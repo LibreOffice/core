@@ -27,10 +27,7 @@
 
 #include <svl/globalnameitem.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-
-
+// STATIC DATA
 
 TYPEINIT1_AUTOFACTORY(SfxGlobalNameItem, SfxPoolItem);
 

@@ -33,7 +33,7 @@
 #include <tools/solar.h>
 #include <rtl/string.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+// STATIC DATA
 
 static const sal_uInt16 nInitCount = 10; // Single USHORTs => 5 pairs without '0'
 #if OSL_DEBUG_LEVEL > 1

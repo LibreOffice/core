@@ -52,8 +52,6 @@ struct DdeImp
     long    nStatus;
 };
 
-// --- DdeInternat::CliCallback() ----------------------------------
-
 HDDEDATA CALLBACK DdeInternal::CliCallback( WORD nCode, WORD nCbType,
                                             HCONV hConv, HSZ, HSZ hText2,
                                             HDDEDATA hData, DWORD nInfo1, DWORD )
@@ -141,8 +139,6 @@ HDDEDATA CALLBACK DdeInternal::CliCallback( WORD nCode, WORD nCbType,
     return nRet;
 }
 
-// --- DdeConnection::DdeConnection() ------------------------------
-
 DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
 {
     pImp = new DdeImp;
@@ -177,8 +173,6 @@ DdeConnection::DdeConnection( const OUString& rService, const OUString& rTopic )
     pInst->aConnections.push_back( this );
 }
 
-// --- DdeConnection::~DdeConnection() -----------------------------
-
 DdeConnection::~DdeConnection()
 {
     if ( pImp->hConv )
@@ -210,8 +204,6 @@ DdeConnection::~DdeConnection()
     delete pImp;
 }
 
-// --- DdeConnection::IsConnected() --------------------------------
-
 bool DdeConnection::IsConnected()
 {
     CONVINFO c;
@@ -227,21 +219,15 @@ bool DdeConnection::IsConnected()
     }
 }
 
-// --- DdeConnection::GetServiceName() -----------------------------
-
 const OUString DdeConnection::GetServiceName()
 {
     return pService->toOUString();
 }
 
-// --- DdeConnection::GetTopicName() -------------------------------
-
 const OUString DdeConnection::GetTopicName()
 {
     return pTopic->toOUString();
 }
-
-// --- DdeConnection::GetConvId() ----------------------------------
 
 sal_IntPtr DdeConnection::GetConvId()
 {
@@ -254,8 +240,6 @@ const std::vector<DdeConnection*>& DdeConnection::GetConnections()
     DBG_ASSERT(pInst,"SVDDE:No instance data");
     return pInst->aConnections;
 }
-
-// --- DdeTransaction::DdeTransaction() ----------------------------
 
 DdeTransaction::DdeTransaction( DdeConnection& d, const OUString& rItemName,
                                 long n )
@@ -271,8 +255,6 @@ DdeTransaction::DdeTransaction( DdeConnection& d, const OUString& rItemName,
     rDde.aTransactions.push_back( this );
 }
 
-// --- DdeTransaction::~DdeTransaction() ---------------------------
-
 DdeTransaction::~DdeTransaction()
 {
     if ( nId && rDde.pImp->hConv )
@@ -285,8 +267,6 @@ DdeTransaction::~DdeTransaction()
     rDde.aTransactions.erase(std::remove(rDde.aTransactions.begin(),
                                          rDde.aTransactions.end(),this));
 }
-
-// --- DdeTransaction::Execute() -----------------------------------
 
 void DdeTransaction::Execute()
 {
@@ -339,15 +319,10 @@ void DdeTransaction::Execute()
     }
 }
 
-// --- DdeTransaction::GetName() -----------------------------------
-
 const OUString DdeTransaction::GetName() const
 {
     return pName->toOUString();
 }
-
-// --- DdeTransaction::Data() --------------------------------------
-
 
 void DdeTransaction::Data( const DdeData* p )
 {
@@ -358,22 +333,16 @@ void DdeTransaction::Data( const DdeData* p )
     }
 }
 
-// --- DdeTransaction::Done() --------------------------------------
-
 void DdeTransaction::Done( bool bDataValid )
 {
     const sal_uIntPtr nDataValid(bDataValid);
     aDone.Call( reinterpret_cast<void*>(nDataValid) );
 }
 
-// --- DdeLink::DdeLink() ------------------------------------------
-
 DdeLink::DdeLink( DdeConnection& d, const OUString& aItemName, long n )
     : DdeTransaction (d, aItemName, n)
 {
 }
-
-// --- DdeLink::~DdeLink() -----------------------------------------
 
 DdeLink::~DdeLink()
 {
@@ -381,14 +350,10 @@ DdeLink::~DdeLink()
     nTime = 0;
 }
 
-// --- DdeLink::Notify() -----------------------------------------
-
 void DdeLink::Notify()
 {
     aNotify.Call( NULL );
 }
-
-// --- DdeRequest::DdeRequest() ------------------------------------
 
 DdeRequest::DdeRequest( DdeConnection& d, const OUString& i, long n )
     : DdeTransaction( d, i, n )
@@ -396,23 +361,17 @@ DdeRequest::DdeRequest( DdeConnection& d, const OUString& i, long n )
     nType = XTYP_REQUEST;
 }
 
-// --- DdeWarmLink::DdeWarmLink() ----------------------------------
-
 DdeWarmLink::DdeWarmLink( DdeConnection& d, const OUString& i, long n )
     : DdeLink( d, i, n )
 {
     nType = XTYP_ADVSTART | XTYPF_NODATA;
 }
 
-// --- DdeHotLink::DdeHotLink() ------------------------------------
-
 DdeHotLink::DdeHotLink( DdeConnection& d, const OUString& i, long n )
     : DdeLink( d, i, n )
 {
     nType = XTYP_ADVSTART;
 }
-
-// --- DdePoke::DdePoke() ------------------------------------------
 
 DdePoke::DdePoke( DdeConnection& d, const OUString& i, const char* p,
                   long l, sal_uLong f, long n )
@@ -422,8 +381,6 @@ DdePoke::DdePoke( DdeConnection& d, const OUString& i, const char* p,
     nType = XTYP_POKE;
 }
 
-// --- DdePoke::DdePoke() ------------------------------------------
-
 DdePoke::DdePoke( DdeConnection& d, const OUString& i, const OUString& rData,
                   long n )
     : DdeTransaction( d, i, n )
@@ -431,8 +388,6 @@ DdePoke::DdePoke( DdeConnection& d, const OUString& i, const OUString& rData,
     aDdeData = DdeData( (void*) rData.getStr(), sizeof(sal_Unicode) * (rData.getLength()), CF_TEXT );
     nType = XTYP_POKE;
 }
-
-// --- DdePoke::DdePoke() ------------------------------------------
 
 DdePoke::DdePoke( DdeConnection& d, const OUString& i, const DdeData& rData,
                   long n )
@@ -442,16 +397,12 @@ DdePoke::DdePoke( DdeConnection& d, const OUString& i, const DdeData& rData,
     nType = XTYP_POKE;
 }
 
-// --- DdeExecute::DdeExecute() ------------------------------------
-
 DdeExecute::DdeExecute( DdeConnection& d, const OUString& rData, long n )
     : DdeTransaction( d, OUString(), n )
 {
     aDdeData = DdeData( (void*)rData.getStr(), sizeof(sal_Unicode) * (rData.getLength() + 1), CF_TEXT );
     nType = XTYP_EXECUTE;
 }
-
-// --- DdeConnection::GetError() -----------------------------------
 
 long DdeConnection::GetError()
 {

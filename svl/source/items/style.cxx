@@ -958,9 +958,6 @@ SfxStyleSheetBase* SfxStyleSheetPool::Create( const SfxStyleSheet& r )
     return new SfxStyleSheet( r );
 }
 
-/**
- * class SfxUnoStyleSheet
- */
 SfxUnoStyleSheet::SfxUnoStyleSheet( const OUString& _rName, const SfxStyleSheetBasePool& _rPool, SfxStyleFamily _eFamily, sal_uInt16 _nMaske )
 : ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >( _rName, _rPool, _eFamily, _nMaske )
 {

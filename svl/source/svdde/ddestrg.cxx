@@ -23,16 +23,12 @@
 #include "ddeimp.hxx"
 #include <svl/svdde.hxx>
 
-// --- DdeString::DdeString() --------------------------------------
-
 DdeString::DdeString( DWORD hDdeInst, const sal_Unicode* p )
     : m_aString(p)
 {
     hString = DdeCreateStringHandle( hDdeInst, (LPTSTR)p, CP_WINUNICODE );
     hInst = hDdeInst;
 }
-
-// --- DdeString::DdeString() --------------------------------------
 
 DdeString::DdeString( DWORD hDdeInst, const OUString& r)
     : m_aString(r)
@@ -41,22 +37,16 @@ DdeString::DdeString( DWORD hDdeInst, const OUString& r)
     hInst = hDdeInst;
 }
 
-// --- DdeString::~DdeString() -------------------------------------
-
 DdeString::~DdeString()
 {
     if ( hString )
         DdeFreeStringHandle( hInst, hString );
 }
 
-// --- DdeString::operator==() -------------------------------------
-
 int DdeString::operator==( HSZ h )
 {
     return( !DdeCmpStringHandles( hString, h ) );
 }
-
-// --- DdeString::operator HSZ() -----------------------------------
 
 DdeString::operator HSZ()
 {

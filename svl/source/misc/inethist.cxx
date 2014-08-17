@@ -29,11 +29,9 @@
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 
-/*========================================================================
- *
+/*
  * INetURLHistory internals.
- *
- *======================================================================*/
+ */
 #define INETHIST_DEF_FTP_PORT    21
 #define INETHIST_DEF_HTTP_PORT   80
 #define INETHIST_DEF_HTTPS_PORT 443
@@ -46,15 +44,8 @@
  */
 IMPL_PTRHINT (INetURLHistoryHint, const INetURLObject);
 
-/*========================================================================
- *
- * INetURLHistory_Impl interface.
- *
- *======================================================================*/
 class INetURLHistory_Impl: private boost::noncopyable
 {
-    /** head_entry.
-    */
     struct head_entry
     {
         /** Representation.
@@ -73,8 +64,6 @@ class INetURLHistory_Impl: private boost::noncopyable
         }
     };
 
-    /** hash_entry.
-    */
     struct hash_entry
     {
         /** Representation.
@@ -104,8 +93,6 @@ class INetURLHistory_Impl: private boost::noncopyable
         }
     };
 
-    /** lru_entry.
-    */
     struct lru_entry
     {
         /** Representation.
@@ -134,30 +121,20 @@ class INetURLHistory_Impl: private boost::noncopyable
     */
     void initialize (void);
 
-    /** capacity.
-    */
     sal_uInt16 capacity (void) const
     {
         return (sal_uInt16)(INETHIST_SIZE_LIMIT);
     }
 
-    /** crc32.
-    */
     sal_uInt32 crc32 (OUString const & rData) const
     {
         return rtl_crc32 (0, rData.getStr(), rData.getLength() * sizeof(sal_Unicode));
     }
 
-    /** find.
-    */
     sal_uInt16 find (sal_uInt32 nHash) const;
 
-    /** move.
-    */
     void move (sal_uInt16 nSI, sal_uInt16 nDI);
 
-    /** backlink.
-    */
     void backlink (sal_uInt16 nThis, sal_uInt16 nTail)
     {
         lru_entry &rThis = m_pList[nThis];
@@ -169,8 +146,6 @@ class INetURLHistory_Impl: private boost::noncopyable
         m_pList[rTail.m_nPrev].m_nNext = nTail;
     }
 
-    /** unlink.
-    */
     void unlink (sal_uInt16 nThis)
     {
         lru_entry &rThis = m_pList[nThis];
@@ -191,29 +166,15 @@ public:
     bool queryUrl (const OUString &rUrl);
 };
 
-/*========================================================================
- *
- * INetURLHistory_Impl implementation.
- *
- *======================================================================*/
-/*
- * INetURLHistory_Impl.
- */
 INetURLHistory_Impl::INetURLHistory_Impl (void)
 {
     initialize();
 }
 
-/*
- * ~INetURLHistory_Impl.
- */
 INetURLHistory_Impl::~INetURLHistory_Impl (void)
 {
 }
 
-/*
- * initialize.
- */
 void INetURLHistory_Impl::initialize (void)
 {
     m_aHead.initialize();
@@ -227,9 +188,6 @@ void INetURLHistory_Impl::initialize (void)
         backlink (m_aHead.m_nNext, i);
 }
 
-/*
- * find.
- */
 sal_uInt16 INetURLHistory_Impl::find (sal_uInt32 nHash) const
 {
     sal_uInt16 l = 0;
@@ -250,9 +208,6 @@ sal_uInt16 INetURLHistory_Impl::find (sal_uInt32 nHash) const
     return l;
 }
 
-/*
- * move.
- */
 void INetURLHistory_Impl::move (sal_uInt16 nSI, sal_uInt16 nDI)
 {
     hash_entry e = m_pHash[nSI];
@@ -275,9 +230,6 @@ void INetURLHistory_Impl::move (sal_uInt16 nSI, sal_uInt16 nDI)
     m_pHash[nDI] = e;
 }
 
-/*
- * putUrl.
- */
 void INetURLHistory_Impl::putUrl (const OUString &rUrl)
 {
     sal_uInt32 h = crc32 (rUrl);
@@ -332,9 +284,6 @@ void INetURLHistory_Impl::putUrl (const OUString &rUrl)
     }
 }
 
-/*
- * queryUrl.
- */
 bool INetURLHistory_Impl::queryUrl (const OUString &rUrl)
 {
     sal_uInt32 h = crc32 (rUrl);
@@ -351,32 +300,19 @@ bool INetURLHistory_Impl::queryUrl (const OUString &rUrl)
     }
 }
 
-/*========================================================================
- *
+/*
  * INetURLHistory::StaticInstance implementation.
- *
- *======================================================================*/
+ */
 INetURLHistory * INetURLHistory::StaticInstance::operator ()()
 {
     static INetURLHistory g_aInstance;
     return &g_aInstance;
 }
 
-/*========================================================================
- *
- * INetURLHistory implementation.
- *
- *======================================================================*/
-/*
- * INetURLHistory.
- */
 INetURLHistory::INetURLHistory() : m_pImpl (new INetURLHistory_Impl())
 {
 }
 
-/*
- * ~INetURLHistory.
- */
 INetURLHistory::~INetURLHistory()
 {
     DELETEZ (m_pImpl);
@@ -393,9 +329,6 @@ INetURLHistory* INetURLHistory::GetOrCreate()
             StaticInstance(), osl::GetGlobalMutex());
 }
 
-/*
- * NormalizeUrl_Impl.
- */
 void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
 {
     switch (rUrl.GetProtocol())
@@ -432,9 +365,6 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
     }
 }
 
-/*
- * PutUrl_Impl.
- */
 void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
 {
     DBG_ASSERT (m_pImpl, "PutUrl_Impl(): no Implementation");
@@ -457,9 +387,6 @@ void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
     }
 }
 
-/*
- * QueryUrl_Impl.
- */
 bool INetURLHistory::QueryUrl_Impl (const INetURLObject &rUrl)
 {
     DBG_ASSERT (m_pImpl, "QueryUrl_Impl(): no Implementation");

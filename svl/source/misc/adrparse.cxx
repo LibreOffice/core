@@ -722,10 +722,6 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
     }
 }
 
-
-//  SvAddressParser
-
-
 SvAddressParser::SvAddressParser(const OUString& rInput)
     : m_bHasFirst(false)
 {

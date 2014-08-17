@@ -30,8 +30,6 @@
 
 #include <osl/thread.h>
 
-// --- DdeData::DdeData() ------------------------------------------
-
 DdeData::DdeData()
 {
     pImp = new DdeDataImp;
@@ -40,8 +38,6 @@ DdeData::DdeData()
     pImp->pData = NULL;
     pImp->nFmt  = CF_TEXT;
 }
-
-// --- DdeData::DdeData() ------------------------------------------
 
 DdeData::DdeData( const void* p, long n, sal_uLong f )
 {
@@ -52,8 +48,6 @@ DdeData::DdeData( const void* p, long n, sal_uLong f )
     pImp->nFmt  = f;
 }
 
-// --- DdeData::DdeData() ------------------------------------------
-
 DdeData::DdeData( const OUString& s )
 {
     pImp = new DdeDataImp;
@@ -62,8 +56,6 @@ DdeData::DdeData( const OUString& s )
     pImp->nData = s.getLength()+1;
     pImp->nFmt  = CF_TEXT;
 }
-
-// --- DdeData::DdeData() ------------------------------------------
 
 DdeData::DdeData( const DdeData& rData )
 {
@@ -75,8 +67,6 @@ DdeData::DdeData( const DdeData& rData )
     Lock();
 }
 
-// --- DdeData::~DdeData() -----------------------------------------
-
 DdeData::~DdeData()
 {
     if ( pImp && pImp->hData )
@@ -84,15 +74,11 @@ DdeData::~DdeData()
     delete pImp;
 }
 
-// --- DdeData::Lock() ---------------------------------------------
-
 void DdeData::Lock()
 {
     if ( pImp->hData )
         pImp->pData = DdeAccessData( pImp->hData, (LPDWORD) &pImp->nData );
 }
-
-// --- DdeData::GetFormat() ----------------------------------------
 
 sal_uLong DdeData::GetFormat() const
 {
@@ -104,21 +90,15 @@ void DdeData::SetFormat( sal_uLong nFmt )
     pImp->nFmt = nFmt;
 }
 
-// --- DdeData::operator const char*() -----------------------------
-
 DdeData::operator const void*() const
 {
     return pImp->pData;
 }
 
-// --- DdeData::operator long() ------------------------------------
-
 DdeData::operator long() const
 {
     return pImp->nData;
 }
-
-// --- DdeData::operator =() ---------------------------------------
 
 DdeData& DdeData::operator = ( const DdeData& rData )
 {

@@ -37,8 +37,6 @@ using namespace ::com::sun::star::uno;
 
 #define CFG_READONLY_DEFAULT false
 
-// SvtCJKOptions_Impl ----------------------------------------------------------
-
 class SvtCTLOptions_Impl : public utl::ConfigItem
 {
 private:
@@ -377,13 +375,11 @@ void SvtCTLOptions_Impl::SetCTLTextNumerals( SvtCTLOptions::TextNumerals _eNumer
         NotifyListeners(0);
     }
 }
-// global ----------------------------------------------------------------
+// global
 
 static SvtCTLOptions_Impl*  pCTLOptions = NULL;
 static sal_Int32            nCTLRefCount = 0;
 namespace { struct CTLMutex : public rtl::Static< osl::Mutex, CTLMutex > {}; }
-
-// class SvtCTLOptions --------------------------------------------------
 
 SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
 {

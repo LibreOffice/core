@@ -122,8 +122,6 @@ FSStorage_Impl::~FSStorage_Impl()
         delete m_pContent;
 }
 
-// FSStorage implementation
-
 FSStorage::FSStorage( const ::ucbhelper::Content& aContent,
                     sal_Int32 nMode,
                     uno::Reference< uno::XComponentContext > xContext )

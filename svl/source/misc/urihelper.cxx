@@ -46,10 +46,6 @@
 
 using namespace com::sun::star;
 
-
-//  SmartRel2Abs
-
-
 OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
                                  OUString const & rTheRelURIRef,
                                  Link const & rMaybeFileHdl,
@@ -104,20 +100,12 @@ OUString URIHelper::SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
     return aAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
 }
 
-
-//  SetMaybeFileHdl
-
-
 namespace { struct MaybeFileHdl : public rtl::Static< Link, MaybeFileHdl > {}; }
 
 void URIHelper::SetMaybeFileHdl(Link const & rTheMaybeFileHdl)
 {
     MaybeFileHdl::get() = rTheMaybeFileHdl;
 }
-
-
-//  GetMaybeFileHdl
-
 
 Link URIHelper::GetMaybeFileHdl()
 {
@@ -726,10 +714,6 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
     rBegin = rEnd;
     return OUString();
 }
-
-
-//  removePassword
-
 
 OUString URIHelper::removePassword(OUString const & rURI,
                                    INetURLObject::EncodeMechanism eEncodeMechanism,
