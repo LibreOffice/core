@@ -110,7 +110,7 @@ def idForDefine(nsNode, defineNode):
 
 
 def fastNamespace(attrNode):
-    return "NMSP_%s" % attrNode.getAttribute("prefix")
+    return "oox::NMSP_%s" % attrNode.getAttribute("prefix")
 
 
 def fastLocalName(attrNode):

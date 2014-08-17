@@ -161,7 +161,7 @@ def getFastParser(model):
         mxFastParser = css::xml::sax::FastParser::create(mxContext);
 """)
     for alias in model.getElementsByTagName("namespace-alias"):
-        print("""        mxFastParser->registerNamespace("%s", NMSP_%s);""" % (alias.getAttribute("name"), alias.getAttribute("alias")))
+        print("""        mxFastParser->registerNamespace("%s", oox::NMSP_%s);""" % (alias.getAttribute("name"), alias.getAttribute("alias")))
     print("""    }
 
     return mxFastParser;

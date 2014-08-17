@@ -19,7 +19,7 @@ def createHeader(model, ns):
 #define INCLUDED_OOXML_FACTORY_%s_HXX
 #include "ooxml/OOXMLFactory.hxx"
 #include "OOXMLFactory_generated.hxx"
-#include "ooxml/OOXMLnamespaceids.hxx"
+#include "oox/token/namespaces.hxx"
 #include "ooxml/resourceids.hxx"
 
 namespace writerfilter {
