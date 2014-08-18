@@ -34,7 +34,6 @@
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XStringListControl.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/StringListResource.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

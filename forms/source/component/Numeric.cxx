@@ -18,9 +18,7 @@
  */
 
 #include "Numeric.hxx"
-#include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
-
 
 namespace frm
 {

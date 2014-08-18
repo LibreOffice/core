@@ -18,7 +18,6 @@
  */
 
 #include "ImageButton.hxx"
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

@@ -23,7 +23,6 @@
 #include <comphelper/property.hxx>
 #include <comphelper/uno3.hxx>
 #include <tools/solar.h>
-#include <tools/debug.hxx>
 
 #include "property.hrc"
 

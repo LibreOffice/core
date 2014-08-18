@@ -18,7 +18,6 @@
  */
 
 #include "Time.hxx"
-#include <tools/debug.hxx>
 #include <tools/time.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -26,10 +25,8 @@
 
 using namespace dbtools;
 
-
 namespace frm
 {
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
