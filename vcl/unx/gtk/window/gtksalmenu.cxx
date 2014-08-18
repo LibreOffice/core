@@ -451,29 +451,39 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 }
 
 static bool bInvalidMenus = false;
-static gboolean RefreshMenusUnity(gpointer)
+class RefreshMenusUnityTimer;
+static RefreshMenusUnityTimer* refreshMenusTimer = NULL;
+
+class RefreshMenusUnityTimer : public Timer
 {
-    SalDisplay* pSalDisplay = GetGenericData()->GetSalDisplay();
-    std::list< SalFrame* >::const_iterator pSalFrame = pSalDisplay->getFrames().begin();
-    std::list< SalFrame* >::const_iterator pEndSalFrame = pSalDisplay->getFrames().end();
-    for(; pSalFrame != pEndSalFrame; ++pSalFrame) {
-        const GtkSalFrame* pGtkSalFrame = static_cast< const GtkSalFrame* >( *pSalFrame );
-        GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(pGtkSalFrame);
-        GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(pFrameNonConst->GetMenu());
-        if(pSalMenu) {
-            pSalMenu->Activate();
-            pSalMenu->UpdateFull();
-        }
+    virtual void Timeout() SAL_OVERRIDE
+    {
+       SalDisplay* pSalDisplay = GetGenericData()->GetSalDisplay();
+       std::list< SalFrame* >::const_iterator pSalFrame = pSalDisplay->getFrames().begin();
+       std::list< SalFrame* >::const_iterator pEndSalFrame = pSalDisplay->getFrames().end();
+       for(; pSalFrame != pEndSalFrame; ++pSalFrame) {
+           const GtkSalFrame* pGtkSalFrame = static_cast< const GtkSalFrame* >( *pSalFrame );
+           GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(pGtkSalFrame);
+           GtkSalMenu* pSalMenu = static_cast<GtkSalMenu*>(pFrameNonConst->GetMenu());
+           if(pSalMenu) {
+              pSalMenu->Activate();
+              pSalMenu->UpdateFull();
+           }
+       }
+       bInvalidMenus = false;
+       refreshMenusTimer->Stop();
     }
-    bInvalidMenus = false;
-    return FALSE;
-}
+};
 
 static long RefreshMenusUnity(void*, void*)
 {
+    if (refreshMenusTimer == NULL) {
+        refreshMenusTimer = new RefreshMenusUnityTimer;
+        refreshMenusTimer->SetTimeout(10);
+    }
     if(!bInvalidMenus) {
-        g_timeout_add(10, &RefreshMenusUnity, NULL);
         bInvalidMenus = true;
+        refreshMenusTimer->Start();
     }
     return 0;
 }
