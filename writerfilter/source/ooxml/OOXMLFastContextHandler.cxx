@@ -282,9 +282,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
-    if ((Element & 0xffff0000) != NMSP_mce && !m_bDiscardChildren)
+    if (oox::getNamespace(Element) != NMSP_mce && !m_bDiscardChildren)
         xResult.set(lcl_createFastChildContext(Element, Attribs));
-    else if ((Element & 0xffff0000) == NMSP_mce)
+    else if (oox::getNamespace(Element) == NMSP_mce)
         xResult = this;
 
     return xResult;
