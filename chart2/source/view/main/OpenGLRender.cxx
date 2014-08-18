@@ -66,28 +66,6 @@ static GLfloat coordReverseVertices[] = {
     0.0f, 0.0f,
 };
 
-int static checkGLError(const char *file, int line)
-{
-    GLenum glErr;
-    int retCode = 0;
-    glErr = glGetError();
-    while (glErr != GL_NO_ERROR)
-    {
-        const char* sError = OpenGLHelper::GLErrorString(glErr);
-
-        if (sError)
-            SAL_WARN("chart2.opengl", "GL Error #" << glErr << "(" << sError << ") in File " << file << " at line: " << line);
-        else
-            SAL_WARN("chart2.opengl", "GL Error #" << glErr << " (no message available) in File " << file << " at line: " << line);
-
-        retCode = -1;
-        return retCode;
-    }
-    return retCode;
-}
-
-#define CHECK_GL_ERROR() checkGLError(__FILE__, __LINE__)
-
 #define CHECK_GL_FRAME_BUFFER_STATUS() \
     status = glCheckFramebufferStatus(GL_FRAMEBUFFER);\
     if( status != GL_FRAMEBUFFER_COMPLETE ) {\

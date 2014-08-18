@@ -44,7 +44,11 @@ public:
 
     // Get OpenGL version (needs a context)
     static float getGLVersion();
+
+    static void checkGLError(const char* aFile, size_t nLine);
 };
+
+#define CHECK_GL_ERROR() OpenGLHelper::checkGLError(__FILE__, __LINE__)
 
 #endif
 
