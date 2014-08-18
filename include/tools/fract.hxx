@@ -19,9 +19,17 @@
 #ifndef INCLUDED_TOOLS_FRACT_HXX
 #define INCLUDED_TOOLS_FRACT_HXX
 
+#include <boost/rational.hpp>
 #include <tools/toolsdllapi.h>
 
+
 class SvStream;
+
+// Added due transition from Fraction to boost::rational<long>
+void reduceInaccurate(boost::rational<long> &, unsigned);
+TOOLS_DLLPUBLIC SvStream& ReadFraction( SvStream& rIStream, boost::rational<long>& rFract );
+TOOLS_DLLPUBLIC SvStream& WriteFraction( SvStream& rOStream, const boost::rational<long>& rFract );
+
 
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
 {
