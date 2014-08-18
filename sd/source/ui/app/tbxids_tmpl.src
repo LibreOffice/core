@@ -42,16 +42,6 @@
         RadioCheck = TRUE ; \
     };
 
-#define TBI_OBJECT_CHOOSE_MODE \
-    ToolBoxItem\
-    {\
-        Identifier = SID_OBJECT_CHOOSE_MODE ; \
-        HelpID = SID_OBJECT_CHOOSE_MODE ; \
-        DropDown = TRUE ; \
-        Checkable = TRUE ; \
-        RadioCheck = TRUE ; \
-    };
-
 #define TBI_OBJECT_ALIGN \
     ToolBoxItem\
     {\

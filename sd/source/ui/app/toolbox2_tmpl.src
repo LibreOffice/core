@@ -17,15 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef SD_TOOLBOX
-#define SD_TOOLBOX RID_DRAW_TOOLBOX
 #include "tbxids_tmpl.src"
 #include <svx/svxids.hrc>
 #include <svx/globlmn.hrc>
-#endif
 
  // toolbox bar
-ToolBox SD_TOOLBOX
+ToolBox RID_DRAW_TOOLBOX
 {
     HelpId = HID_SD_DRAW_TOOLBOX ;
     LineSpacing = TRUE ;
@@ -64,17 +61,12 @@ ToolBox SD_TOOLBOX
         TBI_DRAWTBX_CS_CALLOUT
         TBI_DRAWTBX_CS_STAR
         SEPARATOR
-#if SD_TOOLBOX != RID_DRAW_TOOLBOX
-        TBI_OBJECT_CHOOSE_MODE
-#endif
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
         ToolBoxItem
         {
             ITEM_TOOLBAR_OBJECT_ROTATE
             Checkable = TRUE ;
             RadioCheck = TRUE ;
         };
-#endif
         TBI_OBJECT_ALIGN
         TBI_POSITION
         SEPARATOR
@@ -85,16 +77,12 @@ ToolBox SD_TOOLBOX
             Hide = TRUE;
         };
         SEPARATOR
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
         /* TBI_EFFECT_WIN */
         TBI_ANIMATION_EFFECTS
         TBI_ANIMATION_OBJECTS
-#endif
         TBI_3D_WIN
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
         SEPARATOR
         TBI_PRESENTATION
-#endif
         TBI_ZOOM_IN
         TBI_ZOOM_OUT
         TBI_ATTR_TRANSFORM
@@ -128,11 +116,7 @@ ToolBox SD_TOOLBOX
 };
 
  // object bar
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
 ToolBox RID_DRAW_OBJ_TOOLBOX
-#elif SD_TOOLBOX == RID_GRAPHIC_TOOLBOX
-ToolBox RID_GRAPHIC_OBJ_TOOLBOX
-#endif
 {
     HelpId = HID_SD_DRAW_OBJ_TOOLBOX ;
     LineSpacing = TRUE ;
@@ -163,19 +147,13 @@ ToolBox RID_GRAPHIC_OBJ_TOOLBOX
         TBI ( ITEM_TOOLBAR_ATTR_FILL_STYLE )
         SEPARATOR
         TBI_ATTR_FILL_SHADOW
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
         TBI_TOGGLECOMMONTASKBAR
-#endif
         TBI_IMAGEMAP
     };
 };
 
 // option bar
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
 ToolBox RID_DRAW_OPTIONS_TOOLBOX
-#elif SD_TOOLBOX == RID_GRAPHIC_TOOLBOX
-ToolBox RID_GRAPHIC_OPTIONS_TOOLBOX
-#endif
 {
     HelpId = HID_SD_DRAW_OPTIONS_TOOLBOX ;
     LineSpacing = TRUE ;
@@ -213,18 +191,10 @@ ToolBox RID_GRAPHIC_OPTIONS_TOOLBOX
         TBI_PICK_THROUGH
         TBI_DOUBLECLICK_TEXTEDIT
         SEPARATOR
-#if SD_TOOLBOX != RID_DRAW_TOOLBOX
-        TBI_SOLID_CREATE
-#endif
-        SEPARATOR
         TBI_LEAVE_ALL_GROUPS
     };
 };
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
 ToolBox RID_DRAW_TEXT_TOOLBOX
-#elif SD_TOOLBOX == RID_GRAPHIC_TOOLBOX
-ToolBox RID_GRAPHIC_TEXT_TOOLBOX
-#endif
 {
     HelpId = HID_SD_TEXT_TOOLBOX ;
     LineSpacing = TRUE ;
@@ -338,29 +308,6 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-#if SD_TOOLBOX != RID_DRAW_TOOLBOX
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_10
-        };
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_15
-        };
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_20
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_NUM_BULLET_ON ;
-            HelpID = FN_NUM_BULLET_ON ;
-        };
-#else
         ToolBoxItem
         {
             ITEM_FORMAT_PARA_LINESPACE_10
@@ -405,7 +352,6 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
             Identifier = SID_OUTLINE_DOWN ;
             HelpID = SID_OUTLINE_DOWN ;
         };
-#endif
         ToolBoxItem
         {
             Type = TOOLBOXITEM_SEPARATOR ;
@@ -436,13 +382,11 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
         ToolBoxItem
         {
             Identifier = SID_OUTLINE_BULLET ;
             HelpID = SID_OUTLINE_BULLET ;
         };
-#endif
         ToolBoxItem
         {
             Identifier = SID_CHARMAP;
@@ -547,29 +491,6 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-#if SD_TOOLBOX != RID_DRAW_TOOLBOX
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_10
-        };
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_15
-        };
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_20
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_NUM_BULLET_ON ;
-            HelpID = FN_NUM_BULLET_ON ;
-        };
-#else
         ToolBoxItem
         {
             ITEM_FORMAT_PARA_LINESPACE_10
@@ -614,7 +535,6 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
             Identifier = SID_OUTLINE_DOWN ;
             HelpID = SID_OUTLINE_DOWN ;
         };
-#endif
         ToolBoxItem
         {
             Type = TOOLBOXITEM_SEPARATOR ;
@@ -645,13 +565,11 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
         ToolBoxItem
         {
             Identifier = SID_OUTLINE_BULLET ;
             HelpID = SID_OUTLINE_BULLET ;
         };
-#endif
         ToolBoxItem
         {
             Identifier = SID_CHARMAP;
@@ -756,29 +674,6 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-#if SD_TOOLBOX != RID_DRAW_TOOLBOX
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_10
-        };
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_15
-        };
-        ToolBoxItem
-        {
-            ITEM_FORMAT_PARA_LINESPACE_20
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = FN_NUM_BULLET_ON ;
-            HelpID = FN_NUM_BULLET_ON ;
-        };
-#else
         ToolBoxItem
         {
             ITEM_FORMAT_PARA_LINESPACE_10
@@ -823,7 +718,6 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
             Identifier = SID_OUTLINE_DOWN ;
             HelpID = SID_OUTLINE_DOWN ;
         };
-#endif
         ToolBoxItem
         {
             Type = TOOLBOXITEM_SEPARATOR ;
@@ -854,13 +748,11 @@ ToolBox RID_GRAPHIC_TEXT_TOOLBOX
         {
             Type = TOOLBOXITEM_SEPARATOR ;
         };
-#if SD_TOOLBOX == RID_DRAW_TOOLBOX
         ToolBoxItem
         {
             Identifier = SID_OUTLINE_BULLET ;
             HelpID = SID_OUTLINE_BULLET ;
         };
-#endif
         ToolBoxItem
         {
             Identifier = SID_CHARMAP;

@@ -24,10 +24,6 @@ String STR_DRAW_TOOLBOX
 {
     Text [ en-US ] = "Drawings Toolbar" ;
 };
-String STR_GRAPHIC_TOOLBOX
-{
-    Text [ en-US ] = "Draw Toolbar/Image" ;
-};
 String STR_SLIDE_TOOLBOX
 {
     Text [ en-US ] = "Slide Bar" ;
@@ -48,10 +44,6 @@ String STR_DRAW_OPTIONS_TOOLBOX
 {
     Text [ en-US ] = "Options Bar" ;
 };
-String STR_GRAPHIC_OPTIONS_TOOLBOX
-{
-    Text [ en-US ] = "Options Bar/Image" ;
-};
 String STR_DRAW_COMMONTASK_TOOLBOX
 {
     Text [ en-US ] = "Presentation" ;
@@ -71,10 +63,6 @@ String STR_GLUEPOINTS_TOOLBOX
 String STR_DRAW_TEXT_TOOLBOX
 {
     Text [ en-US ] = "Text Object Bar" ;
-};
-String STR_GRAPHIC_TEXT_TOOLBOX
-{
-    Text [ en-US ] = "Text Object Bar/Draw" ;
 };
 String RID_APPTITLE
 {

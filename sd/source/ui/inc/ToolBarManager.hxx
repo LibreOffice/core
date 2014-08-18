@@ -104,12 +104,9 @@ public:
     /** The set of tool bars that are handled by this manager class.
     */
     const static OUString msToolBar;                  // RID_DRAW_TOOLBOX, 23011
-                                                             // RID_GRAPHIC_TOOLBOX, 23025
     const static OUString msOptionsToolBar;           // RID_DRAW_OPTIONS_TOOLBOX, 23020
-                                                             // RID_GRAPHIC_OPTIONS_TOOLBOX, 23026
     const static OUString msCommonTaskToolBar;        // RID_DRAW_COMMONTASK_TOOLBOX, 23021
     const static OUString msViewerToolBar;            // RID_DRAW_VIEWER_TOOLBOX, 23023
-                                                             // RID_GRAPHIC_VIEWER_TOOLBOX, 23024
     const static OUString msSlideSorterToolBar;       // RID_SLIDE_TOOLBOX, 23012
     const static OUString msSlideSorterObjectBar;     // RID_SLIDE_OBJ_TOOLBOX, 23014
     const static OUString msOutlineToolBar;           // RID_OUTLINE_TOOLBOX, 23017
@@ -117,7 +114,6 @@ public:
     const static OUString msDrawingObjectToolBar;     // RID_DRAW_OBJ_TOOLBOX, 23013
     const static OUString msGluePointsToolBar;        // RID_GLUEPOINTS_TOOLBOX, 23019
     const static OUString msTextObjectBar;            // RID_DRAW_TEXT_TOOLBOX, 23016
-                                                             // RID_GRAPHIC_TEXT_TOOLBOX, 23028
     const static OUString msBezierObjectBar;          // RID_BEZIER_TOOLBOX, 23015
     const static OUString msGraphicObjectBar;         // RID_DRAW_GRAF_TOOLBOX, 23030
     const static OUString msMediaObjectBar;           // RID_DRAW_MEDIA_TOOLBOX, 23031
