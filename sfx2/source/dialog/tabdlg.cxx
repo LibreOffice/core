@@ -163,24 +163,6 @@ void SfxTabPage::SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::st
     return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
 }
 
-SfxTabPage::SfxTabPage( Window *pParent,
-                        const ResId &rResId, const SfxItemSet &rAttrSet ) :
-
-/*  [Description]
-
-    Constructor
-*/
-
-    TabPage( pParent, rResId ),
-
-    pSet                ( &rAttrSet ),
-    bHasExchangeSupport ( false ),
-    pImpl               ( new TabPageImpl )
-
-{
-}
-
-
 SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet)
     : TabPage(pParent, rID, rUIXMLDescription)
     , pSet                ( rAttrSet )
@@ -189,27 +171,19 @@ SfxTabPage::SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIX
 {
 }
 
-
-
 SfxTabPage::~SfxTabPage()
-
 /*  [Description]
 
     Destructor
 */
-
 {
     delete pImpl;
 }
-
-
 
 bool SfxTabPage::FillItemSet( SfxItemSet* rSet )
 {
     return pImpl->maItemConn.DoFillItemSet( *rSet, GetItemSet() );
 }
-
-
 
 void SfxTabPage::Reset( const SfxItemSet* rSet )
 {
@@ -217,21 +191,15 @@ void SfxTabPage::Reset( const SfxItemSet* rSet )
     pImpl->maItemConn.DoReset( *rSet );
 }
 
-
-
 void SfxTabPage::ActivatePage( const SfxItemSet& )
-
 /*  [Description]
 
     Default implementation of the virtual ActivatePage method. This method is
     called when a page of dialogue supports the exchange of data between pages.
     <SfxTabPage::DeactivatePage(SfxItemSet *)>
 */
-
 {
 }
-
-
 
 int SfxTabPage::DeactivatePage( SfxItemSet* )
 

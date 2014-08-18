@@ -68,22 +68,17 @@ namespace dbp
         void implApplySettings();
     };
 
-
     //= OGridPage
-
     class OGridPage : public OControlWizardPage
     {
     public:
-        OGridPage( OGridWizard* _pParent, const ResId& _rId ) : OControlWizardPage(_pParent, _rId) { }
         OGridPage( OGridWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription ) : OControlWizardPage(_pParent, _rID, _rUIXMLDescription) { }
 
     protected:
         OGridSettings& getSettings() { return static_cast<OGridWizard*>(getDialog())->getSettings(); }
     };
 
-
     //= OGridFieldsSelection
-
     class OGridFieldsSelection : public OGridPage
     {
     protected:

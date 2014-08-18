@@ -237,7 +237,6 @@ private:
     SAL_DLLPRIVATE void SetInputSet( const SfxItemSet* pNew ) { pSet = pNew; }
 
 protected:
-    SfxTabPage( Window *pParent, const ResId &, const SfxItemSet &rAttrSet );
     SfxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet *rAttrSet);
 
     sal_uInt16              GetSlot( sal_uInt16 nWhich ) const

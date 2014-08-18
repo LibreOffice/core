@@ -82,14 +82,14 @@ namespace dbp
         void implApplySettings();
     };
 
-
     //= OLCPage
-
     class OLCPage : public OControlWizardPage
     {
     public:
-        OLCPage( OListComboWizard* _pParent, const ResId& _rId ) : OControlWizardPage(_pParent, _rId) { }
-        OLCPage( OListComboWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription ) : OControlWizardPage(_pParent, rID, rUIXMLDescription) { }
+        OLCPage(OListComboWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription)
+            : OControlWizardPage(_pParent, rID, rUIXMLDescription)
+    {
+    }
 
     protected:
         OListComboSettings& getSettings() { return static_cast<OListComboWizard*>(getDialog())->getSettings(); }

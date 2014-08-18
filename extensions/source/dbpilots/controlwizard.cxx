@@ -46,11 +46,8 @@
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
 
-
 namespace dbp
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::lang;
@@ -68,9 +65,6 @@ namespace dbp
     using namespace ::comphelper;
     using namespace ::dbtools;
 
-
-    //= OAccessRegulator
-
     struct OAccessRegulator
     {
         friend class OControlWizardPage;
@@ -78,22 +72,6 @@ namespace dbp
     protected:
         OAccessRegulator() { }
     };
-
-
-    //= OControlWizardPage
-
-
-    OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId )
-        :OControlWizardPage_Base( _pParent, _rResId )
-        ,m_pFormDatasourceLabel(NULL)
-        ,m_pFormDatasource(NULL)
-        ,m_pFormContentTypeLabel(NULL)
-        ,m_pFormContentType(NULL)
-        ,m_pFormTableLabel(NULL)
-        ,m_pFormTable(NULL)
-    {
-    }
-
 
     OControlWizardPage::OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription )
         :OControlWizardPage_Base( _pParent, rID, rUIXMLDescription )
@@ -106,17 +84,14 @@ namespace dbp
     {
     }
 
-
     OControlWizardPage::~OControlWizardPage()
     {
     }
-
 
     OControlWizard* OControlWizardPage::getDialog()
     {
         return static_cast< OControlWizard* >(GetParent());
     }
-
 
     const OControlWizard* OControlWizardPage::getDialog() const
     {

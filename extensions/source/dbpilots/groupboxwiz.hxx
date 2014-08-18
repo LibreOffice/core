@@ -79,8 +79,10 @@ namespace dbp
     class OGBWPage : public OControlWizardPage
     {
     public:
-        OGBWPage( OControlWizard* _pParent, const ResId& _rId ) : OControlWizardPage(_pParent, _rId) { }
-        OGBWPage( OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription ) : OControlWizardPage(_pParent, _rID, _rUIXMLDescription) { }
+        OGBWPage(OControlWizard* _pParent, const OString& _rID, const OUString& _rUIXMLDescription)
+            : OControlWizardPage(_pParent, _rID, _rUIXMLDescription)
+    {
+    }
 
     protected:
         OOptionGroupSettings& getSettings() { return static_cast<OGroupBoxWizard*>(getDialog())->getSettings(); }

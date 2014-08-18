@@ -42,10 +42,6 @@ class SvxTabPage : public SfxTabPage
 {
 
 public:
-    SvxTabPage(Window* pParent, ResId Id, const SfxItemSet& rInAttrs)
-        : SfxTabPage(pParent, Id, rInAttrs)
-    {
-    }
     SvxTabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription, const SfxItemSet &rAttrSet)
         : SfxTabPage(pParent, rID, rUIXMLDescription, &rAttrSet)
     {

@@ -72,9 +72,7 @@ namespace dbp
         void                            setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn, bool _bAutoDispose = true );
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                                         getFormConnection() const;
-
     public:
-        OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId );
         OControlWizardPage( OControlWizard* _pParent, const OString& rID, const OUString& rUIXMLDescription );
         virtual ~OControlWizardPage();
 
