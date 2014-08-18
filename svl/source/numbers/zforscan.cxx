@@ -933,6 +933,11 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
             }
             else
             {
+                // Valid only if there is a character following, else we are
+                // at the end of a code that does not have a fill character
+                // (yet?).
+                if (sStrArray[nAnzStrings].getLength() < 2)
+                    return nPos;
                 bStar = true;
             }
         }
