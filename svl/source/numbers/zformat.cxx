@@ -2578,8 +2578,18 @@ bool SvNumberformat::GetOutputString(double fNumber,
                     if( bStarFlag )
                     {
                         sBuff.append((sal_Unicode) 0x1B);
-                        sBuff.append(rInfo.sStrArray[i][1]);
-                        bRes = true;
+                        const OUString& rStr =rInfo.sStrArray[i];
+                        // Right during user input the star symbol is the very
+                        // last character before the user enters another one.
+                        if (rStr.getLength() > 1)
+                        {
+                            sBuff.append(rStr[1]);
+                            bRes = true;
+                        }
+                        else
+                        {
+                            bRes = false;
+                        }
                     }
                     break;
                 case NF_SYMBOLTYPE_BLANK:
