@@ -18,6 +18,7 @@
  */
 
 #include <doc.hxx>
+#include <DocumentFieldsManager.hxx>
 #include <DocumentSettingManager.hxx>
 #include <DocumentDrawModelManager.hxx>
 #include <DocumentTimerManager.hxx>
@@ -1555,7 +1556,7 @@ bool SwDoc::ConvertFieldsToText()
                     aInsertPam.SetMark();
 
                     // go to the end of the field
-                    const SwTxtFld *pTxtField = GetTxtFldAtPos( *aInsertPam.End() );
+                    const SwTxtFld *pTxtField = sw::DocumentFieldsManager::GetTxtFldAtPos( *aInsertPam.End() );
                     if (pTxtField && pTxtField->Which() == RES_TXTATR_INPUTFIELD)
                     {
                         SwPosition &rEndPos = *aInsertPam.GetPoint();
