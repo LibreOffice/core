@@ -21,11 +21,11 @@
 
 #define DLG_ROW_HEIGHT          (RC_TABLE_BEGIN + 4)
 
-#define MSG_ERR_TABLE_MERGE     (RC_TABLE_BEGIN + 7)
+#define STR_ERR_TABLE_MERGE     (RC_TABLE_BEGIN + 7)
 
-#define MSG_WRONG_TABLENAME     (RC_TABLE_BEGIN + 13)
+#define STR_WRONG_TABLENAME     (RC_TABLE_BEGIN + 13)
 
-#define TABLE_ACT_END           MSG_WRONG_TABLENAME
+#define TABLE_ACT_END           STR_WRONG_TABLENAME
 
 #if TABLE_ACT_END > RC_TABLE_END
 #error Resource-Id Ueberlauf in #file, #line

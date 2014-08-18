@@ -19,9 +19,9 @@
 
 #include "table.hrc"
 
-InfoBox MSG_WRONG_TABLENAME
+String STR_WRONG_TABLENAME
 {
-    Message [ en-US ] = "The name of the table must not contain spaces." ;
+    Text [ en-US ] = "The name of the table must not contain spaces." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

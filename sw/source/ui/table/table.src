@@ -18,9 +18,9 @@
  */
 
 #include "table.hrc"
-InfoBox MSG_ERR_TABLE_MERGE
+String STR_ERR_TABLE_MERGE
 {
-    Message [ en-US ] = "Selected table cells are too complex to merge." ;
+    Text [ en-US ] = "Selected table cells are too complex to merge." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

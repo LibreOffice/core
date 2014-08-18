@@ -40,6 +40,7 @@
 #include <svx/svxdlg.hxx>
 #include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -734,8 +735,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
                         break;
                     case TBLMERGE_TOOCOMPLEX:
                     {
-                        InfoBox aInfoBox( GetView().GetWindow(),
-                                    SW_RES( MSG_ERR_TABLE_MERGE ) );
+                        MessageDialog aInfoBox( GetView().GetWindow(),
+                                    SW_RES( STR_ERR_TABLE_MERGE ), VCL_MESSAGE_INFO );
                         aInfoBox.Execute();
                         break;
                     }

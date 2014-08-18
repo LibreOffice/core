@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
@@ -601,7 +602,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
     OUString sTblName = m_pNameED->GetText();
     if(sTblName.indexOf(' ') != -1)
     {
-        InfoBox(this, SW_RES(MSG_WRONG_TABLENAME)).Execute();
+        MessageDialog(this, SW_RES(STR_WRONG_TABLENAME), VCL_MESSAGE_INFO).Execute();
         m_pNameED->GrabFocus();
         return KEEP_PAGE;
     }
