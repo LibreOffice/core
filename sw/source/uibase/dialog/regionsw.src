@@ -53,17 +53,13 @@ QueryBox QB_CONNECT
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "A file connection will delete the contents of the current section. Connect anyway?" ;
 };
-InfoBox REG_WRONG_PASSWORD
+String STR_WRONG_PASSWORD
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "The password entered is invalid." ;
+    Text [ en-US ] = "The password entered is invalid." ;
 };
-InfoBox REG_WRONG_PASSWD_REPEAT
+String STR_WRONG_PASSWD_REPEAT
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "The password has not been set." ;
+    Text [ en-US ] = "The password has not been set." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

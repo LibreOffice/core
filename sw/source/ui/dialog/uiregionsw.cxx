@@ -22,6 +22,7 @@
 #include <svl/urihelper.hxx>
 #include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -417,7 +418,7 @@ bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
                 }
                 else
                 {
-                    InfoBox(this, SW_RES(REG_WRONG_PASSWORD)).Execute();
+                    MessageDialog(this, SW_RES(STR_WRONG_PASSWORD), VCL_MESSAGE_INFO).Execute();
                 }
             }
         }
@@ -1242,7 +1243,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
                     }
                     else
                     {
-                        InfoBox(pBox, SW_RES(REG_WRONG_PASSWD_REPEAT)).Execute();
+                        MessageDialog(pBox, SW_RES(STR_WRONG_PASSWD_REPEAT), VCL_MESSAGE_INFO).Execute();
                         ChangePasswdHdl(pBox);
                         break;
                     }
@@ -1681,7 +1682,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
                 }
                 else
                 {
-                    InfoBox(pButton, SW_RES(REG_WRONG_PASSWD_REPEAT)).Execute();
+                    MessageDialog(pButton, SW_RES(STR_WRONG_PASSWD_REPEAT), VCL_MESSAGE_INFO).Execute();
                 }
             }
             else if(!bChange)
