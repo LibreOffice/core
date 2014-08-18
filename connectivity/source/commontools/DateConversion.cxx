@@ -250,7 +250,21 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
         try
         {
             double fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
-            sal_Int32 nRealUsedKey = xFormatter->detectNumberFormat(0, rString);
+            Reference< XNumberFormats > xFormats(xFormatter->getNumberFormatsSupplier()->getNumberFormats());
+            Reference< XNumberFormatTypes > xFormatTypes(xFormats, UNO_QUERY);
+            assert(xFormatTypes.is());
+            sal_Int32 nStandardKey(0);
+            if(xFormatTypes.is())
+            {
+                css::lang::Locale loc;
+                OSL_VERIFY(xFormats->getByKey(nKeyToUse)->getPropertyValue("Locale") >>= loc);
+                nStandardKey = xFormatTypes->getStandardIndex(loc);
+            }
+            // Why use nStandardKey rather than nKeyToUse here? Don't know, but "it was always like that".
+            // Previously had hardcoded 0 instead of nStandardKey, which led to problems with dates
+            // because of differences M/D/Y vs D/M/Y. This at least fixes those problems, but possibly
+            // nKeyToUse is an even better choice than nStandardKey.
+            sal_Int32 nRealUsedKey = xFormatter->detectNumberFormat(nStandardKey, rString);
             if (nRealUsedKey != nKeyToUse)
                 nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~NumberFormat::DEFINED;
 
