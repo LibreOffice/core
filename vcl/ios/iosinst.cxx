@@ -234,14 +234,6 @@ int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
 
     NSLog(@"%@: %@", CreateNSString(rTitle), CreateNSString(rMessage));
 
-    if (IosSalInstance::getInstance() != NULL)
-    {
-        // Temporary...
-        MessageDialog aVclErrBox(NULL, rMessage);
-        aVclErrBox.SetTitle(rTitle);
-        aVclErrBox.Execute();
-    }
-
     return 0;
 }
 
