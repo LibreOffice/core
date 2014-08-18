@@ -720,4 +720,19 @@ String STR_CAPTION_OLE
     Text [ en-US ] = "Other OLE Objects";
 };
 
+String STR_WRONG_TABLENAME
+{
+    Text [ en-US ] = "The name of the table must not contain spaces." ;
+};
+
+String STR_ERR_TABLE_MERGE
+{
+    Text [ en-US ] = "Selected table cells are too complex to merge." ;
+};
+
+String STR_SRTERR
+{
+    Text [ en-US ] = "Cannot sort selection" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
