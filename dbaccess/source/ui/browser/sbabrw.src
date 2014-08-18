@@ -118,12 +118,6 @@ String STR_QUERY_DELETE_TABLE
     Text [ en-US ] = "Do you want to delete the table '%1'?" ;
 };
 
-QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
-{
-    Buttons = WB_YES_NO ;
-    Message [ en-US ] = "The query already exists. Do you want to delete it?" ;
-};
-
 QueryBox QUERY_CONNECTION_LOST
 {
     Buttons = WB_YES_NO ;

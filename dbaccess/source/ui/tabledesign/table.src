@@ -333,12 +333,6 @@ QueryBox TABLE_DESIGN_SAVEMODIFIED
     Message [ en-US ] = "The table has been changed.\nDo you want to save the changes?" ;
 };
 
-QueryBox TABLE_QUERY_CONNECTION_LOST
-{
-    Buttons = WB_YES_NO ;
-    Message [ en-US ] = "The connection to the database was lost! The table design can only be used with limited functionality without a connection.\nReconnect?" ;
-};
-
 String STR_TABLEDESIGN_CONNECTION_MISSING
 {
     Text [ en-US ] = "The table could not be saved due to problems connecting to the database.";

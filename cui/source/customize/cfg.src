@@ -217,27 +217,9 @@ String RID_SVXSTR_TOOLBAR_NAME
     Text [ en-US ] = "Toolbar Name" ;
 };
 
-/* %MENUNAME will be replaced at runtime by the name of the selected menu. */
-QueryBox QBX_CONFIRM_DELETE_MENU
-{
-    Message [ en-US ] = "Are you sure you want to delete the '%MENUNAME' menu?";
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-};
-
 QueryBox QBX_CONFIRM_DELETE_TOOLBAR
 {
     Message [ en-US ] = "There are no more commands on the toolbar. Do you want to delete the toolbar?";
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-};
-
-/* Translators: Do not translate %SAVE IN SELECTION% It is a placeholder and will be
-   replaced at runtime by the name of the selected application or document.
-*/
-QueryBox QBX_CONFIRM_RESET
-{
-    Message [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
 };
