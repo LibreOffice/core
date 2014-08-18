@@ -108,7 +108,7 @@ namespace sdr
             {
                 // for SC, the caption object may have a specialized shadow. The usual object shadow is off
                 // and a specialized shadow gets created here (see old paint)
-                const SdrShadowColorItem& rShadColItem = (SdrShadowColorItem&)(rItemSet.Get(SDRATTR_SHADOWCOLOR));
+                const XColorItem& rShadColItem = (XColorItem&)(rItemSet.Get(SDRATTR_SHADOWCOLOR));
                 const sal_uInt16 nShadowTransparence(((SdrPercentItem&)(rItemSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
                 const Color aShadowColor(rShadColItem.GetColorValue());
                 const drawing::FillStyle eShadowStyle = ((XFillStyleItem&)(rItemSet.Get(XATTR_FILLSTYLE))).GetValue();

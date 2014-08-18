@@ -323,9 +323,9 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         if( nPos != LISTBOX_ENTRY_NOTFOUND &&
             m_pLbShadowColor->IsValueChangedFromSaved() )
         {
-            SdrShadowColorItem aItem(m_pLbShadowColor->GetSelectEntryColor());
+            XColorItem aItem(makeSdrShadowColorItem(m_pLbShadowColor->GetSelectEntryColor()));
             pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWCOLOR );
-            if ( !pOld || !( *(const SdrShadowColorItem*)pOld == aItem ) )
+            if ( !pOld || !( *(const XColorItem*)pOld == aItem ) )
             {
                 rAttrs->Put( aItem );
                 bModified = true;
@@ -426,7 +426,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 
         if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SFX_ITEM_DONTCARE )
         {
-            m_pLbShadowColor->SelectEntry( ( ( const SdrShadowColorItem& ) rAttrs->Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
+            m_pLbShadowColor->SelectEntry( ( ( const XColorItem& ) rAttrs->Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
         }
         else
             m_pLbShadowColor->SetNoSelection();

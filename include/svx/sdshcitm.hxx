@@ -22,14 +22,9 @@
 #include <svx/xcolit.hxx>
 #include <svx/svddef.hxx>
 
-class SdrShadowColorItem: public XColorItem
-{
-public:
-    SdrShadowColorItem(const Color& rTheColor)
-        : XColorItem(SDRATTR_SHADOWCOLOR, rTheColor)
-    {
-    }
-};
+inline XColorItem makeSdrShadowColorItem(const Color& rTheColor) {
+    return XColorItem(SDRATTR_SHADOWCOLOR, rTheColor);
+}
 
 #endif
 

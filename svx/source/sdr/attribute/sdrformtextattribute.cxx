@@ -99,7 +99,7 @@ namespace
 
         if(bShadow)
         {
-            const Color aShadowColor(((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
+            const Color aShadowColor(((XColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
             aColorAttribute = aShadowColor.getBColor();
         }
         else
