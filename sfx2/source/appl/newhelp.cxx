@@ -1044,8 +1044,7 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
 
         if ( aFactories.empty() )
         {
-            InfoBox aBox( this, SfxResId( RID_INFO_NOSEARCHRESULTS ) );
-            aBox.SetText( SfxResId( STR_HELP_WINDOW_TITLE ).toString() );
+            MessageDialog aBox( this, SfxResId( STR_INFO_NOSEARCHRESULTS ), VCL_MESSAGE_INFO );
             aBox.Execute();
         }
     }
@@ -2269,7 +2268,7 @@ IMPL_LINK( SfxHelpTextWindow_Impl, FindHdl, sfx2::SearchDialog*, pDlg )
                 else
                 {
                     DBG_ASSERT( pSrchDlg, "no search dialog" );
-                    InfoBox aBox( pSrchDlg, SfxResId( RID_INFO_NOSEARCHTEXTFOUND ) );
+                    MessageDialog aBox( pSrchDlg, SfxResId( STR_INFO_NOSEARCHTEXTFOUND ), VCL_MESSAGE_INFO );
                     aBox.Execute();
                     pSrchDlg->SetFocusOnEdit();
                 }

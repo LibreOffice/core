@@ -195,18 +195,14 @@ Menu MENU_HELP_BOOKMARKS
     };
 };
 
-InfoBox RID_INFO_NOSEARCHRESULTS
+String STR_INFO_NOSEARCHRESULTS
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "No topics found.";
+    Text [ en-US ] = "No topics found.";
 };
 
-InfoBox RID_INFO_NOSEARCHTEXTFOUND
+String STR_INFO_NOSEARCHTEXTFOUND
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "The text you entered was not found.";
+    Text [ en-US ] = "The text you entered was not found.";
 };
 
 Image IMG_HELP_TOOLBOX_L_INDEX_ON
