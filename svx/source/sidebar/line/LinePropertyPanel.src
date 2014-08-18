@@ -84,35 +84,6 @@ Control RID_POPUPPANEL_LINEPAGE_COLOR
         Text = "Color";
     };
 };
-Control RID_POPUPPANEL_LINEPAGE_STYLE
-{
-    OutputSize = TRUE;
-    DialogControl = TRUE;
-    Border = FALSE;
-
-    Size = MAP_APPFONT(
-        POPUPPANEL_MARGIN_SMALL * 2 + POPUP_BORDER_WIDTH ,
-        13 + POPUP_BORDER_HEIGHT + POPUPPANEL_MARGIN_SMALL * 2 + POPUPPANEL_MARGIN_LARGE);
-
-    Control VS_STYLE
-    {
-        HelpId = HID_PPROPERTYPANEL_LINE_VS_STYLE ;
-        Hide = TRUE ;
-        Pos = MAP_APPFONT(  POPUPPANEL_MARGIN_SMALL + OFFSET_X , POPUPPANEL_MARGIN_SMALL + OFFSET_Y );
-        Size = MAP_APPFONT ( 93  , 13 * 12);
-        TabStop = TRUE ;
-        Text = "Style";
-    };
-
-    PushButton PB_OPTIONS
-    {
-        HelpId = HID_PPROPERTYPANEL_LINE_BTN_STYLE;
-        Pos = MAP_APPFONT (  POPUPPANEL_MARGIN_LARGE + OFFSET_X , POPUPPANEL_MARGIN_SMALL * 2 + OFFSET_Y  );
-        Size = MAP_APPFONT ( 93 , 13 );
-        TabStop = TRUE;
-        Text [ en-US ] = "~More Options...";
-    };
-};
 Control RID_POPUPPANEL_LINEPAGE_WIDTH
 {
     OutputSize = TRUE;
