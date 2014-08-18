@@ -21,8 +21,6 @@
 
 #include <sfx2/sfx.hrc>
 
-// #defines *****************************************************************
-
 #define STR_NODEFPRINTER                    (RID_SFX_VIEW_START+ 0)
 #define STR_ERROR_PRINTER_BUSY              (RID_SFX_VIEW_START+ 1)
 #define STR_NOSTARTPRINTER                  (RID_SFX_VIEW_START+ 2)
@@ -33,12 +31,12 @@
 #define STR_PRINT_NEWSIZE                   (RID_SFX_VIEW_START+23)
 #define STR_PRINT_NEWORISIZE                (RID_SFX_VIEW_START+24)
 
-#define MSG_ERROR_SEND_MAIL                 (RID_SFX_VIEW_START+31)
+#define STR_ERROR_SEND_MAIL                 (RID_SFX_VIEW_START+31)
 
 #define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_VIEW_START+33)
 
 #define MSG_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
-#define MSG_CANT_CLOSE                      (RID_SFX_VIEW_START+42)
+#define STR_CANT_CLOSE                      (RID_SFX_VIEW_START+42)
 
 #endif
 
