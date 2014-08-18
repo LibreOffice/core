@@ -56,6 +56,7 @@
 #include <editeng/acorrcfg.hxx>
 #include "swabstdlg.hxx"
 #include <misc.hrc>
+#include <view.hrc>
 
 #include <IDocumentFieldsAccess.hxx>
 #include <boost/scoped_ptr.hpp>
