@@ -1757,6 +1757,24 @@ void ScExportTest::testSharedFormulaExportXLSX()
     {
         bool checkContent( ScDocument& rDoc )
         {
+            SCTAB nTabCount = rDoc.GetTableCount();
+            if (nTabCount != 2)
+            {
+                cerr << "Document should have exactly 2 sheets.  " << nTabCount << " found." << endl;
+                return false;
+            }
+
+            // Make sure the sheet tab colors are not set.
+            for (SCROW i = 0; i <= 1; ++i)
+            {
+                Color aTabBgColor = rDoc.GetTabBgColor(i);
+                if (aTabBgColor != Color(COL_AUTO))
+                {
+                    cerr << "The tab color of Sheet " << (i+1) << " should not be explicitly set." << endl;
+                    return false;
+                }
+            }
+
             // B2:B7 should show 1,2,3,4,5,6.
             double fExpected = 1.0;
             for (SCROW i = 1; i <= 6; ++i, ++fExpected)
