@@ -349,10 +349,9 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         }
         if( (aData.nTestFlags & ~IMMEDIATE_FLAGS) != (pData->nTestFlags & ~IMMEDIATE_FLAGS) )
         {
-            InfoBox aBox( this, OUString(
+            MessageDialog aBox(this, OUString(
                 "Some of the changed settings will only be active after "
-                "restarting the process"
-                ) );
+                "restarting the process"), VCL_MESSAGE_INFO);
             aBox.Execute();
         }
         EndDialog( RET_OK );
