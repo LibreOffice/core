@@ -29,11 +29,6 @@ String STR_RECOVER_TITLE
     Text [ en-US ] = "File Recovery" ;
 };
 
-WarningBox STR_RECOVER_PREPARED
-{
-    Message [ en-US ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
-};
-
 String STR_BOOTSTRAP_ERR_CANNOT_START
 {
     Text [ en-US ] = "The application cannot be started. ";

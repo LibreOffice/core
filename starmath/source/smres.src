@@ -23,11 +23,6 @@
 #include "toolbox.hrc"
 #include "smcommands.h"
 
-WarningBox RID_NOMATHTYPEFACEWARNING
-{
-    Message [ en-US ] = "The 'StarMath' font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
-};
-
 String RID_FONTREGULAR
 {
     Text [ en-US ] = "Standard" ;

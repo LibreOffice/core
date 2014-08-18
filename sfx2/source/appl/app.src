@@ -328,14 +328,6 @@ String STR_DDE_ERROR
     Text [ en-US ] = "DDE link to % for % area % are not available." ;
 };
 
-WarningBox RID_SECURITY_WARNING_HYPERLINK
-{
-    HelpId = HID_WARNING_SECURITY_HYPERLINK;
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "This hyperlink is going to open \"%s\". Do you want to proceed?" ;
-};
-
 WarningBox RID_SECURITY_WARNING_NO_HYPERLINKS
 {
     Buttons = WB_OK ;
