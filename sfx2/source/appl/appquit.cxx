@@ -21,7 +21,7 @@
 #include <basic/sbstar.hxx>
 
 #include <svl/svdde.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svl/eitem.hxx>
 
 #include <unotools/saveopt.hxx>
@@ -65,7 +65,7 @@ bool SfxApplication::QueryExit_Impl()
     if ( !bQuit )
     {
         // Not really exit, only minimize
-        InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
+        MessageDialog aInfoBox( NULL, SfxResId(STR_CANT_QUIT), VCL_MESSAGE_INFO );
         aInfoBox.Execute();
         OSL_TRACE( "QueryExit => sal_False (in use)" );
         return false;

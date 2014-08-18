@@ -205,9 +205,9 @@ String GID_CONTROLS
     Text [ en-US ] = "Controls" ;
 };
 
-InfoBox MSG_CANT_QUIT
+String STR_CANT_QUIT
 {
-    Message [ en-US ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
+    Text [ en-US ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
 };
 
 String STR_ISMODIFIED
