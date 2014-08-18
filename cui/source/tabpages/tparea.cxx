@@ -323,7 +323,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
         if(m_pMtrTransparent->IsValueChangedFromSaved() || !bLinearActive)
         {
             XFillTransparenceItem aItem(nPos);
-            SdrShadowTransparenceItem aShadowItem(nPos);
+            SdrPercentItem aShadowItem(makeSdrShadowTransparenceItem(nPos));
             const SfxPoolItem* pOld = GetOldItem(*rAttrs, XATTR_FILLTRANSPARENCE);
             if(!pOld || !(*(const XFillTransparenceItem*)pOld == aItem) || !bLinearActive)
             {
@@ -393,7 +393,7 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
     if(bSwitchOffLinear && (bLinearActive || bLinearUsed))
     {
         XFillTransparenceItem aItem(0);
-        SdrShadowTransparenceItem aShadowItem(0);
+        SdrPercentItem aShadowItem(makeSdrShadowTransparenceItem(0));
         rAttrs->Put(aItem);
         rAttrs->Put(aShadowItem);
         bModified = true;

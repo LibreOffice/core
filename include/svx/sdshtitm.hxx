@@ -22,14 +22,9 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 
-/**
- * class SdrShadowTransparenceItem
- */
-class SdrShadowTransparenceItem: public SdrPercentItem {
-public:
-    SdrShadowTransparenceItem(sal_uInt16 nTransp=0): SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE,nTransp) {}
-    SdrShadowTransparenceItem(SvStream& rIn)   : SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE,rIn)     {}
-};
+inline SdrPercentItem makeSdrShadowTransparenceItem(sal_uInt16 nTransp) {
+    return SdrPercentItem(SDRATTR_SHADOWTRANSPARENCE, nTransp);
+}
 
 #endif
 

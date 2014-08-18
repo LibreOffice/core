@@ -336,9 +336,9 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
         sal_uInt16 nVal = (sal_uInt16)m_pMtrTransparent->GetValue();
         if( m_pMtrTransparent->IsValueChangedFromSaved() )
         {
-            SdrShadowTransparenceItem aItem( nVal );
+            SdrPercentItem aItem( makeSdrShadowTransparenceItem(nVal) );
             pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWTRANSPARENCE );
-            if ( !pOld || !( *(const SdrShadowTransparenceItem*)pOld == aItem ) )
+            if ( !pOld || !( *(const SdrPercentItem*)pOld == aItem ) )
             {
                 rAttrs->Put( aItem );
                 bModified = true;
@@ -433,7 +433,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
 
         if( rAttrs->GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SFX_ITEM_DONTCARE )
         {
-            sal_uInt16 nTransp = ( ( const SdrShadowTransparenceItem& ) rAttrs->Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
+            sal_uInt16 nTransp = ( ( const SdrPercentItem& ) rAttrs->Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
             m_pMtrTransparent->SetValue( nTransp );
         }
         else

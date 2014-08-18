@@ -339,7 +339,7 @@ namespace drawinglayer
 
             if(bShadow)
             {
-                sal_uInt16 nTransparence(((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
+                sal_uInt16 nTransparence(((SdrPercentItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
 
                 if(nTransparence > 100)
                 {

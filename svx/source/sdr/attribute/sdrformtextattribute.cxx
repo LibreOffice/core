@@ -83,7 +83,7 @@ namespace
 
         if(bShadow)
         {
-            nRetval = (sal_uInt8)((((SdrShadowTransparenceItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue() * 255) / 100);
+            nRetval = (sal_uInt8)((((SdrPercentItem&)(rSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue() * 255) / 100);
         }
         else
         {

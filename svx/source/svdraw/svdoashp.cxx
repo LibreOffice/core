@@ -214,7 +214,7 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
         const sal_Int32 nXDist(((SdrMetricItem&)(rOriginalSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
         const sal_Int32 nYDist(((SdrMetricItem&)(rOriginalSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
         const ::Color aShadowColor(((SdrShadowColorItem&)(rOriginalSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
-        const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
+        const sal_uInt16 nShadowTransparence(((SdrPercentItem&)(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
         pRetval = rOriginal.Clone();
         DBG_ASSERT(pRetval, "ImpCreateShadowObjectClone: Could not clone object (!)");
 
