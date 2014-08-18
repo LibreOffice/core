@@ -16,6 +16,24 @@
       "revId": "b49353f7d8fea0ba9799d2bbf924177b581b56a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_5b3e7bb9",
+        "filename": "l10ntools/source/export.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-08-18T09:25:27Z",
+      "side": 1,
+      "message": "It\u0027s from my working around segfault here. Well yep, currently it\u0027s not needed. Pushing updated patch...",
+      "parentUuid": "7ad32947_9602ac6e",
+      "revId": "b49353f7d8fea0ba9799d2bbf924177b581b56a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
