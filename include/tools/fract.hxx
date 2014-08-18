@@ -21,6 +21,15 @@
 
 #include <tools/toolsdllapi.h>
 
+// Added due transition from Fraction to boost::rational<long>
+#include <stdexcept>
+#include <boost/rational.hpp>
+void reduceInnacurate(boost::rational<long> &, unsigned)
+{
+    throw std::runtime_error("NOT IMPLEMENTED");
+}
+
+
 class SvStream;
 
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
