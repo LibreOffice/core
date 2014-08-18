@@ -304,7 +304,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet* rAttrs )
 
     if( rAttrs->GetItemState( SDRATTR_TEXT_CONTOURFRAME ) != SFX_ITEM_DONTCARE )
     {
-        bool bContour = ( ( const SdrTextContourFrameItem& )rAttrs->Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
+        bool bContour = ( ( const SdrOnOffItem& )rAttrs->Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
         m_pTsbContour->SetState( bContour ? TRISTATE_TRUE : TRISTATE_FALSE );
         m_pTsbContour->EnableTriState( false );
     }
@@ -381,7 +381,7 @@ bool SvxTextAttrPage::FillItemSet( SfxItemSet* rAttrs)
     eState = m_pTsbContour->GetState();
     if( m_pTsbContour->IsValueChangedFromSaved() )
     {
-        rAttrs->Put( SdrTextContourFrameItem( TRISTATE_TRUE == eState ) );
+        rAttrs->Put( makeSdrTextContourFrameItem( TRISTATE_TRUE == eState ) );
     }
 
     eState = m_pTsbFitToSize->GetState();

@@ -859,7 +859,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     pImpRec->bAutoWidth = true;
                 break;
                 case mso_wrapByPoints :
-                    aSet.Put( SdrTextContourFrameItem( true ) );
+                    aSet.Put( makeSdrTextContourFrameItem( true ) );
                 break;
                 default:
                     ;

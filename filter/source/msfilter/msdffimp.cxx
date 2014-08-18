@@ -5147,7 +5147,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     }
                 break;
                 case mso_wrapByPoints :
-                    aSet.Put( SdrTextContourFrameItem( true ) );
+                    aSet.Put( makeSdrTextContourFrameItem( true ) );
                 break;
                 default: break;
             }

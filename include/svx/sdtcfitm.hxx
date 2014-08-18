@@ -22,14 +22,9 @@
 #include <svx/sdooitm.hxx>
 #include <svx/svddef.hxx>
 
-/*
- * class SdrTextContourFrameItem
- */
-class SdrTextContourFrameItem: public SdrOnOffItem {
-public:
-    SdrTextContourFrameItem(bool bOn=false): SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME,bOn) {}
-    SdrTextContourFrameItem(SvStream& rIn) : SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME,rIn) {}
-};
+inline SdrOnOffItem makeSdrTextContourFrameItem(bool bOn) {
+    return SdrOnOffItem(SDRATTR_TEXT_CONTOURFRAME, bOn);
+}
 
 #endif
 

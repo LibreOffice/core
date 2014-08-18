@@ -572,7 +572,7 @@ namespace drawinglayer
                     pLower ? *pLower : rTextObj.GetTextLowerDistance(),
                     rTextObj.GetTextHorizontalAdjust(rSet),
                     rTextObj.GetTextVerticalAdjust(rSet),
-                    ((const SdrTextContourFrameItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
+                    ((const SdrOnOffItem&)rSet.Get(SDRATTR_TEXT_CONTOURFRAME)).GetValue(),
                     rTextObj.IsFitToSize(),
                     rTextObj.IsAutoFit(),
                     ((const XFormTextHideFormItem&)rSet.Get(XATTR_FORMTXTHIDEFORM)).GetValue(),

@@ -1794,7 +1794,7 @@ bool SdrTextObj::IsHideContour() const
 bool SdrTextObj::IsContourTextFrame() const
 {
     return (bTextFrame) ? false // ContourFrame not together with normal TextFrames
-        : ((SdrTextContourFrameItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME))).GetValue();
+        : ((SdrOnOffItem&)(GetObjectItemSet().Get(SDRATTR_TEXT_CONTOURFRAME))).GetValue();
 }
 
 long SdrTextObj::GetTextLeftDistance() const
