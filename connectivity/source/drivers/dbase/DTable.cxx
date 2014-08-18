@@ -799,6 +799,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)) >>= nLen;
             (*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))      >>= nType;
         }
+
         switch(nType)
         {
             case DataType::INTEGER:
@@ -875,6 +876,8 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
         else if ( DataType::INTEGER == nType )
         {
             sal_Int32 nValue = 0;
+            if (static_cast<size_t>(nLen) > sizeof(nValue))
+                return false;
             memcpy(&nValue, pData, nLen);
             *(_rRow->get())[i] = nValue;
         }
@@ -884,6 +887,8 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             if (getBOOL((*aIter)->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency is treated separately
             {
                 sal_Int64 nValue = 0;
+                if (static_cast<size_t>(nLen) > sizeof(nValue))
+                    return false;
                 memcpy(&nValue, pData, nLen);
 
                 if ( m_aScales[i-1] )
@@ -893,6 +898,8 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             }
             else
             {
+                if (static_cast<size_t>(nLen) > sizeof(d))
+                    return false;
                 memcpy(&d, pData, nLen);
             }
 
@@ -1852,6 +1859,8 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
                 case DataType::INTEGER:
                     {
                         sal_Int32 nValue = thisColVal;
+                        if (static_cast<size_t>(nLen) > sizeof(nValue))
+                            return false;
                         memcpy(pData,&nValue,nLen);
                     }
                     break;
@@ -1867,10 +1876,16 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, cons
                                 nValue = (sal_Int64)(d * pow(10.0,(int)m_aScales[i]));
                             else
                                 nValue = (sal_Int64)(d);
+                            if (static_cast<size_t>(nLen) > sizeof(nValue))
+                                return false;
                             memcpy(pData,&nValue,nLen);
                         } // if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency is treated separately
                         else
+                        {
+                            if (static_cast<size_t>(nLen) > sizeof(d))
+                                return false;
                             memcpy(pData,&d,nLen);
+                        }
                     }
                     break;
                 case DataType::DECIMAL:
