@@ -110,9 +110,21 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
     mnPos = aPrevStr.indexOf( 0x1B );
     if ( mnPos != -1 )
     {
-        mnChar = aPrevStr[ mnPos + 1 ];
-        // delete placeholder and char to repeat
-        aPrevStr = aPrevStr.replaceAt( mnPos, 2, "" );
+        // Right during user input the star symbol is the very
+        // last character before the user enters another one.
+        if (mnPos < aPrevStr.getLength() - 1)
+        {
+            mnChar = aPrevStr[ mnPos + 1 ];
+            // delete placeholder and char to repeat
+            aPrevStr = aPrevStr.replaceAt( mnPos, 2, "" );
+        }
+        else
+        {
+            // delete placeholder
+            aPrevStr = aPrevStr.replaceAt( mnPos, 1, "" );
+            // do not attempt to draw a 0 fill character
+            mnPos = -1;
+        }
     }
     svtools::ColorConfig aColorConfig;
     Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
