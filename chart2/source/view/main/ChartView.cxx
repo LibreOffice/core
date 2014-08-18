@@ -2496,11 +2496,6 @@ void ChartView::createShapes()
     else
     {
         m_pGL3DPlotter.reset();
-
-        // hide OpenGL window for now in normal charts
-        OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
-        if(pWindow)
-            pWindow->Show(false);
     }
 #endif
 
