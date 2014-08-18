@@ -23,11 +23,6 @@
 namespace svxform
 {
 
-
-
-    //= OTypeConversionClient
-
-
     OTypeConversionClient::OTypeConversionClient()
     {
     }

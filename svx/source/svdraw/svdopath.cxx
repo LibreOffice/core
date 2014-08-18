@@ -228,8 +228,6 @@ void ImpSdrPathDragData::ResetPoly(const SdrPathObj& rPO)
     aXP[4]=aTmpXP[nNextNextPnt0];  aXP.SetFlags(4,aTmpXP.GetFlags(nNextNextPnt0));
 }
 
-/*************************************************************************/
-
 struct ImpPathCreateUser  : public SdrDragStatUserData
 {
     Point                   aBezControl0;
@@ -502,8 +500,6 @@ XPolygon ImpPathCreateUser::GetRectPoly() const
     if (aRectP3!=aRectP2) aXP[2]=aRectP3;
     return aXP;
 }
-
-/*************************************************************************/
 
 class ImpPathForDragAndCreate
 {
@@ -1650,8 +1646,6 @@ Pointer ImpPathForDragAndCreate::GetCreatePointer() const
     return Pointer(POINTER_CROSS);
 }
 
-/*************************************************************************/
-
 SdrPathObjGeoData::SdrPathObjGeoData()
     : meKind(OBJ_NONE)
 {
@@ -1667,8 +1661,6 @@ sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfSdrPathObj(*this);
 }
-
-/*************************************************************************/
 
 TYPEINIT1(SdrPathObj,SdrTextObj);
 

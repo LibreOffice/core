@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_STBCTRLS_STBCTRLS_H
 #define INCLUDED_SVX_SOURCE_STBCTRLS_STBCTRLS_H
 
-// defines ------------------------------------------------------------------
-
 #define ZOOM_200            1
 #define ZOOM_150            2
 #define ZOOM_100            3

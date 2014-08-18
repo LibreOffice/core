@@ -70,9 +70,6 @@ namespace svx
     {
     }
 
-
-    //= PropertyChangeNotifier_Data
-
     struct PropertyChangeNotifier_Data
     {
         ::cppu::OWeakObject&            m_rContext;
@@ -100,10 +97,6 @@ namespace svx
         Reference< XPropertySet > xContextProps( const_cast< PropertyValueProvider* >( this )->m_rContext, UNO_QUERY_THROW );
         _out_rValue = xContextProps->getPropertyValue( getPropertyName() );
     }
-
-
-    //= PropertyChangeNotifier
-
 
     PropertyChangeNotifier::PropertyChangeNotifier( ::cppu::OWeakObject& _rOwner, ::osl::Mutex& _rMutex )
         :m_pData( new PropertyChangeNotifier_Data( _rOwner, _rMutex ) )

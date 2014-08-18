@@ -113,8 +113,7 @@ EnhancedCustomShapeEngine::~EnhancedCustomShapeEngine()
 {
 }
 
-// XInterface -----------------------------------------------------------------
-
+// XInterface
 void SAL_CALL EnhancedCustomShapeEngine::acquire() throw()
 {
     OWeakObject::acquire();
@@ -124,8 +123,7 @@ void SAL_CALL EnhancedCustomShapeEngine::release() throw()
     OWeakObject::release();
 }
 
-// XInitialization ------------------------------------------------------------
-
+// XInitialization
 void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArguments )
     throw ( Exception, RuntimeException, std::exception )
 {
@@ -146,7 +144,7 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArg
     }
 }
 
-// XServiceInfo ---------------------------------------------------------------
+// XServiceInfo
 OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
     throw( RuntimeException, std::exception )
 {
@@ -166,7 +164,7 @@ Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceName
     return aRet;
 }
 
-// XCustomShapeEngine -----------------------------------------------------------
+// XCustomShapeEngine
 SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape )
 {
     bool bHasText = pCustoObj->HasText();

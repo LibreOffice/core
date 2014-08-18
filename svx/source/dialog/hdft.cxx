@@ -55,8 +55,6 @@
 
 using namespace com::sun::star;
 
-// static ----------------------------------------------------------------
-
 // Word 97 incompatibility (#i19922#)
 static const long MINBODY = 56;  // 1mm in twips rounded
 
@@ -696,7 +694,6 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
                 pItem = aIter.NextItem();
             }
 
-            //----------------------------------------------------------------
             {
                 drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFillAttributes;
 
@@ -732,7 +729,6 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
                 }
             }
 
-            //----------------------------------------------------------------
             {
                 const sal_uInt16 nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 

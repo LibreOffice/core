@@ -124,9 +124,6 @@ namespace svxform
         SVX_DLLPRIVATE void implReset();
     };
 
-
-    //= OControlTransferData
-
     class OControlTransferData
     {
     private:
@@ -207,9 +204,6 @@ namespace svxform
         return m_aCurrentFormats;
     }
 
-
-    //= OControlExchange
-
     class OControlExchange : public OLocalExchange, public OControlTransferData
     {
     public:
@@ -228,9 +222,6 @@ namespace svxform
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) SAL_OVERRIDE;
         virtual void        AddSupportedFormats() SAL_OVERRIDE;
     };
-
-
-    //= OControlExchangeHelper
 
     class OControlExchangeHelper : public OLocalExchangeHelper
     {

@@ -44,9 +44,6 @@ namespace svxform
     #define CONTROL_STATUS_MOUSE_HOVER  0x02
     #define CONTROL_STATUS_INVALID      0x04
 
-
-    //= BorderDescriptor
-
     struct BorderDescriptor
     {
         sal_Int16   nBorderType;
@@ -63,9 +60,6 @@ namespace svxform
             nBorderColor = 0x00000000;
         }
     };
-
-
-    //= UnderlineDescriptor
 
     struct UnderlineDescriptor
     {
@@ -90,9 +84,6 @@ namespace svxform
             nUnderlineColor = 0x00000000;
         }
     };
-
-
-    //= ControlData
 
     struct ControlData : public BorderDescriptor, UnderlineDescriptor
     {

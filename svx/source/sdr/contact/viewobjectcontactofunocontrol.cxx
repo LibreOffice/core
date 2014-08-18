@@ -142,9 +142,6 @@ namespace sdr { namespace contact {
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::uno::Any;
 
-
-    //= ControlHolder
-
     class ControlHolder
     {
     private:
@@ -346,8 +343,6 @@ namespace sdr { namespace contact {
 
     }
 
-    //= IPageViewAccess
-
     /** interface encapsulating access to an SdrPageView, stripped down to the methods we really need
      */
     class IPageViewAccess
@@ -369,9 +364,6 @@ namespace sdr { namespace contact {
     protected:
         ~IPageViewAccess() {}
     };
-
-
-    //= SdrPageViewAccess
 
     /** is a ->IPageViewAccess implementation based on a real ->SdrPageView instance
      */
@@ -409,9 +401,6 @@ namespace sdr { namespace contact {
     {
         return m_rPageView.GetVisibleLayers().IsSet( _nLayerID );
     }
-
-
-    //= InvisibleControlViewAccess
 
     /** is a ->IPageViewAccess implementation which can be used to create an invisble control for
         an arbitrary window
@@ -804,9 +793,6 @@ namespace sdr { namespace contact {
         const OutputDevice& impl_getOutputDevice_throw() const;
     };
 
-
-    //= LazyControlCreationPrimitive2D
-
     class LazyControlCreationPrimitive2D : public ::drawinglayer::primitive2d::BufferedDecompositionPrimitive2D
     {
     private:
@@ -858,10 +844,6 @@ namespace sdr { namespace contact {
         */
         ::basegfx::B2DHomMatrix                                 m_aTransformation;
     };
-
-
-    //= ViewObjectContactOfUnoControl_Impl
-
 
     ViewObjectContactOfUnoControl_Impl::ViewObjectContactOfUnoControl_Impl( ViewObjectContactOfUnoControl* _pAntiImpl )
         :m_pAntiImpl( _pAntiImpl )
@@ -1622,10 +1604,6 @@ namespace sdr { namespace contact {
 
     ImplPrimitive2DIDBlock( LazyControlCreationPrimitive2D, PRIMITIVE2D_ID_SDRCONTROLPRIMITIVE2D )
 
-
-    //= ViewObjectContactOfUnoControl
-
-
     ViewObjectContactOfUnoControl::ViewObjectContactOfUnoControl( ObjectContact& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfSdrObj( _rObjectContact, _rViewContact )
         ,m_pImpl( new ViewObjectContactOfUnoControl_Impl( this ) )
@@ -1794,10 +1772,6 @@ namespace sdr { namespace contact {
         // since it only has a uno reference to the XControlModel
         flushPrimitive2DSequence();
     }
-
-
-    //= UnoControlPrintOrPreviewContact
-
 
     UnoControlPrintOrPreviewContact::UnoControlPrintOrPreviewContact( ObjectContactOfPageView& _rObjectContact, ViewContactOfUnoControl& _rViewContact )
         :ViewObjectContactOfUnoControl( _rObjectContact, _rViewContact )

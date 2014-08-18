@@ -155,8 +155,6 @@ void StrArrToList_Impl( sal_uInt16 nId, const std::vector<OUString>& rStrLst )
     SfxGetpApp()->PutItem( SfxStringListItem( nId, &rStrLst ) );
 }
 
-// class SearchAttrItemList ----------------------------------------------
-
 SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList ) :
     SrchAttrItemList(rList)
 {
@@ -246,8 +244,6 @@ void SearchAttrItemList::Remove(size_t nPos, size_t nLen)
 
     SrchAttrItemList::erase( begin() + nPos, begin() + nPos + nLen );
 }
-
-// class SvxSearchDialog -------------------------------------------------
 
 SvxSearchDialog::SvxSearchDialog( Window* pParent, SfxChildWindow* pChildWin, SfxBindings& rBind )
     : SfxModelessDialog(&rBind, pChildWin, pParent, "FindReplaceDialog",
@@ -2212,8 +2208,6 @@ void SvxSearchDialog::SaveToModule_Impl()
     else
         return xPeer;
 }
-
-// class SvxSearchDialogWrapper ------------------------------------------
 
 SFX_IMPL_CHILDWINDOW_WITHID(SvxSearchDialogWrapper, SID_SEARCH_DLG);
 

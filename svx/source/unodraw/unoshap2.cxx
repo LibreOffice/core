@@ -69,10 +69,6 @@ using namespace ::com::sun::star::container;
     if( rType == ::getCppuType((const Reference< xint >*)0) ) \
         aAny <<= Reference< xint >(this)
 
-/***********************************************************************
-* class SvxShapeGroup                                                  *
-***********************************************************************/
-
 SvxShapeGroup::SvxShapeGroup( SdrObject* pObj, SvxDrawPage* pDrawPage  )  throw() :
     SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_GROUP), getSvxMapProvider().GetPropertySet(SVXMAP_GROUP, SdrObject::GetGlobalDrawObjectItemPool()) ),
     mxPage( pDrawPage )
@@ -144,7 +140,6 @@ OUString SAL_CALL SvxShapeGroup::getShapeType()
     return SvxShape::getShapeType();
 }
 
-//------------------------------------------------------------------1----
 awt::Point SAL_CALL SvxShapeGroup::getPosition() throw(uno::RuntimeException, std::exception)
 {
     return SvxShape::getPosition();
@@ -371,11 +366,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapeGroup::getSupportedServiceNames()
 {
     return SvxShape::getSupportedServiceNames();
 }
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-
 SvxShapeConnector::SvxShapeConnector( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONNECTOR), getSvxMapProvider().GetPropertySet(SVXMAP_CONNECTOR, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -438,7 +428,6 @@ OUString SAL_CALL SvxShapeConnector::getShapeType()
     return SvxShapeText::getShapeType();
 }
 
-//------------------------------------------------------------------1----
 awt::Point SAL_CALL SvxShapeConnector::getPosition() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getPosition();
@@ -532,10 +521,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapeConnector::getSupportedServiceNames()
     return SvxShapeText::getSupportedServiceNames();
 }
 
-/***********************************************************************
-* class SvxShapeControl                                                *
-***********************************************************************/
-
 SvxShapeControl::SvxShapeControl( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CONTROL), getSvxMapProvider().GetPropertySet(SVXMAP_CONTROL, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -597,7 +582,6 @@ OUString SAL_CALL SvxShapeControl::getShapeType()
     return SvxShapeText::getShapeType();
 }
 
-//------------------------------------------------------------------1----
 awt::Point SAL_CALL SvxShapeControl::getPosition() throw(uno::RuntimeException, std::exception)
 {
     return SvxShapeText::getPosition();
@@ -990,12 +974,6 @@ uno::Any SAL_CALL SvxShapeControl::getPropertyDefault( const OUString& aProperty
     }
 }
 
-
-/***********************************************************************
-* class SvxShapeDimensioning                                           *
-***********************************************************************/
-
-
 SvxShapeDimensioning::SvxShapeDimensioning( SdrObject* pObj ) throw()
 :   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_DIMENSIONING), getSvxMapProvider().GetPropertySet(SVXMAP_DIMENSIONING, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -1011,12 +989,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapeDimensioning::getSupportedServiceName
 {
     return SvxShapeText::getSupportedServiceNames();
 }
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-
-
 SvxShapeCircle::SvxShapeCircle( SdrObject* pObj ) throw()
 :   SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_CIRCLE), getSvxMapProvider().GetPropertySet(SVXMAP_CIRCLE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -1033,11 +1005,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapeCircle::getSupportedServiceNames() th
 {
     return SvxShapeText::getSupportedServiceNames();
 }
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-
 #include <svx/svdopath.hxx>
 
 
@@ -1299,9 +1266,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygon::getSupportedServiceNames
     return SvxShapeText::getSupportedServiceNames();
 }
 
-/***********************************************************************
-* class SvxShapePolyPolygonBezier                                      *
-***********************************************************************/
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 
@@ -1431,9 +1395,6 @@ uno::Sequence< OUString > SAL_CALL SvxShapePolyPolygonBezier::getSupportedServic
     return SvxShapeText::getSupportedServiceNames();
 }
 
-/***********************************************************************
-* class SvxGraphicObject                                               *
-***********************************************************************/
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <vcl/cvtgrf.hxx>
 #include <svx/svdograf.hxx>
@@ -1715,10 +1676,6 @@ SvxShapeCaption::~SvxShapeCaption() throw()
 {
 }
 
-/***********************************************************************
-* class SvxCustomShape                                                   *
-***********************************************************************/
-
 SvxCustomShape::SvxCustomShape( SdrObject* pObj )  throw() :
     SvxShapeText( pObj, getSvxMapProvider().GetMap( SVXMAP_CUSTOMSHAPE ), getSvxMapProvider().GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
@@ -1786,7 +1743,6 @@ OUString SAL_CALL SvxCustomShape::getShapeType()
     return SvxShape::getShapeType();
 }
 
-//------------------------------------------------------------------1----
 awt::Point SAL_CALL SvxCustomShape::getPosition() throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;

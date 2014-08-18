@@ -21,11 +21,6 @@
 
 #include <svx/stddlg.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
-
-// class SvxStandardDialog -----------------------------------------------
-
 short SvxStandardDialog::Execute()
 {
     short nRet = ModalDialog::Execute();

@@ -34,10 +34,6 @@
 namespace svx
 {
 
-
-
-    //= FeatureSlotTranslation
-
     class FeatureSlotTranslation
     {
     public:
@@ -50,9 +46,6 @@ namespace svx
         /// retrieves the slot id for a given css.form.runtime.FormFeature ID
         static  sal_Int32       getSlotIdForFormFeature( sal_Int16 _nFormFeature );
     };
-
-
-    //= IControllerFeatureInvalidation
 
     class IControllerFeatureInvalidation
     {
@@ -71,9 +64,6 @@ namespace svx
     protected:
         ~IControllerFeatureInvalidation() {}
     };
-
-
-    //= ControllerFeatures
 
     class FormControllerHelper;
     /** easier access to an FormControllerHelper instance

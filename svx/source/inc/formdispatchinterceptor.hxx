@@ -30,10 +30,6 @@
 namespace svxform
 {
 
-
-
-    //= DispatchInterceptor
-
     class DispatchInterceptor
     {
     public:

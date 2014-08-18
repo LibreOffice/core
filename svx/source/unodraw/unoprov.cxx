@@ -802,10 +802,6 @@ comphelper::PropertyMapEntry const * ImplGetAdditionalWriterDrawingDefaultsPrope
     return aSvxAdditionalDefaultsPropertyMap_Impl;
 }
 
-/***********************************************************************
-* class UHashMap                                                       *
-***********************************************************************/
-
 typedef ::boost::unordered_map< OUString, sal_uInt32, OUStringHash > UHashMapImpl;
 
 namespace {
@@ -900,10 +896,6 @@ sal_uInt32 UHashMap::getId( const OUString& rCompareString )
         return it->second;
 }
 
-/***********************************************************************
-* class SvxUnoPropertyMapProvider                                      *
-***********************************************************************/
-
 struct theSvxMapProvider :
     public rtl::Static<SvxUnoPropertyMapProvider, theSvxMapProvider>
 {
@@ -979,7 +971,6 @@ const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(sal_uInt16 n
     return aSetArr[nPropertyId];
 }
 
-// #####################################################################
 
 /** maps the API constant MeasureUnit to a vcl MapUnit enum.
     Returns false if conversion is not supported.

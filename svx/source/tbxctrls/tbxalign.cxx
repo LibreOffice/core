@@ -32,12 +32,9 @@
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlAlign, SfxAllEnumItem);
 
-/*************************************************************************
-|*
-|* Klasse fuer SwToolbox
-|*
-\************************************************************************/
-
+/*
+ * Klasse fuer SwToolbox
+ */
 SvxTbxCtlAlign::SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
     ,   m_aSubTbName( "alignmentbar" )
@@ -49,24 +46,20 @@ SvxTbxCtlAlign::SvxTbxCtlAlign( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTb
     m_aCommand = m_aCommandURL;
 }
 
-/*************************************************************************
-|*
-|* Wenn man ein PopupWindow erzeugen will
-|*
-\************************************************************************/
+/*
+ * Wenn man ein PopupWindow erzeugen will
+ */
 
 SfxPopupWindowType SvxTbxCtlAlign::GetPopupWindowType() const
 {
     return(SFX_POPUPWINDOW_ONCLICK);
 }
 
-/*************************************************************************
-|*
-|* Hier wird das Fenster erzeugt
-|* Lage der Toolbox mit GetToolBox() abfragbar
-|* rItemRect sind die Screen-Koordinaten
-|*
-\************************************************************************/
+/*
+ * Hier wird das Fenster erzeugt
+ * Lage der Toolbox mit GetToolBox() abfragbar
+ * rItemRect sind die Screen-Koordinaten
+ */
 
 SfxPopupWindow* SvxTbxCtlAlign::CreatePopupWindow()
 {

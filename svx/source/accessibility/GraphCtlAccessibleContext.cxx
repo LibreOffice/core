@@ -37,7 +37,6 @@
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-//===== local includes ========================================================
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/AccessibleShapeInfo.hxx>
 #include "GraphCtlAccessibleContext.hxx"
@@ -50,8 +49,7 @@
 #include <svx/svdetc.hxx>
 #include <svx/sdrhittesthelper.hxx>
 
-//=====  namespaces ===========================================================
-
+// namespaces
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::accessibility;
@@ -61,9 +59,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
-
-//=====  internal  ============================================================
-
+// internal
 /** initialize this component and set default values */
 SvxGraphCtrlAccessibleContext::SvxGraphCtrlAccessibleContext(
     const Reference< XAccessible >& rxParent,
@@ -178,15 +174,13 @@ Reference< XAccessible > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessible( 
     return xAccessibleShape;
 }
 
-//=====  XAccessible  =========================================================
-
+// XAccessible
 Reference< XAccessibleContext > SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleContext( void ) throw( RuntimeException, std::exception )
 {
     return this;
 }
 
-//=====  XAccessibleComponent  ================================================
-
+// XAccessibleComponent
 sal_Bool SAL_CALL SvxGraphCtrlAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException, std::exception )
 {
     // no guard -> done in getSize()
@@ -269,9 +263,7 @@ awt::Size SAL_CALL SvxGraphCtrlAccessibleContext::getSize() throw( RuntimeExcept
     return awt::Size( aRect.getWidth(), aRect.getHeight() );
 }
 
-
-//=====  XAccessibleContext  ==================================================
-
+// XAccessibleContext
 sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getAccessibleChildCount( void ) throw( RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
@@ -447,8 +439,7 @@ lang::Locale SAL_CALL SvxGraphCtrlAccessibleContext::getLocale( void ) throw( Il
     throw IllegalAccessibleComponentStateException();
 }
 
-//=====  XAccessibleEventListener  ============================================
-
+// XAccessibleEventListener
 void SAL_CALL SvxGraphCtrlAccessibleContext::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw( RuntimeException, std::exception )
 {
@@ -555,8 +546,7 @@ sal_Int32 SAL_CALL SvxGraphCtrlAccessibleContext::getBackground (void)
     return static_cast<sal_Int32>(nColor);
 }
 
-
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 OUString SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationName( void ) throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ui.SvxGraphCtrlAccessibleContext" );
@@ -578,21 +568,19 @@ Sequence< OUString > SAL_CALL SvxGraphCtrlAccessibleContext::getSupportedService
     return aSNs;
 }
 
-//=====  XTypeProvider  =======================================================
+// XTypeProvider
 Sequence<sal_Int8> SAL_CALL SvxGraphCtrlAccessibleContext::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-//=====  XServiceName  ========================================================
-
+// XServiceName
 OUString SvxGraphCtrlAccessibleContext::getServiceName( void ) throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.accessibility.AccessibleContext" );
 }
 
-//=====  XAccessibleSelection =============================================
-
+// XAccessibleSelection
 void SAL_CALL SvxGraphCtrlAccessibleContext::selectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
@@ -704,8 +692,7 @@ void SAL_CALL SvxGraphCtrlAccessibleContext::deselectAccessibleChild( sal_Int32 
     }
 }
 
-//=====  internals ========================================================
-
+// internals
 void SvxGraphCtrlAccessibleContext::checkChildIndexOnSelection( long nIndex ) throw( lang::IndexOutOfBoundsException )
 {
     if( nIndex < 0 || nIndex >= getSelectedAccessibleChildCount() )
@@ -875,8 +862,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     }
 }
 
-//=====  IAccessibleViewforwarder  ========================================
-
+// IAccessibleViewforwarder
 bool SvxGraphCtrlAccessibleContext::IsValid (void) const
 {
     return true;

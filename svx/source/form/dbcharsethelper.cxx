@@ -23,11 +23,6 @@
 namespace svxform
 {
 
-
-
-    //= ODataAccessCharsetHelper
-
-
     ODataAccessCharsetHelper::ODataAccessCharsetHelper( )
     {
     }

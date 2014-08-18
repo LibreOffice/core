@@ -70,9 +70,6 @@ namespace svx
 const int nColCount = 4;
 const int nLineCount = 4;
 
-/*************************************************************************
-|*  Svx3DWin - FloatingWindow
-\************************************************************************/
 FontWorkGalleryDialog::FontWorkGalleryDialog( SdrView* pSdrView, Window* pParent, sal_uInt16 /*nSID*/ ) :
         ModalDialog(pParent, "FontworkGalleryDialog", "svx/ui/fontworkgallerydialog.ui" ),
         mnThemeId           ( 0xffff ),
@@ -298,10 +295,6 @@ void FontWorkShapeTypeControl::Select(sal_uInt16 /*nSelectModifier*/)
 
 }
 
-
-// FontworkAlignmentWindow
-
-
 class FontworkAlignmentWindow : public ToolbarMenu
 {
 public:
@@ -421,10 +414,6 @@ IMPL_LINK_NOARG(FontworkAlignmentWindow, SelectHdl)
     return 0;
 }
 
-
-// FontworkAlignmentControl
-
-
 class FontworkAlignmentControl : public svt::PopupWindowController
 {
 public:
@@ -492,9 +481,6 @@ Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames
 {
     return FontworkAlignmentControl_getSupportedServiceNames();
 }
-
-
-// ####################################################################
 
 class FontworkCharacterSpacingWindow : public ToolbarMenu
 {
@@ -658,10 +644,6 @@ IMPL_LINK_NOARG(FontworkCharacterSpacingWindow, SelectHdl)
 
     return 0;
 }
-
-
-// FontworkCharacterSpacingControl
-
 
 class FontworkCharacterSpacingControl : public svt::PopupWindowController
 {

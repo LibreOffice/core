@@ -28,10 +28,6 @@
 namespace svx
 {
 
-
-
-    //= TextControlCharAttribDialog
-
     class TextControlCharAttribDialog : public SfxTabDialog
     {
     private:

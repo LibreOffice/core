@@ -82,7 +82,7 @@ class SvxGraphCtrlAccessibleContext : public SvxGraphCtrlAccessibleContext_Base,
 public:
     friend class GraphCtrl;
 
-    //=====  internal  ========================================================
+    // internal
     SvxGraphCtrlAccessibleContext(
         const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent,
         GraphCtrl&              rRepresentation,
@@ -94,14 +94,12 @@ public:
 protected:
     virtual ~SvxGraphCtrlAccessibleContext();
 public:
-    //=====  XAccessible  =====================================================
-
+    // XAccessible
     /// Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleComponent  ============================================
-
+    // XAccessibleComponent
     virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& rPoint ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& rPoint )    throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -119,9 +117,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackground (void)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
-    //=====  XAccessibleContext  ==============================================
-
+    // XAccessibleContext
     virtual sal_Int32 SAL_CALL getAccessibleChildCount (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL getAccessibleChild (sal_Int32 nIndex) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IndexOutOfBoundsException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL getAccessibleParent (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -135,27 +131,22 @@ public:
 //  virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
 //  virtual void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException) {}
 
-    //=====  XAccessibleEventBroadcaster  =====================================
-
+    // XAccessibleEventBroadcaster
     virtual void SAL_CALL addAccessibleEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener>& xListener) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeAccessibleEventListener(  const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleEventListener>& xListener) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XServiceInfo  ====================================================
-
+    // XServiceInfo
     virtual OUString SAL_CALL getImplementationName (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL supportsService (const OUString& sServiceName) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XTypeProvider  ===================================================
-
+    // XTypeProvider
     virtual ::com::sun::star::uno::Sequence<sal_Int8> SAL_CALL getImplementationId (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XServiceName  ====================================================
-
+    // XServiceName
     virtual OUString SAL_CALL getServiceName (void) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleSelection =============================================
-
+    // XAccessibleSelection
     virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL clearAccessibleSelection() throw (::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
@@ -164,8 +155,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    //=====  IAccessibleViewforwarder  ========================================
-
+    // IAccessibleViewforwarder
     virtual bool IsValid (void) const SAL_OVERRIDE;
     virtual Rectangle GetVisibleArea() const SAL_OVERRIDE;
     virtual Point LogicToPixel (const Point& rPoint) const SAL_OVERRIDE;
@@ -174,8 +164,6 @@ public:
     virtual Size PixelToLogic (const Size& rSize) const SAL_OVERRIDE;
 
 protected:
-    //=====  internals ========================================================
-
     void checkChildIndexOnSelection( long nIndexOfChild ) throw (::com::sun::star::lang::IndexOutOfBoundsException );
 
 public:

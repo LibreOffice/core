@@ -31,10 +31,6 @@
 namespace svx
 {
 
-
-
-    //= OSingleFeatureDispatcher
-
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XDispatch
                                     >   OSingleFeatureDispatcher_Base;
 

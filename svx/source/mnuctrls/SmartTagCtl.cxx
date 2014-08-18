@@ -31,8 +31,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-// STATIC DATA -----------------------------------------------------------
-
 SFX_IMPL_MENU_CONTROL(SvxSmartTagsControl, SvxSmartTagItem);
 
 

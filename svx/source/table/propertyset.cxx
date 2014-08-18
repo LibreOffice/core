@@ -26,10 +26,6 @@ using namespace ::com::sun::star::lang;
 
 namespace sdr { namespace table {
 
-
-// FastPropertySetInfo
-
-
 FastPropertySetInfo::FastPropertySetInfo( const PropertyVector& rProps )
 {
     addProperties( rProps );
@@ -100,10 +96,6 @@ sal_Bool SAL_CALL FastPropertySetInfo::hasPropertyByName( const OUString& aName 
 {
     return hasProperty( aName ) != 0 ? sal_True : sal_False;
 }
-
-
-// FastPropertySet
-
 
 FastPropertySet::FastPropertySet( const rtl::Reference< FastPropertySetInfo >& xInfo )
 : mxInfo( xInfo )

@@ -53,11 +53,6 @@ using namespace ::svxform;
 
 static bool bInit = false;
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
 FmFormObjFactory::FmFormObjFactory()
 {
     if ( !bInit )
@@ -92,22 +87,11 @@ FmFormObjFactory::FmFormObjFactory()
     }
 }
 
-
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 FmFormObjFactory::~FmFormObjFactory()
 {
 }
 
-
-/*************************************************************************
-|*
-|* ::com::sun::star::form::Form-Objekte erzeugen
-|*
-\************************************************************************/
+// ::com::sun::star::form::Form-Objekte erzeugen
 namespace
 {
     void    lcl_initProperty( FmFormObj* _pObject, const OUString& _rPropName, const Any& _rValue )

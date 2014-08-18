@@ -29,10 +29,6 @@
 
 namespace sdr { namespace table {
 
-
-// TableRows
-
-
 class TableRows : public ::cppu::WeakAggImplHelper1< ::com::sun::star::table::XTableRows >
 {
 public:

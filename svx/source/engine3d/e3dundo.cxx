@@ -24,8 +24,6 @@
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-/************************************************************************/
-
 TYPEINIT1(E3dUndoAction, SfxUndoAction);
 
 E3dUndoAction::~E3dUndoAction ()
@@ -39,15 +37,7 @@ bool E3dUndoAction::CanRepeat(SfxRepeatTarget&) const
     return false;
 }
 
-/************************************************************************/
-
 TYPEINIT1(E3dRotateUndoAction, E3dUndoAction);
-
-/************************************************************************
-
-                        E3dRotateUndoAction
-
-************************************************************************/
 
 // Undo destructor for 3D-Rotation
 

@@ -1039,13 +1039,7 @@ void DbCellControl::invalidatedController()
     m_rColumn.GetParent().refreshController(m_rColumn.GetId(), DbGridControl::GrantControlAccess());
 }
 
-/*************************************************************************/
 // CellModels
-/*************************************************************************/
-
-
-//= DbLimitedLengthField
-
 
 DbLimitedLengthField::DbLimitedLengthField( DbGridColumn& _rColumn )
     :DbCellControl( _rColumn )
@@ -1073,7 +1067,6 @@ void DbLimitedLengthField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
         dynamic_cast<Edit&>(*m_pPainter).SetMaxTextLen(_nMaxLen);
 }
 
-//= DbTextField
 DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
             ,m_pEdit( NULL )
@@ -1246,10 +1239,6 @@ void DbTextField::implSetEffectiveMaxTextLen( sal_Int32 _nMaxLen )
     if ( m_pPainterImplementation )
         m_pPainterImplementation->SetMaxTextLen( _nMaxLen );
 }
-
-
-//= DbFormattedField
-
 
 DbFormattedField::DbFormattedField(DbGridColumn& _rColumn)
     :DbLimitedLengthField(_rColumn)
@@ -1629,10 +1618,6 @@ bool DbFormattedField::commitControl()
     return true;
 }
 
-
-//= DbCheckBox
-
-
 DbCheckBox::DbCheckBox( DbGridColumn& _rColumn )
     :DbCellControl( _rColumn, true )
 {
@@ -1755,9 +1740,6 @@ OUString DbCheckBox::GetFormatText(const Reference< XColumn >& /*_rxField*/, con
     return OUString();
 }
 
-
-//= DbPatternField
-
 DbPatternField::DbPatternField( DbGridColumn& _rColumn, const Reference<XComponentContext>& _rContext )
     :DbCellControl( _rColumn )
     ,m_xContext( _rContext )
@@ -1872,10 +1854,6 @@ bool DbPatternField::commitControl()
     return true;
 }
 
-
-//= DbSpinField
-
-
 DbSpinField::DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign )
     :DbCellControl( _rColumn )
     ,m_nStandardAlign( _nStandardAlign )
@@ -1909,10 +1887,6 @@ CellControllerRef DbSpinField::CreateController() const
 {
     return new SpinCellController( static_cast< SpinField* >( m_pWindow ) );
 }
-
-
-//= DbNumericField
-
 
 DbNumericField::DbNumericField( DbGridColumn& _rColumn )
     :DbSpinField( _rColumn )
@@ -2051,10 +2025,6 @@ bool DbNumericField::commitControl()
     m_rColumn.getModel()->setPropertyValue(FM_PROP_VALUE, aVal);
     return true;
 }
-
-
-//= DbCurrencyField
-
 
 DbCurrencyField::DbCurrencyField(DbGridColumn& _rColumn)
     :DbSpinField( _rColumn )
@@ -2208,10 +2178,6 @@ bool DbCurrencyField::commitControl()
     return true;
 }
 
-
-//= DbDateField
-
-
 DbDateField::DbDateField( DbGridColumn& _rColumn )
     :DbSpinField( _rColumn )
 {
@@ -2341,10 +2307,6 @@ bool DbDateField::commitControl()
     return true;
 }
 
-
-//= DbTimeField
-
-
 DbTimeField::DbTimeField( DbGridColumn& _rColumn )
     :DbSpinField( _rColumn, ::com::sun::star::awt::TextAlign::LEFT )
 {
@@ -2452,10 +2414,6 @@ bool DbTimeField::commitControl()
     m_rColumn.getModel()->setPropertyValue(FM_PROP_TIME, aVal);
     return true;
 }
-
-
-//= DbComboBox
-
 
 DbComboBox::DbComboBox(DbGridColumn& _rColumn)
            :DbCellControl(_rColumn)
@@ -2740,8 +2698,6 @@ bool DbListBox::commitControl()
     return true;
 }
 
-
-/*************************************************************************/
 DbFilterField::DbFilterField(const Reference< XComponentContext >& rxContext,DbGridColumn& _rColumn)
               :DbCellControl(_rColumn)
               ,OSQLParserClient(rxContext)
@@ -3205,7 +3161,6 @@ IMPL_LINK_NOARG(DbFilterField, OnClick)
     return 1;
 }
 
-/*************************************************************************/
 TYPEINIT0(FmXGridCell);
 
 
@@ -3569,7 +3524,6 @@ void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWi
     }
 }
 
-/*************************************************************************/
 TYPEINIT1(FmXDataCell, FmXGridCell);
 
 void FmXDataCell::PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
@@ -3587,7 +3541,6 @@ void FmXDataCell::UpdateFromColumn()
         m_pCellControl->UpdateFromField(xField, m_pColumn->GetParent().getNumberFormatter());
 }
 
-/*************************************************************************/
 TYPEINIT1(FmXTextCell, FmXDataCell);
 
 FmXTextCell::FmXTextCell( DbGridColumn* pColumn, DbCellControl& _rControl )
@@ -3636,10 +3589,6 @@ void FmXTextCell::PaintFieldToCell(OutputDevice& rDev,
     else
         rDev.DrawText(rRect, aText, nStyle);
 }
-
-
-/*************************************************************************/
-
 
 FmXEditCell::FmXEditCell( DbGridColumn* pColumn, DbCellControl& _rControl )
             :FmXTextCell( pColumn, _rControl )
@@ -3903,8 +3852,6 @@ void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWi
     FmXTextCell::onWindowEvent( _nEventId, _rWindow, _pEventData );
 }
 
-/*************************************************************************/
-
 FmXCheckBoxCell::FmXCheckBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl )
                 :FmXDataCell( pColumn, _rControl )
                 ,m_aItemListeners(m_aMutex)
@@ -4078,9 +4025,6 @@ void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& 
         break;
     }
 }
-
-/*************************************************************************/
-
 
 FmXListBoxCell::FmXListBoxCell(DbGridColumn* pColumn, DbCellControl& _rControl)
                :FmXTextCell( pColumn, _rControl )
@@ -4418,11 +4362,6 @@ IMPL_LINK_NOARG(FmXListBoxCell, OnDoubleClick)
     return 1;
 }
 
-
-/*************************************************************************/
-
-
-
 FmXComboBoxCell::FmXComboBoxCell( DbGridColumn* pColumn, DbCellControl& _rControl )
     :FmXTextCell( pColumn, _rControl )
     ,m_aItemListeners( m_aMutex )
@@ -4610,7 +4549,6 @@ void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& 
     }
 }
 
-/*************************************************************************/
 TYPEINIT1(FmXFilterCell, FmXGridCell);
 
 FmXFilterCell::FmXFilterCell(DbGridColumn* pColumn, DbCellControl* pControl )

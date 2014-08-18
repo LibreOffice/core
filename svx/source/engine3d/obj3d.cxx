@@ -758,10 +758,6 @@ void E3dObject::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
     SetGlueReallyAbsolute(false);       // from now they are again relative to BoundRect (that is defined as aOutRect)
 }
 
-/*************************************************************************/
-
-
-
 sdr::properties::BaseProperties* E3dCompoundObject::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dCompoundProperties(*this);

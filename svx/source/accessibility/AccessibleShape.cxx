@@ -94,11 +94,7 @@ OUString GetOptionalProperty (
 
 } // end of anonymous namespace
 
-
-
-
-//=====  internal  ============================================================
-
+// internal
 AccessibleShape::AccessibleShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
@@ -338,8 +334,7 @@ OUString SAL_CALL AccessibleShape::getAccessibleDescription (void)
         return OUString(" ");
 }
 
-//=====  XAccessibleContext  ==================================================
-
+// XAccessibleContext
 /** The children of this shape come from two sources: The children from
     group or scene shapes and the paragraphs of text.
 */
@@ -515,11 +510,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return xStateSet;
 }
 
-
-
-
-//=====  XAccessibleComponent  ================================================
-
+// XAccessibleComponent
 /** The implementation below is at the moment straightforward.  It iterates
     over all children (and thereby instances all children which have not
     been already instatiated) until a child covering the specifed point is
@@ -788,11 +779,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
     return nColor;
 }
 
-
-
-
-//=====  XAccessibleEventBroadcaster  =========================================
-
+// XAccessibleEventBroadcaster
 void SAL_CALL AccessibleShape::addAccessibleEventListener (
     const Reference<XAccessibleEventListener >& rxListener)
     throw (uno::RuntimeException, std::exception)
@@ -823,11 +810,7 @@ void SAL_CALL AccessibleShape::removeAccessibleEventListener (
         mpText->RemoveEventListener (rxListener);
 }
 
-
-
-
-//=====  XInterface  ==========================================================
-
+// XInterface
 com::sun::star::uno::Any SAL_CALL
     AccessibleShape::queryInterface (const com::sun::star::uno::Type & rType)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -868,10 +851,7 @@ void SAL_CALL
     AccessibleContextBase::release ();
 }
 
-//=====  XAccessibleSelection  ============================================
-
-
-
+// XAccessibleSelection
 void SAL_CALL AccessibleShape::selectAccessibleChild( sal_Int32 )
 throw ( IndexOutOfBoundsException, RuntimeException, std::exception )
 {
@@ -969,7 +949,7 @@ void SAL_CALL AccessibleShape::deselectAccessibleChild( sal_Int32 )
 
 }
 
-//=====  XAccessibleExtendedAttributes  ========================================================
+// XAccessibleExtendedAttributes
 uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -985,8 +965,7 @@ uno::Any SAL_CALL AccessibleShape::getExtendedAttributes()
     return strRet;
 }
 
-//=====  XServiceInfo  ========================================================
-
+// XServiceInfo
 OUString SAL_CALL
     AccessibleShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -1015,12 +994,7 @@ uno::Sequence<OUString> SAL_CALL
     return aServiceNames;
 }
 
-
-
-
-
-//=====  XTypeProvider  ===================================================
-
+// XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleShape::getTypes (void)
     throw (uno::RuntimeException, std::exception)
@@ -1055,11 +1029,7 @@ uno::Sequence<uno::Type> SAL_CALL
     return aTypeList;
 }
 
-
-
-
-//=====  lang::XEventListener  ================================================
-
+// lang::XEventListener
 /** Disposing calls are accepted only from the model: Just reset the
     reference to the model in the shape tree info.  Otherwise this object
     remains functional.
@@ -1087,11 +1057,7 @@ void SAL_CALL
     }
 }
 
-
-
-
-//=====  document::XEventListener  ============================================
-
+// document::XEventListener
 void SAL_CALL
     AccessibleShape::notifyEvent (const document::EventObject& rEventObject)
     throw (uno::RuntimeException, std::exception)
@@ -1124,8 +1090,7 @@ void SAL_CALL
     }
 }
 
-//=====  lang::XUnoTunnel  ================================================
-
+// lang::XUnoTunnel
 namespace
 {
     class theAccessibleShapeImplementationId : public rtl::Static< UnoTunnelIdInit, theAccessibleShapeImplementationId > {};
@@ -1165,8 +1130,7 @@ sal_Int64 SAL_CALL
     return( nReturn );
 }
 
-//=====  IAccessibleViewForwarderListener  ====================================
-
+// IAccessibleViewForwarderListener
 void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder)
 {
@@ -1185,11 +1149,8 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
         mpText->UpdateChildren();
 }
 
-
-
-
-//=====  protected internal  ==================================================
-/// Set this object's name if is different to the current name.
+// protected internal
+// Set this object's name if is different to the current name.
 OUString AccessibleShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1454,7 +1415,7 @@ struct XShapePosCompareHelper
 };
 //end of group position
 
-//=====  XAccessibleGroupPosition  =========================================
+// XAccessibleGroupPosition
 uno::Sequence< sal_Int32 > SAL_CALL
 AccessibleShape::getGroupPosition( const uno::Any& )
 throw (uno::RuntimeException, std::exception)
@@ -1571,7 +1532,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
     return aRet;
 }
 
-//=====  XAccesibleHypertext  ==================================================
+// XAccesibleHypertext
 sal_Int32 SAL_CALL AccessibleShape::getHyperLinkCount()
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -1609,7 +1570,7 @@ throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno:
     sal_Int32 nRet = 0;
     return nRet;
 }
-//=====  XAccesibleText  ==================================================
+// XAccesibleText
 sal_Int32 SAL_CALL AccessibleShape::getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException, std::exception){return 0;}
 sal_Bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception){return 0;}
 sal_Unicode SAL_CALL AccessibleShape::getCharacter( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception){return 0;}

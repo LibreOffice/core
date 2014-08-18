@@ -22,17 +22,11 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-
-// class SdrTransformRef1XItem
-
 class SdrTransformRef1XItem: public SdrMetricItem {
 public:
     SdrTransformRef1XItem(long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF1X,nHgt)  {}
     SdrTransformRef1XItem(SvStream& rIn): SdrMetricItem(SDRATTR_TRANSFORMREF1X,rIn) {}
 };
-
-
-// class SdrTransformRef1YItem
 
 class SdrTransformRef1YItem: public SdrMetricItem {
 public:
@@ -40,17 +34,11 @@ public:
     SdrTransformRef1YItem(SvStream& rIn): SdrMetricItem(SDRATTR_TRANSFORMREF1Y,rIn) {}
 };
 
-
-// class SdrTransformRef2XItem
-
 class SdrTransformRef2XItem: public SdrMetricItem {
 public:
     SdrTransformRef2XItem(long nHgt=0): SdrMetricItem(SDRATTR_TRANSFORMREF2X,nHgt)  {}
     SdrTransformRef2XItem(SvStream& rIn): SdrMetricItem(SDRATTR_TRANSFORMREF2X,rIn) {}
 };
-
-
-// class SdrTransformRef2YItem
 
 class SdrTransformRef2YItem: public SdrMetricItem {
 public:

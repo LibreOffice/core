@@ -17,15 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// === includes (declaration) ============================================
 #include "svx/databaseregistrationui.hxx"
 
-// === includes (project) ================================================
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
-// === includes (global) =================================================
 #include <sfx2/app.hxx>
 #include <svl/itemset.hxx>
 #include <vcl/msgbox.hxx>

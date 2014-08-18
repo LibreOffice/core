@@ -80,10 +80,6 @@ using namespace ::com::sun::star::style;
 
 namespace sdr { namespace table {
 
-
-// class SvxTableControllerModifyListener
-
-
 class SvxTableControllerModifyListener : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XModifyListener >
 {
 public:

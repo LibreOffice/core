@@ -32,8 +32,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-// class XLineTransparenceItem
-
 TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 
 XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
@@ -78,8 +76,6 @@ bool XLineTransparenceItem::GetPresentation
             return false;
     }
 }
-
-// class XLineJointItem -
 
 TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
 
@@ -184,8 +180,6 @@ sal_uInt16 XLineJointItem::GetValueCount() const
     return 5;
 }
 
-// class AffineMatrixItem
-
 TYPEINIT1_AUTOFACTORY(AffineMatrixItem, SfxPoolItem);
 
 AffineMatrixItem::AffineMatrixItem(const com::sun::star::geometry::AffineMatrix2D* pMatrix)
@@ -286,8 +280,6 @@ bool AffineMatrixItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     OSL_ENSURE(false, "AffineMatrixItem::PutValue - Wrong type!");
     return false;
 }
-
-// class XLineCapItem -
 
 TYPEINIT1_AUTOFACTORY(XLineCapItem, SfxEnumItem);
 
@@ -398,8 +390,6 @@ com::sun::star::drawing::LineCap XLineCapItem::GetValue() const
     return eRetval;
 }
 
-// class XFillTransparenceItem
-
 TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
 
 XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
@@ -444,8 +434,6 @@ bool XFillTransparenceItem::GetPresentation
             return false;
     }
 }
-
-// class XFormTextShadowTranspItem
 
 TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
 
@@ -506,8 +494,6 @@ bool XGradientStepCountItem::GetPresentation
     rText += OUString::number(GetValue());
     return true;
 }
-
-// class XFillBmpTileItem
 
 TYPEINIT1_AUTOFACTORY( XFillBmpTileItem, SfxBoolItem );
 
@@ -774,8 +760,6 @@ bool XFillBmpTileOffsetYItem::GetPresentation
     return true;
 }
 
-// class XFillBmpStretchItem
-
 TYPEINIT1_AUTOFACTORY( XFillBmpStretchItem, SfxBoolItem );
 
 XFillBmpStretchItem::XFillBmpStretchItem( bool bStretch ) :
@@ -881,8 +865,6 @@ bool XFillBmpPosOffsetYItem::GetPresentation
     rText = OUString();
     return true;
 }
-
-// class XFillBackgroundItem
 
 TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 

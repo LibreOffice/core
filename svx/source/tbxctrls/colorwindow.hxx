@@ -17,9 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
-// class SvxColorWindow_Impl --------------------------------------------------
-
 #ifndef INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
 #define INCLUDED_SVX_SOURCE_TBXCTRLS_COLORWINDOW_HXX
 
@@ -29,10 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <svx/SvxColorValueSet.hxx>
-
-
-// class SvxColorWindow_Impl --------------------------------------------------
-
 
 class SvxColorWindow_Impl : public SfxPopupWindow
 {

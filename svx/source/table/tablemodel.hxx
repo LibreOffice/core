@@ -36,10 +36,6 @@ namespace sdr { namespace table {
 
 class SdrTableObj;
 
-
-// ICellRange
-
-
 /** base class for each object implementing an XCellRange */
 class ICellRange
 {
@@ -53,10 +49,6 @@ public:
 protected:
     ~ICellRange() {}
 };
-
-
-// TableModel
-
 
 typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::table::XTable, ::com::sun::star::util::XBroadcaster > TableModelBase;
 

@@ -89,11 +89,7 @@ public:
     void EndNumberingPopupMode (void);
 
 private:
-    /**********************************************************
-     **
-     ** UI controls
-     **
-    ***********************************************************/
+    // UI controls
     //Alignment
     ToolBox*            mpTBxVertAlign;
     //NumBullet&Backcolor
@@ -112,23 +108,14 @@ private:
 
     ::boost::scoped_ptr< ::svx::ToolboxButtonColorUpdater > mpColorUpdater;
 
-    /**********************************************************
-     **
-     ** Resources
-     **
-    ***********************************************************/
-
+    // Resources
     Image  maSpace3;
     Image  maIndHang;
 
     ImageList   maNumBImageList;
     ImageList   maNumBImageListRTL;
 
-    /****************************************************************
-    **
-    ** Data Member
-    **
-    *****************************************************************/
+    // Data Member
     long                maTxtLeft;
     //Line spacing
     SvxLineSpacingItem  *mpLnSPItem;
@@ -146,12 +133,7 @@ private:
     FieldUnit                       m_last_eMetricUnit;
     SfxMapUnit                      m_eLRSpaceUnit;
     SfxMapUnit                      m_eULSpaceUnit;
-    /****************************************************************
-    **
-    ** Control Items
-    **
-    *****************************************************************/
-
+    // Control Items
     ::sfx2::sidebar::ControllerItem  maLRSpaceControl;
     ::sfx2::sidebar::ControllerItem  maLNSpaceControl;
     ::sfx2::sidebar::ControllerItem  maULSpaceControl;

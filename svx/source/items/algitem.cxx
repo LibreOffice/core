@@ -44,8 +44,6 @@ using namespace ::com::sun::star;
 TYPEINIT1_FACTORY( SvxOrientationItem, SfxEnumItem, new SvxOrientationItem(SVX_ORIENTATION_STANDARD, 0) );
 TYPEINIT1_FACTORY( SvxMarginItem, SfxPoolItem, new SvxMarginItem(0) );
 
-// class SvxOrientationItem ----------------------------------------------
-
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
                                         const sal_uInt16 nId):
     SfxEnumItem( nId, (sal_uInt16)eOrientation )
@@ -173,8 +171,6 @@ void SvxOrientationItem::SetFromRotation( sal_Int32 nRotation, bool bStacked )
         default:    SetValue( SVX_ORIENTATION_STANDARD );
     }
 }
-
-// class SvxMarginItem ---------------------------------------------------
 
 SvxMarginItem::SvxMarginItem( const sal_uInt16 nId ) :
 

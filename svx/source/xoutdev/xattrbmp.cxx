@@ -197,8 +197,6 @@ void XOBitmap::Array2Bitmap()
     bGraphicDirty = false;
 }
 
-// class XFillBitmapItem
-
 TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
 XFillBitmapItem::XFillBitmapItem(const OUString& rName, const GraphicObject& rGraphicObject)

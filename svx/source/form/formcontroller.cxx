@@ -208,9 +208,6 @@ namespace svxform
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
     namespace DataType = ::com::sun::star::sdbc::DataType;
 
-
-// ColumnInfo
-
 struct ColumnInfo
 {
     // information about the column itself
@@ -245,9 +242,6 @@ struct ColumnInfo
     {
     }
 };
-
-
-//= ColumnInfoCache
 
 class ColumnInfoCache
 {
@@ -428,9 +422,6 @@ const ColumnInfo& ColumnInfoCache::getColumnInfo( size_t _pos )
     return m_aColumns[ _pos ];
 }
 
-
-// OParameterContinuation
-
 class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
 {
     Sequence< PropertyValue >       m_aValues;
@@ -464,9 +455,6 @@ struct FmFieldInfo
         ,xText(_xText)
     {xField->getPropertyValue(FM_PROP_NAME) >>= aFieldName;}
 };
-
-
-// FmXAutoControl
 
 class FmXAutoControl: public UnoControl
 
@@ -542,9 +530,6 @@ IMPL_LINK( FormController, OnInvalidateFeatures, void*, /*_pNotInterestedInThisP
     }
     return 1;
 }
-
-/*************************************************************************/
-
 
 FormController::FormController(const Reference< css::uno::XComponentContext > & _rxORB )
                   :FormController_BASE( m_aMutex )

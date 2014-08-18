@@ -254,12 +254,6 @@ namespace accessibility
         int mnNotifierClientId;
     };
 
-
-
-    // AccessibleTextHelper_Impl implementation
-
-
-
     AccessibleTextHelper_Impl::AccessibleTextHelper_Impl() :
         mxFrontEnd( NULL ),
         maLastSelection( EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND,EE_PARA_NOT_FOUND,EE_INDEX_NOT_FOUND ),

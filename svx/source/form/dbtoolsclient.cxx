@@ -159,10 +159,6 @@ namespace svxform
         OSL_ENSURE(s_nClients >= 0,"Illegall call of revokeClient()");
     }
 
-
-    //= OStaticDataAccessTools
-
-
     OStaticDataAccessTools::OStaticDataAccessTools()
     {
     }
@@ -310,10 +306,6 @@ namespace svxform
         }
         return bReturn;
     }
-
-
-    //= DBToolsObjectFactory
-
 
     DBToolsObjectFactory::DBToolsObjectFactory()
     {

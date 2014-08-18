@@ -178,10 +178,6 @@ public:
     TableDesignStyleVector  maDesigns;
 };
 
-
-// TableDesignStyle
-
-
 TableDesignStyle::TableDesignStyle()
 : TableDesignStyleBase(m_aMutex)
 {

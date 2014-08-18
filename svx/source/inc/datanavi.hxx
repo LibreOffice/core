@@ -54,8 +54,6 @@
 #include "datalistener.hxx"
 #include <vector>
 
-// forward ---------------------------------------------------------------
-
 class FmFormShell;
 
 

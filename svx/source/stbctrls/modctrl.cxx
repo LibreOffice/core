@@ -41,9 +41,6 @@ namespace
 const unsigned _FEEDBACK_TIMEOUT = 3000;
 }
 
-
-// class SvxModifyControl ------------------------------------------------
-
 struct SvxModifyControl::ImplData
 {
     enum ModificationState

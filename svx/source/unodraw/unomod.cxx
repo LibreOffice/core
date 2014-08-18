@@ -579,10 +579,6 @@ uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::
     return SvxCreateNumRuleCompare();
 }
 
-
-// class SvxUnoDrawPagesAccess
-
-
 SvxUnoDrawPagesAccess::SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel )  throw()
 :   mrModel(rMyModel)
 {
@@ -654,10 +650,8 @@ sal_Bool SAL_CALL SvxUnoDrawPagesAccess::hasElements()
 
 // XDrawPages
 
-/******************************************************************************
-* Erzeugt eine neue Seite mit Model an der angegebennen Position und gibt die *
-* dazugehoerige SdDrawPage zurueck.                                           *
-******************************************************************************/
+// Erzeugt eine neue Seite mit Model an der angegebennen Position und gibt die
+// dazugehoerige SdDrawPage zurueck.
 uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewByIndex( sal_Int32 nIndex )
     throw(uno::RuntimeException, std::exception)
 {

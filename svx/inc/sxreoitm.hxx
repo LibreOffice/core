@@ -23,18 +23,12 @@
 
 #include <svx/sxfiitm.hxx>
 
-
-// class SdrResizeXOneItem
-
 class SdrResizeXOneItem: public SdrFractionItem {
 public:
     SdrResizeXOneItem(): SdrFractionItem(SDRATTR_RESIZEXONE,Fraction(1,1)) {}
     SdrResizeXOneItem(const Fraction& rFact): SdrFractionItem(SDRATTR_RESIZEXONE,rFact) {}
     SdrResizeXOneItem(SvStream& rIn): SdrFractionItem(SDRATTR_RESIZEXONE,rIn)    {}
 };
-
-
-// class SdrResizeYOneItem
 
 class SdrResizeYOneItem: public SdrFractionItem {
 public:

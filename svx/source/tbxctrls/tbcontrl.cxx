@@ -91,8 +91,6 @@
 #define MAX_MRU_FONTNAME_ENTRIES    5
 #define LOGICAL_EDIT_HEIGHT         12
 
-// STATIC DATA -----------------------------------------------------------
-
 #ifndef DELETEZ
 #define DELETEZ(p) (delete (p), (p)=NULL)
 #endif

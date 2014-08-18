@@ -113,10 +113,6 @@ private:
     void                ReleaseFocus_Impl();
 };
 
-
-// class SvxFontSizeBox_Impl --------------------------------------------------
-
-
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     Window*                                           _pParent,
     const uno::Reference< frame::XDispatchProvider >& _rDispatchProvider,
@@ -283,10 +279,6 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
     FontSizeBox::DataChanged( rDCEvt );
 }
-
-
-// class FontHeightToolBoxControl
-
 
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
  : svt::ToolboxController( rxContext,

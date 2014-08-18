@@ -28,8 +28,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
-
+// internal
 AccessibleOLEShape::AccessibleOLEShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
@@ -44,11 +43,7 @@ AccessibleOLEShape::~AccessibleOLEShape (void)
 {
 }
 
-
-
-
-//=====  XAccessibleAction  ===================================================
-
+// XAccessibleAction
 sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -84,11 +79,7 @@ Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActio
     throw lang::IndexOutOfBoundsException();
 }
 
-
-
-
-//=====  XInterface  ==========================================================
-
+// XInterface
 com::sun::star::uno::Any SAL_CALL
     AccessibleOLEShape::queryInterface (const com::sun::star::uno::Type & rType)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -118,11 +109,7 @@ void SAL_CALL
     AccessibleShape::release ();
 }
 
-
-
-
-//=====  XServiceInfo  ========================================================
-
+// XServiceInfo
 OUString SAL_CALL
     AccessibleOLEShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -151,11 +138,7 @@ OUString SAL_CALL
     return aServiceNames;
 }
 
-
-
-
-//=====  XTypeProvider  ===================================================
-
+// XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleOLEShape::getTypes (void)
     throw (uno::RuntimeException, std::exception)
@@ -172,7 +155,7 @@ uno::Sequence<uno::Type> SAL_CALL
     return aTypeList;
 }
 
-//=====  XAccessibleExtendedAttributes  ========================================================
+// XAccessibleExtendedAttributes
 uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
 {

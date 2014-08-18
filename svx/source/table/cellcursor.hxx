@@ -31,10 +31,6 @@ namespace sdr { namespace table {
 
 struct CellPos;
 
-
-// CellCursor
-
-
 typedef ::cppu::ImplInheritanceHelper2< CellRange, ::com::sun::star::table::XCellCursor, ::com::sun::star::table::XMergeableCellRange > CellCursorBase;
 
 class CellCursor : public CellCursorBase

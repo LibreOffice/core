@@ -147,10 +147,6 @@ namespace
     }
 }
 
-
-//   SdrUnoObj
-
-
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
 SdrUnoObj::SdrUnoObj(const OUString& rModelName, bool _bOwnUnoControlModel)

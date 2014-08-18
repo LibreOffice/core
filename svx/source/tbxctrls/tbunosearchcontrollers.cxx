@@ -239,10 +239,6 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-
-
-// SearchToolbarControllersManager
-
 SearchToolbarControllersManager::SearchToolbarControllersManager()
 {
 }
@@ -346,9 +342,6 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
 
     return xStatusListener;
 }
-
-
-// FindTextToolbarController
 
 FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : svt::ToolboxController(rxContext, css::uno::Reference< css::frame::XFrame >(), OUString(COMMAND_FINDTEXT))
@@ -503,9 +496,6 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
     return 0;
 }
 
-
-// class UpDownSearchToolboxController
-
 UpDownSearchToolboxController::UpDownSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext, Type eType )
     : svt::ToolboxController( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
@@ -597,9 +587,6 @@ void SAL_CALL UpDownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ 
 void SAL_CALL UpDownSearchToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
-
-
-// MatchCaseToolboxController
 
 MatchCaseToolboxController::MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : svt::ToolboxController( rxContext,
@@ -696,9 +683,6 @@ void SAL_CALL MatchCaseToolboxController::statusChanged( const css::frame::Featu
 {
 }
 
-
-// class FindAllToolboxController
-
 FindAllToolboxController::FindAllToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : svt::ToolboxController( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
@@ -782,9 +766,6 @@ void SAL_CALL FindAllToolboxController::execute( sal_Int16 /*KeyModifier*/ ) thr
 void SAL_CALL FindAllToolboxController::statusChanged( const css::frame::FeatureStateEvent& /*rEvent*/ ) throw ( css::uno::RuntimeException, std::exception )
 {
 }
-
-
-// class ExitSearchToolboxController
 
 ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : svt::ToolboxController( rxContext,
@@ -881,9 +862,6 @@ void SAL_CALL ExitSearchToolboxController::statusChanged( const css::frame::Feat
 {
 }
 
-
-// class SearchLabelToolboxController
-
 SearchLabelToolboxController::SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : svt::ToolboxController( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
@@ -962,9 +940,6 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL SearchLabelToolboxController::
     pSL->SetSizePixel(Size(250, 25));
     return VCLUnoHelper::GetInterface(pSL);
 }
-
-
-// class FindbarDispatcher
 
 FindbarDispatcher::FindbarDispatcher()
 {

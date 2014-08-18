@@ -65,10 +65,7 @@
 
 using namespace ::com::sun::star;
 
-/******************************************************************************
-* Global data of the DrawingEngine
-******************************************************************************/
-
+// Global data of the DrawingEngine
 SdrGlobalData::SdrGlobalData() :
     pSysLocale(NULL),
     pLocaleData(NULL),

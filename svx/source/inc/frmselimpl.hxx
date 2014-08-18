@@ -146,8 +146,7 @@ struct FrameSelectorImpl : public Resource
     explicit            FrameSelectorImpl( FrameSelector& rFrameSel );
                         ~FrameSelectorImpl();
 
-    // initialization ---------------------------------------------------------
-
+    // initialization
     /** Initializes the control, enables/disables frame borders according to flags. */
     void                Initialize( FrameSelFlags nFlags );
 
@@ -166,16 +165,13 @@ struct FrameSelectorImpl : public Resource
     /** call this to recalculate based on parent size */
     void                sizeChanged();
 
-
-    // frame border access ----------------------------------------------------
-
+    // frame border access
     /** Returns the object representing the specified frame border. */
     const FrameBorder&  GetBorder( FrameBorderType eBorder ) const;
     /** Returns the object representing the specified frame border (write access). */
     FrameBorder&        GetBorderAccess( FrameBorderType eBorder );
 
-    // drawing ----------------------------------------------------------------
-
+    // drawing
     /** Draws the background of the entire control (the gray areas between borders). */
     void                DrawBackground();
 
@@ -204,8 +200,7 @@ struct FrameSelectorImpl : public Resource
         @param bFullRepaint  true = Full repaint; false = update selection only. */
     void                DoInvalidate( bool bFullRepaint );
 
-    // frame border state and style -------------------------------------------
-
+    // frame border state and style
     /** Sets the state of the specified frame border. */
     void                SetBorderState( FrameBorder& rBorder, FrameBorderState eState );
     /** Sets the core style of the specified frame border, or hides the frame border, if pStyle is 0. */
@@ -214,8 +209,7 @@ struct FrameSelectorImpl : public Resource
     /** Changes the state of a frame border after a control event (mouse/keyboard). */
     void                ToggleBorderState( FrameBorder& rBorder );
 
-    // frame border selection -------------------------------------------------
-
+    // frame border selection
     /** Selects a frame border and schedules redraw. */
     void                SelectBorder( FrameBorder& rBorder, bool bSelect );
     /** Grabs focus without auto-selection of a frame border, if no border selected. */

@@ -70,10 +70,6 @@ namespace sdr { namespace contact {
     {
     }
 
-
-    //= ViewContactOfUnoControl
-
-
     ViewContactOfUnoControl::ViewContactOfUnoControl( SdrUnoObj& _rUnoObject )
         :ViewContactOfSdrObj( _rUnoObject )
         ,m_pImpl( new ViewContactOfUnoControl_Impl )

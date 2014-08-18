@@ -250,9 +250,7 @@ void NBOTypeMgrBase::StoreMapUnit_impl() {
         }
     }
 }
-/***************************************************************************************************
-**********************Character Bullet Type lib**********************************************************
-****************************************************************************************************/
+// Character Bullet Type lib
 BulletsSettings_Impl* BulletsTypeMgr::pActualBullets[] ={0,0,0,0,0,0,0,0};
 sal_Unicode BulletsTypeMgr::aDynamicBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
 sal_Unicode BulletsTypeMgr::aDynamicRTLBulletTypes[]={' ',' ',' ',' ',' ',' ',' ',' '};
@@ -536,9 +534,7 @@ Font BulletsTypeMgr::GetBulCharFont(sal_uInt16 nIndex)
 
     return aRet;
 }
-/***************************************************************************************************
-**********************Graphic Bullet Type lib***********************************************************
-****************************************************************************************************/
+// Graphic Bullet Type lib
 GraphyicBulletsTypeMgr::GraphyicBulletsTypeMgr()
     : NBOTypeMgrBase(eNBOType::BULLETS)
 {
@@ -787,9 +783,7 @@ OUString GraphyicBulletsTypeMgr::GetGrfName(sal_uInt16 nIndex)
 
     return sRet;
 }
-/***************************************************************************************************
-**********************Mix Bullets Type lib**************************************************************
-****************************************************************************************************/
+// Mix Bullets Type lib
 MixBulletsSettings_Impl* MixBulletsTypeMgr::pActualBullets[] ={0,0,0,0,0,0,0,0};
 MixBulletsSettings_Impl* MixBulletsTypeMgr::pDefaultActualBullets[] ={0,0,0,0,0,0,0,0};
 
@@ -1284,10 +1278,7 @@ bool MixBulletsTypeMgr::IsCustomized(sal_uInt16 nIndex)
 
     return bRet;
 }
-/***************************************************************************************************
-**********************Numbering Type lib**************************************************************
-****************************************************************************************************/
-
+// Numbering Type lib
 NumberingTypeMgr::NumberingTypeMgr()
     : NBOTypeMgrBase(eNBOType::NUMBERING)
     , pNumberSettingsArr (new NumberSettingsArr_Impl)
@@ -1496,10 +1487,7 @@ bool NumberingTypeMgr::IsCustomized(sal_uInt16 nIndex)
 
     return bRet;
 }
-/***************************************************************************************************
-**********************Multi-level /Outline Type lib*******************************************************
-****************************************************************************************************/
-
+// Multi-level /Outline Type lib
 OutlineTypeMgr::OutlineTypeMgr()
     : NBOTypeMgrBase(eNBOType::OUTLINE)
 {

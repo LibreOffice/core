@@ -33,9 +33,6 @@
 using namespace svxform;
 using namespace ::connectivity;
 
-//= OSystemParseContext
-
-
 OSystemParseContext::OSystemParseContext() : IParseContext()
 {
     SolarMutexGuard aGuard;

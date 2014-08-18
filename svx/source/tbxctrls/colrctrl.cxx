@@ -89,12 +89,6 @@ bool SvxColorValueSetData::WriteObject( SotStorageStreamRef& rxOStm, void*, sal_
     return( rxOStm->GetError() == ERRCODE_NONE );
 }
 
-/*************************************************************************
-|*
-|* SvxColorValueSet_docking: Ctor
-|*
-\************************************************************************/
-
 SvxColorValueSet_docking::SvxColorValueSet_docking( Window* _pParent, const ResId& rResId ) :
     SvxColorValueSet( _pParent, rResId ),
     DragSourceHelper( this ),
@@ -102,12 +96,6 @@ SvxColorValueSet_docking::SvxColorValueSet_docking( Window* _pParent, const ResI
 {
     SetAccessibleName(SVX_RESSTR(STR_COLORTABLE));
 }
-
-/*************************************************************************
-|*
-|* SvxColorValueSet_docking: MouseButtonDown
-|*
-\************************************************************************/
 
 void SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -131,12 +119,6 @@ void SvxColorValueSet_docking::MouseButtonDown( const MouseEvent& rMEvt )
     aDragPosPixel = GetPointerPosPixel();
 }
 
-/*************************************************************************
-|*
-|* SvxColorValueSet_docking: MouseButtonUp
-|*
-\************************************************************************/
-
 void SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // Fuer Mac noch anders handlen !
@@ -158,34 +140,16 @@ void SvxColorValueSet_docking::MouseButtonUp( const MouseEvent& rMEvt )
     SetNoSelection();
 }
 
-/*************************************************************************
-|*
-|* Command-Event
-|*
-\************************************************************************/
-
 void SvxColorValueSet_docking::Command(const CommandEvent& rCEvt)
 {
     // Basisklasse
     SvxColorValueSet::Command(rCEvt);
 }
 
-/*************************************************************************
-|*
-|* StartDrag
-|*
-\************************************************************************/
-
 void SvxColorValueSet_docking::StartDrag( sal_Int8 , const Point&  )
 {
     Application::PostUserEvent(STATIC_LINK(this, SvxColorValueSet_docking, ExecDragHdl));
 }
-
-/*************************************************************************
-|*
-|* Drag&Drop asynchron ausfuehren
-|*
-\************************************************************************/
 
 void SvxColorValueSet_docking::DoDrag()
 {
@@ -213,12 +177,6 @@ IMPL_STATIC_LINK(SvxColorValueSet_docking, ExecDragHdl, void*, EMPTYARG)
     pThis->DoDrag();
     return(0);
 }
-
-/*************************************************************************
-|*
-|* Ctor: SvxColorDockingWindow
-|*
-\************************************************************************/
 
 SvxColorDockingWindow::SvxColorDockingWindow
 (
@@ -282,23 +240,10 @@ SvxColorDockingWindow::SvxColorDockingWindow
         StartListening( *_pBindings, true );
 }
 
-
-/*************************************************************************
-|*
-|* Dtor: SvxColorDockingWindow
-|*
-\************************************************************************/
-
 SvxColorDockingWindow::~SvxColorDockingWindow()
 {
     EndListening( GetBindings() );
 }
-
-/*************************************************************************
-|*
-|* Notify
-|*
-\************************************************************************/
 
 void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
@@ -311,12 +256,6 @@ void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
         FillValueSet();
     }
 }
-
-/*************************************************************************
-|*
-|* FillValueSet
-|*
-\************************************************************************/
 
 void SvxColorDockingWindow::FillValueSet()
 {
@@ -344,12 +283,6 @@ void SvxColorDockingWindow::FillValueSet()
         aColorSet.addEntriesForXColorList(*pColorList, 2);
     }
 }
-
-/*************************************************************************
-|*
-|* SetSize
-|*
-\************************************************************************/
 
 void SvxColorDockingWindow::SetSize()
 {
@@ -392,12 +325,6 @@ void SvxColorDockingWindow::SetSize()
     aColorSet.SetPosSizePixel( Point( 2, 2 ), aSize );
 }
 
-/*************************************************************************
-|*
-|* SvxColorDockingWindow: Close
-|*
-\************************************************************************/
-
 bool SvxColorDockingWindow::Close()
 {
     SfxBoolItem aItem( SID_COLOR_CONTROL, false );
@@ -406,12 +333,6 @@ bool SvxColorDockingWindow::Close()
     SfxDockingWindow::Close();
     return true;
 }
-
-/*************************************************************************
-|*
-|* SelectHdl
-|*
-\************************************************************************/
 
 IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
 {
@@ -509,13 +430,6 @@ IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
     return 0;
 }
 
-/*************************************************************************
-|*
-|* Resizing
-|*
-\************************************************************************/
-
-
 void SvxColorDockingWindow::Resizing( Size& rNewSize )
 {
     rNewSize.Width()  -= 4;
@@ -558,12 +472,6 @@ void SvxColorDockingWindow::Resizing( Size& rNewSize )
     rNewSize.Width()  = nCols * aItemSize.Width() + nScrollWidth + 4;
     rNewSize.Height() = nLines * aItemSize.Height() + 4;
 }
-
-/*************************************************************************
-|*
-|* Resize
-|*
-\************************************************************************/
 
 void SvxColorDockingWindow::Resize()
 {

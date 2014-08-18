@@ -26,8 +26,6 @@
 #include "svx/srchdlg.hxx"
 #include <svl/srchitem.hxx>
 
-// class SvxSearchFamilyControllerItem -----------------------------------
-
 SvxSearchController::SvxSearchController
 (
     sal_uInt16 _nId,

@@ -53,8 +53,6 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
     return cSelectedChar;
 }
 
-// class SvxShowCharSet ==================================================
-
 SvxShowCharSet::SvxShowCharSet(Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
     , m_pAccessible(NULL)
@@ -738,8 +736,6 @@ sal_Int32 SvxShowCharSet::getMaxCharCount() const
     return maFontCharMap.GetCharCount();
 }
 
-
-// class SubsetMap =======================================================
 // TODO: should be moved into Font Attributes stuff
 // we let it mature here though because it is currently the only use
 

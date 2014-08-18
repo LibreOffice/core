@@ -36,8 +36,6 @@
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 
-// class ZoomPopup_Impl --------------------------------------------------
-
 class ZoomPopup_Impl : public PopupMenu
 {
 public:
@@ -97,7 +95,6 @@ void ZoomPopup_Impl::Select()
     }
 }
 
-// class SvxZoomStatusBarControl ------------------------------------------
 SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
                                                   sal_uInt16 _nId,
                                                   StatusBar& rStb ) :

@@ -55,9 +55,6 @@ Any SAL_CALL SvxFmDrawPage::queryAggregation( const ::com::sun::star::uno::Type&
     return aRet;
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  ) throw(::com::sun::star::uno::RuntimeException, std::exception)
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypes(SvxDrawPage::getTypes());

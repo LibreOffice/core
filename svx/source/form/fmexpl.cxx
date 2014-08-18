@@ -69,9 +69,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-
-// class FmNavInsertedHint
-
 TYPEINIT1( FmNavInsertedHint, SfxHint );
 
 FmNavInsertedHint::FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos )
@@ -102,9 +99,6 @@ FmNavModelReplacedHint::~FmNavModelReplacedHint()
 {
 }
 
-
-// class FmNavRemovedHint
-
 TYPEINIT1( FmNavRemovedHint, SfxHint );
 
 FmNavRemovedHint::FmNavRemovedHint( FmEntryData* pRemovedEntryData )
@@ -116,10 +110,6 @@ FmNavRemovedHint::FmNavRemovedHint( FmEntryData* pRemovedEntryData )
 FmNavRemovedHint::~FmNavRemovedHint()
 {
 }
-
-
-
-// class FmNavNameChangedHint
 
 TYPEINIT1( FmNavNameChangedHint, SfxHint );
 
@@ -133,9 +123,6 @@ FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const OUString& 
 FmNavNameChangedHint::~FmNavNameChangedHint()
 {
 }
-
-
-// class FmNavClearedHint
 
 TYPEINIT1( FmNavClearedHint, SfxHint );
 
@@ -157,10 +144,6 @@ TYPEINIT1(FmNavRequestSelectHint, SfxHint);
 // class FmNavViewMarksChanged
 
 TYPEINIT1(FmNavViewMarksChanged, SfxHint);
-
-
-// class FmEntryDataList
-
 
 FmEntryDataList::FmEntryDataList()
 {
@@ -208,9 +191,6 @@ void FmEntryDataList::clear()
         delete maEntryDataList[ i ];
     maEntryDataList.clear();
 }
-
-
-// class FmEntryData
 
 TYPEINIT0( FmEntryData );
 
@@ -293,10 +273,6 @@ bool FmEntryData::IsEqualWithoutChildren( FmEntryData* pEntryData )
     return true;
 }
 
-
-
-// class FmFormData
-
 TYPEINIT1( FmFormData, FmEntryData );
 
 FmFormData::FmFormData(
@@ -358,10 +334,6 @@ bool FmFormData::IsEqualWithoutChildren( FmEntryData* pEntryData )
 
     return FmEntryData::IsEqualWithoutChildren( pFormData );
 }
-
-
-
-// class FmControlData
 
 TYPEINIT1( FmControlData, FmEntryData );
 
@@ -544,11 +516,6 @@ void FmControlData::ModelReplaced(
 
 namespace svxform
 {
-
-
-
-    // class NavigatorFrame
-
 
     NavigatorFrame::NavigatorFrame( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                                   Window* _pParent )

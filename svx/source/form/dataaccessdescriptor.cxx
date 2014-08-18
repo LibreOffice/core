@@ -37,9 +37,6 @@ namespace svx
     using namespace ::com::sun::star::ucb;
     using namespace ::comphelper;
 
-
-    //= ODADescriptorImpl
-
     class ODADescriptorImpl
     {
     protected:
@@ -271,10 +268,6 @@ namespace svx
         // don't need to rebuild next time
         m_bSequenceOutOfDate = false;
     }
-
-
-    //= ODataAccessDescriptor
-
 
     ODataAccessDescriptor::ODataAccessDescriptor()
         :m_pImpl(new ODADescriptorImpl)

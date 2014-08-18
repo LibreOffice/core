@@ -73,8 +73,6 @@ using namespace ::com::sun::star::inspection;
 using namespace ::com::sun::star::form::inspection;
 using ::com::sun::star::awt::XWindow;
 
-/*************************************************************************/
-
 //= FmPropBrwMgr
 
 
@@ -184,10 +182,6 @@ OUString GetUIHeadlineName(sal_Int16 nClassId, const Any& aUnoObj)
 
     return SVX_RESSTR(nClassNameResourceId);
 }
-
-
-// class FmPropBrw
-
 
 FmPropBrw::FmPropBrw( const Reference< XComponentContext >& _xORB, SfxBindings* _pBindings,
             SfxChildWindow* _pMgr, Window* _pParent, const SfxChildWinInfo* _pInfo )

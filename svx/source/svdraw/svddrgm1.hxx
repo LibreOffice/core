@@ -30,9 +30,6 @@
 
 class SdrDragView;
 
-
-//   SdrDragMovHdl
-
 class SdrDragMovHdl : public SdrDragMethod
 {
 protected:
@@ -50,9 +47,6 @@ public:
     virtual void CancelSdrDrag() SAL_OVERRIDE;
     virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;
 };
-
-
-//   SdrDragRotate
 
 class SdrDragRotate : public SdrDragMethod
 {
@@ -76,9 +70,6 @@ public:
     virtual basegfx::B2DHomMatrix getCurrentTransformation() SAL_OVERRIDE;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) SAL_OVERRIDE;
 };
-
-
-//   SdrDragShear
 
 class SdrDragShear : public SdrDragMethod
 {
@@ -106,9 +97,6 @@ public:
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) SAL_OVERRIDE;
 };
 
-
-//   SdrDragMirror
-
 class SdrDragMirror : public SdrDragMethod
 {
 private:
@@ -133,9 +121,6 @@ public:
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) SAL_OVERRIDE;
 };
 
-
-//   SdrDragGradient
-
 class SdrDragGradient : public SdrDragMethod
 {
 private:
@@ -158,9 +143,6 @@ public:
     virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;
     virtual void CancelSdrDrag() SAL_OVERRIDE;
 };
-
-
-//   SdrDragCrook
 
 class SdrDragCrook : public SdrDragMethod
 {
@@ -211,9 +193,6 @@ public:
     virtual void applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget) SAL_OVERRIDE;
 };
 
-
-//   SdrDragDistort
-
 class SdrDragDistort : public SdrDragMethod
 {
 private:
@@ -244,9 +223,6 @@ public:
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) SAL_OVERRIDE;
     virtual void applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget) SAL_OVERRIDE;
 };
-
-
-//   SdrDragCrop
 
 // derive from SdrDragObjOwn to have handles aligned to object when it
 // is sheared or rotated

@@ -26,10 +26,6 @@
 namespace svxform
 {
 
-
-
-    //= OTypeConversionClient
-
     class OTypeConversionClient : public ODbtoolsClient
     {
     protected:

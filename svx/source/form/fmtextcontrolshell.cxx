@@ -158,9 +158,6 @@ namespace svx
         0
     };
 
-
-    //= FmFocusListenerAdapter
-
     typedef ::cppu::WeakImplHelper1 <   XFocusListener
                                     >   FmFocusListenerAdapter_Base;
     class FmFocusListenerAdapter : public FmFocusListenerAdapter_Base
@@ -247,9 +244,6 @@ namespace svx
         m_xWindow.clear();
     }
 
-
-    //= FmMouseListenerAdapter
-
     typedef ::cppu::WeakImplHelper1 <   XMouseListener
                                     >   FmMouseListenerAdapter_Base;
     class FmMouseListenerAdapter : public FmMouseListenerAdapter_Base
@@ -274,11 +268,6 @@ namespace svx
         virtual void SAL_CALL mouseExited( const awt::MouseEvent& e ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
         virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
     };
-
-
-    //= FmMouseListenerAdapter
-
-
 
     FmMouseListenerAdapter::FmMouseListenerAdapter( const Reference< XControl >& _rxControl, IContextRequestObserver* _pObserver )
         :m_pObserver( _pObserver )

@@ -22,9 +22,6 @@
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>
 
-
-// class SdrObjPrintableItem
-
 class SdrObjPrintableItem: public SdrYesNoItem {
 public:
     SdrObjPrintableItem(bool bOn=false): SdrYesNoItem(SDRATTR_OBJPRINTABLE,bOn) {}

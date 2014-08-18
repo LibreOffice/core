@@ -38,10 +38,6 @@ using namespace ::com::sun::star::table;
 
 namespace sdr { namespace table {
 
-
-// CellCursor
-
-
 CellCursor::CellCursor( const TableModelRef & xTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 : CellCursorBase( xTable, nLeft, nTop, nRight, nBottom )
 {

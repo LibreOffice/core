@@ -20,8 +20,6 @@
 #define INCLUDED_SVX_SOURCE_DIALOG_SRCHCTRL_HXX
 
 #include <sfx2/ctrlitem.hxx>
-// class SvxSearchFamilyController ---------------------------------------
-
 class SvxSearchDialog;
 
 class SvxSearchController : public SfxControllerItem

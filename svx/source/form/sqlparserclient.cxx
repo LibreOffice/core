@@ -28,10 +28,6 @@ namespace svxform
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-
-    //= OSQLParserClient
-
-
     OSQLParserClient::OSQLParserClient(const Reference< XComponentContext >& rxContext)
     {
         m_xContext = rxContext;

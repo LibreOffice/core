@@ -29,8 +29,6 @@
 #include "editeng/flstitem.hxx"
 #include "editeng/fontitem.hxx"
 
-// STATIC DATA -----------------------------------------------------------
-
 SFX_IMPL_MENU_CONTROL(SvxFontMenuControl, SvxFontItem);
 
 

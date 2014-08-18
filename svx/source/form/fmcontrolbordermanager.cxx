@@ -83,10 +83,6 @@ namespace svxform
         _rxPeer->setProperty( FM_PROP_BORDERCOLOR, makeAny( _rBoder.nBorderColor ) );
     }
 
-
-    //= ControlBorderManager
-
-
     ControlBorderManager::ControlBorderManager()
         :m_nFocusColor    ( 0x000000FF )
         ,m_nMouseHoveColor( 0x007098BE )

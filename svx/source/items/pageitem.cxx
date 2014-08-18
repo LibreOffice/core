@@ -32,14 +32,9 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 TYPEINIT1_FACTORY( SvxPageItem, SfxPoolItem , new  SvxPageItem(0));
 
-/*--------------------------------------------------------------------
-    Beschreibung: Konstruktor
- --------------------------------------------------------------------*/
-
+// Konstruktor
 SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 
     eNumType    ( SVX_ARABIC ),
@@ -48,10 +43,7 @@ SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 {
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Copy-Konstruktor
- --------------------------------------------------------------------*/
-
+// Copy-Konstruktor
 SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     : SfxPoolItem( rItem )
 {
@@ -60,19 +52,13 @@ SvxPageItem::SvxPageItem( const SvxPageItem& rItem )
     eUse        = rItem.eUse;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Clonen
- --------------------------------------------------------------------*/
-
+// Clonen
 SfxPoolItem* SvxPageItem::Clone( SfxItemPool * ) const
 {
     return new SvxPageItem( *this );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Abfrage auf Gleichheit
- --------------------------------------------------------------------*/
-
+// Abfrage auf Gleichheit
 bool SvxPageItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -266,10 +252,7 @@ SvStream& SvxPageItem::Store( SvStream &rStrm, sal_uInt16 /*nItemVersion*/ ) con
     return rStrm;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   HeaderFooterSet
- --------------------------------------------------------------------*/
-
+// HeaderFooterSet
 SvxSetItem::SvxSetItem( const sal_uInt16 nId, const SfxItemSet& rSet ) :
 
     SfxSetItem( nId, rSet )

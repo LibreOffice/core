@@ -42,8 +42,6 @@ using namespace ::com::sun::star::frame;
 SFX_IMPL_TOOLBOX_CONTROL(SvxTableToolBoxControl,SfxUInt16Item);
 SFX_IMPL_TOOLBOX_CONTROL(SvxColumnsToolBoxControl,SfxUInt16Item);
 
-// class TableWindow -----------------------------------------------------
-
 class TableWindow : public SfxPopupWindow
 {
 private:
@@ -398,8 +396,6 @@ void TableWindow::CloseAndShowTableDialog()
     TableDialog( Sequence< PropertyValue >() );
 }
 
-// class ColumnsWindow ---------------------------------------------------
-
 class ColumnsWindow : public SfxPopupWindow
 {
 private:
@@ -704,8 +700,6 @@ void ColumnsWindow::PopupModeEnd()
     SfxPopupWindow::PopupModeEnd();
 }
 
-// class SvxTableToolBoxControl ------------------------------------------
-
 SvxTableToolBoxControl::SvxTableToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     bEnabled( true )
@@ -770,8 +764,6 @@ void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, cons
     rTbx.SetItemState( nId,
         ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
-
-// class SvxColumnsToolBoxControl ------------------------------------------
 
 SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     : SfxToolBoxControl(nSlotId, nId, rTbx)

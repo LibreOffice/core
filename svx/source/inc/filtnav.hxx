@@ -225,9 +225,6 @@ inline bool OFilterItemExchange::hasFormat( const DataFlavorExVector& _rFormats 
     return OLocalExchange::hasFormat( _rFormats, getFormatId() );
 }
 
-
-//= OFilterExchangeHelper
-
 class OFilterExchangeHelper : public OLocalExchangeHelper
 {
 public:
@@ -296,14 +293,15 @@ private:
             The first form item.
     */
     FmFormItem* getSelectedFilterItems(::std::vector<FmFilterItem*>& _rItemList);
-    /* inserts the filter items into the tree model and creates new FilterItems if needed.
-        @param  _rFilterList
-            The items which should be inserted.
-        @param  _pTargetItems
-            The target where to insert the items.
-        @param  _bCopy
-            If <TRUE/> the items will not be removed from the model, otherwise they will.
-    */
+    /**
+     * inserts the filter items into the tree model and creates new FilterItems if needed.
+     *    @param  _rFilterList
+     *        The items which should be inserted.
+     *    @param  _pTargetItems
+     *        The target where to insert the items.
+     *    @param  _bCopy
+     *        If <TRUE/> the items will not be removed from the model, otherwise they will.
+     */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems, bool _bCopy = false);
     SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith = NULL);
     SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith = NULL);

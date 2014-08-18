@@ -917,9 +917,6 @@ void SdrHdl::onMouseLeave()
 {
 }
 
-
-// class SdrHdlColor
-
 SdrHdlColor::SdrHdlColor(const Point& rRef, Color aCol, const Size& rSize, bool bLum)
 :   SdrHdl(rRef, HDL_COLR),
     aMarkerSize(rSize),
@@ -1073,7 +1070,6 @@ void SdrHdlColor::SetSize(const Size& rNew)
     }
 }
 
-// class SdrHdlGradient
 SdrHdlGradient::SdrHdlGradient(const Point& rRef1, const Point& rRef2, bool bGrad)
     : SdrHdl(rRef1, bGrad ? HDL_GRAD : HDL_TRNS)
     , pColHdl1(NULL)
@@ -2198,10 +2194,6 @@ SdrHdl* SdrHdlList::GetHdl(SdrHdlKind eKind1) const
    }
    return pRet;
 }
-
-
-// SdrCropHdl
-
 
 SdrCropHdl::SdrCropHdl(
     const Point& rPnt,

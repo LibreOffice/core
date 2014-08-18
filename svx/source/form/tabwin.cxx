@@ -101,9 +101,6 @@ static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< conta
     }
 }
 
-// class FmFieldWinListBox
-
-
 FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS|WB_BORDER )
     ,pTabWin( pParent )
@@ -166,10 +163,6 @@ void FmFieldWinListBox::StartDrag( sal_Int8 /*_nAction*/, const Point& /*_rPosPi
     }
 }
 
-
-// class FmFieldWinData
-
-
 FmFieldWinData::FmFieldWinData()
 {
 }
@@ -178,10 +171,6 @@ FmFieldWinData::FmFieldWinData()
 FmFieldWinData::~FmFieldWinData()
 {
 }
-
-
-// class FmFieldWin
-
 
 FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _pParent)
             :SfxFloatingWindow(_pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))

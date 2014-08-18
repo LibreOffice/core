@@ -105,9 +105,6 @@ namespace sdr { namespace contact {
         ViewObjectContactOfUnoControl& operator=( const ViewObjectContactOfUnoControl& );   // never implemented
     };
 
-
-    //= UnoControlPrintOrPreviewContact
-
     class SVX_DLLPRIVATE UnoControlPrintOrPreviewContact : public ViewObjectContactOfUnoControl
     {
     public:

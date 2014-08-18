@@ -45,17 +45,9 @@ using namespace ::com::sun::star::lang;
 // For End Line Controlleer
 #define MAX_LINES 12
 
-// STATIC DATA -----------------------------------------------------------
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineStyleToolBoxControl, XLineStyleItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineWidthToolBoxControl, XLineWidthItem );
 SFX_IMPL_TOOLBOX_CONTROL( SvxLineEndToolBoxControl,   SfxBoolItem );
-
-/*************************************************************************
-|*
-|* SvxLineStyleToolBoxControl
-|*
-\************************************************************************/
 
 SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
                                                         sal_uInt16 nId,
@@ -195,12 +187,6 @@ Window* SvxLineStyleToolBoxControl::CreateItemWindow( Window *pParent )
     return new SvxLineBox( pParent, m_xFrame );
 }
 
-/*************************************************************************
-|*
-|* SvxLineWidthToolBoxControl
-|*
-\************************************************************************/
-
 SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
     sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
@@ -261,14 +247,6 @@ Window* SvxLineWidthToolBoxControl::CreateItemWindow( Window *pParent )
 {
     return( new SvxMetricField( pParent, m_xFrame ) );
 }
-
-
-
-/*************************************************************************
-|*
-|* SvxLineEndWindow
-|*
-\************************************************************************/
 
 SvxLineEndWindow::SvxLineEndWindow(
     sal_uInt16 nSlotId,
@@ -623,12 +601,6 @@ void SvxLineEndWindow::GetFocus (void)
     // with the keyboard.
     aLineEndSet.GrabFocus();
 }
-
-/*************************************************************************
-|*
-|* SvxLineEndToolBoxControl
-|*
-\************************************************************************/
 
 SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )

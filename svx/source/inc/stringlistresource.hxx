@@ -29,10 +29,6 @@
 namespace svx
 {
 
-
-
-    //= StringListResource
-
     /** loads a list of strings from a resource, where the resource is of type RSC_RESOURCE,
         and has sub resources of type string, numbered from 1 to n
     */
