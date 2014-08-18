@@ -516,9 +516,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
     // Vorbedingung: Zahlenformatierer gefunden
     DBG_ASSERT( pFormatter != NULL, "Zahlenformatierer nicht gefunden!" );
 
-//  sal_uInt16                  nCount      = 0;
     short                   nSelPos     = SELPOS_NONE;
-//  SvNumberFormatTable*    pFmtTable   = NULL;
 
     // Sonderbehandlung fuer undefiniertes Zahlenformat:
     if ( (eValType == SVX_VALUE_TYPE_UNDEFINED) && (nCurFormatKey == 0) )
@@ -640,7 +638,6 @@ void SvxNumberFormatShell::FillEListWithStd_Impl( std::vector<OUString>& rList,
         if(nPrivCat==CAT_DATE || nPrivCat==CAT_TIME)
         {
             nSelPos=FillEListWithDateTime_Impl(rList,nSelPos);
-            //if(nSelPos!=SELPOS_NONE) nSelPos=nTmpPos;
         }
     }
 }
