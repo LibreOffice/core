@@ -141,6 +141,7 @@ public:
 
     virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() SAL_OVERRIDE { return &maAutoFilter; }
     virtual orcus::spreadsheet::iface::import_sheet_properties* get_sheet_properties() SAL_OVERRIDE;
+    virtual orcus::spreadsheet::iface::import_table* get_table() SAL_OVERRIDE;
 
     // Orcus import interface
     virtual void set_auto(orcus::spreadsheet::row_t row, orcus::spreadsheet::col_t col, const char* p, size_t n) SAL_OVERRIDE;
