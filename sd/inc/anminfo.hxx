@@ -31,7 +31,7 @@
 class SdrObject;
 class SdrPathObj;
 
-class SdAnimationInfo : public SdrObjUserData
+class SD_DLLPUBLIC SdAnimationInfo : public SdrObjUserData
 {
 public:
     PresObjKind             mePresObjKind;
@@ -60,14 +60,14 @@ public:
     sal_uLong                   mnPresOrder;
     SdrObject&                  mrObject;
 
-    SD_DLLPUBLIC void           SetBookmark( const OUString& rBookmark );
-    SD_DLLPUBLIC OUString       GetBookmark();
+    void           SetBookmark( const OUString& rBookmark );
+    OUString       GetBookmark();
 public:
-                            SdAnimationInfo(SdrObject& rObject);
-                            SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);
-    virtual                 ~SdAnimationInfo();
+                            SAL_DLLPRIVATE SdAnimationInfo(SdrObject& rObject);
+                            SAL_DLLPRIVATE SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject);
+    SAL_DLLPRIVATE virtual                 ~SdAnimationInfo();
 
-    virtual SdrObjUserData* Clone(SdrObject* pObject) const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual SdrObjUserData* Clone(SdrObject* pObject) const SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SD_INC_ANMINFO_HXX

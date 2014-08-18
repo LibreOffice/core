@@ -133,18 +133,18 @@ namespace sd
 }
 
 // SdDrawDocument
-class SdDrawDocument : public FmFormModel
+class SD_DLLPUBLIC SdDrawDocument : public FmFormModel
 {
 private:
     OUString msDocAccTitle;
 public:
-    virtual void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
-    virtual const OUString getDocAccTitle() const { return msDocAccTitle; }
+    SAL_DLLPRIVATE virtual void setDocAccTitle( const OUString& rTitle ) { msDocAccTitle = rTitle; }
+    SAL_DLLPRIVATE virtual const OUString getDocAccTitle() const { return msDocAccTitle; }
 private:
     bool bReadOnly;
 public:
-    virtual void setDocReadOnly( bool b){ bReadOnly = b; }
-    virtual bool getDocReadOnly() const { return bReadOnly; }
+    SAL_DLLPRIVATE virtual void setDocReadOnly( bool b){ bReadOnly = b; }
+    SAL_DLLPRIVATE virtual bool getDocReadOnly() const { return bReadOnly; }
 private:
     ::sd::Outliner*     mpOutliner;          ///< local outliner for outline mode
     ::sd::Outliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
@@ -184,14 +184,14 @@ private:
     ::std::auto_ptr<ImpDrawPageListWatcher> mpDrawPageListWatcher;
     ::std::auto_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
 
-    void                UpdatePageObjectsInNotes(sal_uInt16 nStartPos);
-    void                UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_Int32 nIncrement);
-    void                FillOnlineSpellingList(SdPage* pPage);
-    void                SpellObject(SdrTextObj* pObj);
+    SAL_DLLPRIVATE void                UpdatePageObjectsInNotes(sal_uInt16 nStartPos);
+    SAL_DLLPRIVATE void                UpdatePageRelativeURLs(SdPage* pPage, sal_uInt16 nPos, sal_Int32 nIncrement);
+    SAL_DLLPRIVATE void                FillOnlineSpellingList(SdPage* pPage);
+    SAL_DLLPRIVATE void                SpellObject(SdrTextObj* pObj);
 
-                        DECL_LINK(WorkStartupHdl, void *);
-                        DECL_LINK(OnlineSpellingHdl, void *);
-                        DECL_LINK(OnlineSpellEventHdl, EditStatus*);
+                        DECL_DLLPRIVATE_LINK(WorkStartupHdl, void *);
+                        DECL_DLLPRIVATE_LINK(OnlineSpellingHdl, void *);
+                        DECL_DLLPRIVATE_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< OUString > maAnnotationAuthors;
     std::vector<com::sun::star::uno::Reference<
@@ -203,90 +203,90 @@ private:
     bool                mbUseEmbedFonts;
 protected:
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel() SAL_OVERRIDE;
 
 public:
 
-                        TYPEINFO_OVERRIDE();
+                        TYPEINFO_VISIBILITY_OVERRIDE(SAL_DLLPRIVATE);
 
-                        SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
-                        virtual ~SdDrawDocument();
+                        SAL_DLLPRIVATE SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
+                        SAL_DLLPRIVATE virtual ~SdDrawDocument();
 
-    SdDrawDocument*     AllocSdDrawDocument() const;
-    virtual SdrModel*   AllocModel() const SAL_OVERRIDE; //forwards to AllocSdDrawDocument
+    SAL_DLLPRIVATE SdDrawDocument*     AllocSdDrawDocument() const;
+    SAL_DLLPRIVATE virtual SdrModel*   AllocModel() const SAL_OVERRIDE; //forwards to AllocSdDrawDocument
 
-    SdPage*             AllocSdPage(bool bMasterPage);
-    virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE; //forwards to AllocSdPage
+    SAL_DLLPRIVATE SdPage*             AllocSdPage(bool bMasterPage);
+    SAL_DLLPRIVATE virtual SdrPage*    AllocPage(bool bMasterPage) SAL_OVERRIDE; //forwards to AllocSdPage
 
-    virtual bool        IsReadOnly() const SAL_OVERRIDE;
-    virtual void        SetChanged(bool bFlag = true) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual bool        IsReadOnly() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void        SetChanged(bool bFlag = true) SAL_OVERRIDE;
 
-    SfxItemPool&        GetPool() { return( *pItemPool ); }
+    SAL_DLLPRIVATE SfxItemPool&        GetPool() { return( *pItemPool ); }
 
-    ::sd::Outliner* GetOutliner(bool bCreateOutliner=true);
-    SD_DLLPUBLIC ::sd::Outliner* GetInternalOutliner(bool bCreateOutliner=true);
+    SAL_DLLPRIVATE ::sd::Outliner* GetOutliner(bool bCreateOutliner=true);
+    ::sd::Outliner* GetInternalOutliner(bool bCreateOutliner=true);
 
-    ::sd::DrawDocShell*     GetDocSh() const { return mpDocSh; }
+    SAL_DLLPRIVATE ::sd::DrawDocShell*     GetDocSh() const { return mpDocSh; }
 
-    LanguageType        GetLanguage( const sal_uInt16 nId ) const;
-    void                SetLanguage( const LanguageType eLang, const sal_uInt16 nId );
+    SAL_DLLPRIVATE LanguageType        GetLanguage( const sal_uInt16 nId ) const;
+    SAL_DLLPRIVATE void                SetLanguage( const LanguageType eLang, const sal_uInt16 nId );
 
-    SvxNumType          GetPageNumType() const SAL_OVERRIDE;
-    void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
-    SD_DLLPUBLIC OUString CreatePageNumValue(sal_uInt16 nNum) const;
+    SAL_DLLPRIVATE SvxNumType          GetPageNumType() const SAL_OVERRIDE;
+    SAL_DLLPRIVATE void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
+    OUString CreatePageNumValue(sal_uInt16 nNum) const;
 
-    DocumentType        GetDocumentType() const { return meDocType; }
+    SAL_DLLPRIVATE DocumentType        GetDocumentType() const { return meDocType; }
 
-    void                SetAllocDocSh(bool bAlloc);
+    SAL_DLLPRIVATE void                SetAllocDocSh(bool bAlloc);
 
-    void                CreatingDataObj( SdTransferable* pTransferable ) { mpCreatingTransferable = pTransferable; }
+    SAL_DLLPRIVATE void                CreatingDataObj( SdTransferable* pTransferable ) { mpCreatingTransferable = pTransferable; }
 
     /** if the document does not contain at least one handout, one slide and one notes page with
         at least one master each this methods creates them.
         If a reference document is given, the sizes and border settings of that document are used
         for newly created slides.
     */
-    SD_DLLPUBLIC void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
-    SD_DLLPUBLIC bool                CreateMissingNotesAndHandoutPages();
+    void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
+    bool                CreateMissingNotesAndHandoutPages();
 
-    void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) SAL_OVERRIDE;
-    void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
-    void                DeletePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
-    SdrPage*            RemovePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
+    SAL_DLLPRIVATE void                MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos) SAL_OVERRIDE;
+    SAL_DLLPRIVATE void                InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
+    SAL_DLLPRIVATE void                DeletePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
+    SAL_DLLPRIVATE SdrPage*            RemovePage(sal_uInt16 nPgNum) SAL_OVERRIDE;
 
-    virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
-    virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum) SAL_OVERRIDE;
 
-    void                RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, bool bOnlyDuplicatePages=false, bool bUndo=true );
-    SD_DLLPUBLIC void   SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
+    SAL_DLLPRIVATE void                RemoveUnnecessaryMasterPages( SdPage* pMaster=NULL, bool bOnlyDuplicatePages=false, bool bUndo=true );
+    void   SetMasterPage(sal_uInt16 nSdPageNum, const OUString& rLayoutName,
                                       SdDrawDocument* pSourceDoc, bool bMaster, bool bCheckMasters);
 
-    SD_DLLPUBLIC SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile);
-    SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
+    SdDrawDocument* OpenBookmarkDoc(const OUString& rBookmarkFile);
+    SAL_DLLPRIVATE SdDrawDocument*     OpenBookmarkDoc(SfxMedium& rMedium);
 
-    bool InsertBookmark(const std::vector<OUString> &rBookmarkList,
+    SAL_DLLPRIVATE bool InsertBookmark(const std::vector<OUString> &rBookmarkList,
                             std::vector<OUString> &rExchangeList, bool bLink,
                             bool bReplace, sal_uInt16 nPgPos, bool bNoDialogs,
                             ::sd::DrawDocShell* pBookmarkDocSh, bool bCopy,
                             Point* pObjPos);
 
-    bool IsStartWithPresentation() const { return mbStartWithPresentation;}
-    void SetStartWithPresentation( bool bStartWithPresentation );
+    SAL_DLLPRIVATE bool IsStartWithPresentation() const { return mbStartWithPresentation;}
+    SAL_DLLPRIVATE void SetStartWithPresentation( bool bStartWithPresentation );
 
-    bool IsExitAfterPresenting() const { return mbExitAfterPresenting;}
-    void SetExitAfterPresenting( bool bExitAfterPresenting );
+    SAL_DLLPRIVATE bool IsExitAfterPresenting() const { return mbExitAfterPresenting;}
+    SAL_DLLPRIVATE void SetExitAfterPresenting( bool bExitAfterPresenting );
 
     /// load xml-based impress layout definitions into document
-    void InitLayoutVector();
+    SAL_DLLPRIVATE void InitLayoutVector();
     /// return reference to vector of Impress layout definitions
-    const std::vector<com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE const std::vector<com::sun::star::uno::Reference<
         com::sun::star::xml::dom::XNode> >& GetLayoutVector() const
     { return maLayoutInfo; }
 
    /// load xml-based impress master presentation object definitions into document
-    void InitObjectVector();
+    SAL_DLLPRIVATE void InitObjectVector();
     /// return reference to vector of master presentation object definitions
-    const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> >& GetObjectVector() const { return maPresObjectInfo; }
+    SAL_DLLPRIVATE const std::vector<com::sun::star::uno::Reference<com::sun::star::xml::dom::XNode> >& GetObjectVector() const { return maPresObjectInfo; }
     /** Insert pages into this document
 
         This method inserts whole pages into this document, either
@@ -333,21 +333,21 @@ public:
         page, or preserve the old name
      */
 
-    bool InsertBookmarkAsPage(const std::vector<OUString> &rBookmarkList,
+    SAL_DLLPRIVATE bool InsertBookmarkAsPage(const std::vector<OUString> &rBookmarkList,
                                   std::vector<OUString> *pExchangeList,
                               bool bLink, bool bReplace, sal_uInt16 nPgPos,
                               bool bNoDialogs, ::sd::DrawDocShell* pBookmarkDocSh,
                               bool bCopy, bool bMergeMasterPages,
                               bool bPreservePageNames);
 
-    bool InsertBookmarkAsObject(const std::vector<OUString> &rBookmarkList,
+    SAL_DLLPRIVATE bool InsertBookmarkAsObject(const std::vector<OUString> &rBookmarkList,
                                     const std::vector<OUString> &rExchangeList,
                                     bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
                                     Point* pObjPos, bool bCalcObjCount = false);
 
-    SD_DLLPUBLIC void   CloseBookmarkDoc();
+    void   CloseBookmarkDoc();
 
-    SdrObject*          GetObj(const OUString& rObjName) const;
+    SAL_DLLPRIVATE SdrObject*          GetObj(const OUString& rObjName) const;
 
     /** Return the first page that has the given name.  Regular pages and
         notes pages are searched first.  When not found then the master
@@ -362,27 +362,27 @@ public:
             Returns the index of the page with the given name or
             SDRPAGE_NOTFOUND (=0xffff) when such a page does not exist.
     */
-    sal_uInt16 GetPageByName(const OUString& rPgName, bool& rbIsMasterPage ) const;
-    SD_DLLPUBLIC SdPage*GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const;
-    SD_DLLPUBLIC sal_uInt16 GetSdPageCount(PageKind ePgKind) const;
+    SAL_DLLPRIVATE sal_uInt16 GetPageByName(const OUString& rPgName, bool& rbIsMasterPage ) const;
+    SdPage*GetSdPage(sal_uInt16 nPgNum, PageKind ePgKind) const;
+    sal_uInt16 GetSdPageCount(PageKind ePgKind) const;
 
-    void                SetSelected(SdPage* pPage, bool bSelect);
-    bool                MovePages(sal_uInt16 nTargetPage);
+    SAL_DLLPRIVATE void                SetSelected(SdPage* pPage, bool bSelect);
+    SAL_DLLPRIVATE bool                MovePages(sal_uInt16 nTargetPage);
 
-    SD_DLLPUBLIC SdPage*GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
-    SD_DLLPUBLIC sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;
+    SdPage*GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
+    sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;
 
-    SD_DLLPUBLIC sal_uInt16 GetActiveSdPageCount() const;
+    sal_uInt16 GetActiveSdPageCount() const;
 
-    sal_uInt16              GetMasterPageUserCount(SdrPage* pMaster) const;
+    SAL_DLLPRIVATE sal_uInt16              GetMasterPageUserCount(SdrPage* pMaster) const;
 
-    const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
-    sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
+    SAL_DLLPRIVATE const sd::PresentationSettings& getPresentationSettings() const { return maPresentationSettings; }
+    SAL_DLLPRIVATE sd::PresentationSettings& getPresentationSettings() { return maPresentationSettings; }
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 >& getPresentation() const;
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation2 >& getPresentation() const;
 
-       void                SetSummationOfParagraphs( bool bOn = true ) { mbSummationOfParagraphs = bOn; }
-    bool            IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
+    SAL_DLLPRIVATE void                SetSummationOfParagraphs( bool bOn = true ) { mbSummationOfParagraphs = bOn; }
+    SAL_DLLPRIVATE bool            IsSummationOfParagraphs() const { return mbSummationOfParagraphs; }
 
     /** Set the mode that controls whether (and later how) the formatting of the document
         depends on the current printer metrics.
@@ -393,7 +393,7 @@ public:
             scope="com::sun::star::document::PrinterIndependentLayout">DISABLED</const>
             to make formatting depend on the current printer metrics.
     */
-    void SetPrinterIndependentLayout (sal_Int32 nMode);
+    SAL_DLLPRIVATE void SetPrinterIndependentLayout (sal_Int32 nMode);
 
     /** Get the flag that controls whether the formatting of the document
         depends on the current printer metrics.
@@ -404,74 +404,74 @@ public:
             scope="com::sun::star::document::PrinterIndependentLayout">DISABLED</const>
             when formatting depends on the current printer metrics.
     */
-    sal_Int32 GetPrinterIndependentLayout (void) { return mnPrinterIndependentLayout;}
+    SAL_DLLPRIVATE sal_Int32 GetPrinterIndependentLayout (void) { return mnPrinterIndependentLayout;}
 
-    void                SetOnlineSpell( bool bIn );
-    bool                GetOnlineSpell() const { return mbOnlineSpell; }
-    void                StopOnlineSpelling();
-    void                StartOnlineSpelling(bool bForceSpelling=true);
+    SAL_DLLPRIVATE void                SetOnlineSpell( bool bIn );
+    SAL_DLLPRIVATE bool                GetOnlineSpell() const { return mbOnlineSpell; }
+    SAL_DLLPRIVATE void                StopOnlineSpelling();
+    SAL_DLLPRIVATE void                StartOnlineSpelling(bool bForceSpelling=true);
 
-    void                ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl);
+    SAL_DLLPRIVATE void                ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl);
 
-    void                InsertObject(SdrObject* pObj, SdPage* pPage);
-    void                RemoveObject(SdrObject* pObj, SdPage* pPage);
+    SAL_DLLPRIVATE void                InsertObject(SdrObject* pObj, SdPage* pPage);
+    SAL_DLLPRIVATE void                RemoveObject(SdrObject* pObj, SdPage* pPage);
 
-    sal_uLong               GetLinkCount();
+    SAL_DLLPRIVATE sal_uLong               GetLinkCount();
 
-    std::vector<sd::FrameView*>& GetFrameViewList() { return maFrameViewList; }
-    SD_DLLPUBLIC SdCustomShowList* GetCustomShowList(bool bCreate = false);
+    SAL_DLLPRIVATE std::vector<sd::FrameView*>& GetFrameViewList() { return maFrameViewList; }
+    SdCustomShowList* GetCustomShowList(bool bCreate = false);
 
-    void                NbcSetChanged(bool bFlag = true);
+    SAL_DLLPRIVATE void                NbcSetChanged(bool bFlag = true);
 
-    void                SetTextDefaults() const;
+    SAL_DLLPRIVATE void                SetTextDefaults() const;
 
-    void                CreateLayoutTemplates();
-    void                RenameLayoutTemplate(const OUString& rOldLayoutName, const OUString& rNewName);
+    SAL_DLLPRIVATE void                CreateLayoutTemplates();
+    SAL_DLLPRIVATE void                RenameLayoutTemplate(const OUString& rOldLayoutName, const OUString& rNewName);
 
-    void                CreateDefaultCellStyles();
+    SAL_DLLPRIVATE void                CreateDefaultCellStyles();
 
-    SD_DLLPUBLIC void   StopWorkStartupDelay();
+    void   StopWorkStartupDelay();
 
-    void                NewOrLoadCompleted(DocCreationMode eMode);
-    void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
-    bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
+    SAL_DLLPRIVATE void                NewOrLoadCompleted(DocCreationMode eMode);
+    SAL_DLLPRIVATE void                NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool );
+    SAL_DLLPRIVATE bool                IsNewOrLoadCompleted() const {return mbNewOrLoadCompleted; }
 
-    ::sd::FrameView* GetFrameView(sal_uLong nPos) {
+    SAL_DLLPRIVATE ::sd::FrameView* GetFrameView(sal_uLong nPos) {
         return nPos < maFrameViewList.size() ? maFrameViewList[nPos] : NULL; }
 
     /** deprecated*/
-    SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
+    SAL_DLLPRIVATE SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
 
-    SD_DLLPUBLIC static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
+    static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
-    SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
-    IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const ::Window& rCmpWnd );
+    SAL_DLLPRIVATE SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
+    SAL_DLLPRIVATE IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const ::Window& rCmpWnd );
 
-    CharClass*          GetCharClass() const { return mpCharClass; }
+    SAL_DLLPRIVATE CharClass*          GetCharClass() const { return mpCharClass; }
 
-    void                RestoreLayerNames();
+    SAL_DLLPRIVATE void                RestoreLayerNames();
 
-    void                UpdateAllLinks();
+    SAL_DLLPRIVATE void                UpdateAllLinks();
 
-    void                CheckMasterPages();
+    SAL_DLLPRIVATE void                CheckMasterPages();
 
-    void                Merge(SdrModel& rSourceModel,
+    SAL_DLLPRIVATE void                Merge(SdrModel& rSourceModel,
                                 sal_uInt16 nFirstPageNum=0, sal_uInt16 nLastPageNum=0xFFFF,
                                 sal_uInt16 nDestPos=0xFFFF,
                                 bool bMergeMasterPages = false, bool bAllMasterPages = false,
                                 bool bUndo = true, bool bTreadSourceAsConst = false) SAL_OVERRIDE;
 
-    SD_DLLPUBLIC ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
-    void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
+    ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
+    SAL_DLLPRIVATE void SetDefaultWritingMode( ::com::sun::star::text::WritingMode eMode );
 
     /** replacespOldPage from all custom shows with pNewPage or removes pOldPage from
         all custom shows if pNewPage is 0.
     */
-    void ReplacePageInCustomShows( const SdPage* pOldPage, const SdPage* pNewPage );
+    SAL_DLLPRIVATE void ReplacePageInCustomShows( const SdPage* pOldPage, const SdPage* pNewPage );
 
 public:
 
-    static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
+    SAL_DLLPRIVATE static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
 
     /** Create and insert a set of two new pages: a standard (draw) page and
         the associated notes page.  The new pages are inserted directly
@@ -510,7 +510,7 @@ public:
             Returns an index of the inserted pages that can be used with the
             <member>GetSdPage()</member> method.
     */
-    sal_uInt16 CreatePage (
+    SAL_DLLPRIVATE sal_uInt16 CreatePage (
         SdPage* pCurrentPage,
         PageKind ePageKind,
         const OUString& sStandardPageName,
@@ -531,7 +531,7 @@ public:
             Returns an index of the inserted pages that can be used with the
             <member>GetSdPage()</member> method.
     */
-    sal_uInt16 DuplicatePage (sal_uInt16 nPageNum);
+    SAL_DLLPRIVATE sal_uInt16 DuplicatePage (sal_uInt16 nPageNum);
 
     /** Create and insert a set of two new pages that are copies of the
         given <argument>pCurrentPage</argument> and its associated notes
@@ -560,7 +560,7 @@ public:
             Returns an index of the inserted pages that can be used with the
             <member>GetSdPage()</member> method.
     */
-    sal_uInt16 DuplicatePage (
+    SAL_DLLPRIVATE sal_uInt16 DuplicatePage (
         SdPage* pCurrentPage,
         PageKind ePageKind,
         const OUString& sStandardPageName,
@@ -571,25 +571,25 @@ public:
 
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */
-    void getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont );
+    SAL_DLLPRIVATE void getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont );
 
-    sd::UndoManager* GetUndoManager() const;
+    SAL_DLLPRIVATE sd::UndoManager* GetUndoManager() const;
 
     /** converts the given western font height to a corresponding ctl font height, depending on the system language */
-    static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );
+    SAL_DLLPRIVATE static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );
 
     /** Get the style sheet pool if it was a SdStyleSheetPool.
      */
-    SD_DLLPUBLIC SdStyleSheetPool* GetSdStyleSheetPool() const;
+    SdStyleSheetPool* GetSdStyleSheetPool() const;
 
-       void UpdatePageRelativeURLs(const OUString& rOldName, const OUString& rNewName);
+    SAL_DLLPRIVATE void UpdatePageRelativeURLs(const OUString& rOldName, const OUString& rNewName);
 
-    void SetCalcFieldValueHdl( ::Outliner* pOutliner);
+    SAL_DLLPRIVATE void SetCalcFieldValueHdl( ::Outliner* pOutliner);
 
-    sal_uInt16 GetAnnotationAuthorIndex( const OUString& rAuthor );
+    SAL_DLLPRIVATE sal_uInt16 GetAnnotationAuthorIndex( const OUString& rAuthor );
 
-    bool IsUsingEmbededFonts() { return mbUseEmbedFonts; }
-    void SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
+    SAL_DLLPRIVATE bool IsUsingEmbededFonts() { return mbUseEmbedFonts; }
+    SAL_DLLPRIVATE void SetIsUsingEmbededFonts( bool bUse ) { mbUseEmbedFonts = bUse; }
 
 private:
     /** This member stores the printer independent layout mode.  Please
@@ -626,7 +626,7 @@ private:
             Returns an index of the inserted pages that can be used with the
             <member>GetSdPage()</member> method.
     */
-    sal_uInt16 InsertPageSet (
+    SAL_DLLPRIVATE sal_uInt16 InsertPageSet (
         SdPage* pCurrentPage,
         PageKind ePageKind,
         const OUString& sStandardPageName,
@@ -652,7 +652,7 @@ private:
             This flag indicates whether to show the shapes on the master
             page.
     */
-    void SetupNewPage (
+    SAL_DLLPRIVATE void SetupNewPage (
         SdPage* pPreviousPage,
         SdPage* pPage,
         const OUString& sPageName,
@@ -660,9 +660,9 @@ private:
         bool bIsPageBack,
         bool bIsPageObj);
 
-    virtual void PageListChanged() SAL_OVERRIDE;
-    virtual void MasterPageListChanged() SAL_OVERRIDE;
-    virtual ImageMap* GetImageMapForObject(SdrObject* pObj) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void PageListChanged() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void MasterPageListChanged() SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ImageMap* GetImageMapForObject(SdrObject* pObj) SAL_OVERRIDE;
 };
 
 namespace sd

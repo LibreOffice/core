@@ -52,132 +52,132 @@ typedef std::list< CustomAnimationEffectPtr > EffectSequence;
 
 class EffectSequenceHelper;
 
-class CustomAnimationEffect
+class SD_DLLPUBLIC CustomAnimationEffect
 {
     friend class MainSequence;
     friend class EffectSequenceHelper;
 
 public:
-    SD_DLLPUBLIC CustomAnimationEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    SD_DLLPUBLIC virtual ~CustomAnimationEffect();
+    CustomAnimationEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    virtual ~CustomAnimationEffect();
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& getNode() const { return mxNode; }
-    void setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void replaceNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& getNode() const { return mxNode; }
+    SAL_DLLPRIVATE void setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void replaceNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
-    CustomAnimationEffectPtr clone() const;
+    SAL_DLLPRIVATE CustomAnimationEffectPtr clone() const;
 
     // attributes
-    const OUString&    getPresetId() const { return maPresetId; }
-    const OUString&    getPresetSubType() const { return maPresetSubType; }
-    const OUString&    getProperty() const { return maProperty; }
+    SAL_DLLPRIVATE const OUString&    getPresetId() const { return maPresetId; }
+    SAL_DLLPRIVATE const OUString&    getPresetSubType() const { return maPresetSubType; }
+    SAL_DLLPRIVATE const OUString&    getProperty() const { return maProperty; }
 
-    sal_Int16               getPresetClass() const { return mnPresetClass; }
-    void                    setPresetClass( sal_Int16 nPresetClass );
+    SAL_DLLPRIVATE sal_Int16               getPresetClass() const { return mnPresetClass; }
+    SAL_DLLPRIVATE void                    setPresetClass( sal_Int16 nPresetClass );
 
-    sal_Int16       getNodeType() const { return mnNodeType; }
-    SD_DLLPUBLIC void           setNodeType( sal_Int16 nNodeType );
+    SAL_DLLPRIVATE sal_Int16       getNodeType() const { return mnNodeType; }
+    void           setNodeType( sal_Int16 nNodeType );
 
-    ::com::sun::star::uno::Any              getRepeatCount() const;
-    void            setRepeatCount( const ::com::sun::star::uno::Any& rRepeatCount );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Any              getRepeatCount() const;
+    SAL_DLLPRIVATE void            setRepeatCount( const ::com::sun::star::uno::Any& rRepeatCount );
 
-    ::com::sun::star::uno::Any              getEnd() const;
-    void            setEnd( const ::com::sun::star::uno::Any& rEnd );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Any              getEnd() const;
+    SAL_DLLPRIVATE void            setEnd( const ::com::sun::star::uno::Any& rEnd );
 
-    sal_Int16       getFill() const;
-    void            setFill( sal_Int16 nFill );
+    SAL_DLLPRIVATE sal_Int16       getFill() const;
+    SAL_DLLPRIVATE void            setFill( sal_Int16 nFill );
 
-    double          getBegin() const { return mfBegin; }
-    SD_DLLPUBLIC void           setBegin( double fBegin );
+    SAL_DLLPRIVATE double          getBegin() const { return mfBegin; }
+    void           setBegin( double fBegin );
 
-    double          getDuration() const { return mfDuration; }
-    SD_DLLPUBLIC void           setDuration( double fDuration );
+    SAL_DLLPRIVATE double          getDuration() const { return mfDuration; }
+    void           setDuration( double fDuration );
 
-    double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
+    SAL_DLLPRIVATE double          getAbsoluteDuration() const { return mfAbsoluteDuration; }
 
-    const OUString& getName() const { return maName; }
-    void            setName( const OUString& rName ) { maName = rName; }
+    SAL_DLLPRIVATE const OUString& getName() const { return maName; }
+    SAL_DLLPRIVATE void            setName( const OUString& rName ) { maName = rName; }
 
-    sal_Int16       getIterateType() const { return mnIterateType; }
-    SD_DLLPUBLIC void           setIterateType( sal_Int16 nIterateType );
+    SAL_DLLPRIVATE sal_Int16       getIterateType() const { return mnIterateType; }
+    void           setIterateType( sal_Int16 nIterateType );
 
-    double          getIterateInterval() const { return mfIterateInterval; }
-    SD_DLLPUBLIC void           setIterateInterval( double fIterateInterval );
+    SAL_DLLPRIVATE double          getIterateInterval() const { return mfIterateInterval; }
+    void           setIterateInterval( double fIterateInterval );
 
-    ::com::sun::star::uno::Any  getTarget() const { return maTarget; }
-    SD_DLLPUBLIC void                       setTarget( const ::com::sun::star::uno::Any& rTarget );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Any  getTarget() const { return maTarget; }
+    void                       setTarget( const ::com::sun::star::uno::Any& rTarget );
 
-    bool        hasAfterEffect() const { return mbHasAfterEffect; }
-    void            setHasAfterEffect( bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
+    SAL_DLLPRIVATE bool        hasAfterEffect() const { return mbHasAfterEffect; }
+    SAL_DLLPRIVATE void            setHasAfterEffect( bool bHasAfterEffect ) { mbHasAfterEffect = bHasAfterEffect; }
 
-    ::com::sun::star::uno::Any  getDimColor() const { return maDimColor; }
-    void                        setDimColor( ::com::sun::star::uno::Any aDimColor ) { maDimColor = aDimColor; }
+    SAL_DLLPRIVATE ::com::sun::star::uno::Any  getDimColor() const { return maDimColor; }
+    SAL_DLLPRIVATE void                        setDimColor( ::com::sun::star::uno::Any aDimColor ) { maDimColor = aDimColor; }
 
-    bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
-    void            setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }
+    SAL_DLLPRIVATE bool            IsAfterEffectOnNext() const { return mbAfterEffectOnNextEffect; }
+    SAL_DLLPRIVATE void            setAfterEffectOnNext( bool bOnNextEffect ) { mbAfterEffectOnNextEffect = bOnNextEffect; }
 
-    sal_Int32       getParaDepth() const { return mnParaDepth; }
+    SAL_DLLPRIVATE sal_Int32       getParaDepth() const { return mnParaDepth; }
 
-    bool        hasText() const { return mbHasText; }
+    SAL_DLLPRIVATE bool        hasText() const { return mbHasText; }
 
-    sal_Int16       getCommand() const { return mnCommand; }
+    SAL_DLLPRIVATE sal_Int16       getCommand() const { return mnCommand; }
 
-    double          getAcceleration() const { return mfAcceleration; }
-    void            setAcceleration( double fAcceleration );
+    SAL_DLLPRIVATE double          getAcceleration() const { return mfAcceleration; }
+    SAL_DLLPRIVATE void            setAcceleration( double fAcceleration );
 
-    double          getDecelerate() const { return mfDecelerate; }
-    void            setDecelerate( double fDecelerate );
+    SAL_DLLPRIVATE double          getDecelerate() const { return mfDecelerate; }
+    SAL_DLLPRIVATE void            setDecelerate( double fDecelerate );
 
-    bool        getAutoReverse() const { return mbAutoReverse; }
-    void            setAutoReverse( bool bAutoReverse );
+    SAL_DLLPRIVATE bool        getAutoReverse() const { return mbAutoReverse; }
+    SAL_DLLPRIVATE void            setAutoReverse( bool bAutoReverse );
 
-    ::com::sun::star::uno::Any  getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue );
-    bool                        setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const ::com::sun::star::uno::Any& rValue );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Any  getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue );
+    SAL_DLLPRIVATE bool                        setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const ::com::sun::star::uno::Any& rValue );
 
-    ::com::sun::star::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
-    bool                        setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const ::com::sun::star::uno::Any& rValue );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Any  getTransformationProperty( sal_Int32 nTransformType, EValue eValue );
+    SAL_DLLPRIVATE bool                        setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const ::com::sun::star::uno::Any& rValue );
 
-    ::com::sun::star::uno::Any  getColor( sal_Int32 nIndex );
-    void                        setColor( sal_Int32 nIndex, const ::com::sun::star::uno::Any& rColor );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Any  getColor( sal_Int32 nIndex );
+    SAL_DLLPRIVATE void                        setColor( sal_Int32 nIndex, const ::com::sun::star::uno::Any& rColor );
 
-    ::com::sun::star::uno::Any  getRotation();
-    void                        setRotation( const ::com::sun::star::uno::Any& rRotation );
+    SAL_DLLPRIVATE ::com::sun::star::uno::Any  getRotation();
+    SAL_DLLPRIVATE void                        setRotation( const ::com::sun::star::uno::Any& rRotation );
 
-    sal_Int32       getGroupId() const { return mnGroupId; }
-    void            setGroupId( sal_Int32 nGroupId );
+    SAL_DLLPRIVATE sal_Int32       getGroupId() const { return mnGroupId; }
+    SAL_DLLPRIVATE void            setGroupId( sal_Int32 nGroupId );
 
-    sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
-    SD_DLLPUBLIC void           setTargetSubItem( sal_Int16 nSubItem );
+    SAL_DLLPRIVATE sal_Int16       getTargetSubItem() const { return mnTargetSubItem; }
+    void           setTargetSubItem( sal_Int16 nSubItem );
 
-    OUString getPath() const;
-    void setPath( const OUString& rPath );
+    SAL_DLLPRIVATE OUString getPath() const;
+    SAL_DLLPRIVATE void setPath( const OUString& rPath );
 
-    bool checkForText();
-    bool calculateIterateDuration();
+    SAL_DLLPRIVATE bool checkForText();
+    SAL_DLLPRIVATE bool calculateIterateDuration();
 
-    void setAudio( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& xAudio );
-    bool getStopAudio() const;
-    SD_DLLPUBLIC void setStopAudio();
-    SD_DLLPUBLIC void createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume = 1.0 );
-    void removeAudio();
-    const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& getAudio() const { return mxAudio; }
+    SAL_DLLPRIVATE void setAudio( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& xAudio );
+    SAL_DLLPRIVATE bool getStopAudio() const;
+    void setStopAudio();
+    void createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume = 1.0 );
+    SAL_DLLPRIVATE void removeAudio();
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAudio >& getAudio() const { return mxAudio; }
 
-    EffectSequenceHelper*   getEffectSequence() const { return mpEffectSequence; }
+    SAL_DLLPRIVATE EffectSequenceHelper*   getEffectSequence() const { return mpEffectSequence; }
 
     // helper
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > createAfterEffectNode() const throw (com::sun::star::uno::Exception);
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTargetShape() const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > createAfterEffectNode() const throw (com::sun::star::uno::Exception);
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTargetShape() const;
 
     // static helpers
-    static sal_Int32 get_node_type( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    static sal_Int32 getNumberOfSubitems( const ::com::sun::star::uno::Any& aTarget, sal_Int16 nIterateType );
+    SAL_DLLPRIVATE static sal_Int32 get_node_type( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE static sal_Int32 getNumberOfSubitems( const ::com::sun::star::uno::Any& aTarget, sal_Int16 nIterateType );
 
-    SdrPathObj* createSdrPathObjFromPath();
-    void updateSdrPathObjFromPath( SdrPathObj& rPathObj );
-    void updatePathFromSdrPathObj( const SdrPathObj& rPathObj );
+    SAL_DLLPRIVATE SdrPathObj* createSdrPathObjFromPath();
+    SAL_DLLPRIVATE void updateSdrPathObjFromPath( SdrPathObj& rPathObj );
+    SAL_DLLPRIVATE void updatePathFromSdrPathObj( const SdrPathObj& rPathObj );
 
 protected:
-    void setEffectSequence( EffectSequenceHelper* pSequence ) { mpEffectSequence = pSequence; }
+    SAL_DLLPRIVATE void setEffectSequence( EffectSequenceHelper* pSequence ) { mpEffectSequence = pSequence; }
 
 private:
     sal_Int16       mnNodeType;
@@ -271,82 +271,82 @@ private:
 typedef boost::shared_ptr< CustomAnimationTextGroup > CustomAnimationTextGroupPtr;
 typedef std::map< sal_Int32, CustomAnimationTextGroupPtr > CustomAnimationTextGroupMap;
 
-class EffectSequenceHelper
+class SD_DLLPUBLIC EffectSequenceHelper
 {
 friend class MainSequence;
 
 public:
-    EffectSequenceHelper();
-    EffectSequenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot );
-    virtual ~EffectSequenceHelper();
+    SAL_DLLPRIVATE EffectSequenceHelper();
+    SAL_DLLPRIVATE EffectSequenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot );
+    SAL_DLLPRIVATE virtual ~EffectSequenceHelper();
 
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode();
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRootNode();
 
-    CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
-    CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
-    SD_DLLPUBLIC void append( const CustomAnimationEffectPtr& pEffect );
-    void insert( EffectSequence::iterator& rPos, const CustomAnimationEffectPtr& pEffect );
-    void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration = -1.0 );
-    void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration = -1.0 );
-    void remove( const CustomAnimationEffectPtr& pEffect );
+    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const CustomAnimationPresetPtr& pDescriptor, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
+    SAL_DLLPRIVATE CustomAnimationEffectPtr append( const SdrPathObj& rPathObj, const ::com::sun::star::uno::Any& rTarget, double fDuration = -1.0 );
+    void append( const CustomAnimationEffectPtr& pEffect );
+    SAL_DLLPRIVATE void insert( EffectSequence::iterator& rPos, const CustomAnimationEffectPtr& pEffect );
+    SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, double fDuration = -1.0 );
+    SAL_DLLPRIVATE void replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pDescriptor, const OUString& rPresetSubType, double fDuration = -1.0 );
+    SAL_DLLPRIVATE void remove( const CustomAnimationEffectPtr& pEffect );
 
-    void create( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void createEffectsequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void processAfterEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void createEffects( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void create( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void createEffectsequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void processAfterEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
+    SAL_DLLPRIVATE void createEffects( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
-    sal_Int32 getCount() const { return sal::static_int_cast< sal_Int32 >( maEffects.size() ); }
+    SAL_DLLPRIVATE sal_Int32 getCount() const { return sal::static_int_cast< sal_Int32 >( maEffects.size() ); }
 
-    virtual CustomAnimationEffectPtr findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
+    SAL_DLLPRIVATE virtual CustomAnimationEffectPtr findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const;
 
-    virtual bool disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
-    virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
-    virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
-    virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
-    virtual void onTextChanged( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    SAL_DLLPRIVATE virtual bool disposeShape( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    SAL_DLLPRIVATE virtual void insertTextRange( const com::sun::star::uno::Any& aTarget );
+    SAL_DLLPRIVATE virtual void disposeTextRange( const com::sun::star::uno::Any& aTarget );
+    SAL_DLLPRIVATE virtual bool hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
+    SAL_DLLPRIVATE virtual void onTextChanged( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape );
 
     /** this must be called if effects from this sequence are changed.
         the method will call the registered listeners */
-    void update( const CustomAnimationEffectPtr& pEffect );
+    SAL_DLLPRIVATE void update( const CustomAnimationEffectPtr& pEffect );
 
     /** this method rebuilds the animation nodes */
-    virtual void rebuild();
+    SAL_DLLPRIVATE virtual void rebuild();
 
-    EffectSequence::iterator getBegin() { return maEffects.begin(); }
-    EffectSequence::iterator getEnd() { return maEffects.end(); }
-    EffectSequence::iterator find( const CustomAnimationEffectPtr& pEffect );
+    SAL_DLLPRIVATE EffectSequence::iterator getBegin() { return maEffects.begin(); }
+    SAL_DLLPRIVATE EffectSequence::iterator getEnd() { return maEffects.end(); }
+    SAL_DLLPRIVATE EffectSequence::iterator find( const CustomAnimationEffectPtr& pEffect );
 
-    EffectSequence& getSequence() { return maEffects; }
+    SAL_DLLPRIVATE EffectSequence& getSequence() { return maEffects; }
 
-    void addListener( ISequenceListener* pListener );
-    void removeListener( ISequenceListener* pListener );
+    SAL_DLLPRIVATE void addListener( ISequenceListener* pListener );
+    SAL_DLLPRIVATE void removeListener( ISequenceListener* pListener );
 
     // text group methods
 
-    CustomAnimationTextGroupPtr findGroup( sal_Int32 nGroupId );
-    SD_DLLPUBLIC CustomAnimationTextGroupPtr    createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, bool bAnimateForm, bool bTextReverse );
-    void setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping );
-    void setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm );
-    void setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto );
-    void setTextReverse( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm );
+    SAL_DLLPRIVATE CustomAnimationTextGroupPtr findGroup( sal_Int32 nGroupId );
+    CustomAnimationTextGroupPtr    createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, bool bAnimateForm, bool bTextReverse );
+    SAL_DLLPRIVATE void setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping );
+    SAL_DLLPRIVATE void setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm );
+    SAL_DLLPRIVATE void setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto );
+    SAL_DLLPRIVATE void setTextReverse( CustomAnimationTextGroupPtr pTextGroup, bool bAnimateForm );
 
-    sal_Int32 getSequenceType() const { return mnSequenceType; }
+    SAL_DLLPRIVATE sal_Int32 getSequenceType() const { return mnSequenceType; }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTriggerShape() const { return mxEventSource; }
-    void setTriggerShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTrigger ) { mxEventSource = xTrigger; }
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getTriggerShape() const { return mxEventSource; }
+    SAL_DLLPRIVATE void setTriggerShape( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTrigger ) { mxEventSource = xTrigger; }
 
-    virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const;
-    virtual CustomAnimationEffectPtr getEffectFromOffset( sal_Int32 nOffset ) const;
+    SAL_DLLPRIVATE virtual sal_Int32 getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const;
+    SAL_DLLPRIVATE virtual CustomAnimationEffectPtr getEffectFromOffset( sal_Int32 nOffset ) const;
 
 protected:
-    virtual void implRebuild();
-    virtual void reset();
+    SAL_DLLPRIVATE virtual void implRebuild();
+    SAL_DLLPRIVATE virtual void reset();
 
-    void createTextGroupParagraphEffects( CustomAnimationTextGroupPtr pTextGroup, CustomAnimationEffectPtr pEffect, bool bUsed );
+    SAL_DLLPRIVATE void createTextGroupParagraphEffects( CustomAnimationTextGroupPtr pTextGroup, CustomAnimationEffectPtr pEffect, bool bUsed );
 
-    void notify_listeners();
+    SAL_DLLPRIVATE void notify_listeners();
 
-    void updateTextGroups();
+    SAL_DLLPRIVATE void updateTextGroups();
 
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer > mxSequenceRoot;

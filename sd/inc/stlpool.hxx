@@ -52,19 +52,19 @@ typedef ::cppu::ImplInheritanceHelper4< SfxStyleSheetPool,
                                         ::com::sun::star::container::XNameAccess,
                                         ::com::sun::star::lang::XComponent > SdStyleSheetPoolBase;
 
-class SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
+class SD_DLLPUBLIC SdStyleSheetPool : public SdStyleSheetPoolBase, public SfxListener
 {
     friend class SdDrawDocument;
 public:
-                        SdStyleSheetPool(SfxItemPool const& rPool, SdDrawDocument* pDocument);
+                        SAL_DLLPRIVATE SdStyleSheetPool(SfxItemPool const& rPool, SdDrawDocument* pDocument);
 
-    void                SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)  { mpActualStyleSheet = pActStyleSheet; }
-    SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mpActualStyleSheet; }
+    SAL_DLLPRIVATE void                SetActualStyleSheet(SfxStyleSheetBase* pActStyleSheet)  { mpActualStyleSheet = pActStyleSheet; }
+    SAL_DLLPRIVATE SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mpActualStyleSheet; }
 
-    SfxStyleSheetBase*  GetTitleSheet(const OUString& rLayoutName);
+    SAL_DLLPRIVATE SfxStyleSheetBase*  GetTitleSheet(const OUString& rLayoutName);
 
                         // Caller has to delete the list
-    void                CreateOutlineSheetList(const OUString& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
+    SAL_DLLPRIVATE void                CreateOutlineSheetList(const OUString& rLayoutName, std::vector<SfxStyleSheetBase*> &rOutlineStyles);
 
     /** creates all layout style sheets for the given layout name if they
         don't exist yet.
@@ -74,69 +74,69 @@ public:
                             had to be created. This is used to assert errors in documents
                             when styles are missing.
     */
-    SD_DLLPUBLIC void                CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck = false );
-    void                CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList) const;
-    void                CreateLayoutSheetList(const OUString& rLayoutName, SdStyleSheetVector& rLayoutSheets);
-    void                CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
-    void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);
-    void                CopyCellSheets(SdStyleSheetPool& rSourcePool);
-    void                CopyTableStyles(SdStyleSheetPool& rSourcePool);
-    void                CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets);
-    void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
+    void                CreateLayoutStyleSheets(const OUString& rLayoutName, bool bCheck = false );
+    SAL_DLLPRIVATE void                CreateLayoutSheetNames(const OUString& rLayoutName, std::vector<OUString> &aNameList) const;
+    SAL_DLLPRIVATE void                CreateLayoutSheetList(const OUString& rLayoutName, SdStyleSheetVector& rLayoutSheets);
+    SAL_DLLPRIVATE void                CopyLayoutSheets(const OUString& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
+    SAL_DLLPRIVATE void                CopyGraphicSheets(SdStyleSheetPool& rSourcePool);
+    SAL_DLLPRIVATE void                CopyCellSheets(SdStyleSheetPool& rSourcePool);
+    SAL_DLLPRIVATE void                CopyTableStyles(SdStyleSheetPool& rSourcePool);
+    SAL_DLLPRIVATE void                CopyCellSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets);
+    SAL_DLLPRIVATE void                RenameAndCopyGraphicSheets(SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
 
-    void                CreatePseudosIfNecessary();
-    void                UpdateStdNames();
-    static void         PutNumBulletItem( SfxStyleSheetBase* pSheet, Font& rBulletFont );
-    static Font         GetBulletFont();
+    SAL_DLLPRIVATE void                CreatePseudosIfNecessary();
+    SAL_DLLPRIVATE void                UpdateStdNames();
+    SAL_DLLPRIVATE static void         PutNumBulletItem( SfxStyleSheetBase* pSheet, Font& rBulletFont );
+    SAL_DLLPRIVATE static Font         GetBulletFont();
 
-    SdDrawDocument*     GetDoc() const { return mpDoc; }
+    SAL_DLLPRIVATE SdDrawDocument*     GetDoc() const { return mpDoc; }
 
-    static  SdStyleSheetVector CreateChildList( SdStyleSheet* pSheet );
+    SAL_DLLPRIVATE static  SdStyleSheetVector CreateChildList( SdStyleSheet* pSheet );
 
-    static void setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i, SvxNumberFormat &rNumberFormat);
+    SAL_DLLPRIVATE static void setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i, SvxNumberFormat &rNumberFormat);
 
 public:
-    void throwIfDisposed() throw(::com::sun::star::uno::RuntimeException);
+    SAL_DLLPRIVATE void throwIfDisposed() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XNameAccess
-    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getElementNames() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XElementAccess
-    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
-    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
+    SAL_DLLPRIVATE virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL acquire (void) throw () SAL_OVERRIDE;
-    virtual void SAL_CALL release (void) throw () SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL acquire (void) throw () SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual void SAL_CALL release (void) throw () SAL_OVERRIDE;
 protected:
-    void RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
-    void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
-    void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets );
-    void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix );
+    SAL_DLLPRIVATE void RenameAndCopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix);
+    SAL_DLLPRIVATE void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
+    SAL_DLLPRIVATE void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets );
+    SAL_DLLPRIVATE void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily, SdStyleSheetVector& rCreatedSheets, OUString &rRenameSuffix );
 
-    virtual SfxStyleSheetBase* Create(const OUString& rName, SfxStyleFamily eFamily, sal_uInt16 nMask) SAL_OVERRIDE;
-    virtual SfxStyleSheetBase* Create(const SdStyleSheet& rStyle);
+    SAL_DLLPRIVATE virtual SfxStyleSheetBase* Create(const OUString& rName, SfxStyleFamily eFamily, sal_uInt16 nMask) SAL_OVERRIDE;
+    SAL_DLLPRIVATE virtual SfxStyleSheetBase* Create(const SdStyleSheet& rStyle);
 
     using  SfxStyleSheetPool::Create;
-    virtual ~SdStyleSheetPool();
+    SAL_DLLPRIVATE virtual ~SdStyleSheetPool();
 
-    void AddStyleFamily( const SdPage* pPage );
-    void RemoveStyleFamily( const SdPage* pPage );
+    SAL_DLLPRIVATE void AddStyleFamily( const SdPage* pPage );
+    SAL_DLLPRIVATE void RemoveStyleFamily( const SdPage* pPage );
 
 private:
     SfxStyleSheetBase*      mpActualStyleSheet;

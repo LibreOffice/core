@@ -88,38 +88,38 @@ struct PresetCategory
 typedef boost::shared_ptr< PresetCategory > PresetCategoryPtr;
 typedef std::vector< PresetCategoryPtr > PresetCategoryList;
 
-class CustomAnimationPresets
+class SD_DLLPUBLIC CustomAnimationPresets
 {
 public:
-    CustomAnimationPresets();
-    virtual ~CustomAnimationPresets();
+    SAL_DLLPRIVATE CustomAnimationPresets();
+    SAL_DLLPRIVATE virtual ~CustomAnimationPresets();
 
-    void init();
+    SAL_DLLPRIVATE void init();
 
-    SD_DLLPUBLIC static const CustomAnimationPresets& getCustomAnimationPresets();
+    static const CustomAnimationPresets& getCustomAnimationPresets();
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > getRandomPreset( sal_Int16 nPresetClass ) const;
 
-    SD_DLLPUBLIC CustomAnimationPresetPtr getEffectDescriptor( const OUString& rPresetId ) const;
+    CustomAnimationPresetPtr getEffectDescriptor( const OUString& rPresetId ) const;
 
-    const OUString& getUINameForPresetId( const OUString& rPresetId ) const;
-    const OUString& getUINameForProperty( const OUString& rProperty ) const;
+    SAL_DLLPRIVATE const OUString& getUINameForPresetId( const OUString& rPresetId ) const;
+    SAL_DLLPRIVATE const OUString& getUINameForProperty( const OUString& rProperty ) const;
 
-    const PresetCategoryList& getEntrancePresets() const { return maEntrancePresets; }
-    const PresetCategoryList& getEmphasisPresets() const { return maEmphasisPresets; }
-    const PresetCategoryList& getExitPresets() const { return maExitPresets; }
-    const PresetCategoryList& getMotionPathsPresets() const { return maMotionPathsPresets; }
-    const PresetCategoryList& getMiscPresets() const { return maMiscPresets; }
+    SAL_DLLPRIVATE const PresetCategoryList& getEntrancePresets() const { return maEntrancePresets; }
+    SAL_DLLPRIVATE const PresetCategoryList& getEmphasisPresets() const { return maEmphasisPresets; }
+    SAL_DLLPRIVATE const PresetCategoryList& getExitPresets() const { return maExitPresets; }
+    SAL_DLLPRIVATE const PresetCategoryList& getMotionPathsPresets() const { return maMotionPathsPresets; }
+    SAL_DLLPRIVATE const PresetCategoryList& getMiscPresets() const { return maMiscPresets; }
 
-    void changePresetSubType( CustomAnimationEffectPtr pEffect, const OUString& rPresetSubType ) const;
+    SAL_DLLPRIVATE void changePresetSubType( CustomAnimationEffectPtr pEffect, const OUString& rPresetSubType ) const;
 
 private:
-    void importEffects();
-    void importResources();
+    SAL_DLLPRIVATE void importEffects();
+    SAL_DLLPRIVATE void importResources();
 
-    void importPresets( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  );
+    SAL_DLLPRIVATE void importPresets( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xConfigProvider, const OUString& rNodePath, PresetCategoryList& rPresetMap  );
 
-    const OUString& translateName( const OUString& rId, const UStringMap& rNameMap ) const;
+    SAL_DLLPRIVATE const OUString& translateName( const OUString& rId, const UStringMap& rNameMap ) const;
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxRootNode;
@@ -133,7 +133,7 @@ private:
     PresetCategoryList maMotionPathsPresets;
     PresetCategoryList maMiscPresets;
 
-    static CustomAnimationPresets*  mpCustomAnimationPresets;
+    SAL_DLLPRIVATE static CustomAnimationPresets*  mpCustomAnimationPresets;
 };
 
 typedef boost::shared_ptr< CustomAnimationPresets > CustomAnimationPresetsPtr;
