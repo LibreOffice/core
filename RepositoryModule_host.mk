@@ -123,6 +123,7 @@ $(eval $(call gb_Module_add_moduledirs,libreoffice,\
 	sysui \
 	test \
 	testtools \
+	testcompilerplugins \
 	toolkit \
 	tools \
 	touch \
