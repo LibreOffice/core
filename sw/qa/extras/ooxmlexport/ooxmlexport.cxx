@@ -1191,6 +1191,12 @@ DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
         CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
         CPPUNIT_ASSERT_EQUAL(sal_Int16(318), aShadow.ShadowWidth);
     }
+
+    if (xmlDocPtr pXmlStyles = parseExport("word/styles.xml"))
+    {
+        // Make sure we write qFormat for custom style names.
+        assertXPath(pXmlStyles, "//w:style[@w:styleId='Heading']/w:qFormat", 1);
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testStyleInheritance, "style-inheritance.docx")

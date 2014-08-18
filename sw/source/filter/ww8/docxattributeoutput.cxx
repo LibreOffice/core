@@ -5054,6 +5054,55 @@ oox::drawingml::DrawingML& DocxAttributeOutput::GetDrawingML()
     return m_rDrawingML;
 }
 
+/// Functor to do case-insensitive ordering of OUString instances.
+struct OUStringIgnoreCase
+{
+    bool operator() (const OUString& lhs, const OUString& rhs) const
+    {
+        return lhs.compareToIgnoreAsciiCase(rhs) < 0;
+    }
+};
+
+/// Guesses if a style created in Writer (no grab-bag) should be qFormat or not.
+static bool lcl_guessQFormat(const OUString& rName, sal_uInt16 nWwId)
+{
+    // If the style has no dedicated STI number, then it's probably a custom style -> qFormat.
+    if (nWwId == ww::stiUser)
+        return true;
+
+    static std::set<OUString, OUStringIgnoreCase> aWhitelist;
+    if (aWhitelist.empty())
+    {
+        aWhitelist.insert("Normal");
+        aWhitelist.insert("Heading 1");
+        aWhitelist.insert("Heading 2");
+        aWhitelist.insert("Heading 3");
+        aWhitelist.insert("Heading 4");
+        aWhitelist.insert("Heading 5");
+        aWhitelist.insert("Heading 6");
+        aWhitelist.insert("Heading 7");
+        aWhitelist.insert("Heading 8");
+        aWhitelist.insert("Heading 9");
+        aWhitelist.insert("Caption");
+        aWhitelist.insert("Title");
+        aWhitelist.insert("Subtitle");
+        aWhitelist.insert("Strong");
+        aWhitelist.insert("Emphasis");
+        aWhitelist.insert("No Spacing");
+        aWhitelist.insert("List Paragraph");
+        aWhitelist.insert("Quote");
+        aWhitelist.insert("Intense Quote");
+        aWhitelist.insert("Subtle Emphasis,");
+        aWhitelist.insert("Intense Emphasis");
+        aWhitelist.insert("Subtle Reference");
+        aWhitelist.insert("Intense Reference");
+        aWhitelist.insert("Book Title");
+        aWhitelist.insert("TOC Heading");
+    }
+    // Not custom style? Then we have a list of standard styles which should be qFormat.
+    return aWhitelist.find(rName) != aWhitelist.end();
+}
+
 void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
         sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId, bool bAutoUpdate )
 {
@@ -5148,9 +5197,7 @@ void DocxAttributeOutput::StartStyle( const OUString& rName, StyleType eType,
     if (bUnhideWhenUsed)
         m_pSerializer->singleElementNS(XML_w, XML_unhideWhenUsed, FSEND);
 
-    // If the style has a dedicated STI number, then chances are high that Word
-    // will have qFormat enabled for it, so let's do the same.
-    if (bQFormat || nWwId != ww::stiUser)
+    if (bQFormat || lcl_guessQFormat(rName, nWwId))
         m_pSerializer->singleElementNS(XML_w, XML_qFormat, FSEND);
     if (bLocked)
         m_pSerializer->singleElementNS(XML_w, XML_locked, FSEND);
