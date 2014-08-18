@@ -70,6 +70,7 @@
 #include <docsh.hxx>
 #include <tblsel.hxx>
 
+#include <app.hrc>
 #include <dialog.hrc>
 #include <popup.hrc>
 #include <shells.hrc>

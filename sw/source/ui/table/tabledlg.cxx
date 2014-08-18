@@ -53,6 +53,7 @@
 #include <poolfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 
+#include <app.hrc>
 #include <cmdid.h>
 #include <table.hrc>
 #include <svx/svxids.hrc>
