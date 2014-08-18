@@ -33,29 +33,29 @@ namespace apphelper
 {
 
 class LifeTimeGuard;
-class LifeTimeManager
+class OOO_DLLPUBLIC_CHARTTOOLS LifeTimeManager
 {
 friend class LifeTimeGuard;
 protected:
     mutable ::osl::Mutex                    m_aAccessMutex;
 public:
-OOO_DLLPUBLIC_CHARTTOOLS    LifeTimeManager( ::com::sun::star::lang::XComponent* pComponent, bool bLongLastingCallsCancelable = false );
-OOO_DLLPUBLIC_CHARTTOOLS    virtual ~LifeTimeManager();
+    LifeTimeManager( ::com::sun::star::lang::XComponent* pComponent, bool bLongLastingCallsCancelable = false );
+    virtual ~LifeTimeManager();
 
-OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposed( bool bAssert=true );
-OOO_DLLPUBLIC_CHARTTOOLS    bool    dispose() throw(::com::sun::star::uno::RuntimeException);
+    bool        impl_isDisposed( bool bAssert=true );
+    bool    dispose() throw(::com::sun::star::uno::RuntimeException);
 
 public:
     ::cppu::OMultiTypeInterfaceContainerHelper      m_aListenerContainer;
 
 protected:
-    virtual bool    impl_canStartApiCall();
-    virtual void        impl_apiCallCountReachedNull(){}
+    SAL_DLLPRIVATE virtual bool    impl_canStartApiCall();
+    SAL_DLLPRIVATE virtual void        impl_apiCallCountReachedNull(){}
 
-    void        impl_registerApiCall(bool bLongLastingCall);
-    void        impl_unregisterApiCall(bool bLongLastingCall);
+    SAL_DLLPRIVATE void        impl_registerApiCall(bool bLongLastingCall);
+    SAL_DLLPRIVATE void        impl_unregisterApiCall(bool bLongLastingCall);
 
-    void        impl_init();
+    SAL_DLLPRIVATE void        impl_init();
 
 protected:
     ::com::sun::star::lang::XComponent*     m_pComponent;
