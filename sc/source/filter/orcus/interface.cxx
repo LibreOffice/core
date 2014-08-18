@@ -215,6 +215,11 @@ void ScOrcusSheet::cellInserted()
     }
 }
 
+os::iface::import_table* ScOrcusSheet::get_table()
+{
+    return NULL;
+}
+
 void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)
 {
     OUString aVal(p, n, RTL_TEXTENCODING_UTF8);
