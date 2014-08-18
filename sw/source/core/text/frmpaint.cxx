@@ -19,7 +19,6 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <hintids.hxx>
-#include <tools/shl.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <pagedesc.hxx>

@@ -19,7 +19,6 @@
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 
-#include <tools/shl.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>

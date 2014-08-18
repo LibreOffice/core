@@ -18,7 +18,6 @@
  */
 
 #include <mdiexp.hxx>
-#include <tools/shl.hxx>
 #include <sfx2/progress.hxx>
 #include <tools/resid.hxx>
 #include <docsh.hxx>

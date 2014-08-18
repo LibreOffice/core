@@ -27,7 +27,6 @@
 #include <tools/resid.hxx>
 #include <tools/bigint.hxx>
 #include <svl/poolitem.hxx>
-#include <tools/shl.hxx>
 #include <editeng/editengdllapi.h>
 
 class Color;

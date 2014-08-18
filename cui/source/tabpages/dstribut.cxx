@@ -23,7 +23,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/svddef.hxx>
 #include <dialmgr.hxx>
-#include <tools/shl.hxx>
 
 /*************************************************************************
 |*

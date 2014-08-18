@@ -23,7 +23,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <swpossizetabpage.hxx>
-#include <tools/shl.hxx>
 #include <vcl/settings.hxx>
 
 #include <svx/dialogs.hrc>

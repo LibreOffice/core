@@ -46,7 +46,6 @@
 #include <ucbhelper/content.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/shl.hxx>
 #include <linguistic/misc.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>

@@ -20,7 +20,6 @@
 #include "showcols.hxx"
 #include "fmsearch.hrc"
 
-#include <tools/shl.hxx>
 #include <dialmgr.hxx>
 #include <vcl/msgbox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -19,7 +19,6 @@
 
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <tools/shl.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <svtools/valueset.hxx>
 #include <svl/languageoptions.hxx>

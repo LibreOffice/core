@@ -20,7 +20,6 @@
 #include <tools/debug.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/shl.hxx>
 #include <dialmgr.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <osl/mutex.hxx>

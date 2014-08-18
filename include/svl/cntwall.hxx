@@ -21,7 +21,6 @@
 
 #include <svl/svldllapi.h>
 
-#include <tools/shl.hxx>
 #include <tools/rtti.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>

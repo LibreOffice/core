@@ -23,7 +23,6 @@
 #include <svx/dialogs.hrc>
 
 #include "svx/tbxalign.hxx"
-#include <tools/shl.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>

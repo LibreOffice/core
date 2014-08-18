@@ -19,7 +19,6 @@
 
 #include <sfx2/app.hxx>
 #include <tools/rc.h>
-#include <tools/shl.hxx>
 
 #include <dialmgr.hxx>
 

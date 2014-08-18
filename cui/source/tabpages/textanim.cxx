@@ -19,7 +19,6 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
-#include <tools/shl.hxx>
 
 #include <cuires.hrc>
 #include <svx/dialogs.hrc>

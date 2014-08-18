@@ -19,7 +19,6 @@
 
 #include <stdio.h>
 
-#include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/eitem.hxx>

@@ -19,7 +19,6 @@
 
 #include <ctype.h>
 #include <editeng/unolingu.hxx>
-#include <tools/shl.hxx>
 #include <dlelstnr.hxx>
 #include <swmodule.hxx>
 #include <IDocumentSettingAccess.hxx>

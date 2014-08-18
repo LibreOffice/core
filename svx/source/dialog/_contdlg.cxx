@@ -19,7 +19,6 @@
 
 #include <vcl/wrkwin.hxx>
 #include <sot/factory.hxx>
-#include <tools/shl.hxx>
 #include <tools/helpers.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/eitem.hxx>

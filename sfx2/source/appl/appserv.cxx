@@ -72,7 +72,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <svtools/helpopt.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <tools/shl.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/exc_hlp.hxx>

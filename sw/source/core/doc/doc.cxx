@@ -38,7 +38,6 @@
 #include <DocumentExternalDataManager.hxx>
 #include <UndoManager.hxx>
 #include <hintids.hxx>
-#include <tools/shl.hxx>
 #include <tools/globname.hxx>
 #include <svx/svxids.hrc>
 #include <rtl/random.h>

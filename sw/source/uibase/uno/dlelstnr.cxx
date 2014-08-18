@@ -31,7 +31,6 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/shl.hxx>
 #include "dlelstnr.hxx"
 #include <swmodule.hxx>
 #include <wrtsh.hxx>

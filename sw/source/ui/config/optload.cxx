@@ -19,7 +19,6 @@
 
 #include <officecfg/Office/Writer.hxx>
 #include <comphelper/string.hxx>
-#include <tools/shl.hxx>
 #include <swtypes.hxx>
 #include <helpid.h>
 #include <uiitems.hxx>

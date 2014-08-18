@@ -24,7 +24,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/langtab.hxx>
-#include <tools/shl.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
 #include <editeng/scripttypeitem.hxx>

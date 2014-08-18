@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/shl.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>

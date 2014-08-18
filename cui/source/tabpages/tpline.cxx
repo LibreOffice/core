@@ -18,7 +18,6 @@
  */
 
 #include <editeng/sizeitem.hxx>
-#include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>

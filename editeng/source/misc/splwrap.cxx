@@ -18,7 +18,6 @@
  */
 
 #include <rtl/ustring.hxx>
-#include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <i18nutil/unicode.hxx>
-#include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>

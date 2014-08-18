@@ -18,7 +18,6 @@
  */
 
 
-#include <tools/shl.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdpool.hxx>
 #include <svx/svdmodel.hxx>

@@ -60,7 +60,6 @@
 
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
-#include <tools/shl.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <cassert>

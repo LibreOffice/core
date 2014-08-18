@@ -47,7 +47,6 @@
 #include <vcl/menu.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/request.hxx>
-#include <tools/shl.hxx>
 
 #include <vcl/wrkwin.hxx>
 #include <svx/fmshell.hxx>

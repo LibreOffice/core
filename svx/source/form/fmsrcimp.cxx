@@ -26,7 +26,6 @@
 #include <tools/diagnose_ex.h>
 #include <tools/wldcrd.hxx>
 #include <vcl/msgbox.hxx>
-#include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>

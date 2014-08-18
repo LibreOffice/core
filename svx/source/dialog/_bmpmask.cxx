@@ -18,7 +18,6 @@
  */
 
 #include <vcl/wrkwin.hxx>
-#include <tools/shl.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
 #include <svtools/valueset.hxx>

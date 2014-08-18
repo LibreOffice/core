@@ -30,7 +30,6 @@
 #include <editeng/justifyitem.hxx>
 #include <dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <tools/shl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/itemconnect.hxx>

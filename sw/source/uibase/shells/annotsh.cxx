@@ -25,7 +25,6 @@
 #include <com/sun/star/ui/dialogs/XSLTFilterDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-#include <tools/shl.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>

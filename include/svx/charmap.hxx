@@ -24,7 +24,6 @@
 #include <vcl/scrbar.hxx>
 #include <boost/shared_ptr.hpp>
 #include <map>
-#include <tools/shl.hxx>
 #include <svx/svxdllapi.h>
 
 // define ----------------------------------------------------------------

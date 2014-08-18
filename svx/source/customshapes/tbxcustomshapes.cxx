@@ -21,7 +21,6 @@
 #include <string>
 
 #include <svx/svxids.hrc>
-#include <tools/shl.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>

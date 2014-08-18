@@ -22,7 +22,6 @@
 #include <hintids.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/shl.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xmlexpit.hxx"
 #include <xmloff/nmspmap.hxx>

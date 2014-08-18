@@ -29,7 +29,6 @@
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/intitem.hxx>
-#include <tools/shl.hxx>
 #include <svl/srchitem.hxx>
 
 #include <numrule.hxx>

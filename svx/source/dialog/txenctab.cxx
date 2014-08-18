@@ -21,9 +21,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
 #include "svx/txenctab.hxx"
-#include <tools/shl.hxx>
-
-
 
 SvxTextEncodingTable::SvxTextEncodingTable()
     :
@@ -31,13 +28,9 @@ SvxTextEncodingTable::SvxTextEncodingTable()
 {
 }
 
-
-
 SvxTextEncodingTable::~SvxTextEncodingTable()
 {
 }
-
-
 
 const OUString SvxTextEncodingTable::GetTextString( const rtl_TextEncoding nEnc ) const
 {

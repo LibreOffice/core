@@ -20,7 +20,6 @@
 
 #include <string>
 
-#include <tools/shl.hxx>
 #include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewsh.hxx>

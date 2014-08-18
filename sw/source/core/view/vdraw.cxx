@@ -19,7 +19,6 @@
 
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <svx/svdpagv.hxx>

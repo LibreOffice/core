@@ -44,7 +44,6 @@
 #include <tgrditem.hxx>
 #include <scriptinfo.hxx>
 #include <editeng/brushitem.hxx>
-#include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include <accessibilityoptions.hxx>
 #include <svtools/accessibilityoptions.hxx>

@@ -23,7 +23,6 @@
 #include <sfx2/docfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/itemset.hxx>
-#include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/dialmgr.hxx>

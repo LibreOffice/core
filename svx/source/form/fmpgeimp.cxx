@@ -43,7 +43,6 @@
 #include <svx/fmmodel.hxx>
 #include <tools/resid.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/shl.hxx>
 #include <vcl/stdtext.hxx>
 #include <svx/dialmgr.hxx>
 #include <comphelper/processfactory.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <svx/svxdlg.hxx>
-#include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>

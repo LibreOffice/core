@@ -59,7 +59,6 @@
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
 #include <svl/eitem.hxx>
-#include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
 #include <svx/svdpage.hxx>
 #include <svx/fmmodel.hxx>

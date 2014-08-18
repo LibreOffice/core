@@ -29,7 +29,6 @@
 #include "swregion.hxx"
 #include "dflyobj.hxx"
 #include "dview.hxx"
-#include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include <svx/svdpage.hxx>
 #include <accmap.hxx>

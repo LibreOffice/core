@@ -20,7 +20,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/shl.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <unotools/textsearch.hxx>

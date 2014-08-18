@@ -39,8 +39,6 @@
 #include "formulagroup.hxx"
 #include <refhint.hxx>
 
-#include <tools/shl.hxx>
-
 #include "globstr.hrc"
 
 extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkAround

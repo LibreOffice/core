@@ -61,7 +61,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/shl.hxx>
 #include <unotools/confignode.hxx>
 #include <vcl/stdtext.hxx>
 

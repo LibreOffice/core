@@ -19,7 +19,6 @@
 
 #include <tools/resid.hxx>
 #include <tools/stream.hxx>
-#include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>

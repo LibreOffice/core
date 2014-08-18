@@ -25,7 +25,6 @@
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
 #include <svl/SfxBroadcaster.hxx>
-#include <tools/shl.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
 #include "sb.hxx"

@@ -27,7 +27,6 @@
 #include <svtools/langtab.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
-#include <tools/shl.hxx>
 #include <vcl/msgbox.hxx>
 
 #define HYPH_POS_CHAR       '='

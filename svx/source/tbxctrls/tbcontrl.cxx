@@ -18,7 +18,6 @@
  */
 
 #include <string>
-#include <tools/shl.hxx>
 #include <tools/color.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>

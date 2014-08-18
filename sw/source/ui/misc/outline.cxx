@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <tools/shl.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>

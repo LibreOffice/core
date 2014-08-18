@@ -19,7 +19,6 @@
 
 
 #include <dragmt3d.hxx>
-#include <tools/shl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svddrgmt.hxx>

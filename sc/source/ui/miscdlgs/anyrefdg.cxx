@@ -23,7 +23,6 @@
 #include <sfx2/viewsh.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/mnemonic.hxx>
-#include <tools/shl.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 

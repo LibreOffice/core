@@ -18,7 +18,6 @@
  */
 
 #include <vcl/wrkwin.hxx>
-#include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/pathoptions.hxx>

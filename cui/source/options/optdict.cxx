@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/shl.hxx>
 #include <editeng/unolingu.hxx>
 #include <svx/dlgutil.hxx>
 #include <sfx2/sfxuno.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <svx/rubydialog.hxx>
-#include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <sfx2/app.hxx>

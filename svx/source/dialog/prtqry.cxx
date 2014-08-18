@@ -21,7 +21,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/prtqry.hxx>
 #include <svx/dialmgr.hxx>
-#include <tools/shl.hxx>
 
 SvxPrtQryBox::SvxPrtQryBox(Window* pParent) :
     MessBox(pParent, 0,

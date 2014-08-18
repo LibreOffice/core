@@ -45,7 +45,6 @@
 
 #include "svx/fmresids.hrc"
 #include <svx/dialmgr.hxx>
-#include <tools/shl.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/dispatch.hxx>

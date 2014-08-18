@@ -22,7 +22,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/request.hxx>
-#include <tools/shl.hxx>
 
 #include <svx/connctrl.hxx>
 #include <svx/dialogs.hrc>

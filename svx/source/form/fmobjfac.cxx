@@ -38,7 +38,6 @@
 #include <tools/resid.hxx>
 
 #include "svx/fmresids.hrc"
-#include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include "tabwin.hxx"
 #include "fmexpl.hxx"

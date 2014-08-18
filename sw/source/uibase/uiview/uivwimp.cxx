@@ -22,7 +22,6 @@
 #include <cmdid.h>
 #include "globals.hrc"
 
-#include <tools/shl.hxx>
 #include <com/sun/star/scanner/XScannerManager2.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

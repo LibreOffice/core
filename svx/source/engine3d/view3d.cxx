@@ -21,7 +21,6 @@
 #include <vcl/wrkwin.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
-#include <tools/shl.hxx>
 #include "svx/svditer.hxx"
 #include <svx/svdpool.hxx>
 #include <svx/svdorect.hxx>

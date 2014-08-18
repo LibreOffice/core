@@ -22,7 +22,6 @@
 #include <svl/itemprop.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <tools/shl.hxx>
 #include <unotools/tempfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>

@@ -25,7 +25,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <tools/shl.hxx>
 #include <svx/svdview.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/lrspitem.hxx>

@@ -24,7 +24,6 @@
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <i18nlangtag/mslangid.hxx>
-#include <tools/shl.hxx>
 #include <svl/asiancfg.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

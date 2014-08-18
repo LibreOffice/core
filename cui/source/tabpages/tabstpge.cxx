@@ -18,7 +18,6 @@
  */
 
 #include <sfx2/app.hxx>
-#include <tools/shl.hxx>
 #include <svtools/ruler.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/settings.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <limits.h>
-#include <tools/shl.hxx>
 #include <vcl/status.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/image.hxx>

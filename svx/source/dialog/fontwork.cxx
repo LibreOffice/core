@@ -19,7 +19,6 @@
 
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
-#include <tools/shl.hxx>
 
 #include <svx/svdobj.hxx>
 #include <svx/svdopath.hxx>

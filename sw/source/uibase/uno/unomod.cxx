@@ -25,7 +25,6 @@
 #include <unoprnms.hxx>
 #include <unomap.hxx>
 #include <prtopt.hxx>
-#include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include <view.hxx>
 #include <docsh.hxx>

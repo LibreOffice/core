@@ -22,7 +22,6 @@
 #include <boost/static_assert.hpp>
 #include <comphelper/string.hxx>
 #include <i18nutil/unicode.hxx>
-#include <tools/shl.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>

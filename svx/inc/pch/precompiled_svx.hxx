@@ -459,7 +459,6 @@
 #include <tools/rcid.h>
 #include <tools/resary.hxx>
 #include <tools/resid.hxx>
-#include <tools/shl.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>

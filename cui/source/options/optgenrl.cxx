@@ -19,7 +19,6 @@
 
 #include <comphelper/string.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/saveopt.hxx>

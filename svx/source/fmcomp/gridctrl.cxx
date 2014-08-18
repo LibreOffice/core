@@ -48,7 +48,6 @@
 #include "svx/fmresids.hrc"
 
 #include <svx/svxids.hrc>
-#include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include "fmservs.hxx"
 #include "sdbdatacolumn.hxx"

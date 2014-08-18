@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/shl.hxx>
 #include <unotools/searchopt.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <cuires.hrc>

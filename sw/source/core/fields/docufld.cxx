@@ -60,7 +60,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Time.hpp>
 
-#include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>

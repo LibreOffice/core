@@ -24,7 +24,6 @@
 #include <numpages.hxx>
 #include <numpages.hrc>
 #include <dialmgr.hxx>
-#include <tools/shl.hxx>
 #include <tools/mapunit.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <helpid.hrc>

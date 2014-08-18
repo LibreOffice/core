@@ -24,8 +24,6 @@
 #include <expfld.hxx>
 #include <modcfg.hxx>
 
-#include <tools/shl.hxx>
-
 #include "swmodule.hxx"
 #include "view.hxx"
 #include "wview.hxx"

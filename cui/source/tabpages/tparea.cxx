@@ -19,7 +19,6 @@
 
 #include <stdlib.h>
 
-#include <tools/shl.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>

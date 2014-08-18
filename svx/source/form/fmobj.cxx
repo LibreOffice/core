@@ -38,7 +38,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include "svx/fmtools.hxx"
 
-#include <tools/shl.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/awt/vclxdevice.hxx>

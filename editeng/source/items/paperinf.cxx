@@ -18,7 +18,6 @@
  */
 
 #include <limits.h>
-#include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/editrids.hrc>
 #include <editeng/paperinf.hxx>

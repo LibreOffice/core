@@ -24,7 +24,6 @@
 #include <svtools/colrdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewsh.hxx>
-#include <tools/shl.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/globl3d.hxx>

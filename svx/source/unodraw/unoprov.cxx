@@ -29,7 +29,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <boost/unordered_map.hpp>
 #include <tools/fldunit.hxx>
-#include <tools/shl.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>

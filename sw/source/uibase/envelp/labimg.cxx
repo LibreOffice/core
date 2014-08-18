@@ -22,7 +22,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/useroptions.hxx>
-#include <tools/shl.hxx>
 #include <swmodule.hxx>
 #include "labimg.hxx"
 #include "cmdid.h"

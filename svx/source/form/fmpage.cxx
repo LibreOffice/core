@@ -29,7 +29,6 @@
 #include "fmobj.hxx"
 
 #include <svx/fmresids.hrc>
-#include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 
 #include "fmpgeimp.hxx"

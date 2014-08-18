@@ -22,7 +22,6 @@
 #include "cuires.hrc"
 #include "dialmgr.hxx"
 
-#include <tools/shl.hxx>
 #include <svl/lngmisc.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svtools/svlbitm.hxx>

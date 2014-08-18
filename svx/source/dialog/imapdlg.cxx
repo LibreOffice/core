@@ -18,7 +18,6 @@
  */
 
 #include <stdlib.h>
-#include <tools/shl.hxx>
 #include <tools/errinf.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>

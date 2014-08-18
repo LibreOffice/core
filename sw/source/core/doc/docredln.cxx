@@ -18,7 +18,6 @@
  */
 
 #include <hintids.hxx>
-#include <tools/shl.hxx>
 #include <svl/itemiter.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/colritem.hxx>

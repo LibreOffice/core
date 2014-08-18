@@ -63,7 +63,6 @@
 #include <svtools/fmtfield.hxx>
 #include <svl/numuno.hxx>
 #include <tools/multisel.hxx>
-#include <tools/shl.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/help.hxx>
 #include <vcl/image.hxx>

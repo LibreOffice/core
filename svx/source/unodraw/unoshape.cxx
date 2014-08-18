@@ -64,7 +64,6 @@
 #include "svx/svdpagv.hxx"
 #include "svx/svdpool.hxx"
 #include <tools/gen.hxx>
-#include <tools/shl.hxx>
 #include "svx/dialmgr.hxx"
 #include "svx/dialogs.hrc"
 #include "svx/svdocapt.hxx"

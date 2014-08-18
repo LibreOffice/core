@@ -267,7 +267,6 @@
 #include <tools/poly.hxx>
 #include <tools/resid.hxx>
 #include <tools/rtti.hxx>
-#include <tools/shl.hxx>
 #include <tools/stream.hxx>
 #include <tools/tenccvt.hxx>
 #include <tools/urlobj.hxx>

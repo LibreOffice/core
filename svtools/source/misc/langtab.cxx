@@ -19,8 +19,6 @@
 
 #include <boost/static_assert.hpp>
 
-#include <tools/shl.hxx>
-
 #include <com/sun/star/i18n/DirectionProperty.hpp>
 
 #include <i18nlangtag/lang.h>

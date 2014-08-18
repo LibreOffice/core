@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/shl.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/app.hxx>
