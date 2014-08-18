@@ -177,8 +177,8 @@ void SdDrawDocument::CreateLayoutTemplates()
                     // Shadow attributes (Drawing Engine)
     rISet.Put(makeSdrShadowItem(false));
     rISet.Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
-    rISet.Put(SdrShadowXDistItem(200));         // 3 mm Shadow distance
-    rISet.Put(SdrShadowYDistItem(200));
+    rISet.Put(makeSdrShadowXDistItem(200));         // 3 mm Shadow distance
+    rISet.Put(makeSdrShadowYDistItem(200));
 
     Font aLatinFont, aCJKFont, aCTLFont;
 
@@ -285,8 +285,8 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(makeSdrShadowItem(true));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 3 mm shadow distance
-    pISet->Put(SdrShadowYDistItem(200));
+    pISet->Put(makeSdrShadowXDistItem(200));        // 3 mm shadow distance
+    pISet->Put(makeSdrShadowYDistItem(200));
 
     // Object without fillung
     aName = SD_RESSTR(STR_POOLSHEET_OBJWITHOUTFILL);
@@ -384,8 +384,8 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(makeSdrShadowItem(true));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 2 mm shadow distance
-    pISet->Put(SdrShadowYDistItem(200));
+    pISet->Put(makeSdrShadowXDistItem(200));        // 2 mm shadow distance
+    pISet->Put(makeSdrShadowYDistItem(200));
 
     pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));       // 24 pt
 
@@ -408,8 +408,8 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(makeSdrShadowItem(true));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 2 mm shadow distance
-    pISet->Put(SdrShadowYDistItem(200));
+    pISet->Put(makeSdrShadowXDistItem(200));        // 2 mm shadow distance
+    pISet->Put(makeSdrShadowYDistItem(200));
 
     pISet->Put(SvxFontHeightItem(1270, 100, EE_CHAR_FONTHEIGHT ));      // 36 pt
 

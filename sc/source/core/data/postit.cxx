@@ -124,8 +124,8 @@ void ScCaptionUtil::SetDefaultItems( SdrCaptionObj& rCaption, ScDocument& rDoc )
         rectangle only with SetSpecialTextBoxShadow() when the object is
         created (item must be set to adjust objects from older files). */
     aItemSet.Put( makeSdrShadowItem( false ) );
-    aItemSet.Put( SdrShadowXDistItem( 100 ) );
-    aItemSet.Put( SdrShadowYDistItem( 100 ) );
+    aItemSet.Put( makeSdrShadowXDistItem( 100 ) );
+    aItemSet.Put( makeSdrShadowYDistItem( 100 ) );
 
     // text attributes
     aItemSet.Put( makeSdrTextLeftDistItem( 100 ) );
@@ -147,8 +147,8 @@ void ScCaptionUtil::SetCaptionItems( SdrCaptionObj& rCaption, const SfxItemSet& 
     rCaption.SetMergedItemSet( rItemSet );
     // reset shadow items
     rCaption.SetMergedItem( makeSdrShadowItem( false ) );
-    rCaption.SetMergedItem( SdrShadowXDistItem( 100 ) );
-    rCaption.SetMergedItem( SdrShadowYDistItem( 100 ) );
+    rCaption.SetMergedItem( makeSdrShadowXDistItem( 100 ) );
+    rCaption.SetMergedItem( makeSdrShadowYDistItem( 100 ) );
     rCaption.SetSpecialTextBoxShadow();
 }
 

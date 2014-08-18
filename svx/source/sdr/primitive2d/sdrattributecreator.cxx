@@ -368,8 +368,8 @@ namespace drawinglayer
                 if(100 != nTransparence)
                 {
                     const basegfx::B2DVector aOffset(
-                        (double)((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue(),
-                        (double)((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
+                        (double)((SdrMetricItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue(),
+                        (double)((SdrMetricItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
                     const Color aColor(((SdrShadowColorItem&)(rSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
 
                     return attribute::SdrShadowAttribute(aOffset, (double)nTransparence * 0.01, aColor.getBColor());

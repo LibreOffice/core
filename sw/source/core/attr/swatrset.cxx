@@ -96,8 +96,8 @@ void SwAttrPool::createAndAddSecondaryPools()
         pSdrPool->SetPoolDefaultItem(SdrEdgeNode2VertDistItem(nDefEdgeDist));
 
         // #i33700# // Set shadow distance defaults as PoolDefaultItems
-        pSdrPool->SetPoolDefaultItem(SdrShadowXDistItem((300 * 72) / 127));
-        pSdrPool->SetPoolDefaultItem(SdrShadowYDistItem((300 * 72) / 127));
+        pSdrPool->SetPoolDefaultItem(makeSdrShadowXDistItem((300 * 72) / 127));
+        pSdrPool->SetPoolDefaultItem(makeSdrShadowYDistItem((300 * 72) / 127));
     }
 
     SfxItemPool *pEEgPool = EditEngine::CreatePool(false);

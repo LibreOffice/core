@@ -215,8 +215,8 @@ ScCommentData::ScCommentData( ScDocument& rDoc, SdrModel* pModel ) :
     //  only with SetSpecialTextBoxShadow when the object is created
     //  (item must be set to adjust objects from older files)
     aCaptionSet.Put( makeSdrShadowItem( false ) );
-    aCaptionSet.Put( SdrShadowXDistItem( 100 ) );
-    aCaptionSet.Put( SdrShadowYDistItem( 100 ) );
+    aCaptionSet.Put( makeSdrShadowXDistItem( 100 ) );
+    aCaptionSet.Put( makeSdrShadowYDistItem( 100 ) );
 
     //  text attributes
     aCaptionSet.Put( makeSdrTextLeftDistItem( 100 ) );

@@ -296,23 +296,23 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
             if( rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
                 rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
             {
-                nOldX = ( ( const SdrShadowXDistItem& ) rOutAttrs.
+                nOldX = ( ( const SdrMetricItem& ) rOutAttrs.
                                     Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-                nOldY = ( ( const SdrShadowYDistItem& ) rOutAttrs.
+                nOldY = ( ( const SdrMetricItem& ) rOutAttrs.
                                     Get( SDRATTR_SHADOWYDIST ) ).GetValue();
             }
-            SdrShadowXDistItem aXItem( nX );
+            SdrMetricItem aXItem( makeSdrShadowXDistItem(nX) );
             pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWXDIST );
             if ( nX != nOldX &&
-                ( !pOld || !( *(const SdrShadowXDistItem*)pOld == aXItem ) ) )
+                ( !pOld || !( *(const SdrMetricItem*)pOld == aXItem ) ) )
             {
                 rAttrs->Put( aXItem );
                 bModified = true;
             }
-            SdrShadowYDistItem aYItem( nY );
+            SdrMetricItem aYItem( makeSdrShadowYDistItem(nY) );
             pOld = GetOldItem( *rAttrs, SDRATTR_SHADOWYDIST );
             if ( nY != nOldY &&
-                ( !pOld || !( *(const SdrShadowYDistItem*)pOld == aYItem ) ) )
+                ( !pOld || !( *(const SdrMetricItem*)pOld == aYItem ) ) )
             {
                 rAttrs->Put( aYItem );
                 bModified = true;
@@ -382,8 +382,8 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         if( rAttrs->GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
             rAttrs->GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
         {
-            sal_Int32 nX = ( ( const SdrShadowXDistItem& ) rAttrs->Get( SDRATTR_SHADOWXDIST ) ).GetValue();
-            sal_Int32 nY = ( ( const SdrShadowYDistItem& ) rAttrs->Get( SDRATTR_SHADOWYDIST ) ).GetValue();
+            sal_Int32 nX = ( ( const SdrMetricItem& ) rAttrs->Get( SDRATTR_SHADOWXDIST ) ).GetValue();
+            sal_Int32 nY = ( ( const SdrMetricItem& ) rAttrs->Get( SDRATTR_SHADOWYDIST ) ).GetValue();
 
             if( nX != 0 )
                 SetMetricValue( *m_pMtrDistance, nX < 0L ? -nX : nX, ePoolUnit );
@@ -406,8 +406,8 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         {
             // determine default-distance
             SfxItemPool* pPool = rOutAttrs.GetPool();
-            SdrShadowXDistItem* pXDistItem = (SdrShadowXDistItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWXDIST);
-            SdrShadowYDistItem* pYDistItem = (SdrShadowYDistItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWYDIST);
+            SdrMetricItem* pXDistItem = (SdrMetricItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWXDIST);
+            SdrMetricItem* pYDistItem = (SdrMetricItem*)&pPool->GetDefaultItem (SDRATTR_SHADOWYDIST);
             if (pXDistItem && pYDistItem)
             {
                 sal_Int32 nX = pXDistItem->GetValue();

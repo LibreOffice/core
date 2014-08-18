@@ -488,8 +488,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
         rBackgroundObjectsSet.Put(makeSdrShadowItem(false));
         rBackgroundObjectsSet.Put(SdrShadowColorItem(Color(COL_GRAY)));
-        rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm shadow distance
-        rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));
+        rBackgroundObjectsSet.Put(makeSdrShadowXDistItem(200)); // 3 mm shadow distance
+        rBackgroundObjectsSet.Put(makeSdrShadowYDistItem(200));
         // #i16874# enable kerning by default but only for new documents
         rBackgroundObjectsSet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
         rBackgroundObjectsSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));

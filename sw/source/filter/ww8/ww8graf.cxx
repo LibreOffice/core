@@ -232,8 +232,8 @@ static void SetStdAttr( SfxItemSet& rSet, WW8_DP_LINETYPE& rL,
     }
     if( SVBT16ToShort( rSh.shdwpi ) ){                  // shadow
         rSet.Put(makeSdrShadowItem(true));
-        rSet.Put( SdrShadowXDistItem( SVBT16ToShort( rSh.xaOffset ) ) );
-        rSet.Put( SdrShadowYDistItem( SVBT16ToShort( rSh.yaOffset ) ) );
+        rSet.Put( makeSdrShadowXDistItem( SVBT16ToShort( rSh.xaOffset ) ) );
+        rSet.Put( makeSdrShadowYDistItem( SVBT16ToShort( rSh.yaOffset ) ) );
     }
 }
 
@@ -1701,9 +1701,9 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         const Color aShdColor = static_cast< SdrShadowColorItem const & >(
             rOldSet.Get(SDRATTR_SHADOWCOLOR)).GetColorValue();
         const sal_Int32 nShdDistX = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWXDIST,
-            SdrShadowXDistItem);
+            SdrMetricItem);
         const sal_Int32 nShdDistY = WW8ITEMVALUE(rOldSet, SDRATTR_SHADOWYDIST,
-            SdrShadowYDistItem);
+            SdrMetricItem);
 
         aShadow.SetColor( Color( aShdColor ) );
 

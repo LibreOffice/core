@@ -2551,14 +2551,14 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
     {
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX ) );
         rManager.ScaleEmu( nVal );
-        rSet.Put( SdrShadowXDistItem( nVal ) );
+        rSet.Put( makeSdrShadowXDistItem( nVal ) );
         bNonZeroShadowOffset = ( nVal > 0 );
     }
     if ( IsProperty( DFF_Prop_shadowOffsetY ) )
     {
         sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetY ) );
         rManager.ScaleEmu( nVal );
-        rSet.Put( SdrShadowYDistItem( nVal ) );
+        rSet.Put( makeSdrShadowYDistItem( nVal ) );
         bNonZeroShadowOffset = ( nVal > 0 );
     }
     if ( IsProperty( DFF_Prop_fshadowObscured ) )
@@ -2567,9 +2567,9 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         if ( bHasShadow )
         {
             if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
-                rSet.Put( SdrShadowXDistItem( 35 ) );
+                rSet.Put( makeSdrShadowXDistItem( 35 ) );
             if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
-                rSet.Put( SdrShadowYDistItem( 35 ) );
+                rSet.Put( makeSdrShadowYDistItem( 35 ) );
         }
     }
     if ( IsProperty( DFF_Prop_shadowType ) )
@@ -2579,8 +2579,8 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObj
         {
             //0.12" == 173 twip == 302 100mm
             sal_uInt32 nDist = rManager.pSdrModel->GetScaleUnit() == MAP_TWIP ? 173: 302;
-            rSet.Put( SdrShadowXDistItem( nDist ) );
-            rSet.Put( SdrShadowYDistItem( nDist ) );
+            rSet.Put( makeSdrShadowXDistItem( nDist ) );
+            rSet.Put( makeSdrShadowYDistItem( nDist ) );
         }
     }
     if ( bHasShadow )

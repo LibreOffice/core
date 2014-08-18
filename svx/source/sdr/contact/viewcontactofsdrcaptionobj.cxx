@@ -145,8 +145,8 @@ namespace sdr
                 if(!aFill.isDefault() && 1.0 != aFill.getTransparence())
                 {
                     // add shadow offset to object matrix
-                    const sal_uInt32 nXDist(((SdrShadowXDistItem&)(rItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
-                    const sal_uInt32 nYDist(((SdrShadowYDistItem&)(rItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
+                    const sal_uInt32 nXDist(((SdrMetricItem&)(rItemSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
+                    const sal_uInt32 nYDist(((SdrMetricItem&)(rItemSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
 
                     if(nXDist || nYDist)
                     {

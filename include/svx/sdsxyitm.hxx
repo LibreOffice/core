@@ -22,23 +22,13 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
+inline SdrMetricItem makeSdrShadowXDistItem(long nDist) {
+    return SdrMetricItem(SDRATTR_SHADOWXDIST, nDist);
+}
 
-// class SdrShadowXDistItem
-
-class SdrShadowXDistItem: public SdrMetricItem {
-public:
-    SdrShadowXDistItem(long nDist=0) : SdrMetricItem(SDRATTR_SHADOWXDIST,nDist) {}
-    SdrShadowXDistItem(SvStream& rIn): SdrMetricItem(SDRATTR_SHADOWXDIST,rIn)   {}
-};
-
-
-// class SdrShadowYDistItem
-
-class SdrShadowYDistItem: public SdrMetricItem {
-public:
-    SdrShadowYDistItem(long nDist=0) : SdrMetricItem(SDRATTR_SHADOWYDIST,nDist) {}
-    SdrShadowYDistItem(SvStream& rIn): SdrMetricItem(SDRATTR_SHADOWYDIST,rIn)   {}
-};
+inline SdrMetricItem makeSdrShadowYDistItem(long nDist) {
+    return SdrMetricItem(SDRATTR_SHADOWYDIST, nDist);
+}
 
 #endif
 

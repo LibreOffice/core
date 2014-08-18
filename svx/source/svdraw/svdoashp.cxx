@@ -211,8 +211,8 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
     if(bShadow)
     {
         // create a shadow representing object
-        const sal_Int32 nXDist(((SdrShadowXDistItem&)(rOriginalSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
-        const sal_Int32 nYDist(((SdrShadowYDistItem&)(rOriginalSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
+        const sal_Int32 nXDist(((SdrMetricItem&)(rOriginalSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
+        const sal_Int32 nYDist(((SdrMetricItem&)(rOriginalSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
         const ::Color aShadowColor(((SdrShadowColorItem&)(rOriginalSet.Get(SDRATTR_SHADOWCOLOR))).GetColorValue());
         const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
         pRetval = rOriginal.Clone();
@@ -281,8 +281,8 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 
         // no shadow
         aTempSet.Put(makeSdrShadowItem(false));
-        aTempSet.Put(SdrShadowXDistItem(0L));
-        aTempSet.Put(SdrShadowYDistItem(0L));
+        aTempSet.Put(makeSdrShadowXDistItem(0L));
+        aTempSet.Put(makeSdrShadowYDistItem(0L));
 
         // line color and transparency like shadow
         if(bLineUsed)

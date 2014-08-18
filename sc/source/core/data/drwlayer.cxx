@@ -221,8 +221,8 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const OUString& rName ) :
 
     // #i33700#
     // Set shadow distance defaults as PoolDefaultItems. Details see bug.
-    rPool.SetPoolDefaultItem(SdrShadowXDistItem(300));
-    rPool.SetPoolDefaultItem(SdrShadowYDistItem(300));
+    rPool.SetPoolDefaultItem(makeSdrShadowXDistItem(300));
+    rPool.SetPoolDefaultItem(makeSdrShadowYDistItem(300));
 
     // default for script spacing depends on locale, see SdDrawDocument ctor in sd
     LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
