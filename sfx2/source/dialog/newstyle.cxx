@@ -24,6 +24,7 @@
 #include <sfx2/newstyle.hxx>
 #include "dialog.hrc"
 #include <sfx2/sfxresid.hxx>
+#include <vcl/layout.hxx>
 
 // PRIVATE METHODES ------------------------------------------------------
 
@@ -36,7 +37,7 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
     {
         if ( !pStyle->IsUserDefined() )
         {
-            InfoBox( this, SfxResId( MSG_POOL_STYLE_NAME ) ).Execute();
+            MessageDialog( this, SfxResId( STR_POOL_STYLE_NAME ), VCL_MESSAGE_INFO ).Execute();
             return 0;
         }
 

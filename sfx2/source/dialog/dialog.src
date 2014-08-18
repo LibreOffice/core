@@ -30,27 +30,21 @@ String STR_APPLY
 {
     Text [ en-US ] = "Apply";
 };
-InfoBox MSG_TABPAGE_INVALIDNAME
+String STR_TABPAGE_INVALIDNAME
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "This name is already in use." ;
+    Text [ en-US ] = "This name is already in use." ;
 };
-InfoBox MSG_TABPAGE_INVALIDSTYLE
+String STR_TABPAGE_INVALIDSTYLE
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "This Style does not exist." ;
+    Text [ en-US ] = "This Style does not exist." ;
 };
-InfoBox MSG_TABPAGE_INVALIDPARENT
+String STR_TABPAGE_INVALIDPARENT
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "This Style cannot be used as a base Style,\nbecause it would result in a recursive reference." ;
+    Text [ en-US ] = "This Style cannot be used as a base Style,\nbecause it would result in a recursive reference." ;
 };
-InfoBox MSG_POOL_STYLE_NAME
+String STR_POOL_STYLE_NAME
 {
-    Message [ en-US ] = "Name already exists as a default Style.\nPlease choose another name." ;
+    Text [ en-US ] = "Name already exists as a default Style.\nPlease choose another name." ;
 };
 String STR_DELETE_STYLE_USED
 {

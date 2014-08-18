@@ -35,12 +35,12 @@
 #define RID_DLG_ALIEN_WARNING           ( RC_DIALOG_BEGIN + 0)
 #define STR_RESET                       ( RC_DIALOG_BEGIN + 0)
 #define MSG_OVERWRITE                   ( RC_DIALOG_BEGIN + 1)
-#define MSG_TABPAGE_INVALIDNAME         ( RC_DIALOG_BEGIN + 13)
-#define MSG_TABPAGE_INVALIDSTYLE        ( RC_DIALOG_BEGIN + 14)
-#define MSG_POOL_STYLE_NAME             ( RC_DIALOG_BEGIN + 16)
-#define MSG_TABPAGE_INVALIDPARENT       ( RC_DIALOG_BEGIN + 18)
+#define STR_TABPAGE_INVALIDNAME         ( RC_DIALOG_BEGIN + 13)
+#define STR_TABPAGE_INVALIDSTYLE        ( RC_DIALOG_BEGIN + 14)
+#define STR_POOL_STYLE_NAME             ( RC_DIALOG_BEGIN + 16)
+#define STR_TABPAGE_INVALIDPARENT       ( RC_DIALOG_BEGIN + 18)
 
-#define STR_DELETE_STYLE                ( RC_DIALOG_BEGIN + 18)
+#define STR_DELETE_STYLE                ( RC_DIALOG_BEGIN + 19)
 #define STR_DELETE_STYLE_USED           ( RC_DIALOG_BEGIN + 20)
 
 #define MN_CONTEXT_TEMPLDLG             ( RC_DIALOG_BEGIN + 46)
