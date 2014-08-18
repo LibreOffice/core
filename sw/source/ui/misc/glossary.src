@@ -22,9 +22,9 @@
 #include "helpid.h"
 #include "access.hrc"
 
-InfoBox MSG_DOUBLE_SHORTNAME
+String STR_DOUBLE_SHORTNAME
 {
-    Message [ en-US ] = "Shortcut name already exists. Please choose another name." ;
+    Text [ en-US ] = "Shortcut name already exists. Please choose another name." ;
 };
 QueryBox MSG_QUERY_DELETE
 {
@@ -48,9 +48,9 @@ String STR_SAVE_GLOSSARY
 {
     Text[ en-US ] = "Save AutoText";
 };
-InfoBox MSG_NO_GLOSSARIES
+String STR_NO_GLOSSARIES
 {
-    Message [ en-US ] = "There is no AutoText in this file.";
+    Text [ en-US ] = "There is no AutoText in this file.";
 };
 
 String STR_MY_AUTOTEXT
