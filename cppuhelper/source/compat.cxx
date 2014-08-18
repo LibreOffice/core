@@ -21,7 +21,6 @@
 
 #include <cstdlib>
 
-#include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
