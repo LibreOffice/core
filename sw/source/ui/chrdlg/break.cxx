@@ -19,6 +19,7 @@
 
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <cmdid.h>
@@ -114,7 +115,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
             default:; //prevent warning
         }
         if(!bOk) {
-            InfoBox(this, SW_RES(MSG_ILLEGAL_PAGENUM)).Execute();
+            MessageDialog(this, SW_RES(STR_ILLEGAL_PAGENUM), VCL_MESSAGE_INFO).Execute();
             m_pPageNumEdit->GrabFocus();
             return 0;
         }

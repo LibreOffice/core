@@ -18,6 +18,7 @@
  */
 
 #include "chrdlg.hrc"
+
 String STR_TEXTCOLL_HEADER
 {
     Text [ en-US ] = "(Paragraph Style: " ;
@@ -26,11 +27,9 @@ String STR_PAGEFMT_HEADER
 {
     Text [ en-US ] = "(Page Style: " ;
 };
-InfoBox MSG_ILLEGAL_PAGENUM
+String STR_ILLEGAL_PAGENUM
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Page numbers cannot be applied to the current page. Even numbers can be used on left pages, odd numbers on right pages." ;
+    Text [ en-US ] = "Page numbers cannot be applied to the current page. Even numbers can be used on left pages, odd numbers on right pages." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
