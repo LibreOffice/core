@@ -19,6 +19,7 @@
 
 #include "srtdlg.hxx"
 
+#include <vcl/listbox.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -351,7 +352,7 @@ void SwSortDlg::Apply()
     }
 
     if( !bRet )
-        InfoBox( this->GetParent(), SW_RES(MSG_SRTERR)).Execute();
+        MessageDialog( this->GetParent(), SW_RES(STR_SRTERR), VCL_MESSAGE_INFO).Execute();
 }
 
 IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )

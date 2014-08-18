@@ -21,11 +21,9 @@
 #include "cmdid.h"
 #include "helpid.h"
 
-InfoBox MSG_SRTERR
+String STR_SRTERR
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Cannot sort selection" ;
+    Text [ en-US ] = "Cannot sort selection" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
