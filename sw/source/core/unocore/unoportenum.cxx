@@ -537,8 +537,7 @@ lcl_CreateTOXMarkPortion(
     SwTOXMark & rTOXMark = static_cast<SwTOXMark&>(rAttr.GetAttr());
 
     const Reference<XTextContent> xContent(
-        SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc,
-                    const_cast<SwTOXType*>(rTOXMark.GetTOXType()), & rTOXMark),
+        SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc, & rTOXMark),
         uno::UNO_QUERY);
 
     SwXTextPortion* pPortion = 0;

@@ -1197,8 +1197,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 {
                     SwTOXMark* pMark = aMarks[i];
                     pxMarks[i] = SwXDocumentIndexMark::CreateXDocumentIndexMark(
-                        *m_pImpl->m_pDoc,
-                        const_cast<SwTOXType*>(pType), pMark);
+                        *m_pImpl->m_pDoc, pMark);
                 }
                 aRet <<= aXMarks;
             }
@@ -1674,10 +1673,8 @@ SwXDocumentIndexMark::~SwXDocumentIndexMark()
 
 uno::Reference<text::XDocumentIndexMark>
 SwXDocumentIndexMark::CreateXDocumentIndexMark(
-        SwDoc & rDoc, SwTOXType *const pType, SwTOXMark *const pMark,
-        TOXTypes const eType)
+        SwDoc & rDoc, SwTOXMark *const pMark, TOXTypes const eType)
 {
-    assert((pType != 0) == (pMark != 0));
     // re-use existing SwXDocumentIndexMark
     // NB: xmloff depends on this caching to generate ID from the address!
     // #i105557#: do not iterate over the registered clients: race condition
@@ -1689,7 +1686,8 @@ SwXDocumentIndexMark::CreateXDocumentIndexMark(
     if (!xTOXMark.is())
     {
         SwXDocumentIndexMark *const pNew((pMark)
-            ? new SwXDocumentIndexMark(rDoc, *pType, *pMark)
+            ? new SwXDocumentIndexMark(rDoc,
+                    *const_cast<SwTOXType*>(pMark->GetTOXType()), *pMark)
             : new SwXDocumentIndexMark(eType));
         xTOXMark.set(pNew);
         if (pMark)

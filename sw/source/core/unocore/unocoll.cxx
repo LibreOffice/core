@@ -627,7 +627,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 eType = TOX_CONTENT;
             else if(SW_SERVICE_USER_INDEX_MARK == nObjectType)
                 eType = TOX_USER;
-            xRet = SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc, 0, 0, eType);
+            xRet = SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc, 0, eType);
         }
         break;
         case  SW_SERVICE_CONTENT_INDEX      :

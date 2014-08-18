@@ -222,7 +222,7 @@ public:
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XDocumentIndexMark>
         CreateXDocumentIndexMark(SwDoc & rDoc,
-            SwTOXType * pType, SwTOXMark * pMark, TOXTypes eType = TOX_INDEX);
+            SwTOXMark * pMark, TOXTypes eType = TOX_INDEX);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
