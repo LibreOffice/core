@@ -264,11 +264,9 @@ String STR_READONLY_PATH
     Text [ en-US ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
 };
 
-InfoBox MSG_ERROR_PASSWD
+String STR_ERROR_PASSWD
 {
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Invalid password" ;
+    Text [ en-US ] = "Invalid password" ;
 };
 
 String STR_FMT_STD

@@ -83,7 +83,7 @@
 // INFOBOX ------------------------------------------------------------
 
 #define ERR_CLPBRD_READ             (RC_GLOBALS_BEGIN + 1)
-#define MSG_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 3)
+#define STR_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 3)
 
 // ACC ---------------------------------------------------------------
 

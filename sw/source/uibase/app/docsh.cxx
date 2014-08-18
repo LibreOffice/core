@@ -18,6 +18,7 @@
  */
 
 #include <hintids.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -207,7 +208,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
 
         if (!(*ppRdr)->CheckPasswd( aPasswd, *pRead ))
         {
-            InfoBox( 0, SW_RES(MSG_ERROR_PASSWD)).Execute();
+            MessageDialog( 0, SW_RES(STR_ERROR_PASSWD), VCL_MESSAGE_INFO).Execute();
                 delete *ppRdr;
             return 0;
         }
