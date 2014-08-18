@@ -36,10 +36,6 @@ String STR_NO_MERGE_ENTRY
 {
     Text [ en-US ] = "Could not merge documents." ;
 };
-String STR_ERR_INSERT_GLOS
-{
-    Text [ en-US ] = "AutoText could not be created." ;
-};
 String STR_ERR_SRCSTREAM
 {
     Text [ en-US ] = "The source cannot be loaded." ;
