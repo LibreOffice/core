@@ -98,9 +98,6 @@ namespace sd { namespace colortoolpanel
         }
     }
 
-    //= class SingleColorPanel
-
-
     SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow, const ::sal_Int32 i_nPanelColor )
         :SingleColorPanel_Base( m_aMutex )
         ,m_xWindow()
@@ -194,10 +191,6 @@ namespace sd { namespace colortoolpanel
         }
         m_xWindow.clear();
     }
-
-
-    //= PanelUIElement
-
 
     PanelUIElement::PanelUIElement( const Reference< XComponentContext >& i_rContext, const Reference< XWindow >& i_rParentWindow,
         const OUString& i_rResourceURL, const ::sal_Int32 i_nPanelColor )

@@ -45,9 +45,6 @@ namespace connectivity
     namespace skeleton
     {
 
-        //************ Class: ODatabaseMetaData
-
-
         typedef ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XDatabaseMetaData> ODatabaseMetaData_BASE;
 
         class ODatabaseMetaData : public ODatabaseMetaData_BASE

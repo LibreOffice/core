@@ -33,16 +33,12 @@
  *
  *************************************************************************/
 
-/*************************************************************************
- *************************************************************************
- *
+/*
  * service implementation:   foo.Counter
  * exported interfaces:      foo.XCounter
  *
  * simple example component implementing a counter
- *
- *************************************************************************
- *************************************************************************/
+ */
 
 #include <stdio.h>
 #include <rtl/ustring.hxx>
@@ -146,11 +142,6 @@ Reference< XInterface > SAL_CALL MyCounterImpl_create(
 {
     return Reference<XInterface>(static_cast<XCountable*>(new MyCounterImpl(xMgr)));
 }
-
-
-
-//#### EXPORTED ###########################################################
-
 
 /**
  * This function is called to get service factories for an implementation.

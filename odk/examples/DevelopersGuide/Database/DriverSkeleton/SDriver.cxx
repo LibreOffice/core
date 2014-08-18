@@ -86,8 +86,8 @@ rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeExce
 
 Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
-    // for more information @see com.sun.star.sdbc.Driver
+    /// which service is supported
+    /// for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS[0] = ::rtl::OUString("com.sun.star.sdbc.Driver");
     return aSNS;

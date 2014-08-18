@@ -35,10 +35,6 @@
 namespace sd { namespace colortoolpanel
 {
 
-
-
-    //= SingleColorPanel
-
     typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::ui::XToolPanel
                                                 ,   ::com::sun::star::awt::XPaintListener
                                                 >   SingleColorPanel_Base;
@@ -72,9 +68,6 @@ namespace sd { namespace colortoolpanel
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >  m_xWindow;
         const sal_Int32                                                     m_nPanelColor;
     };
-
-
-    //= PanelUIElement
 
     typedef ::cppu::WeakComponentImplHelper1    <   ::com::sun::star::ui::XUIElement
                                                 >   PanelUIElement_Base;
