@@ -28,6 +28,7 @@
 #include <sal/macros.h>
 #include <rtl/strbuf.hxx>
 #include <boost/scoped_array.hpp>
+#include "strings.hrc"
 
 #define PREVIEW_WIDTH       113
 #define PREVIEW_HEIGHT      160
@@ -241,11 +242,21 @@ SaneDlg::~SaneDlg()
     mrSane.SetReloadOptionsHdl( maOldLink );
 }
 
+namespace {
+
+ResId SaneResId( sal_uInt32 nID )
+{
+    static ResMgr* pResMgr = ResMgr::CreateResMgr( "scn" );
+    return ResId( nID, *pResMgr );
+}
+
+}
+
 short SaneDlg::Execute()
 {
     if( ! Sane::IsSane() )
     {
-        MessageDialog aErrorBox(NULL, "The SANE interface could not be initialized. Scanning is not possible.");
+        MessageDialog aErrorBox(NULL, SaneResId(STR_COULD_NOT_BE_INIT));
         aErrorBox.Execute();
         return sal_False;
     }
@@ -523,7 +534,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
     {
         if( pButton == mpDeviceInfoButton )
         {
-            OUString aString("Device: %s\nVendor: %s\nModel: %s\nType: %s");
+            OUString aString(SaneResId(STR_DEVICE_DESC));
             aString = aString.replaceFirst( "%s", Sane::GetName( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
@@ -808,7 +819,7 @@ void SaneDlg::AcquirePreview()
     int nOption = mrSane.GetOptionByName( "preview" );
     if( nOption == -1 )
     {
-        OUString aString("The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time." );
+        OUString aString(SaneResId(STR_SLOW_PREVIEW));
         MessageDialog aBox(this, aString, VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
         if (aBox.Execute() == RET_CANCEL)
             return;
@@ -819,7 +830,7 @@ void SaneDlg::AcquirePreview()
     BitmapTransporter aTransporter;
     if( ! mrSane.Start( aTransporter ) )
     {
-        MessageDialog aErrorBox(this, "An error occurred while scanning.");
+        MessageDialog aErrorBox(this, SaneResId(STR_ERROR_SCAN));
         aErrorBox.Execute();
     }
     else
