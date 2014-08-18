@@ -20,18 +20,6 @@
 #include "doc.hrc"
 #define __RSC
 
-QueryBox MSG_CONFIRM_FILTER
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "Saving in external formats may have caused\n information loss. Do you still want to close?" ;
-};
-QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Name already in use.\nDo you want to overwrite document template?" ;
-};
 String STR_DELETE_REGION
 {
     Text [ en-US ] = "Are you sure you want to delete the region \"$1\"?" ;
@@ -40,12 +28,7 @@ String STR_DELETE_TEMPLATE
 {
     Text [ en-US ] = "Are you sure you want to delete the entry \"$1\"?" ;
 };
-QueryBox MSG_REGION_NOTEMPTY
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "The category is not empty.\nDelete anyway?" ;
-};
+
 Bitmap BMP_STYLES_CLOSED { File = "newex.bmp" ; };
 Bitmap BMP_STYLES_OPENED { File = "newex.bmp" ; };
 
@@ -78,16 +61,6 @@ String STR_BACKUP_COPY
 {
     Text [ en-US ] = "Copy" ;
 };
-InfoBox MSG_CANT_OPEN_TEMPLATE
-{
-    Message [ en-US ] = "The template could not be opened." ;
-};
-InfoBox MSG_VIEW_OPEN_CANT_SAVE
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Document already open for editing." ;
-};
 String STR_ERROR_SAVE
 {
     Text [ en-US ] = "Error recording document " ;
@@ -115,20 +88,6 @@ String STR_ERROR_SAVE_TEMPLATE
 String STR_QUERY_DEFAULT_TEMPLATE
 {
     Text [ en-US ] = "Should the template \"$(TEXT)\" become the default template?" ;
-};
-QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Do you want to reset the default template?" ;
-};
-InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
-{
-    Message [ en-US ] = "Template directory\n$(DIR)\ndoes not exist." ;
-};
-InfoBox MSG_DOCINFO_CANTREAD
-{
-    Message [ en-US ] = "Document info cannot be read." ;
 };
 String STR_ERROR_NOSTORAGE
 {
@@ -181,12 +140,6 @@ String RID_STR_FILTBASIC
 String RID_STR_WARNSTYLEOVERWRITE
 {
     Text [ en-US ] = "Should the \"$(ARG1)\" Style be replaced?" ;
-};
-QueryBox MSG_OPEN_READONLY
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_YES ;
-    Message [ en-US ] = "Document cannot be opened for editing.\nDo you want to open it as read-only?" ;
 };
 String STR_EDIT
 {
@@ -282,14 +235,6 @@ String STR_PACKNGO_NEWMEDIUM
 String STR_OBJECT
 {
     Text [ en-US ] = "Object" ;
-};
-
-QueryBox DLG_MACROQUERY
-{
-    Buttons = WB_OK_CANCEL;
-    Title [ en-US ] = "Run Macro" ;
-
-    Message [ en-US ] = "This document contains macros. $(TEXT)";
 };
 
 String BTN_OK

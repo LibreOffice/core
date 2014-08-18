@@ -29,12 +29,8 @@
 #define STR_ERROR_PRINTER_BUSY              (RID_SFX_DOC_START+ 1)
 #define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 2)
 
-#define MSG_CONFIRM_FILTER                  (RID_SFX_DOC_START+11)
-#define MSG_CONFIRM_OVERWRITE_TEMPLATE      (RID_SFX_DOC_START+12)
-
 #define STR_DELETE_REGION                   (RID_SFX_DOC_START+14)
 #define STR_DELETE_TEMPLATE                 (RID_SFX_DOC_START+15)
-#define MSG_REGION_NOTEMPTY                 (RID_SFX_DOC_START+17)
 
 #define BMP_STYLES_CLOSED                   (RID_SFX_DOC_START+ 0)
 #define BMP_STYLES_OPENED                   (RID_SFX_DOC_START+ 1)
@@ -50,8 +46,6 @@
 #define STR_PRINT_STYLES                    (RID_SFX_DOC_START+ 20)
 #define STR_PRINT_STYLES_HEADER             (RID_SFX_DOC_START+ 21)
 #define STR_BACKUP_COPY                     (RID_SFX_DOC_START+ 23)
-#define MSG_CANT_OPEN_TEMPLATE              (RID_SFX_DOC_START+ 25)
-#define MSG_VIEW_OPEN_CANT_SAVE             (RID_SFX_DOC_START+ 26)
 #define STR_ERROR_SAVE                      (RID_SFX_DOC_START+ 27)
 #define STR_TEMPLATE_FILTER                 (RID_SFX_DOC_START+ 28)
 #define STR_ERROR_COPY_TEMPLATE             (RID_SFX_DOC_START+ 29)
@@ -61,9 +55,6 @@
 #define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_DOC_START+ 34)
 #define STR_CONFIG                          (RID_SFX_DOC_START+ 37)
 #define STR_QUERY_DEFAULT_TEMPLATE          (RID_SFX_DOC_START+ 39)
-#define MSG_QUERY_RESET_DEFAULT_TEMPLATE    (RID_SFX_DOC_START+ 39)
-#define MSG_TEMPLATE_DIR_NOT_EXIST          (RID_SFX_DOC_START+ 40)
-#define MSG_DOCINFO_CANTREAD                (RID_SFX_DOC_START+ 41)
 #define STR_ERROR_NOSTORAGE                 (RID_SFX_DOC_START+ 42)
 #define STR_QUERY_MUSTOWNFORMAT             (RID_SFX_DOC_START+ 44)
 #define STR_SAVEDOC                         (RID_SFX_DOC_START+ 45)
@@ -77,8 +68,6 @@
 #define RID_STR_FILTBASIC                   (RID_SFX_DOC_START+ 53)
 #define RID_STR_WARNSTYLEOVERWRITE          (RID_SFX_DOC_START+ 54)
 #define STR_SAVEACOPY                       (RID_SFX_DOC_START+ 55)
-
-#define MSG_OPEN_READONLY                   (RID_SFX_DOC_START+ 58)
 
 #define RID_OFFICEFILTER                    (RID_SFX_DOC_START+ 59)
 #define RID_OFFICEFILTER_WILDCARD           (RID_SFX_DOC_START+ 60)
@@ -111,7 +100,6 @@
 
 #define STR_OBJECT                          (RID_SFX_DOC_START+ 84)
 
-#define DLG_MACROQUERY                      (RID_SFX_DOC_START+87)
 #define BTN_OK                              (RID_SFX_DOC_START+88)
 #define BTN_CANCEL                          (RID_SFX_DOC_START+89)
 #define FT_OK                               (RID_SFX_DOC_START+90)
