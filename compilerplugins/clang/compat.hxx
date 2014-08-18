@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 
+#include "clang/AST/ASTContext.h"
 #include "clang/AST/Decl.h"
 #include "clang/AST/DeclBase.h"
 #include "clang/AST/DeclCXX.h"
@@ -89,6 +90,31 @@ inline clang::QualType getReturnType(clang::FunctionDecl const & decl) {
     return decl.getReturnType();
 #else
     return decl.getResultType();
+#endif
+}
+
+inline clang::SourceRange getReturnTypeSourceRange(clang::FunctionDecl const & decl) {
+#if (__clang_major__ == 3 && __clang_minor__ > 5) || __clang_major__ > 3
+    return decl.getReturnTypeSourceRange();
+#elif (__clang_major__ == 3 && __clang_minor__ == 5)
+    const clang::TypeSourceInfo *TSI = decl.getTypeSourceInfo();
+    if (!TSI)
+        return clang::SourceRange();
+    clang::FunctionTypeLoc FTL =
+        TSI->getTypeLoc().IgnoreParens().getAs<clang::FunctionTypeLoc>();
+    if (!FTL)
+        return clang::SourceRange();
+
+    // Skip self-referential return types.
+    const clang::SourceManager &SM = decl.getASTContext().getSourceManager();
+    clang::SourceRange RTRange = FTL.getReturnLoc().getSourceRange();
+    clang::SourceLocation Boundary = decl.getNameInfo().getLocStart();
+    if (RTRange.isInvalid() || Boundary.isInvalid() ||
+        !SM.isBeforeInTranslationUnit(RTRange.getEnd(), Boundary))
+        return clang::SourceRange();
+
+    return RTRange;
+#else
 #endif
 }
 

@@ -19,7 +19,6 @@
 #ifndef INCLUDED_TOOLS_FRACT_HXX
 #define INCLUDED_TOOLS_FRACT_HXX
 
-#include <tools/toolsdllapi.h>
 
 // Added due transition from Fraction to boost::rational<long>
 #include <stdexcept>
@@ -32,7 +31,7 @@ void reduceInnacurate(boost::rational<long> &, unsigned)
 
 class SvStream;
 
-class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Fraction
+class Fraction
 {
 private:
     long            nNumerator;
@@ -66,15 +65,15 @@ public:
     friend inline   Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );
     friend inline   Fraction operator/( const Fraction& rVal1, const Fraction& rVal2 );
 
-    TOOLS_DLLPUBLIC friend          bool operator==( const Fraction& rVal1, const Fraction& rVal2 );
+    friend          bool operator==( const Fraction& rVal1, const Fraction& rVal2 );
     friend inline   bool operator!=( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend          bool operator< ( const Fraction& rVal1, const Fraction& rVal2 );
-    TOOLS_DLLPUBLIC friend          bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
+    friend          bool operator< ( const Fraction& rVal1, const Fraction& rVal2 );
+    friend          bool operator> ( const Fraction& rVal1, const Fraction& rVal2 );
     friend inline   bool operator<=( const Fraction& rVal1, const Fraction& rVal2 );
     friend inline   bool operator>=( const Fraction& rVal1, const Fraction& rVal2 );
 
-    TOOLS_DLLPUBLIC friend SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract );
-    TOOLS_DLLPUBLIC friend SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract );
+    friend SvStream& ReadFraction( SvStream& rIStream, Fraction& rFract );
+    friend SvStream& WriteFraction( SvStream& rOStream, const Fraction& rFract );
 };
 
 inline Fraction::Fraction( const Fraction& rFrac )
