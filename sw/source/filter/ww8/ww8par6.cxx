@@ -795,10 +795,10 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     if (!pSep)
         return;
 
-    if (!maSegments.empty() && mrReader.lastAnchorPos.get() && *mrReader.lastAnchorPos == *mrReader.pPaM->GetPoint())
+    if (!maSegments.empty() && mrReader.mpLastAnchorPos.get() && *mrReader.mpLastAnchorPos == *mrReader.pPaM->GetPoint())
     {
         bool insert = true;
-        SwPaM pam( *mrReader.lastAnchorPos );
+        SwPaM pam( *mrReader.mpLastAnchorPos );
         if( pam.Move(fnMoveBackward, fnGoNode))
             if( SwTxtNode* txtNode = pam.GetPoint()->nNode.GetNode().GetTxtNode())
                 if( txtNode->Len() == 0 )
@@ -1815,7 +1815,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     //#i53725# - absolute positioned objects have to be
     // anchored at-paragraph to assure its correct anchor position.
     eAnchor = FLY_AT_PARA;
-    rIo.lastAnchorPos.reset( new SwPosition(*rPaM.GetPoint()));
+    rIo.mpLastAnchorPos.reset( new SwPosition(*rPaM.GetPoint()));
 
     switch (nYBind)
     {

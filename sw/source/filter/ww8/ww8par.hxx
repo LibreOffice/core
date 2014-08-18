@@ -1383,7 +1383,7 @@ private:
     // a document position recorded the after-position of TOC section, managed by Read_F_TOX() and End_Field()
     SwPaM* mpPosAfterTOC;
 
-    boost::scoped_ptr< SwPosition > lastAnchorPos;
+    boost::scoped_ptr< SwPosition > mpLastAnchorPos;
 
     bool mbCareFirstParaEndInToc;
     bool mbCareLastParaEndInToc;
