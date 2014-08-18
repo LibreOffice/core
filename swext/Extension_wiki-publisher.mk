@@ -29,7 +29,7 @@ $(eval $(call gb_Extension_add_file,wiki-publisher,commons-httpclient-3.1.jar,$(
 $(eval $(call gb_Extension_add_file,wiki-publisher,$(if $(filter TRUE,$(HAVE_JAVA6)),commons-lang3-3.3.1.jar,commons-lang-2.4.jar),\
 $(call gb_UnpackedTarball_get_dir,apache_commons_lang)$(if $(filter TRUE,$(HAVE_JAVA6)),/target/commons-lang3-3.3.1.jar,/dist/commons-lang-2.4.jar)\
 ))
-$(eval $(call gb_Extension_add_file,wiki-publisher,commons-logging-1.2.jar,$(call gb_UnpackedTarball_get_dir,apache_commons_logging)/target/commons-logging-1.2.jar))
+$(eval $(call gb_Extension_add_file,wiki-publisher,commons-logging-$(COMMONS_LOGGING_VERSION).jar,$(call gb_UnpackedTarball_get_dir,apache_commons_logging)/target/commons-logging-$(COMMONS_LOGGING_VERSION).jar))
 endif
 $(eval $(call gb_Extension_add_file,wiki-publisher,Addons.xcu,$(call gb_XcuFile_for_extension,swext/mediawiki/src/registry/data/org/openoffice/Office/Addons.xcu)))
 $(eval $(call gb_Extension_add_file,wiki-publisher,Filter.xcu,$(SRCDIR)/swext/mediawiki/src/registry/data/org/openoffice/TypeDetection/Filter.xcu))

@@ -3512,7 +3512,7 @@ else # !SYSTEM_APACHE_COMMONS
 
 ifeq ($(ENABLE_JAVA),TRUE)
 $(eval $(call gb_Helper_register_jars_for_install,OOO,reportbuilder,\
-	commons-logging-1.2 \
+	commons-logging-$(COMMONS_LOGGING_VERSION) \
 ))
 endif
 $(eval $(call gb_Helper_register_jars,OXT,\
@@ -3553,7 +3553,7 @@ endef
 
 define gb_Jar__use_commons-logging
 $(call gb_Jar_use_external_project,$(1),apache_commons_logging)
-$(call gb_Jar_use_jar,$(1),commons-logging-1.2)
+$(call gb_Jar_use_jar,$(1),commons-logging-$(COMMONS_LOGGING_VERSION))
 endef
 define gb_ExternalProject__use_commons-logging
 $(call gb_ExternalProject_use_external_project,$(1),apache_commons_logging)
