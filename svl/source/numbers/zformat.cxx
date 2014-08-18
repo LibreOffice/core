@@ -2598,10 +2598,6 @@ bool SvNumberformat::GetOutputString(double fNumber,
                             sBuff.append(rStr[1]);
                             bRes = true;
                         }
-                        else
-                        {
-                            bRes = false;
-                        }
                     }
                     break;
                 case NF_SYMBOLTYPE_BLANK:
