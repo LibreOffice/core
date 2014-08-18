@@ -26,7 +26,6 @@
 #include "datman.hxx"
 #include "bibresid.hxx"
 #include "bibmod.hxx"
-#include "sections.hrc"
 #include "bibconfig.hxx"
 
 

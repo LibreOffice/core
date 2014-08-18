@@ -44,51 +44,47 @@ typedef cppu::WeakAggImplHelper1 < ::com::sun::star::awt::XFocusListener > BibGe
 
 class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
 {
-    Window              aControlParentWin;
-    FixedText           aIdentifierFT;
-    FixedText           aAuthTypeFT;
-    FixedText           aYearFT;
+    FixedText*          pIdentifierFT;
+    FixedText*          pAuthTypeFT;
+    FixedText*          pYearFT;
 
-    FixedText           aAuthorFT;
-    FixedText           aTitleFT;
+    FixedText*          pAuthorFT;
+    FixedText*          pTitleFT;
 
-    FixedText           aPublisherFT;
-    FixedText           aAddressFT;
-    FixedText           aISBNFT;
+    FixedText*          pPublisherFT;
+    FixedText*          pAddressFT;
+    FixedText*          pISBNFT;
 
-    FixedText           aChapterFT;
-    FixedText           aPagesFT;
-    FixedLine           aFirstFL;
+    FixedText*          pChapterFT;
+    FixedText*          pPagesFT;
 
-    FixedText           aEditorFT;
-    FixedText           aEditionFT;
+    FixedText*          pEditorFT;
+    FixedText*          pEditionFT;
 
-    FixedText           aBooktitleFT;
-    FixedText           aVolumeFT;
-    FixedText           aHowpublishedFT;
+    FixedText*          pBooktitleFT;
+    FixedText*          pVolumeFT;
+    FixedText*          pHowpublishedFT;
 
-    FixedText           aOrganizationsFT;
-    FixedText           aInstitutionFT;
-    FixedText           aSchoolFT;
+    FixedText*          pOrganizationsFT;
+    FixedText*          pInstitutionFT;
+    FixedText*          pSchoolFT;
 
-    FixedText           aReportTypeFT;
-    FixedText           aMonthFT;
-    FixedLine           aSecondFL;
+    FixedText*          pReportTypeFT;
+    FixedText*          pMonthFT;
 
-    FixedText           aJournalFT;
-    FixedText           aNumberFT;
-    FixedText           aSeriesFT;
+    FixedText*          pJournalFT;
+    FixedText*          pNumberFT;
+    FixedText*          pSeriesFT;
 
-    FixedText           aAnnoteFT;
-    FixedText           aNoteFT;
-    FixedText           aURLFT;
-    FixedLine           aThirdFL;
+    FixedText*          pAnnoteFT;
+    FixedText*          pNoteFT;
+    FixedText*          pURLFT;
 
-    FixedText           aCustom1FT;
-    FixedText           aCustom2FT;
-    FixedText           aCustom3FT;
-    FixedText           aCustom4FT;
-    FixedText           aCustom5FT;
+    FixedText*          pCustom1FT;
+    FixedText*          pCustom2FT;
+    FixedText*          pCustom3FT;
+    FixedText*          pCustom4FT;
+    FixedText*          pCustom5FT;
 
     ScrollBar           aHoriScroll;
     ScrollBar           aVertScroll;

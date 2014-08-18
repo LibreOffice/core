@@ -73,6 +73,7 @@ class BibTabPage : public TabPage, public BibShortCutHandler
 {
 public:
                             BibTabPage( Window* pParent, const ResId& rResId );
+                            BibTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
     virtual                 ~BibTabPage();
 };
 
