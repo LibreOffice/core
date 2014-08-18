@@ -33,18 +33,11 @@
  *
  *************************************************************************/
 
-/*****************************************************************************
- *****************************************************************************
- *
- * Simple client application using the UnoUrlResolver service.
- *
- *****************************************************************************
- *****************************************************************************/
+// Simple client application using the UnoUrlResolver service.
 #include <stdio.h>
 #include <wchar.h>
 
 #include <sal/main.h>
-
 #include <cppuhelper/bootstrap.hxx>
 
 #include <osl/file.hxx>

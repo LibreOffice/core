@@ -31,10 +31,6 @@
 namespace sd { namespace colortoolpanel
 {
 
-
-
-    //= ToolPanelFactory
-
     typedef ::cppu::WeakImplHelper2 <   ::com::sun::star::ui::XUIElementFactory
                                     ,   ::com::sun::star::lang::XServiceInfo
                                     >   ToolPanelFactory_Base;

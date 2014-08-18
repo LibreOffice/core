@@ -29,7 +29,7 @@
 #define MYLISTENER_IMPLEMENTATIONNAME  "vnd.My.impl.NewDocListener"
 #define MYLISTENER_SERVICENAME         "vnd.My.NewDocListener"
 
-/*---------------------------------------------------
+/**
  * Registriert sich in der Office Konfiguration als Job.
  * Dieser wird dann für alle neu geöffneten Dokumente automatisch
  * gerufen. Man bekommt eine Reference auf das geöffnete Dokument

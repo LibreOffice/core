@@ -46,9 +46,6 @@
 
 #include "so_activex.h"
 
-
-// SOComWindowPeer
-
 class SOComWindowPeer :
     public IDispatchImpl<ISOComWindowPeer, &IID_ISOComWindowPeer, &LIBID_SO_ACTIVEXLib>,
     public ISupportErrorInfo,

@@ -280,8 +280,8 @@ void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 level ) throw(SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // set your isolation level
-    // please have a look at @see com.sun.star.sdbc.TransactionIsolation
+    /// set your isolation level
+    /// please have a look at @see com.sun.star.sdbc.TransactionIsolation
 }
 
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
