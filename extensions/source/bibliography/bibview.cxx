@@ -113,6 +113,7 @@ namespace bib
         }
 
         m_xGeneralPage = m_pGeneralPage = new BibGeneralPage( this, m_pDatMan );
+        m_pGeneralPage->Show();
 
         Resize();
 

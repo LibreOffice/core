@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <vcl/builder.hxx>
 #include <vcl/settings.hxx>
 #include "general.hxx"
 #include "bibresid.hxx"
@@ -51,16 +52,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
 using namespace ::rtl;
-
-#define DISTANCE_CONTROL_TO_FIXEDTEXT 5
-
-static ::Point lcl_MovePoint(const FixedText& rFixedText)
-{
-    ::Point aRet(rFixedText.GetPosPixel());
-    aRet.X() += rFixedText.GetSizePixel().Width();
-    aRet.X() += DISTANCE_CONTROL_TO_FIXEDTEXT;
-    return aRet;
-}
 
 static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
 {
@@ -177,43 +168,42 @@ void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::
 
 BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent, "GeneralPage", "modules/sbibliography/ui/generalpage.ui"),
-    pIdentifierFT(new FixedText(this)),
-    pAuthTypeFT(new FixedText(this)),
-    pYearFT(new FixedText(this)),
-    pAuthorFT(new FixedText(this)),
-    pTitleFT(new FixedText(this)),
-    pPublisherFT(new FixedText(this)),
-    pAddressFT(new FixedText(this)),
-    pISBNFT(new FixedText(this)),
-    pChapterFT(new FixedText(this)),
-    pPagesFT(new FixedText(this)),
-    pEditorFT(new FixedText(this)),
-    pEditionFT(new FixedText(this)),
-    pBooktitleFT(new FixedText(this)),
-    pVolumeFT(new FixedText(this)),
-    pHowpublishedFT(new FixedText(this)),
-    pOrganizationsFT(new FixedText(this)),
-    pInstitutionFT(new FixedText(this)),
-    pSchoolFT(new FixedText(this)),
-    pReportTypeFT(new FixedText(this)),
-    pMonthFT(new FixedText(this)),
-    pJournalFT(new FixedText(this)),
-    pNumberFT(new FixedText(this)),
-    pSeriesFT(new FixedText(this)),
-    pAnnoteFT(new FixedText(this)),
-    pNoteFT(new FixedText(this)),
-    pURLFT(new FixedText(this)),
-    pCustom1FT(new FixedText(this)),
-    pCustom2FT(new FixedText(this)),
-    pCustom3FT(new FixedText(this)),
-    pCustom4FT(new FixedText(this)),
-    pCustom5FT(new FixedText(this)),
-    aHoriScroll(this, WB_HORZ),
-    aVertScroll(this, WB_VERT),
     sErrorPrefix(BIB_RESSTR(ST_ERROR_PREFIX)),
     pDatMan(pMan)
 {
-    aStdSize = GetOutputSizePixel();
+    get(pIdentifierFT, "shortname");
+    get(pAuthTypeFT, "authtype");
+    get(pGrid, "grid");
+    get(pScrolledWindow, "scrolledwindow");
+    get(pYearFT, "year");
+    get(pAuthorFT, "authors");
+    get(pTitleFT, "title");
+    get(pPublisherFT, "publisher");
+    get(pAddressFT, "address");
+    get(pISBNFT, "isbn");
+    get(pChapterFT, "chapter");
+    get(pPagesFT, "pages");
+    get(pEditorFT, "editor");
+    get(pEditionFT, "edition");
+    get(pBooktitleFT, "booktitle");
+    get(pVolumeFT, "volume");
+    get(pHowpublishedFT, "publicationtype");
+    get(pOrganizationsFT, "organization");
+    get(pInstitutionFT, "institution");
+    get(pSchoolFT, "university");
+    get(pReportTypeFT, "reporttype");
+    get(pMonthFT, "month");
+    get(pJournalFT, "journal");
+    get(pNumberFT, "number");
+    get(pSeriesFT, "series");
+    get(pAnnoteFT, "annotation");
+    get(pNoteFT, "note");
+    get(pURLFT, "url");
+    get(pCustom1FT, "custom1");
+    get(pCustom2FT, "custom2");
+    get(pCustom3FT, "custom3");
+    get(pCustom4FT, "custom4");
+    get(pCustom5FT, "custom5");
 
     aBibTypeArr[0] = BIB_RESSTR(ST_TYPE_ARTICLE);
     aBibTypeArr[1] = BIB_RESSTR(ST_TYPE_BOOK);
@@ -240,26 +230,12 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
 
     InitFixedTexts();
 
-    aBasePos = pIdentifierFT->GetPosPixel();
-
     sal_Int16* pMap = nFT2CtrlMap;
     for( sal_uInt16 i = 0 ; i < FIELD_COUNT ; ++i, ++pMap )
     {
         aControls[ i ] = 0;
         *pMap = -1;
     }
-
-    AdjustScrollbars();
-    Link aScrollLnk(LINK(this, BibGeneralPage, ScrollHdl));
-    aHoriScroll.SetScrollHdl( aScrollLnk );
-    aVertScroll.SetScrollHdl( aScrollLnk );
-    aHoriScroll.SetLineSize(10);
-    aVertScroll.SetLineSize(10);
-    aHoriScroll.SetPageSize( pIdentifierFT->GetSizePixel().Width());
-    aVertScroll.SetPageSize(
-        pPublisherFT->GetPosPixel().Y() - pIdentifierFT->GetPosPixel().Y());
-    aHoriScroll.Show();
-    aVertScroll.Show();
 
     BibConfig* pBibConfig = BibModul::GetConfig();
     BibDBDescriptor aDesc;
@@ -268,111 +244,107 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     aDesc.nCommandType = CommandType::TABLE;
     const Mapping* pMapping = pBibConfig->GetMapping(aDesc);
 
-    xCtrlContnr = VCLUnoHelper::CreateControlContainer(this);
+    xCtrlContnr = VCLUnoHelper::CreateControlContainer(pGrid);
 
-    // the control should be a bit smaller than the fixed text
-    Size aControlSize(pIdentifierFT->GetSizePixel());
-    aControlSize.Width() = aControlSize.Width() * 8 / 10;
+    std::vector<Window*> aChildren;
 
-    AddControlWithError( lcl_GetColumnName( pMapping, IDENTIFIER_POS ), lcl_MovePoint( *pIdentifierFT ),
-        aControlSize, sTableErrorString, pIdentifierFT->GetText(),
-        HID_BIB_IDENTIFIER_POS, 0 );
+    AddControlWithError(lcl_GetColumnName(pMapping, IDENTIFIER_POS), *pIdentifierFT,
+        sTableErrorString,
+        HID_BIB_IDENTIFIER_POS, 0, aChildren);
 
     sTypeColumnName = lcl_GetColumnName(pMapping, AUTHORITYTYPE_POS);
 
-    AddControlWithError( sTypeColumnName, lcl_MovePoint(*pAuthTypeFT ), aControlSize, sTableErrorString,
-        pAuthTypeFT->GetText(), HID_BIB_AUTHORITYTYPE_POS, 1 );
+    AddControlWithError(sTypeColumnName, *pAuthTypeFT, sTableErrorString,
+        HID_BIB_AUTHORITYTYPE_POS, 1, aChildren);
 
-    ::Point aYearPos = lcl_MovePoint(*pYearFT);
-    AddControlWithError( lcl_GetColumnName( pMapping, YEAR_POS ), aYearPos,
-        aControlSize, sTableErrorString, pYearFT->GetText(), HID_BIB_YEAR_POS, 4 );
+    AddControlWithError(lcl_GetColumnName(pMapping, YEAR_POS), *pYearFT,
+        sTableErrorString, HID_BIB_YEAR_POS, 2, aChildren);
 
-    AddControlWithError( lcl_GetColumnName(pMapping, AUTHOR_POS), lcl_MovePoint(*pAuthorFT),
-        aControlSize, sTableErrorString, pAuthorFT->GetText(), HID_BIB_AUTHOR_POS, 2 );
+    AddControlWithError(lcl_GetColumnName(pMapping, AUTHOR_POS), *pAuthorFT,
+        sTableErrorString, HID_BIB_AUTHOR_POS, 3, aChildren);
 
-    ::Point aTitlePos( lcl_MovePoint( *pTitleFT ) );
-    ::Size aTitleSize = pTitleFT->GetSizePixel();
-    aTitleSize.Width() = aYearPos.X() + aControlSize.Width() - aTitlePos.X();
-    AddControlWithError( lcl_GetColumnName(pMapping, TITLE_POS), aTitlePos, aTitleSize, sTableErrorString,
-        pTitleFT->GetText(), HID_BIB_TITLE_POS, 22 );
+    AddControlWithError(lcl_GetColumnName(pMapping, TITLE_POS), *pTitleFT, sTableErrorString,
+        HID_BIB_TITLE_POS, 4, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, PUBLISHER_POS ), lcl_MovePoint( *pPublisherFT),
-        aControlSize, sTableErrorString, pPublisherFT->GetText(), HID_BIB_PUBLISHER_POS, 5 );
+    AddControlWithError(lcl_GetColumnName(pMapping, PUBLISHER_POS), *pPublisherFT,
+        sTableErrorString, HID_BIB_PUBLISHER_POS, 5, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, ADDRESS_POS ), lcl_MovePoint( *pAddressFT ),
-        aControlSize, sTableErrorString, pAddressFT->GetText(), HID_BIB_ADDRESS_POS, 7 );
+    AddControlWithError(lcl_GetColumnName(pMapping, ADDRESS_POS), *pAddressFT,
+        sTableErrorString, HID_BIB_ADDRESS_POS, 6, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, ISBN_POS ), lcl_MovePoint( *pISBNFT ),
-        aControlSize, sTableErrorString, pISBNFT->GetText(), HID_BIB_ISBN_POS, 6 );
+    AddControlWithError(lcl_GetColumnName(pMapping, ISBN_POS), *pISBNFT,
+        sTableErrorString, HID_BIB_ISBN_POS, 7, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CHAPTER_POS ), lcl_MovePoint(*pChapterFT),
-        aControlSize, sTableErrorString, pChapterFT->GetText(), HID_BIB_CHAPTER_POS, 10 );
+    AddControlWithError(lcl_GetColumnName(pMapping, CHAPTER_POS), *pChapterFT,
+        sTableErrorString, HID_BIB_CHAPTER_POS, 8, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, PAGES_POS ), lcl_MovePoint( *pPagesFT ),
-        aControlSize, sTableErrorString, pPagesFT->GetText(), HID_BIB_PAGES_POS, 19 );
+    AddControlWithError(lcl_GetColumnName(pMapping, PAGES_POS), *pPagesFT,
+        sTableErrorString, HID_BIB_PAGES_POS, 9, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, EDITOR_POS ), lcl_MovePoint( *pEditorFT ),
-        aControlSize, sTableErrorString, pEditorFT->GetText(), HID_BIB_EDITOR_POS, 12 );
+    AddControlWithError(lcl_GetColumnName(pMapping, EDITOR_POS), *pEditorFT,
+        sTableErrorString, HID_BIB_EDITOR_POS, 10, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, EDITION_POS ), lcl_MovePoint(*pEditionFT),
-        aControlSize, sTableErrorString, pEditionFT->GetText(), HID_BIB_EDITION_POS, 11 );
+    AddControlWithError(lcl_GetColumnName(pMapping, EDITION_POS), *pEditionFT,
+        sTableErrorString, HID_BIB_EDITION_POS, 11, aChildren);
 
-    AddControlWithError( lcl_GetColumnName(pMapping, BOOKTITLE_POS), lcl_MovePoint(*pBooktitleFT),
-        aControlSize, sTableErrorString, pBooktitleFT->GetText(), HID_BIB_BOOKTITLE_POS, 9 );
+    AddControlWithError(lcl_GetColumnName(pMapping, BOOKTITLE_POS), *pBooktitleFT,
+        sTableErrorString, HID_BIB_BOOKTITLE_POS, 12, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, VOLUME_POS ), lcl_MovePoint( *pVolumeFT ),
-        aControlSize, sTableErrorString, pVolumeFT->GetText(), HID_BIB_VOLUME_POS, 24 );
+    AddControlWithError(lcl_GetColumnName(pMapping, VOLUME_POS), *pVolumeFT,
+        sTableErrorString, HID_BIB_VOLUME_POS, 13, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, HOWPUBLISHED_POS ), lcl_MovePoint( *pHowpublishedFT ),
-        aControlSize, sTableErrorString, pHowpublishedFT->GetText(), HID_BIB_HOWPUBLISHED_POS, 13 );
+    AddControlWithError(lcl_GetColumnName(pMapping, HOWPUBLISHED_POS), *pHowpublishedFT,
+        sTableErrorString, HID_BIB_HOWPUBLISHED_POS, 14, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, ORGANIZATIONS_POS ), lcl_MovePoint( *pOrganizationsFT ),
-        aControlSize, sTableErrorString, pOrganizationsFT->GetText(), HID_BIB_ORGANIZATIONS_POS, 18 );
+    AddControlWithError(lcl_GetColumnName(pMapping, ORGANIZATIONS_POS), *pOrganizationsFT,
+        sTableErrorString, HID_BIB_ORGANIZATIONS_POS, 15, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, INSTITUTION_POS ), lcl_MovePoint( *pInstitutionFT ),
-        aControlSize, sTableErrorString, pInstitutionFT->GetText(), HID_BIB_INSTITUTION_POS, 14 );
+    AddControlWithError(lcl_GetColumnName(pMapping, INSTITUTION_POS), *pInstitutionFT,
+        sTableErrorString, HID_BIB_INSTITUTION_POS, 16, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, SCHOOL_POS ), lcl_MovePoint( *pSchoolFT ),
-        aControlSize, sTableErrorString, pSchoolFT->GetText(), HID_BIB_SCHOOL_POS, 20 );
+    AddControlWithError(lcl_GetColumnName(pMapping, SCHOOL_POS), *pSchoolFT,
+        sTableErrorString, HID_BIB_SCHOOL_POS, 17, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, REPORTTYPE_POS ), lcl_MovePoint( *pReportTypeFT ),
-        aControlSize, sTableErrorString, pReportTypeFT->GetText(), HID_BIB_REPORTTYPE_POS, 23 );
+    AddControlWithError(lcl_GetColumnName(pMapping, REPORTTYPE_POS), *pReportTypeFT,
+        sTableErrorString, HID_BIB_REPORTTYPE_POS, 18, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, MONTH_POS ), lcl_MovePoint( *pMonthFT ),
-        aControlSize, sTableErrorString, pMonthFT->GetText(), HID_BIB_MONTH_POS, 3 );
+    AddControlWithError(lcl_GetColumnName(pMapping, MONTH_POS), *pMonthFT,
+        sTableErrorString, HID_BIB_MONTH_POS, 19, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, JOURNAL_POS ), lcl_MovePoint( *pJournalFT ),
-        aControlSize, sTableErrorString, pJournalFT->GetText(), HID_BIB_JOURNAL_POS, 15 );
+    AddControlWithError(lcl_GetColumnName(pMapping, JOURNAL_POS), *pJournalFT,
+        sTableErrorString, HID_BIB_JOURNAL_POS, 20, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, NUMBER_POS ), lcl_MovePoint( *pNumberFT ),
-        aControlSize, sTableErrorString, pNumberFT->GetText(), HID_BIB_NUMBER_POS, 17 );
+    AddControlWithError(lcl_GetColumnName(pMapping, NUMBER_POS), *pNumberFT,
+        sTableErrorString, HID_BIB_NUMBER_POS, 21, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, SERIES_POS ), lcl_MovePoint( *pSeriesFT ),
-        aControlSize, sTableErrorString, pSeriesFT->GetText(), HID_BIB_SERIES_POS, 21 );
+    AddControlWithError(lcl_GetColumnName(pMapping, SERIES_POS), *pSeriesFT,
+        sTableErrorString, HID_BIB_SERIES_POS, 22, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, ANNOTE_POS ), lcl_MovePoint( *pAnnoteFT ),
-        aControlSize, sTableErrorString, pAnnoteFT->GetText(), HID_BIB_ANNOTE_POS, 8 );
+    AddControlWithError(lcl_GetColumnName(pMapping, ANNOTE_POS), *pAnnoteFT,
+        sTableErrorString, HID_BIB_ANNOTE_POS, 23, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, NOTE_POS ), lcl_MovePoint( *pNoteFT ),
-        aControlSize, sTableErrorString, pNoteFT->GetText(), HID_BIB_NOTE_POS, 16 );
+    AddControlWithError(lcl_GetColumnName(pMapping, NOTE_POS),*pNoteFT,
+        sTableErrorString, HID_BIB_NOTE_POS, 24, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, URL_POS ), lcl_MovePoint( *pURLFT ),
-        aControlSize, sTableErrorString, pURLFT->GetText(), HID_BIB_URL_POS, 25 );
+    AddControlWithError(lcl_GetColumnName(pMapping, URL_POS), *pURLFT,
+        sTableErrorString, HID_BIB_URL_POS, 25, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM1_POS ), lcl_MovePoint( *pCustom1FT ),
-        aControlSize, sTableErrorString, pCustom1FT->GetText(), HID_BIB_CUSTOM1_POS, 26 );
+    AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM1_POS), *pCustom1FT,
+        sTableErrorString, HID_BIB_CUSTOM1_POS, 26, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM2_POS ), lcl_MovePoint( *pCustom2FT ),
-        aControlSize, sTableErrorString, pCustom2FT->GetText(), HID_BIB_CUSTOM2_POS, 27 );
+    AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM2_POS), *pCustom2FT,
+        sTableErrorString, HID_BIB_CUSTOM2_POS, 27, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM3_POS ), lcl_MovePoint( *pCustom3FT ),
-        aControlSize, sTableErrorString, pCustom3FT->GetText(), HID_BIB_CUSTOM3_POS, 28 );
+    AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM3_POS), *pCustom3FT,
+        sTableErrorString, HID_BIB_CUSTOM3_POS, 28, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM4_POS ), lcl_MovePoint( *pCustom4FT ),
-        aControlSize, sTableErrorString, pCustom4FT->GetText(), HID_BIB_CUSTOM4_POS, 29 );
+    AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM4_POS), *pCustom4FT,
+        sTableErrorString, HID_BIB_CUSTOM4_POS, 29, aChildren);
 
-    AddControlWithError( lcl_GetColumnName( pMapping, CUSTOM5_POS ), lcl_MovePoint( *pCustom5FT ),
-        aControlSize, sTableErrorString, pCustom5FT->GetText(), HID_BIB_CUSTOM5_POS, 30 );
+    AddControlWithError(lcl_GetColumnName(pMapping, CUSTOM5_POS), *pCustom5FT,
+        sTableErrorString, HID_BIB_CUSTOM5_POS, 30, aChildren);
+
+    VclBuilder::reorderWithinParent(aChildren, false);
 
     xPosListener = new BibPosListener(this);
     uno::Reference< sdbc::XRowSet >  xRowSet(pDatMan->getForm(), UNO_QUERY);
@@ -386,6 +358,9 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
         sTableErrorString = sErrorPrefix + sTableErrorString;
 
     SetText(BIB_RESSTR(ST_TYPE_TITLE));
+
+    Size aSize(LogicToPixel(Size(0, 209), MapMode(MAP_APPFONT)));
+    set_height_request(aSize.Height());
 }
 
 BibGeneralPage::~BibGeneralPage()
@@ -396,38 +371,6 @@ BibGeneralPage::~BibGeneralPage()
         if(xRowSet.is())
             xRowSet->removeRowSetListener(xPosListener);
     }
-
-    delete pIdentifierFT;
-    delete pAuthTypeFT;
-    delete pYearFT;
-    delete pAuthorFT;
-    delete pTitleFT;
-    delete pPublisherFT;
-    delete pAddressFT;
-    delete pISBNFT;
-    delete pChapterFT;
-    delete pPagesFT;
-    delete pEditorFT;
-    delete pEditionFT;
-    delete pBooktitleFT;
-    delete pVolumeFT;
-    delete pHowpublishedFT;
-    delete pOrganizationsFT;
-    delete pInstitutionFT;
-    delete pSchoolFT;
-    delete pReportTypeFT;
-    delete pMonthFT;
-    delete pJournalFT;
-    delete pNumberFT;
-    delete pSeriesFT;
-    delete pAnnoteFT;
-    delete pNoteFT;
-    delete pURLFT;
-    delete pCustom1FT;
-    delete pCustom2FT;
-    delete pCustom3FT;
-    delete pCustom4FT;
-    delete pCustom5FT;
 }
 
 void BibGeneralPage::RemoveListeners()
@@ -456,13 +399,14 @@ void BibGeneralPage::CommitActiveControl()
     }
 }
 
-void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::Point& rPos, const ::Size& rSize,
-                                OUString& rErrorString, const OUString& aColumnUIName, const OString& sHelpId, sal_uInt16 nIndexInFTArray )
+void BibGeneralPage::AddControlWithError( const OUString& rColumnName, FixedText &rLabel,
+    OUString& rErrorString, const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<Window*> &rChildren)
 {
+    const OUString aColumnUIName(rLabel.GetText());
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
 
     sal_Int16                                   nIndex = -1;
-    uno::Reference< awt::XControlModel >    xTmp = AddXControl(rColumnName, rPos, rSize, sHelpId, nIndex );
+    uno::Reference< awt::XControlModel >    xTmp = AddXControl(rColumnName, rLabel, sHelpId, nIndex, rChildren);
     if( xTmp.is() )
     {
         DBG_ASSERT( nIndexInFTArray < FIELD_COUNT, "*BibGeneralPage::AddControlWithError(): wrong array index!" );
@@ -481,7 +425,8 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::P
 
 uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
         const OUString& rName,
-        ::Point rPos, ::Size rSize, const OString& sHelpId, sal_Int16& rIndex )
+        FixedText& rLabel, const OString& sHelpId, sal_Int16& rIndex,
+        std::vector<Window*>& rChildren)
 {
     uno::Reference< awt::XControlModel >  xCtrModel;
     try
@@ -565,17 +510,26 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                             rIndex = sal_Int16( i );
                             break;
                         }
+                    // initially switch on the design mode - switch it off _after_ loading the form
                     xCtrWin->setVisible( sal_True );
                     xControl->setDesignMode( sal_True );
-                    // initially switch on the design mode - switch it off _after_ loading the form
 
-                    xCtrWin->setPosSize(rPos.X(), rPos.Y(), rSize.Width(),
-                        rSize.Height(), awt::PosSize::POSSIZE);
+                    Window* pWindow = VCLUnoHelper::GetWindow(xControl->getPeer());
+                    pWindow->set_grid_top_attach(rLabel.get_grid_top_attach());
+                    pWindow->set_grid_left_attach(rLabel.get_grid_left_attach()+1);
+                    pWindow->set_valign(VCL_ALIGN_CENTER);
+                    rLabel.set_mnemonic_widget(pWindow);
+                    if (&rLabel == pTitleFT)
+                        pWindow->set_grid_width(3);
+                    else
+                        pWindow->set_hexpand(true);
+                    rChildren.push_back(&rLabel);
+                    rChildren.push_back(pWindow);
                 }
             }
         }
     }
-    catch(Exception& rEx)
+    catch(const Exception& rEx)
     {
         (void) rEx; // make compiler happy
         OSL_FAIL("BibGeneralPage::AddXControl: something went wrong!");
@@ -583,124 +537,37 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     return xCtrModel;
 }
 
-void BibGeneralPage::AdjustScrollbars()
-{
-    long nVertScrollWidth = aVertScroll.GetSizePixel().Width();
-    long nHoriScrollHeight = aHoriScroll.GetSizePixel().Height();
-    ::Size aOutSize(GetOutputSizePixel());
-    bool bHoriVisible = aOutSize.Width() <= aStdSize.Width();
-    bool bVertVisible = (aOutSize.Height()-(bHoriVisible ? nHoriScrollHeight : 0)) <= (aStdSize.Height());
-    aHoriScroll.Show(bHoriVisible);
-    aVertScroll.Show(bVertVisible);
-
-    if(bHoriVisible)
-    {
-        ::Size aHoriSize(aOutSize.Width() - (bVertVisible ? nVertScrollWidth : 0),
-                        nHoriScrollHeight);
-        aHoriScroll.SetSizePixel(aHoriSize);
-        aHoriScroll.SetRange( Range(0, aStdSize.Width()));
-        aHoriScroll.SetVisibleSize( aHoriSize.Width()  - (bVertVisible ? nVertScrollWidth : 0));
-    }
-    if(bVertVisible)
-    {
-        ::Size aVertSize(nHoriScrollHeight, aOutSize.Height() -
-                                            (bHoriVisible ? nHoriScrollHeight : 0));
-        aVertScroll.SetSizePixel(aVertSize);
-        aVertScroll.SetRange( Range(0, aStdSize.Height()));
-        aVertScroll.SetVisibleSize( aVertSize.Height() );
-    }
-
-    ::Size aSize(8, 8);
-    aSize = LogicToPixel(aSize, MapMode(MAP_APPFONT));
-    ::Size aScrollSize(aOutSize.Width() - aSize.Height(), aSize.Height());
-    ::Point aScrollPos(0, aOutSize.Height() - aSize.Height());
-    aHoriScroll.SetPosSizePixel(aScrollPos, aScrollSize);
-
-    aScrollPos.X() = aOutSize.Width() - aSize.Width();
-    aScrollPos.Y() = 0;
-    aScrollSize.Width() = aSize.Width();
-    aScrollSize.Height() = aOutSize.Height() - aSize.Height();
-    aVertScroll.SetPosSizePixel(aScrollPos, aScrollSize);
-
-    ::Size aControlParentWinSz(aOutSize);
-    if(bHoriVisible)
-        aControlParentWinSz.Height() -=  aSize.Height();
-    if(bVertVisible)
-        aControlParentWinSz.Width() -=  aSize.Width();
-    SetSizePixel(aControlParentWinSz);
-}
-
-void BibGeneralPage::Resize()
-{
-    AdjustScrollbars();
-    ScrollHdl(&aVertScroll);
-    ScrollHdl(&aHoriScroll);
-    Window::Resize();
-}
-
 void BibGeneralPage::InitFixedTexts( void )
 {
-    OUString      aFixedStrings[ FIELD_COUNT ] =
-    {
-        BIB_RESSTR( ST_IDENTIFIER     ),
-        BIB_RESSTR( ST_AUTHTYPE       ),
-        BIB_RESSTR( ST_AUTHOR         ),
-        BIB_RESSTR( ST_TITLE          ),
-        BIB_RESSTR( ST_MONTH          ),
-        BIB_RESSTR( ST_YEAR           ),
-        BIB_RESSTR( ST_ISBN           ),
-        BIB_RESSTR( ST_BOOKTITLE      ),
-        BIB_RESSTR( ST_CHAPTER        ),
-        BIB_RESSTR( ST_EDITION        ),
-        BIB_RESSTR( ST_EDITOR         ),
-        BIB_RESSTR( ST_HOWPUBLISHED   ),
-        BIB_RESSTR( ST_INSTITUTION    ),
-        BIB_RESSTR( ST_JOURNAL        ),
-        BIB_RESSTR( ST_NOTE           ),
-        BIB_RESSTR( ST_ANNOTE         ),
-        BIB_RESSTR( ST_NUMBER         ),
-        BIB_RESSTR( ST_ORGANIZATION   ),
-        BIB_RESSTR( ST_PAGE           ),
-        BIB_RESSTR( ST_PUBLISHER      ),
-        BIB_RESSTR( ST_ADDRESS        ),
-        BIB_RESSTR( ST_SCHOOL         ),
-        BIB_RESSTR( ST_SERIES         ),
-        BIB_RESSTR( ST_REPORT         ),
-        BIB_RESSTR( ST_VOLUME         ),
-        BIB_RESSTR( ST_URL            ),
-        BIB_RESSTR( ST_CUSTOM1        ),
-        BIB_RESSTR( ST_CUSTOM2        ),
-        BIB_RESSTR( ST_CUSTOM3        ),
-        BIB_RESSTR( ST_CUSTOM4        ),
-        BIB_RESSTR( ST_CUSTOM5        )
-    };
-
     aFixedTexts[0] = pIdentifierFT;
     aFixedTexts[1] = pAuthTypeFT;
-    aFixedTexts[2] = pAuthorFT;
-    aFixedTexts[3] = pTitleFT;
-    aFixedTexts[4] = pMonthFT;
-    aFixedTexts[5] = pYearFT;
-    aFixedTexts[6] = pISBNFT;
-    aFixedTexts[7] = pBooktitleFT;
+    aFixedTexts[2] = pYearFT;
+    aFixedTexts[3] = pAuthorFT;
+    aFixedTexts[4] = pTitleFT;
+    aFixedTexts[5] = pPublisherFT;
+    aFixedTexts[6] = pAddressFT;
+    aFixedTexts[7] = pISBNFT;
     aFixedTexts[8] = pChapterFT;
-    aFixedTexts[9] = pEditionFT;
+    aFixedTexts[9] = pPagesFT;
+
     aFixedTexts[10] = pEditorFT;
-    aFixedTexts[11] = pHowpublishedFT;
-    aFixedTexts[12] = pInstitutionFT;
-    aFixedTexts[13] = pJournalFT;
-    aFixedTexts[14] = pNoteFT;
-    aFixedTexts[15] = pAnnoteFT;
-    aFixedTexts[16] = pNumberFT;
-    aFixedTexts[17] = pOrganizationsFT;
-    aFixedTexts[18] = pPagesFT;
-    aFixedTexts[19] = pPublisherFT;
-    aFixedTexts[20] = pAddressFT;
-    aFixedTexts[21] = pSchoolFT;
+    aFixedTexts[11] = pEditionFT;
+    aFixedTexts[12] = pBooktitleFT;
+    aFixedTexts[13] = pVolumeFT;
+    aFixedTexts[14] = pHowpublishedFT;
+    aFixedTexts[15] = pOrganizationsFT;
+    aFixedTexts[16] = pInstitutionFT;
+    aFixedTexts[17] = pSchoolFT;
+    aFixedTexts[18] = pReportTypeFT;
+    aFixedTexts[19] = pMonthFT;
+
+    aFixedTexts[20] = pJournalFT;
+    aFixedTexts[21] = pNumberFT;
     aFixedTexts[22] = pSeriesFT;
-    aFixedTexts[23] = pReportTypeFT;
-    aFixedTexts[24] = pVolumeFT;
+    aFixedTexts[23] = pAnnoteFT;
+    aFixedTexts[24] = pNoteFT;
     aFixedTexts[25] = pURLFT;
+
     aFixedTexts[26] = pCustom1FT;
     aFixedTexts[27] = pCustom2FT;
     aFixedTexts[28] = pCustom3FT;
@@ -710,6 +577,11 @@ void BibGeneralPage::InitFixedTexts( void )
     int                 i;
 
     MnemonicGenerator   aMnemonicGenerator;
+
+    OUString aFixedStrings[ FIELD_COUNT ];
+    for( i = 0 ; i < FIELD_COUNT ; ++i )
+        aFixedStrings[i] = aFixedTexts[i]->GetText();
+
     // init mnemonics, first register all strings
     for( i = 0 ; i < FIELD_COUNT ; ++i )
         aMnemonicGenerator.RegisterMnemonic( aFixedStrings[ i ] );
@@ -723,72 +595,24 @@ void BibGeneralPage::InitFixedTexts( void )
         aFixedTexts[ i ]->SetText( aFixedStrings[ i ] );
 }
 
-IMPL_LINK(BibGeneralPage, ScrollHdl, ScrollBar*, pScroll)
-{
-    bool bVertical = &aVertScroll == pScroll;
-    long nOffset = 0;
-    long nCurrentOffset = 0;
-    if(bVertical)
-        nCurrentOffset = aFixedTexts[0]->GetPosPixel().Y() - aBasePos.Y();
-    else
-        nCurrentOffset = aFixedTexts[0]->GetPosPixel().X() - aBasePos.X();
-    nOffset = pScroll->IsVisible() ? pScroll->GetThumbPos() + nCurrentOffset : nCurrentOffset;
-
-    for(sal_uInt16 i = 0; i < FIELD_COUNT; i++)
-    {
-        ::Point aPos = aFixedTexts[i]->GetPosPixel();
-        if(bVertical)
-            aPos.Y() -= nOffset;
-        else
-            aPos.X() -= nOffset;
-        aFixedTexts[i]->SetPosPixel(aPos);
-        if(aControls[i].is())
-        {
-            awt::Rectangle aRect = aControls[i]->getPosSize();
-            long nX = aRect.X;
-            long nY = aRect.Y;
-            if(bVertical)
-                nY -= nOffset;
-            else
-                nX -= nOffset;
-            aControls[i]->setPosSize(nX, nY, 0, 0, awt::PosSize::POS);
-        }
-    }
-    return 0;
-}
-
 void BibGeneralPage::focusGained(const awt::FocusEvent& rEvent) throw( uno::RuntimeException, std::exception )
 {
     Reference<awt::XWindow> xCtrWin(rEvent.Source, UNO_QUERY );
     if(xCtrWin.is())
     {
-        ::Size aOutSize = GetOutputSizePixel();
+        ::Size aOutSize = pScrolledWindow->getVisibleChildSize();
         awt::Rectangle aRect = xCtrWin->getPosSize();
-        long nX = aRect.X;
-        if(nX < 0)
+        Point aOffset(pGrid->GetPosPixel());
+        long nX = aRect.X + aOffset.X();
+        if (nX < 0 || nX > aOutSize.Width())
         {
-            // left of the visible area
-            aHoriScroll.SetThumbPos(aHoriScroll.GetThumbPos() + nX);
-            ScrollHdl(&aHoriScroll);
+            pScrolledWindow->getHorzScrollBar().DoScroll(aRect.X);
         }
-        else if(nX > aOutSize.Width())
+
+        long nY = aRect.Y + aOffset.Y();
+        if (nY < 0 || nY > aOutSize.Height())
         {
-            // right of the visible area
-            aHoriScroll.SetThumbPos(aHoriScroll.GetThumbPos() + nX - aOutSize.Width() + aFixedTexts[0]->GetSizePixel().Width());
-            ScrollHdl(&aHoriScroll);
-        }
-        long nY = aRect.Y;
-        if(nY < 0)
-        {
-            // below the visible area
-            aVertScroll.SetThumbPos(aVertScroll.GetThumbPos() + nY);
-            ScrollHdl(&aVertScroll);
-        }
-        else if(nY > aOutSize.Height())
-        {
-            // over the visible area
-            aVertScroll.SetThumbPos(aVertScroll.GetThumbPos() + nY - aOutSize.Height()+ aFixedTexts[0]->GetSizePixel().Height());
-            ScrollHdl(&aVertScroll);
+            pScrolledWindow->getVertScrollBar().DoScroll(aRect.Y);
         }
     }
 }

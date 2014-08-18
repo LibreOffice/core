@@ -26,6 +26,7 @@
 #include <com/sun/star/sdbc/XRowSetListener.hpp>
 #include <svtools/stdctrl.hxx>
 
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <svtools/svmedit.hxx>
@@ -44,6 +45,9 @@ typedef cppu::WeakAggImplHelper1 < ::com::sun::star::awt::XFocusListener > BibGe
 
 class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
 {
+    VclGrid*            pGrid;
+    VclScrolledWindow*  pScrolledWindow;
+
     FixedText*          pIdentifierFT;
     FixedText*          pAuthTypeFT;
     FixedText*          pYearFT;
@@ -86,17 +90,11 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     FixedText*          pCustom4FT;
     FixedText*          pCustom5FT;
 
-    ScrollBar           aHoriScroll;
-    ScrollBar           aVertScroll;
-
     FixedText*          aFixedTexts[ FIELD_COUNT ];
     sal_Int16           nFT2CtrlMap[ FIELD_COUNT ];
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >
                         aControls[ FIELD_COUNT ];
-
-    Size                aStdSize;
-    Point               aBasePos;
 
     OUString            aBibTypeArr[ TYPE_COUNT ];
     OUString            sErrorPrefix;
@@ -120,19 +118,14 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     BibDataManager*     pDatMan;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                                AddXControl( const OUString& rName, Point aPos, Size aSize, const OString& sHelpId,
-                                            sal_Int16& rIndex );
+                                AddXControl( const OUString& rName, FixedText& rLabel, const OString& sHelpId,
+                                            sal_Int16& rIndex, std::vector<Window*>& rChildren );
 
-    void                        AddControlWithError( const OUString& rColumnName, const Point& rPos,
-                                            const Size& rSize, OUString& rErrorString, const OUString& aColumnUIName,
-                                            const OString& sHelpId, sal_uInt16 nIndexInFTArray );
-
-    void                        AdjustScrollbars();
-
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    void                        AddControlWithError( const OUString& rColumnName, FixedText& rLabel,
+                                            OUString& rErrorString,
+                                            const OString& sHelpId, sal_uInt16 nIndexInFTArray, std::vector<Window*>& rChildren );
 
 protected:
-    virtual void                Resize() SAL_OVERRIDE;
     void                        InitFixedTexts( void );     // create mnemonics and set text an all fixed texts
 
 public:
