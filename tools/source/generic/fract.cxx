@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <stdexcept>
 
 #include <limits.h>
 #include <rtl/ustring.hxx>
@@ -26,6 +27,14 @@
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
 #include <tools/bigint.hxx>
+
+
+// Added due transition from Fraction to boost::rational<long>
+void reduceInnacurate(boost::rational<long> &, unsigned)
+{
+    throw std::runtime_error("NOT IMPLEMENTED");
+}
+
 
 /** Compute greates common divisor using Euclidian algorithm
 
