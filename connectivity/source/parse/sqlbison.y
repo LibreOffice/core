@@ -1124,8 +1124,8 @@ parenthesized_boolean_value_expression:
 	}
 	;
 boolean_factor:
-	    boolean_primary
-	|   SQL_TOKEN_NOT boolean_primary
+	    boolean_primary			%dprec 2
+	|   SQL_TOKEN_NOT boolean_primary	%dprec 1
 		{ // boolean_factor: rule 1
 		    $$ = SQL_NEW_RULE;
 		    $$->append($1);
