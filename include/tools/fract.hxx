@@ -19,7 +19,13 @@
 #ifndef INCLUDED_TOOLS_FRACT_HXX
 #define INCLUDED_TOOLS_FRACT_HXX
 
+#include <boost/rational.hpp>
 #include <tools/toolsdllapi.h>
+
+
+// Added due transition from Fraction to boost::rational<long>
+void reduceInaccurate(boost::rational<long> &, unsigned);
+
 
 class SvStream;
 
