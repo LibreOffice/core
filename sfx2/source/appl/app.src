@@ -265,56 +265,6 @@ String RID_STR_NOAUTOSTARTHELPAGENT
     Text [ en-US ] = "No automatic start at 'XX'" ;
 };
 
-String RID_HELPBAR
-{
-    Text [ en-US ] = "Help Bar" ;
-};
-
-ToolBox RID_HELPBAR
-{
-    HelpId = HID_HELPBAR ;
-    Hide = TRUE ;
-    ItemList  =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_INDEX ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_HELPFILEBOX ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_ZOOMOUT;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_ZOOMIN;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_SEARCH ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_BOOKMARK ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_HELP_ANNOTATE ;
-        };
-    };
-};
-
 String RID_STR_HLPFILENOTEXIST
 {
     Text [ en-US ] = "The help file for this topic is not installed." ;

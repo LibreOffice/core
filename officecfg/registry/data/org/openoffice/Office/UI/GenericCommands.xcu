@@ -1590,11 +1590,6 @@
           <value>15</value>
         </prop>
       </node>
-      <node oor:name=".uno:HelpChooseFile" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Choose Help File</value>
-        </prop>
-      </node>
       <node oor:name=".uno:SpacePara1" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Line Spacing: 1</value>

@@ -614,7 +614,6 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = getContainer()->getElementType() == E_TABLE && !isDataSourceReadOnly() && !isConnectionReadOnly() && isTableFormat();
                 break;
             case SID_OPENDOC:
-            case SID_HELP_INDEX:
                 aReturn.bEnabled = true;
                 break;
             case ID_BROWSER_SAVEDOC:
@@ -1101,7 +1100,6 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 }
                 break;
             case SID_OPENDOC:
-            case SID_HELP_INDEX:
                 {
                     Reference < XDispatchProvider > xProv( getFrame(), UNO_QUERY );
                     if ( xProv.is() )
@@ -1109,9 +1107,6 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         URL aURL;
                         switch(_nId)
                         {
-                            case SID_HELP_INDEX:
-                                aURL.Complete = ".uno:HelpIndex";
-                                break;
                             case SID_OPENDOC:
                                 aURL.Complete = ".uno:Open";
                                 break;
