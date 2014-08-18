@@ -177,9 +177,9 @@ SwTOXMark::~SwTOXMark()
 {
 }
 
-void SwTOXMark::RegisterToTOXType( SwTOXType& rMark )
+void SwTOXMark::RegisterToTOXType(SwTOXType& rType)
 {
-    rMark.Add(this);
+    rType.Add(this);
 }
 
 bool SwTOXMark::operator==( const SfxPoolItem& rAttr ) const
