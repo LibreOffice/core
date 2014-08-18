@@ -3497,6 +3497,15 @@ DECLARE_OOXMLEXPORT_TEST(testParaShading, "para-shading.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo81956 , "fdo81956.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "behindDoc", "1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor", "behindDoc", "1");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
 {
     // Test import and export of a section's headerf/footerf properties.

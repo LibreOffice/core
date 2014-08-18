@@ -1848,6 +1848,7 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
                         aGrabBag[i].Value >>= zOrder;
                         xShapePropertySet->setPropertyValue( "ZOrder", uno::makeAny(pZOrderHelper->findZOrder(zOrder)));
                         pZOrderHelper->addItem(xShapePropertySet, zOrder);
+                        xShapePropertySet->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ), uno::makeAny( false ) );
                         checkZOrderStatus = true;
                     }
                     if(checkBtLrStatus && checkZOrderStatus)
