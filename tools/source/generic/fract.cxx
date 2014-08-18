@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <stdexcept>
 
 #include <limits.h>
 #include <rtl/ustring.hxx>
@@ -26,6 +27,34 @@
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
 #include <tools/bigint.hxx>
+
+
+// Added due transition from Fraction to boost::rational<long>
+void reduceInaccurate(boost::rational<long> &, unsigned)
+{
+    throw std::runtime_error("NOT IMPLEMENTED");
+}
+
+SvStream& ReadFraction( SvStream& rIStream, boost::rational<long>& rFract )
+{
+    //fdo#39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 nTmp(0), dTmp(0);
+    rIStream.ReadInt32( nTmp );
+    rIStream.ReadInt32( dTmp );
+    // TODO/FIXME: how manage invalid rationals? throw exception or return a
+    // valid rational - sentinel value?
+    rFract = boost::rational<long>( nTmp, dTmp);
+    return rIStream;
+}
+
+SvStream& WriteFraction( SvStream& rOStream, const boost::rational<long>& rFract )
+{
+    //fdo#39428 SvStream no longer supports operator<<(long)
+    rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rFract.numerator()) );
+    rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rFract.denominator()) );
+    return rOStream;
+}
+
 
 /** Compute greates common divisor using Euclidian algorithm
 
