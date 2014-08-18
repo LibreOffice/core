@@ -424,8 +424,9 @@ void XclExpXmlSheetPr::SaveXml( XclExpXmlStream& rStrm )
 
     // OOXTODO: XML_outlinePr
 
-    rWorksheet->singleElement(
-        XML_tabColor, XML_rgb, XclXmlUtils::ToOString(maTabColor).getStr(), FSEND);
+    if (maTabColor != Color(COL_AUTO))
+        rWorksheet->singleElement(
+            XML_tabColor, XML_rgb, XclXmlUtils::ToOString(maTabColor).getStr(), FSEND);
 
     rWorksheet->singleElement(XML_pageSetUpPr,
             // OOXTODO: XML_autoPageBreaks,
