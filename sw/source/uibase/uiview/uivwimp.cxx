@@ -29,6 +29,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/mutex.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
@@ -182,7 +183,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
             if( !bDone )
             {
-                InfoBox( 0, SW_RES(MSG_SCAN_NOSOURCE) ).Execute();
+                MessageDialog( 0, SW_RES(STR_SCAN_NOSOURCE), VCL_MESSAGE_INFO ).Execute();
                 rReq.Ignore();
             }
             else

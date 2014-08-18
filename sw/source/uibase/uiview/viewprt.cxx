@@ -23,6 +23,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <sfx2/printer.hxx>
@@ -175,11 +176,9 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             }
             else
             {
-                InfoBox aInfoBox(&GetEditWin(), SW_RES(MSG_ERR_NO_FAX));
-                OUString sMsg = aInfoBox.GetMessText();
+                MessageDialog aInfoBox(&GetEditWin(), SW_RES(STR_ERR_NO_FAX), VCL_MESSAGE_INFO);
                 sal_uInt16 nResNo = bWeb ? STR_WEBOPTIONS : STR_TEXTOPTIONS;
-                sMsg = sMsg.replaceFirst("%1", OUString(SW_RES(nResNo)));
-                aInfoBox.SetMessText(sMsg);
+                aInfoBox.set_primary_text(aInfoBox.get_primary_text().replaceFirst("%1", OUString(SW_RES(nResNo))));
                 aInfoBox.Execute();
                 SfxUInt16Item aDefPage(SID_SW_EDITOPTIONS, TP_OPTPRINT_PAGE);
                 GetViewFrame()->GetDispatcher()->Execute(SID_SW_EDITOPTIONS,

@@ -32,21 +32,21 @@ QueryBox DLG_SPECIAL_FORCED
     DEFBUTTON = WB_DEF_NO ;
     Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
 };
-InfoBox MSG_NO_MERGE_ENTRY
+String STR_NO_MERGE_ENTRY
 {
-    Message [ en-US ] = "Could not merge documents." ;
+    Text [ en-US ] = "Could not merge documents." ;
 };
 String STR_ERR_INSERT_GLOS
 {
     Text [ en-US ] = "AutoText could not be created." ;
 };
-InfoBox MSG_ERR_SRCSTREAM
+String STR_ERR_SRCSTREAM
 {
-    Message [ en-US ] = "The source cannot be loaded." ;
+    Text [ en-US ] = "The source cannot be loaded." ;
 };
-InfoBox MSG_ERR_NO_FAX
+String STR_ERR_NO_FAX
 {
-    Message [ en-US ] = "No fax printer has been set under Tools/Options/%1/Print." ;
+    Text [ en-US ] = "No fax printer has been set under Tools/Options/%1/Print." ;
 };
 String STR_WEBOPTIONS
 {
@@ -56,9 +56,9 @@ String STR_TEXTOPTIONS
 {
     Text [ en-US ] = "Text document";
 };
-InfoBox MSG_SCAN_NOSOURCE
+String STR_SCAN_NOSOURCE
 {
-    Message [ en-US ] = "Source not specified." ;
+    Text [ en-US ] = "Source not specified." ;
 };
 String STR_NUM_LEVEL
 {

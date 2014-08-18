@@ -57,6 +57,7 @@
 #include <editeng/lrspitem.hxx>
 #include <unotools/textsearch.hxx>
 #include <editeng/unolingu.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <editeng/tstpitem.hxx>
 #include <sfx2/event.hxx>
@@ -500,7 +501,7 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         {
             if( bShowError )
             {
-                InfoBox aInfoBox( GetWindow(), SW_RESSTR( nResId ));
+                MessageDialog aInfoBox( GetWindow(), SW_RESSTR( nResId ), VCL_MESSAGE_INFO);
                 aInfoBox.Execute();
             }
             rReq.Ignore();
@@ -2265,7 +2266,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
             if (!bCompare && !nFound)
             {
                 Window* pWin = &GetEditWin();
-                InfoBox(pWin, SW_RES(MSG_NO_MERGE_ENTRY)).Execute();
+                MessageDialog(pWin, SW_RES(STR_NO_MERGE_ENTRY), VCL_MESSAGE_INFO).Execute();
             }
             if( nRet==2 && xDocSh.Is() )
                 xDocSh->DoClose();

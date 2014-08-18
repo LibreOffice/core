@@ -25,6 +25,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/print.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
@@ -828,7 +829,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
         else
         {
             Window *pTmpWindow = &GetViewFrame()->GetWindow();
-            InfoBox(pTmpWindow, SW_RES(MSG_ERR_SRCSTREAM)).Execute();
+            MessageDialog(pTmpWindow, SW_RES(STR_ERR_SRCSTREAM), VCL_MESSAGE_INFO).Execute();
         }
     }
     else
