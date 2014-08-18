@@ -24,7 +24,7 @@ String AVMEDIA_STR_INSERTMEDIA_DLG
     Text[en-US] = "Insert Movie and Sound";
 };
 
-STRING AVMEDIA_STR_OPENMEDIA_DLG
+String AVMEDIA_STR_OPENMEDIA_DLG
 {
     Text[en-US] = "Open Movie and Sound";
 };

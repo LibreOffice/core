@@ -952,12 +952,12 @@ String STR_PRES_PAUSE
     Text [ en-US ] = "Pause..." ;
 };
 
-STRING STR_WIZARD_ORIGINAL
+String STR_WIZARD_ORIGINAL
 {
     Text [ en-US ] = "<Original>";
 };
 
-STRING STR_ISLOADING
+String STR_ISLOADING
 {
     Text [ en-US ] = "Loading...";
 };
