@@ -33,9 +33,9 @@ String STR_COMCORE_CANT_SHOW
     Text [ en-US ] = "Image cannot be displayed." ;
 };
 
-InfoBox ERR_CLPBRD_READ
+String STR_ERROR_CLPBRD_READ
 {
-    Message [ en-US ] = "Error reading from the clipboard." ;
+    Text [ en-US ] = "Error reading from the clipboard." ;
 };
 
 #define ERR_CODE( class, err )  (class | (err - ERROR_SW_BASE))

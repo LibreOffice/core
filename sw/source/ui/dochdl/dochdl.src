@@ -34,9 +34,9 @@ InfoBox MSG_ERR_INSERT_GLOS
     Message [ en-US ] = "AutoText could not be created." ;
 };
 
-InfoBox MSG_CLPBRD_FORMAT_ERROR
+String STR_CLPBRD_FORMAT_ERROR
 {
-    Message [ en-US ] = "Requested clipboard format is not available." ;
+    Text [ en-US ] = "Requested clipboard format is not available." ;
 };
 
 String STR_PRIVATETEXT

@@ -41,6 +41,7 @@
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
@@ -1624,7 +1625,7 @@ sal_uInt16 SwTransferable::GetSotDestination( const SwWrtShell& rSh,
 bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                                     SwWrtShell& rSh, sal_uLong nFmt, bool bMsg )
 {
-    sal_uInt16 nResId = MSG_CLPBRD_FORMAT_ERROR;
+    sal_uInt16 nResId = STR_CLPBRD_FORMAT_ERROR;
     bool nRet = false;
 
     MSE40HTMLClipFormatObj aMSE40ClpObj;
@@ -1695,7 +1696,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
         SwReader aReader( *pStream, aEmptyOUStr, OUString(), *rSh.GetCrsr() );
         rSh.SaveTblBoxCntnt( &rInsPos );
         if( IsError( aReader.Read( *pRead )) )
-            nResId = ERR_CLPBRD_READ;
+            nResId = STR_ERROR_CLPBRD_READ;
         else
             nResId = 0, nRet = true;
 
@@ -1704,7 +1705,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
             rSh.CallChgLnk();
     }
     else
-        nResId = MSG_CLPBRD_FORMAT_ERROR;
+        nResId = STR_CLPBRD_FORMAT_ERROR;
 
     // Exist a SvMemoryStream? (data in the OUString and xStrm is empty)
     if( pStream && !xStrm.Is() )
@@ -1712,7 +1713,7 @@ bool SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
 
     if( bMsg && nResId )
     {
-        InfoBox( 0, SW_RES( nResId )).Execute();
+        MessageDialog( 0, SW_RES( nResId ), VCL_MESSAGE_INFO).Execute();
     }
     return nRet;
 }
@@ -1788,7 +1789,7 @@ bool SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
         if( !IsError( aReader.Read( *pRead )) )
             nRet = true;
         else if( bMsg )
-            InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
+            MessageDialog( 0, SW_RES(STR_ERROR_CLPBRD_READ), VCL_MESSAGE_INFO ).Execute();
     }
     else
     {
@@ -2170,7 +2171,7 @@ bool SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 if( !nRows || !nCols )
                 {
                     if( bMsg )
-                        InfoBox(0, SW_RESSTR(STR_NO_TABLE)).Execute();
+                        MessageDialog(0, SW_RESSTR(STR_NO_TABLE), VCL_MESSAGE_INFO).Execute();
                     pDDETyp = 0;
                     break;
                 }
@@ -2716,7 +2717,7 @@ bool SwTransferable::_PasteDBData( TransferableDataHelper& rData,
     }
     else if( bMsg )
     {
-        InfoBox( 0, SW_RES(MSG_CLPBRD_FORMAT_ERROR)).Execute();
+        MessageDialog( 0, SW_RES(STR_CLPBRD_FORMAT_ERROR), VCL_MESSAGE_INFO).Execute();
     }
     return nRet;
 }
@@ -2755,7 +2756,7 @@ bool SwTransferable::_PasteFileList( TransferableDataHelper& rData,
     }
     else if( bMsg )
     {
-        InfoBox( 0, SW_RES(MSG_CLPBRD_FORMAT_ERROR)).Execute();
+        MessageDialog( 0, SW_RES(STR_CLPBRD_FORMAT_ERROR), VCL_MESSAGE_INFO).Execute();
     }
     return nRet;
 }
