@@ -731,7 +731,7 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
         bool bCheckNeighbours = false;
         sal_Int16 aHori = text::HoriOrientation::NONE;
         SwRect aRect;
-        SdrObject *pO = pLst->GetMark( 0 )->GetMarkedSdrObj();
+        SdrObject *pO = pLst->GetMark( j )->GetMarkedSdrObj();
         if ( pO->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
