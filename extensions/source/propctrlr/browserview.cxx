@@ -20,18 +20,12 @@
 #include "browserview.hxx"
 #include "propertyeditor.hxx"
 #include "propctrlr.hrc"
-#include <tools/debug.hxx>
 #include <boost/scoped_ptr.hpp>
-
 
 namespace pcr
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
-
-
 
     //= class OPropertyBrowserView
 

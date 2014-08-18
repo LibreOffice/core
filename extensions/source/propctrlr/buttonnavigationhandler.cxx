@@ -24,8 +24,6 @@
 #include "pushbuttonnavigation.hxx"
 
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
-#include <tools/debug.hxx>
-
 
 extern "C" void SAL_CALL createRegistryInfo_ButtonNavigationHandler()
 {

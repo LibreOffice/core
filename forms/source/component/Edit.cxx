@@ -37,14 +37,12 @@
 #include <connectivity/dbconversion.hxx>
 
 #include <tools/diagnose_ex.h>
-#include <tools/debug.hxx>
 
 #include <comphelper/container.hxx>
 #include <comphelper/numbers.hxx>
 #include <comphelper/processfactory.hxx>
 
 using namespace dbtools;
-
 
 namespace frm
 {

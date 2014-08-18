@@ -38,7 +38,6 @@
 #include <connectivity/dbconversion.hxx>
 #include "formresid.hrc"
 #include "pcrservices.hxx"
-#include <tools/debug.hxx>
 #include <tools/StringListResource.hxx>
 #include <comphelper/types.hxx>
 #include "modulepcr.hxx"

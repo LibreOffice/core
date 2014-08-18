@@ -42,9 +42,7 @@
 
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/componentbase.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-
 
 namespace pcr
 {

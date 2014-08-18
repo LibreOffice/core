@@ -22,17 +22,13 @@
 #include "formresid.hrc"
 #include "propctrlr.hrc"
 #include <svtools/localresaccess.hxx>
-#include <tools/debug.hxx>
 #include <comphelper/extract.hxx>
 #include <sal/macros.h>
 #include <algorithm>
 #include <functional>
 
-
 namespace pcr
 {
-
-
     using namespace ::com::sun::star::uno;
 
 

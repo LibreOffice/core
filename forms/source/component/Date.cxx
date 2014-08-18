@@ -19,7 +19,6 @@
 
 #include "Date.hxx"
 #include "services.hxx"
-#include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <connectivity/dbconversion.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>

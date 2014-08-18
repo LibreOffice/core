@@ -25,17 +25,14 @@
 #include "frm_strings.hxx"
 #include "property.hrc"
 
-#include <tools/debug.hxx>
 #include <comphelper/enumhelper.hxx>
 
 #include <functional>
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 
-
 namespace xforms
 {
-
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;

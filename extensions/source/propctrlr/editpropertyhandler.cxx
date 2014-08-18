@@ -23,7 +23,6 @@
 #include "pcrservices.hxx"
 
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-#include <tools/debug.hxx>
 
 #define TEXTTYPE_SINGLELINE     0
 #define TEXTTYPE_MULTILINE      1

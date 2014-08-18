@@ -21,9 +21,7 @@
 #include "services.hxx"
 #include "property.hrc"
 #include "property.hxx"
-#include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
-
 
 namespace frm
 {
