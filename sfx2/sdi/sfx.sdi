@@ -2696,31 +2696,6 @@ SfxVoidItem GoUpSel SID_CURSORUP_SEL
 ]
 
 
-SfxVoidItem HelpDownload SID_HELP_DOWNLOAD
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EXPLORER;
-]
-
-
 SfxVoidItem HelpIndex SID_HELPINDEX
 ()
 [
