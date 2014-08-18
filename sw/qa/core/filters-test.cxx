@@ -188,6 +188,15 @@ void SwFiltersTest::testCVEs()
             0,
             0,
             /*bExport=*/true);
+
+    testDir("MS Word 2007 XML",
+            getURLFromSrc("/sw/qa/core/exportdata/ooxml/"),
+            OUString(),
+            SFX_FILTER_STARONEFILTER,
+            0,
+            0,
+            /*bExport=*/true);
+
 }
 
 void SwFiltersTest::setUp()

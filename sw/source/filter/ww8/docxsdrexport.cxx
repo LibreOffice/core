@@ -1314,6 +1314,9 @@ void DocxSdrExport::writeOnlyTextOfFrame(sw::Frame* pParentFrame)
 
 void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bool bTextBoxOnly)
 {
+    bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
+    m_pImpl->m_bDMLAndVMLDrawingOpen = true;
+
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
     const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
@@ -1542,10 +1545,14 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId, bo
 
         endDMLAnchorInline(&rFrmFmt);
     }
+    m_pImpl->m_bDMLAndVMLDrawingOpen = bDMLAndVMLDrawingOpen;
 }
 
 void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly)
 {
+    bool bDMLAndVMLDrawingOpen = m_pImpl->m_bDMLAndVMLDrawingOpen;
+    m_pImpl->m_bDMLAndVMLDrawingOpen = true;
+
     sax_fastparser::FSHelperPtr pFS = m_pImpl->m_pSerializer;
     const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt();
     const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
@@ -1633,6 +1640,8 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame, bool bTextBoxOnly
         pFS->endElementNS(XML_w, XML_pict);
     }
     m_pImpl->m_bFrameBtLr = false;
+
+    m_pImpl->m_bDMLAndVMLDrawingOpen = bDMLAndVMLDrawingOpen;
 }
 
 bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList)
