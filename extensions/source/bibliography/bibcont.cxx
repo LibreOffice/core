@@ -65,6 +65,11 @@ BibTabPage::BibTabPage( Window* pParent, const ResId& rResId ) : TabPage( pParen
 {
 }
 
+BibTabPage::BibTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
+                        TabPage( pParent, rID, rUIXMLDescription ), BibShortCutHandler( this )
+{
+}
+
 BibTabPage::~BibTabPage()
 {
 }
