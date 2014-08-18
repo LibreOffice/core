@@ -107,10 +107,6 @@ using ::svx::IPropertyValueProvider;
 
 class GDIMetaFile;
 
-/***********************************************************************
-* class SvxShapeImpl                                                   *
-***********************************************************************/
-
 struct SvxShapeImpl
 {
     SvxShape&       mrAntiImpl;
@@ -145,7 +141,6 @@ struct SvxShapeImpl
     }
 };
 
-/**********************************************************************/
 class ShapePositionProvider : public PropertyValueProvider
 {
 public:
@@ -176,11 +171,6 @@ protected:
         _out_rCurrentValue <<= static_cast< SvxShape& >( getContext() ).getSize();
     }
 };
-
-/***********************************************************************
-* class SvxShape                                                       *
-***********************************************************************/
-
 
 SvxShape::SvxShape( SdrObject* pObject ) throw( uno::RuntimeException )
 :   maSize(100,100)
@@ -3954,9 +3944,6 @@ void SvxShape::updateShapeKind()
     }
 }
 
-/***********************************************************************
-* class SvxShapeText                                                   *
-***********************************************************************/
 SvxShapeText::SvxShapeText( SdrObject* pObject ) throw ()
 : SvxShape( pObject, getSvxMapProvider().GetMap(SVXMAP_TEXT), getSvxMapProvider().GetPropertySet(SVXMAP_TEXT, SdrObject::GetGlobalDrawObjectItemPool()) ), SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 {
@@ -4172,9 +4159,6 @@ bool SvxShapeText::setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* p
     return SvxShape::setPropertyToDefaultImpl( pProperty );
 }
 
-/***********************************************************************
-* class SvxShapeRect                                                   *
-***********************************************************************/
 SvxShapeRect::SvxShapeRect( SdrObject* pObj ) throw()
 : SvxShapeText( pObj, getSvxMapProvider().GetMap(SVXMAP_SHAPE), getSvxMapProvider().GetPropertySet(SVXMAP_SHAPE, SdrObject::GetGlobalDrawObjectItemPool()))
 {

@@ -70,8 +70,6 @@ SelectionTypePopup::SelectionTypePopup( sal_uInt16 nCurrent )
     CheckItem( state_to_id( nCurrent ), true );
 }
 
-// class SvxSelectionModeControl -----------------------------------------
-
 SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
                                                   sal_uInt16 _nId,
                                                   StatusBar& rStb ) :

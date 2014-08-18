@@ -109,7 +109,6 @@ namespace
     }
 }
 
-//= AccessibleControlShape
 AccessibleControlShape::AccessibleControlShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)

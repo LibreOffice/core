@@ -36,8 +36,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
 TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0));
 
 

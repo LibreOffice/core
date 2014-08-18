@@ -22,9 +22,6 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-
-// class SdrLogicSizeWidthItem
-
 class SdrLogicSizeWidthItem: public SdrMetricItem {
 public:
     SdrLogicSizeWidthItem(long nWdt=0): SdrMetricItem(SDRATTR_LOGICSIZEWIDTH,nWdt)  {}

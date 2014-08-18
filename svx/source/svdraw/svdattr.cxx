@@ -106,12 +106,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-/*************************************************************************
-|*
-|* Constructor
-|*
-\************************************************************************/
-
 SdrItemPool::SdrItemPool(
     SfxItemPool* _pMaster,
     bool bLoadRefCounts)
@@ -343,34 +337,17 @@ SdrItemPool::SdrItemPool(
     SetItemInfos(mpLocalItemInfos);
 }
 
-/*************************************************************************
-|*
-|* copy ctor, so that static defaults are cloned
-|*            (Parameter 2 = sal_True)
-|*
-\************************************************************************/
-
+// copy ctor, so that static defaults are cloned
+//            (Parameter 2 = sal_True)
 SdrItemPool::SdrItemPool(const SdrItemPool& rPool)
 :   XOutdevItemPool(rPool)
 {
 }
 
-/*************************************************************************
-|*
-|* Clone()
-|*
-\************************************************************************/
-
 SfxItemPool* SdrItemPool::Clone() const
 {
     return new SdrItemPool(*this);
 }
-
-/*************************************************************************
-|*
-|* Destructor
-|*
-\************************************************************************/
 
 SdrItemPool::~SdrItemPool()
 {
@@ -1604,11 +1581,6 @@ bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, sal_uInt8 /*n
     return true;
 }
 
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Edge
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 // EdgeKind
 TYPEINIT1_AUTOFACTORY(SdrEdgeKindItem,SfxEnumItem);
 
@@ -1746,10 +1718,6 @@ bool SdrEdgeNode2VertDistItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemb
     SetValue( nValue );
     return true;
 }
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Measure
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1_AUTOFACTORY(SdrMeasureKindItem,SfxEnumItem);
 
@@ -1944,10 +1912,6 @@ bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     return true;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Circ
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 TYPEINIT1_AUTOFACTORY(SdrCircKindItem,SfxEnumItem);
 
 SfxPoolItem* SdrCircKindItem::Clone(SfxItemPool* /*pPool*/) const          { return new SdrCircKindItem(*this); }
@@ -2031,10 +1995,6 @@ bool SdrSignedPercentItem::GetPresentation(
     return true;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafRedItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 TYPEINIT1( SdrGrafRedItem, SdrSignedPercentItem );
 
 SfxPoolItem* SdrGrafRedItem::Clone( SfxItemPool* /*pPool*/) const
@@ -2046,10 +2006,6 @@ SfxPoolItem* SdrGrafRedItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new SdrGrafRedItem( rIn );
 }
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafGreenItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1( SdrGrafGreenItem, SdrSignedPercentItem );
 
@@ -2063,10 +2019,6 @@ SfxPoolItem* SdrGrafGreenItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrGrafGreenItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafBlueItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 TYPEINIT1( SdrGrafBlueItem, SdrSignedPercentItem );
 
 SfxPoolItem* SdrGrafBlueItem::Clone( SfxItemPool* /*pPool*/) const
@@ -2078,10 +2030,6 @@ SfxPoolItem* SdrGrafBlueItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new SdrGrafBlueItem( rIn );
 }
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafLuminanceItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1( SdrGrafLuminanceItem, SdrSignedPercentItem );
 
@@ -2095,10 +2043,6 @@ SfxPoolItem* SdrGrafLuminanceItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) c
     return new SdrGrafLuminanceItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafContrastItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 TYPEINIT1( SdrGrafContrastItem, SdrSignedPercentItem );
 
 SfxPoolItem* SdrGrafContrastItem::Clone( SfxItemPool* /*pPool*/) const
@@ -2110,10 +2054,6 @@ SfxPoolItem* SdrGrafContrastItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) co
 {
     return new SdrGrafContrastItem( rIn );
 }
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafGamma100Item
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1( SdrGrafGamma100Item, SfxUInt32Item );
 
@@ -2143,10 +2083,6 @@ bool SdrGrafGamma100Item::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
     return true;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafInvertItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 TYPEINIT1( SdrGrafInvertItem, SdrOnOffItem );
 
 SfxPoolItem* SdrGrafInvertItem::Clone( SfxItemPool* /*pPool*/) const
@@ -2159,10 +2095,6 @@ SfxPoolItem* SdrGrafInvertItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) cons
     return new SdrGrafInvertItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafTransparenceItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 TYPEINIT1( SdrGrafTransparenceItem, SdrPercentItem );
 
 SfxPoolItem* SdrGrafTransparenceItem::Clone( SfxItemPool* /*pPool*/) const
@@ -2174,10 +2106,6 @@ SfxPoolItem* SdrGrafTransparenceItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/
 {
     return new SdrGrafTransparenceItem( rIn );
 }
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafModeItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1( SdrGrafModeItem, SfxEnumItem );
 
@@ -2243,10 +2171,6 @@ bool SdrGrafModeItem::GetPresentation( SfxItemPresentation ePres,
 
     return true;
 }
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafCropItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 TYPEINIT1( SdrGrafCropItem, SvxGrfCrop );
 

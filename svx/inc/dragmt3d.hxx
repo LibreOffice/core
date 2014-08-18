@@ -26,11 +26,7 @@
 #include <vcl/timer.hxx>
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
-/*************************************************************************
-|*
-|* Parameters for the interaction of a 3D object
-|*
-\************************************************************************/
+// Parameters for the interaction of a 3D object
 class E3dDragMethodUnit
 {
 public:
@@ -55,12 +51,7 @@ public:
     {}
 };
 
-/*************************************************************************
-|*
-|* Derivative of SdrDragMethod for 3D objects
-|*
-\************************************************************************/
-
+// Derivative of SdrDragMethod for 3D objects
 class E3dDragMethod : public SdrDragMethod
 {
 protected:
@@ -91,13 +82,7 @@ public:
     virtual void CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverlayManager) SAL_OVERRIDE;
 };
 
-
-/*************************************************************************
-|*
-|* Derivative of SdrDragMethod for spinning 3D objects
-|*
-\************************************************************************/
-
+// Derivative of SdrDragMethod for spinning 3D objects
 class E3dDragRotate : public E3dDragMethod
 {
     basegfx::B3DPoint                   maGlobalCenter;
@@ -114,13 +99,7 @@ public:
     virtual Pointer GetSdrDragPointer() const SAL_OVERRIDE;
 };
 
-
-/*************************************************************************
-|*
-|* Derivative of SdrDragMethod for moving 3D sub-objects
-|*
-\************************************************************************/
-
+// Derivative of SdrDragMethod for moving 3D sub-objects
 class E3dDragMove : public E3dDragMethod
 {
     SdrHdlKind              meWhatDragHdl;

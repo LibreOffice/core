@@ -58,12 +58,6 @@ using namespace ::com::sun::star::graphic;
 namespace svx
 {
 
-/*************************************************************************
-|*
-|* ExtrusionDirectionWindow
-|*
-\************************************************************************/
-
 static const sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
 
 ExtrusionDirectionWindow::ExtrusionDirectionWindow(
@@ -232,10 +226,6 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-
-// ExtrusionDirectionControl
-
-
 ExtrusionDirectionControl::ExtrusionDirectionControl(
     const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController(
@@ -294,8 +284,6 @@ Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceName
     return ExtrusionDirectionControl_getSupportedServiceNames();
 }
 
-// ####################################################################
-
 ExtrusionDepthDialog::ExtrusionDepthDialog( Window* pParent, double fDepth, FieldUnit eDefaultUnit )
     : ModalDialog( pParent, "ExtrustionDepthDialog", "svx/ui/extrustiondepthdialog.ui" )
 {
@@ -308,8 +296,6 @@ double ExtrusionDepthDialog::getDepth() const
 {
     return (double)( m_pMtrDepth->GetValue( FUNIT_100TH_MM ) ) / 100.0;
 }
-
-// ####################################################################
 
 double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
 double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
@@ -546,11 +532,6 @@ Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames
 {
     return ExtrusionDepthController_getSupportedServiceNames();
 }
-
-
-// ####################################################################
-
-
 
 ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
 : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ))
@@ -809,8 +790,6 @@ Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames
 {
     return ExtrusionLightingControl_getSupportedServiceNames();
 }
-
-// ####################################################################
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     svt::ToolboxController& rController,

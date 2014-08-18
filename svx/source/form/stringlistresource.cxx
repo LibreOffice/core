@@ -25,9 +25,6 @@
 namespace svx
 {
 
-    //= StringListResource
-
-
     StringListResource::StringListResource( const ResId& _rResId )
         :Resource( _rResId )
     {

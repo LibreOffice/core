@@ -1163,15 +1163,11 @@ void ColorLB::Fill( const XColorListRef &pColorTab )
     SetUpdateMode( true );
 }
 
-/************************************************************************/
-
 void ColorLB::Append( const XColorEntry& rEntry )
 {
     InsertEntry( rEntry.GetColor(), rEntry.GetName() );
     AdaptDropDownLineCountToMaximum();
 }
-
-/************************************************************************/
 
 void ColorLB::Modify( const XColorEntry& rEntry, sal_Int32 nPos )
 {
@@ -1242,8 +1238,6 @@ void HatchingLB::Fill( const XHatchListRef &pList )
     SetUpdateMode( true );
 }
 
-/************************************************************************/
-
 void HatchingLB::Append( const XHatchEntry& rEntry, const Bitmap& rBitmap )
 {
     if(!rBitmap.IsEmpty())
@@ -1257,8 +1251,6 @@ void HatchingLB::Append( const XHatchEntry& rEntry, const Bitmap& rBitmap )
 
     AdaptDropDownLineCountToMaximum();
 }
-
-/************************************************************************/
 
 void HatchingLB::Modify( const XHatchEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
 {
@@ -1341,8 +1333,6 @@ void GradientLB::Fill( const XGradientListRef &pList )
     SetUpdateMode( true );
 }
 
-/************************************************************************/
-
 void GradientLB::Append( const XGradientEntry& rEntry, const Bitmap& rBitmap )
 {
     if(!rBitmap.IsEmpty())
@@ -1357,8 +1347,6 @@ void GradientLB::Append( const XGradientEntry& rEntry, const Bitmap& rBitmap )
     AdaptDropDownLineCountToMaximum();
 }
 
-/************************************************************************/
-
 void GradientLB::Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
 {
     RemoveEntry( nPos );
@@ -1372,8 +1360,6 @@ void GradientLB::Modify( const XGradientEntry& rEntry, sal_Int32 nPos, const Bit
         InsertEntry( rEntry.GetName(), nPos );
     }
 }
-
-/************************************************************************/
 
 void GradientLB::SelectEntryByList( const XGradientListRef &pList, const OUString& rStr,
                                     const XGradient& rGradient, sal_uInt16 nDist )
@@ -1440,8 +1426,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeBitmapLB(Window *pParent, V
     return pListBox;
 }
 
-/************************************************************************/
-
 namespace
 {
     void formatBitmapExToSize(BitmapEx& rBitmapEx, const Size& rSize)
@@ -1496,8 +1480,6 @@ namespace
     }
 } // end of anonymous namespace
 
-/************************************************************************/
-
 void BitmapLB::Fill( const XBitmapListRef &pList )
 {
     if( !pList.is() )
@@ -1523,8 +1505,6 @@ void BitmapLB::Fill( const XBitmapListRef &pList )
     SetUpdateMode(true);
 }
 
-/************************************************************************/
-
 void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry)
 {
     maBitmapEx = rEntry.GetGraphicObject().GetGraphic().GetBitmapEx();
@@ -1541,8 +1521,6 @@ void BitmapLB::Append(const Size& rSize, const XBitmapEntry& rEntry)
 
     AdaptDropDownLineCountToMaximum();
 }
-
-/************************************************************************/
 
 void BitmapLB::Modify(const Size& rSize, const XBitmapEntry& rEntry, sal_Int32 nPos)
 {
@@ -1564,8 +1542,6 @@ FillAttrLB::FillAttrLB(Window* pParent, WinBits aWB)
 :   ColorListBox(pParent, aWB)
 {
 }
-
-/************************************************************************/
 
 void FillAttrLB::Fill( const XBitmapListRef &pList )
 {
@@ -1676,8 +1652,6 @@ void LineLB::Fill( const XDashListRef &pList )
     SetUpdateMode( true );
 }
 
-/************************************************************************/
-
 void LineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
 {
     if(!rBitmap.IsEmpty())
@@ -1691,8 +1665,6 @@ void LineLB::Append( const XDashEntry& rEntry, const Bitmap& rBitmap )
 
     AdaptDropDownLineCountToMaximum();
 }
-
-/************************************************************************/
 
 void LineLB::Modify( const XDashEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap )
 {
@@ -1767,8 +1739,6 @@ void LineEndLB::Fill( const XLineEndListRef &pList, bool bStart )
     SetUpdateMode( true );
 }
 
-/************************************************************************/
-
 void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool bStart )
 {
     if(!rBitmap.IsEmpty())
@@ -1791,8 +1761,6 @@ void LineEndLB::Append( const XLineEndEntry& rEntry, const Bitmap& rBitmap, bool
 
     AdaptDropDownLineCountToMaximum();
 }
-
-/************************************************************************/
 
 void LineEndLB::Modify( const XLineEndEntry& rEntry, sal_Int32 nPos, const Bitmap& rBitmap, bool bStart )
 {

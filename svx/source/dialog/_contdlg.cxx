@@ -47,9 +47,6 @@
 
 SFX_IMPL_FLOATINGWINDOW_WITHID( SvxContourDlgChildWindow, SID_CONTOUR_DLG );
 
-
-/******************************************************************************/
-
 SvxContourDlgItem::SvxContourDlgItem( sal_uInt16 _nId, SvxSuperContourDlg& rContourDlg, SfxBindings& rBindings ) :
             SfxControllerItem   ( _nId, rBindings ),
             rDlg                ( rContourDlg )
@@ -266,8 +263,6 @@ SvxSuperContourDlg::~SvxSuperContourDlg()
     aMiscOptions.RemoveListenerLink( LINK(this, SvxSuperContourDlg, MiscHdl) );
 }
 
-// Resize methods
-
 void SvxSuperContourDlg::Resize()
 {
     SfxFloatingWindow::Resize();
@@ -292,8 +287,6 @@ void SvxSuperContourDlg::Resize()
         aLastSize = aNewSize;
     }
 }
-
-// Close methods
 
 bool SvxSuperContourDlg::Close()
 {

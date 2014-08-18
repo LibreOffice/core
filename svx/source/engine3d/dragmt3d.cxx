@@ -250,12 +250,6 @@ void E3dDragMethod::CreateOverlayGeometry(::sdr::overlay::OverlayManager& rOverl
     }
 }
 
-/*************************************************************************
-
-                                E3dDragRotate
-
-*************************************************************************/
-
 TYPEINIT1(E3dDragRotate, E3dDragMethod);
 
 E3dDragRotate::E3dDragRotate(SdrDragView &_rView,

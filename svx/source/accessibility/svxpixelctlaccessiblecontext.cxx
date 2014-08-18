@@ -68,9 +68,6 @@ SvxPixelCtlAccessible::~SvxPixelCtlAccessible()
         dispose();      // set mpRepr = NULL & release all childs
     }
 }
-/*-- 04.02.2002 14:11:55---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< XAccessibleContext > SvxPixelCtlAccessible::getAccessibleContext(  )
     throw (uno::RuntimeException, std::exception)
 {
@@ -82,9 +79,6 @@ sal_Int32 SvxPixelCtlAccessible::getAccessibleChildCount(  ) throw (uno::Runtime
     ::osl::MutexGuard   aGuard( m_aMutex );
     return mrPixelCtl.GetSquares();
 }
-/*-- 04.02.2002 14:11:56---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleChild( sal_Int32 i )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
@@ -119,9 +113,6 @@ sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )
             break;
     return nIdx;
 }
-/*-- 04.02.2002 14:11:57---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 sal_Int16 SvxPixelCtlAccessible::getAccessibleRole(  ) throw (uno::RuntimeException, std::exception)
 {
     return AccessibleRole::LIST;
@@ -592,15 +583,13 @@ SvxPixelCtlAccessibleChild::~SvxPixelCtlAccessibleChild()
     }
 }
 
-//=====  XAccessible  =========================================================
-
+// XAccessible
 uno::Reference< XAccessibleContext> SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleContext( void ) throw( RuntimeException, std::exception )
 {
     return this;
 }
 
-//=====  XAccessibleComponent  ================================================
-
+// XAccessibleComponent
 sal_Bool SAL_CALL SvxPixelCtlAccessibleChild::containsPoint( const awt::Point& rPoint ) throw( RuntimeException, std::exception )
 {
     // no guard -> done in getBounds()
@@ -665,8 +654,7 @@ sal_Int32 SvxPixelCtlAccessibleChild::getBackground(  )
     return mrParentWindow.GetControlBackground().GetColor();
 }
 
-//=====  XAccessibleContext  ==================================================
-
+// XAccessibleContext
 sal_Int32 SAL_CALL SvxPixelCtlAccessibleChild::getAccessibleChildCount( void ) throw( RuntimeException, std::exception )
 {
     return 0;
@@ -792,8 +780,7 @@ void SAL_CALL SvxPixelCtlAccessibleChild::removeAccessibleEventListener( const u
     }
 }
 
-
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 OUString SAL_CALL SvxPixelCtlAccessibleChild::getImplementationName( void ) throw( RuntimeException, std::exception )
 {
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxPixelCtlAccessibleChild" ) );
@@ -814,8 +801,7 @@ Sequence< OUString > SAL_CALL SvxPixelCtlAccessibleChild::getSupportedServiceNam
     return aRet;
 }
 
-//=====  internal  ============================================================
-
+// internal
 void SvxPixelCtlAccessibleChild::CommitChange( const AccessibleEventObject& rEvent )
 {
     if (mnClientId)

@@ -108,10 +108,6 @@ inline void lclPolyPolyUnion( PolyPolygon& rDest, const PolyPolygon& rSource )
 
 } // namespace
 
-
-// FrameBorder
-
-
 FrameBorder::FrameBorder( FrameBorderType eType ) :
     meType( eType ),
     meState( FRAMESTATE_HIDE ),
@@ -210,10 +206,6 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( sal_uInt16 nKeyCode ) const
     return eBorder;
 }
 
-
-// FrameSelectorImpl
-
-
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
     mrFrameSel( rFrameSel ),
@@ -285,8 +277,7 @@ FrameSelectorImpl::~FrameSelectorImpl()
             (*aIt)->Invalidate();
 }
 
-// initialization -------------------------------------------------------------
-
+// initialization
 void FrameSelectorImpl::Initialize( FrameSelFlags nFlags )
 {
     mnFlags = nFlags;
@@ -364,15 +355,13 @@ void FrameSelectorImpl::InitBorderGeometry()
 {
     size_t nCol, nCols, nRow, nRows;
 
-    // Global border geometry values ------------------------------------------
-
+    // Global border geometry values
     /*  mnLine* is the middle point inside a frame border (i.e. mnLine1 is mid X inside left border). */
     mnLine1 = mnArrowSize + FRAMESEL_GEOM_INNER + FRAMESEL_GEOM_WIDTH / 2;
     mnLine2 = mnCtrlSize / 2;
     mnLine3 = 2 * mnLine2 - mnLine1;
 
-    // Frame helper array -----------------------------------------------------
-
+    // Frame helper array
     maArray.Initialize( mbVer ? 2 : 1, mbHor ? 2 : 1 );
     maArray.SetUseDiagDoubleClipping( true );
 
@@ -382,8 +371,7 @@ void FrameSelectorImpl::InitBorderGeometry()
     maArray.SetYOffset( mnLine1 );
     maArray.SetAllRowHeights( (mbHor ? mnLine2 : mnLine3) - mnLine1 );
 
-    // Focus polygons ---------------------------------------------------------
-
+    // Focus polygons
     /*  Width for focus rectangles from center of frame borders. */
     mnFocusOffs = FRAMESEL_GEOM_WIDTH / 2 + 1;
 
@@ -429,8 +417,7 @@ void FrameSelectorImpl::InitBorderGeometry()
         }
     }
 
-    // Click areas ------------------------------------------------------------
-
+    // Click areas
     for( FrameBorderIter aIt( maAllBorders ); aIt.Is(); ++aIt )
         (*aIt)->ClearClickArea();
 
@@ -511,8 +498,7 @@ void FrameSelectorImpl::sizeChanged()
     DoInvalidate( true );
 }
 
-// frame border access --------------------------------------------------------
-
+// frame border access
 const FrameBorder& FrameSelectorImpl::GetBorder( FrameBorderType eBorder ) const
 {
     size_t nIndex = GetIndexFromFrameBorderType( eBorder );
@@ -527,8 +513,7 @@ FrameBorder& FrameSelectorImpl::GetBorderAccess( FrameBorderType eBorder )
     return const_cast< FrameBorder& >( GetBorder( eBorder ) );
 }
 
-// drawing --------------------------------------------------------------------
-
+// drawing
 void FrameSelectorImpl::DrawBackground()
 {
     // clear the area
@@ -718,8 +703,7 @@ void FrameSelectorImpl::DoInvalidate( bool bFullRepaint )
     mrFrameSel.Invalidate( INVALIDATE_NOERASE );
 }
 
-// frame border state and style -----------------------------------------------
-
+// frame border state and style
 void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState eState )
 {
     DBG_ASSERT( rBorder.IsEnabled(), "svx::FrameSelectorImpl::SetBorderState - access to disabled border" );
@@ -767,8 +751,7 @@ void FrameSelectorImpl::ToggleBorderState( FrameBorder& rBorder )
     }
 }
 
-// frame border selection -----------------------------------------------------
-
+// frame border selection
 void FrameSelectorImpl::SelectBorder( FrameBorder& rBorder, bool bSelect )
 {
     DBG_ASSERT( rBorder.IsEnabled(), "svx::FrameSelectorImpl::SelectBorder - access to disabled border" );
@@ -798,10 +781,6 @@ bool FrameSelectorImpl::SelectedBordersEqual() const
     return bEqual;
 }
 
-
-// FrameSelector
-
-
 FrameSelector::FrameSelector(Window* pParent)
     : Control(pParent, WB_BORDER|WB_TABSTOP)
 {
@@ -825,8 +804,7 @@ void FrameSelector::Initialize( FrameSelFlags nFlags )
     Show();
 }
 
-// enabled frame borders ------------------------------------------------------
-
+// enabled frame borders
 bool FrameSelector::IsBorderEnabled( FrameBorderType eBorder ) const
 {
     return mxImpl->GetBorder( eBorder ).IsEnabled();
@@ -858,8 +836,7 @@ sal_Int32 FrameSelector::GetEnabledBorderIndex( FrameBorderType eBorder ) const
     return -1;
 }
 
-// frame border state and style -----------------------------------------------
-
+// frame border state and style
 bool FrameSelector::SupportsDontCareState() const
 {
     return (mxImpl->mnFlags & FRAMESEL_DONTCARE) != 0;
@@ -941,8 +918,7 @@ bool FrameSelector::GetVisibleColor( Color& rColor ) const
     return bFound;
 }
 
-// frame border selection -----------------------------------------------------
-
+// frame border selection
 const Link& FrameSelector::GetSelectHdl() const
 {
     return mxImpl->maSelectHdl;
@@ -1008,8 +984,7 @@ void FrameSelector::SetColorToSelection( const Color& rColor )
         mxImpl->SetBorderState( **aIt, FRAMESTATE_SHOW );
 }
 
-// accessibility --------------------------------------------------------------
-
+// accessibility
 Reference< XAccessible > FrameSelector::CreateAccessible()
 {
     if( !mxImpl->mxAccess.is() )
@@ -1064,8 +1039,7 @@ Rectangle FrameSelector::GetClickBoundRect( FrameBorderType eBorder ) const
     return aRect;
 }
 
-// virtual functions from base class ------------------------------------------
-
+// virtual functions from base class
 void FrameSelector::Paint( const Rectangle& )
 {
     mxImpl->CopyVirDevToControl();

@@ -28,8 +28,6 @@ TYPEINIT1_FACTORY(SvxPostItAuthorItem, SfxStringItem, new SvxPostItAuthorItem(0)
 TYPEINIT1_FACTORY(SvxPostItDateItem, SfxStringItem, new SvxPostItDateItem(0));
 TYPEINIT1_FACTORY(SvxPostItTextItem, SfxStringItem, new SvxPostItTextItem(0));
 
-// class SvxPostItAuthorItem ---------------------------------------------
-
 SvxPostItAuthorItem::SvxPostItAuthorItem( sal_uInt16 _nWhich )
 {
     SetWhich( _nWhich );
@@ -73,8 +71,6 @@ SfxPoolItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
     return new SvxPostItAuthorItem( *this );
 }
 
-// class SvxPostItDateItem -----------------------------------------------
-
 SvxPostItDateItem::SvxPostItDateItem( sal_uInt16 _nWhich )
 {
     SetWhich( _nWhich );
@@ -117,8 +113,6 @@ SfxPoolItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItDateItem( *this );
 }
-
-// class SvxPostItTextItem -----------------------------------------------
 
 SvxPostItTextItem::SvxPostItTextItem( sal_uInt16 _nWhich )
 {

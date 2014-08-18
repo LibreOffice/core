@@ -91,8 +91,6 @@ OUString SvxPosSizeStatusBarControl::GetMetricStr_Impl( long nVal )
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxPosSizeStatusBarControl, SvxSizeItem);
 
-// class FunctionPopup_Impl ----------------------------------------------
-
 class FunctionPopup_Impl : public PopupMenu
 {
 public:
@@ -123,8 +121,6 @@ void FunctionPopup_Impl::Select()
     nSelected = GetCurItemId();
 }
 
-// struct SvxPosSizeStatusBarControl_Impl --------------------------------
-
 struct SvxPosSizeStatusBarControl_Impl
 
 /*  [Description]
@@ -149,8 +145,6 @@ struct SvxPosSizeStatusBarControl_Impl
     Image     aPosImage;  // Image to show the position
     Image     aSizeImage; // Image to show the size
 };
-
-// class SvxPosSizeStatusBarControl ------------------------------------------
 
 /*  [Description]
 

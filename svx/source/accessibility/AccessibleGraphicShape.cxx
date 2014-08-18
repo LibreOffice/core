@@ -29,8 +29,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
-
+// internal
 AccessibleGraphicShape::AccessibleGraphicShape (
     const AccessibleShapeInfo& rShapeInfo,
     const AccessibleShapeTreeInfo& rShapeTreeInfo)
@@ -45,11 +44,7 @@ AccessibleGraphicShape::~AccessibleGraphicShape (void)
 {
 }
 
-
-
-
-//=====  XAccessibleImage  ====================================================
-
+// XAccessibleImage
 OUString SAL_CALL AccessibleGraphicShape::getAccessibleImageDescription (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
@@ -76,11 +71,7 @@ sal_Int32 SAL_CALL AccessibleGraphicShape::getAccessibleImageWidth (void)
     return AccessibleShape::getSize().Width;
 }
 
-
-
-
-//=====  XInterface  ==========================================================
-
+// XInterface
 com::sun::star::uno::Any SAL_CALL
     AccessibleGraphicShape::queryInterface (const com::sun::star::uno::Type & rType)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -110,11 +101,7 @@ void SAL_CALL
     AccessibleShape::release ();
 }
 
-
-
-
-//=====  XServiceInfo  ========================================================
-
+// XServiceInfo
 OUString SAL_CALL
     AccessibleGraphicShape::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException, std::exception)
@@ -143,11 +130,7 @@ OUString SAL_CALL
     return aServiceNames;
 }
 
-
-
-
-//=====  XTypeProvider  ===================================================
-
+// XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleGraphicShape::getTypes (void)
     throw (uno::RuntimeException, std::exception)

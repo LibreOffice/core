@@ -137,9 +137,6 @@ namespace svxform
         DECL_LINK( OnAsyncScriptEvent, ScriptEvent* );
     };
 
-
-    //= FormScriptingEnvironment
-
     class FormScriptingEnvironment:
         public IFormScriptingEnvironment, private boost::noncopyable
     {
@@ -167,10 +164,6 @@ namespace svxform
     private:
         void impl_registerOrRevoke_throw( const Reference< XEventAttacherManager >& _rxManager, bool _bRegister );
     };
-
-
-    //= FormScriptListener
-
 
     FormScriptListener::FormScriptListener( FormScriptingEnvironment* pScriptExecutor )
         :m_pScriptExecutor( pScriptExecutor )
@@ -794,10 +787,6 @@ namespace svxform
         return 0L;
     }
 
-
-    //= FormScriptingEnvironment
-
-
     FormScriptingEnvironment::FormScriptingEnvironment( FmFormModel& _rModel )
         :m_pScriptListener( NULL )
         ,m_rFormModel( _rModel )
@@ -868,9 +857,6 @@ namespace svxform
             virtual ~IScript() { }
         };
         typedef ::boost::shared_ptr< IScript >  PScript;
-
-
-        //. NewStyleUNOScript
 
         class NewStyleUNOScript : public IScript
         {

@@ -141,10 +141,6 @@ bool SdrLayer::operator==(const SdrLayer& rCmpLayer) const
         && maName == rCmpLayer.maName);
 }
 
-
-// SdrLayerAdmin
-
-
 SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     aLayer(),
     pParent(pNewParent),

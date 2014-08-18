@@ -29,8 +29,6 @@
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxInsertStatusBarControl, SfxBoolItem);
 
-// class SvxInsertStatusBarControl ---------------------------------------
-
 SvxInsertStatusBarControl::SvxInsertStatusBarControl( sal_uInt16 _nSlotId,
                                                       sal_uInt16 _nId,
                                                       StatusBar& rStb ) :

@@ -20,22 +20,12 @@
 #define INCLUDED_SVX_SOURCE_UNODRAW_SHAPEIMPL_HXX
 
 #include <svx/unoshape.hxx>
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-
 class SvxShapeCaption : public SvxShapeText
 {
 public:
     SvxShapeCaption( SdrObject* pObj ) throw();
     virtual ~SvxShapeCaption() throw();
 };
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-
 class SvxPluginShape : public SvxOle2Shape
 {
 protected:
@@ -54,11 +44,6 @@ public:
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) SAL_OVERRIDE;
 };
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-
 class SvxAppletShape : public SvxOle2Shape
 {
 protected:
@@ -77,11 +62,6 @@ public:
 
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage = NULL ) SAL_OVERRIDE;
 };
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-
 class SvxFrameShape : public SvxOle2Shape
 {
 protected:

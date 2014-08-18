@@ -68,8 +68,6 @@
 #include <editeng/charscaleitem.hxx>
 #include <editeng/langitem.hxx>
 
-// define ----------------------------------------------------------------
-
 //TODO: remove this and calculate off the actual size of text, not
 //an arbitrary number of characters
 #define TEXT_WIDTH 80
@@ -124,10 +122,6 @@ namespace
     }
 
 }
-
-
-
-// class FontPrevWin_Impl -----------------------------------------------
 
 class FontPrevWin_Impl
 {
@@ -218,8 +212,6 @@ inline bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
                 "*FontPrevWin_Impl::Is100PercentFontWidthValid(): 100PercentFontWidth's not synchronous" );
     return n100PercentFontWidth != -1;
 }
-
-// class FontPrevWin_Impl -----------------------------------------------
 
 /*
  * evalutates the scripttypes of the actual string.
@@ -438,8 +430,6 @@ void FontPrevWin_Impl::ScaleFontWidth( const OutputDevice& rOutDev )
     aCJKFont.SetWidth( n100PercentFontWidthCJK * nFontWidthScale / 100 );
     aCTLFont.SetWidth( n100PercentFontWidthCTL * nFontWidthScale / 100 );
 }
-
-// class SvxFontPrevWindow -----------------------------------------------
 
 void SvxFontPrevWindow::InitSettings( bool bForeground, bool bBackground )
 {

@@ -260,8 +260,6 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
     return aUniqueName;
 }
 
-// class XColorItem
-
 TYPEINIT1_AUTOFACTORY(XColorItem, NameOrIndex);
 
 XColorItem::XColorItem(sal_uInt16 _nWhich, sal_Int32 nIndex, const Color& rTheColor) :
@@ -351,8 +349,6 @@ bool XColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*n
 
 // --- line attributes ---
 
-// class XLineStyleItem
-
 TYPEINIT1_AUTOFACTORY(XLineStyleItem, SfxEnumItem);
 
 XLineStyleItem::XLineStyleItem(XLineStyle eTheLineStyle) :
@@ -429,8 +425,6 @@ sal_uInt16 XLineStyleItem::GetValueCount() const
 {
     return 3;
 }
-
-// class XDash
 
 XDash::XDash(XDashStyle eTheDash, sal_uInt16 nTheDots, sal_uIntPtr nTheDotLen,
              sal_uInt16 nTheDashes, sal_uIntPtr nTheDashLen, sal_uIntPtr nTheDistance) :
@@ -645,8 +639,6 @@ double XDash::CreateDotDashArray(::std::vector< double >& rDotDashArray, double 
 
     return fFullDotDashLen;
 }
-
-// class XLineDashItem
 
 TYPEINIT1_AUTOFACTORY(XLineDashItem, NameOrIndex);
 
@@ -1014,8 +1006,6 @@ XLineDashItem* XLineDashItem::checkForUniqueItem( SdrModel* pModel ) const
     return NULL;
 }
 
-// class XLineWidthItem
-
 TYPEINIT1_AUTOFACTORY(XLineWidthItem, SfxMetricItem);
 
 XLineWidthItem::XLineWidthItem(long nWidth) :
@@ -1072,8 +1062,6 @@ bool XLineWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
     SetValue( nValue );
     return true;
 }
-
-// class XLineColorItem
 
 TYPEINIT1_AUTOFACTORY(XLineColorItem, XColorItem);
 
@@ -1225,8 +1213,6 @@ namespace
         return aRetval;
     }
 }
-
-// class XLineStartItem
 
 TYPEINIT1_AUTOFACTORY(XLineStartItem, NameOrIndex);
 
@@ -1570,8 +1556,6 @@ XLineStartItem* XLineStartItem::checkForUniqueItem( SdrModel* pModel ) const
     return NULL;
 }
 
-// class XLineEndItem
-
 TYPEINIT1_AUTOFACTORY(XLineEndItem, NameOrIndex);
 
 XLineEndItem::XLineEndItem(sal_Int32 nIndex)
@@ -1913,8 +1897,6 @@ bool XLineEndItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 n
     return true;
 }
 
-// class XLineStartWidthItem
-
 TYPEINIT1_AUTOFACTORY(XLineStartWidthItem, SfxMetricItem);
 
 XLineStartWidthItem::XLineStartWidthItem(long nWidth) :
@@ -1964,8 +1946,6 @@ bool XLineStartWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
     SetValue( nValue );
     return true;
 }
-
-// class XLineEndWidthItem
 
 TYPEINIT1_AUTOFACTORY(XLineEndWidthItem, SfxMetricItem);
 
@@ -2017,8 +1997,6 @@ bool XLineEndWidthItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uI
     return true;
 }
 
-// class XLineStartCenterItem
-
 TYPEINIT1_AUTOFACTORY(XLineStartCenterItem, SfxBoolItem);
 
 XLineStartCenterItem::XLineStartCenterItem(bool bStartCenter) :
@@ -2069,8 +2047,6 @@ bool XLineStartCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal
     SetValue( *(sal_Bool*)rVal.getValue() );
     return true;
 }
-
-// class XLineEndCenterItem
 
 TYPEINIT1_AUTOFACTORY(XLineEndCenterItem, SfxBoolItem);
 
@@ -2124,8 +2100,6 @@ bool XLineEndCenterItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_u
 }
 
 // --- fill attributes ---
-
-// class XFillStyleItem
 
 TYPEINIT1_AUTOFACTORY(XFillStyleItem, SfxEnumItem);
 
@@ -2216,8 +2190,6 @@ bool XFillStyleItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-// class XFillColorItem
-
 TYPEINIT1_AUTOFACTORY(XFillColorItem, XColorItem);
 
 XFillColorItem::XFillColorItem(sal_Int32 nIndex, const Color& rTheColor) :
@@ -2274,8 +2246,6 @@ bool XFillColorItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-// class XSecondaryFillColorItem
-
 TYPEINIT1_AUTOFACTORY(XSecondaryFillColorItem, XColorItem);
 
 XSecondaryFillColorItem::XSecondaryFillColorItem(const OUString& rName, const Color& rTheColor) :
@@ -2317,8 +2287,6 @@ bool XSecondaryFillColorItem::GetPresentation
     rText = GetName();
     return true;
 }
-
-// class XGradient
 
 XGradient::XGradient() :
     eStyle( XGRAD_LINEAR ),
@@ -2365,8 +2333,6 @@ bool XGradient::operator==(const XGradient& rGradient) const
              nIntensEnd     == rGradient.nIntensEnd     &&
              nStepCount     == rGradient.nStepCount );
 }
-
-// class XFillGradientItem
 
 TYPEINIT1_AUTOFACTORY(XFillGradientItem, NameOrIndex);
 
@@ -2753,8 +2719,6 @@ XFillGradientItem* XFillGradientItem::checkForUniqueItem( SdrModel* pModel ) con
     return NULL;
 }
 
-// class XFillFloatTransparenceItem -
-
 TYPEINIT1_AUTOFACTORY( XFillFloatTransparenceItem, XFillGradientItem );
 
 XFillFloatTransparenceItem::XFillFloatTransparenceItem() :
@@ -2861,8 +2825,6 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
     return NULL;
 }
 
-// class XHatch
-
 XHatch::XHatch(const Color& rCol, XHatchStyle eTheStyle, long nTheDistance,
                long nTheAngle) :
     eStyle(eTheStyle),
@@ -2879,8 +2841,6 @@ bool XHatch::operator==(const XHatch& rHatch) const
              nDistance  == rHatch.nDistance &&
              nAngle     == rHatch.nAngle );
 }
-
-// class XFillHatchItem
 
 TYPEINIT1_AUTOFACTORY(XFillHatchItem, NameOrIndex);
 
@@ -3168,8 +3128,6 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 
 // --- form text attributes ---
 
-// class XFormTextStyleItem
-
 TYPEINIT1_AUTOFACTORY(XFormTextStyleItem, SfxEnumItem);
 
 XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
@@ -3211,8 +3169,6 @@ bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 
     return true;
 }
-
-// class XFormTextAdjustItem
 
 TYPEINIT1_AUTOFACTORY(XFormTextAdjustItem, SfxEnumItem);
 
@@ -3256,8 +3212,6 @@ bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
     return true;
 }
 
-// class XFormTextDistanceItem
-
 TYPEINIT1_AUTOFACTORY(XFormTextDistanceItem, SfxMetricItem);
 
 XFormTextDistanceItem::XFormTextDistanceItem(long nDist) :
@@ -3279,8 +3233,6 @@ SfxPoolItem* XFormTextDistanceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) c
 {
     return new XFormTextDistanceItem(rIn);
 }
-
-// class XFormTextStartItem
 
 TYPEINIT1_AUTOFACTORY(XFormTextStartItem, SfxMetricItem);
 
@@ -3304,8 +3256,6 @@ SfxPoolItem* XFormTextStartItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) cons
     return new XFormTextStartItem(rIn);
 }
 
-// class XFormTextMirrorItem
-
 TYPEINIT1_AUTOFACTORY(XFormTextMirrorItem, SfxBoolItem);
 
 XFormTextMirrorItem::XFormTextMirrorItem(bool bMirror) :
@@ -3328,8 +3278,6 @@ SfxPoolItem* XFormTextMirrorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) con
     return new XFormTextMirrorItem(rIn);
 }
 
-// class XFormTextOutlineItem
-
 TYPEINIT1_AUTOFACTORY(XFormTextOutlineItem, SfxBoolItem);
 
 XFormTextOutlineItem::XFormTextOutlineItem(bool bOutline) :
@@ -3351,8 +3299,6 @@ SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) co
 {
     return new XFormTextOutlineItem(rIn);
 }
-
-// class XFormTextShadowItem
 
 TYPEINIT1_AUTOFACTORY(XFormTextShadowItem, SfxEnumItem);
 
@@ -3397,8 +3343,6 @@ bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
     return true;
 }
 
-// class XFormTextShadowColorItem
-
 TYPEINIT1_AUTOFACTORY(XFormTextShadowColorItem, XColorItem);
 
 XFormTextShadowColorItem::XFormTextShadowColorItem(const OUString& rName,
@@ -3422,8 +3366,6 @@ SfxPoolItem* XFormTextShadowColorItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/
     return new XFormTextShadowColorItem(rIn);
 }
 
-// class XFormTextShadowXValItem
-
 TYPEINIT1_AUTOFACTORY(XFormTextShadowXValItem, SfxMetricItem);
 
 XFormTextShadowXValItem::XFormTextShadowXValItem(long nVal) :
@@ -3446,8 +3388,6 @@ SfxPoolItem* XFormTextShadowXValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/)
     return new XFormTextShadowXValItem(rIn);
 }
 
-// class XFormTextShadowYValItem
-
 TYPEINIT1_AUTOFACTORY(XFormTextShadowYValItem, SfxMetricItem);
 
 XFormTextShadowYValItem::XFormTextShadowYValItem(long nVal) :
@@ -3469,8 +3409,6 @@ SfxPoolItem* XFormTextShadowYValItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/)
 {
     return new XFormTextShadowYValItem(rIn);
 }
-
-// class XFormTextHideFormItem
 
 TYPEINIT1_AUTOFACTORY(XFormTextHideFormItem, SfxBoolItem);
 

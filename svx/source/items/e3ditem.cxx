@@ -25,11 +25,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
-
-
-
-
 TYPEINIT1_FACTORY(SvxB3DVectorItem, SfxPoolItem, new SvxB3DVectorItem);
 
 

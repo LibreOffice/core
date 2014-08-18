@@ -23,8 +23,6 @@
 
 TYPEINIT1(SvxNumberInfoItem, SfxPoolItem);
 
-// class SvxNumberInfoItem -----------------------------------------------
-
 #define INIT(pNum,eVal,nDouble,rStr)    \
     SfxPoolItem     ( nId ),            \
                                         \

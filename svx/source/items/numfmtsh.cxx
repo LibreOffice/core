@@ -34,8 +34,6 @@
 
 #include <limits>
 
-// class SvxNumberFormatShell --------------------------------------------
-
 const double SvxNumberFormatShell::DEFAULT_NUMVALUE = 1234.56789;
 
 
@@ -1198,22 +1196,12 @@ void SvxNumberFormatShell::CategoryToPos_Impl( short nCategory, sal_uInt16& rPos
     }
 }
 
-
-/*************************************************************************
-#*  Member:     MakePrevStringFromVal                       Datum:19.09.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatShell
-#*
-#*  Funktion:   Formatiert die Zahl nValue abhaengig von rFormatStr
-#*              und speichert das Ergebnis in rPreviewStr.
-#*
-#*  Input:      FormatString, Farbe, zu formatierende Zahl
-#*
-#*  Output:     Ausgabestring rPreviewStr
-#*
-#************************************************************************/
-
+/*
+ * Funktion:   Formatiert die Zahl nValue abhaengig von rFormatStr
+ *             und speichert das Ergebnis in rPreviewStr.
+ * Input:      FormatString, Farbe, zu formatierende Zahl
+ * Output:     Ausgabestring rPreviewStr
+ */
 void SvxNumberFormatShell::MakePrevStringFromVal(
         const OUString& rFormatStr,
         OUString& rPreviewStr,
@@ -1224,21 +1212,12 @@ void SvxNumberFormatShell::MakePrevStringFromVal(
     pFormatter->GetPreviewString( rFormatStr, nValue, rPreviewStr, &rpFontColor, eCurLanguage );
 }
 
-/*************************************************************************
-#*  Member:     GetComment4Entry                            Datum:30.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatShell
-#*
-#*  Funktion:   Liefert den Kommentar fuer einen gegebenen
-#*              Eintrag zurueck.
-#*
-#*  Input:      Nummer des Eintrags
-#*
-#*  Output:     Kommentar-String
-#*
-#************************************************************************/
-
+/*
+ * Funktion:   Liefert den Kommentar fuer einen gegebenen
+ *             Eintrag zurueck.
+ * Input:      Nummer des Eintrags
+ * Output:     Kommentar-String
+ */
 void SvxNumberFormatShell::SetComment4Entry(short nEntry, const OUString& aEntStr)
 {
     SvNumberformat *pNumEntry;
@@ -1248,21 +1227,12 @@ void SvxNumberFormatShell::SetComment4Entry(short nEntry, const OUString& aEntSt
     if(pNumEntry!=NULL) pNumEntry->SetComment(aEntStr);
 }
 
-/*************************************************************************
-#*  Member:     GetComment4Entry                            Datum:30.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatShell
-#*
-#*  Funktion:   Liefert den Kommentar fuer einen gegebenen
-#*              Eintrag zurueck.
-#*
-#*  Input:      Nummer des Eintrags
-#*
-#*  Output:     Kommentar-String
-#*
-#************************************************************************/
-
+/*
+ * Funktion:   Liefert den Kommentar fuer einen gegebenen
+ *             Eintrag zurueck.
+ * Input:      Nummer des Eintrags
+ * Output:     Kommentar-String
+ */
 OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
 {
     if(nEntry < 0)
@@ -1279,25 +1249,15 @@ OUString SvxNumberFormatShell::GetComment4Entry(short nEntry)
     return OUString();
 }
 
-/*************************************************************************
-#*  Member:     GetCategory4Entry                           Datum:30.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatShell
-#*
-#*  Funktion:   Liefert die Kategorie- Nummer fuer einen gegebenen
-#*              Eintrag zurueck.
-#*
-#*  Input:      Nummer des Eintrags
-#*
-#*  Output:     Kategorie- Nummer
-#*
-#************************************************************************/
-
+/*
+ * Funktion:   Liefert die Kategorie- Nummer fuer einen gegebenen
+ *             Eintrag zurueck.
+ * Input:      Nummer des Eintrags
+ * Output:     Kategorie- Nummer
+ */
 short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 {
     if(nEntry<0) return 0;
-
     if( static_cast<size_t>(nEntry) < aCurEntryList.size() )
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
@@ -1324,25 +1284,15 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry)
 
 }
 
-/*************************************************************************
-#*  Member:     GetUserDefined4Entry                        Datum:31.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatShell
-#*
-#*  Funktion:   Liefert die Information, ob ein Eintrag
-#*              benutzerspezifisch ist zurueck.
-#*
-#*  Input:      Nummer des Eintrags
-#*
-#*  Output:     Benutzerspezifisch?
-#*
-#************************************************************************/
-
+/*
+ * Funktion:   Liefert die Information, ob ein Eintrag
+ *             benutzerspezifisch ist zurueck.
+ * Input:      Nummer des Eintrags
+ * Output:     Benutzerspezifisch?
+ */
 bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
 {
     if(nEntry<0) return false;
-
     if( static_cast<size_t>(nEntry) < aCurEntryList.size())
     {
         sal_uInt32  nMyNfEntry=aCurEntryList[nEntry];
@@ -1359,22 +1309,12 @@ bool SvxNumberFormatShell::GetUserDefined4Entry(short nEntry)
     return false;
 }
 
-
-/*************************************************************************
-#*  Member:     GetFormat4Entry                             Datum:30.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatShell
-#*
-#*  Funktion:   Liefert den Format- String fuer einen gegebenen
-#*              Eintrag zurueck.
-#*
-#*  Input:      Nummer des Eintrags
-#*
-#*  Output:     Format- String
-#*
-#************************************************************************/
-
+/*
+ * Funktion:   Liefert den Format- String fuer einen gegebenen
+ *             Eintrag zurueck.
+ * Input:      Nummer des Eintrags
+ * Output:     Format- String
+ */
 OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
 {
     if(nEntry < 0)
@@ -1396,25 +1336,15 @@ OUString SvxNumberFormatShell::GetFormat4Entry(short nEntry)
     return OUString();
 }
 
-/*************************************************************************
-#*  Member:     GetListPos4Entry                            Datum:31.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     SvxNumberFormatShell
-#*
-#*  Funktion:   Liefert die Listen- Nummer fuer einen gegebenen
-#*              Formatindex zurueck.
-#*
-#*  Input:      Nummer des Eintrags
-#*
-#*  Output:     Kategorie- Nummer
-#*
-#************************************************************************/
-
+/*
+ * Funktion:   Liefert die Listen- Nummer fuer einen gegebenen
+ *             Formatindex zurueck.
+ * Input:      Nummer des Eintrags
+ * Output:     Kategorie- Nummer
+ */
 short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
 {
     short nSelP=SELPOS_NONE;
-
     // Check list size against return type limit.
     if( aCurEntryList.size() <= static_cast<size_t>(::std::numeric_limits< short >::max()) )
     {

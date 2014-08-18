@@ -778,9 +778,7 @@ const SdrTextObj* SdrModel::GetFormattingTextObj() const
 
 void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
 {
-    /**************************************************************************
-    * Initialization of the Outliners for drawing text and HitTest
-    **************************************************************************/
+    // Initialization of the Outliners for drawing text and HitTest
     if( bInit )
     {
         pOutliner->EraseVirtualDevice();

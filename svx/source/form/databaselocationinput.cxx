@@ -50,9 +50,6 @@ namespace svx
 
     namespace TemplateDescription = ::com::sun::star::ui::dialogs::TemplateDescription;
 
-
-    //= DatabaseLocationInputController_Impl
-
     class DatabaseLocationInputController_Impl
     {
     public:
@@ -262,10 +259,6 @@ namespace svx
     {
         m_bNeedExistenceCheck = true;
     }
-
-
-    //= DatabaseLocationInputController
-
 
     DatabaseLocationInputController::DatabaseLocationInputController( const Reference<XComponentContext>& _rContext,
             ::svt::OFileURLControl& _rLocationInput, PushButton& _rBrowseButton )

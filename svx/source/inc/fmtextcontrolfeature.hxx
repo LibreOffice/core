@@ -31,10 +31,6 @@
 namespace svx
 {
 
-
-
-    //= FmTextControlFeature
-
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::frame::XStatusListener
                                     >   FmTextControlFeature_Base;
 

@@ -94,9 +94,6 @@ namespace svxform
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-
-    //= FormControlFactory_Data
-
     struct FormControlFactory_Data
     {
         Reference<XComponentContext>  m_xContext;
@@ -106,10 +103,6 @@ namespace svxform
         {
         }
     };
-
-
-    //= FormControlFactory
-
 
     FormControlFactory::FormControlFactory( const Reference<XComponentContext>& _rContext )
         :m_pData( new FormControlFactory_Data( _rContext ) )

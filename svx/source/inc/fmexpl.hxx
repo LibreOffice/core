@@ -309,8 +309,6 @@ namespace svxform
 
     class NavigatorTreeModel;
 
-    // class OFormComponentObserver
-
     class OFormComponentObserver
         :public ::cppu::WeakImplHelper2 <   ::com::sun::star::beans::XPropertyChangeListener
                                         ,   ::com::sun::star::container::XContainerListener
@@ -344,9 +342,6 @@ namespace svxform
         void Insert(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xIface, sal_Int32 nIndex);
         void Remove( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxElement );
     };
-
-
-    //= NavigatorTreeModel
 
     class NavigatorTreeModel : public SfxBroadcaster
                            ,public SfxListener

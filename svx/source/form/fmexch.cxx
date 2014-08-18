@@ -36,10 +36,6 @@ namespace svxform
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::datatransfer;
 
-
-    //= OLocalExchange
-
-
     OLocalExchange::OLocalExchange( )
         :m_bDragging( false )
         ,m_bClipboardOwner( false )
@@ -119,10 +115,6 @@ namespace svxform
     {
         return false;   // do not have any formats by default
     }
-
-
-    //= OControlTransferData
-
 
     OControlTransferData::OControlTransferData( )
         :m_pFocusEntry( NULL )
@@ -281,10 +273,6 @@ namespace svxform
         }
     }
 
-
-    //= OControlExchange
-
-
     OControlExchange::OControlExchange( )
     {
     }
@@ -371,10 +359,6 @@ namespace svxform
     {
         return new OControlExchange;
     }
-
-
-    //= OLocalExchangeHelper
-
 
     OLocalExchangeHelper::OLocalExchangeHelper(Window* _pDragSource)
         :m_pDragSource(_pDragSource)

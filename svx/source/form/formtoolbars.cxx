@@ -32,10 +32,6 @@ namespace svxform
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-
-    //= FormToolboxes
-
-
     FormToolboxes::FormToolboxes( const Reference< XFrame >& _rxFrame )
     {
         // the layout manager

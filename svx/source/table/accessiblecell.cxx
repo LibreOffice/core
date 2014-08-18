@@ -42,10 +42,6 @@ using namespace ::com::sun::star::container;
 
 namespace accessibility {
 
-
-// AccessibleCell
-
-
 AccessibleCell::AccessibleCell( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>& rxParent, const sdr::table::CellRef& rCell, sal_Int32 nIndex, const AccessibleShapeTreeInfo& rShapeTreeInfo )
 : AccessibleCellBase( rxParent, AccessibleRole::TABLE_CELL )
 , maShapeTreeInfo( rShapeTreeInfo )

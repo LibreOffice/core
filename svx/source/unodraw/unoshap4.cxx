@@ -790,11 +790,6 @@ bool SvxFrameShape::getPropertyValueImpl(const OUString& rName, const SfxItemPro
         return SvxOle2Shape::getPropertyValueImpl( rName, pProperty, rValue );
     }
 }
-
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
-
 SvxMediaShape::SvxMediaShape( SdrObject* pObj, OUString const & referer ) throw()
 :   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_MEDIA), getSvxMapProvider().GetPropertySet(SVXMAP_MEDIA, SdrObject::GetGlobalDrawObjectItemPool()) ),
     referer_(referer)

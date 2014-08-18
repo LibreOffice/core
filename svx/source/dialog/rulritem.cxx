@@ -641,11 +641,6 @@ bool SvxColumnItem::IsLastAct() const
     return nActColumn == Count() - 1;
 }
 
-
-
-
-/* SvxColumnDescription */
-
 SvxColumnDescription::SvxColumnDescription() :
     nStart   (0),
     nEnd     (0),

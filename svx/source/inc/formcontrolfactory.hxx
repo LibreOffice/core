@@ -43,10 +43,6 @@ namespace comphelper {
 namespace svxform
 {
 
-
-
-    //= FormControlFactory
-
     struct FormControlFactory_Data;
 
     class FormControlFactory

@@ -35,8 +35,6 @@
 #include "svx/rulritem.hxx"
 #include <svl/eitem.hxx>
 
-// class SvxRulerItem ----------------------------------------------------
-
 SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindings)
 : SfxControllerItem(_nId, rBindings),
   rRuler(rRul)

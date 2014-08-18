@@ -609,9 +609,6 @@ Reference< XForm > GetForm(const Reference< XInterface>& _rxElement)
     return Reference< XForm >();
 }
 
-
-// class FmXFormShell_Base_Disambiguation
-
 FmXFormShell_Base_Disambiguation::FmXFormShell_Base_Disambiguation( ::osl::Mutex& _rMutex )
     :FmXFormShell_BD_BASE( _rMutex )
 {
@@ -627,10 +624,6 @@ void SAL_CALL FmXFormShell_Base_Disambiguation::disposing()
     // with the XEventListener::disposing(EventObject) of our various listener
     // base classes.
 }
-
-
-// class FmXFormShell
-
 
 FmXFormShell::FmXFormShell( FmFormShell& _rShell, SfxViewFrame* _pViewFrame )
         :FmXFormShell_BASE(m_aMutex)

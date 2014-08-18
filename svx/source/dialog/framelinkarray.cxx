@@ -401,8 +401,7 @@ Array::~Array()
 {
 }
 
-// array size and column/row indexes ------------------------------------------
-
+// array size and column/row indexes
 void Array::Initialize( size_t nWidth, size_t nHeight )
 {
     bool bDiagDblClip = mxImpl.get() ? mxImpl->mbDiagDblClip : DIAG_DBL_CLIP_DEFAULT;
@@ -432,8 +431,7 @@ size_t Array::GetCellIndex( size_t nCol, size_t nRow, bool bRTL ) const
     return mxImpl->GetIndex( nCol, nRow );
 }
 
-// cell border styles ---------------------------------------------------------
-
+// cell border styles
 void Array::SetCellStyleLeft( size_t nCol, size_t nRow, const Style& rStyle )
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "SetCellStyleLeft" );
@@ -650,8 +648,7 @@ const Style& Array::GetCellStyleTR( size_t nCol, size_t nRow ) const
         CELL( mxImpl->GetMergedFirstCol( nCol, nRow ), nFirstRow ).maBLTR : OBJ_STYLE_NONE;
 }
 
-// cell merging ---------------------------------------------------------------
-
+// cell merging
 void Array::SetMergedRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow )
 {
     DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "SetMergedRange" );
@@ -734,8 +731,7 @@ void Array::GetMergedRange( size_t& rnFirstCol, size_t& rnFirstRow,
     rnLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
 }
 
-// clipping -------------------------------------------------------------------
-
+// clipping
 void Array::SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow )
 {
     DBG_FRAME_CHECK_COLROW( nFirstCol, nFirstRow, "SetClipRange" );
@@ -755,8 +751,7 @@ Rectangle Array::GetClipRangeRectangle() const
         mxImpl->GetRowPosition( mxImpl->mnLastClipRow + 1 ) );
 }
 
-// cell coordinates -----------------------------------------------------------
-
+// cell coordinates
 void Array::SetXOffset( long nXOffset )
 {
     mxImpl->maXCoords[ 0 ] = nXOffset;
@@ -863,8 +858,7 @@ Rectangle Array::GetCellRect( size_t nCol, size_t nRow, bool bSimple ) const
     return aRect;
 }
 
-// diagonal frame borders -----------------------------------------------------
-
+// diagonal frame borders
 double Array::GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple ) const
 {
     DBG_FRAME_CHECK_COLROW( nCol, nRow, "GetHorDiagAngle" );
@@ -882,8 +876,7 @@ void Array::SetUseDiagDoubleClipping( bool bSet )
     mxImpl->mbDiagDblClip = bSet;
 }
 
-// mirroring ------------------------------------------------------------------
-
+// mirroring
 void Array::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
 {
     CellVec aNewCells;
@@ -918,8 +911,7 @@ void Array::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
     mxImpl->mbXCoordsDirty = true;
 }
 
-// drawing --------------------------------------------------------------------
-
+// drawing
 void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
         size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
         const Color* pForceColor ) const

@@ -23,8 +23,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-// class SvxPasswordDialog -----------------------------------------------
-
 IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
 {
     bool bOK = true;

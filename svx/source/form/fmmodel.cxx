@@ -53,11 +53,6 @@ struct FmFormModelImplData
     }
 };
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
 FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
     : SdrModel(pPool, pPers, false, LOADREFCOUNTS)
     , m_pImpl(NULL)
@@ -70,11 +65,6 @@ FmFormModel::FmFormModel(SfxItemPool* pPool, SfxObjectShell* pPers)
     m_pImpl->pUndoEnv->acquire();
 }
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
 FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers)
     : SdrModel(rPath, pPool, pPers, false, LOADREFCOUNTS)
     , m_pImpl(NULL)
@@ -87,11 +77,6 @@ FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShe
     m_pImpl->pUndoEnv->acquire();
 }
 
-/*************************************************************************
-|*
-|* Ctor
-|*
-\************************************************************************/
 FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
                          bool bUseExtColorTable)
     : SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS)
@@ -105,11 +90,6 @@ FmFormModel::FmFormModel(const OUString& rPath, SfxItemPool* pPool, SfxObjectShe
     m_pImpl->pUndoEnv->acquire();
 }
 
-/*************************************************************************
-|*
-|* Dtor
-|*
-\************************************************************************/
 FmFormModel::~FmFormModel()
 {
     if (m_pObjShell && m_pImpl->pUndoEnv->IsListening(*m_pObjShell))
@@ -124,21 +104,11 @@ FmFormModel::~FmFormModel()
 
 }
 
-/*************************************************************************
-|*
-|* Erzeugt eine neue Seite
-|*
-\************************************************************************/
 SdrPage* FmFormModel::AllocPage(bool bMasterPage)
 {
     return new FmFormPage(*this, bMasterPage);
 }
 
-/*************************************************************************
-|*
-|* InsertPage
-|*
-\************************************************************************/
 void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
     // hack solange Methode intern
@@ -148,11 +118,6 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
     SdrModel::InsertPage( pPage, nPos );
 }
 
-/*************************************************************************
-|*
-|* MovePage
-|*
-\************************************************************************/
 void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
 {
     m_pImpl->bMovingPage = true;
@@ -163,11 +128,6 @@ void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
     m_pImpl->bMovingPage = false;
 }
 
-/*************************************************************************
-|*
-|* RemovePage
-|*
-\************************************************************************/
 SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 {
     FmFormPage* pToBeRemovedPage = dynamic_cast< FmFormPage* >( GetPage( nPgNum ) );
@@ -185,11 +145,6 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
     return pRemovedPage;
 }
 
-/*************************************************************************
-|*
-|* InsertMasterPage
-|*
-\************************************************************************/
 void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 {
     // hack solange Methode intern
@@ -199,11 +154,6 @@ void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
     SdrModel::InsertMasterPage(pPage, nPos);
 }
 
-/*************************************************************************
-|*
-|* RemoveMasterPage
-|*
-\************************************************************************/
 SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
 {
     FmFormPage* pPage = (FmFormPage*)SdrModel::RemoveMasterPage(nPgNum);

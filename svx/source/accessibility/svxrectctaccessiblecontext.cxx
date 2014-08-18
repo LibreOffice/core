@@ -52,11 +52,7 @@ using namespace ::com::sun::star::lang;
 #define MAX_NUM_OF_CHILDREN   9
 #define NOCHILDSELECTED     -1
 
-
-
-
-//=====  internal  ============================================================
-
+// internal
 namespace
 {
     struct ChildIndexToPointData
@@ -184,15 +180,13 @@ SvxRectCtlAccessibleContext::~SvxRectCtlAccessibleContext()
     }
 }
 
-//=====  XAccessible  =========================================================
-
+// XAccessible
 Reference< XAccessibleContext > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleContext( void ) throw( RuntimeException, std::exception )
 {
     return this;
 }
 
-//=====  XAccessibleComponent  ================================================
-
+// XAccessibleComponent
 sal_Bool SAL_CALL SvxRectCtlAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException, std::exception )
 {
     // no guard -> done in getBounds()
@@ -259,8 +253,7 @@ bool SAL_CALL SvxRectCtlAccessibleContext::isFocusTraversable() throw( RuntimeEx
     return true;
 }
 
-//=====  XAccessibleContext  ==================================================
-
+// XAccessibleContext
 sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChildCount( void ) throw( RuntimeException, std::exception )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
@@ -522,7 +515,7 @@ sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
     return mpRepr->GetControlBackground().GetColor();
 }
 
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 OUString SAL_CALL SvxRectCtlAccessibleContext::getImplementationName( void ) throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ui.SvxRectCtlAccessibleContext" );
@@ -539,15 +532,13 @@ Sequence< OUString > SAL_CALL SvxRectCtlAccessibleContext::getSupportedServiceNa
     return Sequence< OUString >( &sServiceName, 1 );
 }
 
-//=====  XTypeProvider  =======================================================
-
+// XTypeProvider
 Sequence< sal_Int8 > SAL_CALL SvxRectCtlAccessibleContext::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-//=====  XAccessibleSelection =============================================
-
+// XAccessibleSelection
 void SAL_CALL SvxRectCtlAccessibleContext::selectAccessibleChild( sal_Int32 nIndex ) throw( lang::IndexOutOfBoundsException, RuntimeException, std::exception )
 {
     ::SolarMutexGuard aSolarGuard;
@@ -614,8 +605,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 /*
     throw lang::IndexOutOfBoundsException( aMessage, *this );   // never possible
 }
 
-//=====  internals ========================================================
-
+// internals
 void SvxRectCtlAccessibleContext::checkChildIndex( long nIndex ) throw( lang::IndexOutOfBoundsException )
 {
     if( nIndex < 0 || nIndex >= getAccessibleChildCount() )
@@ -803,15 +793,13 @@ SvxRectCtlChildAccessibleContext::~SvxRectCtlChildAccessibleContext()
     }
 }
 
-//=====  XAccessible  =========================================================
-
+// XAccessible
 Reference< XAccessibleContext> SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleContext( void ) throw( RuntimeException, std::exception )
 {
     return this;
 }
 
-//=====  XAccessibleComponent  ================================================
-
+// XAccessibleComponent
 sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException, std::exception )
 {
     // no guard -> done in getBounds()
@@ -905,8 +893,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
     return mrParentWindow.GetControlBackground().GetColor();
 }
 
-//=====  XAccessibleContext  ==================================================
-
+// XAccessibleContext
 sal_Int32 SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleChildCount( void ) throw( RuntimeException, std::exception )
 {
     return 0;
@@ -1038,8 +1025,7 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::removeAccessibleEventListener( c
     }
 }
 
-//=====  XAccessibleValue  ================================================
-
+// XAccessibleValue
 Any SAL_CALL SvxRectCtlChildAccessibleContext::getCurrentValue() throw( RuntimeException, std::exception )
 {
     ThrowExceptionIfNotAlive();
@@ -1119,7 +1105,7 @@ Reference< XAccessibleKeyBinding > SvxRectCtlChildAccessibleContext::getAccessib
     return Reference< XAccessibleKeyBinding >();
 }
 
-//=====  XServiceInfo  ========================================================
+// XServiceInfo
 OUString SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationName( void ) throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ui.SvxRectCtlChildAccessibleContext" );
@@ -1136,13 +1122,11 @@ Sequence< OUString > SAL_CALL SvxRectCtlChildAccessibleContext::getSupportedServ
     return Sequence< OUString >( &sServiceName, 1 );
 }
 
-//=====  XTypeProvider  =======================================================
+// XTypeProvider
 Sequence< sal_Int8 > SAL_CALL SvxRectCtlChildAccessibleContext::getImplementationId( void ) throw( RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
-
-//=====  internal  ============================================================
 
 void SvxRectCtlChildAccessibleContext::CommitChange( const AccessibleEventObject& rEvent )
 {

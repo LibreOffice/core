@@ -52,8 +52,7 @@ void adjustIndexInParentOfShapes(ChildDescriptorListType& _rList)
 }
 }
 
-//=====  AccessibleChildrenManager  ===========================================
-
+// AccessibleChildrenManager
 ChildrenManagerImpl::ChildrenManagerImpl (
     const uno::Reference<XAccessible>& rxParent,
     const uno::Reference<drawing::XShapes>& rxShapeList,
@@ -655,11 +654,7 @@ void ChildrenManagerImpl::SetInfo (const AccessibleShapeTreeInfo& rShapeTreeInfo
     }
 }
 
-
-
-
-//=====  lang::XEventListener  ================================================
-
+// lang::XEventListener
 void SAL_CALL
     ChildrenManagerImpl::disposing (const lang::EventObject& rEventObject)
     throw (uno::RuntimeException, std::exception)
@@ -688,11 +683,7 @@ void SAL_CALL
     }
 }
 
-
-
-
-//=====  document::XEventListener  ============================================
-
+// document::XEventListener
 /** Listen for new and removed shapes.
 */
 void SAL_CALL
@@ -711,11 +702,7 @@ void SAL_CALL
     // else ignore unknown event.
 }
 
-
-
-
-//=====  view::XSelectionChangeListener  ======================================
-
+// view::XSelectionChangeListener
 void  SAL_CALL
     ChildrenManagerImpl::selectionChanged (const lang::EventObject& /*rEvent*/)
         throw (uno::RuntimeException, std::exception)
@@ -776,8 +763,7 @@ void SAL_CALL ChildrenManagerImpl::disposing (void)
     impl_dispose();
 }
 
-//=====  IAccessibleViewForwarderListener  ====================================
-
+// IAccessibleViewForwarderListener
 void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder)
 {
@@ -796,11 +782,7 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
     }
 }
 
-
-
-
-//=====  IAccessibleParent  ===================================================
-
+// IAccessibleParent
 bool ChildrenManagerImpl::ReplaceChild (
     AccessibleShape* pCurrentChild,
     const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
@@ -1102,11 +1084,7 @@ void ChildrenManagerImpl::UnregisterAsDisposeListener (
             static_cast<document::XEventListener*>(this));
 }
 
-
-
-
-//=====  AccessibleChildDescriptor  ===========================================
-
+// AccessibleChildDescriptor
 ChildDescriptor::ChildDescriptor (const Reference<drawing::XShape>& xShape)
     : mxShape (xShape),
       mxAccessibleShape (NULL),

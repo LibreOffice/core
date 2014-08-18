@@ -87,37 +87,22 @@ SvxTbxCtlCustomShapes::SvxTbxCtlCustomShapes( sal_uInt16 nSlotId, sal_uInt16 nId
     rTbx.Invalidate();
 }
 
-/*************************************************************************
-|*
-|* Notification when the application status has changed
-|*
-\************************************************************************/
-
+// Notification when the application status has changed
 void SvxTbxCtlCustomShapes::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 }
 
-/*************************************************************************
-|*
-|* when one wants to create a popup window
-|*
-\************************************************************************/
-
+// when one wants to create a popup window
 SfxPopupWindowType SvxTbxCtlCustomShapes::GetPopupWindowType() const
 {
     return( m_aCommand.isEmpty() ? SFX_POPUPWINDOW_ONCLICK : SFX_POPUPWINDOW_ONTIMEOUT);
 }
 
-/*************************************************************************
-|*
-|* Here is the window created
-|* The location of the Toolbox is queried through GetToolBox()
-|* rItemRect are the screen coordinates
-|*
-\************************************************************************/
-
+// Here is the window created
+// The location of the Toolbox is queried through GetToolBox()
+// rItemRect are the screen coordinates
 SfxPopupWindow* SvxTbxCtlCustomShapes::CreatePopupWindow()
 {
     createAndPositionSubToolBar( m_aSubTbxResName );

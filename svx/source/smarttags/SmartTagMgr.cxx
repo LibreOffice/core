@@ -335,8 +335,6 @@ void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( Run
     ReadConfiguration( bExcludedTypes, bRecognize );
 }
 
-//------------- PRIVATE -----------------------------------------------
-
 /**
 */
 void SmartTagMgr::LoadLibraries()

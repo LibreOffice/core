@@ -26,12 +26,7 @@
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxColorChildWindow, SID_COLOR_CONTROL )
 
-/*************************************************************************
-|*
-|* Ableitung vom SfxChildWindow als "Behaelter" fuer Animator
-|*
-\************************************************************************/
-
+// Ableitung vom SfxChildWindow als "Behaelter" fuer Animator
 SvxColorChildWindow::SvxColorChildWindow( Window* _pParent,
                                           sal_uInt16 nId,
                                           SfxBindings* pBindings,

@@ -52,10 +52,6 @@ namespace svxform
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::sdb;
 
-
-    // class OFormComponentObserver
-
-
     OFormComponentObserver::OFormComponentObserver(NavigatorTreeModel* _pModel)
         :m_pNavModel(_pModel)
         ,m_nLocks(0)
@@ -189,11 +185,6 @@ namespace svxform
         evt.Element >>= xElement;
         Remove( xElement );
     }
-
-
-    // class NavigatorTreeModel
-
-
 
     NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages )
                     :m_pFormShell(NULL)

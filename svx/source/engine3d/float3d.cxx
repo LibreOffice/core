@@ -83,10 +83,6 @@ namespace {
     }
 }
 
-
-/*************************************************************************
-|*  Svx3DWin - FloatingWindow
-\************************************************************************/
 Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, Window* pParent ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent,

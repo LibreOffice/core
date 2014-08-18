@@ -1023,9 +1023,6 @@ void FmFilterModel::EnsureEmptyFilterRows( FmParentData& _rItem )
     }
 }
 
-
-// class FmFilterItemsString
-
 class FmFilterItemsString : public SvLBoxString
 {
 public:
@@ -1082,9 +1079,6 @@ void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pE
     pViewData->maSize = aSize;
 }
 
-
-// class FmFilterString
-
 class FmFilterString : public SvLBoxString
 {
     OUString m_aName;
@@ -1137,9 +1131,6 @@ void FmFilterString::Paint(
     rDev.SetFont( aOldFont );
     rDev.DrawText( aPos, GetText() );
 }
-
-
-// class FmFilterNavigator
 
 FmFilterNavigator::FmFilterNavigator( Window* pParent )
                   :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HASBUTTONSATROOT )
@@ -1886,10 +1877,6 @@ void FmFilterNavigator::DeleteSelection()
     }
 }
 
-
-
-// class FmFilterNavigatorWin
-
 FmFilterNavigatorWin::FmFilterNavigatorWin( SfxBindings* _pBindings, SfxChildWindow* _pMgr,
                               Window* _pParent )
                      :SfxDockingWindow( _pBindings, _pMgr, _pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_ROLLABLE|WB_3DLOOK|WB_DOCKABLE) )
@@ -2019,11 +2006,6 @@ void FmFilterNavigatorWin::GetFocus()
     if ( m_pNavigator )
         m_pNavigator->GrabFocus();
 }
-
-
-
-
-// class FmFilterNavigatorWinMgr
 
 SFX_IMPL_DOCKINGWINDOW( FmFilterNavigatorWinMgr, SID_FM_FILTER_NAVIGATOR )
 

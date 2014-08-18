@@ -43,8 +43,6 @@
 #define RULER_TAB_RTL           ((sal_uInt16)0x0010)
 #endif
 
-// STATIC DATA -----------------------------------------------------------
-
 #define CTRL_ITEM_COUNT 14
 #define GAP 10
 #define OBJECT_BORDER_COUNT 4

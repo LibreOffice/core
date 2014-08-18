@@ -30,10 +30,6 @@ namespace svx
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
 
-
-    //= FmTextControlFeature
-
-
     FmTextControlFeature::FmTextControlFeature( const Reference< XDispatch >& _rxDispatcher, const URL& _rFeatureURL, SfxSlotId _nSlotId, ISlotInvalidator* _pInvalidator )
         :m_xDispatcher    ( _rxDispatcher )
         ,m_aFeatureURL    ( _rFeatureURL  )

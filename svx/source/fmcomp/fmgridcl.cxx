@@ -1879,7 +1879,7 @@ namespace
     }
 }
 
-// Object data and state ------------------------------------------------------
+// Object data and state
 OUString FmGridControl::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType _eObjType,sal_Int32 _nPosition ) const
 {
     OUString sRetText;

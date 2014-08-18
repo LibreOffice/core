@@ -31,12 +31,8 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-// STATIC DATA -----------------------------------------------------------
-
 #define CELL_WIDTH      1600L
 #define CELL_HEIGHT      800L
-
-// class SvxPageWindow ---------------------------------------------------
 
 SvxPageWindow::SvxPageWindow(Window* pParent)
 : Window(pParent),

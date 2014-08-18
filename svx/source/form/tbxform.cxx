@@ -45,12 +45,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using ::com::sun::star::beans::XPropertySet;
 
-
-
-// class SvxFmAbsRecWin
-
-
-
 SvxFmAbsRecWin::SvxFmAbsRecWin( Window* _pParent, SfxToolBoxControl* _pController )
     :NumericField( _pParent, WB_BORDER )
     ,m_pController(_pController)
@@ -242,11 +236,6 @@ void SvxFmTbxCtlConfig::Select( sal_uInt16 /*nSelectModifier*/ )
     }
 }
 
-
-
-// class SvxFmTbxCtlAbsRec
-
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlAbsRec, SfxInt32Item );
 
 SvxFmTbxCtlAbsRec::SvxFmTbxCtlAbsRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
@@ -293,11 +282,6 @@ Window* SvxFmTbxCtlAbsRec::CreateItemWindow( Window* pParent )
     return pWin;
 }
 
-
-
-// SvxFmTbxCtlRecText
-
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecText, SfxBoolItem );
 
 SvxFmTbxCtlRecText::SvxFmTbxCtlRecText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
@@ -324,11 +308,6 @@ Window* SvxFmTbxCtlRecText::CreateItemWindow( Window* pParent )
     return pFixedText;
 }
 
-
-
-// SvxFmTbxCtlRecFromText
-
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecFromText, SfxBoolItem );
 
 SvxFmTbxCtlRecFromText::SvxFmTbxCtlRecFromText( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
@@ -353,10 +332,6 @@ Window* SvxFmTbxCtlRecFromText::CreateItemWindow( Window* pParent )
     pFixedText->SetBackground(Wallpaper(Color(COL_TRANSPARENT)));
     return pFixedText;
 }
-
-
-
-// SvxFmTbxCtlRecTotal
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxCtlRecTotal, SfxStringItem );
 
@@ -406,9 +381,6 @@ void SvxFmTbxCtlRecTotal::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     SfxToolBoxControl::StateChanged( nSID, eState,pState );
 }
 
-
-// SvxFmTbxNextRec
-
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxNextRec, SfxBoolItem );
 
 
@@ -423,9 +395,6 @@ SvxFmTbxNextRec::SvxFmTbxNextRec( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& r
     aSettings.SetMouseSettings(aMouseSettings);
     rTbx.SetSettings(aSettings, true);
 }
-
-
-// SvxFmTbxPrevRec
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFmTbxPrevRec, SfxBoolItem );
 

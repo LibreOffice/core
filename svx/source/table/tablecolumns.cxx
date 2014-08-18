@@ -34,10 +34,6 @@ using namespace ::com::sun::star::table;
 
 namespace sdr { namespace table {
 
-
-// TableColumns
-
-
 TableColumns::TableColumns( const TableModelRef& xTableModel )
 : mxTableModel( xTableModel )
 {

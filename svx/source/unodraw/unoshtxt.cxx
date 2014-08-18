@@ -1029,12 +1029,6 @@ IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
     return 0;
 }
 
-
-
-
-// SvxTextEditSource
-
-
 SvxTextEditSource::SvxTextEditSource( SdrObject* pObject, SdrText* pText )
 {
     mpImpl = new SvxTextEditSourceImpl( pObject, pText );

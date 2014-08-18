@@ -22,8 +22,6 @@
 #include <vcl/builder.hxx>
 #include <vcl/settings.hxx>
 
-// class SvxParaPrevWindow -----------------------------------------------
-
 SvxParaPrevWindow::SvxParaPrevWindow( Window* pParent,  WinBits nBits) :
 
     Window( pParent, nBits),

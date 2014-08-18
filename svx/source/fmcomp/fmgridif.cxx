@@ -121,10 +121,6 @@ Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
     return aFont;
 }
 
-
-//= FmXModifyMultiplexer
-
-
 FmXModifyMultiplexer::FmXModifyMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
                     ,OInterfaceContainerHelper( _rMutex )
@@ -158,10 +154,6 @@ void FmXModifyMultiplexer::modified(const EventObject& e) throw( RuntimeExceptio
     aMulti.Source = &m_rParent;
     notifyEach( &XModifyListener::modified, aMulti );
 }
-
-
-//= FmXUpdateMultiplexer
-
 
 FmXUpdateMultiplexer::FmXUpdateMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                     :OWeakSubObject( rSource )
@@ -214,11 +206,6 @@ void FmXUpdateMultiplexer::updated(const EventObject &e) throw( RuntimeException
     notifyEach( &XUpdateListener::updated, aMulti );
 }
 
-
-
-//= FmXSelectionMultiplexer
-
-
 FmXSelectionMultiplexer::FmXSelectionMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
     ,OInterfaceContainerHelper( _rMutex )
@@ -252,10 +239,6 @@ void SAL_CALL FmXSelectionMultiplexer::selectionChanged( const EventObject& _rEv
     aMulti.Source = &m_rParent;
     notifyEach( &XSelectionChangeListener::selectionChanged, aMulti );
 }
-
-
-//= FmXContainerMultiplexer
-
 
 FmXContainerMultiplexer::FmXContainerMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
                         :OWeakSubObject( rSource )
@@ -306,10 +289,6 @@ void FmXContainerMultiplexer::elementReplaced(const ContainerEvent& e) throw( Ru
     aMulti.Source = &m_rParent;
     notifyEach( &XContainerListener::elementReplaced, aMulti );
 }
-
-
-//= FmXGridControlMultiplexer
-
 
 FmXGridControlMultiplexer::FmXGridControlMultiplexer( ::cppu::OWeakObject& rSource, ::osl::Mutex& _rMutex )
     :OWeakSubObject( rSource )
@@ -993,9 +972,6 @@ sal_Bool SAL_CALL FmXGridControl::supportsMode(const OUString& Mode) throw( Runt
     Reference< ::com::sun::star::util::XModeSelector >  xPeer(getPeer(), UNO_QUERY);
     return xPeer.is() ? xPeer->supportsMode(Mode) : sal_False;
 }
-
-
-//= FmXGridPeer
 
 // helper class which prevents that in the peer's header the FmGridListener must be known
 class FmXGridPeer::GridListenerDelegator : public FmGridListener

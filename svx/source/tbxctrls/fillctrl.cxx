@@ -47,11 +47,6 @@ using namespace ::com::sun::star::lang;
 
 SFX_IMPL_TOOLBOX_CONTROL( SvxFillToolBoxControl, XFillStyleItem );
 
-/*************************************************************************
-|*
-|* SvxFillToolBoxControl
-|*
-\************************************************************************/
 SvxFillToolBoxControl::SvxFillToolBoxControl(
     sal_uInt16 nSlotId,
     sal_uInt16 nId,
@@ -536,12 +531,6 @@ Window* SvxFillToolBoxControl::CreateItemWindow(Window *pParent)
     }
     return NULL;
 }
-
-/*************************************************************************
-|*
-|* FillControl
-|*
-\************************************************************************/
 
 FillControl::FillControl(Window* pParent,WinBits nStyle)
 :   Window(pParent,nStyle | WB_DIALOGCONTROL),

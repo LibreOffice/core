@@ -43,10 +43,6 @@ const sal_Int32 Property_OptimalHeight = 1;
 const sal_Int32 Property_IsVisible = 2;
 const sal_Int32 Property_IsStartOfNewPage = 3;
 
-
-// TableRow
-
-
 TableRow::TableRow( const TableModelRef& xTableModel, sal_Int32 nRow, sal_Int32 nColumns )
 : TableRowBase( getStaticPropertySetInfo() )
 , mxTableModel( xTableModel )

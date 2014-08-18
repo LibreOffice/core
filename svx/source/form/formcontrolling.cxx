@@ -192,10 +192,6 @@ namespace svx
         return ( pos != rDescriptions.end() ) ? pos->nSlotId : -1;
     }
 
-
-    //= ControllerFeatures
-
-
     ControllerFeatures::ControllerFeatures( IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )
         ,m_pImpl( NULL )
@@ -234,10 +230,6 @@ namespace svx
             m_pImpl = NULL;
         }
     }
-
-
-    //= FormControllerHelper
-
 
     FormControllerHelper::FormControllerHelper( const Reference< XFormController >& _rxController, IControllerFeatureInvalidation* _pInvalidationCallback )
         :m_pInvalidationCallback( _pInvalidationCallback )

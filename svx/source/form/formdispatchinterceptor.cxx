@@ -46,11 +46,6 @@ namespace svxform
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::lang::EventObject;
 
-
-    //= DispatchInterceptionMultiplexer
-
-
-
     DispatchInterceptionMultiplexer::DispatchInterceptionMultiplexer(
                 const Reference< XDispatchProviderInterception >& _rxToIntercept, DispatchInterceptor* _pMaster )
         :DispatchInterceptionMultiplexer_BASE(_pMaster && _pMaster->getInterceptorMutex() ? *_pMaster->getInterceptorMutex() : m_aFallback)

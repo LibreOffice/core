@@ -156,10 +156,6 @@ public:
     Rectangle   maLogicRect;
 };
 
-
-// TableStyleSettings
-
-
 TableStyleSettings::TableStyleSettings()
 : mbUseFirstRow(true)
 , mbUseLastRow(false)

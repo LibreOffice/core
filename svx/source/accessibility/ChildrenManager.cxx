@@ -27,9 +27,7 @@ using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
-
-//=====  AccessibleChildrenManager  ===========================================
-
+// AccessibleChildrenManager
 ChildrenManager::ChildrenManager (
     const ::com::sun::star::uno::Reference<XAccessible>& rxParent,
     const ::com::sun::star::uno::Reference<drawing::XShapes>& rxShapeList,
@@ -136,7 +134,7 @@ void ChildrenManager::RemoveFocus (void)
     mpImpl->RemoveFocus ();
 }
 
-//=====  IAccessibleViewForwarderListener  ====================================
+// IAccessibleViewForwarderListener
 void ChildrenManager::ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder)
 {

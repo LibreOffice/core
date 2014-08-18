@@ -60,8 +60,6 @@ using namespace ::com::sun::star::drawing;
 #define INTERFACE_TYPE( xint ) \
     ::getCppuType((const Reference< xint >*)0)
 
-// class SvxDrawPage                                                   *
-
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
 SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
 : mrBHelper( getMutex() )

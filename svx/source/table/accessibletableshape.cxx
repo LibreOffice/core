@@ -61,10 +61,6 @@ struct hash
 
 typedef boost::unordered_map< Reference< XCell >, rtl::Reference< AccessibleCell >, hash > AccessibleCellMap;
 
-
-// AccessibleTableShapeImpl
-
-
 class AccessibleTableShapeImpl : public cppu::WeakImplHelper1< XModifyListener >
 {
 public:
@@ -304,12 +300,6 @@ void SAL_CALL AccessibleTableShapeImpl::modified( const EventObject& /*aEvent*/ 
 void SAL_CALL AccessibleTableShapeImpl::disposing( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
 {
 }
-
-
-// AccessibleTableShape
-
-
-
 
 AccessibleTableShape::AccessibleTableShape( const AccessibleShapeInfo& rShapeInfo, const AccessibleShapeTreeInfo& rShapeTreeInfo)
 : AccessibleTableShape_Base(rShapeInfo, rShapeTreeInfo)
@@ -858,8 +848,7 @@ void SAL_CALL AccessibleTableShape::deselectAccessibleChild( sal_Int32 nChildInd
     }
 }
 
-
-//=====  XAccessibleTableSelection  ============================================
+// XAccessibleTableSelection
 sal_Bool SAL_CALL AccessibleTableShape::selectRow( sal_Int32 row )
 throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
@@ -1156,8 +1145,7 @@ void SAL_CALL AccessibleTableHeaderShape::grabFocus (void) throw (RuntimeExcepti
 {
     mpTable->grabFocus();
 }
-//=====  XAccessibleTable  ============================================
-
+// XAccessibleTable
 sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleRowCount() throw (RuntimeException, std::exception)
 {
     return mbRow ? 1 : mpTable->getAccessibleRowCount();
@@ -1315,7 +1303,7 @@ sal_Int32 SAL_CALL AccessibleTableHeaderShape::getAccessibleColumn( sal_Int32 nC
     return mpTable->getAccessibleColumn( nChildIndex );
 }
 
-//=====  XAccessibleTableSelection  ============================================
+// XAccessibleTableSelection
 sal_Bool SAL_CALL AccessibleTableHeaderShape::selectRow( sal_Int32 row )
 throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {

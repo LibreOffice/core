@@ -29,10 +29,6 @@
 namespace svxform
 {
 
-
-
-    //= ControlLayouter
-
     class ControlLayouter
     {
     public:

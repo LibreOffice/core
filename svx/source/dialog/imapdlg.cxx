@@ -68,8 +68,6 @@
 #define IMAP_CERN_EXT       OUString("map")
 #define IMAP_NCSA_EXT       OUString("map")
 
-/******************************************************************************/
-
 SFX_IMPL_MODELESSDIALOG_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 
 // ControllerItem

@@ -51,9 +51,6 @@ class DbCellControl;
 class Edit;
 class FmXGridCell;
 
-
-// FmMutexHelper
-
 class FmMutexHelper
 {
 protected:

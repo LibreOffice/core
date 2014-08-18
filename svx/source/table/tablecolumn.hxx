@@ -31,10 +31,6 @@
 
 namespace sdr { namespace table {
 
-
-// TableColumn
-
-
 typedef ::cppu::ImplInheritanceHelper2< FastPropertySet, ::com::sun::star::table::XCellRange, ::com::sun::star::container::XNamed > TableColumnBase;
 
 class TableColumn : public TableColumnBase

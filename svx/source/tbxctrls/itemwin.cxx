@@ -53,9 +53,6 @@ using namespace ::com::sun::star::beans;
 
 #define LOGICAL_EDIT_HEIGHT         12
 
-// SvxLineBox
-
-
 SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
     nCurPos     ( 0 ),
@@ -257,7 +254,6 @@ void SvxLineBox::FillControl()
     }
 }
 
-// SvxMetricField
 SvxMetricField::SvxMetricField(
     Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits )
     : MetricField(pParent, nBits)
@@ -419,10 +415,6 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     MetricField::DataChanged( rDCEvt );
 }
 
-
-// SvxFillTypeBox
-
-
 SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     FillTypeLB( pParent, nBits | WB_TABSTOP ),
     nCurPos ( 0 ),
@@ -510,10 +502,6 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
             pShellWnd->GrabFocus();
     }
 }
-
-
-// SvxFillAttrBox
-
 
 SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
     FillAttrLB( pParent, nBits | WB_TABSTOP ),

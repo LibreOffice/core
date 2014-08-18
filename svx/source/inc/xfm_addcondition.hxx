@@ -28,10 +28,6 @@
 namespace svxform
 {
 
-
-
-    //= OAddConditionDialog
-
     typedef ::svt::OGenericUnoDialog OAddConditionDialogBase;
     class OAddConditionDialog
             :public OAddConditionDialogBase

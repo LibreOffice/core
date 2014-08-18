@@ -23,8 +23,6 @@
 
 class SvxRuler;
 
-// class SvxRulerItem ----------------------------------------------------
-
 class SvxRulerItem : public SfxControllerItem
 {
 private:

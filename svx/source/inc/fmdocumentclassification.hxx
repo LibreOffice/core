@@ -26,10 +26,6 @@
 namespace svxform
 {
 
-
-
-    //= DocumentType
-
     enum DocumentType
     {
         eTextDocument,
@@ -43,9 +39,6 @@ namespace svxform
 
         eUnknownDocumentType
     };
-
-
-    //= DocumentClassification
 
     class DocumentClassification
     {

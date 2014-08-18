@@ -44,7 +44,6 @@ SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, Tool
     addStatusListener( OUString( ".uno:VerticalTextState" ));
 }
 
-/* ---------------------------------------------------------------------------*/
 SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     bCheckVertical(true)

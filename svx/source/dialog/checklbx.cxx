@@ -26,8 +26,6 @@
 
 #include <vcl/builder.hxx>
 
-// class SvxCheckListBox -------------------------------------------------
-
 SvxCheckListBox::SvxCheckListBox( Window* pParent, WinBits nWinStyle ) :
 
     SvTreeListBox( pParent, nWinStyle )

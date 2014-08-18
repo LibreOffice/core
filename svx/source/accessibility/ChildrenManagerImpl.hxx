@@ -243,29 +243,22 @@ public:
     */
     void RemoveFocus (void);
 
-    //=====  lang::XEventListener  ============================================
-
+    // lang::XEventListener
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
-    //=====  document::XEventListener  ========================================
-
+    // document::XEventListener
     virtual void SAL_CALL
         notifyEvent (const ::com::sun::star::document::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
-    //=====  view::XSelectionChangeListener  ==================================
-
+    // view::XSelectionChangeListener
     virtual void  SAL_CALL
         selectionChanged (const ::com::sun::star::lang::EventObject& rEvent)
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-
-    //=====  IAccessibleViewForwarderListener  ================================
-
+    // IAccessibleViewForwarderListener
     /** Informs this children manager and its children about a change of one
         (or more) aspect of the view forwarder.
         @param aChangeType
@@ -280,8 +273,7 @@ public:
     virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder) SAL_OVERRIDE;
 
-    //=====  IAccessibleParent  ===============================================
-
+    // IAccessibleParent
     /** Replace the specified child with a replacement.
         @param pCurrentChild
             This child is to be replaced.

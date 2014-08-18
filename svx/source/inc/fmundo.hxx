@@ -45,9 +45,6 @@ class FmFormModel;
 class FmFormObj;
 class SdrObject;
 
-
-// FmUndoPropertyAction
-
 class FmUndoPropertyAction: public SdrUndoAction
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xObj;
@@ -64,9 +61,6 @@ public:
     virtual OUString GetComment() const SAL_OVERRIDE;
 
 };
-
-
-// FmUndoContainerAction
 
 class FmUndoContainerAction: public SdrUndoAction
 {
@@ -107,9 +101,6 @@ protected:
     void    implReInsert( );
     void    implReRemove( );
 };
-
-
-// FmUndoModelReplaceAction
 
 class FmUndoModelReplaceAction : public SdrUndoAction
 {

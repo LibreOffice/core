@@ -117,8 +117,6 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
     DrawEllipse( Rectangle( nX - nSize, nY - nSize, nX + nSize, nY + nSize ) );
 }
 
-// private --------------------------------------------------------------------
-
 const Color& DialControlBmp::GetBackgroundColor() const
 {
     return GetSettings().GetStyleSettings().GetDialogColor();
@@ -426,8 +424,6 @@ void DialControl::SetModifyHdl( const Link& rLink )
 {
     mpImpl->maModifyHdl = rLink;
 }
-
-// private --------------------------------------------------------------------
 
 void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 {

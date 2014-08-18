@@ -29,10 +29,6 @@ namespace svx
 
     using namespace ::com::sun::star::datatransfer;
 
-
-    //= OXFormsTransferable
-
-
     OXFormsTransferable::OXFormsTransferable( const OXFormsDescriptor &rhs ) :
         m_aDescriptor(rhs)
     {

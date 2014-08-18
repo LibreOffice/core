@@ -102,7 +102,7 @@ public:
     virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw ( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw ( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL deselectAccessibleChild( sal_Int32 nChildIndex )  throw ( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
-    //=====  XAccessibleTableSelection ============================================
+    // XAccessibleTableSelection
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
     virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column )
@@ -215,7 +215,7 @@ public:
     virtual sal_Int32 SAL_CALL getAccessibleRow( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getAccessibleColumn( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    //=====  XAccessibleTableSelection  ============================================
+    // XAccessibleTableSelection
     virtual sal_Bool SAL_CALL selectRow( sal_Int32 row )
         throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE ;
     virtual sal_Bool SAL_CALL selectColumn( sal_Int32 column )

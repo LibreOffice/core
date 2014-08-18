@@ -22,17 +22,11 @@
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 
-
-// class SdrMoveXItem
-
 class SdrMoveXItem: public SdrMetricItem {
 public:
     SdrMoveXItem(long n=0): SdrMetricItem(SDRATTR_MOVEX,n)        {}
     SdrMoveXItem(SvStream& rIn): SdrMetricItem(SDRATTR_MOVEX,rIn) {}
 };
-
-
-// class SdrMoveYItem
 
 class SdrMoveYItem: public SdrMetricItem {
 public:

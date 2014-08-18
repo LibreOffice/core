@@ -36,8 +36,6 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
-// class XColorEntry
-
 XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 :   XPropertyEntry(rName),
     aColor(rColor)
@@ -49,8 +47,6 @@ XColorEntry::XColorEntry(const XColorEntry& rOther)
 aColor(rOther.aColor)
 {
 }
-
-// class XLineEndEntry
 
 XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -64,8 +60,6 @@ XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
 {
 }
 
-// class XDashEntry
-
 XDashEntry::XDashEntry(const XDash& rDash, const OUString& rName)
 :   XPropertyEntry(rName),
     aDash(rDash)
@@ -77,8 +71,6 @@ XDashEntry::XDashEntry(const XDashEntry& rOther)
 aDash(rOther.aDash)
 {
 }
-
-// class XHatchEntry
 
 XHatchEntry::XHatchEntry(const XHatch& rHatch, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -92,8 +84,6 @@ XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
 {
 }
 
-// class XGradientEntry
-
 XGradientEntry::XGradientEntry(const XGradient& rGradient, const OUString& rName)
 :   XPropertyEntry(rName),
     aGradient(rGradient)
@@ -105,8 +95,6 @@ XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
     aGradient(rOther.aGradient)
 {
 }
-
-// class XBitmapEntry
 
 XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const OUString& rName)
 :   XPropertyEntry(rName),

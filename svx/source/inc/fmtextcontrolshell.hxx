@@ -51,9 +51,6 @@ namespace svx
     class FmTextControlFeature;
     class FmMouseListenerAdapter;
 
-
-    //= IFocusObserver
-
     class IFocusObserver
     {
     public:
@@ -75,9 +72,6 @@ namespace svx
     protected:
         ~IContextRequestObserver() {}
     };
-
-
-    //= FmTextControlShell
 
     class FmTextControlShell :public IFocusObserver
                              ,public ISlotInvalidator

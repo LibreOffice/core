@@ -670,7 +670,6 @@ void ImpSdrGDIMetaFileImport::InsertObj(SdrObject* pObj, bool bScale)
     }
 }
 
-/**************************************************************************************************/
 void ImpSdrGDIMetaFileImport::DoAction(MetaPixelAction& /*rAct*/) const
 {
 }
@@ -742,8 +741,6 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaRoundRectAction& rAct)
     InsertObj(pRect);
 }
 
-/**************************************************************************************************/
-
 void ImpSdrGDIMetaFileImport::DoAction(MetaEllipseAction& rAct)
 {
     SdrCircObj* pCirc=new SdrCircObj(OBJ_CIRC,rAct.GetRect());
@@ -780,8 +777,6 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaChordAction& rAct)
     SetAttributes(pCirc);
     InsertObj(pCirc);
 }
-
-/**************************************************************************************************/
 
 bool ImpSdrGDIMetaFileImport::CheckLastLineMerge(const basegfx::B2DPolygon& rSrcPoly)
 {
@@ -992,8 +987,6 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaPolyPolygonAction& rAct)
         }
     }
 }
-
-/**************************************************************************************************/
 
 void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rStr, const MetaAction& rAct )
 {

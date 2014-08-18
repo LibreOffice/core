@@ -25,10 +25,6 @@
 
 using namespace ::com::sun::star;
 
-/******************************************************************************
- *  Implementierung     class SwCropGrf
- ******************************************************************************/
-
 SvxGrfCrop::SvxGrfCrop( sal_uInt16 nItemId )
     : SfxPoolItem( nItemId ),
     nLeft( 0 ), nRight( 0 ), nTop( 0 ), nBottom( 0 )

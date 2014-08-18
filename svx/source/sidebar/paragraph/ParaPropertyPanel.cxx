@@ -370,10 +370,7 @@ void ParaPropertyPanel::initial()
 #endif
 }
 
-//===========================for Numbering & Bullet================================================
-
-
-
+// for Numbering & Bullet
 IMPL_LINK(ParaPropertyPanel, NumBTbxDDHandler, ToolBox*, pToolBox)
 {
     const sal_uInt16 nId = pToolBox->GetCurItemId();
@@ -416,9 +413,7 @@ IMPL_LINK(ParaPropertyPanel, NumBTbxSelectHandler, ToolBox*, pToolBox)
     return 0;
 }
 
-
-//==================================for Background color=====================
-
+// for Background color
 IMPL_LINK(ParaPropertyPanel, ToolBoxBackColorDDHandler,ToolBox*, pToolBox)
 {
     const sal_uInt16 nId = pToolBox->GetCurItemId();
@@ -459,7 +454,7 @@ void ParaPropertyPanel::SetBGColor (
     maColor = aColor;
 }
 
-//==================================for Paragraph Indent=====================
+// for Paragraph Indent
 IMPL_LINK_NOARG( ParaPropertyPanel, ModifyIndentHdl_Impl)
 {
     SvxLRSpaceItem aMargin( SID_ATTR_PARA_LRSPACE );
@@ -577,8 +572,7 @@ IMPL_LINK(ParaPropertyPanel, ClickProDemote_Hdl_Impl, ToolBox *, pControl)
 
     return( 0L );
 }
-//==================================for Paragraph Line Spacing=====================
-
+// for Paragraph Line Spacing
 IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
 {
     const sal_uInt16 nId = pBox->GetCurItemId();
@@ -593,7 +587,7 @@ IMPL_LINK( ParaPropertyPanel, ClickLineSPDropDownHdl_Impl, ToolBox*, pBox )
     return (0L);
 }
 
-//==================================for Paragraph Spacing=====================
+// for Paragraph Spacing
 IMPL_LINK_NOARG( ParaPropertyPanel, ULSpaceHdl_Impl)
 {
     SvxULSpaceItem aMargin( SID_ATTR_PARA_ULSPACE );
@@ -656,7 +650,7 @@ IMPL_LINK(ParaPropertyPanel, ClickUL_IncDec_Hdl_Impl, ToolBox *, pControl)
     return( 0L );
 }
 
-//==================================for Paragraph State change=====================
+// for Paragraph State change
 void ParaPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
     SfxItemState eState,
