@@ -44,11 +44,15 @@
 #include "workbooksettings.hxx"
 #include "worksheetsettings.hxx"
 
+#include "orcusinterface.hxx"
+#include <orcus/orcus_import_xlsx.hpp>
+
 namespace oox {
 namespace xls {
 
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::oox::core;
 
 namespace {
@@ -196,7 +200,19 @@ WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUSt
     // import data tables related to this worksheet
     RelationsRef xTableRels = getRelations().getRelationsFromTypeFromOfficeDoc( "table" );
     for( ::std::map< OUString, Relation >::const_iterator aIt = xTableRels->begin(), aEnd = xTableRels->end(); aIt != aEnd; ++aIt )
-        importOoxFragment( new TableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
+    {
+        OUString aFragmentPath = getFragmentPathFromRelation( aIt->second );
+        uno::Reference<io::XInputStream> xStream = rHelper.getBaseFilter().openInputStream(aFragmentPath);
+        uno::Sequence<sal_Int8> aData(8000);
+        sal_Int32 nRead = 0;
+        OStringBuffer aString;
+        do {
+            nRead = xStream->readBytes(aData, 8000);
+            aString.append(OString((char*) aData.getConstArray(), nRead));
+        } while(nRead == 8000);
+        ScOrcusTable aTable(getSheetIndex());
+        orcus::import_xlsx::read_table(aString.getStr(), aString.getLength(), &aTable);
+    }
 
     // import comments related to this worksheet
     OUString aCommentsFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "comments" );
