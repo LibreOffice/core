@@ -424,9 +424,9 @@ QueryBox RID_QUERY_CANCELCHECKOUT
     Message [ en-US ] = "This will discard all changes on the server since check-out.\nDo you want to proceed?" ;
 };
 
-InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
+String STR_INFO_WRONGDOCFORMAT
 {
-    Message [ en-US ] = "This document must be saved in OpenDocument file format before it can be digitally signed." ;
+    Text [ en-US ] = "This document must be saved in OpenDocument file format before it can be digitally signed." ;
 };
 
 String RID_XMLSEC_DOCUMENTSIGNED
