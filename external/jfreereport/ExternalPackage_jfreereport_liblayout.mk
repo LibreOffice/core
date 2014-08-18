@@ -9,6 +9,7 @@
 
 # for VERSION
 include $(SRCDIR)/external/jfreereport/version.mk
+include $(SRCDIR)/external/apache-commons/version.mk
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,jfreereport_liblayout,jfreereport_liblayout))
 
