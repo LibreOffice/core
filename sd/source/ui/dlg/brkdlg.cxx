@@ -93,7 +93,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     // update status bar or show a error message?
     if(nInit == (void*)1L)
     {
-        ErrorBox aErrBox( this, WB_OK, SD_RESSTR( STR_BREAK_FAIL ) );
+        MessageDialog aErrBox(this, SD_RESSTR(STR_BREAK_FAIL));
         aErrBox.Execute();
     }
     else

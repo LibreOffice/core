@@ -27,7 +27,7 @@
 #include <connectivity/dbtools.hxx>
 #include "dbustrings.hrc"
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include "localresaccess.hxx"
@@ -196,7 +196,7 @@ namespace dbaui
 
                     OUString sMessage(ModuleRes(STR_COULD_NOT_CONVERT_PARAM));
                     sMessage = sMessage.replaceAll( "$name$", sName );
-                    ErrorBox(NULL, WB_OK, sMessage).Execute();
+                    MessageDialog(NULL, sMessage).Execute();
                     m_pParam->GrabFocus();
                     return 1L;
                 }

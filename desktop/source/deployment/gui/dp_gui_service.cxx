@@ -28,9 +28,9 @@
 #include <comphelper/servicedecl.hxx>
 #include <comphelper/unwrapargs.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/msgbox.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
@@ -223,9 +223,9 @@ void ServiceImpl::startExecuteModal(
         catch (const Exception & exc) {
             if (bAppUp) {
                 const SolarMutexGuard guard;
-                std::auto_ptr<ErrorBox> box(
-                    new ErrorBox( Application::GetActiveTopWindow(),
-                                  WB_OK, exc.Message ) );
+                boost::scoped_ptr<MessageDialog> box(
+                    new MessageDialog(Application::GetActiveTopWindow(),
+                                      exc.Message));
                 box->Execute();
             }
             throw;

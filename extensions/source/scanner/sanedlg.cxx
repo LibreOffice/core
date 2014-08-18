@@ -22,7 +22,6 @@
 #include <tools/config.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <sanedlg.hxx>
 #include <grid.hxx>
 #include <math.h>
@@ -246,8 +245,7 @@ short SaneDlg::Execute()
 {
     if( ! Sane::IsSane() )
     {
-        ErrorBox aErrorBox( NULL, WB_OK | WB_DEF_OK,
-                            "The SANE interface could not be initialized. Scanning is not possible." );
+        MessageDialog aErrorBox(NULL, "The SANE interface could not be initialized. Scanning is not possible.");
         aErrorBox.Execute();
         return sal_False;
     }
@@ -530,7 +528,7 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
             aString = aString.replaceFirst( "%s", Sane::GetVendor( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetModel( mrSane.GetDeviceNumber() ) );
             aString = aString.replaceFirst( "%s", Sane::GetType( mrSane.GetDeviceNumber() ) );
-            InfoBox aInfoBox( this, aString );
+            MessageDialog aInfoBox(this, aString, VCL_MESSAGE_INFO);
             aInfoBox.Execute();
         }
         else if( pButton == mpPreviewButton )
@@ -811,8 +809,8 @@ void SaneDlg::AcquirePreview()
     if( nOption == -1 )
     {
         OUString aString("The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time." );
-        WarningBox aBox( this, WB_OK_CANCEL | WB_DEF_OK, aString );
-        if( aBox.Execute() == RET_CANCEL )
+        MessageDialog aBox(this, aString, VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
+        if (aBox.Execute() == RET_CANCEL)
             return;
     }
     else
@@ -821,8 +819,7 @@ void SaneDlg::AcquirePreview()
     BitmapTransporter aTransporter;
     if( ! mrSane.Start( aTransporter ) )
     {
-        ErrorBox aErrorBox( this, WB_OK | WB_DEF_OK,
-                            "An error occurred while scanning." );
+        MessageDialog aErrorBox(this, "An error occurred while scanning.");
         aErrorBox.Execute();
     }
     else

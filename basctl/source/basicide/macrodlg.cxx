@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include <macrodlg.hxx>
 #include <macrodlg.hrc>
@@ -622,7 +622,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                 ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
                 if ( aDocument.isDocument() && !aDocument.allowMacros() )
                 {
-                    WarningBox( this, WB_OK, IDEResId(RID_STR_CANNOTRUNMACRO).toString() ).Execute();
+                    MessageDialog(this, IDEResId(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING).Execute();
                     return 0;
                 }
             }
@@ -631,7 +631,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         {
             if ( !IsValidSbxName(m_pMacroNameEdit->GetText()) )
             {
-                ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId(RID_STR_BADSBXNAME).toString() ).Execute();
+                MessageDialog(this, IDEResId(RID_STR_BADSBXNAME)).Execute();
                 m_pMacroNameEdit->SetSelection( Selection( 0, m_pMacroNameEdit->GetText().getLength() ) );
                 m_pMacroNameEdit->GrabFocus();
                 return 0;
@@ -699,7 +699,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             {
                 if ( !IsValidSbxName(m_pMacroNameEdit->GetText()) )
                 {
-                    ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId(RID_STR_BADSBXNAME).toString() ).Execute();
+                    MessageDialog(this, IDEResId(RID_STR_BADSBXNAME)).Execute();
                     m_pMacroNameEdit->SetSelection( Selection( 0, m_pMacroNameEdit->GetText().getLength() ) );
                     m_pMacroNameEdit->GrabFocus();
                     return 1;

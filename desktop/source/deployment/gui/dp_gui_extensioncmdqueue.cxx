@@ -61,6 +61,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/anytostring.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -505,7 +506,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         SolarMutexGuard guard;
         OUString sMsg(ResId(RID_STR_UNSUPPORTED_PLATFORM, *DeploymentGuiResMgr::get()).toString());
         sMsg = sMsg.replaceAll("%Name", platExc.package->getDisplayName());
-        ErrorBox box( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, sMsg );
+        MessageDialog box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, sMsg);
         box.Execute();
         approve = true;
     }
@@ -570,7 +571,7 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
             text = ::comphelper::anyToString( rStatus ); // fallback
 
         const SolarMutexGuard aGuard;
-        const boost::scoped_ptr< ErrorBox > aBox( new ErrorBox( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, WB_OK, text ) );
+        const boost::scoped_ptr<MessageDialog> aBox(new MessageDialog(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, text));
         aBox->Execute();
     }
     ++m_nCurrentProgress;
@@ -812,8 +813,8 @@ void ExtensionCmdQueue::Thread::execute()
                     msg = ::comphelper::anyToString(exc);
 
                 const SolarMutexGuard guard;
-                boost::scoped_ptr<ErrorBox> box(
-                    new ErrorBox( currentCmdEnv->activeDialog(), WB_OK, msg ) );
+                boost::scoped_ptr<MessageDialog> box(
+                    new MessageDialog(currentCmdEnv->activeDialog(), msg));
                 if ( m_pDialogHelper )
                     box->SetText( m_pDialogHelper->getWindow()->GetText() );
                 box->Execute();

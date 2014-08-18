@@ -43,7 +43,7 @@ class DBSaveData;
 
 static DBSaveData* pSaveObj = NULL;
 
-#define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
+#define ERRORBOX(s) MessageDialog(this, s).Execute()
 
 //  class DBSaveData
 

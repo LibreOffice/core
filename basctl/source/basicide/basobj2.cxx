@@ -38,7 +38,7 @@
 #include <framework/documentundoguard.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/moduleoptions.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -160,7 +160,7 @@ bool RenameModule (
 
     if ( rDocument.hasModule( rLibName, rNewName ) )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2) );
+        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2));
         aError.Execute();
         return false;
     }
@@ -168,7 +168,7 @@ bool RenameModule (
     // #i74440
     if ( rNewName.isEmpty() )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_BADSBXNAME) );
+        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME));
         aError.Execute();
         return false;
     }
@@ -342,7 +342,7 @@ OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, 
                     {
                         // error
                         bError = true;
-                        ErrorBox( NULL, WB_OK | WB_DEF_OK, IDEResId(RID_STR_ERRORCHOOSEMACRO).toString() ).Execute();
+                        MessageDialog(NULL, IDEResId(RID_STR_ERRORCHOOSEMACRO)).Execute();
                     }
                 }
             }

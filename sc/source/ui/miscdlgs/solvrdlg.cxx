@@ -35,7 +35,7 @@ namespace
 {
     void lclErrorDialog( Window* pParent, const OUString& aString )
     {
-        ErrorBox( pParent, WinBits( WB_OK | WB_DEF_OK), aString ).Execute();
+        MessageDialog(pParent, aString).Execute();
     }
 }
 

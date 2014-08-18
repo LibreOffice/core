@@ -21,7 +21,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <tools/resid.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <osl/file.hxx>
 
 #include "xmlfilterdialogstrings.hrc"
@@ -257,7 +257,7 @@ bool XMLFilterTabDialog::onOk()
             aMessage = aMessage.replaceAll( "%s", aReplace1 );
         }
 
-        ErrorBox aBox(this, (WinBits)(WB_OK), aMessage );
+        MessageDialog aBox(this, aMessage);
         aBox.Execute();
 
         if( pFocusWindow )

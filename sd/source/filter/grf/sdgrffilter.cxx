@@ -29,7 +29,7 @@
 
 #include <unotools/localfilehelper.hxx>
 #include <tools/errinf.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <sfx2/docfile.hxx>
@@ -169,7 +169,7 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     else
     {
-        ErrorBox aErrorBox(NULL, WB_OK, SD_RESSTR(nId));
+        MessageDialog aErrorBox(NULL, SD_RESSTR(nId));
         aErrorBox.Execute();
     }
 }

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <osl/file.hxx>
 
 #include "ids.hrc"
@@ -35,7 +35,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
         OUString aNewName = maEDNewName.GetText();
         if ( ( aNewName == maNewName ) || aNewName.isEmpty() )
         {
-            ErrorBox aError( NULL, WB_OK, maSameName );
+            MessageDialog aError(NULL, maSameName);
             aError.Execute();
             return 1;
         }

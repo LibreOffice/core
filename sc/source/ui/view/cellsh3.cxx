@@ -425,8 +425,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                     else if( ! rReq.IsAPI() )
                     {
-                        ErrorBox aErrorBox( pTabViewShell->GetDialogParent(), WinBits(WB_OK | WB_DEF_OK),
-                                            ScGlobal::GetRscString(STR_NOAREASELECTED) );
+                        MessageDialog aErrorBox(pTabViewShell->GetDialogParent(),
+                                            ScGlobal::GetRscString(STR_NOAREASELECTED));
                         aErrorBox.Execute();
                     }
                 }
@@ -838,7 +838,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     }
                 }
                 else
-                    ErrorBox( pDlgParent, WinBits( WB_OK | WB_DEF_OK ),
+                    MessageDialog (pDlgParent,
                               ScGlobal::GetRscString(STR_INVALID_AFAREA) ).Execute();
             }
             break;

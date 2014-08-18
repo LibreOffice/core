@@ -409,7 +409,7 @@ namespace dbaui
             {
                 OUString sConfirm(ModuleRes(STR_CONFIRM_DROP_INDEX));
                 sConfirm = sConfirm.replaceFirst("$name$", m_pIndexList->GetEntryText(pSelected));
-                QueryBox aConfirm(this, WB_YES_NO, sConfirm);
+                MessageDialog aConfirm(this, sConfirm, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 if (RET_YES != aConfirm.Execute())
                     return;
             }
@@ -616,7 +616,7 @@ namespace dbaui
         {
             OUString sError(ModuleRes(STR_INDEX_NAME_ALREADY_USED));
             sError = sError.replaceFirst("$name$", sNewName);
-            ErrorBox aError(this, WB_OK, sError);
+            MessageDialog aError(this, sError);
             aError.Execute();
 
             updateToolbox();
@@ -695,7 +695,7 @@ namespace dbaui
                 // a column is specified twice ... won't work anyway, so prevent this here and now
                 OUString sMessage(ModuleRes(STR_INDEXDESIGN_DOUBLE_COLUMN_NAME));
                 sMessage = sMessage.replaceFirst("$name$", aFieldCheck->sFieldName);
-                ErrorBox aError(this, WB_OK, sMessage);
+                MessageDialog aError(this, sMessage);
                 aError.Execute();
                 m_pFields->GrabFocus();
                 return false;

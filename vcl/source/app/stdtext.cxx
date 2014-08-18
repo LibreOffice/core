@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/stdtext.hxx>
 
 #include <svids.hrc>
@@ -39,16 +39,8 @@ void ShowServiceNotAvailableError(Window* pParent,
 {
     OUString aText  = GetStandardText(STANDARD_TEXT_SERVICE_NOT_AVAILABLE).
         replaceAll("%s", rServiceName);
-    if (bError)
-    {
-        ErrorBox aBox( pParent, WB_OK | WB_DEF_OK, aText );
-        aBox.Execute();
-    }
-    else
-    {
-        WarningBox aBox( pParent, WB_OK | WB_DEF_OK, aText );
-        aBox.Execute();
-    }
+    MessageDialog aBox(pParent, aText, bError ? VCL_MESSAGE_ERROR : VCL_MESSAGE_WARNING);
+    aBox.Execute();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,7 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include <boost/scoped_array.hpp>
 
-#define ERRORBOX(s) ErrorBox(this,WinBits(WB_OK|WB_DEF_OK),s).Execute()
+#define ERRORBOX(s) MessageDialog(this, s).Execute()
 #define QUERYBOX(m) QueryBox(this,WinBits(WB_YES_NO|WB_DEF_YES),m).Execute()
 
 const sal_uLong nEntryDataCol = 0;

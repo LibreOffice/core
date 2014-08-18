@@ -52,7 +52,7 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <cassert>
 #include <basic/codecompletecache.hxx>
 #include <svtools/miscopt.hxx>
@@ -317,7 +317,7 @@ bool ModulWindow::BasicExecute()
     {
         if ( !aDocument.allowMacros() )
         {
-            WarningBox( this, WB_OK, IDE_RESSTR(RID_STR_CANNOTRUNMACRO)).Execute();
+            MessageDialog(this, IDE_RESSTR(RID_STR_CANNOTRUNMACRO), VCL_MESSAGE_WARNING).Execute();
             return false;
         }
     }
@@ -455,7 +455,7 @@ bool ModulWindow::LoadBasic()
                 bDone = true;
         }
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_COULDNTREAD) ).Execute();
+            MessageDialog(this, IDE_RESSTR(RID_STR_COULDNTREAD)).Execute();
     }
     return bDone;
 }
@@ -501,7 +501,7 @@ bool ModulWindow::SaveBasicSource()
                 bDone = true;
         }
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId(RID_STR_COULDNTWRITE).toString() ).Execute();
+            MessageDialog(this, IDEResId(RID_STR_COULDNTWRITE)).Execute();
     }
 
     return bDone;

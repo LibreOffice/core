@@ -36,13 +36,12 @@
 #include "filter.hrc"
 
 #include "filtdlg.hxx"
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <limits>
 
-#define ERRORBOX(rid)   ErrorBox( this, WinBits( WB_OK|WB_DEF_OK), \
-                                   ScGlobal::GetRscString(rid) ).Execute()
+#define ERRORBOX(rid)   MessageDialog(this, ScGlobal::GetRscString(rid)).Execute()
 
 #define QUERY_ENTRY_COUNT 4
 #define INVALID_HEADER_POS std::numeric_limits<size_t>::max()

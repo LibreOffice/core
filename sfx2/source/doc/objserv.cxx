@@ -333,7 +333,7 @@ void SfxObjectShell::CheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        ErrorBox* pErrorBox = new ErrorBox( &GetFrame()->GetWindow(), WB_OK, e.Message );
+        MessageDialog* pErrorBox = new MessageDialog( &GetFrame()->GetWindow(), e.Message );
         pErrorBox->Execute( );
         delete pErrorBox;
     }
@@ -352,7 +352,7 @@ void SfxObjectShell::CancelCheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        ErrorBox* pErrorBox = new ErrorBox( &GetFrame()->GetWindow(), WB_OK, e.Message );
+        MessageDialog* pErrorBox = new MessageDialog(&GetFrame()->GetWindow(), e.Message);
         pErrorBox->Execute( );
         delete pErrorBox;
     }
@@ -377,7 +377,7 @@ void SfxObjectShell::CheckIn( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        ErrorBox* pErrorBox = new ErrorBox( &GetFrame()->GetWindow(), WB_OK, e.Message );
+        MessageDialog* pErrorBox = new MessageDialog(&GetFrame()->GetWindow(), e.Message);
         pErrorBox->Execute( );
         delete pErrorBox;
     }
@@ -392,7 +392,7 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        ErrorBox* pErrorBox = new ErrorBox( &GetFrame()->GetWindow(), WB_OK, e.Message );
+        MessageDialog* pErrorBox = new MessageDialog(&GetFrame()->GetWindow(), e.Message);
         pErrorBox->Execute( );
         delete pErrorBox;
     }
@@ -1465,7 +1465,7 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         }
         else
         {
-            ErrorBox( NULL, WB_OK, SfxResId(STR_XMLSEC_ODF12_EXPECTED).toString() ).Execute();
+            MessageDialog(NULL, SfxResId(STR_XMLSEC_ODF12_EXPECTED)).Execute();
             return;
         }
 

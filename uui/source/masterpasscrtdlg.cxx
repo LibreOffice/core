@@ -18,7 +18,7 @@
  */
 
 #include <sal/macros.h>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include "ids.hrc"
 #include "masterpasscrtdlg.hxx"
@@ -33,8 +33,6 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl)
     return 0;
 }
 
-
-
 IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
 {
     // compare both passwords and show message box if there are not equal!!
@@ -43,7 +41,7 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
     else
     {
         OUString aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
-        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
+        MessageDialog aErrorBox(this, aErrorMsg);
         aErrorBox.Execute();
         m_pEDMasterPasswordCrt->SetText( OUString() );
         m_pEDMasterPasswordRepeat->SetText( OUString() );
@@ -51,8 +49,6 @@ IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
     }
     return 1;
 }
-
-
 
 MasterPasswordCreateDialog::MasterPasswordCreateDialog(Window* pParent, ResMgr* pResMgr)
     : ModalDialog(pParent, "SetMasterPasswordDialog", "uui/ui/setmasterpassworddlg.ui")

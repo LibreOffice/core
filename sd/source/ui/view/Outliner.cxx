@@ -1158,8 +1158,7 @@ void Outliner::PrepareSpellCheck (void)
     {
         mbError = true;
         mbEndOfSearch = true;
-        ErrorBox aErrorBox (NULL,
-            WB_OK,
+        MessageDialog aErrorBox (NULL,
             SD_RESSTR(STR_NOLANGUAGE));
         ShowModalMessageBox (aErrorBox);
     }

@@ -18,8 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
-#include <tools/shl.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include "svx/passwd.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
@@ -34,7 +33,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
 
     if ( m_pNewPasswdED->GetText() != m_pRepeatPasswdED->GetText() )
     {
-        ErrorBox( this, WB_OK, aRepeatPasswdErrStr ).Execute();
+        MessageDialog(this, aRepeatPasswdErrStr).Execute();
         m_pNewPasswdED->SetText( aEmpty );
         m_pRepeatPasswdED->SetText( aEmpty );
         m_pNewPasswdED->GrabFocus();
@@ -43,7 +42,7 @@ IMPL_LINK_NOARG(SvxPasswordDialog, ButtonHdl)
 
     if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
     {
-        ErrorBox( this, WB_OK, aOldPasswdErrStr ).Execute();
+        MessageDialog(this, aOldPasswdErrStr).Execute();
         m_pOldPasswdED->SetText( aEmpty );
         m_pOldPasswdED->GrabFocus();
         bOK = false;

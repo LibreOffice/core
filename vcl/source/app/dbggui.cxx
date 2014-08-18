@@ -40,7 +40,7 @@
 #include "vcl/fixed.hxx"
 #include "vcl/group.hxx"
 #include "vcl/field.hxx"
-#include "vcl/msgbox.hxx"
+#include "vcl/layout.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/threadex.hxx"
@@ -819,7 +819,7 @@ void DbgGUIStart()
     }
     else
     {
-        ErrorBox( 0, WB_OK, OUString("TOOLS Library has no Debug-Routines") ).Execute();
+        MessageDialog(0, OUString("TOOLS Library has no Debug-Routines")).Execute();
     }
 }
 

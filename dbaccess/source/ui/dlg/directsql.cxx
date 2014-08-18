@@ -19,7 +19,7 @@
 
 #include "directsql.hxx"
 #include "dbu_dlg.hrc"
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <comphelper/types.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
@@ -94,7 +94,7 @@ namespace dbaui
 
         {
             OUString sMessage(ModuleRes(STR_DIRECTSQL_CONNECTIONLOST));
-            ErrorBox aError(this, WB_OK, sMessage);
+            MessageDialog aError(this, sMessage);
             aError.Execute();
         }
 

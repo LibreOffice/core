@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include "ids.hrc"
 #include "masterpassworddlg.hxx"
@@ -49,7 +49,7 @@ MasterPasswordDialog::MasterPasswordDialog
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
         OUString aErrorMsg( ResId( STR_ERROR_MASTERPASSWORD_WRONG, *pResourceMgr ));
-        ErrorBox aErrorBox( pParent, WB_OK, aErrorMsg );
+        MessageDialog aErrorBox(pParent, aErrorMsg);
         aErrorBox.Execute();
     }
 

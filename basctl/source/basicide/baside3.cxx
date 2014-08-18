@@ -52,6 +52,7 @@
 #include <svl/whiter.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
@@ -858,7 +859,7 @@ bool DialogWindow::SaveDialog()
             }
         }
         else
-            ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_COULDNTWRITE)).Execute();
+            MessageDialog(this, IDE_RESSTR(RID_STR_COULDNTWRITE)).Execute();
     }
 
     return bDone;

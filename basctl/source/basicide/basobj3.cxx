@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <algorithm>
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
@@ -171,7 +171,7 @@ bool RenameDialog (
 
     if ( rDocument.hasDialog( rLibName, rNewName ) )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2) );
+        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2));
         aError.Execute();
         return false;
     }
@@ -179,7 +179,7 @@ bool RenameDialog (
     // #i74440
     if ( rNewName.isEmpty() )
     {
-        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_BADSBXNAME) );
+        MessageDialog aError(pErrorParent, IDE_RESSTR(RID_STR_BADSBXNAME));
         aError.Execute();
         return false;
     }

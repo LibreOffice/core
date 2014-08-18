@@ -53,7 +53,7 @@
 #include <osl/file.hxx>
 #include <unotools/bootstrap.hxx>
 #include <rtl/uri.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 
@@ -76,7 +76,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::system;
 
-class NoHelpErrorBox : public ErrorBox
+class NoHelpErrorBox : public MessageDialog
 {
 public:
     NoHelpErrorBox( Window* _pParent );
@@ -84,9 +84,8 @@ public:
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 };
 
-NoHelpErrorBox::NoHelpErrorBox( Window* _pParent ) :
-
-    ErrorBox( _pParent, WB_OK, SfxResId( RID_STR_HLPFILENOTEXIST ).toString() )
+NoHelpErrorBox::NoHelpErrorBox( Window* _pParent )
+    : MessageDialog(_pParent, SfxResId(RID_STR_HLPFILENOTEXIST))
 {
     // Error message: "No help available"
 }

@@ -23,7 +23,7 @@
 
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/awt/XControl.hpp>
@@ -646,7 +646,7 @@ namespace dlgprov
                 aOUFinal += aQuoteChar;
                 aOUFinal += aOURes.copy( nIndex + 2 );
 
-                ErrorBox( NULL, WinBits( WB_OK ), aOUFinal ).Execute();
+                MessageDialog(NULL, aOUFinal).Execute();
             }
         }
     }

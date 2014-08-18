@@ -383,8 +383,8 @@ void ScDBFunc::ToggleAutoFilter()
         }
         else
         {
-            ErrorBox aErrorBox( GetViewData().GetDialogParent(), WinBits( WB_OK | WB_DEF_OK ),
-                                ScGlobal::GetRscString( STR_ERR_AUTOFILTER ) );
+            MessageDialog aErrorBox(GetViewData().GetDialogParent(),
+                                ScGlobal::GetRscString(STR_ERR_AUTOFILTER));
             aErrorBox.Execute();
         }
     }

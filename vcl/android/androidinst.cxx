@@ -346,7 +346,7 @@ void DestroySalInstance( SalInstance *pInst )
     delete pInst;
 }
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
                                         const OUString& rMessage,
@@ -371,8 +371,8 @@ int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
         // horror would be needed to use it directly here. Probably we
         // want some easier to use magic wrapper, hmm.
 
-        ErrorBox aVclErrBox( NULL, WB_OK, rTitle );
-        aVclErrBox.SetText( rMessage );
+        MessageDialog aVclErrBox(NULL, rMessage);
+        aVclErrBox.SetText(rTitle);
         aVclErrBox.Execute();
     }
     else

@@ -35,7 +35,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmlscript/xmldlg_imexp.hxx>
 #include <svtools/treelistentry.hxx>
@@ -99,7 +99,7 @@ bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewT
 {
     if ( !IsValidSbxName(rNewText) )
     {
-        ErrorBox( this, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_BADSBXNAME) ).Execute();
+        MessageDialog(this, IDE_RESSTR(RID_STR_BADSBXNAME)).Execute();
         return false;
     }
 
@@ -816,8 +816,7 @@ void ObjectPage::NewDialog()
 
             if ( aDocument.hasDialog( aLibName, aDlgName ) )
             {
-                ErrorBox( this, WB_OK | WB_DEF_OK,
-                          IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2) ).Execute();
+                MessageDialog(this, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2)).Execute();
             }
             else
             {
@@ -1014,8 +1013,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
         }
         catch (const container::ElementExistException& )
         {
-            ErrorBox( pWin, WB_OK | WB_DEF_OK,
-                      IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2) ).Execute();
+            MessageDialog(pWin, IDE_RESSTR(RID_STR_SBXNAMEALLREADYUSED2)).Execute();
         }
         catch (const container::NoSuchElementException& )
         {

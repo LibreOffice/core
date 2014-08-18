@@ -35,6 +35,7 @@
 
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
@@ -624,7 +625,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        ErrorBox aErrorBox( NULL, WB_OK, msg );
+        MessageDialog aErrorBox(NULL, msg);
         aErrorBox.SetText( sTitle );
         aErrorBox.Execute();
     }

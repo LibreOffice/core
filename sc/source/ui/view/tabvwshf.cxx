@@ -410,8 +410,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    nRet = ErrorBox( GetDialogParent(),
-                                                     WinBits( WB_OK | WB_DEF_OK ),
+                                    nRet = MessageDialog(GetDialogParent(),
                                                      aErrMsg
                                                    ).Execute();
                                 }

@@ -721,7 +721,7 @@ IMPL_LINK( ScOptSolverDlg, CursorDownHdl, ScCursorRefEdit*, pEdit )
 void ScOptSolverDlg::ShowError( bool bCondition, formula::RefEdit* pFocus )
 {
     OUString aMessage = bCondition ? maConditionError : maInputError;
-    ErrorBox( this, WinBits( WB_OK | WB_DEF_OK ), aMessage ).Execute();
+    MessageDialog(this, aMessage).Execute();
     if (pFocus)
     {
         mpEdActive = pFocus;

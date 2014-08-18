@@ -830,7 +830,7 @@ void ScDocument::UpdateExternalRefLinks(Window* pWin)
         aBuf.append(OUString(ScResId(SCSTR_EXTDOC_NOT_LOADED)));
         aBuf.appendAscii("\n\n");
         aBuf.append(aFile);
-        ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+        MessageDialog aBox(pWin, aBuf.makeStringAndClear());
         aBox.Execute();
     }
 

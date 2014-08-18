@@ -35,7 +35,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <tools/stream.hxx>
 
 namespace basctl
@@ -548,7 +548,7 @@ TabBarAllowRenamingReturnCode TabBar::AllowRenaming()
     bool const bValid = IsValidSbxName(GetEditText());
 
     if ( !bValid )
-        ErrorBox( this, WB_OK | WB_DEF_OK, IDEResId(RID_STR_BADSBXNAME).toString() ).Execute();
+        MessageDialog(this, IDEResId(RID_STR_BADSBXNAME)).Execute();
 
     return bValid ? TABBAR_RENAMING_YES : TABBAR_RENAMING_NO;
 }
@@ -789,7 +789,7 @@ bool QueryDel( const OUString& rName, const ResId& rId, Window* pParent )
     aNameBuf.append('\'');
     aNameBuf.insert(0, '\'');
     aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
-    QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
+    MessageDialog aQueryBox(pParent, aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
     return ( aQueryBox.Execute() == RET_YES );
 }
 
@@ -854,7 +854,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 
                     if ( !bOK )
                     {
-                        ErrorBox aErrorBox( Application::GetDefDialogParent(), WB_OK, IDE_RESSTR(RID_STR_WRONGPASSWORD) );
+                        MessageDialog aErrorBox(Application::GetDefDialogParent(), IDE_RESSTR(RID_STR_WRONGPASSWORD));
                         aErrorBox.Execute();
                     }
                 }

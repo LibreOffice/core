@@ -36,8 +36,8 @@
 #include <vcl/button.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/msgbox.hxx>
 
 #include <algorithm>
 #include <stdlib.h>
@@ -117,7 +117,7 @@ namespace dbaui
             // show an error message
             OUString sError( ModuleRes( STR_COULD_NOT_LOAD_ODBC_LIB ) );
             sError = sError.replaceFirst("#lib#", aEnumeration.getLibraryName());
-            ErrorBox aDialog(this, WB_OK, sError);
+            MessageDialog aDialog(this, sError);
             aDialog.Execute();
             return false;
         }

@@ -34,7 +34,7 @@
 #include "vcl/svapp.hxx"
 #include "vcl/settings.hxx"
 #include "vcl/wrkwin.hxx"
-#include "vcl/msgbox.hxx"
+#include "vcl/layout.hxx"
 #include "vcl/button.hxx"
 #include "vcl/dockwin.hxx"
 #include "salinst.hxx"
@@ -155,7 +155,7 @@ ResMgr* ImplGetResMgr()
                 "Missing vcl resource. This indicates that files vital to localization are missing. "
                 "You might have a corrupt installation.";
             fprintf( stderr, "%s\n", pMsg );
-            ErrorBox aBox( NULL, WB_OK | WB_DEF_OK, OUString( pMsg, strlen( pMsg ), RTL_TEXTENCODING_ASCII_US ) );
+            MessageDialog aBox(NULL, OUString(pMsg, strlen(pMsg), RTL_TEXTENCODING_ASCII_US));
             aBox.Execute();
         }
     }

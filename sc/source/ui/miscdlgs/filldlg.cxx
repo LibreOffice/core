@@ -20,7 +20,7 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <svl/zforlist.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <limits.h>
 
 #include "scresid.hxx"
@@ -299,8 +299,7 @@ IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
         EndDialog( RET_OK );
     else
     {
-        ErrorBox( this,
-                  WinBits( WB_OK | WB_DEF_OK ),
+        MessageDialog(this,
                   aErrMsgInvalidVal
                 ).Execute();
         pEdWrong->GrabFocus();

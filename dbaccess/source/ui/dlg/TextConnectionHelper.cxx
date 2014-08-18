@@ -32,7 +32,7 @@
 #include "dbfindex.hxx"
 #include "dbaccess_helpid.hrc"
 #include "localresaccess.hxx"
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <svl/cjkoptions.hxx>
 #if HAVE_FEATURE_JAVA
@@ -304,7 +304,7 @@ namespace dbaui
         }
         else
             return true;
-        ErrorBox(NULL, WB_OK, MnemonicGenerator::EraseAllMnemonicChars( aErrorText)).Execute();
+        MessageDialog(NULL, MnemonicGenerator::EraseAllMnemonicChars(aErrorText)).Execute();
         pErrorWin->GrabFocus();
         return false;
     }

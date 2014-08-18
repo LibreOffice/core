@@ -21,7 +21,7 @@
 
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <osl/mutex.hxx>
 
 #include <cuires.hrc>
@@ -906,7 +906,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                         bValid = false;
                         OUString aError( m_createErrStr );
                         aError += m_createDupStr;
-                        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
+                        MessageDialog aErrorBox(static_cast<Window*>(this), aError);
                         aErrorBox.SetText( m_createErrTitleStr );
                         aErrorBox.Execute();
                         xNewDlg->SetObjectName( aNewName );
@@ -993,7 +993,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_createErrStr );
-        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
+        MessageDialog aErrorBox(static_cast<Window*>(this), aError);
         aErrorBox.SetText( m_createErrTitleStr );
         aErrorBox.Execute();
     }
@@ -1069,7 +1069,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     {
         //ISSUE L10N & message from exception?
         OUString aError( m_renameErrStr );
-        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
+        MessageDialog aErrorBox(static_cast<Window*>(this), aError);
         aErrorBox.SetText( m_renameErrTitleStr );
         aErrorBox.Execute();
     }
@@ -1080,7 +1080,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
-    QueryBox aQueryBox( static_cast<Window*>(this), WB_YES_NO | WB_DEF_YES, aQuery );
+    MessageDialog aQueryBox(static_cast<Window*>(this), aQuery, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
     aQueryBox.SetText( m_delQueryTitleStr );
     if ( aQueryBox.Execute() == RET_NO )
     {
@@ -1115,7 +1115,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     else
     {
         //ISSUE L10N & message from exception?
-        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, m_delErrStr );
+        MessageDialog aErrorBox(static_cast<Window*>(this), m_delErrStr);
         aErrorBox.SetText( m_delErrTitleStr );
         aErrorBox.Execute();
     }
@@ -1487,7 +1487,7 @@ IMPL_LINK( SvxScriptErrorDialog, ShowDialog, OUString*, pMessage )
         message = OUString( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     }
 
-    MessBox* pBox = new WarningBox( NULL, WB_OK, message );
+    MessageDialog* pBox = new MessageDialog(NULL, message, VCL_MESSAGE_WARNING);
     pBox->SetText( CUI_RES( RID_SVXSTR_ERROR_TITLE ) );
     pBox->Execute();
 

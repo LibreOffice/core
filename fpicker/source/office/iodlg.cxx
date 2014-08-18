@@ -25,8 +25,8 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <unotools/ucbhelper.hxx>
@@ -1042,7 +1042,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     "$filename$",
                     aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
                 );
-                QueryBox aBox( pThis, WB_YES_NO, aMsg );
+                MessageDialog aBox(pThis, aMsg, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 if ( aBox.Execute() != RET_YES )
                     return 0;
             }
@@ -1087,7 +1087,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     }
                     sError = sError.replaceFirst( "$name$", sInvalidFile );
 
-                    ErrorBox aError( pThis, WB_OK, sError );
+                    MessageDialog aError(pThis, sError);
                     aError.Execute();
                     return 0;
                 }
@@ -1883,7 +1883,7 @@ short SvtFileDialog::PrepareExecute()
 
                 if ( bEmpty )
                 {
-                    ErrorBox aBox( this, WB_OK, SVT_RESSTR( STR_SVT_NOREMOVABLEDEVICE ) );
+                    MessageDialog aBox(this, SVT_RESSTR(STR_SVT_NOREMOVABLEDEVICE));
                     aBox.Execute();
                     return 0;
                 }

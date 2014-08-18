@@ -36,8 +36,8 @@
 #include <tools/debug.hxx>
 #include "dbadmin.hxx"
 #include "moduledbu.hxx"
-#include <vcl/msgbox.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/msgbox.hxx>
 #include <sfx2/passwd.hxx>
 
 using namespace ::com::sun::star::container;
@@ -93,7 +93,7 @@ IMPL_LINK_NOARG(OPasswordDialog, OKHdl_Impl)
     else
     {
         OUString aErrorMsg( ModuleRes( STR_ERROR_PASSWORDS_NOT_IDENTICAL));
-        ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
+        MessageDialog aErrorBox(this, aErrorMsg);
         aErrorBox.Execute();
         m_pEDPassword->SetText( OUString() );
         m_pEDPasswordRepeat->SetText( OUString() );

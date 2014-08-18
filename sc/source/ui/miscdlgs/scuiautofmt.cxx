@@ -245,9 +245,10 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 
                 if ( !bFmtInserted )
                 {
-                    sal_uInt16 nRet = ErrorBox( this,
-                                            WinBits( WB_OK_CANCEL | WB_DEF_OK),
-                                            ScGlobal::GetRscString(STR_INVALID_AFNAME)
+                    sal_uInt16 nRet = MessageDialog(this,
+                                            ScGlobal::GetRscString(STR_INVALID_AFNAME),
+                                            VCL_MESSAGE_ERROR,
+                                            VCL_BUTTONS_OK_CANCEL
                                           ).Execute();
 
                     bOk = ( nRet == RET_CANCEL );
@@ -369,9 +370,10 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
             }
             if( !bFmtRenamed )
             {
-                bOk = RET_CANCEL == ErrorBox( this,
-                                    WinBits( WB_OK_CANCEL | WB_DEF_OK),
-                                    ScGlobal::GetRscString(STR_INVALID_AFNAME)
+                bOk = RET_CANCEL == MessageDialog( this,
+                                    ScGlobal::GetRscString(STR_INVALID_AFNAME),
+                                    VCL_MESSAGE_ERROR,
+                                    VCL_BUTTONS_OK_CANCEL
                                     ).Execute();
             }
         }

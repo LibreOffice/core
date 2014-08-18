@@ -38,6 +38,7 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <sot/formats.hxx>
 
@@ -239,7 +240,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 
     if (!bOK)
     {
-        ErrorBox aErrorBox( NULL, (WinBits)WB_OK, SD_RESSTR(STR_READ_DATA_ERROR));
+        MessageDialog aErrorBox(NULL, SD_RESSTR(STR_READ_DATA_ERROR));
         aErrorBox.Execute();
 
         CloseBookmarkDoc();

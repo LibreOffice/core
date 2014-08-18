@@ -19,7 +19,7 @@
 
 #include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
 #include <tools/stream.hxx>
@@ -127,7 +127,7 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        ErrorBox aErrorBox( NULL, WB_OK, msg );
+        MessageDialog aErrorBox(NULL, msg);
         aErrorBox.SetText( GetText() );
         aErrorBox.Execute();
     }

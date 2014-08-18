@@ -20,7 +20,7 @@
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/settings.hxx>
 #include <SpellAttrib.hxx>
@@ -2030,8 +2030,8 @@ IMPL_LINK( SpellDialog, HandleHyperlink, FixedHyperlink*, pHyperlink )
         uno::Any exc( ::cppu::getCaughtException() );
         OUString msg( ::comphelper::anyToString( exc ) );
         const SolarMutexGuard guard;
-        ErrorBox aErrorBox( NULL, WB_OK, msg );
-        aErrorBox.SetText( sTitle );
+        MessageDialog aErrorBox(NULL, msg);
+        aErrorBox.SetText(sTitle);
         aErrorBox.Execute();
     }
 

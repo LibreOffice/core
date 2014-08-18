@@ -38,7 +38,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/edit.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/toolbox.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -622,7 +622,7 @@ IMPL_LINK(SfxTemplateManagerDlg, RepositoryMenuSelectHdl, Menu*, pMenu)
             {
                 OUString aMsg(SfxResId(STR_MSG_ERROR_REPOSITORY_NAME).toString());
                 aMsg = aMsg.replaceFirst("$1",pPlace->GetName());
-                ErrorBox(this,WB_OK,aMsg).Execute();
+                MessageDialog(this, aMsg).Execute();
             }
         }
     }
@@ -933,7 +933,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                     {
                         OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
                         aMsg = aMsg.replaceFirst("$1",pFolder->maTitle);
-                        ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
+                        MessageDialog(this, aMsg.replaceFirst("$2",aTemplateList));
                     }
                 }
             }
@@ -956,7 +956,7 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
                 {
                     OUString aMsg(SfxResId(STR_MSG_ERROR_IMPORT).toString());
                     aMsg = aMsg.replaceFirst("$1",mpLocalView->getCurRegionName());
-                    ErrorBox(this,WB_OK,aMsg.replaceFirst("$2",aTemplateList));
+                    MessageDialog(this, aMsg.replaceFirst("$2",aTemplateList));
                 }
             }
 
@@ -1045,7 +1045,7 @@ void SfxTemplateManagerDlg::OnTemplateExport()
         if (!aTemplateList.isEmpty())
         {
             OUString aText( SfxResId(STR_MSG_ERROR_EXPORT).toString() );
-            ErrorBox(this, WB_OK,aText.replaceFirst("$1",aTemplateList)).Execute();
+            MessageDialog(this, aText.replaceFirst("$1",aTemplateList)).Execute();
         }
     }
 }
@@ -1158,7 +1158,7 @@ void SfxTemplateManagerDlg::OnTemplateProperties ()
 
 void SfxTemplateManagerDlg::OnTemplateDelete ()
 {
-    QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE).toString());
+    MessageDialog aQueryDlg(this, SfxResId(STR_QMSG_SEL_TEMPLATE_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
     if ( aQueryDlg.Execute() == RET_NO )
         return;
@@ -1207,7 +1207,7 @@ void SfxTemplateManagerDlg::OnTemplateDelete ()
     if (!aTemplateList.isEmpty())
     {
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_TEMPLATE).toString() );
-        ErrorBox(this, WB_OK,aMsg.replaceFirst("$1",aTemplateList)).Execute();
+        MessageDialog(this, aMsg.replaceFirst("$1",aTemplateList)).Execute();
     }
 }
 
@@ -1243,7 +1243,7 @@ void SfxTemplateManagerDlg::OnFolderNew()
 
 void SfxTemplateManagerDlg::OnFolderDelete()
 {
-    QueryBox aQueryDlg(this, WB_YES_NO | WB_DEF_YES, SfxResId(STR_QMSG_SEL_FOLDER_DELETE).toString());
+    MessageDialog aQueryDlg(this, SfxResId(STR_QMSG_SEL_FOLDER_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
     if ( aQueryDlg.Execute() == RET_NO )
         return;
@@ -1271,7 +1271,7 @@ void SfxTemplateManagerDlg::OnFolderDelete()
     if (!aFolderList.isEmpty())
     {
         OUString aMsg( SfxResId(STR_MSG_ERROR_DELETE_FOLDER).toString() );
-        ErrorBox(this, WB_OK,aMsg.replaceFirst("$1",aFolderList)).Execute();
+        MessageDialog(this, aMsg.replaceFirst("$1",aFolderList)).Execute();
     }
 }
 
@@ -1292,7 +1292,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
 
     if (!mpLocalView->isNonRootRegionVisible() && maSelFolders.empty())
     {
-        ErrorBox(this, WB_OK,SfxResId(STR_MSG_ERROR_SELECT_FOLDER).toString()).Execute();
+        MessageDialog(this, SfxResId(STR_MSG_ERROR_SELECT_FOLDER)).Execute();
         return;
     }
 
@@ -1306,7 +1306,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
         {
             OUString aFolderList;
             OUString aQMsg(SfxResId(STR_QMSG_TEMPLATE_OVERWRITE).toString());
-            QueryBox aQueryDlg(this,WB_YES_NO | WB_DEF_YES, OUString());
+            MessageDialog aQueryDlg(this, OUString(), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
             if (mpLocalView->isNonRootRegionVisible())
             {
@@ -1315,7 +1315,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
                 if (!mpLocalView->isTemplateNameUnique(nRegionItemId,aName))
                 {
                     aQMsg = aQMsg.replaceFirst("$1",aName);
-                    aQueryDlg.SetMessText(aQMsg.replaceFirst("$2",mpLocalView->getCurRegionName()));
+                    aQueryDlg.set_primary_text(aQMsg.replaceFirst("$2",mpLocalView->getCurRegionName()));
 
                     if (aQueryDlg.Execute() == RET_NO)
                         return;
@@ -1334,7 +1334,7 @@ void SfxTemplateManagerDlg::OnTemplateSaveAs()
                     if (!mpLocalView->isTemplateNameUnique(pItem->mnId,aName))
                     {
                         OUString aDQMsg = aQMsg.replaceFirst("$1",aName);
-                        aQueryDlg.SetMessText(aDQMsg.replaceFirst("$2",pItem->maTitle));
+                        aQueryDlg.set_primary_text(aDQMsg.replaceFirst("$2",pItem->maTitle));
 
                         if (aQueryDlg.Execute() == RET_NO)
                             continue;
@@ -1471,7 +1471,7 @@ void SfxTemplateManagerDlg::localMoveTo(sal_uInt16 nMenuId)
             OUString aDst = mpLocalView->getRegionItemName(nItemId);
             OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",aDst);
-            ErrorBox(this, WB_OK,aMsg.replaceFirst( "$2",aTemplateList)).Execute();
+            MessageDialog(this, aMsg.replaceFirst( "$2",aTemplateList)).Execute();
         }
     }
 }
@@ -1525,7 +1525,7 @@ void SfxTemplateManagerDlg::remoteMoveTo(const sal_uInt16 nMenuId)
             OUString aMsg(SfxResId(STR_MSG_ERROR_REMOTE_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",mpRemoteView->getCurRegionName());
             aMsg = aMsg.replaceFirst("$2",mpLocalView->getRegionItemName(nItemId));
-            ErrorBox(this,WB_OK,aMsg.replaceFirst("$1",aTemplateList)).Execute();
+            MessageDialog(this, aMsg.replaceFirst("$1",aTemplateList)).Execute();
         }
     }
 }
@@ -1581,7 +1581,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
             OUString aDst = mpLocalView->getRegionItemName(nItemId);
             OUString aMsg(SfxResId(STR_MSG_ERROR_LOCAL_MOVE).toString());
             aMsg = aMsg.replaceFirst("$1",aDst);
-            ErrorBox(this, WB_OK,aMsg.replaceFirst( "$2",aTemplateList)).Execute();
+            MessageDialog(this, aMsg.replaceFirst( "$2",aTemplateList)).Execute();
         }
     }
 

@@ -92,8 +92,7 @@
 #include <sfx2/viewsh.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/shl.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
 
@@ -1512,7 +1511,7 @@ void FmXFormShell::ExecuteSearch()
 
     if (m_aSearchForms.empty() )
     {   // es gibt keine Controls, die alle Bedingungen fuer eine Suche erfuellen
-        ErrorBox(NULL, WB_OK, SVX_RESSTR(RID_STR_NODATACONTROLS)).Execute();
+        MessageDialog(NULL, SVX_RESSTR(RID_STR_NODATACONTROLS)).Execute();
         return;
     }
 
@@ -3188,7 +3187,7 @@ void FmXFormShell::CreateExternalView()
 
         if (!bHaveUsableControls)
         {
-            ErrorBox(NULL, WB_OK, SVX_RESSTR(RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY)).Execute();
+            MessageDialog(NULL, SVX_RESSTR(RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY)).Execute();
             return;
         }
     }

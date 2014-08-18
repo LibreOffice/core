@@ -20,7 +20,7 @@
 #include <sal/types.h>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svl/urihelper.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
@@ -1009,7 +1009,7 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
 
         if ( !mpBookmarkDoc )
         {
-            ErrorBox aErrorBox( this, WB_OK, SD_RESSTR( STR_READ_DATA_ERROR ) );
+            MessageDialog aErrorBox(this, SD_RESSTR(STR_READ_DATA_ERROR));
             aErrorBox.Execute();
             mpMedium = 0; //On failure the SfxMedium is invalid
         }

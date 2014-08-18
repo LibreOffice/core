@@ -683,7 +683,7 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, PushButton*, pBtn )
         }
         else
         {
-            ErrorBox( this, WinBits( WB_OK | WB_DEF_OK ),
+            MessageDialog(this,
                       ScGlobal::GetRscString( STR_INVALID_TABREF )
                     ).Execute();
             mpEdCopyFrom->GrabFocus();

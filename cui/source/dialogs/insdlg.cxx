@@ -46,7 +46,6 @@
 #include <vcl/group.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/classids.hxx>
 #include <sfx2/frmdescr.hxx>
@@ -280,7 +279,7 @@ short SvInsertOleDlg::Execute()
                         // global Resource from svtools (former so3 resource)
                         OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                         aErr = aErr.replaceFirst( "%", aFileName );
-                        ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
+                        MessageDialog(this, aErr).Execute();
                     }
                     else
                     {
@@ -288,7 +287,7 @@ short SvInsertOleDlg::Execute()
                         // global Resource from svtools (former so3 resource)
                         OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE ) );
                         aErr = aErr.replaceFirst( "%", aServerName );
-                        ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
+                        MessageDialog(this, aErr).Execute();
                     }
                 }
             }
@@ -329,7 +328,7 @@ short SvInsertOleDlg::Execute()
                 // global Resource from svtools (former so3 resource)
                 OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_FROM_FILE ) );
                 aErr = aErr.replaceFirst( "%", aFileName );
-                ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
+                MessageDialog(this, aErr).Execute();
             }
         }
     }
@@ -466,7 +465,7 @@ short SvInsertPlugInDialog::Execute()
             // global Resource from svtools (former so3 resource)
             OUString aErr( impl_getSvtResString( STR_ERROR_OBJNOCREATE_PLUGIN ) );
             aErr = aErr.replaceFirst( "%", aURL );
-            ErrorBox( this, WB_3DLOOK | WB_OK, aErr ).Execute();
+            MessageDialog(this, aErr).Execute();
         }
     }
 

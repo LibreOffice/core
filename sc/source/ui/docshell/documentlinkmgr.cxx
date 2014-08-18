@@ -24,7 +24,7 @@
 #include <scresid.hxx>
 
 #include <sfx2/linkmgr.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -165,7 +165,7 @@ bool DocumentLinkManager::updateDdeLinks( Window* pWin )
             aBuf.append(aElem);
             aBuf.appendAscii("\nType : ");
             aBuf.append(aType);
-            ErrorBox aBox(pWin, WB_OK, aBuf.makeStringAndClear());
+            MessageDialog aBox(pWin, aBuf.makeStringAndClear());
             aBox.Execute();
         }
     }

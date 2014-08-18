@@ -511,7 +511,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                             // unable to create PlugIn
                             OUString aStrErr( SdResId( STR_ERROR_OBJNOCREATE_PLUGIN ) );
                             aStrErr = aStrErr.replaceFirst( "%", aStrURL );
-                            ErrorBox( mpWindow, WB_3DLOOK | WB_OK, aStrErr ).Execute();
+                            MessageDialog(mpWindow, aStrErr).Execute();
                         }
                     }
                 }

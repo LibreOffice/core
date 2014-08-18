@@ -43,7 +43,7 @@
 
 //UUUU
 #include "sfx2/opengrf.hxx"
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <boost/scoped_ptr.hpp>
 
 using namespace com::sun::star;
@@ -2166,7 +2166,7 @@ IMPL_LINK_NOARG( SvxAreaTabPage, ClickImportHdl_Impl )
         else
         {
             // graphic could not be loaded
-            ErrorBox(this, WB_OK, OUString(ResId(RID_SVXSTR_READ_DATA_ERROR, rMgr))).Execute();
+            MessageDialog (this, OUString(ResId(RID_SVXSTR_READ_DATA_ERROR, rMgr))).Execute();
         }
     }
 

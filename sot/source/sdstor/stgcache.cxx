@@ -28,9 +28,6 @@
 #include "stgdir.hxx"
 #include "stgio.hxx"
 
-//#define   CHECK_DIRTY 1
-//#define   READ_AFTER_WRITE 1
-
 ////////////////////////////// class StgPage
 // This class implements buffer functionality. The cache will always return
 // a page buffer, even if a read fails. It is up to the caller to determine
@@ -341,11 +338,7 @@ bool StgCache::Read( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
             }
             if( pStrm->Tell() != nPos )
             {
-                if( pStrm->Seek( nPos ) != nPos ) {
-    #ifdef CHECK_DIRTY
-                    ErrorBox( NULL, WB_OK, OUString("SO2: Seek failed") ).Execute();
-    #endif
-                }
+                pStrm->Seek(nPos);
             }
             pStrm->Read( pBuf, nBytes );
             if ( nPg != nPg2 )
@@ -372,30 +365,13 @@ bool StgCache::Write( sal_Int32 nPage, void* pBuf, sal_Int32 nPg )
             nPos = 0L, nBytes = 512;
         if( pStrm->Tell() != nPos )
         {
-            if( pStrm->Seek( nPos ) != nPos ) {
-#ifdef CHECK_DIRTY
-                ErrorBox( NULL, WB_OK, OUString("SO2: Seek failed") ).Execute();
-#endif
-            }
+            pStrm->Seek(nPos);
         }
         sal_uLong nRes = pStrm->Write( pBuf, nBytes );
         if( nRes != nBytes )
             SetError( SVSTREAM_WRITE_ERROR );
         else
             SetError( pStrm->GetError() );
-#ifdef READ_AFTER_WRITE
-        sal_uInt8 cBuf[ 512 ];
-        pStrm->Flush();
-        pStrm->Seek( nPos );
-        bool bRes = ( pStrm->Read( cBuf, 512 ) == 512 );
-        if( bRes )
-            bRes = !memcmp( cBuf, pBuf, 512 );
-        if( !bRes )
-        {
-            ErrorBox( NULL, WB_OK, OUString("SO2: Read after Write failed") ).Execute();
-            pStrm->SetError( SVSTREAM_WRITE_ERROR );
-        }
-#endif
     }
     return Good();
 }

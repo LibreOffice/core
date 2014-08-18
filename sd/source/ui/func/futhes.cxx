@@ -20,7 +20,7 @@
 #include "futhes.hxx"
 
 #include <editeng/outliner.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>
 #include <editeng/eeitem.hxx>
@@ -113,7 +113,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
 
             if (eState == EE_SPELL_NOLANGUAGE)
             {
-                ErrorBox(mpWindow, WB_OK, SD_RESSTR(STR_NOLANGUAGE)).Execute();
+                MessageDialog(mpWindow, SD_RESSTR(STR_NOLANGUAGE)).Execute();
             }
         }
     }
@@ -140,7 +140,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
 
         if (eState == EE_SPELL_NOLANGUAGE)
         {
-            ErrorBox(mpWindow, WB_OK, SD_RESSTR(STR_NOLANGUAGE)).Execute();
+            MessageDialog(mpWindow, SD_RESSTR(STR_NOLANGUAGE)).Execute();
         }
     }
 }

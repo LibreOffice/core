@@ -30,6 +30,7 @@
 #include <basic/sbx.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <rtl/math.hxx>
 
@@ -250,8 +251,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     {
         //! andere Fehlermeldung, wenn gefunden, aber nicht bAllowed ??
 
-        ErrorBox aBox( pParent, WinBits(WB_OK),
-                        ScGlobal::GetRscString( STR_VALID_MACRONOTFOUND ) );
+        MessageDialog aBox( pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
         aBox.Execute();
     }
 
@@ -357,8 +357,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
     {
         //! andere Fehlermeldung, wenn gefunden, aber nicht bAllowed ??
 
-        ErrorBox aBox( pParent, WinBits(WB_OK),
-                        ScGlobal::GetRscString( STR_VALID_MACRONOTFOUND ) );
+        MessageDialog aBox(pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
         aBox.Execute();
     }
 

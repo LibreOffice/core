@@ -28,7 +28,6 @@
 #include <vcl/button.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/msgbox.hxx>
 
 struct PasswordToOpenModifyDialog_Impl
 {
@@ -102,8 +101,8 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
             m_pPasswdToModifyED->GetText().isEmpty();
     if (bInvalidState)
     {
-        ErrorBox aErrorBox( m_pParent, WB_OK,
-            m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2 );
+        MessageDialog aErrorBox(m_pParent,
+            m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2);
         aErrorBox.Execute();
     }
     else // check for mismatched passwords...
@@ -113,7 +112,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
         const int nMismatch = (bToOpenMatch? 0 : 1) + (bToModifyMatch? 0 : 1);
         if (nMismatch > 0)
         {
-            ErrorBox aErrorBox( m_pParent, WB_OK, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch );
+            MessageDialog aErrorBox(m_pParent, nMismatch == 1 ? m_aOneMismatch : m_aTwoMismatch);
             aErrorBox.Execute();
 
             Edit* pEdit = !bToOpenMatch ? m_pPasswdToOpenED : m_pPasswdToModifyED;

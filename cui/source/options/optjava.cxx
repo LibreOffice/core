@@ -32,7 +32,6 @@
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/imagemgr.hxx>
@@ -978,7 +977,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
         {
             OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sFile );
-            ErrorBox( this, WB_OK, sMsg ).Execute();
+            MessageDialog(this, sMsg).Execute();
         }
     }
     EnableRemoveButton();
@@ -1015,7 +1014,7 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
         {
             OUString sMsg( CUI_RES( RID_SVXSTR_MULTIFILE_DBL_ERR ) );
             sMsg = sMsg.replaceFirst( "%1", sNewFolder );
-            ErrorBox( this, WB_OK, sMsg ).Execute();
+            MessageDialog(this, sMsg).Execute();
         }
     }
     EnableRemoveButton();

@@ -38,8 +38,7 @@
 
 // DEFINE --------------------------------------------------------------------
 
-#define ERRORBOX(rid) ErrorBox( this, WinBits( WB_OK|WB_DEF_OK),\
-                                    ScGlobal::GetRscString(rid) ).Execute()
+#define ERRORBOX(rid) MessageDialog(this, ScGlobal::GetRscString(rid)).Execute()
 
 //  class ScSpecialFilterDialog
 

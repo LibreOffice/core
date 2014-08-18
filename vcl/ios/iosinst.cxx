@@ -22,7 +22,7 @@
 #include <postmac.h>
 
 #include <basebmp/scanlineformats.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <touch/touch.h>
 #include <touch/touch-impl.h>
 
@@ -30,6 +30,7 @@
 #include "headless/svpdummies.hxx"
 #include "generic/gendata.hxx"
 #include "quartz/utils.h"
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
 // Horrible hack
@@ -236,9 +237,8 @@ int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
     if (IosSalInstance::getInstance() != NULL)
     {
         // Temporary...
-
-        ErrorBox aVclErrBox( NULL, WB_OK, rTitle );
-        aVclErrBox.SetText( rMessage );
+        MessageDialog aVclErrBox(NULL, rMessage);
+        aVclErrBox.SetTitle(rTitle);
         aVclErrBox.Execute();
     }
 

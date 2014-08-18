@@ -23,7 +23,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <vcl/svapp.hxx>
 #include "app.hrc"
@@ -505,7 +505,7 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
             else
                 return false;
 
-            ErrorBox( pImpl->m_pParentWin, WB_OK, sError ).Execute();
+            MessageDialog(pImpl->m_pParentWin, sError).Execute();
         }
     }
     else if( !pImpl->m_bIsConnect )

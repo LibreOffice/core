@@ -20,7 +20,7 @@
 #include "passworddlg.hxx"
 #include "ids.hrc"
 
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 using namespace ::com::sun::star;
 
@@ -44,7 +44,7 @@ PasswordDialog::PasswordDialog(Window* _pParent,
         const sal_uInt16 nOpenToModifyErrStrId = bOpenToModify ? STR_ERROR_PASSWORD_TO_MODIFY_WRONG : STR_ERROR_PASSWORD_TO_OPEN_WRONG;
         const sal_uInt16 nErrStrId = bIsSimplePasswordRequest ? STR_ERROR_SIMPLE_PASSWORD_WRONG : nOpenToModifyErrStrId;
         OUString aErrorMsg(ResId(nErrStrId, *pResourceMgr).toString());
-        ErrorBox aErrorBox( GetParent(), WB_OK, aErrorMsg );
+        MessageDialog aErrorBox(GetParent(), aErrorMsg);
         aErrorBox.Execute();
     }
 
@@ -91,7 +91,7 @@ IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl)
 
     if (m_pEDConfirmPassword->IsVisible() && bPasswdMismatch)
     {
-        ErrorBox aErrorBox( this, WB_OK, aPasswdMismatch );
+        MessageDialog aErrorBox(this, aPasswdMismatch);
         aErrorBox.Execute();
     }
     else if (bValid)

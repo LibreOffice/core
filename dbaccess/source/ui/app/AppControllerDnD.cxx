@@ -43,7 +43,7 @@
 #include <unotools/ucbhelper.hxx>
 #include "dlgsave.hxx"
 #include <comphelper/types.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbexception.hxx>
@@ -175,7 +175,7 @@ void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList
         else
         {
             OUString sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
-            ErrorBox aError(getView(), WB_OK, sMessage);
+            MessageDialog aError(getView(), sMessage);
             aError.Execute();
         }
     }
