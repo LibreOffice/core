@@ -2242,6 +2242,30 @@ short SvNumberformat::ImpCheckCondition(double& fNumber,
     }
 }
 
+static bool lcl_appendStarFillChar( OUStringBuffer& rBuf, const OUString& rStr )
+{
+    // Right during user input the star symbol is the very
+    // last character before the user enters another one.
+    if (rStr.getLength() > 1)
+    {
+        rBuf.append((sal_Unicode) 0x1B);
+        rBuf.append(rStr[1]);
+        return true;
+    }
+    return false;
+}
+
+static bool lcl_insertStarFillChar( OUStringBuffer& rBuf, sal_Int32 nPos, const OUString& rStr )
+{
+    if (rStr.getLength() > 1)
+    {
+        rBuf.insert( nPos, rStr[1]);
+        rBuf.insert( nPos, (sal_Unicode) 0x1B);
+        return true;
+    }
+    return false;
+}
+
 bool SvNumberformat::GetOutputString(const OUString& sString,
                                      OUString& OutString,
                                      Color** ppColor)
@@ -2274,9 +2298,7 @@ bool SvNumberformat::GetOutputString(const OUString& sString,
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
-                    sOutBuff.append((sal_Unicode) 0x1B);
-                    sOutBuff.append(rInfo.sStrArray[i][1]);
-                    bRes = true;
+                    bRes = lcl_appendStarFillChar( sOutBuff, rInfo.sStrArray[i]);
                 }
                 break;
             case NF_SYMBOLTYPE_BLANK:
@@ -2589,15 +2611,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                 case NF_SYMBOLTYPE_STAR:
                     if( bStarFlag )
                     {
-                        const OUString& rStr =rInfo.sStrArray[i];
-                        // Right during user input the star symbol is the very
-                        // last character before the user enters another one.
-                        if (rStr.getLength() > 1)
-                        {
-                            sBuff.append((sal_Unicode) 0x1B);
-                            sBuff.append(rStr[1]);
-                            bRes = true;
-                        }
+                        bRes = lcl_appendStarFillChar( sBuff, rInfo.sStrArray[i]);
                     }
                     break;
                 case NF_SYMBOLTYPE_BLANK:
@@ -3221,9 +3235,7 @@ bool SvNumberformat::ImpGetTimeOutput(double fNumber,
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                sBuff.append((sal_Unicode)0x1B);
-                sBuff.append(rInfo.sStrArray[i][1]);
-                bRes = true;
+                bRes = lcl_appendStarFillChar( sBuff, rInfo.sStrArray[i]);
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
@@ -3719,9 +3731,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                sBuff.append((sal_Unicode) 0x1B);
-                sBuff.append(rInfo.sStrArray[i][1]);
-                bRes = true;
+                bRes = lcl_appendStarFillChar( sBuff, rInfo.sStrArray[i]);
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
@@ -4014,9 +4024,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                sBuff.append((sal_Unicode) 0x1B);
-                sBuff.append(rInfo.sStrArray[i][1]);
-                bRes = true;
+                bRes = lcl_appendStarFillChar( sBuff, rInfo.sStrArray[i]);
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
@@ -4347,9 +4355,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
-                    sStr.insert(k, rInfo.sStrArray[j][1]);
-                    sStr.insert(k, (sal_Unicode) 0x1B);
-                    bRes = true;
+                    bRes = lcl_insertStarFillChar( sStr, k, rInfo.sStrArray[j]);
                 }
                 break;
             case NF_SYMBOLTYPE_BLANK:
@@ -4482,9 +4488,7 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                sBuff.insert(k, rInfo.sStrArray[j][1]);
-                sBuff.insert(k, (sal_Unicode) 0x1B);
-                bRes = true;
+                bRes = lcl_insertStarFillChar( sBuff, k, rInfo.sStrArray[j]);
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
@@ -4658,9 +4662,7 @@ bool SvNumberformat::ImpNumberFill( OUStringBuffer& sBuff, // number string
         case NF_SYMBOLTYPE_STAR:
             if( bStarFlag )
             {
-                sBuff.insert(k, rInfo.sStrArray[j][1]);
-                sBuff.insert(k, sal_Unicode(0x1B));
-                bRes = true;
+                bRes = lcl_insertStarFillChar( sBuff, k, rInfo.sStrArray[j]);
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
