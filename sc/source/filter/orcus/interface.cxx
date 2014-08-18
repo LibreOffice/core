@@ -683,24 +683,31 @@ ScOrcusAutoFilter::~ScOrcusAutoFilter()
 {
 }
 
-void ScOrcusAutoFilter::set_range(const char* /*p_ref*/, size_t /*n_ref*/)
+void ScOrcusAutoFilter::set_range(const char* p_ref, size_t n_ref)
 {
+    OUString aRange(p_ref, n_ref, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.autofilter", "set_range: " << aRange);
 }
 
-void ScOrcusAutoFilter::set_column(orcus::spreadsheet::col_t /*col*/)
+void ScOrcusAutoFilter::set_column(orcus::spreadsheet::col_t col)
 {
+    SAL_INFO("sc.orcus.autofilter", "set_column: " << col);
 }
 
-void ScOrcusAutoFilter::append_column_match_value(const char* /*p*/, size_t /*n*/)
+void ScOrcusAutoFilter::append_column_match_value(const char* p, size_t n)
 {
+    OUString aString(p, n, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.autofilter", "append_column_match_value: " << aString);
 }
 
 void ScOrcusAutoFilter::commit_column()
 {
+    SAL_INFO("sc.orcus.autofilter", "commit column");
 }
 
 void ScOrcusAutoFilter::commit()
 {
+    SAL_INFO("sc.orcus.autofilter", "commit");
 }
 
 ScOrcusTable::ScOrcusTable(SCTAB nTab):
