@@ -22,8 +22,6 @@
 
 #include <sfx2/sfx.hrc>
 
-#define IBX_MNUCFG_ALREADY_INCLUDED         (RID_SFX_MENU_START+2)
-
 #define STR_MENU_CFGITEM                    RID_SFX_MENU_START+1
 #define STR_MENU_ADDONS                     RID_SFX_MENU_START+2
 #define STR_MENU_ADDONHELP                  RID_SFX_MENU_START+3

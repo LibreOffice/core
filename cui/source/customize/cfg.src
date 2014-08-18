@@ -263,9 +263,9 @@ QueryBox QBX_CONFIRM_RESTORE_DEFAULT
     DEFBUTTON = WB_DEF_NO ;
 };
 
-InfoBox IBX_MNUCFG_ALREADY_INCLUDED
+String RID_SVXSTR_MNUCFG_ALREADY_INCLUDED
 {
-    Message [ en-US ] = "Function is already included in this popup." ;
+    Text [ en-US ] = "Function is already included in this popup." ;
 };
 
 String RID_SVXSTR_LABEL_NEW_NAME
