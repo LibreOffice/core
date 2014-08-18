@@ -967,8 +967,9 @@ namespace oglcanvas
                 break;
         }
 
-        o_action.maARGBColor =
-            mpDevice->getDeviceColorSpace()->convertToARGB(renderState.DeviceColor)[0];
+        if (renderState.DeviceColor.getLength())
+            o_action.maARGBColor =
+                mpDevice->getDeviceColorSpace()->convertToARGB(renderState.DeviceColor)[0];
     }
 
     void CanvasHelper::flush() const
