@@ -50,6 +50,7 @@
 #include <dochdl.hrc>
 #include <swerror.h>
 #include <frmmgr.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 
 #include <editeng/acorrcfg.hxx>
@@ -331,7 +332,7 @@ bool SwGlossaryHdl::NewGlossary(const OUString& rName, const OUString& rShortNam
                             rCfg.IsSaveRelFile(), pOnlyTxt );
     if(nSuccess == (sal_uInt16) -1 )
     {
-        InfoBox(pWrtShell->GetView().GetWindow(), SW_RES(MSG_ERR_INSERT_GLOS)).Execute();
+        MessageDialog(pWrtShell->GetView().GetWindow(), SW_RES(STR_ERR_INSERT_GLOS), VCL_MESSAGE_INFO).Execute();
     }
     if( !pCurGrp )
         rStatGlossaries.PutGroupDoc( pTmp );

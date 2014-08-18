@@ -36,9 +36,9 @@ InfoBox MSG_NO_MERGE_ENTRY
 {
     Message [ en-US ] = "Could not merge documents." ;
 };
-InfoBox MSG_ERR_INSERT_GLOS
+String STR_ERR_INSERT_GLOS
 {
-    Message [ en-US ] = "AutoText could not be created." ;
+    Text [ en-US ] = "AutoText could not be created." ;
 };
 InfoBox MSG_ERR_SRCSTREAM
 {

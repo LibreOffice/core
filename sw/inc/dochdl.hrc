@@ -23,7 +23,6 @@
 #include "rcid.hrc"
 
 #define STR_NOGLOS                  (RC_DOCHDL_BEGIN + 1)
-#define MSG_ERR_INSERT_GLOS         (RC_DOCHDL_BEGIN + 3)
 #define STR_CLPBRD_FORMAT_ERROR     (RC_DOCHDL_BEGIN + 4)
 
 #define STR_NO_TABLE                (RC_DOCHDL_BEGIN + 7)

@@ -29,11 +29,6 @@ String STR_NO_TABLE
     Text [ en-US ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
 };
 
-InfoBox MSG_ERR_INSERT_GLOS
-{
-    Message [ en-US ] = "AutoText could not be created." ;
-};
-
 String STR_CLPBRD_FORMAT_ERROR
 {
     Text [ en-US ] = "Requested clipboard format is not available." ;

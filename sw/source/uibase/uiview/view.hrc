@@ -50,9 +50,9 @@
 
 #define STR_SAVEACOPY_SRC           (RC_VIEW_BEGIN + 34)
 
-// MSG
+#define STR_ERR_INSERT_GLOS         (RC_VIEW_BEGIN + 35)
 
-#define MSG_ERR_INSERT_GLOS (RC_VIEW_BEGIN)
+// MSG
 
 #define MSG_ERR_NO_FAX      (RC_VIEW_BEGIN + 5)
 #define MSG_ERR_SRCSTREAM   (RC_VIEW_BEGIN + 6)
