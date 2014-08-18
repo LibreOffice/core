@@ -15,11 +15,14 @@
 
 #define BUFLEN 2048
 
-string getexe(string exename) {
+string getexe(string exename, bool maybeempty) {
     char* cmdbuf;
     size_t cmdlen;
     _dupenv_s(&cmdbuf,&cmdlen,exename.c_str());
     if(!cmdbuf) {
+        if (maybeempty) {
+            return string();
+        }
         cout << "Error " << exename << " not defined. Did you forget to source the environment?" << endl;
         exit(1);
     }

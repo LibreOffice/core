@@ -16,7 +16,7 @@
 
 using namespace std;
 
-string getexe(string exename);
+string getexe(string exename, bool maybeempty = false);
 
 void setupccenv();
 

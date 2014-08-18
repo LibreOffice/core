@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
     vector<string> rawargs(argv + 1, argv + argc);
 
     string command=getexe("REAL_CXX");
-    string flags=getexe("REAL_CXX_FLAGS");
+    string flags=getexe("REAL_CXX_FLAGS", true);
 
     string args=flags.empty() ? string() : flags + " ";
     args += processccargs(rawargs);
