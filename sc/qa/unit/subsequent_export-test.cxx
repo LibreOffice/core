@@ -111,9 +111,7 @@ public:
     void testFunctionsExcel2010( sal_uLong nFormatType );
     void testFunctionsExcel2010XLSX();
     void testFunctionsExcel2010XLS();
-#if 0
     void testFunctionsExcel2010ODS();
-#endif
 
     void testRelativePaths();
     void testSheetProtection();
@@ -154,14 +152,7 @@ public:
     CPPUNIT_TEST(testRelativePaths);
 #endif
     CPPUNIT_TEST(testSheetProtection);
-
-    /* TODO: export to ODS currently (2014-04-28) makes the validator stumble,
-     * probably due to a loext:fill-character attribute in a
-     * <number:number-style> element (says number:text tag would not be
-     * allowed, which is nonsense). Skip this test until solved. */
-#if 0
     CPPUNIT_TEST(testFunctionsExcel2010ODS);
-#endif
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1983,12 +1974,10 @@ void ScExportTest::testSheetProtection()
     xDocSh2->DoClose();
 }
 
-#if 0
 void ScExportTest::testFunctionsExcel2010ODS()
 {
     testFunctionsExcel2010(ODS);
 }
-#endif
 
 ScExportTest::ScExportTest()
       : ScBootstrapFixture("/sc/qa/unit/data")
