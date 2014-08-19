@@ -1933,6 +1933,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
         break;
         default: OSL_FAIL("was ist das fuer ein Typ?");
     }
+    if (!pFld)
+        throw uno::RuntimeException("no SwField created?");
     if (pFld)
     {
         pFld->SetAutomaticLanguage(!m_pImpl->m_pProps->bBool4);
@@ -1986,9 +1988,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                 }
             }
         }
+        else // could theoretically happen, if paragraph is full
+            throw uno::RuntimeException("no SwTxtAttr inserted?");
     }
     delete pFld;
 
+    assert(m_pImpl->m_pFmtFld);
     m_pImpl->m_pDoc = pDoc;
     m_pImpl->m_pDoc->GetUnoCallBack()->Add(m_pImpl.get());
     m_pImpl->m_bIsDescriptor = false;
