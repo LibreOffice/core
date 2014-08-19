@@ -40,7 +40,7 @@ class SwTOXMark;
 class SwTxtTOXMark;
 class SwDoc;
 
-class SwTOXMarks : public std::vector<SwTOXMark*> {};
+typedef std::vector<SwTOXMark*> SwTOXMarks;
 
 // Entry of content index, alphabetical index or user defined index
 

@@ -42,6 +42,7 @@
 #include <editeng/numitem.hxx>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <tox.hxx>
 
 #include <boost/unordered_map.hpp>
 
@@ -126,11 +127,7 @@ class SwSectionFmt;
 class SwSectionFmts;
 class SwSectionData;
 class SwSelBoxes;
-class SwTOXBase;
 class SwTOXBaseSection;
-class SwTOXMark;
-class SwTOXMarks;
-class SwTOXType;
 class SwTOXTypes;
 class SwTabCols;
 class SwTable;
