@@ -266,7 +266,6 @@ public class ScriptEditorForJavaScript implements ScriptEditor
                 });
                 Context.addContextListener(sdb);
                 sdb.setScopeProvider(new ScopeProvider() {
-                    @Override
                     public Scriptable getScope() {
                         return org.mozilla.javascript.tools.shell.Main.getScope();
                     }
