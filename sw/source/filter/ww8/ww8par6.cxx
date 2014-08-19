@@ -2380,7 +2380,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
             pAnchorStck->AddAnchor(*pPaM->GetPoint(),pSFlyPara->pFlyFmt);
         }
 
-        // merke Pos im Haupttext
+        // remember Pos in body text
         pSFlyPara->pMainTextPos = new SwPosition( *pPaM->GetPoint() );
 
         //remove fltanchors, otherwise they will be closed inside the
@@ -2476,7 +2476,9 @@ void SwWW8ImplReader::StopApo()
 
         Color aBg(0xFE, 0xFF, 0xFF, 0xFF);  //Transparent by default
 
-        if (SwTxtNode* pNd = aPref.GetNode().GetTxtNode())
+        SwTxtNode* pNd = aPref.GetNode().GetTxtNode();
+        if (pNd && &pPaM->GetPoint()->nNode.GetNode()
+                        != &pSFlyPara->pMainTextPos->nNode.GetNode())
         {
             /*
             #i582#
