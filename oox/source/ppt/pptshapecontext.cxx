@@ -96,7 +96,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
 
                               case XML_subTitle :       // slide/layout
                                   nFirstPlaceholder = XML_subTitle;
-                                  nSecondPlaceholder = XML_title;
+                                  nSecondPlaceholder = XML_body;
                               break;
 
                              case XML_obj :         // slide/layout
@@ -140,7 +140,8 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                               }
                               if ( pPlaceholder.get() )
                               {
-                                  OSL_TRACE("shape %s will get shape reference %s applied", OUStringToOString(mpShapePtr->getId(), RTL_TEXTENCODING_UTF8 ).getStr(), OUStringToOString(pPlaceholder->getId(), RTL_TEXTENCODING_UTF8 ).getStr());
+                                  SAL_INFO("oox.ppt","shape " << mpShapePtr->getId() <<
+                                          " will get shape reference " << pPlaceholder->getId() << " applied");
                                   mpShapePtr->applyShapeReference( *pPlaceholder.get() );
                                   PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
                                   if ( pPPTShape )

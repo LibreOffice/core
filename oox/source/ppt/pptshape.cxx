@@ -90,12 +90,10 @@ oox::drawingml::TextListStylePtr PPTShape::getSubTypeTextListStyle( const SlideP
     {
         case XML_ctrTitle :
         case XML_title :
-        case XML_subTitle :
             pTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
             break;
+        case XML_subTitle :
         case XML_obj :
-            pTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
-            break;
         case XML_body :
             if ( rSlidePersist.isNotesPage() )
                 pTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getNotesTextStyle() : rSlidePersist.getNotesTextStyle();
@@ -149,6 +147,7 @@ void PPTShape::addShape(
                             sServiceName = OUString();
                         else {
                             sServiceName = "com.sun.star.presentation.SubtitleShape";
+                            aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getBodyTextStyle() : rSlidePersist.getBodyTextStyle();
                         }
                     }
                     break;
@@ -391,7 +390,8 @@ namespace
 // 1. ph with nFirstSubType and the same oSubTypeIndex
 // 2. ph with nFirstSubType
 // 3. ph with nSecondSubType and the same oSubTypeIndex
-// 4. ph with the same oSubTypeIndex
+// 4. ph with nSecondSubType
+// 5. ph with the same oSubTypeIndex
 oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal_Int32 nSecondSubType,
     const OptValue< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
 {
@@ -399,6 +399,7 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
     oox::drawingml::ShapePtr aChoiceShapePtr1;
     oox::drawingml::ShapePtr aChoiceShapePtr2;
     oox::drawingml::ShapePtr aChoiceShapePtr3;
+    oox::drawingml::ShapePtr aChoiceShapePtr4;
     std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
     while (aRevIter != rShapes.rend())
     {
@@ -413,27 +414,31 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
                 }
                 else if ((*aRevIter)->getSubType() == nSecondSubType && !aChoiceShapePtr2.get())
                     aChoiceShapePtr2 = *aRevIter;
-                else if (!aChoiceShapePtr3.get())
-                    aChoiceShapePtr3 = *aRevIter;
+                else if (!aChoiceShapePtr4.get())
+                    aChoiceShapePtr4 = *aRevIter;
             }
             else if ((*aRevIter)->getSubType() == nFirstSubType && !aChoiceShapePtr1.get())
                 aChoiceShapePtr1 = *aRevIter;
+            else if ((*aRevIter)->getSubType() == nSecondSubType && !aChoiceShapePtr3.get())
+                aChoiceShapePtr3 = *aRevIter;
         }
         std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
-        aChoiceShapePtr3 = findPlaceholder( nFirstSubType, nSecondSubType, oSubTypeIndex, rChildren, bMasterOnly );
-        if (aChoiceShapePtr3.get())
+        aChoiceShapePtr4 = findPlaceholder( nFirstSubType, nSecondSubType, oSubTypeIndex, rChildren, bMasterOnly );
+        if (aChoiceShapePtr4.get())
         {
-            if (aChoiceShapePtr3->getSubType() == nFirstSubType)
+            if (aChoiceShapePtr4->getSubType() == nFirstSubType)
             {
-                if (aChoiceShapePtr3->getSubTypeIndex() == oSubTypeIndex)
-                    aShapePtr = aChoiceShapePtr3;
+                if (aChoiceShapePtr4->getSubTypeIndex() == oSubTypeIndex)
+                    aShapePtr = aChoiceShapePtr4;
                 else
-                    aChoiceShapePtr1 = aChoiceShapePtr3;
+                    aChoiceShapePtr1 = aChoiceShapePtr4;
             }
-            else if (aChoiceShapePtr3->getSubType() == nSecondSubType &&
-                    aChoiceShapePtr3->getSubTypeIndex() == oSubTypeIndex)
+            else if (aChoiceShapePtr4->getSubType() == nSecondSubType)
             {
-                aChoiceShapePtr2 = aChoiceShapePtr3;
+                if (aChoiceShapePtr4->getSubTypeIndex() == oSubTypeIndex)
+                    aChoiceShapePtr2 = aChoiceShapePtr4;
+                else
+                    aChoiceShapePtr3 = aChoiceShapePtr4;
             }
         }
         if (aShapePtr.get())
@@ -446,7 +451,9 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstSubType, sal
         return aChoiceShapePtr1;
     if (aChoiceShapePtr2.get())
         return aChoiceShapePtr2;
-    return aChoiceShapePtr3;
+    if (aChoiceShapePtr3.get())
+        return aChoiceShapePtr3;
+    return aChoiceShapePtr4;
 }
 
 oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes, bool bMasterOnly )
