@@ -108,25 +108,26 @@ SwXReferenceMark::~SwXReferenceMark()
 {
 }
 
-SwXReferenceMark *
-SwXReferenceMark::GetReferenceMark(
-        SwModify const& /*rUnoCB*/, SwFmtRefMark const& /*rMarkFmt*/)
-{
-    // #i105557#: do not iterate over the registered clients: race condition
-    // to do this properly requires the SwXReferenceMark to register at the
-    // SwFmtRefMark directly, not at the unocallback
-    return 0;
-}
-
-SwXReferenceMark *
+uno::Reference<text::XTextContent>
 SwXReferenceMark::CreateXReferenceMark(
-        SwDoc & rDoc, SwFmtRefMark & rMarkFmt)
+        SwDoc & rDoc, SwFmtRefMark *const pMarkFmt)
 {
-    SwXReferenceMark *const pXMark(
-        GetReferenceMark(rMarkFmt, rMarkFmt) );
-    return (pXMark)
-        ?   pXMark
-        :   new SwXReferenceMark(&rDoc, &rMarkFmt);
+    // i#105557: do not iterate over the registered clients: race condition
+    uno::Reference<text::XTextContent> xMark;
+    if (pMarkFmt)
+    {
+        xMark = pMarkFmt->GetXRefMark();
+    }
+    if (!xMark.is())
+    {
+        SwXReferenceMark *const pMark(new SwXReferenceMark(&rDoc, pMarkFmt));
+        xMark.set(pMark);
+        if (pMarkFmt)
+        {
+            pMarkFmt->SetXRefMark(xMark);
+        }
+    }
+    return xMark;
 }
 
 namespace

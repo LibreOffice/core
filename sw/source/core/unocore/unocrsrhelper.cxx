@@ -632,7 +632,9 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 if( pAny )
                 {   // hmm... can only return 1 here
                     const SwFmtRefMark& rRef = (*marks.begin())->GetRefMark();
-                    uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
+                    uno::Reference<XTextContent> const xRef =
+                        SwXReferenceMark::CreateXReferenceMark(*rPam.GetDoc(),
+                                const_cast<SwFmtRefMark*>(&rRef));
                     pAny->setValue(&xRef, cppu::UnoType<XTextContent>::get());
                 }
             }

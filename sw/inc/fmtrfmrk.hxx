@@ -20,9 +20,14 @@
 #define INCLUDED_SW_INC_FMTRFMRK_HXX
 
 #include <rtl/ustring.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
 
 #include <calbck.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace text { class XTextContent; }
+} } }
 
 class SwTxtRefMark;
 
@@ -39,6 +44,8 @@ class SwFmtRefMark
     SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark);
     OUString aRefName;
 
+    css::uno::WeakReference<css::text::XTextContent> m_wXReferenceMark;
+
 public:
     SwFmtRefMark( const OUString& rTxt );
     SwFmtRefMark( const SwFmtRefMark& rRefMark );
@@ -48,6 +55,10 @@ public:
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
+    // SwClient
+    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
+        SAL_OVERRIDE;
+
     void InvalidateRefMark();
 
     const SwTxtRefMark *GetTxtRefMark() const   { return pTxtAttr; }
@@ -55,6 +66,11 @@ public:
 
     inline       OUString &GetRefName()       { return aRefName; }
     inline const OUString &GetRefName() const { return aRefName; }
+
+    css::uno::WeakReference<css::text::XTextContent> const& GetXRefMark() const
+        { return m_wXReferenceMark; }
+    void SetXRefMark(css::uno::Reference<css::text::XTextContent> const& xMark)
+        { m_wXReferenceMark = xMark; }
 };
 
 #endif

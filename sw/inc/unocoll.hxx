@@ -521,7 +521,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-    static SwXReferenceMark* GetObject( SwDoc* pDoc, const SwFmtRefMark* pMark );
 };
 
 #endif

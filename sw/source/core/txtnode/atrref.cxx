@@ -55,6 +55,15 @@ SfxPoolItem* SwFmtRefMark::Clone( SfxItemPool* ) const
     return new SwFmtRefMark( *this );
 }
 
+void SwFmtRefMark::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
+{
+    NotifyClients(pOld, pNew);
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached UNO object
+        SetXRefMark(css::uno::Reference<css::text::XTextContent>(0));
+    }
+}
+
 void SwFmtRefMark::InvalidateRefMark()
 {
     SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,

@@ -496,7 +496,7 @@ lcl_CreateRefMarkPortion(
     Reference<XTextContent> xContent;
     if (!xContent.is())
     {
-        xContent = new SwXReferenceMark(pDoc, &rRefMark);
+        xContent = SwXReferenceMark::CreateXReferenceMark(*pDoc, &rRefMark);
     }
 
     SwXTextPortion* pPortion = 0;

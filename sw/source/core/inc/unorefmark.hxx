@@ -53,15 +53,12 @@ private:
 
     virtual ~SwXReferenceMark();
 
-public:
-
     SwXReferenceMark(SwDoc *const pDoc, SwFmtRefMark *const pMark);
 
-    static SwXReferenceMark *
-        CreateXReferenceMark(SwDoc & rDoc, SwFmtRefMark & rMarkFmt);
-    /// may return 0
-    static SwXReferenceMark *
-        GetReferenceMark(SwModify const& rUnoCB, SwFmtRefMark const& rMarkFmt);
+public:
+
+    static css::uno::Reference<css::text::XTextContent>
+        CreateXReferenceMark(SwDoc & rDoc, SwFmtRefMark * pMarkFmt);
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 

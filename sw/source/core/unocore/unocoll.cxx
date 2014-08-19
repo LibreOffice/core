@@ -669,7 +669,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
 
         break;
         case SW_SERVICE_REFERENCE_MARK :
-            xRet =  (cppu::OWeakObject*)new SwXReferenceMark(0, 0);
+            xRet = SwXReferenceMark::CreateXReferenceMark(*pDoc, 0);
         break;
         case SW_SERVICE_STYLE_CHARACTER_STYLE:
         case SW_SERVICE_STYLE_PARAGRAPH_STYLE:
@@ -1912,10 +1912,11 @@ uno::Any SwXReferenceMarks::getByIndex(sal_Int32 nIndex)
     uno::Reference< XTextContent >  xRef;
     if(0 <= nIndex && nIndex < USHRT_MAX)
     {
-        const SwFmtRefMark* pMark = GetDoc()->GetRefMark( (sal_uInt16) nIndex );
+        SwFmtRefMark *const pMark = const_cast<SwFmtRefMark*>(
+                GetDoc()->GetRefMark(static_cast<sal_uInt16>(nIndex)));
         if(pMark)
         {
-            xRef = SwXReferenceMarks::GetObject( GetDoc(), pMark );
+            xRef = SwXReferenceMark::CreateXReferenceMark(*GetDoc(), pMark);
             aRet.setValue(&xRef, cppu::UnoType<XTextContent>::get());
         }
     }
@@ -1931,10 +1932,12 @@ uno::Any SwXReferenceMarks::getByName(const OUString& rName)
     uno::Any aRet;
     if(IsValid())
     {
-        const SwFmtRefMark* pMark = GetDoc()->GetRefMark(rName);
+        SwFmtRefMark *const pMark =
+            const_cast<SwFmtRefMark*>(GetDoc()->GetRefMark(rName));
         if(pMark)
         {
-            uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( GetDoc(), pMark );
+            uno::Reference<XTextContent> const xRef =
+                SwXReferenceMark::CreateXReferenceMark(*GetDoc(), pMark);
             aRet.setValue(&xRef, cppu::UnoType<XTextContent>::get());
         }
         else
@@ -1982,12 +1985,6 @@ sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException, std:
     if(!IsValid())
         throw uno::RuntimeException();
     return 0 != GetDoc()->GetRefMarks();
-}
-
-SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark* pMark )
-{
-    return SwXReferenceMark::CreateXReferenceMark(
-                *pDoc, *const_cast<SwFmtRefMark*>(pMark));
 }
 
 void SwUnoCollection::Invalidate()
