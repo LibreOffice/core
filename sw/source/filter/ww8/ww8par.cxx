@@ -87,6 +87,7 @@
 #include <swtable.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
+#include <unocrsr.hxx>
 #include <IDocumentSettingAccess.hxx>
 
 #include <fltini.hxx>
@@ -4913,7 +4914,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             pDocShell->SetReadOnlyUI(true);
     }
 
-    pPaM = new SwPaM(rPos);
+    pPaM = rDoc.CreateUnoCrsr(rPos);
 
     pCtrlStck = new SwWW8FltControlStack( &rDoc, nFieldFlags, *this );
 
