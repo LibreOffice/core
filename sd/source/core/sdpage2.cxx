@@ -208,9 +208,10 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
 
                 if (pSheet != pOldSheet)
                 {
-                    pObj->EndListening(*pOldSheet);
+                    if (pOldSheet)
+                        pObj->EndListening(*pOldSheet);
 
-                    if (!pObj->IsListening(*pSheet))
+                    if (pSheet && !pObj->IsListening(*pSheet))
                         pObj->StartListening(*pSheet);
                 }
 
