@@ -69,9 +69,9 @@ writerfilter_SRC_ooxml_Preprocess_py=$(writerfilter_SRC)/ooxml/modelpreprocess.p
 writerfilter_SRC_ooxml_QNameToStr_py=$(writerfilter_SRC)/ooxml/qnametostr.py
 writerfilter_SRC_ooxml_ResourceIds_py=$(writerfilter_SRC)/ooxml/resourceids.py
 
-$(writerfilter_GEN_ooxml_Factory_cxx) : $(writerfilter_SRC)/ooxml/factoryimpl.py $(writerfilter_GEN_ooxml_Model_processed)
+$(writerfilter_GEN_ooxml_Factory_cxx) : $(writerfilter_SRC)/ooxml/factoryimpl.py $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
-	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
+	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_DEP_ooxml_Namespaces_txt) $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
 $(writerfilter_GEN_ooxml_Factory_hxx) : $(writerfilter_SRC)/ooxml/factoryinc.py $(writerfilter_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)

@@ -126,7 +126,7 @@ std::string fastTokenToId(sal_uInt32 nToken)
     {""")
 
     aliases = []
-    for alias in sorted([a.getAttribute("alias") for a in model.getElementsByTagName("namespace-alias")]):
+    for alias in sorted(ooxUrlAliases.values()):
         if not alias in aliases:
             aliases.append(alias)
             print("""    case oox::NMSP_%s:
@@ -160,11 +160,8 @@ def getFastParser(model):
     {
         mxFastParser = css::xml::sax::FastParser::create(mxContext);
 """)
-    aliases = {}
-    for alias in model.getElementsByTagName("namespace-alias"):
-        aliases[alias.getAttribute("name")] = alias.getAttribute("alias")
-    for name in sorted(aliases.keys()):
-        print("""        mxFastParser->registerNamespace("%s", oox::NMSP_%s);""" % (name, aliases[name]))
+    for url in sorted(ooxUrlAliases.keys()):
+        print("""        mxFastParser->registerNamespace("%s", oox::NMSP_%s);""" % (url, ooxUrlAliases[url]))
     print("""    }
 
     return mxFastParser;
@@ -200,7 +197,19 @@ using namespace com::sun::star;
     getFastParser(model)
 
 
-modelPath = sys.argv[1]
+def parseNamespaces(fro):
+    sock = open(fro)
+    for i in sock.readlines():
+        line = i.strip()
+        id, alias, url = line.split(' ')
+        ooxUrlAliases[url] = alias
+    sock.close()
+
+
+namespacesPath = sys.argv[1]
+ooxUrlAliases = {}
+parseNamespaces(namespacesPath)
+modelPath = sys.argv[2]
 model = minidom.parse(modelPath)
 createImpl(model)
 
