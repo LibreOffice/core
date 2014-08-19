@@ -244,15 +244,31 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     ScDocument& rDoc = pDocSh->GetDocument();
     ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
-    Date aActDate( Date::SYSTEM );
-    double fDate = aActDate - *pFormatter->GetNullDate();
-    Time aActTime( Time::SYSTEM );
-    double fTime = aActTime.GetHour()    / static_cast<double>(::Time::hourPerDay)   +
-                   aActTime.GetMin()     / static_cast<double>(::Time::minutePerDay) +
-                   aActTime.GetSec()     / static_cast<double>(::Time::secondPerDay) +
-                   aActTime.GetNanoSec() / static_cast<double>(::Time::nanoSecPerDay);
+    double fVal;
+    switch (nCellFmt)
+    {
+        case NUMBERFORMAT_DATE:
+            {
+                Date aActDate( Date::SYSTEM );
+                fVal = aActDate - *pFormatter->GetNullDate();
+            }
+            break;
+        default:
+            assert(!"unhandled current date/time");
+            // fallthru
+        case NUMBERFORMAT_TIME:
+        case NUMBERFORMAT_DATETIME:     // for now treat datetime and time identically
+            {
+                DateTime aActDateTime( DateTime::SYSTEM );
+                // Converting the null date to DateTime forces the correct
+                // operator-() to be used, resulting in a fractional date&time
+                // instead of only date value.
+                fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
+            }
+            break;
+    }
     pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
-    pDocSh->GetDocFunc().SetValueCell(aCurPos, fDate+fTime, true);
+    pDocSh->GetDocFunc().SetValueCell(aCurPos, fVal, true);
 
     // Set the new cell format only when it differs from the current cell
     // format type.
