@@ -25,7 +25,6 @@
 #include <unistd.h>
 #include <limits.h>
 
-#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <vector>
 

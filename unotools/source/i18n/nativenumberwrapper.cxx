@@ -18,7 +18,6 @@
  */
 
 #include <unotools/nativenumberwrapper.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/i18n/NativeNumberSupplier.hpp>
 
 using namespace ::com::sun::star;

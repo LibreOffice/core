@@ -31,7 +31,6 @@
 #include "file/FDriver.hxx"
 #include "file/FTable.hxx"
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
 #include <ucbhelper/content.hxx>
 
 using namespace com::sun::star::ucb;

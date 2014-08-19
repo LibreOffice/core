@@ -21,7 +21,6 @@
 #include <osl/diagnose.h>
 #include <connectivity/sqlparse.hxx>
 #include <i18nlangtag/mslangid.hxx>
-#include <tools/debug.hxx>
 #include "TConnection.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <comphelper/types.hxx>

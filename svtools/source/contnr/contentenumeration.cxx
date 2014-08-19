@@ -30,7 +30,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <comphelper/processfactory.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 

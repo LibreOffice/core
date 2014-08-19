@@ -19,7 +19,6 @@
 
 #include <unotools/numberformatcodewrapper.hxx>
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
-#include <tools/debug.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;

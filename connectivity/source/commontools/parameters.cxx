@@ -32,7 +32,6 @@
 #include <connectivity/filtermanager.hxx>
 #include "TConnection.hxx"
 
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <comphelper/uno3.hxx>
@@ -41,11 +40,8 @@
 #include <connectivity/ParameterCont.hxx>
 #include <rtl/ustrbuf.hxx>
 
-
 namespace dbtools
 {
-
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::sdbc;

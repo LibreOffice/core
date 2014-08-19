@@ -19,9 +19,6 @@
 
 #include <svtools/viewdataentry.hxx>
 
-#include <tools/debug.hxx>
-
-
 SvViewDataEntry::SvViewDataEntry() :
     nVisPos(0),
     mbSelected(false),

@@ -19,7 +19,6 @@
 
 #include <tools/link.hxx>
 #include <tools/line.hxx>
-#include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 
 #include <cstdlib>

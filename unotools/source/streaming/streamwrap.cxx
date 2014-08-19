@@ -19,7 +19,6 @@
 
 #include <unotools/streamwrap.hxx>
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
 
 namespace utl
 {

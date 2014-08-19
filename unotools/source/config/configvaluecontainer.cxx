@@ -19,11 +19,9 @@
 
 #include <unotools/configvaluecontainer.hxx>
 #include <unotools/confignode.hxx>
-#include <tools/debug.hxx>
 #include <uno/data.h>
 #include <algorithm>
 #include <vector>
-
 
 namespace utl
 {
