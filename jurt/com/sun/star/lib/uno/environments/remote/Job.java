@@ -90,7 +90,7 @@ public class Job {
                     ? dispatch_queryInterface((Type) args[0])
                     : md.getMethod().invoke(_object, args);
             } catch (InvocationTargetException e) {
-                exception = e.getTargetException();
+                exception = e.getCause();
                 if (exception == null) {
                     exception = e;
                 }
