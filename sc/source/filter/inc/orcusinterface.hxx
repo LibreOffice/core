@@ -281,9 +281,11 @@ class ScOrcusTable : public orcus::spreadsheet::iface::import_table
 {
 private:
     SCTAB mnTab;
+    ScDocument& mrDoc;
+    ScOrcusAutoFilter maAutoFilter;
 
 public:
-    ScOrcusTable(SCTAB nTab);
+    ScOrcusTable(SCTAB nTab, ScDocument& rDoc);
     virtual ~ScOrcusTable();
 
     virtual orcus::spreadsheet::iface::import_auto_filter* get_auto_filter() SAL_OVERRIDE;

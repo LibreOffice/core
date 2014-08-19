@@ -215,11 +215,6 @@ void ScOrcusSheet::cellInserted()
     }
 }
 
-os::iface::import_table* ScOrcusSheet::get_table()
-{
-    return NULL;
-}
-
 void ScOrcusSheet::set_auto(os::row_t row, os::col_t col, const char* p, size_t n)
 {
     OUString aVal(p, n, RTL_TEXTENCODING_UTF8);
@@ -710,8 +705,10 @@ void ScOrcusAutoFilter::commit()
     SAL_INFO("sc.orcus.autofilter", "commit");
 }
 
-ScOrcusTable::ScOrcusTable(SCTAB nTab):
-    mnTab(nTab)
+ScOrcusTable::ScOrcusTable(SCTAB nTab, ScDocument& rDoc):
+    mnTab(nTab),
+    mrDoc(rDoc),
+    maAutoFilter(rDoc)
 {
 }
 
@@ -721,7 +718,7 @@ ScOrcusTable::~ScOrcusTable()
 
 os::iface::import_auto_filter* ScOrcusTable::get_auto_filter()
 {
-    return NULL;
+    return &maAutoFilter;
 }
 
 void ScOrcusTable::set_identifier(size_t id)

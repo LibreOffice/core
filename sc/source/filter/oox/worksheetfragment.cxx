@@ -210,7 +210,7 @@ WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUSt
             nRead = xStream->readBytes(aData, 8000);
             aString.append(OString((char*) aData.getConstArray(), nRead));
         } while(nRead == 8000);
-        ScOrcusTable aTable(getSheetIndex());
+        ScOrcusTable aTable(getSheetIndex(), getScDocument());
         orcus::import_xlsx::read_table(aString.getStr(), aString.getLength(), &aTable);
     }
 
