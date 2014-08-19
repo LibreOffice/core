@@ -746,6 +746,8 @@ private:
 
     /// Flag indicating that the section properties are being written
     bool m_bOpenedSectPr;
+    /// Did we have a section break in this paragraph? Set by StartSection(), reset by the next StartParagraph().
+    bool m_bHadSectPr;
 
     /// Flag indicating that the Run Text is being written
     bool m_bRunTextIsOn;
@@ -960,6 +962,8 @@ public:
     void SetAlternateContentChoiceOpen( bool bAltContentChoiceOpen ) { m_bAlternateContentChoiceOpen = bAltContentChoiceOpen; }
     bool IsAlternateContentChoiceOpen( ) { return m_bAlternateContentChoiceOpen; }
     void GetSdtEndBefore(const SdrObject* pSdrObj);
+    void SetStartedParaSdt(bool bStartedParaSdt);
+    bool IsStartedParaSdt();
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_WW8_DOCXATTRIBUTEOUTPUT_HXX

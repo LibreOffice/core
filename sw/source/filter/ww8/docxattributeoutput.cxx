@@ -292,13 +292,14 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
             bEndParaSdt = m_bStartedParaSdt && rMap.find("ParaSdtEndBefore") != rMap.end();
         }
     }
-    if (bEndParaSdt)
+    if (bEndParaSdt || (m_bStartedParaSdt && m_bHadSectPr))
     {
         // This is the common case: "close sdt before the current paragraph" was requrested by the next paragraph.
         EndSdtBlock();
         bEndParaSdt = false;
         m_bStartedParaSdt = false;
     }
+    m_bHadSectPr = false;
 
     // this mark is used to be able to enclose the paragraph inside a sdr tag.
     // We will only know if we have to do that later.
@@ -5390,6 +5391,7 @@ void DocxAttributeOutput::StartSection()
         aSeqOrder[i] = aOrder[i];
 
     m_pSerializer->mark( aSeqOrder );
+    m_bHadSectPr = true;
 }
 
 void DocxAttributeOutput::EndSection()
@@ -8216,6 +8218,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pRedlineData( NULL ),
       m_nRedlineId( 0 ),
       m_bOpenedSectPr( false ),
+      m_bHadSectPr(false),
       m_bRunTextIsOn( false ),
       m_bWritingHeaderFooter( false ),
       m_bAnchorLinkedToNode(false),
@@ -8366,6 +8369,16 @@ void DocxAttributeOutput::AddToAttrList( ::sax_fastparser::FastAttributeList* &p
             pAttrList->add( nName, pValue );
     }
     va_end( args );
+}
+
+void DocxAttributeOutput::SetStartedParaSdt(bool bStartedParaSdt)
+{
+    m_bStartedParaSdt = bStartedParaSdt;
+}
+
+bool DocxAttributeOutput::IsStartedParaSdt()
+{
+    return m_bStartedParaSdt;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

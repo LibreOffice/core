@@ -714,6 +714,9 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     m_pVMLExport->SetFS( pFS );
     m_pSdrExport->setSerializer(pFS);
     SetFS( pFS );
+    bool bStartedParaSdt = m_pAttrOutput->IsStartedParaSdt();
+    m_pAttrOutput->SetStartedParaSdt(false);
+
     m_pAttrOutput->switchHeaderFooter(true, m_nHeadersFootersInSection++);
     // do the work
     WriteHeaderFooterText( rFmt, bHeader );
@@ -728,6 +731,7 @@ void DocxExport::WriteHeaderFooter( const SwFmt& rFmt, bool bHeader, const char*
     m_pVMLExport->SetFS( m_pDocumentFS );
     m_pSdrExport->setSerializer(m_pDocumentFS);
     SetFS( m_pDocumentFS );
+    m_pAttrOutput->SetStartedParaSdt(bStartedParaSdt);
 
     // close the tag
     sal_Int32 nReference;
