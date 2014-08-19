@@ -1694,7 +1694,7 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     if (pChild && pChild->IsVisible())
         aChildReq = getLayoutRequisition(*pChild);
 
-    long nAvailHeight = rAllocation.Width();
+    long nAvailHeight = rAllocation.Height();
     long nAvailWidth = rAllocation.Width();
     // vert. ScrollBar
     if (GetStyle() & WB_AUTOVSCROLL)
