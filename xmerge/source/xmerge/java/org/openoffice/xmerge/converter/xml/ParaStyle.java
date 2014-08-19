@@ -534,7 +534,7 @@ public class ParaStyle extends Style implements Cloneable {
         for (int i = 0; i <= TEXT_INDENT; i++) {
             if (isSet[i]) {
                 double temp = value[i] / 100.0;
-                String stringVal = (new Double(temp)).toString() + "mm";
+                String stringVal = Double.toString(temp) + "mm";
                 node.setAttribute(attrName[i], stringVal);
             }
         }
@@ -542,10 +542,10 @@ public class ParaStyle extends Style implements Cloneable {
         if (isSet[LINE_HEIGHT]) {
             String stringVal;
             if ((value[LINE_HEIGHT] & LH_PCT) != 0)
-                stringVal = (Integer.valueOf(value[LINE_HEIGHT] & LH_VALUEMASK)).toString() + "%";
+                stringVal = Integer.toString(value[LINE_HEIGHT] & LH_VALUEMASK) + "%";
             else {
                 double temp = (value[LINE_HEIGHT] & LH_VALUEMASK) / 100.0;
-                stringVal = (new Double(temp)).toString() + "mm";
+                stringVal = Double.toString(temp) + "mm";
             }
             node.setAttribute(attrName[LINE_HEIGHT], stringVal);
         }
