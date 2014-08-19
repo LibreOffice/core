@@ -222,28 +222,11 @@ documentation for that file. The schema has two parts:
   <define name="model-element">
     <element name="model">
       <oneOrMore>
-        <ref name="namespace-alias-element"/>
-      </oneOrMore>
-      <oneOrMore>
         <ref name="token-element"/>
       </oneOrMore>
       <oneOrMore>
         <ref name="namespace-element"/>
       </oneOrMore>
-    </element>
-  </define>
-
-  <!--
-  A namespace-alias element defines an alias for an URI. Multiple URI's
-  can have the same alias, that's how both strict and transitional OOXML is
-  supported by the same tokenizer.
-  -->
-  <define name="namespace-alias-element">
-    <element name="namespace-alias">
-      <!-- The URI of the namespace, e.g. http://schemas.openxmlformats.org/wordprocessingml/2006/main -->
-      <attribute name="name"/>
-      <!-- The alias of the namespace, e.g. w14 -->
-      <attribute name="alias"/>
     </element>
   </define>
 
