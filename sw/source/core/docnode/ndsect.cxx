@@ -752,7 +752,7 @@ void sw_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
     SwFtnIdxs& rFtnArr = pNd->GetDoc()->GetFtnIdxs();
     if( rFtnArr.size() )
     {
-        sal_uInt16 nPos;
+        size_t nPos = 0;
         rFtnArr.SeekEntry( SwNodeIndex( *pNd ), &nPos );
         SwTxtFtn* pSrch;
 

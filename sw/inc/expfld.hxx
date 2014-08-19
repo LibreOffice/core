@@ -62,11 +62,11 @@ public:
     }
 
     bool InsertSort(_SeqFldLstElem* pNew);
-    bool SeekEntry(const _SeqFldLstElem& rNew, sal_uInt16* pPos) const;
+    bool SeekEntry(const _SeqFldLstElem& rNew, size_t* pPos) const;
 
-    sal_uInt16 Count() { return maData.size(); }
-    _SeqFldLstElem* operator[](sal_uInt16 nIndex) { return maData[nIndex]; }
-    const _SeqFldLstElem* operator[](sal_uInt16 nIndex) const { return maData[nIndex]; }
+    size_t Count() { return maData.size(); }
+    _SeqFldLstElem* operator[](size_t nIndex) { return maData[nIndex]; }
+    const _SeqFldLstElem* operator[](size_t nIndex) const { return maData[nIndex]; }
     void Clear() { maData.clear(); }
 };
 
@@ -177,7 +177,7 @@ public:
 
     sal_uInt16 SetSeqRefNo( SwSetExpField& rFld );
 
-    sal_uInt16 GetSeqFldList( SwSeqFldList& rList );
+    size_t GetSeqFldList( SwSeqFldList& rList );
     OUString MakeSeqName( sal_uInt16 nSeqNo );
 
     /// Number sequence fields chapterwise if required.

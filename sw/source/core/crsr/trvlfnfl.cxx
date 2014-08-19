@@ -130,7 +130,7 @@ bool SwCursor::GotoFtnAnchor()
         // search in all footnotes in document for this StartIndex
         const SwTxtFtn* pTxtFtn;
         const SwFtnIdxs& rFtnArr = pSttNd->GetDoc()->GetFtnIdxs();
-        for( sal_uInt16 n = 0; n < rFtnArr.size(); ++n )
+        for( size_t n = 0; n < rFtnArr.size(); ++n )
             if( 0 != ( pTxtFtn = rFtnArr[ n ])->GetStartNode() &&
                 pSttNd == &pTxtFtn->GetStartNode()->GetNode() )
             {
@@ -178,7 +178,7 @@ bool SwCursor::GotoNextFtnAnchor()
 {
     const SwFtnIdxs& rFtnArr = GetDoc()->GetFtnIdxs();
     const SwTxtFtn* pTxtFtn = 0;
-    sal_uInt16 nPos;
+    size_t nPos = 0;
 
     if( rFtnArr.SeekEntry( GetPoint()->nNode, &nPos ))
     {
@@ -237,7 +237,7 @@ bool SwCursor::GotoPrevFtnAnchor()
 {
     const SwFtnIdxs& rFtnArr = GetDoc()->GetFtnIdxs();
     const SwTxtFtn* pTxtFtn = 0;
-    sal_uInt16 nPos;
+    size_t nPos = 0;
 
     if( rFtnArr.SeekEntry( GetPoint()->nNode, &nPos ) )
     {

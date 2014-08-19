@@ -492,9 +492,9 @@ void SwFldRefPage::UpdateSubType()
         {
             m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
-            const sal_uInt16 nCnt = pSh->GetSeqFtnList( aArr );
+            const size_t nCnt = pSh->GetSeqFtnList( aArr );
 
-            for( sal_uInt16 n = 0; n < nCnt; ++n )
+            for( size_t n = 0; n < nCnt; ++n )
             {
                 m_pSelectionLB->InsertEntry( aArr[ n ]->sDlgEntry );
                 if (IsFldEdit() && pRefFld->GetSeqNo() == aArr[ n ]->nSeqNo)
@@ -505,9 +505,9 @@ void SwFldRefPage::UpdateSubType()
         {
             m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() & ~WB_SORT);
             SwSeqFldList aArr;
-            const sal_uInt16 nCnt = pSh->GetSeqFtnList( aArr, true );
+            const size_t nCnt = pSh->GetSeqFtnList( aArr, true );
 
-            for( sal_uInt16 n = 0; n < nCnt; ++n )
+            for( size_t n = 0; n < nCnt; ++n )
             {
                 m_pSelectionLB->InsertEntry( aArr[ n ]->sDlgEntry );
                 if (IsFldEdit() && pRefFld->GetSeqNo() == aArr[ n ]->nSeqNo)
@@ -585,8 +585,8 @@ void SwFldRefPage::UpdateSubType()
                 if(IsFldEdit())
                     sOldSel = "";
 
-                const sal_uInt16 nCnt = pType->GetSeqFldList( aArr );
-                for( sal_uInt16 n = 0; n < nCnt; ++n )
+                const size_t nCnt = pType->GetSeqFldList( aArr );
+                for( size_t n = 0; n < nCnt; ++n )
                 {
                     m_pSelectionLB->InsertEntry( aArr[ n ]->sDlgEntry );
                     if (IsFldEdit() && sOldSel.isEmpty() &&
@@ -808,7 +808,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
 
-            sal_uInt16 nPos;
+            size_t nPos = 0;
 
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_FOOTNOTE;
@@ -829,7 +829,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
 
-            sal_uInt16 nPos;
+            size_t nPos = 0;
 
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_ENDNOTE;
@@ -898,7 +898,7 @@ bool SwFldRefPage::FillItemSet(SfxItemSet* )
                 SwSeqFldList aArr;
                 _SeqFldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
 
-                sal_uInt16 nPos;
+                size_t nPos = 0;
 
                 nTypeId = TYP_GETREFFLD;
                 nSubType = REF_SEQUENCEFLD;

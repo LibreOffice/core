@@ -377,7 +377,7 @@ SwTxtFrm::~SwTxtFrm()
     {
         SwTxtNode *pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
         const SwFtnIdxs &rFtnIdxs = pCNd->GetDoc()->GetFtnIdxs();
-        sal_uInt16 nPos;
+        size_t nPos = 0;
         sal_uLong nIndex = pCNd->GetIndex();
         rFtnIdxs.SeekEntry( *pTxtNd, &nPos );
         SwTxtFtn* pTxtFtn;

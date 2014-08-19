@@ -490,7 +490,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
         if( !rFtnArr.empty() )
         {
             const SwNode* pFtnNd;
-            sal_uInt16 nPos;
+            size_t nPos = 0;
             rFtnArr.SeekEntry( pStt->nNode, &nPos );
             SwTxtFtn* pSrch;
 

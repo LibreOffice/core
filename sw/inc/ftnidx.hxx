@@ -45,7 +45,7 @@ public:
     void UpdateFtn( const SwNodeIndex& rStt ); // Update all from pos.
     void UpdateAllFtn();                       // Update all footnotes.
 
-    SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, sal_uInt16* pPos = 0 ) const;
+    SwTxtFtn* SeekEntry( const SwNodeIndex& rIdx, size_t* pPos = 0 ) const;
 };
 
 class SwUpdFtnEndNtAtEnd

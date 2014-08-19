@@ -576,7 +576,7 @@ sal_uInt16 SwSetExpFieldType::SetSeqRefNo( SwSetExpField& rFld )
     return n;
 }
 
-sal_uInt16 SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
+size_t SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
 {
     rList.Clear();
 
@@ -699,16 +699,17 @@ bool SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
     }
     pNew->sDlgEntry = aBuf.makeStringAndClear();
 
-    sal_uInt16 nPos;
+    size_t nPos = 0;
     bool bRet = SeekEntry( *pNew, &nPos );
     if( !bRet )
         maData.insert( maData.begin() + nPos, pNew );
     return bRet;
 }
 
-bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
+bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, size_t* pP ) const
 {
-    sal_uInt16 nO = maData.size(), nM, nU = 0;
+    size_t nO = maData.size();
+    size_t nU = 0;
     if( nO > 0 )
     {
         CollatorWrapper & rCaseColl = ::GetAppCaseCollator(),
@@ -725,7 +726,7 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
         nO--;
         while( nU <= nO )
         {
-            nM = nU + ( nO - nU ) / 2;
+            const size_t nM = nU + ( nO - nU ) / 2;
 
             //#59900# Sorting should sort number correctly (e.g. "10" after "9" not after "1")
             const OUString rTmp1 = maData[nM]->sDlgEntry;

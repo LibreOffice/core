@@ -85,7 +85,7 @@ namespace
     {
         const SwFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-        for( sal_uInt16 n = 0; n < rFrmFmtTbl.size(); ++n )
+        for( size_t n = 0; n < rFrmFmtTbl.size(); ++n )
         {
             SwFrmFmt const*const  pFmt = rFrmFmtTbl[n];
             SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
@@ -815,7 +815,7 @@ namespace
         if( !rFtnArr.empty() )
         {
 
-            sal_uInt16 nPos;
+            size_t nPos = 0;
             rFtnArr.SeekEntry( rSttNd, &nPos );
             SwTxtFtn* pSrch;
             const SwNode* pFtnNd;
@@ -1849,7 +1849,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             // What's with Flys?
         {
             // If there are FlyFrames left, delete these too
-            for( sal_uInt16 n = 0; n < m_rSwdoc.GetSpzFrmFmts()->size(); ++n )
+            for( size_t n = 0; n < m_rSwdoc.GetSpzFrmFmts()->size(); ++n )
             {
                 SwFrmFmt* pFly = (*m_rSwdoc.GetSpzFrmFmts())[n];
                 const SwFmtAnchor* pAnchor = &pFly->GetAnchor();
@@ -2222,7 +2222,7 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
     if( !aSavRedlInsPosArr.empty() )
     {
         SwNode* pNewNd = &aIdx.GetNode();
-        for( sal_uInt16 n = 0; n < aSavRedlInsPosArr.size(); ++n )
+        for( size_t n = 0; n < aSavRedlInsPosArr.size(); ++n )
         {
             SwRangeRedline* pTmp = aSavRedlInsPosArr[ n ];
             if( m_rSwdoc.getIDocumentRedlineAccess().GetRedlineTbl().Contains( pTmp ) )
@@ -3180,13 +3180,13 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     // managed in the DrawModel).
     SwDoc *const pDest = rStartIdx.GetNode().GetDoc();
     ::std::set< _ZSortFly > aSet;
-    sal_uInt16 nArrLen = m_rSwdoc.GetSpzFrmFmts()->size();
+    const size_t nArrLen = m_rSwdoc.GetSpzFrmFmts()->size();
 
     SwTextBoxHelper::SavedLink aOldTextBoxes;
     SwTextBoxHelper::saveLinks(*m_rSwdoc.GetSpzFrmFmts(), aOldTextBoxes);
     SwTextBoxHelper::SavedContent aOldContent;
 
-    for ( sal_uInt16 n = 0; n < nArrLen; ++n )
+    for ( size_t n = 0; n < nArrLen; ++n )
     {
         SwFrmFmt* pFmt = (*m_rSwdoc.GetSpzFrmFmts())[n];
         SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();

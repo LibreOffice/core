@@ -330,13 +330,13 @@ bool SwEditShell::HasFtns( bool bEndNotes ) const
 }
 
 /// Give a List of all footnotes and their beginning texts
-sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
+size_t SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
     rList.Clear();
 
-    sal_uInt16 n, nFtnCnt = mpDoc->GetFtnIdxs().size();
+    const size_t nFtnCnt = mpDoc->GetFtnIdxs().size();
     SwTxtFtn* pTxtFtn;
-    for( n = 0; n < nFtnCnt; ++n )
+    for( size_t n = 0; n < nFtnCnt; ++n )
     {
         pTxtFtn = mpDoc->GetFtnIdxs()[ n ];
         const SwFmtFtn& rFtn = pTxtFtn->GetFtn();

@@ -186,7 +186,7 @@ void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
 
 void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
 
     if( RES_ATTRSET_CHG == nWhich ||
         RES_FMT_CHG == nWhich )
@@ -197,7 +197,7 @@ void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         else
             pDoc = ((SwCharFmt*)aAnchorCharFmtDep.GetRegisteredIn())->GetDoc();
         SwFtnIdxs& rFtnIdxs = pDoc->GetFtnIdxs();
-        for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
+        for( size_t nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
         {
             SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -290,7 +290,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                     // For messages regarding ErgoSum etc. we save the extra code and use the
                     // available methods.
                     SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-                    for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
+                    for( size_t nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
                     {
                         SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -359,7 +359,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
                 // For messages regarding ErgoSum etc. we save the extra code and use the
                 // available methods.
                 SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
-                for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
+                for( size_t nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
                 {
                     SwTxtFtn *pTxtFtn = rFtnIdxs[ nPos ];
                     const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -398,7 +398,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
     const sal_uLong nEndNd = pEnd->nNode.GetIndex();
     const sal_Int32 nEndCnt = pEnd->nContent.GetIndex();
 
-    sal_uInt16 nPos;
+    size_t nPos = 0;
     rFtnArr.SeekEntry( pStt->nNode, &nPos );
 
     SwUndoChangeFootNote* pUndo = 0;
@@ -412,7 +412,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
     sal_uLong nIdx;
     bool bChg = false;
     bool bTypeChgd = false;
-    sal_uInt16 n = nPos;        // save
+    const size_t nPosSave = nPos;
     while( nPos < rFtnArr.size() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
@@ -442,7 +442,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
             }
         }
 
-    nPos = n;       // There are more in the front!
+    nPos = nPosSave;       // There are more in the front!
     while( nPos &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ --nPos ] )))
                 > nSttNd || ( nIdx == nSttNd &&

@@ -802,7 +802,7 @@ public:
     bool SetCurFtn( const SwFmtFtn& rFillFtn );
     bool HasFtns( bool bEndNotes = false ) const;
 
-    sal_uInt16 GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes = false );
+    size_t GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes = false );
     /// @return list of all footnotes and their first portions of text.
 
     SwSection const* InsertSection(

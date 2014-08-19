@@ -60,9 +60,9 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         if( !rOutlNds.empty() )
         {
             // Find the Chapter's start, which contains rStt
-            sal_uInt16 n;
+            size_t n = 0;
 
-            for( n = 0; n < rOutlNds.size(); ++n )
+            for( ; n < rOutlNds.size(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
                     break;      // found it!
                 else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
@@ -76,7 +76,8 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
                 }
         }
 
-        sal_uInt16 nPos, nFtnNo = 1;
+        size_t nPos = 0;
+        size_t nFtnNo = 1;
         if( SeekEntry( *pCapStt, &nPos ) && nPos )
         {
             // Step forward until the Index is not the same anymore
@@ -112,7 +113,9 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     // unless we have per-document numbering, only look at endnotes here
     const bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
 
-    sal_uInt16 nPos, nFtnNo = 1, nEndNo = 1;
+    size_t nPos;
+    size_t nFtnNo = 1;
+    size_t nEndNo = 1;
     sal_uLong nUpdNdIdx = rStt.GetIndex();
     for( nPos = 0; nPos < size(); ++nPos )
     {
@@ -174,9 +177,9 @@ void SwFtnIdxs::UpdateAllFtn()
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        sal_uInt16 nNo = 1,     // Number for the Footnotes
-               nFtnIdx = 0;     // Index into theFtnIdx array
-        for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
+        sal_uInt16 nNo = 1;     // Number for the Footnotes
+        size_t nFtnIdx = 0;     // Index into theFtnIdx array
+        for( size_t n = 0; n < rOutlNds.size(); ++n )
         {
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
             {
@@ -217,7 +220,7 @@ void SwFtnIdxs::UpdateAllFtn()
     // We use bool here, so that we also iterate through the Endnotes with a chapter setting.
     const bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
     sal_uInt16 nFtnNo = 0, nEndNo = 0;
-    for( sal_uInt16 nPos = 0; nPos < size(); ++nPos )
+    for( size_t nPos = 0; nPos < size(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
         const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
@@ -240,17 +243,18 @@ void SwFtnIdxs::UpdateAllFtn()
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));
 }
 
-SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, sal_uInt16* pFndPos ) const
+SwTxtFtn* SwFtnIdxs::SeekEntry( const SwNodeIndex& rPos, size_t* pFndPos ) const
 {
     sal_uLong nIdx = rPos.GetIndex();
 
-    sal_uInt16 nO = size(), nM, nU = 0;
+    size_t nO = size();
+    size_t nU = 0;
     if( nO > 0 )
     {
         nO--;
         while( nU <= nO )
         {
-            nM = nU + ( nO - nU ) / 2;
+            const size_t nM = nU + ( nO - nU ) / 2;
             sal_uLong nNdIdx = _SwTxtFtn_GetIndex( (*this)[ nM ] );
             if( nNdIdx == nIdx )
             {
@@ -310,7 +314,7 @@ sal_uInt16 SwUpdFtnEndNtAtEnd::GetNumber( const SwTxtFtn& rTxtFtn,
         nWh = RES_FTN_AT_TXTEND;
     }
 
-    for( sal_uInt16 n = pArr->size(); n; )
+    for( size_t n = pArr->size(); n; )
         if( (*pArr)[ --n ] == &rNd )
         {
             nRet = ++((*pNum)[ n ]);
