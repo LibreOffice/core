@@ -2,6 +2,7 @@
 #include <iostream>
 #include "WINNetworkService.hxx"
 #include "mDNSResponder/dns_sd.h"
+#include <sal/log.hxx>
 
 void sd::WINNetworkService::setup()
 {
