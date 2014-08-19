@@ -41,6 +41,7 @@
 #include "wrtww8.hxx"
 
 #include <comphelper/string.hxx>
+#include <comphelper/flagguard.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/mathml/export.hxx>
@@ -442,6 +443,8 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     ++m_nTextFrameLevel;
     if( m_nTextFrameLevel == 1 )
     {
+        comphelper::FlagRestorationGuard aStartedParaSdtGuard(m_bStartedParaSdt, false);
+
         assert(!m_postponedCustomShape);
         m_postponedCustomShape = new std::list< PostponedDrawing >;
         for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
