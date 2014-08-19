@@ -11,6 +11,6 @@
 
 include $(SRCDIR)/sw/ooxmlexport_setup.mk
 
-$eval( $(call sw_ooxmlexport_test,2))
+$(eval $(call sw_ooxmlexport_test,2))
 
 # vim: set noet sw=4 ts=4:
