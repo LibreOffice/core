@@ -353,7 +353,7 @@ public class JavaLoader implements XImplementationLoader,
                         + implementationName + " because " + e.toString() );
         } catch ( InvocationTargetException e ) {
             throw new CannotActivateFactoryException("Can not activate the factory for "
-                        + implementationName + " because " + e.getTargetException().toString() );
+                        + implementationName + " because " + e.getCause().toString() );
         }
 
         return returnObject;

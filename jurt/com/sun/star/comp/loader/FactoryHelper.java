@@ -198,7 +198,7 @@ public class FactoryHelper {
             try {
                 return _constructor.newInstance( args );
             } catch (InvocationTargetException invocationTargetException) {
-                Throwable targetException = invocationTargetException.getTargetException();
+                Throwable targetException = invocationTargetException.getCause();
 
                 if (targetException instanceof java.lang.RuntimeException)
                     throw (java.lang.RuntimeException)targetException;
@@ -274,7 +274,7 @@ public class FactoryHelper {
                 }
                 return instance;
             } catch (InvocationTargetException invocationTargetException) {
-                Throwable targetException = invocationTargetException.getTargetException();
+                Throwable targetException = invocationTargetException.getCause();
 
                 if (targetException instanceof java.lang.RuntimeException)
                     throw (java.lang.RuntimeException)targetException;
