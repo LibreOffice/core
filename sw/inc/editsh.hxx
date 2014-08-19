@@ -32,6 +32,7 @@
 #include <fldupde.hxx>
 #include <tblenum.hxx>
 #include <IMark.hxx>
+#include <tox.hxx>
 
 #include <vector>
 #include <set>
@@ -77,9 +78,6 @@ class SwFmtFtn;
 class SwSection;
 class SwSectionData;
 class SwSectionFmt;
-class SwTOXMarks;
-class SwTOXBase;
-class SwTOXType;
 class SwTableAutoFmt;
 class SwPageDesc;
 class SwTxtINetFmt;
