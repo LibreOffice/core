@@ -5743,16 +5743,19 @@ int RTFDocumentImpl::popState()
     case DESTINATION_FLYMAINCONTENT:
     case DESTINATION_SHPPICT:
     case DESTINATION_SHAPE:
-        m_aStates.top().aFrame = aState.aFrame;
-        if (aState.nDestinationState == DESTINATION_SHPPICT && !m_aStates.empty() && m_aStates.top().nDestinationState == DESTINATION_LISTPICTURE)
+        if (!m_aStates.empty())
         {
-            RTFSprms aAttributes;
-            aAttributes.set(NS_ooxml::LN_CT_NumPicBullet_numPicBulletId, RTFValue::Pointer_t(new RTFValue(m_nListPictureId++)));
-            RTFSprms aSprms;
-            // Dummy value, real picture is already sent to dmapper.
-            aSprms.set(NS_ooxml::LN_CT_NumPicBullet_pict, RTFValue::Pointer_t(new RTFValue(0)));
-            RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-            m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_numPicBullet, pValue, OVERWRITE_NO_APPEND);
+            m_aStates.top().aFrame = aState.aFrame;
+            if (aState.nDestinationState == DESTINATION_SHPPICT && m_aStates.top().nDestinationState == DESTINATION_LISTPICTURE)
+            {
+                RTFSprms aAttributes;
+                aAttributes.set(NS_ooxml::LN_CT_NumPicBullet_numPicBulletId, RTFValue::Pointer_t(new RTFValue(m_nListPictureId++)));
+                RTFSprms aSprms;
+                // Dummy value, real picture is already sent to dmapper.
+                aSprms.set(NS_ooxml::LN_CT_NumPicBullet_pict, RTFValue::Pointer_t(new RTFValue(0)));
+                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_numPicBullet, pValue, OVERWRITE_NO_APPEND);
+            }
         }
         break;
     case DESTINATION_SHAPETEXT:
@@ -5780,7 +5783,7 @@ int RTFDocumentImpl::popState()
         break;
     default:
     {
-        if (m_aStates.size() && m_aStates.top().nDestinationState == DESTINATION_PICT)
+        if (!m_aStates.empty() && m_aStates.top().nDestinationState == DESTINATION_PICT)
             m_aStates.top().aPicture = aState.aPicture;
     }
     break;
