@@ -40,6 +40,7 @@
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -128,7 +129,6 @@ void ChartController::executeDispatch_PositionAndSize()
             ObjectNameProvider::getName( eObjectType)),
         m_xUndoManager );
 
-    SfxAbstractTabDialog * pDlg = NULL;
     try
     {
         SfxItemSet aItemSet = m_pDrawViewWrapper->getPositionAndSizeItemSetFromMarkedObject();
@@ -140,8 +140,8 @@ void ChartController::executeDispatch_PositionAndSize()
         SolarMutexGuard aGuard;
         SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
         OSL_ENSURE( pFact, "No dialog factory" );
-        pDlg = pFact->CreateSchTransformTabDialog(
-            m_pChartWindow, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible );
+        boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateSchTransformTabDialog(
+            m_pChartWindow, &aItemSet, pSdrView, RID_SCH_TransformTabDLG_SVXPAGE_ANGLE, bResizePossible ));
         OSL_ENSURE( pDlg, "Couldn't create SchTransformTabDialog" );
 
         if( pDlg->Execute() == RET_OK )
@@ -168,11 +168,9 @@ void ChartController::executeDispatch_PositionAndSize()
                     aUndoGuard.commit();
             }
         }
-        delete pDlg;
     }
     catch(const uno::Exception& e)
     {
-        delete pDlg;
         ASSERT_EXCEPTION( e );
     }
 }

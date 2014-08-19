@@ -41,6 +41,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <svl/stritem.hxx>
 #include <editeng/fontitem.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace chart
 {
@@ -168,7 +169,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
-    SfxAbstractDialog * pDlg = pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP );
+    boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP ));
     OSL_ENSURE( pDlg, "Couldn't create SvxCharacterMap dialog" );
     if( pDlg->Execute() == RET_OK )
     {
@@ -206,8 +207,6 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
         pOutliner->SetUpdateMode(true);
         pOutlinerView->ShowCursor();
     }
-
-    delete pDlg;
 }
 
 uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
