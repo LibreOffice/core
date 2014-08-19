@@ -1324,29 +1324,34 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                         bByteSwap = true;
 
                     nStripsPerPlane = ( nImageLength - 1 ) / GetRowsPerStrip() + 1;
-                    nBytesPerRow = ( nImageWidth * nSamplesPerPixel / nPlanes * nBitsPerSample + 7 ) >> 3;
+                    bStatus = nPlanes != 0;
 
-                    for ( sal_uLong j = 0; j < 4; j++ )
+                    if (bStatus)
                     {
-                        try
+                        nBytesPerRow = ( nImageWidth * nSamplesPerPixel / nPlanes * nBitsPerSample + 7 ) >> 3;
+
+                        for ( sal_uLong j = 0; j < 4; j++ )
                         {
-                            pMap[ j ] = new sal_uInt8[ nBytesPerRow ];
-                        }
-                        catch (const std::bad_alloc &)
-                        {
-                            pMap[ j ] = NULL;
-                            bStatus = false;
-                            break;
+                            try
+                            {
+                                pMap[ j ] = new sal_uInt8[ nBytesPerRow ];
+                            }
+                            catch (const std::bad_alloc &)
+                            {
+                                pMap[ j ] = NULL;
+                                bStatus = false;
+                                break;
+                            }
                         }
                     }
 
-                    if (HasAlphaChannel())
+                    if (bStatus && HasAlphaChannel())
                     {
                         pAlphaMask = new AlphaMask( aTargetSize );
                         pMaskAcc = pAlphaMask->AcquireWriteAccess();
                     }
 
-                    if ( bStatus && ReadMap( 10, 60 ) )
+                    if (bStatus && ReadMap(10, 60))
                     {
                         nMaxPos = std::max( pTIFF->Tell(), nMaxPos );
                         MakePalCol();
