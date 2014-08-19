@@ -253,9 +253,8 @@ SotStorageStreamRef OLEStorageImpl::createStream(const rtl::OUString &rPath)
 
     const OLEStorageMap_t::const_iterator aIt = maStorageMap.find(aDir);
 
-    // We can only get there for paths that are present in the OLE.
-    // Which means the storage must exist.
-    assert(maStorageMap.end() != aIt);
+    if (maStorageMap.end() == aIt)
+        return 0;
 
     return aIt->second.ref->OpenSotStream(aName, STREAM_STD_READ);
 }
