@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_3bf29f9b",
+        "filename": "include/comphelper/sequence.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-08-19T08:07:06Z",
+      "side": 1,
+      "message": "that is a good example of the insanity of that notation\nwhat else can this cast be ? _nPos is a scalar\nso we just make the line 12 characters longer per instance\nfor.. nothing at all.",
+      "revId": "eec281d132d95035c2b817d78889f5a2c422a4e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_1befe3b1",
+        "filename": "include/tools/link.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-08-19T08:07:06Z",
+      "side": 1,
+      "message": "comparing straight pointer or function pointer can be often unspecified\nsee § 5.9 of the C++11 standard\nare you sure that is not the case here ?\n(that being said I can\u0027t imagine what use one can make of that operator anyway... )",
+      "revId": "eec281d132d95035c2b817d78889f5a2c422a4e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
