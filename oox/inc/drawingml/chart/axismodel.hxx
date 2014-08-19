@@ -27,8 +27,6 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-
-
 struct AxisDispUnitsModel
 {
     typedef ModelRef< Shape >       ShapeRef;
@@ -46,8 +44,6 @@ struct AxisDispUnitsModel
     explicit            AxisDispUnitsModel();
                         ~AxisDispUnitsModel();
 };
-
-
 
 struct AxisModel
 {
@@ -93,8 +89,6 @@ struct AxisModel
     explicit            AxisModel( sal_Int32 nTypeId );
                         ~AxisModel();
 };
-
-
 
 } // namespace chart
 } // namespace drawingml
