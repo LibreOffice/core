@@ -1,0 +1,677 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include <swmodeltestbase.hxx>
+
+#include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/style/TabStop.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/text/GraphicCrop.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/style/BreakType.hpp>
+#include <unotools/tempfile.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <com/sun/star/text/XDocumentIndex.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/drawing/Hatch.hpp>
+
+#include <string>
+
+class Test : public SwModelTestBase
+{
+public:
+    Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
+
+protected:
+    /**
+     * Blacklist handling
+     */
+    bool mustTestImportOf(const char* filename) const SAL_OVERRIDE {
+        const char* aBlacklist[] = {
+            "math-escape.docx",
+            "math-mso2k7.docx",
+            "ImageCrop.docx",
+            "test_GIF_ImageCrop.docx",
+            "test_PNG_ImageCrop.docx"
+        };
+        std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
+
+        // If the testcase is stored in some other format, it's pointless to test.
+        return (OString(filename).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
+    }
+};
+
+DECLARE_OOXMLEXPORT_TEST(testFDO76248, "FDO76248.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+    // In two cases the a:graphicData elements had no children, which is invalid.
+    assertXPath(pXmlDoc, "//a:graphicData[not(*)]", 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo76589 , "fdo76589.docx")
+{
+    /* Numbered list was not preserve after RT.
+     * In numbering.xml, when NumberingType is "decimal" and level is zero,
+     * w:val of w:lvlText was empty.
+     * It should be <w:lvlText w:val="%1" />
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/numbering.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath ( pXmlDoc, "/w:numbering/w:abstractNum[1]/w:lvl[1]/w:lvlText","val","%1" );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79008, "fdo79008.docx")
+{
+    /* File getting crash while saving in LO.
+     * Checking if document.xml file is getting created after fix
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+}
+
+DECLARE_OOXMLEXPORT_TEST(testAuthorPropertySdt, "author-property.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:dataBinding", "xpath", "/ns1:coreProperties[1]/ns0:creator[1]");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:dataBinding", "storeItemID","{6C3C8BC8-F283-45AE-878A-BAB7291924A1}");
+    // FIXME: the next property doesn't match, though it's correct in theory. A bug in assertXPath?
+    // assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:dataBinding", "prefixMappings",
+    //            "xmlns:ns0='http://purl.org/dc/elements/1.1/' xmlns:ns1='http://schemas.openxmlformats.org/package/2006/metadata/core-properties'");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO76586, "fdo76586.docx")
+{
+    /*
+     * In the test file gridCol had only one value for entire table width
+     * while there are two cells in a table row.
+     * So the table was not imported with the correct cell widths
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    // there is only one table in the test file
+    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[1]", "w", "1601");
+    assertXPath(pXmlDoc, "//w:tblGrid/w:gridCol[2]", "w", "7843");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO76587 , "fdo76587.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "line", "240");
+    assertXPath(pXmlDoc, "/w:styles/w:style[8]/w:pPr/w:spacing", "lineRule", "auto");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO77890 , "fdo77890.docx")
+{
+    /*
+    Ensure that the page break is preserved i.e it should not be converted to a section break, in case
+    if the different first page is set for the pages in the document.
+    For additional comments pls refer https://www.libreoffice.org/bugzilla/show_bug.cgi?id=77890#c2
+    */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[2]/w:br", "type", "page");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testNumberedList,"NumberedList.docx")
+{
+    //fdo74150:In document.xml, for pStyle = "NumberedList1", iLvl and numId was not preserved
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:pStyle", "val", "NumberedList1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:numPr/w:ilvl","val", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:p[1]/w:pPr[1]/w:numPr/w:numId","val", "0");
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[3]/w:pPr[1]/w:pStyle","val", "NumberedList1");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[3]/w:pPr[1]/w:numPr/w:ilvl","val", "0");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[1]/w:tr[1]/w:tc[1]/w:p[3]/w:pPr[1]/w:numPr/w:numId","val", "0");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO76597, "fdo76597.docx")
+{
+    // check XML
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "before", "96");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[4]/w:pPr/w:spacing", "after", "120");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testContentTypeTIF, "fdo77476.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/ContentType:Types/ContentType:Override[@ContentType='image/tif']", "PartName", "/word/media/image1.tif");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO77117, "fdo77117.docx")
+{
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xGroup->getByIndex(0), uno::UNO_QUERY);
+    // This checks textbox textrun size of font which is in group shape.
+    CPPUNIT_ASSERT_EQUAL(11.f, getProperty<float>(xShape, "CharHeight"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFloatingTable, "fdo77887.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "horzAnchor", "margin");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "leftFromText", "141");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "rightFromText", "141");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "tblpXSpec", "center");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "tblpY", "2266");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblpPr[1]", "vertAnchor", "page");
+
+}
+
+
+DECLARE_OOXMLEXPORT_TEST(testTablePreferredWidth, "tablePreferredWidth.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if(!pXmlDoc)
+        return;
+
+    // Problem :If the table preferred width is in percent, then after RT it changes to 0 & width type changes
+    // to 'auto' instead of 'pct'.
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblW[1]", "w", "3000");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:tbl[1]/w:tblPr[1]/w:tblW[1]", "type","pct");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO75431, "fdo75431.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "//w:tbl", 2);
+    assertXPath(pXmlDoc, "//w:p/w:pPr/w:sectPr/w:type", "val", "nextPage");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO77725, "fdo77725.docx")
+{
+    xmlDocPtr pXmlFootnotes = parseExport("word/footnotes.xml");
+    if (!pXmlFootnotes)
+        return;
+
+    assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[1]", 0);
+    assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[2]", 0);
+    assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[3]", 0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO77812, "fdo77812.docx")
+{
+    /* Additional sectPr was getting inserted and hence Column properties
+     * were getting added into this additional sectPr instead of Default setPr.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    // Check no additional section break is inserted.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[6]/w:pPr/w:sectPr", 0);
+
+    // Check w:cols comes under Default sectPr
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols", "num", "2");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[1]", 1);
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sectPr/w:cols/w:col[2]", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testContentTypeOLE, "fdo77759.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']",
+                "PartName",
+                "/word/embeddings/oleObject1.xlsx");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo78420, "fdo78420.docx")
+{
+    xmlDocPtr pXmlHeader = parseExport("word/header2.xml");
+
+    if (!pXmlHeader)
+       return;
+
+    xmlDocPtr pXmlHeaderRels = parseExport("word/_rels/header2.xml.rels");
+    if(!pXmlHeaderRels)
+       return;
+
+    assertXPath(pXmlHeaderRels,"/rels:Relationships/rels:Relationship[1]","Id","rId1");
+}
+
+
+DECLARE_OOXMLEXPORT_TEST(testPageBreakInFirstPara,"fdo77727.docx")
+{
+    /* Break to next page was not exported if it is in first paragraph of the section.
+     * Now after fix , LO writes Next Page Break and also preserves <w:br> tag.
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br","type","page");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO78284, "fdo78284.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc,"/ContentType:Types/ContentType:Override[@PartName='/word/media/OOXDiagramDataRels1_0.png']",
+                        "ContentType",
+                        "image/png");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO78384,"fdo78384.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:r[1]/w:rPr/w:rFonts","ascii","Wingdings");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo78469, "fdo78469.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+       return;
+    // make sure dataBinding & text tags not presernt in sdtcontent
+    assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:dataBinding[1]",0);
+    assertXPath(pXmlDoc, "/w:hdr[1]/w:tbl[1]/w:tr[1]/w:tc[2]/w:p[1]/w:sdt[2]/w:sdtPr[1]/w:text[1]",0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO78887, "fdo78887.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:br[1]", 1);
+    assertXPathContent(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:t[1]", "Lyrics: ");
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/w:br[2]", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo78651, "fdo78651.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+    // ensure that there are only two tables
+    assertXPath(pXmlDoc, "//w:tbl", 2);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo78882, "fdo78882.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that Section Break is getting written inside second paragraph
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:pPr[1]/w:sectPr[1]",1);
+
+    // Ensure that no dummy paragarph gets created inside second paragraph for Section Break
+    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[2]/w:p[1]/w:pPr[1]/w:sectPr[1]",0);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo76934, "fdo76934.docx")
+{
+    /* Issue was, AuoSpacing property if present inside styles.xml, LO was not able to
+     * preserve it.
+     */
+
+    xmlDocPtr pXmlDoc = parseExport("word/styles.xml");
+
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that after fix LO is preserving AutoSpacing property in styles.xml
+    assertXPath ( pXmlDoc, "/w:styles[1]/w:style[36]/w:pPr[1]/w:spacing[1]", "beforeAutospacing", "1" );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79540, "fdo79540.docx")
+{
+    /* Issue was, <w:drawing> was getting written inside <w:drawing>.
+     * So Postone the writing of Inner Drawing tag.
+     * MS Office does not allow Nestimg of drawing tags.
+     */
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+        return;
+
+    // Ensure that two separate w:drawing tags are written after the code changes.
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p/w:r[2]/mc:AlternateContent/mc:Choice/w:drawing",1);
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p/w:r[3]/mc:AlternateContent/mc:Choice/w:drawing",1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO79062, "fdo79062.docx")
+{
+    xmlDocPtr pXmlFootNotes = parseExport("word/footnotes.xml");
+    if (!pXmlFootNotes)
+        return;
+    assertXPath(pXmlFootNotes, "/w:footnotes", "Ignorable", "w14 wp14");
+
+    xmlDocPtr pXmlEndNotes = parseExport("word/endnotes.xml");
+    if (!pXmlEndNotes)
+        return;
+    assertXPath(pXmlEndNotes, "/w:endnotes", "Ignorable", "w14 wp14");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79668,"fdo79668.docx")
+{
+    // fdo#79668: Document was Crashing on DebugUtil build while Saving
+    // because of repeated attribute value in same element.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    // w:pPr's  w:shd attributes were getting added to w:pPrChange/w:pPr's w:shd hence checking
+    // w:fill for both shd elements
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:shd", "fill", "FFFFFF" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[9]/w:pPr/w:pPrChange/w:pPr/w:shd", "fill", "FFFFFF" );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo78907,"fdo78907.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[1]/w:r[2]/w:br", "type", "page" );
+
+    xmlDocPtr pXmlDoc1 = parseExport("word/footer1.xml");
+    if (!pXmlDoc1)
+        return;
+    assertXPath ( pXmlDoc1, "/w:ftr[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl[1]/w:tr[1]/w:tc[1]/w:tbl", 0 );
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79822, "fdo79822.docx")
+{
+    /* File getting crash while saving in LO.
+     * The Docx contain smartart and the file was created in ms word 2007
+     */
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFDO79915, "fdo79915.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+        return;
+
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[8]/w:t", "How much buoyancy does the water provide?");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79817, "fdo79817.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "storeItemID", "{9222E47B-A68B-4AEB-9855-21C912B9D3D2}");
+        assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w:dataBinding", "xpath", "/ns0:properties[1]/documentManagement[1]/ns2:Responsible_x0020_Officer_x0020_Title[1]");
+    }
+}
+
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79968_sldx, "fdo79968.docx")
+{
+    // This UT for DOCX embedded with powerpoint slide
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.openxmlformats-officedocument.presentationml.slide']",
+                "PartName",
+                "/word/embeddings/oleObject1.sldx");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsb, "fdo79969_xlsb.docx")
+{
+    // This UT for DOCX embedded with binary excel work sheet.
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.binary.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.xlsb");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo80097, "fdo80097.docx")
+{
+    //fdo#76635 : Table borders are not getting preserved.
+
+    xmlDocPtr pXmlDocument = parseExport("word/document.xml");
+    if (!pXmlDocument)
+        return;
+
+    //Table Borders
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:top[@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:top[@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:top[@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:top[@w:color = '00000A']", 1);
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:bottom[@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:bottom[@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:bottom[@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:bottom[@w:color = '00000A']", 1);
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:insideH[@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:insideH[@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:insideH[@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:insideH[@w:color = '00000A']", 1);
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:insideV[@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:insideV[@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:insideV[@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tblPr/w:tblBorders/w:insideV[@w:color = '00000A']", 1);
+
+    //Table Cell Borders
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:top[@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:top[@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:top[@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:top[@w:color = '00000A']", 1);
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:bottom[@w:color = '00000A']", 1);
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideH[@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideH[@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideH[@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideH[@w:color = '00000A']", 1);
+
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideV[@w:val = 'single']",1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideV[@w:sz = 4]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideV[@w:space = 0]", 1);
+    assertXPath(pXmlDocument, "/w:document/w:body/w:tbl/w:tr[1]/w:tc[1]/w:tbl/w:tr[1]/w:tc[1]/w:tcPr/w:tcBorders/w:insideV[@w:color = '00000A']", 1);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testFdo77129, "fdo77129.docx")
+{
+    // The problem was that text after TOC field was missing if footer reference  comes in field.
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    // Data was lost from this paragraph.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[5]/w:r[1]/w:t", "Abstract");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo79969_xlsm, "fdo79969_xlsm.docx")
+{
+    // This UT for DOCX embedded with excel work sheet.
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-excel.sheet.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.xlsm");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo80522,"fdo80522.docx")
+{
+   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-word.document.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.docm");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo80523_pptm,"fdo80523_pptm.docx")
+{
+   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-powerpoint.presentation.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.pptm");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo80523_sldm,"fdo80523_sldm.docx")
+{
+   xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/vnd.ms-powerpoint.slide.macroEnabled.12']",
+                "PartName",
+                "/word/embeddings/oleObject1.sldm");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
+{
+    // This UT for DOCX embedded with binary excel work sheet.
+    xmlDocPtr pXmlDoc = parseExport("[Content_Types].xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc,
+                "/ContentType:Types/ContentType:Override[@ContentType='application/msword']",
+                "PartName",
+                "/word/embeddings/oleObject1.doc");
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTableCellWithDirectFormatting, "fdo80800.docx")
+{
+    // Issue was Direct Foramatting for non-first Table cells was not getting preserved.
+
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    if (!pXmlDoc)
+       return;
+
+    // Ensure that for Third Table cell Direct Formatting is preserved.
+    // In file, Direct Formatting used for Third Table cell is Line Spacing="1.5 lines"
+    // For Line Spacing "1.5 lines" w:line equals 360
+    assertXPath(pXmlDoc,"/w:document/w:body/w:tbl/w:tr/w:tc[3]/w:p/w:pPr/w:spacing","line","360");
+
+}
+
+DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
+{
+    // Header was lost on export when the document had multiple columns.
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport();
+    if (!pXmlDoc)
+        return;
+
+    // The problem was that <w:sdt> was closed after "first", not after "second", so the second assert failed.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[1]/w:t", "first");
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtContent/w:r[2]/w:t", "second");
+    // Make sure the third portion is still outside <w:sdt>.
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t", "third");
+}
+
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
