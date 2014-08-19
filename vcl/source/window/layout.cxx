@@ -1704,8 +1704,11 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     // horz. ScrollBar
     if (GetStyle() & WB_AUTOHSCROLL)
     {
-        m_aHScroll.Show(nAvailWidth < aChildReq.Width());
-        nAvailHeight -= getLayoutRequisition(m_aHScroll).Height();
+        bool bShowHScroll = nAvailWidth < aChildReq.Width();
+        m_aHScroll.Show(bShowHScroll);
+
+        if (bShowHScroll)
+            nAvailHeight -= getLayoutRequisition(m_aHScroll).Height();
 
         if (GetStyle() & WB_AUTOVSCROLL)
             m_aVScroll.Show(nAvailHeight < aChildReq.Height());
