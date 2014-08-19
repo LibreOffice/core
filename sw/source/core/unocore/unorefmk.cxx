@@ -43,19 +43,17 @@ class SwXReferenceMark::Impl
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
-    SwXReferenceMark & m_rThis;
 
 public:
+    uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     bool                        m_bIsDescriptor;
     SwDoc *                     m_pDoc;
     const SwFmtRefMark *        m_pMarkFmt;
     OUString             m_sMarkName;
 
-    Impl(   SwXReferenceMark & rThis,
-            SwDoc *const pDoc, SwFmtRefMark *const pRefMark)
+    Impl(   SwDoc *const pDoc, SwFmtRefMark *const pRefMark)
         : SwClient(pRefMark)
-        , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(0 == pRefMark)
         , m_pDoc(pDoc)
@@ -84,7 +82,12 @@ void SwXReferenceMark::Impl::Invalidate()
     }
     m_pDoc = 0;
     m_pMarkFmt = 0;
-    lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
+    lang::EventObject const ev(xThis);
     m_EventListeners.disposeAndClear(ev);
 }
 
@@ -100,7 +103,7 @@ void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem 
 
 SwXReferenceMark::SwXReferenceMark(
         SwDoc *const pDoc, SwFmtRefMark *const pRefMark)
-    : m_pImpl( new SwXReferenceMark::Impl(*this, pDoc, pRefMark) )
+    : m_pImpl( new SwXReferenceMark::Impl(pDoc, pRefMark) )
 {
 }
 
@@ -126,6 +129,8 @@ SwXReferenceMark::CreateXReferenceMark(
         {
             pMarkFmt->SetXRefMark(xMark);
         }
+        // need a permanent Reference to initialize m_wThis
+        pMark->m_pImpl->m_wThis = xMark;
     }
     return xMark;
 }
