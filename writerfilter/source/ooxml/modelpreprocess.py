@@ -13,8 +13,8 @@ import sys
 
 
 def prefixFromUrl(url):
-    if url in list(namespaceAliases.keys()):
-        return namespaceAliases[url]
+    if url in list(ooxUrlAliases.keys()):
+        return ooxUrlAliases[url]
     else:
         if url.startswith("http://"):
             return url.replace('http://', '').replace('/', '_').replace('.', '_')
@@ -24,8 +24,8 @@ def prefixFromUrl(url):
 
 def prefixForGrammar(namespace):
     ns = nsForGrammar(namespace)
-    if ns in list(namespaceAliases.keys()):
-        prefix = namespaceAliases[ns]
+    if ns in list(ooxUrlAliases.keys()):
+        prefix = ooxUrlAliases[ns]
         return prefix
     else:
         return prefixFromUrl(ns)
@@ -48,6 +48,7 @@ def parseNamespaces(fro):
         id, alias, url = line.split(' ')
         ooxUrlIds[url] = id
         ooxAliasIds[alias] = id
+        ooxUrlAliases[url] = alias
     sock.close()
 
 
@@ -68,15 +69,10 @@ def check(model):
 
 
 def preprocess(model):
-    for i in model.getElementsByTagName("namespace-alias"):
-        name = i.getAttribute("name")
-        i.setAttribute("id", ooxUrlIds[name])
-        namespaceAliases[name] = i.getAttribute("alias")
-
     for i in model.getElementsByTagName("namespace"):
         ns = i.getElementsByTagName("grammar")[0].getAttribute("ns")
-        if ns in list(namespaceAliases.keys()):
-            i.setAttribute("namespacealias", namespaceAliases[ns])
+        if ns in list(ooxUrlAliases.keys()):
+            i.setAttribute("namespacealias", ooxUrlAliases[ns])
         else:
             i.setAttribute("namespacealias", "")
         if ns.startswith("http://schemas.openxmlformats.org/"):
@@ -160,10 +156,10 @@ modelPath = sys.argv[2]
 ooxUrlIds = {}
 # Alias -> ID, from oox
 ooxAliasIds = {}
+# URL -> alias, from oox
+ooxUrlAliases = {}
 parseNamespaces(namespacesPath)
 
-# URL -> alias
-namespaceAliases = {}
 model = minidom.parse(modelPath)
 check(model)
 preprocess(model)
