@@ -1988,7 +1988,8 @@ SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark*
 {
     SolarMutexGuard aGuard;
 
-    return SwXReferenceMark::CreateXReferenceMark(*pDoc, *pMark);
+    return SwXReferenceMark::CreateXReferenceMark(
+                *pDoc, *const_cast<SwFmtRefMark*>(pMark));
 }
 
 void SwUnoCollection::Invalidate()

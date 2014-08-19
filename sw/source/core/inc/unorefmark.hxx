@@ -55,10 +55,10 @@ private:
 
 public:
 
-    SwXReferenceMark(SwDoc *const pDoc, const SwFmtRefMark *const pMark);
+    SwXReferenceMark(SwDoc *const pDoc, SwFmtRefMark *const pMark);
 
     static SwXReferenceMark *
-        CreateXReferenceMark(SwDoc & rDoc, SwFmtRefMark const& rMarkFmt);
+        CreateXReferenceMark(SwDoc & rDoc, SwFmtRefMark & rMarkFmt);
     /// may return 0
     static SwXReferenceMark *
         GetReferenceMark(SwModify const& rUnoCB, SwFmtRefMark const& rMarkFmt);

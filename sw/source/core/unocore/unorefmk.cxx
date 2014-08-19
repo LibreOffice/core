@@ -53,8 +53,8 @@ public:
     OUString             m_sMarkName;
 
     Impl(   SwXReferenceMark & rThis,
-            SwDoc *const pDoc, SwFmtRefMark const*const pRefMark)
-        : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
+            SwDoc *const pDoc, SwFmtRefMark *const pRefMark)
+        : SwClient(pRefMark)
         , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
         , m_bIsDescriptor(0 == pRefMark)
@@ -96,23 +96,10 @@ void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem 
     {
         Invalidate();
     }
-    else if (pOld)
-    {
-        switch (pOld->Which())
-        {
-            case RES_REFMARK_DELETED:
-                if (static_cast<const void*>(m_pMarkFmt) ==
-                        static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject)
-                {
-                    Invalidate();
-                }
-                break;
-        }
-    }
 }
 
 SwXReferenceMark::SwXReferenceMark(
-        SwDoc *const pDoc, SwFmtRefMark const*const pRefMark)
+        SwDoc *const pDoc, SwFmtRefMark *const pRefMark)
     : m_pImpl( new SwXReferenceMark::Impl(*this, pDoc, pRefMark) )
 {
 }
@@ -133,10 +120,10 @@ SwXReferenceMark::GetReferenceMark(
 
 SwXReferenceMark *
 SwXReferenceMark::CreateXReferenceMark(
-        SwDoc & rDoc, SwFmtRefMark const& rMarkFmt)
+        SwDoc & rDoc, SwFmtRefMark & rMarkFmt)
 {
     SwXReferenceMark *const pXMark(
-        GetReferenceMark(*rDoc.GetUnoCallBack(), rMarkFmt) );
+        GetReferenceMark(rMarkFmt, rMarkFmt) );
     return (pXMark)
         ?   pXMark
         :   new SwXReferenceMark(&rDoc, &rMarkFmt);
@@ -266,7 +253,7 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
 
     m_pMarkFmt = &pTxtAttr->GetRefMark();
 
-    pDoc2->GetUnoCallBack()->Add(this);
+    const_cast<SwFmtRefMark*>(m_pMarkFmt)->Add(this);
 }
 
 void SAL_CALL

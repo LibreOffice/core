@@ -32,6 +32,7 @@
 #include <txtinet.hxx>
 #include <txtflcnt.hxx>
 #include <fmtfld.hxx>
+#include <fmtrfmrk.hxx>
 #include <fmtanchr.hxx>
 #include <fmtinfmt.hxx>
 #include <txtatr.hxx>
@@ -1185,7 +1186,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
             break;
 
         case RES_TXTATR_REFMARK:
-            nDelMsg = RES_REFMARK_DELETED;
+            static_cast<SwFmtRefMark&>(pAttr->GetAttr()).InvalidateRefMark();
             break;
 
         case RES_TXTATR_META:

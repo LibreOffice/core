@@ -174,7 +174,6 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
             break;
 
         case RES_FOOTNOTE_DELETED:
-        case RES_REFMARK_DELETED:
         case RES_FIELD_DELETED:
             bLockClientList = false;
             break;

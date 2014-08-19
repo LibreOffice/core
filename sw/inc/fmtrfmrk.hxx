@@ -22,11 +22,15 @@
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 
+#include <calbck.hxx>
+
 class SwTxtRefMark;
 
 // ATT_REFMARK
 
-class SwFmtRefMark : public SfxPoolItem
+class SwFmtRefMark
+    : public SfxPoolItem
+    , public SwModify
 {
     friend class SwTxtRefMark;
     SwTxtRefMark* pTxtAttr;
@@ -43,6 +47,8 @@ public:
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+
+    void InvalidateRefMark();
 
     const SwTxtRefMark *GetTxtRefMark() const   { return pTxtAttr; }
     SwTxtRefMark *GetTxtRefMark()               { return pTxtAttr; }

@@ -17,9 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <hintids.hxx>
-#include <txtrfmrk.hxx>
 #include <fmtrfmrk.hxx>
+
+#include <hintids.hxx>
+#include <hints.hxx>
+#include <txtrfmrk.hxx>
 #include <swfont.hxx>
 
 SwFmtRefMark::~SwFmtRefMark( )
@@ -27,16 +29,18 @@ SwFmtRefMark::~SwFmtRefMark( )
 }
 
 SwFmtRefMark::SwFmtRefMark( const OUString& rName )
-    : SfxPoolItem( RES_TXTATR_REFMARK ),
-    pTxtAttr( 0 ),
-    aRefName( rName )
+    : SfxPoolItem(RES_TXTATR_REFMARK)
+    , SwModify(0)
+    , pTxtAttr(0)
+    , aRefName(rName)
 {
 }
 
 SwFmtRefMark::SwFmtRefMark( const SwFmtRefMark& rAttr )
-    : SfxPoolItem( RES_TXTATR_REFMARK ),
-    pTxtAttr( 0 ),
-    aRefName( rAttr.aRefName )
+    : SfxPoolItem(RES_TXTATR_REFMARK)
+    , SwModify(0)
+    , pTxtAttr(0)
+    , aRefName(rAttr.aRefName)
 {
 }
 
@@ -49,6 +53,13 @@ bool SwFmtRefMark::operator==( const SfxPoolItem& rAttr ) const
 SfxPoolItem* SwFmtRefMark::Clone( SfxItemPool* ) const
 {
     return new SwFmtRefMark( *this );
+}
+
+void SwFmtRefMark::InvalidateRefMark()
+{
+    SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
+            &static_cast<SwModify&>(*this)); // cast to base class (void*)
+    NotifyClients(&item, &item);
 }
 
 // Attribut fuer Inhalts-/Positions-Referenzen im Text

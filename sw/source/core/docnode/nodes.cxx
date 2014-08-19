@@ -39,6 +39,7 @@
 #include <frame.hxx>
 #include <txtatr.hxx>
 #include <tox.hxx>
+#include <fmtrfmrk.hxx>
 
 #include <docsh.hxx>
 #include <svl/smplhint.hxx>
@@ -303,7 +304,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                 break;
 
                             case RES_TXTATR_REFMARK:
-                                nDelMsg = RES_REFMARK_DELETED;
+                                static_cast<SwFmtRefMark&>(pAttr->GetAttr())
+                                    .InvalidateRefMark();
                                 break;
 
                             case RES_TXTATR_META:

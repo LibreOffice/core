@@ -491,8 +491,8 @@ lcl_CreateRefMarkPortion(
     const SwTxtAttr & rAttr, const bool bEnd)
 {
     SwDoc* pDoc = pUnoCrsr->GetDoc();
-    const SwFmtRefMark& rRefMark =
-        static_cast<const SwFmtRefMark&>(rAttr.GetAttr());
+    SwFmtRefMark& rRefMark = const_cast<SwFmtRefMark&>(
+            static_cast<const SwFmtRefMark&>(rAttr.GetAttr()));
     Reference<XTextContent> xContent;
     if (!xContent.is())
     {
