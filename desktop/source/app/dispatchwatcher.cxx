@@ -133,10 +133,10 @@ const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const r
     const Reference< document::XTypeDetection > xTypeDetector(
             xContext->getServiceManager()->createInstanceWithContext( "com.sun.star.document.TypeDetection", xContext ),
             UNO_QUERY_THROW );
-    const rtl::OUString aFilterName( xTypeDetector->queryTypeByURL( rUrl ) );
+    const rtl::OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
 
-    const SfxFilter* pFilter( SfxFilter::GetFilterByName( aFilterName ) );
-    if ( !pFilter || !pFilter->CanExport() )
+    const SfxFilter* pFilter( SfxGetpApp()->GetFilterMatcher().GetFilter4EA( aTypeName, SFX_FILTER_EXPORT ) );
+    if ( !pFilter )
         pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
     if ( !pFilter )
     {
