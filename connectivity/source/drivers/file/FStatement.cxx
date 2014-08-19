@@ -35,7 +35,6 @@
 #include <connectivity/dbexception.hxx>
 #include "resource/file_res.hrc"
 #include <algorithm>
-#include <tools/debug.hxx>
 
 namespace connectivity
 {

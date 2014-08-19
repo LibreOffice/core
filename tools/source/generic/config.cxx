@@ -29,7 +29,6 @@
 
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
 #include <tools/config.hxx>
 #include <osl/security.h>
 #include <rtl/strbuf.hxx>

@@ -34,7 +34,6 @@
 #include "diagnose_ex.h"
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <tools/debug.hxx>
 #include "resource/file_res.hrc"
 
 using namespace connectivity;

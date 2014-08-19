@@ -18,7 +18,6 @@
  */
 
 #include <unotools/transliterationwrapper.hxx>
-#include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>

@@ -27,7 +27,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <unotools/ucbstreamhelper.hxx>
-#include <tools/debug.hxx>
 
 using namespace connectivity;
 using namespace connectivity::file;

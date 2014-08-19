@@ -18,7 +18,6 @@
  */
 
 #include <unotools/collatorwrapper.hxx>
-#include <tools/debug.hxx>
 #include <com/sun/star/i18n/Collator.hpp>
 
 using namespace ::com::sun::star;

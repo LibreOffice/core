@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "dbase/DPreparedStatement.hxx"
 #include "dbase/DStatement.hxx"
-#include <tools/debug.hxx>
 #include <connectivity/dbexception.hxx>
 
 using namespace connectivity::dbase;

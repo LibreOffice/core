@@ -34,9 +34,6 @@
 #include <unotools/options.hxx>
 #include <svtools/miscopt.hxx>
 
-
-#include <tools/debug.hxx>
-
 namespace svtools {
 
 ItemHolder2::ItemHolder2()
