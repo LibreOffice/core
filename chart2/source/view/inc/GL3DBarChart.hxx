@@ -47,6 +47,7 @@ enum RenderEventType
     EVENT_DRAG_RIGHT,
     EVENT_SCROLL,
     EVENT_SHOW_SCROLL,
+    EVENT_AUTO_FLY,
     EVENT_DIE
 };
 
@@ -100,6 +101,7 @@ private:
     void swapVector(int i, int j, std::vector<sal_uInt32> &vectorNearest);
     void getNearestBars(std::vector<sal_uInt32> &vectorNearest);
     void updateScroll();
+    void processAutoFly(sal_uInt32 nId, sal_uInt32 nColor);
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
@@ -167,6 +169,9 @@ private:
     std::map<sal_uInt32, std::list<float> > maBarHistory;
     std::vector<sal_uInt32> maVectorNearest;
     std::map<sal_uInt32, float> maDistanceMap;
+    std::map<sal_uInt32, sal_uInt32> maBarColorMap;
+    int mnColorRate;
+    sal_uInt32 mnAutoFlyBarID;
 };
 
 }

@@ -33,6 +33,7 @@
 #define HISTORY_NUM 5
 #define SHOW_VALUE_COUNT 15
 #define SHOW_SCROLL_TEXT_DISTANCE 1000
+#define FLY_THRESHOLD 20
 
 
 using namespace com::sun::star;
@@ -192,6 +193,7 @@ public:
         , mbNeedFlyBack(false)
         , mnStep(0)
         , mnStepsTotal(0)
+        , mbAutoFlyExecuting(0)
     {
         osl_getSystemTime(&maClickFlyBackStartTime);
         osl_getSystemTime(&maClickFlyBackEndTime);
@@ -207,9 +209,11 @@ private:
     void ProcessScroll();
     void UpdateScreenText();
     void ProcessClickFlyBack();
+    void AutoMoveToBar();
 private:
     glm::vec3 maStartPos;
     glm::vec3 maEndPos;
+    bool mbAutoFlyExecuting;
     bool mbExecuting;
     bool mbNeedFlyBack;
     glm::vec3 maStep;
@@ -235,7 +239,8 @@ void RenderBenchMarkThread::MoveCamera()
     {
         mnStep = 0;
         mbExecuting = false;
-        if (mpChart->maRenderEvent == EVENT_CLICK)
+        mbAutoFlyExecuting = false;
+        if ((mpChart->maRenderEvent == EVENT_CLICK) || (mpChart->maRenderEvent == EVENT_AUTO_FLY))
         {
             mpChart->mpRenderer->EndClick();
             mbNeedFlyBack = true;
@@ -260,6 +265,8 @@ void RenderBenchMarkThread::MoveToDefault()
     }
     if (!mbExecuting)
     {
+        mpChart->mpRenderer->EndClick();
+        mnStep = 0;
         mnStepsTotal = STEPS;
         maStep = (mpChart->maDefaultCameraPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
         maStepDirection = (mpChart->maDefaultCameraDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
@@ -272,6 +279,7 @@ void RenderBenchMarkThread::MoveToBar()
 {
     if (!mbExecuting)
     {
+        mpChart->mpRenderer->EndClick();
         mpChart->mpRenderer->SetPickingMode(true);
         mpChart->mpCamera->render();
         mpChart->mpRenderer->ProcessUnrenderedShape(mpChart->mbNeedsNewRender);
@@ -285,6 +293,7 @@ void RenderBenchMarkThread::MoveToBar()
             return;
         }
         const GL3DBarChart::BarInformation& rBarInfo = itr->second;
+        mnStep = 0;
         mnStepsTotal = STEPS;
         glm::vec3 maTargetPosition = rBarInfo.maPos;
         maTargetPosition.z += 240;
@@ -301,10 +310,40 @@ void RenderBenchMarkThread::MoveToBar()
     MoveCamera();
 }
 
+void RenderBenchMarkThread::AutoMoveToBar()
+{
+    if (!mbAutoFlyExecuting)
+    {
+        mpChart->mpRenderer->EndClick();
+        std::map<sal_uInt32, const GL3DBarChart::BarInformation>::const_iterator itr = mpChart->maBarMap.find(mpChart->mnAutoFlyBarID);
+        if(itr == mpChart->maBarMap.end())
+        {
+            mpChart->maRenderEvent = EVENT_NONE;
+            return;
+        }
+        const GL3DBarChart::BarInformation& rBarInfo = itr->second;
+        mnStep = 0;
+        mnStepsTotal = STEPS;
+        glm::vec3 maTargetPosition = rBarInfo.maPos;
+        maTargetPosition.z += 240;
+        maTargetPosition.x += BAR_SIZE_X / 2.0f;
+        maStep = (maTargetPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
+        glm::vec3 maTargetDirection = rBarInfo.maPos;
+        maTargetDirection.x += BAR_SIZE_X / 2.0f;
+        maTargetDirection.y += BAR_SIZE_Y / 2.0f;
+        maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
+        mpChart->mpRenderer->StartClick(mpChart->mnAutoFlyBarID);
+        mbAutoFlyExecuting = true;
+    }
+    MoveCamera();
+}
+
 void RenderBenchMarkThread::MoveToCorner()
 {
     if (!mbExecuting)
     {
+        mpChart->mpRenderer->EndClick();
+        mnStep = 0;
         mnStepsTotal = STEPS;
         maStep = (mpChart->getCornerPosition(mpChart->mnCornerId) - mpChart->maCameraPosition) / float(mnStepsTotal);
         maStepDirection = (glm::vec3(mpChart->mnMaxX/2.0f, mpChart->mnMaxY/2.0f, 0) - mpChart->maCameraDirection)/ float(mnStepsTotal);
@@ -350,6 +389,11 @@ void RenderBenchMarkThread::ProcessMouseEvent()
     {
         ProcessScroll();
     }
+    else if (mpChart->maRenderEvent == EVENT_AUTO_FLY)
+    {
+        AutoMoveToBar();
+    }
+
 }
 
 void RenderBenchMarkThread::UpdateScreenText()
@@ -414,7 +458,9 @@ GL3DBarChart::GL3DBarChart(
     maFPS(OUString("Render FPS: 0")),
     maDataUpdateFPS(OUString("Data Update FPS: 0")),
     miFrameCount(0),
-    miDataUpdateCounter(0)
+    miDataUpdateCounter(0),
+    mnColorRate(0),
+    mnAutoFlyBarID(0)
 {
     if (BENCH_MARK_MODE)
     {
@@ -487,6 +533,11 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     maSeriesNames.reserve(rDataSeriesContainer.size());
     maBarMap.clear();
     maShapes.clear();
+    if (BENCH_MARK_MODE)
+    {
+        mnColorRate = 0;
+        mnAutoFlyBarID = 0;
+    }
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
     mpCamera = static_cast<opengl3D::Camera*>(&maShapes.back());
 
@@ -548,6 +599,18 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
                         BarInformation(glm::vec3(nXPos, nYPos, float(nVal/nMaxVal)),
                             nVal, nIndex, nSeriesIndex)));
             recordBarHistory(nId, nVal);
+            if (BENCH_MARK_MODE)
+            {
+                std::map<sal_uInt32, sal_uInt32>::const_iterator itr = maBarColorMap.find(nId);
+                if (itr == maBarColorMap.end())
+                {
+                    maBarColorMap[nId] = nColor;
+                }
+                else
+                {
+                    processAutoFly(nId, nColor);
+                }
+            }
             maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId));
             nId += ID_STEP;
         }
@@ -719,7 +782,7 @@ void GL3DBarChart::moveToDefault()
     if(BENCH_MARK_MODE)
     {
         // add correct handling here!!
-        if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL))
+        if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL) && (maRenderEvent != EVENT_AUTO_FLY))
             return;
 
         {
@@ -760,7 +823,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     if (BENCH_MARK_MODE)
     {
         // add correct handling here !!
-        if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL))
+        if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL) && (maRenderEvent != EVENT_AUTO_FLY))
             return;
 
         {
@@ -831,7 +894,7 @@ void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, s
 {
     long nDirection = rEndPos.X() - rStartPos.X();
     osl::MutexGuard aGuard(maMutex);
-    if ((maRenderEvent == EVENT_NONE) || (maRenderEvent == EVENT_SHOW_SCROLL))
+    if ((maRenderEvent == EVENT_NONE) || (maRenderEvent == EVENT_SHOW_SCROLL) || (maRenderEvent == EVENT_AUTO_FLY))
         maRenderEvent = nDirection > 0 ? EVENT_DRAG_RIGHT : EVENT_DRAG_LEFT;
     if(nDirection < 0)
     {
@@ -906,7 +969,7 @@ void GL3DBarChart::scroll(long nDelta)
 {
     {
         osl::MutexGuard aGuard(maMutex);
-        if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL))
+        if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL) && (maRenderEvent != EVENT_AUTO_FLY))
             return;
         glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
         maCameraPosition -= (float((nDelta/10)) * maDir);
@@ -1168,6 +1231,27 @@ void GL3DBarChart::updateScroll()
                 pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
             }
         }
+    }
+}
+
+void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
+{
+    //record the color
+    sal_uInt32 nPreColor = maBarColorMap[nId];
+    maBarColorMap[nId] = nColor;
+    //if has manul event, just record the color and process manul event first
+    if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_AUTO_FLY))
+    {
+        return;
+    }
+    //calc the percentage of color change
+    int nColorRate = (nColor - nPreColor) * 100 / nPreColor;
+    nColorRate = abs(nColorRate);
+    if (nColorRate >= FLY_THRESHOLD)
+    {
+        maRenderEvent = EVENT_AUTO_FLY;
+        mnAutoFlyBarID = nColorRate > mnColorRate ? nId : mnAutoFlyBarID;
+        mnColorRate = nColorRate > mnColorRate ? nColorRate : mnColorRate;
     }
 }
 
