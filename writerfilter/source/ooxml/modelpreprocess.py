@@ -70,10 +70,7 @@ def check(model):
 def preprocess(model):
     for i in model.getElementsByTagName("namespace-alias"):
         name = i.getAttribute("name")
-        if name in list(ooxUrlIds.keys()):
-            i.setAttribute("id", ooxUrlIds[name])
-        else:
-            i.setAttribute("id", ooxAliasIds[i.getAttribute("alias")])
+        i.setAttribute("id", ooxUrlIds[name])
         namespaceAliases[name] = i.getAttribute("alias")
 
     for i in model.getElementsByTagName("namespace"):
