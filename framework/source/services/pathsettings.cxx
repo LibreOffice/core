@@ -694,10 +694,13 @@ OUStringList PathSettings::impl_convertOldStyle2Path(const OUString& sOldStylePa
 }
 
 //-----------------------------------------------------------------------------
-void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
-                                               OUStringList&           lList)
+void PathSettings::impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
+                                        OUStringList&           lList)
 {
-    OUStringList::const_iterator pIt;
+    OUStringList::iterator pIt;
+
+    // Erase items in the internal path list from lList.
+    // Also erase items in the internal path list from the user path list.
     for (  pIt  = rPath.lInternalPaths.begin();
            pIt != rPath.lInternalPaths.end()  ;
          ++pIt                                 )
@@ -706,7 +709,29 @@ void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
         OUStringList::iterator pItem = lList.find(rItem);
         if (pItem != lList.end())
             lList.erase(pItem);
+        pItem = rPath.lUserPaths.find(rItem);
+        if (pItem != rPath.lUserPaths.end())
+            rPath.lUserPaths.erase(pItem);
     }
+
+    // Erase itsems not in lList from the user path list.
+    pIt = rPath.lUserPaths.begin();
+    while ( pIt != rPath.lUserPaths.end() )
+    {
+        const OUString& rItem = *pIt;
+        OUStringList::iterator pItem = lList.find(rItem);
+        if ( pItem == lList.end() )
+        {
+            rPath.lUserPaths.erase(pIt);
+            pIt = rPath.lUserPaths.begin();
+        }
+        else
+        {
+            ++pIt;
+        }
+    }
+
+    // Erase items in the user path list from lList.
     for (  pIt  = rPath.lUserPaths.begin();
            pIt != rPath.lUserPaths.end()  ;
          ++pIt                             )
@@ -717,6 +742,7 @@ void PathSettings::impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
             lList.erase(pItem);
     }
 
+    // Erase the write path from lList
     OUStringList::iterator pItem = lList.find(rPath.sWritePath);
     if (pItem != lList.end())
         lList.erase(pItem);
