@@ -2953,6 +2953,9 @@ void DocxAttributeOutput::switchHeaderFooter(bool isHeaderFooter, sal_Int32 inde
 
 void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )
 {
+    // In case any paragraph SDT's are open, close them here.
+    EndParaSdtBlock();
+
     m_pSerializer->startElementNS( XML_w, XML_tbl, FSEND );
 
     tableFirstCells.push_back(pTableTextNodeInfoInner);
