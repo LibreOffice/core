@@ -17,6 +17,7 @@
 #include "docoptio.hxx"
 #include "globstr.hrc"
 #include "compiler.hxx"
+#include "dbdata.hxx"
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
@@ -726,10 +727,30 @@ void ScOrcusTable::set_identifier(size_t id)
     SAL_INFO("sc.orcus.table", "set_identifier :" << id);
 }
 
+namespace {
+
+std::ostream& operator<<(std::ostream& rStrm, const ScAddress& rAddr)
+{
+    rStrm << "Col: " << rAddr.Col() << ", Row: " << rAddr.Row() << ", Tab: " << rAddr.Tab();
+    return rStrm;
+}
+
+std::ostream& operator<<(std::ostream& rStrm, const ScRange& rRange)
+{
+    rStrm << "aStart: " << rRange.aStart << std::endl;
+    rStrm << "aEnd: " << rRange.aEnd;
+    return rStrm;
+}
+
+}
+
 void ScOrcusTable::set_range(const char* p_ref, size_t n_ref)
 {
     OUString aRange(p_ref, n_ref, RTL_TEXTENCODING_UTF8);
     SAL_INFO("sc.orcus.table", "set_range: " << aRange);
+
+    maRange.Parse(aRange);
+    SAL_INFO("sc.orcus.table", "set_range translated range: " << maRange);
 }
 
 void ScOrcusTable::set_totals_row_count(size_t row_count)
@@ -739,8 +760,8 @@ void ScOrcusTable::set_totals_row_count(size_t row_count)
 
 void ScOrcusTable::set_name(const char* p, size_t n)
 {
-    OUString aName(p, n, RTL_TEXTENCODING_UTF8);
-    SAL_INFO("sc.orcus.table", "set_name: " << aName);
+    maName = OUString(p, n, RTL_TEXTENCODING_UTF8);
+    SAL_INFO("sc.orcus.table", "set_name: " << maName);
 }
 
 void ScOrcusTable::set_display_name(const char* p, size_t n)
@@ -810,6 +831,13 @@ void ScOrcusTable::set_style_show_column_stripes(bool b)
 void ScOrcusTable::commit()
 {
     SAL_INFO("sc.orcus.table", "commit");
+
+    ScDBData* pDBData = new ScDBData(maName, mnTab,
+                        maRange.aStart.Col(), maRange.aStart.Row(),
+                        maRange.aEnd.Col(), maRange.aEnd.Row());
+
+    if(!mrDoc.GetDBCollection()->getNamedDBs().insert(pDBData))
+        delete pDBData;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
