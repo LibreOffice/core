@@ -372,8 +372,8 @@ class PathSettings : // base classes
             So real user defined paths can be extracted from the list of
             fix internal paths !
          */
-        void impl_purgeKnownPaths(const PathSettings::PathInfo& rPath,
-                                         OUStringList&           lList);
+        void impl_purgeKnownPaths(PathSettings::PathInfo& rPath,
+                                  OUStringList&           lList);
 
         /** rebuild the member m_lPropDesc using the path list m_lPaths. */
         void impl_rebuildPropertyDescriptor();
