@@ -1986,8 +1986,6 @@ sal_Bool SwXReferenceMarks::hasElements(void) throw( uno::RuntimeException, std:
 
 SwXReferenceMark* SwXReferenceMarks::GetObject( SwDoc* pDoc, const SwFmtRefMark* pMark )
 {
-    SolarMutexGuard aGuard;
-
     return SwXReferenceMark::CreateXReferenceMark(
                 *pDoc, *const_cast<SwFmtRefMark*>(pMark));
 }
