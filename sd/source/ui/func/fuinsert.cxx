@@ -786,7 +786,7 @@ void FuInsert3DModel::DoExecute( SfxRequest& )
     aDlg.SetTitle( "Insert 3D Model" );
 
 #if HAVE_FEATURE_COLLADA
-    aDlg.AddFilter( "All supported formats", "*.json; *.dae; *.kmz"  );
+    aDlg.AddFilter( "All supported formats", "*.json;*.dae;*.kmz"  );
 #else
     aDlg.AddFilter( "All supported formats", "*.json"  );
 #endif
