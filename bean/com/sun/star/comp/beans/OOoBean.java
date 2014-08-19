@@ -281,7 +281,7 @@ public class OOoBean
             };
             aConnectorThread.start();
             try { aConnectorThread.join(nOOoStartTimeOut); }
-            catch ( java.lang.InterruptedException aExc )
+            catch ( InterruptedException aExc )
             { throw new NoConnectionException(); }
             if ( xServiceFactory == null )
                 throw new NoConnectionException();
@@ -381,7 +381,7 @@ public class OOoBean
 
             aCallWatchThread.cancel();
         }
-        catch ( java.lang.InterruptedException aExc )
+        catch ( InterruptedException aExc )
         { /* can be ignored */ }
     }
 
@@ -648,7 +648,7 @@ public class OOoBean
 
             applyToolVisibilities();
         }
-        catch ( java.lang.InterruptedException aExc )
+        catch ( InterruptedException aExc )
         {
             throw new NoConnectionException();
         }
@@ -802,7 +802,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
         boolean bOldValue, boolean bNewValue )
 
         throws
-            java.lang.InterruptedException
+            InterruptedException
     {
         // start runtime timeout
         CallWatchThread aCallWatchThread =
@@ -871,7 +871,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             bMenuBarVisible = setToolVisible( "MenuBarVisible",
                     "private:resource/menubar/menubar", bMenuBarVisible, bVisible );
         }
-        catch ( java.lang.InterruptedException aExc )
+        catch ( InterruptedException aExc )
         {
             bMenuBarVisible = bVisible;
         }
@@ -919,7 +919,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             bStandardBarVisible = setToolVisible( "StandardBarVisible",
                     "private:resource/toolbar/standardbar", bStandardBarVisible, bVisible );
         }
-        catch ( java.lang.InterruptedException aExc )
+        catch ( InterruptedException aExc )
         {
             bMenuBarVisible = bVisible;
         }
@@ -967,7 +967,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             bToolBarVisible = setToolVisible( "ToolBarVisible",
                     "private:resource/toolbar/toolbar", bToolBarVisible, bVisible );
         }
-        catch ( java.lang.InterruptedException aExc )
+        catch ( InterruptedException aExc )
         {
             bMenuBarVisible = bVisible;
         }
@@ -1015,7 +1015,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
             bStatusBarVisible = setToolVisible( "StatusBarVisible",
                     "private:resource/statusbar/statusbar", bStatusBarVisible, bVisible );
         }
-        catch ( java.lang.InterruptedException aExc )
+        catch ( InterruptedException aExc )
         {
             bMenuBarVisible = bVisible;
         }
@@ -1204,7 +1204,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                     {
                         aCallWatchThread.restart();
                     }
-                    catch ( java.lang.InterruptedException aExc )
+                    catch ( InterruptedException aExc )
                     {
                         // ignore late interrupt
                     }
@@ -1221,7 +1221,7 @@ xLayoutManager.showElement("private:resource/menubar/menubar");
                 try {
                         sleep(nOOoCheckCycle);
                 }
-                catch ( java.lang.InterruptedException aExc )
+                catch ( InterruptedException aExc )
                 {
                     dbgPrint("EventListener(" + aTag + ") interrupted.");
                     // thread can be ended by EvendListener.end();

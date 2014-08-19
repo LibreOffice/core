@@ -73,7 +73,7 @@ public class _XDocumentAuditing extends MultiMethodTest {
         catch(com.sun.star.lang.WrappedTargetException e) {
             ex = e;
         }
-        catch(java.lang.NullPointerException e) {
+        catch(NullPointerException e) {
             ex = e;
         }
         if (ex != null) {

@@ -27,7 +27,7 @@ import org.openoffice.netbeans.modules.office.utils.FrameworkJarChecker;
 
 public class ConfigureParcelAction extends CookieAction {
 
-    public java.lang.String getName() {
+    public String getName() {
         return "Configure";
     }
 

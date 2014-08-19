@@ -296,14 +296,14 @@ public class DBaseNumericFunctions extends SubTestCase
     private void exp(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "EXP(2),EXP(-2) ");
-        assure("EXP(2) failed!", (float) row.getDouble(1) == (float) java.lang.Math.exp(2));
-        assure("EXP(-2) failed!", (float) row.getDouble(2) == (float) java.lang.Math.exp(-2));
+        assure("EXP(2) failed!", (float) row.getDouble(1) == (float) Math.exp(2));
+        assure("EXP(-2) failed!", (float) row.getDouble(2) == (float) Math.exp(-2));
     }
 
     private void log(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "LOG(2),LOG(-2) ");
-        assure("LOG(2) failed!", (float) row.getDouble(1) == (float) java.lang.Math.log(2));
+        assure("LOG(2) failed!", (float) row.getDouble(1) == (float) Math.log(2));
         row.getDouble(2);
         assure("LOG(-2) failed!", row.wasNull());
     }
@@ -329,7 +329,7 @@ public class DBaseNumericFunctions extends SubTestCase
     private void pi(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "PI() ");
-        assure("PI() failed!", (float) row.getDouble(1) == (float) java.lang.Math.PI);
+        assure("PI() failed!", (float) row.getDouble(1) == (float) Math.PI);
     }
 
     private void cos(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
@@ -341,13 +341,13 @@ public class DBaseNumericFunctions extends SubTestCase
     private void sin(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "SIN(2) ");
-        assure("SIN(PI()) failed!", (float) row.getDouble(1) == (float) java.lang.Math.sin(2));
+        assure("SIN(PI()) failed!", (float) row.getDouble(1) == (float) Math.sin(2));
     }
 
     private void tan(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "TAN(PI()+1) ");
-        assure("TAN(PI()+1) failed!", (float) row.getDouble(1) == (float) java.lang.Math.tan(java.lang.Math.PI + 1.0));
+        assure("TAN(PI()+1) failed!", (float) row.getDouble(1) == (float) Math.tan(Math.PI + 1.0));
     }
 
     private void acos(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
@@ -359,7 +359,7 @@ public class DBaseNumericFunctions extends SubTestCase
     private void asin(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "ASIN(0) ");
-        assure("ASIN(0) failed!", (float) row.getDouble(1) == (float) java.lang.Math.asin(0.0));
+        assure("ASIN(0) failed!", (float) row.getDouble(1) == (float) Math.asin(0.0));
     }
 
     private void atan(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
@@ -383,6 +383,6 @@ public class DBaseNumericFunctions extends SubTestCase
     private void radians(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "RADIANS(90) ");
-        assure("RADIANS(90) failed!", (float) row.getDouble(1) == (float) (java.lang.Math.PI / 2.0));
+        assure("RADIANS(90) failed!", (float) row.getDouble(1) == (float) (Math.PI / 2.0));
     }
 }

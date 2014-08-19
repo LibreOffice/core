@@ -92,7 +92,7 @@ public class _XTextComponent extends MultiMethodTest {
         oObj.setText("Listen");
         try {
             Thread.sleep(500);
-        } catch(java.lang.InterruptedException e) {
+        } catch(InterruptedException e) {
             e.printStackTrace(log);
         }
         if (!textChanged) {

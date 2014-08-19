@@ -208,7 +208,7 @@ public class Helper  {
             }
 
         }catch (IOException e) {
-        }catch(java.lang.NullPointerException e) {
+        }catch(NullPointerException e) {
             return null;
         }
         return null;
@@ -343,7 +343,7 @@ public class Helper  {
         try{
             String fileURL = m_hFileURLs.get(fileAlias).toString();
             return utils.getFullURL(ensureEndingFileSep(m_sTestDocPath) + fileURL);
-        } catch (java.lang.NullPointerException e){
+        } catch (NullPointerException e){
             throw new FileAliasNotFoundException(fileAlias);
        }
 
@@ -358,7 +358,7 @@ public class Helper  {
                                         throws FileAliasNotFoundException{
         try{
             return m_hFileTypes.get(fileAlias).toString();
-        } catch (java.lang.NullPointerException e){
+        } catch (NullPointerException e){
             throw new FileAliasNotFoundException(fileAlias);
        }
     }

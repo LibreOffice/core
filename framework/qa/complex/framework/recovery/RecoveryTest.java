@@ -360,7 +360,7 @@ public class RecoveryTest extends ComplexTestCase {
 
                     try{
                        oButton = oUITools.getButton("Next >");
-                    } catch (java.lang.NullPointerException e){
+                    } catch (NullPointerException e){
                         // no fault: The title "Start Recovery" switches to "Next"
                         // while all documents are recoverd
                     }

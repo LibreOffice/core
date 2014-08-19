@@ -281,7 +281,7 @@ public class CalcHelper
 
             int nCol, nRow;
             double fValue;
-            double fFactor = 2.0 * java.lang.Math.PI / (nRowCount - 1);
+            double fFactor = 2.0 * Math.PI / (nRowCount - 1);
             String aFormula;
 
             // set variable factor for cos formula

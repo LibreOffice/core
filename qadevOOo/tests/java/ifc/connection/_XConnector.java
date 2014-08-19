@@ -130,7 +130,7 @@ public class _XConnector extends MultiMethodTest {
         try {
             Thread.sleep(500);
         }
-        catch (java.lang.InterruptedException e) {}
+        catch (InterruptedException e) {}
 
         // connect to acceptor
         try {

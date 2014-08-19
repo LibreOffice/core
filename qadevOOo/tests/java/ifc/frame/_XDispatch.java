@@ -133,7 +133,7 @@ public class _XDispatch extends MultiMethodTest {
             try {
                 Thread.sleep(200);
             }
-            catch(java.lang.InterruptedException e) {}
+            catch(InterruptedException e) {}
 
             log.println("   Listener called: "+ notificationListener.finishedDispatch);
 
@@ -177,7 +177,7 @@ public class _XDispatch extends MultiMethodTest {
         try {
             Thread.sleep(200);
         }
-        catch(java.lang.InterruptedException e) {}
+        catch(InterruptedException e) {}
 
         log.println("Listener called: "+ listener.statusChangedCalled);
 
@@ -222,7 +222,7 @@ public class _XDispatch extends MultiMethodTest {
         try {
             Thread.sleep(200);
         }
-        catch(java.lang.InterruptedException e) {}
+        catch(InterruptedException e) {}
 
         System.out.println("Listener called: "+ listener.statusChangedCalled);
 

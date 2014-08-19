@@ -35,7 +35,7 @@ public class SimpleFileSemaphore /* extends *//* implements */
             {
                 java.lang.Thread.sleep(_nSeconds * 1000);
             }
-            catch (java.lang.InterruptedException e2)
+            catch (InterruptedException e2)
             {
             }
         }

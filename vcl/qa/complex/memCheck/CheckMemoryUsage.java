@@ -500,7 +500,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
         {
             Thread.sleep(milliSeconds);
         }
-        catch (java.lang.InterruptedException e)
+        catch (InterruptedException e)
         { // ignore
         }
     }

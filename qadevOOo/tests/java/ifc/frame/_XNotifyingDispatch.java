@@ -109,7 +109,7 @@ public class _XNotifyingDispatch extends MultiMethodTest {
         try {
             Thread.sleep(200);
         }
-        catch(java.lang.InterruptedException e) {}
+        catch(InterruptedException e) {}
 
         log.println("Listener called: "+ notificationListener.finishedDispatch);
 

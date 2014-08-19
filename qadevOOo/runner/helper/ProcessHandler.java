@@ -448,7 +448,7 @@ public class ProcessHandler
             {
                 Thread.sleep(1000 * counter); // 5000
             }
-            catch (java.lang.InterruptedException e)
+            catch (InterruptedException e)
             {
             }
             try
@@ -809,7 +809,7 @@ public class ProcessHandler
                 {
                     sleep(1000);
                 }
-                catch(java.lang.InterruptedException e)
+                catch(InterruptedException e)
                 {
                     // interrupt flag is set back to 'not interrupted' :-(
                 }

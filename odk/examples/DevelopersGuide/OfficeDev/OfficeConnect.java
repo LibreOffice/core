@@ -36,9 +36,6 @@
 
 import com.sun.star.uno.UnoRuntime;
 
-// others
-import java.lang.String;
-
 // __________ Implementation __________
 
 /**

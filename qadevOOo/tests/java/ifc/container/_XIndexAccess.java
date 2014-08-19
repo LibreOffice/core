@@ -78,7 +78,7 @@ public class _XIndexAccess extends MultiMethodTest {
         try {
             Thread.sleep(200);
         }
-        catch(java.lang.InterruptedException e) {}
+        catch(InterruptedException e) {}
 
         boolean result = true;
         log.println("Testing getByIndex()");

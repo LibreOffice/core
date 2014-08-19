@@ -169,7 +169,7 @@ public class _XUnoUrlResolver extends MultiMethodTest {
             try {
                 Thread.sleep(500);
             }
-            catch(java.lang.InterruptedException e) {}
+            catch(InterruptedException e) {}
             // get an instance from the remote
             Object obj = oObj.resolve(
                     "uno:" + connectStr + ";urp;com.sun.star.lang.ServiceManager");

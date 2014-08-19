@@ -130,7 +130,7 @@ public class CheckXCellRangesQuery /* extends ComplexTestCase */ {
         } catch (com.sun.star.lang.DisposedException e) {
             worked = false;
             System.out.println("Document already disposed");
-        } catch (java.lang.NullPointerException e) {
+        } catch (NullPointerException e) {
             worked = false;
             System.out.println("Couldn't get XCloseable");
         }

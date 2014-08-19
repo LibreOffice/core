@@ -237,18 +237,18 @@ public class ChartInDraw
 
         // rotate 10 degrees along the x axis
         double fAngle = 10.0;
-        double fCosX = java.lang.Math.cos( java.lang.Math.PI / 180.0 * fAngle );
-        double fSinX = java.lang.Math.sin( java.lang.Math.PI / 180.0 * fAngle );
+        double fCosX = Math.cos( Math.PI / 180.0 * fAngle );
+        double fSinX = Math.sin( Math.PI / 180.0 * fAngle );
 
         // rotate -20 degrees along the y axis
         fAngle = -20.0;
-        double fCosY = java.lang.Math.cos( java.lang.Math.PI / 180.0 * fAngle );
-        double fSinY = java.lang.Math.sin( java.lang.Math.PI / 180.0 * fAngle );
+        double fCosY = Math.cos( Math.PI / 180.0 * fAngle );
+        double fSinY = Math.sin( Math.PI / 180.0 * fAngle );
 
         // rotate -5 degrees along the z axis
         fAngle = -5.0;
-        double fCosZ = java.lang.Math.cos( java.lang.Math.PI / 180.0 * fAngle );
-        double fSinZ = java.lang.Math.sin( java.lang.Math.PI / 180.0 * fAngle );
+        double fCosZ = Math.cos( Math.PI / 180.0 * fAngle );
+        double fSinZ = Math.sin( Math.PI / 180.0 * fAngle );
 
         aMatrix.Line1.Column1 =  fCosY *  fCosZ;
         aMatrix.Line1.Column2 =  fCosY * -fSinZ;

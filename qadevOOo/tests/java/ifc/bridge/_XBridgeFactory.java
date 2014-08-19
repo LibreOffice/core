@@ -165,7 +165,7 @@ public class _XBridgeFactory extends MultiMethodTest {
             try {
                 Thread.sleep(500);
             }
-            catch (java.lang.InterruptedException e) {}
+            catch (InterruptedException e) {}
             conn = xCntr.connect(connectString) ;
 
         } catch (com.sun.star.uno.Exception e) {

@@ -82,7 +82,7 @@ import com.sun.star.util.Time;
 *         index 0 must be used. </li>
 * </ul>
 * Other methods uses types of their arguments (i.e.
-* <code>java.lang.String</code>
+* <code>String</code>
 * for <code>setString</code> method, <code>com.sun.star.sdbc.XRef</code>
 * for <code>setRef</code> method).
 * </li>

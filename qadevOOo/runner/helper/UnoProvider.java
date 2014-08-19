@@ -77,7 +77,7 @@ public class UnoProvider implements AppProvider {
         try {
             Thread.sleep(1000);
         }
-        catch(java.lang.InterruptedException e) {}
+        catch(InterruptedException e) {}
         return true;
     }
 

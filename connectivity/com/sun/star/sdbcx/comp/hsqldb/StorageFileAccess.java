@@ -35,22 +35,22 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
         this.key = (String)key;
     }
 
-    public void createParentDirs(java.lang.String filename) {
+    public void createParentDirs(String filename) {
     }
 
-    public boolean isStreamElement(java.lang.String elementName)  {
+    public boolean isStreamElement(String elementName)  {
         return isStreamElement(key,elementName);
     }
 
-    public java.io.InputStream openInputStreamElement(java.lang.String streamName) throws java.io.IOException {
+    public java.io.InputStream openInputStreamElement(String streamName) throws java.io.IOException {
         return new NativeInputStreamHelper(key,streamName);
     }
 
-    public java.io.OutputStream openOutputStreamElement(java.lang.String streamName) throws java.io.IOException {
+    public java.io.OutputStream openOutputStreamElement(String streamName) throws java.io.IOException {
         return new NativeOutputStreamHelper(key,streamName);
     }
 
-    public void removeElement(java.lang.String filename) throws java.util.NoSuchElementException {
+    public void removeElement(String filename) throws java.util.NoSuchElementException {
         try {
             if ( isStreamElement(key,filename) )
                 removeElement(key,filename);
@@ -59,7 +59,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
        }
     }
 
-    public void renameElement(java.lang.String oldName, java.lang.String newName) throws java.util.NoSuchElementException {
+    public void renameElement(String oldName, String newName) throws java.util.NoSuchElementException {
         try {
             if ( isStreamElement(key,oldName) ){
                 removeElement(key,newName);
@@ -88,7 +88,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
         return new FileSync((NativeOutputStreamHelper)os);
     }
 
-    static native boolean isStreamElement(java.lang.String key,java.lang.String elementName);
-    static native void removeElement(java.lang.String key,java.lang.String filename) throws java.util.NoSuchElementException, java.io.IOException;
-    static native void renameElement(java.lang.String key,java.lang.String oldName, java.lang.String newName) throws java.util.NoSuchElementException, java.io.IOException;
+    static native boolean isStreamElement(String key,String elementName);
+    static native void removeElement(String key,String filename) throws java.util.NoSuchElementException, java.io.IOException;
+    static native void renameElement(String key,String oldName, String newName) throws java.util.NoSuchElementException, java.io.IOException;
 }

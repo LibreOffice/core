@@ -156,7 +156,7 @@ public class ScTableSheetObj extends TestCase {
             log.println("Couldn't close document");
         } catch (com.sun.star.lang.DisposedException e) {
             log.println("Document already disposed");
-        } catch (java.lang.NullPointerException e) {
+        } catch (NullPointerException e) {
             log.println("Couldn't get XCloseable");
         }
 

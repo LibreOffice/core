@@ -44,7 +44,7 @@ public class SplitterData
     public int m_nFormat;
 
     /** specify the encoding for the output xml files. */
-    public java.lang.String m_sEncoding;
+    public String m_sEncoding;
 
     /** directory to generate some generic views. */
     public java.io.File m_aOutDir;
@@ -74,5 +74,5 @@ public class SplitterData
     public java.io.File m_aFragmentDirModuleOthers;
 
     /** file extension for generated xml fragments. */
-    public java.lang.String m_sFragmentExtension;
+    public String m_sFragmentExtension;
 }

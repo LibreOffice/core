@@ -96,7 +96,7 @@ XMultiPropertySet
      *  <em>id</em> is used to identify the storage of the property value. How property values are stored
      *  and retrieved is determined by the methods {@link #convertPropertyValue convertPropertyValue},
      *  {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast} and {@link #getPropertyValue(Property) getPropertyValue}
-     *  These methods expect <em>id</em> to be a java.lang.String which represents the name of a member variable
+     *  These methods expect <em>id</em> to be a String which represents the name of a member variable
      *  which holds the property value.
      *  Only properties which are registered can be accessed. Registration has to occur during
      *  initialization of the inheriting class (i.e. within the contructor).
@@ -253,10 +253,10 @@ XMultiPropertySet
      *  can be obtained by {@link #getPropertyId getPropertyId} later on. The identifyer
      *  is used to specify a certain storage for the property's value. If you do not
      *  override {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast} or {@link #getPropertyValue(Property)}
-     *  then the argument <em>id</em> has to be a java.lang.String that equals the name of
+     *  then the argument <em>id</em> has to be a String that equals the name of
      *  the member variable that holds the Property's value.
      *  Override this method if you want to implement your own mapping from Property objects  to ids or
-     *  if you need ids of a type other then java.lang.String.
+     *  if you need ids of a type other then String.
      *  Then you also need to override {@link #initMappings initMappings} and {@link #getPropertyId getPropertyId}.
      *  @param prop The Property object that is being assigned an id.
      *  @param id The object which identifies the storage used for the property's value.
@@ -446,7 +446,7 @@ XMultiPropertySet
      *  <li>java.lang.Long</li>
      *  <li>java.lang.Float</li>
      *  <li>java.lang.Double</li>
-     *  <li>java.lang.String</li>
+     *  <li>String</li>
      *  <li>com.sun.star.uno.Type</li>
      *  <li><em>objects which implement UNO interfaces</em></li>
      *  <li><em>arrays which contain elements of the types above</em></li>
@@ -549,7 +549,7 @@ XMultiPropertySet
      *  property values. The variables must be public. A property must have been registered (e.g. by
      *  {@link #registerProperty(Property, Object)} in order for this method to work. The identifyer argument (type Object)
      *  used in the registerProperty methods must
-     *  be a java.lang.String, which is, the name of the member variable that holds the property value.
+     *  be a String, which is, the name of the member variable that holds the property value.
      *  If one opts to store values differently then one may override
      *  this method, as well as {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast} and
      *  {@link #getPropertyValue(Property) getPropertyValue(Property)}.
@@ -821,7 +821,7 @@ XMultiPropertySet
      *  of the furthest inheriting class (see {@link #convertPropertyValue convertPropertyValue}) and that the
      *  variables are public. The property must have
      *  been registered, for example by {@link #registerProperty(Property, Object)}. The identifyer Object argument
-     *  must have been a java.lang.String which was the name of the member variable holding the property value.
+     *  must have been a String which was the name of the member variable holding the property value.
      *  When properties are to be stored differently one has to override this method as well as
      *  {@link #convertPropertyValue} and {@link #setPropertyValueNoBroadcast}. <br>
      *  If a value is stored in a variable of a primitive type then this method returns an instance of the respective

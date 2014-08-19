@@ -325,7 +325,7 @@ public class _XTransliteration extends MultiMethodTest {
         int res = -666 ;
         try {
             res = oObj.compareSubstring(str1, p1, len1, str2, p2, len2);
-        } catch (java.lang.NullPointerException e) {
+        } catch (NullPointerException e) {
             log.println("Exception while method calling occurs :" + e);
         }
 
@@ -342,7 +342,7 @@ public class _XTransliteration extends MultiMethodTest {
         res = -666 ;
         try {
             res = oObj.compareSubstring(str2, p2, len2, str1, p1, len1);
-        } catch (java.lang.NullPointerException e) {
+        } catch (NullPointerException e) {
             log.println("Exception while method calling occurs :" + e);
         }
 
@@ -411,7 +411,7 @@ public class _XTransliteration extends MultiMethodTest {
         int res = -666 ;
         try {
             res = oObj.compareString(str1, str2);
-        } catch (java.lang.NullPointerException e) {
+        } catch (NullPointerException e) {
             log.println("Exception while method calling occurs :" + e);
         }
 
@@ -428,7 +428,7 @@ public class _XTransliteration extends MultiMethodTest {
         res = -666 ;
         try {
             res = oObj.compareString(str2, str1);
-        } catch (java.lang.NullPointerException e) {
+        } catch (NullPointerException e) {
             log.println("Exception while method calling occurs :" + e);
         }
 

@@ -42,7 +42,7 @@ class MyUnoObject implements com.sun.star.uno.XInterface
         System.out.println( "finalizer called" );
     }
 
-    public static void main( String args[] ) throws java.lang.InterruptedException
+    public static void main( String args[] ) throws InterruptedException
     {
         com.sun.star.uno.XInterface a = new MyUnoObject();
         a = null;

@@ -18,7 +18,6 @@
 
 package installer;
 
-import java.lang.String;
 import java.io.*;
 import javax.swing.*;
 public class Register{

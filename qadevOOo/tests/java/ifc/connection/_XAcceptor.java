@@ -149,7 +149,7 @@ public class _XAcceptor extends MultiMethodTest {
             try {
                 Thread.sleep(500);
             }
-            catch (java.lang.InterruptedException e) {}
+            catch (InterruptedException e) {}
 
             XConnection con = xConnector.connect(connectString) ;
 

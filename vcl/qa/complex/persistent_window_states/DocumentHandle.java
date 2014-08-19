@@ -88,7 +88,7 @@ public class DocumentHandle {
             try {
                 Thread.sleep(10000);
             }
-            catch(java.lang.InterruptedException e) {}
+            catch(InterruptedException e) {}
 
             xWin = xFrame.getContainerWindow();
             xWin.addWindowListener(wl);
@@ -147,7 +147,7 @@ public class DocumentHandle {
         try {
             Thread.sleep(3000);
         }
-        catch(java.lang.InterruptedException e) {}
+        catch(InterruptedException e) {}
         return wl.resizedTrigger;
     }
 }

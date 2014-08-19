@@ -122,7 +122,7 @@ public class RecoveryTools {
     private void sleep(long millis){
         try{
             Thread.sleep(millis);
-        }catch (java.lang.InterruptedException e){}
+        }catch (InterruptedException e){}
     }
 
     /**

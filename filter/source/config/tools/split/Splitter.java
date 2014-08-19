@@ -84,7 +84,7 @@ public class Splitter
         java.util.ArrayList      lNames = m_aDataSet.m_aCache.getItemNames(Cache.E_TYPE);
         java.util.Enumeration it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_TYPE, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirTypes);
+            generateXMLFragment(Cache.E_TYPE, (String)it.nextElement(), m_aDataSet.m_aFragmentDirTypes);
         nTypes -= lNames.size();
 
         // generate filter fragments for the writer module
@@ -95,7 +95,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSWriter);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSWriter);
         nFilters -= lNames.size();
 
         // generate filter fragments for the writer/web module
@@ -104,7 +104,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSWeb);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSWeb);
         nFilters -= lNames.size();
 
         // generate filter fragments for the writer/global module
@@ -113,7 +113,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSGlobal);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSGlobal);
         nFilters -= lNames.size();
 
         // generate filter fragments for the calc module
@@ -122,7 +122,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSCalc);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSCalc);
         nFilters -= lNames.size();
 
         // generate filter fragments for the draw module
@@ -131,7 +131,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSDraw);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSDraw);
         nFilters -= lNames.size();
 
         // generate filter fragments for the impress module
@@ -140,7 +140,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSImpress);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSImpress);
         nFilters -= lNames.size();
 
         // generate filter fragments for the chart module
@@ -149,7 +149,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSChart);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSChart);
         nFilters -= lNames.size();
 
         // generate filter fragments for the math module
@@ -158,7 +158,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSMath);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleSMath);
         nFilters -= lNames.size();
 
         // generate fragments for 3rdParty or unspecified (may graphics) filters!
@@ -167,7 +167,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getMatchedItemNames(Cache.E_FILTER, rRequestedProps);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FILTER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleOthers);
+            generateXMLFragment(Cache.E_FILTER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirModuleOthers);
         nFilters -= lNames.size();
 
         // generate all detect service fragments
@@ -175,7 +175,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getItemNames(Cache.E_DETECTSERVICE);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_DETECTSERVICE, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirDetectServices);
+            generateXMLFragment(Cache.E_DETECTSERVICE, (String)it.nextElement(), m_aDataSet.m_aFragmentDirDetectServices);
         nDetectServices -= lNames.size();
 
         // generate all frame loader fragments
@@ -183,7 +183,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getItemNames(Cache.E_FRAMELOADER);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_FRAMELOADER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirFrameLoaders);
+            generateXMLFragment(Cache.E_FRAMELOADER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirFrameLoaders);
         nFrameLoaders -= lNames.size();
 
         // generate all content handler fragments
@@ -191,7 +191,7 @@ public class Splitter
         lNames = m_aDataSet.m_aCache.getItemNames(Cache.E_CONTENTHANDLER);
         it     = lNames.elements();
         while(it.hasMoreElements())
-            generateXMLFragment(Cache.E_CONTENTHANDLER, (java.lang.String)it.nextElement(), m_aDataSet.m_aFragmentDirContentHandlers);
+            generateXMLFragment(Cache.E_CONTENTHANDLER, (String)it.nextElement(), m_aDataSet.m_aFragmentDirContentHandlers);
         nContentHandlers -= lNames.size();
 
         // check if all cache items was handled
@@ -203,7 +203,7 @@ public class Splitter
             (nContentHandlers != 0)
            )
         {
-            java.lang.StringBuffer sStatistic = new java.lang.StringBuffer(256);
+            StringBuffer sStatistic = new StringBuffer(256);
             sStatistic.append("some cache items seems to be not transformed:\n");
             sStatistic.append(nTypes          +" unhandled types\n"          );
             sStatistic.append(nFilters        +" unhandled filters\n"        );
@@ -233,12 +233,12 @@ public class Splitter
      *          successfully.
      */
     private void generateXMLFragment(int              eItemType,
-                                     java.lang.String sItemName,
+                                     String sItemName,
                                      java.io.File     aOutDir  )
         throws java.lang.Exception
     {
-        java.lang.String sFileName = FileHelper.convertName2FileName(sItemName);
-        java.lang.String sXML      = m_aDataSet.m_aCache.getItemAsXML(eItemType, sItemName, m_aDataSet.m_nFormat);
+        String sFileName = FileHelper.convertName2FileName(sItemName);
+        String sXML      = m_aDataSet.m_aCache.getItemAsXML(eItemType, sItemName, m_aDataSet.m_nFormat);
         java.io.File     aFile     = new java.io.File(aOutDir, sFileName+m_aDataSet.m_sFragmentExtension);
 
         if (aFile.exists())

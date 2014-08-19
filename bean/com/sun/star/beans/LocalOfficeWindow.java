@@ -164,7 +164,7 @@ public class LocalOfficeWindow
             CallWatchThread aCallWatchThread = new CallWatchThread( 500 );
             setVisible(false);
             try { aCallWatchThread.cancel(); }
-            catch ( java.lang.InterruptedException aExc )
+            catch ( InterruptedException aExc )
             {} // ignore
         }
 
@@ -270,7 +270,7 @@ public class LocalOfficeWindow
                 }
 
                 private void cancel()
-                        throws java.lang.InterruptedException
+                        throws InterruptedException
                 {
                         aWatchedThread = null;
                         stop();
@@ -285,7 +285,7 @@ public class LocalOfficeWindow
                         while ( aWatchedThread != null )
                         {
                                 try { sleep( nTimeout ); }
-                                catch ( java.lang.InterruptedException aExc )
+                                catch ( InterruptedException aExc )
                                 {}
 
                                 //synchronized

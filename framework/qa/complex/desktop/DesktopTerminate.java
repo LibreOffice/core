@@ -93,7 +93,7 @@ public class DesktopTerminate
             {
                 Thread.sleep(10000);
             }
-            catch (java.lang.InterruptedException e)
+            catch (InterruptedException e)
             {
             }
         }
@@ -119,7 +119,7 @@ public class DesktopTerminate
             {
                 Thread.sleep(iOfficeCloseTime);
             }
-            catch (java.lang.InterruptedException e)
+            catch (InterruptedException e)
             {
             }
             xMSF = null;

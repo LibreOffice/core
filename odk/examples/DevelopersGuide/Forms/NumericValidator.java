@@ -69,6 +69,6 @@ public class NumericValidator extends ControlValidator
 
     private boolean isProperDigitCount( double value)
     {
-        return ( java.lang.Math.floor( value * 10 ) == value * 10 );
+        return ( Math.floor( value * 10 ) == value * 10 );
     }
 }

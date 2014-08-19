@@ -492,7 +492,7 @@ public class OfficeProvider implements AppProvider
                         dbg("the Office has " + closeTime / 1000 + " seconds for closing...");
                         Thread.sleep(closeTime);
                     }
-                    catch (java.lang.InterruptedException e)
+                    catch (InterruptedException e)
                     {
                     }
                 }

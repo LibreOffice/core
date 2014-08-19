@@ -124,7 +124,7 @@ public class MemoryUsage
         XTableCharts charts = supp.getCharts();
         charts.addNewByName("Example", rect, addr, false, true);
 
-        try { Thread.sleep(3000); } catch (java.lang.InterruptedException e) { }
+        try { Thread.sleep(3000); } catch (InterruptedException e) { }
 
         // get the diagram and Change some of the properties
         XNameAccess chartsAccess = (XNameAccess)

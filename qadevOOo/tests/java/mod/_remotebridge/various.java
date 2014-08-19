@@ -218,7 +218,7 @@ public class various extends TestCase {
             try {
                 Thread.sleep(500);
             }
-            catch (java.lang.InterruptedException e) {}
+            catch (InterruptedException e) {}
 
             // establish the connection
             XConnection xConnection = xCntr.connect(connectString);
@@ -283,7 +283,7 @@ public class various extends TestCase {
             try {
                 Thread.sleep(5000);
             }
-            catch(java.lang.InterruptedException e) {
+            catch(InterruptedException e) {
             }
         }
     }

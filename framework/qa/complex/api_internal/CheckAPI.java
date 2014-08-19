@@ -149,7 +149,7 @@ public class CheckAPI  {
                 try {
                     Thread.sleep(10000);
                 }
-                catch(java.lang.InterruptedException e) {}
+                catch(InterruptedException e) {}
                 OfficeProvider op = new OfficeProvider();
                 xMSF = (XMultiServiceFactory)op.getManager(param);
                 param.put("ServiceFactory",xMSF);

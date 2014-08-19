@@ -818,7 +818,7 @@ public class Protocol extends JComponent
             else
             if (com.sun.star.uno.AnyConverter.isArray(aAny))
             {
-                if (aAny instanceof java.lang.String[])
+                if (aAny instanceof String[])
                 {
                     sOut.append("[sequence< string >] {");
                     sOut.append("}");

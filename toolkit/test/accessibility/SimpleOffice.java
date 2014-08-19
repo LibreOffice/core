@@ -86,7 +86,7 @@ public class SimpleOffice
             xModel = UnoRuntime.queryInterface(
                 XModel.class, xComponent);
         }
-        catch (java.lang.NullPointerException e)
+        catch (NullPointerException e)
         {
             MessageArea.println ("caught exception while loading "
                 + URL + " : " + e);

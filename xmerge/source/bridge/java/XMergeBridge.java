@@ -143,7 +143,7 @@ public class XMergeBridge {
 
     public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData,
                 com.sun.star.xml.sax.XDocumentHandler xDocHandler,
-                java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException {
+                String[] msUserData) throws com.sun.star.uno.RuntimeException {
 
         sFileName="";
         sURL="";
@@ -161,7 +161,7 @@ public class XMergeBridge {
             xis=(com.sun.star.io.XInputStream)AnyConverter.toObject(new Type(com.sun.star.io.XInputStream.class), pValue[i].Value);
              }
              if (pValue[i].Name.equals("FileName")){
-             sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
+             sFileName=(String)AnyConverter.toObject(new Type(String.class), pValue[i].Value);
              }
 
          }
@@ -220,7 +220,7 @@ public class XMergeBridge {
     }
 
        public boolean exporter(com.sun.star.beans.PropertyValue[] aSourceData,
-                   java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException{
+                   String[] msUserData) throws com.sun.star.uno.RuntimeException{
 
         sFileName=null;
         sURL=null;
@@ -239,11 +239,11 @@ public class XMergeBridge {
             }
 
             if (pValue[i].Name.equals("FileName")){
-            sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
+            sFileName=(String)AnyConverter.toObject(new Type(String.class), pValue[i].Value);
             }
 
             if (pValue[i].Name.equals("URL")){
-            sURL=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
+            sURL=(String)AnyConverter.toObject(new Type(String.class), pValue[i].Value);
             }
         }
         catch(com.sun.star.lang.IllegalArgumentException AnyExec){

@@ -96,7 +96,7 @@ public final class PluginFactoryImpl extends PluginFactory
     }
 
      @Override
-    public org.openoffice.xmerge.Document createDeviceDocument(java.lang.String str, java.io.InputStream inputStream) throws java.io.IOException {
+    public org.openoffice.xmerge.Document createDeviceDocument(String str, java.io.InputStream inputStream) throws java.io.IOException {
         String ext = this.getDeviceFileExtension();
         DOMDocument domDoc = new DOMDocument(str,ext);
         domDoc.read(inputStream);

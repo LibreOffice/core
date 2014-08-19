@@ -39,8 +39,6 @@
 
 
 
-import java.lang.Math;
-
 import com.sun.star.uno.UnoRuntime;
 
 public class SDraw  {

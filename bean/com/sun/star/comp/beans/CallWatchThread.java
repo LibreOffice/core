@@ -52,7 +52,7 @@ public class CallWatchThread extends Thread
     }
 
     public void cancel()
-        throws java.lang.InterruptedException
+        throws InterruptedException
     {
         dbgPrint( "CallWatchThread(" + this + ".cancel(" + aTag + ")" );
         if ( aWatchedThread != null && aWatchedThread != Thread.currentThread() )
@@ -63,7 +63,7 @@ public class CallWatchThread extends Thread
     }
 
     public synchronized void restart()
-        throws java.lang.InterruptedException
+        throws InterruptedException
     {
         dbgPrint( "CallWatchThread(" + this + ".restart(" + aTag + ")" );
         if ( aWatchedThread != null && aWatchedThread != Thread.currentThread() )
@@ -89,7 +89,7 @@ public class CallWatchThread extends Thread
                 {
                     wait( nTimeout );
                 }
-                catch ( java.lang.InterruptedException aExc )
+                catch ( InterruptedException aExc )
                 {
                     bAlive = false;
                 }

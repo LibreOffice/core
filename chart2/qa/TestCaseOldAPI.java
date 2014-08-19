@@ -964,7 +964,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
     private boolean approxEqual( int a, int b, int tolerance )
     {
         if( a != b )
-            log.println( "Integer values differ by " + java.lang.Math.abs( a-b ));
+            log.println( "Integer values differ by " + Math.abs( a-b ));
         return ( ( a - tolerance <= b ) ||
                  ( a + tolerance >= b ));
     }

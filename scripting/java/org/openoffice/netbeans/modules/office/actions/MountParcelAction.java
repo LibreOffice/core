@@ -32,7 +32,7 @@ public class MountParcelAction extends CookieAction
     {
     }
 
-    public java.lang.String getName()
+    public String getName()
     {
         return "Mount Parcel"; //NOI18N
     }

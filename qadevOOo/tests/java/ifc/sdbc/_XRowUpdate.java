@@ -75,7 +75,7 @@ import com.sun.star.util.Time;
 *        <code>java.lang.Object[]</code> class, the element with
 *         index 0 must be used. </li>
 *   </ul>
-*   Other methods uses types they return (i.e. <code>java.lang.String</code>
+*   Other methods uses types they return (i.e. <code>String</code>
 *   for <code>setString</code> method, <code>com.sun.star.sdbc.XRef</code>
 *   for <code>setRef</code> method).
 * </li>

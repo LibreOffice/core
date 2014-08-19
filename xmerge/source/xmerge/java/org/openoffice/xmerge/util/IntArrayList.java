@@ -19,7 +19,6 @@
 package org.openoffice.xmerge.util;
 
 import java.util.ArrayList;
-import java.lang.Integer;
 
 /**
  *  This is a convenience class used to create an

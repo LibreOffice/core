@@ -120,7 +120,7 @@ public class ListSelection extends integration.forms.TestCase
                         this.wait( 500 );
                     }
                 }
-                catch( java.lang.InterruptedException e ) { }
+                catch( InterruptedException e ) { }
 
                 XNamed sheetName = UnoRuntime.queryInterface( XNamed.class, view.getActiveSheet() );
                 assure( "sheet was not selected as expected!", sheetName.getName().equals( selectSheetName ) );

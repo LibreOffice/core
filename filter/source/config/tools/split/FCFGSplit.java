@@ -41,10 +41,10 @@ public class FCFGSplit
     // private const
 
     /** specify the command line parameter to set the debug level for this app. */
-    private static final java.lang.String CMD_DEBUG = "debug" ;
+    private static final String CMD_DEBUG = "debug" ;
 
     /** specify the command line parameter to set a configuration file for this app. */
-    private static final java.lang.String CMD_CONFIG = "config";
+    private static final String CMD_CONFIG = "config";
 
     /** The following strings are used as property names of
      *  the configuration file we need here.
@@ -52,38 +52,38 @@ public class FCFGSplit
      *  @seealso    readCfg()
      */
 
-    private static final java.lang.String CFGKEY_XMLFILE                              = "xmlfile"                             ;
-    private static final java.lang.String CFGKEY_INFORMAT                             = "informat"                            ;
-    private static final java.lang.String CFGKEY_OUTFORMAT                            = "outformat"                           ;
-    private static final java.lang.String CFGKEY_INENCODING                           = "inencoding"                          ;
-    private static final java.lang.String CFGKEY_OUTENCODING                          = "outencoding"                         ;
-    private static final java.lang.String CFGKEY_OUTDIR                               = "outdir"                              ;
-    private static final java.lang.String CFGKEY_FRAGMENT_EXTENSION                   = "fragment_extension"                  ;
-    private static final java.lang.String CFGKEY_CREATE_COMBINE_FILTER_FLAG           = "create_combine_filter_flag"          ;
-    private static final java.lang.String CFGKEY_REMOVE_FILTER_FLAG_BROWSERPREFERRED  = "remove_filter_flag_browserpreferred" ;
-    private static final java.lang.String CFGKEY_REMOVE_FILTER_FLAG_PREFERRED         = "remove_filter_flag_preferred"        ;
-    private static final java.lang.String CFGKEY_REMOVE_FILTER_FLAG_3RDPARTY          = "remove_filter_flag_3rdparty"         ;
-    private static final java.lang.String CFGKEY_REMOVE_FILTER_UINAMES                = "remove_filter_uinames"               ;
-    private static final java.lang.String CFGKEY_REMOVE_GRAPHIC_FILTERS               = "remove_graphic_filters"              ;
-    private static final java.lang.String CFGKEY_SET_DEFAULT_DETECTOR                 = "set_default_detector"                ;
+    private static final String CFGKEY_XMLFILE                              = "xmlfile"                             ;
+    private static final String CFGKEY_INFORMAT                             = "informat"                            ;
+    private static final String CFGKEY_OUTFORMAT                            = "outformat"                           ;
+    private static final String CFGKEY_INENCODING                           = "inencoding"                          ;
+    private static final String CFGKEY_OUTENCODING                          = "outencoding"                         ;
+    private static final String CFGKEY_OUTDIR                               = "outdir"                              ;
+    private static final String CFGKEY_FRAGMENT_EXTENSION                   = "fragment_extension"                  ;
+    private static final String CFGKEY_CREATE_COMBINE_FILTER_FLAG           = "create_combine_filter_flag"          ;
+    private static final String CFGKEY_REMOVE_FILTER_FLAG_BROWSERPREFERRED  = "remove_filter_flag_browserpreferred" ;
+    private static final String CFGKEY_REMOVE_FILTER_FLAG_PREFERRED         = "remove_filter_flag_preferred"        ;
+    private static final String CFGKEY_REMOVE_FILTER_FLAG_3RDPARTY          = "remove_filter_flag_3rdparty"         ;
+    private static final String CFGKEY_REMOVE_FILTER_UINAMES                = "remove_filter_uinames"               ;
+    private static final String CFGKEY_REMOVE_GRAPHIC_FILTERS               = "remove_graphic_filters"              ;
+    private static final String CFGKEY_SET_DEFAULT_DETECTOR                 = "set_default_detector"                ;
 
-    private static final java.lang.String CFGKEY_SUBDIR_TYPES                         = "subdir_types"                        ;
-    private static final java.lang.String CFGKEY_SUBDIR_FILTERS                       = "subdir_filters"                      ;
-    private static final java.lang.String CFGKEY_SUBDIR_DETECTSERVICES                = "subdir_detectservices"               ;
-    private static final java.lang.String CFGKEY_SUBDIR_FRAMELOADERS                  = "subdir_frameloaders"                 ;
-    private static final java.lang.String CFGKEY_SUBDIR_CONTENTHANDLERS               = "subdir_contenthandlers"              ;
+    private static final String CFGKEY_SUBDIR_TYPES                         = "subdir_types"                        ;
+    private static final String CFGKEY_SUBDIR_FILTERS                       = "subdir_filters"                      ;
+    private static final String CFGKEY_SUBDIR_DETECTSERVICES                = "subdir_detectservices"               ;
+    private static final String CFGKEY_SUBDIR_FRAMELOADERS                  = "subdir_frameloaders"                 ;
+    private static final String CFGKEY_SUBDIR_CONTENTHANDLERS               = "subdir_contenthandlers"              ;
 
-    private static final java.lang.String CFGKEY_SEPARATE_FILTERS_BY_MODULE           = "separate_filters_by_module"          ;
+    private static final String CFGKEY_SEPARATE_FILTERS_BY_MODULE           = "separate_filters_by_module"          ;
 
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_SWRITER                = "subdir_module_swriter"               ;
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_SWEB                   = "subdir_module_sweb"                  ;
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_SGLOBAL                = "subdir_module_sglobal"               ;
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_SCALC                  = "subdir_module_scalc"                 ;
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_SDRAW                  = "subdir_module_sdraw"                 ;
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_SIMPRESS               = "subdir_module_simpress"              ;
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_SMATH                  = "subdir_module_smath"                 ;
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_SCHART                 = "subdir_module_schart"                ;
-    private static final java.lang.String CFGKEY_SUBDIR_MODULE_OTHERS                 = "subdir_module_others"                ;
+    private static final String CFGKEY_SUBDIR_MODULE_SWRITER                = "subdir_module_swriter"               ;
+    private static final String CFGKEY_SUBDIR_MODULE_SWEB                   = "subdir_module_sweb"                  ;
+    private static final String CFGKEY_SUBDIR_MODULE_SGLOBAL                = "subdir_module_sglobal"               ;
+    private static final String CFGKEY_SUBDIR_MODULE_SCALC                  = "subdir_module_scalc"                 ;
+    private static final String CFGKEY_SUBDIR_MODULE_SDRAW                  = "subdir_module_sdraw"                 ;
+    private static final String CFGKEY_SUBDIR_MODULE_SIMPRESS               = "subdir_module_simpress"              ;
+    private static final String CFGKEY_SUBDIR_MODULE_SMATH                  = "subdir_module_smath"                 ;
+    private static final String CFGKEY_SUBDIR_MODULE_SCHART                 = "subdir_module_schart"                ;
+    private static final String CFGKEY_SUBDIR_MODULE_OTHERS                 = "subdir_module_others"                ;
 
     /** The following strings are used as property default
      *  values if a configuration key does not exist.
@@ -94,44 +94,44 @@ public class FCFGSplit
      *  @seealso    readCfg()
      */
 
-    private static final java.lang.String DEFAULT_XMLFILE                             = ".//TypeDetection.xcu"                ;
-    private static final java.lang.String DEFAULT_INFORMAT                            = "6.0"                                 ;
-    private static final java.lang.String DEFAULT_OUTFORMAT                           = "6.Y"                                 ;
-    private static final java.lang.String DEFAULT_INENCODING                          = "UTF-8"                               ;
-    private static final java.lang.String DEFAULT_OUTENCODING                         = "UTF-8"                               ;
-    private static final java.lang.String DEFAULT_OUTDIR                              = ".//temp"                             ;
-    private static final java.lang.String DEFAULT_FRAGMENT_EXTENSION                  = ".xcu"                                ;
-    private static final java.lang.String DEFAULT_CREATE_COMBINE_FILTER_FLAG          = "false"                               ;
-    private static final java.lang.String DEFAULT_REMOVE_FILTER_FLAG_BROWSERPREFERRED = "false"                               ;
-    private static final java.lang.String DEFAULT_REMOVE_FILTER_FLAG_PREFERRED        = "false"                               ;
-    private static final java.lang.String DEFAULT_REMOVE_FILTER_FLAG_3RDPARTY         = "false"                               ;
-    private static final java.lang.String DEFAULT_REMOVE_FILTER_UINAMES               = "false"                               ;
-    private static final java.lang.String DEFAULT_REMOVE_GRAPHIC_FILTERS              = "false"                               ;
-    private static final java.lang.String DEFAULT_SET_DEFAULT_DETECTOR                = "false"                               ;
+    private static final String DEFAULT_XMLFILE                             = ".//TypeDetection.xcu"                ;
+    private static final String DEFAULT_INFORMAT                            = "6.0"                                 ;
+    private static final String DEFAULT_OUTFORMAT                           = "6.Y"                                 ;
+    private static final String DEFAULT_INENCODING                          = "UTF-8"                               ;
+    private static final String DEFAULT_OUTENCODING                         = "UTF-8"                               ;
+    private static final String DEFAULT_OUTDIR                              = ".//temp"                             ;
+    private static final String DEFAULT_FRAGMENT_EXTENSION                  = ".xcu"                                ;
+    private static final String DEFAULT_CREATE_COMBINE_FILTER_FLAG          = "false"                               ;
+    private static final String DEFAULT_REMOVE_FILTER_FLAG_BROWSERPREFERRED = "false"                               ;
+    private static final String DEFAULT_REMOVE_FILTER_FLAG_PREFERRED        = "false"                               ;
+    private static final String DEFAULT_REMOVE_FILTER_FLAG_3RDPARTY         = "false"                               ;
+    private static final String DEFAULT_REMOVE_FILTER_UINAMES               = "false"                               ;
+    private static final String DEFAULT_REMOVE_GRAPHIC_FILTERS              = "false"                               ;
+    private static final String DEFAULT_SET_DEFAULT_DETECTOR                = "false"                               ;
 
-    private static final java.lang.String DEFAULT_SUBDIR_TYPES                        = "Types"                               ;
-    private static final java.lang.String DEFAULT_SUBDIR_FILTERS                      = "Filters"                             ;
-    private static final java.lang.String DEFAULT_SUBDIR_DETECTSERVICES               = "DetectServices"                      ;
-    private static final java.lang.String DEFAULT_SUBDIR_FRAMELOADERS                 = "FrameLoaders"                        ;
-    private static final java.lang.String DEFAULT_SUBDIR_CONTENTHANDLERS              = "ContentHandlers"                     ;
+    private static final String DEFAULT_SUBDIR_TYPES                        = "Types"                               ;
+    private static final String DEFAULT_SUBDIR_FILTERS                      = "Filters"                             ;
+    private static final String DEFAULT_SUBDIR_DETECTSERVICES               = "DetectServices"                      ;
+    private static final String DEFAULT_SUBDIR_FRAMELOADERS                 = "FrameLoaders"                        ;
+    private static final String DEFAULT_SUBDIR_CONTENTHANDLERS              = "ContentHandlers"                     ;
 
-    private static final java.lang.String DEFAULT_SEPARATE_FILTERS_BY_MODULE          = "false"                               ;
+    private static final String DEFAULT_SEPARATE_FILTERS_BY_MODULE          = "false"                               ;
 
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_SWRITER               = "SWriter"                             ;
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_SWEB                  = "SWeb"                                ;
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_SGLOBAL               = "SGlobal"                             ;
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_SCALC                 = "SCalc"                               ;
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_SDRAW                 = "SDraw"                               ;
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_SIMPRESS              = "SImpress"                            ;
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_SMATH                 = "SMath"                               ;
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_SCHART                = "SChart"                              ;
-    private static final java.lang.String DEFAULT_SUBDIR_MODULE_OTHERS                = "Others"                              ;
+    private static final String DEFAULT_SUBDIR_MODULE_SWRITER               = "SWriter"                             ;
+    private static final String DEFAULT_SUBDIR_MODULE_SWEB                  = "SWeb"                                ;
+    private static final String DEFAULT_SUBDIR_MODULE_SGLOBAL               = "SGlobal"                             ;
+    private static final String DEFAULT_SUBDIR_MODULE_SCALC                 = "SCalc"                               ;
+    private static final String DEFAULT_SUBDIR_MODULE_SDRAW                 = "SDraw"                               ;
+    private static final String DEFAULT_SUBDIR_MODULE_SIMPRESS              = "SImpress"                            ;
+    private static final String DEFAULT_SUBDIR_MODULE_SMATH                 = "SMath"                               ;
+    private static final String DEFAULT_SUBDIR_MODULE_SCHART                = "SChart"                              ;
+    private static final String DEFAULT_SUBDIR_MODULE_OTHERS                = "Others"                              ;
 
 
     // private member
 
     /** contains the name of the reading xcu file. */
-    private static java.lang.String m_sXMLFile;
+    private static String m_sXMLFile;
 
     /** specify the xml file format, which must be interpreted at reading time. */
     private static int m_nInFormat;
@@ -141,41 +141,41 @@ public class FCFGSplit
     private static int m_nOutFormat;
 
     /** specify the file encoding for reading. */
-    private static java.lang.String m_sInEncoding;
+    private static String m_sInEncoding;
 
     /** specify the file encoding for writing fragments. */
-    private static java.lang.String m_sOutEncoding;
+    private static String m_sOutEncoding;
 
     /** specify the target directory, where all results of this
      *  process can be generated.
      *  Note: May it will be cleared! */
-    private static java.lang.String m_sOutDir;
+    private static String m_sOutDir;
 
     /** can be used to generate some output on the console. */
     private static Logger m_aDebug;
 
     /** contains the file extension for all generated xml fragments. */
-    private static java.lang.String m_sFragmentExtension;
+    private static String m_sFragmentExtension;
 
     /** specify the sub directory to generate type fragments.
      *  Its meaned relative to m_sOutDir. */
-    private static java.lang.String m_sSubDirTypes;
+    private static String m_sSubDirTypes;
 
     /** specify the sub directory to generate filter fragments.
      *  Its meaned relative to m_sOutDir. */
-    private static java.lang.String m_sSubDirFilters;
+    private static String m_sSubDirFilters;
 
     /** specify the sub directory to generate detect service fragments.
      *  Its meaned relative to m_sOutDir. */
-    private static java.lang.String m_sSubDirDetectServices;
+    private static String m_sSubDirDetectServices;
 
     /** specify the sub directory to generate frame loader fragments.
      *  Its meaned relative to m_sOutDir. */
-    private static java.lang.String m_sSubDirFrameLoaders;
+    private static String m_sSubDirFrameLoaders;
 
     /** specify the sub directory to generate content handler fragments.
      *  Its meaned relative to m_sOutDir. */
-    private static java.lang.String m_sSubDirContentHandlers;
+    private static String m_sSubDirContentHandlers;
 
     /** enable/disable generating of filter groups - separated by
      *  application modules. */
@@ -184,48 +184,48 @@ public class FCFGSplit
     /** specify the sub directory to generate filter groups
      *  for the module writer. Will be used only,
      *  if m_bSeparateFiltersByModule is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleSWriter;
+    private static String m_sSubDirModuleSWriter;
 
     /** specify the sub directory to generate filter groups
      *  for the module writer/web. Will be used only,
      *  if m_bSeparateFiltersByModule is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleSWeb;
+    private static String m_sSubDirModuleSWeb;
 
     /** specify the sub directory to generate filter groups
      *  for the module writer/global. Will be used only,
      *  if m_bSeparateFiltersByModule is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleSGlobal;
+    private static String m_sSubDirModuleSGlobal;
 
     /** specify the sub directory to generate filter groups
      *  for the module calc. Will be used only,
      *  if m_bSeparateFiltersByModule is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleSCalc;
+    private static String m_sSubDirModuleSCalc;
 
     /** specify the sub directory to generate filter groups
      *  for the module draw. Will be used only,
      *  if m_bSeparateFiltersByModule is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleSDraw;
+    private static String m_sSubDirModuleSDraw;
 
     /** specify the sub directory to generate filter groups
      *  for the module impress. Will be used only,
      *  if m_bSeparateFiltersByModule is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleSImpress;
+    private static String m_sSubDirModuleSImpress;
 
     /** specify the sub directory to generate filter groups
      *  for the module math. Will be used only,
      *  if m_bSeparateFiltersByModule is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleSMath;
+    private static String m_sSubDirModuleSMath;
 
     /** specify the sub directory to generate filter groups
      *  for the module chart. Will be used only,
      *  if m_bSeparateFiltersByModule is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleSChart;
+    private static String m_sSubDirModuleSChart;
 
     /** specify the sub directory to generate filter groups
      *  for unknown modules - e.g. the graphic filters.
      *  Will be used only, if m_bSeparateFiltersByModule
      *  is set to TRUE.*/
-    private static java.lang.String m_sSubDirModuleOthers;
+    private static String m_sSubDirModuleOthers;
 
     private static boolean m_bCreateCombineFilterFlag;
     private static boolean m_bRemoveFilterFlagBrowserPreferred;
@@ -247,7 +247,7 @@ public class FCFGSplit
      *  @param  lArgs
      *          contains the command line arguments.
      */
-    public static void main(java.lang.String[] lArgs)
+    public static void main(String[] lArgs)
     {
         long t_start = System.currentTimeMillis();
 
@@ -442,7 +442,7 @@ public class FCFGSplit
         // analyze some time stamps
         long t_end = System.currentTimeMillis();
 
-        java.lang.StringBuffer sTimes = new java.lang.StringBuffer(100);
+        StringBuffer sTimes = new StringBuffer(100);
         sTimes.append("Needed times:\n"                  );
         sTimes.append("t [all]\t\t=\t"                   );
         sTimes.append(t_end-t_start                      );
@@ -509,7 +509,7 @@ public class FCFGSplit
         m_bRemoveGraphicFilters             = new java.lang.Boolean(aCfg.getProperty(CFGKEY_REMOVE_GRAPHIC_FILTERS             , DEFAULT_REMOVE_GRAPHIC_FILTERS             )).booleanValue();
         m_bSetDefaultDetector               = new java.lang.Boolean(aCfg.getProperty(CFGKEY_SET_DEFAULT_DETECTOR               , DEFAULT_SET_DEFAULT_DETECTOR               )).booleanValue();
 
-        java.lang.String sFormat = aCfg.getProperty(CFGKEY_INFORMAT, DEFAULT_INFORMAT);
+        String sFormat = aCfg.getProperty(CFGKEY_INFORMAT, DEFAULT_INFORMAT);
         m_nInFormat = Cache.mapFormatString2Format(sFormat);
 
         sFormat = aCfg.getProperty(CFGKEY_OUTFORMAT, DEFAULT_OUTFORMAT);
@@ -522,7 +522,7 @@ public class FCFGSplit
      */
     private static void printCopyright()
     {
-        java.lang.StringBuffer sOut = new java.lang.StringBuffer(256);
+        StringBuffer sOut = new StringBuffer(256);
         sOut.append("FCFGSplit\n");
         sOut.append("Copyright: 2000 by Sun Microsystems, Inc.\n");
         sOut.append("All Rights Reserved.\n");
@@ -535,7 +535,7 @@ public class FCFGSplit
      */
     private static void printHelp()
     {
-        java.lang.StringBuffer sOut = new java.lang.StringBuffer(1000);
+        StringBuffer sOut = new StringBuffer(1000);
         sOut.append("_______________________________________________________________________________\n\n"   );
         sOut.append("usage: FCFGSplit "+CMD_CONFIG+"=<file name> "+CMD_DEBUG+"=<level>\n"                       );
         sOut.append("parameters:\n"                                                                         );

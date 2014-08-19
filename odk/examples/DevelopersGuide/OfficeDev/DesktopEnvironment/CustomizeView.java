@@ -34,7 +34,6 @@
 
 import java.awt.*;
 import javax.swing.*;
-import java.lang.String;
 import java.awt.event.*;
 
 /**

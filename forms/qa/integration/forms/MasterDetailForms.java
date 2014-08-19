@@ -347,7 +347,7 @@ public class MasterDetailForms extends complexlib.ComplexTestCase implements com
             while ( !m_loaded )
             {
                 try { m_waitForLoad.wait(); }
-                catch( java.lang.InterruptedException e ) { }
+                catch( InterruptedException e ) { }
             }
             // reset the flag for the next time
             m_loaded = false;

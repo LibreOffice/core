@@ -44,14 +44,14 @@ public class _XLayerHandler extends MultiMethodTest {
             oObj.overrideNode("org.openoffice.Setup", (short) 0, false);
             oObj.overrideNode("Office", (short) 0, false);
             oObj.overrideProperty("ooSetupInstCompleted", (short) 0,
-                                  new Type(java.lang.String.class), false);
+                                  new Type(String.class), false);
             oObj.setPropertyValue(new Boolean(false));
             oObj.endProperty();
             oObj.overrideNode("Factories", (short) 0, false);
             oObj.addOrReplaceNode("com.sun.star.chart.ChartDocument",
                                   (short) 0);
             oObj.overrideProperty("ooSetupFactoryEmptyDocumentURL", (short) 0,
-                                  new Type(java.lang.String.class), false);
+                                  new Type(String.class), false);
             oObj.setPropertyValue("private:factory/schart");
             oObj.endProperty();
             oObj.overrideProperty("ooSetupFactoryIcon", (short) 0,
@@ -59,23 +59,23 @@ public class _XLayerHandler extends MultiMethodTest {
             oObj.setPropertyValue(new Integer(13));
             oObj.endProperty();
             oObj.overrideProperty("ooSetupFactoryShortName", (short) 0,
-                                  new Type(java.lang.String.class), false);
+                                  new Type(String.class), false);
             oObj.setPropertyValue("schart");
             oObj.setPropertyValueForLocale("TemplateFile", "en-US");
             oObj.endProperty();
             oObj.overrideProperty("ooSetupFactoryTemplateFile", (short) 0,
-                                  new Type(java.lang.String.class), false);
+                                  new Type(String.class), false);
             oObj.setPropertyValue("empty");
             oObj.endProperty();
             oObj.addProperty("ooSetupFactoryTemplateFile", (short) 0,
-                             new Type(java.lang.String.class));
+                             new Type(String.class));
             oObj.addPropertyWithValue("ooSetupFactoryTemplateFile", (short) 0,
                                       "TemplateFile");
             oObj.endNode();
 
             oObj.addOrReplaceNode("dropme", (short) 0);
             oObj.overrideProperty("anyway", (short) 0,
-                                  new Type(java.lang.String.class), false);
+                                  new Type(String.class), false);
             oObj.setPropertyValue("nice");
             oObj.endProperty();
             oObj.dropNode("dropme");

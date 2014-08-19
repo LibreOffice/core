@@ -102,7 +102,7 @@ public class OfficeWatcher extends Thread implements share.Watcher {
     private void shortWait(int timeOut) {
         try {
             OfficeWatcher.sleep(timeOut);
-        } catch (java.lang.InterruptedException ie) {
+        } catch (InterruptedException ie) {
         }
     }
 

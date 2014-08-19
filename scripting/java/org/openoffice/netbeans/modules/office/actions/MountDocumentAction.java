@@ -32,7 +32,7 @@ public class MountDocumentAction extends CookieAction
     {
     }
 
-    public java.lang.String getName()
+    public String getName()
     {
         return "Mount Document"; //NOI18N
     }

@@ -185,7 +185,7 @@ public static class StateSetAllView
             AffineTransform aTransform = g.getTransform ();
             g.setColor (aTextColor);
             int y = aWidgetArea.y+aWidgetArea.height - 12;
-            double nTextRotation = -0.9;//-java.lang.Math.PI/2;
+            double nTextRotation = -0.9;//-Math.PI/2;
             double nScale = 0.6;
 
             // Create a shape for the boxes.

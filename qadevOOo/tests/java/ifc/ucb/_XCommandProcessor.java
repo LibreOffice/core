@@ -234,7 +234,7 @@ public class _XCommandProcessor extends MultiMethodTest {
         try {
             aborter.join(5000);
             aborter.interrupt();
-        } catch(java.lang.InterruptedException e) {
+        } catch(InterruptedException e) {
         }
     }
 }

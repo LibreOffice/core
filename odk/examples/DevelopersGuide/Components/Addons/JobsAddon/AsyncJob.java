@@ -52,13 +52,13 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
     public final XComponentContext m_xCmpCtx;
 
     /** the const list of supported uno service names. */
-    public static final java.lang.String[] SERVICENAMES = {"com.sun.star.task.AsyncJob"};
+    public static final String[] SERVICENAMES = {"com.sun.star.task.AsyncJob"};
 
     /** the const uno implementation name.
      *  It must be an unique value! The best naming schema seems to use
      *  a registered domain in reverse order ...
      */
-    public static final java.lang.String IMPLEMENTATIONNAME = "com.sun.star.comp.framework.java.services.AsyncJob";
+    public static final String IMPLEMENTATIONNAME = "com.sun.star.comp.framework.java.services.AsyncJob";
 
 
     // interface
@@ -122,8 +122,8 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
         if (lEnvironment == null)
             throw new com.sun.star.lang.IllegalArgumentException("no environment");
 
-        java.lang.String          sEnvType   = null;
-        java.lang.String          sEventName = null;
+        String          sEnvType   = null;
+        String          sEventName = null;
         com.sun.star.frame.XFrame xFrame     = null;
         c = lEnvironment.length;
         for (int i=0; i<c; ++i)
@@ -149,7 +149,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
             )
            )
         {
-            java.lang.String sMessage = "\"" + sEnvType + "\" isn't a valid value for EnvType";
+            String sMessage = "\"" + sEnvType + "\" isn't a valid value for EnvType";
             throw new com.sun.star.lang.IllegalArgumentException(sMessage);
         }
 
@@ -166,7 +166,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
 
         // do your job ...
         // Here we print out all found arguments.
-        java.lang.String sOut = formatOutArgs(lGenericConfig, lJobConfig, lEnvironment, lDynamicData);
+        String sOut = formatOutArgs(lGenericConfig, lJobConfig, lEnvironment, lDynamicData);
         if (xFrame != null)
             showInfoModal(xFrame.getContainerWindow(), "Arguments of AsyncJob initialization ...", sOut);
         else
@@ -246,8 +246,8 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      */
 
     private void showInfoModal( com.sun.star.awt.XWindow xParent  ,
-                                java.lang.String         sTitle   ,
-                                java.lang.String         sMessage )
+                                String         sTitle   ,
+                                String         sMessage )
     {
         try
         {
@@ -293,15 +293,15 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
 
 
 
-    private void showInfoNonModal( java.lang.String sTitle   ,
-                                   java.lang.String sMessage )
+    private void showInfoNonModal( String sTitle   ,
+                                   String sMessage )
     {
         // Couldnt be implemented really using the toolkit ...
         // Because we need a parent anytime.
         // And showing e.g. a java dialog can make some trouble
         // inside office ... but we have no chance here.
-    final java.lang.String sFinalTitle = sTitle;
-    final java.lang.String sFinalMessage = sMessage;
+    final String sFinalTitle = sTitle;
+    final String sFinalMessage = sMessage;
 
     // On Mac OS X, AWT/Swing must not be accessed from the AppKit thread, so call
     // SwingUtilities.invokeLater always on a fresh thread to avoid that problem
@@ -336,12 +336,12 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
      *          contains optional data of a might corresponding dispatch() request
      */
 
-    private java.lang.String formatOutArgs(com.sun.star.beans.NamedValue[] lGenericConfig,
+    private String formatOutArgs(com.sun.star.beans.NamedValue[] lGenericConfig,
                                            com.sun.star.beans.NamedValue[] lJobConfig    ,
                                            com.sun.star.beans.NamedValue[] lEnvironment  ,
                                            com.sun.star.beans.NamedValue[] lDynamicData )
     {
-        java.lang.StringBuffer sOut = new java.lang.StringBuffer(1024);
+        StringBuffer sOut = new StringBuffer(1024);
 
         sOut.append("list \"Config\": ");
         if (lGenericConfig==null)
@@ -409,7 +409,7 @@ public class AsyncJob extends    WeakBase implements XServiceInfo, XAsyncJob
 
 
 
-    public synchronized static com.sun.star.lang.XSingleComponentFactory __getComponentFactory(java.lang.String sImplName)
+    public synchronized static com.sun.star.lang.XSingleComponentFactory __getComponentFactory(String sImplName)
     {
         com.sun.star.lang.XSingleComponentFactory xFactory = null;
         if (sImplName.equals(AsyncJob.IMPLEMENTATIONNAME))

@@ -167,7 +167,7 @@ public class DBColumn
         {
             xRows = xTextTable.getRows();
         }
-        catch (java.lang.NullPointerException e)
+        catch (NullPointerException e)
         {
             e.printStackTrace();
 // TODO: handle the nullpointer right

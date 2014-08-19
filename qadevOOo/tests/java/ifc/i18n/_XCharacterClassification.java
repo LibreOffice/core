@@ -95,7 +95,7 @@ public class _XCharacterClassification extends MultiMethodTest {
     /**
     * Test calls the method for different locales. Then each result is compared
     * with a string, converted to a upper case using
-    * <code>java.lang.String</code> method <code>toUpperCase()</code>.<p>
+    * <code>String</code> method <code>toUpperCase()</code>.<p>
     * Has <b> OK </b> status if string, returned by the method is equal to
     * a string that is returned by String.toUpperCase() for all locales.
     */
@@ -124,7 +124,7 @@ public class _XCharacterClassification extends MultiMethodTest {
     /**
     * Test calls the method for different locales. Then each result is compared
     * with a string, converted to a lower case using
-    * <code>java.lang.String</code> method <code>toLowerCase()</code>.<p>
+    * <code>String</code> method <code>toLowerCase()</code>.<p>
     * Has <b> OK </b> status if string, returned by the method is equal to
     * a string that is returned by String.toLowerCase() for all locales.
     */

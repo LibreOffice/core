@@ -40,7 +40,7 @@ public class _XUpdateHandler extends MultiMethodTest {
                                        false);
             xLayerHandler.overrideNode("Office", (short) 0, false);
             xLayerHandler.overrideProperty("ooSetupInstCompleted", (short) 0,
-                                           new Type(java.lang.String.class),
+                                           new Type(String.class),
                                            false);
             xLayerHandler.setPropertyValue(new Boolean(false));
             xLayerHandler.endProperty();
@@ -49,7 +49,7 @@ public class _XUpdateHandler extends MultiMethodTest {
                                            (short) 0);
             xLayerHandler.overrideProperty("ooSetupFactoryEmptyDocumentURL",
                                            (short) 0,
-                                           new Type(java.lang.String.class),
+                                           new Type(String.class),
                                            false);
             xLayerHandler.setPropertyValue("private:factory/schart");
             xLayerHandler.endProperty();
@@ -60,26 +60,26 @@ public class _XUpdateHandler extends MultiMethodTest {
             xLayerHandler.endProperty();
             xLayerHandler.overrideProperty("ooSetupFactoryShortName",
                                            (short) 0,
-                                           new Type(java.lang.String.class),
+                                           new Type(String.class),
                                            false);
             xLayerHandler.setPropertyValue("schart");
             xLayerHandler.setPropertyValueForLocale("TemplateFile", "en-US");
             xLayerHandler.endProperty();
             xLayerHandler.overrideProperty("ooSetupFactoryTemplateFile",
                                            (short) 0,
-                                           new Type(java.lang.String.class),
+                                           new Type(String.class),
                                            false);
             xLayerHandler.setPropertyValue("empty");
             xLayerHandler.endProperty();
             xLayerHandler.addProperty("ooSetupFactoryTemplateFile", (short) 0,
-                                      new Type(java.lang.String.class));
+                                      new Type(String.class));
             xLayerHandler.addPropertyWithValue("ooSetupFactoryTemplateFile",
                                                (short) 0, "TemplateFile");
             xLayerHandler.endNode();
 
             xLayerHandler.addOrReplaceNode("dropme", (short) 0);
             xLayerHandler.overrideProperty("anyway", (short) 0,
-                                           new Type(java.lang.String.class),
+                                           new Type(String.class),
                                            false);
             xLayerHandler.setPropertyValue("nice");
             xLayerHandler.endProperty();
@@ -195,15 +195,15 @@ public class _XUpdateHandler extends MultiMethodTest {
             oObj.addOrReplaceNodeFromTemplate("Office", (short) 0,
                                               new TemplateIdentifier());
             oObj.addOrReplaceProperty("prop", (short) 0,
-                                      new Type(java.lang.String.class));
+                                      new Type(String.class));
             oObj.addOrReplacePropertyWithValue("prop2", (short) 0, "this");
             oObj.modifyProperty("ooSetupFactoryIcon", (short) 0, (short) 0,
-                                new Type(java.lang.String.class));
+                                new Type(String.class));
             oObj.resetPropertyValue();
             oObj.resetPropertyValueForLocale("en-US");
             oObj.endProperty();
             oObj.modifyProperty("ooSetupFactoryEmptyDocumentURL", (short) 0,
-                                (short) 0, new Type(java.lang.String.class));
+                                (short) 0, new Type(String.class));
             oObj.setPropertyValue("newValue");
             oObj.setPropertyValueForLocale("newValue-US", "de-DE");
             oObj.endProperty();

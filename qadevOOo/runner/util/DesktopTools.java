@@ -301,7 +301,7 @@ public class DesktopTools
         {
             System.out.println("Couldn't close document");
         }
-        catch (java.lang.NullPointerException e)
+        catch (NullPointerException e)
         {
             System.out.println("Couldn't close document");
         }

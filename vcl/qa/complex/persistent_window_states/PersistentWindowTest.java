@@ -288,7 +288,7 @@ public class PersistentWindowTest
         {
             connection.setUp();
         }
-        catch (java.lang.InterruptedException e)
+        catch (InterruptedException e)
         {
             fail("can't connect.");
         }
@@ -305,7 +305,7 @@ public class PersistentWindowTest
         {
             connection.tearDown();
         }
-        catch (java.lang.InterruptedException e)
+        catch (InterruptedException e)
         {
             fail("can't disconnect.");
         }

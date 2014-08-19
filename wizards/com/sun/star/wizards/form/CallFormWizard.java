@@ -103,7 +103,7 @@ public class CallFormWizard
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
-        public java.lang.String[] getSupportedServiceNames()
+        public String[] getSupportedServiceNames()
         {
             String[] stringSupportedServiceNames = new String[1];
 
@@ -137,7 +137,7 @@ public class CallFormWizard
         /** Return the class name of the component.
          * @return Class name of the component.
          */
-        public java.lang.String getImplementationName()
+        public String getImplementationName()
         {
             return (FormWizardImplementation.class.getName());
         }

@@ -344,7 +344,7 @@ public class _XMultiPropertySet extends MultiMethodTest {
     private void waitAMoment() {
         try {
             Thread.sleep(200) ;
-        } catch (java.lang.InterruptedException e) {
+        } catch (InterruptedException e) {
             log.println("!!! Exception while waiting !!!") ;
         }
     }
