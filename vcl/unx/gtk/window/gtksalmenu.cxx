@@ -450,17 +450,10 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
     pItem->mpSubMenu = pGtkSubMenu;
 }
 
-class GdkThreadLock
-{
-public:
-    GdkThreadLock() { gdk_threads_enter(); }
-    ~GdkThreadLock() { gdk_threads_leave(); }
-};
-
 static bool bInvalidMenus = false;
 static gboolean RefreshMenusUnity(gpointer)
 {
-    GdkThreadLock aLock;
+    SolarMutexGuard g;
 
     SalDisplay* pSalDisplay = GetGenericData()->GetSalDisplay();
     std::list< SalFrame* >::const_iterator pSalFrame = pSalDisplay->getFrames().begin();

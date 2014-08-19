@@ -98,7 +98,7 @@ extern "C"
 {
     static gboolean canceldialog(RunDialog *pDialog)
     {
-        GdkThreadLock lock;
+        SolarMutexGuard g;
         pDialog->cancel();
         return false;
     }

@@ -66,13 +66,6 @@ class SalGtkPicker
         OUString getResString( sal_Int32 aId );
 };
 
-class GdkThreadLock
-{
-public:
-    GdkThreadLock() { gdk_threads_enter(); }
-    ~GdkThreadLock() { gdk_threads_leave(); }
-};
-
 //Run the Gtk Dialog. Watch for any "new windows" created while we're
 //executing and consider that a CANCEL event to avoid e.g. "file cannot be opened"
 //modal dialogs and this one getting locked if some other API call causes this
