@@ -32,7 +32,7 @@
  *
  *************************************************************************/
 
-public class FirstConnection extends java.lang.Object {
+public class FirstConnection {
 
     public static void main(String[] args) {
         try {

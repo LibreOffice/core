@@ -41,7 +41,7 @@ import com.sun.star.util.thePathSettings;
  * Provides example code how to access and use the
  * path pathsettings servce.
  */
-public class PathSettingsTest extends java.lang.Object {
+public class PathSettingsTest {
 
     /*
      * List of pre-defined path variables supported by

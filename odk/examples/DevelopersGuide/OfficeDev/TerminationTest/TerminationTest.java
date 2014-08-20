@@ -37,7 +37,7 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.frame.XDesktop;
 
-public class TerminationTest extends java.lang.Object {
+public class TerminationTest {
 
     private static boolean atWork = false;
     /**

@@ -37,7 +37,7 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.util.XStringSubstitution;
 
-public class PathSubstitutionTest extends java.lang.Object {
+public class PathSubstitutionTest {
 
     /*
      * List of pre-defined path variables supported by

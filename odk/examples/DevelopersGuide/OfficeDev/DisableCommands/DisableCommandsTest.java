@@ -45,7 +45,7 @@ import com.sun.star.text.XTextDocument;
  * Provides example code how to enable/disable
  * commands.
  */
-public class DisableCommandsTest extends java.lang.Object {
+public class DisableCommandsTest {
 
     /*
      * A list of command names
