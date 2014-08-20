@@ -236,7 +236,20 @@ void ScViewFunc::DetectiveMarkSucc()
     MarkAndJumpToRanges(aDestRanges);
 }
 
-void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
+/** Insert date or time into current cell.
+
+    - key date on time cell  =>  current date + time of cell  =>  date+time formatted cell
+      - unless time cell was empty or 00:00 time  =>  current date  =>  date formatted cell
+    - key date on date+time cell  =>  current date + 00:00 time  =>  date+time formatted cell
+      - unless date was current date  =>  current date  =>  date formatted cell
+    - key date on other cell  =>  current date  =>  date formatted cell
+    - key time on date cell  =>  date of cell + current time  =>  date+time formatted cell
+      - unless date cell was empty  =>  current time  =>  time formatted cell
+    - key time on date+time cell  =>  current time  =>  time formatted cell
+      - unless cell was empty  =>  current date+time  =>  date+time formatted cell
+    - key time on other cell  =>  current time  =>  time formatted cell
+ */
+void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
 {
     ScViewData& rViewData = GetViewData();
     ScAddress aCurPos = rViewData.GetCurPos();
@@ -248,23 +261,69 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     const SvNumberformat* pCurNumFormatEntry = pFormatter->GetEntry(nCurNumFormat);
     const short nCurNumFormatType = (pCurNumFormatEntry ?
             (pCurNumFormatEntry->GetType() & ~NUMBERFORMAT_DEFINED) : NUMBERFORMAT_UNDEFINED);
+    bool bForceReqFmt = false;
+    const double fCell = rDoc.GetValue( aCurPos);
     // Combine requested date/time stamp with existing cell time/date, if any.
-    switch (nCellFmt)
+    switch (nReqFmt)
     {
         case NUMBERFORMAT_DATE:
-            if (nCurNumFormatType == NUMBERFORMAT_TIME)
-                nCellFmt = NUMBERFORMAT_DATETIME;
+            switch (nCurNumFormatType)
+            {
+                case NUMBERFORMAT_TIME:
+                    // An empty cell formatted as time (or 00:00 time) shall
+                    // not result in the current date with 00:00 time, but only
+                    // in current date.
+                    if (fCell != 0.0)
+                        nReqFmt = NUMBERFORMAT_DATETIME;
+                    break;
+                case NUMBERFORMAT_DATETIME:
+                    {
+                        // Force to only date if the existing date+time is the
+                        // current date. This way inserting current date twice
+                        // on an existing date+time cell can be used to force
+                        // date, which otherwise would only be possible by
+                        // applying a date format.
+                        double fDate = rtl::math::approxFloor( fCell);
+                        if (fDate == (Date( Date::SYSTEM) - *pFormatter->GetNullDate()))
+                            bForceReqFmt = true;
+                    }
+                    break;
+            }
             break;
         case NUMBERFORMAT_TIME:
-            if (nCurNumFormatType == NUMBERFORMAT_DATE)
-                nCellFmt = NUMBERFORMAT_DATETIME;
+            switch (nCurNumFormatType)
+            {
+                case NUMBERFORMAT_DATE:
+                    // An empty cell formatted as date shall not result in the
+                    // null date and current time, but only in current time.
+                    if (fCell != 0.0)
+                        nReqFmt = NUMBERFORMAT_DATETIME;
+                    break;
+                case NUMBERFORMAT_DATETIME:
+                    // Requesting current time on an empty date+time cell
+                    // inserts both current date+time.
+                    if (fCell == 0.0)
+                        nReqFmt = NUMBERFORMAT_DATETIME;
+                    else
+                    {
+                        // Add current time to an existing date+time where time is
+                        // zero and date is current date, else force time only.
+                        double fDate = rtl::math::approxFloor( fCell);
+                        double fTime = fCell - fDate;
+                        if (fTime == 0.0 && fDate == (Date( Date::SYSTEM) - *pFormatter->GetNullDate()))
+                            nReqFmt = NUMBERFORMAT_DATETIME;
+                        else
+                            bForceReqFmt = true;
+                    }
+                    break;
+            }
             break;
         default:
             assert(!"unhandled current date/time request");
-            nCellFmt = NUMBERFORMAT_DATETIME;
+            nReqFmt = NUMBERFORMAT_DATETIME;
     }
     double fVal(0);
-    switch (nCellFmt)
+    switch (nReqFmt)
     {
         case NUMBERFORMAT_DATE:
             {
@@ -284,14 +343,13 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
                 {
                     case NUMBERFORMAT_DATE:
                         {
-                            double fDate = rtl::math::approxFloor( rDoc.GetValue( aCurPos));
+                            double fDate = rtl::math::approxFloor( fCell);
                             Time aActTime( Time::SYSTEM );
                             fVal = fDate + aActTime.GetTimeInDays();
                         }
                         break;
                     case NUMBERFORMAT_TIME:
                         {
-                            double fCell = rDoc.GetValue( aCurPos);
                             double fTime = fCell - rtl::math::approxFloor( fCell);
                             Date aActDate( Date::SYSTEM );
                             fVal = (aActDate - *pFormatter->GetNullDate()) + fTime;
@@ -302,7 +360,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
                             DateTime aActDateTime( DateTime::SYSTEM );
                             // Converting the null date to DateTime forces the
                             // correct operator-() to be used, resulting in a
-                            // fractional date&time instead of only date value.
+                            // fractional date+time instead of only date value.
                             fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
                         }
                 }
@@ -315,9 +373,10 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     pDocSh->GetDocFunc().SetValueCell(aCurPos, fVal, true);
 
     // Set the new cell format only when it differs from the current cell
-    // format type.
-    if (nCellFmt != nCurNumFormatType)
-        SetNumberFormat(nCellFmt);
+    // format type. Preserve a date+time format unless we force a format
+    // through.
+    if (bForceReqFmt || (nReqFmt != nCurNumFormatType && nCurNumFormatType != NUMBERFORMAT_DATETIME))
+        SetNumberFormat(nReqFmt);
 
     pUndoMgr->LeaveListAction();
 }
