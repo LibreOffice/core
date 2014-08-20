@@ -38,7 +38,6 @@ namespace com { namespace sun { namespace star { namespace awt {
 namespace comphelper
 {
     namespace starawt       = ::com::sun::star::awt;
-    namespace starlang      = ::com::sun::star::lang;
 
     typedef css::uno::Reference< css::uno::XInterface >           InterfaceRef;
     typedef css::uno::Sequence< OUString >                StringSequence;
@@ -105,7 +104,7 @@ namespace comphelper
     template <class TYPE>
     void disposeComponent(css::uno::Reference<TYPE>& _rxComp)
     {
-        css::uno::Reference<starlang::XComponent> xComp(_rxComp, css::uno::UNO_QUERY);
+        css::uno::Reference<css::lang::XComponent> xComp(_rxComp, css::uno::UNO_QUERY);
         if (xComp.is())
         {
             xComp->dispose();
@@ -117,7 +116,7 @@ namespace comphelper
     bool getImplementation(TYPE*& _pObject, const css::uno::Reference< css::uno::XInterface >& _rxIFace)
     {
         _pObject = NULL;
-        css::uno::Reference< starlang::XUnoTunnel > xTunnel(_rxIFace, css::uno::UNO_QUERY);
+        css::uno::Reference< css::lang::XUnoTunnel > xTunnel(_rxIFace, css::uno::UNO_QUERY);
         if (xTunnel.is())
             _pObject = reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
 
@@ -152,7 +151,7 @@ namespace comphelper
     COMPHELPER_DLLPUBLIC OUString    getString(const css::uno::Any& _rAny);
     COMPHELPER_DLLPUBLIC bool       getBOOL(const css::uno::Any& _rAny);
 
-    COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const css::uno::Any& _rAny) throw(starlang::IllegalArgumentException);
+    COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const css::uno::Any& _rAny) throw(css::lang::IllegalArgumentException);
 
 //= replacement of some former UsrAny.setXXX methods - can be used with rvalues
     inline void setBOOL(css::uno::Any& _rAny, bool _b)

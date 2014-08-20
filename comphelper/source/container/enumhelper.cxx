@@ -74,7 +74,7 @@ sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(css::uno::Runtim
 
 
 css::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -95,7 +95,7 @@ css::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
 }
 
 
-void SAL_CALL OEnumerationByName::disposing(const starlang::EventObject& aEvent)
+void SAL_CALL OEnumerationByName::disposing(const css::lang::EventObject& aEvent)
         throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -113,7 +113,7 @@ void OEnumerationByName::impl_startDisposeListening()
         return;
 
     ++m_refCount;
-    css::uno::Reference< starlang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
@@ -131,7 +131,7 @@ void OEnumerationByName::impl_stopDisposeListening()
         return;
 
     ++m_refCount;
-    css::uno::Reference< starlang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
@@ -177,7 +177,7 @@ sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(css::uno::Runti
 
 
 css::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -198,7 +198,7 @@ css::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
 }
 
 
-void SAL_CALL OEnumerationByIndex::disposing(const starlang::EventObject& aEvent)
+void SAL_CALL OEnumerationByIndex::disposing(const css::lang::EventObject& aEvent)
         throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -216,7 +216,7 @@ void OEnumerationByIndex::impl_startDisposeListening()
         return;
 
     ++m_refCount;
-    css::uno::Reference< starlang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
@@ -234,7 +234,7 @@ void OEnumerationByIndex::impl_stopDisposeListening()
         return;
 
     ++m_refCount;
-    css::uno::Reference< starlang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
+    css::uno::Reference< css::lang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
@@ -269,7 +269,7 @@ sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(css::uno::RuntimeEx
 
 
 css::uno::Any SAL_CALL OAnyEnumeration::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     if ( ! hasMoreElements())
         throw starcontainer::NoSuchElementException();

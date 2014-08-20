@@ -195,7 +195,7 @@ bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValue
                     reinterpret_cast< uno_ReleaseFunc >(cpp_release)
                   )
                 )
-                throw starlang::IllegalArgumentException();
+                throw css::lang::IllegalArgumentException();
         }
         else
             _rConvertedValue = _rValueToSet;

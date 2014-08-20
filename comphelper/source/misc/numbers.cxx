@@ -30,7 +30,6 @@ namespace comphelper
 
 
 namespace starbeans = ::com::sun::star::beans;
-namespace starlang  = ::com::sun::star::lang;
 
 
 sal_Int16 getNumberFormatType(const css::uno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
@@ -89,7 +88,7 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<starutil::XNumbe
 sal_Int32 getStandardFormat(
         const css::uno::Reference<starutil::XNumberFormatter>& xFormatter,
         sal_Int16 nType,
-        const starlang::Locale& _rLocale)
+        const css::lang::Locale& _rLocale)
 {
     css::uno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter.is() ? xFormatter->getNumberFormatsSupplier() : css::uno::Reference<starutil::XNumberFormatsSupplier>(NULL));
     css::uno::Reference<starutil::XNumberFormats> xFormats( xSupplier.is() ? xSupplier->getNumberFormats() : css::uno::Reference<starutil::XNumberFormats>(NULL));

@@ -30,7 +30,6 @@ namespace comphelper
 {
 
 
-    namespace starlang  = ::com::sun::star::lang;
     namespace starutil  = ::com::sun::star::util;
 
     /// returns the ::com::sun::star::util::NumberFormat of the given key under the given formats
@@ -47,7 +46,7 @@ namespace comphelper
     sal_Int32 getStandardFormat(
             const css::uno::Reference<starutil::XNumberFormatter>& xFormatter,
             sal_Int16 nType,
-            const starlang::Locale& _rLocale);
+            const css::lang::Locale& _rLocale);
 
     /** retrieves a the value of a given property for a given format key, relating to a given formatter
     */

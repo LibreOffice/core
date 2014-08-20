@@ -36,7 +36,6 @@ namespace comphelper
 
 
     namespace starcontainer     = ::com::sun::star::container;
-    namespace starlang          = ::com::sun::star::lang;
 
 
 //= OEnumerationLock
@@ -55,7 +54,7 @@ struct OEnumerationLock
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
                          , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
-                                                           starlang::XEventListener    >
+                                                           css::lang::XEventListener    >
 {
     css::uno::Sequence< OUString >                m_aNames;
     sal_Int32                                           m_nPos;
@@ -70,9 +69,9 @@ public:
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
@@ -87,7 +86,7 @@ private:
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
                           , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
-                                                            starlang::XEventListener    >
+                                                            css::lang::XEventListener    >
 {
     sal_Int32                                         m_nPos;
     css::uno::Reference< starcontainer::XIndexAccess > m_xAccess;
@@ -99,9 +98,9 @@ public:
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
@@ -127,7 +126,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
