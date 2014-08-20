@@ -33,7 +33,7 @@
 
 class SfxApplication;
 class SfxProgress;
-class SfxDdeDocTopics_Impl;
+class SfxDdeDocTopic_Impl;
 class DdeService;
 class SfxItemPool;
 class SfxFilterMatcher;
@@ -62,6 +62,8 @@ namespace sfx2 {
 }
 
 typedef Link* LinkPtr;
+
+typedef std::vector<SfxDdeDocTopic_Impl*> SfxDdeDocTopics_Impl;
 
 class SfxAppData_Impl
 {
