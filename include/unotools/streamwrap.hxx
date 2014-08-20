@@ -34,11 +34,10 @@ class SvStream;
 
 namespace utl
 {
-    namespace stario    = ::com::sun::star::io;
 
 //= OInputStreamWrapper
 
-typedef ::cppu::WeakImplHelper1 <   stario::XInputStream
+typedef ::cppu::WeakImplHelper1 <   css::io::XInputStream
                                 > InputStreamWrapper_Base;
 // needed for some compilers
 /// helper class for wrapping an SvStream into an com.sun.star.io::XInputStream
@@ -58,12 +57,12 @@ public:
     OInputStreamWrapper(SvStream* pStream, bool bOwner=false);
     virtual ~OInputStreamWrapper();
 
-// stario::XInputStream
-    virtual sal_Int32   SAL_CALL    readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32   SAL_CALL    readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::io::XInputStream
+    virtual sal_Int32   SAL_CALL    readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32   SAL_CALL    readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32   SAL_CALL    available() throw(css::io::NotConnectedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL    closeInput() throw(css::io::NotConnectedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
     /// throws a NotConnectedException if the object is not connected anymore
@@ -95,7 +94,7 @@ public:
 
 //= OOutputStreamWrapper
 
-typedef ::cppu::WeakImplHelper1<stario::XOutputStream> OutputStreamWrapper_Base;
+typedef ::cppu::WeakImplHelper1<css::io::XOutputStream> OutputStreamWrapper_Base;
     // needed for some compilers
 class OOutputStreamWrapper : public OutputStreamWrapper_Base
 {
@@ -105,10 +104,10 @@ public:
 protected:
     virtual ~OOutputStreamWrapper();
 
-// stario::XOutputStream
-    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::io::XOutputStream
+    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL flush() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /// throws an exception according to the error flag of m_pSvStream
     void checkError() const;
@@ -150,14 +149,14 @@ class UNOTOOLS_DLLPUBLIC OStreamWrapper : public ::cppu::ImplInheritanceHelper3 
 public:
     OStreamWrapper(SvStream& _rStream);
 
-// stario::XStream
+// css::io::XStream
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-// stario::XOutputStream
-    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::io::XOutputStream
+    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL flush() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL truncate() throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 

@@ -33,13 +33,13 @@ void SAL_CALL OInputStreamHelper::release() throw ()
 }
 
 sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-    throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, css::uno::RuntimeException, std::exception)
+    throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     if (nBytesToRead < 0)
-        throw stario::BufferSizeExceededException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     ::osl::MutexGuard aGuard( m_aMutex );
     aData.realloc(nBytesToRead);
@@ -49,7 +49,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
     m_nActPos += nRead;
 
     if (nError != ERRCODE_NONE)
-        throw stario::IOException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::IOException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     // adjust sequence if data read is lower than the desired data
     if (nRead < (sal_uInt32)nBytesToRead)
@@ -82,41 +82,41 @@ sal_Int64 SAL_CALL OInputStreamHelper::getLength(  ) throw(::com::sun::star::io:
 
 sal_Int32 SAL_CALL OInputStreamHelper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData,
                                                      sal_Int32 nMaxBytesToRead)
-    throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, css::uno::RuntimeException, std::exception)
+    throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     // read all data desired
     return readBytes(aData, nMaxBytesToRead);
 }
 
 void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
-    throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, css::uno::RuntimeException, std::exception)
+    throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     if (nBytesToSkip < 0)
-        throw stario::BufferSizeExceededException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     m_nActPos += nBytesToSkip;
 }
 
 sal_Int32 SAL_CALL OInputStreamHelper::available()
-    throw (stario::NotConnectedException, stario::IOException, css::uno::RuntimeException, std::exception)
+    throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     return m_nAvailable;
 }
 
 void SAL_CALL OInputStreamHelper::closeInput()
-    throw (stario::NotConnectedException, stario::IOException, css::uno::RuntimeException, std::exception)
+    throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_xLockBytes.Is())
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     m_xLockBytes = NULL;
 }

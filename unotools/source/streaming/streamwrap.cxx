@@ -46,12 +46,12 @@ OInputStreamWrapper::~OInputStreamWrapper()
 }
 
 sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-                throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+                throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     checkConnected();
 
     if (nBytesToRead < 0)
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -67,12 +67,12 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     return nRead;
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     checkError();
 
     if (nMaxBytesToRead < 0)
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     if (m_pSvStream->IsEof())
     {
@@ -83,7 +83,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_In
         return readBytes(aData, nMaxBytesToRead);
 }
 
-void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkError();
@@ -92,7 +92,7 @@ void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( star
     checkError();
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( stario::NotConnectedException, css::uno::RuntimeException, std::exception )
+sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( css::io::NotConnectedException, css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
@@ -110,7 +110,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( stario::NotConnectedE
     return nAvailable;
 }
 
-void SAL_CALL OInputStreamWrapper::closeInput() throw( stario::NotConnectedException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OInputStreamWrapper::closeInput() throw( css::io::NotConnectedException, css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
@@ -124,7 +124,7 @@ void SAL_CALL OInputStreamWrapper::closeInput() throw( stario::NotConnectedExcep
 void OInputStreamWrapper::checkConnected() const
 {
     if (!m_pSvStream)
-        throw stario::NotConnectedException(OUString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
+        throw css::io::NotConnectedException(OUString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
 }
 
 void OInputStreamWrapper::checkError() const
@@ -133,7 +133,7 @@ void OInputStreamWrapper::checkError() const
 
     if (m_pSvStream->SvStream::GetError() != ERRCODE_NONE)
         // TODO: really evaluate the error
-        throw stario::NotConnectedException(OUString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
+        throw css::io::NotConnectedException(OUString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
 }
 
 //= OSeekableInputStreamWrapper
@@ -192,7 +192,7 @@ OOutputStreamWrapper::OOutputStreamWrapper(SvStream& _rStream):
 
 OOutputStreamWrapper::~OOutputStreamWrapper() {}
 
-void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     sal_uInt32 nWritten = rStream.Write(aData.getConstArray(),aData.getLength());
     ErrCode err = rStream.GetError();
@@ -200,17 +200,17 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int
         ||  (nWritten != (sal_uInt32)aData.getLength())
         )
     {
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
     }
 }
 
-void SAL_CALL OOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::flush() throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     rStream.Flush();
     checkError();
 }
 
-void SAL_CALL OOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::closeOutput() throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
 }
 
@@ -218,7 +218,7 @@ void OOutputStreamWrapper::checkError() const
 {
     if (rStream.GetError() != ERRCODE_NONE)
         // TODO: really evaluate the error
-        throw stario::NotConnectedException(OUString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
+        throw css::io::NotConnectedException(OUString(), const_cast<css::uno::XWeak*>(static_cast<const css::uno::XWeak*>(this)));
 }
 
 //= OSeekableOutputStreamWrapper
@@ -290,7 +290,7 @@ OStreamWrapper::OStreamWrapper(SvStream& _rStream)
     return this;
 }
 
-void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
 {
     sal_uInt32 nWritten = m_pSvStream->Write(aData.getConstArray(),aData.getLength());
     ErrCode err = m_pSvStream->GetError();
@@ -298,18 +298,18 @@ void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& a
         ||  (nWritten != (sal_uInt32)aData.getLength())
         )
     {
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
     }
 }
 
-void SAL_CALL OStreamWrapper::flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OStreamWrapper::flush() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
 {
     m_pSvStream->Flush();
     if (m_pSvStream->GetError() != ERRCODE_NONE)
-        throw stario::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
 }
 
-void SAL_CALL OStreamWrapper::closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OStreamWrapper::closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
 {
 }
 
