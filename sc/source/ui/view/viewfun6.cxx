@@ -377,6 +377,8 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
     // through.
     if (bForceReqFmt || (nReqFmt != nCurNumFormatType && nCurNumFormatType != NUMBERFORMAT_DATETIME))
         SetNumberFormat(nReqFmt);
+    else
+        rViewData.UpdateInputHandler();     // update input bar with new value
 
     pUndoMgr->LeaveListAction();
 }
