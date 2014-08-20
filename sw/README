@@ -43,10 +43,12 @@ The details below are mainly about details missing from the Wiki pages.
 
 The central class for a document is SwDoc, which represents a document.
 
-This is a huge class with hundreds of methods; there are some efforts
-to split up the class into many smaller classes that implement more
-specific interfaces but this is not fully implemented yet; see the various
-IDocument* classes.
+A lot of the functionality is split out into separate Manager classes,
+each of which implements some IDocument* interface; there are
+SwDoc::getIDocument*() methods to retrieve the managers.
+
+However there are still too many members and methods in this class,
+many of which could be moved to some Manager or other...
 
 === SwNodes ===
 
