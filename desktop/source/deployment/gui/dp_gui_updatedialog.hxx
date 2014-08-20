@@ -172,7 +172,7 @@ private:
     FixedText* m_pchecking;
     Throbber* m_pthrobber;
     FixedText* m_pUpdate;
-    VclScrolledWindow* m_pContainer;
+    VclViewport* m_pContainer;
     UpdateDialog::CheckListBox* m_pUpdates;
     CheckBox* m_pAll;
     FixedText* m_pDescription;

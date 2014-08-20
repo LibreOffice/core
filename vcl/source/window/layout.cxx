@@ -1616,6 +1616,13 @@ IMPL_LINK_NOARG(VclScrolledWindow, ScrollBarHdl)
     if (!pChild)
         return 1;
 
+    assert(dynamic_cast<VclViewport*>(pChild) && "scrolledwindow child should be a Viewport");
+
+    pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
+
+    if (!pChild)
+        return 1;
+
     Point aWinPos;
 
     if (m_aHScroll.IsVisible())
@@ -1698,7 +1705,9 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
     long nAvailWidth = rAllocation.Width();
     // vert. ScrollBar
     if (GetStyle() & WB_AUTOVSCROLL)
+    {
         m_aVScroll.Show(nAvailHeight < aChildReq.Height());
+    }
 
     if (m_aVScroll.IsVisible())
         nAvailWidth -= getLayoutRequisition(m_aVScroll).Width();
@@ -1754,12 +1763,8 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
 
     if (pChild && pChild->IsVisible())
     {
-        Point aChildPos(pChild->GetPosPixel());
-        if (!m_aHScroll.IsVisible())
-            aChildPos.X() = 0;
-        if (!m_aVScroll.IsVisible())
-            aChildPos.Y() = 0;
-        setLayoutAllocation(*pChild, aChildPos, aChildAllocation);
+        assert(dynamic_cast<VclViewport*>(pChild) && "scrolledwindow child should be a Viewport");
+        setLayoutAllocation(*pChild, Point(0, 0), aInnerSize);
     }
 
     if (!m_bUserManagedScrolling)
@@ -1801,6 +1806,18 @@ bool VclScrolledWindow::Notify(NotifyEvent& rNEvt)
     }
 
     return nDone || VclBin::Notify( rNEvt );
+}
+
+void VclViewport::setAllocation(const Size &rAllocation)
+{
+    Window *pChild = get_child();
+    if (pChild && pChild->IsVisible())
+    {
+        Size aReq(getLayoutRequisition(*pChild));
+        aReq.Width() = std::max(aReq.Width(), rAllocation.Width());
+        aReq.Height() = std::max(aReq.Height(), rAllocation.Height());
+        setLayoutAllocation(*pChild, Point(0, 0), aReq);
+    }
 }
 
 const Window *VclEventBox::get_child() const

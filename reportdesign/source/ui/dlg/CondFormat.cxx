@@ -321,7 +321,7 @@ namespace rptui
             return;
         long nConditionHeight = m_aConditions[0]->get_preferred_size().Height();
         Point aConditionPos(0, -1 * nConditionHeight * impl_getFirstVisibleConditionIndex());
-        m_pScrollWindow->get_child()->SetPosPixel(aConditionPos);
+        m_pConditionPlayground->SetPosPixel(aConditionPos);
     }
 
     void ConditionalFormattingDialog::impl_layoutAll()

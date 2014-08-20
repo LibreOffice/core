@@ -1159,7 +1159,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         }
     }
 
-    if (bIsPlaceHolder || name == "GtkTreeSelection" || name == "GtkViewport")
+    if (bIsPlaceHolder || name == "GtkTreeSelection")
         return NULL;
 
     extractButtonImage(id, rMap, name == "GtkRadioButton");
@@ -1472,6 +1472,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkScrolledWindow")
     {
         pWindow = new VclScrolledWindow(pParent);
+    }
+    else if (name == "GtkViewport")
+    {
+        pWindow = new VclViewport(pParent);
     }
     else if (name == "GtkEventBox")
     {

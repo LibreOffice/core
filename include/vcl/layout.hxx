@@ -576,6 +576,17 @@ private:
     ScrollBarBox m_aScrollBarBox;
 };
 
+class VCL_DLLPUBLIC VclViewport : public VclBin
+{
+public:
+    VclViewport(Window *pParent, WinBits nStyle = WB_HIDE | WB_CLIPCHILDREN)
+        : VclBin(pParent, nStyle)
+    {
+    }
+protected:
+    virtual void setAllocation(const Size &rAllocation) SAL_OVERRIDE;
+};
+
 //Enforces that its children are always the same size as itself.
 //Intercepts any Commands intended for its children.
 //

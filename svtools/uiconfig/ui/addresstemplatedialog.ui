@@ -231,6 +231,9 @@
                         <property name="vexpand">True</property>
                         <property name="vscrollbar_policy">always</property>
                         <property name="shadow_type">in</property>
+                  <child>
+                    <object class="GtkViewport" id="viewport1">
+                      <property name="visible">True</property>
                         <child>
                           <object class="GtkGrid" id="grid4">
                             <property name="visible">True</property>
@@ -582,6 +585,8 @@
                             </child>
                           </object>
                         </child>
+                    </object>
+                  </child>
                       </object>
                     </child>
                   </object>
