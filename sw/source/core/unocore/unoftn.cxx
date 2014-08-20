@@ -126,26 +126,19 @@ SwXFootnote::~SwXFootnote()
 {
 }
 
-SwXFootnote *
-SwXFootnote::GetXFootnote(
-        SwModify const& /*rUnoCB*/, SwFmtFtn const& /*rFootnoteFmt*/)
-{
-    // re-use existing SwXFootnote
-    // #i105557#: do not iterate over the registered clients: race condition
-    // to do this properly requires the SwXFootnote to register at the
-    // SwFmtFtn directly, not at the unocallback
-    // also this function must return a uno Reference!
-    return 0;
-}
-
-SwXFootnote *
+uno::Reference<text::XFootnote>
 SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFmtFtn & rFootnoteFmt)
 {
-    SwXFootnote *const pXFootnote(
-        GetXFootnote(rFootnoteFmt, rFootnoteFmt));
-    return (pXFootnote)
-        ?   pXFootnote
-        :   new SwXFootnote(rDoc, rFootnoteFmt);
+    // i#105557: do not iterate over the registered clients: race condition
+    uno::Reference<text::XFootnote> xNote;
+    xNote = rFootnoteFmt.GetXFootnote();
+    if (!xNote.is())
+    {
+        SwXFootnote *const pNote(new SwXFootnote(rDoc, rFootnoteFmt));
+        xNote.set(pNote);
+        rFootnoteFmt.SetXFootnote(xNote);
+    }
+    return xNote;
 }
 
 namespace

@@ -1238,8 +1238,8 @@ CreateParentXText(SwDoc & rDoc, const SwPosition& rPos)
                 if (pSttNode == pTxtFtn->GetStartNode()->GetNode().
                                     FindSttNodeByType(SwFootnoteStartNode))
                 {
-                    xParentText = SwXFootnote::CreateXFootnote(rDoc,
-                            const_cast<SwFmtFtn&>(rFtn));
+                    xParentText.set(SwXFootnote::CreateXFootnote(rDoc,
+                            const_cast<SwFmtFtn&>(rFtn)), uno::UNO_QUERY);
                     break;
                 }
             }

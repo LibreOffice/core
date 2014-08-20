@@ -20,10 +20,15 @@
 #define INCLUDED_SW_INC_FMTFTN_HXX
 
 #include <rtl/ustring.hxx>
+#include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
 
 #include "swdllapi.h"
 #include <calbck.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace text { class XFootnote; }
+} } }
 
 class SwDoc;
 class SwTxtFtn;
@@ -40,6 +45,8 @@ class SW_DLLPUBLIC SwFmtFtn
     sal_uInt16 m_nNumber;   ///< Automatische Nummerierung
     bool    m_bEndNote;     ///< Is it an End note?
 
+    css::uno::WeakReference<css::text::XFootnote> m_wXFootnote;
+
     /// Protected CopyCtor.
     SwFmtFtn& operator=(const SwFmtFtn& rFtn);
     SwFmtFtn( const SwFmtFtn& );
@@ -51,6 +58,10 @@ public:
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+
+    // SwClient
+    virtual void Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
+        SAL_OVERRIDE;
 
     void InvalidateFootnote();
 
@@ -75,6 +86,11 @@ public:
 
     /// Returns string to be displayed of footnote / endnote.
     OUString GetViewNumStr( const SwDoc& rDoc, bool bInclStrs = false ) const;
+
+    css::uno::WeakReference<css::text::XFootnote> const& GetXFootnote() const
+        { return m_wXFootnote; }
+    void SetXFootnote(css::uno::Reference<css::text::XFootnote> const& xNote)
+        { m_wXFootnote = xNote; }
 };
 
 #endif

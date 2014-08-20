@@ -141,6 +141,15 @@ SfxPoolItem* SwFmtFtn::Clone( SfxItemPool* ) const
     return pNew;
 }
 
+void SwFmtFtn::Modify(SfxPoolItem const* pOld, SfxPoolItem const* pNew)
+{
+    NotifyClients(pOld, pNew);
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached UNO object
+        SetXFootnote(css::uno::Reference<css::text::XFootnote>(0));
+    }
+}
+
 void SwFmtFtn::InvalidateFootnote()
 {
     SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,

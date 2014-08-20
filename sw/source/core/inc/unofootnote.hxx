@@ -72,11 +72,8 @@ public:
 
     SwXFootnote(const bool bEndnote);
 
-    static SwXFootnote *
+    static css::uno::Reference<css::text::XFootnote>
         CreateXFootnote(SwDoc & rDoc, SwFmtFtn & rFootnoteFmt);
-    /// may return 0
-    static SwXFootnote *
-        GetXFootnote(SwModify const& rUnoCB, SwFmtFtn const& rFootnoteFmt);
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
