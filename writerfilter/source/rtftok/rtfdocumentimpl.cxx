@@ -5734,12 +5734,13 @@ int RTFDocumentImpl::popState()
     case DESTINATION_SHAPEPROPERTYNAME:
     case DESTINATION_SHAPEPROPERTYVALUE:
     case DESTINATION_SHAPEPROPERTY:
-    {
-        m_aStates.top().aShape = aState.aShape;
-        m_aStates.top().aPicture = aState.aPicture;
-        m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
-    }
-    break;
+        if (!m_aStates.empty())
+        {
+            m_aStates.top().aShape = aState.aShape;
+            m_aStates.top().aPicture = aState.aPicture;
+            m_aStates.top().aCharacterAttributes = aState.aCharacterAttributes;
+        }
+        break;
     case DESTINATION_FLYMAINCONTENT:
     case DESTINATION_SHPPICT:
     case DESTINATION_SHAPE:
