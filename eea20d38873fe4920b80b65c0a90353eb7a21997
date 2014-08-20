@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_fb49c78f",
+        "filename": "connectivity/source/commontools/DateConversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2014-08-20T08:07:38Z",
+      "side": 1,
+      "message": "Well, my expectation is that xFormatTypes will always be present. If I\u0027m wrong, I want a debug build to loudly tell me so.\n\nHowever, in a non-debug build, if there is no xFormatTypes, I fall back to the behaviour before this change.",
+      "parentUuid": "5ad0253b_db672b24",
+      "revId": "eea20d38873fe4920b80b65c0a90353eb7a21997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_bb6c6f09",
         "filename": "connectivity/source/commontools/DateConversion.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-08-20T07:59:45Z",
       "side": 1,
       "message": "Please, do not use the obsolete OSL_* debug macros. Also, it is certain that xFormats-\u003egetByKey(nKeyToUse) always returns something?",
+      "revId": "eea20d38873fe4920b80b65c0a90353eb7a21997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_db4e0b96",
+        "filename": "connectivity/source/commontools/DateConversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2014-08-20T08:07:38Z",
+      "side": 1,
+      "message": "I welcome suggestions what to replace OSL_VERIFY with. Again, I expect xFormats-\u003egetByKey(nKeyToUse) will always return something, but if not, I\u0027d like a debug build to warn me.",
+      "parentUuid": "5ad0253b_bb6c6f09",
       "revId": "eea20d38873fe4920b80b65c0a90353eb7a21997",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
