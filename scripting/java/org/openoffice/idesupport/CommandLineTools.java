@@ -174,7 +174,7 @@ public class CommandLineTools {
         private boolean verbose = false;
         private String language = null;
         private MethodFinder finder = null;
-        private ArrayList scripts = null;
+        private ArrayList<ScriptEntry> scripts = null;
         private HashMap properties = new HashMap(3);
 
         public GenerateCommand(String basedir) {
@@ -288,9 +288,7 @@ public class CommandLineTools {
                     throw new Exception("No valid scripts found");
 
                 ParcelDescriptor desc = new ParcelDescriptor(parcelxml, language);
-                desc.setScriptEntries((ScriptEntry[])scripts.toArray(new
-                                      ScriptEntry[scripts.size()]));
-
+                desc.setScriptEntries(scripts.toArray(new ScriptEntry[scripts.size()]));
                 if (properties.size() != 0) {
                     Enumeration enumer = properties.keys();
 

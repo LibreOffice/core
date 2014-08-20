@@ -304,7 +304,7 @@ public class CheckModuleAPI extends ComplexTestCase
                         moduleNames.add(sModuleName);
                     }
                 }
-                names = moduleNames.toArray(new String[0]);
+                names = moduleNames.toArray(new String[moduleNames.size()]);
             }
             catch (ParameterNotFoundException ex)
             {
@@ -465,7 +465,7 @@ public class CheckModuleAPI extends ComplexTestCase
             }
         }
 
-        final String[] names = moduleNames.toArray(new String[0]);
+        final String[] names = moduleNames.toArray(new String[moduleNames.size()]);
         return names;
     }
 
