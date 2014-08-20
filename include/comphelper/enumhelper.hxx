@@ -34,10 +34,6 @@
 namespace comphelper
 {
 
-
-    namespace starcontainer     = ::com::sun::star::container;
-
-
 //= OEnumerationLock
 
 struct OEnumerationLock
@@ -53,23 +49,23 @@ struct OEnumerationLock
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
-                         , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
+                         , public ::cppu::WeakImplHelper2< css::container::XEnumeration ,
                                                            css::lang::XEventListener    >
 {
     css::uno::Sequence< OUString >                m_aNames;
     sal_Int32                                           m_nPos;
-    css::uno::Reference< starcontainer::XNameAccess >    m_xAccess;
+    css::uno::Reference< css::container::XNameAccess >    m_xAccess;
     bool                                            m_bListening;
 
 public:
-    OEnumerationByName(const css::uno::Reference< starcontainer::XNameAccess >& _rxAccess);
-    OEnumerationByName(const css::uno::Reference< starcontainer::XNameAccess >& _rxAccess,
+    OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess);
+    OEnumerationByName(const css::uno::Reference< css::container::XNameAccess >& _rxAccess,
                        const css::uno::Sequence< OUString >&             _aNames  );
     virtual ~OEnumerationByName();
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -85,20 +81,20 @@ private:
     on an object implementing the com.sun.star.container::XNameAccess interface
 */
 class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
-                          , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
+                          , public ::cppu::WeakImplHelper2< css::container::XEnumeration ,
                                                             css::lang::XEventListener    >
 {
     sal_Int32                                         m_nPos;
-    css::uno::Reference< starcontainer::XIndexAccess > m_xAccess;
+    css::uno::Reference< css::container::XIndexAccess > m_xAccess;
     bool                                          m_bListening;
 
 public:
-    OEnumerationByIndex(const css::uno::Reference< starcontainer::XIndexAccess >& _rxAccess);
+    OEnumerationByIndex(const css::uno::Reference< css::container::XIndexAccess >& _rxAccess);
     virtual ~OEnumerationByIndex();
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -115,7 +111,7 @@ private:
 
 */
 class COMPHELPER_DLLPUBLIC OAnyEnumeration : private OEnumerationLock
-                                           , public  ::cppu::WeakImplHelper1< starcontainer::XEnumeration >
+                                           , public  ::cppu::WeakImplHelper1< css::container::XEnumeration >
 {
     sal_Int32                         m_nPos;
     css::uno::Sequence< css::uno::Any > m_lItems;
@@ -126,7 +122,7 @@ public:
 
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 
