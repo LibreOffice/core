@@ -87,7 +87,7 @@ public class _XAccessibleValue extends MultiMethodTest {
         }
 
         if (curVal < minVal || maxVal < curVal) {
-            log.println("" + (curVal - minVal) + "," + (maxVal - curVal));
+            log.println((curVal - minVal) + "," + (maxVal - curVal));
             log.println("Current value " + curVal + " is not in range ["
                 + minVal + "," + maxVal + "]");
             result = false;

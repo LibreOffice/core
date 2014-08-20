@@ -64,7 +64,7 @@ public class _XAccessibleContext extends MultiMethodTest {
      */
     public void _getAccessibleChildCount() {
         childCount = oObj.getAccessibleChildCount();
-        log.println("" + childCount + " children found.");
+        log.println(childCount + " children found.");
         tRes.tested("getAccessibleChildCount()", childCount > -1);
     }
 

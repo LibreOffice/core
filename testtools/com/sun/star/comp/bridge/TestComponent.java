@@ -887,7 +887,7 @@ public class TestComponent {
                 checkEqual(33, multi.fn33());
                 checkEqual(41 * 4, multi.fn41(4));
                 checkEqual(61 * 6, multi.fn61(6));
-                checkEqual("62" + "", multi.fn62(""));
+                checkEqual("62", multi.fn62(""));
                 checkEqual(71 * 7, multi.fn71(7));
                 checkEqual("72" + "g", multi.fn72("g"));
                 checkEqual(73, multi.fn73());

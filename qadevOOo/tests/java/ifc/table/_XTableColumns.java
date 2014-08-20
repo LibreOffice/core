@@ -327,8 +327,8 @@ public class _XTableColumns extends MultiMethodTest {
             throws com.sun.star.lang.IndexOutOfBoundsException {
 
         for (int i = 0; i <= lastColumn && i < 3; i++) {
-            setCellText(xRange.getCellByPosition(i, 0), "" + i + "a");
-            setCellText(xRange.getCellByPosition(i, 1), "" + i + "b");
+            setCellText(xRange.getCellByPosition(i, 0), i + "a");
+            setCellText(xRange.getCellByPosition(i, 1), i + "b");
         }
 
         for (int i = 3; i <= lastColumn && i < 10; i++) {
@@ -355,7 +355,7 @@ public class _XTableColumns extends MultiMethodTest {
         String c1 = getCellText(xCellRange.getCellByPosition(col, 0));
         String c2 = getCellText(xCellRange.getCellByPosition(col, 1));
 
-        if (!((""+ idx + "a").equals(c1) && (""+ idx + "b").equals(c2))) {
+        if (!((idx + "a").equals(c1) && (idx + "b").equals(c2))) {
 
             log.println("FAILED for column " + col + " and index " + idx + "("
                 + c1 + "," + c2 + ")");

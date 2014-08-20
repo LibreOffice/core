@@ -331,7 +331,7 @@ public class AccessibilityTools {
             XAccessibleContext.class, AC);
 
         if (xAC != null) {
-            return "" + xAC.getAccessibleRole() + "," +
+            return xAC.getAccessibleRole() + "," +
                 xAC.getAccessibleName() + "(" +
                 xAC.getAccessibleDescription() + "):";
         }
@@ -345,7 +345,7 @@ public class AccessibilityTools {
 
         xAC = xA.getAccessibleContext();
 
-        return "" + xAC.getAccessibleRole() + "," + xAC.getAccessibleName() +
+        return xAC.getAccessibleRole() + "," + xAC.getAccessibleName() +
             "(" + xAC.getAccessibleDescription() + ")";
     }
 

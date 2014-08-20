@@ -166,8 +166,7 @@ class AccessibleTextHandler extends NodeHandler
     {
         return "[" + nStart + "," + nEnd + "] "
             + "\"" + sWord + "\"     \t"
-            + "(" + sBefore + ","
-            + "" + sBehind + ")";
+            + "(" + sBefore + "," + sBehind + ")";
     }
 
     /** Create a text node that lists all strings of a particular text type

@@ -959,7 +959,7 @@ public class _XAccessibleText {
         try {
             System.out.println("copyText(0,chCount):");
             locRes = oObj.copyText(0, chCount);
-            System.out.println(""+locRes);
+            System.out.println(locRes);
             res &= locRes;
 
             String cbText = null;
@@ -976,7 +976,7 @@ public class _XAccessibleText {
             if (chCount > 2) {
                 System.out.println("copyText(1,chCount-1):");
                 locRes = oObj.copyText(1, chCount - 1);
-                System.out.println(""+locRes);
+                System.out.println(locRes);
                 res &= locRes;
 
                 try {

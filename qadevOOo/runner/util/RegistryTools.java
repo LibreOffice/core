@@ -321,7 +321,7 @@ public class RegistryTools {
                 out.print("[BINARY] = {") ;
                 byte[] bin = key.getBinaryValue() ;
                 for (int i = 0; i < bin.length; i++)
-                    out.print("" + bin[i] + ",") ;
+                    out.print(bin[i] + ",") ;
                 out.println("}") ;
             } else
             if (type.equals(RegistryValueType.ASCIILIST)) {
@@ -342,7 +342,7 @@ public class RegistryTools {
                 out.print("[LONGLIST] = {") ;
                 int[] list = key.getLongListValue() ;
                 for (int i = 0; i < list.length; i++)
-                    out.print("" + list[i] + ",") ;
+                    out.print(list[i] + ",") ;
                 out.println("}") ;
             } else {
                 out.println("") ;

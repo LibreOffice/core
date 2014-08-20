@@ -63,7 +63,7 @@ public class _XAccessibleContext {
      */
     public boolean _getAccessibleChildCount() {
         childCount = oObj.getAccessibleChildCount();
-        System.out.println("" + childCount + " children found.");
+        System.out.println(childCount + " children found.");
         return childCount > -1;
     }
 
