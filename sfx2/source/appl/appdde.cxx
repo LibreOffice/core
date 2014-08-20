@@ -229,8 +229,6 @@ public:
 };
 
 
-class SfxDdeDocTopics_Impl : public std::vector<SfxDdeDocTopic_Impl*> {};
-
 #if defined( WNT )
 
 namespace {
