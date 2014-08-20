@@ -77,6 +77,93 @@ public:
     ScRefHandlerHelper():m_pHandler(NULL), m_pSetReferenceHdl( NULL ), m_pSetActiveHdl(NULL),  m_pRefInputStartPreHdl( NULL ), m_pRefInputStartPostHdl( NULL ), m_pRefInputDonePreHdl( NULL ),  m_pRefInputDonePostHdl( NULL ){}
 };
 
+class ScValidationDlg;
+
+/** The tab page "Criteria" from the Validation dialog. */
+class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
+{
+public:
+    explicit                    ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet );
+
+    static SfxTabPage*          Create( Window* pParent, const SfxItemSet* rArgSet );
+    static const sal_uInt16*              GetRanges();
+
+    virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
+    virtual void                Reset( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
+
+private:
+    void                        Init();
+
+    OUString                      GetFirstFormula() const;
+    OUString                      GetSecondFormula() const;
+
+    void                        SetFirstFormula( const OUString& rFmlaStr );
+    void                        SetSecondFormula( const OUString& rFmlaStr );
+
+                                DECL_LINK(SelectHdl, void *);
+                                DECL_LINK(CheckHdl, void *);
+
+    ListBox*                    m_pLbAllow;
+    CheckBox*                   m_pCbAllow;      /// Allow blank cells.
+    CheckBox*                   m_pCbShow;       /// Show selection list in cell.
+    CheckBox*                   m_pCbSort;       /// Sort selection list in cell.
+    FixedText*                  m_pFtValue;
+    ListBox*                    m_pLbValue;
+    FixedText*                  m_pFtMin;
+    VclContainer*               m_pMinGrid;
+    formula::RefEdit*           m_pEdMin;
+    VclMultiLineEdit*           m_pEdList;       /// Entries for explicit list
+    FixedText*                  m_pFtMax;
+    formula::RefEdit*           m_pEdMax;
+    FixedText*                  m_pFtHint;       /// Hint text for cell range validity.
+
+    OUString                    maStrMin;
+    OUString                    maStrMax;
+    OUString                    maStrValue;
+    OUString                    maStrRange;
+    OUString                    maStrList;
+    sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
+
+    DECL_LINK(EditSetFocusHdl, void *);
+    DECL_LINK( KillFocusHdl, Window *);
+    void    OnClick( Button *pBtn );
+    formula::RefEdit*           m_pRefEdit;
+public:
+    class ScRefButtonEx : public ::formula::RefButton
+    {
+        ScTPValidationValue* m_pPage;
+        virtual void Click() SAL_OVERRIDE;
+    public:
+        ScRefButtonEx(Window* pParent, WinBits nStyle)
+            : ::formula::RefButton(pParent, nStyle)
+            , m_pPage(NULL)
+        {
+        }
+        void SetParentPage(ScTPValidationValue *pPage)
+        {
+            m_pPage = pPage;
+        }
+        ScTPValidationValue* GetParentPage()
+        {
+            return m_pPage;
+        }
+    };
+private:
+    ScRefButtonEx*              m_pBtnRef;
+    VclContainer*               m_pRefGrid;
+    friend class ScRefButtonEx;
+    void            SetReferenceHdl( const ScRange& , ScDocument* );
+    void            SetActiveHdl();
+    void            RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton );
+    void            RefInputDonePostHdl();
+    ScValidationDlg * GetValidationDlg();
+public:
+    sal_uInt16      GetAllowEntryPos();
+    OUString        GetMinText();
+    void            SetupRefDlg();
+    void            RemoveRefDlg();
+};
+
 /** The "Validity" tab dialog. */
 class ScValidationDlg
     : public ScRefHdlrImpl<ScValidationDlg, SfxTabDialog, false>
@@ -173,104 +260,17 @@ public:
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
-    inline bool Close() SAL_OVERRIDE;
-};
-
-/** The tab page "Criteria" from the Validation dialog. */
-class ScTPValidationValue : public ScRefHandlerCaller, public SfxTabPage
-{
-public:
-    explicit                    ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet );
-
-    static SfxTabPage*          Create( Window* pParent, const SfxItemSet* rArgSet );
-    static const sal_uInt16*              GetRanges();
-
-    virtual bool                FillItemSet( SfxItemSet* rArgSet ) SAL_OVERRIDE;
-    virtual void                Reset( const SfxItemSet* rArgSet ) SAL_OVERRIDE;
-
-private:
-    void                        Init();
-
-    OUString                      GetFirstFormula() const;
-    OUString                      GetSecondFormula() const;
-
-    void                        SetFirstFormula( const OUString& rFmlaStr );
-    void                        SetSecondFormula( const OUString& rFmlaStr );
-
-                                DECL_LINK(SelectHdl, void *);
-                                DECL_LINK(CheckHdl, void *);
-
-    ListBox*                    m_pLbAllow;
-    CheckBox*                   m_pCbAllow;      /// Allow blank cells.
-    CheckBox*                   m_pCbShow;       /// Show selection list in cell.
-    CheckBox*                   m_pCbSort;       /// Sort selection list in cell.
-    FixedText*                  m_pFtValue;
-    ListBox*                    m_pLbValue;
-    FixedText*                  m_pFtMin;
-    VclContainer*               m_pMinGrid;
-    formula::RefEdit*           m_pEdMin;
-    VclMultiLineEdit*           m_pEdList;       /// Entries for explicit list
-    FixedText*                  m_pFtMax;
-    formula::RefEdit*           m_pEdMax;
-    FixedText*                  m_pFtHint;       /// Hint text for cell range validity.
-
-    OUString                    maStrMin;
-    OUString                    maStrMax;
-    OUString                    maStrValue;
-    OUString                    maStrRange;
-    OUString                    maStrList;
-    sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
-
-    DECL_LINK(EditSetFocusHdl, void *);
-    DECL_LINK( KillFocusHdl, Window *);
-    void    OnClick( Button *pBtn );
-    formula::RefEdit*           m_pRefEdit;
-public:
-    class ScRefButtonEx : public ::formula::RefButton
+    bool Close() SAL_OVERRIDE
     {
-        ScTPValidationValue* m_pPage;
-        virtual void Click() SAL_OVERRIDE;
-    public:
-        ScRefButtonEx(Window* pParent, WinBits nStyle)
-            : ::formula::RefButton(pParent, nStyle)
-            , m_pPage(NULL)
+        if( m_bOwnRefHdlr )
         {
+            if (SfxTabPage* pPage = GetTabPage(m_nValuePageId))
+                static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
         }
-        void SetParentPage(ScTPValidationValue *pPage)
-        {
-            m_pPage = pPage;
-        }
-        ScTPValidationValue* GetParentPage()
-        {
-            return m_pPage;
-        }
-    };
-private:
-    ScRefButtonEx*              m_pBtnRef;
-    VclContainer*               m_pRefGrid;
-    friend class ScRefButtonEx;
-    void            SetReferenceHdl( const ScRange& , ScDocument* );
-    void            SetActiveHdl();
-    void            RefInputStartPreHdl( formula::RefEdit* pEdit, formula::RefButton* pButton );
-    void            RefInputDonePostHdl();
-    ScValidationDlg * GetValidationDlg();
-public:
-    sal_uInt16      GetAllowEntryPos();
-    OUString        GetMinText();
-    void            SetupRefDlg();
-    void            RemoveRefDlg();
-};
 
-bool ScValidationDlg::Close()
-{
-    if( m_bOwnRefHdlr )
-    {
-        if (SfxTabPage* pPage = GetTabPage(m_nValuePageId))
-            static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
+        return ScValidationDlgBase::Close();
     }
-
-    return ScValidationDlgBase::Close();
-}
+};
 
 class ScTPValidationHelp : public SfxTabPage
 {
