@@ -252,7 +252,6 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             double fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
             Reference< XNumberFormats > xFormats(xFormatter->getNumberFormatsSupplier()->getNumberFormats());
             Reference< XNumberFormatTypes > xFormatTypes(xFormats, UNO_QUERY);
-            assert(xFormatTypes.is());
             sal_Int32 nStandardKey(0);
             if(xFormatTypes.is())
             {
