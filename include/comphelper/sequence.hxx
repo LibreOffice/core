@@ -27,18 +27,12 @@
 
 #include <vector>
 
-
 namespace comphelper
 {
-
-
-    namespace staruno   = ::com::sun::star::uno;
-
-
     /** search the given string within the given sequence, return the positions where it was found.
         if _bOnlyFirst is sal_True, only the first occurrence will be returned.
     */
-    COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst = false);
+    COMPHELPER_DLLPUBLIC css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst = false);
 
     namespace internal
     {
@@ -52,14 +46,14 @@ namespace comphelper
 
     /// concat two sequences
     template <class T>
-     staruno::Sequence<T> concatSequences(const staruno::Sequence<T>& _rLeft, const staruno::Sequence<T>& _rRight)
+     css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rLeft, const css::uno::Sequence<T>& _rRight)
     {
         sal_Int32 nLeft(_rLeft.getLength()), nRight(_rRight.getLength());
         const T* pLeft = _rLeft.getConstArray();
         const T* pRight = _rRight.getConstArray();
 
         sal_Int32 nReturnLen(nLeft + nRight);
-        staruno::Sequence<T> aReturn(nReturnLen);
+        css::uno::Sequence<T> aReturn(nReturnLen);
         T* pReturn = aReturn.getArray();
 
         internal::implCopySequence(pLeft, pReturn, nLeft);
@@ -71,7 +65,7 @@ namespace comphelper
 
     /// concat three sequences
     template <class T>
-    staruno::Sequence<T> concatSequences(const staruno::Sequence<T>& _rLeft, const staruno::Sequence<T>& _rMiddle, const staruno::Sequence<T>& _rRight)
+    css::uno::Sequence<T> concatSequences(const css::uno::Sequence<T>& _rLeft, const css::uno::Sequence<T>& _rMiddle, const css::uno::Sequence<T>& _rRight)
     {
         sal_Int32 nLeft(_rLeft.getLength()), nMiddle(_rMiddle.getLength()), nRight(_rRight.getLength());
         const T* pLeft = _rLeft.getConstArray();
@@ -79,7 +73,7 @@ namespace comphelper
         const T* pRight = _rRight.getConstArray();
 
         sal_Int32 nReturnLen(nLeft + nMiddle + nRight);
-        staruno::Sequence<T> aReturn(nReturnLen);
+        css::uno::Sequence<T> aReturn(nReturnLen);
         T* pReturn = aReturn.getArray();
 
         internal::implCopySequence(pLeft, pReturn, nLeft);
@@ -92,7 +86,7 @@ namespace comphelper
 
     /// remove a specified element from a sequences
     template<class T>
-    void removeElementAt(staruno::Sequence<T>& _rSeq, sal_Int32 _nPos)
+    void removeElementAt(css::uno::Sequence<T>& _rSeq, sal_Int32 _nPos)
     {
         sal_Int32 nLength = _rSeq.getLength();
 

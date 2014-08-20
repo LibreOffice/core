@@ -36,7 +36,6 @@ namespace comphelper
 
 
     namespace starcontainer     = ::com::sun::star::container;
-    namespace staruno           = ::com::sun::star::uno;
     namespace starlang          = ::com::sun::star::lang;
 
 
@@ -58,22 +57,22 @@ class COMPHELPER_DLLPUBLIC OEnumerationByName : private OEnumerationLock
                          , public ::cppu::WeakImplHelper2< starcontainer::XEnumeration ,
                                                            starlang::XEventListener    >
 {
-    staruno::Sequence< OUString >                m_aNames;
+    css::uno::Sequence< OUString >                m_aNames;
     sal_Int32                                           m_nPos;
-    staruno::Reference< starcontainer::XNameAccess >    m_xAccess;
+    css::uno::Reference< starcontainer::XNameAccess >    m_xAccess;
     bool                                            m_bListening;
 
 public:
-    OEnumerationByName(const staruno::Reference< starcontainer::XNameAccess >& _rxAccess);
-    OEnumerationByName(const staruno::Reference< starcontainer::XNameAccess >& _rxAccess,
-                       const staruno::Sequence< OUString >&             _aNames  );
+    OEnumerationByName(const css::uno::Reference< starcontainer::XNameAccess >& _rxAccess);
+    OEnumerationByName(const css::uno::Reference< starcontainer::XNameAccess >& _rxAccess,
+                       const css::uno::Sequence< OUString >&             _aNames  );
     virtual ~OEnumerationByName();
 
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual staruno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL nextElement(  )
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(staruno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
@@ -91,18 +90,18 @@ class COMPHELPER_DLLPUBLIC OEnumerationByIndex : private OEnumerationLock
                                                             starlang::XEventListener    >
 {
     sal_Int32                                         m_nPos;
-    staruno::Reference< starcontainer::XIndexAccess > m_xAccess;
+    css::uno::Reference< starcontainer::XIndexAccess > m_xAccess;
     bool                                          m_bListening;
 
 public:
-    OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess);
+    OEnumerationByIndex(const css::uno::Reference< starcontainer::XIndexAccess >& _rxAccess);
     virtual ~OEnumerationByIndex();
 
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual staruno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL nextElement(  )
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(staruno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL disposing(const starlang::EventObject& aEvent) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
@@ -120,15 +119,15 @@ class COMPHELPER_DLLPUBLIC OAnyEnumeration : private OEnumerationLock
                                            , public  ::cppu::WeakImplHelper1< starcontainer::XEnumeration >
 {
     sal_Int32                         m_nPos;
-    staruno::Sequence< staruno::Any > m_lItems;
+    css::uno::Sequence< css::uno::Any > m_lItems;
 
 public:
-    OAnyEnumeration(const staruno::Sequence< staruno::Any >& lItems);
+    OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems);
     virtual ~OAnyEnumeration();
 
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual staruno::Any SAL_CALL nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL nextElement(  )
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 };
 

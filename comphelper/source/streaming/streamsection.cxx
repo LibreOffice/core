@@ -24,7 +24,7 @@ namespace comphelper
 {
 
 
-OStreamSection::OStreamSection(const staruno::Reference< stario::XDataInputStream >& _rxInput)
+OStreamSection::OStreamSection(const css::uno::Reference< stario::XDataInputStream >& _rxInput)
     :m_xMarkStream(_rxInput, ::com::sun::star::uno::UNO_QUERY)
     ,m_xInStream(_rxInput)
     ,m_nBlockStart(-1)
@@ -39,7 +39,7 @@ OStreamSection::OStreamSection(const staruno::Reference< stario::XDataInputStrea
 }
 
 
-OStreamSection::OStreamSection(const staruno::Reference< stario::XDataOutputStream >& _rxOutput, sal_Int32 _nPresumedLength)
+OStreamSection::OStreamSection(const css::uno::Reference< stario::XDataOutputStream >& _rxOutput, sal_Int32 _nPresumedLength)
     :m_xMarkStream(_rxOutput, ::com::sun::star::uno::UNO_QUERY)
     ,m_xOutStream(_rxOutput)
     ,m_nBlockStart(-1)
@@ -87,7 +87,7 @@ OStreamSection::~OStreamSection()
             }
         }
     }
-    catch(const staruno::Exception&)
+    catch(const css::uno::Exception&)
     {
     }
 }

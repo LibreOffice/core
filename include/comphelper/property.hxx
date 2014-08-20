@@ -35,10 +35,7 @@
 //... namespace comphelper .......................................................
 namespace comphelper
 {
-
-
     namespace starbeans = ::com::sun::star::beans;
-    namespace staruno   = ::com::sun::star::uno;
 
 /** compare two properties by name
 */
@@ -80,7 +77,7 @@ namespace comphelper
 
 
 /// remove the property with the given name from the given sequence
-COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>& seqProps, const OUString& _rPropName);
+COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<starbeans::Property>& seqProps, const OUString& _rPropName);
 
 
 /** within the given property sequence, modify attributes of a special property
@@ -89,19 +86,19 @@ COMPHELPER_DLLPUBLIC void RemoveProperty(staruno::Sequence<starbeans::Property>&
     @param  _nAddAttrib     the attributes which should be added
     @param  _nRemoveAttrib  the attributes which should be removed
 */
-COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(staruno::Sequence<starbeans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
+COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(css::uno::Sequence<starbeans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
 
 
 /** check if the given set has the given property.
 */
-COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const staruno::Reference<starbeans::XPropertySet>& _rxSet);
+COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const css::uno::Reference<starbeans::XPropertySet>& _rxSet);
 
 
 /** copy properties between property sets, in compliance with the property
     attributes of the target object
 */
-COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPropertySet>& _rxSource,
-                    const staruno::Reference<starbeans::XPropertySet>& _rxDest);
+COMPHELPER_DLLPUBLIC void copyProperties(const css::uno::Reference<starbeans::XPropertySet>& _rxSource,
+                    const css::uno::Reference<starbeans::XPropertySet>& _rxDest);
 
 
 //= property conversion helpers
@@ -117,7 +114,7 @@ COMPHELPER_DLLPUBLIC void copyProperties(const staruno::Reference<starbeans::XPr
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <typename T>
-bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const T& _rCurrentValue)
+bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, const T& _rCurrentValue)
 {
     bool bModified(false);
     T aNewValue = T();
@@ -141,10 +138,10 @@ bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
 template <class ENUMTYPE>
-bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
+bool tryPropertyValueEnum(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, const ENUMTYPE& _rCurrentValue)
 {
     if (cppu::getTypeFavourUnsigned(&_rCurrentValue).getTypeClass()
-        != staruno::TypeClass_ENUM)
+        != css::uno::TypeClass_ENUM)
         return tryPropertyValue(_rConvertedValue, _rOldValue, _rValueToSet, _rCurrentValue);
 
     bool bModified(false);
@@ -170,7 +167,7 @@ bool tryPropertyValueEnum(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /
                     sal_False, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to a boolean type
 */
-inline bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any& /*out*/_rOldValue, const staruno::Any& _rValueToSet, bool _bCurrentValue)
+inline bool tryPropertyValue(css::uno::Any& /*out*/_rConvertedValue, css::uno::Any& /*out*/_rOldValue, const css::uno::Any& _rValueToSet, bool _bCurrentValue)
 {
     bool bModified(false);
     sal_Bool bNewValue(sal_False);
@@ -194,7 +191,7 @@ inline bool tryPropertyValue(staruno::Any& /*out*/_rConvertedValue, staruno::Any
                     sal_False, if the value could be converted and has not changed
     @exception      InvalidArgumentException thrown if the value could not be converted to the requested type (which is the template argument)
 */
-COMPHELPER_DLLPUBLIC bool tryPropertyValue(staruno::Any& _rConvertedValue, staruno::Any& _rOldValue, const staruno::Any& _rValueToSet, const staruno::Any& _rCurrentValue, const staruno::Type& _rExpectedType);
+COMPHELPER_DLLPUBLIC bool tryPropertyValue(css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, const css::uno::Any& _rValueToSet, const css::uno::Any& _rCurrentValue, const css::uno::Type& _rExpectedType);
 
 
 }

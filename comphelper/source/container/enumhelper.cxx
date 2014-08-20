@@ -29,7 +29,7 @@ namespace comphelper
 //= OEnumerationByName
 
 
-OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess)
+OEnumerationByName::OEnumerationByName(const css::uno::Reference<starcontainer::XNameAccess>& _rxAccess)
     :m_aNames(_rxAccess->getElementNames())
     ,m_nPos(0)
     ,m_xAccess(_rxAccess)
@@ -39,8 +39,8 @@ OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::X
 }
 
 
-OEnumerationByName::OEnumerationByName(const staruno::Reference<starcontainer::XNameAccess>& _rxAccess,
-                                       const staruno::Sequence< OUString >&           _aNames  )
+OEnumerationByName::OEnumerationByName(const css::uno::Reference<starcontainer::XNameAccess>& _rxAccess,
+                                       const css::uno::Sequence< OUString >&           _aNames  )
     :m_aNames(_aNames)
     ,m_nPos(0)
     ,m_xAccess(_rxAccess)
@@ -56,7 +56,7 @@ OEnumerationByName::~OEnumerationByName()
 }
 
 
-sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -73,12 +73,12 @@ sal_Bool SAL_CALL OEnumerationByName::hasMoreElements(  ) throw(staruno::Runtime
 }
 
 
-staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL OEnumerationByName::nextElement(  )
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    staruno::Any aRes;
+    css::uno::Any aRes;
     if (m_xAccess.is() && m_nPos < m_aNames.getLength())
         aRes = m_xAccess->getByName(m_aNames.getConstArray()[m_nPos++]);
 
@@ -96,7 +96,7 @@ staruno::Any SAL_CALL OEnumerationByName::nextElement(  )
 
 
 void SAL_CALL OEnumerationByName::disposing(const starlang::EventObject& aEvent)
-        throw(staruno::RuntimeException, std::exception)
+        throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -113,7 +113,7 @@ void OEnumerationByName::impl_startDisposeListening()
         return;
 
     ++m_refCount;
-    staruno::Reference< starlang::XComponent > xDisposable(m_xAccess, staruno::UNO_QUERY);
+    css::uno::Reference< starlang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
@@ -131,7 +131,7 @@ void OEnumerationByName::impl_stopDisposeListening()
         return;
 
     ++m_refCount;
-    staruno::Reference< starlang::XComponent > xDisposable(m_xAccess, staruno::UNO_QUERY);
+    css::uno::Reference< starlang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
@@ -144,7 +144,7 @@ void OEnumerationByName::impl_stopDisposeListening()
 //= OEnumerationByIndex
 
 
-OEnumerationByIndex::OEnumerationByIndex(const staruno::Reference< starcontainer::XIndexAccess >& _rxAccess)
+OEnumerationByIndex::OEnumerationByIndex(const css::uno::Reference< starcontainer::XIndexAccess >& _rxAccess)
     :m_nPos(0)
     ,m_xAccess(_rxAccess)
     ,m_bListening(false)
@@ -159,7 +159,7 @@ OEnumerationByIndex::~OEnumerationByIndex()
 }
 
 
-sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -176,12 +176,12 @@ sal_Bool SAL_CALL OEnumerationByIndex::hasMoreElements(  ) throw(staruno::Runtim
 }
 
 
-staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    staruno::Any aRes;
+    css::uno::Any aRes;
     if (m_xAccess.is())
     {
         aRes = m_xAccess->getByIndex(m_nPos++);
@@ -199,7 +199,7 @@ staruno::Any SAL_CALL OEnumerationByIndex::nextElement(  )
 
 
 void SAL_CALL OEnumerationByIndex::disposing(const starlang::EventObject& aEvent)
-        throw(staruno::RuntimeException, std::exception)
+        throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -216,7 +216,7 @@ void OEnumerationByIndex::impl_startDisposeListening()
         return;
 
     ++m_refCount;
-    staruno::Reference< starlang::XComponent > xDisposable(m_xAccess, staruno::UNO_QUERY);
+    css::uno::Reference< starlang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->addEventListener(this);
@@ -234,7 +234,7 @@ void OEnumerationByIndex::impl_stopDisposeListening()
         return;
 
     ++m_refCount;
-    staruno::Reference< starlang::XComponent > xDisposable(m_xAccess, staruno::UNO_QUERY);
+    css::uno::Reference< starlang::XComponent > xDisposable(m_xAccess, css::uno::UNO_QUERY);
     if (xDisposable.is())
     {
         xDisposable->removeEventListener(this);
@@ -248,7 +248,7 @@ void OEnumerationByIndex::impl_stopDisposeListening()
 
 
 
-OAnyEnumeration::OAnyEnumeration(const staruno::Sequence< staruno::Any >& lItems)
+OAnyEnumeration::OAnyEnumeration(const css::uno::Sequence< css::uno::Any >& lItems)
     :m_nPos(0)
     ,m_lItems(lItems)
 {
@@ -260,7 +260,7 @@ OAnyEnumeration::~OAnyEnumeration()
 }
 
 
-sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
@@ -268,8 +268,8 @@ sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeExc
 }
 
 
-staruno::Any SAL_CALL OAnyEnumeration::nextElement(  )
-        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL OAnyEnumeration::nextElement(  )
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     if ( ! hasMoreElements())
         throw starcontainer::NoSuchElementException();

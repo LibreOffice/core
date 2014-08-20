@@ -30,23 +30,22 @@ namespace comphelper
 {
 
 
-    namespace staruno   = ::com::sun::star::uno;
     namespace starlang  = ::com::sun::star::lang;
     namespace starutil  = ::com::sun::star::util;
 
     /// returns the ::com::sun::star::util::NumberFormat of the given key under the given formats
-    COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
+    COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const css::uno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
 
     /// returns the ::com::sun::star::util::NumberFormat of the given key under the given formatter
-    COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey);
+    COMPHELPER_DLLPUBLIC sal_Int16 getNumberFormatType(const css::uno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey);
 
     /// returns the decimals of the given numeric number formatunder the given formats
-    COMPHELPER_DLLPUBLIC staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
+    COMPHELPER_DLLPUBLIC css::uno::Any getNumberFormatDecimals(const css::uno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey);
 
     /** returns the standard format for the given type and the given _rLocale
     */
     sal_Int32 getStandardFormat(
-            const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
+            const css::uno::Reference<starutil::XNumberFormatter>& xFormatter,
             sal_Int16 nType,
             const starlang::Locale& _rLocale);
 

@@ -21,7 +21,7 @@
 
 namespace comphelper
 {
-staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst)
+css::uno::Sequence<sal_Int16> findValue(const css::uno::Sequence< OUString >& _rList, const OUString& _rValue, bool _bOnlyFirst)
 {
     sal_Int32 nLength = _rList.getLength();
 
@@ -42,18 +42,18 @@ staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< OUString >& _rLi
         // fill sequence
         if( nPos>-1 )
         {
-            staruno::Sequence<sal_Int16> aRetSeq( 1 );
+            css::uno::Sequence<sal_Int16> aRetSeq( 1 );
             aRetSeq.getArray()[0] = (sal_Int16)nPos;
 
             return aRetSeq;
         }
 
-        return staruno::Sequence<sal_Int16>();
+        return css::uno::Sequence<sal_Int16>();
 
     }
     else
     {
-        staruno::Sequence<sal_Int16> aRetSeq( nLength );
+        css::uno::Sequence<sal_Int16> aRetSeq( nLength );
         sal_Int16* pReturn = aRetSeq.getArray();
 
         // how often does the value occur?

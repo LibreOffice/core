@@ -37,21 +37,18 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 namespace comphelper
 {
-
-
-    namespace staruno       = ::com::sun::star::uno;
     namespace starawt       = ::com::sun::star::awt;
     namespace starlang      = ::com::sun::star::lang;
 
-    typedef staruno::Reference< staruno::XInterface >           InterfaceRef;
-    typedef staruno::Sequence< OUString >                StringSequence;
+    typedef css::uno::Reference< css::uno::XInterface >           InterfaceRef;
+    typedef css::uno::Sequence< OUString >                StringSequence;
 
 
     /** compare the two given Anys
         The comparison is deep, means if one of the Any's contains an Any which contains an Any ..., this is resolved <br/>
-        Other types recognized currently : FontDescriptor, ::com::sun::star::util::Date/Tim/DateTime, staruno::Sequence<sal_Int8>
+        Other types recognized currently : FontDescriptor, ::com::sun::star::util::Date/Tim/DateTime, css::uno::Sequence<sal_Int8>
     */
-    COMPHELPER_DLLPUBLIC bool compare(const staruno::Any& rLeft, const staruno::Any& rRight);
+    COMPHELPER_DLLPUBLIC bool compare(const css::uno::Any& rLeft, const css::uno::Any& rRight);
 
 
     /** compare two FontDescriptor's
@@ -64,7 +61,7 @@ namespace comphelper
 
 
     /// returns sal_True if objects of the types given are "compatible"
-    COMPHELPER_DLLPUBLIC bool isAssignableFrom(const staruno::Type& _rAssignable, const staruno::Type& _rFrom);
+    COMPHELPER_DLLPUBLIC bool isAssignableFrom(const css::uno::Type& _rAssignable, const css::uno::Type& _rFrom);
 
 
     /** just a small shortcut ...
@@ -75,7 +72,7 @@ namespace comphelper
         So this function is nearly senseless ....
     */
     template <class TYPE>
-    bool isA(const staruno::Type& _rType, TYPE* pDummy)
+    bool isA(const css::uno::Type& _rType, TYPE* pDummy)
     {
         return  _rType.equals(cppu::getTypeFavourUnsigned(pDummy));
     }
@@ -85,7 +82,7 @@ namespace comphelper
         same comment as for the other isA ....
     */
     template <class TYPE>
-    bool isA(const staruno::Any& _rVal, TYPE* pDummy)
+    bool isA(const css::uno::Any& _rVal, TYPE* pDummy)
     {
         return  _rVal.getValueType().equals(
             cppu::getTypeFavourUnsigned(pDummy));
@@ -95,20 +92,20 @@ namespace comphelper
     /** check if a type you have at hand at runtime is equal to another type you have at compile time
     */
     template <class TYPE>
-    bool isAReference(const staruno::Any& _rVal, TYPE*)
+    bool isAReference(const css::uno::Any& _rVal, TYPE*)
     {
         return  _rVal.getValueType().equals(
             cppu::getTypeFavourUnsigned(
-                static_cast<staruno::Reference<TYPE>*>(NULL)));
+                static_cast<css::uno::Reference<TYPE>*>(NULL)));
     }
 
 
     /** ask the given object for an XComponent interface and dispose on it
     */
     template <class TYPE>
-    void disposeComponent(staruno::Reference<TYPE>& _rxComp)
+    void disposeComponent(css::uno::Reference<TYPE>& _rxComp)
     {
-        staruno::Reference<starlang::XComponent> xComp(_rxComp, staruno::UNO_QUERY);
+        css::uno::Reference<starlang::XComponent> xComp(_rxComp, css::uno::UNO_QUERY);
         if (xComp.is())
         {
             xComp->dispose();
@@ -117,10 +114,10 @@ namespace comphelper
     }
 
     template <class TYPE>
-    bool getImplementation(TYPE*& _pObject, const staruno::Reference< staruno::XInterface >& _rxIFace)
+    bool getImplementation(TYPE*& _pObject, const css::uno::Reference< css::uno::XInterface >& _rxIFace)
     {
         _pObject = NULL;
-        staruno::Reference< starlang::XUnoTunnel > xTunnel(_rxIFace, staruno::UNO_QUERY);
+        css::uno::Reference< starlang::XUnoTunnel > xTunnel(_rxIFace, css::uno::UNO_QUERY);
         if (xTunnel.is())
             _pObject = reinterpret_cast< TYPE* >(xTunnel->getSomething(TYPE::getUnoTunnelImplementationId()));
 
@@ -137,7 +134,7 @@ namespace comphelper
 
     /** examine a sequence for the com.sun.star.uno::Type of it's elements.
     */
-    COMPHELPER_DLLPUBLIC staruno::Type getSequenceElementType(const staruno::Type& _rSequenceType);
+    COMPHELPER_DLLPUBLIC css::uno::Type getSequenceElementType(const css::uno::Type& _rSequenceType);
 
 
 //= replacement of the former UsrAny.getXXX methods
@@ -147,23 +144,23 @@ namespace comphelper
     // no, we don't use templates here. This would lead to a lot of implicit uses of the conversion methods,
     // which would be difficult to trace ...
 
-    COMPHELPER_DLLPUBLIC sal_Int64      getINT64(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC sal_Int32      getINT32(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC double         getDouble(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC float          getFloat(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC OUString    getString(const staruno::Any& _rAny);
-    COMPHELPER_DLLPUBLIC bool       getBOOL(const staruno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int64      getINT64(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int32      getINT32(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC sal_Int16      getINT16(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC double         getDouble(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC float          getFloat(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC OUString    getString(const css::uno::Any& _rAny);
+    COMPHELPER_DLLPUBLIC bool       getBOOL(const css::uno::Any& _rAny);
 
-    COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const staruno::Any& _rAny) throw(starlang::IllegalArgumentException);
+    COMPHELPER_DLLPUBLIC sal_Int32      getEnumAsINT32(const css::uno::Any& _rAny) throw(starlang::IllegalArgumentException);
 
 //= replacement of some former UsrAny.setXXX methods - can be used with rvalues
-    inline void setBOOL(staruno::Any& _rAny, bool _b)
+    inline void setBOOL(css::uno::Any& _rAny, bool _b)
     { _rAny.setValue(&_b, ::getBooleanCppuType()); }
 
 //= extension of ::cppu::makeAny()
-    inline staruno::Any makeBoolAny(bool _b)
-    { return staruno::Any(&_b, ::getBooleanCppuType()); }
+    inline css::uno::Any makeBoolAny(bool _b)
+    { return css::uno::Any(&_b, ::getBooleanCppuType()); }
 
 
 }   // namespace comphelper

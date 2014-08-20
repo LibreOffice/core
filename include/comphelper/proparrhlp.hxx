@@ -33,12 +33,7 @@ namespace cppu {
 //... namespace comphelper ................................................
 namespace comphelper
 {
-
-
-    namespace staruno   = ::com::sun::star::uno;
     namespace starbeans = ::com::sun::star::beans;
-
-
 
 
 template <typename TYPE> struct OPropertyArrayUsageHelperMutex

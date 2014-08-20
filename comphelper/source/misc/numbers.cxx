@@ -33,14 +33,14 @@ namespace starbeans = ::com::sun::star::beans;
 namespace starlang  = ::com::sun::star::lang;
 
 
-sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
+sal_Int16 getNumberFormatType(const css::uno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     sal_Int16 nReturn(starutil::NumberFormat::UNDEFINED);
     if (xFormats.is())
     {
         try
         {
-            staruno::Reference<starbeans::XPropertySet> xFormat(xFormats->getByKey(nKey));
+            css::uno::Reference<starbeans::XPropertySet> xFormat(xFormats->getByKey(nKey));
             if (xFormat.is())
                 xFormat->getPropertyValue("Type") >>= nReturn;
         }
@@ -53,23 +53,23 @@ sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormats>
 }
 
 
-sal_Int16 getNumberFormatType(const staruno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey)
+sal_Int16 getNumberFormatType(const css::uno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey)
 {
     OSL_ENSURE(xFormatter.is(), "getNumberFormatType : the formatter isn't valid !");
-    staruno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter->getNumberFormatsSupplier());
+    css::uno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter->getNumberFormatsSupplier());
     OSL_ENSURE(xSupplier.is(), "getNumberFormatType : the formatter doesn't implement a supplier !");
-    staruno::Reference<starutil::XNumberFormats> xFormats( xSupplier->getNumberFormats());
+    css::uno::Reference<starutil::XNumberFormats> xFormats( xSupplier->getNumberFormats());
     return getNumberFormatType(xFormats, nKey);
 }
 
 
-staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
+css::uno::Any getNumberFormatDecimals(const css::uno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     if (xFormats.is())
     {
         try
         {
-            staruno::Reference<starbeans::XPropertySet> xFormat( xFormats->getByKey(nKey));
+            css::uno::Reference<starbeans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
                 static OUString PROPERTY_DECIMALS( "Decimals" );
@@ -81,19 +81,19 @@ staruno::Any getNumberFormatDecimals(const staruno::Reference<starutil::XNumberF
             OSL_TRACE("getNumberFormatDecimals : invalid key! (may be created with another formatter ?)");
         }
     }
-    return staruno::makeAny((sal_Int16)0);
+    return css::uno::makeAny((sal_Int16)0);
 }
 
 
 
 sal_Int32 getStandardFormat(
-        const staruno::Reference<starutil::XNumberFormatter>& xFormatter,
+        const css::uno::Reference<starutil::XNumberFormatter>& xFormatter,
         sal_Int16 nType,
         const starlang::Locale& _rLocale)
 {
-    staruno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter.is() ? xFormatter->getNumberFormatsSupplier() : staruno::Reference<starutil::XNumberFormatsSupplier>(NULL));
-    staruno::Reference<starutil::XNumberFormats> xFormats( xSupplier.is() ? xSupplier->getNumberFormats() : staruno::Reference<starutil::XNumberFormats>(NULL));
-    staruno::Reference<starutil::XNumberFormatTypes> xTypes(xFormats, staruno::UNO_QUERY);
+    css::uno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter.is() ? xFormatter->getNumberFormatsSupplier() : css::uno::Reference<starutil::XNumberFormatsSupplier>(NULL));
+    css::uno::Reference<starutil::XNumberFormats> xFormats( xSupplier.is() ? xSupplier->getNumberFormats() : css::uno::Reference<starutil::XNumberFormats>(NULL));
+    css::uno::Reference<starutil::XNumberFormatTypes> xTypes(xFormats, css::uno::UNO_QUERY);
     OSL_ENSURE(xTypes.is(), "getStandardFormat : no format types !");
 
     return xTypes.is() ? xTypes->getStandardFormat(nType, _rLocale) : 0;
