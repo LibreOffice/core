@@ -435,11 +435,11 @@ public class ImageProducer
         }
         catch (IOException e)
         {
-            LOGGER.warn("Failed to load image from local input-repository" + e);
+            LOGGER.warn("Failed to load image from local input-repository", e);
         }
         catch (ReportExecutionException e)
         {
-            LOGGER.warn("Failed to create image from local input-repository" + e);
+            LOGGER.warn("Failed to create image from local input-repository", e);
         }
 
         if (!preserveIRI)
