@@ -61,7 +61,7 @@ public class SysUtils {
     for (int i = 0; i < dfs.length; i++) {
         if (dfs[i].MimeType.startsWith("text/plain")) {
             Object data = xTrans.getTransferData(dfs[i]);
-            if (data != null && data instanceof String) {
+            if (data instanceof String) {
                 return (String) data;
             }
         }

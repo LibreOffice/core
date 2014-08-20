@@ -1603,7 +1603,7 @@ class util
     static boolean isVoidAny(Object obj)
     {
         boolean ret= false;
-        if( obj != null && obj instanceof Any)
+        if(obj instanceof Any)
         {
             Any a= (Any) obj;
             if( a.getType().getTypeClass().equals( TypeClass.INTERFACE)

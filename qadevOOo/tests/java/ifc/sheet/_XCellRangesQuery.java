@@ -95,7 +95,7 @@ public class _XCellRangesQuery extends MultiMethodTest {
         // and the environment has to be disposed: this is necessary for objects
         // that do not make entries on the sheet themselves
         Object o = tEnv.getObjRelation("XCellRangesQuery.CREATEENTRIES");
-        if (o != null && o instanceof Boolean) {
+        if (o instanceof Boolean) {
             bMakeEntriesAndDispose = ((Boolean)o).booleanValue();
         }
         if(bMakeEntriesAndDispose) {

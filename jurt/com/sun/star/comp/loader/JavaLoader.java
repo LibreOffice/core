@@ -323,7 +323,7 @@ public class JavaLoader implements XImplementationLoader,
         try {
             if (null != compfac_method) {
                 Object ret = compfac_method.invoke( clazz, new Object [] { implementationName } );
-                if (null == ret || !(ret instanceof XSingleComponentFactory))
+                if (!(ret instanceof XSingleComponentFactory))
                     throw new CannotActivateFactoryException(
                         "No factory object for " + implementationName );
 

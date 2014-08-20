@@ -52,7 +52,7 @@ public class AccessibilityTreeModelBase
         Object aChild = null;
         try
         {
-            if (aParent != null && aParent instanceof AccessibleTreeNode)
+            if (aParent instanceof AccessibleTreeNode)
                 aChild = ((AccessibleTreeNode)aParent).getChild(nIndex);
             else
                 System.out.println ("getChild called for unknown parent node");
@@ -69,7 +69,7 @@ public class AccessibilityTreeModelBase
         Object aChild = null;
         try
         {
-            if (aParent != null && aParent instanceof AccessibleTreeNode)
+            if (aParent instanceof AccessibleTreeNode)
                 aChild = ((AccessibleTreeNode)aParent).getChildNoCreate(nIndex);
             else
                 System.out.println ("getChild called for unknown parent node");

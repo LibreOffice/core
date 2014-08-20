@@ -71,7 +71,7 @@ public class Parameters implements XPropertySet {
     public String get(String paramName) {
         Object res = parameters.get(paramName);
 
-        if (res != null && res instanceof String)
+        if (res instanceof String)
             return (String)res;
 
         if (defaults != null)
