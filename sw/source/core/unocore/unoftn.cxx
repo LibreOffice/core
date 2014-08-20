@@ -50,6 +50,7 @@ private:
 public:
 
     SwXFootnote &               m_rThis;
+    uno::WeakReference<uno::XInterface> m_wThis;
     const bool                  m_bIsEndnote;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     bool                        m_bIsDescriptor;
@@ -96,7 +97,12 @@ void SwXFootnote::Impl::Invalidate()
     }
     m_pFmtFtn = 0;
     m_rThis.SetDoc(0);
-    lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
+    lang::EventObject const ev(xThis);
     m_EventListeners.disposeAndClear(ev);
 }
 
@@ -127,16 +133,27 @@ SwXFootnote::~SwXFootnote()
 }
 
 uno::Reference<text::XFootnote>
-SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFmtFtn & rFootnoteFmt)
+SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFmtFtn *const pFootnoteFmt,
+        bool const isEndnote)
 {
     // i#105557: do not iterate over the registered clients: race condition
     uno::Reference<text::XFootnote> xNote;
-    xNote = rFootnoteFmt.GetXFootnote();
+    if (pFootnoteFmt)
+    {
+        xNote = pFootnoteFmt->GetXFootnote();
+    }
     if (!xNote.is())
     {
-        SwXFootnote *const pNote(new SwXFootnote(rDoc, rFootnoteFmt));
+        SwXFootnote *const pNote((pFootnoteFmt)
+                ? new SwXFootnote(rDoc, *pFootnoteFmt)
+                : new SwXFootnote(isEndnote));
         xNote.set(pNote);
-        rFootnoteFmt.SetXFootnote(xNote);
+        if (pFootnoteFmt)
+        {
+            pFootnoteFmt->SetXFootnote(xNote);
+        }
+        // need a permanent Reference to initialize m_wThis
+        pNote->m_pImpl->m_wThis = xNote;
     }
     return xNote;
 }

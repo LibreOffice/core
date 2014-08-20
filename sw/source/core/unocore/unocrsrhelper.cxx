@@ -608,7 +608,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                     {
                         const uno::Reference< text::XFootnote > xFootnote =
                             SwXFootnote::CreateXFootnote(*rPam.GetDoc(),
-                                    const_cast<SwFmtFtn&>(rFtn));
+                                    &const_cast<SwFmtFtn&>(rFtn));
                         *pAny <<= xFootnote;
                     }
                 }

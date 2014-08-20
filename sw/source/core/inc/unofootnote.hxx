@@ -67,13 +67,13 @@ protected:
     virtual ~SwXFootnote();
 
     SwXFootnote(SwDoc & rDoc, SwFmtFtn & rFmt);
+    SwXFootnote(const bool bEndnote);
 
 public:
 
-    SwXFootnote(const bool bEndnote);
-
     static css::uno::Reference<css::text::XFootnote>
-        CreateXFootnote(SwDoc & rDoc, SwFmtFtn & rFootnoteFmt);
+        CreateXFootnote(SwDoc & rDoc, SwFmtFtn * pFootnoteFmt,
+                bool isEndnote = false);
 
     // XInterface
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(

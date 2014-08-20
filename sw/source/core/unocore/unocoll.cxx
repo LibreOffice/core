@@ -613,10 +613,10 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
 
         case  SW_SERVICE_TYPE_FOOTNOTE :
-            xRet =  (cppu::OWeakObject*)new SwXFootnote(false);
+            xRet = SwXFootnote::CreateXFootnote(*pDoc, 0, false);
         break;
         case  SW_SERVICE_TYPE_ENDNOTE  :
-            xRet =  (cppu::OWeakObject*)new SwXFootnote(true);
+            xRet = SwXFootnote::CreateXFootnote(*pDoc, 0, true);
         break;
         case  SW_SERVICE_CONTENT_INDEX_MARK :
         case  SW_SERVICE_USER_INDEX_MARK    :
@@ -1836,7 +1836,7 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
             if(nCount == nIndex)
             {
                 xRef = SwXFootnote::CreateXFootnote(*GetDoc(),
-                        const_cast<SwFmtFtn&>(rFtn));
+                        &const_cast<SwFmtFtn&>(rFtn));
                 aRet <<= xRef;
                 break;
             }
@@ -1865,7 +1865,7 @@ sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException, std::exce
 
 Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
 {
-    return SwXFootnote::CreateXFootnote(rDoc, const_cast<SwFmtFtn&>(rFmt));
+    return SwXFootnote::CreateXFootnote(rDoc, &const_cast<SwFmtFtn&>(rFmt));
 }
 
 OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException, std::exception )
