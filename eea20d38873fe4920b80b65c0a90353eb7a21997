@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_db672b24",
+        "filename": "connectivity/source/commontools/DateConversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-20T07:59:45Z",
+      "side": 1,
+      "message": "Using a combination of assert(xFormatTypes.is()) and if (xFormatTypes.is() {...} does not make sense. Either xFormatTypes is required and the function cannot work without it (assert) or it is not required (if).",
+      "revId": "eea20d38873fe4920b80b65c0a90353eb7a21997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_bb6c6f09",
+        "filename": "connectivity/source/commontools/DateConversion.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-20T07:59:45Z",
+      "side": 1,
+      "message": "Please, do not use the obsolete OSL_* debug macros. Also, it is certain that xFormats-\u003egetByKey(nKeyToUse) always returns something?",
+      "revId": "eea20d38873fe4920b80b65c0a90353eb7a21997",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
