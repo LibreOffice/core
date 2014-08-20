@@ -29,7 +29,6 @@
 namespace utl
 {
     namespace stario    = ::com::sun::star::io;
-    namespace staruno   = ::com::sun::star::uno;
 
 /**
  * The helper implementation for a using input streams based on SvLockBytes.
@@ -54,16 +53,16 @@ public:
         ,m_nActPos(_nPos)
         ,m_nAvailable(_nAvailable){}
 
-// staruno::XInterface
+// css::uno::XInterface
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE;
     virtual void SAL_CALL release() throw () SAL_OVERRIDE;
 
 // stario::XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL readSomeBytes( staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL available(  ) throw(stario::NotConnectedException, stario::IOException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeInput(  ) throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL available(  ) throw(stario::NotConnectedException, stario::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeInput(  ) throw (stario::NotConnectedException, stario::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int64 SAL_CALL getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
