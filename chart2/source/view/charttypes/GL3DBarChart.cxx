@@ -189,11 +189,11 @@ class RenderBenchMarkThread : public RenderThread
 public:
     RenderBenchMarkThread(GL3DBarChart * pChart)
         : RenderThread(pChart)
+        , mbAutoFlyExecuting(0)
         , mbExecuting(false)
         , mbNeedFlyBack(false)
         , mnStep(0)
         , mnStepsTotal(0)
-        , mbAutoFlyExecuting(0)
     {
         osl_getSystemTime(&maClickFlyBackStartTime);
         osl_getSystemTime(&maClickFlyBackEndTime);
@@ -536,7 +536,6 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     if (BENCH_MARK_MODE)
     {
         mnColorRate = 0;
-        mnAutoFlyBarID = 0;
     }
     maShapes.push_back(new opengl3D::Camera(mpRenderer.get()));
     mpCamera = static_cast<opengl3D::Camera*>(&maShapes.back());
@@ -601,8 +600,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             recordBarHistory(nId, nVal);
             if (BENCH_MARK_MODE)
             {
-                std::map<sal_uInt32, sal_uInt32>::const_iterator itr = maBarColorMap.find(nId);
-                if (itr == maBarColorMap.end())
+                std::map<sal_uInt32, sal_uInt32>::const_iterator it = maBarColorMap.find(nId);
+                if (it == maBarColorMap.end())
                 {
                     maBarColorMap[nId] = nColor;
                 }
@@ -1070,9 +1069,10 @@ void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
 
 void GL3DBarChart::updateClickEvent()
 {
-    if (maRenderEvent == EVENT_CLICK)
+    if (maRenderEvent == EVENT_CLICK || maRenderEvent == EVENT_AUTO_FLY)
     {
-        std::list<float>& aList = maBarHistory[mSelectBarId];
+        sal_uInt32 nBarId = maRenderEvent == EVENT_CLICK ? mSelectBarId : mnAutoFlyBarID;
+        std::list<float>& aList = maBarHistory[nBarId];
         sal_uInt32 idex = 0;
         for (std::list<float>::iterator it = aList.begin();it != aList.end();++it)
         {
@@ -1083,7 +1083,7 @@ void GL3DBarChart::updateClickEvent()
                 maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, CALC_POS_EVENT_ID));
                 const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
                 float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.03;
-                std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(mSelectBarId);
+                std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(nBarId);
                 const BarInformation& rBarInfo = itr->second;
                 glm::vec3 aTextPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
                                               rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
@@ -1240,7 +1240,7 @@ void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
     sal_uInt32 nPreColor = maBarColorMap[nId];
     maBarColorMap[nId] = nColor;
     //if has manul event, just record the color and process manul event first
-    if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_AUTO_FLY))
+    if ((maRenderEvent != EVENT_NONE))
     {
         return;
     }
