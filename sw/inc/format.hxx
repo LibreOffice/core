@@ -98,6 +98,8 @@ public:
     //UUUUinline
     SfxItemState GetItemState( sal_uInt16 nWhich, bool bSrchInParent = true,
                                     const SfxPoolItem **ppItem = 0 ) const;
+    SfxItemState GetBackgroundState(SvxBrushItem &rItem,
+                                    bool bSrchInParent = true) const;
     virtual bool SetFmtAttr( const SfxPoolItem& rAttr );
     virtual bool SetFmtAttr( const SfxItemSet& rSet );
     virtual bool ResetFmtAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 = 0 );

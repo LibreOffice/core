@@ -821,7 +821,7 @@ void DocxExport::WriteSettings()
     }
 
     // Display Background Shape
-    if (boost::optional<const SvxBrushItem*> oBrush = getBackground())
+    if (boost::optional<SvxBrushItem> oBrush = getBackground())
     {
         // Turn on the 'displayBackgroundShape'
         pFS->singleElementNS( XML_w, XML_displayBackgroundShape, FSEND );
@@ -1280,19 +1280,18 @@ bool DocxExport::isMirroredMargin()
     return bMirroredMargins;
 }
 
-boost::optional<const SvxBrushItem*> DocxExport::getBackground()
+boost::optional<SvxBrushItem> DocxExport::getBackground()
 {
-    boost::optional<const SvxBrushItem*> oRet;
+    boost::optional<SvxBrushItem> oRet;
     const SwFrmFmt &rFmt = pDoc->GetPageDesc(0).GetMaster();
-    const SfxPoolItem* pItem = 0;
-    SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
+    SvxBrushItem aBrush(RES_BACKGROUND);
+    SfxItemState eState = rFmt.GetBackgroundState(aBrush);
 
-    if (SFX_ITEM_SET == eState && pItem)
+    if (SFX_ITEM_SET == eState)
     {
         // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
-        const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
-        if (pBrush->GetColor().GetColor() != COL_AUTO)
-            oRet.reset(pBrush);
+        if (aBrush.GetColor().GetColor() != COL_AUTO)
+            oRet.reset(aBrush);
     }
     return oRet;
 }
@@ -1303,9 +1302,9 @@ void DocxExport::WriteMainText()
     m_pDocumentFS->startElementNS( XML_w, XML_document, MainXmlNamespaces( m_pDocumentFS ));
 
     // Write background page color
-    if (boost::optional<const SvxBrushItem*> oBrush = getBackground())
+    if (boost::optional<SvxBrushItem> oBrush = getBackground())
     {
-        Color backgroundColor = (*oBrush)->GetColor();
+        Color backgroundColor = oBrush->GetColor();
         OString aBackgroundColorStr = msfilter::util::ConvertColor(backgroundColor);
 
         m_pDocumentFS->singleElementNS( XML_w, XML_background, FSNS( XML_w, XML_color ), aBackgroundColorStr, FSEND );

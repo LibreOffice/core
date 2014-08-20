@@ -409,13 +409,12 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
     return aSet.Get( nWhich, bInParents );
 }
 
-
 SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const SfxPoolItem **ppItem ) const
 {
     if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
+        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or SwFmt::GetBackgroundStat (simple fallback is in place and used)");
         const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
 
         // check if the new fill attributes are used
@@ -424,6 +423,7 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
             // if yes, fill the local SvxBrushItem using the new fill attributes
             // as good as possible to have an instance for the pointer to point
             // to and return as state that it is set
+
             static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
             aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bSrchInParent);
@@ -444,6 +444,33 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
     return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
 }
 
+SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) const
+{
+    if (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
+    {
+        //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
+        const drawinglayer::attribute::SdrAllFillAttributesHelperPtr aFill = getSdrAllFillAttributesHelper();
+
+        // check if the new fill attributes are used
+        if(aFill.get() && aFill->isUsed())
+        {
+            // if yes, fill the local SvxBrushItem using the new fill attributes
+            // as good as possible to have an instance for the pointer to point
+            // to and return as state that it is set
+            rItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bSrchInParent);
+            return SFX_ITEM_SET;
+        }
+
+        // if not return SFX_ITEM_DEFAULT to signal that the item is not set
+        return SFX_ITEM_DEFAULT;
+    }
+
+    const SfxPoolItem* pItem = 0;
+    SfxItemState eRet = aSet.GetItemState(RES_BACKGROUND, bSrchInParent, &pItem);
+    if (pItem)
+        rItem = *(const SvxBrushItem*)pItem;
+    return eRet;
+}
 
 bool SwFmt::SetFmtAttr( const SfxPoolItem& rAttr )
 {

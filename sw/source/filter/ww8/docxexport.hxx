@@ -252,7 +252,7 @@ private:
     void WriteEmbeddings();
 
     /// Get background color of the document, if there is one.
-    boost::optional<const SvxBrushItem*> getBackground();
+    boost::optional<SvxBrushItem> getBackground();
 
     /// return true if Page Layout is set as Mirrored
     bool isMirroredMargin();
