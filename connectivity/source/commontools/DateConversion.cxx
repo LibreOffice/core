@@ -263,10 +263,12 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                         nStandardKey = xFormatTypes->getStandardIndex(loc);
                 }
             }
-            // Why use nStandardKey rather than nKeyToUse here? Don't know, but "it was always like that".
+            // Why use nStandardKey rather than nKeyToUse here? I'm not sure, but "it was always like that".
             // Previously had hardcoded 0 instead of nStandardKey, which led to problems with dates
             // because of differences M/D/Y vs D/M/Y. This at least fixes those problems, but possibly
             // nKeyToUse is an even better choice than nStandardKey.
+            // OTOH, using nKeyToUse nullifies the special treatment for percent formats,
+            //       leading to "5" (in a percent format) to be understood as "500%" instead of "5%".
             sal_Int32 nRealUsedKey = xFormatter->detectNumberFormat(nStandardKey, rString);
             if (nRealUsedKey != nKeyToUse)
                 nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~NumberFormat::DEFINED;
