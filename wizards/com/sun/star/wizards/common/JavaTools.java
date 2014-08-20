@@ -48,44 +48,26 @@ public class JavaTools
      */
     public static int[] IntegerTointList(java.util.List<Integer> _aIntegerVector)
     {
-        try
+        int i = 0;
+        int[] nintValues = new int[_aIntegerVector.size()];
+        for (Integer nIntegerValue : _aIntegerVector)
         {
-            Integer[] nIntegerValues = new Integer[_aIntegerVector.size()];
-            int[] nintValues = new int[_aIntegerVector.size()];
-            _aIntegerVector.toArray(nIntegerValues);
-            for (int i = 0; i < nIntegerValues.length; i++)
-            {
-                nintValues[i] = nIntegerValues[i].intValue();
-            }
-            return nintValues;
+            nintValues[++i] = nIntegerValue.intValue();
         }
-        catch (RuntimeException e)
-        {
-            e.printStackTrace(System.err);
-            return null;
-        }
+        return nintValues;
     }
 
     /**converts a list of Boolean values included in a Boolean vector to a list of boolean values
      */
     public static boolean[] BooleanTobooleanList(java.util.List<Boolean> _aBooleanVector)
     {
-        try
+        int i = 0;
+        boolean[] bbooleanValues = new boolean[_aBooleanVector.size()];
+        for (Boolean bBooleanValue : _aBooleanVector)
         {
-            Boolean[] bBooleanValues = new Boolean[_aBooleanVector.size()];
-            boolean[] bbooleanValues = new boolean[_aBooleanVector.size()];
-            _aBooleanVector.toArray(bBooleanValues);
-            for (int i = 0; i < bBooleanValues.length; i++)
-            {
-                bbooleanValues[i] = bBooleanValues[i].booleanValue();
-            }
-            return bbooleanValues;
+            bbooleanValues[++i] = bBooleanValue.booleanValue();
         }
-        catch (RuntimeException e)
-        {
-            e.printStackTrace(System.err);
-            return null;
-        }
+        return bbooleanValues;
     }
 
 
@@ -93,16 +75,15 @@ public class JavaTools
     public static String getlongestArrayItem(String[] StringArray)
     {
         String sLongestItem = PropertyNames.EMPTY_STRING;
-        int FieldCount = StringArray.length;
+        int iCurLength;
         int iOldLength = 0;
-        int iCurLength = 0;
-        for (int i = 0; i < FieldCount; i++)
+        for (String str : StringArray)
         {
-            iCurLength = StringArray[i].length();
+            iCurLength = str.length();
             if (iCurLength > iOldLength)
             {
                 iOldLength = iCurLength;
-                sLongestItem = StringArray[i];
+                sLongestItem = str;
             }
         }
         return sLongestItem;
@@ -111,14 +92,14 @@ public class JavaTools
     public static String ArraytoString(String[] LocArray)
     {
         StringBuilder ResultString = new StringBuilder(PropertyNames.EMPTY_STRING);
-        int iLen = LocArray.length;
-        for (int i = 0; i < iLen; i++)
+        boolean bActive = false;
+        for (String str : LocArray)
         {
-            ResultString.append(LocArray[i]);
-            if (i < iLen - 1)
-            {
+            if (bActive)
                 ResultString.append(PropertyNames.SEMI_COLON);
-            }
+            else
+                bActive = true;
+            ResultString.append(str);
         }
         return ResultString.toString();
     }
@@ -129,9 +110,8 @@ public class JavaTools
      */
     public static int FieldInList(String[] SearchList, String SearchString)
     {
-        int FieldLen = SearchList.length;
         int retvalue = -1;
-        for (int i = 0; i < FieldLen; i++)
+        for (int i = 0; i < SearchList.length; i++)
         {
             if (SearchList[i].equals(SearchString))
             {
@@ -146,11 +126,10 @@ public class JavaTools
 
     public static int FieldInTable(String[][] SearchList, String SearchString)
     {
-        int retvalue;
-        if (SearchList.length > 0)
+        int retvalue = -1;
+        int FieldLen = SearchList.length;
+        if (FieldLen > 0)
         {
-            int FieldLen = SearchList.length;
-            retvalue = -1;
             for (int i = 0; i < FieldLen; i++)
             {
                 if (SearchList[i][0] != null)
@@ -162,10 +141,6 @@ public class JavaTools
                     }
                 }
             }
-        }
-        else
-        {
-            retvalue = -1;
         }
         return retvalue;
     }
@@ -541,11 +516,9 @@ public class JavaTools
     public static String[] removefromList(String[] _sbaselist, String[] _sdellist)
     {
         ArrayList<String> tempbaselist = new ArrayList<String>();
-        for (int i = 0; i < _sbaselist.length; i++)
-        {
-            if (FieldInList(_sdellist, _sbaselist[i]) == -1)
-            {
-                tempbaselist.add(_sbaselist[i]);
+        for (String _sbase : _sbaselist) {
+            if (FieldInList(_sdellist, _sbase) == -1) {
+                tempbaselist.add(_sbase);
             }
         }
         String[] sretlist = new String[tempbaselist.size()];
@@ -558,29 +531,6 @@ public class JavaTools
      */
     public static boolean isSame(String sFirstString, String sSecondString)
     {
-        boolean bissame = false;
-        if (sFirstString == null)
-        {
-            if (sSecondString != null)
-            {
-                bissame = sSecondString.equals(PropertyNames.EMPTY_STRING);
-            }
-            else
-            {
-                bissame = true;
-            }
-        }
-        else
-        {
-            if (sFirstString.equals(PropertyNames.EMPTY_STRING))
-            {
-                bissame = (sSecondString == null);
-            }
-            else if (sSecondString != null)
-            {
-                bissame = sFirstString.equals(sSecondString);
-            }
-        }
-        return bissame;
+        return (sFirstString == null ? sSecondString == null : sFirstString.equals(sSecondString));
     }
 }
