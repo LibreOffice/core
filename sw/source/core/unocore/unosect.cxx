@@ -1105,7 +1105,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                     // convert section to TOXBase and get SwXDocumentIndex
                     const uno::Reference<text::XDocumentIndex> xIndex =
                         SwXDocumentIndex::CreateXDocumentIndex(
-                            *pTOXBaseSect->GetFmt()->GetDoc(), *pTOXBaseSect);
+                            *pTOXBaseSect->GetFmt()->GetDoc(), pTOXBaseSect);
                     pRet[nProperty] <<= xIndex;
                 }
                 // else: no enclosing index found -> empty return value

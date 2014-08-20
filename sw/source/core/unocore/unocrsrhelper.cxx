@@ -501,7 +501,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {
                     const uno::Reference< text::XDocumentIndex > xRef =
                         SwXDocumentIndex::CreateXDocumentIndex(*rPam.GetDoc(),
-                            *static_cast<SwTOXBaseSection const*>(pBase));
+                            static_cast<SwTOXBaseSection const*>(pBase));
                     (*pAny) <<= xRef;
                 }
             }

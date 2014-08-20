@@ -659,7 +659,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             {
                 eType = TOX_TABLES;
             }
-            xRet =  (cppu::OWeakObject*)new SwXDocumentIndex(eType, *pDoc);
+            xRet = SwXDocumentIndex::CreateXDocumentIndex(*pDoc, 0, eType);
         }
         break;
         case SW_SERVICE_INDEX_HEADER_SECTION :

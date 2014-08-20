@@ -66,14 +66,15 @@ private:
 
     SwXDocumentIndex(SwTOXBaseSection const&, SwDoc &);
 
-public:
-
     /// descriptor
     SwXDocumentIndex(const TOXTypes eToxType, SwDoc& rDoc);
 
+public:
+
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::text::XDocumentIndex>
-        CreateXDocumentIndex(SwDoc & rDoc, SwTOXBaseSection const& rSection);
+        CreateXDocumentIndex(SwDoc & rDoc, SwTOXBaseSection const* pSection,
+                TOXTypes eTypes = TOX_INDEX);
 
     // MetadatableMixin
     virtual ::sfx2::Metadatable* GetCoreObject() SAL_OVERRIDE;

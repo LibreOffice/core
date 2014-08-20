@@ -321,7 +321,7 @@ private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
 
 public:
-    SwXDocumentIndex &          m_rThis;
+    uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OMultiTypeInterfaceContainerHelper m_Listeners;
     SfxItemPropertySet const&   m_rPropSet;
     const TOXTypes              m_eTOXType;
@@ -331,12 +331,10 @@ public:
     uno::WeakReference<container::XIndexReplace> m_wStyleAccess;
     uno::WeakReference<container::XIndexReplace> m_wTokenAccess;
 
-    Impl(   SwXDocumentIndex & rThis,
-            SwDoc & rDoc,
+    Impl(   SwDoc & rDoc,
             const TOXTypes eType,
             SwTOXBaseSection const*const pBaseSection)
         : SwClient((pBaseSection) ? pBaseSection->GetFmt() : 0)
-        , m_rThis(rThis)
         , m_Listeners(m_Mutex)
         , m_rPropSet(
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Index(eType)))
@@ -386,23 +384,29 @@ protected:
 void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
-
-    if (!GetRegisteredIn())
+    if (GetRegisteredIn())
     {
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
-        m_Listeners.disposeAndClear(ev);
+        return; // core object still alive
     }
+
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
+    lang::EventObject const ev(xThis);
+    m_Listeners.disposeAndClear(ev);
 }
 
 SwXDocumentIndex::SwXDocumentIndex(
         SwTOXBaseSection const& rBaseSection, SwDoc & rDoc)
-    : m_pImpl( new SwXDocumentIndex::Impl( *this,
+    : m_pImpl( new SwXDocumentIndex::Impl(
                 rDoc, rBaseSection.SwTOXBase::GetType(), & rBaseSection) )
 {
 }
 
 SwXDocumentIndex::SwXDocumentIndex(const TOXTypes eType, SwDoc& rDoc)
-    : m_pImpl( new SwXDocumentIndex::Impl( *this, rDoc, eType, 0) )
+    : m_pImpl( new SwXDocumentIndex::Impl(rDoc, eType, 0) )
 {
 }
 
@@ -412,18 +416,28 @@ SwXDocumentIndex::~SwXDocumentIndex()
 
 uno::Reference<text::XDocumentIndex>
 SwXDocumentIndex::CreateXDocumentIndex(
-        SwDoc & rDoc, SwTOXBaseSection const& rSection)
+        SwDoc & rDoc, SwTOXBaseSection const* pSection, TOXTypes const eTypes)
 {
     // re-use existing SwXDocumentIndex
     // #i105557#: do not iterate over the registered clients: race condition
-    SwSectionFmt *const pFmt = rSection.GetFmt();
-    uno::Reference<text::XDocumentIndex> xIndex(pFmt->GetXObject(),
-            uno::UNO_QUERY);
+    uno::Reference<text::XDocumentIndex> xIndex;
+    if (pSection)
+    {
+        SwSectionFmt *const pFmt = pSection->GetFmt();
+        xIndex.set(pFmt->GetXObject(), uno::UNO_QUERY);
+    }
     if (!xIndex.is())
     {
-        SwXDocumentIndex *const pIndex(new SwXDocumentIndex(rSection, rDoc));
+        SwXDocumentIndex *const pIndex((pSection)
+                ? new SwXDocumentIndex(*pSection, rDoc)
+                : new SwXDocumentIndex(eTypes, rDoc));
         xIndex.set(pIndex);
-        pFmt->SetXObject(uno::Reference<uno::XInterface>(xIndex));
+        if (pSection)
+        {
+            pSection->GetFmt()->SetXObject(xIndex);
+        }
+        // need a permanent Reference to initialize m_wThis
+        pIndex->m_pImpl->m_wThis = xIndex;
     }
     return xIndex;
 }
@@ -2498,7 +2512,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
         {
            const uno::Reference< text::XDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
-                   *GetDoc(), static_cast<SwTOXBaseSection const&>(*pSect));
+                   *GetDoc(), static_cast<SwTOXBaseSection const*>(pSect));
            uno::Any aRet;
            aRet <<= xTmp;
            return aRet;
@@ -2529,7 +2543,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         {
            const uno::Reference< text::XDocumentIndex > xTmp =
                SwXDocumentIndex::CreateXDocumentIndex(
-                   *GetDoc(), static_cast<SwTOXBaseSection const&>(*pSect));
+                   *GetDoc(), static_cast<SwTOXBaseSection const*>(pSect));
            uno::Any aRet;
            aRet <<= xTmp;
            return aRet;
