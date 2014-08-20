@@ -75,18 +75,6 @@ TabPage::TabPage( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-TabPage::TabPage( Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_TABPAGE )
-{
-    rResId.SetRT( RSC_TABPAGE );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes(rResId);
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 TabPage::TabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDescription)
     : Window(WINDOW_TABPAGE)
 {

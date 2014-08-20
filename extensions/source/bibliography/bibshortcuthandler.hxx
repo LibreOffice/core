@@ -52,14 +52,12 @@ inline Window* BibShortCutHandler::GetWindow( void )
     return pBaseClass;
 }
 
-
 class BibWindow : public Window, public BibShortCutHandler
 {
 public:
                             BibWindow( Window* pParent,WinBits nStyle = WB_3DLOOK);
     virtual                 ~BibWindow();
 };
-
 
 class BibSplitWindow : public SplitWindow, public BibShortCutHandler
 {
@@ -68,13 +66,11 @@ public:
     virtual                 ~BibSplitWindow();
 };
 
-
 class BibTabPage : public TabPage, public BibShortCutHandler
 {
 public:
-                            BibTabPage( Window* pParent, const ResId& rResId );
-                            BibTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
-    virtual                 ~BibTabPage();
+    BibTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
+    virtual ~BibTabPage();
 };
 
 #endif

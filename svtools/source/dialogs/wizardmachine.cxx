@@ -40,15 +40,6 @@ namespace svt
         }
     };
 
-
-    //= OWizardPage
-
-    OWizardPage::OWizardPage( Window* _pParent, const ResId& _rResId )
-        :TabPage( _pParent, _rResId )
-        ,m_pImpl( new WizardPageImplData )
-    {
-    }
-
     OWizardPage::OWizardPage(Window *pParent, const OString& rID,
         const OUString& rUIXMLDescription)
         : TabPage(pParent, rID, rUIXMLDescription)
@@ -56,24 +47,20 @@ namespace svt
     {
     }
 
-
     OWizardPage::~OWizardPage()
     {
         delete m_pImpl;
     }
 
-
     void OWizardPage::initializePage()
     {
     }
-
 
     void OWizardPage::ActivatePage()
     {
         TabPage::ActivatePage();
         updateDialogTravelUI();
     }
-
 
     void OWizardPage::updateDialogTravelUI()
     {
@@ -82,20 +69,15 @@ namespace svt
             pWizardMachine->updateTravelUI();
     }
 
-
     bool OWizardPage::canAdvance() const
     {
         return true;
     }
 
-
     bool OWizardPage::commitPage( WizardTypes::CommitPageReason )
     {
         return true;
     }
-
-
-    //= WizardMachineImplData
 
     struct WizardMachineImplData : public WizardTypes
     {

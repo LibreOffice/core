@@ -98,8 +98,6 @@
 #define RSC_TOOLBOX             (RSC_NOTYPE + 0x71)
 #define RSC_DOCKINGWINDOW       (RSC_NOTYPE + 0x72)
 
-#define RSC_TABPAGE             (RSC_NOTYPE + 0x74)
-
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 
 // (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx

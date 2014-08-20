@@ -60,11 +60,6 @@ BibSplitWindow::~BibSplitWindow()
 {
 }
 
-
-BibTabPage::BibTabPage( Window* pParent, const ResId& rResId ) : TabPage( pParent, rResId ), BibShortCutHandler( this )
-{
-}
-
 BibTabPage::BibTabPage( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
                         TabPage( pParent, rID, rUIXMLDescription ), BibShortCutHandler( this )
 {
