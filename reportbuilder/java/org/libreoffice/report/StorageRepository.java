@@ -49,7 +49,7 @@ import org.apache.commons.logging.LogFactory;
 public class StorageRepository implements InputRepository, OutputRepository
 {
 
-    private static final Log LOGGER = LogFactory.getLog(SDBCReportDataFactory.class);
+    private static final Log LOGGER = LogFactory.getLog(StorageRepository.class);
     private static final String REPORT_PROCESSING_FAILED = "ReportProcessing failed";
     private XStorage input;
     private XStorage output;
