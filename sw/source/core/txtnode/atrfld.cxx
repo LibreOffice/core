@@ -64,6 +64,11 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
         SetWhich( RES_TXTATR_INPUTFIELD );
         static_cast<SwInputField*>(GetField())->SetFmtFld( *this );
     }
+    else if (GetField()->GetTyp()->Which() == RES_SETEXPFLD)
+    {
+        // see SwWrtShell::StartInputFldDlg
+        static_cast<SwSetExpField *>(GetField())->SetFmtFld(*this);
+    }
     else if ( GetField()->GetTyp()->Which() == RES_POSTITFLD )
     {
         // text annotation field
@@ -94,6 +99,11 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
             assert(pField);
             if (pField)
                 pField->SetFmtFld( *this );
+        }
+        else if (GetField()->GetTyp()->Which() == RES_SETEXPFLD)
+        {
+            // see SwWrtShell::StartInputFldDlg
+            static_cast<SwSetExpField *>(GetField())->SetFmtFld(*this);
         }
         else if ( GetField()->GetTyp()->Which() == RES_POSTITFLD )
         {
@@ -155,6 +165,11 @@ void SwFmtFld::SetField(SwField * _pField)
     if ( GetField()->GetTyp()->Which() == RES_INPUTFLD )
     {
         static_cast<SwInputField* >(GetField())->SetFmtFld( *this );
+    }
+    else if (GetField()->GetTyp()->Which() == RES_SETEXPFLD)
+    {
+        // see SwWrtShell::StartInputFldDlg
+        static_cast<SwSetExpField *>(GetField())->SetFmtFld(*this);
     }
     Broadcast( SwFmtFldHint( this, SWFMTFLD_CHANGED ) );
 }

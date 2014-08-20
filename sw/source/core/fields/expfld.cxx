@@ -765,6 +765,7 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
                                         sal_uLong nFmt)
     : SwFormulaField( pTyp, nFmt, 0.0 ), nSeqNo( USHRT_MAX ),
     nSubType(0)
+    , mpFmtFld(0)
 {
     SetFormula(rFormel);
     // ignore SubType
@@ -777,6 +778,11 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
             SetFormula(pTyp->GetName() + "+1");
         }
     }
+}
+
+void SwSetExpField::SetFmtFld(SwFmtFld & rFmtFld)
+{
+    mpFmtFld = &rFmtFld;
 }
 
 OUString SwSetExpField::Expand() const

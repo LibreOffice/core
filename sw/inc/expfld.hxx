@@ -216,12 +216,16 @@ class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
     bool            bInput;
     sal_uInt16          nSeqNo;
     sal_uInt16          nSubType;
+    SwFmtFld * mpFmtFld; /// pool item to which the SwSetExpField belongs
 
     virtual OUString            Expand() const SAL_OVERRIDE;
     virtual SwField*            Copy() const SAL_OVERRIDE;
 
 public:
     SwSetExpField(SwSetExpFieldType*, const OUString& rFormel, sal_uLong nFmt = 0);
+
+    void SetFmtFld(SwFmtFld & rFmtFld);
+    SwFmtFld* GetFmtFld() { return mpFmtFld;}
 
     virtual void                SetValue( const double& rVal ) SAL_OVERRIDE;
 
