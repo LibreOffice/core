@@ -1714,6 +1714,7 @@ RTLFUNC(Join)
         if( pArr->GetDims() != 1 )
         {
             StarBASIC::Error( SbERR_WRONG_DIMS );   // Syntax Error?!
+            return;
         }
         OUString aDelim;
         if( nParCount == 3 )
