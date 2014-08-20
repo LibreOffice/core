@@ -97,8 +97,7 @@ public class NumericalHelper
             case STRING_TYPE:
                 try
                 {
-                    Integer i = Integer.valueOf((String) aTypeObject.aValue);
-                    retValue = i.intValue();
+                    retValue = Integer.parseInt((String) aTypeObject.aValue);
                 }
                 catch (java.lang.NumberFormatException e)
                 {
@@ -152,8 +151,7 @@ public class NumericalHelper
             case STRING_TYPE:
                 try
                 {
-                    Float f = new Float((String) aTypeObject.aValue);
-                    retValue = f.floatValue();
+                    retValue = Float.parseFloat((String) aTypeObject.aValue);
                 }
                 catch (java.lang.NumberFormatException e)
                 {
@@ -207,8 +205,7 @@ public class NumericalHelper
             case STRING_TYPE:
                 try
                 {
-                    Boolean b = Boolean.valueOf((String) aTypeObject.aValue);
-                    retValue = b.booleanValue();
+                    retValue = Boolean.parseBoolean((String) aTypeObject.aValue);
                 }
                 catch (java.lang.NumberFormatException e)
                 {
