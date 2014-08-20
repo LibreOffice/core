@@ -35,7 +35,6 @@
 //... namespace comphelper .......................................................
 namespace comphelper
 {
-    namespace starbeans = ::com::sun::star::beans;
 
 /** compare two properties by name
 */
@@ -77,7 +76,7 @@ namespace comphelper
 
 
 /// remove the property with the given name from the given sequence
-COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<starbeans::Property>& seqProps, const OUString& _rPropName);
+COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<css::beans::Property>& seqProps, const OUString& _rPropName);
 
 
 /** within the given property sequence, modify attributes of a special property
@@ -86,19 +85,19 @@ COMPHELPER_DLLPUBLIC void RemoveProperty(css::uno::Sequence<starbeans::Property>
     @param  _nAddAttrib     the attributes which should be added
     @param  _nRemoveAttrib  the attributes which should be removed
 */
-COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(css::uno::Sequence<starbeans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
+COMPHELPER_DLLPUBLIC void ModifyPropertyAttributes(css::uno::Sequence<css::beans::Property>& _rProps, const OUString& _sPropName, sal_Int16 _nAddAttrib, sal_Int16 _nRemoveAttrib);
 
 
 /** check if the given set has the given property.
 */
-COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const css::uno::Reference<starbeans::XPropertySet>& _rxSet);
+COMPHELPER_DLLPUBLIC bool hasProperty(const OUString& _rName, const css::uno::Reference<css::beans::XPropertySet>& _rxSet);
 
 
 /** copy properties between property sets, in compliance with the property
     attributes of the target object
 */
-COMPHELPER_DLLPUBLIC void copyProperties(const css::uno::Reference<starbeans::XPropertySet>& _rxSource,
-                    const css::uno::Reference<starbeans::XPropertySet>& _rxDest);
+COMPHELPER_DLLPUBLIC void copyProperties(const css::uno::Reference<css::beans::XPropertySet>& _rxSource,
+                    const css::uno::Reference<css::beans::XPropertySet>& _rxDest);
 
 
 //= property conversion helpers

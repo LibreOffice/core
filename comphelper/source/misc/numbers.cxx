@@ -28,10 +28,6 @@
 namespace comphelper
 {
 
-
-namespace starbeans = ::com::sun::star::beans;
-
-
 sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     sal_Int16 nReturn(css::util::NumberFormat::UNDEFINED);
@@ -39,7 +35,7 @@ sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormat
     {
         try
         {
-            css::uno::Reference<starbeans::XPropertySet> xFormat(xFormats->getByKey(nKey));
+            css::uno::Reference<css::beans::XPropertySet> xFormat(xFormats->getByKey(nKey));
             if (xFormat.is())
                 xFormat->getPropertyValue("Type") >>= nReturn;
         }
@@ -68,7 +64,7 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumb
     {
         try
         {
-            css::uno::Reference<starbeans::XPropertySet> xFormat( xFormats->getByKey(nKey));
+            css::uno::Reference<css::beans::XPropertySet> xFormat( xFormats->getByKey(nKey));
             if (xFormat.is())
             {
                 static OUString PROPERTY_DECIMALS( "Decimals" );

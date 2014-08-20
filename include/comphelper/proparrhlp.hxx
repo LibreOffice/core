@@ -33,8 +33,6 @@ namespace cppu {
 //... namespace comphelper ................................................
 namespace comphelper
 {
-    namespace starbeans = ::com::sun::star::beans;
-
 
 template <typename TYPE> struct OPropertyArrayUsageHelperMutex
     : public rtl::Static< ::osl::Mutex, OPropertyArrayUsageHelperMutex<TYPE> > {};
