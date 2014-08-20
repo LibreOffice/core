@@ -374,7 +374,10 @@ void Parser::readChar()
     readDouble(aUnoMatrix.m11);
     readDouble(fontSize);
 
-    OString aChars = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
+    OString aChars;
+
+    if (m_nCharIndex != -1)
+        aChars = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
 
     // chars gobble up rest of line
     m_nCharIndex = -1;
