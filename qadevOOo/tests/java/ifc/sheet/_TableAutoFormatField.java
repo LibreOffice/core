@@ -98,7 +98,7 @@ public class _TableAutoFormatField extends MultiPropertyTest {
         testProperty("CharLocale", new PropertyTester() {
             @Override
             protected Object getNewValue(String p, Object old) {
-                return old == null || ((Locale)old).Language == "de" ?
+                return old == null || ((Locale)old).Language.equals( "de" ) ?
                     new Locale("es", "ES", "") : new Locale("de", "DE", "") ;
             }
         }) ;

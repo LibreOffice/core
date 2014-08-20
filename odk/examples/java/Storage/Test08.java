@@ -119,7 +119,7 @@ public class Test08 implements StorageTest {
 
             // create temporary file
             String sTempFileURL = m_aTestHelper.CreateTempFile( m_xMSF );
-            if ( sTempFileURL == null || sTempFileURL == "" )
+            if ( sTempFileURL == null || sTempFileURL.equals("") )
             {
                 m_aTestHelper.Error( "No valid temporary file was created!" );
                 return false;

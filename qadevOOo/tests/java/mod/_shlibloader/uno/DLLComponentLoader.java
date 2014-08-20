@@ -87,7 +87,7 @@ public class DLLComponentLoader extends TestCase {
         tEnv.addObjRelation("ImplementationLoader",
             "com.sun.star.loader.SharedLibrary") ;
         String os = (String) Param.get("OS");
-        if (os == null || os == "")
+        if (os == null || os.equals(""))
             throw new StatusException(
                 "Couldn't determine operating system for naming convention.",
                 new NullPointerException());
