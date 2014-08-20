@@ -57,7 +57,6 @@
 #define HID_BIB_CUSTOM4_POS                             "EXTENSIONS_HID_BIB_CUSTOM4_POS"
 #define HID_BIB_CUSTOM5_POS                             "EXTENSIONS_HID_BIB_CUSTOM5_POS"
 #define HID_BIB_DB_TBX                                  "EXTENSIONS_HID_BIB_DB_TBX"
-#define HID_BIB_CONTROL_PAGE                            "EXTENSIONS_HID_BIB_CONTROL_PAGE"
 #define HID_BIB_CONTROL_PARENT                          "EXTENSIONS_HID_BIB_CONTROL_PARENT"
 #define UID_BIB_FRAME_WINDOW                            "EXTENSIONS_UID_BIB_FRAME_WINDOW"
 #define HID_BIB_DB_GRIDCTRL                             "EXTENSIONS_HID_BIB_DB_GRIDCTRL"
