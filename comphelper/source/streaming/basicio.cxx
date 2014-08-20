@@ -27,7 +27,7 @@ namespace comphelper
 
 const css::uno::Reference<stario::XObjectOutputStream>& operator << (
         const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream,
-        const starawt::FontDescriptor& _rFont)
+        const css::awt::FontDescriptor& _rFont)
 {
     _rxOutStream->writeUTF( _rFont.Name );
     _rxOutStream->writeShort( _rFont.Height );
@@ -52,7 +52,7 @@ const css::uno::Reference<stario::XObjectOutputStream>& operator << (
 
 const css::uno::Reference<stario::XObjectInputStream>& operator >> (
         const css::uno::Reference<stario::XObjectInputStream>& _rxInStream,
-        starawt::FontDescriptor& _rFont)
+        css::awt::FontDescriptor& _rFont)
 {
     // schreiben des Fontdescriptors
     _rFont.Name = _rxInStream->readUTF();
@@ -64,7 +64,7 @@ const css::uno::Reference<stario::XObjectInputStream>& operator >> (
     _rFont.Pitch = _rxInStream->readShort();
     _rFont.CharacterWidth = static_cast< float >(_rxInStream->readDouble());
     _rFont.Weight = static_cast< float >(_rxInStream->readDouble());
-    _rFont.Slant = (starawt::FontSlant)_rxInStream->readShort();
+    _rFont.Slant = (css::awt::FontSlant)_rxInStream->readShort();
     _rFont.Underline = _rxInStream->readShort();
     _rFont.Strikeout = _rxInStream->readShort();
     _rFont.Orientation = static_cast< float >(_rxInStream->readDouble());

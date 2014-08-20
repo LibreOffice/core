@@ -37,7 +37,6 @@ namespace com { namespace sun { namespace star { namespace awt {
 
 namespace comphelper
 {
-    namespace starawt       = ::com::sun::star::awt;
 
     typedef css::uno::Reference< css::uno::XInterface >           InterfaceRef;
     typedef css::uno::Sequence< OUString >                StringSequence;
@@ -52,8 +51,8 @@ namespace comphelper
 
     /** compare two FontDescriptor's
     */
-    COMPHELPER_DLLPUBLIC bool   operator ==(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight);
-    inline  bool    operator !=(const starawt::FontDescriptor& _rLeft, const starawt::FontDescriptor& _rRight)
+    COMPHELPER_DLLPUBLIC bool   operator ==(const css::awt::FontDescriptor& _rLeft, const css::awt::FontDescriptor& _rRight);
+    inline  bool    operator !=(const css::awt::FontDescriptor& _rLeft, const css::awt::FontDescriptor& _rRight)
     {
         return !(_rLeft == _rRight);
     }
@@ -129,7 +128,7 @@ namespace comphelper
         the XXX_DONTKNOW enum values (which isn't the case if you instantiate it
         via the default constructor)
     */
-    COMPHELPER_DLLPUBLIC starawt::FontDescriptor    getDefaultFont();
+    COMPHELPER_DLLPUBLIC css::awt::FontDescriptor    getDefaultFont();
 
     /** examine a sequence for the com.sun.star.uno::Type of it's elements.
     */

@@ -30,7 +30,6 @@ namespace comphelper
 
 
 namespace stario    = ::com::sun::star::io;
-namespace starawt   = ::com::sun::star::awt;
 
 // bool
 COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& _rxInStream, bool& _rVal);
@@ -60,8 +59,8 @@ COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& oper
 COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_Int32 _nValue);
 
 // FontDescriptor
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& InStream, starawt::FontDescriptor& rVal);
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& OutStream, const starawt::FontDescriptor& rVal);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& InStream, css::awt::FontDescriptor& rVal);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& OutStream, const css::awt::FontDescriptor& rVal);
 
 // sequences
 template <class ELEMENT>
