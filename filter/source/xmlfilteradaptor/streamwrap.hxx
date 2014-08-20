@@ -32,8 +32,6 @@ namespace osl
 
 namespace foo
 {
-    namespace staruno   = ::com::sun::star::uno;
-
 
 //= OOutputStreamWrapper
 
@@ -47,9 +45,9 @@ public:
     OOutputStreamWrapper(::osl::File& _rStream) :rStream(_rStream) { }
 
 // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL flush() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, staruno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL flush() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 }   // namespace utl
