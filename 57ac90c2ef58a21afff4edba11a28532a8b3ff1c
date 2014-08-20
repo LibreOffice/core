@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_fb30a709",
+        "filename": "vcl/source/window/layout.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1704,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-20T08:16:17Z",
+      "side": 1,
+      "message": "Should we not do the same thing here?",
+      "revId": "57ac90c2ef58a21afff4edba11a28532a8b3ff1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
