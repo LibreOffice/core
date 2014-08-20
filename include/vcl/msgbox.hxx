@@ -107,7 +107,6 @@ private:
 public:
                         ErrorBox( Window* pParent, WinBits nStyle,
                                   const OUString& rMessage );
-                        ErrorBox( Window* pParent, const ResId& rResId );
 
     static Image        GetStandardImage();
 };

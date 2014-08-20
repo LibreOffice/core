@@ -489,12 +489,6 @@ ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
     ImplInitErrorBoxData();
 }
 
-ErrorBox::ErrorBox( Window* pParent, const ResId& rResId ) :
-    MessBox( pParent, rResId.SetRT( RSC_ERRORBOX ) )
-{
-    ImplInitErrorBoxData();
-}
-
 Image ErrorBox::GetStandardImage()
 {
     try

@@ -96,7 +96,6 @@ void RscTypCont::Init()
     RscTop   *  pClassMessBox;
     RscTop   *  pClassInfoBox;
     RscTop   *  pClassWarningBox;
-    RscTop   *  pClassErrorBox;
     RscTop   *  pClassQueryBox;
     RscTop   *  pClassSplitter;
     RscTop   *  pClassSplitWindow;
@@ -485,13 +484,6 @@ void RscTypCont::Init()
     pClassWarningBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassWarningBox );
     pRoot->Insert( pClassWarningBox );
-
-    // Klasse anlegen
-    nId = pHS->getID( "ErrorBox" );
-    pClassErrorBox = new RscClass( nId, RSC_ERRORBOX, pClassMessBox );
-    pClassErrorBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassErrorBox );
-    pRoot->Insert( pClassErrorBox );
 
     // Klasse anlegen
     nId = pHS->getID( "QueryBox" );

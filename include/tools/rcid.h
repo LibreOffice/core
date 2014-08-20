@@ -50,7 +50,7 @@
 #define RSC_MESSBOX             (RSC_NOTYPE + 0x30)
 #define RSC_INFOBOX             (RSC_NOTYPE + 0x31)
 #define RSC_WARNINGBOX          (RSC_NOTYPE + 0x32)
-#define RSC_ERRORBOX            (RSC_NOTYPE + 0x33)
+
 #define RSC_QUERYBOX            (RSC_NOTYPE + 0x34)
 #define RSC_WINDOW              (RSC_NOTYPE + 0x35)
 #define RSC_SYSWINDOW           (RSC_NOTYPE + 0x36)
