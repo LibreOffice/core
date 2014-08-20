@@ -4359,7 +4359,8 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
                 }
                 break;
             case NF_SYMBOLTYPE_BLANK:
-                /*k = */ InsertBlanks(sStr, k, rInfo.sStrArray[j][1] );
+                if (rInfo.sStrArray[j].getLength() >= 2)
+                    /*k = */ InsertBlanks(sStr, k, rInfo.sStrArray[j][1] );
                 break;
             case NF_SYMBOLTYPE_STRING:
             case NF_SYMBOLTYPE_CURRENCY:
@@ -4492,7 +4493,8 @@ bool SvNumberformat::ImpNumberFillWithThousands( OUStringBuffer& sBuff,  // numb
             }
             break;
         case NF_SYMBOLTYPE_BLANK:
-            /*k = */ InsertBlanks(sBuff, k, rInfo.sStrArray[j][1] );
+            if (rInfo.sStrArray[j].getLength() >= 2)
+                /*k = */ InsertBlanks(sBuff, k, rInfo.sStrArray[j][1] );
             break;
         case NF_SYMBOLTYPE_THSEP:
             // #i7284# #102685# Insert separator also if number is divided
