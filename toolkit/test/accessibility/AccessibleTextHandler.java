@@ -16,37 +16,38 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-import com.sun.star.accessibility.AccessibleTextType;
-import com.sun.star.accessibility.TextSegment;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.accessibility.XAccessibleText;
-import com.sun.star.accessibility.XAccessibleEditableText;
-
-import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.Point;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.IndexOutOfBoundsException;
-import com.sun.star.beans.PropertyValue;
-
-import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JDialog;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
 import javax.swing.Icon;
-import javax.swing.JTextArea;
-import javax.swing.JOptionPane;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
-import javax.swing.BoxLayout;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
+
+import com.sun.star.accessibility.AccessibleTextType;
+import com.sun.star.accessibility.TextSegment;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleEditableText;
+import com.sun.star.accessibility.XAccessibleText;
+import com.sun.star.awt.Point;
+import com.sun.star.awt.Rectangle;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.lang.IndexOutOfBoundsException;
+import com.sun.star.uno.UnoRuntime;
 
 
 class AccessibleTextHandler extends NodeHandler
@@ -365,6 +366,10 @@ class AccessibleTextHandler extends NodeHandler
             }
 
             aRet = aPortions;
+        }
+        catch( UnknownPropertyException e )
+        {
+            aRet = new StringNode( "Exception caught:" + e, aParent );
         }
         catch( IndexOutOfBoundsException e )
         {
