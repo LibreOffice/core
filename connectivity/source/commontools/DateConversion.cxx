@@ -256,8 +256,8 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             if(xFormatTypes.is())
             {
                 css::lang::Locale loc;
-                OSL_VERIFY(xFormats->getByKey(nKeyToUse)->getPropertyValue("Locale") >>= loc);
-                nStandardKey = xFormatTypes->getStandardIndex(loc);
+                if (xFormats->getByKey(nKeyToUse)->getPropertyValue("Locale") >>= loc)
+                    nStandardKey = xFormatTypes->getStandardIndex(loc);
             }
             // Why use nStandardKey rather than nKeyToUse here? Don't know, but "it was always like that".
             // Previously had hardcoded 0 instead of nStandardKey, which led to problems with dates
