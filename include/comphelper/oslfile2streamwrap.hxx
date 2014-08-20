@@ -28,12 +28,11 @@
 
 namespace comphelper
 {
-    namespace stario    = ::com::sun::star::io;
 
 // FmUnoIOStream,
 // Stream to read and write data, based on File
 
-class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XInputStream>
+class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper1<css::io::XInputStream>
 {
     ::osl::Mutex    m_aMutex;
     ::osl::File*    m_pFile;
@@ -42,19 +41,19 @@ public:
     OSLInputStreamWrapper(::osl::File& _rStream);
     virtual ~OSLInputStreamWrapper();
 
-// stario::XInputStream
-    virtual sal_Int32   SAL_CALL    readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32   SAL_CALL    readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32   SAL_CALL    available() throw(stario::NotConnectedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void        SAL_CALL    closeInput() throw(stario::NotConnectedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::io::XInputStream
+    virtual sal_Int32   SAL_CALL    readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32   SAL_CALL    readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int32   SAL_CALL    available() throw(css::io::NotConnectedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void        SAL_CALL    closeInput() throw(css::io::NotConnectedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
 // FmUnoOutStream,
 // data sink for the files
 
-class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XOutputStream>
+class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<css::io::XOutputStream>
 {
 public:
     COMPHELPER_DLLPUBLIC OSLOutputStreamWrapper(::osl::File& _rFile);
@@ -62,10 +61,10 @@ public:
 private:
     virtual ~OSLOutputStreamWrapper();
 
-// stario::XOutputStream
-    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL flush() throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL closeOutput() throw(stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+// css::io::XOutputStream
+    virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL flush() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     ::osl::File&        rFile;
 };

@@ -28,43 +28,40 @@
 namespace comphelper
 {
 
-
-namespace stario    = ::com::sun::star::io;
-
 // bool
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& _rxInStream, bool& _rVal);
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream, bool _bVal);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, bool& _rVal);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, bool _bVal);
 void operator <<(
     css::uno::Reference<css::io::XObjectOutputStream> const &, sal_Bool)
     SAL_DELETED_FUNCTION;
 
 // OUString
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& _rxInStream, OUString& _rStr);
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream, const OUString& _rStr);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, OUString& _rStr);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, const OUString& _rStr);
 
 // sal_Int16
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Int16& _rValue);
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_Int16 _nValue);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_Int16& _rValue);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_Int16 _nValue);
 
 // sal_uInt16
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& _rxInStream, sal_uInt16& _rValue);
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_uInt16 _nValue);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_uInt16& _rValue);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_uInt16 _nValue);
 
 // sal_uInt32
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& _rxInStream, sal_uInt32& _rValue);
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_uInt32 _nValue);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_uInt32& _rValue);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_uInt32 _nValue);
 
 // sal_Int16
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Int32& _rValue);
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_Int32 _nValue);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, sal_Int32& _rValue);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, sal_Int32 _nValue);
 
 // FontDescriptor
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& InStream, css::awt::FontDescriptor& rVal);
-COMPHELPER_DLLPUBLIC const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& OutStream, const css::awt::FontDescriptor& rVal);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& InStream, css::awt::FontDescriptor& rVal);
+COMPHELPER_DLLPUBLIC const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& OutStream, const css::awt::FontDescriptor& rVal);
 
 // sequences
 template <class ELEMENT>
-const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::uno::Reference<stario::XObjectInputStream>& _rxInStream, css::uno::Sequence<ELEMENT>& _rSeq)
+const css::uno::Reference<css::io::XObjectInputStream>& operator >> (const css::uno::Reference<css::io::XObjectInputStream>& _rxInStream, css::uno::Sequence<ELEMENT>& _rSeq)
 {
     sal_Int32 nLen = _rxInStream->readLong();
     _rSeq.realloc(nLen);
@@ -78,7 +75,7 @@ const css::uno::Reference<stario::XObjectInputStream>& operator >> (const css::u
 }
 
 template <class ELEMENT>
-const css::uno::Reference<stario::XObjectOutputStream>& operator << (const css::uno::Reference<stario::XObjectOutputStream>& _rxOutStream, const css::uno::Sequence<ELEMENT>& _rSeq)
+const css::uno::Reference<css::io::XObjectOutputStream>& operator << (const css::uno::Reference<css::io::XObjectOutputStream>& _rxOutStream, const css::uno::Sequence<ELEMENT>& _rSeq)
 {
     sal_Int32 nLen = _rSeq.getLength();
     _rxOutStream->writeLong(nLen);

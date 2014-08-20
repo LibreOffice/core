@@ -38,13 +38,13 @@ OSLInputStreamWrapper::~OSLInputStreamWrapper()
 
 
 sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-                throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+                throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     if (!m_pFile)
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     if (nBytesToRead < 0)
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -53,7 +53,7 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8
     sal_uInt64 nRead = 0;
     FileBase::RC eError = m_pFile->read((void*)aData.getArray(), nBytesToRead, nRead);
     if (eError != FileBase::E_None)
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     // Wenn gelesene Zeichen < MaxLength, css::uno::Sequence anpassen
     if (nRead < (sal_uInt32)nBytesToRead)
@@ -63,23 +63,23 @@ sal_Int32 SAL_CALL OSLInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8
 }
 
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+sal_Int32 SAL_CALL OSLInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     if (!m_pFile)
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     if (nMaxBytesToRead < 0)
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     return readBytes(aData, nMaxBytesToRead);
 }
 
 
-void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pFile)
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     sal_uInt64 nCurrentPos;
     m_pFile->getPos(nCurrentPos);
@@ -88,45 +88,45 @@ void SAL_CALL OSLInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( st
     FileBase::RC eError = m_pFile->setPos(osl_Pos_Absolut, nNewPos);
     if (eError != FileBase::E_None)
     {
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
     }
 }
 
 
-sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( stario::NotConnectedException, css::uno::RuntimeException, std::exception )
+sal_Int32 SAL_CALL OSLInputStreamWrapper::available() throw( css::io::NotConnectedException, css::uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (!m_pFile)
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     sal_uInt64 nPos;
     FileBase::RC eError = m_pFile->getPos(nPos);
     if (eError != FileBase::E_None)
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     sal_uInt64 nDummy = 0;
     eError = m_pFile->setPos(osl_Pos_End, nDummy);
     if (eError != FileBase::E_None)
-       throw stario::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
+       throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     sal_uInt64 nAvailable;
     eError = m_pFile->getPos(nAvailable);
     if (eError != FileBase::E_None)
-       throw stario::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
+       throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
 
     nAvailable = nAvailable - nPos;
     eError = m_pFile->setPos(osl_Pos_Absolut, nPos);
     if (eError != FileBase::E_None)
-       throw stario::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
+       throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
     return sal::static_int_cast< sal_Int32 >(
         std::max(nAvailable, sal::static_int_cast< sal_uInt64 >(SAL_MAX_INT32)));
 }
 
 
-void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OSLInputStreamWrapper::closeInput() throw( css::io::NotConnectedException, css::uno::RuntimeException, std::exception )
 {
     if (!m_pFile)
-        throw stario::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
+        throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     m_pFile->close();
 
@@ -134,7 +134,7 @@ void SAL_CALL OSLInputStreamWrapper::closeInput() throw( stario::NotConnectedExc
 }
 
 /*************************************************************************/
-// stario::XOutputStream
+// css::io::XOutputStream
 
 
 OSLOutputStreamWrapper::OSLOutputStreamWrapper(osl::File & _rFile):
@@ -143,24 +143,24 @@ OSLOutputStreamWrapper::OSLOutputStreamWrapper(osl::File & _rFile):
 
 OSLOutputStreamWrapper::~OSLOutputStreamWrapper() {}
 
-void SAL_CALL OSLOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OSLOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     sal_uInt64 nWritten;
     FileBase::RC eError = rFile.write(aData.getConstArray(),aData.getLength(), nWritten);
     if (eError != FileBase::E_None
         || nWritten != sal::static_int_cast< sal_uInt32 >(aData.getLength()))
     {
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
     }
 }
 
 
-void SAL_CALL OSLOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OSLOutputStreamWrapper::flush() throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
 }
 
 
-void SAL_CALL OSLOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OSLOutputStreamWrapper::closeOutput() throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     rFile.close();
 }
