@@ -837,8 +837,8 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     {
         if (nSuppressed > nArgs)
         {
-            OSL_TRACE( "ScFuncRes: suppressed parameters count mismatch on OpCode %u: suppressed %d > params %d",
-                    aRes.GetId(), (int)nSuppressed, (int)nArgs);
+            SAL_WARN("sc.core", "ScFuncRes: suppressed parameters count mismatch on OpCode " <<
+                    aRes.GetId() << ": suppressed " << nSuppressed << " > params " << nArgs);
             nSuppressed = nArgs;    // sanitize
         }
         for (sal_uInt16 i = 0; i < nSuppressed; ++i)
@@ -848,13 +848,13 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
             {
                 if (pDesc->nArgCount >= PAIRED_VAR_ARGS && nParam >= nArgs-2)
                 {
-                    OSL_TRACE( "ScFuncRes: PAIRED_VAR_ARGS parameters can't be suppressed, on OpCode %u: param %d >= arg %d-2",
-                            aRes.GetId(), (int)nParam, (int)nArgs);
+                    SAL_WARN("sc.core", "ScFuncRes: PAIRED_VAR_ARGS parameters can't be suppressed, on OpCode " <<
+                            aRes.GetId() << ": param " << nParam << " >= arg " << nArgs << "-2");
                 }
                 else if (pDesc->nArgCount >= VAR_ARGS && nParam == nArgs-1)
                 {
-                    OSL_TRACE( "ScFuncRes: VAR_ARGS parameters can't be suppressed, on OpCode %u: param %d == arg %d-1",
-                            aRes.GetId(), (int)nParam, (int)nArgs);
+                    SAL_WARN("sc.core", "ScFuncRes: VAR_ARGS parameters can't be suppressed, on OpCode " <<
+                            aRes.GetId() << ": param " << nParam << " == arg " << nArgs << "-1");
                 }
                 else
                 {
@@ -864,8 +864,8 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
             }
             else
             {
-                OSL_TRACE( "ScFuncRes: suppressed parameter exceeds count on OpCode %u: param %d >= args %d",
-                        aRes.GetId(), (int)nParam, (int)nArgs);
+                SAL_WARN("sc.core", "ScFuncRes: suppressed parameter exceeds count on OpCode " <<
+                        aRes.GetId() << ": param " << nParam << " >= args " << nArgs);
             }
         }
     }
