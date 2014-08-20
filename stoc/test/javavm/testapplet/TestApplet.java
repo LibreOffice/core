@@ -56,9 +56,4 @@ public class TestApplet extends java.applet.Applet {
         }
 
     }
-
-    @Override
-    public void paint( Graphics g) {
-        super.paint( g);
-    }
 }

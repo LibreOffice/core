@@ -27,23 +27,4 @@ import ifc.style._PageProperties;
  */
 public class _PageStyle extends _PageProperties {
 
-    /**
-     * This property is system dependent and printer dependent.
-     * Test is used from _PageProperties
-     * @see ifc.style._PageProperties
-     */
-    @Override
-    public void _PrinterPaperTray() {
-        super._PrinterPaperTray();
-    }
-
-    /**
-     * Create some valid user defined attributes
-     * Test is used from _PageProperties
-     * @see ifc.style._PageProperties
-     */
-    @Override
-    public void _UserDefinedAttributes() {
-        super._UserDefinedAttributes();
-    }
 }

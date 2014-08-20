@@ -40,10 +40,6 @@ public class ParcelContentsFolderDataLoader extends UniFileLoader {
         return "Office Script Parcel Contents";
     }
 
-    protected void initialize() {
-        super.initialize();
-    }
-
     protected FileObject findPrimaryFile(FileObject fo) {
         if (!fo.isFolder() ||
             !fo.getName().equals(ParcelZipper.CONTENTS_DIRNAME) ||

@@ -47,10 +47,6 @@ public class ParcelFolderDataLoader extends UniFileLoader {
         return "Office Script Parcel Folder";
     }
 
-    protected void initialize() {
-        super.initialize();
-    }
-
     protected FileObject findPrimaryFile(FileObject fo) {
         if (!fo.isFolder())
             return null;

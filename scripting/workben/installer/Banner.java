@@ -34,11 +34,6 @@ public class Banner extends Canvas {
     }
 
     @Override
-    public void update(Graphics g) {
-        super.update(g);
-    }
-
-    @Override
     public Dimension getPreferredSize() {
         return new Dimension(137, 358);
     }
