@@ -199,8 +199,8 @@ public class DatabaseControl extends Control
                         xPropertySet.setPropertyValue("EffectiveMin", new Double(Short.MIN_VALUE));
                         break;
                     case DataType.TINYINT:
-                        xPropertySet.setPropertyValue("EffectiveMax", new Double(127));
-                        xPropertySet.setPropertyValue("EffectiveMin", new Double(-128));
+                        xPropertySet.setPropertyValue("EffectiveMax", new Double(Byte.MAX_VALUE));
+                        xPropertySet.setPropertyValue("EffectiveMin", new Double(Byte.MIN_VALUE));
                         break;
                     case DataType.FLOAT:
                     case DataType.REAL:
