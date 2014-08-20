@@ -216,15 +216,13 @@ BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     aEdQuery.Show();
 
     OUString aStr=GetItemText(TBC_FT_SOURCE);
-    Rectangle aRect=GetItemRect(TBC_FT_SOURCE);
     aFtSource.SetText(aStr);
-    aFtSource.SetSizePixel(aRect.GetSize());
+    aFtSource.SetSizePixel(aFtSource.get_preferred_size());
     aFtSource.SetBackground(Wallpaper( COL_TRANSPARENT ));
 
     aStr=GetItemText(TBC_FT_QUERY);
-    aRect=GetItemRect(TBC_FT_QUERY);
     aFtQuery.SetText(aStr);
-    aFtQuery.SetSizePixel(aRect.GetSize());
+    aFtQuery.SetSizePixel(aFtQuery.get_preferred_size());
     aFtQuery.SetBackground(Wallpaper( COL_TRANSPARENT ));
 
     SetItemWindow(TBC_FT_SOURCE,&aFtSource);
