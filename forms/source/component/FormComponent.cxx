@@ -468,7 +468,7 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
     return aReturn;
 }
 
-void OControlModel::readHelpTextCompatibly(const css::uno::Reference< stario::XObjectInputStream >& _rxInStream)
+void OControlModel::readHelpTextCompatibly(const css::uno::Reference< css::io::XObjectInputStream >& _rxInStream)
 {
     OUString sHelpText;
     ::comphelper::operator>>( _rxInStream, sHelpText);
@@ -484,7 +484,7 @@ void OControlModel::readHelpTextCompatibly(const css::uno::Reference< stario::XO
     }
 }
 
-void OControlModel::writeHelpTextCompatibly(const css::uno::Reference< stario::XObjectOutputStream >& _rxOutStream)
+void OControlModel::writeHelpTextCompatibly(const css::uno::Reference< css::io::XObjectOutputStream >& _rxOutStream)
 {
     OUString sHelpText;
     try
@@ -730,13 +730,13 @@ void OControlModel::readAggregate( const Reference< XObjectInputStream >& _rxInS
         xPersist->read( _rxInStream );
 }
 
-void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
-                        throw(stario::IOException, RuntimeException, std::exception)
+void SAL_CALL OControlModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
+                        throw(css::io::IOException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
     // 1. writing the UnoControls
-    Reference<stario::XMarkableStream> xMark(_rxOutStream, UNO_QUERY);
+    Reference<css::io::XMarkableStream> xMark(_rxOutStream, UNO_QUERY);
     if ( !xMark.is() )
     {
         throw IOException(
@@ -775,11 +775,11 @@ void SAL_CALL OControlModel::write(const Reference<stario::XObjectOutputStream>&
     // EOIN!
 }
 
-void OControlModel::read(const Reference<stario::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, RuntimeException, std::exception)
+void OControlModel::read(const Reference<css::io::XObjectInputStream>& InStream) throw (::com::sun::star::io::IOException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    Reference<stario::XMarkableStream> xMark(InStream, UNO_QUERY);
+    Reference<css::io::XMarkableStream> xMark(InStream, UNO_QUERY);
     if ( !xMark.is() )
     {
         throw IOException(
@@ -1525,7 +1525,7 @@ Sequence< OUString > SAL_CALL OBoundControlModel::getSupportedServiceNames_Stati
 }
 
 // XPersist
-void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputStream>& _rxOutStream ) throw(stario::IOException, RuntimeException, std::exception)
+void SAL_CALL OBoundControlModel::write( const Reference<css::io::XObjectOutputStream>& _rxOutStream ) throw(css::io::IOException, RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
     osl::MutexGuard aGuard(m_aMutex);
@@ -1550,14 +1550,14 @@ void OBoundControlModel::defaultCommonProperties()
     m_xLabelControl = NULL;
 }
 
-void OBoundControlModel::readCommonProperties(const Reference<stario::XObjectInputStream>& _rxInStream)
+void OBoundControlModel::readCommonProperties(const Reference<css::io::XObjectInputStream>& _rxInStream)
 {
     sal_Int32 nLen = _rxInStream->readLong();
-    Reference<stario::XMarkableStream> xMark(_rxInStream, UNO_QUERY);
+    Reference<css::io::XMarkableStream> xMark(_rxInStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OBoundControlModel::readCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
     // read the reference to the label control
-    Reference<stario::XPersistObject> xPersist;
+    Reference<css::io::XPersistObject> xPersist;
     sal_Int32 nUsedFlag;
     nUsedFlag = _rxInStream->readLong();
     if (nUsedFlag)
@@ -1573,16 +1573,16 @@ void OBoundControlModel::readCommonProperties(const Reference<stario::XObjectInp
     xMark->deleteMark(nMark);
 }
 
-void OBoundControlModel::writeCommonProperties(const Reference<stario::XObjectOutputStream>& _rxOutStream)
+void OBoundControlModel::writeCommonProperties(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
 {
-    Reference<stario::XMarkableStream> xMark(_rxOutStream, UNO_QUERY);
+    Reference<css::io::XMarkableStream> xMark(_rxOutStream, UNO_QUERY);
     DBG_ASSERT(xMark.is(), "OBoundControlModel::writeCommonProperties : can only work with markable streams !");
     sal_Int32 nMark = xMark->createMark();
     // a placeholder where we will write the overall length (later in this method)
     sal_Int32 nLen = 0;
     _rxOutStream->writeLong(nLen);
     // write the reference to the label control
-    Reference<stario::XPersistObject> xPersist(m_xLabelControl, UNO_QUERY);
+    Reference<css::io::XPersistObject> xPersist(m_xLabelControl, UNO_QUERY);
     sal_Int32 nUsedFlag = 0;
     if (xPersist.is())
         nUsedFlag = 1;
@@ -1598,7 +1598,7 @@ void OBoundControlModel::writeCommonProperties(const Reference<stario::XObjectOu
     xMark->deleteMark(nMark);
 }
 
-void SAL_CALL OBoundControlModel::read( const Reference< stario::XObjectInputStream >& _rxInStream ) throw(stario::IOException, RuntimeException, std::exception)
+void SAL_CALL OBoundControlModel::read( const Reference< css::io::XObjectInputStream >& _rxInStream ) throw(css::io::IOException, RuntimeException, std::exception)
 {
     OControlModel::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);

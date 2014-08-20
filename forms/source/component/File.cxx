@@ -200,7 +200,7 @@ OUString SAL_CALL OFileControlModel::getServiceName() throw ( ::com::sun::star::
 }
 
 
-void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OFileControlModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OControlModel::write(_rxOutStream);
 
@@ -214,7 +214,7 @@ void OFileControlModel::write(const Reference<stario::XObjectOutputStream>& _rxO
 }
 
 
-void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
 {
     OControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);

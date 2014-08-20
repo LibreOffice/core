@@ -324,8 +324,8 @@ OUString SAL_CALL OComboBoxModel::getServiceName() throw(RuntimeException, std::
 }
 
 
-void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
-        throw(stario::IOException, RuntimeException, std::exception)
+void SAL_CALL OComboBoxModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
+        throw(css::io::IOException, RuntimeException, std::exception)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -362,7 +362,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<stario::XObjectOutputStream>
 }
 
 
-void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException, std::exception)
+void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream) throw(css::io::IOException, RuntimeException, std::exception)
 {
     OBoundControlModel::read(_rxInStream);
     ControlModelLock aLock( *this );

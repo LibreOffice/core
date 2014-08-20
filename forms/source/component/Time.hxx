@@ -41,7 +41,7 @@ protected:
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OTimeModel );
 
-    // stario::XPersistObject
+    // css::io::XPersistObject
     virtual OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ::com::sun::star::beans::XPropertySet

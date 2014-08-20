@@ -137,8 +137,8 @@ OUString SAL_CALL OCheckBoxModel::getServiceName() throw(RuntimeException, std::
 }
 
 
-void SAL_CALL OCheckBoxModel::write(const Reference<stario::XObjectOutputStream>& _rxOutStream)
-    throw(stario::IOException, RuntimeException, std::exception)
+void SAL_CALL OCheckBoxModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
+    throw(css::io::IOException, RuntimeException, std::exception)
 {
     OReferenceValueComponent::write(_rxOutStream);
 
@@ -153,7 +153,7 @@ void SAL_CALL OCheckBoxModel::write(const Reference<stario::XObjectOutputStream>
 }
 
 
-void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& _rxInStream) throw(stario::IOException, RuntimeException, std::exception)
+void SAL_CALL OCheckBoxModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream) throw(css::io::IOException, RuntimeException, std::exception)
 {
     OReferenceValueComponent::read(_rxInStream);
     osl::MutexGuard aGuard(m_aMutex);

@@ -33,23 +33,23 @@ using namespace ::osl;
 //= OOutputStreamWrapper
 
 
-void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     sal_uInt64 nWritten = 0;
     rStream.write(aData.getConstArray(),aData.getLength(),nWritten);
     if (nWritten != (sal_uInt64)aData.getLength())
     {
-        throw stario::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
+        throw css::io::BufferSizeExceededException(OUString(),static_cast<css::uno::XWeak*>(this));
     }
 }
 
 
-void SAL_CALL OOutputStreamWrapper::flush() throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::flush() throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
 }
 
 
-void SAL_CALL OOutputStreamWrapper::closeOutput() throw( stario::NotConnectedException, stario::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::closeOutput() throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
 }
 
