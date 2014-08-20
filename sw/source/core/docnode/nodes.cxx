@@ -263,7 +263,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                             GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds);
                         for( size_t i = pHts->Count(); i; )
                         {
-                            sal_uInt16 nDelMsg = 0;
                             SwTxtAttr * const pAttr = pHts->GetTextHint( --i );
                             switch ( pAttr->Which() )
                             {
@@ -324,14 +323,6 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
                             default:
                                 break;
-                            }
-
-                            if( nDelMsg && bToUndo )
-                            {
-                                SwPtrMsgPoolItem aMsgHint( nDelMsg,
-                                    (void*)&pAttr->GetAttr() );
-                                rNds.GetDoc()->GetUnoCallBack()->
-                                    ModifyNotification( &aMsgHint, &aMsgHint );
                             }
                         }
                     }

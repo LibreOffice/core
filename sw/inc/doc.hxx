@@ -346,7 +346,6 @@ class SW_DLLPUBLIC SwDoc :
     SwLayoutCache   *mpLayoutCache;  /**< Layout cache to read and save with the
                                      document for a faster formatting */
 
-    SwModify *mpUnoCallBack;
     IGrammarContact *mpGrammarContact;   //< for grammar checking in paragraphs during editing
 
     // table of forbidden characters of this document
@@ -1561,9 +1560,6 @@ public:
         has to trigger a reformatting only if some of the text is hidden.
     */
     bool ContainsHiddenChars() const;
-
-    // call back for API wrapper
-    SwModify*   GetUnoCallBack() const { return mpUnoCallBack; }
 
     IGrammarContact* getGrammarContact() const { return mpGrammarContact; }
 

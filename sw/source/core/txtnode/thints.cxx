@@ -1114,7 +1114,6 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
     {
         // einige Sachen muessen vorm Loeschen der "Format-Attribute" erfolgen
         SwDoc* pDoc = GetDoc();
-        sal_uInt16 nDelMsg = 0;
         switch( pAttr->Which() )
         {
         case RES_TXTATR_FLYCNT:
@@ -1196,12 +1195,6 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 
         default:
             break;
-        }
-
-        if( nDelMsg && !pDoc->IsInDtor() && GetNodes().IsDocNodes() )
-        {
-            SwPtrMsgPoolItem aMsgHint( nDelMsg, (void*)&pAttr->GetAttr() );
-            pDoc->GetUnoCallBack()->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
         SwTxtAttr::Destroy( pAttr, pDoc->GetAttrPool() );

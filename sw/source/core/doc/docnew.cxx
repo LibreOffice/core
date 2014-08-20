@@ -254,7 +254,6 @@ SwDoc::SwDoc()
     mpExtInputRing( 0 ),
     mpStyleAccess( 0 ),
     mpLayoutCache( 0 ),
-    mpUnoCallBack(new SwModify(0)),
     mpGrammarContact(createGrammarContact()),
     m_pXmlIdRegistry(),
     mReferenceCount(0),
@@ -446,7 +445,6 @@ SwDoc::~SwDoc()
 
     getIDocumentTimerAccess().StopIdling();   // stop idle timer
 
-    delete mpUnoCallBack, mpUnoCallBack = 0;
     delete mpURLStateChgd;
 
     // Deactivate Undo notification from Draw
