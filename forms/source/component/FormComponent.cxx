@@ -468,7 +468,7 @@ Any SAL_CALL OControlModel::queryAggregation(const Type& _rType) throw (RuntimeE
     return aReturn;
 }
 
-void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XObjectInputStream >& _rxInStream)
+void OControlModel::readHelpTextCompatibly(const css::uno::Reference< stario::XObjectInputStream >& _rxInStream)
 {
     OUString sHelpText;
     ::comphelper::operator>>( _rxInStream, sHelpText);
@@ -484,7 +484,7 @@ void OControlModel::readHelpTextCompatibly(const staruno::Reference< stario::XOb
     }
 }
 
-void OControlModel::writeHelpTextCompatibly(const staruno::Reference< stario::XObjectOutputStream >& _rxOutStream)
+void OControlModel::writeHelpTextCompatibly(const css::uno::Reference< stario::XObjectOutputStream >& _rxOutStream)
 {
     OUString sHelpText;
     try
