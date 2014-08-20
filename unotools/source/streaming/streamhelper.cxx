@@ -58,18 +58,18 @@ sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >&
     return nRead;
 }
 
-void SAL_CALL OInputStreamHelper::seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OInputStreamHelper::seek( sal_Int64 location ) throw(css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_nActPos = location;
 }
 
-sal_Int64 SAL_CALL OInputStreamHelper::getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL OInputStreamHelper::getPosition(  ) throw(css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     return m_nActPos;
 }
 
-sal_Int64 SAL_CALL OInputStreamHelper::getLength(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL OInputStreamHelper::getLength(  ) throw(css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     if (!m_xLockBytes.Is())
         return 0;

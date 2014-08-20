@@ -63,9 +63,9 @@ public:
     virtual sal_Int32 SAL_CALL available(  ) throw(css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL closeInput(  ) throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual void SAL_CALL seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int64 SAL_CALL getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int64 SAL_CALL getLength(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL seek( sal_Int64 location ) throw(css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getPosition(  ) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getLength(  ) throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 }   // namespace utl

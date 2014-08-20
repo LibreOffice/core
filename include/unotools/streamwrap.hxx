@@ -73,12 +73,12 @@ protected:
 
 //= OSeekableInputStreamWrapper
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
+typedef ::cppu::ImplHelper1 <   css::io::XSeekable
                             >   OSeekableInputStreamWrapper_Base;
 /** helper class for wrapping an SvStream into an com.sun.star.io::XInputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).
 */
-class UNOTOOLS_DLLPUBLIC OSeekableInputStreamWrapper : public ::cppu::ImplInheritanceHelper1 < OInputStreamWrapper, com::sun::star::io::XSeekable >
+class UNOTOOLS_DLLPUBLIC OSeekableInputStreamWrapper : public ::cppu::ImplInheritanceHelper1 < OInputStreamWrapper, css::io::XSeekable >
 {
 protected:
     OSeekableInputStreamWrapper() {}
@@ -87,9 +87,9 @@ public:
     OSeekableInputStreamWrapper(SvStream* _pStream, bool _bOwner = false);
 
     // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int64 SAL_CALL getPosition(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getPosition(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getLength(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 //= OOutputStreamWrapper
@@ -118,7 +118,7 @@ protected:
 
 //= OSeekableOutputStreamWrapper
 
-typedef ::cppu::ImplHelper1 <   ::com::sun::star::io::XSeekable
+typedef ::cppu::ImplHelper1 <   css::io::XSeekable
                             >   OSeekableOutputStreamWrapper_Base;
 /** helper class for wrapping an SvStream into an com.sun.star.io::XOutputStream
     which is seekable (i.e. supports the com.sun.star.io::XSeekable interface).
@@ -134,30 +134,30 @@ private:
     virtual ~OSeekableOutputStreamWrapper();
 
     // disambiguate XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL acquire(  ) throw () SAL_OVERRIDE;
     virtual void SAL_CALL release(  ) throw () SAL_OVERRIDE;
 
     // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int64 SAL_CALL getPosition(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int64 SAL_CALL getLength(  ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getPosition(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Int64 SAL_CALL getLength(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
-class UNOTOOLS_DLLPUBLIC OStreamWrapper : public ::cppu::ImplInheritanceHelper3 < OSeekableInputStreamWrapper, com::sun::star::io::XStream, com::sun::star::io::XOutputStream, com::sun::star::io::XTruncate >
+class UNOTOOLS_DLLPUBLIC OStreamWrapper : public ::cppu::ImplInheritanceHelper3 < OSeekableInputStreamWrapper, css::io::XStream, css::io::XOutputStream, css::io::XTruncate >
 {
 public:
     OStreamWrapper(SvStream& _rStream);
 
 // css::io::XStream
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 // css::io::XOutputStream
     virtual void SAL_CALL writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL flush() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL truncate() throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL truncate() throw(css::io::IOException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 }

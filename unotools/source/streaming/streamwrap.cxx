@@ -280,12 +280,12 @@ OStreamWrapper::OStreamWrapper(SvStream& _rStream)
     SetStream( &_rStream, false );
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return this;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL OStreamWrapper::getOutputStream(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
+css::uno::Reference< css::io::XOutputStream > SAL_CALL OStreamWrapper::getOutputStream(  ) throw (css::uno::RuntimeException, std::exception)
 {
     return this;
 }
@@ -313,7 +313,7 @@ void SAL_CALL OStreamWrapper::closeOutput() throw(css::io::NotConnectedException
 {
 }
 
-void SAL_CALL OStreamWrapper::truncate() throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL OStreamWrapper::truncate() throw(css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     m_pSvStream->SetStreamSize(0);
 }
