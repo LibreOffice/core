@@ -162,7 +162,7 @@ public:
 
 
 #define DECL_IFACE_PROP1(varname, type, attrib1)    \
-    DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1)
+    DECL_IFACE_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1)
 
 
 #define DECL_IFACE_PROP2(varname, type, attrib1, attrib2)   \
@@ -170,11 +170,11 @@ public:
 
 
 #define DECL_IFACE_PROP3(varname, type, attrib1, attrib2, attrib3)  \
-    DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3)
+    DECL_IFACE_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3)
 
 
 #define DECL_IFACE_PROP4(varname, type, attrib1, attrib2, attrib3, attrib4) \
-    DECL_IFACE_PROP_IMPL(varname, type) starbeans::PropertyAttribute::attrib1 | starbeans::PropertyAttribute::attrib2 | starbeans::PropertyAttribute::attrib3 | PropertyAttribute::attrib4)
+    DECL_IFACE_PROP_IMPL(varname, type) css::beans::PropertyAttribute::attrib1 | css::beans::PropertyAttribute::attrib2 | css::beans::PropertyAttribute::attrib3 | PropertyAttribute::attrib4)
 
 // === or Boolean properties
 

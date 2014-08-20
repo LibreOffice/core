@@ -425,7 +425,7 @@ void SAL_CALL OButtonControl::disposing( const EventObject& _rSource ) throw( Ru
 
 void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::com::sun::star::uno::RuntimeException, std::exception)
 {
-    // Asynchronous for starutil::URL-Button
+    // Asynchronous for css::util::URL-Button
     ImplSVEvent * n = Application::PostUserEvent( LINK(this, OButtonControl,OnClick) );
     {
         ::osl::MutexGuard aGuard( m_aMutex );

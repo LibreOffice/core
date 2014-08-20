@@ -253,11 +253,11 @@ protected:
 // XControl
     virtual void                                        SAL_CALL setContext(const InterfaceRef& Context) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual InterfaceRef                                SAL_CALL getContext() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void                                        SAL_CALL createPeer(const ::com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference<starawt::XWindowPeer>  SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Bool                                    SAL_CALL setModel(const ::com::sun::star::uno::Reference<starawt::XControlModel>& Model) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference<starawt::XControlModel>    SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual ::com::sun::star::uno::Reference<starawt::XView>            SAL_CALL getView() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void                                        SAL_CALL createPeer(const ::com::sun::star::uno::Reference<css::awt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<css::awt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference<css::awt::XWindowPeer>  SAL_CALL getPeer() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual sal_Bool                                    SAL_CALL setModel(const ::com::sun::star::uno::Reference<css::awt::XControlModel>& Model) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference<css::awt::XControlModel>    SAL_CALL getModel() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference<css::awt::XView>            SAL_CALL getView() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void                                        SAL_CALL setDesignMode(sal_Bool bOn) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool                                    SAL_CALL isDesignMode() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool                                    SAL_CALL isTransparent() throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

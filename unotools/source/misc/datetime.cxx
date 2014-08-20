@@ -179,19 +179,19 @@ namespace
 namespace utl
 {
 
-void typeConvert(const Date& _rDate, starutil::Date& _rOut)
+void typeConvert(const Date& _rDate, css::util::Date& _rOut)
 {
     _rOut.Day = _rDate.GetDay();
     _rOut.Month = _rDate.GetMonth();
     _rOut.Year = _rDate.GetYear();
 }
 
-void typeConvert(const starutil::Date& _rDate, Date& _rOut)
+void typeConvert(const css::util::Date& _rDate, Date& _rOut)
 {
     _rOut = Date(_rDate.Day, _rDate.Month, _rDate.Year);
 }
 
-void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut)
+void typeConvert(const DateTime& _rDateTime, css::util::DateTime& _rOut)
 {
     _rOut.Year = _rDateTime.GetYear();
     _rOut.Month = _rDateTime.GetMonth();
@@ -202,21 +202,21 @@ void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut)
     _rOut.NanoSeconds = _rDateTime.GetNanoSec();
 }
 
-void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut)
+void typeConvert(const css::util::DateTime& _rDateTime, DateTime& _rOut)
 {
     Date aDate(_rDateTime.Day, _rDateTime.Month, _rDateTime.Year);
     Time aTime(_rDateTime.Hours, _rDateTime.Minutes, _rDateTime.Seconds, _rDateTime.NanoSeconds);
     _rOut = DateTime(aDate, aTime);
 }
 
-void extractDate(const starutil::DateTime& _rDateTime, starutil::Date& _rOut)
+void extractDate(const css::util::DateTime& _rDateTime, css::util::Date& _rOut)
 {
     _rOut.Day = _rDateTime.Day;
     _rOut.Month = _rDateTime.Month;
     _rOut.Year = _rDateTime.Year;
 }
 
-OUString toISO8601(const starutil::DateTime& rDateTime)
+OUString toISO8601(const css::util::DateTime& rDateTime)
 {
     OUStringBuffer rBuffer;
     rBuffer.append((sal_Int32) rDateTime.Year);
@@ -261,13 +261,13 @@ OUString toISO8601(const starutil::DateTime& rDateTime)
 }
 
 /** convert ISO8601 DateTime String to util::DateTime */
-bool ISO8601parseDateTime(const OUString &rString, starutil::DateTime& rDateTime)
+bool ISO8601parseDateTime(const OUString &rString, css::util::DateTime& rDateTime)
 {
     bool bSuccess = true;
 
     rtl::OUString aDateStr, aTimeStr;
-    starutil::Date aDate;
-    starutil::Time aTime;
+    css::util::Date aDate;
+    css::util::Time aTime;
     sal_Int32 nPos = rString.indexOf( 'T' );
     if ( nPos >= 0 )
     {
@@ -286,7 +286,7 @@ bool ISO8601parseDateTime(const OUString &rString, starutil::DateTime& rDateTime
 
     if (bSuccess)
     {
-        rDateTime = starutil::DateTime(aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
+        rDateTime = css::util::DateTime(aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
                aDate.Day, aDate.Month, aDate.Year, false);
     }
 
@@ -297,7 +297,7 @@ bool ISO8601parseDateTime(const OUString &rString, starutil::DateTime& rDateTime
 // TODO: supports only calendar dates YYYY-MM-DD
 // MISSING: calendar dates YYYYMMDD YYYY-MM
 //          year, week date, ordinal date
-bool ISO8601parseDate(const OUString &aDateStr, starutil::Date& rDate)
+bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
 {
     bool bSuccess = true;
 
@@ -339,7 +339,7 @@ bool ISO8601parseDate(const OUString &aDateStr, starutil::Date& rDate)
 }
 
 /** convert ISO8601 Time String to util::Time */
-bool ISO8601parseTime(const OUString &aTimeStr, starutil::Time& rTime)
+bool ISO8601parseTime(const OUString &aTimeStr, css::util::Time& rTime)
 {
     bool bSuccess = true;
 

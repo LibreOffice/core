@@ -70,7 +70,7 @@ ORadioButtonControl::ORadioButtonControl(const Reference<XComponentContext>& _rx
 }
 
 
-void SAL_CALL ORadioButtonControl::createPeer(const Reference<starawt::XToolkit>& _rxToolkit, const Reference<starawt::XWindowPeer>& _rxParent) throw (RuntimeException, std::exception)
+void SAL_CALL ORadioButtonControl::createPeer(const Reference<css::awt::XToolkit>& _rxToolkit, const Reference<css::awt::XWindowPeer>& _rxParent) throw (RuntimeException, std::exception)
 {
     OBoundControl::createPeer(_rxToolkit, _rxParent);
 

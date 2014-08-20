@@ -126,7 +126,7 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
     {
         case UNODIALOG_PROPERTY_ID_PARENT:
         {
-            Reference<starawt::XWindow> xNew(rValue, css::uno::UNO_QUERY);
+            Reference<css::awt::XWindow> xNew(rValue, css::uno::UNO_QUERY);
             if (xNew != m_xParent)
             {
                 rConvertedValue <<= xNew;

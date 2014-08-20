@@ -88,7 +88,7 @@ public:
 
 protected:
     // XControl
-    virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference<starawt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<starawt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL createPeer(const ::com::sun::star::uno::Reference<css::awt::XToolkit>& Toolkit, const ::com::sun::star::uno::Reference<css::awt::XWindowPeer>& Parent) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
