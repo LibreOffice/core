@@ -77,7 +77,6 @@ private:
 
 public:
                         InfoBox( Window* pParent, const OUString& rMessage );
-                        InfoBox( Window* pParent, const ResId & rResId );
                         InfoBox( Window* pParent, WinBits nStyle,
                                 const OUString& rMessage );
 

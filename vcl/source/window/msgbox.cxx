@@ -420,12 +420,6 @@ InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
     ImplInitInfoBoxData();
 }
 
-InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
-    MessBox( pParent, rResId.SetRT( RSC_INFOBOX ) )
-{
-    ImplInitInfoBoxData();
-}
-
 InfoBox::InfoBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
 {
