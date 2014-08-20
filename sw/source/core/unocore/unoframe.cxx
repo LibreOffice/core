@@ -1232,7 +1232,7 @@ SwXFrame::~SwXFrame()
     delete pProps;
 }
 
-template<class Interface, class Impl>
+template<class Interface, class NameLookupIsHard>
 uno::Reference<Interface>
 SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
 {
@@ -1244,7 +1244,9 @@ SwXFrame::CreateXFrame(SwDoc & rDoc, SwFrmFmt *const pFrmFmt)
     }
     if (!xFrame.is())
     {
-        Impl *const pNew((pFrmFmt) ? new Impl(*pFrmFmt) : new Impl(&rDoc));
+        NameLookupIsHard *const pNew((pFrmFmt)
+                ? new NameLookupIsHard(*pFrmFmt)
+                : new NameLookupIsHard(&rDoc));
         xFrame.set(pNew);
         if (pFrmFmt)
         {
