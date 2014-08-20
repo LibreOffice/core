@@ -1152,9 +1152,9 @@ public:
     OUString            m_sTypeName;
     boost::scoped_ptr<SwFieldProperties_Impl> m_pProps;
 
-    Impl(SwDoc *const pDoc, SwFmtFld const*const pFmt,
+    Impl(SwDoc *const pDoc, SwFmtFld *const pFmt,
             sal_uInt16 const nServiceId)
-        : SwClient((pFmt) ? pDoc->GetUnoCallBack() : 0)
+        : SwClient(pFmt)
         , m_EventListeners(m_Mutex)
         , m_pFmtFld(pFmt)
         , m_pDoc(pDoc)
@@ -1225,9 +1225,7 @@ SwXTextField::SwXTextField(
     }
 }
 
-SwXTextField::SwXTextField(
-    const SwFmtFld& rFmt,
-    SwDoc & rDoc)
+SwXTextField::SwXTextField(SwFmtFld& rFmt, SwDoc & rDoc)
     : m_pImpl(new Impl(&rDoc, &rFmt, USHRT_MAX))
 {
 }
@@ -1251,7 +1249,7 @@ SwXTextField::CreateXTextField(SwDoc *const pDoc, SwFmtFld const* pFmt,
     if (!xField.is())
     {
         SwXTextField *const pField( (pFmt)
-                ? new SwXTextField(*pFmt, *pDoc)
+                ? new SwXTextField(const_cast<SwFmtFld&>(*pFmt), *pDoc)
                 : new SwXTextField(nServiceId, pDoc));
         xField.set(pField);
         if (pFmt)
@@ -1995,7 +1993,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 
     assert(m_pImpl->m_pFmtFld);
     m_pImpl->m_pDoc = pDoc;
-    m_pImpl->m_pDoc->GetUnoCallBack()->Add(m_pImpl.get());
+    const_cast<SwFmtFld *>(m_pImpl->m_pFmtFld)->Add(m_pImpl.get());
     m_pImpl->m_bIsDescriptor = false;
     if (m_pImpl->m_FieldTypeClient.GetRegisteredIn())
     {
@@ -2647,10 +2645,6 @@ void SwXTextField::Impl::Modify(
         // Am I re-attached to a new one and will the old one be deleted?
         if( ((SwFmtChg*)pNew)->pChangedFmt == GetRegisteredIn() &&
             ((SwFmtChg*)pOld)->pChangedFmt->IsFmtInDTOR() )
-            Invalidate();
-        break;
-    case RES_FIELD_DELETED:
-        if ((void*)m_pFmtFld == ((SwPtrMsgPoolItem *)pOld)->pObject)
             Invalidate();
         break;
     }

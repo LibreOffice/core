@@ -290,7 +290,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                         else
                                             ((SwDDEFieldType*)pTyp)->IncRefCnt();
                                     }
-                                    nDelMsg = RES_FIELD_DELETED;
+                                    static_cast<SwFmtFld&>(pAttr->GetAttr())
+                                        .InvalidateField();
                                 }
                                 break;
 

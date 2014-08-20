@@ -36,7 +36,10 @@ class SwView;
 class SwFieldType;
 
 // ATT_FLD
-class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
+class SW_DLLPUBLIC SwFmtFld
+    : public SfxPoolItem
+    , public SwModify
+    , public SfxBroadcaster
 {
     friend void _InitCore();
     SwFmtFld( sal_uInt16 nWhich ); // for default-Attibute
@@ -70,6 +73,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
 
     virtual bool GetInfo( SfxPoolItem& rInfo ) const SAL_OVERRIDE;
+
+    void InvalidateField();
 
     const SwField* GetField() const
     {

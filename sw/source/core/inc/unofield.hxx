@@ -169,7 +169,7 @@ private:
 
     virtual ~SwXTextField();
 
-    SwXTextField(const SwFmtFld& rFmt, SwDoc & rDoc);
+    SwXTextField(SwFmtFld& rFmt, SwDoc & rDoc);
 
     /// descriptor
     SwXTextField(sal_uInt16 nServiceId, SwDoc* pDoc=0);

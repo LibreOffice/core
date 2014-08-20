@@ -1178,7 +1178,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                     }
                 }
             }
-            nDelMsg = RES_FIELD_DELETED;
+            static_cast<SwFmtFld&>(pAttr->GetAttr()).InvalidateField();
             break;
 
         case RES_TXTATR_TOXMARK:

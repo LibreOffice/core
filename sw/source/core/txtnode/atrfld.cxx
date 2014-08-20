@@ -38,13 +38,13 @@
 #include <fieldhint.hxx>
 #include <svl/smplhint.hxx>
 
-TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
+TYPEINIT3(SwFmtFld, SfxPoolItem, SwModify, SfxBroadcaster)
 TYPEINIT1(SwFmtFldHint, SfxHint);
 
 // constructor for default item in attribute-pool
 SwFmtFld::SwFmtFld( sal_uInt16 nWhich )
     : SfxPoolItem( nWhich )
-    , SwClient()
+    , SwModify(0)
     , SfxBroadcaster()
     , mpField( NULL )
     , mpTxtFld( NULL )
@@ -53,7 +53,7 @@ SwFmtFld::SwFmtFld( sal_uInt16 nWhich )
 
 SwFmtFld::SwFmtFld( const SwField &rFld )
     : SfxPoolItem( RES_TXTATR_FIELD )
-    , SwClient( rFld.GetTyp() )
+    , SwModify( rFld.GetTyp() )
     , SfxBroadcaster()
     , mpField( rFld.CopyField() )
     , mpTxtFld( NULL )
@@ -77,7 +77,7 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
 // corrected
 SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
     : SfxPoolItem( RES_TXTATR_FIELD )
-    , SwClient()
+    , SwModify(0)
     , SfxBroadcaster()
     , mpField( NULL )
     , mpTxtFld( NULL )
@@ -183,6 +183,13 @@ SfxPoolItem* SwFmtFld::Clone( SfxItemPool* ) const
     return new SwFmtFld( *this );
 }
 
+void SwFmtFld::InvalidateField()
+{
+    SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
+            &static_cast<SwModify&>(*this)); // cast to base class (void*)
+    NotifyClients(&item, &item);
+}
+
 void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
 {
     if( !mpTxtFld )
@@ -208,6 +215,14 @@ void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
 
 void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
+    if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
+    {   // invalidate cached UNO object
+        SetXTextField(css::uno::Reference<css::text::XTextField>(0));
+        // ??? why does this Modify method not already do this?
+        NotifyClients(pOld, pNew);
+        return;
+    }
+
     if( !mpTxtFld )
         return;
 

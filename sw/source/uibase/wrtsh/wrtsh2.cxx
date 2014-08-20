@@ -43,6 +43,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <viewopt.hxx>
 #include <frmfmt.hxx>
+#include <fmtfld.hxx>
 #include <swtable.hxx>
 #include <mdiexp.hxx>
 #include <view.hxx>
@@ -178,10 +179,16 @@ class FieldDeletionModify : public SwModify
 
         void Modify( const SfxPoolItem* pOld, const SfxPoolItem *) SAL_OVERRIDE
         {
-            // Input fields have been deleted: better to close the dialog
-            if (pOld->Which() == RES_FIELD_DELETED)
+            // Input field has been deleted: better to close the dialog
+            if (pOld)
             {
-                mpInputFieldDlg->EndDialog(RET_CANCEL);
+                switch (pOld->Which())
+                {
+                case RES_REMOVE_UNO_OBJECT:
+                case RES_OBJECTDYING:
+                    mpInputFieldDlg->EndDialog(RET_CANCEL);
+                    break;
+                }
             }
         }
     private:
@@ -201,14 +208,21 @@ bool SwWrtShell::StartInputFldDlg( SwField* pFld, bool bNextButton,
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
 
-    // Register for possible input field deletion while dialog is open
     FieldDeletionModify aModify(pDlg.get());
-    GetDoc()->GetUnoCallBack()->Add(&aModify);
+    SwInputField *const pInputField(dynamic_cast<SwInputField*>(pFld));
+    if (pInputField)
+    {
+        // Register for possible input field deletion while dialog is open
+        pInputField->GetFmtFld()->Add(&aModify);
+    }
 
     bool bRet = RET_CANCEL == pDlg->Execute();
 
-    // Dialog closed, remove modification listener
-    GetDoc()->GetUnoCallBack()->Remove(&aModify);
+    if (pInputField)
+    {
+        // Dialog closed, remove modification listener
+        pInputField->GetFmtFld()->Remove(&aModify);
+    }
 
     if(pWindowState)
         *pWindowState = pDlg->GetWindowState();
