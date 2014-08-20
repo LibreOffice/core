@@ -46,8 +46,7 @@ class FilterDialog : public ModalDialog
 {
     // public interface
     public:
-             FilterDialog (       Window*            pParentWindow  ,
-                                  ResMgr*            pResMgr        );
+             FilterDialog (       Window*            pParentWindow  );
         void SetURL       ( const OUString&          sURL           );
         void ChangeFilters( const FilterNameList*    pFilterNames   );
         bool AskForFilter (       FilterNameListPtr& pSelectedItem  );
@@ -59,11 +58,8 @@ class FilterDialog : public ModalDialog
 
     // member
     private:
-              FixedText       m_ftURL       ;
-              ListBox         m_lbFilters   ;
-              OKButton        m_btnOK       ;
-              CancelButton    m_btnCancel   ;
-              HelpButton      m_btnHelp     ;
+              FixedText       *m_pFtURL       ;
+              ListBox         *m_pLbFilters   ;
         const FilterNameList* m_pFilterNames;
 
 };  // class FilterDialog

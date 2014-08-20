@@ -25,8 +25,6 @@
 
 #define RID_KEEP_PASSWORD                               (RID_UUI_START +  0)
 #define RID_SAVE_PASSWORD                               (RID_UUI_START +  1)
-#define DLG_FILTER_SELECT                               (RID_UUI_START + 10)
-#define DLG_SIMPLE_NAME_CLASH                           (RID_UUI_START + 13)
 #define STR_ERROR_PASSWORDS_NOT_IDENTICAL               (RID_UUI_START + 13)
 #define STR_ERROR_MASTERPASSWORD_WRONG                  (RID_UUI_START + 14)
 // RID_UUI_START + 15, 16, 17 are misused by syncaccess/source/ui/resids.hrc

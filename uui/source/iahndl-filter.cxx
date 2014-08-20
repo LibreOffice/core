@@ -55,10 +55,8 @@ executeFilterDialog(
     {
         SolarMutexGuard aGuard;
 
-        boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
-
         boost::scoped_ptr< uui::FilterDialog > xDialog(
-            new uui::FilterDialog(pParent, xManager.get()));
+            new uui::FilterDialog(pParent));
 
         xDialog->SetURL(rURL);
         xDialog->ChangeFilters(&rFilters);
