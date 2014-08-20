@@ -42,6 +42,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/outdev.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/button.hxx>
@@ -594,7 +595,7 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl)
             mrJob->execute( aEmpty );
         }
         catch(const uno::Exception&) {
-            ErrorBox( NULL, ResId( MSG_ERR_NO_WEBBROWSER_FOUND, *mpSfxResMgr )).Execute();
+            MessageDialog( NULL, ResId( STR_NO_WEBBROWSER_FOUND, *mpSfxResMgr )).Execute();
         }
     }
 
