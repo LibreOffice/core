@@ -51,9 +51,11 @@ namespace sw { namespace mark
 
     void AnnotationMark::InitDoc(SwDoc* const io_pDoc)
     {
-        SwTxtFld* pTxtFld =
-            GetMarkEnd().nNode.GetNode().GetTxtNode()->GetFldTxtAttrAt(
-            GetMarkEnd().nContent.GetIndex()-1, true );
+        SwTxtNode *pTxtNode = GetMarkEnd().nNode.GetNode().GetTxtNode();
+
+        SwTxtFld* pTxtFld = pTxtNode ?
+            pTxtNode->GetFldTxtAttrAt(
+            GetMarkEnd().nContent.GetIndex()-1, true ) : NULL;
         OSL_ENSURE( pTxtFld != NULL, "<AnnotationMark::InitDoc(..)> - missing text attribute for annotation field!" );
         if ( pTxtFld != NULL )
         {
