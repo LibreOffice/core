@@ -48,9 +48,9 @@ jclass java_sql_DriverPropertyInfo::getMyClass() const
 }
 
 
-java_sql_DriverPropertyInfo::operator starsdbc::DriverPropertyInfo()
+java_sql_DriverPropertyInfo::operator css::sdbc::DriverPropertyInfo()
 {
-    starsdbc::DriverPropertyInfo aInfo;
+    css::sdbc::DriverPropertyInfo aInfo;
     aInfo.Name = name();
     aInfo.Description = description();
     aInfo.IsRequired = required();

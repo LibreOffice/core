@@ -572,7 +572,7 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     if( out )
     {
         java_sql_SQLWarning_BASE        warn_base(t.pEnv, out);
-        SQLException aAsException( static_cast< starsdbc::SQLException >( java_sql_SQLWarning( warn_base, *this ) ) );
+        SQLException aAsException( static_cast< css::sdbc::SQLException >( java_sql_SQLWarning( warn_base, *this ) ) );
 
         // translate to warning
         SQLWarning aWarning;

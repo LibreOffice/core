@@ -30,7 +30,7 @@ using namespace ::com::sun::star::lang;
 //************ Class: java.sql.SQLException
 
 java_sql_SQLException::java_sql_SQLException( const java_sql_SQLException_BASE& _rException,const Reference< XInterface> & _rContext)
-    : starsdbc::SQLException(   _rException.getMessage(),
+    : css::sdbc::SQLException(   _rException.getMessage(),
                                 _rContext,
                                 _rException.getSQLState(),
                                 _rException.getErrorCode(),
@@ -61,7 +61,7 @@ jclass java_sql_SQLException_BASE::st_getMyClass()
     return theClass;
 }
 
-starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
+css::sdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
 {
     SDBThreadAttach t;
     static jmethodID mID(NULL);
@@ -70,10 +70,10 @@ starsdbc::SQLException java_sql_SQLException_BASE::getNextException()  const
     if( out )
     {
         java_sql_SQLException_BASE  warn_base(t.pEnv,out);
-        return (starsdbc::SQLException)java_sql_SQLException(warn_base,0);
+        return (css::sdbc::SQLException)java_sql_SQLException(warn_base,0);
     }
 
-    return starsdbc::SQLException();
+    return css::sdbc::SQLException();
 }
 
 OUString java_sql_SQLException_BASE::getSQLState() const

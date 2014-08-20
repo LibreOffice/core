@@ -523,7 +523,7 @@ void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(::com::sun::star::sdbc
     {
         java_sql_SQLWarning_BASE        warn_base( t.pEnv, out );
         return makeAny(
-            static_cast< starsdbc::SQLException >(
+            static_cast< css::sdbc::SQLException >(
                 java_sql_SQLWarning(warn_base,*this)));
     }
 

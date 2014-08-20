@@ -24,12 +24,10 @@
 
 namespace connectivity
 {
-    namespace starsdbc  = ::com::sun::star::sdbc;
-
     //************ Class: java.sql.SQLException
 
     class java_sql_SQLException_BASE;
-    class java_sql_SQLException :   public starsdbc::SQLException
+    class java_sql_SQLException :   public css::sdbc::SQLException
     {
     public:
         // A ctor that is needed for returning the object
@@ -50,7 +48,7 @@ namespace connectivity
 
         OUString getSQLState() const;
         sal_Int32       getErrorCode() const;
-        starsdbc::SQLException getNextException() const;
+        css::sdbc::SQLException getNextException() const;
 
         static jclass st_getMyClass();
     };
