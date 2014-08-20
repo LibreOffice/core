@@ -166,7 +166,7 @@ public class SwXStyleFamily extends TestCase {
         if ((String)Param.get("THRCNT") != null) {
             THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
         }
-        String nr = Integer.valueOf(THRCNT+1).toString();
+        String nr = Integer.toString(THRCNT+1);
 
         log.println( "adding NameReplaceIndex as mod relation to environment" );
         tEnv.addObjRelation("XNameReplaceINDEX", nr);

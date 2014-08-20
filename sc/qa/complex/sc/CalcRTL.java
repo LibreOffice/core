@@ -163,21 +163,16 @@ public class CalcRTL /* extends ComplexTestCase */
         assertTrue("Anchor has changed",
                (previous[0].equals(RL_TB[0]) && previous[0].equals(LR_TB[0])));
         assertEquals("HoriOrientPosition has changed",
-               2100, (Integer.valueOf(previous[1]).intValue() + Integer.valueOf(
-                                                                  RL_TB[1])
-                                                                 .intValue() +
-                   Integer.valueOf(LR_TB[1]).intValue()));
+               2100, Integer.parseInt(previous[1]) + Integer.parseInt(RL_TB[1]) +
+                   Integer.parseInt(LR_TB[1]));
         assertEquals("VertOrientPosition has changed",
-                3*Integer.valueOf(previous[2]).intValue(),
-               (Integer.valueOf(previous[2]).intValue() + Integer.valueOf(
-                                                                  RL_TB[2])
-                                                                 .intValue() +
-                   Integer.valueOf(LR_TB[2]).intValue()));
+                3*Integer.parseInt(previous[2]),
+               (Integer.parseInt(previous[2]) + Integer.parseInt(RL_TB[2]) +
+                   Integer.parseInt(LR_TB[2])));
         assertTrue("x-position hasn't changed",
                (previous[3].equals(LR_TB[3]) &&
-                   ((Integer.valueOf(previous[3]).intValue() * (-1)) -
-                       oShape.getSize().Width != Integer.valueOf(LR_TB[2])
-                                                        .intValue())));
+                   ((Integer.parseInt(previous[3]) * (-1)) -
+                       oShape.getSize().Width != Integer.parseInt(LR_TB[2]))));
         assertTrue("Couldn't close document", closeSpreadsheetDocument());
     }
 

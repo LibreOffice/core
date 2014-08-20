@@ -264,9 +264,8 @@ public class LocalOfficeWindow
         if (getNativeWindowSystemType() == SystemDependent.SYSTEM_XWINDOW )
         {
             String vendor = System.getProperty("java.vendor");
-            if ((vendor.equals("Sun Microsystems Inc.")
-		 || vendor.equals("Oracle Corporation"))
-                && Boolean.parseBoolean(System.getProperty("sun.awt.xembedserver")))
+            if ((vendor.equals("Sun Microsystems Inc.") || vendor.equals("Oracle Corporation"))
+                && Boolean.getBoolean("sun.awt.xembedserver"))
             {
                 xembed = new NamedValue(
                     "XEMBED",
