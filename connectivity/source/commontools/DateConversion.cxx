@@ -261,7 +261,19 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                     css::lang::Locale loc;
                     if (xFormatProps->getPropertyValue("Locale") >>= loc)
                         nStandardKey = xFormatTypes->getStandardIndex(loc);
+                    else
+                    {
+                        assert(false);
+                    }
                 }
+                else
+                {
+                    SAL_WARN("connectivity.commontools", "no format by key " << nKeyToUse);
+                }
+            }
+            else
+            {
+                assert(false);
             }
             // Why use nStandardKey rather than nKeyToUse here? I'm not sure, but "it was always like that".
             // Previously had hardcoded 0 instead of nStandardKey, which led to problems with dates
