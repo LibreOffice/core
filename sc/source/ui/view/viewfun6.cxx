@@ -263,7 +263,7 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
             assert(!"unhandled current date/time request");
             nCellFmt = NUMBERFORMAT_DATETIME;
     }
-    double fVal;
+    double fVal(0);
     switch (nCellFmt)
     {
         case NUMBERFORMAT_DATE:
