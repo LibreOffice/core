@@ -890,6 +890,7 @@ void SmXMLExport::ExportTable(const SmNode *pNode, int nLevel)
                 }
                 else if (pTemp->GetType() == NLINE &&
                          pTemp->GetNumSubNodes() == 1 &&
+                         pTemp->GetSubNode(0) &&
                          pTemp->GetSubNode(0)->GetType() == NALIGN)
                 {
                     // For the Table() construction, the NALIGN node is a child
