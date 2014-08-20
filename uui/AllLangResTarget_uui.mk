@@ -23,7 +23,6 @@ $(eval $(call gb_SrsTarget_set_include,uui/res,\
 $(eval $(call gb_SrsTarget_add_files,uui/res,\
 	uui/source/alreadyopen.src \
 	uui/source/filechanged.src \
-	uui/source/fltdlg.src \
 	uui/source/ids.src \
 	uui/source/lockfailed.src \
 	uui/source/nameclashdlg.src \

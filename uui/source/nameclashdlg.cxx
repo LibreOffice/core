@@ -21,7 +21,6 @@
 #include <osl/file.hxx>
 
 #include "ids.hrc"
-#include "nameclashdlg.hrc"
 #include "nameclashdlg.hxx"
 
 // NameClashDialog ---------------------------------------------------------
@@ -29,10 +28,10 @@
 IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
 {
     long nRet = (long) ABORT;
-    if ( &maBtnRename == pBtn )
+    if ( m_pBtnRename == pBtn )
     {
         nRet = (long) RENAME;
-        OUString aNewName = maEDNewName.GetText();
+        OUString aNewName = m_pEDNewName->GetText();
         if ( ( aNewName == maNewName ) || aNewName.isEmpty() )
         {
             MessageDialog aError(NULL, maSameName);
@@ -41,7 +40,7 @@ IMPL_LINK( NameClashDialog, ButtonHdl_Impl, PushButton *, pBtn )
         }
         maNewName = aNewName;
     }
-    else if ( &maBtnOverwrite == pBtn )
+    else if ( m_pBtnOverwrite == pBtn )
         nRet = (long) OVERWRITE;
 
     EndDialog( nRet );
@@ -55,21 +54,19 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
                                   OUString const & rClashingName,
                                   OUString const & rProposedNewName,
                                   bool bAllowOverwrite )
-    : ModalDialog( pParent, ResId( DLG_SIMPLE_NAME_CLASH, *pResMgr ) ),
-    maFTMessage            ( this, ResId( FT_FILE_EXISTS_WARNING, *pResMgr ) ),
-    maEDNewName            ( this, ResId( EDIT_NEW_NAME, *pResMgr ) ),
-    maBtnOverwrite         ( this, ResId( BTN_OVERWRITE, *pResMgr ) ),
-    maBtnRename            ( this, ResId( BTN_RENAME, *pResMgr ) ),
-    maBtnCancel            ( this, ResId( BTN_CANCEL, *pResMgr ) ),
-    maBtnHelp              ( this, ResId( BTN_HELP, *pResMgr ) ),
+    : ModalDialog( pParent, "SimpleNameClashDialog", "uui/ui/simplenameclash.ui" ),
     maNewName              ( rClashingName )
 {
-    FreeResource();
+    get(m_pFTMessage, "warning");
+    get(m_pEDNewName, "newname");
+    get(m_pBtnOverwrite, "replace");
+    get(m_pBtnRename, "rename");
+    get(m_pBtnCancel, "cancel");
 
     Link aLink( LINK( this, NameClashDialog, ButtonHdl_Impl ) );
-    maBtnOverwrite.SetClickHdl( aLink );
-    maBtnRename.SetClickHdl( aLink );
-    maBtnCancel.SetClickHdl( aLink );
+    m_pBtnOverwrite->SetClickHdl( aLink );
+    m_pBtnRename->SetClickHdl( aLink );
+    m_pBtnCancel->SetClickHdl( aLink );
 
     OUString aInfo;
     if ( bAllowOverwrite )
@@ -79,7 +76,7 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
     else
     {
         aInfo = ResId(STR_NAME_CLASH_RENAME_ONLY, *pResMgr).toString();
-        maBtnOverwrite.Hide();
+        m_pBtnOverwrite->Hide();
     }
 
     OUString aPath;
@@ -90,11 +87,11 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
 
     aInfo = aInfo.replaceFirst( "%NAME", rClashingName );
     aInfo = aInfo.replaceFirst( "%FOLDER", aPath );
-    maFTMessage.SetText( aInfo );
+    m_pFTMessage->SetText( aInfo );
     if ( !rProposedNewName.isEmpty() )
-        maEDNewName.SetText( rProposedNewName );
+        m_pEDNewName->SetText( rProposedNewName );
     else
-        maEDNewName.SetText( rClashingName );
+        m_pEDNewName->SetText( rClashingName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

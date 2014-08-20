@@ -21,8 +21,6 @@
 
 #include "ids.hrc"
 
-#include "fltdlg.hrc"
-
 #include <com/sun/star/util/XStringWidth.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -45,20 +43,19 @@ namespace uui
     @seealso    method SetURL()
 
     @param      "pParentWindow"  , parent window for dialog
-    @param      "pResMgr"        , resource manager
     @threadsafe no
 *//*-*************************************************************************************************************/
-FilterDialog::FilterDialog( Window* pParentWindow ,
-                            ResMgr* pResMgr       )
-    :   ModalDialog  (pParentWindow, ResId( DLG_FILTER_SELECT, *pResMgr ) )
-    ,   m_ftURL      (this, ResId( FT_URL, *pResMgr))
-    ,   m_lbFilters  (this, ResId( LB_FILTERS, *pResMgr))
-    ,   m_btnOK      (this, ResId( BTN_OK, *pResMgr))
-    ,   m_btnCancel  (this, ResId( BTN_CANCEL, *pResMgr))
-    ,   m_btnHelp    (this, ResId( BTN_HELP, *pResMgr))
+FilterDialog::FilterDialog( Window* pParentWindow )
+    :   ModalDialog  (pParentWindow, "FilterSelectDialog", "uui/ui/filterselect.ui" )
     ,   m_pFilterNames(NULL)
 {
-    FreeResource();
+    get(m_pFtURL, "url");
+    get(m_pLbFilters, "filters");
+    m_pFtURL->GetOutputSizePixel();
+    Size aSize(pParentWindow->LogicToPixel(Size(182, 175), MAP_APPFONT));
+    m_pLbFilters->set_height_request(aSize.Height());
+    m_pLbFilters->set_width_request(aSize.Width());
+    m_pFtURL->SetSizePixel(Size(aSize.Width(), m_pFtURL->GetOptimalSize().Height()));
 }
 
 /*-************************************************************************************************************
@@ -70,7 +67,7 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
 void FilterDialog::SetURL( const OUString& sURL )
 {
     // convert it and use given pure string as fallback if conversion failed
-    m_ftURL.SetText( impl_buildUIFileName(sURL) );
+    m_pFtURL->SetText( impl_buildUIFileName(sURL) );
 }
 
 /*-************************************************************************************************************
@@ -93,14 +90,14 @@ void FilterDialog::SetURL( const OUString& sURL )
 void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
 {
     m_pFilterNames = pFilterNames;
-    m_lbFilters.Clear();
+    m_pLbFilters->Clear();
     if( m_pFilterNames != NULL )
     {
         for( FilterNameListPtr pItem  = m_pFilterNames->begin();
                                pItem != m_pFilterNames->end()  ;
                                ++pItem                         )
         {
-            m_lbFilters.InsertEntry( pItem->sUI );
+            m_pLbFilters->InsertEntry( pItem->sUI );
         }
     }
 }
@@ -131,10 +128,10 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     {
         if( ModalDialog::Execute() == RET_OK )
         {
-            OUString sEntry = m_lbFilters.GetSelectEntry();
+            OUString sEntry = m_pLbFilters->GetSelectEntry();
             if( !sEntry.isEmpty() )
             {
-                int nPos = m_lbFilters.GetSelectEntryPos();
+                int nPos = m_pLbFilters->GetSelectEntryPos();
                 if( nPos < (int)(m_pFilterNames->size()) )
                 {
                     pSelectedItem  = m_pFilterNames->begin();
@@ -199,11 +196,11 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
     else
     {
         // otherwise its really a url ... build short name by using INetURLObject
-        ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > xStringCalculator( new StringCalculator(&m_ftURL) );
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > xStringCalculator( new StringCalculator(m_pFtURL) );
         if( xStringCalculator.is() )
         {
             INetURLObject aBuilder   ( sName );
-            Size          aSize      = m_ftURL.GetOutputSize();
+            Size          aSize      = m_pFtURL->GetOutputSizePixel();
                           sShortName = aBuilder.getAbbreviated( xStringCalculator, aSize.Width(), INetURLObject::DECODE_UNAMBIGUOUS );
         }
     }

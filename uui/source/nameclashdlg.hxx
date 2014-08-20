@@ -31,12 +31,12 @@ enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
 
 class NameClashDialog : public ModalDialog
 {
-    FixedText     maFTMessage;
-    Edit          maEDNewName;
-    PushButton    maBtnOverwrite;
-    PushButton    maBtnRename;
-    CancelButton  maBtnCancel;
-    HelpButton    maBtnHelp;
+    FixedText     *m_pFTMessage;
+    Edit          *m_pEDNewName;
+    PushButton    *m_pBtnOverwrite;
+    PushButton    *m_pBtnRename;
+    CancelButton  *m_pBtnCancel;
+
     OUString maSameName;
     OUString maNewName;
 
