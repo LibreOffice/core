@@ -34,20 +34,18 @@ class DateTime;
 namespace utl
 {
 
-    namespace starutil = ::com::sun::star::util;
+    UNOTOOLS_DLLPUBLIC void typeConvert(const Date& _rDate, css::util::Date& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const css::util::Date& _rDate, Date& _rOut);
 
-    UNOTOOLS_DLLPUBLIC void typeConvert(const Date& _rDate, starutil::Date& _rOut);
-    UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::Date& _rDate, Date& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const DateTime& _rDateTime, css::util::DateTime& _rOut);
+    UNOTOOLS_DLLPUBLIC void typeConvert(const css::util::DateTime& _rDateTime, DateTime& _rOut);
 
-    UNOTOOLS_DLLPUBLIC void typeConvert(const DateTime& _rDateTime, starutil::DateTime& _rOut);
-    UNOTOOLS_DLLPUBLIC void typeConvert(const starutil::DateTime& _rDateTime, DateTime& _rOut);
+    UNOTOOLS_DLLPUBLIC void extractDate(const css::util::DateTime& _rDateTime, css::util::Date& _rOut);
 
-    UNOTOOLS_DLLPUBLIC void extractDate(const starutil::DateTime& _rDateTime, starutil::Date& _rOut);
-
-    UNOTOOLS_DLLPUBLIC ::rtl::OUString toISO8601(const starutil::DateTime& _rDateTime);
-    UNOTOOLS_DLLPUBLIC bool            ISO8601parseDateTime(const ::rtl::OUString &i_rIn, starutil::DateTime& o_rDateTime);
-    UNOTOOLS_DLLPUBLIC bool            ISO8601parseDate(const ::rtl::OUString &i_rIn, starutil::Date& o_rDate);
-    UNOTOOLS_DLLPUBLIC bool            ISO8601parseTime(const ::rtl::OUString &i_rIn, starutil::Time& o_Time);
+    UNOTOOLS_DLLPUBLIC ::rtl::OUString toISO8601(const css::util::DateTime& _rDateTime);
+    UNOTOOLS_DLLPUBLIC bool            ISO8601parseDateTime(const ::rtl::OUString &i_rIn, css::util::DateTime& o_rDateTime);
+    UNOTOOLS_DLLPUBLIC bool            ISO8601parseDate(const ::rtl::OUString &i_rIn, css::util::Date& o_rDate);
+    UNOTOOLS_DLLPUBLIC bool            ISO8601parseTime(const ::rtl::OUString &i_rIn, css::util::Time& o_Time);
 
 }   // namespace utl
 

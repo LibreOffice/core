@@ -32,9 +32,9 @@ namespace comphelper
 namespace starbeans = ::com::sun::star::beans;
 
 
-sal_Int16 getNumberFormatType(const css::uno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
+sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
-    sal_Int16 nReturn(starutil::NumberFormat::UNDEFINED);
+    sal_Int16 nReturn(css::util::NumberFormat::UNDEFINED);
     if (xFormats.is())
     {
         try
@@ -52,17 +52,17 @@ sal_Int16 getNumberFormatType(const css::uno::Reference<starutil::XNumberFormats
 }
 
 
-sal_Int16 getNumberFormatType(const css::uno::Reference<starutil::XNumberFormatter>& xFormatter, sal_Int32 nKey)
+sal_Int16 getNumberFormatType(const css::uno::Reference<css::util::XNumberFormatter>& xFormatter, sal_Int32 nKey)
 {
     OSL_ENSURE(xFormatter.is(), "getNumberFormatType : the formatter isn't valid !");
-    css::uno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter->getNumberFormatsSupplier());
+    css::uno::Reference<css::util::XNumberFormatsSupplier> xSupplier( xFormatter->getNumberFormatsSupplier());
     OSL_ENSURE(xSupplier.is(), "getNumberFormatType : the formatter doesn't implement a supplier !");
-    css::uno::Reference<starutil::XNumberFormats> xFormats( xSupplier->getNumberFormats());
+    css::uno::Reference<css::util::XNumberFormats> xFormats( xSupplier->getNumberFormats());
     return getNumberFormatType(xFormats, nKey);
 }
 
 
-css::uno::Any getNumberFormatDecimals(const css::uno::Reference<starutil::XNumberFormats>& xFormats, sal_Int32 nKey)
+css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumberFormats>& xFormats, sal_Int32 nKey)
 {
     if (xFormats.is())
     {
@@ -86,13 +86,13 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<starutil::XNumbe
 
 
 sal_Int32 getStandardFormat(
-        const css::uno::Reference<starutil::XNumberFormatter>& xFormatter,
+        const css::uno::Reference<css::util::XNumberFormatter>& xFormatter,
         sal_Int16 nType,
         const css::lang::Locale& _rLocale)
 {
-    css::uno::Reference<starutil::XNumberFormatsSupplier> xSupplier( xFormatter.is() ? xFormatter->getNumberFormatsSupplier() : css::uno::Reference<starutil::XNumberFormatsSupplier>(NULL));
-    css::uno::Reference<starutil::XNumberFormats> xFormats( xSupplier.is() ? xSupplier->getNumberFormats() : css::uno::Reference<starutil::XNumberFormats>(NULL));
-    css::uno::Reference<starutil::XNumberFormatTypes> xTypes(xFormats, css::uno::UNO_QUERY);
+    css::uno::Reference<css::util::XNumberFormatsSupplier> xSupplier( xFormatter.is() ? xFormatter->getNumberFormatsSupplier() : css::uno::Reference<css::util::XNumberFormatsSupplier>(NULL));
+    css::uno::Reference<css::util::XNumberFormats> xFormats( xSupplier.is() ? xSupplier->getNumberFormats() : css::uno::Reference<css::util::XNumberFormats>(NULL));
+    css::uno::Reference<css::util::XNumberFormatTypes> xTypes(xFormats, css::uno::UNO_QUERY);
     OSL_ENSURE(xTypes.is(), "getStandardFormat : no format types !");
 
     return xTypes.is() ? xTypes->getStandardFormat(nType, _rLocale) : 0;
