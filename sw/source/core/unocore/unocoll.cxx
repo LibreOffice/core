@@ -1835,7 +1835,8 @@ uno::Any SwXFootnotes::getByIndex(sal_Int32 nIndex)
 
             if(nCount == nIndex)
             {
-                xRef = SwXFootnote::CreateXFootnote(*GetDoc(), rFtn);
+                xRef = SwXFootnote::CreateXFootnote(*GetDoc(),
+                        const_cast<SwFmtFtn&>(rFtn));
                 aRet <<= xRef;
                 break;
             }
@@ -1864,7 +1865,7 @@ sal_Bool SwXFootnotes::hasElements(void) throw( uno::RuntimeException, std::exce
 
 Reference<XFootnote>    SwXFootnotes::GetObject( SwDoc& rDoc, const SwFmtFtn& rFmt )
 {
-    return SwXFootnote::CreateXFootnote(rDoc, rFmt);
+    return SwXFootnote::CreateXFootnote(rDoc, const_cast<SwFmtFtn&>(rFmt));
 }
 
 OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException, std::exception )

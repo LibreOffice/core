@@ -437,8 +437,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                     bTypeChgd = true;
                     pTxtFtn->CheckCondColl();
                     //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
-                    SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)&pTxtFtn->GetAttr() );
-                    GetUnoCallBack()->ModifyNotification( &aMsgHint, &aMsgHint );
+                    const_cast<SwFmtFtn&>(rFtn).InvalidateFootnote();
                 }
             }
         }

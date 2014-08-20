@@ -57,9 +57,9 @@ public:
     OUString             m_sLabel;
 
     Impl(   SwXFootnote & rThis,
-            SwDoc *const pDoc, SwFmtFtn const*const pFootnote,
+            SwFmtFtn *const pFootnote,
             const bool bIsEndnote)
-        : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
+        : SwClient(pFootnote)
         , m_rThis(rThis)
         , m_bIsEndnote(bIsEndnote)
         , m_EventListeners(m_Mutex)
@@ -108,30 +108,17 @@ void SwXFootnote::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
     {
         Invalidate();
     }
-    else if (pOld)
-    {
-        switch (pOld->Which())
-        {
-            case RES_FOOTNOTE_DELETED:
-                if (static_cast<const void*>(m_pFmtFtn) ==
-                        static_cast<const SwPtrMsgPoolItem *>(pOld)->pObject)
-                {
-                    Invalidate();
-                }
-                break;
-        }
-    }
 }
 
 SwXFootnote::SwXFootnote(const bool bEndnote)
     : SwXText(0, CURSOR_FOOTNOTE)
-    , m_pImpl( new SwXFootnote::Impl(*this, 0, 0, bEndnote) )
+    , m_pImpl( new SwXFootnote::Impl(*this, 0, bEndnote) )
 {
 }
 
-SwXFootnote::SwXFootnote(SwDoc & rDoc, const SwFmtFtn& rFmt)
+SwXFootnote::SwXFootnote(SwDoc & rDoc, SwFmtFtn & rFmt)
     : SwXText(& rDoc, CURSOR_FOOTNOTE)
-    , m_pImpl( new SwXFootnote::Impl(*this, &rDoc, &rFmt, rFmt.IsEndNote()) )
+    , m_pImpl( new SwXFootnote::Impl(*this, &rFmt, rFmt.IsEndNote()) )
 {
 }
 
@@ -152,10 +139,10 @@ SwXFootnote::GetXFootnote(
 }
 
 SwXFootnote *
-SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFmtFtn const& rFootnoteFmt)
+SwXFootnote::CreateXFootnote(SwDoc & rDoc, SwFmtFtn & rFootnoteFmt)
 {
     SwXFootnote *const pXFootnote(
-        GetXFootnote(*rDoc.GetUnoCallBack(), rFootnoteFmt));
+        GetXFootnote(rFootnoteFmt, rFootnoteFmt));
     return (pXFootnote)
         ?   pXFootnote
         :   new SwXFootnote(rDoc, rFootnoteFmt);
@@ -335,7 +322,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
     {
         const SwFmtFtn& rFtn = pTxtAttr->GetFtn();
         m_pImpl->m_pFmtFtn = &rFtn;
-        pNewDoc->GetUnoCallBack()->Add(m_pImpl.get());
+        const_cast<SwFmtFtn*>(m_pImpl->m_pFmtFtn)->Add(m_pImpl.get());
         // force creation of sequence id - is used for references
         if (pNewDoc->IsInReading())
         {

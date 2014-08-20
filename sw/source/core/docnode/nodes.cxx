@@ -40,6 +40,7 @@
 #include <txtatr.hxx>
 #include <tox.hxx>
 #include <fmtrfmrk.hxx>
+#include <fmtftn.hxx>
 
 #include <docsh.hxx>
 #include <svl/smplhint.hxx>
@@ -296,7 +297,8 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                                 break;
 
                             case RES_TXTATR_FTN:
-                                nDelMsg = RES_FOOTNOTE_DELETED;
+                                static_cast<SwFmtFtn&>(pAttr->GetAttr())
+                                    .InvalidateFootnote();
                                 break;
 
                             case RES_TXTATR_TOXMARK:

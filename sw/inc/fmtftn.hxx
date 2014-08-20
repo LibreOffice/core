@@ -21,14 +21,18 @@
 
 #include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
+
 #include "swdllapi.h"
+#include <calbck.hxx>
 
 class SwDoc;
 class SwTxtFtn;
 
 // ATT_FTN
 
-class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
+class SW_DLLPUBLIC SwFmtFtn
+    : public SfxPoolItem
+    , public SwModify
 {
     friend class SwTxtFtn;
     SwTxtFtn* m_pTxtAttr;   ///< My TextAttribute.
@@ -47,6 +51,8 @@ public:
     /// "Pure virtual methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const SAL_OVERRIDE;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const SAL_OVERRIDE;
+
+    void InvalidateFootnote();
 
     OUString   GetNumStr() const { return m_aNumber; }
     sal_uInt16 GetNumber() const { return m_nNumber; }

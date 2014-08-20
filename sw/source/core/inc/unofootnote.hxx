@@ -66,14 +66,14 @@ protected:
 
     virtual ~SwXFootnote();
 
-    SwXFootnote(SwDoc & rDoc, const SwFmtFtn & rFmt);
+    SwXFootnote(SwDoc & rDoc, SwFmtFtn & rFmt);
 
 public:
 
     SwXFootnote(const bool bEndnote);
 
     static SwXFootnote *
-        CreateXFootnote(SwDoc & rDoc, SwFmtFtn const& rFootnoteFmt);
+        CreateXFootnote(SwDoc & rDoc, SwFmtFtn & rFootnoteFmt);
     /// may return 0
     static SwXFootnote *
         GetXFootnote(SwModify const& rUnoCB, SwFmtFtn const& rFootnoteFmt);

@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <fmtftn.hxx>
+
 #include <doc.hxx>
 #include <DocumentContentOperationsManager.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <cntfrm.hxx>
 #include <pagefrm.hxx>
-#include <fmtftn.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
 #include <ftninfo.hxx>
@@ -115,10 +116,11 @@ namespace {
 }
 
 SwFmtFtn::SwFmtFtn( bool bEndNote )
-    : SfxPoolItem( RES_TXTATR_FTN ),
-    m_pTxtAttr( 0 ),
-    m_nNumber( 0 ),
-    m_bEndNote( bEndNote )
+    : SfxPoolItem( RES_TXTATR_FTN )
+    , SwModify(0)
+    , m_pTxtAttr(0)
+    , m_nNumber(0)
+    , m_bEndNote(bEndNote)
 {
 }
 
@@ -137,6 +139,13 @@ SfxPoolItem* SwFmtFtn::Clone( SfxItemPool* ) const
     pNew->m_nNumber = m_nNumber;
     pNew->m_bEndNote = m_bEndNote;
     return pNew;
+}
+
+void SwFmtFtn::InvalidateFootnote()
+{
+    SwPtrMsgPoolItem const item(RES_REMOVE_UNO_OBJECT,
+            &static_cast<SwModify&>(*this)); // cast to base class (void*)
+    NotifyClients(&item, &item);
 }
 
 void SwFmtFtn::SetEndNote( bool b )

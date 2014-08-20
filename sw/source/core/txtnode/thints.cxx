@@ -1133,7 +1133,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 
         case RES_TXTATR_FTN:
             ((SwTxtFtn*)pAttr)->SetStartNode( 0 );
-            nDelMsg = RES_FOOTNOTE_DELETED;
+            static_cast<SwFmtFtn&>(pAttr->GetAttr()).InvalidateFootnote();
             break;
 
         case RES_TXTATR_FIELD:

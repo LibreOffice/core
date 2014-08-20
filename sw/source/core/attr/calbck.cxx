@@ -173,10 +173,6 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
             bLockClientList = ((SwPtrMsgPoolItem*)pOldValue)->pObject != this;
             break;
 
-        case RES_FOOTNOTE_DELETED:
-            bLockClientList = false;
-            break;
-
         default:
             bLockClientList = true;
         }
