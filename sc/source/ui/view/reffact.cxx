@@ -278,24 +278,24 @@ namespace
     }
 }
 
-ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,                   \
-                                             sal_uInt16             nId,                        \
-                                             SfxBindings*       p,                          \
-                                             SfxChildWinInfo*   /*pInfo*/ )                     \
+ScValidityRefChildWin::ScValidityRefChildWin( Window*               pParentP,
+                                             sal_uInt16             nId,
+                                             SfxBindings*       p,
+                                             SfxChildWinInfo*   /*pInfo*/ )
                                              : SfxChildWindow(pParentP, nId),
                                              m_bVisibleLock( false ),
                                              m_bFreeWindowLock( false ),
                                              m_pSavedWndParent( NULL )
 {
-    SetWantsFocus( false );\
-        ScTabViewShell* pViewShell =                                \
-            NULL != ( pWindow =  ScValidationDlg::Find1AliveObject( pParentP ) ) ? static_cast<ScValidationDlg*>(pWindow)->GetTabViewShell() :
-            lcl_GetTabViewShell( p );
-        if (!pViewShell)
-            pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
-        OSL_ENSURE( pViewShell, "missing view shell :-(" );         \
-        if (pViewShell && !pWindow)                                             \
-            pViewShell->GetViewFrame()->SetChildWindow( nId, false );           \
+    SetWantsFocus( false );
+    ScTabViewShell* pViewShell =
+        NULL != ( pWindow =  ScValidationDlg::Find1AliveObject( pParentP ) ) ? static_cast<ScValidationDlg*>(pWindow)->GetTabViewShell() :
+        lcl_GetTabViewShell( p );
+    if (!pViewShell)
+        pViewShell = PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
+    OSL_ENSURE( pViewShell, "missing view shell :-(" );
+    if (pViewShell && !pWindow)
+        pViewShell->GetViewFrame()->SetChildWindow( nId, false );
 
     if( pWindow ) m_pSavedWndParent = pWindow->GetParent();
 }
