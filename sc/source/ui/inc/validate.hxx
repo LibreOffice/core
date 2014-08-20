@@ -97,7 +97,11 @@ class ScValidationDlg
 
 public:
     explicit ScValidationDlg( Window* pParent, const SfxItemSet* pArgSet, ScTabViewShell * pTabViewSh, SfxBindings *pB = NULL );
-    virtual                     ~ScValidationDlg();
+    virtual                     ~ScValidationDlg()
+    {
+        if( m_bOwnRefHdlr )
+            RemoveRefDlg( false );
+    }
     static ScValidationDlg * Find1AliveObject( Window *pAncestor )
     {
         return static_cast<ScValidationDlg *>( SC_MOD()->Find1RefWindow( SLOTID, pAncestor ) );
@@ -169,7 +173,7 @@ public:
 
     enum { SLOTID = SID_VALIDITY_REFERENCE };
 
-    bool Close() SAL_OVERRIDE;
+    inline bool Close() SAL_OVERRIDE;
 };
 
 /** The tab page "Criteria" from the Validation dialog. */
@@ -256,6 +260,17 @@ public:
     void            SetupRefDlg();
     void            RemoveRefDlg();
 };
+
+bool ScValidationDlg::Close()
+{
+    if( m_bOwnRefHdlr )
+    {
+        if (SfxTabPage* pPage = GetTabPage(m_nValuePageId))
+            static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
+    }
+
+    return ScValidationDlgBase::Close();
+}
 
 class ScTPValidationHelp : public SfxTabPage
 {

@@ -156,23 +156,6 @@ void ScTPValidationValue::RefInputDonePostHdl()
 
 }
 
-bool ScValidationDlg::Close()
-{
-    if( m_bOwnRefHdlr )
-    {
-        if (SfxTabPage* pPage = GetTabPage(m_nValuePageId))
-            static_cast<ScTPValidationValue*>(pPage)->RemoveRefDlg();
-    }
-
-    return ScValidationDlgBase::Close();
-}
-
-ScValidationDlg::~ScValidationDlg()
-{
-    if( m_bOwnRefHdlr )
-        RemoveRefDlg( false );
-}
-
 namespace {
 
 /** Converts the passed ScValidationMode to the position in the list box. */
