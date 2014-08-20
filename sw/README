@@ -104,4 +104,37 @@ There are several sub-categories of SwTxtAttr:
   These all have a corresponding dummy character in the paragraph text, which
   is a placeholder for the "expansion" of the attribute, e.g. field content.
 
+=== Fields ===
+
+There are multiple model classes involved for fields:
+
+- enum RES_FIELDS enumerates the different types of fields.
+- SwFieldType contains some shared stuff for all fields of a type.
+  There are many subclasses of SwFieldType, one for each different type
+  of field.
+  For most types of fields there is one shared instance of this per type,
+  which is created in DocumentFieldsManager::_InitFieldTypes()
+  but for some there are more than one, and they are dynamically created, see
+  DocumentFieldsManager::InsertFldType().  An example for the latter are
+  variable fields (RES_GETEXPFLD/RES_SETEXPFLD), with one SwFldType per
+  variable.
+- SwXFieldMaster is the UNO wrapper of a field type.
+  It is a SwClient registered at the SwFieldType.
+  Its life-cycle is determined by UNO clients outside of sw; it will get
+  disposed when the SwFieldType dies.
+- SwFmtFld is the SfxPoolItem of a field.
+  The SwFmtFld is a SwClient registered at its SwFldType.
+  The SwFmtFld owns the SwField of the field.
+- SwField contains the core logic of a field.
+  The SwField is owned by the SwFmtFld of the field.
+  There are many subclasses of SwField, one for each different type of field.
+  Note that there are not many places that can Expand the field to its
+  correct value, since for example page number fields require a View
+  with an up to date layout; therefore the correct expansion is cached.
+- SwTxtFld is the text attribute of a field.
+  It owns the SwFmtFld of the field (like all text attributes).
+- SwXTextField is the UNO wrapper object of a field.
+  It is a SwClient registered at the SwFmtFld.
+  Its life-cycle is determined by UNO clients outside of sw; it will get
+  disposed when the SwFmtFld dies.
 
