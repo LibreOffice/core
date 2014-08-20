@@ -189,7 +189,7 @@ class RenderBenchMarkThread : public RenderThread
 public:
     RenderBenchMarkThread(GL3DBarChart * pChart)
         : RenderThread(pChart)
-        , mbAutoFlyExecuting(0)
+        , mbAutoFlyExecuting(false)
         , mbExecuting(false)
         , mbNeedFlyBack(false)
         , mnStep(0)
