@@ -125,7 +125,7 @@ public class QueryMetaData extends CommandMetaData
         for (int n = 0; n < FieldColumns.length; n++)
         {
             String sDisplayFieldName = FieldColumns[n].getDisplayFieldName();
-            if (!(JavaTools.FieldInList(_DisplayFieldNames, sDisplayFieldName) > -1))
+            if (JavaTools.FieldInList(_DisplayFieldNames, sDisplayFieldName) <= -1)
             {
                 oRemainingFieldColumns.add(FieldColumns[n]);
             }

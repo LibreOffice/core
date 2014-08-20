@@ -49,7 +49,7 @@ public class _XSearchDescriptor extends MultiMethodTest {
         log.println("test for getSearchString() ");
         searchStr = oObj.getSearchString();
 
-        if (!(searchStr == null)){ bResult = true; }
+        if (searchStr != null){ bResult = true; }
         tRes.tested("getSearchString()", bResult);
     }
 

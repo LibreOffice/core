@@ -77,7 +77,7 @@ public class _XCellCursor extends MultiMethodTest {
 
         oAddr = oRange.getRangeAddress();
         startCol2 = oAddr.StartColumn;
-        if (!(startCol == startCol2)){
+        if (startCol != startCol2){
             bResult = true;
         }
         tRes.tested( "gotoNext()", bResult );
@@ -105,7 +105,7 @@ public class _XCellCursor extends MultiMethodTest {
         oAddr = oRange.getRangeAddress();
         startRow2 = oAddr.StartRow;
         startCol2 = oAddr.StartColumn;
-        if (!(startCol == startCol2) || (startRow == startRow2)){
+        if ((startCol != startCol2) || (startRow == startRow2)){
             bResult = true;
         }
         tRes.tested( "gotoOffset()", bResult );
@@ -131,7 +131,7 @@ public class _XCellCursor extends MultiMethodTest {
 
         oAddr = oRange.getRangeAddress();
         startCol2 = oAddr.StartColumn;
-        if (!(startCol == startCol2)){
+        if (startCol != startCol2){
             bResult = true;
         }
         tRes.tested( "gotoPrevious()", bResult );

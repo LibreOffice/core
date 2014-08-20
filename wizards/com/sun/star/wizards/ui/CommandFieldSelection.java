@@ -343,7 +343,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator<
 
     public void toggleCommandListBox(String[] _NewItems)
     {
-        boolean bdoenable = !(QueryMetaData.getIncludedCommandNames(_NewItems).length >= CurDBMetaData.getMaxTablesInSelect());
+        boolean bdoenable = QueryMetaData.getIncludedCommandNames(_NewItems).length < CurDBMetaData.getMaxTablesInSelect();
         toggleCommandListBox(bdoenable);
     }
 

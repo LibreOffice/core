@@ -164,7 +164,7 @@ public class Format implements Cloneable {
     public boolean getAttribute(int attribute) {
         if ((mask & attribute) == 0)
             return false;
-        return (!((attributes & attribute) == 0));
+        return ((attributes & attribute) != 0);
     }
 
     /**

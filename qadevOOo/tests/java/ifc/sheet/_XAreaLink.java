@@ -49,7 +49,7 @@ public class _XAreaLink extends MultiMethodTest {
         log.println("testing getDestArea()");
         boolean bResult = false;
         oORAdd = oObj.getDestArea();
-        if (!(oORAdd == null)){ bResult = true; }
+        if (oORAdd != null){ bResult = true; }
         tRes.tested("getDestArea()", bResult) ;
     }
 
@@ -63,7 +63,7 @@ public class _XAreaLink extends MultiMethodTest {
         boolean bResult = false;
         String src = null;
         src = oObj.getSourceArea() ;
-        if (!(src == null)){ bResult = true; }
+        if (src != null){ bResult = true; }
         tRes.tested("getSourceArea()", bResult) ;
     }
 

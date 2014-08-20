@@ -593,7 +593,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             }
             else
             {
-                enableNextButton(!(getCurrentStep() == nMaxStep));
+                enableNextButton(getCurrentStep() != nMaxStep);
             }
         }
     }

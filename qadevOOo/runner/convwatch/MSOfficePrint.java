@@ -788,7 +788,7 @@ public class MSOfficePrint
                     if (aLine != null)
                     {
                         aLine = aLine.trim();
-                        if ( (! (aLine.length() < 2) ) &&
+                        if ( (aLine.length() >= 2 ) &&
                              (! aLine.startsWith("#")) &&
                              (! aLine.startsWith(";")) )
                         {

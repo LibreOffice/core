@@ -373,7 +373,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                                 CurDBColumn = getDoc().DBColumnsVector.get(ColIndex);
                                 addLinkedTextSection(xTextCursor, ReportTextDocument.COPYOFGROUPSECTION + Integer.toString(ColIndex + 1), CurDBColumn, CurGroupValue);
                                 OldGroupFieldValues[ColIndex] = CurGroupValue;
-                                breset = !(ColIndex == GroupFieldCount - 1);
+                                breset = ColIndex != GroupFieldCount - 1;
                             }
                         }
                         getRecordParser().getcurrentRecordData(DataVector);

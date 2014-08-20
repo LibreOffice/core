@@ -177,7 +177,7 @@ public class PerformanceContainer /* extends *//* implements */ {
                 {
                     sLine = aRandomAccessFile.readLine();
                     if ( (sLine != null) &&
-                         (! (sLine.length() < 2) ) &&
+                         (sLine.length() >= 2 ) &&
                          (! sLine.startsWith("#")))
                     {
                         if (sLine.startsWith("WordStartTime="))

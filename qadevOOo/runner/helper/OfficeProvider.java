@@ -671,7 +671,7 @@ public class OfficeProvider implements AppProvider
 
         if (sep.equalsIgnoreCase("\\"))
         {
-            if (!(idx2 < 0))
+            if (idx2 >= 0)
             {
                 sysDir = sysDir.substring(1);
             }

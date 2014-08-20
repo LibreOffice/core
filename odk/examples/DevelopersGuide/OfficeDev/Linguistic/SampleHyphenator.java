@@ -275,8 +275,8 @@ public class SampleHyphenator extends ComponentBase implements
             // check if hyphenation pos is valid,
             // a value of -1 indicates that hyphenation is not possible
             if (  nHyphenationPos != -1 &&
-                !(nHyphenationPos <  nHyphMinLeading) &&
-                !(nHyphenationPos >= aWord.length() - nHyphMinTrailing))
+                (nHyphenationPos > nHyphMinLeading) &&
+                (nHyphenationPos < aWord.length() - nHyphMinTrailing))
             {
                 xRes = new XHyphenatedWord_impl(aWord, aLocale,
                                 nHyphenationPos, aHyphenatedWord, nHyphenPos);

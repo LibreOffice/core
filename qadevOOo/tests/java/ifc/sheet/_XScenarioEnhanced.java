@@ -40,35 +40,35 @@ public class _XScenarioEnhanced extends MultiMethodTest {
 
         CellRangeAddress first = getting[0];
 
-        if (!(first.Sheet == 1)) {
+        if (first.Sheet != 1) {
             log.println(
                     "wrong RangeAddress is returned, expected Sheet=0 and got " +
                     first.Sheet);
             res = false;
         }
 
-        if (!(first.StartColumn == 0)) {
+        if (first.StartColumn != 0) {
             log.println(
                     "wrong RangeAddress is returned, expected StartColumn=0 and got " +
                     first.StartColumn);
             res = false;
         }
 
-        if (!(first.EndColumn == 10)) {
+        if (first.EndColumn != 10) {
             log.println(
                     "wrong RangeAddress is returned, expected EndColumn=10 and got " +
                     first.EndColumn);
             res = false;
         }
 
-        if (!(first.StartRow == 0)) {
+        if (first.StartRow != 0) {
             log.println(
                     "wrong RangeAddress is returned, expected StartRow=0 and got " +
                     first.StartRow);
             res = false;
         }
 
-        if (!(first.EndRow == 10)) {
+        if (first.EndRow != 10) {
             log.println(
                     "wrong RangeAddress is returned, expected EndRow=10 and got " +
                     first.EndRow);

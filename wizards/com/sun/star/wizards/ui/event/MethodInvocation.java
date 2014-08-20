@@ -59,7 +59,7 @@ public class MethodInvocation
     {
         mMethod = method;
         mObject = obj;
-        mWithParam = !(paramClass == null);
+        mWithParam = paramClass != null;
     }
 
     /**
