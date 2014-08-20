@@ -4143,13 +4143,13 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
             }
             else
             {
-                const SvxBrushItem &rBack = GetFmt()->GetBackground();
+                SvxBrushItem aBack = GetFmt()->makeBackgroundBrushItem();
                 // OD 07.08.2002 #99657# #GetTransChg#
                 //     to determine, if background has to be painted, by checking, if
                 //     background color is not COL_TRANSPARENT ("no fill"/"auto fill")
                 //     or a background graphic exists.
-                bPaintCompleteBack = !(rBack.GetColor() == COL_TRANSPARENT) ||
-                                     rBack.GetGraphicPos() != GPOS_NONE;
+                bPaintCompleteBack = !(aBack.GetColor() == COL_TRANSPARENT) ||
+                                     aBack.GetGraphicPos() != GPOS_NONE;
             }
         }
         // paint of margin needed.

@@ -925,7 +925,7 @@ void SwHTMLParser::InsertBodyOptions()
 
     // Die Item fuer die Seitenvorlage vorbereiten (Hintergrund, Umrandung)
     // Beim BrushItem muessen schon gesetzte werte erhalten bleiben!
-    SvxBrushItem aBrushItem( pCSS1Parser->GetPageDescBackground() );
+    SvxBrushItem aBrushItem( pCSS1Parser->makePageDescBackground() );
     bool bSetBrush = false;
 
     if( bBGColor && !pCSS1Parser->IsBodyBGColorSet() )

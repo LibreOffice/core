@@ -395,7 +395,7 @@ const SfxPoolItem& SwFmt::GetFmtAttr( sal_uInt16 nWhich, bool bInParents ) const
     if(RES_BACKGROUND == nWhich && (RES_FLYFRMFMT == Which() || RES_FRMFMT == Which()))
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
-        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
+        SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes or makeBackgroundBrushItem (simple fallback is in place and used)");
         static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
         // fill the local static SvxBrushItem from the current ItemSet so that
@@ -789,21 +789,18 @@ void SwFmt::SetGrabBagItem(const uno::Any& rVal)
 }
 
 //UUUU
-const SvxBrushItem& SwFmt::GetBackground(bool bInP) const
+SvxBrushItem SwFmt::makeBackgroundBrushItem(bool bInP) const
 {
     //UUUU   FlyFrame              PageStyle
     if(RES_FLYFRMFMT == Which() || RES_FRMFMT == Which())
     {
         //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
         SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");
-        static SvxBrushItem aSvxBrushItem(RES_BACKGROUND);
 
         // fill the local static SvxBrushItem from the current ItemSet so that
         // the fill attributes [XATTR_FILL_FIRST .. XATTR_FILL_LAST] are used
         // as good as possible to create a fallback representation and return that
-        aSvxBrushItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bInP);
-
-        return aSvxBrushItem;
+        return getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bInP);
     }
 
     return aSet.GetBackground(bInP);

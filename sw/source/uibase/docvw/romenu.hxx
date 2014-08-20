@@ -19,20 +19,20 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_DOCVW_ROMENU_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_DOCVW_ROMENU_HXX
 
+#include <editeng/brushitem.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/menu.hxx>
 #include <svl/stritem.hxx>
 
 class SwView;
 class SfxDispatcher;
-class SvxBrushItem;
 class ImageMap;
 class INetImage;
 
 class SwReadOnlyPopup : public PopupMenu
 {
-          SwView &rView;
-    const SvxBrushItem *pItem;
+    SwView &rView;
+    SvxBrushItem aBrushItem;
     const Point &rDocPos;
                 Graphic aGraphic;
     OUString    sURL,

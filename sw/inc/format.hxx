@@ -244,8 +244,8 @@ public:
     inline const SvxBoxItem               &GetBox( bool = true ) const;
     inline const SvxFmtKeepItem         &GetKeep( bool = true ) const;
 
-    //UUUU Get SvxBrushItem for Background fill (partially for backwards compatibility)
-    const SvxBrushItem& GetBackground( bool = true ) const;
+    //UUUU Create SvxBrushItem for Background fill (partially for backwards compatibility)
+    SvxBrushItem makeBackgroundBrushItem( bool = true ) const;
 
     inline const SvxShadowItem            &GetShadow( bool = true ) const;
     inline const SwFmtPageDesc            &GetPageDesc( bool = true ) const;

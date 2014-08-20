@@ -2028,7 +2028,7 @@ void SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 
     if(pBackColor||pBackTrans||pGrURL||pGrFilter||pGrLoc)
     {
-        SvxBrushItem aBrush ( rFrmFmt.GetBackground() );
+        SvxBrushItem aBrush(rFrmFmt.makeBackgroundBrushItem());
         if(pBackColor)
             aBrush.PutValue(*pBackColor, MID_BACK_COLOR);
         if(pBackTrans)

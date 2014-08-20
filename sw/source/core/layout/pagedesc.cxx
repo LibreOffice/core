@@ -117,7 +117,7 @@ void SwPageDesc::Mirror()
     aSet.Put( aMaster.GetPaperBin() );
     aSet.Put( aMaster.GetULSpace() );
     aSet.Put( aMaster.GetBox() );
-    aSet.Put( aMaster.GetBackground() );
+    aSet.Put( aMaster.makeBackgroundBrushItem() );
     aSet.Put( aMaster.GetShadow() );
     aSet.Put( aMaster.GetCol() );
     aSet.Put( aMaster.GetFrmDir() );    // #112217#

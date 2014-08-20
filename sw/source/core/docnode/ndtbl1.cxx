@@ -495,11 +495,11 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, SvxBrushItem &rToFill ) c
 
         if( !aRowArr.empty() )
         {
-            rToFill = aRowArr[0]->GetFrmFmt()->GetBackground();
+            rToFill = aRowArr[0]->GetFrmFmt()->makeBackgroundBrushItem();
 
             bRet = true;
             for ( sal_uInt16 i = 1; i < aRowArr.size(); ++i )
-                if ( rToFill != aRowArr[i]->GetFrmFmt()->GetBackground() )
+                if ( rToFill != aRowArr[i]->GetFrmFmt()->makeBackgroundBrushItem() )
                 {
                     bRet = false;
                     break;
@@ -1190,14 +1190,14 @@ bool SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
             {
                 case RES_BACKGROUND:
                 {
-                    const SvxBrushItem &rBack =
-                                    aBoxes[i]->GetFrmFmt()->GetBackground();
+                    SvxBrushItem aBack =
+                        aBoxes[i]->GetFrmFmt()->makeBackgroundBrushItem();
                     if( !bOneFound )
                     {
-                        (SvxBrushItem&)rToFill = rBack;
+                        (SvxBrushItem&)rToFill = aBack;
                         bOneFound = true;
                     }
-                    else if( rToFill != rBack )
+                    else if( rToFill != aBack )
                         bRet = false;
                 }
                 break;

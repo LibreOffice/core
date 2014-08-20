@@ -153,7 +153,7 @@ public:
     void SetBodyLinkSet() { bBodyLinkSet = true; }
     void SetBodyVLinkSet() { bBodyVLinkSet = true; }
 
-    const SvxBrushItem& GetPageDescBackground() const;
+    SvxBrushItem makePageDescBackground() const;
 
     inline void SetTHTagStyles();
     inline void SetTDTagStyles();

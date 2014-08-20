@@ -2043,8 +2043,8 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
 
     if (bIsInHeader)
     {
-        const SvxBrushItem& rBrush(rFmt.GetBackground());
-        WriteBrushAttr(rBrush, rPropOpt);
+        SvxBrushItem aBrush(rFmt.makeBackgroundBrushItem());
+        WriteBrushAttr(aBrush, rPropOpt);
     }
     else
     {

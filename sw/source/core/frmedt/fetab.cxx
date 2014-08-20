@@ -849,7 +849,7 @@ void SwFEShell::GetTabBackground( SvxBrushItem &rToFill ) const
 {
     SwFrm *pFrm = GetCurrFrm();
     if( pFrm && pFrm->IsInTab() )
-        rToFill = pFrm->ImplFindTabFrm()->GetFmt()->GetBackground();
+        rToFill = pFrm->ImplFindTabFrm()->GetFmt()->makeBackgroundBrushItem();
 }
 
 bool SwFEShell::HasWholeTabSelection() const

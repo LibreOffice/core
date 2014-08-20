@@ -258,11 +258,11 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                 }
                 if( bEmpty )
                 {
-                    const SvxBrushItem& rBrush = rFrmFmt.GetBackground();
+                    SvxBrushItem aBrush = rFrmFmt.makeBackgroundBrushItem();
                     /// background is not empty, if it has a background graphic
                     /// or its background color is not "no fill"/"auto fill".
-                    if( GPOS_NONE != rBrush.GetGraphicPos() ||
-                        rBrush.GetColor() != COL_TRANSPARENT )
+                    if( GPOS_NONE != aBrush.GetGraphicPos() ||
+                        aBrush.GetColor() != COL_TRANSPARENT )
                         bEmpty = false;
                 }
                 if( bEmpty )

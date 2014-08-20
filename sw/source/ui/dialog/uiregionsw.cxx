@@ -193,7 +193,7 @@ SectRepr::SectRepr( sal_uInt16 nPos, SwSection& rSect )
     if( pFmt )
     {
         m_Col = pFmt->GetCol();
-        m_Brush = pFmt->GetBackground();
+        m_Brush = pFmt->makeBackgroundBrushItem();
         m_FtnNtAtEnd = pFmt->GetFtnAtTxtEnd();
         m_EndNtAtEnd = pFmt->GetEndAtTxtEnd();
         m_Balance.SetValue(pFmt->GetBalancedColumns().GetValue());
@@ -764,7 +764,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
             if( pFmt->GetCol() != pRepr->GetCol() )
                 pSet->Put( pRepr->GetCol() );
 
-            if( pFmt->GetBackground(false) != pRepr->GetBackground() )
+            SvxBrushItem aBrush(pFmt->makeBackgroundBrushItem(false));
+            if( aBrush != pRepr->GetBackground() )
                 pSet->Put( pRepr->GetBackground() );
 
             if( pFmt->GetFtnAtTxtEnd(false) != pRepr->GetFtnNtAtEnd() )

@@ -83,6 +83,7 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
 SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     PopupMenu( SW_RES(MN_READONLY_POPUP) ),
     rView  ( rV ),
+    aBrushItem(RES_BACKGROUND),
     rDocPos( rDPos ),
     pImageMap( 0 ),
     pTargetURL( 0 )
@@ -149,14 +150,14 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     SfxViewFrame * pVFrame = rV.GetViewFrame();
     SfxDispatcher &rDis = *pVFrame->GetDispatcher();
     const SwPageDesc &rDesc = rSh.GetPageDesc( rSh.GetCurPageDesc() );
-    pItem = &rDesc.GetMaster().GetBackground();
+    aBrushItem = rDesc.GetMaster().makeBackgroundBrushItem();
     bool bEnableBackGallery = false,
          bEnableBack = false;
 
-    if ( GPOS_NONE != pItem->GetGraphicPos() )
+    if ( GPOS_NONE != aBrushItem.GetGraphicPos() )
     {
         bEnableBack = true;
-        if ( !pItem->GetGraphicLink().isEmpty() )
+        if ( !aBrushItem.GetGraphicLink().isEmpty() )
         {
             if ( aThemeList.empty() )
                 GalleryExplorer::FillThemeList( aThemeList );
@@ -248,7 +249,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, sal_uInt16 nId )
         {
             nId -= MN_READONLY_BACKGROUNDTOGALLERY+3;
             nSaveId = MN_READONLY_SAVEBACKGROUND;
-            sTmp = pItem->GetGraphicLink();
+            sTmp = aBrushItem.GetGraphicLink();
         }
         else
         {
@@ -349,15 +350,15 @@ OUString SwReadOnlyPopup::SaveGraphic( sal_uInt16 nId )
     // fish out the graphic's name
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
-        if ( !pItem->GetGraphicLink().isEmpty() )
-            sGrfName = pItem->GetGraphicLink();
-        ((SvxBrushItem*)pItem)->SetDoneLink( Link() );
-        const Graphic *pGrf = pItem->GetGraphic();
+        if ( !aBrushItem.GetGraphicLink().isEmpty() )
+            sGrfName = aBrushItem.GetGraphicLink();
+        aBrushItem.SetDoneLink( Link() );
+        const Graphic *pGrf = aBrushItem.GetGraphic();
         if ( pGrf )
         {
             aGraphic = *pGrf;
-            if ( !pItem->GetGraphicLink().isEmpty() )
-                sGrfName = pItem->GetGraphicLink();
+            if ( !aBrushItem.GetGraphicLink().isEmpty() )
+                sGrfName = aBrushItem.GetGraphicLink();
         }
         else
             return OUString();

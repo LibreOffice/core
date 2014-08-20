@@ -2178,7 +2178,7 @@ static bool OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
 void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
 {
     // If the frame itself has a background, then export.
-    if( OutCSS1_FrmFmtBrush( *this, rFrmFmt.GetBackground() ) )
+    if( OutCSS1_FrmFmtBrush( *this, rFrmFmt.makeBackgroundBrushItem() ) )
         return;
 
     // If the frame is not linked to a page, we use the background of the anchor.
@@ -2206,7 +2206,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
 
                 // If the box has a background, we take it.
                 if( OutCSS1_FrmFmtBrush( *this,
-                        pBox->GetFrmFmt()->GetBackground() ) )
+                        pBox->GetFrmFmt()->makeBackgroundBrushItem() ) )
                     return;
 
                 // Otherwise we use that of the lines
@@ -2214,7 +2214,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
                 while( pLine )
                 {
                     if( OutCSS1_FrmFmtBrush( *this,
-                            pLine->GetFrmFmt()->GetBackground() ) )
+                            pLine->GetFrmFmt()->makeBackgroundBrushItem() ) )
                         return;
                     pBox = pLine->GetUpper();
                     pLine = pBox ? pBox->GetUpper() : 0;
@@ -2222,7 +2222,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
 
                 // If there was none either, we use the background of the table.
                 if( OutCSS1_FrmFmtBrush( *this,
-                        pTableNd->GetTable().GetFrmFmt()->GetBackground() ) )
+                        pTableNd->GetTable().GetFrmFmt()->makeBackgroundBrushItem() ) )
                     return;
             }
 
@@ -2241,7 +2241,7 @@ void SwHTMLWriter::OutCSS1_FrmFmtBackground( const SwFrmFmt& rFrmFmt )
     // the value of the Config.
     OSL_ENSURE( pCurrPageDesc, "no page template found" );
     if( !OutCSS1_FrmFmtBrush( *this,
-                              pCurrPageDesc->GetMaster().GetBackground() ) )
+                              pCurrPageDesc->GetMaster().makeBackgroundBrushItem() ) )
     {
         Color aColor( COL_WHITE );
 

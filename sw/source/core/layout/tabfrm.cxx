@@ -2972,7 +2972,8 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
         InvalidatePage( pPage );
         SetComplete();
 
-        const SvxGraphicPosition ePos = GetFmt()->GetBackground().GetGraphicPos();
+        SvxBrushItem aBack = GetFmt()->makeBackgroundBrushItem();
+        const SvxGraphicPosition ePos = aBack.GetGraphicPos();
         if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
             SetCompletePaint();
     }

@@ -561,10 +561,10 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
 }
 // /Feature: PrintExt
 
-const SvxBrushItem& SwCSS1Parser::GetPageDescBackground() const
+SvxBrushItem SwCSS1Parser::makePageDescBackground() const
 {
     return pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool( RES_POOLPAGE_HTML, false )
-        ->GetMaster().GetBackground();
+        ->GetMaster().makeBackgroundBrushItem();
 }
 
 sal_uInt16 SwCSS1Parser::GetScriptFromClass( OUString& rClass,

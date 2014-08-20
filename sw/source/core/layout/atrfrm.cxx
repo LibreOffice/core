@@ -2986,8 +2986,9 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
     // NOTE: If background color is "no fill"/"auto fill" (COL_TRANSPARENT)
     //     and there is no background graphic, it "inherites" the background
     //     from its anchor.
-    if ( (GetBackground().GetColor().GetTransparency() != 0) &&
-         (GetBackground().GetColor() != COL_TRANSPARENT)
+    SvxBrushItem aBackground(makeBackgroundBrushItem());
+    if ( (aBackground.GetColor().GetTransparency() != 0) &&
+         (aBackground.GetColor() != COL_TRANSPARENT)
        )
     {
         return true;
@@ -2995,7 +2996,7 @@ bool SwFlyFrmFmt::IsBackgroundTransparent() const
     else
     {
         const GraphicObject *pTmpGrf =
-                static_cast<const GraphicObject*>(GetBackground().GetGraphicObject());
+                static_cast<const GraphicObject*>(aBackground.GetGraphicObject());
         if ( (pTmpGrf) &&
              (pTmpGrf->GetAttr().GetTransparency() != 0)
            )
@@ -3024,10 +3025,14 @@ bool SwFlyFrmFmt::IsBackgroundBrushInherited() const
     {
         return !getSdrAllFillAttributesHelper()->isUsed();
     }
-    else if ( (GetBackground().GetColor() == COL_TRANSPARENT) &&
-         !(GetBackground().GetGraphicObject()) )
+    else
     {
-        return true;
+        SvxBrushItem aBackground(makeBackgroundBrushItem());
+        if ( (aBackground.GetColor() == COL_TRANSPARENT) &&
+             !(aBackground.GetGraphicObject()) )
+        {
+            return true;
+        }
     }
 
     return false;

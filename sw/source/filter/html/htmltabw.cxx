@@ -140,13 +140,13 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
     bool bRet = false;
     if( rBox.GetSttNd() )
     {
-        const SvxBrushItem& rBrushItem =
-            rBox.GetFrmFmt()->GetBackground();
+        SvxBrushItem aBrushItem =
+            rBox.GetFrmFmt()->makeBackgroundBrushItem();
 
         /// The table box has a background, if its background color is not "no fill"/
         /// "auto fill" or it has a background graphic.
-        bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
-               !rBrushItem.GetGraphicLink().isEmpty() || rBrushItem.GetGraphic();
+        bRet = aBrushItem.GetColor() != COL_TRANSPARENT ||
+               !aBrushItem.GetGraphicLink().isEmpty() || aBrushItem.GetGraphic();
     }
     else
     {
@@ -171,11 +171,11 @@ bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
     OSL_ENSURE( bTop || bBottom || bLeft || bRight,
             "HasTabBackground: darf nicht aufgerufen werden" );
 
-    const SvxBrushItem& rBrushItem = rLine.GetFrmFmt()->GetBackground();
+    SvxBrushItem aBrushItem = rLine.GetFrmFmt()->makeBackgroundBrushItem();
     /// The table line has a background, if its background color is not "no fill"/
     /// "auto fill" or it has a background graphic.
-    bool bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
-           !rBrushItem.GetGraphicLink().isEmpty() || rBrushItem.GetGraphic();
+    bool bRet = aBrushItem.GetColor() != COL_TRANSPARENT ||
+           !aBrushItem.GetGraphicLink().isEmpty() || aBrushItem.GetGraphic();
 
     if( !bRet )
     {

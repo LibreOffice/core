@@ -1377,7 +1377,8 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
                 GetNext()->_InvalidatePos();
 
             //Trigger a repaint if necessary.
-            const SvxGraphicPosition ePos = pUp->GetFmt()->GetBackground().GetGraphicPos();
+            SvxBrushItem aBack(pUp->GetFmt()->makeBackgroundBrushItem());
+            const SvxGraphicPosition ePos = aBack.GetGraphicPos();
             if ( ePos != GPOS_NONE && ePos != GPOS_TILED )
                 pViewShell->InvalidateWindows( pUp->Frm() );
 
@@ -2347,7 +2348,8 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, bool bTst, bool bInfo )
             if( IsCellFrm() )
                 InvaPercentLowers( nReal );
 
-            const SvxGraphicPosition ePos = GetFmt()->GetBackground().GetGraphicPos();
+            SvxBrushItem aBack(GetFmt()->makeBackgroundBrushItem());
+            const SvxGraphicPosition ePos = aBack.GetGraphicPos();
             if ( GPOS_NONE != ePos && GPOS_TILED != ePos )
                 SetCompletePaint();
         }
@@ -2503,7 +2505,8 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
             const SwFrmFmt* pFmt = GetFmt();
             if (pFmt)
             {
-                const SvxGraphicPosition ePos = pFmt->GetBackground().GetGraphicPos();
+                SvxBrushItem aBack(pFmt->makeBackgroundBrushItem());
+                const SvxGraphicPosition ePos = aBack.GetGraphicPos();
                 if ( GPOS_NONE == ePos || GPOS_TILED == ePos )
                     bCompletePaint = false;
             }
