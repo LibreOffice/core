@@ -58,14 +58,15 @@ private:
 
     SwXFieldMaster(SwFieldType& rType, SwDoc & rDoc);
 
-public:
-
     /// descriptor
     SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId);
 
+public:
+
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet>
-        CreateXFieldMaster(SwDoc & rDoc, SwFieldType & rType);
+        CreateXFieldMaster(SwDoc & rDoc, SwFieldType * pType,
+                sal_uInt16 nResId = 0xFFFF);
 
     static OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
     static OUString LocalizeFormula(const SwSetExpField& rFld, const OUString& rFormula, bool bQuery);

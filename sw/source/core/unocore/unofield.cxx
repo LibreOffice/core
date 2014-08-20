@@ -412,9 +412,9 @@ class SwXFieldMaster::Impl
 {
 private:
     ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
-    SwXFieldMaster & m_rThis;
 
 public:
+    uno::WeakReference<uno::XInterface> m_wThis;
     ::cppu::OInterfaceContainerHelper m_EventListeners;
 
     SwDoc*          m_pDoc;
@@ -434,10 +434,9 @@ public:
     bool        m_bParam1;  // IsExpression
     sal_Int32       m_nParam2;
 
-    Impl(SwXFieldMaster & rThis, SwModify *const pModify,
+    Impl(SwModify *const pModify,
             SwDoc & rDoc, sal_uInt16 const nResId, bool const bIsDescriptor)
         : SwClient(pModify)
-        , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
         , m_pDoc(& rDoc)
         , m_bIsDescriptor(bIsDescriptor)
@@ -526,13 +525,13 @@ SwXFieldMaster::getSupportedServiceNames() throw (uno::RuntimeException, std::ex
 }
 
 SwXFieldMaster::SwXFieldMaster(SwDoc *const pDoc, sal_uInt16 const nResId)
-    : m_pImpl(new Impl(*this, pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD),
+    : m_pImpl(new Impl(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD),
                 *pDoc, nResId, true))
 {
 }
 
 SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc & rDoc)
-    : m_pImpl(new Impl(*this, &rType, rDoc, rType.Which(), false))
+    : m_pImpl(new Impl(&rType, rDoc, rType.Which(), false))
 {
 }
 
@@ -541,15 +540,27 @@ SwXFieldMaster::~SwXFieldMaster()
 }
 
 uno::Reference<beans::XPropertySet>
-SwXFieldMaster::CreateXFieldMaster(SwDoc & rDoc, SwFieldType & rType)
+SwXFieldMaster::CreateXFieldMaster(SwDoc & rDoc, SwFieldType *const pType,
+        sal_uInt16 nResId)
 {
     // re-use existing SwXFieldMaster
-    uno::Reference<beans::XPropertySet> xFM(rType.GetXObject());
+    uno::Reference<beans::XPropertySet> xFM;
+    if (pType)
+    {
+        xFM = pType->GetXObject();
+    }
     if (!xFM.is())
     {
-        SwXFieldMaster *const pFM(new SwXFieldMaster(rType, rDoc));
+        SwXFieldMaster *const pFM( (pType)
+                ? new SwXFieldMaster(*pType, rDoc)
+                : new SwXFieldMaster(& rDoc, nResId));
         xFM.set(pFM);
-        rType.SetXObject(xFM);
+        if (pType)
+        {
+            pType->SetXObject(xFM);
+        }
+        // need a permanent Reference to initialize m_wThis
+        pFM->m_pImpl->m_wThis = xFM;
     }
     return xFM;
 }
@@ -1020,12 +1031,19 @@ void SwXFieldMaster::Impl::Modify(
         SfxPoolItem const*const pOld, SfxPoolItem const*const pNew)
 {
     ClientModify(this, pOld, pNew);
-    if(!GetRegisteredIn())
+    if (GetRegisteredIn())
     {
-        m_pDoc = 0;
-        lang::EventObject const ev(static_cast< ::cppu::OWeakObject&>(m_rThis));
-        m_EventListeners.disposeAndClear(ev);
+        return; // core object still alive
     }
+
+    m_pDoc = 0;
+    uno::Reference<uno::XInterface> const xThis(m_wThis);
+    if (!xThis.is())
+    {   // fdo#72695: if UNO object is already dead, don't revive it with event
+        return;
+    }
+    lang::EventObject const ev(xThis);
+    m_EventListeners.disposeAndClear(ev);
 }
 
 OUString SwXFieldMaster::GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc)
@@ -1293,7 +1311,7 @@ SwXTextField::getTextFieldMaster() throw (uno::RuntimeException, std::exception)
     }
 
     uno::Reference<beans::XPropertySet> const xRet(
-            SwXFieldMaster::CreateXFieldMaster(*m_pImpl->m_pDoc, *pType));
+            SwXFieldMaster::CreateXFieldMaster(*m_pImpl->m_pDoc, pType));
     return xRet;
 }
 
@@ -2741,7 +2759,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
             css::uno::Reference<css::uno::XInterface>());
 
     uno::Reference<beans::XPropertySet> const xRet(
-            SwXFieldMaster::CreateXFieldMaster(*GetDoc(), *pType));
+            SwXFieldMaster::CreateXFieldMaster(*GetDoc(), pType));
     return uno::makeAny(xRet);
 }
 

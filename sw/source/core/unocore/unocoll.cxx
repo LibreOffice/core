@@ -774,7 +774,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 case SW_SERVICE_FIELDMASTER_SET_EXP : nResId = RES_SETEXPFLD; break;
                 case SW_SERVICE_FIELDMASTER_DATABASE: nResId = RES_DBFLD; break;
             }
-            xRet =  (cppu::OWeakObject*)new SwXFieldMaster(pDoc, nResId);
+            xRet = SwXFieldMaster::CreateXFieldMaster(*pDoc, 0, nResId);
         }
         break;
         case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
@@ -785,7 +785,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 SwAuthorityFieldType aType(pDoc);
                 pType = pDoc->getIDocumentFieldsAccess().InsertFldType(aType);
             }
-            xRet = SwXFieldMaster::CreateXFieldMaster(*pDoc, *pType);
+            xRet = SwXFieldMaster::CreateXFieldMaster(*pDoc, pType);
         }
         break;
         case SW_SERVICE_PARAGRAPH :
