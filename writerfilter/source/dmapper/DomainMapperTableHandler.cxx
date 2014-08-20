@@ -825,6 +825,12 @@ bool lcl_emptyRow(TableSequence_t& rTableSeq, sal_Int32 nRow)
     }
 
     RowSequence_t rRowSeq = rTableSeq[nRow];
+    if (rRowSeq.getLength() == 0)
+    {
+        SAL_WARN("writerfilter", "m_aCellProperties not in sync with m_pTableSeq?");
+        return false;
+    }
+
     uno::Reference<text::XTextRangeCompare> xTextRangeCompare(rRowSeq[0][0]->getText(), uno::UNO_QUERY);
     try
     {
@@ -835,7 +841,7 @@ bool lcl_emptyRow(TableSequence_t& rTableSeq, sal_Int32 nRow)
             if (xTextRangeCompare->compareRegionStarts(rRowSeq[nCell][0], rRowSeq[nCell][1]) != 0)
                 return false;
     }
-    catch (lang::IllegalArgumentException& e)
+    catch (const lang::IllegalArgumentException& e)
     {
         SAL_WARN("writerfilter", "compareRegionStarts() failed: " << e.Message);
         return false;
