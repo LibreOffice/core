@@ -53,7 +53,7 @@
 
 #include "updatecheckui.hrc"
 
-#define MSG_ERR_NO_WEBBROWSER_FOUND  (RID_SFX_APP_START + 7)
+#define STR_NO_WEBBROWSER_FOUND  (RID_SFX_APP_START + 7)
 
 #define PROPERTY_TITLE          "BubbleHeading"
 #define PROPERTY_TEXT           "BubbleText"
