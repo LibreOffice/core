@@ -94,11 +94,11 @@ namespace comphelper
     template<class T>
     void removeElementAt(staruno::Sequence<T>& _rSeq, sal_Int32 _nPos)
     {
-        sal_uInt32 nLength = _rSeq.getLength();
+        sal_Int32 nLength = _rSeq.getLength();
 
-        OSL_ENSURE(0 <= _nPos && (sal_uInt32)_nPos < nLength, "invalid index");
+        OSL_ENSURE(0 <= _nPos && _nPos < nLength, "invalid index");
 
-        for (sal_uInt32 i = (sal_uInt32)_nPos + 1; i < nLength; ++i)
+        for (sal_Int32 i = _nPos + 1; i < nLength; ++i)
         {
             _rSeq[i-1] = _rSeq[i];
         }
