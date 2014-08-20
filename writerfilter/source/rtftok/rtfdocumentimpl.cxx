@@ -4908,7 +4908,7 @@ int RTFDocumentImpl::popState()
         case DESTINATION_PARAGRAPHNUMBERING:
             {
                 RTFValue::Pointer_t pIdValue = aState.aTableAttributes.find(NS_rtf::LN_LSID);
-                if (pIdValue.get())
+                if (pIdValue.get() && !m_aStates.empty())
                 {
                     // Abstract numbering
                     RTFSprms aLeveltextAttributes;
@@ -4977,18 +4977,21 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_PARAGRAPHNUMBERING_TEXTAFTER:
+            if (!m_aStates.empty())
             {
                 RTFValue::Pointer_t pValue(new RTFValue(aState.aDestinationText.makeStringAndClear(), true));
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_LevelSuffix_val, pValue);
             }
             break;
         case DESTINATION_PARAGRAPHNUMBERING_TEXTBEFORE:
+            if (!m_aStates.empty())
             {
                 RTFValue::Pointer_t pValue(new RTFValue(aState.aDestinationText.makeStringAndClear(), true));
                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_LevelText_val, pValue);
             }
             break;
         case DESTINATION_LISTLEVEL:
+            if (!m_aStates.empty())
             {
                 RTFValue::Pointer_t pInnerValue(new RTFValue(m_aStates.top().nListLevelNum++));
                 aState.aTableAttributes.set(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue);
@@ -5001,6 +5004,7 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_LFOLEVEL:
+            if (!m_aStates.empty())
             {
                 RTFValue::Pointer_t pInnerValue(new RTFValue(m_aStates.top().nListLevelNum++));
                 aState.aTableAttributes.set(NS_ooxml::LN_CT_NumLvl_ilvl, pInnerValue);
@@ -5011,6 +5015,7 @@ int RTFDocumentImpl::popState()
             break;
             // list override table
         case DESTINATION_LISTOVERRIDEENTRY:
+            if (!m_aStates.empty())
             {
                 if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
                 {   // copy properties upwards so upper popState inserts it
@@ -5027,36 +5032,43 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_LEVELTEXT:
+            if (!m_aStates.empty())
             {
                 RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes));
                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Lvl_lvlText, pValue);
             }
             break;
         case DESTINATION_LEVELNUMBERS:
-            m_aStates.top().aTableSprms = aState.aTableSprms;
+            if (!m_aStates.empty())
+                m_aStates.top().aTableSprms = aState.aTableSprms;
             break;
         case DESTINATION_FIELDINSTRUCTION:
-            m_aStates.top().nFieldStatus = FIELD_INSTRUCTION;
+            if (!m_aStates.empty())
+                m_aStates.top().nFieldStatus = FIELD_INSTRUCTION;
             break;
         case DESTINATION_FIELDRESULT:
-            m_aStates.top().nFieldStatus = FIELD_RESULT;
+            if (!m_aStates.empty())
+                m_aStates.top().nFieldStatus = FIELD_RESULT;
             break;
         case DESTINATION_FIELD:
             if (aState.nFieldStatus == FIELD_INSTRUCTION)
                 singleChar(0x15);
             break;
         case DESTINATION_SHAPEPROPERTYVALUEPICT:
+            if (!m_aStates.empty())
             {
                 m_aStates.top().aPicture = aState.aPicture;
                 m_aStates.top().aDestinationText = aState.aDestinationText;
             }
             break;
         case DESTINATION_FALT:
-            m_aStates.top().aTableSprms = aState.aTableSprms;
+            if (!m_aStates.empty())
+                m_aStates.top().aTableSprms = aState.aTableSprms;
             break;
         case DESTINATION_SHAPEPROPERTYNAME:
         case DESTINATION_SHAPEPROPERTYVALUE:
         case DESTINATION_SHAPEPROPERTY:
+            if (!m_aStates.empty())
             {
                 m_aStates.top().aShape = aState.aShape;
                 m_aStates.top().aPicture = aState.aPicture;
@@ -5066,19 +5078,23 @@ int RTFDocumentImpl::popState()
         case DESTINATION_FLYMAINCONTENT:
         case DESTINATION_SHPPICT:
         case DESTINATION_SHAPE:
-            m_aStates.top().aFrame = aState.aFrame;
-            if (aState.nDestinationState == DESTINATION_SHPPICT && !m_aStates.empty() && m_aStates.top().nDestinationState == DESTINATION_LISTPICTURE)
+            if (!m_aStates.empty())
             {
-                RTFSprms aAttributes;
-                aAttributes.set(NS_ooxml::LN_CT_NumPicBullet_numPicBulletId, RTFValue::Pointer_t(new RTFValue(m_nListPictureId++)));
-                RTFSprms aSprms;
-                // Dummy value, real picture is already sent to dmapper.
-                aSprms.set(NS_ooxml::LN_CT_NumPicBullet_pict, RTFValue::Pointer_t(new RTFValue(0)));
-                RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-                m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_numPicBullet, pValue, false);
+                m_aStates.top().aFrame = aState.aFrame;
+                if (aState.nDestinationState == DESTINATION_SHPPICT && !m_aStates.empty() && m_aStates.top().nDestinationState == DESTINATION_LISTPICTURE)
+                {
+                    RTFSprms aAttributes;
+                    aAttributes.set(NS_ooxml::LN_CT_NumPicBullet_numPicBulletId, RTFValue::Pointer_t(new RTFValue(m_nListPictureId++)));
+                    RTFSprms aSprms;
+                    // Dummy value, real picture is already sent to dmapper.
+                    aSprms.set(NS_ooxml::LN_CT_NumPicBullet_pict, RTFValue::Pointer_t(new RTFValue(0)));
+                    RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+                    m_aListTableSprms.set(NS_ooxml::LN_CT_Numbering_numPicBullet, pValue, false);
+                }
             }
             break;
         case DESTINATION_TITLE:
+            if (!m_aStates.empty())
             {
                 if (m_aStates.top().nDestinationState == DESTINATION_TITLE)
                     // The parent is a title as well, just append what we have so far.
@@ -5088,31 +5104,34 @@ int RTFDocumentImpl::popState()
             }
             break;
         case DESTINATION_SHAPETEXT:
-            // If we're leaving the shapetext group (it may have nested ones) and this is a shape, not an old drawingobject.
-            if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT && !m_aStates.top().aDrawingObject.bHadShapeText)
+            if (!m_aStates.empty())
             {
-                m_aStates.top().bHadShapeText = true;
-                if (!m_aStates.top().pCurrentBuffer)
-                    m_pSdrImport->close();
-                else
-                    m_aStates.top().pCurrentBuffer->push_back(
-                            Buf_t(BUFFER_ENDSHAPE));
-            }
+                // If we're leaving the shapetext group (it may have nested ones) and this is a shape, not an old drawingobject.
+                if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT && !m_aStates.top().aDrawingObject.bHadShapeText)
+                {
+                    m_aStates.top().bHadShapeText = true;
+                    if (!m_aStates.top().pCurrentBuffer)
+                        m_pSdrImport->close();
+                    else
+                        m_aStates.top().pCurrentBuffer->push_back(
+                                Buf_t(BUFFER_ENDSHAPE));
+                }
 
-        // It's allowed to declare these inside the the shape text, and they
-        // are expected to have an effect for the whole shape.
-        if (aState.aDrawingObject.nLeft)
-            m_aStates.top().aDrawingObject.nLeft = aState.aDrawingObject.nLeft;
-        if (aState.aDrawingObject.nTop)
-            m_aStates.top().aDrawingObject.nTop = aState.aDrawingObject.nTop;
-        if (aState.aDrawingObject.nRight)
-            m_aStates.top().aDrawingObject.nRight = aState.aDrawingObject.nRight;
-        if (aState.aDrawingObject.nBottom)
-            m_aStates.top().aDrawingObject.nBottom = aState.aDrawingObject.nBottom;
+                // It's allowed to declare these inside the the shape text, and they
+                // are expected to have an effect for the whole shape.
+                if (aState.aDrawingObject.nLeft)
+                    m_aStates.top().aDrawingObject.nLeft = aState.aDrawingObject.nLeft;
+                if (aState.aDrawingObject.nTop)
+                    m_aStates.top().aDrawingObject.nTop = aState.aDrawingObject.nTop;
+                if (aState.aDrawingObject.nRight)
+                    m_aStates.top().aDrawingObject.nRight = aState.aDrawingObject.nRight;
+                if (aState.aDrawingObject.nBottom)
+                    m_aStates.top().aDrawingObject.nBottom = aState.aDrawingObject.nBottom;
+            }
             break;
         default:
             {
-                if (m_aStates.size() && m_aStates.top().nDestinationState == DESTINATION_PICT)
+                if (!m_aStates.empty() && m_aStates.top().nDestinationState == DESTINATION_PICT)
                     m_aStates.top().aPicture = aState.aPicture;
             }
             break;
