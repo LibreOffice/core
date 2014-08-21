@@ -3628,8 +3628,6 @@ DECLARE_OOXMLEXPORT_TEST(testfdo80898, "fdo80898.docx")
                 "/word/embeddings/oleObject1.doc");
 }
 
-#endif
-
 DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
 {
     // Test import and export of a section's headerf/footerf properties.
@@ -3657,6 +3655,8 @@ DECLARE_OOXMLEXPORT_TEST(testFooterBodyDistance, "footer-body-distance.docx")
         // Page break was exported as section break, this was 0
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", 1);
 }
+
+#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
