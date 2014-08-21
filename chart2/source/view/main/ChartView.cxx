@@ -3161,6 +3161,12 @@ void ChartView::createShapes3D()
     if(!pWindow)
         return;
 
+    if( pWindow->GetSizePixel().Width() == 0 || pWindow->GetSizePixel().Height() == 0 )
+    {
+        awt::Size aPageSize = mrChartModel.getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
+        Size aSize = pWindow->LogicToPixel( Size(aPageSize.Width,aPageSize.Height), MapUnit(MAP_100TH_MM) );
+        pWindow->SetSizePixel(aSize);
+    }
     pWindow->Show();
     uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
