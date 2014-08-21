@@ -1544,7 +1544,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, com::sun:
     sal_uInt16 nTextLen = pTextEngine->GetTextLen(0);
     if(m_nErrorEnd >= nTextLen - 1)
         return false;
-    //if it's not already modified the modified flag has to be reset at the and of the marking
+    //if it's not already modified the modified flag has to be reset at the end of the marking
     bool bModified = IsModified();
     bool bRet = false;
     const sal_uInt16 nOldErrorStart = m_nErrorStart;

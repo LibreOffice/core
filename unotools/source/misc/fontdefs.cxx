@@ -335,7 +335,7 @@ void GetEnglishSearchFontName( OUString& rName )
     // Remove Script at the end
     // Scriptname must be the last part of the fontname and
     // looks like "fontname (scriptname)". So there can only be a
-    // script name at the and of the fontname, when the last char is ')'
+    // script name at the end of the fontname, when the last char is ')'
     if ( (nLen >= 3) && rName[ nLen-1 ] == ')' )
     {
         int nOpen = 1;
