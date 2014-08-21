@@ -100,7 +100,7 @@ namespace cppcanvas
             double                                                                              fontRotation;
 
             sal_uInt16                                                                          textEmphasisMarkStyle;
-            sal_uInt16                                                                          pushFlags;
+            PushFlags                                                                           pushFlags;
             sal_Int8                                                                            textDirection;
             sal_Int8                                                                            textAlignment;
             sal_Int8                                                                            textReliefStyle;

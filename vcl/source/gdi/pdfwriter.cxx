@@ -224,7 +224,7 @@ void PDFWriter::EndTransparencyGroup( const Rectangle& rRect, sal_uInt16 nTransp
     pImplementation->endTransparencyGroup( rRect, nTransparentPercent );
 }
 
-void PDFWriter::Push( sal_uInt16 nFlags )
+void PDFWriter::Push( PushFlags nFlags )
 {
     pImplementation->push( nFlags );
 }

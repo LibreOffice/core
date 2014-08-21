@@ -32,23 +32,36 @@
 #include <tools/fontenum.hxx>
 
 // Flags for OutputDevice::Push() and OutDevState
-#define PUSH_LINECOLOR                  ((sal_uInt16)0x0001)
-#define PUSH_FILLCOLOR                  ((sal_uInt16)0x0002)
-#define PUSH_FONT                       ((sal_uInt16)0x0004)
-#define PUSH_TEXTCOLOR                  ((sal_uInt16)0x0008)
-#define PUSH_MAPMODE                    ((sal_uInt16)0x0010)
-#define PUSH_CLIPREGION                 ((sal_uInt16)0x0020)
-#define PUSH_RASTEROP                   ((sal_uInt16)0x0040)
-#define PUSH_TEXTFILLCOLOR              ((sal_uInt16)0x0080)
-#define PUSH_TEXTALIGN                  ((sal_uInt16)0x0100)
-#define PUSH_REFPOINT                   ((sal_uInt16)0x0200)
-#define PUSH_TEXTLINECOLOR              ((sal_uInt16)0x0400)
-#define PUSH_TEXTLAYOUTMODE             ((sal_uInt16)0x0800)
-#define PUSH_TEXTLANGUAGE               ((sal_uInt16)0x1000)
-#define PUSH_OVERLINECOLOR              ((sal_uInt16)0x2000)
+enum PushFlags {
+        PUSH_NONE            = ((sal_uInt16)0x0000),
+        PUSH_LINECOLOR       = ((sal_uInt16)0x0001),
+        PUSH_FILLCOLOR       = ((sal_uInt16)0x0002),
+        PUSH_FONT            = ((sal_uInt16)0x0004),
+        PUSH_TEXTCOLOR       = ((sal_uInt16)0x0008),
+        PUSH_MAPMODE         = ((sal_uInt16)0x0010),
+        PUSH_CLIPREGION      = ((sal_uInt16)0x0020),
+        PUSH_RASTEROP        = ((sal_uInt16)0x0040),
+        PUSH_TEXTFILLCOLOR   = ((sal_uInt16)0x0080),
+        PUSH_TEXTALIGN       = ((sal_uInt16)0x0100),
+        PUSH_REFPOINT        = ((sal_uInt16)0x0200),
+        PUSH_TEXTLINECOLOR   = ((sal_uInt16)0x0400),
+        PUSH_TEXTLAYOUTMODE  = ((sal_uInt16)0x0800),
+        PUSH_TEXTLANGUAGE    = ((sal_uInt16)0x1000),
+        PUSH_OVERLINECOLOR   = ((sal_uInt16)0x2000),
+        PUSH_ALL             = ((sal_uInt16)0xFFFF)
+};
+// make combining these type-safe
+inline PushFlags operator| (PushFlags lhs, PushFlags rhs)
+{
+    return static_cast<PushFlags>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
+}
+inline PushFlags operator& (PushFlags lhs, PushFlags rhs)
+{
+    return static_cast<PushFlags>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
+}
+
 #define PUSH_ALLTEXT                    (PUSH_TEXTCOLOR | PUSH_TEXTFILLCOLOR | PUSH_TEXTLINECOLOR | PUSH_OVERLINECOLOR | PUSH_TEXTALIGN | PUSH_TEXTLAYOUTMODE | PUSH_TEXTLANGUAGE)
 #define PUSH_ALLFONT                    (PUSH_ALLTEXT | PUSH_FONT)
-#define PUSH_ALL                        ((sal_uInt16)0xFFFF)
 
 // LayoutModes for Complex Text Layout
 // These are flag values, i.e they can be combined
@@ -108,7 +121,7 @@ public:
     RasterOp        meRasterOp;
     ComplexTextLayoutMode  mnTextLayoutMode;
     LanguageType    meTextLanguage;
-    sal_uInt16      mnFlags;
+    PushFlags       mnFlags;
 };
 
 #endif // INCLUDED_VCL_OUTDEVSTATE_HXX

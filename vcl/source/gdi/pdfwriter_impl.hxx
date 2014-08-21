@@ -713,7 +713,7 @@ private:
         ComplexTextLayoutMode            m_nLayoutMode;
         LanguageType                     m_aDigitLanguage;
         sal_Int32                        m_nTransparentPercent;
-        sal_uInt16                       m_nFlags;
+        PushFlags                        m_nFlags;
         sal_uInt16                       m_nUpdateFlags;
 
         static const sal_uInt16 updateFont                  = 0x0001;
@@ -738,7 +738,7 @@ private:
                 m_nLayoutMode( TEXT_LAYOUT_DEFAULT ),
                 m_aDigitLanguage( 0 ),
                 m_nTransparentPercent( 0 ),
-                m_nFlags( 0xffff ),
+                m_nFlags( PUSH_ALL ),
                 m_nUpdateFlags( 0xffff )
         {}
         GraphicsState( const GraphicsState& rState ) :
@@ -1104,7 +1104,7 @@ public:
     { m_aContext.DocumentLocale = rLoc; }
 
     /* graphics state */
-    void push( sal_uInt16 nFlags );
+    void push( PushFlags nFlags );
     void pop();
 
     void setFont( const Font& rFont );

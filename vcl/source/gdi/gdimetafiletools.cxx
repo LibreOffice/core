@@ -270,7 +270,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
     GDIMetaFile aTarget;
     bool bChanged(false);
     std::vector< basegfx::B2DPolyPolygon > aClips;
-    std::vector< sal_uInt16 > aPushFlags;
+    std::vector< PushFlags > aPushFlags;
     std::vector< MapMode > aMapModes;
 
     // start with empty region
@@ -367,7 +367,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
             case META_PUSH_ACTION :
             {
                 const MetaPushAction* pA = static_cast< const MetaPushAction* >(pAction);
-                const sal_uInt16 nFlags(pA->GetFlags());
+                const PushFlags nFlags(pA->GetFlags());
 
                 aPushFlags.push_back(nFlags);
 
@@ -388,7 +388,7 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
                 if(aPushFlags.size())
                 {
-                    const sal_uInt16 nFlags(aPushFlags.back());
+                    const PushFlags nFlags(aPushFlags.back());
                     aPushFlags.pop_back();
 
                     if(nFlags & PUSH_CLIPREGION)

@@ -91,7 +91,7 @@ namespace
         RasterOp                maRasterOp;
         ComplexTextLayoutMode   mnLayoutMode;
         LanguageType            maLanguageType;
-        sal_uInt16              mnPushFlags;
+        PushFlags               mnPushFlags;
 
         /// bitfield
         /// contains all active markers
@@ -118,7 +118,7 @@ namespace
             maRasterOp(ROP_OVERPAINT),
             mnLayoutMode(TEXT_LAYOUT_DEFAULT),
             maLanguageType(0),
-            mnPushFlags(0),
+            mnPushFlags(PUSH_NONE),
             mbLineColor(false),
             mbFillColor(false),
             mbTextColor(true),
@@ -190,8 +190,8 @@ namespace
         LanguageType getLanguageType() const { return maLanguageType; }
         void setLanguageType(LanguageType aNew) { if(aNew != maLanguageType) maLanguageType = aNew; }
 
-        sal_uInt16 getPushFlags() const { return mnPushFlags; }
-        void setPushFlags(sal_uInt16 nNew) { if(nNew != mnPushFlags) mnPushFlags = nNew; }
+        PushFlags getPushFlags() const { return mnPushFlags; }
+        void setPushFlags(PushFlags nNew) { if(nNew != mnPushFlags) mnPushFlags = nNew; }
 
         bool getLineOrFillActive() const { return (mbLineColor || mbFillColor); }
     };
@@ -227,7 +227,7 @@ namespace
             maPropertyHolders.push_back(pNew);
         }
 
-        void Push(sal_uInt16 nPushFlags)
+        void Push(PushFlags nPushFlags)
         {
             if(nPushFlags)
             {
@@ -249,9 +249,9 @@ namespace
             if(nSize)
             {
                 const PropertyHolder* pTip = maPropertyHolders.back();
-                const sal_uInt16 nPushFlags(pTip->getPushFlags());
+                const PushFlags nPushFlags(pTip->getPushFlags());
 
-                if(nPushFlags)
+                if(nPushFlags != PUSH_NONE)
                 {
                     if(nSize > 1)
                     {

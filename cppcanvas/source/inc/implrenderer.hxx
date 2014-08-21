@@ -68,7 +68,7 @@ namespace cppcanvas
         public:
             OutDevState& getState();
             const OutDevState& getState() const;
-            void pushState(sal_uInt16 nFlags);
+            void pushState(PushFlags nFlags);
             void popState();
             void clearStateStack();
         private:

@@ -1402,7 +1402,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
     aMapVDev.SetMapMode( GetPrefMapMode() );
 
     std::vector<Rectangle> aClipStack( 1, Rectangle() );
-    std::vector<sal_uInt16> aPushFlagStack;
+    std::vector<PushFlags> aPushFlagStack;
 
     Rectangle aBound;
 
@@ -1789,7 +1789,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
                 {
                     MetaPushAction* pAct = (MetaPushAction*) pAction;
                     aPushFlagStack.push_back( pAct->GetFlags() );
-                    if( (aPushFlagStack.back() & PUSH_CLIPREGION) != 0 )
+                    if( aPushFlagStack.back() & PUSH_CLIPREGION )
                     {
                         Rectangle aRect( aClipStack.back() );
                         aClipStack.push_back( aRect );
@@ -1800,7 +1800,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
                     // sanity check
                     if( ! aPushFlagStack.empty() )
                     {
-                        if( (aPushFlagStack.back() & PUSH_CLIPREGION) != 0 )
+                        if( aPushFlagStack.back() & PUSH_CLIPREGION )
                         {
                             if( aClipStack.size() > 1 )
                                 aClipStack.pop_back();

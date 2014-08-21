@@ -534,7 +534,7 @@ private:
 
 public:
 
-    void                        Push( sal_uInt16 nFlags = PUSH_ALL );
+    void                        Push( PushFlags nFlags = PUSH_ALL );
     void                        Pop();
 
     // returns the current stack depth; that is the number of Push() calls minus the number of Pop() calls

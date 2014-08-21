@@ -261,7 +261,7 @@ namespace cppcanvas
             return m_aStates.back();
         }
 
-        void VectorOfOutDevStates::pushState(sal_uInt16 nFlags)
+        void VectorOfOutDevStates::pushState(PushFlags nFlags)
         {
             m_aStates.push_back( getState() );
             getState().pushFlags = nFlags;

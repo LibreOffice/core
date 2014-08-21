@@ -65,7 +65,7 @@ OutDevState::~OutDevState()
 }
 
 
-void OutputDevice::Push( sal_uInt16 nFlags )
+void OutputDevice::Push( PushFlags nFlags )
 {
 
     if ( mpMetaFile )

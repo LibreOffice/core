@@ -1350,7 +1350,7 @@ class VCL_DLLPUBLIC MetaPushAction : public MetaAction
 {
 private:
 
-    sal_uInt16              mnFlags;
+    PushFlags              mnFlags;
 
     virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
 
@@ -1364,9 +1364,9 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-    explicit            MetaPushAction( sal_uInt16 nFlags );
+    explicit            MetaPushAction( PushFlags nFlags );
 
-    sal_uInt16              GetFlags() const { return mnFlags; }
+    PushFlags           GetFlags() const { return mnFlags; }
 };
 
 class VCL_DLLPUBLIC MetaPopAction : public MetaAction

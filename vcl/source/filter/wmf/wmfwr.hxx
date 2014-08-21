@@ -40,7 +40,7 @@ struct WMFWriterAttrStackMember
     Font aFont;
     MapMode aMapMode;
     Region aClipRegion;
-    sal_uInt16 nFlags;
+    PushFlags nFlags;
 };
 
 class StarSymbolToMSMultiFont;

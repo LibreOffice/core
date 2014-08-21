@@ -22,7 +22,7 @@ namespace
 
 const size_t constMaxActionType = 513;
 
-OUString flagToString(sal_uInt16 nFlag)
+OUString flagToString(PushFlags nFlag)
 {
     if (nFlag & PUSH_LINECOLOR)
         return OUString("PushLineColor");
@@ -56,7 +56,7 @@ OUString flagToString(sal_uInt16 nFlag)
     return OUString();
 }
 
-OUString collectPushFlags(sal_uInt16 nFlags)
+OUString collectPushFlags(PushFlags nFlags)
 {
     if ((nFlags & PUSH_ALL) == nFlags)
         return OUString("PushAll");
@@ -69,14 +69,14 @@ OUString collectPushFlags(sal_uInt16 nFlags)
 
     for (sal_uInt16 nFlag = 1; nFlag > 0; nFlag <<= 1)
     {
-        OUString sFlag = flagToString(nFlag);
+        OUString sFlag = flagToString(static_cast<PushFlags>(nFlag));
         if (!sFlag.isEmpty())
         {
             if (!sFlags.isEmpty())
             {
                 sFlags += ",";
             }
-            sFlags += flagToString(nFlag);
+            sFlags += flagToString(static_cast<PushFlags>(nFlag));
         }
     }
 

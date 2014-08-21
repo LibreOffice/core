@@ -4681,7 +4681,7 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( sal::static_int_cast<sal_uInt16>(~0U) );
+    push( PUSH_ALL );
 
     // transform relative to control's coordinates since an
     // appearance stream is a form XObject
@@ -4788,7 +4788,7 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     SvMemoryStream* pEditStream = new SvMemoryStream( 1024, 1024 );
 
-    push( sal::static_int_cast<sal_uInt16>(~0U) );
+    push( PUSH_ALL );
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rEdit, rWidget, rSettings );
@@ -4840,7 +4840,7 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     SvMemoryStream* pListBoxStream = new SvMemoryStream( 1024, 1024 );
 
-    push( sal::static_int_cast<sal_uInt16>(~0U) );
+    push( PUSH_ALL );
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rBox, rWidget, rSettings );
@@ -4891,7 +4891,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( sal::static_int_cast<sal_uInt16>(~0U) );
+    push( PUSH_ALL );
 
     if( rWidget.Background || rWidget.Border )
     {
@@ -5016,7 +5016,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     // save graphics state
-    push( sal::static_int_cast<sal_uInt16>(~0U) );
+    push( PUSH_ALL );
 
     if( rWidget.Background || rWidget.Border )
     {
@@ -5104,7 +5104,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     rBox.m_aRect = aCheckRect;
 
     // create appearance streams
-    push( sal::static_int_cast<sal_uInt16>(~0U) );
+    push( PUSH_ALL);
     SvMemoryStream* pCheckStream = new SvMemoryStream( 256, 256 );
 
     beginRedirect( pCheckStream, aCheckRect );
@@ -10604,7 +10604,7 @@ void PDFWriterImpl::setFont( const Font& rFont )
     m_aGraphicsStack.front().m_nUpdateFlags |= GraphicsState::updateFont;
 }
 
-void PDFWriterImpl::push( sal_uInt16 nFlags )
+void PDFWriterImpl::push( PushFlags nFlags )
 {
     OSL_ENSURE( !m_aGraphicsStack.empty(), "invalid graphics stack" );
     m_aGraphicsStack.push_front( m_aGraphicsStack.front() );
