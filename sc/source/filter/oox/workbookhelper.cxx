@@ -688,6 +688,8 @@ void WorkbookGlobals::recalcFormulaCells()
                 officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
                 ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
                 aOpt.SetOOXMLRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
+                /* XXX  is this really supposed to set the ScModule options?
+                 *      Not the ScDocShell options? */
                 SC_MOD()->SetFormulaOptions(aOpt);
 
                 batch->commit();

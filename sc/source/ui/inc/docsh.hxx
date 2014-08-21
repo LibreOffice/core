@@ -322,7 +322,7 @@ public:
     void            UpdateLinks();
     sal_Bool            ReloadTabLinks();
 
-    void            SetFormulaOptions(const ScFormulaOptions& rOpt );
+    void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
     virtual void    CheckConfigOptions();
 
     void            PostEditView( ScEditEngineDefaulter* pEditEngine, const ScAddress& rCursorPos );
