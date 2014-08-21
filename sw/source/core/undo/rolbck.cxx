@@ -615,8 +615,11 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     }
     else
     {
-        pMark = pMarkAccess->findMark(m_aName)->get();
-        pPam = ::std::auto_ptr<SwPaM>(new SwPaM(pMark->GetMarkPos()));
+        IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(m_aName);
+        if(pMarkAccess->getMarksEnd() != ppMark) {
+            pMark = ppMark->get();
+            pPam = ::std::auto_ptr<SwPaM>(new SwPaM(pMark->GetMarkPos()));
+        }
     }
 
     if(m_bSaveOtherPos)
@@ -637,11 +640,14 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
     {
         if(!pMark)
             pMark = pMarkAccess->findMark(m_aName)->get();
-        OSL_ENSURE(pMark->IsExpanded(),
-            "<SwHistoryBookmark::SetInDoc(..)>"
-            " - missing pos on old mark");
-        pPam->SetMark();
-        *pPam->GetMark() = pMark->GetOtherMarkPos();
+        if(pMark)
+        {
+            OSL_ENSURE(pMark->IsExpanded(),
+                "<SwHistoryBookmark::SetInDoc(..)>"
+                " - missing pos on old mark");
+            pPam->SetMark();
+            *pPam->GetMark() = pMark->GetOtherMarkPos();
+        }
     }
 
     if(pPam.get())
