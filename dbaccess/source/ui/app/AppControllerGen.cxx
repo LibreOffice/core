@@ -61,6 +61,7 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <unotools/bootstrap.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/waitobj.hxx>
@@ -533,7 +534,7 @@ void OApplicationController::askToReconnect()
         bool bClear = true;
         if ( !m_pSubComponentManager->empty() )
         {
-            QueryBox aQry(getView(), ModuleRes(APP_CLOSEDOCUMENTS));
+            MessageDialog aQry(getView(), ModuleRes(STR_QUERY_CLOSEDOCUMENTS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
             switch (aQry.Execute())
             {
                 case RET_YES:
