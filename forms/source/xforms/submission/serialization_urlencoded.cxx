@@ -34,10 +34,10 @@
 
 #include "serialization_urlencoded.hxx"
 
-using namespace CSS::uno;
-using namespace CSS::io;
-using namespace CSS::xml::xpath;
-using namespace CSS::xml::dom;
+using namespace css::uno;
+using namespace css::io;
+using namespace css::xml::xpath;
+using namespace css::xml::dom;
 
 CSerializationURLEncoded::CSerializationURLEncoded()
     : m_aPipe(Pipe::create(comphelper::getProcessComponentContext()))
@@ -164,7 +164,7 @@ void CSerializationURLEncoded::serialize()
     // output stream to the pipe buffer
     Reference< XOutputStream > out(m_aPipe, UNO_QUERY);
 
-    CSS::uno::Reference< CSS::xml::dom::XNode > cur = m_aFragment->getFirstChild();
+    css::uno::Reference< css::xml::dom::XNode > cur = m_aFragment->getFirstChild();
     while (cur.is())
     {
         serialize_node(cur);

@@ -32,29 +32,29 @@
 
 #include <boost/scoped_ptr.hpp>
 
-using namespace CSS::uno;
-using namespace CSS::ucb;
-using namespace CSS::task;
-using namespace CSS::io;
+using namespace css::uno;
+using namespace css::ucb;
+using namespace css::task;
+using namespace css::io;
 using namespace osl;
 using namespace ucbhelper;
 using namespace std;
 
 
 
-CSubmissionGet::CSubmissionGet(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
+CSubmissionGet::CSubmissionGet(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
 {
 }
 
-CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
+CSubmission::SubmissionResult CSubmissionGet::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
     // GET always uses apllicatin/x-www-formurlencoded
     boost::scoped_ptr< CSerialization > apSerialization(new CSerializationURLEncoded());
     apSerialization->setSource(m_aFragment);
     apSerialization->serialize();
 
-    CSS::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
+    css::uno::Reference< XInputStream > aInStream = apSerialization->getInputStream();
 
     // create a commandEnvironment and use the default interaction handler
     CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
@@ -62,12 +62,12 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
         pHelper->m_aInteractionHandler = aInteractionHandler;
     else
         pHelper->m_aInteractionHandler.set(
-            CSS::task::InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW);
+            css::task::InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW);
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
-    pHelper->m_aProgressHandler = CSS::uno::Reference< XProgressHandler >(pProgressHelper);
+    pHelper->m_aProgressHandler = css::uno::Reference< XProgressHandler >(pProgressHelper);
 
     // UCB has ownership of environment...
-    CSS::uno::Reference< XCommandEnvironment > aEnvironment(pHelper);
+    css::uno::Reference< XCommandEnvironment > aEnvironment(pHelper);
 
     // append query string to the URL
     try {
@@ -87,7 +87,7 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
         }
         OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
         ucbhelper::Content aContent(aQueryURL, aEnvironment, m_xContext);
-        CSS::uno::Reference< XOutputStream > aPipe( CSS::io::Pipe::create(m_xContext), UNO_QUERY_THROW );
+        css::uno::Reference< XOutputStream > aPipe( css::io::Pipe::create(m_xContext), UNO_QUERY_THROW );
         aContent.openStream(aPipe);
         // get reply
         try {

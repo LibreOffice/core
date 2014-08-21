@@ -48,13 +48,11 @@
 
 #include <memory>
 
-namespace CSS = com::sun::star;
-
 class CSubmissionPut;
 class CSubmissionPost;
 class CSubmissionGet;
 
-class CCommandEnvironmentHelper : public cppu::WeakImplHelper1< CSS::ucb::XCommandEnvironment >
+class CCommandEnvironmentHelper : public cppu::WeakImplHelper1< css::ucb::XCommandEnvironment >
 {
     friend class CSubmissionPut;
     friend class CSubmissionPost;
@@ -62,21 +60,21 @@ class CCommandEnvironmentHelper : public cppu::WeakImplHelper1< CSS::ucb::XComma
     friend class CSubmission;
 
 protected:
-    CSS::uno::Reference< CSS::task::XInteractionHandler >   m_aInteractionHandler;
-    CSS::uno::Reference< CSS::ucb::XProgressHandler >       m_aProgressHandler;
+    css::uno::Reference< css::task::XInteractionHandler >   m_aInteractionHandler;
+    css::uno::Reference< css::ucb::XProgressHandler >       m_aProgressHandler;
 
 public:
-    virtual CSS::uno::Reference< CSS::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (CSS::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return m_aInteractionHandler;
     }
-    virtual CSS::uno::Reference< CSS::ucb::XProgressHandler > SAL_CALL getProgressHandler() throw (CSS::uno::RuntimeException, std::exception) SAL_OVERRIDE
+    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
         return m_aProgressHandler;
     }
 };
 
-class CProgressHandlerHelper : public cppu::WeakImplHelper1< CSS::ucb::XProgressHandler >
+class CProgressHandlerHelper : public cppu::WeakImplHelper1< css::ucb::XProgressHandler >
 {
     friend class CSubmissionPut;
     friend class CSubmissionPost;
@@ -113,10 +111,10 @@ class CSubmission
 
 protected:
     INetURLObject m_aURLObj;
-    CSS::uno::Reference< CSS::xml::xpath::XXPathObject >    m_aXPathObject;
-    CSS::uno::Reference< CSS::xml::dom::XDocumentFragment > m_aFragment;
-    CSS::uno::Reference< CSS::io::XInputStream >            m_aResultStream;
-    CSS::uno::Reference< CSS::uno::XComponentContext >      m_xContext;
+    css::uno::Reference< css::xml::xpath::XXPathObject >    m_aXPathObject;
+    css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
+    css::uno::Reference< css::io::XInputStream >            m_aResultStream;
+    css::uno::Reference< css::uno::XComponentContext >      m_xContext;
     OUString m_aEncoding;
 
     ::std::auto_ptr< CSerialization > createSerialization(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
@@ -132,7 +130,7 @@ public:
         UNKNOWN_ERROR
     };
 
-    CSubmission(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
+    CSubmission(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
         : m_aURLObj(aURL)
         , m_aFragment(aFragment)
         , m_xContext(::comphelper::getProcessComponentContext())
@@ -144,9 +142,9 @@ public:
     {
         m_aEncoding = aEncoding;
     }
-    virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& ) = 0;
+    virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& ) = 0;
 
-    virtual SubmissionResult replace(const OUString&, const CSS::uno::Reference< CSS::xml::dom::XDocument >&, const CSS::uno::Reference< CSS::frame::XFrame>&);
+    virtual SubmissionResult replace(const OUString&, const css::uno::Reference< css::xml::dom::XDocument >&, const css::uno::Reference< css::frame::XFrame>&);
 
 };
 

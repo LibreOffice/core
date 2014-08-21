@@ -61,16 +61,16 @@ using ::com::sun::star::xml::sax::Writer;
 using ::com::sun::star::xml::sax::XDocumentHandler;
 
 CSerializationAppXML::CSerializationAppXML()
-    : m_xBuffer(CSS::io::Pipe::create(comphelper::getProcessComponentContext()))
+    : m_xBuffer(css::io::Pipe::create(comphelper::getProcessComponentContext()))
 {
 }
 
-Reference< CSS::io::XInputStream >
+Reference< css::io::XInputStream >
 CSerializationAppXML::getInputStream()
 {
     // The pipes output is provided through it's
     // XOutputStream interface aspect
-    return Reference< CSS::io::XInputStream >(m_xBuffer, UNO_QUERY);
+    return Reference< css::io::XInputStream >(m_xBuffer, UNO_QUERY);
 }
 
 void
@@ -107,8 +107,8 @@ CSerializationAppXML::serialize_node(const Reference< XNode >& rNode)
             "CSerializationAppXML::serialize_node: no serialization access to the node/document!" );
 
         // create a SAXWriter to take the serialization events, and connect it to our pipe
-        Reference< CSS::xml::sax::XWriter > const xSaxWriter = Writer::create( comphelper::getProcessComponentContext() );
-        xSaxWriter->setOutputStream( Reference< CSS::io::XOutputStream >( m_xBuffer, UNO_QUERY_THROW) );
+        Reference< css::xml::sax::XWriter > const xSaxWriter = Writer::create( comphelper::getProcessComponentContext() );
+        xSaxWriter->setOutputStream( Reference< css::io::XOutputStream >( m_xBuffer, UNO_QUERY_THROW) );
 
         // do the serialization
         xSerializer->serialize( Reference< XDocumentHandler >(xSaxWriter, UNO_QUERY_THROW), Sequence< StringPair >() );

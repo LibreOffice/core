@@ -27,10 +27,10 @@
 class CSubmissionGet : public CSubmission
 {
 private:
-    CSS::uno::Reference< CSS::uno::XComponentContext > m_xContext;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 public:
-    CSubmissionGet(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment);
-    virtual SubmissionResult submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler) SAL_OVERRIDE;
+    CSubmissionGet(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment);
+    virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler) SAL_OVERRIDE;
 
 };
 #endif

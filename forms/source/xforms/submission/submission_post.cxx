@@ -29,25 +29,25 @@
 #include <ucbhelper/activedatasink.hxx>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 
-using namespace CSS::uno;
-using namespace CSS::ucb;
-using namespace CSS::task;
-using namespace CSS::io;
+using namespace css::uno;
+using namespace css::ucb;
+using namespace css::task;
+using namespace css::io;
 using namespace osl;
 using namespace ucbhelper;
 using namespace std;
 
 
 
-CSubmissionPost::CSubmissionPost(const OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
+CSubmissionPost::CSubmissionPost(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
 {
 }
 
-CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference< CSS::task::XInteractionHandler >& aInteractionHandler)
+CSubmission::SubmissionResult CSubmissionPost::submit(const css::uno::Reference< css::task::XInteractionHandler >& aInteractionHandler)
 {
     // PUT always uses application/xml
-    CSS::uno::Reference< XCommandEnvironment > aEnvironment;
+    css::uno::Reference< XCommandEnvironment > aEnvironment;
     auto_ptr< CSerialization > apSerialization(createSerialization(aInteractionHandler,aEnvironment));
 
     try {
@@ -57,7 +57,7 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         OUString aCommandName("post");
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
-        CSS::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
+        css::uno::Reference< XActiveDataSink > aSink(new ucbhelper::ActiveDataSink);
         aPostArgument.Sink = aSink;
         aPostArgument.MediaType = "application/xml";
         aPostArgument.Referer = "";

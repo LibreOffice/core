@@ -27,16 +27,16 @@
 class CSerializationAppXML : public CSerialization
 {
 private:
-    CSS::uno::Reference< CSS::io::XPipe > m_xBuffer;
+    css::uno::Reference< css::io::XPipe > m_xBuffer;
 
-    void serialize_node(const CSS::uno::Reference< CSS::xml::dom::XNode >& aNode);
+    void serialize_node(const css::uno::Reference< css::xml::dom::XNode >& aNode);
     void serialize_nodeset();
 
 public:
     CSerializationAppXML();
 
     virtual void serialize() SAL_OVERRIDE;
-    virtual CSS::uno::Reference< CSS::io::XInputStream > getInputStream() SAL_OVERRIDE;
+    virtual css::uno::Reference< css::io::XInputStream > getInputStream() SAL_OVERRIDE;
 };
 
 #endif

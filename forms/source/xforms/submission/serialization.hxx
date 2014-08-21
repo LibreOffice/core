@@ -31,8 +31,6 @@
 #include <com/sun/star/xml/xpath/XXPathObject.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
 
-namespace CSS = com::sun::star;
-
 /**
 Serialize an XObject
 */
@@ -42,7 +40,7 @@ typedef std::map<OUString, OUString> PropMap;
 class CSerialization
 {
 protected:
-    CSS::uno::Reference< CSS::xml::dom::XDocumentFragment > m_aFragment;
+    css::uno::Reference< css::xml::dom::XDocumentFragment > m_aFragment;
     PropMap m_properties;
 
 public:
@@ -51,7 +49,7 @@ public:
     /**
     sets the XObject that is to serialized
     */
-    virtual void setSource(const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
+    virtual void setSource(const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
     {
         m_aFragment = aFragment;
     }
@@ -61,7 +59,7 @@ public:
     that control aspects of the serialization
     eachs serialization may support individual properties
     */
-    void setProperties(const CSS::uno::Sequence< CSS::beans::NamedValue >& props)
+    void setProperties(const css::uno::Sequence< css::beans::NamedValue >& props)
     {
         m_properties.clear();
         OUString aValue;
@@ -83,7 +81,7 @@ public:
     bytes read.
     returns -1 on error
     */
-    virtual CSS::uno::Reference< CSS::io::XInputStream > getInputStream() = 0;
+    virtual css::uno::Reference< css::io::XInputStream > getInputStream() = 0;
 
 };
 
