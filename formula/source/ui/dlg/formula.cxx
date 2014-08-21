@@ -1824,7 +1824,7 @@ void FormulaDlg::StoreFormEditData(FormEditData* pData)
 
 const IFunctionDescription* FormulaDlg::getCurrentFunctionDescription() const
 {
-    OSL_VERIFY(!m_pImpl->pFuncDesc || m_pImpl->pFuncDesc->getSuppressedArgumentCount() == m_pImpl->nArgs);
+    //OSL_VERIFY(!m_pImpl->pFuncDesc || m_pImpl->pFuncDesc->getSuppressedArgumentCount() == m_pImpl->nArgs);
     return m_pImpl->pFuncDesc;
 }
 
