@@ -2425,8 +2425,9 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             { "EASTERSUNDAY",   ocEasterSunday },   // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
             { "ZGZ",            ocZGZ },            // ZGZ -> RRI
             { "COLOR",          ocColor },          // COLOR -> ORG.LIBREOFFICE.COLOR
+            { "GOALSEEK",       ocBackSolver }      // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
             // Renamed new names, prepare to read future names:
-            { "ORG.OPENOFFICE.GOALSEEK", ocBackSolver } // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
+            //{ "ORG.OPENOFFICE.XXX", ocXXX }         // XXX -> ORG.OPENOFFICE.XXX
         };
         static const size_t nOdffAliases = sizeof(aOdffAliases) / sizeof(aOdffAliases[0]);
         for (size_t i=0; i<nOdffAliases; ++i)
