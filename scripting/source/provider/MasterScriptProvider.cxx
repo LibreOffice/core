@@ -900,8 +900,8 @@ extern "C"
      */
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL scriptframe_component_getFactory(
         const sal_Char * pImplName,
-        lang::XMultiServiceFactory * pServiceManager,
-        registry::XRegistryKey * pRegistryKey )
+        void * pServiceManager,
+        void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper( pImplName, pServiceManager,
             pRegistryKey, ::scripting_runtimemgr::s_entries );
