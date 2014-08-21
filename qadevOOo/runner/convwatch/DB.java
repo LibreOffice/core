@@ -349,7 +349,7 @@ public class DB extends DBHelper
                 String sResult = aResultList.get(i);
 
                 StringTokenizer aTokenizer = new StringTokenizer(sResult,",",false);
-                while (aTokenizer.hasMoreTokens())
+                if (aTokenizer.hasMoreTokens())
                 {
                     String sToken = aTokenizer.nextToken();
                     int nIndex = sToken.indexOf("uuid()=");
