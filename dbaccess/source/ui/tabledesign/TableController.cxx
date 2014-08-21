@@ -65,7 +65,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 #include <boost/mem_fn.hpp>
 #include <boost/bind.hpp>
@@ -447,7 +447,7 @@ void OTableController::doEditIndexes()
     // table needs to be saved before editing indexes
     if (m_bNew || isModified())
     {
-        QueryBox aAsk(getView(), ModuleRes(QUERY_SAVE_TABLE_EDIT_INDEXES));
+        MessageDialog aAsk(getView(), ModuleRes(STR_QUERY_SAVE_TABLE_EDIT_INDEXES), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
         if (RET_YES != aAsk.Execute())
             return;
 

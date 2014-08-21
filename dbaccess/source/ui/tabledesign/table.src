@@ -343,11 +343,9 @@ String STR_TABLEDESIGN_DATASOURCE_DELETED
     Text [ en-US ] = "The table filter could not be adjusted because the data source has been deleted.";
 };
 
-QueryBox QUERY_SAVE_TABLE_EDIT_INDEXES
+String STR_QUERY_SAVE_TABLE_EDIT_INDEXES
 {
-    Message [ en-US ] = "Before you can edit the indexes of a table, you have to save it.\nDo you want to save the changes now?";
-
-    Buttons = WB_YES_NO ;
+    Text [ en-US ] = "Before you can edit the indexes of a table, you have to save it.\nDo you want to save the changes now?";
 };
 
 String STR_TABLEDESIGN_NO_PRIM_KEY_HEAD
