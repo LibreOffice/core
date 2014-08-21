@@ -82,6 +82,7 @@
 #include <svx/svxdlg.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
@@ -1386,7 +1387,7 @@ void SbaXDataBrowserController::resetted(const ::com::sun::star::lang::EventObje
 
 sal_Bool SbaXDataBrowserController::confirmDelete(const ::com::sun::star::sdb::RowChangeEvent& /*aEvent*/) throw( RuntimeException, std::exception )
 {
-    if (QueryBox(getBrowserView(), ModuleRes(QUERY_BRW_DELETE_ROWS)).Execute() != RET_YES)
+    if (MessageDialog(getBrowserView(), ModuleRes(STR_QUERY_BRW_DELETE_ROWS), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() != RET_YES)
         return sal_False;
 
     return sal_True;

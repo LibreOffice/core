@@ -29,10 +29,9 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Message [ en-US ] = "The current record has been changed.\nDo you want to save the changes?" ;
 };
 
-QueryBox QUERY_BRW_DELETE_ROWS
+String STR_QUERY_BRW_DELETE_ROWS
 {
-    Buttons = WB_YES_NO ;
-    Message [ en-US ] = "Do you want to delete the selected data?" ;
+    Text[ en-US ] = "Do you want to delete the selected data?" ;
 };
 
 String RID_STR_DATABROWSER_FILTERED
