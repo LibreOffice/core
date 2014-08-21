@@ -2372,6 +2372,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
             { "TDIST",          ocTDist },          // TDIST -> LEGACY.TDIST
             { "EASTERSUNDAY",   ocEasterSunday },   // EASTERSUNDAY -> ORG.OPENOFFICE.EASTERSUNDAY
             { "ZGZ",            ocZGZ },            // ZGZ -> RRI
+            { "COLOR",          ocColor },          // COLOR -> ORG.LIBREOFFICE.COLOR
             // Renamed new names, prepare to read future names:
             { "ORG.OPENOFFICE.GOALSEEK", ocBackSolver } // GOALSEEK -> ORG.OPENOFFICE.GOALSEEK
         };
