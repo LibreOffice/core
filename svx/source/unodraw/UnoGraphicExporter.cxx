@@ -32,6 +32,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>

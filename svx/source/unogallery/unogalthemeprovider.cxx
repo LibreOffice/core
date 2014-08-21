@@ -29,6 +29,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 using namespace ::com::sun::star;
 
