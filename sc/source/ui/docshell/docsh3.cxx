@@ -438,7 +438,7 @@ void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and L
 
     aDocument.SetDocOptions( aDocOpt );
     aDocument.SetViewOptions( aViewOpt );
-    SetFormulaOptions( aFormulaOpt );
+    SetFormulaOptions( aFormulaOpt, bForLoading );
 
     //  Druck-Optionen werden jetzt direkt vor dem Drucken gesetzt
 
