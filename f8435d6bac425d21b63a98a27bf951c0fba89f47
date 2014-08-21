@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_9ece41b3",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-08-21T11:57:46Z",
+      "side": 1,
+      "message": "Could you please make this conditional? Certainly not all VML shapes having an explicit ZOrder should be in the background. See the drawingML import, there in GraphicImport, the Opaque property is conditional on m_pImpl-\u003ebOpaque.",
+      "revId": "f8435d6bac425d21b63a98a27bf951c0fba89f47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
