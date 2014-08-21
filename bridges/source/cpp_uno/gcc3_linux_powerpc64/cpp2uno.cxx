@@ -31,6 +31,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef OSL_BIGENDIAN
+#define IS_BIG_ENDIAN 1
+#else
+#define IS_BIG_ENDIAN 0
+#endif
 
 using namespace ::com::sun::star::uno;
 
@@ -139,13 +144,13 @@ static typelib_TypeClass cpp2uno_call(
                 case typelib_TypeClass_BOOLEAN:
                     if (ng < ppc64::MAX_GPR_REGS)
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-1));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + 7*IS_BIG_ENDIAN);
                         ng++;
                         gpreg++;
                     }
                     else
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + (sizeof(void*)-1));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + 7*IS_BIG_ENDIAN);
                         bOverflowUsed = true;
                     }
                     if (bOverflowUsed) ovrflw++;
@@ -155,13 +160,13 @@ static typelib_TypeClass cpp2uno_call(
                 case typelib_TypeClass_UNSIGNED_SHORT:
                     if (ng < ppc64::MAX_GPR_REGS)
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-2));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + 6*IS_BIG_ENDIAN);
                         ng++;
                         gpreg++;
                     }
                     else
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + (sizeof(void*)-2));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + 6*IS_BIG_ENDIAN);
                         bOverflowUsed = true;
                     }
                     if (bOverflowUsed) ovrflw++;
@@ -171,13 +176,13 @@ static typelib_TypeClass cpp2uno_call(
                 case typelib_TypeClass_UNSIGNED_LONG:
                     if (ng < ppc64::MAX_GPR_REGS)
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-4));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + 4*IS_BIG_ENDIAN);
                         ng++;
                         gpreg++;
                     }
                     else
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + (sizeof(void*)-4));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + 4*IS_BIG_ENDIAN);
                         bOverflowUsed = true;
                     }
                     if (bOverflowUsed) ovrflw++;
