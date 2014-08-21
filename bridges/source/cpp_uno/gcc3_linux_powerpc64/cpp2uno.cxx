@@ -326,7 +326,11 @@ static typelib_TypeClass cpp2uno_call(
     }
 }
 
-
+#if _CALL_ELF == 2
+#  define PARAMSAVE 32
+#else
+#  define PARAMSAVE 48
+#endif
 
 static typelib_TypeClass cpp_mediate(
     sal_uInt64 nOffsetAndIndex,
@@ -339,7 +343,7 @@ static typelib_TypeClass cpp_mediate(
     sal_Int32 nFunctionIndex = (nOffsetAndIndex & 0xFFFFFFFF);
 
     long sf = *(long*)sp;
-    void ** ovrflw = (void**)(sf + 112);
+    void ** ovrflw = (void**)(sf + PARAMSAVE + 64);
 
     // gpreg:  [ret *], this, [other gpr params]
     // fpreg:  [fpr params]
