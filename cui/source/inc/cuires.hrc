@@ -410,6 +410,7 @@
 
 #define RID_SXVSTR_CONFIRM_DELETE_TOOLBAR                   (RID_SVX_START + 1283)
 #define RID_SVXSTR_CONFIRM_RESTORE_DEFAULT                  (RID_SVX_START + 1284)
+#define RID_SVXSTR_CONFIRM_SET_LANGUAGE                     (RID_SVX_START + 1285)
 
 #endif
 

@@ -26,7 +26,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/intlwrapper.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include <svx/dialogs.hrc>
 
@@ -141,7 +141,7 @@ IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
     if ( bFound )
     {
         // duplicate names?
-        InfoBox( this, CUI_RESSTR( RID_SVXSTR_OPT_DOUBLE_DICTS ) ).Execute();
+        MessageDialog(this, CUI_RESSTR(RID_SVXSTR_OPT_DOUBLE_DICTS), VCL_MESSAGE_INFO).Execute();
         pNameEdit->GrabFocus();
         return 0;
     }
@@ -450,10 +450,10 @@ IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
 
     if ( nLang != nOldLang )
     {
-        QueryBox aBox( this, CUI_RES( RID_SFXQB_SET_LANGUAGE ) );
-        OUString sTxt( aBox.GetMessText() );
+        MessageDialog aBox(this, CUI_RES( RID_SVXSTR_CONFIRM_SET_LANGUAGE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        OUString sTxt(aBox.get_primary_text());
         sTxt = sTxt.replaceFirst( "%1", pAllDictsLB->GetSelectEntry() );
-        aBox.SetMessText( sTxt );
+        aBox.set_primary_text(sTxt);
 
         if ( aBox.Execute() == RET_YES )
         {
