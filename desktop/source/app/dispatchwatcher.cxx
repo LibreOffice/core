@@ -135,7 +135,7 @@ const SfxFilter* impl_getExportFilterFromUrl( const rtl::OUString& rUrl, const r
             UNO_QUERY_THROW );
     const rtl::OUString aTypeName( xTypeDetector->queryTypeByURL( rUrl ) );
 
-    const SfxFilter* pFilter( SfxGetpApp()->GetFilterMatcher().GetFilter4EA( aTypeName, SFX_FILTER_EXPORT ) );
+    const SfxFilter* pFilter( SfxFilterMatcher( rFactory ).GetFilter4EA( aTypeName, SFX_FILTER_EXPORT ) );
     if ( !pFilter )
         pFilter = impl_lookupExportFilterForUrl( rUrl, rFactory );
     if ( !pFilter )
