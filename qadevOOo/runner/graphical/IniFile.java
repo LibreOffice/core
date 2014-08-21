@@ -52,7 +52,7 @@ public class IniFile implements Enumeration<String>
 
     public void insertFirstComment(String[] _aList)
         {
-            if (m_aList.size() == 0)
+            if (m_aList.isEmpty())
             {
                 // can only insert if there is nothing else already in the ini file
                 for (int i = 0; i < _aList.length; i++)

@@ -289,7 +289,7 @@ public class XMLTools {
         public void endElement(String name) {
             super.endElement(name);
             if (wellFormed) {
-                if (tagStack.size() == 0) {
+                if (tagStack.isEmpty()) {
                     wellFormed = false ;
                     printError("No tags to close (bad closing tag </" + name + ">)") ;
                 } else {
@@ -718,7 +718,7 @@ public class XMLTools {
             if (!isWellFormed())
                 log.println("!!! Some errors were found in XML structure") ;
 
-            boolean result = tags.size() == 0 && chars.size() == 0 && isWellFormed();
+            boolean result = tags.isEmpty() && chars.size() == 0 && isWellFormed();
             reset();
             return result;
         }

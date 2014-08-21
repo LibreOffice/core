@@ -284,7 +284,7 @@ public class CommandLineTools {
             }
 
             if (scripts != null) {
-                if (scripts.size() == 0)
+                if (scripts.isEmpty())
                     throw new Exception("No valid scripts found");
 
                 ParcelDescriptor desc = new ParcelDescriptor(parcelxml, language);

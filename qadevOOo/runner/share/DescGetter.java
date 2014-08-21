@@ -153,7 +153,7 @@ public abstract class DescGetter
             }
         }
 
-        if (entryList.size() == 0)
+        if (entryList.isEmpty())
         {
             return null;
         }

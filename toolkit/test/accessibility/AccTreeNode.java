@@ -281,7 +281,7 @@ class AccTreeNode
     @Override
     public boolean isLeaf()
     {
-        return (maHandlers.size() == 0);
+        return maHandlers.isEmpty();
     }
 
     @Override

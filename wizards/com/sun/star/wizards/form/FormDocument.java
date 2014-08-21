@@ -141,7 +141,7 @@ public class FormDocument extends TextDocument
         adjustPageStyle();
         if (_baddParentForm)
         {
-            if (oControlForms.size() == 0)
+            if (oControlForms.isEmpty())
             {
                 final ControlForm aMainControlForm = new ControlForm(this, SOMAINFORM, aMainFormPoint, getMainFormSize(FormWizard.AS_GRID));
                 oControlForms.add(aMainControlForm);

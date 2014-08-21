@@ -98,7 +98,7 @@ class Canvas
             {
                 aObject = new CanvasShape (aNode);
                 // Update bounding box that includes all objects.
-                if (maObjects.size() == 0)
+                if (maObjects.isEmpty())
                     maBoundingBox = aObject.getBBox();
                 else
                     maBoundingBox = maBoundingBox.union (aObject.getBBox());

@@ -153,7 +153,7 @@ public class CheckMemoryUsage /* extends ComplexTestCase */
             }
         }
         // if no param given, set defaults.
-        if (v.size() == 0)
+        if (v.isEmpty())
         {
             v.add(sWriterDoc);
             v.add(sCalcDoc);

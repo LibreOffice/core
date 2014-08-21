@@ -218,9 +218,9 @@ public class ScriptMetaData extends ScriptEntry {
                 if (url != null) {
                     classPathVec.add(url);
                 }
-            }
+             }
 
-            return  classPathVec.toArray(new URL[classPathVec.size()]);
+             return  classPathVec.toArray(new URL[classPathVec.size()]);
         } catch (Exception e) {
             LogUtils.DEBUG("Failed to build class path " + e.toString());
             LogUtils.DEBUG(LogUtils.getTrace(e));

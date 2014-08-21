@@ -191,8 +191,7 @@ public class JavaFinder implements MethodFinder {
 
     private String[] findClassNames(File basedir) {
         ArrayList<File> classFiles = findFiles(basedir, CLASS_SUFFIX);
-
-        if (classFiles == null || classFiles.size() == 0)
+        if(classFiles == null || classFiles.isEmpty())
             return null;
 
         ArrayList<File> javaFiles = findFiles(basedir, JAVA_SUFFIX);
