@@ -5348,6 +5348,8 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     UpdatePageDescs(rDoc, nPageDescOffset);
 
+    SAL_WARN_IF(mpTableEndPaM, "sw.ww8", "document ended without table ending");
+    mpTableEndPaM.reset();  //ensure this is deleted before pPaM
     delete pPaM, pPaM = 0;
     return nErrRet;
 }
