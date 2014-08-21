@@ -3279,7 +3279,7 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                     }
 
                     // for Flys go via the parent if the Fly is not yet "formatted"
-                    if( !bCalcFrm && nFrmType & FRM_FLY &&
+                    if( !bCalcFrm && pTmpFrm->GetType() & FRM_FLY &&
                         ((SwFlyFrm*)pTmpFrm)->GetAnchorFrm() &&
                         FAR_AWAY == pTmpFrm->Frm().Pos().getX() &&
                         FAR_AWAY == pTmpFrm->Frm().Pos().getY() )
