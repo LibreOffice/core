@@ -4157,6 +4157,13 @@ linux-gnu*)
         PLATFORMID=linux_powerpc_64
         OUTPATH=unxlngppc64
         ;;
+    powerpc64le)
+        CPUNAME=POWERPC64
+        RTL_ARCH=PowerPC_64_LE
+        LIB64="lib64"
+        PLATFORMID=linux_powerpc64_le
+        OUTPATH=unxlngppc64
+        ;;
     sparc)
         CPUNAME=SPARC
         RTL_ARCH=SPARC
@@ -7155,7 +7162,7 @@ if test -n "$ENABLE_JAVA" -a \( -z "$JAVALIB" -o -z "$JAVAINC" \); then
                 ;;
             esac
             ;;
-        powerpc64)
+        powerpc64*)
             JAVA_ARCH="ppc64"
             if test "$JDK" = "gcj"; then
                 JAVA_TOOLKIT="client"
@@ -10809,7 +10816,7 @@ AC_SUBST(RHINO_JAR)
 
 supports_multilib=
 case "$host_cpu" in
-x86_64 | powerpc64 | s390x)
+x86_64 | powerpc64 | powerpc64le | s390x)
     if test "$SAL_TYPES_SIZEOFLONG" = "8"; then
         supports_multilib="yes"
     fi

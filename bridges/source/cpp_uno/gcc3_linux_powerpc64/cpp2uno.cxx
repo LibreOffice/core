@@ -31,6 +31,11 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef OSL_BIGENDIAN
+#define IS_BIG_ENDIAN 1
+#else
+#define IS_BIG_ENDIAN 0
+#endif
 
 using namespace ::com::sun::star::uno;
 
@@ -67,7 +72,7 @@ static typelib_TypeClass cpp2uno_call(
 
     if (pReturnTypeDescr)
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
+        if (!ppc64::return_in_hidden_param(pReturnTypeRef))
         {
             pUnoReturn = pRegisterReturn; // direct way for simple types
         }
@@ -139,13 +144,13 @@ static typelib_TypeClass cpp2uno_call(
                 case typelib_TypeClass_BOOLEAN:
                     if (ng < ppc64::MAX_GPR_REGS)
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-1));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + 7*IS_BIG_ENDIAN);
                         ng++;
                         gpreg++;
                     }
                     else
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + (sizeof(void*)-1));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + 7*IS_BIG_ENDIAN);
                         bOverFlowUsed = true;
                     }
                     if (bOverFlowUsed) ovrflw++;
@@ -155,13 +160,13 @@ static typelib_TypeClass cpp2uno_call(
                 case typelib_TypeClass_UNSIGNED_SHORT:
                     if (ng < ppc64::MAX_GPR_REGS)
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-2));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + 6*IS_BIG_ENDIAN);
                         ng++;
                         gpreg++;
                     }
                     else
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + (sizeof(void*)-2));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + 6*IS_BIG_ENDIAN);
                         bOverFlowUsed = true;
                     }
                     if (bOverFlowUsed) ovrflw++;
@@ -171,13 +176,13 @@ static typelib_TypeClass cpp2uno_call(
                 case typelib_TypeClass_UNSIGNED_LONG:
                     if (ng < ppc64::MAX_GPR_REGS)
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + (sizeof(void*)-4));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)gpreg) + 4*IS_BIG_ENDIAN);
                         ng++;
                         gpreg++;
                     }
                     else
                     {
-                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + (sizeof(void*)-4));
+                        pCppArgs[nPos] = pUnoArgs[nPos] = (((char *)ovrflw) + 4*IS_BIG_ENDIAN);
                         bOverFlowUsed = true;
                     }
                     if (bOverFlowUsed) ovrflw++;
@@ -321,6 +326,11 @@ static typelib_TypeClass cpp2uno_call(
     }
 }
 
+#if _CALL_ELF == 2
+#  define PARAMSAVE 32
+#else
+#  define PARAMSAVE 48
+#endif
 
 //==================================================================================================
 static typelib_TypeClass cpp_mediate(
@@ -334,7 +344,7 @@ static typelib_TypeClass cpp_mediate(
     sal_Int32 nFunctionIndex = (nOffsetAndIndex & 0xFFFFFFFF);
 
     long sf = *(long*)sp;
-    void ** ovrflw = (void**)(sf + 112);
+    void ** ovrflw = (void**)(sf + PARAMSAVE + 64);
 
     // gpreg:  [ret *], this, [other gpr params]
     // fpreg:  [fpr params]
@@ -540,7 +550,11 @@ extern "C" void privateSnippetExecutor( ... )
                 "mr     %0,    1\n\t"
                 : "=r" (sp) : );
 
+#if _CALL_ELF == 2
+    volatile long nRegReturn[2];
+#else
     volatile long nRegReturn[1];
+#endif
 
     typelib_TypeClass aType =
         cpp_mediate( nOffsetAndIndex, (void**)gpreg, (void**)fpreg, sp, (sal_Int64*)nRegReturn);
@@ -583,14 +597,22 @@ extern "C" void privateSnippetExecutor( ... )
         default:
             __asm__( "ld 3,%0\n\t"
                 : : "m" (nRegReturn[0]) );
+#if _CALL_ELF == 2
+            __asm__( "ld 4,%0\n\t"
+                : : "m" (nRegReturn[1]) );
+#endif
             break;
     }
 }
 
+#if _CALL_ELF == 2
+const int codeSnippetSize = 32;
+#else
 const int codeSnippetSize = 24;
+#endif
 
 unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
-                              bool simpleRetType)
+                              bool bHasHiddenParam)
 {
 #if OSL_DEBUG_LEVEL > 2
     fprintf(stderr,"in codeSnippet functionIndex is %x\n", nFunctionIndex);
@@ -599,15 +621,27 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sa
 
     sal_uInt64 nOffsetAndIndex = ( ( (sal_uInt64) nVtableOffset ) << 32 ) | ( (sal_uInt64) nFunctionIndex );
 
-    if ( !simpleRetType )
+    if ( bHasHiddenParam )
         nOffsetAndIndex |= 0x80000000;
+#if _CALL_ELF == 2
+    unsigned int *raw = (unsigned int *)&code[0];
 
+    raw[0] = 0xe96c0018;        /* 0:   ld      11,2f-0b(12)    */
+    raw[1] = 0xe98c0010;        /*      ld      12,1f-0b(12)    */
+    raw[2] = 0x7d8903a6;        /*      mtctr   12              */
+    raw[3] = 0x4e800420;        /*      bctr                    */
+                                /* 1:   .quad   function_addr   */
+                                /* 2:   .quad   context         */
+    *(void **)&raw[4] = (void *)privateSnippetExecutor;
+    *(void **)&raw[6] = (void*)nOffsetAndIndex;
+#else
     void ** raw = (void **)&code[0];
     memcpy(raw, (char*) privateSnippetExecutor, 16);
     raw[2] = (void*) nOffsetAndIndex;
+#endif
 #if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "in: offset/index is %x %x %d, %lx\n",
-    nFunctionIndex, nVtableOffset, !simpleRetType, raw[2]);
+    nFunctionIndex, nVtableOffset, bHasHiddenParam, raw[2]);
 #endif
     return (code + codeSnippetSize);
 }
@@ -673,7 +707,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             (s++)->fn = code + writetoexecdiff;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
-                bridges::cpp_uno::shared::isSimpleType(
+                ppc64::return_in_hidden_param(
                     reinterpret_cast<
                     typelib_InterfaceAttributeTypeDescription * >(
                         member)->pAttributeTypeRef));
@@ -684,7 +718,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     member)->bReadOnly)
             {
                 (s++)->fn = code + writetoexecdiff;
-                code = codeSnippet(code, functionOffset++, vtableOffset, true);
+                code = codeSnippet(code, functionOffset++, vtableOffset, false);
             }
             break;
 
@@ -692,7 +726,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             (s++)->fn = code + writetoexecdiff;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
-                bridges::cpp_uno::shared::isSimpleType(
+                ppc64::return_in_hidden_param(
                     reinterpret_cast<
                     typelib_InterfaceMethodTypeDescription * >(
                         member)->pReturnTypeRef));
