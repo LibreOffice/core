@@ -323,7 +323,7 @@ public:
     void            UpdateLinks() SAL_OVERRIDE;
     bool            ReloadTabLinks();
 
-    void            SetFormulaOptions(const ScFormulaOptions& rOpt );
+    void            SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading = false );
     void            SetCalcConfig( const ScCalcConfig& rConfig );
     virtual void    CheckConfigOptions() SAL_OVERRIDE;
 

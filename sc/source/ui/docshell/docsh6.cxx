@@ -445,32 +445,48 @@ bool ScDocShell::ReloadTabLinks()
     return true;        //! Fehler erkennen
 }
 
-void ScDocShell::SetFormulaOptions(const ScFormulaOptions& rOpt )
+void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoading )
 {
     aDocument.SetGrammar( rOpt.GetFormulaSyntax() );
 
-    // This needs to be called first since it may re-initialize the entire
-    // opcode map.
-    if (rOpt.GetUseEnglishFuncName())
+    // This is nasty because it resets module globals from within a docshell!
+    // For actual damage caused see fdo#82183 where an unconditional
+    // ScGlobal::ResetFunctionList() (without checking GetUseEnglishFuncName())
+    // lead to a crash becasuse the function list was still used by the Formula
+    // Wizard when loading the second document.
+    // Do the stupid stuff only when we're not called while loading a document.
+
+    /** TODO: bForLoading is a workaround, rather get rid of setting any
+        globals from per document instances like ScDocShell. */
+
+    if (!bForLoading)
     {
-        // switch native symbols to English.
-        ScCompiler aComp(NULL, ScAddress());
-        ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH);
-        ScCompiler::SetNativeSymbols(xMap);
+        if (rOpt.GetUseEnglishFuncName() != SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName())
+        {
+            // This needs to be called first since it may re-initialize the entire
+            // opcode map.
+            if (rOpt.GetUseEnglishFuncName())
+            {
+                // switch native symbols to English.
+                ScCompiler aComp(NULL, ScAddress());
+                ScCompiler::OpCodeMapPtr xMap = aComp.GetOpCodeMap(::com::sun::star::sheet::FormulaLanguage::ENGLISH);
+                ScCompiler::SetNativeSymbols(xMap);
+            }
+            else
+                // re-initialize native symbols with localized function names.
+                ScCompiler::ResetNativeSymbols();
+
+            // Force re-population of function names for the function wizard, function tip etc.
+            ScGlobal::ResetFunctionList();
+        }
+
+        // Update the separators.
+        ScCompiler::UpdateSeparatorsNative(
+                rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
+
+        // Global interpreter settings.
+        ScInterpreter::SetGlobalConfig(rOpt.GetCalcConfig());
     }
-    else
-        // re-initialize native symbols with localized function names.
-        ScCompiler::ResetNativeSymbols();
-
-    // Force re-population of function names for the function wizard, function tip etc.
-    ScGlobal::ResetFunctionList();
-
-    // Update the separators.
-    ScCompiler::UpdateSeparatorsNative(
-        rOpt.GetFormulaSepArg(), rOpt.GetFormulaSepArrayCol(), rOpt.GetFormulaSepArrayRow());
-
-    // Global interpreter settings.
-    ScInterpreter::SetGlobalConfig(rOpt.GetCalcConfig());
 
     // Per document interpreter settings.
     SetCalcConfig( rOpt.GetCalcConfig());
