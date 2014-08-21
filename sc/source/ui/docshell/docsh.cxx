@@ -497,6 +497,8 @@ sal_Bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::un
                 officecfg::Office::Calc::Formula::Load::ODFRecalcMode::set(sal_Int32(0), batch);
                 ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
                 aOpt.SetODFRecalcOptions(bHardRecalc ? RECALC_ALWAYS : RECALC_NEVER);
+                /* XXX  is this really supposed to set the ScModule options?
+                 *      Not the ScDocShell options? */
                 SC_MOD()->SetFormulaOptions(aOpt);
 
                 batch->commit();
