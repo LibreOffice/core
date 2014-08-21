@@ -96,7 +96,7 @@
 
 // options
 #define RID_SVXSTR_DIAGRAM_ROW                              (RID_SVX_START + 1162)
-#define QUERY_DELETE_CONFIRM                    (RID_SVX_START + 1110)
+#define RID_SVXSTR_QUERY_DELETE_CONFIRM     (RID_SVX_START + 1110)
 #define RID_SVXPAGE_JSEARCH_OPTIONS         (RID_SVX_START +  840)
 #define STR_LINKEDDOC_DOESNOTEXIST              (RID_SVX_START + 1111)
 #define STR_LINKEDDOC_NO_SYSTEM_FILE                        (RID_SVX_START + 1169)

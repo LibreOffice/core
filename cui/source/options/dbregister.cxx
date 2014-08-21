@@ -256,8 +256,6 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
     }
 }
 
-
-
 void DbRegistrationOptionsPage::FillUserData()
 {
     HeaderBar &rBar = pPathBox->GetTheHeaderBar();
@@ -269,13 +267,12 @@ void DbRegistrationOptionsPage::FillUserData()
     SetUserData( aUserData );
 }
 
-
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
 {
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
     if ( pEntry )
     {
-        QueryBox aQuery(this,CUI_RES(QUERY_DELETE_CONFIRM));
+        MessageDialog aQuery(this, CUI_RES(RID_SVXSTR_QUERY_DELETE_CONFIRM), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
         if ( aQuery.Execute() == RET_YES )
             pPathBox->GetModel()->Remove(pEntry);
     }
@@ -288,8 +285,6 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
     openLinkDialog(sNewName,sNewLocation);
     return 0;
 }
-
-
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
 {

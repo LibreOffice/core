@@ -34,10 +34,9 @@ String STR_NAME_CONFLICT
     Text [ en-US ] = "The name '$file$' is already used for another database.\nPlease choose a different name.";
 };
 
-QueryBox QUERY_DELETE_CONFIRM
+String RID_SVXSTR_QUERY_DELETE_CONFIRM
 {
-    Buttons = WB_YES_NO ;
-    Message [ en-US ] = "Do you want to delete the entry?" ;
+    Text [ en-US ] = "Do you want to delete the entry?" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
