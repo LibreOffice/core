@@ -23,9 +23,6 @@
 
 // component exports
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-
 namespace sdecl = comphelper::service_decl;
 
 namespace globals
@@ -54,11 +51,13 @@ extern sdecl::ServiceDecl const serviceDecl;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL vbaswobj_component_getFactory(
-    const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
-    registry::XRegistryKey * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager,
+    void * pRegistryKey )
 {
-    void* pRet = component_getFactoryHelper(pImplName, pServiceManager,
-            pRegistryKey, globals::serviceDecl, ::document::serviceDecl,
+    void* pRet = component_getFactoryHelper(pImplName,
+            static_cast<css::lang::XMultiServiceFactory *>(pServiceManager),
+            static_cast<css::registry::XRegistryKey *>(pRegistryKey),
+            globals::serviceDecl, ::document::serviceDecl,
             wrapformat::serviceDecl, vbaeventshelper::serviceDecl );
     OSL_TRACE("Ret is 0x%p", pRet);
     return pRet;
