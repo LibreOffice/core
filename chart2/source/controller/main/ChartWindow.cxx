@@ -49,7 +49,7 @@ ChartWindow::ChartWindow( ChartController* pController, Window* pParent, WinBits
         : Window(pParent, nStyle)
         , m_pWindowController( pController )
         , m_bInPaint(false)
-        , m_pOpenGLWindow(new OpenGLWindow(this))
+        , m_pOpenGLWindow(getenv("CHART_DUMMY_FACTORY") ? new OpenGLWindow(this) : 0)
 {
     this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
@@ -60,11 +60,14 @@ ChartWindow::ChartWindow( ChartController* pController, Window* pParent, WinBits
     if( pParent )
         pParent->EnableRTL( false );// #i96215# necessary for a correct position of the context menu in rtl mode
 
-    m_pOpenGLWindow->Show();
-    uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(pController->getModel(), uno::UNO_QUERY_THROW);
-    sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(m_pOpenGLWindow);
-    x3DWindowProvider->setWindow(nWindowPtr);
-    x3DWindowProvider->update();
+    if( m_pOpenGLWindow )
+    {
+        m_pOpenGLWindow->Show();
+        uno::Reference< chart2::X3DChartWindowProvider > x3DWindowProvider(pController->getModel(), uno::UNO_QUERY_THROW);
+        sal_uInt64 nWindowPtr = reinterpret_cast<sal_uInt64>(m_pOpenGLWindow);
+        x3DWindowProvider->setWindow(nWindowPtr);
+        x3DWindowProvider->update();
+    }
 }
 
 ChartWindow::~ChartWindow()
@@ -150,7 +153,8 @@ void ChartWindow::Resize()
     else
         Window::Resize();
 
-    m_pOpenGLWindow->SetSizePixel(GetSizePixel());
+    if( m_pOpenGLWindow )
+        m_pOpenGLWindow->SetSizePixel(GetSizePixel());
 }
 
 void ChartWindow::Activate()
