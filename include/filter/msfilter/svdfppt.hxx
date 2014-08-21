@@ -1366,7 +1366,7 @@ public :
 #define PPT_PST_ExObjListAtom                   1034
 #define PPT_PST_PPDrawingGroup                  1035
 #define PPT_PST_PPDrawing                       1036
-#define PPT_PST_NewlyAddedAtomByXP1037          1037
+#define PPT_PST_GridSpacing10Atom               1037
 #define PPT_PST_NamedShows                      1040
 #define PPT_PST_NamedShow                       1041
 #define PPT_PST_NamedShowSlides                 1042
@@ -1420,7 +1420,7 @@ public :
 #define PPT_PST_ExtendedPresRuleContainer       4014    // consist of 4012, 4015,
 #define PPT_PST_ExtendedParagraphHeaderAtom     4015    // the instance of this atom indices the current presobj
                                                         // the first sal_uInt32 in this atom indices the current slideId
-#define PPT_PST_NewlyAddedAtom4016              4016
+#define PPT_PST_TextDefaults9Atom               4016
 
 #define PPT_PST_FontEntityAtom                  4023
 #define PPT_PST_FontEmbedData                   4024
@@ -1497,8 +1497,8 @@ public :
 #define PPT_PST_PersistPtrIncrementalBlock      6002
 
 // these atoms first was seen in ppt2000 in a private Tag atom
-#define PPT_PST_NewlyAddedAtomByPPT2000_6010    6010
-#define PPT_PST_NewlyAddedAtomByPPT2000_6011    6011
+#define PPT_PST_PresentationAdvisorFlags9Atom   6010
+#define PPT_PST_HtmlDocInfo9Atom                6011
 
 #define PPT_PST_RulerIndentAtom                 10000
 #define PPT_PST_GscalingAtom                    10001
@@ -1506,14 +1506,14 @@ public :
 #define PPT_PST_GLPointAtom                     10003
 #define PPT_PST_GlineAtom                       10004
 
-#define PPT_PST_NewlyAddedAtomByXP11008         11008
-#define PPT_PST_NewlyAddedAtomByXP11010         11010
+#define PPT_PST_HashCodeAtom                    11008
+#define PPT_PST_BuildList                       11010
 #define PPT_PST_Comment10                       12000
 #define PPT_PST_CommentAtom10                   12001
-#define PPT_PST_NewlyAddedAtomByXP12004         12004
-#define PPT_PST_NewlyAddedAtomByXP12010         12010
-#define PPT_PST_NewlyAddedAtomByXP12011         12011
-#define PPT_PST_NewlyAddedAtomByXP14001         14001
+#define PPT_PST_CommentIndex10                  12004
+#define PPT_PST_SlideFlags10Atom                12010
+#define PPT_PST_SlideTime10Atom                 12011
+#define PPT_PST_DocToolbarStates10Atom          14001
 
 // attributes for PptTextStyleSheet
 #define PPT_ParaAttr_BulletOn       0   //00000001

@@ -920,11 +920,11 @@ bool ImplSdPPTImport::Import()
                                             }
                                             break;
 
-                                            case PPT_PST_NewlyAddedAtomByXP11008 :  // ???
+                                            case PPT_PST_HashCodeAtom :  // ???
                                             break;
 
-                                            case PPT_PST_NewlyAddedAtomByXP12011 :  // ??? don't know, this atom is always 8 bytes big
-                                            break;                                  // and is appearing in nearly every l10 progtag
+                                            case PPT_PST_SlideTime10Atom :  // ??? don't know, this atom is always 8 bytes big
+                                            break;                          // and is appearing in nearly every l10 progtag
                                         }
                                         aProgTagContentHd.SeekToEndOfRecord( rStCtrl );
                                     }

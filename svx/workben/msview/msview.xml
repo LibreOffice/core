@@ -62,7 +62,7 @@
 <atom name="ExObjListAtom" id="1034"/>
 <atom name="PPDrawingGroup" id="1035"/>
 <atom name="PPDrawing" id="1036"/>
-<atom name="NewlyAddedAtomByXP1037 " id="1037"/>
+<atom name="GridSpacing10Atom" id="1037"/>
 <atom name="NamedShows" id="1040"/>
 <atom name="NamedShow" id="1041"/>
 <atom name="NamedShowSlides" id="1042"/>
@@ -110,7 +110,7 @@
 <atom name="ExtendedParagraphMasterAtom" id="4013"/>
 <atom name="ExtendedPresRuleatom" id="4014"/>
 <atom name="ExtendedParagraphHeaderAtom" id="4015"/>
-<atom name="NewlyAddedAtom4016" id="4016"/>
+<atom name="TextDefaults9Atom" id="4016"/>
 <atom name="FontEntityAtom" id="4023"/>
 <atom name="FontEmbedData" id="4024"/>
 <atom name="TypeFace" id="4025"/>
@@ -186,8 +186,8 @@
 <atom name="PrintOptions" id="6000"/>
 <atom name="PersistPtrFullBlock" id="6001"/>
 <atom name="PersistPtrIncrementalBlock" id="6002"/>
-<atom name="NewlyAddedAtomByPPT2000_6010" id="6010"/>
-<atom name="NewlyAddedAtomByPPT2000_6011" id="6011"/>
+<atom name="PresentationAdvisorFlags9Atom" id="6010"/>
+<atom name="HtmlDocInfo9Atom" id="6011"/>
 
 <!-- animations-->
 <atom name="AnimEvent" id="0xf125"/>

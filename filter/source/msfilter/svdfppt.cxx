@@ -3230,12 +3230,12 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                     OSL_FAIL( "PPTExParaProv::PPTExParaProv - unknown atom reading ppt2000 num rules (SJ)" );
                 case PPT_PST_MasterText :   // first seen in: ms-tt02.ppt
                 case PPT_PST_SrKinsoku :
-                case PPT_PST_NewlyAddedAtom4016 :
-                case PPT_PST_NewlyAddedAtomByPPT2000_6010 :
-                case PPT_PST_NewlyAddedAtomByPPT2000_6011 :
-                case PPT_PST_NewlyAddedAtomByXP1037 :
-                case PPT_PST_NewlyAddedAtomByXP12004 :
-                case PPT_PST_NewlyAddedAtomByXP14001 :
+                case PPT_PST_TextDefaults9Atom :
+                case PPT_PST_PresentationAdvisorFlags9Atom :
+                case PPT_PST_HtmlDocInfo9Atom :
+                case PPT_PST_GridSpacing10Atom :
+                case PPT_PST_CommentIndex10 :
+                case PPT_PST_DocToolbarStates10Atom :
                 break;
 #endif
             }
@@ -3283,10 +3283,10 @@ PPTExtParaProv::PPTExtParaProv( SdrPowerPointImport& rMan, SvStream& rSt, const 
                 break;
                 default :
                     OSL_FAIL( "PPTExParaProv::PPTExParaProv - unknown atom, assuming PPT_PST_ExtendedParagraphMasterAtom (SJ)" );
-                case PPT_PST_NewlyAddedAtomByXP11008 :
-                case PPT_PST_NewlyAddedAtomByXP11010 :
-                case PPT_PST_NewlyAddedAtomByXP12010 :
-                case PPT_PST_NewlyAddedAtomByXP12011 :
+                case PPT_PST_HashCodeAtom :
+                case PPT_PST_BuildList :
+                case PPT_PST_SlideFlags10Atom :
+                case PPT_PST_SlideTime10Atom :
                 case 0xf144 :
                 break;
             }
