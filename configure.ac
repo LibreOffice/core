@@ -4384,7 +4384,7 @@ linux-gnu*)
         CPUNAME=POWERPC64
         RTL_ARCH=PowerPC_64_LE
         LIB64="lib64"
-        PLATFORMID=linux_powerpc64le
+        PLATFORMID=linux_powerpc64_le
         OUTPATH=unxlngppc64
         ;;
     sparc)
