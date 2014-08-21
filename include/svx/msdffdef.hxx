@@ -1002,7 +1002,8 @@ enum MSO_LineStyle {
    mso_lineDouble,          // Double lines of equal width
    mso_lineThickThin,       // Double lines, one thick, one thin
    mso_lineThinThick,       // Double lines, reverse order
-   mso_lineTriple           // Three lines, thin, thick, thin
+   mso_lineTriple,          // Three lines, thin, thick, thin
+   MSO_LineStyle_NONE = USHRT_MAX
 };
 
 // MSO_LINETYPE - how to "fill" the line contour

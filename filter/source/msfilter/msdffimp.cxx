@@ -5357,7 +5357,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                             ? (MSO_LineStyle)GetPropertyValue(
                                                 DFF_Prop_lineStyle,
                                                 mso_lineSimple )
-                            : (MSO_LineStyle)USHRT_MAX;
+                            : MSO_LineStyle_NONE;
         pTextImpRec->eLineStyle = pImpRec->eLineStyle;
 
         pImpRec->eLineDashing = (MSO_LineDashing)GetPropertyValue(
