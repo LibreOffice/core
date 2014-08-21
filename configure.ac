@@ -7223,7 +7223,7 @@ then
         powerpc)
             my_java_arch=ppc
             ;;
-        powerpc64)
+        powerpc64*)
             my_java_arch=ppc64
             ;;
         x86_64)
