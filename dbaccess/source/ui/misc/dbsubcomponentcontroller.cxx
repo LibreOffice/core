@@ -45,7 +45,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 
 namespace dbaui
 {
@@ -308,7 +308,7 @@ namespace dbaui
         bool bReConnect = true;
         if ( _bUI )
         {
-            QueryBox aQuery( getView(), ModuleRes(QUERY_CONNECTION_LOST) );
+            MessageDialog aQuery(getView(), ModuleRes(STR_QUERY_CONNECTION_LOST), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
             bReConnect = ( RET_YES == aQuery.Execute() );
         }
 
@@ -457,7 +457,7 @@ namespace dbaui
         if ( !pWin )
             pWin = getView()->Window::GetParent();
 
-        InfoBox(pWin, aMessage).Execute();
+        MessageDialog(pWin, aMessage, VCL_MESSAGE_INFO).Execute();
     }
     const Reference< XConnection >& DBSubComponentController::getConnection() const
     {

@@ -117,10 +117,9 @@ String STR_QUERY_DELETE_TABLE
     Text [ en-US ] = "Do you want to delete the table '%1'?" ;
 };
 
-QueryBox QUERY_CONNECTION_LOST
+String STR_QUERY_CONNECTION_LOST
 {
-    Buttons = WB_YES_NO ;
-    Message [ en-US ] = "The connection to the database has been lost. Do you want to reconnect?" ;
+    Text [ en-US ] = "The connection to the database has been lost. Do you want to reconnect?" ;
 };
 
 String STR_OPENTABLES_WARNINGS
