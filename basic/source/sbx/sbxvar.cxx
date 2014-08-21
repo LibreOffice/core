@@ -166,7 +166,7 @@ void SbxVariable::Broadcast( sal_uIntPtr nHintId )
         // Avoid further broadcasting
         SfxBroadcaster* pSave = pCst;
         pCst = NULL;
-        sal_uInt16 nSaveFlags = GetFlags();
+        SbxFlagBits nSaveFlags = GetFlags();
         SetFlag( SBX_READWRITE );
         if( mpPar.Is() )
         {
@@ -250,7 +250,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         {
             aTmp += ",";
         }
-        if( i->nFlags & SBX_OPTIONAL )
+        if( (i->nFlags & SBX_OPTIONAL) != SBX_NONE )
         {
             aTmp += OUString( SbxRes( STRING_OPTIONAL ) );
         }
@@ -589,7 +589,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
         // #50200 Avoid that objects , which during the runtime
         // as return-value are saved in the method as a value were saved
         SbxVariable* pThis = (SbxVariable*)this;
-        sal_uInt16 nSaveFlags = GetFlags();
+        SbxFlagBits nSaveFlags = GetFlags();
         pThis->SetFlag( SBX_WRITE );
         pThis->SbxValue::Clear();
         pThis->SetFlags( nSaveFlags );

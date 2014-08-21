@@ -288,7 +288,7 @@ static SbxVariable* Element
     SbxVariableRef refVar;
     if( !aSym.isEmpty() )
     {
-        sal_uInt16 nOld = pObj->GetFlags();
+        SbxFlagBits nOld = pObj->GetFlags();
         if( pObj == pGbl )
         {
             pObj->SetFlag( SBX_GBLSEARCH );

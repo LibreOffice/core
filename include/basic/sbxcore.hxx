@@ -56,7 +56,7 @@ class BASIC_DLLPUBLIC SbxBase : virtual public SvRefBase
     virtual bool LoadData( SvStream&, sal_uInt16 );
     virtual bool StoreData( SvStream& ) const;
 protected:
-    sal_uInt16 nFlags;          // Flag-Bits
+    SbxFlagBits nFlags;          // Flag-Bits
 
     SbxBase();
     SbxBase( const SbxBase& );
@@ -65,12 +65,12 @@ protected:
     SBX_DECL_PERSIST(0,0,0);
 public:
     TYPEINFO();
-    inline void         SetFlags( sal_uInt16 n );
-    inline sal_uInt16   GetFlags() const;
-    inline void         SetFlag( sal_uInt16 n );
-    inline void         ResetFlag( sal_uInt16 n );
-    inline bool         IsSet( sal_uInt16 n ) const;
-    inline bool         IsReset( sal_uInt16 n ) const;
+    inline void         SetFlags( SbxFlagBits n );
+    inline SbxFlagBits  GetFlags() const;
+    inline void         SetFlag( SbxFlagBits n );
+    inline void         ResetFlag( SbxFlagBits n );
+    inline bool         IsSet( SbxFlagBits n ) const;
+    inline bool         IsReset( SbxFlagBits n ) const;
     inline bool         CanRead() const;
     inline bool         CanWrite() const;
     inline bool         IsModified() const;
@@ -107,23 +107,23 @@ public:
 
 typedef tools::SvRef<SbxBase> SbxBaseRef;
 
-inline void SbxBase::SetFlags( sal_uInt16 n )
+inline void SbxBase::SetFlags( SbxFlagBits n )
 { nFlags = n; }
 
-inline sal_uInt16 SbxBase::GetFlags() const
+inline SbxFlagBits SbxBase::GetFlags() const
 { return nFlags; }
 
-inline void SbxBase::SetFlag( sal_uInt16 n )
+inline void SbxBase::SetFlag( SbxFlagBits n )
 { nFlags |= n; }
 
-inline void SbxBase::ResetFlag( sal_uInt16 n )
+inline void SbxBase::ResetFlag( SbxFlagBits n )
 { nFlags &= ~n; }
 
-inline bool SbxBase::IsSet( sal_uInt16 n ) const
-{ return ( nFlags & n ) != 0; }
+inline bool SbxBase::IsSet( SbxFlagBits n ) const
+{ return ( nFlags & n ) != SBX_NONE; }
 
-inline bool SbxBase::IsReset( sal_uInt16 n ) const
-{ return ( nFlags & n ) == 0; }
+inline bool SbxBase::IsReset( SbxFlagBits n ) const
+{ return ( nFlags & n ) == SBX_NONE; }
 
 inline bool SbxBase::CanRead() const
 { return IsSet( SBX_READ ); }

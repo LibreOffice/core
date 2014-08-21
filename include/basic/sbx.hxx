@@ -52,9 +52,9 @@ struct SbxParamInfo
     const OUString aName;          // Name of the parameter
     SbxBaseRef     aTypeRef;       // Object, if object type
     SbxDataType    eType;          // Data type
-    sal_uInt16     nFlags;         // Flag-Bits
+    SbxFlagBits    nFlags;         // Flag-Bits
     sal_uInt32     nUserData;      // IDs etc.
-    SbxParamInfo( const OUString& s, SbxDataType t, sal_uInt16 n, SbxBase* b = NULL )
+    SbxParamInfo( const OUString& s, SbxDataType t, SbxFlagBits n, SbxBase* b = NULL )
         : aName( s ), aTypeRef( b ), eType( t ), nFlags( n ), nUserData( 0 ) {}
     ~SbxParamInfo() {}
 };
@@ -79,7 +79,7 @@ public:
     SbxInfo();
     SbxInfo( const OUString&, sal_uInt32 );
 
-    void                AddParam( const OUString&, SbxDataType, sal_uInt16=SBX_READ );
+    void                AddParam( const OUString&, SbxDataType, SbxFlagBits=SBX_READ );
     const SbxParamInfo* GetParam( sal_uInt16 n ) const; // index starts with 1!
     const OUString&     GetComment() const              { return aComment; }
     const OUString&     GetHelpFile() const             { return aHelpFile; }

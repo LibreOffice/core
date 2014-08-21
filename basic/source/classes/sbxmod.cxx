@@ -248,7 +248,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
         sal_uInt16 n = 1;
         for ( const SbxParamInfo* pParamInfo = pInfo->GetParam( n ); pParamInfo; pParamInfo = pInfo->GetParam( ++n ) )
         {
-            if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != 0 )
+            if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != SBX_NONE )
                 ++nSbxOptional;
             else
                 nSbxOptional = 0;
@@ -389,7 +389,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeE
     SbMethodRef pMethod = NULL;
     if ( m_pMod )
     {
-        sal_uInt16 nSaveFlgs = m_pMod->GetFlags();
+        SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
         // Limit search to this module
         m_pMod->ResetFlag( SBX_GBLSEARCH );
         pMethod = dynamic_cast<SbMethod*>(m_pMod->SbModule::Find(aName,  SbxCLASS_METHOD));
@@ -404,7 +404,7 @@ SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (Runt
     SbPropertyRef pProperty = NULL;
     if ( m_pMod )
     {
-        sal_uInt16 nSaveFlgs = m_pMod->GetFlags();
+        SbxFlagBits nSaveFlgs = m_pMod->GetFlags();
         // Limit search to this module.
         m_pMod->ResetFlag( SBX_GBLSEARCH );
         pProperty = dynamic_cast<SbProperty*>(m_pMod->SbModule::Find(aName,  SbxCLASS_PROPERTY));
@@ -1123,7 +1123,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
             StarBASIC* pMSOMacroRuntimeLib = PTR_CAST(StarBASIC,pMSOMacroRuntimeLibVar);
             if( pMSOMacroRuntimeLib )
             {
-                sal_uInt16 nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
+                SbxFlagBits nGblFlag = pMSOMacroRuntimeLib->GetFlags() & SBX_GBLSEARCH;
                 pMSOMacroRuntimeLib->ResetFlag( SBX_GBLSEARCH );
                 SbxVariable* pAppSymbol = pMSOMacroRuntimeLib->Find( "Application", SbxCLASS_METHOD );
                 pMSOMacroRuntimeLib->SetFlag( nGblFlag );
@@ -2172,7 +2172,7 @@ void SbMethod::Broadcast( sal_uIntPtr nHintId )
         pCst = pSave;
         pSave->Broadcast( SbxHint( nHintId, pThisCopy ) );
 
-        sal_uInt16 nSaveFlags = GetFlags();
+        SbxFlagBits nSaveFlags = GetFlags();
         SetFlag( SBX_READWRITE );
         pCst = NULL;
         Put( pThisCopy->GetValues_Impl() );

@@ -4374,7 +4374,7 @@ RTLFUNC(StrConv)
         }
 
         SbxVariableRef refVar = rPar.Get(0);
-        sal_uInt16 nFlags = refVar->GetFlags();
+        SbxFlagBits nFlags = refVar->GetFlags();
         refVar->ResetFlag( SBX_FIXED );
         refVar->PutObject( pArray );
         refVar->SetFlags( nFlags );

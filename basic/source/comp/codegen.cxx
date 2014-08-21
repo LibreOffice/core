@@ -313,7 +313,7 @@ void SbiCodeGen::Save()
                             t = (SbxDataType) ( t | SbxARRAY );
                         }
                         // #33677 hand-over an Optional-Info
-                        sal_uInt16 nFlags = SBX_READ;
+                        SbxFlagBits nFlags = SBX_READ;
                         if( pPar->IsOptional() )
                         {
                             nFlags |= SBX_OPTIONAL;

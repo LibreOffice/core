@@ -1711,7 +1711,7 @@ void SbiRuntime::StepPUT()
     SbxVariableRef refVar = PopVar();
     // store on its own method (inside a function)?
     bool bFlagsChanged = false;
-    sal_uInt16 n = 0;
+    SbxFlagBits n = SBX_NONE;
     if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
     {
         bFlagsChanged = true;
@@ -1863,7 +1863,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
     else
     {
         bool bFlagsChanged = false;
-        sal_uInt16 n = 0;
+        SbxFlagBits n = SBX_NONE;
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
         {
             bFlagsChanged = true;
@@ -2064,7 +2064,7 @@ void SbiRuntime::StepLSET()
     }
     else
     {
-        sal_uInt16 n = refVar->GetFlags();
+        SbxFlagBits n = refVar->GetFlags();
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
         {
             refVar->SetFlag( SBX_WRITE );
@@ -2100,7 +2100,7 @@ void SbiRuntime::StepRSET()
     }
     else
     {
-        sal_uInt16 n = refVar->GetFlags();
+        SbxFlagBits n = refVar->GetFlags();
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
         {
             refVar->SetFlag( SBX_WRITE );
@@ -2200,7 +2200,7 @@ void SbiRuntime::DimImpl( SbxVariableRef refVar )
             // a dimension (like for Uno-Sequences of the length 0)
             pArray->unoAddDim( 0, -1 );
         }
-        sal_uInt16 nSavFlags = refVar->GetFlags();
+        SbxFlagBits nSavFlags = refVar->GetFlags();
         refVar->ResetFlag( SBX_FIXED );
         refVar->PutObject( pArray );
         refVar->SetFlags( nSavFlags );
@@ -2333,7 +2333,7 @@ void SbiRuntime::StepREDIMP_ERASE()
 
 static void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
 {
-    sal_uInt16 nSavFlags = refVar->GetFlags();
+    SbxFlagBits nSavFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
     refVar->SetType( SbxDataType(eType & 0x0FFF) );
     refVar->SetFlags( nSavFlags );
@@ -3553,7 +3553,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
             // shall the type be converted?
             SbxDataType t2 = pElem->GetType();
             bool bSet = false;
-            if( !( pElem->GetFlags() & SBX_FIXED ) )
+            if( (pElem->GetFlags() & SBX_FIXED) == SBX_NONE )
             {
                 if( t != SbxVARIANT && t != t2 &&
                     t >= SbxINTEGER && t <= SbxSTRING )
@@ -3566,7 +3566,7 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
 
             // remove potential rests of the last call of the SbxMethod
             // free Write before, so that there's no error
-            sal_uInt16 nSavFlags = pElem->GetFlags();
+            SbxFlagBits nSavFlags = pElem->GetFlags();
             pElem->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
             pElem->SbxValue::Clear();
             pElem->SetFlags( nSavFlags );
@@ -4115,7 +4115,7 @@ void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
             if ( pInfo )
             {
                 const SbxParamInfo* pParam = pInfo->GetParam( i );
-                if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != 0 ) )
+                if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != SBX_NONE ) )
                 {
                     // Default value?
                     sal_uInt16 nDefaultId = (sal_uInt16)(pParam->nUserData & 0x0ffff);

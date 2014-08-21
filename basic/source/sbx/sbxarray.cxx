@@ -408,7 +408,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
                 case SbxCLASS_OBJECT:
                 {
                     // Objects are not allowed to scan their parent.
-                    sal_uInt16 nOld = pEntry->mpVar->GetFlags();
+                    SbxFlagBits nOld = pEntry->mpVar->GetFlags();
                     pEntry->mpVar->ResetFlag(SBX_GBLSEARCH);
                     p = static_cast<SbxObject&>(*pEntry->mpVar).FindUserData(nData);
                     pEntry->mpVar->SetFlags(nOld);
@@ -468,7 +468,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
                 case SbxCLASS_OBJECT:
                 {
                     // Objects are not allowed to scan their parent.
-                    sal_uInt16 nOld = pEntry->mpVar->GetFlags();
+                    SbxFlagBits nOld = pEntry->mpVar->GetFlags();
                     pEntry->mpVar->ResetFlag(SBX_GBLSEARCH);
                     p = static_cast<SbxObject&>(*pEntry->mpVar).Find(rName, t);
                     pEntry->mpVar->SetFlags(nOld);
@@ -497,7 +497,7 @@ bool SbxArray::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     sal_uInt16 nElem;
     Clear();
     bool bRes = true;
-    sal_uInt16 f = nFlags;
+    SbxFlagBits f = nFlags;
     nFlags |= SBX_WRITE;
     rStrm.ReadUInt16( nElem );
     nElem &= 0x7FFF;
@@ -531,14 +531,14 @@ bool SbxArray::StoreData( SvStream& rStrm ) const
     for( n = 0; n < mpVarEntries->size(); n++ )
     {
         SbxVarEntry* pEntry = (*mpVarEntries)[n];
-        if (pEntry->mpVar && !(pEntry->mpVar->GetFlags() & SBX_DONTSTORE))
+        if (pEntry->mpVar && (pEntry->mpVar->GetFlags() & SBX_DONTSTORE) == SBX_NONE)
             nElem++;
     }
     rStrm.WriteUInt16( (sal_uInt16) nElem );
     for( n = 0; n < mpVarEntries->size(); n++ )
     {
         SbxVarEntry* pEntry = (*mpVarEntries)[n];
-        if (pEntry->mpVar && !(pEntry->mpVar->GetFlags() & SBX_DONTSTORE))
+        if (pEntry->mpVar && (pEntry->mpVar->GetFlags() & SBX_DONTSTORE) == SBX_NONE)
         {
             rStrm.WriteUInt16( (sal_uInt16) n );
             if (!pEntry->mpVar->Store(rStrm))

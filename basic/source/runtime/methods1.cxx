@@ -841,7 +841,7 @@ RTLFUNC(Array)
 
     // return array
     SbxVariableRef refVar = rPar.Get(0);
-    sal_uInt16 nFlags = refVar->GetFlags();
+    SbxFlagBits nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
@@ -881,7 +881,7 @@ RTLFUNC(DimArray)
         pArray->unoAddDim( 0, -1 );
     }
     SbxVariableRef refVar = rPar.Get(0);
-    sal_uInt16 nFlags = refVar->GetFlags();
+    SbxFlagBits nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
@@ -1831,7 +1831,7 @@ RTLFUNC(Split)
 
     // return array
     SbxVariableRef refVar = rPar.Get(0);
-    sal_uInt16 nFlags = refVar->GetFlags();
+    SbxFlagBits nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
     refVar->PutObject( pArray );
     refVar->SetFlags( nFlags );
