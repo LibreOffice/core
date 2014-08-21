@@ -43,27 +43,13 @@ public class JREProperties
                     bNoAccess = true;
             }
 
-            //Find out on what operation system we are running. On Windows 98
-            //we must not call getDefaultToolkit, because the office may freeze
-            //#i44608.
-            boolean bW98 = false;
-            String os = System.getProperty("os.name");
-
-            if (os != null)
-            {
-                os = os.trim();
-                if (os.equalsIgnoreCase("Windows 98") ||
-                    os.indexOf("Windows 98") != -1)
-                    bW98 = true;
-            }
-
             //We need to be able to switch this part off because
             //it causes an exception if the DISPLAY variable has
             //a false value. Setting the noaccessibility argument
             //can be done by providing a sunjavaplugin.ini with
             //the bootstrap parameter JFW_PLUGIN_NO_NOT_CHECK_ACCESSIBILITY
             //set to "1"
-            if (!bNoAccess && ! bW98)
+            if (!bNoAccess)
             {
                 try{
                     //This line is needed to get the accessibility properties
