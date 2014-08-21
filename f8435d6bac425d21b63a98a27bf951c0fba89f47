@@ -16,6 +16,24 @@
       "revId": "f8435d6bac425d21b63a98a27bf951c0fba89f47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_fe5d35ed",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1851,
+      "author": {
+        "id": 1000542
+      },
+      "writtenOn": "2014-08-21T12:26:50Z",
+      "side": 1,
+      "message": "@miklos : Yes, In GraphicImport it is conditional but value of m_pImpl-\u003ebOpaque is decided on behindDoc property(http://opengrok.libreoffice.org/xref/core/writerfilter/source/dmapper/GraphicImport.cxx#579) which is specific to DML shapes. I think in VML shapes background and foreground rendering is decided on z-order.",
+      "parentUuid": "5ad0253b_9ece41b3",
+      "revId": "f8435d6bac425d21b63a98a27bf951c0fba89f47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
