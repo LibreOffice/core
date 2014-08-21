@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_1e8d917b",
+        "filename": "cui/source/dialogs/iconcdlg.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-08-21T06:07:42Z",
+      "side": 1,
+      "message": "Do I need to set an Help ID with ui files?",
+      "revId": "169cb6c5b8b0882111ba46a2d3d9b56a21bbe3fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
