@@ -1583,16 +1583,13 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     return aRegion;
 }
 
-#define ENTER0( rSource, pMapModeSource, pMapModeDest )                 \
+#define ENTER1( rSource, pMapModeSource, pMapModeDest )                 \
     if ( !pMapModeSource )                                              \
         pMapModeSource = &maMapMode;                                    \
     if ( !pMapModeDest )                                                \
         pMapModeDest = &maMapMode;                                      \
     if ( *pMapModeSource == *pMapModeDest )                             \
-        return rSource
-
-#define ENTER1( rSource, pMapModeSource, pMapModeDest )                 \
-    ENTER0( rSource, pMapModeSource, pMapModeDest );                    \
+        return rSource;                                                 \
                                                                         \
     ImplMapRes aMapResSource;                                           \
     aMapResSource.mnMapOfsX          = 0;                               \
@@ -1626,19 +1623,21 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
     else                                                                \
         aMapResDest = maMapRes
 
-#define ENTER2( eUnitSource, eUnitDest )                                \
-    DBG_ASSERT( eUnitSource != MAP_SYSFONT                              \
-                && eUnitSource != MAP_APPFONT                           \
-                && eUnitSource != MAP_RELATIVE,                         \
-                "Source MapUnit nicht erlaubt" );                       \
-    DBG_ASSERT( eUnitDest != MAP_SYSFONT                                \
-                && eUnitDest != MAP_APPFONT                             \
-                && eUnitDest != MAP_RELATIVE,                           \
-                "Destination MapUnit nicht erlaubt" );                  \
-    DBG_ASSERTWARNING( eUnitSource != MAP_PIXEL,                        \
-                       "MAP_PIXEL mit 72dpi angenaehert" );             \
-    DBG_ASSERTWARNING( eUnitDest != MAP_PIXEL,                          \
-                       "MAP_PIXEL mit 72dpi angenaehert" )
+static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
+{
+    DBG_ASSERT( eUnitSource != MAP_SYSFONT
+                && eUnitSource != MAP_APPFONT
+                && eUnitSource != MAP_RELATIVE,
+                "Source MapUnit nicht erlaubt" );
+    DBG_ASSERT( eUnitDest != MAP_SYSFONT
+                && eUnitDest != MAP_APPFONT
+                && eUnitDest != MAP_RELATIVE,
+                "Destination MapUnit nicht erlaubt" );
+    DBG_ASSERTWARNING( eUnitSource != MAP_PIXEL,
+                       "MAP_PIXEL mit 72dpi angenaehert" );
+    DBG_ASSERTWARNING( eUnitDest != MAP_PIXEL,
+                       "MAP_PIXEL mit 72dpi angenaehert" );
+}
 
 #define ENTER3( eUnitSource, eUnitDest )                                \
     long nNumerator      = 1;       \
@@ -1890,7 +1889,7 @@ Point OutputDevice::LogicToLogic( const Point& rPtSource,
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
-    ENTER2( eUnitSource, eUnitDest );
+    verifyUnitSourceDest( eUnitSource, eUnitDest );
 
     if ( rMapModeSource.mpImplMapMode->mbSimple &&
          rMapModeDest.mpImplMapMode->mbSimple )
@@ -1924,7 +1923,7 @@ Size OutputDevice::LogicToLogic( const Size& rSzSource,
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
-    ENTER2( eUnitSource, eUnitDest );
+    verifyUnitSourceDest( eUnitSource, eUnitDest );
 
     if ( rMapModeSource.mpImplMapMode->mbSimple &&
          rMapModeDest.mpImplMapMode->mbSimple )
@@ -1990,7 +1989,7 @@ basegfx::B2DHomMatrix OutputDevice::LogicToLogic(const MapMode& rMapModeSource, 
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
-    ENTER2(eUnitSource, eUnitDest);
+    verifyUnitSourceDest(eUnitSource, eUnitDest);
 
     if(rMapModeSource.mpImplMapMode->mbSimple && rMapModeDest.mpImplMapMode->mbSimple)
     {
@@ -2027,7 +2026,7 @@ Rectangle OutputDevice::LogicToLogic( const Rectangle& rRectSource,
 
     MapUnit eUnitSource = rMapModeSource.GetMapUnit();
     MapUnit eUnitDest   = rMapModeDest.GetMapUnit();
-    ENTER2( eUnitSource, eUnitDest );
+    verifyUnitSourceDest( eUnitSource, eUnitDest );
 
     if ( rMapModeSource.mpImplMapMode->mbSimple &&
          rMapModeDest.mpImplMapMode->mbSimple )
@@ -2068,7 +2067,7 @@ long OutputDevice::LogicToLogic( long nLongSource,
     if ( eUnitSource == eUnitDest )
         return nLongSource;
 
-    ENTER2( eUnitSource, eUnitDest );
+    verifyUnitSourceDest( eUnitSource, eUnitDest );
     ENTER3( eUnitSource, eUnitDest );
 
     return fn3( nLongSource, nNumerator, nDenominator );
