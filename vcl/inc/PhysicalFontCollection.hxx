@@ -54,6 +54,7 @@ public:
 
     // find the device font
     PhysicalFontFamily*    FindFontFamily( const OUString& rFontName ) const;
+    PhysicalFontFamily*    FindOrCreateFamily( const OUString &rFamilyName );
     PhysicalFontFamily*    ImplFindByFont( FontSelectPattern& ) const;
     PhysicalFontFamily*    ImplFindBySearchName( const OUString& ) const;
 

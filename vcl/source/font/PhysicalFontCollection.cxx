@@ -353,16 +353,7 @@ void PhysicalFontCollection::Add( PhysicalFontFace* pNewData )
     GetEnglishSearchFontName( aSearchName );
 
     PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( aSearchName );
-    PhysicalFontFamily* pFoundData = NULL;
-
-    if( it != maPhysicalFontFamilies.end() )
-        pFoundData = (*it).second;
-
-    if( !pFoundData )
-    {
-        pFoundData = new PhysicalFontFamily( aSearchName );
-        maPhysicalFontFamilies[ aSearchName ] = pFoundData;
-    }
+    PhysicalFontFamily* pFoundData = FindOrCreateFamily( aSearchName );
 
     bool bKeepNewData = pFoundData->AddFontFace( pNewData );
 
@@ -432,6 +423,23 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( const OUString& rFon
 
     PhysicalFontFamily* pFound = ImplFindBySearchName( aName );
     return pFound;
+}
+
+PhysicalFontFamily *PhysicalFontCollection::FindOrCreateFamily( const OUString &rFamilyName )
+{
+    PhysicalFontFamilies::const_iterator it = maPhysicalFontFamilies.find( rFamilyName );
+    PhysicalFontFamily* pFoundData = NULL;
+
+    if( it != maPhysicalFontFamilies.end() )
+        pFoundData = (*it).second;
+
+    if( !pFoundData )
+    {
+        pFoundData = new PhysicalFontFamily( rFamilyName );
+        maPhysicalFontFamilies[ rFamilyName ] = pFoundData;
+    }
+
+    return pFoundData;
 }
 
 PhysicalFontFamily* PhysicalFontCollection::ImplFindByTokenNames(const OUString& rTokenStr) const
