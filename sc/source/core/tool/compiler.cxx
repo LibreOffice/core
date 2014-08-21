@@ -426,7 +426,7 @@ static bool lcl_isValidQuotedText( const OUString& rFormula, sal_Int32 nSrcPos, 
     // but '' marks an escaped '
     // We've earlier guaranteed that a string containing '' will be
     // surrounded by '
-    if (rFormula[nSrcPos] == '\'')
+    if (nSrcPos < rFormula.getLength() && rFormula[nSrcPos] == '\'')
     {
         sal_Int32 nPos = nSrcPos+1;
         while (nPos < rFormula.getLength())
