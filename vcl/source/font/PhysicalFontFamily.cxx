@@ -281,6 +281,10 @@ void PhysicalFontFamily::GetFontHeights( std::set<int>& rHeights ) const
 void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontCollection,
                                               bool bScalable, bool bEmbeddable ) const
 {
+    // This is rather expensive to do per face.
+    OUString aFamilyName = GetEnglishSearchFontName( GetFamilyName() );
+    PhysicalFontFamily* pFamily = rFontCollection.FindOrCreateFamily( aFamilyName );
+
     for( PhysicalFontFace* pFace = mpFirst; pFace; pFace = pFace->GetNextFace() )
     {
         if( bScalable && !pFace->IsScalable() )
@@ -289,7 +293,12 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
             continue;
 
         PhysicalFontFace* pClonedFace = pFace->Clone();
-        rFontCollection.Add( pClonedFace );
+
+        assert( pClonedFace->GetFamilyName() == GetFamilyName() );
+        assert( rFontCollection.FindOrCreateFamily( GetEnglishSearchFontName( pClonedFace->GetFamilyName() ) ) == pFamily );
+
+        if (! pFamily->AddFontFace( pClonedFace ) )
+            delete pClonedFace;
     }
 }
 
