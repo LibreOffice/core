@@ -26,7 +26,6 @@ namespace connectivity
 {
     namespace flat
     {
-                //      namespace ::com::sun::star::sdbcx             = ::com::sun::star::sdbcx;
         typedef file::OTables OFlatTables_BASE;
 
         class OFlatTables : public OFlatTables_BASE

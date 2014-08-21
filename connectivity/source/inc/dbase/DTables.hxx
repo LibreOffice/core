@@ -26,7 +26,6 @@ namespace connectivity
 {
     namespace dbase
     {
-                //      namespace ::com::sun::star::sdbcx             = ::com::sun::star::sdbcx;
         typedef file::OTables ODbaseTables_BASE;
 
         class ODbaseTables : public ODbaseTables_BASE
