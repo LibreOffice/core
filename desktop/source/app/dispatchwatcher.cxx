@@ -151,41 +151,14 @@ catch ( const Exception& )
     return 0;
 }
 
-
-static OUString impl_GetFilterFromExt( const OUString& aUrl, SfxFilterFlags nFlags,
-                                        const OUString& aAppl )
+OUString impl_GuessFilter( const OUString& rUrlOut, const OUString& rDocService )
 {
-    OUString aFilter;
-    SfxMedium* pMedium = new SfxMedium( aUrl,
-                                        STREAM_STD_READ );
+    OUString aOutFilter;
+    const SfxFilter* pOutFilter = impl_getExportFilterFromUrl( rUrlOut, rDocService );
+    if (pOutFilter)
+        aOutFilter = pOutFilter->GetFilterName();
 
-    const SfxFilter *pSfxFilter = NULL;
-    if( nFlags == SFX_FILTER_EXPORT )
-    {
-        pSfxFilter = impl_getExportFilterFromUrl( aUrl, aAppl );
-    }
-    else
-    {
-        SfxGetpApp()->GetFilterMatcher().GuessFilter( *pMedium, &pSfxFilter, nFlags );
-    }
-
-    if( pSfxFilter )
-    {
-        if (nFlags == SFX_FILTER_EXPORT)
-            aFilter = pSfxFilter->GetFilterName();
-        else
-            aFilter = pSfxFilter->GetServiceName();
-    }
-
-    delete pMedium;
-    return aFilter;
-}
-static OUString impl_GuessFilter( const OUString& aUrlIn, const OUString& aUrlOut )
-{
-    /* aAppl can also be set to Factory like scalc, swriter... */
-    OUString aAppl;
-    aAppl = impl_GetFilterFromExt( aUrlIn, SFX_FILTER_IMPORT, aAppl );
-    return  impl_GetFilterFromExt( aUrlOut, SFX_FILTER_EXPORT, aAppl );
+    return aOutFilter;
 }
 
 }
@@ -545,7 +518,14 @@ bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
 
                             if ( bGuess )
                             {
-                                aFilter = impl_GuessFilter( aName, aOutFile );
+                                OUString aDocService;
+                                Reference< XModel > xModel( xDoc, UNO_QUERY );
+                                if ( xModel.is() )
+                                {
+                                    utl::MediaDescriptor aMediaDesc( xModel->getArgs() );
+                                    aDocService = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTSERVICE(), OUString() );
+                                }
+                                aFilter = impl_GuessFilter( aOutFile, aDocService );
                             }
 
                             sal_Int32 nFilterOptionsIndex = aFilter.indexOf( ':' );
