@@ -1903,7 +1903,7 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                     nFilter=pStyleSheetPool->GetSearchMask();
                 pStyleSheetPool->SetSearchMask( eFam, SFXSTYLEBIT_USERDEF );
 
-                SfxNewStyleDlg *pDlg = new SfxNewStyleDlg(pWindow, *pStyleSheetPool);
+                boost::scoped_ptr<SfxNewStyleDlg> pDlg(new SfxNewStyleDlg(pWindow, *pStyleSheetPool));
                     // why? : FloatingWindow must not be parent of a modal dialog
                 if(RET_OK == pDlg->Execute())
                 {
@@ -1915,7 +1915,6 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(sal_uInt16 nEntry)
                                  nFilter);
                 }
                 pStyleSheetPool->SetSearchMask( eFam, nFilter );
-                delete pDlg;
             }
             break;
         }

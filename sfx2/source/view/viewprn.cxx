@@ -46,6 +46,7 @@
 #include <sfx2/docfilt.hxx>
 
 #include <toolkit/awt/vclxdevice.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #include "view.hrc"
 #include "helpid.hrc"
@@ -453,8 +454,8 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
         return 0;
 
     // Create Dialog
-    SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( static_cast<Window*>(_pSetupParent),
-                                                             _pViewSh, _pOptions );
+    boost::scoped_ptr<SfxPrintOptionsDialog> pDlg(new SfxPrintOptionsDialog( static_cast<Window*>(_pSetupParent),
+                                                             _pViewSh, _pOptions ));
     if ( _bHelpDisabled )
         pDlg->DisableHelp();
     if ( pDlg->Execute() == RET_OK )
@@ -463,7 +464,6 @@ IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
         _pOptions = pDlg->GetOptions().Clone();
 
     }
-    delete pDlg;
 
     return 0;
 }

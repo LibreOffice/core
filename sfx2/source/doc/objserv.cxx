@@ -100,6 +100,7 @@
 
 #include "guisaveas.hxx"
 #include "templatedlg.hxx"
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -333,9 +334,8 @@ void SfxObjectShell::CheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        MessageDialog* pErrorBox = new MessageDialog( &GetFrame()->GetWindow(), e.Message );
+        boost::scoped_ptr<MessageDialog> pErrorBox(new MessageDialog( &GetFrame()->GetWindow(), e.Message ));
         pErrorBox->Execute( );
-        delete pErrorBox;
     }
 }
 
@@ -352,9 +352,8 @@ void SfxObjectShell::CancelCheckOut( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        MessageDialog* pErrorBox = new MessageDialog(&GetFrame()->GetWindow(), e.Message);
+        boost::scoped_ptr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
         pErrorBox->Execute( );
-        delete pErrorBox;
     }
 }
 
@@ -377,9 +376,8 @@ void SfxObjectShell::CheckIn( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        MessageDialog* pErrorBox = new MessageDialog(&GetFrame()->GetWindow(), e.Message);
+        boost::scoped_ptr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
         pErrorBox->Execute( );
-        delete pErrorBox;
     }
 }
 
@@ -392,9 +390,8 @@ uno::Sequence< document::CmisVersion > SfxObjectShell::GetCmisVersions( )
     }
     catch ( const uno::RuntimeException& e )
     {
-        MessageDialog* pErrorBox = new MessageDialog(&GetFrame()->GetWindow(), e.Message);
+        boost::scoped_ptr<MessageDialog> pErrorBox(new MessageDialog(&GetFrame()->GetWindow(), e.Message));
         pErrorBox->Execute( );
-        delete pErrorBox;
     }
     return uno::Sequence< document::CmisVersion > ( );
 }
@@ -441,10 +438,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             if ( !IsOwnStorageFormat_Impl( *GetMedium() ) )
                 return;
 
-            SfxVersionDialog *pDlg = new SfxVersionDialog( pFrame, IsSaveVersionOnClose() );
+            boost::scoped_ptr<SfxVersionDialog> pDlg(new SfxVersionDialog( pFrame, IsSaveVersionOnClose() ));
             pDlg->Execute();
             SetSaveVersionOnClose( pDlg->IsSaveVersionOnClose() );
-            delete pDlg;
             rReq.Done();
             return;
         }
@@ -502,7 +498,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // creating dialog is done via virtual method; application will
                 // add its own statistics page
-                SfxDocumentInfoDialog *pDlg = CreateDocumentInfoDialog(0, aSet);
+                boost::scoped_ptr<SfxDocumentInfoDialog> pDlg(CreateDocumentInfoDialog(0, aSet));
                 if ( RET_OK == pDlg->Execute() )
                 {
                     SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pDocInfoItem, SfxDocumentInfoItem, SID_DOCINFO, false);
@@ -525,8 +521,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 else
                     // nothing done; no recording
                     rReq.Ignore();
-
-                delete pDlg;
             }
 
             return;

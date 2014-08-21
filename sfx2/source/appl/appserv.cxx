@@ -118,6 +118,7 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -357,9 +358,9 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( pFrameItem )
                     xFrame = pFrameItem->GetFrame();
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog(
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog(
                     RID_SVXDLG_CUSTOMIZE,
-                    NULL, &aSet, xFrame );
+                    NULL, &aSet, xFrame ));
 
                 if ( pDlg )
                 {
@@ -367,8 +368,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                     if ( nRet )
                         bDone = true;
-
-                    delete pDlg;
                 }
             }
             break;
@@ -529,9 +528,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                VclAbstractDialog* pDlg = pFact->CreateVclDialog( 0, RID_DEFAULTABOUT );
+                boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateVclDialog( 0, RID_DEFAULTABOUT ));
                 pDlg->Execute();
-                delete pDlg;
                 bDone = true;
             }
             break;
@@ -1163,8 +1161,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             do  // artificial loop for flow control
             {
-                AbstractScriptSelectorDialog* pDlg = pFact->CreateScriptSelectorDialog(
-                    lcl_getDialogParent( xFrame, GetTopWindow() ), false, xFrame );
+                boost::scoped_ptr<AbstractScriptSelectorDialog> pDlg(pFact->CreateScriptSelectorDialog(
+                    lcl_getDialogParent( xFrame, GetTopWindow() ), false, xFrame ));
                 OSL_ENSURE( pDlg, "SfxApplication::OfaExec_Impl( SID_RUNMACRO ): no dialog!" );
                 if ( !pDlg )
                     break;
@@ -1172,10 +1170,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                 short nDialogResult = pDlg->Execute();
                 if ( !nDialogResult )
-                {
-                    delete pDlg;
                     break;
-                }
 
                 Sequence< Any > args;
                 Sequence< sal_Int16 > outIndex;
@@ -1193,7 +1188,6 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     xScriptContext = xController;
 
                 SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
-                delete pDlg;
             }
             while ( false );
             rReq.Done();
@@ -1259,9 +1253,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SFX_ITEM_SET )
                     aSet.Put( *pItem );
 
-                SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL );
+                boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL ));
                 pDlg->Execute();
-                delete pDlg;
             }
 
             break;

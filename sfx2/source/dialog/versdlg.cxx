@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>
@@ -399,7 +400,7 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     {
         SfxVersionInfo aInfo;
         aInfo.aAuthor = SvtUserOptions().GetFullName();
-        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl(this, aInfo, true);
+        boost::scoped_ptr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, aInfo, true));
         short nRet = pDlg->Execute();
         if ( nRet == RET_OK )
         {
@@ -414,8 +415,6 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
             Init_Impl();
             m_pVersionBox->SetUpdateMode( true );
         }
-
-        delete pDlg;
     }
     if (pButton == m_pDeleteButton && pEntry)
     {
@@ -433,9 +432,8 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     else if (pButton == m_pViewButton && pEntry)
     {
         SfxVersionInfo* pInfo = (SfxVersionInfo*) pEntry->GetUserData();
-        SfxViewVersionDialog_Impl* pDlg = new SfxViewVersionDialog_Impl(this, *pInfo, false);
+        boost::scoped_ptr<SfxViewVersionDialog_Impl> pDlg(new SfxViewVersionDialog_Impl(this, *pInfo, false));
         pDlg->Execute();
-        delete pDlg;
     }
     else if (pEntry && pButton == m_pCompareButton)
     {
@@ -457,9 +455,8 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
     }
     else if (pButton == m_pCmisButton)
     {
-        SfxCmisVersionsDialog* pDlg = new SfxCmisVersionsDialog(pViewFrame, false);
+        boost::scoped_ptr<SfxCmisVersionsDialog> pDlg(new SfxCmisVersionsDialog(pViewFrame, false));
         pDlg->Execute();
-        delete pDlg;
     }
 
     return 0L;

@@ -72,6 +72,7 @@
 #include <vcl/help.hxx>
 
 #include <algorithm>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -1344,10 +1345,9 @@ CustomPropertiesEditButton::~CustomPropertiesEditButton()
 
 IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl)
 {
-    DurationDialog_Impl* pDurationDlg = new DurationDialog_Impl( this, m_pLine->m_aDurationField.GetDuration() );
+    boost::scoped_ptr<DurationDialog_Impl> pDurationDlg(new DurationDialog_Impl( this, m_pLine->m_aDurationField.GetDuration() ));
     if ( RET_OK == pDurationDlg->Execute() )
         m_pLine->m_aDurationField.SetDuration( pDurationDlg->GetDuration() );
-    delete pDurationDlg;
     return 1;
 }
 
