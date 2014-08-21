@@ -37,7 +37,6 @@
 #include "dbadmin.hxx"
 #include "moduledbu.hxx"
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/passwd.hxx>
 
 using namespace ::com::sun::star::container;
@@ -239,7 +238,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);
                 if(xDrop.is())
                 {
-                    QueryBox aQry(this, ModuleRes(QUERY_USERADMIN_DELETE_USER));
+                    MessageDialog aQry(this, ModuleRes(STR_QUERY_USERADMIN_DELETE_USER), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                     if(aQry.Execute() == RET_YES)
                         xDrop->dropByName(GetUser());
                 }

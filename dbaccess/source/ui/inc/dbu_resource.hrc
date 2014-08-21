@@ -62,7 +62,7 @@
 #define RID_STR_UNO_END                 RID_STR_UNO_START       + 20    // 414 - 433
 
 #define RID_STR_GEN_START               RID_STR_UNO_END
-#define RID_STR_GEN_END                 RID_STR_GEN_START       + 63    // 434 - 493
+#define RID_STR_GEN_END                 RID_STR_GEN_START       + 64    // 434 - 493
 
 #define RID_STR_APP_START               RID_STR_GEN_END
 #define RID_STR_APP_END                 RID_STR_APP_START       + 40    //   494 - 533
@@ -105,7 +105,6 @@
 #define QUERY_SAVE_CURRENT_INDEX        RID_QUERYBOX_START +  7
 #define QUERY_SAVE_TABLE_EDIT_INDEXES   RID_QUERYBOX_START +  8
 #define RELATION_DESIGN_SAVEMODIFIED    RID_QUERYBOX_START +  9
-#define QUERY_USERADMIN_DELETE_USER     RID_QUERYBOX_START + 12
 #define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
 
 // images
@@ -223,6 +222,7 @@
 #define STR_QUERY_CLOSEDOCUMENTS            RID_STR_GEN_START + 60
 #define STR_QUERY_BRW_DELETE_ROWS           RID_STR_GEN_START + 61
 #define STR_QUERY_CONNECTION_LOST           RID_STR_GEN_START + 62
+#define STR_QUERY_USERADMIN_DELETE_USER     RID_STR_GEN_START + 63
 
 // untyped resources
 

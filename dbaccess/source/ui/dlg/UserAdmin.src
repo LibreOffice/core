@@ -20,10 +20,9 @@
 #include "dbu_dlg.hrc"
 #include "dbaccess_helpid.hrc"
 
-QueryBox QUERY_USERADMIN_DELETE_USER
+String STR_QUERY_USERADMIN_DELETE_USER
 {
-    Buttons = WB_YES_NO ;
-    Message [ en-US ] = "Do you really want to delete the user?";
+    Text[ en-US ] = "Do you really want to delete the user?";
 };
 
 String STR_USERADMIN_NOT_AVAILABLE
