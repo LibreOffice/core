@@ -676,31 +676,36 @@ void ExcTable::Write( XclExpStream& rStrm )
 
 void ExcTable::WriteXml( XclExpXmlStream& rStrm )
 {
-    if (GetTabInfo().IsExportTab( mnScTab ) )
+    if (!GetTabInfo().IsExportTab(mnScTab))
     {
-        // worksheet export
-        OUString sSheetName = XclXmlUtils::GetStreamName( "xl/", "worksheets/sheet", mnScTab+1 );
+        // header export.
+        SetCurrScTab(mnScTab);
+        if (mxCellTable)
+            mxCellTable->Finalize();
+        aRecList.SaveXml(rStrm);
 
-        sax_fastparser::FSHelperPtr pWorksheet = rStrm.GetStreamForPath( sSheetName );
-
-        rStrm.PushStream( pWorksheet );
-
-        pWorksheet->startElement( XML_worksheet,
-                XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-                FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-                FSEND );
+        return;
     }
 
+    // worksheet export
+    OUString sSheetName = XclXmlUtils::GetStreamName( "xl/", "worksheets/sheet", mnScTab+1 );
+
+    sax_fastparser::FSHelperPtr pWorksheet = rStrm.GetStreamForPath( sSheetName );
+
+    rStrm.PushStream( pWorksheet );
+
+    pWorksheet->startElement( XML_worksheet,
+            XML_xmlns, "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+            FSNS( XML_xmlns, XML_r ), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSEND );
+
     SetCurrScTab( mnScTab );
-    if( mxCellTable.get() )
+    if (mxCellTable)
         mxCellTable->Finalize();
     aRecList.SaveXml( rStrm );
 
-    if (GetTabInfo().IsExportTab( mnScTab ) )
-    {
-        rStrm.GetCurrentStream()->endElement( XML_worksheet );
-        rStrm.PopStream();
-    }
+    rStrm.GetCurrentStream()->endElement( XML_worksheet );
+    rStrm.PopStream();
 }
 
 ExcDocument::ExcDocument( const XclExpRoot& rRoot ) :
