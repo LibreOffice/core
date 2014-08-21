@@ -24,13 +24,12 @@ import java.net.ConnectException;
  * LocalOffice represents a connection to the local office.
  *
  * This class allows to get access to some scripting framework
- * releated functionality of the locally running office. The
+ * related functionality of the locally running office. The
  * office has to be started with options appropriate for establishing
  * local connection.
  */
-public class LocalOffice {
-
-
+public abstract class LocalOffice
+{
     /**
      * Connects to the running office.
      *
@@ -38,21 +37,18 @@ public class LocalOffice {
      *   to the office distribution.
      * @param port is a communication port.
      */
-    protected void connect(String officePath, int port)
-    throws ConnectException {
-    }
+    protected abstract void connect(String officePath, int port)
+        throws ConnectException;
 
     /**
      * Closes the connection to the running office.
      */
-    public void disconnect() {
-    }
+    public abstract void disconnect();
 
     /**
      * Refresh the script storage.
      *
      * @param uri is an identifier of storage has to be refreshed.
      */
-    public void refreshStorage(String uri) {
-    }
+    public abstract void refreshStorage(String uri);
 }
