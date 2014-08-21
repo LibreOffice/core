@@ -442,7 +442,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // Write the anchored frame if any
     // Word can't handle nested text boxes, so write them on the same level.
     ++m_nTextFrameLevel;
-    if( m_nTextFrameLevel == 1 )
+    if( m_nTextFrameLevel == 1 && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() )
     {
         comphelper::FlagRestorationGuard aStartedParaSdtGuard(m_bStartedParaSdt, false);
 
