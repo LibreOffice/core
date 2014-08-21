@@ -56,7 +56,7 @@ public class _XDesktop extends MultiMethodTest {
         boolean result = false;
 
         try {
-            for (; xEnum.hasMoreElements();) {
+            while (xEnum.hasMoreElements()) {
                 try {
                     AnyConverter.toObject(
                             new Type(XInterface.class), xEnum.nextElement());

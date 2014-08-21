@@ -724,7 +724,7 @@ public class APIDescGetter extends DescGetter
         ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
 
-        for (; st.hasMoreTokens();)
+        while (st.hasMoreTokens())
         {
             String token = st.nextToken();
 
@@ -742,7 +742,7 @@ public class APIDescGetter extends DescGetter
         ArrayList<String> namesList = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(job, ",");
 
-        for (; st.hasMoreTokens();)
+        while (st.hasMoreTokens())
         {
             namesList.add(st.nextToken());
         }

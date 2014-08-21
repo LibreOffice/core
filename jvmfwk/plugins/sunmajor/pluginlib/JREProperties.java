@@ -64,7 +64,7 @@ public class JREProperties
 
             Properties p = System.getProperties();
             Enumeration e = p.propertyNames();
-            for (; e.hasMoreElements() ;) {
+            while (e.hasMoreElements()) {
                 String sProp = (String) e.nextElement();
                 String sCompleteProp = sProp + "=" + p.getProperty(sProp);
                 char[] arChars = new char[sCompleteProp.length()];
