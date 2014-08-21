@@ -2623,7 +2623,7 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
             std::vector< EnhancedCustomShapeEquation >::iterator aEnd ( rEquations.end() );
             while( aIter != aEnd )
             {
-                sal_Int32 nMask = 0x20000000;
+                sal_uInt32 nMask = 0x20000000;
                 for( i = 0; i < 3; i++ )
                 {
                     if ( aIter->nOperation & nMask )
