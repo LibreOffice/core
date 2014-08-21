@@ -650,7 +650,7 @@ void SbiParser::DefType( bool bPrivate )
                     }
                     else
                         pArray->unoAddDim( 0, -1 ); // variant array
-                    sal_uInt16 nSavFlags = pTypeElem->GetFlags();
+                    SbxFlagBits nSavFlags = pTypeElem->GetFlags();
                     // need to reset the FIXED flag
                     // when calling PutObject ( because the type will not match Object )
                     pTypeElem->ResetFlag( SBX_FIXED );

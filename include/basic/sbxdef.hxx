@@ -212,29 +212,55 @@ typedef sal_uIntPtr SbxError;           // Preserve old type
 
 
 // Flag-Bits:
-#define SBX_READ        0x0001  // Read permission
-#define SBX_WRITE       0x0002  // Write permission
-#define SBX_READWRITE   0x0003  // Read/Write permission
-#define SBX_DONTSTORE   0x0004  // Don't store object
-#define SBX_MODIFIED    0x0008  // Object was changed
-#define SBX_FIXED       0x0010  // Fixed data type (SbxVariable)
-#define SBX_CONST       0x0020  // Definition of const value
-#define SBX_OPTIONAL    0x0040  // Parameter is optional
-#define SBX_HIDDEN      0x0080  // Element is invisible
-#define SBX_INVISIBLE 0x0100    // Element is not found by Find()
-#define SBX_EXTSEARCH 0x0200    // Object is searched completely
-#define SBX_EXTFOUND  0x0400    // Variable was found through extended search
-#define SBX_GBLSEARCH 0x0800    // Global search via Parents
-#define SBX_RESERVED  0x1000    // reserved
-#define SBX_PRIVATE   0x1000    // #110004, #112015, cannot conflict with SBX_RESERVED
-#define SBX_NO_BROADCAST 0x2000 // No broadcast on Get/Put
-#define SBX_REFERENCE 0x4000    // Parameter is Reference (DLL-call)
-#define SBX_NO_MODIFY 0x8000    // SetModified is suppressed
-#define SBX_WITH_EVENTS 0x0080  // Same value as unused SBX_HIDDEN
-#define SBX_DIM_AS_NEW  0x0800  // Same value as SBX_GBLSEARCH, cannot conflict as one
+enum SbxFlagBits {
+    SBX_NONE         = 0x0000,
+    SBX_READ         = 0x0001,  // Read permission
+    SBX_WRITE        = 0x0002,  // Write permission
+    SBX_READWRITE    = 0x0003,  // Read/Write permission
+    SBX_DONTSTORE    = 0x0004,  // Don't store object
+    SBX_MODIFIED     = 0x0008,  // Object was changed
+    SBX_FIXED        = 0x0010,  // Fixed data type (SbxVariable)
+    SBX_CONST        = 0x0020,  // Definition of const value
+    SBX_OPTIONAL     = 0x0040,  // Parameter is optional
+    SBX_HIDDEN       = 0x0080,  // Element is invisible
+    SBX_INVISIBLE    = 0x0100,  // Element is not found by Find()
+    SBX_EXTSEARCH    = 0x0200,  // Object is searched completely
+    SBX_EXTFOUND     = 0x0400,  // Variable was found through extended search
+    SBX_GBLSEARCH    = 0x0800,  // Global search via Parents
+    SBX_RESERVED     = 0x1000,  // reserved
+    SBX_PRIVATE      = 0x1000,  // #110004, #112015, cannot conflict with SBX_RESERVED
+    SBX_NO_BROADCAST = 0x2000,  // No broadcast on Get/Put
+    SBX_REFERENCE    = 0x4000,  // Parameter is Reference (DLL-call)
+    SBX_NO_MODIFY    = 0x8000,  // SetModified is suppressed
+    SBX_WITH_EVENTS  = 0x0080,  // Same value as unused SBX_HIDDEN
+    SBX_DIM_AS_NEW   = 0x0800,  // Same value as SBX_GBLSEARCH, cannot conflict as one
                                 // is used for objects, the other for variables only
-#define SBX_VAR_TO_DIM  0x2000  // Same value as SBX_NO_BROADCAST, cannot conflict as
+    SBX_VAR_TO_DIM   = 0x2000,  // Same value as SBX_NO_BROADCAST, cannot conflict as
                                 // used for variables without broadcaster only
+};
+// make combining these type-safe
+inline SbxFlagBits operator| (SbxFlagBits lhs, SbxFlagBits rhs)
+{
+    return static_cast<SbxFlagBits>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
+}
+inline SbxFlagBits operator& (SbxFlagBits lhs, SbxFlagBits rhs)
+{
+    return static_cast<SbxFlagBits>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
+}
+inline SbxFlagBits& operator|= (SbxFlagBits& lhs, SbxFlagBits rhs)
+{
+    lhs = static_cast<SbxFlagBits>(static_cast<sal_uInt16>(lhs) | static_cast<sal_uInt16>(rhs));
+    return lhs;
+}
+inline SbxFlagBits operator~ (SbxFlagBits rhs)
+{
+    return static_cast<SbxFlagBits>(0xffff & ~(static_cast<sal_uInt16>(rhs)));
+}
+inline SbxFlagBits& operator&= (SbxFlagBits& lhs, SbxFlagBits rhs)
+{
+    lhs = static_cast<SbxFlagBits>(static_cast<sal_uInt16>(lhs) & static_cast<sal_uInt16>(rhs));
+    return lhs;
+}
 
 // Broadcaster-IDs:
 #define SBX_HINT_DYING          SFX_HINT_DYING

@@ -269,7 +269,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
                     if( aName == aLibName )
                     {
                         // Search only in the lib, not automatically in application basic
-                        sal_uInt16 nFlags = pBasic->GetFlags();
+                        SbxFlagBits nFlags = pBasic->GetFlags();
                         pBasic->ResetFlag( SBX_GBLSEARCH );
                         pMethVar = pBasic->Find( aMacro, SbxCLASS_DONTCARE );
                         pBasic->SetFlags( nFlags );

@@ -789,7 +789,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
         if( bFound )
         {
             // isolate Args-fields:
-            short nAccess = ( p->nArgs & _RWMASK ) >> 8;
+            SbxFlagBits nAccess = static_cast<SbxFlagBits>(( p->nArgs & _RWMASK ) >> 8);
             short nType   = ( p->nArgs & _TYPEMASK );
             if( p->nArgs & _CONST )
                 nAccess |= SBX_CONST;
@@ -869,7 +869,7 @@ SbxInfo* SbiStdObject::GetInfo( short nIdx )
     {
         p++;
         OUString aName_ = OUString::createFromAscii( p->pName );
-        sal_uInt16 nFlags_ = ( p->nArgs >> 8 ) & 0x03;
+        SbxFlagBits nFlags_ = static_cast<SbxFlagBits>(( p->nArgs >> 8 ) & 0x03);
         if( p->nArgs & _OPT )
         {
             nFlags_ |= SBX_OPTIONAL;

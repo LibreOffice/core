@@ -199,12 +199,13 @@ SbxObject* SbxBase::CreateObject( const OUString& rClass )
 
 SbxBase* SbxBase::Load( SvStream& rStrm )
 {
-    sal_uInt16 nSbxId, nFlags, nVer;
+    sal_uInt16 nSbxId, nFlagsTmp, nVer;
     sal_uInt32 nCreator, nSize;
-    rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlags ).ReadUInt16( nVer );
+    rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlagsTmp ).ReadUInt16( nVer );
+    SbxFlagBits nFlags = static_cast<SbxFlagBits>(nFlagsTmp);
 
     // Correcting a foolishness of mine:
-    if( nFlags & SBX_RESERVED )
+    if( (nFlags & SBX_RESERVED) != SBX_NONE )
         nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
 
     sal_Size nOldPos = rStrm.Tell();
@@ -255,7 +256,7 @@ void SbxBase::Skip( SvStream& rStrm )
 
 bool SbxBase::Store( SvStream& rStrm )
 {
-    if( !( nFlags & SBX_DONTSTORE ) )
+    if( ( nFlags & SBX_DONTSTORE ) == SBX_NONE )
     {
         rStrm.WriteUInt32( (sal_uInt32) GetCreator() )
              .WriteUInt16( (sal_uInt16) GetSbxId() )
@@ -329,7 +330,7 @@ SbxObject* SbxFactory::CreateObject( const OUString& )
 SbxInfo::~SbxInfo()
 {}
 
-void SbxInfo::AddParam(const OUString& rName, SbxDataType eType, sal_uInt16 nFlags)
+void SbxInfo::AddParam(const OUString& rName, SbxDataType eType, SbxFlagBits nFlags)
 {
     aParams.push_back(new SbxParamInfo(rName, eType, nFlags));
 }
@@ -353,11 +354,12 @@ bool SbxInfo::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     rStrm.ReadUInt32( nHelpId ).ReadUInt16( nParam );
     while( nParam-- )
     {
-        sal_uInt16 nType, nFlags;
+        sal_uInt16 nType, nFlagsTmp;
         sal_uInt32 nUserData = 0;
         OUString aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm,
             RTL_TEXTENCODING_ASCII_US);
-        rStrm.ReadUInt16( nType ).ReadUInt16( nFlags );
+        rStrm.ReadUInt16( nType ).ReadUInt16( nFlagsTmp );
+        SbxFlagBits nFlags = static_cast<SbxFlagBits>(nFlagsTmp);
         if( nVer > 1 )
             rStrm.ReadUInt32( nUserData );
         AddParam( aName, (SbxDataType) nType, nFlags );

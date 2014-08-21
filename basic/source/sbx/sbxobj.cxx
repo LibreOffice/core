@@ -199,10 +199,10 @@ SbxVariable* SbxObject::FindUserData( sal_uInt32 nData )
         while( !pRes && pCur->pParent )
         {
             // I myself was already searched!
-            sal_uInt16 nOwn = pCur->GetFlags();
+            SbxFlagBits nOwn = pCur->GetFlags();
             pCur->ResetFlag( SBX_EXTSEARCH );
             // I search already global!
-            sal_uInt16 nPar = pCur->pParent->GetFlags();
+            SbxFlagBits nPar = pCur->pParent->GetFlags();
             pCur->pParent->ResetFlag( SBX_GBLSEARCH );
             pRes = pCur->pParent->FindUserData( nData );
             pCur->SetFlags( nOwn );
@@ -272,10 +272,10 @@ SbxVariable* SbxObject::Find( const OUString& rName, SbxClassType t )
         while( !pRes && pCur->pParent )
         {
             // I myself was already searched!
-            sal_uInt16 nOwn = pCur->GetFlags();
+            SbxFlagBits nOwn = pCur->GetFlags();
             pCur->ResetFlag( SBX_EXTSEARCH );
             // I search already global!
-            sal_uInt16 nPar = pCur->pParent->GetFlags();
+            SbxFlagBits nPar = pCur->pParent->GetFlags();
             pCur->pParent->ResetFlag( SBX_GBLSEARCH );
             pRes = pCur->pParent->Find( rName, t );
             pCur->SetFlags( nOwn );

@@ -182,7 +182,7 @@ namespace basprov
                 sal_uInt16 n = 1;
                 for ( const SbxParamInfo* pParamInfo = pInfo->GetParam( n ); pParamInfo; pParamInfo = pInfo->GetParam( ++n ) )
                 {
-                    if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != 0 )
+                    if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != SBX_NONE )
                         ++nSbxOptional;
                     else
                         nSbxOptional = 0;

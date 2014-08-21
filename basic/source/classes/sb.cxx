@@ -558,7 +558,7 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 {
                     pDest->unoAddDim( 0, -1 ); // variant array
                 }
-                sal_uInt16 nSavFlags = pVar->GetFlags();
+                SbxFlagBits nSavFlags = pVar->GetFlags();
                 pNewProp->ResetFlag( SBX_FIXED );
                 // need to reset the FIXED flag
                 // when calling PutObject ( because the type will not match Object )
@@ -648,7 +648,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbMethod* pMethod = PTR_CAST(SbMethod, pVar );
             if( pMethod )
             {
-                sal_uInt16 nFlags_ = pMethod->GetFlags();
+                SbxFlagBits nFlags_ = pMethod->GetFlags();
                 pMethod->SetFlag( SBX_NO_BROADCAST );
                 SbMethod* pNewMethod = new SbMethod( *pMethod );
                 pNewMethod->ResetFlag( SBX_NO_BROADCAST );
@@ -700,7 +700,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         SbProcedureProperty* pProcedureProp = PTR_CAST( SbProcedureProperty, pVar );
         if( pProcedureProp )
         {
-            sal_uInt16 nFlags_ = pProcedureProp->GetFlags();
+            SbxFlagBits nFlags_ = pProcedureProp->GetFlags();
             pProcedureProp->SetFlag( SBX_NO_BROADCAST );
             SbProcedureProperty* pNewProp = new SbProcedureProperty
                 ( pProcedureProp->GetName(), pProcedureProp->GetType() );
@@ -715,7 +715,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             SbxProperty* pProp = PTR_CAST( SbxProperty, pVar );
             if( pProp )
             {
-                sal_uInt16 nFlags_ = pProp->GetFlags();
+                SbxFlagBits nFlags_ = pProp->GetFlags();
                 pProp->SetFlag( SBX_NO_BROADCAST );
                 SbxProperty* pNewProp = new SbxProperty( *pProp );
 
@@ -1361,7 +1361,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
                 }
                 // otherwise check if the element is available
                 // unset GBLSEARCH-Flag (due to Rekursion)
-                sal_uInt16 nGblFlag = p->GetFlags() & SBX_GBLSEARCH;
+                SbxFlagBits nGblFlag = p->GetFlags() & SBX_GBLSEARCH;
                 p->ResetFlag( SBX_GBLSEARCH );
                 pRes = p->Find( rName, t );
                 p->SetFlag( nGblFlag );

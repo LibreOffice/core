@@ -600,7 +600,7 @@ bool SbxValue::PutStringExt( const OUString& r )
 
     // #34939: For Strings which contain a number, and if this has a Num-Type,
     // set a Fixed flag so that the type will not be changed
-    sal_uInt16 nFlags_ = GetFlags();
+    SbxFlagBits nFlags_ = GetFlags();
     if( ( eTargetType >= SbxINTEGER && eTargetType <= SbxCURRENCY ) ||
         ( eTargetType >= SbxCHAR && eTargetType <= SbxUINT ) ||
         eTargetType == SbxBOOL )
@@ -705,7 +705,7 @@ PUT( PutDecimal,  SbxDECIMAL,    SbxDecimal*,      pDecimal )
 
 bool SbxValue::IsFixed() const
 {
-    return ( (GetFlags() & SBX_FIXED) | (aData.eType & SbxBYREF) ) != 0;
+    return ((GetFlags() & SBX_FIXED) != SBX_NONE) || ((aData.eType & SbxBYREF) != 0);
 }
 
 // A variable is numeric, if it is EMPTY or really numeric
