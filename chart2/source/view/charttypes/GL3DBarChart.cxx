@@ -1313,7 +1313,14 @@ IMPL_LINK_NOARG(GL3DBarChart, updateTimer)
 void GL3DBarChart::setOpenGLWindow(OpenGLWindow* pWindow)
 {
     if (mpWindow != pWindow)
+    {
         mpWindow = pWindow;
+        Size aSize = mpWindow->GetSizePixel();
+        mpRenderer->SetSize(aSize);
+        mpWindow->setRenderer(this);
+        mpRenderer->init();
+        mbValidContext = true;
+    }
 }
 
 }
