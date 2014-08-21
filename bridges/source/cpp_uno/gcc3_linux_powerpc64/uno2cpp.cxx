@@ -37,9 +37,59 @@
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-void MapReturn(long r3, double dret, typelib_TypeClass eTypeClass, void *pRegisterReturn)
+namespace ppc64
 {
-    switch (eTypeClass)
+#if _CALL_ELF == 2
+    bool is_complex_struct(const typelib_TypeDescription * type)
+    {
+        const typelib_CompoundTypeDescription * p
+            = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
+        for (sal_Int32 i = 0; i < p->nMembers; ++i)
+        {
+            if (p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_STRUCT ||
+                p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_EXCEPTION)
+            {
+                typelib_TypeDescription * t = 0;
+                TYPELIB_DANGER_GET(&t, p->ppTypeRefs[i]);
+                bool b = is_complex_struct(t);
+                TYPELIB_DANGER_RELEASE(t);
+                if (b) {
+                    return true;
+                }
+            }
+            else if (!bridges::cpp_uno::shared::isSimpleType(p->ppTypeRefs[i]->eTypeClass))
+                return true;
+        }
+        if (p->pBaseTypeDescription != 0)
+            return is_complex_struct(&p->pBaseTypeDescription->aBase);
+        return false;
+    }
+#endif
+
+    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef )
+    {
+        if (bridges::cpp_uno::shared::isSimpleType(pTypeRef))
+            return false;
+#if _CALL_ELF == 2
+        else if (pTypeRef->eTypeClass == typelib_TypeClass_STRUCT || pTypeRef->eTypeClass == typelib_TypeClass_EXCEPTION)
+        {
+            typelib_TypeDescription * pTypeDescr = 0;
+            TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
+
+            //A Composite Type not larger than 16 bytes is returned in up to two GPRs
+            bool bRet = pTypeDescr->nSize > 16 || is_complex_struct(pTypeDescr);
+
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+            return bRet;
+        }
+#endif
+        return true;
+    }
+}
+
+void MapReturn(long r3, long r4, double dret, typelib_TypeDescriptionReference* pReturnType, void *pRegisterReturn)
+{
+    switch (pReturnType->eTypeClass)
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -65,6 +115,17 @@ void MapReturn(long r3, double dret, typelib_TypeClass eTypeClass, void *pRegist
     case typelib_TypeClass_DOUBLE:
             *reinterpret_cast<double *>( pRegisterReturn ) = dret;
             break;
+#if _CALL_ELF == 2
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+            if (!ppc64::return_in_hidden_param(pReturnType))
+            {
+                sal_uInt64 *pRegisters = reinterpret_cast<sal_uInt64*>(pRegisterReturn);
+                pRegisters[0] = r3;
+                if (pReturnType->pType->nSize > 8)
+                    pRegisters[1] = r4;
+            }
+#endif
     default:
             break;
     }
@@ -114,7 +175,11 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     pMethod += 8 * nVtableIndex;
     pMethod = *((sal_uInt64 *)pMethod);
 
+#if _CALL_ELF == 2
+    typedef void (* FunctionCall )(...);
+#else
     typedef void (* FunctionCall )( sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64 );
+#endif
     FunctionCall pFunc = (FunctionCall)pMethod;
 
     volatile double dret;
@@ -168,7 +233,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
                 "fmr    %0,     1\n\t"
                 : "=f" (dret), "=r" (r3), "=r" (r4) : );
 
-    MapReturn(r3, dret, pReturnTypeDescr->eTypeClass, pRegisterReturn);
+    MapReturn(r3, r4, dret, pReturnTypeRef, pRegisterReturn);
 }
 
 // Macros for easier insertion of values to registers or stack
@@ -251,14 +316,18 @@ static void cpp_call(
 
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
-        bool bOverflow = false;
+    bool bOverflow = false;
+    bool bSimpleReturn = true;
 
     if (pReturnTypeDescr)
     {
 #if OSL_DEBUG_LEVEL > 2
         fprintf(stderr, "return type is %d\n", pReturnTypeDescr->eTypeClass);
 #endif
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
+        if (ppc64::return_in_hidden_param(pReturnTypeRef))
+            bSimpleReturn = false;
+
+        if (bSimpleReturn)
         {
             pCppReturn = pUnoReturn; // direct way for simple types
 #if OSL_DEBUG_LEVEL > 2

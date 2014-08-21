@@ -4377,6 +4377,13 @@ linux-gnu*)
         PLATFORMID=linux_powerpc64
         OUTPATH=unxlngppc64
         ;;
+    powerpc64le)
+        CPUNAME=POWERPC64
+        RTL_ARCH=PowerPC_64_LE
+        LIB64="lib64"
+        PLATFORMID=linux_powerpc64_le
+        OUTPATH=unxlngppc64
+        ;;
     sparc)
         CPUNAME=SPARC
         RTL_ARCH=SPARC
@@ -7234,7 +7241,7 @@ then
         powerpc)
             my_java_arch=ppc
             ;;
-        powerpc64)
+        powerpc64*)
             my_java_arch=ppc64
             ;;
         x86_64)
