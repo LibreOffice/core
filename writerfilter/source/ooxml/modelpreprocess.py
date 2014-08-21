@@ -134,11 +134,6 @@ def preprocess(model):
                 localname = j.getAttribute("name")
 
             # set the attributes
-            qname = ""
-            if len(ns):
-                qname += ns + ":"
-            j.setAttribute("qname", qname + localname)
-
             j.setAttribute("prefix", prefix)
             j.setAttribute("localname", localname)
 
