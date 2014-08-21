@@ -911,6 +911,8 @@ private:
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrDataBindingAttrs;
     /// Value of the <w:alias> paragraph SDT element.
     OUString m_aParagraphSdtPrAlias;
+    /// Same as m_aParagraphSdtPrAlias, but its content is aviailable till the SDT is closed.
+    OUString m_aStartedParagraphSdtPrAlias;
     OUString m_aRunSdtPrAlias;
     /// Currently paragraph SDT has a <w:id> child element.
     bool m_bParagraphSdtHasId;

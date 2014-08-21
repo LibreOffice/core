@@ -628,6 +628,15 @@ DECLARE_OOXMLEXPORT_TEST(testSdtHeader, "sdt-header.docx")
         assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:date", 1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdtCompanyMultipara, "sdt-company-multipara.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // This was 3, but multiple paragraphs inside "Company" SDT is now allowed.
+        assertXPath(pXmlDoc, "//w:sdtContent/w:p", 1);
+    }
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

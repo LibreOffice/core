@@ -223,6 +223,12 @@ void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
         m_pSerializer->singleElementNS( XML_w, XML_rtl, FSNS( XML_w, XML_val ), "true", FSEND );
 }
 
+/// Are multiple paragraphs disallowed inside this type of SDT?
+static bool lcl_isOnelinerSdt(const OUString& rName)
+{
+    return rName == "Title" || rName == "Subtitle" || rName == "Company";
+}
+
 void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo )
 {
     if ( m_nColBreakStatus == COLBRK_POSTPONE )
@@ -292,12 +298,15 @@ void DocxAttributeOutput::StartParagraph( ww8::WW8TableNodeInfo::Pointer_t pText
             bEndParaSdt = m_bStartedParaSdt && rMap.find("ParaSdtEndBefore") != rMap.end();
         }
     }
-    if (bEndParaSdt || (m_bStartedParaSdt && m_bHadSectPr))
+    // TODO also avoid multiline paragarphs in those SDT types for shape text
+    bool bOneliner = m_bStartedParaSdt && !m_rExport.SdrExporter().IsDMLAndVMLDrawingOpen() && lcl_isOnelinerSdt(m_aStartedParagraphSdtPrAlias);
+    if (bEndParaSdt || (m_bStartedParaSdt && m_bHadSectPr) || bOneliner)
     {
         // This is the common case: "close sdt before the current paragraph" was requrested by the next paragraph.
         EndSdtBlock();
         bEndParaSdt = false;
         m_bStartedParaSdt = false;
+        m_aStartedParagraphSdtPrAlias = "";
     }
     m_bHadSectPr = false;
 
@@ -7951,6 +7960,7 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
                 {
                     if (!(aPropertyValue.Value >>= m_aParagraphSdtPrAlias))
                         SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unexpected sdt alias value");
+                    m_aStartedParagraphSdtPrAlias = m_aParagraphSdtPrAlias;
                 }
                 else if (aPropertyValue.Name == "ooxml:CT_SdtPr_checkbox")
                 {
@@ -8006,6 +8016,10 @@ void DocxAttributeOutput::ParaGrabBag(const SfxGrabBagItem& rItem)
         {
             uno::Sequence<beans::PropertyValue> aAttributes = i->second.get< uno::Sequence<beans::PropertyValue> >();
             m_pTableStyleExport->CnfStyle(aAttributes);
+        }
+        else if (i->first == "ParaSdtEndBefore")
+        {
+            // Handled already in StartParagraph().
         }
         else
             SAL_WARN("sw.ww8", "DocxAttributeOutput::ParaGrabBag: unhandled grab bag property " << i->first );
