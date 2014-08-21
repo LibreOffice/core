@@ -1178,8 +1178,8 @@ IMPL_LINK(SvxColorOptionsTabPage, SaveDeleteHdl_Impl, PushButton*, pButton )
     else
     {
         DBG_ASSERT(m_pColorSchemeLB->GetEntryCount() > 1, "don't delete the last scheme");
-        QueryBox aQuery(pButton, CUI_RES(RID_SVXQB_DELETE_COLOR_CONFIG));
-        aQuery.SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE));
+        MessageDialog aQuery(pButton, CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        aQuery.SetText(CUI_RES(RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE));
         if(RET_YES == aQuery.Execute())
         {
             OUString sDeleteScheme(m_pColorSchemeLB->GetSelectEntry());

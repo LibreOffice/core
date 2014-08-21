@@ -21,13 +21,11 @@
 #include "helpid.hrc"
 #include <cuires.hrc>
 
-QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Do you really want to delete the color scheme?" ;
-};
 String RID_SVXSTR_COLOR_CONFIG_DELETE
+{
+    Text [ en-US ] = "Do you really want to delete the color scheme?" ;
+};
+String RID_SVXSTR_COLOR_CONFIG_DELETE_TITLE
 {
     Text [ en-US ] = "Color Scheme Deletion" ;
 };
