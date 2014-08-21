@@ -236,11 +236,9 @@ String RID_SVXSTR_CONFIRM_TOOLBAR_RESET
     Text [ en-US ] = "The toolbar configuration for %SAVE IN SELECTION% will be reset to the default settings. Do you want to continue?";
 };
 
-QueryBox QBX_CONFIRM_RESTORE_DEFAULT
+String RID_SVXSTR_CONFIRM_RESTORE_DEFAULT
 {
-    Message [ en-US ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
+    Text [ en-US ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
 };
 
 String RID_SVXSTR_MNUCFG_ALREADY_INCLUDED

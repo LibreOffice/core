@@ -3075,8 +3075,8 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
         }
         case ID_DEFAULT_STYLE:
         {
-            QueryBox qbox( this,
-                CUI_RES( QBX_CONFIRM_RESTORE_DEFAULT ) );
+            MessageDialog qbox(this,
+                CUI_RES(RID_SVXSTR_CONFIRM_RESTORE_DEFAULT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
             if ( qbox.Execute() == RET_YES )
             {

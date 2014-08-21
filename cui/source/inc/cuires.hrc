@@ -409,6 +409,7 @@
 #define RID_SVXSTR_APPLYPERSONA                             (RID_SVX_START + 1282)
 
 #define RID_SXVSTR_CONFIRM_DELETE_TOOLBAR                   (RID_SVX_START + 1283)
+#define RID_SVXSTR_CONFIRM_RESTORE_DEFAULT                  (RID_SVX_START + 1284)
 
 #endif
 
