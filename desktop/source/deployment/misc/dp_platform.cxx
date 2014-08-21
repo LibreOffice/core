@@ -35,6 +35,7 @@
 #define PLATFORM_LINUX_SPARC        "linux_sparc"
 #define PLATFORM_LINUX_POWERPC      "linux_powerpc"
 #define PLATFORM_LINUX_POWERPC64    "linux_powerpc64"
+#define PLATFORM_LINUX_POWERPC64_LE "linux_powerpc64_le"
 #define PLATFORM_LINUX_ARM_EABI     "linux_arm_eabi"
 #define PLATFORM_LINUX_ARM_OABI     "linux_arm_oabi"
 #define PLATFORM_LINUX_MIPS_EL      "linux_mips_el"
@@ -129,6 +130,8 @@ namespace
             ret = checkOSandCPU("Linux", "PowerPC");
         else if (token == PLATFORM_LINUX_POWERPC64)
             ret = checkOSandCPU("Linux", "PowerPC_64");
+        else if (token == PLATFORM_LINUX_POWERPC64_LE)
+            ret = checkOSandCPU("Linux", "PowerPC_64_LE");
         else if (token == PLATFORM_LINUX_ARM_EABI)
             ret = checkOSandCPU("Linux", "ARM_EABI");
         else if (token == PLATFORM_LINUX_ARM_OABI)
