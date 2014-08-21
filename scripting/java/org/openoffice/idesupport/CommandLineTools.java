@@ -187,7 +187,7 @@ public class CommandLineTools {
             StringTokenizer tokenizer = new StringTokenizer(language, "=");
             this.language = tokenizer.nextToken();
 
-            if (this.language.toLowerCase().equals("java")) {
+            if (this.language.equalsIgnoreCase("java")) {
                 this.finder = JavaFinder.getInstance();
                 return;
             }

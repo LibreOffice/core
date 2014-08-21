@@ -197,7 +197,7 @@ public class DocumentConverter extends EnhancedComplexTestCase
             }
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
 
-            if (aGTA.getOfficeProgram().toLowerCase().equals("msoffice"))
+            if (aGTA.getOfficeProgram().equalsIgnoreCase("msoffice"))
             {
                 // ReferenceType is MSOffice
                 GlobalLogWriter.get().println("USE MSOFFICE AS EXPORT FORMAT.");

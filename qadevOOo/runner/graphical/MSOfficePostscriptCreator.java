@@ -185,7 +185,7 @@ public class MSOfficePostscriptCreator implements IOffice
             {
                 aStartCommand = createPowerPointPrintHelper();
             }
-            else if (sDocumentSuffix.toLowerCase().equals(".xml"))
+            else if (sDocumentSuffix.equalsIgnoreCase(".xml"))
             {
 // TODO: Open XML File and check if we need excel or word
                 String sOfficeType = getOfficeType(_sInputFile);

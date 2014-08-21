@@ -79,8 +79,8 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             {
                 sNEEDCHECK = "false";
             }
-            if (sNEEDCHECK.toLowerCase().equals("yes") ||
-                sNEEDCHECK.toLowerCase().equals("true"))
+            if (sNEEDCHECK.equalsIgnoreCase("yes") ||
+                sNEEDCHECK.equalsIgnoreCase("true"))
             {
                 return true;
             }
@@ -92,11 +92,11 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
     public GraphicalTestArguments getGraphicalTestArguments()
         {
             GraphicalTestArguments aGTA = new GraphicalTestArguments(param);
-            if (aGTA.getImportFilterName() != null && aGTA.getImportFilterName().toLowerCase().equals("help"))
+            if (aGTA.getImportFilterName() != null && aGTA.getImportFilterName().equalsIgnoreCase("help"))
             {
                 aGTA = null;
             }
-            if (aGTA.getExportFilterName() != null && aGTA.getExportFilterName().toLowerCase().equals("help"))
+            if (aGTA.getExportFilterName() != null && aGTA.getExportFilterName().equalsIgnoreCase("help"))
             {
                 aGTA = null;
             }

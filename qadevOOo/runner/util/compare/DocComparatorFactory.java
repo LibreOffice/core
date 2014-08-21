@@ -29,11 +29,11 @@ public class DocComparatorFactory
      */
     static public DocComparator createComparator(String s, TestParameters aParams) throws IllegalArgumentException
         {
-            if (s.toLowerCase().equals("gfx") || s.toLowerCase().equals("graphical"))
+            if (s.equalsIgnoreCase("gfx") || s.equalsIgnoreCase("graphical"))
             {
                 return GraphicalComparator.getInstance(aParams);
             }
-            else if (s.toLowerCase().equals("pdf"))
+            else if (s.equalsIgnoreCase("pdf"))
             {
                 throw new IllegalArgumentException("PDF not implemented yet.");
             }

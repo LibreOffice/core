@@ -135,8 +135,8 @@ public class ParameterHelper
             {
                 sRECURSIVE = "true";
             }
-            if (sRECURSIVE.toLowerCase().equals("no") ||
-                sRECURSIVE.toLowerCase().equals("false"))
+            if (sRECURSIVE.equalsIgnoreCase("no") ||
+                sRECURSIVE.equalsIgnoreCase("false"))
             {
                 m_bIncludeSubdirectories = false;
             }
@@ -219,10 +219,10 @@ public class ParameterHelper
             XMultiServiceFactory xMSF = m_aCurrentParams.getMSF();
 
             // check if MultiServiceFactory is given
-            if (getReferenceType().toLowerCase().equals("pdf") ||
-                getReferenceType().toLowerCase().equals("ps") ||
-                getReferenceType().toLowerCase().equals("ooo") ||
-                getReferenceType().toLowerCase().equals("o3") )
+            if (getReferenceType().equalsIgnoreCase("pdf") ||
+                getReferenceType().equalsIgnoreCase("ps") ||
+                getReferenceType().equalsIgnoreCase("ooo") ||
+                getReferenceType().equalsIgnoreCase("o3") )
             {
                 if (xMSF == null)
                 {

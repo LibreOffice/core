@@ -448,7 +448,7 @@ final class InstallationFinder {
 
         String prefix = "file://";
         if (oooUrl.length() < prefix.length()
-            || !oooUrl.substring(0, prefix.length()).toLowerCase().equals(
+            || !oooUrl.substring(0, prefix.length()).equalsIgnoreCase(
                 prefix))
         {
             return null;
@@ -459,7 +459,7 @@ final class InstallationFinder {
             n = oooUrl.length();
         }
         String host = oooUrl.substring(prefix.length(), n);
-        if (host.length() != 0 && !host.toLowerCase().equals("localhost")) {
+        if (host.length() != 0 && !host.equalsIgnoreCase("localhost")) {
             return null;
         }
         buf.append(host);

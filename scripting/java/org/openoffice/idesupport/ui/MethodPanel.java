@@ -88,7 +88,7 @@ public class MethodPanel extends JPanel {
 
         if (language == null)
             finder = JavaFinder.getInstance(classpath);
-        else if (language.toLowerCase().equals("beanshell"))
+        else if (language.equalsIgnoreCase("beanshell"))
             finder = new ExtensionFinder(language, new String[] {".bsh"});
         else
             finder = JavaFinder.getInstance(classpath);

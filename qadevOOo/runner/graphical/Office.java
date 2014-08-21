@@ -32,14 +32,14 @@ public class Office implements IOffice
         m_aParameterHelper = _aParam;
         m_sResult = _sResult;
 
-        if (_aParam.getReferenceType().toLowerCase().equals("ooo") ||
-            _aParam.getReferenceType().toLowerCase().equals("o3") ||
-            _aParam.getReferenceType().toLowerCase().equals("ps") ||
-            _aParam.getReferenceType().toLowerCase().equals("pdf"))
+        if (_aParam.getReferenceType().equalsIgnoreCase("ooo") ||
+            _aParam.getReferenceType().equalsIgnoreCase("o3") ||
+            _aParam.getReferenceType().equalsIgnoreCase("ps") ||
+            _aParam.getReferenceType().equalsIgnoreCase("pdf"))
         {
             m_aOffice = new OpenOfficePostscriptCreator(_aParam, m_sResult);
         }
-        else if (_aParam.getReferenceType().toLowerCase().equals("msoffice"))
+        else if (_aParam.getReferenceType().equalsIgnoreCase("msoffice"))
         {
             m_aOffice = new MSOfficePostscriptCreator(_aParam, m_sResult);
         }
@@ -67,7 +67,7 @@ public class Office implements IOffice
         {
             if (sDocumentSuffix.toLowerCase().endsWith(".odb"))
             {
-                if (m_aParameterHelper.getReferenceType().toLowerCase().equals("msoffice"))
+                if (m_aParameterHelper.getReferenceType().equalsIgnoreCase("msoffice"))
                 {
                     // we can't handle .odb with msoffice
                     return;

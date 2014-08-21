@@ -115,10 +115,10 @@ public class MSOfficePrint
             else if (isPowerPointDocument(sDocumentSuffix))
             {
             }
-            else if (sDocumentSuffix.toLowerCase().equals(".xml"))
+            else if (sDocumentSuffix.equalsIgnoreCase(".xml"))
             {
                 // special case, if xml we prefer word, but with DEFAULT_XML_FORMAT_APP=excel it's changeable.
-                if (_aGTA.getDefaultXMLFormatApp().toLowerCase().equals("excel"))
+                if (_aGTA.getDefaultXMLFormatApp().equalsIgnoreCase("excel"))
                 {
                     aStartCommand = createExcelStoreHelper();
                 }
@@ -169,7 +169,7 @@ public class MSOfficePrint
             {
                 aStartCommand = createPowerPointPrintHelper();
             }
-            else if (sDocumentSuffix.toLowerCase().equals(".xml"))
+            else if (sDocumentSuffix.equalsIgnoreCase(".xml"))
             {
 // TODO: Open XML File and check if we need excel or word
                 String sOfficeType = getOfficeType(_sInputFile);

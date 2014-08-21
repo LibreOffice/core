@@ -1575,7 +1575,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         closeDesignTemplate();
 
         String sName = FileAccess.getFilename(LayoutTemplatePath);
-        if (sName.toLowerCase().equals("default.otr_")
+        if (sName.equalsIgnoreCase("default.otr_")
                 || LayoutTemplatePath.equals("DefaultLayoutOfHeaders"))
         {
             // this is the default layout, we don't want to have a layout for this.

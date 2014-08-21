@@ -75,9 +75,10 @@ public class ParcelContentsFolder extends DataFolder {
     public static void createEmptyScript(DataFolder parent, String language) {
         String sourceFile = "Templates/OfficeScripting/EmptyScript/Empty";
 
-        if (language.toLowerCase().equals("java")) {
+        if (language.equalsIgnoreCase("java")) {
             sourceFile += ".java";
-        } else if (language.toLowerCase().equals("beanshell")) {
+        }
+        else if (language.equalsIgnoreCase("beanshell")) {
             sourceFile += ".bsh";
         } else {
             NotifyDescriptor d = new NotifyDescriptor.Message(

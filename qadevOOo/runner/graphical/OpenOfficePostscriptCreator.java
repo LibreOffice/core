@@ -89,9 +89,9 @@ public class OpenOfficePostscriptCreator implements IOffice
         if (m_aDocument != null)
         {
             String sDocumentName = FileHelper.appendPath(m_sOutputURL, m_sBasename);
-            if (m_aParameterHelper.getReferenceType().toLowerCase().equals("ooo") ||
-                m_aParameterHelper.getReferenceType().toLowerCase().equals("o3") ||
-                m_aParameterHelper.getReferenceType().toLowerCase().equals("ps") )
+            if (m_aParameterHelper.getReferenceType().equalsIgnoreCase("ooo") ||
+                m_aParameterHelper.getReferenceType().equalsIgnoreCase("o3") ||
+                m_aParameterHelper.getReferenceType().equalsIgnoreCase("ps") )
             {
                 String sPrintURL = sDocumentName + ".ps";
 
@@ -99,7 +99,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                 String sBasename = FileHelper.getBasename(sPrintURL);
                 FileHelper.addBasenameToIndex(m_sOutputURL, sBasename, "OOo", "postscript", m_sDocumentName);
             }
-            else if (m_aParameterHelper.getReferenceType().toLowerCase().equals("pdf"))
+            else if (m_aParameterHelper.getReferenceType().equalsIgnoreCase("pdf"))
             {
                 String sPDFURL = sDocumentName + ".pdf";
                 storeAsPDF(m_aParameterHelper, m_aDocument, sPDFURL);

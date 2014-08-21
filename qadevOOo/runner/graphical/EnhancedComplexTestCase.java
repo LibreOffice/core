@@ -158,7 +158,7 @@ private void callEntry(String _sEntry, ParameterHelper _aParam)
                     File aInputPathWithPDF = new File(sInputPathWithPDF);
 
                     if (aInputPathWithPDF.exists() &&
-                        _aParam.getReferenceType().toLowerCase().equals("pdf"))
+                        _aParam.getReferenceType().equalsIgnoreCase("pdf"))
                     {
                         // create PDF only if a pdf file exists and creatortype is set to PDF
                         callEntry(sInputPathWithPDF, _aParam);

@@ -699,16 +699,16 @@ public class OfficePrint {
                 return true;
             }
 
-            if (_aGTA.getReferenceType().toLowerCase().equals("msoffice"))
+            if (_aGTA.getReferenceType().equalsIgnoreCase("msoffice"))
             {
                 sPrintFileURL = URLHelper.getFileURLFromSystemPath(sAbsolutePrintFilename);
             }
-            else if (_aGTA.getReferenceType().toLowerCase().equals("pdf"))
+            else if (_aGTA.getReferenceType().equalsIgnoreCase("pdf"))
             {
 //  TODO: If we rename the stored file to *.pdf, we have to be sure that we use *.pdf also as a available reference
                 sPrintFileURL = URLHelper.getFileURLFromSystemPath(sAbsolutePrintFilename );
             }
-            else if (_aGTA.getReferenceType().toLowerCase().equals("ooo"))
+            else if (_aGTA.getReferenceType().equalsIgnoreCase("ooo"))
             {
                 sPrintFileURL = URLHelper.getFileURLFromSystemPath(sAbsolutePrintFilename );
             }
@@ -737,16 +737,16 @@ public class OfficePrint {
             }
 
 
-            if (_aGTA.getReferenceType().toLowerCase().equals("ooo"))
+            if (_aGTA.getReferenceType().equalsIgnoreCase("ooo"))
             {
                 bBack = printToFileWithOOo(_aGTA, _sInputFileURL, _sOutputFileURL, _sPrintFileURL);
             }
-            else if (_aGTA.getReferenceType().toLowerCase().equals("pdf"))
+            else if (_aGTA.getReferenceType().equalsIgnoreCase("pdf"))
             {
                 GlobalLogWriter.get().println("USE PDF AS EXPORT FORMAT.");
                 bBack = storeAsPDF(_aGTA, _sInputFileURL, _sPrintFileURL);
             }
-            else if (_aGTA.getReferenceType().toLowerCase().equals("msoffice"))
+            else if (_aGTA.getReferenceType().equalsIgnoreCase("msoffice"))
             {
                 if (MSOfficePrint.isMSOfficeDocumentFormat(_sInputFileURL))
                 {

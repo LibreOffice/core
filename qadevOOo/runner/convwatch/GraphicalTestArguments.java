@@ -143,8 +143,8 @@ public class GraphicalTestArguments
             {
                 sRECURSIVE = "true";
             }
-            if (sRECURSIVE.toLowerCase().equals("no") ||
-                sRECURSIVE.toLowerCase().equals("false"))
+            if (sRECURSIVE.equalsIgnoreCase("no") ||
+                sRECURSIVE.equalsIgnoreCase("false"))
             {
                 m_bIncludeSubdirectories = false;
             }
@@ -166,7 +166,7 @@ public class GraphicalTestArguments
             {
                 m_sImportFilterName = sImportFilterName;
 
-                if (sImportFilterName.toLowerCase().equals("help"))
+                if (sImportFilterName.equalsIgnoreCase("help"))
                 {
                     showInternalFilterName(sImportFilterName, getMultiServiceFactory() );
                     GlobalLogWriter.get().println("Must quit.");
@@ -177,7 +177,7 @@ public class GraphicalTestArguments
             if (sExportFilterName != null && sExportFilterName.length() > 0)
             {
                 m_sExportFilterName = sExportFilterName;
-                if (sExportFilterName.toLowerCase().equals("help"))
+                if (sExportFilterName.equalsIgnoreCase("help"))
                 {
                     showInternalFilterName(sExportFilterName, getMultiServiceFactory() );
                     GlobalLogWriter.get().println("Must quit.");
@@ -196,8 +196,8 @@ public class GraphicalTestArguments
             {
                 sREUSE_OFFICE = "false";
             }
-            if (sREUSE_OFFICE.toLowerCase().equals("yes") ||
-                sREUSE_OFFICE.toLowerCase().equals("true"))
+            if (sREUSE_OFFICE.equalsIgnoreCase("yes") ||
+                sREUSE_OFFICE.equalsIgnoreCase("true"))
             {
                 m_bResuseOffice = true;
             }
@@ -224,13 +224,13 @@ public class GraphicalTestArguments
                 // m_tWithBorderMove = TriState.UNSET;
                 m_tWithBorderMove = TriState.FALSE;
             }
-            if (sWithBorderMove.toLowerCase().equals("yes") ||
-                sWithBorderMove.toLowerCase().equals("true"))
+            if (sWithBorderMove.equalsIgnoreCase("yes") ||
+                sWithBorderMove.equalsIgnoreCase("true"))
             {
                 m_tWithBorderMove = TriState.TRUE;
             }
-            else if (sWithBorderMove.toLowerCase().equals("no") ||
-                     sWithBorderMove.toLowerCase().equals("false"))
+            else if (sWithBorderMove.equalsIgnoreCase("no") ||
+                     sWithBorderMove.equalsIgnoreCase("false"))
             {
                 m_tWithBorderMove = TriState.FALSE;
             }
@@ -262,8 +262,8 @@ public class GraphicalTestArguments
             String sOfficeViewable = (String)param.get(PropertyName.OFFICE_VIEWABLE);
             if (sOfficeViewable != null)
             {
-                if (sOfficeViewable.toLowerCase().equals("yes") ||
-                    sOfficeViewable.toLowerCase().equals("true"))
+                if (sOfficeViewable.equalsIgnoreCase("yes") ||
+                    sOfficeViewable.equalsIgnoreCase("true"))
                 {
                     setViewable();
                 }
@@ -276,8 +276,8 @@ public class GraphicalTestArguments
             String sCreateDefault = (String)param.get(PropertyName.CREATE_DEFAULT);
             if (sCreateDefault != null)
             {
-                if (sCreateDefault.toLowerCase().equals("yes") ||
-                    sCreateDefault.toLowerCase().equals("true"))
+                if (sCreateDefault.equalsIgnoreCase("yes") ||
+                    sCreateDefault.equalsIgnoreCase("true"))
                 {
                     m_bCreateDefaultReference = true;
                 }
@@ -334,7 +334,7 @@ public class GraphicalTestArguments
                 if (aNameAccess != null)
                 {
 
-                    if (_sFilterName.toLowerCase().equals("help"))
+                    if (_sFilterName.equalsIgnoreCase("help"))
                     {
                         GlobalLogWriter.get().println("Show all possible ElementNames from current version." );
                         String[] aElementNames = aNameAccess.getElementNames();
@@ -372,8 +372,8 @@ public class GraphicalTestArguments
             XMultiServiceFactory xMSF = m_aCurrentParams.getMSF();
 
             // check if MultiServiceFactory is given
-            if (getReferenceType().toLowerCase().equals("pdf") ||
-                getReferenceType().toLowerCase().equals("ooo"))
+            if (getReferenceType().equalsIgnoreCase("pdf") ||
+                getReferenceType().equalsIgnoreCase("ooo"))
             {
                 if (xMSF == null)
                 {
