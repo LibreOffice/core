@@ -1620,18 +1620,17 @@ bool SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntr
 
 }
 
-
-    //  - return the replacement text (only for SWG-Format, all other
-    //      can be taken from the word list!)
+//  - return the replacement text (only for SWG-Format, all other
+//    can be taken from the word list!)
 bool SvxAutoCorrect::GetLongText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                                      const OUString&, const OUString&, OUString& )
+                                  const OUString&, OUString& )
 {
     return false;
 }
 
-    // Text with attribution (only the SWG - SWG format!)
+// Text with attribution (only the SWG - SWG format!)
 bool SvxAutoCorrect::PutText( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&,
-                                  const OUString&, const OUString&, SfxObjectShell&, OUString& )
+                              const OUString&, const OUString&, SfxObjectShell&, OUString& )
 {
     return false;
 }

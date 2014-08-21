@@ -34,13 +34,13 @@ TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
     //      rShort ist der Stream-Name - gecryptet!
 
 bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
-                                     const OUString& rFileName, const OUString& rShort, OUString& rLong )
+                                 const OUString& rShort, OUString& rLong )
 {
     sal_uLong nRet = 0;
     if (rStg.is())
     {
         // mba: relative URLs don't make sense here
-        SwXMLTextBlocks aBlk( rStg, rFileName );
+        SwXMLTextBlocks aBlk( rStg, OUString() );
         nRet = aBlk.GetText( rShort, rLong );
     }
     else {

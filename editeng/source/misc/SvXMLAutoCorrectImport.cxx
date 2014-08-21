@@ -129,7 +129,7 @@ SvXMLWordContext::SvXMLWordContext(
     if( !bOnlyTxt )
     {
         const OUString sLongSave( sRight );
-        if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.xStorage, OUString(), sWrong, sRight ) &&
+        if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.xStorage, sWrong, sRight ) &&
             !sLongSave.isEmpty() )
         {
             sRight = sLongSave;
