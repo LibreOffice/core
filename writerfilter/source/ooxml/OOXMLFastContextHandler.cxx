@@ -1987,7 +1987,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
     // filter out a single token. Just hardwire the wrap token here till we
     // need a more generic solution.
     bool bIsWrap = Element == static_cast<sal_Int32>(NMSP_vmlWord | XML_wrap);
-    if ( bInNamespaces && ((bIsWrap && static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent()) || !bIsWrap) )
+    if ( bInNamespaces && (!bIsWrap || static_cast<OOXMLFastContextHandlerShape*>(mpParent)->isShapeSent()) )
         xResult.set(OOXMLFactory::getInstance()->createFastChildContextFromStart(this, Element));
     else if (mxContext.is())
     {
