@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_7edda56f",
+        "filename": "wizards/com/sun/star/wizards/common/JavaTools.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 510,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-08-21T08:58:48Z",
+      "side": 1,
+      "message": "You are changing the behaviour here, it will now return null instead of an empty array,\nFrankly, the original code was cleaner.",
+      "revId": "af5e0be4ee71046ccf169f1231d450d3f37a769b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
