@@ -588,7 +588,11 @@ extern "C" void privateSnippetExecutor( ... )
     }
 }
 
+#if _CALL_ELF == 2
+const int codeSnippetSize = 32;
+#else
 const int codeSnippetSize = 24;
+#endif
 
 unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
                               bool simpleRetType)
@@ -603,9 +607,22 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sa
     if ( !simpleRetType )
         nOffsetAndIndex |= 0x80000000;
 
+#if _CALL_ELF == 2
+    unsigned int *raw = (unsigned int *)&code[0];
+
+    raw[0] = 0xe96c0018;        /* 0:   ld      11,2f-0b(12)    */
+    raw[1] = 0xe98c0010;        /*      ld      12,1f-0b(12)    */
+    raw[2] = 0x7d8903a6;        /*      mtctr   12              */
+    raw[3] = 0x4e800420;        /*      bctr                    */
+                                /* 1:   .quad   function_addr   */
+                                /* 2:   .quad   context         */
+    *(void **)&raw[4] = (void *)privateSnippetExecutor;
+    *(void **)&raw[6] = (void*)nOffsetAndIndex;
+#else
     void ** raw = (void **)&code[0];
     memcpy(raw, (char*) privateSnippetExecutor, 16);
     raw[2] = (void*) nOffsetAndIndex;
+#endif
 #if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "in: offset/index is %x %x %d, %lx\n",
     nFunctionIndex, nVtableOffset, !simpleRetType, raw[2]);
