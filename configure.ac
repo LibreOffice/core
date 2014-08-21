@@ -10515,11 +10515,15 @@ fi
 if test "x$enable_opengl" = "xno"; then
     AC_MSG_RESULT([no])
 elif test "$_os" = "Darwin"; then
-    # We use frameworks on Mac OS X, no need for detail checks
-    ENABLE_OPENGL=TRUE
-    ENABLE_OPENGL_CANVAS=TRUE
-    SYSTEM_MESA_HEADERS=TRUE
-    AC_MSG_RESULT([yes])
+    if test "$with_macosx_sdk" = "10.5"; then
+        AC_MSG_RESULT([disabled on OS X 10.5])
+    else
+        # We use frameworks on Mac OS X, no need for detail checks
+        ENABLE_OPENGL=TRUE
+        ENABLE_OPENGL_CANVAS=TRUE
+        SYSTEM_MESA_HEADERS=TRUE
+        AC_MSG_RESULT([yes])
+    fi
 elif test $_os = WINNT; then
     # Experimental: try to use OpenGL on Windows
     ENABLE_OPENGL=TRUE
