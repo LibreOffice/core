@@ -38,6 +38,5 @@
 #define MODIFY_TOOLBAR_CONTENT (61 + CFG_OFFSET)
 
 #define QBX_CONFIRM_RESTORE_DEFAULT (66 + CFG_OFFSET)
-#define QBX_CONFIRM_DELETE_TOOLBAR (67 + CFG_OFFSET)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

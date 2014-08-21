@@ -408,6 +408,8 @@
 #define RID_SVXSTR_NORESULTS                                (RID_SVX_START + 1281)
 #define RID_SVXSTR_APPLYPERSONA                             (RID_SVX_START + 1282)
 
+#define RID_SXVSTR_CONFIRM_DELETE_TOOLBAR                   (RID_SVX_START + 1283)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

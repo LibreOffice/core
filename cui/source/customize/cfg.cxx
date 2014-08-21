@@ -2995,8 +2995,8 @@ bool SvxToolbarConfigPage::DeleteSelectedContent()
         if ( m_pContentsListBox->GetEntryCount() == 0 &&
              GetTopLevelSelection()->IsDeletable() )
         {
-            QueryBox qbox( this,
-                CUI_RES( QBX_CONFIRM_DELETE_TOOLBAR ) );
+            MessageDialog qbox(this,
+                CUI_RES(RID_SXVSTR_CONFIRM_DELETE_TOOLBAR), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
 
             if ( qbox.Execute() == RET_YES )
             {

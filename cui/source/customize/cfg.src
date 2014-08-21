@@ -217,11 +217,9 @@ String RID_SVXSTR_TOOLBAR_NAME
     Text [ en-US ] = "Toolbar Name" ;
 };
 
-QueryBox QBX_CONFIRM_DELETE_TOOLBAR
+String RID_SXVSTR_CONFIRM_DELETE_TOOLBAR
 {
-    Message [ en-US ] = "There are no more commands on the toolbar. Do you want to delete the toolbar?";
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
+    Text [ en-US ] = "There are no more commands on the toolbar. Do you want to delete the toolbar?";
 };
 
 /* Translators: Do not translate %SAVE IN SELECTION% It is a placeholder
