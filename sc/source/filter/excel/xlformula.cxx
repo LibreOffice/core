@@ -593,7 +593,8 @@ static const XclFunctionInfo saFuncTable_Odf[] =
 /** Functions defined by Calc, but not in OpenFormula nor supported by Excel. */
 static const XclFunctionInfo saFuncTable_OOoLO[] =
 {
-    EXC_FUNCENTRY_OOO( ocConvert,       3,  3,  0,  "ORG.OPENOFFICE.CONVERT" )
+    EXC_FUNCENTRY_OOO( ocConvert,       3,  3,  0,  "ORG.OPENOFFICE.CONVERT" ),
+    EXC_FUNCENTRY_OOO( ocColor,         3,  4,  0,  "ORG.LIBREOFFICE.COLOR" )
 };
 
 #undef EXC_FUNCENTRY_OOO
