@@ -676,10 +676,8 @@ ImplFontSubstEntry::ImplFontSubstEntry( const OUString& rFontName,
 ,   maReplaceName( rSubstFontName )
 ,   mnFlags( nSubstFlags )
 {
-    maSearchName        = rFontName;
-    maSearchReplaceName = rSubstFontName;
-    GetEnglishSearchFontName( maSearchName );
-    GetEnglishSearchFontName( maSearchReplaceName );
+    maSearchName = GetEnglishSearchFontName( rFontName );
+    maSearchReplaceName = GetEnglishSearchFontName( rSubstFontName );
 }
 
 void OutputDevice::RemoveFontSubstitute( sal_uInt16 n )
@@ -727,11 +725,8 @@ bool ImplDirectFontSubstitution::FindFontSubstitute( OUString& rSubstName,
 
 void ImplFontSubstitute( OUString& rFontName )
 {
-#ifdef DBG_UTIL
-    OUString aTempName = rFontName;
-    GetEnglishSearchFontName( aTempName );
-    DBG_ASSERT( aTempName == rFontName, "ImplFontSubstitute() called without a searchname" );
-#endif
+    // must be canonicalised
+    assert( GetEnglishSearchFontName( rFontName ) == rFontName );
 
     OUString aSubstFontName;
 
@@ -836,8 +831,8 @@ Font OutputDevice::GetDefaultFont( sal_uInt16 nType, LanguageType eLang,
             sal_Int32     nIndex = 0;
             do
             {
-                aSearchName = GetNextFontToken( aSearch, nIndex );
-                GetEnglishSearchFontName( aSearchName );
+                aSearchName = GetEnglishSearchFontName( GetNextFontToken( aSearch, nIndex ) );
+
                 PhysicalFontFamily* pFontFamily = pOutDev->mpFontCollection->ImplFindBySearchName( aSearchName );
                 if( pFontFamily )
                 {

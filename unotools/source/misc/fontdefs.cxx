@@ -320,8 +320,10 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 {   NULL,                   NULL },
 };
 
-void GetEnglishSearchFontName( OUString& rName )
+OUString GetEnglishSearchFontName( const OUString& rInName )
 {
+    OUString rName( rInName );
+
     bool        bNeedTranslation = false;
     sal_Int32  nLen = rName.getLength();
 
@@ -438,6 +440,8 @@ void GetEnglishSearchFontName( OUString& rName )
         if( it != aDictionary.end() )
             rName = OUString::createFromAscii ( it->second );
     }
+
+    return rName;
 }
 
 OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
@@ -519,9 +523,8 @@ OUString GetSubsFontName( const OUString& rName, sal_uLong nFlags )
     OUString aName;
 
     sal_Int32 nIndex = 0;
-    OUString aOrgName = GetNextFontToken( rName, nIndex );
-    // clean up and lowercase font name
-    GetEnglishSearchFontName( aOrgName );
+    OUString aOrgName = GetEnglishSearchFontName(
+                                GetNextFontToken( rName, nIndex ) );
 
     // #93662# do not try to replace StarSymbol with MS only font
     if( nFlags == (SUBSFONT_MS|SUBSFONT_ONLYONE)

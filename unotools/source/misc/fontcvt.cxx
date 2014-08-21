@@ -1412,11 +1412,10 @@ static ConvertChar aImplStarSymbolCvt = { NULL, "StarBats", ImplStarSymbolToStar
 const ConvertChar* ConvertChar::GetRecodeData( const OUString& rOrgFontName, const OUString& rMapFontName )
 {
     const ConvertChar* pCvt = NULL;
-    OUString aOrgName( rOrgFontName );
-    GetEnglishSearchFontName( aOrgName );
-    OUString aMapName( rMapFontName );
+
     // clean up and lowercase font name
-    GetEnglishSearchFontName( aMapName );
+    OUString aOrgName( GetEnglishSearchFontName( rOrgFontName ) );
+    OUString aMapName( GetEnglishSearchFontName( rMapFontName ) );
 
     if( aMapName == "starsymbol"
      || aMapName == "opensymbol" )
@@ -1457,8 +1456,7 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( const OUString& rOrgName,
 {
     const ConvertChar* pCvt = NULL;
 
-    OUString aName = rOrgName;
-    GetEnglishSearchFontName( aName );
+    OUString aName = GetEnglishSearchFontName( rOrgName );
 
     if ( nFlags & FONTTOSUBSFONT_IMPORT )
     {

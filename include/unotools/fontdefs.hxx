@@ -81,7 +81,7 @@ public:
 
 UNOTOOLS_DLLPUBLIC OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex );
 
-UNOTOOLS_DLLPUBLIC void GetEnglishSearchFontName( OUString& rName );
+UNOTOOLS_DLLPUBLIC OUString GetEnglishSearchFontName( const OUString& rName );
 
 /** Determine if the font is the special Star|Open Symbol font
 
