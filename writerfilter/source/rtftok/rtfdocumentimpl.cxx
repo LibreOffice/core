@@ -4894,24 +4894,27 @@ int RTFDocumentImpl::popState()
         {
             RTFSprms& rAttributes = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
             RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val);
-            OUString aOrig = pValue->getString();
-
-            OUStringBuffer aBuf;
-            sal_Int32 nReplaces = 1;
-            for (int i = 0; i < aOrig.getLength(); i++)
+            if (pValue)
             {
-                if (std::find(aState.aLevelNumbers.begin(), aState.aLevelNumbers.end(), i+1)
-                        != aState.aLevelNumbers.end())
-                {
-                    aBuf.append('%');
-                    // '1.1.1' -> '%1.%2.%3', but '1.' (with '2.' prefix omitted) is %2.
-                    aBuf.append(sal_Int32(nReplaces++ + aState.nListLevelNum + 1 - aState.aLevelNumbers.size()));
-                }
-                else
-                    aBuf.append(aOrig.copy(i, 1));
-            }
+                OUString aOrig = pValue->getString();
 
-            pValue->setString(aBuf.makeStringAndClear());
+                OUStringBuffer aBuf;
+                sal_Int32 nReplaces = 1;
+                for (int i = 0; i < aOrig.getLength(); i++)
+                {
+                    if (std::find(aState.aLevelNumbers.begin(), aState.aLevelNumbers.end(), i+1)
+                            != aState.aLevelNumbers.end())
+                    {
+                        aBuf.append('%');
+                        // '1.1.1' -> '%1.%2.%3', but '1.' (with '2.' prefix omitted) is %2.
+                        aBuf.append(sal_Int32(nReplaces++ + aState.nListLevelNum + 1 - aState.aLevelNumbers.size()));
+                    }
+                    else
+                        aBuf.append(aOrig.copy(i, 1));
+                }
+
+                pValue->setString(aBuf.makeStringAndClear());
+            }
         }
         break;
     case DESTINATION_SHAPEPROPERTYNAME:
