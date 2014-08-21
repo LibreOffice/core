@@ -609,12 +609,14 @@ const SwPageDesc* SwNode::FindPageDesc( bool bCalcLay,
 
                         for( ; nStt < nLast; ++nStt, pFmt = &rPgDsc.GetLeft() )
                         {
-                            const SwFmtHeader& rHdFt = (SwFmtHeader&)
-                                                    pFmt->GetFmtAttr( nId );
-                            if( rHdFt.GetHeaderFmt() )
+                            const SwFrmFmt * pHdFtFmt = nId == RES_HEADER
+                                ? static_cast<SwFmtHeader const &>(
+                                    pFmt->GetFmtAttr(nId)).GetHeaderFmt()
+                                : static_cast<SwFmtFooter const &>(
+                                    pFmt->GetFmtAttr(nId)).GetFooterFmt();
+                            if( pHdFtFmt )
                             {
-                                const SwFmtCntnt& rCntnt =
-                                    rHdFt.GetHeaderFmt()->GetCntnt();
+                                const SwFmtCntnt& rCntnt = pHdFtFmt->GetCntnt();
                                 if( rCntnt.GetCntntIdx() &&
                                     &rCntnt.GetCntntIdx()->GetNode() ==
                                     (SwNode*)pSttNd )
