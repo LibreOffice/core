@@ -31,11 +31,11 @@ class ScInsertContentsDlg : public ModalDialog
 {
 public:
             ScInsertContentsDlg( Window*          pParent,
-                                 sal_uInt16       nCheckDefaults = 0,
+                                 InsertDeleteFlags nCheckDefaults = IDF_NONE,
                                  const OUString*  pStrTitle = NULL );
             virtual ~ScInsertContentsDlg();
 
-    sal_uInt16      GetInsContentsCmdBits() const;
+    InsertDeleteFlags GetInsContentsCmdBits() const;
     sal_uInt16      GetFormulaCmdBits() const;
     bool            IsSkipEmptyCells() const;
     bool            IsTranspose() const;
@@ -82,7 +82,7 @@ private:
     bool              bMoveRightDisabled;
     bool              bUsedShortCut;
 
-    sal_uInt16        nShortCutInsContentsCmdBits;
+    InsertDeleteFlags nShortCutInsContentsCmdBits;
     sal_uInt16        nShortCutFormulaCmdBits;
     bool              bShortCutSkipEmptyCells;
     bool              bShortCutTranspose;
@@ -90,7 +90,7 @@ private:
     InsCellCmd        nShortCutMoveMode;
 
     static bool         bPreviousAllCheck;
-    static sal_uInt16   nPreviousChecks;
+    static InsertDeleteFlags nPreviousChecks;
     static sal_uInt16   nPreviousChecks2;
     static sal_uInt16   nPreviousFormulaChecks;
     static sal_uInt16   nPreviousMoveMode;          // enum InsCellCmd

@@ -1802,7 +1802,7 @@ ScUndoDataForm::ScUndoDataForm( ScDocShell* pNewDocShell,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                 const ScMarkData& rMark,
                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                                sal_uInt16 nNewFlags,
+                                InsertDeleteFlags nNewFlags,
                                 ScRefUndoData* pRefData,
                                 void* /*pFill1*/, void* /*pFill2*/, void* /*pFill3*/,
                                 bool bRedoIsFilled ) :
@@ -1893,7 +1893,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
     ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData : pRefRedoData;
 
     // Always back-up either all or none of the content for Undo
-    sal_uInt16 nUndoFlags = IDF_NONE;
+    InsertDeleteFlags nUndoFlags = IDF_NONE;
     if (nFlags & IDF_CONTENTS)
             nUndoFlags |= IDF_CONTENTS;
     if (nFlags & IDF_ATTRIB)
@@ -1919,7 +1919,7 @@ void ScUndoDataForm::DoChange( const bool bUndo )
         ScRange aCopyRange = aBlockRange;
         aCopyRange.aStart.SetTab(0);
         aCopyRange.aEnd.SetTab(nTabCount-1);
-        rDoc.CopyToDocument( aCopyRange, 1, false, pRedoDoc );
+        rDoc.CopyToDocument( aCopyRange, IDF_VALUE, false, pRedoDoc );
         bRedoFilled = true;
     }
 

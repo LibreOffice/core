@@ -24,13 +24,13 @@
 #include "miscdlgs.hrc"
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
-sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);
+InsertDeleteFlags ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);
 sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
 sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
 
 ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
-                                          sal_uInt16        nCheckDefaults,
+                                          InsertDeleteFlags nCheckDefaults,
                                           const OUString* pStrTitle )
 
  :  ModalDialog     ( pParent, "PasteSpecial", "modules/scalc/ui/pastespecial.ui" ),
@@ -39,7 +39,8 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     bChangeTrack    ( false ),
     bMoveDownDisabled( false ),
     bMoveRightDisabled( false ),
-    bUsedShortCut   ( false )
+    bUsedShortCut   ( false ),
+    nShortCutInsContentsCmdBits( IDF_NONE )
 {
     get( mpBtnInsAll, "paste_all" );
     get( mpBtnInsStrings, "text" );
@@ -67,7 +68,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     if ( pStrTitle )
         SetText( *pStrTitle );
 
-    if ( nCheckDefaults != 0 )
+    if ( nCheckDefaults != IDF_NONE )
     {
         ScInsertContentsDlg::nPreviousChecks = nCheckDefaults;
         ScInsertContentsDlg::bPreviousAllCheck = false;
@@ -120,9 +121,9 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     mpBtnShortCutPasteTranspose->SetClickHdl( LINK( this, ScInsertContentsDlg, ShortCutHdl ) );
 }
 
-sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
+InsertDeleteFlags ScInsertContentsDlg::GetInsContentsCmdBits() const
 {
-    ScInsertContentsDlg::nPreviousChecks = 0;
+    ScInsertContentsDlg::nPreviousChecks = IDF_NONE;
 
     if ( mpBtnInsStrings->IsChecked() )
         ScInsertContentsDlg::nPreviousChecks = IDF_STRING;

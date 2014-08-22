@@ -410,7 +410,7 @@ public:
     void DeleteCol(
         const sc::ColumnSet& rRegroupCols, SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE nSize, bool* pUndoOutline = NULL );
 
-    void        DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nDelFlag);
+    void        DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, InsertDeleteFlags nDelFlag);
     void CopyToClip( sc::CopyToClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pTable );
     void CopyToClip( sc::CopyToClipContext& rCxt, const ScRangeList& rRanges, ScTable* pTable );
 
@@ -439,17 +439,17 @@ public:
 
     void CopyToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab,
+        InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab,
         const ScMarkData* pMarkData = NULL, bool bAsLink = false, bool bColRowFlags = true );
 
     void UndoToTable(
         sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-        sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData = NULL );
+        InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData = NULL );
 
     void        CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                             SCsCOL nDx, SCsROW nDy, ScTable* pTable);
     void        TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                ScTable* pTransClip, sal_uInt16 nFlags, bool bAsLink );
+                                ScTable* pTransClip, InsertDeleteFlags nFlags, bool bAsLink );
 
                 // mark of this document
     void MixMarked(
@@ -642,7 +642,7 @@ public:
     bool        RemoveFlags( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, sal_Int16 nFlags );
 
     void        ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = NULL );
-    void DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
+    void        DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );

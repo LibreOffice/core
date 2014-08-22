@@ -775,7 +775,7 @@ void ScUndoCut::DoChange( const bool bUndo )
     sal_uInt16 nExtFlags = 0;
 
     // do not undo/redo objects and note captions, they are handled via drawing undo
-    sal_uInt16 nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+    InsertDeleteFlags nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
 
     if (bUndo)  // only for Undo
     {
@@ -842,7 +842,7 @@ bool ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
 ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell, const ScRangeList& rRanges,
                 const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                sal_uInt16 nNewFlags,
+                InsertDeleteFlags nNewFlags,
                 ScRefUndoData* pRefData,
                 bool bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
     ScMultiBlockUndo( pNewDocShell, rRanges, SC_UNDO_SIMPLE ),
@@ -904,7 +904,7 @@ void ScUndoPaste::DoChange(bool bUndo)
     ScRefUndoData* pWorkRefData = bUndo ? pRefUndoData : pRefRedoData;
 
     // Always back-up either all or none of the content for Undo
-    sal_uInt16 nUndoFlags = IDF_NONE;
+    InsertDeleteFlags nUndoFlags = IDF_NONE;
     if (nFlags & IDF_CONTENTS)
         nUndoFlags |= IDF_CONTENTS;
     if (nFlags & IDF_ATTRIB)
@@ -1236,7 +1236,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange )
     pDocShell->UpdatePaintExt(mnPaintExtFlags, aPaintRange);
 
     // do not undo objects and note captions, they are handled via drawing undo
-    sal_uInt16 nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+    InsertDeleteFlags nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
 
     rDoc.DeleteAreaTab( aRange, nUndoFlags );
     pRefUndoDoc->CopyToDocument( aRange, nUndoFlags, false, &rDoc );
@@ -1353,7 +1353,7 @@ void ScUndoDragDrop::Redo()
     EnableDrawAdjust( &rDoc, false );                //! include in ScBlockUndo?
 
     // do not undo/redo objects and note captions, they are handled via drawing undo
-    sal_uInt16 nRedoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+    InsertDeleteFlags nRedoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
 
     /*  TODO: Redoing note captions is quite tricky due to the fact that a
         helper clip document is used. While (re-)pasting the contents to the
