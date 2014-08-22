@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 
 namespace ppc64
 {
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
     bool is_complex_struct(const typelib_TypeDescription * type)
     {
         const typelib_CompoundTypeDescription * p
@@ -70,7 +70,7 @@ namespace ppc64
     {
         if (bridges::cpp_uno::shared::isSimpleType(pTypeRef))
             return false;
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
         else if (pTypeRef->eTypeClass == typelib_TypeClass_STRUCT || pTypeRef->eTypeClass == typelib_TypeClass_EXCEPTION)
         {
             typelib_TypeDescription * pTypeDescr = 0;
@@ -115,7 +115,7 @@ void MapReturn(long r3, long r4, double dret, typelib_TypeDescriptionReference* 
     case typelib_TypeClass_DOUBLE:
             *reinterpret_cast<double *>( pRegisterReturn ) = dret;
             break;
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
             if (!ppc64::return_in_hidden_param(pReturnType))
@@ -175,7 +175,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     pMethod += 8 * nVtableIndex;
     pMethod = *((sal_uInt64 *)pMethod);
 
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
     typedef void (* FunctionCall )(...);
 #else
     typedef void (* FunctionCall )( sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64 );

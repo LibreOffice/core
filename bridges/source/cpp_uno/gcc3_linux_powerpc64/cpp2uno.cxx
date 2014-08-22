@@ -326,7 +326,7 @@ static typelib_TypeClass cpp2uno_call(
     }
 }
 
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
 #  define PARAMSAVE 32
 #else
 #  define PARAMSAVE 48
@@ -545,7 +545,7 @@ extern "C" void privateSnippetExecutor( ... )
                 "mr     %0,    1\n\t"
                 : "=r" (sp) : );
 
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
     volatile long nRegReturn[2];
 #else
     volatile long nRegReturn[1];
@@ -592,7 +592,7 @@ extern "C" void privateSnippetExecutor( ... )
         default:
             __asm__( "ld 3,%0\n\t"
                 : : "m" (nRegReturn[0]) );
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
             __asm__( "ld 4,%0\n\t"
                 : : "m" (nRegReturn[1]) );
 #endif
@@ -600,7 +600,7 @@ extern "C" void privateSnippetExecutor( ... )
     }
 }
 
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
 const int codeSnippetSize = 32;
 #else
 const int codeSnippetSize = 24;
@@ -618,7 +618,7 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sa
 
     if ( bHasHiddenParam )
         nOffsetAndIndex |= 0x80000000;
-#if _CALL_ELF == 2
+#if defined(_CALL_ELF) && _CALL_ELF == 2
     unsigned int *raw = (unsigned int *)&code[0];
 
     raw[0] = 0xe96c0018;        /* 0:   ld      11,2f-0b(12)    */
