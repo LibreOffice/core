@@ -87,9 +87,9 @@ namespace ppc64
     }
 }
 
-void MapReturn(long r3, double dret, typelib_TypeClass eTypeClass, void *pRegisterReturn)
+void MapReturn(long r3, long r4, double dret, typelib_TypeDescriptionReference* pReturnType, void *pRegisterReturn)
 {
-    switch (eTypeClass)
+    switch (pReturnType->eTypeClass)
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
@@ -115,6 +115,17 @@ void MapReturn(long r3, double dret, typelib_TypeClass eTypeClass, void *pRegist
     case typelib_TypeClass_DOUBLE:
             *reinterpret_cast<double *>( pRegisterReturn ) = dret;
             break;
+#if _CALL_ELF == 2
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+            if (!ppc64::return_in_hidden_param(pReturnType))
+            {
+                sal_uInt64 *pRegisters = reinterpret_cast<sal_uInt64*>(pRegisterReturn);
+                pRegisters[0] = r3;
+                if (pReturnType->pType->nSize > 8)
+                    pRegisters[1] = r4;
+            }
+#endif
     default:
             break;
     }
@@ -222,7 +233,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
                 "fmr    %0,     1\n\t"
                 : "=f" (dret), "=r" (r3), "=r" (r4) : );
 
-    MapReturn(r3, dret, pReturnTypeDescr->eTypeClass, pRegisterReturn);
+    MapReturn(r3, r4, dret, pReturnTypeRef, pRegisterReturn);
 }
 
 // Macros for easier insertion of values to registers or stack

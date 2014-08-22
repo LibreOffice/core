@@ -545,7 +545,11 @@ extern "C" void privateSnippetExecutor( ... )
                 "mr     %0,    1\n\t"
                 : "=r" (sp) : );
 
+#if _CALL_ELF == 2
     volatile long nRegReturn[1];
+#else
+    volatile long nRegReturn[2];
+#endif
 
     typelib_TypeClass aType =
         cpp_mediate( nOffsetAndIndex, (void**)gpreg, (void**)fpreg, sp, (sal_Int64*)nRegReturn);
@@ -588,6 +592,10 @@ extern "C" void privateSnippetExecutor( ... )
         default:
             __asm__( "ld 3,%0\n\t"
                 : : "m" (nRegReturn[0]) );
+#if _CALL_ELF == 2
+            __asm__( "ld 4,%0\n\t"
+                : : "m" (nRegReturn[1]) );
+#endif
             break;
     }
 }
