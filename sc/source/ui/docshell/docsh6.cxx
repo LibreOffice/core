@@ -456,8 +456,8 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
     // Wizard when loading the second document.
     // Do the stupid stuff only when we're not called while loading a document.
 
-    /** TODO: bForLoading is a workaround, rather get rid of setting any
-        globals from per document instances like ScDocShell. */
+    /* TODO: bForLoading is a workaround, rather get rid of setting any
+     * globals from per document instances like ScDocShell. */
 
     if (!bForLoading)
     {
