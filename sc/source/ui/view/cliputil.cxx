@@ -59,7 +59,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
         else
         {
             ScDocument* pClipDoc = pOwnClip->GetDocument();
-            sal_uInt16 nFlags = IDF_ALL;
+            InsertDeleteFlags nFlags = IDF_ALL;
             if (pClipDoc->GetClipParam().isMultiRange())
                 // For multi-range paste, we paste values by default.
                 nFlags &= ~IDF_FORMULA;

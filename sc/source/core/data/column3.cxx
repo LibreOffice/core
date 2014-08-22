@@ -500,7 +500,7 @@ class DeleteAreaHandler
     bool mbFormula:1;
 
 public:
-    DeleteAreaHandler(ScDocument& rDoc, sal_uInt16 nDelFlag) :
+    DeleteAreaHandler(ScDocument& rDoc, InsertDeleteFlags nDelFlag) :
         mrDoc(rDoc),
         mbNumeric(nDelFlag & IDF_VALUE),
         mbString(nDelFlag & IDF_STRING),
@@ -592,7 +592,7 @@ public:
 }
 
 void ScColumn::DeleteCells(
-    sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, sal_uInt16 nDelFlag,
+    sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nDelFlag,
     std::vector<SCROW>& rDeleted )
 {
     // Determine which cells to delete based on the deletion flags.
@@ -615,13 +615,13 @@ void ScColumn::DeleteCells(
 }
 
 void ScColumn::DeleteArea(
-    SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag, bool bBroadcast )
+    SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag, bool bBroadcast )
 {
-    sal_uInt16 nContMask = IDF_CONTENTS;
+    InsertDeleteFlags nContMask = IDF_CONTENTS;
     // IDF_NOCAPTIONS needs to be passed too, if IDF_NOTE is set
     if( nDelFlag & IDF_NOTE )
         nContMask |= IDF_NOCAPTIONS;
-    sal_uInt16 nContFlag = nDelFlag & nContMask;
+    InsertDeleteFlags nContFlag = nDelFlag & nContMask;
 
     std::vector<SCROW> aDeletedRows;
 
@@ -636,7 +636,7 @@ void ScColumn::DeleteArea(
 
     if ( nDelFlag & IDF_EDITATTR )
     {
-        OSL_ENSURE( nContFlag == 0, "DeleteArea: Wrong Flags" );
+        OSL_ENSURE( nContFlag == IDF_NONE, "DeleteArea: Wrong Flags" );
         RemoveEditAttribs( nStartRow, nEndRow );
     }
 
@@ -755,23 +755,23 @@ public:
         SCROW nSrcRow1 = node.position + nOffset;
         bool bCopyCellNotes = mrCxt.isCloneNotes();
 
-        sal_uInt16 nFlags = mrCxt.getInsertFlag();
+        InsertDeleteFlags nFlags = mrCxt.getInsertFlag();
 
         if (node.type == sc::element_type_empty)
         {
             if (bCopyCellNotes && !mrCxt.isSkipAttrForEmptyCells())
             {
-                bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
+                bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == IDF_NONE;
                 duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
             }
             return;
         }
 
-        bool bNumeric = (nFlags & IDF_VALUE) != 0;
-        bool bDateTime = (nFlags & IDF_DATETIME) != 0;
-        bool bString   = (nFlags & IDF_STRING) != 0;
-        bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != 0;
-        bool bFormula  = (nFlags & IDF_FORMULA) != 0;
+        bool bNumeric = (nFlags & IDF_VALUE) != IDF_NONE;
+        bool bDateTime = (nFlags & IDF_DATETIME) != IDF_NONE;
+        bool bString   = (nFlags & IDF_STRING) != IDF_NONE;
+        bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
+        bool bFormula  = (nFlags & IDF_FORMULA) != IDF_NONE;
 
         bool bAsLink = mrCxt.isAsLink();
 
@@ -944,7 +944,7 @@ public:
         }
         if (bCopyCellNotes)
         {
-            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
+            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == IDF_NONE;
             duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
         }
     }
@@ -958,7 +958,7 @@ public:
 void ScColumn::CopyFromClip(
     sc::CopyFromClipContext& rCxt, SCROW nRow1, SCROW nRow2, long nDy, ScColumn& rColumn )
 {
-    if ((rCxt.getInsertFlag() & IDF_ATTRIB) != 0)
+    if ((rCxt.getInsertFlag() & IDF_ATTRIB) != IDF_NONE)
     {
         if (rCxt.isSkipAttrForEmptyCells())
         {
@@ -973,7 +973,7 @@ void ScColumn::CopyFromClip(
         else
             rColumn.pAttrArray->CopyAreaSafe( nRow1, nRow2, nDy, *pAttrArray );
     }
-    if ((rCxt.getInsertFlag() & IDF_CONTENTS) == 0)
+    if ((rCxt.getInsertFlag() & IDF_CONTENTS) == IDF_NONE)
         return;
 
     if (rCxt.isAsLink() && rCxt.getInsertFlag() == IDF_ALL)

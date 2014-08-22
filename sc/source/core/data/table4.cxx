@@ -1487,7 +1487,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOLROW nIMin = nIStart;
     SCCOLROW nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
-    sal_uInt16 nDel = bAttribs ? IDF_AUTOFILL : (IDF_AUTOFILL & IDF_CONTENTS);
+    InsertDeleteFlags nDel = bAttribs ? IDF_AUTOFILL : (IDF_AUTOFILL & IDF_CONTENTS);
 
     bool bIsFiltered = IsDataFiltered(aFillRange);
     if (!bIsFiltered)

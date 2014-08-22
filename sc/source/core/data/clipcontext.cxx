@@ -28,7 +28,7 @@ ColumnBlockPosition* ClipContextBase::getBlockPosition(SCTAB nTab, SCCOL nCol)
 }
 
 CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
-    ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
+    ScDocument* pRefUndoDoc, ScDocument* pClipDoc, InsertDeleteFlags nInsertFlag,
     bool bAsLink, bool bSkipAttrForEmptyCells) :
     ClipContextBase(rDoc),
     mnDestCol1(-1), mnDestCol2(-1),
@@ -71,7 +71,7 @@ CopyFromClipContext::Range CopyFromClipContext::getDestRange() const
     return aRet;
 }
 
-void CopyFromClipContext::setDeleteFlag( sal_uInt16 nFlag )
+void CopyFromClipContext::setDeleteFlag( InsertDeleteFlags nFlag )
 {
     mnDeleteFlag = nFlag;
 }

@@ -242,7 +242,7 @@ void AbstractScDeleteContentsDlg_Impl::DisableObjects()
     pDlg->DisableObjects();
 }
 
-sal_uInt16   AbstractScDeleteContentsDlg_Impl::GetDelContentsCmdBits() const
+InsertDeleteFlags AbstractScDeleteContentsDlg_Impl::GetDelContentsCmdBits() const
 {
     return pDlg->GetDelContentsCmdBits();
 }
@@ -297,7 +297,7 @@ InsCellCmd  AbstractScInsertCellDlg_Impl::GetInsCellCmd() const
     return pDlg->GetInsCellCmd();
 }
 
-sal_uInt16 AbstractScInsertContentsDlg_Impl::GetInsContentsCmdBits() const
+InsertDeleteFlags AbstractScInsertContentsDlg_Impl::GetInsContentsCmdBits() const
 {
     return pDlg->GetInsContentsCmdBits();
 }
@@ -701,7 +701,7 @@ AbstractScDataFormDlg* ScAbstractDialogFactory_Impl::CreateScDataFormDlg(Window*
 }
 
 AbstractScDeleteContentsDlg* ScAbstractDialogFactory_Impl::CreateScDeleteContentsDlg(Window* pParent,
-                                                                                     sal_uInt16  nCheckDefaults)
+                                                                                     InsertDeleteFlags nCheckDefaults)
 {
     ScDeleteContentsDlg* pDlg = new ScDeleteContentsDlg(pParent, nCheckDefaults);
     return new AbstractScDeleteContentsDlg_Impl( pDlg );
@@ -749,7 +749,7 @@ AbstractScInsertCellDlg * ScAbstractDialogFactory_Impl::CreateScInsertCellDlg( W
 }
 
 AbstractScInsertContentsDlg * ScAbstractDialogFactory_Impl::CreateScInsertContentsDlg( Window*      pParent,
-                                                                                    sal_uInt16      nCheckDefaults,
+                                                                                    InsertDeleteFlags nCheckDefaults,
                                                                                     const OUString* pStrTitle )
 {
     ScInsertContentsDlg * pDlg = new ScInsertContentsDlg(pParent, nCheckDefaults, pStrTitle);

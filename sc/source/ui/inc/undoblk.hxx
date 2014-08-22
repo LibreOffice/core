@@ -186,7 +186,7 @@ public:
     ScUndoPaste(ScDocShell* pNewDocShell, const ScRangeList& rRanges,
                 const ScMarkData& rMark,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                sal_uInt16 nNewFlags,
+                InsertDeleteFlags nNewFlags,
                 ScRefUndoData* pRefData,
                 bool bRedoIsFilled = true,
                 const ScUndoPasteOptions* pOptions = NULL);
@@ -203,7 +203,7 @@ private:
     ScMarkData      aMarkData;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
-    sal_uInt16      nFlags;
+    InsertDeleteFlags nFlags;
     ScRefUndoData*  pRefUndoData;
     ScRefUndoData*  pRefRedoData;
     sal_uLong       nStartChangeAction;
@@ -257,7 +257,7 @@ public:
                                           const ScMarkData& rMark,
                                           const ScRange& rRange,
                                           ScDocument* pNewUndoDoc, bool bNewMulti,
-                                          sal_uInt16 nNewFlags, bool bObjects );
+                                          InsertDeleteFlags nNewFlags, bool bObjects );
     virtual         ~ScUndoDeleteContents();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -278,7 +278,7 @@ private:
     SdrUndoAction*  pDrawUndo;      // Deleted objects
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
-    sal_uInt16      nFlags;
+    InsertDeleteFlags nFlags;
     bool            bMulti;         // Multi selection
 
     void            DoChange( const bool bUndo );
@@ -294,7 +294,7 @@ public:
                                      SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                      SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                      ScDocument* pNewUndoDoc, bool bNewMulti, SCTAB nSrc,
-                                     sal_uInt16 nFlg, sal_uInt16 nFunc, bool bSkip, bool bLink );
+                                     InsertDeleteFlags nFlg, sal_uInt16 nFunc, bool bSkip, bool bLink );
     virtual         ~ScUndoFillTable();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -310,7 +310,7 @@ private:
     ScDocument*     pUndoDoc;       // Block mark and deleted data
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
-    sal_uInt16      nFlags;
+    InsertDeleteFlags nFlags;
     sal_uInt16      nFunction;
     SCTAB           nSrcTab;
     bool            bMulti;         // Multi selection
@@ -577,7 +577,7 @@ public:
                     TYPEINFO_OVERRIDE();
                     ScUndoRefConversion( ScDocShell* pNewDocShell,
                                          const ScRange& aMarkRange, const ScMarkData& rMark,
-                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti, sal_uInt16 nNewFlag);
+                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti, InsertDeleteFlags nNewFlag);
     virtual         ~ScUndoRefConversion();
 
     virtual void    Undo() SAL_OVERRIDE;
@@ -593,7 +593,7 @@ private:
     ScDocument*         pRedoDoc;
     ScRange             aRange;
     bool                bMulti;
-    sal_uInt16          nFlags;
+    InsertDeleteFlags   nFlags;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 

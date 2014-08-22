@@ -1957,7 +1957,7 @@ void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         ApplyFlagsTab( nStartCol+1, nStartRow+1, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
 
     // Remove all covered notes (removed captions are collected by drawing undo if active)
-    sal_uInt16 nDelFlag = IDF_NOTE | (bDeleteCaptions ? 0 : IDF_NOCAPTIONS);
+    InsertDeleteFlags nDelFlag = IDF_NOTE | (bDeleteCaptions ? IDF_NONE : IDF_NOCAPTIONS);
     if( nStartCol < nEndCol )
         DeleteAreaTab( nStartCol + 1, nStartRow, nEndCol, nStartRow, nTab, nDelFlag );
     if( nStartRow < nEndRow )
