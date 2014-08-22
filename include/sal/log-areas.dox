@@ -194,6 +194,7 @@ certain functionality.
 @section formula
 
 @li @c formula.core
+@li @c formula.ui
 
 @section fpicker
 
