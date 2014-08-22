@@ -9,8 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(WNT)
-
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -636,8 +634,6 @@ DECLARE_OOXMLEXPORT_TEST(testSdtCompanyMultipara, "sdt-company-multipara.docx")
         assertXPath(pXmlDoc, "//w:sdtContent/w:p", 1);
     }
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
