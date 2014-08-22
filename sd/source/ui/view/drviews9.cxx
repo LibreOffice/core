@@ -181,10 +181,6 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
     GetDocSh()->SetWaitCursor( false );
 }
 
-void DrawViewShell::GetGalleryState(SfxItemSet& )
-{
-}
-
 /**
  * Edit macros for attribute configuration
  */

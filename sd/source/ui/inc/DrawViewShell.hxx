@@ -211,7 +211,6 @@ public:
     void            AssignFrom3DWindow();
 
     void            ExecGallery(SfxRequest& rReq);
-    void            GetGalleryState(SfxItemSet& rSet);
 
     void            ExecBmpMask( SfxRequest& rReq );
     void            GetBmpMaskState( SfxItemSet& rSet );

@@ -394,8 +394,6 @@ void SwDLL::RegisterControls()
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_LEFT_TO_RIGHT, pMod);
     SvxCTLTextTbxCtrl::RegisterControl(SID_ATTR_PARA_RIGHT_TO_LEFT, pMod);
 
-    GalleryChildWindow::RegisterChildWindow(false, pMod);
-
     ::avmedia::MediaToolBoxControl::RegisterControl(SID_AVMEDIA_TOOLBOX, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(false, pMod);
 

@@ -19,19 +19,14 @@
 <!DOCTYPE oor:component-data SYSTEM "../../../../component-update.dtd">
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:install="http://openoffice.org/2004/installation" oor:name="Views" oor:package="org.openoffice.Office">
   <node oor:name="Windows">
+    <!-- Hide DesignerDialog -->
     <node oor:name="5539" oor:op="replace">
       <prop oor:name="Visible" oor:type="xs:boolean">
         <value>false</value>
       </prop>
     </node>
-    <!-- don't show Sidebar child window by default in all modules
-         except impress - oor:name == SID_SIDEBAR -->
+    <!-- Show sidebar by default -->
     <node oor:name="10336" oor:op="replace">
-      <prop oor:name="Visible" oor:type="xs:boolean">
-        <value>false</value>
-      </prop>
-    </node>
-    <node oor:name="simpress/10336" oor:op="replace">
       <prop oor:name="Visible" oor:type="xs:boolean">
         <value>true</value>
       </prop>

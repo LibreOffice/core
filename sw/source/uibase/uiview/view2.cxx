@@ -140,6 +140,7 @@
 #include <unotextrange.hxx>
 #include <docstat.hxx>
 #include <wordcountdialog.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
@@ -1076,7 +1077,12 @@ void SwView::Execute(SfxRequest &rReq)
                 JumpToSwMark( (( const SfxStringItem*)pItem)->GetValue() );
         break;
         case SID_GALLERY :
-            GetViewFrame()->ChildWindowExecute(rReq);
+            // First make sure that the sidebar is visible
+            GetViewFrame()->ShowChildWindow(SID_SIDEBAR);
+
+            ::sfx2::sidebar::Sidebar::ShowPanel(
+                "GalleryPanel",
+                GetViewFrame()->GetFrame().GetFrameInterface());
         break;
         case SID_AVMEDIA_PLAYER :
             GetViewFrame()->ChildWindowExecute(rReq);
@@ -1092,7 +1098,7 @@ void SwView::Execute(SfxRequest &rReq)
             }
         }
         break;
-        case FN_INSERT_FIELD_DATA_ONLY :
+        case FN_INSERT_FIELD_DATA_ONLY:
         {
             bool bShow = false;
             if( pArgs &&

@@ -4885,7 +4885,7 @@ SfxBoolItem AutoColorInvalid SID_ATTR_AUTO_COLOR_INVALID
 ]
 
 
-SfxBoolItem Gallery SID_GALLERY
+SfxVoidItem Gallery SID_GALLERY
 
 [
     /* flags: */
