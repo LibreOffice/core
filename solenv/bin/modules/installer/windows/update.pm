@@ -423,10 +423,10 @@ sub readmergedatabase
     foreach my $mergemodule ( @{$mergemodules} )
     {
         my $filename = $mergemodule->{'Name'};
-        my $mergefile = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$filename, $includepatharrayref, 1);
+        my $mergefile = $ENV{'MSM_PATH'} . $filename;
 
-        if ( $$mergefile eq "" ) { installer::exiter::exit_program("ERROR: msm file not found: $filename !", "readmergedatabase"); }
-        my $completesource = $$mergefile;
+        if ( ! -f $mergefile ) { installer::exiter::exit_program("ERROR: msm file not found: $filename !", "readmergedatabase"); }
+        my $completesource = $mergefile;
 
         my $mergegid = $mergemodule->{'gid'};
         my $workdir = $mergemoduledir . $installer::globals::separator . $mergegid;
