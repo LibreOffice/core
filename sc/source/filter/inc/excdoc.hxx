@@ -66,7 +66,9 @@ public:
                                 ExcTable( const XclExpRoot& rRoot, SCTAB nScTab );
                                 virtual ~ExcTable();
 
-    void                        FillAsHeader( ExcBoundsheetList& rBoundsheetList );
+    void FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList );
+    void FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList );
+
     void                        FillAsTable( SCTAB nCodeNameIdx );
     void                        FillAsEmptyTable( SCTAB nCodeNameIdx );
 

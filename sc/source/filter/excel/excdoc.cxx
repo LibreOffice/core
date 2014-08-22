@@ -159,7 +159,7 @@ void ExcTable::Add( XclExpRecordBase* pRec )
     aRecList.AppendNewRecord( pRec );
 }
 
-void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
+void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
 {
     InitializeGlobals();
 
@@ -283,38 +283,13 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         Add( new XclExpBoolRecord( 0x000E, !rDoc.GetDocOptions().IsCalcAsShown() ) );
         Add( new XclExpBoolRecord(0x01B7, false) ); // REFRESHALL
         Add( new XclExpBoolRecord(0x00DA, false) ); // BOOKBOOL
-        // OOXTODO: The following /workbook/workbookPr attributes are mapped
-        //          to various BIFF records that are not currently supported:
-        //
-        //          XML_allowRefreshQuery:          QSISTAG 802h: fEnableRefresh
-        //          XML_autoCompressPictures:       COMPRESSPICTURES 89Bh: fAutoCompressPictures
-        //          XML_checkCompatibility:         COMPAT12 88Ch: fNoCompatChk
-        //          XML_codeName:                   "Calc"
-        //          XML_defaultThemeVersion:        ???
-        //          XML_filterPrivacy:              BOOKEXT 863h: fFilterPrivacy
-        //          XML_hidePivotFieldList:         BOOKBOOL DAh: fHidePivotTableFList
-        //          XML_promptedSolutions:          BOOKEXT 863h: fBuggedUserAboutSolution
-        //          XML_publishItems:               NAMEPUBLISH 893h: fPublished
-        //          XML_saveExternalLinkValues:     BOOKBOOL DAh: fNoSavSupp
-        //          XML_showBorderUnselectedTables: BOOKBOOL DAh: fHideBorderUnsels
-        //          XML_showInkAnnotation:          BOOKEXT 863h: fShowInkAnnotation
-        //          XML_showPivotChart:             PIVOTCHARTBITS 859h: fGXHide??
-        //          XML_updateLinks:                BOOKBOOL DAh: grbitUpdateLinks
     }
-    Add( new XclExpXmlEndSingleElementRecord() );   // XML_workbookPr
 
     // Formatting: FONT, FORMAT, XF, STYLE, PALETTE
-    if( GetOutput() != EXC_OUTPUT_BINARY )
-    {
-        aRecList.AppendNewRecord( new XclExpXmlStyleSheet( *this ) );
-    }
-    else
-    {
-        aRecList.AppendRecord( CreateRecord( EXC_ID_FONTLIST ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_FORMATLIST ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_XFLIST ) );
-        aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
-    }
+    aRecList.AppendRecord( CreateRecord( EXC_ID_FONTLIST ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_FORMATLIST ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_XFLIST ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
 
     if( GetBiff() <= EXC_BIFF5 )
     {
@@ -343,14 +318,7 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         // Natural Language Formulas Flag
         aRecList.AppendNewRecord( new XclExpBoolRecord( EXC_ID_USESELFS, GetDoc().GetDocOptions().IsLookUpColRowNames() ) );
 
-        if( GetOutput() != EXC_OUTPUT_BINARY )
-        {
-            lcl_AddWorkbookProtection( aRecList, *this );
-            lcl_AddBookviews( aRecList, *this );
-        }
-
         // Bundlesheet
-        aRecList.AppendNewRecord( new XclExpXmlStartElementRecord( XML_sheets ) );
         for( nC = 0 ; nC < nScTabCount ; nC++ )
             if( rTabInfo.IsExportTab( nC ) )
             {
@@ -358,7 +326,6 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
                 aRecList.AppendRecord( xBoundsheet );
                 rBoundsheetList.AppendRecord( xBoundsheet );
             }
-        aRecList.AppendNewRecord( new XclExpXmlEndElementRecord( XML_sheets ) );
 
         for( SCTAB nAdd = 0; nC < static_cast<SCTAB>(nCodenames) ; nC++, nAdd++ )
         {
@@ -375,9 +342,6 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
         aRecList.AppendRecord( CreateRecord( EXC_ID_EXTERNSHEET ) );
         aRecList.AppendRecord( CreateRecord( EXC_ID_NAME ) );
 
-        if( GetOutput() != EXC_OUTPUT_BINARY )
-            lcl_AddCalcPr( aRecList, *this );
-
         Add( new XclExpRecalcId );
 
         // MSODRAWINGGROUP per-document data
@@ -389,6 +353,104 @@ void ExcTable::FillAsHeader( ExcBoundsheetList& rBoundsheetList )
     }
 
     Add( new ExcEof );
+}
+
+void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
+{
+    InitializeGlobals();
+
+    RootData& rR = GetOldRoot();
+    ScDocument& rDoc = GetDoc();
+    XclExpTabInfo& rTabInfo = GetTabInfo();
+
+    SCTAB   nC;
+    OUString aTmpString;
+    SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
+    sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
+    sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
+
+    rR.pTabId = new XclExpChTrTabId( std::max( nExcTabCount, nCodenames ) );
+    Add( rR.pTabId );
+
+    // erst Namen- und Tabellen-Eintraege aufbauen
+
+    for( nC = 0 ; nC < nScTabCount ; nC++ )
+        if( rTabInfo.IsExportTab( nC ) )
+        {
+            rDoc.GetName( nC, aTmpString );
+            *pTabNames << aTmpString;
+        }
+
+    Add( new XclExpXmlStartSingleElementRecord( XML_workbookPr ) );
+    Add( new XclExpBoolRecord(0x0040, false, XML_backupFile ) );    // BACKUP
+    Add( new XclExpBoolRecord(0x008D, false, XML_showObjects ) );   // HIDEOBJ
+
+    Add( new Exc1904( rDoc ) );
+    // OOXTODO: The following /workbook/workbookPr attributes are mapped
+    //          to various BIFF records that are not currently supported:
+    //
+    //          XML_allowRefreshQuery:          QSISTAG 802h: fEnableRefresh
+    //          XML_autoCompressPictures:       COMPRESSPICTURES 89Bh: fAutoCompressPictures
+    //          XML_checkCompatibility:         COMPAT12 88Ch: fNoCompatChk
+    //          XML_codeName:                   "Calc"
+    //          XML_defaultThemeVersion:        ???
+    //          XML_filterPrivacy:              BOOKEXT 863h: fFilterPrivacy
+    //          XML_hidePivotFieldList:         BOOKBOOL DAh: fHidePivotTableFList
+    //          XML_promptedSolutions:          BOOKEXT 863h: fBuggedUserAboutSolution
+    //          XML_publishItems:               NAMEPUBLISH 893h: fPublished
+    //          XML_saveExternalLinkValues:     BOOKBOOL DAh: fNoSavSupp
+    //          XML_showBorderUnselectedTables: BOOKBOOL DAh: fHideBorderUnsels
+    //          XML_showInkAnnotation:          BOOKEXT 863h: fShowInkAnnotation
+    //          XML_showPivotChart:             PIVOTCHARTBITS 859h: fGXHide??
+    //          XML_updateLinks:                BOOKBOOL DAh: grbitUpdateLinks
+    Add( new XclExpXmlEndSingleElementRecord() );   // XML_workbookPr
+
+    // Formatting: FONT, FORMAT, XF, STYLE, PALETTE
+    aRecList.AppendNewRecord( new XclExpXmlStyleSheet( *this ) );
+
+    // Pivot Cache
+    GetPivotTableManager().CreatePivotTables();
+    aRecList.AppendRecord( GetPivotTableManager().CreatePivotCachesRecord() );
+
+    // Change tracking
+    if( rDoc.GetChangeTrack() )
+    {
+        rR.pUserBViewList = new XclExpUserBViewList( *rDoc.GetChangeTrack() );
+        Add( rR.pUserBViewList );
+    }
+
+    lcl_AddWorkbookProtection( aRecList, *this );
+    lcl_AddBookviews( aRecList, *this );
+
+    // Bundlesheet
+    aRecList.AppendNewRecord( new XclExpXmlStartElementRecord( XML_sheets ) );
+    for( nC = 0 ; nC < nScTabCount ; nC++ )
+        if( rTabInfo.IsExportTab( nC ) )
+        {
+            ExcBoundsheetList::RecordRefType xBoundsheet( new ExcBundlesheet8( rR, nC ) );
+            aRecList.AppendRecord( xBoundsheet );
+            rBoundsheetList.AppendRecord( xBoundsheet );
+        }
+    aRecList.AppendNewRecord( new XclExpXmlEndElementRecord( XML_sheets ) );
+
+    for( SCTAB nAdd = 0; nC < static_cast<SCTAB>(nCodenames) ; nC++, nAdd++ )
+    {
+        aTmpString = lcl_GetVbaTabName( nAdd );
+        ExcBoundsheetList::RecordRefType xBoundsheet( new ExcBundlesheet8( aTmpString ) );
+        aRecList.AppendRecord( xBoundsheet );
+        rBoundsheetList.AppendRecord( xBoundsheet );
+    }
+
+    // link table: SUPBOOK, XCT, CRN, EXTERNNAME, EXTERNSHEET, NAME
+    aRecList.AppendRecord( CreateRecord( EXC_ID_EXTERNSHEET ) );
+    aRecList.AppendRecord( CreateRecord( EXC_ID_NAME ) );
+
+    lcl_AddCalcPr( aRecList, *this );
+
+    // MSODRAWINGGROUP per-document data
+    aRecList.AppendRecord( GetObjectManager().CreateDrawingGroup() );
+    // Shared string table: SST, EXTSST
+    aRecList.AppendRecord( CreateRecord( EXC_ID_SST ) );
 }
 
 void ExcTable::FillAsTable( SCTAB nCodeNameIdx )
@@ -725,7 +787,10 @@ void ExcDocument::ReadDoc( void )
 {
     InitializeConvert();
 
-    aHeader.FillAsHeader( maBoundsheetList );
+    if (GetOutput() == EXC_OUTPUT_BINARY)
+        aHeader.FillAsHeaderBinary(maBoundsheetList);
+    else
+        aHeader.FillAsHeaderXml(maBoundsheetList);
 
     SCTAB nScTab = 0, nScTabCount = GetTabInfo().GetScTabCount();
     SCTAB nCodeNameIdx = 0, nCodeNameCount = GetExtDocOptions().GetCodeNameCount();
