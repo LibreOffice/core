@@ -260,6 +260,7 @@ class SwFrm: public SwClient, public SfxBroadcaster
     static SwCache *mpCache;
 
     bool mbIfAccTableShouldDisposing;
+    bool mbInDtor;
 
     // #i65250#
     // frame ID is now in general available - used for layout loop control
@@ -845,6 +846,8 @@ public:
     bool IsColLocked()  const { return mbColLocked; }
 
     virtual ~SwFrm();
+
+    bool IsInDtor() const { return mbInDtor; }
 
     // No inline cause we need the function pointers
     long GetTopMargin() const;

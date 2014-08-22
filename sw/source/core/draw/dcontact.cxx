@@ -1597,7 +1597,7 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
     // --> #i36181# - notify background of drawing object
     if ( _bMoveMasterToInvisibleLayer &&
          !(GetFmt()->GetDoc()->IsInDtor()) &&
-         GetAnchorFrm() )
+         GetAnchorFrm() && !GetAnchorFrm()->IsInDtor() )
     {
         const Rectangle aOldRect( maAnchoredDrawObj.GetObjRectWithSpaces().SVRect() );
         lcl_NotifyBackgroundOfObj( *this, *GetMaster(), &aOldRect );

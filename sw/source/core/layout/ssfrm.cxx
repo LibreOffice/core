@@ -338,6 +338,8 @@ Point SwFrm::GetFrmAnchorPos( bool bIgnoreFlysAnchoredAtThisFrame ) const
 
 void SwFrm::Destroy()
 {
+    mbInDtor = true;
+
     // accessible objects for fly and cell frames have been already disposed
     // by the destructors of the derived classes.
     if( IsAccessibleFrm() && !(IsFlyFrm() || IsCellFrm()) && GetDep() )
