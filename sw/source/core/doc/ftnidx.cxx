@@ -283,7 +283,7 @@ const SwSectionNode* SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr(
     sal_uInt16 nVal;
     const SwSectionNode* pNd = rTxtFtn.GetTxtNode().FindSectionNode();
     while( pNd && FTNEND_ATTXTEND_OWNNUMSEQ != ( nVal =
-            ((const SwFmtFtnAtTxtEnd&)pNd->GetSection().GetFmt()->
+            ((const SwFmtFtnEndAtTxtEnd&)pNd->GetSection().GetFmt()->
             GetFmtAttr( nWh, true )).GetValue() ) &&
             FTNEND_ATTXTEND_OWNNUMANDFMT != nVal )
         pNd = pNd->StartOfSectionNode()->FindSectionNode();

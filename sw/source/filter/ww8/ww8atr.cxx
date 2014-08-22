@@ -3340,7 +3340,7 @@ static bool lcl_IsAtTxtEnd(const SwFmtFtn& rFtn)
         const SwSectionNode* pSectNd = rFtn.GetTxtFtn()->GetTxtNode().
                                                         FindSectionNode();
         while( pSectNd && FTNEND_ATPGORDOCEND ==
-                ((const SwFmtFtnAtTxtEnd&)pSectNd->GetSection().GetFmt()->
+                ((const SwFmtFtnEndAtTxtEnd&)pSectNd->GetSection().GetFmt()->
                 GetFmtAttr( nWh, true)).GetValue() )
             pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
 
