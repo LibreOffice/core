@@ -39,7 +39,6 @@
 #include "sdpropls.hxx"
 #include <xmloff/xmlexppr.hxx>
 #include <xmloff/xmlerror.hxx>
-#include <tools/debug.hxx>
 #include <xmloff/settingsstore.hxx>
 #include <com/sun/star/style/XStyle.hpp>
 

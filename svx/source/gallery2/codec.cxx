@@ -20,7 +20,6 @@
 
 #include <tools/stream.hxx>
 #include <tools/zcodec.hxx>
-#include <tools/debug.hxx>
 #include "codec.hxx"
 #include <boost/scoped_array.hpp>
 

@@ -35,7 +35,6 @@
 
 #include <rtl/uri.hxx>
 #include <rtl/instance.hxx>
-#include <tools/debug.hxx>
 
 #include <CustomAnimationPreset.hxx>
 #include <TransitionPreset.hxx>

@@ -25,7 +25,6 @@
 #include "SchXMLAxisContext.hxx"
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
-#include <tools/debug.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <xmloff/xmlnmspe.hxx>

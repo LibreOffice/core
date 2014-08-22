@@ -21,7 +21,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/mutex.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>

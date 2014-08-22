@@ -42,7 +42,6 @@
 
 #include <comphelper/processfactory.hxx>
 
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlimp.hxx>

@@ -18,7 +18,6 @@
  */
 
 #include <xmloff/ProgressBarHelper.hxx>
-#include <tools/debug.hxx>
 #include <xmloff/xmltoken.hxx>
 
 #include <stdlib.h>

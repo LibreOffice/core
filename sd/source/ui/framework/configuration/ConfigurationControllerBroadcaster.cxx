@@ -20,7 +20,6 @@
 #include "ConfigurationControllerBroadcaster.hxx"
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

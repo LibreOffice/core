@@ -20,7 +20,6 @@
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/debug.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include <com/sun/star/text/XTextFrame.hpp>

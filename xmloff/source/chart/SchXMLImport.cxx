@@ -24,7 +24,6 @@
 #include "SchXMLTools.hxx"
 #include "facreg.hxx"
 
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/xmlnmspe.hxx>

@@ -21,7 +21,6 @@
 #define INCLUDED_SVL_VISITEM_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 #include <com/sun/star/frame/status/Visibility.hpp>
 

@@ -26,8 +26,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlictxt.hxx>
-#include <tools/debug.hxx>
-
 
 using namespace ::com::sun::star;
 

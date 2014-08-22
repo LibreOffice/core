@@ -33,8 +33,6 @@
 
 #include <sal/types.h>
 
-#include <tools/debug.hxx>
-
 // CoreFoundation designers, in their wisdom, decided that CFRelease of NULL
 // cause a Crash, yet few API can return NULL when asking for the creation
 // of an object, which force us to peper the code with egly if construct everywhere

@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/embed/ElementModes.hpp>
-#include <tools/debug.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmlversion.hxx>
 #include <xmloff/xmlmetae.hxx>
