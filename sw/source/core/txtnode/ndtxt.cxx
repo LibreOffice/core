@@ -2742,6 +2742,16 @@ SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt(
     return 0;
 }
 
+namespace
+{
+
+inline sal_uInt16 lcl_BoundListLevel(const int nActualLevel)
+{
+    return static_cast<sal_uInt16>( std::min( std::max(nActualLevel, 0), MAXLEVEL-1 ) );
+}
+
+}
+
 // -> #i29560#
 bool SwTxtNode::HasNumber() const
 {
@@ -2750,15 +2760,7 @@ bool SwTxtNode::HasNumber() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
-        int nLevel = GetActualListLevel();
-
-        if (nLevel < 0)
-            nLevel = 0;
-
-        if (nLevel >= MAXLEVEL)
-            nLevel = MAXLEVEL - 1;
-
-        SwNumFmt aFmt(pRule->Get(static_cast<sal_uInt16>(nLevel)));
+        SwNumFmt aFmt(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
 
         // #i40041#
         bResult = aFmt.IsEnumeration() &&
@@ -2775,15 +2777,7 @@ bool SwTxtNode::HasBullet() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
-        int nLevel = GetActualListLevel();
-
-        if (nLevel < 0)
-            nLevel = 0;
-
-        if (nLevel >= MAXLEVEL)
-            nLevel = MAXLEVEL - 1;
-
-        SwNumFmt aFmt(pRule->Get( static_cast<sal_uInt16>(nLevel) ));
+        SwNumFmt aFmt(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
 
         bResult = aFmt.IsItemize();
     }
@@ -2806,16 +2800,8 @@ OUString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
     if ( pRule &&
          IsCountedInList() )
     {
-        int nLevel = GetActualListLevel();
-
-        if (nLevel < 0)
-            nLevel = 0;
-
-        if (nLevel >= MAXLEVEL)
-            nLevel = MAXLEVEL - 1;
-
         SvxNumberType const& rNumberType(
-                pRule->Get( static_cast<sal_uInt16>(nLevel) ) );
+                pRule->Get( lcl_BoundListLevel(GetActualListLevel()) ) );
         if (rNumberType.IsTxtFmt() ||
 
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
@@ -2836,15 +2822,7 @@ long SwTxtNode::GetLeftMarginWithNum( bool bTxtLeft ) const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if( pRule )
     {
-        int nLevel = GetActualListLevel();
-
-        if (nLevel < 0)
-            nLevel = 0;
-
-        if (nLevel >= MAXLEVEL)
-            nLevel = MAXLEVEL - 1;
-
-        const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(nLevel));
+        const SwNumFmt& rFmt = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
 
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
@@ -2892,15 +2870,7 @@ bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
     {
         if ( IsCountedInList() )
         {
-            int nLevel = GetActualListLevel();
-
-            if (nLevel < 0)
-                nLevel = 0;
-
-            if (nLevel >= MAXLEVEL)
-                nLevel = MAXLEVEL - 1;
-
-            const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(nLevel));
+            const SwNumFmt& rFmt = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
                 rFLOffset = rFmt.GetFirstLineOffset();
@@ -2939,15 +2909,7 @@ SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
-        int nLevel = GetActualListLevel();
-
-        if (nLevel < 0)
-            nLevel = 0;
-
-        if (nLevel >= MAXLEVEL)
-            nLevel = MAXLEVEL - 1;
-
-        const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(nLevel));
+        const SwNumFmt& rFmt = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
             nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
@@ -2991,15 +2953,7 @@ void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpac
         const SwNumRule* pRule = GetNumRule();
         if ( pRule && GetActualListLevel() >= 0 )
         {
-            int nLevel = GetActualListLevel();
-
-            if (nLevel < 0)
-                nLevel = 0;
-
-            if (nLevel >= MAXLEVEL)
-                nLevel = MAXLEVEL - 1;
-
-            const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(nLevel));
+            const SwNumFmt& rFmt = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
@@ -3018,15 +2972,7 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0;
     if( pRule )
     {
-        int nLevel = GetActualListLevel();
-
-        if (nLevel < 0)
-            nLevel = 0;
-
-        if (nLevel >= MAXLEVEL)
-            nLevel = MAXLEVEL - 1;
-
-        const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(nLevel));
+        const SwNumFmt& rFmt = pRule->Get(lcl_BoundListLevel(GetActualListLevel()));
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             if ( AreListLevelIndentsApplicable() )
@@ -3920,18 +3866,10 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule && IsCountedInList())
     {
-        int nLevel = GetActualListLevel();
-
-        if (nLevel < 0)
-            nLevel = 0;
-
-        if (nLevel >= MAXLEVEL)
-            nLevel = MAXLEVEL - 1;
-
         // #i87154#
         // Correction of #newlistlevelattrs#:
         // The numbering type has to be checked for bullet lists.
-        const SwNumFmt& rFmt = pRule->Get( static_cast<sal_uInt16>(nLevel ));
+        const SwNumFmt& rFmt = pRule->Get( lcl_BoundListLevel(GetActualListLevel()) );
         return SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() ||
                !pRule->MakeNumString( *(GetNum()) ).isEmpty();
     }
