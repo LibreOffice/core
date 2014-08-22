@@ -103,6 +103,8 @@ uno::Any SAL_CALL UnxFilePickerCommandThread::getValue()
 
 void SAL_CALL UnxFilePickerCommandThread::run()
 {
+    osl_setThreadName("UnxFilePickerCommandThread");
+
     if ( m_nReadFD < 0 )
         return;
 

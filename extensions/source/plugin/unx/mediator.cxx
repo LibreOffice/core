@@ -196,6 +196,8 @@ MediatorListener::~MediatorListener()
 
 void MediatorListener::run()
 {
+    osl_setThreadName("MediatorListener");
+
     bool bRun = true;
     while( schedule() && m_pMediator && bRun )
     {

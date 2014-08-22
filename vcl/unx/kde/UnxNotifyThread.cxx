@@ -72,6 +72,8 @@ void SAL_CALL UnxFilePickerNotifyThread::fileSelectionChanged()
 
 void SAL_CALL UnxFilePickerNotifyThread::run()
 {
+    osl_setThreadName("UnxFilePickerNotifyThread");
+
     do {
         m_aNotifyCondition.reset();
         m_aNotifyCondition.wait();

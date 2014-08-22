@@ -111,6 +111,7 @@ struct GetPPDAttribs
 extern "C" {
     static void getPPDWorker(void* pData)
     {
+        osl_setThreadName("CUPSManager getPPDWorker");
         GetPPDAttribs* pAttribs = (GetPPDAttribs*)pData;
         pAttribs->executeCall();
     }
@@ -172,6 +173,7 @@ extern "C"
 {
 static void run_dest_thread_stub( void* pThis )
 {
+    osl_setThreadName("CUPSManager cupsGetDests");
     CUPSManager::runDestThread( pThis );
 }
 }

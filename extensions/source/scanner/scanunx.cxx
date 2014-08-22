@@ -181,6 +181,8 @@ ScannerThread::~ScannerThread()
 
 void ScannerThread::run()
 {
+    osl_setThreadName("ScannerThread");
+
     osl::MutexGuard         aGuard( m_pHolder->m_aProtector );
     BitmapTransporter*  pTransporter = new BitmapTransporter;
     Reference< XInterface >   aIf( static_cast< OWeakObject* >( pTransporter ) );

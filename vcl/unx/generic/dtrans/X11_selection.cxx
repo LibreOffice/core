@@ -97,6 +97,7 @@ extern "C"
 
     static void call_SelectionManager_runDragExecute( void * pMgr )
     {
+        osl_setThreadName("SelectionManager::runDragExecute()");
         SelectionManager::runDragExecute( pMgr );
     }
 }

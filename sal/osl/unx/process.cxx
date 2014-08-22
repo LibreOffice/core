@@ -190,6 +190,8 @@ extern "C" {
 
 static void ChildStatusProc(void *pData)
 {
+    osl_setThreadName("osl_executeProcess");
+
     pid_t pid = -1;
     int   status = 0;
     int   channel[2] = { -1, -1 };
