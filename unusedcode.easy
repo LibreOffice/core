@@ -1,4 +1,3 @@
-(anonymous namespace)::flagToString(unsigned short)
 BigInt::BigInt(unsigned int)
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
 DocxSdrExport::isParagraphSdtOpen()
