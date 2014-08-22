@@ -122,7 +122,7 @@ void RenderThread::renderFrame()
     mpChart->mpRenderer->ProcessUnrenderedShape(mpChart->mbNeedsNewRender);
     mpChart->mbNeedsNewRender = false;
     mpChart->mpWindow->getContext().swapBuffers();
-
+    mpChart->mpWindow->getContext().resetCurrent();
 }
 
 class RenderOneFrameThread : public RenderThread
