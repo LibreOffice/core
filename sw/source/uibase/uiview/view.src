@@ -26,11 +26,9 @@
 #include "helpid.h"
 #include "cmdid.h"
 
-QueryBox DLG_SPECIAL_FORCED
+String STR_QUERY_SPECIAL_FORCED
 {
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
+    Text [ en-US ] = "Check special regions is deactivated. Check anyway?" ;
 };
 String STR_NO_MERGE_ENTRY
 {

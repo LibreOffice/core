@@ -53,9 +53,7 @@
 #define STR_ERR_NO_FAX              (RC_VIEW_BEGIN + 36)
 #define STR_ERR_SRCSTREAM           (RC_VIEW_BEGIN + 37)
 
-// DLG
-
-#define DLG_SPECIAL_FORCED              (RC_VIEW_BEGIN)
+#define STR_QUERY_SPECIAL_FORCED    (RC_VIEW_BEGIN + 38)
 
 // Overflow checking
 
