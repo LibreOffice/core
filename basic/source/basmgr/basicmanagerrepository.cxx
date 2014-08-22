@@ -68,8 +68,7 @@ namespace basic
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::document::XEmbeddedScripts;
 
-    typedef BasicManager*   BasicManagerPointer;
-    typedef ::std::map< Reference< XInterface >, BasicManagerPointer, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;
+    typedef ::std::map< Reference< XInterface >, BasicManager*, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;
 
     typedef ::std::vector< BasicManagerCreationListener* >  CreationListeners;
 
@@ -123,7 +122,7 @@ namespace basic
             @precond
                 our mutex is locked
         */
-        BasicManagerPointer&
+        BasicManager*&
                 impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel );
 
         /** creates a new BasicManager instance for the given model
@@ -136,12 +135,12 @@ namespace basic
                 the model whose BasicManager will be created. Must not be <NULL/>.
         */
         void impl_createManagerForModel(
-                    BasicManagerPointer& _out_rpBasicManager,
+                    BasicManager*& _out_rpBasicManager,
                     const Reference< XModel >& _rxDocumentModel );
 
         /** creates the application-wide BasicManager
         */
-        BasicManagerPointer impl_createApplicationBasicManager();
+        BasicManager* impl_createApplicationBasicManager();
 
         /** notifies all listeners which expressed interest in the creation of BasicManager instances.
         */
@@ -248,7 +247,7 @@ namespace basic
             thus a recursive call of this function will find and return it
             without creating another instance.
          */
-        BasicManagerPointer& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
+        BasicManager*& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
         if ( pBasicManager == NULL )
             impl_createManagerForModel( pBasicManager, _rxDocumentModel );
 
@@ -379,12 +378,12 @@ namespace basic
     }
 
 
-    BasicManagerPointer& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
+    BasicManager*& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
-        BasicManagerPointer& location = m_aStore[ xNormalized ];
+        BasicManager*& location = m_aStore[ xNormalized ];
         return location;
     }
 
@@ -415,7 +414,7 @@ namespace basic
     }
 
 
-    void ImplRepository::impl_createManagerForModel( BasicManagerPointer& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
+    void ImplRepository::impl_createManagerForModel( BasicManager*& _out_rpBasicManager, const Reference< XModel >& _rxDocumentModel )
     {
         StarBASIC* pAppBasic = impl_getDefaultAppBasicLibrary();
 
