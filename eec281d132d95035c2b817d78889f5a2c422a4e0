@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_feb535d0",
+        "filename": "include/comphelper/sequence.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:44:46Z",
+      "side": 1,
+      "message": "it is IMO rather a good example of poor original code that required casting in the first place, cf. f340f0454627939f1830826fb5cc53a90e6c62a4 \"Pick a more suitable type for nLength\"\n\n(and see e.g. item 95 \"Don\u0027t use C-syte casts\" of Sutter/Alexandrescu \"C++ Coding Standards\" for why a broad consensus appears to be that the wordy C++ style casts are a better choice after all)",
+      "parentUuid": "5ad0253b_3bf29f9b",
+      "revId": "eec281d132d95035c2b817d78889f5a2c422a4e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_1befe3b1",
         "filename": "include/tools/link.hxx",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2014-08-19T08:07:06Z",
       "side": 1,
       "message": "comparing straight pointer or function pointer can be often unspecified\nsee § 5.9 of the C++11 standard\nare you sure that is not the case here ?\n(that being said I can\u0027t imagine what use one can make of that operator anyway... )",
+      "revId": "eec281d132d95035c2b817d78889f5a2c422a4e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_deba79c0",
+        "filename": "include/tools/link.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:44:46Z",
+      "side": 1,
+      "message": "indeed, these require reinterpret_cast\u003csal_uIntPtr\u003e(...)",
+      "parentUuid": "5ad0253b_1befe3b1",
       "revId": "eec281d132d95035c2b817d78889f5a2c422a4e0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
