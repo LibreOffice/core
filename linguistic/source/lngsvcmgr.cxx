@@ -1152,7 +1152,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                     }
                 }
 
-                if (xSvc.is())
+                if (xSvc.is() && pAvailGrammarSvcs)
                 {
                     OUString            aImplName;
                     uno::Sequence< sal_Int16 >   aLanguages;
