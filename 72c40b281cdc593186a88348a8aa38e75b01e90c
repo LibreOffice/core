@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_1e9c7168",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:07:22Z",
+      "side": 1,
+      "message": "[API CHANGE] is a marker for incompatible changes; adding a new class is not an incompatible change",
+      "revId": "72c40b281cdc593186a88348a8aa38e75b01e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_fe877510",
+        "filename": "bean/com/sun/star/beans/LocalOfficeConnection.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:07:22Z",
+      "side": 1,
+      "message": "Throwable.initCause is not documented to change a null message to (cause\u003d\u003dnull ? null : cause.toString()), as would the Throwable(Throwable cause) ctor do",
+      "revId": "72c40b281cdc593186a88348a8aa38e75b01e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_be81fdfd",
+        "filename": "bridges/test/java_uno/nativethreadpool/Relay.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:07:22Z",
+      "side": 1,
+      "message": "WrappedTargetRuntimeException does not magically initialize cause with the given TargetException",
+      "revId": "72c40b281cdc593186a88348a8aa38e75b01e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_9e864112",
+        "filename": "bridges/test/java_uno/nativethreadpool/Relay.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:07:22Z",
+      "side": 1,
+      "message": "I wonder if it is nevertheless useful to use e.toString() instead of e.getMessage() here, even when setting the cause to e",
+      "revId": "72c40b281cdc593186a88348a8aa38e75b01e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_7e7c8520",
+        "filename": "framework/qa/complex/framework/recovery/RecoveryTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:07:22Z",
+      "side": 1,
+      "message": "is this additional vertical whitespace accidental?",
+      "revId": "72c40b281cdc593186a88348a8aa38e75b01e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_5e79c92e",
+        "filename": "framework/qa/complex/framework/recovery/RecoveryTools.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:07:22Z",
+      "side": 1,
+      "message": "this sets the Context to e, not the cause",
+      "revId": "72c40b281cdc593186a88348a8aa38e75b01e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_de8cb937",
+        "filename": "jurt/com/sun/star/lib/util/ExceptionHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:07:22Z",
+      "side": 1,
+      "message": "does it?",
+      "revId": "72c40b281cdc593186a88348a8aa38e75b01e90c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
