@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_be98dd6b",
+        "filename": "filter/source/graphicfilter/ieps/ieps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:30:22Z",
+      "side": 1,
+      "message": "as a nit-pick, generally better to declare variables only where they are needed, not upfront at the head of a block",
+      "revId": "7294538b9b5c5faf9c579808cc7044cfdad89641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_de93994e",
+        "filename": "filter/source/graphicfilter/ieps/ieps.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-08-22T09:30:22Z",
+      "side": 1,
+      "message": "you must call osl_joinWithThread first; as a general policy, all spawned threads must be joined explicitly, to avoid still running threads wreaking havoc during exit\n\n(that would also allow to pass back the number of bytes written and re-introduce the check it matches nBytesRead)",
+      "revId": "7294538b9b5c5faf9c579808cc7044cfdad89641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
