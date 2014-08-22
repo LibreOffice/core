@@ -136,9 +136,9 @@ bool SwTxtAttrIterator::Next()
 
                     if( RES_TXTATR_CHARFMT == pHt->Which() )
                     {
-                        sal_uInt16 nWId = bIsUseGetWhichOfScript ?
-                                GetWhichOfScript( nWhichId,
-                                                  aSIter.GetCurrScript() ) : nWhichId;
+                        const sal_uInt16 nWId = bIsUseGetWhichOfScript
+                            ? GetWhichOfScript( nWhichId, aSIter.GetCurrScript() )
+                            : nWhichId;
                         pCurItem = &pHt->GetCharFmt().GetCharFmt()->GetFmtAttr(nWId);
                     }
                     else

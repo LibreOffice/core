@@ -54,7 +54,7 @@ SwTxtCharFmt::~SwTxtCharFmt( )
 
 void SwTxtCharFmt::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtCharFmt::Modify(): unknown Modify");
@@ -166,7 +166,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 
 void SwTxtINetFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtINetFmt::Modify(): unknown Modify");
@@ -215,7 +215,7 @@ SwTxtRuby::~SwTxtRuby()
 
 void SwTxtRuby::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtRuby::Modify(): unknown Modify");

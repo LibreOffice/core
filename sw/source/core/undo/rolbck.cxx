@@ -107,8 +107,7 @@ OUString SwHistorySetFmt::GetDescription() const
 {
     OUString aResult;
 
-    sal_uInt16 nWhich = m_pAttr->Which();
-    switch (nWhich)
+    switch (m_pAttr->Which())
     {
     case RES_BREAK:
         switch ((static_cast<SvxFmtBreakItem &>(*m_pAttr)).GetBreak())
@@ -207,8 +206,7 @@ SwHistorySetTxt::SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNodePos )
 
     // a little bit complicated but works: first assign a copy of the
     // default value and afterwards the values from text attribute
-    sal_uInt16 nWhich = pTxtHt->Which();
-    if ( RES_TXTATR_CHARFMT == nWhich )
+    if ( RES_TXTATR_CHARFMT == pTxtHt->Which() )
     {
         m_pAttr.reset( new SwFmtCharFmt( pTxtHt->GetCharFmt().GetCharFmt() ) );
     }
@@ -361,7 +359,7 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
         return;
 
     // search for respective TOX type
-    sal_uInt16 nCnt = pDoc->GetTOXTypeCount( m_eTOXTypes );
+    const sal_uInt16 nCnt = pDoc->GetTOXTypeCount( m_eTOXTypes );
     SwTOXType* pToxType = 0;
     for ( sal_uInt16 n = 0; n < nCnt; ++n )
     {
@@ -878,7 +876,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
-    sal_uInt16 nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
+    const sal_uInt16 nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
     if ( USHRT_MAX != nPos )    // Format does still exist
     {
         SwFmtAnchor aTmp( m_rFmt.GetAnchor() );
@@ -1021,12 +1019,10 @@ void SwHistory::Add( SwTxtAttr* pHint, sal_uLong nNodeIdx, bool bNewAttr )
 {
     OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
-    SwHistoryHint * pHt;
-    sal_uInt16 nAttrWhich = pHint->Which();
-
+    SwHistoryHint * pHt = 0;
     if( !bNewAttr )
     {
-        switch ( nAttrWhich )
+        switch ( pHint->Which() )
         {
             case RES_TXTATR_FTN:
                 pHt = new SwHistorySetFootnote(
@@ -1192,7 +1188,7 @@ sal_uInt16 SwHistory::SetTmpEnd( sal_uInt16 nNewTmpEnd )
 {
     OSL_ENSURE( nNewTmpEnd <= Count(), "SwHistory::SetTmpEnd: out of bounds" );
 
-    sal_uInt16 nOld = Count() - m_nEndDiff;
+    const sal_uInt16 nOld = Count() - m_nEndDiff;
     m_nEndDiff = Count() - nNewTmpEnd;
 
     // for every SwHistoryFlyCnt, call the Redo of its UndoObject.

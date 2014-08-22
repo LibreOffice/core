@@ -56,7 +56,7 @@ void SwTxtTOXMark::CopyTOXMark( SwDoc* pDoc )
 {
     SwTOXMark& rTOX = (SwTOXMark&)GetTOXMark();
     TOXTypes    eType   = rTOX.GetTOXType()->GetType();
-    sal_uInt16      nCount  = pDoc->GetTOXTypeCount( eType );
+    const sal_uInt16 nCount = pDoc->GetTOXTypeCount( eType );
     const SwTOXType* pType = 0;
     const OUString rNm = rTOX.GetTOXType()->GetTypeName();
 
