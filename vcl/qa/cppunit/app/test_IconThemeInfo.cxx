@@ -33,9 +33,6 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     ImagesOxygenZipIsValid();
 
     void
-    DefaultZipIsValid();
-
-    void
     ThemeIdIsDetectedFromFileNameWithUnderscore();
 
     void
@@ -43,9 +40,6 @@ class IconThemeInfoTest : public CppUnit::TestFixture
 
     void
     ExceptionIsThrownWhenIdCannotBeDetermined2();
-
-    void
-    GalaxyIsReturnedAsDisplayNameForDefaultZip();
 
     // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(IconThemeInfoTest);
