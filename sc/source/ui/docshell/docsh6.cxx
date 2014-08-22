@@ -459,9 +459,15 @@ void ScDocShell::SetFormulaOptions( const ScFormulaOptions& rOpt, bool bForLoadi
     /* TODO: bForLoading is a workaround, rather get rid of setting any
      * globals from per document instances like ScDocShell. */
 
-    if (!bForLoading)
+    /* XXX  this is utter crap, we rely on the options being set here at least
+     * once, for the very first document, empty or loaded. */
+    static bool bInitOnce = true;
+
+    if (!bForLoading || bInitOnce)
     {
-        if (rOpt.GetUseEnglishFuncName() != SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName())
+        bool bForceInit = bInitOnce;
+        bInitOnce = false;
+        if (bForceInit || rOpt.GetUseEnglishFuncName() != SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName())
         {
             // This needs to be called first since it may re-initialize the entire
             // opcode map.
