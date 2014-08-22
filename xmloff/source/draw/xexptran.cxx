@@ -18,7 +18,6 @@
  */
 
 #include "xexptran.hxx"
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmluconv.hxx>

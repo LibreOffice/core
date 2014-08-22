@@ -34,7 +34,6 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
-#include <tools/debug.hxx>
 #include <comphelper/InlineContainer.hxx>
 
 #include <rtl/ustrbuf.hxx>

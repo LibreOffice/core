@@ -19,13 +19,8 @@
 
 #include "formdispatchinterceptor.hxx"
 
-#include <tools/debug.hxx>
-
-
 namespace svxform
 {
-
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;

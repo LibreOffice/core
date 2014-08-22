@@ -29,8 +29,6 @@
 #include <svl/languageoptions.hxx>
 #include <unotools/options.hxx>
 
-#include <tools/debug.hxx>
-
 ItemHolder2::ItemHolder2()
     : ItemHolderMutexBase()
 {

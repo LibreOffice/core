@@ -19,7 +19,6 @@
 
 #include "dlgedmod.hxx"
 #include "dlgedpage.hxx"
-#include <tools/debug.hxx>
 
 namespace basctl
 {

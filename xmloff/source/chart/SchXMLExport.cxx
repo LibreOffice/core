@@ -31,7 +31,6 @@
 #include "SchXMLEnumConverter.hxx"
 #include "facreg.hxx"
 
-#include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>

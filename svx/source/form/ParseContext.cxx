@@ -27,7 +27,6 @@
 
 #include <unotools/syslocale.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
 using namespace svxform;
@@ -204,10 +203,5 @@ const OSystemParseContext* OParseContextClient::getParseContext() const
 {
     return getSharedContext();
 }
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

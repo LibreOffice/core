@@ -23,7 +23,6 @@
 #include <errno.h>
 #include <comphelper/string.hxx>
 #include <tools/date.hxx>
-#include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/calendarwrapper.hxx>

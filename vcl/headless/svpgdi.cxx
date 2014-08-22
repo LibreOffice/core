@@ -29,8 +29,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basebmp/scanlineformats.hxx>
 
-#include <tools/debug.hxx>
-
 #if OSL_DEBUG_LEVEL > 2
 #include <basebmp/debug.hxx>
 #include <fstream>

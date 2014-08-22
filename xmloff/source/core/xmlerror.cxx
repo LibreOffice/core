@@ -18,7 +18,6 @@
  */
 
 #include <xmloff/xmlerror.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/xml/sax/XLocator.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -26,10 +25,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-
 #include <rtl/ustrbuf.hxx>
-
-
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;

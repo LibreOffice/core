@@ -26,7 +26,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.h>
-#include <tools/debug.hxx>
 
 #include <typeinfo>
 

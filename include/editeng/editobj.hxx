@@ -21,7 +21,6 @@
 #define INCLUDED_EDITENG_EDITOBJ_HXX
 
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
 #include <rsc/rscsfx.hxx>
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>

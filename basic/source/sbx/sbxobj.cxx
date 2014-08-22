@@ -21,6 +21,7 @@
 
 #include <iomanip>
 
+#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
 #include <svl/SfxBroadcaster.hxx>

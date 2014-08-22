@@ -21,10 +21,8 @@
 #include <com/sun/star/uno/Reference.h>
 
 #include <rtl/ustring.hxx>
-#include <tools/debug.hxx>
 #include "XMLPropertyBackpatcher.hxx"
 #include <xmloff/txtimp.hxx>
-
 
 using ::std::vector;
 using ::std::map;

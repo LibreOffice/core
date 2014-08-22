@@ -25,7 +25,6 @@
 #include <svl/svldllapi.h>
 #include <svl/poolitem.hxx>
 #include <tools/rtti.hxx>
-#include <tools/debug.hxx>
 #include <map>
 
 class SvStream;

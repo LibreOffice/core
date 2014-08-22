@@ -21,8 +21,6 @@
 #include "toolkit/helper/property.hxx"
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 
-
-#include <tools/debug.hxx>
 #include <vcl/spin.hxx>
 #include <vcl/svapp.hxx>
 #include "vclxwindows_internal.hxx"

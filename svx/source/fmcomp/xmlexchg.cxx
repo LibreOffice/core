@@ -20,8 +20,6 @@
 #include "svx/xmlexchg.hxx"
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
-#include <tools/debug.hxx>
-
 
 namespace svx
 {
@@ -60,7 +58,5 @@ namespace svx
     }
 
 }   // namespace svx
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,7 +22,6 @@
 
 #include <tools/rtti.hxx>
 #include <tools/ref.hxx>
-#include <tools/debug.hxx>
 
 #include <basic/sbxdef.hxx>
 #include <basic/basicdllapi.h>

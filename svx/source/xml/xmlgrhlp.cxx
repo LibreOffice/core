@@ -36,7 +36,6 @@
 #include <unotools/streamwrap.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>
-#include <tools/debug.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>

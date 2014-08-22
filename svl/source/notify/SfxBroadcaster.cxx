@@ -19,8 +19,6 @@
 
 #include <assert.h>
 
-#include <tools/debug.hxx>
-
 #include <svl/hint.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/lstner.hxx>
@@ -29,7 +27,6 @@
 #include <algorithm>
 
 TYPEINIT0(SfxBroadcaster);
-
 
 // broadcast immediately
 

@@ -21,7 +21,6 @@
 #define INCLUDED_SVL_CENUMITM_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/debug.hxx>
 #include <svl/poolitem.hxx>
 
 class SVL_DLLPUBLIC SfxEnumItemInterface: public SfxPoolItem

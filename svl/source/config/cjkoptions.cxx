@@ -17,13 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svl/cjkoptions.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <i18nlangtag/lang.h>
 #include <unotools/configitem.hxx>
 #include <tools/debug.hxx>
+#include <tools/solar.h>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <osl/mutex.hxx>

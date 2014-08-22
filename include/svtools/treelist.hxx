@@ -26,7 +26,6 @@
 
 #include <tools/solar.h>
 #include <tools/link.hxx>
-#include <tools/debug.hxx>
 #include <tools/contnr.hxx>
 
 #include <limits.h>

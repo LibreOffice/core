@@ -25,7 +25,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <osl/mutex.hxx>
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>

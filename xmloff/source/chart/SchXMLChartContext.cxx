@@ -26,7 +26,6 @@
 #include "SchXMLSeries2Context.hxx"
 #include "SchXMLTools.hxx"
 #include <unotools/mediadescriptor.hxx>
-#include <tools/debug.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/xmltoken.hxx>

@@ -19,6 +19,7 @@
 
 
 #include <math.h>
+#include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
 #include <basic/sbx.hxx>
