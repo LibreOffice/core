@@ -33,6 +33,8 @@
 #include "redline.hxx"
 #include "section.hxx"
 #include "fmtclds.hxx"
+#include "fmtpdsc.hxx"
+#include "pagedesc.hxx"
 #include <swmodule.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/intitem.hxx>
@@ -258,7 +260,7 @@ void SwFldTypes::dumpAsXml( xmlTextWriterPtr w ) const
             writer.startElement("swfmtfld");
             writer.writeFormatAttribute("ptr", "%p", pCurFldFmt);
             writer.writeFormatAttribute("pTxtAttr", "%p", pCurFldFmt->GetTxtFld());
-            const char* name = "???";
+            const char* name = "FIXME_unhandledfield";
             switch(pCurFldFmt->GetField()->GetTyp()->Which())
             {
                 case RES_PAGENUMBERFLD: name = "swpagenumberfield"; break;
@@ -321,6 +323,7 @@ void SwNode::dumpAsXml( xmlTextWriterPtr w )
     }
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
+    writer.writeFormatAttribute( "type", "0x%04x", GetNodeType() );
     writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
     writer.endElement();
     if( GetNodeType() == ND_ENDNODE )
@@ -365,7 +368,16 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
     }
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
+    writer.writeFormatAttribute( "type", "0x%04x", GetNodeType() );
     writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
+
+    if (IsTableNode())
+    {
+        writer.startElement("attrset");
+        const SwAttrSet& rAttrSet = GetTableNode()->GetTable().GetFrmFmt()->GetAttrSet();
+        lcl_dumpSfxItemSet(writer, &rAttrSet);
+        writer.endElement();
+    }
 
     // writer.endElement(); - it is a start node, so don't end, will make xml better nested
 }
@@ -574,6 +586,12 @@ void lcl_dumpSfxItemSet(WriterHelper& writer, const SfxItemSet* pSet)
                 break;
             case RES_SHADOW:
                 pWhich = "shadow";
+                break;
+            case RES_PAGEDESC:
+                pWhich = "page description";
+                const SwFmtPageDesc* pFmt = static_cast<const SwFmtPageDesc*>(pItem);
+                if (pFmt->GetPageDesc())
+                    oValue = "name: " + OUStringToOString(pFmt->GetPageDesc()->GetName(), RTL_TEXTENCODING_UTF8);
                 break;
         }
         if (pWhich)
