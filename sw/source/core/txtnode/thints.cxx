@@ -2117,8 +2117,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
             // #i75299#
             boost::scoped_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
 
-            const sal_uInt16 coArrSz = static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
-                                   static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
+            const size_t coArrSz = RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN;
 
             for (size_t n = 0; n < nSize; ++n)
             {
@@ -2233,7 +2232,7 @@ bool SwTxtNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 
             if ( pAttrArr.get() )
             {
-                for (sal_uInt16 n = 0; n < coArrSz; ++n)
+                for (size_t n = 0; n < coArrSz; ++n)
                 {
                     const SwPoolItemEndPair& rItemPair = (*pAttrArr)[ n ];
                     if( (0 != rItemPair.mpItem) && ((SfxPoolItem*)-1 != rItemPair.mpItem) )
@@ -2922,8 +2921,7 @@ static void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharF
 
             if ( nOtherStart == nHtStart && nOtherEnd == nHtEnd )
             {
-                const sal_uInt16 nOtherSortNum = static_cast<const SwTxtCharFmt*>(pOtherHt)->GetSortNumber();
-                nSortNumber = nOtherSortNum + 1;
+                nSortNumber = static_cast<const SwTxtCharFmt*>(pOtherHt)->GetSortNumber() + 1;
             }
         }
     }
@@ -2957,7 +2955,7 @@ bool SwpHints::TryInsertHint(
     // Wir koennen also auf die while-Schleife verzichten
 
     sal_Int32 *pHtEnd = pHint->GetEnd();
-    sal_uInt16 nWhich = pHint->Which();
+    const sal_uInt16 nWhich = pHint->Which();
     std::vector<sal_uInt16> aWhichSublist;
 
     switch( nWhich )
@@ -2994,9 +2992,9 @@ bool SwpHints::TryInsertHint(
         const sal_uInt16 *pRanges = pSet->GetRanges();
         while( (*pRanges) != 0 )
         {
-            sal_uInt16 nBeg = (*pRanges);
+            const sal_uInt16 nBeg = (*pRanges);
             ++pRanges;
-            sal_uInt16 nEnd = (*pRanges);
+            const sal_uInt16 nEnd = (*pRanges);
             ++pRanges;
             for( sal_uInt16 nSubElem = nBeg; nSubElem <= nEnd; ++nSubElem )
                 if( pSet->HasItem( nSubElem ) )
@@ -3399,7 +3397,7 @@ sal_uInt16 SwTxtNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                                 ( nAttrStart == *pEndIdx || !nBegin ))) )
                 {
                     const SfxPoolItem* pItem = CharFmt::GetItem( *pHt, nWhichId );
-                    sal_uInt16 nLng = ((SvxLanguageItem*)pItem)->GetLanguage();
+                    const sal_uInt16 nLng = ((SvxLanguageItem*)pItem)->GetLanguage();
 
                     // Umfasst das Attribut den Bereich komplett?
                     if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
