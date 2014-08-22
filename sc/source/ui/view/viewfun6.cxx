@@ -379,6 +379,9 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
             default:
                 assert(!"unhandled current date/time request");
                 nReqFmt = NUMBERFORMAT_DATETIME;
+                // fallthru
+            case NUMBERFORMAT_DATETIME:
+                break;
         }
         double fVal = 0.0;
         switch (nReqFmt)
