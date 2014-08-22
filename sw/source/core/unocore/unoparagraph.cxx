@@ -134,7 +134,7 @@ public:
     {
     }
 
-          SwTxtNode * GetTxtNode()       {
+    SwTxtNode* GetTxtNode() {
         return static_cast<SwTxtNode*>(GetRegisteredInNonConst());
     }
 
