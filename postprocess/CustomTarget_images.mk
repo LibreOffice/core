@@ -18,8 +18,7 @@ helpimages_DIR := $(call gb_CustomTarget_get_workdir,helpcontent2/source/auxilia
 packimages_CUSTOM_FALLBACKS := -c $(SRCDIR)/icon-themes/tango -c $(SRCDIR)/icon-themes/industrial
 
 $(eval $(call gb_CustomTarget_register_targets,postprocess/images,\
-	$(if $(filter default,$(WITH_THEMES)),images.zip) \
-	$(foreach theme,$(filter-out default,$(WITH_THEMES)),images_$(theme).zip) \
+	$(foreach theme,$(WITH_THEMES),images_$(theme).zip) \
 	commandimagelist.ilst \
 	sorted.lst \
 ))
