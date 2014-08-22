@@ -499,7 +499,7 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         if (bRecord)
         {
             // do not touch notes (ScUndoImportData does not support drawing undo)
-            sal_uInt16 nCopyFlags = IDF_ALL & ~IDF_NOTE;
+            InsertDeleteFlags nCopyFlags = IDF_ALL & ~IDF_NOTE;
 
             //  nFormulaCols is set only if column count is unchanged
             rDoc.CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,

@@ -2797,10 +2797,9 @@ uno::Any ScVbaRange::getCellRange( const uno::Reference< excel::XRange >& rxRang
     throw uno::RuntimeException();
 }
 
-static sal_uInt16
-getPasteFlags (sal_Int32 Paste)
+static InsertDeleteFlags getPasteFlags (sal_Int32 Paste)
 {
-    sal_uInt16 nFlags = IDF_NONE;
+    InsertDeleteFlags nFlags = IDF_NONE;
     switch (Paste) {
         case excel::XlPasteType::xlPasteComments:
         nFlags = IDF_NOTE;break;
@@ -2821,7 +2820,7 @@ getPasteFlags (sal_Int32 Paste)
     default:
         nFlags = IDF_ALL;break;
     }
-return nFlags;
+    return nFlags;
 }
 
 static sal_uInt16
@@ -2875,7 +2874,7 @@ ScVbaRange::PasteSpecial( const uno::Any& Paste, const uno::Any& Operation, cons
     if ( Transpose.hasValue() )
         Transpose >>= bTranspose;
 
-    sal_uInt16 nFlags = getPasteFlags(nPaste);
+    InsertDeleteFlags nFlags = getPasteFlags(nPaste);
     sal_uInt16 nFormulaBits = getPasteFormulaBits(nOperation);
     excel::implnPasteSpecial(pShell->GetModel(), nFlags,nFormulaBits,bSkipBlanks,bTranspose);
 }

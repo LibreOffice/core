@@ -77,7 +77,7 @@ ScUndoDeleteContents::ScUndoDeleteContents(
                 ScDocShell* pNewDocShell,
                 const ScMarkData& rMark, const ScRange& rRange,
                 ScDocument* pNewUndoDoc, bool bNewMulti,
-                sal_uInt16 nNewFlags, bool bObjects )
+                InsertDeleteFlags nNewFlags, bool bObjects )
     :   ScSimpleUndo( pNewDocShell ),
         aRange      ( rRange ),
         aMarkData   ( rMark ),
@@ -131,7 +131,7 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
 
     if (bUndo)  // only Undo
     {
-        sal_uInt16 nUndoFlags = IDF_NONE; // copy either all or none of the content
+        InsertDeleteFlags nUndoFlags = IDF_NONE; // copy either all or none of the content
         if (nFlags & IDF_CONTENTS)        // (Only the correct ones have been copied into UndoDoc)
             nUndoFlags |= IDF_CONTENTS;
         if (nFlags & IDF_ATTRIB)
@@ -163,7 +163,7 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
         aMarkData.MarkToMulti();
         RedoSdrUndoAction( pDrawUndo );
         // do not delete objects and note captions, they have been removed via drawing undo
-        sal_uInt16 nRedoFlags = (nFlags & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+        InsertDeleteFlags nRedoFlags = (nFlags & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
         rDoc.DeleteSelection( nRedoFlags, aMarkData );
         aMarkData.MarkToSimple();
 
@@ -229,7 +229,7 @@ ScUndoFillTable::ScUndoFillTable( ScDocShell* pNewDocShell,
                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                 ScDocument* pNewUndoDoc, bool bNewMulti, SCTAB nSrc,
-                sal_uInt16 nFlg, sal_uInt16 nFunc, bool bSkip, bool bLink )
+                InsertDeleteFlags nFlg, sal_uInt16 nFunc, bool bSkip, bool bLink )
     :   ScSimpleUndo( pNewDocShell ),
         aRange      ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
         aMarkData   ( rMark ),
@@ -995,7 +995,7 @@ void ScUndoReplace::Undo()
         // Undo document has no row/column information, thus copy with
         // bColRowFlags = FALSE to not destroy Outline groups
 
-        sal_uInt16 nUndoFlags = (pSearchItem->GetPattern()) ? IDF_ATTRIB : IDF_CONTENTS;
+        InsertDeleteFlags nUndoFlags = (pSearchItem->GetPattern()) ? IDF_ATTRIB : IDF_CONTENTS;
         pUndoDoc->CopyToDocument( 0,      0,      0,
                                   MAXCOL, MAXROW, MAXTAB,
                                   nUndoFlags, false, &rDoc, NULL, false );   // without row flags
@@ -1282,7 +1282,7 @@ bool ScUndoConversion::CanRepeat(SfxRepeatTarget& rTarget) const
 
 ScUndoRefConversion::ScUndoRefConversion( ScDocShell* pNewDocShell,
                                          const ScRange& aMarkRange, const ScMarkData& rMark,
-                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti, sal_uInt16 nNewFlag) :
+                                         ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc, bool bNewMulti, InsertDeleteFlags nNewFlag) :
 ScSimpleUndo( pNewDocShell ),
 aMarkData   ( rMark ),
 pUndoDoc    ( pNewUndoDoc ),

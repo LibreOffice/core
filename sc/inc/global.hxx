@@ -154,29 +154,69 @@ const ScBreakType BREAK_NONE   = 0;
 const ScBreakType BREAK_PAGE   = 1;
 const ScBreakType BREAK_MANUAL = 2;
 
-// insert/delete flags
-const sal_uInt16 IDF_NONE       = 0x0000;
-const sal_uInt16 IDF_VALUE      = 0x0001;   /// Numeric values (and numeric results if IDF_FORMULA is not set).
-const sal_uInt16 IDF_DATETIME   = 0x0002;   /// Dates, times, datetime values.
-const sal_uInt16 IDF_STRING     = 0x0004;   /// Strings (and string results if IDF_FORMULA is not set).
-const sal_uInt16 IDF_NOTE       = 0x0008;   /// Cell notes.
-const sal_uInt16 IDF_FORMULA    = 0x0010;   /// Formula cells.
-const sal_uInt16 IDF_HARDATTR   = 0x0020;   /// Hard cell attributes.
-const sal_uInt16 IDF_STYLES     = 0x0040;   /// Cell styles.
-const sal_uInt16 IDF_OBJECTS    = 0x0080;   /// Drawing objects.
-const sal_uInt16 IDF_EDITATTR   = 0x0100;   /// Rich-text attributes.
-const sal_uInt16 IDF_OUTLINE    = 0x0800;   /// Sheet / outlining (grouping) information
-const sal_uInt16 IDF_NOCAPTIONS = 0x0200;   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
-const sal_uInt16 IDF_ADDNOTES   = 0x0400;   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
-const sal_uInt16 IDF_SPECIAL_BOOLEAN = 0x1000;
-const sal_uInt16 IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
-const sal_uInt16 IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA | IDF_OUTLINE;
-const sal_uInt16 IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
+// insert/delete flags - typesafe bitfield
+struct InsertDeleteFlags SAL_FINAL {
+private:
+    sal_uInt16 v;
+    // hidden so that it doesn't accidentally get called in constructor initialiser lists
+    explicit InsertDeleteFlags(sal_uInt16 _v) : v(_v) {}
+public:
+    static InsertDeleteFlags fromInt(sal_uInt16 v) { return InsertDeleteFlags(v); }
+    operator bool() const { return v != 0; }
+    sal_uInt16 val() const { return v; }
+    bool operator ==(const InsertDeleteFlags& other) const { return v == other.v; }
+    bool operator !=(const InsertDeleteFlags& other) const { return v != other.v; }
+private:
+    // disallow implicit conversion to int
+    operator int() const { return v; }
+};
+// make combining these type-safe
+inline InsertDeleteFlags operator| (const InsertDeleteFlags& lhs, const InsertDeleteFlags& rhs)
+{
+    return InsertDeleteFlags::fromInt(lhs.val() | rhs.val());
+}
+inline InsertDeleteFlags operator& (const InsertDeleteFlags& lhs, const InsertDeleteFlags& rhs)
+{
+    return InsertDeleteFlags::fromInt(lhs.val() & rhs.val());
+}
+inline InsertDeleteFlags operator~ (const InsertDeleteFlags& rhs)
+{
+    return InsertDeleteFlags::fromInt(0x1fff & ~rhs.val());
+}
+inline InsertDeleteFlags& operator|= (InsertDeleteFlags& lhs, const InsertDeleteFlags& rhs)
+{
+    lhs = InsertDeleteFlags::fromInt(lhs.val() | rhs.val());
+    return lhs;
+}
+inline InsertDeleteFlags& operator&= (InsertDeleteFlags& lhs, const InsertDeleteFlags& rhs)
+{
+    lhs = InsertDeleteFlags::fromInt(lhs.val() & rhs.val());
+    return lhs;
+}
 
-BOOST_STATIC_ASSERT((IDF_ATTRIB & IDF_CONTENTS) == 0);
+const InsertDeleteFlags IDF_NONE      = InsertDeleteFlags::fromInt(0x0000);
+const InsertDeleteFlags IDF_VALUE     = InsertDeleteFlags::fromInt(0x0001);   /// Numeric values (and numeric results if IDF_FORMULA is not set).
+const InsertDeleteFlags IDF_DATETIME  = InsertDeleteFlags::fromInt(0x0002);   /// Dates, times, datetime values.
+const InsertDeleteFlags IDF_STRING    = InsertDeleteFlags::fromInt(0x0004);   /// Strings (and string results if IDF_FORMULA is not set).
+const InsertDeleteFlags IDF_NOTE      = InsertDeleteFlags::fromInt(0x0008);   /// Cell notes.
+const InsertDeleteFlags IDF_FORMULA   = InsertDeleteFlags::fromInt(0x0010);   /// Formula cells.
+const InsertDeleteFlags IDF_HARDATTR  = InsertDeleteFlags::fromInt(0x0020);   /// Hard cell attributes.
+const InsertDeleteFlags IDF_STYLES    = InsertDeleteFlags::fromInt(0x0040);   /// Cell styles.
+const InsertDeleteFlags IDF_OBJECTS   = InsertDeleteFlags::fromInt(0x0080);   /// Drawing objects.
+const InsertDeleteFlags IDF_EDITATTR  = InsertDeleteFlags::fromInt(0x0100);   /// Rich-text attributes.
+const InsertDeleteFlags IDF_OUTLINE   = InsertDeleteFlags::fromInt(0x0800);   /// Sheet / outlining (grouping) information
+const InsertDeleteFlags IDF_NOCAPTIONS  = InsertDeleteFlags::fromInt(0x0200);   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
+const InsertDeleteFlags IDF_ADDNOTES    = InsertDeleteFlags::fromInt(0x0400);   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
+const InsertDeleteFlags IDF_SPECIAL_BOOLEAN  = InsertDeleteFlags::fromInt(0x1000);
+const InsertDeleteFlags IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
+const InsertDeleteFlags IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA | IDF_OUTLINE;
+const InsertDeleteFlags IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
+
+
+//BOOST_STATIC_ASSERT((IDF_ATTRIB & IDF_CONTENTS) == IDF_NONE);
 
 /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
-const sal_uInt16 IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
+const InsertDeleteFlags IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 #define PASTE_NOFUNC        0
 #define PASTE_ADD           1

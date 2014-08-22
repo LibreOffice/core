@@ -1274,7 +1274,7 @@ void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
     }
 }
 
-void ScViewFunc::FillTab( sal_uInt16 nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bAsLink )
+void ScViewFunc::FillTab( InsertDeleteFlags nFlags, sal_uInt16 nFunction, bool bSkipEmpty, bool bAsLink )
 {
     //! allow source sheet to be protected
     ScEditableTester aTester( this );

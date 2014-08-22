@@ -1203,10 +1203,10 @@ public:
     void            DeleteObjectsInSelection( const ScMarkData& rMark );
 
     void            DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                            const ScMarkData& rMark, sal_uInt16 nDelFlag);
-    SC_DLLPUBLIC void            DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                SCTAB nTab, sal_uInt16 nDelFlag);
-    void            DeleteAreaTab(const ScRange& rRange, sal_uInt16 nDelFlag);
+                            const ScMarkData& rMark, InsertDeleteFlags nDelFlag);
+    SC_DLLPUBLIC void DeleteAreaTab(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+                                SCTAB nTab, InsertDeleteFlags nDelFlag);
+    void            DeleteAreaTab(const ScRange& rRange, InsertDeleteFlags nDelFlag);
 
     void            CopyToClip(const ScClipParam& rClipParam, ScDocument* pClipDoc,
                                const ScMarkData* pMarks = NULL, bool bAllTabs = false, bool bKeepScenarioFlags = false,
@@ -1250,14 +1250,14 @@ public:
 
     void            StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
-                                        const ScMarkData& rMark, sal_uInt16 nInsFlag );
+                                        const ScMarkData& rMark, InsertDeleteFlags nInsFlag );
     void            BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark, sal_uInt16 nInsFlag );
+                                    const ScMarkData& rMark, InsertDeleteFlags nInsFlag );
     /** If pDestRanges is given it overrides rDestRange, rDestRange in this
         case is the overall encompassing range. */
     void            CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
-                                    sal_uInt16 nInsFlag,
+                                    InsertDeleteFlags nInsFlag,
                                     ScDocument* pRefUndoDoc = NULL,
                                     ScDocument* pClipDoc = NULL,
                                     bool bResetCut = true,
@@ -1267,7 +1267,7 @@ public:
                                     const ScRangeList * pDestRanges = NULL );
 
     void            CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkData& rMark,
-                                           sal_uInt16 nInsFlag, ScDocument* pClipDoc,
+                                           InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,
                                            bool bResetCut = true, bool bAsLink = false,
                                            bool bIncludeFiltered = true,
                                            bool bSkipAttrForEmpty = false);
@@ -1279,7 +1279,7 @@ public:
 
     bool            IsClipboardSource() const;
 
-    SC_DLLPUBLIC void           TransposeClip( ScDocument* pTransClip, sal_uInt16 nFlags, bool bAsLink );
+    SC_DLLPUBLIC void           TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink );
 
     ScClipParam&    GetClipParam();
     void            SetClipParam(const ScClipParam& rParam);
@@ -1288,10 +1288,10 @@ public:
                                     ScDocument* pSrcDoc );
 
     void            FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
-                                sal_uInt16 nFlags, sal_uInt16 nFunction,
+                                InsertDeleteFlags nFlags, sal_uInt16 nFunction,
                                 bool bSkipEmpty, bool bAsLink );
     void            FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
-                                sal_uInt16 nFlags, sal_uInt16 nFunction,
+                                InsertDeleteFlags nFlags, sal_uInt16 nFunction,
                                 bool bSkipEmpty, bool bAsLink );
 
     void            TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType );
@@ -1306,18 +1306,18 @@ public:
                     //  don't use anymore:
     void            CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                sal_uInt16 nFlags, bool bMarked, ScDocument* pDestDoc,
+                                InsertDeleteFlags nFlags, bool bMarked, ScDocument* pDestDoc,
                                 const ScMarkData* pMarks = NULL, bool bColRowFlags = true);
     void            UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                 SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                                sal_uInt16 nFlags, bool bMarked, ScDocument* pDestDoc,
+                                InsertDeleteFlags nFlags, bool bMarked, ScDocument* pDestDoc,
                                 const ScMarkData* pMarks = NULL);
 
     void            CopyToDocument(const ScRange& rRange,
-                                sal_uInt16 nFlags, bool bMarked, ScDocument* pDestDoc,
+                                InsertDeleteFlags nFlags, bool bMarked, ScDocument* pDestDoc,
                                 const ScMarkData* pMarks = NULL, bool bColRowFlags = true);
     void            UndoToDocument(const ScRange& rRange,
-                                sal_uInt16 nFlags, bool bMarked, ScDocument* pDestDoc,
+                                InsertDeleteFlags nFlags, bool bMarked, ScDocument* pDestDoc,
                                 const ScMarkData* pMarks = NULL);
 
     void            CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario = false );
@@ -1486,8 +1486,8 @@ public:
 
     SC_DLLPUBLIC void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
                                            ScEditDataArray* pDataArray = NULL );
-    void DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
-    void DeleteSelectionTab( SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
+    void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
+    void DeleteSelectionTab( SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast = true );
 
     SC_DLLPUBLIC void           SetColWidth( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth );
     SC_DLLPUBLIC void           SetColWidthOnly( SCCOL nCol, SCTAB nTab, sal_uInt16 nNewWidth );
