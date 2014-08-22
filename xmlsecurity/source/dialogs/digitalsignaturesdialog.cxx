@@ -54,7 +54,6 @@
 #include "helpids.hrc"
 #include "resourcemanager.hxx"
 
-#include <vcl/msgbox.hxx>
 #include <vcl/layout.hxx>
 #include <unotools/configitem.hxx>
 
@@ -308,8 +307,8 @@ bool DigitalSignaturesDialog::canAddRemove()
             //It the user presses 'Add' or 'Remove' several times then, then the warning
             //is shown every time until the user presses 'OK'. From then on, the warning
             //is not displayed anymore as long as the signatures dialog is alive.
-            if (QueryBox(
-                NULL, XMLSEC_RES(MSG_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN)).Execute() == RET_NO)
+            if (MessageDialog(
+                NULL, XMLSEC_RES(STR_XMLSECDLG_QUERY_REMOVEDOCSIGNBEFORESIGN), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() == RET_NO)
                 ret = false;
             else
                 m_bWarningShowSignMacro = true;
