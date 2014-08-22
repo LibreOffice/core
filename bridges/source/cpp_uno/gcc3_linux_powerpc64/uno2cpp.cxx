@@ -114,7 +114,11 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
     pMethod += 8 * nVtableIndex;
     pMethod = *((sal_uInt64 *)pMethod);
 
+#if _CALL_ELF == 2
+    typedef void (* FunctionCall )(...);
+#else
     typedef void (* FunctionCall )( sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64 );
+#endif
     FunctionCall pFunc = (FunctionCall)pMethod;
 
     volatile double dret;
