@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_5e230906",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-08-22T16:31:41Z",
+      "side": 1,
+      "message": "Why 0x1fff? Shouldn\u0027t that be 0x7fff if it is for excluding signed values?",
+      "revId": "862a480da8702cce5981234705e47589e5b9de8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_3e204df7",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-08-22T16:31:41Z",
+      "side": 1,
+      "message": "Assertion not enabled?",
+      "revId": "862a480da8702cce5981234705e47589e5b9de8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
