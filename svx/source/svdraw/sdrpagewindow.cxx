@@ -387,8 +387,10 @@ void SdrPageWindow::InvalidatePageWindow(const basegfx::B2DRange& rRange)
         }
 
         const Rectangle aVCLDiscreteRectangle(
-                (sal_Int32)floor(aDiscreteRange.getMinX()), (sal_Int32)floor(aDiscreteRange.getMinY()),
-                (sal_Int32)ceil(aDiscreteRange.getMaxX()), (sal_Int32)ceil(aDiscreteRange.getMaxY()));
+            static_cast<long>(floor(aDiscreteRange.getMinX())),
+            static_cast<long>(floor(aDiscreteRange.getMinY())),
+            static_cast<long>(ceil(aDiscreteRange.getMaxX())),
+            static_cast<long>(ceil(aDiscreteRange.getMaxY())));
         const bool bWasMapModeEnabled(rWindow.IsMapModeEnabled());
 
         rWindow.EnableMapMode(false);
