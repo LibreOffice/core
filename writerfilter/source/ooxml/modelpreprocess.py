@@ -71,10 +71,6 @@ def check(model):
 def preprocess(model):
     for i in model.getElementsByTagName("namespace"):
         ns = i.getElementsByTagName("grammar")[0].getAttribute("ns")
-        if ns in list(ooxUrlAliases.keys()):
-            i.setAttribute("namespacealias", ooxUrlAliases[ns])
-        else:
-            i.setAttribute("namespacealias", "")
         if ns.startswith("http://schemas.openxmlformats.org/"):
             i.setAttribute("prefix", ns.replace('http://schemas.openxmlformats.org/', '').replace('/', '_').replace('-', '_'))
         else:
