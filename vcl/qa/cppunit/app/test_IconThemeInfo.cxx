@@ -53,8 +53,6 @@ class IconThemeInfoTest : public CppUnit::TestFixture
     CPPUNIT_TEST(ThemeIdIsDetectedFromFileNameWithUnderscore);
     CPPUNIT_TEST(ImagesZipIsNotValid);
     CPPUNIT_TEST(ImagesOxygenZipIsValid);
-    CPPUNIT_TEST(DefaultZipIsValid);
-    CPPUNIT_TEST(GalaxyIsReturnedAsDisplayNameForDefaultZip);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined1);
     CPPUNIT_TEST(ExceptionIsThrownWhenIdCannotBeDetermined2);
 
@@ -84,14 +82,6 @@ IconThemeInfoTest::ImagesOxygenZipIsValid()
     OUString id("file://images_oxygen.zip");
     bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("images_oxygen.zip is a valid theme name", true, valid);
-}
-
-void
-IconThemeInfoTest::DefaultZipIsValid()
-{
-    OUString id("file://default.zip");
-    bool valid = vcl::IconThemeInfo::UrlCanBeParsed(id);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("default.zip is a valid theme name", true, valid);
 }
 
 void
@@ -128,14 +118,6 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
         thrown = true;
     }
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception was thrown", true, thrown);
-}
-
-void
-IconThemeInfoTest::GalaxyIsReturnedAsDisplayNameForDefaultZip()
-{
-    OUString id("file://default.zip");
-    IconThemeInfo i(id);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("default.zip is displayed as Galaxy", OUString("Galaxy"), i.GetDisplayName());
 }
 
 // Put the test suite in the registry

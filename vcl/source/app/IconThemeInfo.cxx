@@ -60,7 +60,7 @@ IconThemeInfo::SizeByThemeName(const OUString& themeName)
     else if (themeName == "crystal") {
         return Size( 22, 22 );
     }
-    else if (themeName == "default") {
+    else if (themeName == "galaxy") {
         return Size( 22, 22 );
     }
     else {
@@ -74,10 +74,6 @@ IconThemeInfo::UrlCanBeParsed(const OUString& url)
     OUString fname = filename_from_url(url);
     if (fname.isEmpty()) {
         return false;
-    }
-
-    if (fname == "default.zip") {
-        return true;
     }
 
     if (!fname.startsWithIgnoreAsciiCase(ICON_THEME_PACKAGE_PREFIX)) {
@@ -94,9 +90,6 @@ IconThemeInfo::UrlCanBeParsed(const OUString& url)
 /*static*/ OUString
 IconThemeInfo::FileNameToThemeId(const OUString& filename)
 {
-    if (filename == "default.zip") {
-        return OUString("default");
-    }
     OUString r;
     sal_Int32 positionOfLastDot = filename.lastIndexOf(EXTENSION_FOR_ICON_PACKAGES);
     if (positionOfLastDot < 0) { // -1 means index not found
@@ -116,10 +109,6 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
 {
     if (themeId.isEmpty()) {
         throw std::runtime_error("IconThemeInfo::ThemeIdToDisplayName() called with invalid id.");
-    }
-
-    if (themeId == "default") {
-        return OUString("Galaxy");
     }
 
     // make the first letter uppercase
