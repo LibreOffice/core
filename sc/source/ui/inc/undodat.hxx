@@ -455,7 +455,7 @@ public:
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ,
                                 const ScMarkData& rMark,
                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
-                                sal_uInt16 nNewFlags,
+                                InsertDeleteFlags nNewFlags,
                                 ScRefUndoData* pRefData, void* pFill1, void* pFill2, void* pFill3,
                                 bool bRedoIsFilled = true
                                  );
@@ -472,7 +472,7 @@ private:
     boost::scoped_ptr<ScMarkData> mpMarkData;
     ScDocument*     pUndoDoc;
     ScDocument*     pRedoDoc;
-    sal_uInt16      nFlags;
+    InsertDeleteFlags nFlags;
     ScRefUndoData*  pRefUndoData;
     ScRefUndoData*  pRefRedoData;
     sal_uLong       nStartChangeAction;

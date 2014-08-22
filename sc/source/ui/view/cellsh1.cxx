@@ -320,7 +320,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_DELETE:
             {
-                sal_uInt16  nFlags = IDF_NONE;
+                InsertDeleteFlags nFlags = IDF_NONE;
 
                 if ( pReqArgs!=NULL && pTabViewShell->SelectionEditable() )
                 {
@@ -428,7 +428,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_FILL_TAB:
             {
-                sal_uInt16 nFlags = IDF_NONE;
+                InsertDeleteFlags nFlags = IDF_NONE;
                 sal_uInt16 nFunction = PASTE_NOFUNC;
                 bool bSkipEmpty = false;
                 bool bAsLink    = false;
@@ -467,7 +467,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                     boost::scoped_ptr<AbstractScInsertContentsDlg> pDlg(pFact->CreateScInsertContentsDlg( pTabViewShell->GetDialogParent(),
-                                                                                            0, /* nCheckDefaults */
+                                                                                            IDF_NONE, /* nCheckDefaults */
                                                                                             &ScGlobal::GetRscString(STR_FILL_TAB)));
                     OSL_ENSURE(pDlg, "Dialog create fail!");
                     pDlg->SetFillMode(true);
@@ -1280,7 +1280,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case FID_INS_CELL_CONTENTS:
             {
-                sal_uInt16 nFlags = IDF_NONE;
+                InsertDeleteFlags nFlags = IDF_NONE;
                 sal_uInt16 nFunction = PASTE_NOFUNC;
                 bool bSkipEmpty = false;
                 bool bTranspose = false;

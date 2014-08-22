@@ -177,7 +177,7 @@ class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg
 {
     DECL_ABSTDLG_BASE( AbstractScDeleteContentsDlg_Impl,ScDeleteContentsDlg)
     virtual void    DisableObjects() SAL_OVERRIDE;
-    virtual sal_uInt16  GetDelContentsCmdBits() const SAL_OVERRIDE;
+    virtual InsertDeleteFlags GetDelContentsCmdBits() const SAL_OVERRIDE;
 };
 
 class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg
@@ -208,7 +208,7 @@ class AbstractScInsertCellDlg_Impl : public AbstractScInsertCellDlg
 class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg
 {
     DECL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl, ScInsertContentsDlg)
-    virtual sal_uInt16  GetInsContentsCmdBits() const SAL_OVERRIDE;
+    virtual InsertDeleteFlags GetInsContentsCmdBits() const SAL_OVERRIDE;
     virtual sal_uInt16  GetFormulaCmdBits() const SAL_OVERRIDE;
     virtual bool        IsSkipEmptyCells() const SAL_OVERRIDE;
     virtual bool        IsLink() const SAL_OVERRIDE;
@@ -428,7 +428,7 @@ public:
         ScTabViewShell* pTabViewShell) SAL_OVERRIDE;
 
     virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent,
-                                                                    sal_uInt16  nCheckDefaults = 0) SAL_OVERRIDE;
+                                                                    InsertDeleteFlags nCheckDefaults = IDF_NONE) SAL_OVERRIDE;
 
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( Window*        pParent,
                                                             ScDocument&     rDocument,
@@ -448,7 +448,7 @@ public:
                                                              bool bDisallowCellMove = false ) SAL_OVERRIDE;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( Window*        pParent,
-                                                                    sal_uInt16      nCheckDefaults = 0,
+                                                                    InsertDeleteFlags nCheckDefaults = IDF_NONE,
                                                                     const OUString* pStrTitle = NULL ) SAL_OVERRIDE;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(Window* pParent, ScViewData& rViewData,

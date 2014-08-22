@@ -40,18 +40,18 @@ private:
     bool             bObjectsDisabled;
 
     static bool         bPreviousAllCheck;
-    static sal_uInt16   nPreviousChecks;
+    static InsertDeleteFlags nPreviousChecks;
 
     void DisableChecks( bool bDelAllChecked = true );
     DECL_LINK( DelAllHdl, void * );
 
 public:
             ScDeleteContentsDlg( Window* pParent,
-                                 sal_uInt16  nCheckDefaults = 0 );
+                                 InsertDeleteFlags nCheckDefaults = IDF_NONE );
             virtual ~ScDeleteContentsDlg();
     void    DisableObjects();
 
-    sal_uInt16  GetDelContentsCmdBits() const;
+    InsertDeleteFlags GetDelContentsCmdBits() const;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_DELCODLG_HXX

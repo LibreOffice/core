@@ -1734,7 +1734,7 @@ void ScViewFunc::DeleteMulti( bool bRows, bool bRecord )
 
 //  delete contents
 
-void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
+void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags, bool bRecord )
 {
     ScViewData& rViewData = GetViewData();
     rViewData.SetPasteMode( SC_PASTE_NONE );
@@ -1854,7 +1854,7 @@ void ScViewFunc::DeleteContents( sal_uInt16 nFlags, bool bRecord )
 
         //  in case of "Format/Standard" copy all attributes, because CopyToDocument
         //  with IDF_HARDATTR only is too time-consuming:
-        sal_uInt16 nUndoDocFlags = nFlags;
+        InsertDeleteFlags nUndoDocFlags = nFlags;
         if (nFlags & IDF_ATTRIB)
             nUndoDocFlags |= IDF_ATTRIB;
         if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute

@@ -52,8 +52,8 @@ class CopyFromClipContext : public ClipContextBase
     SCTAB mnTabEnd;
     ScDocument* mpRefUndoDoc;
     ScDocument* mpClipDoc;
-    sal_uInt16 mnInsertFlag;
-    sal_uInt16 mnDeleteFlag;
+    InsertDeleteFlags mnInsertFlag;
+    InsertDeleteFlags mnDeleteFlag;
     ScCellValue maSingleCell;
     ScConditionalFormatList* mpCondFormatList;
     const ScPatternAttr* mpSinglePattern;
@@ -76,7 +76,7 @@ public:
     };
 
     CopyFromClipContext(ScDocument& rDoc,
-        ScDocument* pRefUndoDoc, ScDocument* pClipDoc, sal_uInt16 nInsertFlag,
+        ScDocument* pRefUndoDoc, ScDocument* pClipDoc, InsertDeleteFlags nInsertFlag,
         bool bAsLink, bool bSkipAttrForEmptyCells);
 
     virtual ~CopyFromClipContext();
@@ -91,10 +91,10 @@ public:
 
     ScDocument* getUndoDoc() { return mpRefUndoDoc;}
     ScDocument* getClipDoc() { return mpClipDoc;}
-    sal_uInt16 getInsertFlag() const { return mnInsertFlag;}
+    InsertDeleteFlags getInsertFlag() const { return mnInsertFlag;}
 
-    void setDeleteFlag( sal_uInt16 nFlag );
-    sal_uInt16 getDeleteFlag() const { return mnDeleteFlag;}
+    void setDeleteFlag( InsertDeleteFlags nFlag );
+    InsertDeleteFlags getDeleteFlag() const { return mnDeleteFlag;}
 
     ScCellValue& getSingleCell() { return maSingleCell;}
 

@@ -2108,7 +2108,7 @@ bool ScImportExport::Dif2Doc( SvStream& rStrm )
     bool bOk = StartPaste();
     if (bOk)
     {
-        sal_uInt16 nFlags = IDF_ALL & ~IDF_STYLES;
+        InsertDeleteFlags nFlags = IDF_ALL & ~IDF_STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
         pImportDoc->CopyToDocument( aRange, nFlags, false, pDoc );
         EndPaste();
@@ -2130,7 +2130,7 @@ bool ScImportExport::RTF2Doc( SvStream& rStrm, const OUString& rBaseURL )
     bool bOk = StartPaste();
     if (bOk)
     {
-        sal_uInt16 nFlags = IDF_ALL & ~IDF_STYLES;
+        InsertDeleteFlags nFlags = IDF_ALL & ~IDF_STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
         pImp->WriteToDocument();
         EndPaste();
@@ -2155,7 +2155,7 @@ bool ScImportExport::HTML2Doc( SvStream& rStrm, const OUString& rBaseURL )
         if (pDocSh)
             pDocSh->MakeDrawLayer();
 
-        sal_uInt16 nFlags = IDF_ALL & ~IDF_STYLES;
+        InsertDeleteFlags nFlags = IDF_ALL & ~IDF_STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
 
         if (pExtOptions)

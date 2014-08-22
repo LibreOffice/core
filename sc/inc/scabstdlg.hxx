@@ -125,7 +125,7 @@ class AbstractScDeleteContentsDlg: public VclAbstractDialog
 {
 public:
     virtual void    DisableObjects() = 0 ;
-    virtual sal_uInt16  GetDelContentsCmdBits() const = 0;
+    virtual InsertDeleteFlags GetDelContentsCmdBits() const = 0;
 };
 
 class AbstractScFillSeriesDlg: public VclAbstractDialog
@@ -156,7 +156,7 @@ public:
 class AbstractScInsertContentsDlg : public VclAbstractDialog
 {
 public:
-    virtual sal_uInt16  GetInsContentsCmdBits() const = 0;
+    virtual InsertDeleteFlags GetInsContentsCmdBits() const = 0;
     virtual sal_uInt16  GetFormulaCmdBits() const = 0 ;
     virtual bool        IsSkipEmptyCells() const = 0;
     virtual bool        IsLink() const = 0;
@@ -361,7 +361,7 @@ public:
         ScTabViewShell* pTabViewShell) = 0;
 
     virtual AbstractScDeleteContentsDlg * CreateScDeleteContentsDlg(Window* pParent,
-                                                                    sal_uInt16  nCheckDefaults = 0) = 0;
+                                                                    InsertDeleteFlags nCheckDefaults = IDF_NONE) = 0;
     virtual AbstractScFillSeriesDlg * CreateScFillSeriesDlg( Window*        pParent,
                                                             ScDocument& rDocument,
                                                             FillDir     eFillDir,
@@ -381,7 +381,7 @@ public:
                                                              bool bDisallowCellMove = false ) = 0;
 
     virtual AbstractScInsertContentsDlg * CreateScInsertContentsDlg( Window*        pParent,
-                                                                    sal_uInt16      nCheckDefaults = 0,
+                                                                    InsertDeleteFlags nCheckDefaults = IDF_NONE,
                                                                     const OUString* pStrTitle = NULL ) = 0;
 
     virtual AbstractScInsertTableDlg * CreateScInsertTableDlg(Window* pParent, ScViewData& rViewData,

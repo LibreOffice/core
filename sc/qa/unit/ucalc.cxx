@@ -4118,7 +4118,7 @@ void Test::testCopyPasteRelativeFormula()
     m_pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark);
 
     // Paste it to B1:B2.
-    sal_uInt16 nFlags = IDF_ALL;
+    InsertDeleteFlags nFlags = IDF_ALL;
     ScRange aDestRange(1,0,0,1,1,0);
     aMark.SetMarkArea(aDestRange);
     m_pDoc->CopyFromClip(aDestRange, aMark, nFlags, NULL, &aClipDoc);
@@ -4665,7 +4665,7 @@ void Test::testCopyPasteFormulasExternalDoc()
     ScDocument* pClipDoc = new ScDocument(SCDOCMODE_CLIP);
     m_pDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
 
-    sal_uInt16 nFlags = IDF_ALL;
+    InsertDeleteFlags nFlags = IDF_ALL;
     aRange = ScRange(1,1,1,1,6,1);
     ScMarkData aMarkData2;
     aMarkData2.SetMarkArea(aRange);

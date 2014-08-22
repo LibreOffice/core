@@ -229,8 +229,8 @@ public:
     void        InsertRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
     void DeleteArea(
-        SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag, bool bBroadcast = true );
-    void DeleteRanges( const std::vector<sc::RowSpan>& rRanges, sal_uInt16 nDelFlag, bool bBroadcast );
+        SCROW nStartRow, SCROW nEndRow, InsertDeleteFlags nDelFlag, bool bBroadcast = true );
+    void DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag, bool bBroadcast );
 
     void CopyToClip(
         sc::CopyToClipContext& rCxt, SCROW nRow1, SCROW nRow2, ScColumn& rColumn ) const;
@@ -266,11 +266,11 @@ public:
         const ScRangeList& rRanges, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows );
 
     void CopyToColumn(
-        sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
+        sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked,
         ScColumn& rColumn, const ScMarkData* pMarkData = NULL, bool bAsLink = false) const;
 
     void UndoToColumn(
-        sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
+        sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked,
         ScColumn& rColumn, const ScMarkData* pMarkData = NULL) const;
 
     void        CopyScenarioFrom( const ScColumn& rSrcCol );
@@ -445,7 +445,7 @@ public:
     void        RemoveProtected( SCROW nStartRow, SCROW nEndRow );
 
     SCsROW      ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray = NULL );
-    void DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast );
+    void DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast );
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
@@ -636,7 +636,7 @@ private:
     void CopyCellTextAttrsToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol) const;
 
     void DeleteCells(
-        sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, sal_uInt16 nDelFlag,
+        sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nDelFlag,
         std::vector<SCROW>& rDeleted );
 
     /**

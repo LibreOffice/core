@@ -1763,7 +1763,7 @@ void ScDocument::FitBlock( const ScRange& rOld, const ScRange& rNew, bool bClear
 
 void ScDocument::DeleteArea(SCCOL nCol1, SCROW nRow1,
                             SCCOL nCol2, SCROW nRow2,
-                            const ScMarkData& rMark, sal_uInt16 nDelFlag)
+                            const ScMarkData& rMark, InsertDeleteFlags nDelFlag)
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
@@ -1778,7 +1778,7 @@ void ScDocument::DeleteArea(SCCOL nCol1, SCROW nRow1,
 
 void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,
                                 SCCOL nCol2, SCROW nRow2,
-                                SCTAB nTab, sal_uInt16 nDelFlag)
+                                SCTAB nTab, InsertDeleteFlags nDelFlag)
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
@@ -1791,7 +1791,7 @@ void ScDocument::DeleteAreaTab(SCCOL nCol1, SCROW nRow1,
     }
 }
 
-void ScDocument::DeleteAreaTab( const ScRange& rRange, sal_uInt16 nDelFlag )
+void ScDocument::DeleteAreaTab( const ScRange& rRange, InsertDeleteFlags nDelFlag )
 {
     for ( SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); nTab++ )
         DeleteAreaTab( rRange.aStart.Col(), rRange.aStart.Row(),
@@ -1903,7 +1903,7 @@ bool ScDocument::IsCutMode()
 
 void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                            sal_uInt16 nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks, bool bColRowFlags )
 {
     PutInOrder( nCol1, nCol2 );
@@ -1930,7 +1930,7 @@ void ScDocument::CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 
 void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                             SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
-                            sal_uInt16 nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks)
 {
     PutInOrder( nCol1, nCol2 );
@@ -1959,7 +1959,7 @@ void ScDocument::UndoToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 }
 
 void ScDocument::CopyToDocument(const ScRange& rRange,
-                            sal_uInt16 nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks, bool bColRowFlags)
 {
     ScRange aNewRange = rRange;
@@ -1985,7 +1985,7 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
 }
 
 void ScDocument::UndoToDocument(const ScRange& rRange,
-                            sal_uInt16 nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
+                            InsertDeleteFlags nFlags, bool bOnlyMarked, ScDocument* pDestDoc,
                             const ScMarkData* pMarks)
 {
     sc::AutoCalcSwitch aAutoCalcSwitch(*this, false);
@@ -2182,7 +2182,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
     }
 }
 
-void ScDocument::TransposeClip( ScDocument* pTransClip, sal_uInt16 nFlags, bool bAsLink )
+void ScDocument::TransposeClip( ScDocument* pTransClip, InsertDeleteFlags nFlags, bool bAsLink )
 {
     OSL_ENSURE( bIsClip && pTransClip && pTransClip->bIsClip,
                     "TransposeClip with wrong Document" );
@@ -2408,7 +2408,7 @@ bool ScDocument::IsClipboardSource() const
 
 void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
                                         SCCOL nCol2, SCROW nRow2,
-                                        const ScMarkData& rMark, sal_uInt16 nInsFlag )
+                                        const ScMarkData& rMark, InsertDeleteFlags nInsFlag )
 {
     if (nInsFlag & IDF_CONTENTS)
     {
@@ -2423,7 +2423,7 @@ void ScDocument::StartListeningFromClip( SCCOL nCol1, SCROW nRow1,
 
 void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
-                                    const ScMarkData& rMark, sal_uInt16 nInsFlag )
+                                    const ScMarkData& rMark, InsertDeleteFlags nInsFlag )
 {
     if (nInsFlag & IDF_CONTENTS)
     {
@@ -2577,7 +2577,7 @@ void ScDocument::CopyNonFilteredFromClip(
 }
 
 void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMark,
-                                sal_uInt16 nInsFlag,
+                                InsertDeleteFlags nInsFlag,
                                 ScDocument* pRefUndoDoc, ScDocument* pClipDoc, bool bResetCut,
                                 bool bAsLink, bool bIncludeFiltered, bool bSkipAttrForEmpty,
                                 const ScRangeList * pDestRanges )
@@ -2636,7 +2636,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
         overwrite/delete existing cells but to insert the notes into
         these cells. In this case, just delete old notes from the
         destination area. */
-    sal_uInt16 nDelFlag = IDF_NONE;
+    InsertDeleteFlags nDelFlag = IDF_NONE;
     if ( (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES) )
         nDelFlag |= IDF_NOTE;
     else if ( nInsFlag & IDF_CONTENTS )
@@ -2783,7 +2783,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 }
 
 void ScDocument::CopyMultiRangeFromClip(
-    const ScAddress& rDestPos, const ScMarkData& rMark, sal_uInt16 nInsFlag, ScDocument* pClipDoc,
+    const ScAddress& rDestPos, const ScMarkData& rMark, InsertDeleteFlags nInsFlag, ScDocument* pClipDoc,
     bool bResetCut, bool bAsLink, bool /*bIncludeFiltered*/, bool bSkipAttrForEmpty)
 {
     if (bIsClip)
@@ -2810,7 +2810,7 @@ void ScDocument::CopyMultiRangeFromClip(
     if (!bSkipAttrForEmpty)
     {
         // Do the deletion first.
-        sal_uInt16 nDelFlag = IDF_CONTENTS;
+        InsertDeleteFlags nDelFlag = IDF_CONTENTS;
         SCCOL nColSize = rClipParam.getPasteColSize();
         SCROW nRowSize = rClipParam.getPasteRowSize();
 
@@ -2986,10 +2986,10 @@ void ScDocument::MixDocument( const ScRange& rRange, sal_uInt16 nFunction, bool 
 }
 
 void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
-                                sal_uInt16 nFlags, sal_uInt16 nFunction,
+                                InsertDeleteFlags nFlags, sal_uInt16 nFunction,
                                 bool bSkipEmpty, bool bAsLink )
 {
-    sal_uInt16 nDelFlags = nFlags;
+    InsertDeleteFlags nDelFlags = nFlags;
     if (nDelFlags & IDF_CONTENTS)
         nDelFlags |= IDF_CONTENTS;          // immer alle Inhalte oder keine loeschen!
 
@@ -3049,10 +3049,10 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
 }
 
 void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
-                                sal_uInt16 nFlags, sal_uInt16 nFunction,
+                                InsertDeleteFlags nFlags, sal_uInt16 nFunction,
                                 bool bSkipEmpty, bool bAsLink )
 {
-    sal_uInt16 nDelFlags = nFlags;
+    InsertDeleteFlags nDelFlags = nFlags;
     if (nDelFlags & IDF_CONTENTS)
         nDelFlags |= IDF_CONTENTS;          // immer alle Inhalte oder keine loeschen!
 
@@ -5461,7 +5461,7 @@ void ScDocument::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData
             maTabs[*itr]->ClearSelectionItems( pWhich, rMark );
 }
 
-void ScDocument::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
+void ScDocument::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     SCTAB nMax = static_cast<SCTAB>(maTabs.size());
     ScMarkData::const_iterator itr = rMark.begin(), itrEnd = rMark.end();
@@ -5471,7 +5471,7 @@ void ScDocument::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, 
 }
 
 void ScDocument::DeleteSelectionTab(
-    SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
+    SCTAB nTab, InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
         maTabs[nTab]->DeleteSelection(nDelFlag, rMark, bBroadcast);

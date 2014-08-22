@@ -471,7 +471,7 @@ void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& r
     }
 }
 
-void ScColumn::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
+void ScColumn::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     SCROW nTop;
     SCROW nBottom;
@@ -1186,14 +1186,14 @@ void ScColumn::CopyCellToDocument( SCROW nSrcRow, SCROW nDestRow, ScColumn& rDes
 
 namespace {
 
-bool canCopyValue(const ScDocument& rDoc, const ScAddress& rPos, sal_uInt16 nFlags)
+bool canCopyValue(const ScDocument& rDoc, const ScAddress& rPos, InsertDeleteFlags nFlags)
 {
     sal_uInt32 nNumIndex = static_cast<const SfxUInt32Item*>(rDoc.GetAttr(rPos, ATTR_VALUE_FORMAT))->GetValue();
     short nType = rDoc.GetFormatTable()->GetType(nNumIndex);
     if ((nType == NUMBERFORMAT_DATE) || (nType == NUMBERFORMAT_TIME) || (nType == NUMBERFORMAT_DATETIME))
-        return ((nFlags & IDF_DATETIME) != 0);
+        return ((nFlags & IDF_DATETIME) != IDF_NONE);
 
-    return ((nFlags & IDF_VALUE) != 0);
+    return (nFlags & IDF_VALUE) != IDF_NONE;
 }
 
 class CopyAsLinkHandler
@@ -1202,7 +1202,7 @@ class CopyAsLinkHandler
     ScColumn& mrDestCol;
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
-    sal_uInt16 mnCopyFlags;
+    InsertDeleteFlags mnCopyFlags;
 
     void setDefaultAttrToDest(size_t nRow)
     {
@@ -1247,7 +1247,7 @@ class CopyAsLinkHandler
     }
 
 public:
-    CopyAsLinkHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, sal_uInt16 nCopyFlags) :
+    CopyAsLinkHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos, InsertDeleteFlags nCopyFlags) :
         mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mnCopyFlags(nCopyFlags)
     {
         if (mpDestPos)
@@ -1266,7 +1266,7 @@ public:
 
         if (mnCopyFlags & (IDF_NOTE|IDF_ADDNOTES))
         {
-            bool bCloneCaption = (mnCopyFlags & IDF_NOCAPTIONS) == 0;
+            bool bCloneCaption = (mnCopyFlags & IDF_NOCAPTIONS) == IDF_NONE;
             duplicateNotes(nRow, nDataSize, bCloneCaption );
         }
 
@@ -1274,7 +1274,7 @@ public:
         {
             case sc::element_type_numeric:
             {
-                if ((mnCopyFlags & (IDF_DATETIME|IDF_VALUE)) == 0)
+                if ((mnCopyFlags & (IDF_DATETIME|IDF_VALUE)) == IDF_NONE)
                     return;
 
                 sc::numeric_block::const_iterator it = sc::numeric_block::begin(*aNode.data);
@@ -1323,7 +1323,7 @@ class CopyByCloneHandler
     sc::ColumnBlockPosition maDestPos;
     sc::ColumnBlockPosition* mpDestPos;
     svl::SharedStringPool* mpSharedStringPool;
-    sal_uInt16 mnCopyFlags;
+    InsertDeleteFlags mnCopyFlags;
 
     void setDefaultAttrToDest(size_t nRow)
     {
@@ -1342,11 +1342,11 @@ class CopyByCloneHandler
     {
         ScAddress aDestPos(mrDestCol.GetCol(), nRow, mrDestCol.GetTab());
 
-        bool bCloneValue          = (mnCopyFlags & IDF_VALUE) != 0;
-        bool bCloneDateTime       = (mnCopyFlags & IDF_DATETIME) != 0;
-        bool bCloneString         = (mnCopyFlags & IDF_STRING) != 0;
-        bool bCloneSpecialBoolean = (mnCopyFlags & IDF_SPECIAL_BOOLEAN) != 0;
-        bool bCloneFormula        = (mnCopyFlags & IDF_FORMULA) != 0;
+        bool bCloneValue          = (mnCopyFlags & IDF_VALUE) != IDF_NONE;
+        bool bCloneDateTime       = (mnCopyFlags & IDF_DATETIME) != IDF_NONE;
+        bool bCloneString         = (mnCopyFlags & IDF_STRING) != IDF_NONE;
+        bool bCloneSpecialBoolean = (mnCopyFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
+        bool bCloneFormula        = (mnCopyFlags & IDF_FORMULA) != IDF_NONE;
 
         bool bForceFormula = false;
 
@@ -1437,7 +1437,7 @@ class CopyByCloneHandler
 
 public:
     CopyByCloneHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, sc::ColumnBlockPosition* pDestPos,
-            sal_uInt16 nCopyFlags, svl::SharedStringPool* pSharedStringPool) :
+            InsertDeleteFlags nCopyFlags, svl::SharedStringPool* pSharedStringPool) :
         mrSrcCol(rSrcCol), mrDestCol(rDestCol), mpDestPos(pDestPos), mpSharedStringPool(pSharedStringPool),
         mnCopyFlags(nCopyFlags)
     {
@@ -1457,7 +1457,7 @@ public:
 
         if (mnCopyFlags & (IDF_NOTE|IDF_ADDNOTES))
         {
-            bool bCloneCaption = (mnCopyFlags & IDF_NOCAPTIONS) == 0;
+            bool bCloneCaption = (mnCopyFlags & IDF_NOCAPTIONS) == IDF_NONE;
             duplicateNotes(nRow, nDataSize, bCloneCaption );
         }
 
@@ -1465,7 +1465,7 @@ public:
         {
             case sc::element_type_numeric:
             {
-                if ((mnCopyFlags & (IDF_DATETIME|IDF_VALUE)) == 0)
+                if ((mnCopyFlags & (IDF_DATETIME|IDF_VALUE)) == IDF_NONE)
                     return;
 
                 sc::numeric_block::const_iterator it = sc::numeric_block::begin(*aNode.data);
@@ -1566,7 +1566,7 @@ public:
 
 void ScColumn::CopyToColumn(
     sc::CopyToDocContext& rCxt,
-    SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,
+    SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked, ScColumn& rColumn,
     const ScMarkData* pMarkData, bool bAsLink) const
 {
     if (bMarked)
@@ -1590,7 +1590,7 @@ void ScColumn::CopyToColumn(
         return;
     }
 
-    if ( (nFlags & IDF_ATTRIB) != 0 )
+    if ( (nFlags & IDF_ATTRIB) != IDF_NONE )
     {
         if ( (nFlags & IDF_STYLES) != IDF_STYLES )
         {   // keep the StyleSheets in the target document
@@ -1609,7 +1609,7 @@ void ScColumn::CopyToColumn(
             pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray);
     }
 
-    if ((nFlags & IDF_CONTENTS) != 0)
+    if ((nFlags & IDF_CONTENTS) != IDF_NONE)
     {
         if (bAsLink)
         {
@@ -1633,7 +1633,7 @@ void ScColumn::CopyToColumn(
 }
 
 void ScColumn::UndoToColumn(
-    sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
+    sc::CopyToDocContext& rCxt, SCROW nRow1, SCROW nRow2, InsertDeleteFlags nFlags, bool bMarked,
     ScColumn& rColumn, const ScMarkData* pMarkData ) const
 {
     if (nRow1 > 0)

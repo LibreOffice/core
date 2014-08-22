@@ -95,12 +95,12 @@ bool ScDocument::CopyOneCellFromClip(
 
         // Check the paste flag to see whether we want to paste this cell.  If the
         // flag says we don't want to paste this cell, we'll return with true.
-        sal_uInt16 nFlags = rCxt.getInsertFlag();
-        bool bNumeric  = (nFlags & IDF_VALUE) != 0;
-        bool bDateTime = (nFlags & IDF_DATETIME) != 0;
-        bool bString   = (nFlags & IDF_STRING) != 0;
-        bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != 0;
-        bool bFormula  = (nFlags & IDF_FORMULA) != 0;
+        InsertDeleteFlags nFlags = rCxt.getInsertFlag();
+        bool bNumeric  = (nFlags & IDF_VALUE) != IDF_NONE;
+        bool bDateTime = (nFlags & IDF_DATETIME) != IDF_NONE;
+        bool bString   = (nFlags & IDF_STRING) != IDF_NONE;
+        bool bBoolean  = (nFlags & IDF_SPECIAL_BOOLEAN) != IDF_NONE;
+        bool bFormula  = (nFlags & IDF_FORMULA) != IDF_NONE;
 
         switch (rSrcCell.meType)
         {
@@ -196,7 +196,7 @@ bool ScDocument::CopyOneCellFromClip(
         }
     }
 
-    if ((rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES)) != 0)
+    if ((rCxt.getInsertFlag() & (IDF_NOTE | IDF_ADDNOTES)) != IDF_NONE)
         rCxt.setSingleCellNote(pClipDoc->GetNote(aSrcPos));
 
     // All good. Proceed with the pasting.

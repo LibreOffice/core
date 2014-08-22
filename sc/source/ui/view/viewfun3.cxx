@@ -798,10 +798,10 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
 
 }
 
-bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
+bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
                                 sal_uInt16 nFunction, bool bSkipEmpty,
                                 bool bTranspose, bool bAsLink,
-                                InsCellCmd eMoveMode, sal_uInt16 nUndoExtraFlags,
+                                InsCellCmd eMoveMode, InsertDeleteFlags nUndoExtraFlags,
                                 bool bAllowDialogs )
 {
     if (!pClipDoc)
@@ -811,13 +811,13 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     }
 
     //  fuer Undo etc. immer alle oder keine Inhalte sichern
-    sal_uInt16 nContFlags = IDF_NONE;
+    InsertDeleteFlags nContFlags = IDF_NONE;
     if (nFlags & IDF_CONTENTS)
         nContFlags |= IDF_CONTENTS;
     if (nFlags & IDF_ATTRIB)
         nContFlags |= IDF_ATTRIB;
     // evtl. Attribute ins Undo ohne sie vom Clip ins Doc zu kopieren
-    sal_uInt16 nUndoFlags = nContFlags;
+    InsertDeleteFlags nUndoFlags = nContFlags;
     if (nUndoExtraFlags & IDF_ATTRIB)
         nUndoFlags |= IDF_ATTRIB;
     // do not copy note captions into undo document
@@ -1228,7 +1228,7 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
     if ( bRecord )
         pDoc->BeginDrawUndo();
 
-    sal_uInt16 nNoObjFlags = nFlags & ~IDF_OBJECTS;
+    InsertDeleteFlags nNoObjFlags = nFlags & ~IDF_OBJECTS;
     if (!bAsLink)
     {
         //  copy normally (original range)
@@ -1391,9 +1391,9 @@ bool ScViewFunc::PasteFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc,
 }
 
 bool ScViewFunc::PasteMultiRangesFromClip(
-    sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+    InsertDeleteFlags nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
     bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
-    InsCellCmd eMoveMode, sal_uInt16 nUndoFlags)
+    InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags)
 {
     ScViewData& rViewData = GetViewData();
     ScDocument* pDoc = rViewData.GetDocument();
@@ -1502,7 +1502,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
     if (pDoc->IsUndoEnabled())
         pDoc->BeginDrawUndo();
 
-    sal_uInt16 nNoObjFlags = nFlags & ~IDF_OBJECTS;
+    InsertDeleteFlags nNoObjFlags = nFlags & ~IDF_OBJECTS;
     pDoc->CopyMultiRangeFromClip(rCurPos, aMark, nNoObjFlags, pClipDoc,
                                  true, bAsLink, false, bSkipEmpty);
 
@@ -1555,9 +1555,9 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 }
 
 bool ScViewFunc::PasteFromClipToMultiRanges(
-    sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+    InsertDeleteFlags nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
     bool bSkipEmpty, bool bTranspose, bool bAsLink, bool bAllowDialogs,
-    InsCellCmd eMoveMode, sal_uInt16 nUndoFlags )
+    InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags )
 {
     if (bTranspose)
     {
@@ -1904,13 +1904,13 @@ void ScViewFunc::DataFormPutData( SCROW nCurrentRow ,
         bool bRowInfo = ( nStartCol==0 && nEndCol==MAXCOL );
         SCCOL nUndoEndCol = nStartCol+aColLength-1;
         SCROW nUndoEndRow = nCurrentRow;
-        sal_uInt16 nUndoFlags = IDF_NONE;
+        InsertDeleteFlags nUndoFlags = IDF_NONE;
 
         if ( bRecord )
         {
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndoSelected( pDoc , rMark , bColInfo , bRowInfo );
-            pDoc->CopyToDocument( aUserRange , 1 , false , pUndoDoc );
+            pDoc->CopyToDocument( aUserRange , IDF_VALUE , false , pUndoDoc );
         }
         sal_uInt16 nExtFlags = 0;
         pDocSh->UpdatePaintExt( nExtFlags, nStartCol, nStartRow, nStartTab , nEndCol, nEndRow, nEndTab ); // content before the change

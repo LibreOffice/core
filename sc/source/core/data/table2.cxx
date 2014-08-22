@@ -412,7 +412,7 @@ void ScTable::DeleteCol(
         SetStreamValid(false);
 }
 
-void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal_uInt16 nDelFlag)
+void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, InsertDeleteFlags nDelFlag)
 {
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
@@ -443,7 +443,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
         SetStreamValid(false);
 }
 
-void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark, bool bBroadcast )
+void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
 {
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
@@ -659,7 +659,7 @@ void ScTable::CopyFromClip(
                 aCol[i].ClearItems(nRow1, nRow2, nWhichArray);
         }
 
-        if ((rCxt.getInsertFlag() & IDF_ATTRIB) != 0)
+        if ((rCxt.getInsertFlag() & IDF_ATTRIB) != IDF_NONE)
         {
             if (nRow1==0 && nRow2==MAXROW && pColWidth && pTable->pColWidth)
                 for (SCCOL i=nCol1; i<=nCol2; i++)
@@ -812,7 +812,7 @@ public:
 }
 
 void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                ScTable* pTransClip, sal_uInt16 nFlags, bool bAsLink )
+                                ScTable* pTransClip, InsertDeleteFlags nFlags, bool bAsLink )
 {
     bool bWasCut = pDocument->IsCutMode();
 
@@ -1055,7 +1055,7 @@ void ScTable::StartListeningInArea(
 
 void ScTable::CopyToTable(
     sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData,
+    InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData,
     bool bAsLink, bool bColRowFlags )
 {
     if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
@@ -1175,7 +1175,7 @@ void ScTable::CopyToTable(
 
 void ScTable::UndoToTable(
     sc::CopyToDocContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-    sal_uInt16 nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData )
+    InsertDeleteFlags nFlags, bool bMarked, ScTable* pDestTab, const ScMarkData* pMarkData )
 {
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {

@@ -24,12 +24,12 @@
 #include "miscdlgs.hrc"
 
 bool       ScDeleteContentsDlg::bPreviousAllCheck = false;
-sal_uInt16 ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
+InsertDeleteFlags ScDeleteContentsDlg::nPreviousChecks   = (IDF_DATETIME | IDF_STRING  |
                                                  IDF_NOTE     | IDF_FORMULA |
                                                  IDF_VALUE);
 
 ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
-                                          sal_uInt16  nCheckDefaults ) :
+                                          InsertDeleteFlags nCheckDefaults ) :
     ModalDialog     ( pParent, "DeleteContentsDialog", "modules/scalc/ui/deletecontents.ui" ),
 
     bObjectsDisabled( false )
@@ -44,7 +44,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     get( aBtnDelObjects, "objects" );
     get( aBtnOk, "ok" );
 
-    if ( nCheckDefaults != 0 )
+    if ( nCheckDefaults != IDF_NONE )
     {
         ScDeleteContentsDlg::nPreviousChecks = nCheckDefaults;
         ScDeleteContentsDlg::bPreviousAllCheck = false;
@@ -71,9 +71,9 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnDelAll->SetClickHdl( LINK( this, ScDeleteContentsDlg, DelAllHdl ) );
 }
 
-sal_uInt16 ScDeleteContentsDlg::GetDelContentsCmdBits() const
+InsertDeleteFlags ScDeleteContentsDlg::GetDelContentsCmdBits() const
 {
-    ScDeleteContentsDlg::nPreviousChecks = 0;
+    ScDeleteContentsDlg::nPreviousChecks = IDF_NONE;
 
     if ( aBtnDelStrings->IsChecked() )
         ScDeleteContentsDlg::nPreviousChecks  = IDF_STRING;

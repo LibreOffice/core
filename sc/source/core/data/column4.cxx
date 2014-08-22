@@ -97,7 +97,7 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
     }
 
     std::vector<SCROW> aDeletedRows;
-    sal_uInt16 nDelFlag = rCxt.getDeleteFlag();
+    InsertDeleteFlags nDelFlag = rCxt.getDeleteFlag();
     sc::ColumnBlockPosition aBlockPos;
     InitBlockPosition(aBlockPos);
 
@@ -150,9 +150,9 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
 
     ScCellValue& rSrcCell = rCxt.getSingleCell();
 
-    sal_uInt16 nFlags = rCxt.getInsertFlag();
+    InsertDeleteFlags nFlags = rCxt.getInsertFlag();
 
-    if ((nFlags & IDF_ATTRIB) != 0)
+    if ((nFlags & IDF_ATTRIB) != IDF_NONE)
     {
         if (!rCxt.isSkipAttrForEmptyCells() || rSrcCell.meType != CELLTYPE_NONE)
         {
@@ -161,7 +161,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         }
     }
 
-    if ((nFlags & IDF_CONTENTS) != 0)
+    if ((nFlags & IDF_CONTENTS) != IDF_NONE)
     {
         std::vector<sc::CellTextAttr> aTextAttrs(nDestSize);
 
@@ -223,7 +223,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     }
 
     const ScPostIt* pNote = rCxt.getSingleCellNote();
-    if (pNote && (nFlags & (IDF_NOTE | IDF_ADDNOTES)) != 0)
+    if (pNote && (nFlags & (IDF_NOTE | IDF_ADDNOTES)) != IDF_NONE)
     {
         // Duplicate the cell note over the whole pasted range.
 
@@ -234,7 +234,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         aNotes.reserve(nDestSize);
         for (size_t i = 0; i < nDestSize; ++i)
         {
-            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
+            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == IDF_NONE;
             aNotes.push_back(pNote->Clone(rSrcPos, *pDocument, aDestPos, bCloneCaption));
             aDestPos.IncRow();
         }
@@ -322,7 +322,7 @@ void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
     BroadcastCells(aRows, SC_HINT_DATACHANGED);
 }
 
-void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, sal_uInt16 nDelFlag, bool bBroadcast )
+void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag, bool bBroadcast )
 {
     std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();
     for (; itSpan != itSpanEnd; ++itSpan)

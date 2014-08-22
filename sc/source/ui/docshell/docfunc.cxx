@@ -555,7 +555,7 @@ void ScDocFunc::DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, vector<S
     lcl_collectAllPredOrSuccRanges(rSrcRanges, rRefTokens, rDocShell, false);
 }
 
-bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
+bool ScDocFunc::DeleteContents( const ScMarkData& rMark, InsertDeleteFlags nFlags,
                                     bool bRecord, bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );
@@ -638,7 +638,7 @@ bool ScDocFunc::DeleteContents( const ScMarkData& rMark, sal_uInt16 nFlags,
 
         //  bei "Format/Standard" alle Attribute kopieren, weil CopyToDocument
         //  nur mit IDF_HARDATTR zu langsam ist:
-        sal_uInt16 nUndoDocFlags = nFlags;
+        InsertDeleteFlags nUndoDocFlags = nFlags;
         if (nFlags & IDF_ATTRIB)
             nUndoDocFlags |= IDF_ATTRIB;
         if (nFlags & IDF_EDITATTR)          // Edit-Engine-Attribute
@@ -2669,7 +2669,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     {
         bool bWholeCols = ( nStartRow == 0 && nEndRow == MAXROW );
         bool bWholeRows = ( nStartCol == 0 && nEndCol == MAXCOL );
-        sal_uInt16 nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
+        InsertDeleteFlags nUndoFlags = (IDF_ALL & ~IDF_OBJECTS) | IDF_NOCAPTIONS;
 
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab, bWholeCols, bWholeRows );
