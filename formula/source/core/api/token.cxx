@@ -922,7 +922,7 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
                 sp = sal::static_int_cast<short>( sp - nParams );
                 if ( sp < 0 )
                 {
-                    OSL_FAIL( "FormulaTokenArray::HasMatrixDoubleRefOps: sp < 0" );
+                    SAL_WARN("formula.core", "FormulaTokenArray::HasMatrixDoubleRefOps: sp < 0" );
                     sp = 0;
                 }
                 pStack[sp++] = pResult;

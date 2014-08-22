@@ -1885,7 +1885,7 @@ FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuffer, F
             case svSep:
                 break;      // Opcodes
             default:
-                OSL_FAIL("FormulaCompiler:: GetStringFromToken errUnknownVariable");
+                SAL_WARN("formula.core", "FormulaCompiler::GetStringFromToken: unknown token type " << t->GetType());
             } // of switch
         }
     }
