@@ -416,10 +416,10 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
         // Compute default (depends on size)
         if( !nPoints )
         {
-            nPoints = (sal_uInt16) ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                                 sqrt( (double) labs( nRadX * nRadY ) ) ) );
-
-            nPoints = (sal_uInt16) MinMax( nPoints, 32, 256 );
+            nPoints = (sal_uInt16) MinMax(
+                ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
+                           sqrt( (double) labs( nRadX * nRadY ) ) ) ),
+                32, 256 );
 
             if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
                 nPoints >>= 1;
@@ -471,10 +471,10 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
         const long  nRadY = aCenter.Y() - rBound.Top();
         sal_uInt16  nPoints;
 
-        nPoints = (sal_uInt16) ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
-                             sqrt( (double) labs( nRadX * nRadY ) ) ) );
-
-        nPoints = (sal_uInt16) MinMax( nPoints, 32, 256 );
+        nPoints = (sal_uInt16) MinMax(
+            ( F_PI * ( 1.5 * ( nRadX + nRadY ) -
+                       sqrt( (double) labs( nRadX * nRadY ) ) ) ),
+            32, 256 );
 
         if( ( nRadX > 32 ) && ( nRadY > 32 ) && ( nRadX + nRadY ) < 8192 )
             nPoints >>= 1;
