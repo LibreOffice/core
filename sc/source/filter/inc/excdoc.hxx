@@ -59,8 +59,6 @@ private:
     // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
     void                        Add( XclExpRecordBase* pRec );
 
-    void                        FillAsXmlTable( SCTAB nCodeNameIdx );
-
 public:
                                 ExcTable( const XclExpRoot& rRoot );
                                 ExcTable( const XclExpRoot& rRoot, SCTAB nScTab );
@@ -69,7 +67,9 @@ public:
     void FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList );
     void FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList );
 
-    void                        FillAsTable( SCTAB nCodeNameIdx );
+    void FillAsTableBinary( SCTAB nCodeNameIdx );
+    void FillAsTableXml();
+
     void                        FillAsEmptyTable( SCTAB nCodeNameIdx );
 
     void                        Write( XclExpStream& );
