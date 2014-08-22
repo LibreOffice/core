@@ -12830,7 +12830,7 @@ if test "$build_os" = "cygwin"; then
     fi
     ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
 
-    if test "$ENABLE_DIRECTX" = "TRUE"; then
+    if test "$ENABLE_DIRECTX" = "TRUE" -a "$HAVE_DIRECTXSDK_LIB" = "yes"; then
         ILIB="$ILIB;$DIRECTXSDK_LIB"
     fi
     AC_SUBST(ILIB)
