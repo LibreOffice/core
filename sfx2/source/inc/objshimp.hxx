@@ -31,6 +31,8 @@
 #include <sfx2/docmacromode.hxx>
 #include "bitset.hxx"
 
+#include <appbaslib.hxx>
+
 namespace svtools { class AsynchronLink; }
 
 class SfxViewFrame;
@@ -46,8 +48,7 @@ class SfxBasicManagerHolder;
 struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 {
     ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
-    SfxBasicManagerHolder*
-                        pBasicManager;
+    SfxBasicManagerHolder aBasicManager;
     SfxObjectShell&     rDocShell;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
                         xBasicLibraries;

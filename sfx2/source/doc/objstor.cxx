@@ -1060,13 +1060,13 @@ bool SfxObjectShell::DoSave()
                     GetBasicManager();
 
                     // disconnect from the current storage
-                    pImp->pBasicManager->setStorage( xTmpStorage );
+                    pImp->aBasicManager.setStorage( xTmpStorage );
 
                     // store to the current storage
-                    pImp->pBasicManager->storeLibrariesToStorage( GetMedium()->GetStorage() );
+                    pImp->aBasicManager.storeLibrariesToStorage( GetMedium()->GetStorage() );
 
                     // connect to the current storage back
-                    pImp->pBasicManager->setStorage( GetMedium()->GetStorage() );
+                    pImp->aBasicManager.setStorage( GetMedium()->GetStorage() );
                 }
                 catch( uno::Exception& )
                 {
@@ -1858,7 +1858,7 @@ bool SfxObjectShell::ConnectTmpStorage_Impl(
 
             if ( bResult )
             {
-                pImp->pBasicManager->setStorage( xTmpStorage );
+                pImp->aBasicManager.setStorage( xTmpStorage );
 
                 // Get rid of this workaround after issue i113914 is fixed
                 try
@@ -2014,7 +2014,7 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
 
         // TODO/LATER: may be this code will be replaced, but not sure
         // Set storage in document library containers
-        pImp->pBasicManager->setStorage( xStorage );
+        pImp->aBasicManager.setStorage( xStorage );
 
         // Get rid of this workaround after issue i113914 is fixed
         try
@@ -3097,7 +3097,7 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             GetBasicManager();
 
             // Save dialog/script container
-            pImp->pBasicManager->storeLibrariesToStorage( xStorage );
+            pImp->aBasicManager.storeLibrariesToStorage( xStorage );
         }
 #endif
         return SaveAs( rMedium );
@@ -3632,12 +3632,12 @@ bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< ta
     if ( !HasBasic() )
         return true;
 
-    if ( !pImp->pBasicManager->isValid() )
+    if ( !pImp->aBasicManager.isValid() )
         GetBasicManager();
     uno::Sequence< OUString > sModules;
     if ( xHandler.is() )
     {
-        if( pImp->pBasicManager->LegacyPsswdBinaryLimitExceeded( sModules ) )
+        if( pImp->aBasicManager.LegacyPsswdBinaryLimitExceeded( sModules ) )
         {
             ModuleSizeExceeded* pReq =  new ModuleSizeExceeded( sModules );
             uno::Reference< task::XInteractionRequest > xReq( pReq );

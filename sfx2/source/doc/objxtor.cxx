@@ -205,7 +205,6 @@ TYPEINIT1(SfxObjectShell, SfxShell);
 
 SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
     :mpObjectContainer(0)
-    ,pBasicManager( new SfxBasicManagerHolder )
     ,rDocShell( _rDocShell )
     ,aMacroMode( *this )
     ,pProgress( 0)
@@ -276,7 +275,6 @@ SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 
 SfxObjectShell_Impl::~SfxObjectShell_Impl()
 {
-    delete pBasicManager;
 }
 
 
@@ -364,7 +362,7 @@ SfxObjectShell::~SfxObjectShell()
         pSfxApp->ReleaseIndex(pImp->nVisualDocumentNumber);
 
     // Destroy Basic-Manager
-    pImp->pBasicManager->reset( NULL );
+    pImp->aBasicManager.reset( NULL );
 
     if ( pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
@@ -688,7 +686,7 @@ namespace
         {
             if ( !_rDocument.Get_Impl()->bBasicInitialized )
                 const_cast< SfxObjectShell& >( _rDocument ).InitBasicManager_Impl();
-            return _rDocument.Get_Impl()->pBasicManager->get();
+            return _rDocument.Get_Impl()->aBasicManager.get();
         }
 
         // assume we do not have Basic ourself, but we can refer to another
@@ -749,7 +747,7 @@ bool SfxObjectShell::HasBasic() const
     if ( !pImp->bBasicInitialized )
         const_cast< SfxObjectShell* >( this )->InitBasicManager_Impl();
 
-    return pImp->pBasicManager->isValid();
+    return pImp->aBasicManager.isValid();
 #endif
 }
 
@@ -876,16 +874,16 @@ void SfxObjectShell::InitBasicManager_Impl()
         Basic managers is the global BasicManagerRepository instance.
      */
 #ifndef DISABLE_SCRIPTING
-    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
+    DBG_ASSERT( !pImp->bBasicInitialized && !pImp->aBasicManager.isValid(), "Lokaler BasicManager bereits vorhanden");
     try
     {
-        pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
+        pImp->aBasicManager.reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     }
     catch (const css::ucb::ContentCreationException& e)
     {
         SAL_WARN("sfx.doc", "caught exception " << e.Message);
     }
-    DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
+    DBG_ASSERT( pImp->aBasicManager.isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
     pImp->bBasicInitialized = true;
 #endif
 }
