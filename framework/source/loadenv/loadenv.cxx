@@ -762,6 +762,7 @@ void LoadEnv::impl_detectTypeAndFilter()
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sType;
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] <<= sFilter;
         m_lMediaDescriptor[utl::MediaDescriptor::PROP_FILTERPROVIDER()] <<= OUString("orcus");
+        m_lMediaDescriptor[utl::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= OUString("com.sun.star.sheet.SpreadsheetDocument");
         return;
     }
 
