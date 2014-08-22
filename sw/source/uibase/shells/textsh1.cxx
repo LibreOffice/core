@@ -183,12 +183,11 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
     {
         pDlg->SetCurPageId("fonteffects");
     }
-    else if (pDlg && nSlot == SID_ATTR_CHAR_FONT)
+    else if (pDlg && (nSlot == SID_ATTR_CHAR_FONT || nSlot == SID_CHAR_DLG_FOR_PARAGRAPH))
     {
         pDlg->SetCurPageId("font");
     }
-
-    if (pReq)
+    else if (pDlg && pReq)
     {
         SFX_REQUEST_ARG((*pReq), pItem, SfxStringItem, FN_PARAM_1, false);
         if (pItem)

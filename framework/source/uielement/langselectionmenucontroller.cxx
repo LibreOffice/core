@@ -207,7 +207,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     OUString aCmd_Language;
     if( eMode == MODE_SetLanguageSelectionMenu )
     {
-        aCmd_Dialog += ".uno:FontDialog?Language:string=*";
+        aCmd_Dialog += ".uno:FontDialog?Page:string=font";
         aCmd_Language += ".uno:LanguageStatus?Language:string=Current_";
     }
     else if ( eMode == MODE_SetLanguageParagraphMenu )

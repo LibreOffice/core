@@ -298,8 +298,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
+            const SfxPoolItem* pItem = 0;
+            if (nSlot == SID_CHAR_DLG)
+                pItem = pArgs->GetItem(FN_PARAM_1, false, TYPE(SfxStringItem) );
 
-            if( !pArgs )
+            if( !pArgs || pItem )
             {
                 aOldSelection = pOLV->GetSelection();
                 if (nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
@@ -329,6 +332,17 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 {
                     pDlg->SetCurPageId("fonteffects");
                 }
+                else if (nSlot == SID_CHAR_DLG_FOR_PARAGRAPH)
+                {
+                    pDlg->SetCurPageId("font");
+                }
+                else if (pItem)
+                {
+                    const SfxStringItem* pStringItem = static_cast< const SfxStringItem* >(pItem);
+                    if (pStringItem)
+                        pDlg->SetCurPageId(OUStringToOString(pStringItem->GetValue(), RTL_TEXTENCODING_UTF8));
+                }
+
                 sal_uInt16 nRet = pDlg->Execute();
                 if(RET_OK == nRet )
                 {
