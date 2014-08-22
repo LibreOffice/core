@@ -135,7 +135,7 @@ void BorderHandler::lcl_sprm(Sprm & rSprm)
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         {
-            std::vector<beans::PropertyValue> aSavedGrabBag;
+            comphelper::SequenceAsVector<beans::PropertyValue> aSavedGrabBag;
             if (!m_aInteropGrabBagName.isEmpty())
             {
                 aSavedGrabBag = m_aInteropGrabBag;
@@ -202,12 +202,7 @@ beans::PropertyValue BorderHandler::getInteropGrabBag(const OUString& aName)
     else
         aRet.Name = aName;
 
-    uno::Sequence<beans::PropertyValue> aSeq(m_aInteropGrabBag.size());
-    beans::PropertyValue* pSeq = aSeq.getArray();
-    for (std::vector<beans::PropertyValue>::iterator i = m_aInteropGrabBag.begin(); i != m_aInteropGrabBag.end(); ++i)
-        *pSeq++ = *i;
-
-    aRet.Value = uno::makeAny(aSeq);
+    aRet.Value = uno::makeAny(m_aInteropGrabBag.getAsConstList());
     return aRet;
 }
 
