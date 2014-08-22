@@ -265,24 +265,40 @@ void ChartWindow::adjustHighContrastMode()
 void ChartWindow::ForceInvalidate()
 {
     ::Window::Invalidate();
+    if(m_pOpenGLWindow)
+    {
+        m_pOpenGLWindow->Invalidate();
+    }
 }
 void ChartWindow::Invalidate( sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     ::Window::Invalidate( nFlags );
+    if(m_pOpenGLWindow)
+    {
+        m_pOpenGLWindow->Invalidate( nFlags );
+    }
 }
 void ChartWindow::Invalidate( const Rectangle& rRect, sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     ::Window::Invalidate( rRect, nFlags );
+    if(m_pOpenGLWindow)
+    {
+        m_pOpenGLWindow->Invalidate( rRect, nFlags );
+    }
 }
 void ChartWindow::Invalidate( const Region& rRegion, sal_uInt16 nFlags )
 {
     if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
         return;
     ::Window::Invalidate( rRegion, nFlags );
+    if(m_pOpenGLWindow)
+    {
+        m_pOpenGLWindow->Invalidate( rRegion, nFlags );
+    }
 }
 
 } //namespace chart

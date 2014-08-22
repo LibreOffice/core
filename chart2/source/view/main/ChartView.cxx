@@ -165,6 +165,7 @@ GL2DRenderer::~GL2DRenderer()
 
 void GL2DRenderer::update()
 {
+    mpView->update();
     mpView->render();
 }
 
