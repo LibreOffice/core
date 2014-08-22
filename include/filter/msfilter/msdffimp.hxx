@@ -260,7 +260,6 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     bool            bHidden         :1;
     bool            bReplaceByFly   :1;
     bool            bLastBoxInChain :1;
-    bool            bHasUDefProp    :1;
     bool            bVFlip          :1;
     bool            bHFlip          :1;
     bool            bAutoWidth      :1;

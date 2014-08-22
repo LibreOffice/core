@@ -4968,7 +4968,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 }
                 if ( rSt.GetError() != 0 )
                     break;
-                pImpRec->bHasUDefProp = true;
                 nBytesLeft  -= 6;
             }
         }
@@ -7244,7 +7243,6 @@ SvxMSDffImportRec::SvxMSDffImportRec()
 
       bReplaceByFly   = false;
       bLastBoxInChain = true;
-      bHasUDefProp    = false; // was the DFF_msofbtUDefProp record set?
       bVFlip          = false;
       bHFlip          = false;
       bAutoWidth      = false;
@@ -7295,7 +7293,6 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     bReplaceByFly    = rCopy.bReplaceByFly;
     bAutoWidth       = rCopy.bAutoWidth;
     bLastBoxInChain  = rCopy.bLastBoxInChain;
-    bHasUDefProp     = rCopy.bHasUDefProp;
     bVFlip = rCopy.bVFlip;
     bHFlip = rCopy.bHFlip;
     nClientAnchorLen = rCopy.nClientAnchorLen;

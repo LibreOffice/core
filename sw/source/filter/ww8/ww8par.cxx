@@ -701,7 +701,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 }
                 if ( rSt.GetError() != 0 )
                     break;
-                pImpRec->bHasUDefProp = true;
                 nBytesLeft  -= 6;
             }
         }
