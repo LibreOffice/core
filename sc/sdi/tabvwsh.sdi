@@ -92,9 +92,9 @@ interface BaseSelection
 
 
     SID_INSERT_SMATH        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
-    SID_GALLERY_FORMATS     [ ExecMethod = ExecGallery; StateMethod = GetGalleryState; ]
-    SID_GALLERY             [ ExecMethod = ExecChildWin; StateMethod = GetChildWinState; ]
-    SID_AVMEDIA_PLAYER      [ ExecMethod = ExecChildWin; StateMethod = GetChildWinState; ]
+    SID_GALLERY_FORMATS     [ ExecMethod = ExecGallery; ]
+    SID_GALLERY             [ ExecMethod = ExecChildWin; ]
+    SID_AVMEDIA_PLAYER      [ ExecMethod = ExecChildWin; ]
     SID_DRAW_NOTEEDIT       [ ExecMethod = ExecDraw; StateMethod = GetDrawState; ]
     SID_OBJECTRESIZE        [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 

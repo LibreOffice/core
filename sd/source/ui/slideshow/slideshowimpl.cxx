@@ -2484,7 +2484,6 @@ FncGetChildWindowId aShowChildren[] =
     &SvxIMapDlgChildWindow::GetChildWindowId,
     &SvxHlinkDlgWrapper::GetChildWindowId,
     &SfxTemplateDialogWrapper::GetChildWindowId,
-    &GalleryChildWindow::GetChildWindowId,
     &SfxInfoBarContainerChild::GetChildWindowId
 };
 

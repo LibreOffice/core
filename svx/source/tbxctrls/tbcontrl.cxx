@@ -57,6 +57,7 @@
 #include <svx/svxitems.hrc>
 #include "helpid.hrc"
 #include <sfx2/htmlmode.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include <svx/xtable.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -365,15 +366,9 @@ void SvxStyleBox_Impl::Select()
             {
                 SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                 DBG_ASSERT( pViewFrm, "SvxStyleBox_Impl::Select(): no viewframe" );
-                pViewFrm->ShowChildWindow( SID_STYLE_DESIGNER );
-                SfxChildWindow* pChildWin = pViewFrm->GetChildWindow( SID_STYLE_DESIGNER );
-                if ( pChildWin && pChildWin->GetWindow() )
-                {
-                    static_cast< SfxTemplateDialogWrapper* >( pChildWin )->SetParagraphFamily();
-                    static_cast< SfxDockingWindow* >( pChildWin->GetWindow() )->AutoShow( true );
-                    Application::PostUserEvent(
-                        STATIC_LINK( 0, SvxStyleBox_Impl, FocusHdl_Impl ), pChildWin->GetWindow() );
-                }
+                pViewFrm->ShowChildWindow( SID_SIDEBAR );
+                ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
+                                                    pViewFrm->GetFrame().GetFrameInterface());
                 bDoIt = false;
             }
         }
