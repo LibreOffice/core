@@ -1489,7 +1489,7 @@ AC_ARG_WITH(galleries,
 AC_ARG_WITH(theme,
     AS_HELP_STRING([--with-theme="theme1 theme2..."],
         [Choose which themes to include. By default those themes with an '*' are included.
-         Possible choices: *crystal, *default (galaxy), *hicontrast, human, industrial, *oxygen, *sifr, *tango, *tango_testing.]),
+         Possible choices: *crystal, *galaxy, *hicontrast, human, industrial, *oxygen, *sifr, *tango, *tango_testing.]),
 ,)
 
 AC_ARG_WITH(helppack-integration,
@@ -11660,7 +11660,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([which themes to include])
 # if none given use default subset of available themes
 if test "x$with_theme" = "x" -o "x$with_theme" = "xyes"; then
-    with_theme="crystal default galaxy hicontrast oxygen tango sifr"
+    with_theme="crystal galaxy hicontrast oxygen tango sifr"
     test -z "$ENABLE_RELEASE_BUILD" && with_theme="$with_theme tango_testing"
 fi
 
@@ -11668,14 +11668,22 @@ WITH_THEMES=""
 if test "x$with_theme" != "xno"; then
     for theme in $with_theme; do
         case $theme in
-        crystal|default|galaxy|hicontrast|human|industrial|oxygen|sifr|tango|tango_testing) : ;;
+        crystal|galaxy|hicontrast|human|industrial|oxygen|sifr|tango|tango_testing) real_theme="$theme" ;;
+        default) real_theme=galaxy ;;
         *) AC_MSG_ERROR([Unknown value for --with-theme: $theme]) ;;
         esac
-        WITH_THEMES="$WITH_THEMES $theme"
+        WITH_THEMES=`echo "$WITH_THEMES $real_theme"|tr '\ ' '\n'|sort|uniq|tr '\n' '\ '`
     done
 fi
 AC_MSG_RESULT([$WITH_THEMES])
 AC_SUBST([WITH_THEMES])
+# FIXME: remove this, and the convenience default->galaxy remapping after a crace period
+for theme in $with_theme; do
+    case $theme in
+    default) AC_MSG_WARN([--with-theme=default is deprecated and will be removed, use --with-theme=galaxy]) ;;
+    *) ;;
+    esac
+done
 
 dnl ===================================================================
 dnl Test whether to integrate helppacks into the product's installer
