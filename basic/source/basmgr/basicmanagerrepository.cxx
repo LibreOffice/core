@@ -72,21 +72,6 @@ namespace basic
 
     typedef ::std::vector< BasicManagerCreationListener* >  CreationListeners;
 
-
-    //= BasicManagerCleaner
-
-    /// is the only instance which is allowed to delete a BasicManager instance
-    class BasicManagerCleaner
-    {
-    public:
-        static void deleteBasicManager( BasicManager*& _rpManager )
-        {
-            delete _rpManager;
-            _rpManager = NULL;
-        }
-    };
-
-
     //= ImplRepository
 
     class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener
@@ -272,7 +257,7 @@ namespace basic
         ::osl::MutexGuard aGuard( m_aMutex );
 
         BasicManager* pPreviousManager = getApplicationBasicManager( false );
-        BasicManagerCleaner::deleteBasicManager( pPreviousManager );
+        delete pPreviousManager;
 
         GetSbData()->pAppBasMgr = _pBasicManager;
     }
@@ -453,7 +438,8 @@ namespace basic
                     if ( ERRCODE_BUTTON_CANCEL == ErrorHandler::HandleError( i->GetErrorId() ) )
                     {
                         // user wants to break loading of BASIC-manager
-                        BasicManagerCleaner::deleteBasicManager( _out_rpBasicManager );
+                        delete _out_rpBasicManager;
+                        _out_rpBasicManager = NULL;
                         xStorage.clear();
                         break;
                     }
@@ -550,7 +536,7 @@ namespace basic
 
         // *then* delete the BasicManager
         EndListening( *pManager );
-        BasicManagerCleaner::deleteBasicManager( pManager );
+        delete pManager;
     }
 
 

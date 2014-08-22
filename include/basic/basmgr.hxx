@@ -67,7 +67,7 @@ class BasicLibs;
 class ErrorManager;
 class BasicLibInfo;
 
-namespace basic { class BasicManagerCleaner; }
+namespace basic { class ImplRepository; }
 
 // Library password handling for 5.0 documents
 class BASIC_DLLPUBLIC OldBasicPassword
@@ -115,7 +115,7 @@ class BASIC_DLLPUBLIC BasicManager : public SfxBroadcaster
     friend class LibraryContainer_Impl;
     friend class StarBasicAccess_Impl;
     friend class BasMgrContainerListenerImpl;
-    friend class ::basic::BasicManagerCleaner;
+    friend class ::basic::ImplRepository;
 
 private:
     BasicLibs*          pLibs;
