@@ -22,23 +22,13 @@
 #include <svx/svddef.hxx>
 #include <svx/sdynitm.hxx>
 
+inline SdrYesNoItem makeSdrObjMoveProtectItem(bool bOn) {
+    return SdrYesNoItem(SDRATTR_OBJMOVEPROTECT, bOn);
+}
 
-// class SdrMoveProtectItem
-
-class SdrObjMoveProtectItem: public SdrYesNoItem {
-public:
-    SdrObjMoveProtectItem(bool bOn=false): SdrYesNoItem(SDRATTR_OBJMOVEPROTECT,bOn) {}
-    SdrObjMoveProtectItem(SvStream& rIn): SdrYesNoItem(SDRATTR_OBJMOVEPROTECT,rIn) {}
-};
-
-
-// class SdrSizeProtectItem
-
-class SdrObjSizeProtectItem: public SdrYesNoItem {
-public:
-    SdrObjSizeProtectItem(bool bOn=false): SdrYesNoItem(SDRATTR_OBJSIZEPROTECT,bOn) {}
-    SdrObjSizeProtectItem(SvStream& rIn): SdrYesNoItem(SDRATTR_OBJSIZEPROTECT,rIn) {}
-};
+inline SdrYesNoItem makeSdrObjSizeProtectItem(bool bOn) {
+    return SdrYesNoItem(SDRATTR_OBJSIZEPROTECT, bOn);
+}
 
 #endif
 

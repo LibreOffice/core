@@ -2203,11 +2203,11 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 
     if (rAttr.GetItemState(SDRATTR_OBJMOVEPROTECT,true,&pPoolItem)==SFX_ITEM_SET) {
-        bool b=((const SdrObjMoveProtectItem*)pPoolItem)->GetValue();
+        bool b=((const SdrYesNoItem*)pPoolItem)->GetValue();
         SetMoveProtect(b);
     }
     if (rAttr.GetItemState(SDRATTR_OBJSIZEPROTECT,true,&pPoolItem)==SFX_ITEM_SET) {
-        bool b=((const SdrObjSizeProtectItem*)pPoolItem)->GetValue();
+        bool b=((const SdrYesNoItem*)pPoolItem)->GetValue();
         SetResizeProtect(b);
     }
 
@@ -2283,8 +2283,8 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const
 {
     const Rectangle& rSnap=GetSnapRect();
     const Rectangle& rLogic=GetLogicRect();
-    lcl_SetItem(rAttr,bMerge,SdrObjMoveProtectItem(IsMoveProtect()));
-    lcl_SetItem(rAttr,bMerge,SdrObjSizeProtectItem(IsResizeProtect()));
+    lcl_SetItem(rAttr,bMerge,makeSdrObjMoveProtectItem(IsMoveProtect()));
+    lcl_SetItem(rAttr,bMerge,makeSdrObjSizeProtectItem(IsResizeProtect()));
     lcl_SetItem(rAttr,bMerge,SdrObjPrintableItem(IsPrintable()));
     lcl_SetItem(rAttr,bMerge,SdrObjVisibleItem(IsVisible()));
     lcl_SetItem(rAttr,bMerge,SdrRotateAngleItem(GetRotateAngle()));
