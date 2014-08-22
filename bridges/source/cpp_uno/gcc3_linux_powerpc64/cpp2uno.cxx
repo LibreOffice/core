@@ -546,9 +546,9 @@ extern "C" void privateSnippetExecutor( ... )
                 : "=r" (sp) : );
 
 #if _CALL_ELF == 2
-    volatile long nRegReturn[1];
-#else
     volatile long nRegReturn[2];
+#else
+    volatile long nRegReturn[1];
 #endif
 
     typelib_TypeClass aType =
