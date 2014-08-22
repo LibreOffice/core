@@ -47,11 +47,9 @@ String STR_INFO_DUPLICATE
 {
     Text [ en-US ] = "Duplicate section name" ;
 };
-QueryBox QB_CONNECT
+String STR_QUERY_CONNECT
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "A file connection will delete the contents of the current section. Connect anyway?" ;
+    Text[ en-US ] = "A file connection will delete the contents of the current section. Connect anyway?" ;
 };
 String STR_WRONG_PASSWORD
 {

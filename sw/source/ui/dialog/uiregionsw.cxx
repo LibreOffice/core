@@ -23,7 +23,6 @@
 #include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/passwd.hxx>
@@ -961,7 +960,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
             bool bContent = pSectRepr->IsContent();
             if( pBox->IsChecked() && bContent && rSh.HasSelection() )
             {
-                if( RET_NO == QueryBox( this, SW_RES(QB_CONNECT) ).Execute() )
+                if (RET_NO == MessageDialog(this, SW_RES(STR_QUERY_CONNECT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute())
                     pBox->Check( false );
             }
             if( bFile )
@@ -1709,7 +1708,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     if( pBox->IsChecked() )
     {
         if( m_pWrtSh->HasSelection() &&
-            RET_NO == QueryBox( this, SW_RES(QB_CONNECT) ).Execute() )
+            RET_NO == MessageDialog(this, SW_RES(STR_QUERY_CONNECT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute())
             pBox->Check( false );
     }
 
