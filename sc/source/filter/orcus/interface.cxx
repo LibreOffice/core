@@ -683,6 +683,8 @@ void ScOrcusAutoFilter::set_range(const char* p_ref, size_t n_ref)
 {
     OUString aRange(p_ref, n_ref, RTL_TEXTENCODING_UTF8);
     SAL_INFO("sc.orcus.autofilter", "set_range: " << aRange);
+
+    maRange.Parse(aRange);
 }
 
 void ScOrcusAutoFilter::set_column(orcus::spreadsheet::col_t col)
