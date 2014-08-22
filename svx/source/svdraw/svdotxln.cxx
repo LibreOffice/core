@@ -248,16 +248,17 @@ bool SdrTextObj::LoadText(const OUString& rFileName, const OUString& /*rFilterNa
 
 ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
 {
-    ImpSdrObjTextLinkUserData* pData=NULL;
     sal_uInt16 nAnz=GetUserDataCount();
-    for (sal_uInt16 nNum=nAnz; nNum>0 && pData==NULL;) {
+    for (sal_uInt16 nNum=nAnz; nNum>0;) {
         nNum--;
-        pData=(ImpSdrObjTextLinkUserData*)GetUserData(nNum);
-        if (pData->GetInventor()!=SdrInventor || pData->GetId()!=SDRUSERDATA_OBJTEXTLINK) {
-            pData=NULL;
+        SdrObjUserData * pData=GetUserData(nNum);
+        if (pData->GetInventor() == SdrInventor
+            && pData->GetId() == SDRUSERDATA_OBJTEXTLINK)
+        {
+            return static_cast<ImpSdrObjTextLinkUserData *>(pData);
         }
     }
-    return pData;
+    return 0;
 }
 
 void SdrTextObj::ImpLinkAnmeldung()
