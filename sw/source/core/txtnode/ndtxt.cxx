@@ -910,8 +910,7 @@ void SwTxtNode::Update(
             bool bNoExp = false;
             bool bResort = false;
             bool bMergePortionsNeeded = false;
-            const sal_uInt16 coArrSz =
-                static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
+            const int coArrSz = RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN;
 
             bool aDontExp[ coArrSz ];
             memset( &aDontExp, 0, coArrSz * sizeof(bool) );
@@ -945,8 +944,7 @@ void SwTxtNode::Update(
                         if (!(isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich)))
                             continue;
 
-                        const sal_uInt16 nWhPos = static_cast<sal_uInt16>(nWhich -
-                                        RES_CHRATR_BEGIN);
+                        const sal_uInt16 nWhPos = nWhich - RES_CHRATR_BEGIN;
 
                         if( aDontExp[ nWhPos ] )
                             continue;
@@ -963,10 +961,8 @@ void SwTxtNode::Update(
                             if ( pHint->IsCharFmtAttr() )
                             {
                                 bNoExp = true;
-                                aDontExp[ static_cast<sal_uInt16>(RES_TXTATR_CHARFMT) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN) ]
-                                    = true;
-                                aDontExp[ static_cast<sal_uInt16>(RES_TXTATR_INETFMT) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN) ]
-                                    = true;
+                                aDontExp[ RES_TXTATR_CHARFMT - RES_CHRATR_BEGIN ] = true;
+                                aDontExp[ RES_TXTATR_INETFMT - RES_CHRATR_BEGIN ] = true;
                             }
                             else
                                 aDontExp[ nWhPos ] = true;
@@ -2885,7 +2881,7 @@ bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             {
                 if ( AreListLevelIndentsApplicable() )
                 {
-                    rFLOffset = static_cast<sal_uInt16>(rFmt.GetFirstLineIndent());
+                    rFLOffset = rFmt.GetFirstLineIndent();
                 }
                 else if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
@@ -3631,7 +3627,7 @@ void SwTxtNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewVal
     //UUUU reset fill information
     if(maFillAttributes.get())
     {
-        sal_uInt16 nWhich = pNewValue ? pNewValue->Which() : 0;
+        const sal_uInt16 nWhich = pNewValue ? pNewValue->Which() : 0;
         bool bReset(RES_FMT_CHG == nWhich); // ..on format change (e.g. style changed)
 
         if(!bReset && RES_ATTRSET_CHG == nWhich) // ..on ItemChange from DrawingLayer FillAttributes
@@ -4898,7 +4894,7 @@ sal_uInt16 SwTxtNode::ResetAllAttr()
 
     HandleResetAttrAtTxtNode aHandleResetAttr( *this );
 
-    sal_uInt16 nRet = SwCntntNode::ResetAllAttr();
+    const sal_uInt16 nRet = SwCntntNode::ResetAllAttr();
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
