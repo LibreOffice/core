@@ -70,6 +70,8 @@ using namespace ::svxform;
 
 void FmSearchThread::run()
 {
+    osl_setThreadName("FmSearchThread");
+
     m_pEngine->SearchNextImpl();
 };
 

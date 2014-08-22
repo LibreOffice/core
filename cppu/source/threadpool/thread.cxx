@@ -148,6 +148,8 @@ namespace cppu_threadpool {
 
     void ORequestThread::run()
     {
+        osl_setThreadName("cppu_threadpool::ORequestThread");
+
         try
         {
             while ( m_pQueue )

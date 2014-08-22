@@ -311,6 +311,8 @@ namespace
 
     void SAL_CALL RelationLoader::run()
     {
+        osl_setThreadName("RelationLoader");
+
         const OUString* pIter = m_aTableList.getConstArray() + m_nStartIndex;
         for(sal_Int32 i = m_nStartIndex; i < m_nEndIndex;++i,++pIter)
         {

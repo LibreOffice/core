@@ -28,6 +28,8 @@ void EventHandler::stop()
 
 void EventHandler::run()
 {
+    osl_setThreadName("VLC EventHandler");
+
     TCallback callback;
     do
     {

@@ -229,6 +229,8 @@ void MNS_XPCOM_EventLoop()
 
 extern "C" void MNS_Mozilla_UI_Thread( void *arg )
 {
+    osl_setThreadName("MNS_Mozilla_UI_Thread");
+
     aLive=1;
     OSL_TRACE( "IN : MNS_Mozilla_UI_Thread()" );
     UI_Thread_ARGS * args = (UI_Thread_ARGS*) arg;

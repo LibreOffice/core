@@ -38,6 +38,8 @@ namespace desktop
 
 extern "C" void offacc_workerfunc (void * acc)
 {
+    osl_setThreadName("URP Acceptor");
+
     ((Acceptor*)acc)->run();
 }
 

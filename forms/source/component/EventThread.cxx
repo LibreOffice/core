@@ -160,6 +160,8 @@ void SAL_CALL OComponentEventThread::onTerminated()
 
 void OComponentEventThread::run()
 {
+    osl_setThreadName("frm::OComponentEventThread");
+
     implStarted( );
 
     // Hold on to ourselves, so that we're not deleted if a dispose is called at some point in time

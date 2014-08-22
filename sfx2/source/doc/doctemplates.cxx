@@ -2417,6 +2417,8 @@ Updater_Impl::~Updater_Impl()
 
 void SAL_CALL Updater_Impl::run()
 {
+    osl_setThreadName("Updater_Impl");
+
     mpDocTemplates->doUpdate();
 }
 

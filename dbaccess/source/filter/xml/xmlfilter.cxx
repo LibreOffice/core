@@ -107,6 +107,8 @@ namespace dbaxml
 
         void SAL_CALL FastLoader::run()
         {
+            osl_setThreadName("dbaxml::FastLoader");
+
             if ( m_eWhat == E_JAVA )
             {
 #if HAVE_FEATURE_JAVA

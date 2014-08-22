@@ -33,6 +33,8 @@ WakeUpThread::WakeUpThread(const css::uno::Reference< css::util::XUpdatable >& x
 
 void SAL_CALL WakeUpThread::run()
 {
+    osl_setThreadName("framework::WakeUpThread");
+
     ::osl::Condition aSleeper;
 
     TimeValue aTime;

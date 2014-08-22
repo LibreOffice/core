@@ -49,6 +49,8 @@ protected:
 
 void TickerThread::run()
 {
+    osl_setThreadName("http_dav_ucp::TickerThread");
+
     SAL_INFO("ucb.ucp.webdav",  "TickerThread: start." );
 
     // we have to go through the loop more often to be able to finish ~quickly

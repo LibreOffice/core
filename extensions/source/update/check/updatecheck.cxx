@@ -463,6 +463,8 @@ UpdateCheckThread::onTerminated()
 void SAL_CALL
 UpdateCheckThread::run()
 {
+    osl_setThreadName("UpdateCheckThread");
+
     bool bExtensionsChecked = false;
     TimeValue systime;
     TimeValue nExtCheckTime;
@@ -626,6 +628,8 @@ DownloadThread::~DownloadThread()
 void SAL_CALL
 DownloadThread::run()
 {
+    osl_setThreadName("DownloadThread");
+
 #ifdef WNT
     CoUninitialize();
     CoInitialize( NULL );
@@ -710,6 +714,8 @@ ShutdownThread::~ShutdownThread()
 void SAL_CALL
 ShutdownThread::run()
 {
+    osl_setThreadName("ShutdownThread");
+
     TimeValue tv = { 0, 250 };
 
     m_aCondition.wait(&tv);

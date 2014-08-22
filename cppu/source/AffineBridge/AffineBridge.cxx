@@ -97,6 +97,8 @@ public:
 
 void InnerThread::run(void)
 {
+    osl_setThreadName("UNO AffineBridge InnerThread");
+
     m_pAffineBridge->enter();
     m_pAffineBridge->innerDispatch();
     m_pAffineBridge->leave();
@@ -120,6 +122,8 @@ OuterThread::OuterThread(AffineBridge * threadEnvironment)
 
 void OuterThread::run(void)
 {
+    osl_setThreadName("UNO AffineBridge OuterThread");
+
     osl::MutexGuard guard(m_pAffineBridge->m_outerMutex);
 
     m_pAffineBridge->m_outerThreadId = getIdentifier();

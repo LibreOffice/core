@@ -120,6 +120,8 @@ bool CancelJobsThread::stopped() const
 
 void SAL_CALL CancelJobsThread::run()
 {
+    osl_setThreadName("sw CancelJobsThread");
+
     while ( !stopped() )
     {
         while ( existJobs() )
@@ -190,6 +192,8 @@ bool TerminateOfficeThread::OfficeTerminationStopped()
 
 void SAL_CALL TerminateOfficeThread::run()
 {
+    osl_setThreadName("sw TerminateOfficeThread");
+
     while ( !OfficeTerminationStopped() )
     {
         osl::MutexGuard aGuard(maMutex);

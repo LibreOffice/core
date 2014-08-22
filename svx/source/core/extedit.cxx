@@ -68,6 +68,8 @@ IMPL_LINK (ExternalToolEdit, StartListeningEvent, void*, pEvent)
 
 void ExternalToolEdit::threadWorker(void* pThreadData)
 {
+    osl_setThreadName("ExternalToolEdit");
+
     ExternalToolEdit* pData = (ExternalToolEdit*) pThreadData;
 
     // Make an asynchronous call to listen to the event of temporary image file

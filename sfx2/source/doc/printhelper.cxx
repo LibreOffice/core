@@ -494,6 +494,8 @@ class ImplUCBPrintWatcher : public ::osl::Thread
          */
         void SAL_CALL run() SAL_OVERRIDE
         {
+            osl_setThreadName("ImplUCBPrintWatcher");
+
             /* SAFE { */
             {
                 SolarMutexGuard aGuard;

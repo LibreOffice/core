@@ -427,6 +427,8 @@ void TimerManager::checkForTimeout()
 
 void TimerManager::run()
 {
+    osl_setThreadName("salhelper::TimerManager");
+
     setPriority( osl_Thread_PriorityBelowNormal );
 
     while (schedule())

@@ -51,6 +51,8 @@ SwAsyncRetrieveInputStreamThread::~SwAsyncRetrieveInputStreamThread()
 
 void SwAsyncRetrieveInputStreamThread::threadFunction()
 {
+    osl_setThreadName("SwAsyncRetrieveInputStreamThread");
+
     com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > xProps( 2 );
     xProps[0].Name = "URL";
     xProps[0].Value <<= mrLinkedURL;

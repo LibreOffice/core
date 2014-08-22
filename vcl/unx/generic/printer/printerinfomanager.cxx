@@ -1169,6 +1169,8 @@ static const struct SystemCommandParameters aParms[] =
 
 void SystemQueueInfo::run()
 {
+    osl_setThreadName("LPR psp::SystemQueueInfo");
+
     char pBuffer[1024];
     FILE *pPipe;
     std::list< OString > aLines;

@@ -224,6 +224,8 @@ void TimerScheduler::CancelTask (const sal_Int32 nTaskId)
 
 void SAL_CALL TimerScheduler::run (void)
 {
+    osl_setThreadName("sdext::presenter::TimerScheduler");
+
     while (true)
     {
         // Get the current time.

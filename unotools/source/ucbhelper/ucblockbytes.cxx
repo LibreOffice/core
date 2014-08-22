@@ -782,6 +782,8 @@ void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
 
 void SAL_CALL Moderator::run()
 {
+    osl_setThreadName("utl::Moderator");
+
     ResultType aResultType;
     Any        aResult;
     sal_Int32  nIOErrorCode = 0;

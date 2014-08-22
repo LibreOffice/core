@@ -183,6 +183,8 @@ void SAL_CALL SdrGraphicUpdater::onTerminated(void)
 
 void SAL_CALL SdrGraphicUpdater::run(void)
 {
+    osl_setThreadName("SdrGraphicUpdater");
+
     Graphic aGraphic( ImpLoadLinkedGraphic( maFileName, mrGraphicLink.getReferer(), maFilterName ) );
     SolarMutexGuard aSolarGuard;
     if ( !mbIsTerminated )

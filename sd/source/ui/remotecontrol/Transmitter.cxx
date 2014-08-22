@@ -24,6 +24,8 @@ Transmitter::Transmitter( IBluetoothSocket* aSocket )
 
 void SAL_CALL Transmitter::run()
 {
+    osl_setThreadName("bluetooth Transmitter");
+
     while ( true )
     {
         mQueuesNotEmpty.wait();

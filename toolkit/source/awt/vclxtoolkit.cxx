@@ -50,6 +50,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <osl/conditn.hxx>
 #include <osl/module.h>
+#include <osl/thread.h>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 #include <rtl/process.h>
@@ -596,6 +597,8 @@ extern "C"
 {
 static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 {
+    osl_setThreadName("VCLXToolkit VCL main thread");
+
     VCLXToolkit * pTk = (VCLXToolkit *)pArgs;
     bInitedByVCLToolkit = InitVCL();
     if( bInitedByVCLToolkit )

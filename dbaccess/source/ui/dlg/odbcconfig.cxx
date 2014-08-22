@@ -287,6 +287,8 @@ public:
 protected:
     virtual void SAL_CALL run()
     {
+        osl_setThreadName("dbaui::ProcessTerminationWait");
+
         osl_joinProcess( m_hProcessHandle );
         osl_freeProcessHandle( m_hProcessHandle );
         Application::PostUserEvent( m_aFinishHdl );

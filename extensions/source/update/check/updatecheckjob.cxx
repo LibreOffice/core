@@ -125,6 +125,8 @@ InitUpdateCheckJobThread::InitUpdateCheckJobThread(
 
 void SAL_CALL InitUpdateCheckJobThread::run()
 {
+    osl_setThreadName("InitUpdateCheckJobThread");
+
     if (!m_bShowDialog) {
         TimeValue tv = { 25, 0 };
         m_aCondition.wait( &tv );

@@ -223,6 +223,8 @@ static sal_Int32 lcl_BacktraceWhiteSpaces( const OUString &rText, sal_Int32 nSta
 
 extern "C" void lcl_workerfunc (void * gci)
 {
+    osl_setThreadName("GrammarCheckingIterator");
+
     ((GrammarCheckingIterator*)gci)->DequeueAndCheck();
 }
 

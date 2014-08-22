@@ -221,6 +221,8 @@ void MailDispatcher::sendMailMessageNotifyListener(uno::Reference<mail::XMailMes
 
 void MailDispatcher::run()
 {
+    osl_setThreadName("MailDispatcher");
+
     // acquire a self reference in order to avoid race
     // conditions. The last client of this class must
     // call shutdown before releasing his last reference
