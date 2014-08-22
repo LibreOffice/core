@@ -565,9 +565,10 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
             nOldTokPos = nTokPos;
         } // while ( pIter != pEnd )
     }
-    catch( const uno::Exception& )
+    catch ( const uno::Exception& e )
     {
-        OSL_FAIL("Exception caught!");
+        (void)e;
+        SAL_WARN("formula.ui", "FormulaDlg_Impl::GetFunctionPos exception! " << e.Message);
     }
 
     return nFuncPos;
@@ -955,9 +956,10 @@ OUString FormulaDlg_Impl::RepairFormula(const OUString& aFormula)
 
         }
     }
-    catch(const uno::Exception& )
+    catch ( const uno::Exception& e )
     {
-        OSL_FAIL("Exception caught!");
+        (void)e;
+        SAL_WARN("formula.ui", "FormulaDlg_Impl::RepairFormula exception! " << e.Message);
     }
     return aResult;
 }
@@ -1831,7 +1833,10 @@ void FormulaDlg::StoreFormEditData(FormEditData* pData)
 
 const IFunctionDescription* FormulaDlg::getCurrentFunctionDescription() const
 {
-    OSL_VERIFY(!m_pImpl->pFuncDesc || m_pImpl->pFuncDesc->getSuppressedArgumentCount() == m_pImpl->nArgs);
+    SAL_WARN_IF( (m_pImpl->pFuncDesc && m_pImpl->pFuncDesc->getSuppressedArgumentCount() != m_pImpl->nArgs),
+            "formula.ui", "FormulaDlg::getCurrentFunctionDescription: getSuppressedArgumentCount " <<
+            m_pImpl->pFuncDesc->getSuppressedArgumentCount() << " != nArgs " << m_pImpl->nArgs << " for " <<
+            m_pImpl->pFuncDesc->getFunctionName());
     return m_pImpl->pFuncDesc;
 }
 
