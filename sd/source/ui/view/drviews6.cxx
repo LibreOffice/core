@@ -244,11 +244,6 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
         sal_uInt16 nId = SvxBmpMaskChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_BMPMASK, GetViewFrame()->HasChildWindow( nId ) ) );
     }
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GALLERY ) )
-    {
-        sal_uInt16 nId = GalleryChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_GALLERY, GetViewFrame()->HasChildWindow( nId ) ) );
-    }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_IMAP ) )
     {
         sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();

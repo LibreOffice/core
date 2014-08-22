@@ -34,24 +34,6 @@
 #include <boost/bind.hpp>
 
 
-GalleryChildWindow::GalleryChildWindow( Window* _pParent, sal_uInt16 nId, SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( _pParent, nId )
-{
-
-    pWindow = new GalleryBrowser( pBindings, this, _pParent, GAL_RES( RID_SVXDLG_GALLERYBROWSER ) );
-    eChildAlignment = SFX_ALIGN_TOP;
-    ( (GalleryBrowser*) pWindow )->Initialize( pInfo );
-};
-
-GalleryChildWindow::~GalleryChildWindow()
-{
-}
-
-SFX_IMPL_DOCKINGWINDOW_WITHID( GalleryChildWindow, SID_GALLERY )
-
-// - GalleryBrowser -
-
-
 GalleryBrowser::GalleryBrowser(
     SfxBindings* _pBindings,
     SfxChildWindow* pCW,
