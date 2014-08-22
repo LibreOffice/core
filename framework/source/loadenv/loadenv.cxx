@@ -1079,9 +1079,9 @@ bool LoadEnv::impl_loadContent()
     // So we prevent our code against wrong using. Why?
     // It could be, that using of this progress could make trouble. e.g. He make window visible ...
     // but shouldn't do that. But if no indicator is available ... nobody has a chance to do that!
-    bool                                           bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()         , sal_False                                           );
-    bool                                           bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED()      , sal_False                                           );
-    bool                                           bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW()        , sal_False                                           );
+    bool bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), sal_False);
+    bool bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_MINIMIZED(), sal_False);
+    bool bPreview   = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), sal_False);
     css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), css::uno::Reference< css::task::XStatusIndicator >());
 
     if (!bHidden && !bMinimized && !bPreview && !xProgress.is())
