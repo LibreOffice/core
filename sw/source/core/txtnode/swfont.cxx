@@ -473,7 +473,7 @@ sal_uInt16 SwSubFont::CalcEscAscent( const sal_uInt16 nOldAscent ) const
         const long nAscent = nOldAscent +
                              ( (long) nOrgHeight * GetEscapement() ) / 100L;
         if ( nAscent>0 )
-            return ( std::max( sal_uInt16 (nAscent), nOrgAscent ));
+            return std::max<sal_uInt16>( nAscent, nOrgAscent );
     }
     return nOrgAscent;
 }
@@ -1025,8 +1025,9 @@ sal_uInt16 SwSubFont::CalcEscHeight( const sal_uInt16 nOldHeight,
     {
         long nDescent = nOldHeight - nOldAscent -
                              ( (long) nOrgHeight * GetEscapement() ) / 100L;
-        const sal_uInt16 nDesc = ( nDescent>0 ) ? std::max ( sal_uInt16(nDescent),
-                   sal_uInt16(nOrgHeight - nOrgAscent) ) : nOrgHeight - nOrgAscent;
+        const sal_uInt16 nDesc = nDescent>0
+                ? std::max<sal_uInt16>( nDescent, nOrgHeight - nOrgAscent)
+                : nOrgHeight - nOrgAscent;
         return ( nDesc + CalcEscAscent( nOldAscent ) );
     }
     return nOrgHeight;
@@ -1043,12 +1044,9 @@ short SwSubFont::_CheckKerning( )
 
 sal_uInt16 SwSubFont::GetAscent( SwViewShell *pSh, const OutputDevice& rOut )
 {
-    sal_uInt16 nAscent;
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
-    nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
-    if( GetEscapement() )
-        nAscent = CalcEscAscent( nAscent );
-    return nAscent;
+    const sal_uInt16 nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
+    return GetEscapement() ? CalcEscAscent( nAscent ) : nAscent;
 }
 
 sal_uInt16 SwSubFont::GetHeight( SwViewShell *pSh, const OutputDevice& rOut )
@@ -1414,7 +1412,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 {
     long nOfst;
 
-    sal_uInt16 nDir = UnMapDirection(
+    const sal_uInt16 nDir = UnMapDirection(
                 GetOrientation(), rInf.GetFrm() && rInf.GetFrm()->IsVertical() );
 
     switch ( GetEscapement() )
