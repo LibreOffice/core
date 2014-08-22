@@ -31,7 +31,6 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <svl/stritem.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <unotools/textsearch.hxx>
@@ -1205,7 +1204,7 @@ IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                QueryBox aQuery(&m_rDialog, SW_RES(DLG_CHANGE_AUTH_ENTRY));
+                MessageDialog aQuery(&m_rDialog, SW_RES(STR_QUERY_CHANGE_AUTH_ENTRY), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 if(RET_YES != aQuery.Execute())
                     return 0;
             }

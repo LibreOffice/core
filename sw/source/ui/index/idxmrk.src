@@ -32,11 +32,9 @@ String STR_IDXMRK_INSERT
     Text [ en-US ] = "Insert Index Entry" ;
 };
 
-QueryBox DLG_CHANGE_AUTH_ENTRY
+String STR_QUERY_CHANGE_AUTH_ENTRY
 {
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
+    Text [ en-US ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
