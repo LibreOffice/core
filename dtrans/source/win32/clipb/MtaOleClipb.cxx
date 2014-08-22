@@ -40,6 +40,7 @@
 
 #include "MtaOleClipb.hxx"
 #include <osl/conditn.hxx>
+#include <osl/thread.h>
 
 #include <wchar.h>
 #include <process.h>
@@ -740,6 +741,8 @@ unsigned int CMtaOleClipboard::run( )
 
 unsigned int WINAPI CMtaOleClipboard::oleThreadProc( LPVOID pParam )
 {
+    osl_setThreadName("CMtaOleClipboard::run()");
+
     CMtaOleClipboard* pInst =
         reinterpret_cast<CMtaOleClipboard*>( pParam );
     OSL_ASSERT( NULL != pInst );
@@ -749,6 +752,7 @@ unsigned int WINAPI CMtaOleClipboard::oleThreadProc( LPVOID pParam )
 
 unsigned int WINAPI CMtaOleClipboard::clipboardChangedNotifierThreadProc( LPVOID pParam )
 {
+    osl_setThreadName("CMtaOleClipboard::clipboardChangedNotifierThreadProc()");
     CMtaOleClipboard* pInst = reinterpret_cast< CMtaOleClipboard* >( pParam );
     OSL_ASSERT( NULL != pInst );
 

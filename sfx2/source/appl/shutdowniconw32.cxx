@@ -472,6 +472,8 @@ LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 DWORD WINAPI SystrayThread( LPVOID /*lpParam*/ )
 {
+    osl_setThreadName("SystrayThread");
+
     aListenerWindow = CreateWindowExA(0,
         QUICKSTART_CLASSNAME,       // registered class name
         QUICKSTART_WINDOWNAME,        // window name

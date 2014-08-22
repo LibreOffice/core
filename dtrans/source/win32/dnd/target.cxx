@@ -27,6 +27,7 @@
 #include "targetdropcontext.hxx"
 #include "targetdragcontext.hxx"
 #include <rtl/ustring.h>
+#include <osl/thread.h>
 
 using namespace cppu;
 using namespace osl;
@@ -185,6 +186,8 @@ void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
 // DoDragDrop. The thread also notifies all XSourceListener.
 DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
 {
+    osl_setThreadName("DropTarget DndTargetOleSTAFunc");
+
     HRESULT hr= OleInitialize( NULL);
     if( SUCCEEDED( hr) )
     {

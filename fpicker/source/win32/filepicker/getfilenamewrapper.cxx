@@ -132,6 +132,8 @@ namespace /* private */
 
     unsigned __stdcall ThreadProc(void* pParam)
     {
+        osl_setThreadName("fpicker GetOpenFileName");
+
         CurDirGuard aGuard;
 
         GetFileNameParam* lpgfnp =

@@ -32,6 +32,7 @@
 #include <float.h>
 
 #include <osl/mutex.h>
+#include <osl/thread.h>
 
 #include "internal/rtllifecycle.h"
 
@@ -260,6 +261,8 @@ static DWORD GetParentProcessId()
 
 static DWORD WINAPI ParentMonitorThreadProc( LPVOID lpParam )
 {
+    osl_setThreadName("headless ParentMonitorThread");
+
     DWORD_PTR dwParentProcessId = (DWORD_PTR)lpParam;
 
     HANDLE  hParentProcess = OpenProcess( SYNCHRONIZE, FALSE, dwParentProcessId );

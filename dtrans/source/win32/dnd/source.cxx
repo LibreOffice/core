@@ -30,6 +30,7 @@
 #include "sourcecontext.hxx"
 #include "../../inc/DtObjFactory.hxx"
 #include <rtl/ustring.h>
+#include <osl/thread.h>
 #include <winuser.h>
 #include <stdio.h>
 
@@ -310,6 +311,8 @@ Sequence< OUString > SAL_CALL DragSource::getSupportedServiceNames(  ) throw (Ru
     XSourceListener. */
 unsigned __stdcall DndOleSTAFunc(LPVOID pParams)
 {
+    osl_setThreadName("DragSource DndOleSTAFunc");
+
     // The structure contains all arguments for DoDragDrop and other
     DragSource *pSource= (DragSource*)pParams;
 

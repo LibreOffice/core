@@ -152,6 +152,8 @@ void AsyncRequests::triggerRequestThreadAware(const RequestRef& rRequest,
 
 void SAL_CALL AsyncRequests::run()
 {
+    osl_setThreadName("fpicker::win32::vista::AsyncRequests");
+
     static const ::sal_Int32 TIME_TO_WAIT_FOR_NEW_REQUESTS = 250;
 
     // SYNCHRONIZED ->

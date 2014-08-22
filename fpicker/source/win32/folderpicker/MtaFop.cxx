@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <osl/thread.h>
 #include <osl/conditn.hxx>
 
 #include "MtaFop.hxx"
@@ -738,6 +739,8 @@ unsigned int CMtaFolderPicker::run( )
 
 unsigned int WINAPI CMtaFolderPicker::StaThreadProc( LPVOID pParam )
 {
+    osl_setThreadName("fpicker CMtaFolderPicker::run()");
+
     CMtaFolderPicker* pInst =
         reinterpret_cast<CMtaFolderPicker*>( pParam );
 

@@ -18,6 +18,7 @@
  */
 
 #include <osl/diagnose.h>
+#include <osl/thread.h>
 #include "asynceventnotifier.hxx"
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerListener.hpp>
@@ -297,6 +298,8 @@ void SAL_CALL CAsyncEventNotifier::run()
 
 unsigned int WINAPI CAsyncEventNotifier::ThreadProc(LPVOID pParam)
 {
+    osl_setThreadName("fpicker CAsyncEventNotifier::run()");
+
     CAsyncEventNotifier* pInst = reinterpret_cast< CAsyncEventNotifier* >(pParam);
     OSL_ASSERT(pInst);
 
