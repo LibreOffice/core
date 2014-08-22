@@ -161,7 +161,7 @@ namespace sfx2
 
     //= SolarMutexFacade
 
-    /** a facade for the SolarMutex, implementing ::framework::IMutex (as opposed to ::vos::IMutex)
+    /** a facade for the SolarMutex, implementing ::framework::IMutex
     */
     class SolarMutexFacade : public ::framework::IMutex
     {

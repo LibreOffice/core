@@ -32,7 +32,6 @@ namespace cppu_threadpool {
 
 
     // private thread class for the threadpool
-    // independent from vos
 
     class ORequestThread:
         public salhelper::SimpleReferenceObject, public osl::Thread

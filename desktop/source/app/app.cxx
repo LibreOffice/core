@@ -2873,10 +2873,8 @@ void Desktop::CheckFirstRun( )
 {
     if (officecfg::Office::Common::Misc::FirstRun::get())
     {
-        // this has once been done using a vos timer. this could lead to problems when
-        // the timer would trigger when the app is already going down again, since VCL would
-        // no longer be available. Since the old handler would do a postUserEvent to the main
-        // thread anyway, we can use a vcl timer here to prevent the race contition (#107197#)
+        // use VCL timer, which won't trigger during shutdown if the
+        // application exits before timeout
         m_firstRunTimer.SetTimeout(3000); // 3 sec.
         m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
         m_firstRunTimer.Start();

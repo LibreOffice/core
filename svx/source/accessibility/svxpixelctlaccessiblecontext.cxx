@@ -639,7 +639,6 @@ void SAL_CALL SvxPixelCtlAccessibleChild::grabFocus() throw( RuntimeException, s
 sal_Int32 SvxPixelCtlAccessibleChild::getForeground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    //::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard   aGuard( m_aMutex );
     ThrowExceptionIfNotAlive();
     return mrParentWindow.GetControlForeground().GetColor();
@@ -647,7 +646,6 @@ sal_Int32 SvxPixelCtlAccessibleChild::getForeground(  )
 sal_Int32 SvxPixelCtlAccessibleChild::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    //::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard   aGuard( m_aMutex );
 
     ThrowExceptionIfNotAlive();
