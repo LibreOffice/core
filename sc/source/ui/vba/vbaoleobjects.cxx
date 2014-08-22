@@ -30,6 +30,8 @@ using namespace ooo::vba;
 
 typedef ::cppu::WeakImplHelper1< container::XIndexAccess > XIndexAccess_BASE;
 
+namespace {
+
 class IndexAccessWrapper : public XIndexAccess_BASE
 {
 typedef std::vector< uno::Reference< drawing::XControlShape > > OLEObjects;
@@ -100,6 +102,8 @@ public:
 uno::Reference< container::XIndexAccess > oleObjectIndexWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess )
 {
     return new IndexAccessWrapper( xIndexAccess );
+}
+
 }
 
 ScVbaOLEObjects::ScVbaOLEObjects( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,

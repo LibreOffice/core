@@ -39,6 +39,8 @@ typedef ::std::vector< AxesCoordinate > vecAxesIndices;
 
 typedef ::cppu::WeakImplHelper1< container::XIndexAccess > AxisIndexWrapper_BASE;
 
+namespace {
+
 class EnumWrapper : public EnumerationHelper_BASE
 {
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
@@ -57,6 +59,8 @@ public:
                 throw container::NoSuchElementException();
         }
 };
+
+}
 
 uno::Reference< excel::XAxis >
 ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno::Reference< uno::XComponentContext >& xContext,  sal_Int32 nType, sal_Int32 nAxisGroup ) throw ( uno::RuntimeException, script::BasicErrorException )
@@ -77,6 +81,8 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
     uno::Reference< XHelperInterface > xParent( xChart, uno::UNO_QUERY_THROW );
     return new ScVbaAxis( xParent, xContext, xAxisPropertySet, nType, nAxisGroup);
 }
+
+namespace {
 
 class AxisIndexWrapper : public AxisIndexWrapper_BASE
 {
@@ -131,6 +137,8 @@ public:
 uno::Reference< container::XIndexAccess > createIndexWrapper( const uno::Reference< excel::XChart >& xChart, const uno::Reference< uno::XComponentContext >& xContext )
 {
     return new AxisIndexWrapper( xContext, xChart );
+}
+
 }
 
 // #FIXME The collection semantics will never work as this object is not yet initialised correctly

@@ -23,7 +23,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static OUString SDEFAULTCELLSTYLENAME("Default");
 static css::uno::Any
 lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel )
 {
@@ -63,6 +62,8 @@ ScVbaStyles::getElementType() throw (uno::RuntimeException)
     return cppu::UnoType<excel::XStyle>::get();
 }
 
+namespace {
+
 class EnumWrapper : public EnumerationHelper_BASE
 {
         uno::Reference<container::XIndexAccess > m_xIndexAccess;
@@ -84,6 +85,8 @@ public:
                 throw container::NoSuchElementException();
         }
 };
+
+}
 
 uno::Reference< container::XEnumeration > SAL_CALL
 ScVbaStyles::createEnumeration() throw (uno::RuntimeException)
@@ -125,7 +128,7 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn ) throw (scr
         {
             mxNameContainerCellStyles->insertByName(_sName, uno::makeAny( xStyle) );
         }
-        if (!sParentCellStyleName.equals(SDEFAULTCELLSTYLENAME))
+        if (!sParentCellStyleName.equals("Default"))
         {
             xStyle->setParentStyle( sParentCellStyleName );
         }

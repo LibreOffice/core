@@ -66,7 +66,7 @@ ScVbaFormatConditions::getElementType() throw (css::uno::RuntimeException)
     return cppu::UnoType<excel::XFormatCondition>::get();
 }
 
-uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject )
+static uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject )
 {
     uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry;
     aObject >>= xSheetConditionalEntry;
@@ -81,6 +81,8 @@ ScVbaFormatConditions::createCollectionObject(const uno::Any& aObject )
 {
     return xSheetConditionToFormatCondition( uno::Reference< XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, mxStyles, this, mxParentRangePropertySet, aObject );
 }
+
+namespace {
 
 class EnumWrapper : public EnumerationHelper_BASE
 {
@@ -106,6 +108,8 @@ public:
                 throw container::NoSuchElementException();
         }
 };
+
+}
 
 uno::Reference< excel::XFormatCondition > SAL_CALL
 ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2 ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
