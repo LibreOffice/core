@@ -1625,6 +1625,8 @@ Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& r
 
 static void verifyUnitSourceDest( MapUnit eUnitSource, MapUnit eUnitDest )
 {
+    (void) eUnitSource;
+    (void) eUnitDest;
     DBG_ASSERT( eUnitSource != MAP_SYSFONT
                 && eUnitSource != MAP_APPFONT
                 && eUnitSource != MAP_RELATIVE,
