@@ -43,6 +43,7 @@
 #include "markdata.hxx"
 #include "drawview.hxx"
 #include "globalnames.hxx"
+#include "inputhdl.hxx"
 
 #include <vector>
 
@@ -252,6 +253,11 @@ void ScViewFunc::DetectiveMarkSucc()
 void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
 {
     ScViewData& rViewData = GetViewData();
+
+    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl( rViewData.GetViewShell());
+    if (pInputHdl && pInputHdl->IsInputMode())
+        return;     // don't fiddle with the cell while editing
+
     ScAddress aCurPos = rViewData.GetCurPos();
     ScDocShell* pDocSh = rViewData.GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
