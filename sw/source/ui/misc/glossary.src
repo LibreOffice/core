@@ -26,11 +26,9 @@ String STR_DOUBLE_SHORTNAME
 {
     Text [ en-US ] = "Shortcut name already exists. Please choose another name." ;
 };
-QueryBox MSG_QUERY_DELETE
+String STR_QUERY_DELETE
 {
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_NO ;
-    Message [ en-US ] = "Delete AutoText?" ;
+    Text[ en-US ] = "Delete AutoText?" ;
 };
 String STR_QUERY_DELETE_GROUP1
 {

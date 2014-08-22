@@ -20,7 +20,7 @@
 #include <hintids.hxx>
 
 #include <vcl/menu.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/help.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/pathoptions.hxx>
@@ -488,8 +488,8 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
     }
     else if (sItemIdent == "delete")
     {
-        QueryBox aQuery(this, SW_RES(MSG_QUERY_DELETE));
-        if(RET_YES == aQuery.Execute())
+        MessageDialog aQuery(this, SW_RES(STR_QUERY_DELETE), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        if (RET_YES == aQuery.Execute())
         {
             const OUString aShortName(m_pShortNameEdit->GetText());
             const OUString aTitle(m_pNameED->GetText());
@@ -646,7 +646,8 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl)
         }
         else
         {
-            QueryBox aBox(this, WB_YES_NO, sReadonlyPath);
+            MessageDialog aBox(this, sReadonlyPath, VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+
             if(RET_YES == aBox.Execute())
                 PathHdl(m_pPathBtn);
         }
