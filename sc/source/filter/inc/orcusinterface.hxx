@@ -13,6 +13,8 @@
 #include "address.hxx"
 #include "documentimport.hxx"
 
+#include <tools/color.hxx>
+
 #include "sharedformulagroups.hxx"
 
 #include <rtl/strbuf.hxx>
@@ -23,6 +25,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <map>
 #include <unordered_map>
+#include <vector>
 
 class ScDocumentImport;
 class ScOrcusSheet;
@@ -153,6 +156,85 @@ public:
 
 class ScOrcusStyles : public orcus::spreadsheet::iface::import_styles
 {
+private:
+
+    struct font
+    {
+        bool mbBold;
+        bool mbItalic;
+        OUString maName;
+        double mnSize;
+        Color maColor;
+
+        font();
+    };
+
+    font maCurrentFont;
+    std::vector<font> maFonts;
+
+    struct fill
+    {
+        OUString maPattern;
+        Color maFgColor;
+        Color maBgColor;
+    };
+
+    fill maCurrentFill;
+    std::vector<fill> maFills;
+
+    struct border
+    {
+
+        border();
+    };
+
+    border maCurrentBorder;
+    std::vector<border> maBorders;
+
+    struct protection
+    {
+        bool mbHidden;
+        bool mbLocked;
+
+        protection();
+    };
+
+    protection maCurrentProtection;
+    std::vector<protection> maProtections;
+
+    struct number_format
+    {
+        OUString maCode;
+    };
+
+    number_format maCurrentNumberFormat;
+    std::vector<number_format> maNumberFormats;
+
+    struct xf
+    {
+        size_t mnFontId;
+        size_t mnFillId;
+        size_t mnBorderId;
+        size_t mnProtectionId;
+        size_t mnNumberFormatId;
+
+        xf();
+    };
+
+    xf maCurrentXF;
+    std::vector<xf> maCellStyleXfs;
+    std::vector<xf> maCellXfs;
+
+    struct cell_style
+    {
+        OUString maName;
+        size_t mnXFId;
+        size_t mnBuiltInId;
+
+        cell_style();
+    };
+
+    cell_style maCurrentCellStyle;
 
 public:
     // font

@@ -460,25 +460,62 @@ size_t ScOrcusSharedStrings::commit_segments()
     return mrFactory.addString(OStringToOUString(aStr, RTL_TEXTENCODING_UTF8));
 }
 
+ScOrcusStyles::font::font():
+    mbBold(false),
+    mbItalic(false),
+    mnSize(10)
+{
+}
+
+ScOrcusStyles::protection::protection():
+    mbHidden(false),
+    mbLocked(false)
+{
+}
+
+ScOrcusStyles::border::border()
+{
+}
+
+ScOrcusStyles::xf::xf():
+    mnFontId(0),
+    mnFillId(0),
+    mnBorderId(0),
+    mnProtectionId(0),
+    mnNumberFormatId(0)
+{
+}
+
+ScOrcusStyles::cell_style::cell_style():
+    mnXFId(0),
+    mnBuiltInId(0)
+{
+}
+
 void ScOrcusStyles::set_font_count(size_t /*n*/)
 {
     // needed at all?
 }
 
-void ScOrcusStyles::set_font_bold(bool /*b*/)
+void ScOrcusStyles::set_font_bold(bool b)
 {
+    maCurrentFont.mbBold = b;
 }
 
-void ScOrcusStyles::set_font_italic(bool /*b*/)
+void ScOrcusStyles::set_font_italic(bool b)
 {
+    maCurrentFont.mbItalic = b;
 }
 
-void ScOrcusStyles::set_font_name(const char* /*s*/, size_t /*n*/)
+void ScOrcusStyles::set_font_name(const char* s, size_t n)
 {
+    OUString aName(s, n, RTL_TEXTENCODING_UTF8);
+    maCurrentFont.maName = aName;
 }
 
-void ScOrcusStyles::set_font_size(double /*point*/)
+void ScOrcusStyles::set_font_size(double point)
 {
+    maCurrentFont.mnSize = point;
 }
 
 void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t /*e*/)
@@ -494,7 +531,8 @@ void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t,
 
 size_t ScOrcusStyles::commit_font()
 {
-    return 0;
+    maFonts.push_back(maCurrentFont);
+    return maFonts.size() - 1;
 }
 
 // fill
@@ -548,17 +586,20 @@ size_t ScOrcusStyles::commit_border()
 }
 
 // cell protection
-void ScOrcusStyles::set_cell_hidden(bool /*b*/)
+void ScOrcusStyles::set_cell_hidden(bool b)
 {
+    maCurrentProtection.mbHidden = b;
 }
 
-void ScOrcusStyles::set_cell_locked(bool /*b*/)
+void ScOrcusStyles::set_cell_locked(bool b)
 {
+    maCurrentProtection.mbLocked = b;
 }
 
 size_t ScOrcusStyles::commit_cell_protection()
 {
-    return 0;
+    maProtections.push_back(maCurrentProtection);
+    return maProtections.size() - 1;
 }
 
 void ScOrcusStyles::set_number_format_count(size_t)
@@ -569,13 +610,16 @@ void ScOrcusStyles::set_number_format_identifier(size_t)
 {
 }
 
-void ScOrcusStyles::set_number_format_code(const char* /*s*/, size_t /*n*/)
+void ScOrcusStyles::set_number_format_code(const char* s, size_t n)
 {
+    OUString aCode(s, n, RTL_TEXTENCODING_UTF8);
+    maCurrentNumberFormat.maCode = aCode;
 }
 
 size_t ScOrcusStyles::commit_number_format()
 {
-    return 0;
+    maNumberFormats.push_back(maCurrentNumberFormat);
+    return maNumberFormats.size() - 1;
 }
 
 // cell style xf
@@ -587,7 +631,8 @@ void ScOrcusStyles::set_cell_style_xf_count(size_t /*n*/)
 
 size_t ScOrcusStyles::commit_cell_style_xf()
 {
-    return 0;
+    maCellStyleXfs.push_back(maCurrentXF);
+    return maCellStyleXfs.size() - 1;
 }
 
 // cell xf
@@ -599,30 +644,35 @@ void ScOrcusStyles::set_cell_xf_count(size_t /*n*/)
 
 size_t ScOrcusStyles::commit_cell_xf()
 {
-    return 0;
+    maCellXfs.push_back(maCurrentXF);
+    return maCellXfs.size() - 1;
 }
 
 // xf (cell format) - used both by cell xf and cell style xf.
 
-void ScOrcusStyles::set_xf_number_format(size_t /*index*/)
+void ScOrcusStyles::set_xf_number_format(size_t index)
 {
-    // no number format interfaces implemented yet
+    maCurrentXF.mnNumberFormatId = index;
 }
 
-void ScOrcusStyles::set_xf_font(size_t /*index*/)
+void ScOrcusStyles::set_xf_font(size_t index)
 {
+    maCurrentXF.mnFontId = index;
 }
 
-void ScOrcusStyles::set_xf_fill(size_t /*index*/)
+void ScOrcusStyles::set_xf_fill(size_t index)
 {
+    maCurrentXF.mnFillId = index;
 }
 
-void ScOrcusStyles::set_xf_border(size_t /*index*/)
+void ScOrcusStyles::set_xf_border(size_t index)
 {
+    maCurrentXF.mnBorderId = index;
 }
 
-void ScOrcusStyles::set_xf_protection(size_t /*index*/)
+void ScOrcusStyles::set_xf_protection(size_t index)
 {
+    maCurrentXF.mnProtectionId = index;
 }
 
 void ScOrcusStyles::set_xf_style_xf(size_t /*index*/)
@@ -649,17 +699,21 @@ void ScOrcusStyles::set_cell_style_count(size_t /*n*/)
     // needed at all?
 }
 
-void ScOrcusStyles::set_cell_style_name(const char* /*s*/, size_t /*n*/)
+void ScOrcusStyles::set_cell_style_name(const char* s, size_t n)
 {
+    OUString aName(s, n, RTL_TEXTENCODING_UTF8);
+    maCurrentCellStyle.maName = aName;
 }
 
-void ScOrcusStyles::set_cell_style_xf(size_t /*index*/)
+void ScOrcusStyles::set_cell_style_xf(size_t index)
 {
+    maCurrentCellStyle.mnXFId = index;
 }
 
-void ScOrcusStyles::set_cell_style_builtin(size_t /*index*/)
+void ScOrcusStyles::set_cell_style_builtin(size_t index)
 {
     // not needed for gnumeric
+    maCurrentCellStyle.mnBuiltInId = index;
 }
 
 size_t ScOrcusStyles::commit_cell_style()
