@@ -2857,7 +2857,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                 }
 
                 rRef.SetAddress(aAbs, rNewPos);
-                rRef.SetFlag3D(b3DFlag);
+                if (b3DFlag)
+                    rRef.SetFlag3D(b3DFlag);
             }
             break;
             case svDoubleRef:
