@@ -18,7 +18,7 @@
  */
 
 #include <SwSpellDialogChildWindow.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <svx/svxids.hrc>
@@ -391,7 +391,8 @@ The code below would only be part of the solution.
             if(m_pSpellState->m_xStartRange.is())
             {
                 LockFocusNotification( true );
-                sal_uInt16 nRet = QueryBox( GetWindow(),  SW_RES(RID_QB_SPELL_CONTINUE)).Execute();
+                sal_uInt16 nRet = MessageDialog(GetWindow(), SW_RES(STR_QUERY_SPELL_CONTINUE),
+                                                VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute();
                 if(RET_YES == nRet)
                 {
                     SwUnoInternalPaM aPam(*pWrtShell->GetDoc());
@@ -420,7 +421,7 @@ The code below would only be part of the solution.
                 OUString sInfo(SW_RES(STR_SPELLING_COMPLETED));
                 // #i84610#
                 Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
-                InfoBox(pTemp, sInfo ).Execute();
+                MessageDialog(pTemp, sInfo, VCL_MESSAGE_INFO).Execute();
                 LockFocusNotification( false );
                 // take care that the now valid selection is stored
                 LoseFocus();

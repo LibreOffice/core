@@ -35,11 +35,9 @@ String STR_PATH_NOT_FOUND
     Text [ en-US ] = "The directory '%1' does not exist." ;
 };
 
-QueryBox RID_QB_SPELL_CONTINUE
+String STR_QUERY_SPELL_CONTINUE
 {
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_YES ;
-    MESSAGE [ en-US ] = "Continue checking at beginning of document?" ;
+    Text [ en-US ] = "Continue checking at beginning of document?" ;
 };
 String STR_SPELLING_COMPLETED
 {

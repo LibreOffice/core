@@ -24,7 +24,7 @@
 
 // Dialoge ******************************************************************
 
-#define RID_QB_SPELL_CONTINUE   (RC_DIALOG_BEGIN + 11)
+#define STR_QUERY_SPELL_CONTINUE (RC_DIALOG_BEGIN + 11)
 #define STR_SPELLING_COMPLETED  (RC_DIALOG_BEGIN + 12)
 
 // Strings ******************************************************************
