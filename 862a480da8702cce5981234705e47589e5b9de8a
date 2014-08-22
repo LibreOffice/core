@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_fe5f7573",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-08-22T17:59:56Z",
+      "side": 1,
+      "message": "0x1fff covers the full range of this bitfield.",
+      "parentUuid": "5ad0253b_5e230906",
+      "revId": "862a480da8702cce5981234705e47589e5b9de8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_3e204df7",
         "filename": "sc/inc/global.hxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2014-08-22T16:31:41Z",
       "side": 1,
       "message": "Assertion not enabled?",
+      "revId": "862a480da8702cce5981234705e47589e5b9de8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_de64b94a",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-08-22T17:59:56Z",
+      "side": 1,
+      "message": "Boost can\u0027t cope with this construct. There is some hope of getting BOOST_STATIC_ASSERT to work once we have constexpr.",
+      "parentUuid": "5ad0253b_3e204df7",
       "revId": "862a480da8702cce5981234705e47589e5b9de8a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
