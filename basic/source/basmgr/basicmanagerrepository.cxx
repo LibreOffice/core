@@ -122,7 +122,7 @@ namespace basic
             @precond
                 our mutex is locked
         */
-        BasicManager*&
+        BasicManager*
                 impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel );
 
         /** creates a new BasicManager instance for the given model
@@ -247,7 +247,7 @@ namespace basic
             thus a recursive call of this function will find and return it
             without creating another instance.
          */
-        BasicManager*& pBasicManager = impl_getLocationForModel( _rxDocumentModel );
+        BasicManager* pBasicManager = impl_getLocationForModel( _rxDocumentModel );
         if ( pBasicManager == NULL )
             impl_createManagerForModel( pBasicManager, _rxDocumentModel );
 
@@ -378,12 +378,12 @@ namespace basic
     }
 
 
-    BasicManager*& ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
+    BasicManager* ImplRepository::impl_getLocationForModel( const Reference< XModel >& _rxDocumentModel )
     {
         Reference< XInterface > xNormalized( _rxDocumentModel, UNO_QUERY );
         DBG_ASSERT( _rxDocumentModel.is(), "ImplRepository::impl_getLocationForModel: invalid model!" );
 
-        BasicManager*& location = m_aStore[ xNormalized ];
+        BasicManager* location = m_aStore[ xNormalized ];
         return location;
     }
 
