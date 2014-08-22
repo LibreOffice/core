@@ -963,7 +963,7 @@ Point EnhancedCustomShape2d::GetPoint( const com::sun::star::drawing::EnhancedCu
                 if ( nFlags & DFF_CUSTOMSHAPE_FLIP_H )
                     fVal = aLogicRect.GetWidth() - fVal;
             }
-            aRetValue.X() = (sal_Int32)fVal;
+            aRetValue.X() = static_cast<long>(fVal);
         }
     }
     while ( ++nPass < 2 );
