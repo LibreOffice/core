@@ -898,11 +898,15 @@ void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
 {
     if (!rPaM.GetCntntNode())
         return; // TODO: is there an easy way to get it for tables/sections?
-    const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout())->FindPageFrm();
-    if(pPage)
+    SwCntntFrm* pFrame = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout());
+    if(pFrame)
     {
-        SwStyleNameMapper::FillProgName(pPage->GetPageDesc()->GetName(),
-            rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
+        const SwPageFrm* pPage = pFrame->FindPageFrm();
+        if(pPage)
+        {
+            SwStyleNameMapper::FillProgName(pPage->GetPageDesc()->GetName(),
+                rString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
+        }
     }
 }
 
