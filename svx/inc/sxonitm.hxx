@@ -22,12 +22,9 @@
 #include <svx/svddef.hxx>
 #include <svl/stritem.hxx>
 
-class SdrObjectNameItem: public SfxStringItem {
-public:
-    SdrObjectNameItem()                   : SfxStringItem() { SetWhich(SDRATTR_OBJECTNAME); }
-    SdrObjectNameItem(const OUString& rStr) : SfxStringItem(SDRATTR_OBJECTNAME,rStr) {}
-    SdrObjectNameItem(SvStream& rIn)      : SfxStringItem(SDRATTR_OBJECTNAME,rIn)  {}
-};
+inline SfxStringItem makeSdrObjectNameItem(const OUString& rStr) {
+    return SfxStringItem(SDRATTR_OBJECTNAME,rStr);
+}
 
 #endif
 

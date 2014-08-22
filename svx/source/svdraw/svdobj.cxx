@@ -2245,7 +2245,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 
     if (rAttr.GetItemState(SDRATTR_OBJECTNAME,true,&pPoolItem)==SFX_ITEM_SET) {
-        OUString aName=((const SdrObjectNameItem*)pPoolItem)->GetValue();
+        OUString aName=((const SfxStringItem*)pPoolItem)->GetValue();
         SetName(aName);
     }
     Rectangle aNewLogic(rLogic);
@@ -2303,7 +2303,7 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const
 
     if (!aName.isEmpty())
     {
-        lcl_SetItem(rAttr, bMerge, SdrObjectNameItem(aName));
+        lcl_SetItem(rAttr, bMerge, makeSdrObjectNameItem(aName));
     }
 
     lcl_SetItem(rAttr,bMerge,SdrLayerIdItem(GetLayer()));

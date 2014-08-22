@@ -29,7 +29,7 @@ class SVL_DLLPUBLIC SfxStringItem: public CntUnencodedStringItem
 public:
     TYPEINFO_OVERRIDE();
 
-    SfxStringItem() {}
+    SfxStringItem(sal_uInt16 which = 0): CntUnencodedStringItem(which) {}
 
     SfxStringItem(sal_uInt16 which, const OUString & rValue):
         CntUnencodedStringItem(which, rValue) {}
