@@ -272,11 +272,9 @@ public:
     void            ExecDrawIns(SfxRequest& rReq);
     void            GetDrawState(SfxItemSet &rSet);
     void            GetDrawInsState(SfxItemSet &rSet);
-    void            ExecGallery(SfxRequest& rReq);      // StarGallery
-    void            GetGalleryState(SfxItemSet& rSet);
+    void            ExecGallery(SfxRequest& rReq);
 
     void            ExecChildWin(SfxRequest& rReq);
-    void            GetChildWinState( SfxItemSet& rSet );
 
     void            ExecImageMap( SfxRequest& rReq );
     void            GetImageMapState( SfxItemSet& rSet );

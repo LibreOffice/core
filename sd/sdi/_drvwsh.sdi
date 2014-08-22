@@ -1777,12 +1777,10 @@ interface DrawView
     SID_GALLERY // ole : yes, status : ?
     [
         ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
     ]
     SID_GALLERY_FORMATS // ole : no, status : ?
     [
         ExecMethod = ExecGallery ;
-        StateMethod = GetGalleryState ;
         GroupId = GID_DOCUMENT ;
         Cachable ;
     ]
