@@ -5111,7 +5111,6 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     SvxMSDffShapeInfo& rInfo = **it;
                     pTextImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
-                    pTextImpRec->bLastBoxInChain = rInfo.bLastBoxInChain;
                 }
             }
 
@@ -5661,7 +5660,6 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         boost::shared_ptr<SvxMSDffShapeInfo> const pObj = *iter;
         if( pObj->nTxBxComp )
         {
-            pObj->bLastBoxInChain = false;
             // group change?
             // #156763#
             // the text id also contains an internal drawing container id
@@ -5669,13 +5667,6 @@ void SvxMSDffManager::CheckTxBxStoryChain()
             // drawing containers.
             if( nChain != pObj->nTxBxComp )
             {
-                // previous was last of its group
-                if (iter != m_pShapeInfosByTxBxComp->begin())
-                {
-                    SvxMSDffShapeInfos_ByTxBxComp::iterator prev(iter);
-                    --prev;
-                    (*prev)->bLastBoxInChain = true;
-                }
                 // reset mark and helper flag
                 mark = iter;
                 nChain = pObj->nTxBxComp;
@@ -5701,11 +5692,6 @@ void SvxMSDffManager::CheckTxBxStoryChain()
         // copy all Shape Info objects to m_pShapeInfosById, sorted by nShapeId
         pObj->nTxBxComp = pObj->nTxBxComp & 0xFFFF0000;
         m_pShapeInfosById->insert( pObj );
-    }
-    // last one was last of its group
-    if (!m_pShapeInfosByTxBxComp->empty())
-    {
-        (*m_pShapeInfosByTxBxComp->rbegin())->bLastBoxInChain = true;
     }
     // free original array but don't free its elements
     m_pShapeInfosByTxBxComp.reset();
@@ -7242,7 +7228,6 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       bHidden         = false;
 
       bReplaceByFly   = false;
-      bLastBoxInChain = true;
       bVFlip          = false;
       bHFlip          = false;
       bAutoWidth      = false;
@@ -7292,7 +7277,6 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
     bHidden          = rCopy.bHidden;
     bReplaceByFly    = rCopy.bReplaceByFly;
     bAutoWidth       = rCopy.bAutoWidth;
-    bLastBoxInChain  = rCopy.bLastBoxInChain;
     bVFlip = rCopy.bVFlip;
     bHFlip = rCopy.bHFlip;
     nClientAnchorLen = rCopy.nClientAnchorLen;

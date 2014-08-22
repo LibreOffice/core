@@ -259,7 +259,6 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     bool            bDrawHell       :1;
     bool            bHidden         :1;
     bool            bReplaceByFly   :1;
-    bool            bLastBoxInChain :1;
     bool            bVFlip          :1;
     bool            bHFlip          :1;
     bool            bAutoWidth      :1;
@@ -762,7 +761,6 @@ struct SvxMSDffShapeInfo
     sal_uInt32 nTxBxComp;
 
     bool bReplaceByFly  :1; ///< shape can be replaced by a frame in Writer
-    bool bLastBoxInChain:1;
 
     explicit SvxMSDffShapeInfo(sal_uLong nFPos, sal_uInt32 nId=0, // sal_uLong nBIdx=0,
                       sal_uInt16 nSeqId=0, sal_uInt16 nBoxId=0):
@@ -771,7 +769,6 @@ struct SvxMSDffShapeInfo
         nTxBxComp( (nSeqId << 16) + nBoxId )
         {
             bReplaceByFly   = false;
-            bLastBoxInChain = true;
         }
     SvxMSDffShapeInfo(SvxMSDffShapeInfo& rInfo):
         nShapeId( rInfo.nShapeId ),
@@ -779,7 +776,6 @@ struct SvxMSDffShapeInfo
         nTxBxComp( rInfo.nTxBxComp )
         {
             bReplaceByFly   = rInfo.bReplaceByFly;
-            bLastBoxInChain = rInfo.bLastBoxInChain;
         }
 };
 

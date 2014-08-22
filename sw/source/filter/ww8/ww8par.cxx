@@ -830,7 +830,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                 {
                     SvxMSDffShapeInfo& rInfo = **it;
                     pImpRec->bReplaceByFly   = rInfo.bReplaceByFly;
-                    pImpRec->bLastBoxInChain = rInfo.bLastBoxInChain;
                 }
             }
 
