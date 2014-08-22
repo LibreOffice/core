@@ -104,7 +104,6 @@ void SwView::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(FN_REDLINE_ACCEPT);
     GetStaticInterface()->RegisterChildWindow(SID_HYPERLINK_DIALOG);
     GetStaticInterface()->RegisterChildWindow(FN_WORDCOUNT_DIALOG);
-    GetStaticInterface()->RegisterChildWindow(GalleryChildWindow::GetChildWindowId());
 #if HAVE_FEATURE_AVMEDIA
     GetStaticInterface()->RegisterChildWindow(::avmedia::MediaPlayer::GetChildWindowId());
 #endif

@@ -26,14 +26,6 @@
 #include <tools/urlobj.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC GalleryChildWindow : public SfxChildWindow
-{
-public:
-                        GalleryChildWindow( Window*, sal_uInt16, SfxBindings*, SfxChildWinInfo* );
-                        virtual ~GalleryChildWindow();
-
-                        SFX_DECL_CHILDWINDOW_WITHID( GalleryChildWindow );
-};
 
 class FmFormModel;
 class GalleryBrowser1;

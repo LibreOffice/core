@@ -30,7 +30,6 @@
  <toolbar:toolbaritem xlink:href=".uno:Copy"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog"/>
- <toolbar:toolbaritem xlink:href=".uno:Navigator"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Zoom"/>
  <toolbar:toolbarseparator/>

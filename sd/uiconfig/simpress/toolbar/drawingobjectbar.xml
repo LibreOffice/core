@@ -18,8 +18,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:DesignerDialog" toolbar:helpid="5539"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FormatLine" toolbar:helpid="10143"/>
  <toolbar:toolbaritem xlink:href=".uno:LineEndStyle" toolbar:helpid="10301"/>
  <toolbar:toolbarseparator/>
