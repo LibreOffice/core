@@ -37,6 +37,56 @@
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
+namespace ppc64
+{
+#if _CALL_ELF == 2
+    bool is_complex_struct(const typelib_TypeDescription * type)
+    {
+        const typelib_CompoundTypeDescription * p
+            = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
+        for (sal_Int32 i = 0; i < p->nMembers; ++i)
+        {
+            if (p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_STRUCT ||
+                p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_EXCEPTION)
+            {
+                typelib_TypeDescription * t = 0;
+                TYPELIB_DANGER_GET(&t, p->ppTypeRefs[i]);
+                bool b = is_complex_struct(t);
+                TYPELIB_DANGER_RELEASE(t);
+                if (b) {
+                    return true;
+                }
+            }
+            else if (!bridges::cpp_uno::shared::isSimpleType(p->ppTypeRefs[i]->eTypeClass))
+                return true;
+        }
+        if (p->pBaseTypeDescription != 0)
+            return is_complex_struct(&p->pBaseTypeDescription->aBase);
+        return false;
+    }
+#endif
+
+    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef )
+    {
+        if (bridges::cpp_uno::shared::isSimpleType(pTypeRef))
+            return false;
+#if _CALL_ELF == 2
+        else if (pTypeRef->eTypeClass == typelib_TypeClass_STRUCT || pTypeRef->eTypeClass == typelib_TypeClass_EXCEPTION)
+        {
+            typelib_TypeDescription * pTypeDescr = 0;
+            TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
+
+            //A Composite Type not larger than 16 bytes is returned in up to two GPRs
+            bool bRet = pTypeDescr->nSize > 16 || is_complex_struct(pTypeDescr);
+
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+            return bRet;
+        }
+#endif
+        return true;
+    }
+}
+
 void MapReturn(long r3, double dret, typelib_TypeClass eTypeClass, void *pRegisterReturn)
 {
     switch (eTypeClass)

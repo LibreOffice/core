@@ -72,7 +72,7 @@ static typelib_TypeClass cpp2uno_call(
 
     if (pReturnTypeDescr)
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
+        if (!ppc64::return_in_hidden_param(pReturnTypeRef))
         {
             pUnoReturn = pRegisterReturn; // direct way for simple types
         }
@@ -599,7 +599,7 @@ const int codeSnippetSize = 24;
 #endif
 
 unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sal_Int32 nVtableOffset,
-                              bool simpleRetType)
+                              bool bHasHiddenParam)
 {
 #if OSL_DEBUG_LEVEL > 2
     fprintf(stderr,"in codeSnippet functionIndex is %x\n", nFunctionIndex);
@@ -608,9 +608,8 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sa
 
     sal_uInt64 nOffsetAndIndex = ( ( (sal_uInt64) nVtableOffset ) << 32 ) | ( (sal_uInt64) nFunctionIndex );
 
-    if ( !simpleRetType )
+    if ( bHasHiddenParam )
         nOffsetAndIndex |= 0x80000000;
-
 #if _CALL_ELF == 2
     unsigned int *raw = (unsigned int *)&code[0];
 
@@ -629,7 +628,7 @@ unsigned char *  codeSnippet( unsigned char * code, sal_Int32 nFunctionIndex, sa
 #endif
 #if OSL_DEBUG_LEVEL > 2
     fprintf(stderr, "in: offset/index is %x %x %d, %lx\n",
-    nFunctionIndex, nVtableOffset, !simpleRetType, raw[2]);
+    nFunctionIndex, nVtableOffset, bHasHiddenParam, raw[2]);
 #endif
     return (code + codeSnippetSize);
 }
@@ -696,7 +695,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             (s++)->fn = code + writetoexecdiff;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
-                bridges::cpp_uno::shared::isSimpleType(
+                ppc64::return_in_hidden_param(
                     reinterpret_cast<
                     typelib_InterfaceAttributeTypeDescription * >(
                         member)->pAttributeTypeRef));
@@ -707,7 +706,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     member)->bReadOnly)
             {
                 (s++)->fn = code + writetoexecdiff;
-                code = codeSnippet(code, functionOffset++, vtableOffset, true);
+                code = codeSnippet(code, functionOffset++, vtableOffset, false);
             }
             break;
 
@@ -715,7 +714,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             (s++)->fn = code + writetoexecdiff;
             code = codeSnippet(
                 code, functionOffset++, vtableOffset,
-                bridges::cpp_uno::shared::isSimpleType(
+                ppc64::return_in_hidden_param(
                     reinterpret_cast<
                     typelib_InterfaceMethodTypeDescription * >(
                         member)->pReturnTypeRef));
