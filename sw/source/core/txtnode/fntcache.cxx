@@ -69,6 +69,9 @@ long SwFntObj::nPixWidth;
 MapMode* SwFntObj::pPixMap = NULL;
 OutputDevice* SwFntObj::pPixOut = NULL;
 
+namespace
+{
+
 sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
 {
     SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
@@ -80,6 +83,8 @@ sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
     SfxItemSet& aTmpSet = pStyle->GetItemSet();
     SvxFontHeightItem &aDefaultFontItem = (SvxFontHeightItem&)aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE);
     return (sal_uInt16)aDefaultFontItem.GetHeight();
+}
+
 }
 
 void SwFntCache::Flush( )
