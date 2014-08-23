@@ -40,13 +40,13 @@ namespace {
     /// Get a sorted list of the used footnote reference numbers.
     /// @param[in]  rDoc     The active document.
     /// @param[in]  pExclude A footnote whose reference number should be excluded from the set.
+    /// @param[out] rUsedRef The set of used reference numbers.
     /// @param[out] rInvalid  A returned list of all items that had an invalid reference number.
-    /// @returns The set of used reference numbers.
-    static std::set<sal_uInt16> lcl_GetUsedFtnRefNumbers(SwDoc &rDoc,
-                                                         SwTxtFtn *pExclude,
-                                                         std::vector<SwTxtFtn*> &rInvalid)
+    static void lcl_FillUsedFtnRefNumbers(SwDoc &rDoc,
+                                         SwTxtFtn *pExclude,
+                                         std::set<sal_uInt16> &rUsedRef,
+                                         std::vector<SwTxtFtn*> &rInvalid)
     {
-        std::set<sal_uInt16> aArr;
         SwFtnIdxs& ftnIdxs = rDoc.GetFtnIdxs();
 
         rInvalid.clear();
@@ -62,11 +62,10 @@ namespace {
                 }
                 else
                 {
-                    aArr.insert( pTxtFtn->GetSeqRefNo() );
+                    rUsedRef.insert( pTxtFtn->GetSeqRefNo() );
                 }
             }
         }
-        return aArr;
     }
 
     /// Check whether a requested reference number is available.
@@ -84,13 +83,13 @@ namespace {
     }
 
     /// Get the first few unused sequential reference numbers.
+    /// @param[out] rLowestUnusedNums The lowest unused sequential reference numbers.
     /// @param[in] rUsedNums   The set of used sequential reference numbers.
     /// @param[in] numRequired The number of reference number required.
-    /// @returns The lowest unused sequential reference numbers.
-    static std::vector<sal_uInt16> lcl_GetUnusedSeqRefNums(std::set<sal_uInt16> &rUsedNums,
-                                                           size_t numRequired)
+    static void lcl_FillUnusedSeqRefNums(std::vector<sal_uInt16> &rLowestUnusedNums,
+                                         const std::set<sal_uInt16> &rUsedNums,
+                                         size_t numRequired)
     {
-        std::vector<sal_uInt16> unusedNums;
         sal_uInt16 newNum = 0;
         std::set<sal_uInt16>::iterator it;
         //Start by using numbers from gaps in rUsedNums
@@ -98,19 +97,17 @@ namespace {
         {
             while ( newNum < *it )
             {
-                unusedNums.push_back( newNum++ );
-                if ( unusedNums.size() >= numRequired )
-                    return unusedNums;
+                rLowestUnusedNums.push_back( newNum++ );
+                if ( rLowestUnusedNums.size() >= numRequired )
+                    return;
             }
             newNum++;
         }
         //Filled in all gaps. Fill the rest of the list with new numbers.
-        while ( unusedNums.size() < numRequired )
+        while ( rLowestUnusedNums.size() < numRequired )
         {
-            unusedNums.push_back( newNum++ );
+            rLowestUnusedNums.push_back( newNum++ );
         }
-
-        return unusedNums;
     }
 
 }
@@ -504,11 +501,13 @@ sal_uInt16 SwTxtFtn::SetSeqRefNo()
     if( pDoc->IsInReading() )
         return USHRT_MAX;
 
+    std::set<sal_uInt16> aUsedNums;
     std::vector<SwTxtFtn*> badRefNums;
-    std::set<sal_uInt16> aUsedNums = ::lcl_GetUsedFtnRefNumbers(*pDoc, this, badRefNums);
+    ::lcl_FillUsedFtnRefNumbers(*pDoc, this, aUsedNums, badRefNums);
     if ( ::lcl_IsRefNumAvailable(aUsedNums, m_nSeqNo) )
         return m_nSeqNo;
-    std::vector<sal_uInt16> unused = ::lcl_GetUnusedSeqRefNums(aUsedNums, 1);
+    std::vector<sal_uInt16> unused;
+    ::lcl_FillUnusedSeqRefNums(unused, aUsedNums, 1);
     return m_nSeqNo = unused[0];
 }
 
@@ -516,13 +515,15 @@ sal_uInt16 SwTxtFtn::SetSeqRefNo()
 /// @param[in] rDoc The document to be processed.
 void SwTxtFtn::SetUniqueSeqRefNo( SwDoc& rDoc )
 {
+    std::set<sal_uInt16> aUsedNums;
     std::vector<SwTxtFtn*> badRefNums;
-    std::set<sal_uInt16> aUsedNums = ::lcl_GetUsedFtnRefNumbers(rDoc, NULL, badRefNums);
-    std::vector<sal_uInt16> unused = ::lcl_GetUnusedSeqRefNums(aUsedNums, badRefNums.size());
+    ::lcl_FillUsedFtnRefNumbers(rDoc, NULL, aUsedNums, badRefNums);
+    std::vector<sal_uInt16> aUnused;
+    ::lcl_FillUnusedSeqRefNums(aUnused, aUsedNums, badRefNums.size());
 
     for (size_t i = 0; i < badRefNums.size(); ++i)
     {
-        badRefNums[i]->m_nSeqNo = unused[i];
+        badRefNums[i]->m_nSeqNo = aUnused[i];
     }
 }
 
