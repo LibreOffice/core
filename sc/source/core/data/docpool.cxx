@@ -122,12 +122,12 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_PARA_FORBIDDEN_RULES,SFX_ITEM_POOLABLE },    // ATTR_FORBIDDEN_RULES     from 614d
     { SID_ATTR_ALIGN_HOR_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_HOR_JUSTIFY
     { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // ATTR_HOR_JUSTIFY_METHOD
-    { SID_ATTR_ALIGN_INDENT,        SFX_ITEM_POOLABLE },    // ATTR_INDENT          ab 350
+    { SID_ATTR_ALIGN_INDENT,        SFX_ITEM_POOLABLE },    // ATTR_INDENT          from 350
     { SID_ATTR_ALIGN_VER_JUSTIFY,   SFX_ITEM_POOLABLE },    // ATTR_VER_JUSTIFY
     { SID_ATTR_ALIGN_VER_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // ATTR_VER_JUSTIFY_METHOD
     { SID_ATTR_ALIGN_STACKED,       SFX_ITEM_POOLABLE },    // ATTR_STACKED         from 680/dr14 (replaces ATTR_ORIENTATION)
-    { SID_ATTR_ALIGN_DEGREES,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_VALUE    ab 367
-    { SID_ATTR_ALIGN_LOCKPOS,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_MODE     ab 367
+    { SID_ATTR_ALIGN_DEGREES,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_VALUE    from 367
+    { SID_ATTR_ALIGN_LOCKPOS,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_MODE     from 367
     { SID_ATTR_ALIGN_ASIANVERTICAL, SFX_ITEM_POOLABLE },    // ATTR_VERTICAL_ASIAN  from 642
     { SID_ATTR_FRAMEDIRECTION,      SFX_ITEM_POOLABLE },    // ATTR_WRITINGDIR      from 643
     { SID_ATTR_ALIGN_LINEBREAK,     SFX_ITEM_POOLABLE },    // ATTR_LINEBREAK
@@ -138,7 +138,7 @@ static SfxItemInfo const  aItemInfos[] =
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_MERGE
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_MERGE_FLAG
     { SID_ATTR_NUMBERFORMAT_VALUE,  SFX_ITEM_POOLABLE },    // ATTR_VALUE_FORMAT
-    { ATTR_LANGUAGE_FORMAT,         SFX_ITEM_POOLABLE },    // ATTR_LANGUAGE_FORMAT ab 329, wird im Dialog mit SID_ATTR_NUMBERFORMAT_VALUE kombiniert
+    { ATTR_LANGUAGE_FORMAT,         SFX_ITEM_POOLABLE },    // ATTR_LANGUAGE_FORMAT from 329, is combined with SID_ATTR_NUMBERFORMAT_VALUE in the dialog
     { SID_ATTR_BRUSH,               SFX_ITEM_POOLABLE },    // ATTR_BACKGROUND
     { SID_SCATTR_PROTECTION,        SFX_ITEM_POOLABLE },    // ATTR_PROTECTION
     { SID_ATTR_BORDER_OUTER,        SFX_ITEM_POOLABLE },    // ATTR_BORDER
@@ -151,7 +151,7 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_LRSPACE,             SFX_ITEM_POOLABLE },    // ATTR_LRSPACE
     { SID_ATTR_ULSPACE,             SFX_ITEM_POOLABLE },    // ATTR_ULSPACE
     { SID_ATTR_PAGE,                SFX_ITEM_POOLABLE },    // ATTR_PAGE
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_PAGE_PAPERTRAY, seit 303 nur noch dummy
+    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_PAGE_PAPERTRAY, since 303 just a dummy
     { SID_ATTR_PAGE_PAPERBIN,       SFX_ITEM_POOLABLE },    // ATTR_PAGE_PAPERBIN
     { SID_ATTR_PAGE_SIZE,           SFX_ITEM_POOLABLE },    // ATTR_PAGE_SIZE
     { SID_ATTR_PAGE_MAXSIZE,        SFX_ITEM_POOLABLE },    // ATTR_PAGE_MAXSIZE
@@ -288,14 +288,14 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
     ppPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new ScCondFormatItem;
     ppPoolDefaults[ ATTR_HYPERLINK       - ATTR_STARTINDEX ] = new SfxStringItem( ATTR_HYPERLINK, OUString() ) ;
 
-    //  GetRscString funktioniert erst nach ScGlobal::Init, zu erkennen am EmptyBrushItem
-    //! zusaetzliche Methode ScGlobal::IsInit() oder so...
-    //! oder erkennen, ob dies der Secondary-Pool fuer einen MessagePool ist
+    // GetRscString only works after ScGlobal::Init (indicated by the EmptyBrushItem)
+    // TODO: Write additional method ScGlobal::IsInit() or somesuch
+    //       or detect whether this is the Secondary Pool for a MessagePool
     if ( ScGlobal::GetEmptyBrushItem() )
         ppPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
     else
         ppPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet,
-            OUString(STRING_STANDARD) ); //! without name?
+            OUString(STRING_STANDARD) ); // FIXME: without name?
 
     ppPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
     ppPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );
@@ -339,16 +339,16 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool)
     if ( pSecondary )
         SetSecondaryPool( pSecondary );
 
-    // ATTR_LANGUAGE_FORMAT ab sv329 eingefuegt, VersionMap in _ScGlobal__Init
+    // ATTR_LANGUAGE_FORMAT from sv329 inserted, VersionMap in _ScGlobal__Init
     SetVersionMap( 1, 100, 157, pVersionMap1 );
 
-    // ATTR_VALIDDATA, ATTR_CONDITIONAL ab 341
+    // ATTR_VALIDDATA, ATTR_CONDITIONAL from 341
     SetVersionMap( 2, 100, 158, pVersionMap2 );
 
-    // ATTR_INDENT ab 350
+    // ATTR_INDENT from 350
     SetVersionMap( 3, 100, 160, pVersionMap3 );
 
-    // ATTR_ROTATE_VALUE, ATTR_ROTATE_MODE ab 367
+    // ATTR_ROTATE_VALUE, ATTR_ROTATE_MODE from 367
     SetVersionMap( 4, 100, 161, pVersionMap4 );
 
     // CJK, CTL, EMPHASISMARK, TWOLINES from 614
@@ -401,24 +401,24 @@ void ScDocumentPool::InitVersionMaps()
                 !pVersionMap9 && !pVersionMap10 &&
                 !pVersionMap11 && !pVersionMap12 , "InitVersionMaps call multiple times" );
 
-    // alte WhichId's mappen
-    // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
+    // Map old WhichId's
+    // Do not count with ATTR_*, if they change again
 
-    //  erste Map: ATTR_LANGUAGE_FORMAT ab sv329 eingefuegt
+    // First Map: ATTR_LANGUAGE_FORMAT from sv329 inserted
 
-    const sal_uInt16 nMap1Start = 100;  // alter ATTR_STARTINDEX
-    const sal_uInt16 nMap1End   = 157;  // alter ATTR_ENDINDEX
+    const sal_uInt16 nMap1Start = 100;  // Old ATTR_STARTINDEX
+    const sal_uInt16 nMap1End   = 157;  // Old ATTR_ENDINDEX
     const sal_uInt16 nMap1Count = nMap1End - nMap1Start + 1;
     const sal_uInt16 nMap1New   = 18;   // ATTR_LANGUAGE_FORMAT - ATTR_STARTINDEX
     pVersionMap1 = new sal_uInt16 [ nMap1Count ];
     sal_uInt16 i, j;
     for ( i=0, j=nMap1Start; i < nMap1New; i++, j++ )
         pVersionMap1[i] = j;
-    // ein Eintrag eingefuegt...
+    // An entry inserted ...
     for ( i=nMap1New, j=nMap1Start+nMap1New+1; i < nMap1Count; i++, j++ )
         pVersionMap1[i] = j;
 
-    //  zweite Map: ATTR_VALIDDATA und ATTR_CONDITIONAL ab 341 eingefuegt
+    // Second Map: ATTR_VALIDDATA and ATTR_CONDITIONAL from 341 inserted
 
     const sal_uInt16 nMap2Start = 100;  // ATTR_STARTINDEX
     const sal_uInt16 nMap2End   = 158;  // ATTR_ENDINDEX
@@ -427,11 +427,11 @@ void ScDocumentPool::InitVersionMaps()
     pVersionMap2 = new sal_uInt16 [ nMap2Count ];
     for ( i=0, j=nMap2Start; i < nMap2New; i++, j++ )
         pVersionMap2[i] = j;
-    // zwei Eintraege eingefuegt...
+    // Two entries insterted ...
     for ( i=nMap2New, j=nMap2Start+nMap2New+2; i < nMap2Count; i++, j++ )
         pVersionMap2[i] = j;
 
-    //  dritte Map: ATTR_INDENT ab 350 eingefuegt
+    // Third Map: ATTR_INDENT from 350 insterted
 
     const sal_uInt16 nMap3Start = 100;  // ATTR_STARTINDEX
     const sal_uInt16 nMap3End   = 160;  // ATTR_ENDINDEX
@@ -440,11 +440,11 @@ void ScDocumentPool::InitVersionMaps()
     pVersionMap3 = new sal_uInt16 [ nMap3Count ];
     for ( i=0, j=nMap3Start; i < nMap3New; i++, j++ )
         pVersionMap3[i] = j;
-    // ein Eintrag eingefuegt...
+    // An entry insterted ...
     for ( i=nMap3New, j=nMap3Start+nMap3New+1; i < nMap3Count; i++, j++ )
         pVersionMap3[i] = j;
 
-    //  vierte Map: ATTR_ROTATE_VALUE und ATTR_ROTATE_MODE ab 367 eingefuegt
+    // Fourth Map: ATTR_ROTATE_VALUE and ATTR_ROTATE_MODE from 367 inserted
 
     const sal_uInt16 nMap4Start = 100;  // ATTR_STARTINDEX
     const sal_uInt16 nMap4End   = 161;  // ATTR_ENDINDEX
@@ -453,11 +453,11 @@ void ScDocumentPool::InitVersionMaps()
     pVersionMap4 = new sal_uInt16 [ nMap4Count ];
     for ( i=0, j=nMap4Start; i < nMap4New; i++, j++ )
         pVersionMap4[i] = j;
-    // zwei Eintraege eingefuegt...
+    // Two entries inserted ...
     for ( i=nMap4New, j=nMap4Start+nMap4New+2; i < nMap4Count; i++, j++ )
         pVersionMap4[i] = j;
 
-    //  fifth map: CJK..., CTL..., EMPHASISMARK, TWOLINES (12 items) added in 614
+    // fifth map: CJK..., CTL..., EMPHASISMARK, TWOLINES (12 items) added in 614
 
     const sal_uInt16 nMap5Start = 100;  // ATTR_STARTINDEX
     const sal_uInt16 nMap5End   = 163;  // ATTR_ENDINDEX
@@ -483,7 +483,7 @@ void ScDocumentPool::InitVersionMaps()
     for ( i=nMap6New, j=nMap6Start+nMap6New+3; i < nMap6Count; i++, j++ )
         pVersionMap6[i] = j;
 
-    //  seventh map: ATTR_FONT_WORDLINE, ATTR_FONT_RELIEF, ATTR_HYPHENATE added in 632b
+    // seventh map: ATTR_FONT_WORDLINE, ATTR_FONT_RELIEF, ATTR_HYPHENATE added in 632b
 
     const sal_uInt16 nMap7Start = 100;  // ATTR_STARTINDEX
     const sal_uInt16 nMap7End   = 178;  // ATTR_ENDINDEX
@@ -496,7 +496,7 @@ void ScDocumentPool::InitVersionMaps()
     for ( i=nMap7New, j=nMap7Start+nMap7New+3; i < nMap7Count; i++, j++ )
         pVersionMap7[i] = j;
 
-    //  eighth map: ATTR_VERTICAL_ASIAN added in 642q
+    // eighth map: ATTR_VERTICAL_ASIAN added in 642q
 
     const sal_uInt16 nMap8Start = 100;  // ATTR_STARTINDEX
     const sal_uInt16 nMap8End   = 181;  // ATTR_ENDINDEX
@@ -509,7 +509,7 @@ void ScDocumentPool::InitVersionMaps()
     for ( i=nMap8New, j=nMap8Start+nMap8New+1; i < nMap8Count; i++, j++ )
         pVersionMap8[i] = j;
 
-    //  9th map: ATTR_WRITINGDIR added in 643y
+    // 9th map: ATTR_WRITINGDIR added in 643y
 
     const sal_uInt16 nMap9Start = 100;  // ATTR_STARTINDEX
     const sal_uInt16 nMap9End   = 182;  // ATTR_ENDINDEX
@@ -597,24 +597,24 @@ void ScDocumentPool::DeleteVersionMaps()
     pVersionMap1 = 0;
 }
 
-//  Fuer die Pattern-Attribute (SetItems) kann der sal_uInt16 RefCount leicht ueberlaufen
-//  (z.B. 600 ganze Zeilen abwechselnd formatieren).
-//  Darum wird der RefCount bei SC_MAX_POOLREF festgehalten und nicht mehr hoch- oder
-//  heruntergezaehlt. Dieser RefCount wird dann erst beim naechsten Laden neu gezaehlt.
-//  Die Differenz zwischen SC_MAX_POOLREF und SC_SAFE_POOLREF ist ein wenig groesser
-//  als noetig, um zu erkennen, wenn der RefCount aus Versehen doch "normal" veraendert
-//  wird (Assertions).
-
+/**
+ * The sal_uInt16 RefCount can overflow easily for the pattern attributes (SetItems):
+ * E.g. Alternate formatting for 600 whole cells.
+ * The RefCount is kept at SC_MAX_POOLREF and not increased/decreased anymore.
+ * This RefCount is recalculated not until the next load.
+ * The difference between SC_MAX_POOLREF and SC_SAFE_POOLREF is a little larger than it needs
+ * to be, to allow for detecting accidental "normal" changes to the RefCount (assertions).
+ */
 const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWhich )
 {
-    if ( rItem.Which() != ATTR_PATTERN )                // nur Pattern ist special
+    if ( rItem.Which() != ATTR_PATTERN ) // Only Pattern is special
         return SfxItemPool::Put( rItem, nWhich );
 
-    //  das Default-Pattern dieses Pools nicht kopieren
+    // Don't copy the default pattern of this Pool
     if (&rItem == ppPoolDefaults[ ATTR_PATTERN - ATTR_STARTINDEX ])
         return rItem;
 
-    //  ansonsten muss Put immer passieren, weil es ein anderer Pool sein kann
+    // Else Put must always happen, because it could be another Pool
     const SfxPoolItem& rNew = SfxItemPool::Put( rItem, nWhich );
     CheckRef( rNew );
     return rNew;
@@ -622,7 +622,7 @@ const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, sal_uInt16 nWh
 
 void ScDocumentPool::Remove( const SfxPoolItem& rItem )
 {
-    if ( rItem.Which() == ATTR_PATTERN )                // nur Pattern ist special
+    if ( rItem.Which() == ATTR_PATTERN ) // Only Pattern is special
     {
         sal_uLong nRef = rItem.GetRefCount();
         if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
@@ -632,7 +632,7 @@ void ScDocumentPool::Remove( const SfxPoolItem& rItem )
                 OSL_FAIL("Who fiddles with my ref counts?");
                 SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
             }
-            return;                 // nicht herunterzaehlen
+            return; // Do not decrement
         }
     }
     SfxItemPool::Remove( rItem );
@@ -643,8 +643,8 @@ void ScDocumentPool::CheckRef( const SfxPoolItem& rItem )
     sal_uLong nRef = rItem.GetRefCount();
     if ( nRef >= (sal_uLong) SC_MAX_POOLREF && nRef <= (sal_uLong) SFX_ITEMS_OLD_MAXREF )
     {
-        // beim Apply vom Cache wird evtl. um 2 hochgezaehlt (auf MAX+1 oder SAFE+2),
-        // heruntergezaehlt wird nur einzeln (in LoadCompleted)
+        // At the Apply of the Cache we might increase by 2 (to MAX+1 or SAFE+2)
+        // We only decrease by 1 (in LoadCompleted)
         OSL_ENSURE( nRef<=(sal_uLong)SC_MAX_POOLREF+1 || (nRef>=(sal_uLong)SC_SAFE_POOLREF-1 && nRef<=(sal_uLong)SC_SAFE_POOLREF+2),
                 "ScDocumentPool::CheckRef" );
         SetRefCount( (SfxPoolItem&)rItem, (sal_uLong) SC_SAFE_POOLREF );
@@ -679,7 +679,7 @@ void ScDocumentPool::CellStyleCreated( const OUString& rName )
         {
             const OUString* pStyleName = pPattern->GetStyleName();
             if ( pStyleName && *pStyleName == rName )
-                pPattern->UpdateStyleSheet();           // find and store style pointer
+                pPattern->UpdateStyleSheet(); // find and store style pointer
         }
     }
 }
@@ -751,8 +751,7 @@ static bool lcl_HFPresentation
                 }
                 aText += cpDelim;
 
-                // nPropFirstLineOfst haben wir nicht
-
+                // We don't have a nPropFirstLineOfst
                 aText += EE_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
@@ -920,8 +919,7 @@ bool ScDocumentPool::GetPresentation(
 
 SfxMapUnit ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
 {
-    //  eigene Attribute: Twips, alles andere 1/100 mm
-
+    // Own attributes in Twips, everything else in 1/100 mm
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
         return SFX_MAPUNIT_TWIP;
     else

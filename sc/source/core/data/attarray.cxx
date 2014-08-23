@@ -889,15 +889,15 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
                     rMergeSet.InvalidateItem( nId );
             }
         }
-        else if ( eOldState == SFX_ITEM_SET )               // Item gesetzt
+        else if ( eOldState == SFX_ITEM_SET ) // Item set
         {
             SfxItemState eNewState = rSource.GetItemState( nId, true, &pNewItem );
             if ( eNewState == SFX_ITEM_SET )
             {
-                if ( pNewItem != pOldItem )                 // beide gepuhlt
+                if ( pNewItem != pOldItem ) // Both pulled
                     rMergeSet.InvalidateItem( nId );
             }
-            else            // Default
+            else // Default
             {
                 if ( *pOldItem != rSource.GetPool()->GetDefaultItem(nId) )
                     rMergeSet.InvalidateItem( nId );
@@ -923,7 +923,6 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
         do
         {
             // similar patterns must not be repeated
-
             const ScPatternAttr* pPattern = pData[nPos].pPattern;
             if ( pPattern != rState.pOld1 && pPattern != rState.pOld2 )
             {
@@ -1357,7 +1356,9 @@ bool ScAttrArray::IsMerged( SCROW nRow ) const
     return rItem.IsMerged();
 }
 
-// Area around any given summaries expand and adapt any MergeFlag (bRefresh)
+/**
+ * Area around any given summaries expand and adapt any MergeFlag (bRefresh)
+ */
 bool ScAttrArray::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 bool bRefresh )
@@ -1445,7 +1446,6 @@ bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
             SCROW nMergeEndRow = nThisEnd + nCountY - 1;
 
             // ApplyAttr for areas
-
             for (SCROW nThisRow = nThisStart; nThisRow <= nThisEnd; nThisRow++)
                 pDocument->ApplyAttr( nThisCol, nThisRow, nTab, *pAttr );
 
@@ -1469,8 +1469,9 @@ bool ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
     return bFound;
 }
 
-// Remove field, but leave MergeFlags
-
+/**
+ * Remove field, but leave MergeFlags
+ */
 void ScAttrArray::DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow)
 {
     SetPatternAreaSafe( nStartRow, nEndRow, pDocument->GetDefPattern(), true );
@@ -1492,7 +1493,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
     while ( nThisRow <= nEndRow )
     {
         pOldPattern = pData[nIndex].pPattern;
-        if (pOldPattern != pWantedPattern)                          //! else-Zweig ?
+        if (pOldPattern != pWantedPattern) // FIXME: else-branch?
         {
             if (nThisRow < nStartRow) nThisRow = nStartRow;
             nRow = pData[nIndex].nRow;
@@ -1652,7 +1653,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
                                ((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_RIGHT ));
         sal_uInt16 nOldValue = ((const SfxUInt16Item&)rOldSet.Get( ATTR_INDENT )).GetValue();
         sal_uInt16 nNewValue = nOldValue;
-        //to keep Increment indent from running outside the cell1659
+        // To keep Increment indent from running outside the cell1659
         long nColWidth = (long)pDocument->GetColWidth(nCol,nTab);
         if ( bIncrement )
         {
@@ -2184,8 +2185,9 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
     }
 }
 
-// move within a document
-
+/**
+ * Move within a document
+ */
 void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray)
 {
     SCROW nStart = nStartRow;
@@ -2202,8 +2204,9 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
     DeleteArea(nStartRow, nEndRow);
 }
 
-// copy between documents (Clipboard)
-
+/**
+ * Copy between documents (Clipboard)
+ */
 void ScAttrArray::CopyArea(
     SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags) const
 {
@@ -2267,9 +2270,10 @@ void ScAttrArray::CopyArea(
     }
 }
 
-// leave flags
-// summarized with CopyArea
-
+/**
+ * Leave flags
+ * summarized with CopyArea
+ */
 void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray )
 {
     nStartRow -= nDy;  // Source
