@@ -48,7 +48,24 @@ Private Sub Class_Initialize()
 End Sub		&apos;	Constructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
-&apos;Private Sub Class_Terminate()
+Private Sub Class_Terminate()
+	On Local Error Resume Next
+	If _DbConnect = DBCONNECTANY Then
+		If Not IsNull(Connection) Then
+			Connection.close()
+			Connection.dispose()
+			Set Connection = Nothing
+		End If
+	End If
+	Call Class_Initialize()
+End Sub		&apos;	Destructor
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub Dispose()
+	Call Class_Terminate()
+End Sub		&apos;	Explicit destructor
+
+
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CLASS GET/LET/SET PROPERTIES					        														---
@@ -64,7 +81,7 @@ REM ----------------------------------------------------------------------------
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function mClose() As Variant
-&apos;	Close the form
+&apos;	Close the database
 
 If _ErrorHandler() Then On Local Error Goto Error_Function
 Const cstThisSub = &quot;Database.Close&quot;
@@ -74,6 +91,7 @@ Const cstThisSub = &quot;Database.Close&quot;
 
 	Connection.close()
 	Connection.dispose()
+	Set Connection = Nothing
 	mClose = True
 
 Exit_Function:

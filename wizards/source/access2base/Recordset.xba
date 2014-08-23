@@ -61,9 +61,8 @@ End Sub		&apos;	Constructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Terminate()
+	On Local Error Resume Next
 	mClose()
-	Set Statement = Nothing
-	Set RowSet = Nothing
 End Sub
 
 REM -----------------------------------------------------------------------------------------------------------------------

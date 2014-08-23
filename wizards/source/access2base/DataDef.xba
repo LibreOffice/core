@@ -40,7 +40,15 @@ Private Sub Class_Initialize()
 End Sub		&apos;	Constructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
-&apos;Private Sub Class_Terminate()
+Private Sub Class_Terminate()
+	On Local Error Resume Next
+	Call Class_Initialize()
+End Sub		&apos;	Destructor
+
+REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub Dispose()
+	Call Class_Terminate()
+End Sub		&apos;	Explicit destructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
 REM --- CLASS GET/LET/SET PROPERTIES					        														---

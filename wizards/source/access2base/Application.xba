@@ -1094,7 +1094,6 @@ Dim i As Integer, iCount As Integer, iAllCount As Integer, ofForm As Variant
 	iAllCount = AllForms._Count
 	iCount = 0
 	If iAllCount &gt; 0 Then
-		Set ofForm = New Form
 		For i = 0 To iAllCount - 1
 			Set ofForm = Application.AllForms(i)
 			If ofForm.IsLoaded Then iCount = iCount + 1
@@ -1108,7 +1107,7 @@ Dim i As Integer, iCount As Integer, iAllCount As Integer, ofForm As Variant
 	End If
 
 	If IsMissing(piCountMax) Then _CountOpenForms = iCount
-	
+
 End Function		&apos;	CountOpenForms	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
