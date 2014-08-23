@@ -71,7 +71,6 @@ LibreOffice
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
-            CABFILENUMBER 2
         }
         active          1
         compression     5
@@ -125,7 +124,6 @@ LibreOffice_Dev
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
-            CABFILENUMBER 2
         }
         active          1
         compression     5
