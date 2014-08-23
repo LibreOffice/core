@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_febbf573",
+        "filename": "lotuswordpro/source/filter/lwpobjstrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2014-08-23T03:00:04Z",
+      "side": 1,
+      "message": "I have a crash here in QuinkRead when running unittests. This change makes the QuickRead method to trigger an assert.\n\nShould have sal_uInt32 and SVBT32(from solar.h) the same size, or I\u0027m missing something?\n\nInteresting that this error just happens in the unsigned variants of these methods. QuickReadInt{32,16} works (at least these methods not crashes in the unittest)",
+      "revId": "33b043c9ca599da357c315a4985b0ad12b42b05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_dec039e3",
+        "filename": "lotuswordpro/source/filter/lwpobjstrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000186
+      },
+      "writtenOn": "2014-08-23T03:00:04Z",
+      "side": 1,
+      "message": "Same problem as above.",
+      "revId": "33b043c9ca599da357c315a4985b0ad12b42b05e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
