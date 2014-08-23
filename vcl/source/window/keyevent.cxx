@@ -40,18 +40,18 @@ KeyEvent KeyEvent::LogicalTextDirectionality (TextDirectionality eMode) const
         case TextDirectionality_RightToLeft_TopToBottom:
             switch (nCode)
             {
-                case KEY_LEFT:  aClone.maKeyCode = KeyCode(KEY_RIGHT, nMod); break;
-                case KEY_RIGHT: aClone.maKeyCode = KeyCode(KEY_LEFT,  nMod); break;
+                case KEY_LEFT:  aClone.maKeyCode = vcl::KeyCode(KEY_RIGHT, nMod); break;
+                case KEY_RIGHT: aClone.maKeyCode = vcl::KeyCode(KEY_LEFT,  nMod); break;
             }
             break;
 
         case TextDirectionality_TopToBottom_RightToLeft:
             switch (nCode)
             {
-                case KEY_DOWN:  aClone.maKeyCode = KeyCode(KEY_RIGHT, nMod); break;
-                case KEY_UP:    aClone.maKeyCode = KeyCode(KEY_LEFT,  nMod); break;
-                case KEY_LEFT:  aClone.maKeyCode = KeyCode(KEY_DOWN,  nMod); break;
-                case KEY_RIGHT: aClone.maKeyCode = KeyCode(KEY_UP,    nMod); break;
+                case KEY_DOWN:  aClone.maKeyCode = vcl::KeyCode(KEY_RIGHT, nMod); break;
+                case KEY_UP:    aClone.maKeyCode = vcl::KeyCode(KEY_LEFT,  nMod); break;
+                case KEY_LEFT:  aClone.maKeyCode = vcl::KeyCode(KEY_DOWN,  nMod); break;
+                case KEY_RIGHT: aClone.maKeyCode = vcl::KeyCode(KEY_UP,    nMod); break;
             }
             break;
 

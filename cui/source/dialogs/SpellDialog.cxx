@@ -1380,7 +1380,7 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 nSelectionType == INVALID, "cui.dialogs",
                 "selection type not set");
 
-            const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
+            const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
             bool bDelete = rKeyCode.GetCode() == KEY_DELETE;
             bool bBackspace = rKeyCode.GetCode() == KEY_BACKSPACE;
 

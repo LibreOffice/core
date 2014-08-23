@@ -2972,7 +2972,7 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
         bOptLoaded = true;
     }
 
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
     sal_uInt16 nModi  = aCode.GetModifier();
     bool bShift   = aCode.IsShift();
     bool bControl = aCode.IsMod1();
@@ -3135,10 +3135,10 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
                 if (bDoEnter)
                 {
                     if (pTableView)
-                        if( pTableView->PostKeyEvent( KeyEvent( CHAR_CR, KeyCode(KEY_RETURN) ) ) )
+                        if( pTableView->PostKeyEvent( KeyEvent( CHAR_CR, vcl::KeyCode(KEY_RETURN) ) ) )
                             bUsed = true;
                     if (pTopView)
-                        if( pTopView->PostKeyEvent( KeyEvent( CHAR_CR, KeyCode(KEY_RETURN) ) ) )
+                        if( pTopView->PostKeyEvent( KeyEvent( CHAR_CR, vcl::KeyCode(KEY_RETURN) ) ) )
                             bUsed = true;
                 }
                 else if ( nAutoPar && nChar == ')' && CursorAtClosingPar() )

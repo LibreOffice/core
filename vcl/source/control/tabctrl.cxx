@@ -962,8 +962,8 @@ bool TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
 
     if ( GetPageCount() > 1 )
     {
-        KeyCode         aKeyCode = rKeyEvent.GetKeyCode();
-        sal_uInt16          nKeyCode = aKeyCode.GetCode();
+        vcl::KeyCode aKeyCode = rKeyEvent.GetKeyCode();
+        sal_uInt16 nKeyCode = aKeyCode.GetCode();
 
         if ( aKeyCode.IsMod1() )
         {
@@ -1030,7 +1030,7 @@ void TabControl::KeyInput( const KeyEvent& rKEvt )
         mpTabCtrlData->mpListBox->KeyInput( rKEvt );
     else if ( GetPageCount() > 1 )
     {
-        KeyCode aKeyCode = rKEvt.GetKeyCode();
+        vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
         sal_uInt16  nKeyCode = aKeyCode.GetCode();
 
         if ( (nKeyCode == KEY_LEFT) || (nKeyCode == KEY_RIGHT) )

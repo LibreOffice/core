@@ -134,7 +134,7 @@ void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 
 void MenuButton::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aKeyCode.GetCode();
     if ( (nCode == KEY_DOWN) && aKeyCode.IsMod2() )
         ImplExecuteMenu();

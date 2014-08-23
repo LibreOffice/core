@@ -2143,7 +2143,7 @@ void SvImpLBox::MouseMove( const MouseEvent& rMEvt)
 bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 {
     aEditTimer.Stop();
-    const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
 
     if( rKeyCode.IsMod2() )
         return false; // don't evaluate Alt key

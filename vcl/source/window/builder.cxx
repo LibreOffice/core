@@ -2481,24 +2481,24 @@ OString VclBuilder::convertMnemonicMarkup(const OString &rIn)
 
 namespace
 {
-    KeyCode makeKeyCode(const OString &rKey)
+    vcl::KeyCode makeKeyCode(const OString &rKey)
     {
         if (rKey == "Insert")
-            return KeyCode(KEY_INSERT);
+            return vcl::KeyCode(KEY_INSERT);
         else if (rKey == "Delete")
-            return KeyCode(KEY_DELETE);
+            return vcl::KeyCode(KEY_DELETE);
 
         assert (rKey.getLength() == 1);
         sal_Char cChar = rKey.toChar();
 
         if (cChar >= 'a' && cChar <= 'z')
-            return KeyCode(KEY_A + (cChar - 'a'));
+            return vcl::KeyCode(KEY_A + (cChar - 'a'));
         else if (cChar >= 'A' && cChar <= 'Z')
-            return KeyCode(KEY_A + (cChar - 'A'));
+            return vcl::KeyCode(KEY_A + (cChar - 'A'));
         else if (cChar >= '0' && cChar <= '9')
-            return KeyCode(KEY_0 + (cChar - 'A'));
+            return vcl::KeyCode(KEY_0 + (cChar - 'A'));
 
-        return KeyCode(cChar);
+        return vcl::KeyCode(cChar);
     }
 }
 

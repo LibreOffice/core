@@ -1610,7 +1610,7 @@ bool SfxHelpIndexWindow_Impl::PreNotify(NotifyEvent& rNEvt)
     sal_uInt16 nType = rNEvt.GetType();
     if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
-         const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nCode = rKeyCode.GetCode();
 
         if (  KEY_TAB == nCode )
@@ -2125,7 +2125,7 @@ Reference< XTextRange > SfxHelpTextWindow_Impl::getCursor() const
 
 
 
-bool SfxHelpTextWindow_Impl::isHandledKey( const KeyCode& _rKeyCode )
+bool SfxHelpTextWindow_Impl::isHandledKey( const vcl::KeyCode& _rKeyCode )
 {
     bool bRet = false;
     sal_uInt16 nCode = _rKeyCode.GetCode();
@@ -2429,8 +2429,8 @@ bool SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     }
     else if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
-         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-         const KeyCode& rKeyCode = pKEvt->GetKeyCode();
+        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+        const vcl::KeyCode& rKeyCode = pKEvt->GetKeyCode();
         sal_uInt16 nKeyGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
         if ( KEYGROUP_ALPHA == nKeyGroup &&  !isHandledKey( rKeyCode ) )
@@ -3022,7 +3022,7 @@ bool SfxHelpWindow_Impl::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         // Backward == <ALT><LEFT> or <BACKSPACE> Forward == <ALT><RIGHT>
-         const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey = rKeyCode.GetCode();
         if ( ( rKeyCode.IsMod2() && ( KEY_LEFT == nKey || KEY_RIGHT == nKey ) ) ||
              ( !rKeyCode.GetModifier() && KEY_BACKSPACE == nKey && !pIndexWin->HasFocusOnEdit() ) )

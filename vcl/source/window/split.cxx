@@ -328,7 +328,7 @@ void Splitter::Tracking( const TrackingEvent& rTEvt )
     }
 }
 
-void Splitter::ImplKbdTracking( KeyCode aKeyCode )
+void Splitter::ImplKbdTracking( vcl::KeyCode aKeyCode )
 {
     sal_uInt16 nCode = aKeyCode.GetCode();
     if ( nCode == KEY_ESCAPE || nCode == KEY_RETURN )
@@ -570,7 +570,7 @@ void Splitter::LoseFocus()
 {
     if( mbKbdSplitting )
     {
-        KeyCode aReturnKey( KEY_RETURN );
+        vcl::KeyCode aReturnKey( KEY_RETURN );
         ImplKbdTracking( aReturnKey );
         mbKbdSplitting = false;
     }
@@ -585,7 +585,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
     mbInKeyEvent = 1;
 
     Splitter *pSibling = ImplFindSibling();
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aKeyCode.GetCode();
     switch ( nCode )
     {
@@ -627,7 +627,7 @@ void Splitter::KeyInput( const KeyEvent& rKEvt )
             {
                 if( mbKbdSplitting )
                 {
-                    KeyCode aKey( KEY_ESCAPE );
+                    vcl::KeyCode aKey( KEY_ESCAPE );
                     ImplKbdTracking( aKey );
                 }
 

@@ -140,7 +140,7 @@ class SW_DLLPUBLIC SwFltControlStack : private ::boost::noncopyable
     friend class SwFltShell;
 
     sal_uLong nFieldFlags;
-    KeyCode aEmptyKeyCode; // fuer Bookmarks
+    vcl::KeyCode aEmptyKeyCode; // fuer Bookmarks
 
 private:
     bool bHasSdOD;

@@ -450,7 +450,7 @@ bool ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     if(!bReturn && GetActiveWindow())
     {
-        KeyCode aKeyCode = rKEvt.GetKeyCode();
+        vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
         if (aKeyCode.IsMod1() && aKeyCode.IsShift()
             && aKeyCode.GetCode() == KEY_R)

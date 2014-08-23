@@ -75,9 +75,9 @@ namespace sw { namespace mark
     {
         public:
             virtual const OUString& GetShortName() const =0;
-            virtual const KeyCode& GetKeyCode() const =0;
+            virtual const vcl::KeyCode& GetKeyCode() const =0;
             virtual void SetShortName(const OUString&) =0;
-            virtual void SetKeyCode(const KeyCode&) =0;
+            virtual void SetKeyCode(const vcl::KeyCode&) =0;
     };
 
     class SW_DLLPUBLIC IFieldmark

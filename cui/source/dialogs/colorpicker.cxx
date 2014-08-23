@@ -243,7 +243,7 @@ void HexColorControl::Paste()
 
 bool HexColorControl::ImplProcessKeyInput( const KeyEvent& rKEv )
 {
-    const KeyCode& rKeyCode = rKEv.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEv.GetKeyCode();
 
     if( rKeyCode.GetGroup() == KEYGROUP_ALPHA && !rKeyCode.IsMod1() && !rKeyCode.IsMod2() )
     {

@@ -78,7 +78,7 @@ bool ResizableMultiLineEdit::PreNotify(NotifyEvent& rNEvt)
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
-        KeyCode aCode = rKEvt.GetKeyCode();
+        vcl::KeyCode aCode = rKEvt.GetKeyCode();
         switch (aCode.GetCode())
         {
             case KEY_RETURN:

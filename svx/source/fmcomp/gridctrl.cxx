@@ -3205,7 +3205,7 @@ bool DbGridControl::PreNotify(NotifyEvent& rEvt)
                 // Ctrl-Tab is used to step out of the control, without traveling to the
                 // remaining cells first
                 // -> build a new key event without the Ctrl-key, and let the very base class handle it
-                KeyCode aNewCode( KEY_TAB, bShift, false, false, false );
+                vcl::KeyCode aNewCode( KEY_TAB, bShift, false, false, false );
                 KeyEvent aNewEvent( pKeyEvent->GetCharCode(), aNewCode );
 
                 // call the Control - our direct base class will interpret this in a way we do not want (and do

@@ -68,7 +68,7 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
     bool bNonSpace = rKeyEvent.GetKeyCode().GetCode() != KEY_SPACE;
     if( bNumericOnly && bNonSpace )
     {
-        const KeyCode& rKeyCode = rKeyEvent.GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rKeyEvent.GetKeyCode();
         sal_uInt16 nGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
 

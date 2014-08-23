@@ -83,7 +83,7 @@ struct TAccInfo
     public:
         TAccInfo(      sal_Int32 nKeyPos ,
                        sal_Int32 nListPos,
-                 const KeyCode&  aKey    )
+                 const vcl::KeyCode& aKey )
             : m_nKeyPos        (nKeyPos  )
             , m_nListPos       (nListPos )
             , m_bIsConfigurable(true ) /**< its important to set sal_True as default -
@@ -101,7 +101,7 @@ struct TAccInfo
         sal_Int32 m_nListPos;
         bool m_bIsConfigurable;
         OUString m_sCommand;
-        KeyCode m_aKey;
+        vcl::KeyCode m_aKey;
 };
 
 namespace sfx2
@@ -160,7 +160,7 @@ private:
 
     OUString                    GetLabel4Command(const OUString& rCommand);
     void                        InitAccCfg();
-    sal_uLong                   MapKeyCodeToPos( const KeyCode &rCode ) const;
+    sal_uLong                   MapKeyCodeToPos( const vcl::KeyCode &rCode ) const;
     css::uno::Reference< css::frame::XModel > SearchForAlreadyLoadedDoc(const OUString& sName);
     void                        StartFileDialog( WinBits nBits, const OUString& rTitle );
 

@@ -225,7 +225,7 @@ bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
         case EVENT_KEYINPUT :
             {
                 const ::KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-                const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
+                const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
                 if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
                 {
                     // Call execute only with non-empty text

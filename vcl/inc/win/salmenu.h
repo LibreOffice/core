@@ -39,7 +39,7 @@ public:
     virtual void EnableItem( unsigned nPos, bool bEnable );
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText );
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage );
-    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName );
+    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
     virtual void GetSystemMenuData( SystemMenuData* pData );
 
     HMENU mhMenu;           // the menu handle

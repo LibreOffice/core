@@ -83,7 +83,7 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, Window* pFrameWin )
     bool bKeyProcessed = false;
     ESelection aSel( pEditView->GetSelection() );
     bool bSelection = aSel.HasRange();
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     KeyFuncType eFunc = aKeyCode.GetFunction();
     sal_uInt16 nCode = aKeyCode.GetCode();
     bool bReadOnly = IsReadOnly();

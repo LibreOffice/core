@@ -737,7 +737,7 @@ awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException
         }
     }
 
-    awt::KeyEvent aKeyEvent = svt::AcceleratorExecute::st_VCLKey2AWTKey( KeyCode( nVclKey ) );
+    awt::KeyEvent aKeyEvent = svt::AcceleratorExecute::st_VCLKey2AWTKey( vcl::KeyCode( nVclKey ) );
     return aKeyEvent;
 }
 

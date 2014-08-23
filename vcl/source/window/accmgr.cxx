@@ -106,7 +106,7 @@ void ImplAccelManager::EndSequence( bool bCancel )
     mpSequenceList = NULL;
 }
 
-bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
+bool ImplAccelManager::IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRepeat )
 {
     Accelerator* pAccel;
 
@@ -165,7 +165,7 @@ bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
                     // did the accelerator survive the call
                     if ( !bDel )
                     {
-                        pAccel->maCurKeyCode    = KeyCode();
+                        pAccel->maCurKeyCode    = vcl::KeyCode();
                         pAccel->mnCurId         = 0;
                         pAccel->mnCurRepeat     = 0;
                         pAccel->mpDel           = NULL;
@@ -236,7 +236,7 @@ bool ImplAccelManager::IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat )
                     // if the accelerator did survive the call
                     if ( !bDel )
                     {
-                        pAccel->maCurKeyCode    = KeyCode();
+                        pAccel->maCurKeyCode    = vcl::KeyCode();
                         pAccel->mnCurId         = 0;
                         pAccel->mnCurRepeat     = 0;
                         pAccel->mpDel           = NULL;

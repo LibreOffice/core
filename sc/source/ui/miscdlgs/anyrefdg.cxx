@@ -569,8 +569,8 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         if (!pAccel.get())
         {
             pAccel.reset( new Accelerator );
-            pAccel->InsertItem( 1, KeyCode( KEY_RETURN ) );
-            pAccel->InsertItem( 2, KeyCode( KEY_ESCAPE ) );
+            pAccel->InsertItem( 1, vcl::KeyCode( KEY_RETURN ) );
+            pAccel->InsertItem( 2, vcl::KeyCode( KEY_ESCAPE ) );
             pAccel->SetSelectHdl( LINK( this, ScFormulaReferenceHelper, AccelSelectHdl ) );
         }
         Application::InsertAccel( pAccel.get() );

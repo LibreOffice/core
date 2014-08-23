@@ -953,7 +953,7 @@ Rectangle SvxPixelCtl::implCalFocusRect( const Point& aPosition )
 //Solution:Keyboard function
 void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aKeyCode.GetCode();
     bool bIsMod = aKeyCode.IsShift() || aKeyCode.IsMod1() || aKeyCode.IsMod2();
 

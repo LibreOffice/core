@@ -1386,7 +1386,7 @@ void SdrView::DeleteMarked()
 {
     if (IsTextEdit())
     {
-        SdrObjEditView::KeyInput(KeyEvent(0,KeyCode(KEYFUNC_DELETE)),pTextEditWin);
+        SdrObjEditView::KeyInput(KeyEvent(0,vcl::KeyCode(KEYFUNC_DELETE)),pTextEditWin);
     }
     else
     {

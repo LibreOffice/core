@@ -41,7 +41,7 @@ private:
     Link            maSelectHdl;
 
     // Will be set by AcceleratorManager
-    KeyCode         maCurKeyCode;
+    vcl::KeyCode    maCurKeyCode;
     sal_uInt16      mnCurId;
     sal_uInt16      mnCurRepeat;
     bool        mbIsCancel;
@@ -50,10 +50,10 @@ private:
     SAL_DLLPRIVATE  void        ImplInit();
     SAL_DLLPRIVATE  void        ImplCopyData( ImplAccelData& rAccelData );
     SAL_DLLPRIVATE  void        ImplDeleteData();
-    SAL_DLLPRIVATE  void        ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
+    SAL_DLLPRIVATE  void        ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode,
                                      bool bEnable, Accelerator* pAutoAccel );
 
-    SAL_DLLPRIVATE  ImplAccelEntry* ImplGetAccelData( const KeyCode& rKeyCode ) const;
+    SAL_DLLPRIVATE  ImplAccelEntry* ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const;
 
 protected:
     SAL_DLLPRIVATE  void        ImplLoadRes( const ResId& rResId );
@@ -68,17 +68,17 @@ public:
     virtual void    Deactivate();
     virtual void    Select();
 
-    void            InsertItem( sal_uInt16 nItemId, const KeyCode& rKeyCode );
+    void            InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
     void            InsertItem( const ResId& rResId );
 
     sal_uInt16          GetCurItemId() const { return mnCurId; }
-    const KeyCode&  GetCurKeyCode() const { return maCurKeyCode; }
+    const vcl::KeyCode& GetCurKeyCode() const { return maCurKeyCode; }
     sal_uInt16          GetCurRepeat() const { return mnCurRepeat; }
     bool            IsCancel() const { return mbIsCancel; }
 
     sal_uInt16          GetItemCount() const;
     sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
-    KeyCode         GetKeyCode( sal_uInt16 nItemId ) const;
+    vcl::KeyCode        GetKeyCode( sal_uInt16 nItemId ) const;
 
     Accelerator*    GetAccel( sal_uInt16 nItemId ) const;
 

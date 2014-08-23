@@ -1766,7 +1766,7 @@ SvTreeListEntry* FmFilterNavigator::getPrevEntry(SvTreeListEntry* _pStartWith)
 
 void FmFilterNavigator::KeyInput(const KeyEvent& rKEvt)
 {
-    const KeyCode&  rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
 
     switch ( rKeyCode.GetCode() )
     {

@@ -118,7 +118,7 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext );
     virtual void                EndExtTextInput( sal_uInt16 nFlags );
     virtual OUString              GetKeyName( sal_uInt16 nKeyCode );
-    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual void                UpdateSettings( AllSettings& rSettings );
     virtual void                Beep();

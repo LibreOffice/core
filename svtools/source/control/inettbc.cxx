@@ -1007,7 +1007,7 @@ void SvtURLBox::UpdatePicklistForSmartProtocol_Impl()
 }
 
 
-bool SvtURLBox::ProcessKey( const KeyCode& rKey )
+bool SvtURLBox::ProcessKey( const vcl::KeyCode& rKey )
 {
     // every key input stops the current matching thread
     if( pCtx.is() )
@@ -1017,7 +1017,7 @@ bool SvtURLBox::ProcessKey( const KeyCode& rKey )
         pCtx.clear();
     }
 
-    KeyCode aCode( rKey.GetCode() );
+    vcl::KeyCode aCode( rKey.GetCode() );
     if ( aCode == KEY_RETURN && !GetText().isEmpty() )
     {
         // wait for completion of matching thread
@@ -1100,8 +1100,8 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
     {
 
         const KeyEvent& rEvent = *rNEvt.GetKeyEvent();
-        const KeyCode& rKey = rEvent.GetKeyCode();
-        KeyCode aCode( rKey.GetCode() );
+        const vcl::KeyCode& rKey = rEvent.GetKeyCode();
+        vcl::KeyCode aCode( rKey.GetCode() );
         if( ProcessKey( rKey ) )
         {
             return true;

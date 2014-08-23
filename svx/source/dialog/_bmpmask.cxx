@@ -124,7 +124,7 @@ void MaskSet::GetFocus()
 
 void MaskSet::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
     // if the key has a modifier we don't care
     if( aCode.GetModifier() )

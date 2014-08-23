@@ -113,7 +113,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
     SdrView& rView = rParent.GetView();
     Window& rWindow = rParent.GetWindow();
 
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
 
     switch ( nCode )

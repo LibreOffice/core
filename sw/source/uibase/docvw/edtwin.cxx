@@ -1440,12 +1440,12 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
             }
 
             aKeyEvent = KeyEvent( rKEvt.GetCharCode(),
-                                  KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
+                                  vcl::KeyCode( nKey, rKEvt.GetKeyCode().GetModifier() ),
                                   rKEvt.GetRepeat() );
         }
     }
 
-    const KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = aKeyEvent.GetKeyCode();
     sal_Unicode aCh = aKeyEvent.GetCharCode();
 
     // enable switching to notes ankor with Ctrl - Alt - Page Up/Down

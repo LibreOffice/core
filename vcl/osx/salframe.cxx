@@ -1491,7 +1491,7 @@ bool AquaSalFrame::SetPluginParent( SystemParentData* )
     return false;
 }
 
-bool AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+bool AquaSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , vcl::KeyCode& )
 {
     // not supported yet
     return FALSE;

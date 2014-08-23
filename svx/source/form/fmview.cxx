@@ -486,7 +486,7 @@ void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFor
 bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
     bool bDone = false;
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if  (   IsDesignMode()
         &&  rKeyCode.GetCode() == KEY_RETURN
         )

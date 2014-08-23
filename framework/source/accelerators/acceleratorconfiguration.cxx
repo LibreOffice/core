@@ -723,7 +723,7 @@ AcceleratorCache::TKeyList::const_iterator lcl_getPreferredKey(const Accelerator
          ++pIt                  )
     {
         const css::awt::KeyEvent& rAWTKey = *pIt;
-        const KeyCode             aVCLKey = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey);
+        const vcl::KeyCode        aVCLKey = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(rAWTKey);
         const OUString            sName   = aVCLKey.GetName();
 
         if (!sName.isEmpty())

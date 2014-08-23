@@ -47,7 +47,7 @@ private:
     SAL_DLLPRIVATE void      ImplDrawSplitter();
     SAL_DLLPRIVATE void      ImplSplitMousePos( Point& rPos );
     SAL_DLLPRIVATE void      ImplStartKbdSplitting();
-    SAL_DLLPRIVATE void      ImplKbdTracking( KeyCode aKeyCode );
+    SAL_DLLPRIVATE void      ImplKbdTracking( vcl::KeyCode aKeyCode );
     SAL_DLLPRIVATE bool      ImplSplitterActive();
     SAL_DLLPRIVATE Splitter* ImplFindSibling();
     SAL_DLLPRIVATE void      ImplRestoreSplitter();

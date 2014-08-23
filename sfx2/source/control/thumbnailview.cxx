@@ -537,7 +537,7 @@ void ThumbnailView::KeyInput( const KeyEvent& rKEvt )
     bool bValidRange = false;
     bool bHasSelRange = mpStartSelRange != mFilteredItemList.end();
     size_t nNextPos = nLastPos;
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     ThumbnailViewItem* pNext = NULL;
 
     if (aKeyCode.IsShift() && bHasSelRange)

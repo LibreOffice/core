@@ -311,9 +311,9 @@ bool UnoDataBrowserView::PreNotify( NotifyEvent& rNEvt )
         if ( bGrabAllowed )
         {
             const KeyEvent* pKeyEvt = rNEvt.GetKeyEvent();
-            const KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
-            if (  ( rKeyCode == KeyCode( KEY_E, true, true, false, false ) )
-               || ( rKeyCode == KeyCode( KEY_TAB, true, false, false, false ) )
+            const vcl::KeyCode& rKeyCode = pKeyEvt->GetKeyCode();
+            if (  ( rKeyCode == vcl::KeyCode( KEY_E, true, true, false, false ) )
+               || ( rKeyCode == vcl::KeyCode( KEY_TAB, true, false, false, false ) )
                )
             {
                 if ( m_pTreeView && m_pVclControl && m_pTreeView->HasChildPathFocus() )

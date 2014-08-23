@@ -113,7 +113,7 @@ bool ScScenarioListBox::Notify( NotifyEvent& rNEvt )
 
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        KeyCode aCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        vcl::KeyCode aCode = rNEvt.GetKeyEvent()->GetKeyCode();
         switch( aCode.GetCode() )
         {
             case KEY_RETURN:

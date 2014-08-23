@@ -256,7 +256,7 @@ namespace svt
             {
                 const KeyEvent* pKeyEvent = static_cast< const KeyEvent* >( pWindowEvent->GetData() );
                 ENSURE_OR_RETURN( pKeyEvent, "no key event with KeyInput", 0L );
-                const KeyCode& rKeyCode( pKeyEvent->GetKeyCode() );
+                const vcl::KeyCode& rKeyCode( pKeyEvent->GetKeyCode() );
                 if ( ( rKeyCode.GetModifier() == 0 ) && ( rKeyCode.GetCode() == KEY_RETURN ) )
                 {
                     bActivatePanel = true;

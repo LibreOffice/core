@@ -145,7 +145,7 @@ void AnnotationTextWindow::Paint( const Rectangle& rRect)
 
 void AnnotationTextWindow::KeyInput( const KeyEvent& rKeyEvt )
 {
-    const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     sal_uInt16 nKey = rKeyCode.GetCode();
 
     if ((rKeyCode.IsMod1() && rKeyCode.IsMod2()) && ((nKey == KEY_PAGEUP) || (nKey == KEY_PAGEDOWN)))

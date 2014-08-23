@@ -185,7 +185,7 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
                     Attention: This state does not mean the success state
                     of the corresponding execute. Because its done asynchronous!
          */
-        bool execute(const KeyCode&            aKey);
+        bool execute(const vcl::KeyCode&       aKey);
         bool execute(const css::awt::KeyEvent& aKey);
 
         /** search the command for the given key event.
@@ -196,8 +196,8 @@ class SVT_DLLPUBLIC AcceleratorExecute : private TMutexInit
         OUString  findCommand(const ::com::sun::star::awt::KeyEvent& aKey);
 
         /** TODO document me */
-        static css::awt::KeyEvent st_VCLKey2AWTKey(const KeyCode&            aKey);
-        static KeyCode            st_AWTKey2VCLKey(const css::awt::KeyEvent& aKey);
+        static css::awt::KeyEvent st_VCLKey2AWTKey(const vcl::KeyCode&       aKey);
+        static vcl::KeyCode       st_AWTKey2VCLKey(const css::awt::KeyEvent& aKey);
 
 
         /** TODO document me */

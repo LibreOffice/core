@@ -425,7 +425,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
 {
     bool bUsed = false;
 
-    const KeyCode aCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode aCode = rKEvt.GetKeyCode();
     if (aCode.GetCode() == KEY_RETURN)
     {
         switch (aCode.GetModifier())

@@ -1267,7 +1267,7 @@ bool SelectionListBox::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYUP )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        const KeyCode aKeyCode = pKEvt->GetKeyCode();
+        const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
         const sal_uInt16 nModifier = aKeyCode.GetModifier();
         if( aKeyCode.GetCode() == KEY_SPACE && !nModifier)
             bCallAddSelection = true;

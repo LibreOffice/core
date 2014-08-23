@@ -599,7 +599,7 @@ void     SwGlobalTree::GetFocus()
 
 void     SwGlobalTree::KeyInput(const KeyEvent& rKEvt)
 {
-    const KeyCode aCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode aCode = rKEvt.GetKeyCode();
     if(aCode.GetCode() == KEY_RETURN)
     {
         switch(aCode.GetModifier())

@@ -22,8 +22,9 @@
 
 #include <vector>
 
+#include <vcl/keycod.hxx>
+
 class Accelerator;
-class KeyCode;
 
 typedef ::std::vector< Accelerator* > ImplAccelList;
 
@@ -47,7 +48,7 @@ public:
     void                EndSequence( bool bCancel = false );
     void                FlushAccel() { EndSequence( true ); }
 
-    bool                IsAccelKey( const KeyCode& rKeyCode, sal_uInt16 nRepeat );
+    bool                IsAccelKey( const vcl::KeyCode& rKeyCode, sal_uInt16 nRepeat );
 };
 
 #endif // INCLUDED_VCL_INC_ACCMGR_HXX

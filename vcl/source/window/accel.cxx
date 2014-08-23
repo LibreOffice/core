@@ -149,7 +149,7 @@ void Accelerator::ImplInit()
     mpDel               = NULL;
 }
 
-ImplAccelEntry* Accelerator::ImplGetAccelData( const KeyCode& rKeyCode ) const
+ImplAccelEntry* Accelerator::ImplGetAccelData( const vcl::KeyCode& rKeyCode ) const
 {
     ImplAccelMap::iterator it = mpData->maKeyMap.find( rKeyCode.GetFullCode() );
     if( it != mpData->maKeyMap.end() )
@@ -192,7 +192,7 @@ void Accelerator::ImplDeleteData()
     mpData->maIdList.clear();
 }
 
-void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
+void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode,
                                    bool bEnable, Accelerator* pAutoAccel )
 {
     DBG_ASSERT( nItemId, "Accelerator::InsertItem(): ItemId == 0" );
@@ -205,17 +205,17 @@ void Accelerator::ImplInsertAccel( sal_uInt16 nItemId, const KeyCode& rKeyCode,
                 sal_uInt16 nCode4;
         ImplGetKeyCode( rKeyCode.GetFunction(), nCode1, nCode2, nCode3, nCode4 );
         if ( nCode1 )
-            ImplInsertAccel( nItemId, KeyCode( nCode1, nCode1 ), bEnable, pAutoAccel );
+            ImplInsertAccel( nItemId, vcl::KeyCode( nCode1, nCode1 ), bEnable, pAutoAccel );
         if ( nCode2 )
         {
             if ( pAutoAccel )
                 pAutoAccel = new Accelerator( *pAutoAccel );
-            ImplInsertAccel( nItemId, KeyCode( nCode2, nCode2 ), bEnable, pAutoAccel );
+            ImplInsertAccel( nItemId, vcl::KeyCode( nCode2, nCode2 ), bEnable, pAutoAccel );
             if ( nCode3 )
             {
                 if ( pAutoAccel )
                     pAutoAccel = new Accelerator( *pAutoAccel );
-                ImplInsertAccel( nItemId, KeyCode( nCode3, nCode3 ), bEnable, pAutoAccel );
+                ImplInsertAccel( nItemId, vcl::KeyCode( nCode3, nCode3 ), bEnable, pAutoAccel );
             }
         }
         return;
@@ -312,7 +312,7 @@ void Accelerator::Select()
     maSelectHdl.Call( this );
 }
 
-void Accelerator::InsertItem( sal_uInt16 nItemId, const KeyCode& rKeyCode )
+void Accelerator::InsertItem( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode )
 {
     ImplInsertAccel( nItemId, rKeyCode, true, NULL );
 }
@@ -323,7 +323,7 @@ void Accelerator::InsertItem( const ResId& rResId )
     sal_uLong               nObjMask;
     sal_uInt16              nAccelKeyId;
     sal_uInt16              bDisable;
-    KeyCode             aKeyCode;
+    vcl::KeyCode            aKeyCode;
     Accelerator*        pAutoAccel  = NULL;
 
     GetRes( rResId.SetRT( RSC_ACCELITEM ) );
@@ -336,7 +336,7 @@ void Accelerator::InsertItem( const ResId& rResId )
         // new context was created
         RSHEADER_TYPE * pKeyCodeRes = (RSHEADER_TYPE *)GetClassRes();
         ResId aResId( pKeyCodeRes, *rResId.GetResMgr());
-        aKeyCode = KeyCode( aResId );
+        aKeyCode = vcl::KeyCode( aResId );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
     }
 
@@ -355,14 +355,14 @@ sal_uInt16 Accelerator::GetItemCount() const
     return (sal_uInt16)mpData->maIdList.size();
 }
 
-KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
+vcl::KeyCode Accelerator::GetKeyCode( sal_uInt16 nItemId ) const
 {
 
     sal_uInt16 nIndex = ImplAccelEntryGetFirstPos( &(mpData->maIdList), nItemId );
     if ( nIndex != ACCELENTRY_NOTFOUND )
         return mpData->maIdList[ nIndex ]->maKeyCode;
     else
-        return KeyCode();
+        return vcl::KeyCode();
 }
 
 sal_uInt16 Accelerator::GetItemId( sal_uInt16 nPos ) const
@@ -390,7 +390,7 @@ Accelerator& Accelerator::operator=( const Accelerator& rAccel )
 
     // assign new data
     maHelpStr       = rAccel.maHelpStr;
-    maCurKeyCode    = KeyCode();
+    maCurKeyCode    = vcl::KeyCode();
     mnCurId         = 0;
     mnCurRepeat     = 0;
     mbIsCancel      = false;

@@ -692,7 +692,7 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     }
 }
 
-void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& /*rKeyName*/ )
+void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& /*rKeyName*/ )
 {
     sal_uInt16 nModifier;
     sal_Unicode nCommandKey = 0;

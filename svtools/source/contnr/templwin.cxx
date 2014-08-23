@@ -1117,7 +1117,7 @@ bool SvtTemplateWindow::PreNotify( NotifyEvent& rNEvt )
 
     if ( EVENT_KEYINPUT == nType && rNEvt.GetKeyEvent() )
     {
-        const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nCode = rKeyCode.GetCode();
 
         if ( KEY_BACKSPACE == nCode && !rKeyCode.GetModifier() && pFileWin->HasChildPathFocus() )

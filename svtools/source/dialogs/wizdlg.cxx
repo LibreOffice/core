@@ -432,8 +432,8 @@ bool WizardDialog::Notify( NotifyEvent& rNEvt )
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && mpPrevBtn && mpNextBtn )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        KeyCode         aKeyCode = pKEvt->GetKeyCode();
-        sal_uInt16          nKeyCode = aKeyCode.GetCode();
+        vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
+        sal_uInt16 nKeyCode = aKeyCode.GetCode();
 
         if ( aKeyCode.IsMod1() )
         {

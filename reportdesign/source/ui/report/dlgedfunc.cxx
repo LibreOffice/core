@@ -272,7 +272,7 @@ bool DlgEdFunc::handleKeyEvent(const KeyEvent& _rEvent)
 
     if ( !m_bUiActive )
     {
-        const KeyCode& rCode = _rEvent.GetKeyCode();
+        const vcl::KeyCode& rCode = _rEvent.GetKeyCode();
         sal_uInt16 nCode = rCode.GetCode();
 
         switch ( nCode )

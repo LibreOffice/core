@@ -434,7 +434,7 @@ bool FocusManager::MoveFocusInsideDeckTitle (
 
 
 void FocusManager::HandleKeyEvent (
-    const KeyCode& rKeyCode,
+    const vcl::KeyCode& rKeyCode,
     const Window& rWindow)
 {
     const FocusLocation aLocation (GetFocusLocation(rWindow));

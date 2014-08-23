@@ -3628,7 +3628,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         bool bIsModified = rSh.IsModified();
 
         ::sw::mark::IMark* pMark = rSh.SetBookmark(
-            KeyCode(),
+            vcl::KeyCode(),
             OUString(),
             OUString(),
             IDocumentMarkAccess::DDE_BOOKMARK);

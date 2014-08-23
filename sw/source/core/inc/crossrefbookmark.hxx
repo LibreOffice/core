@@ -23,6 +23,7 @@
 #include <IMark.hxx>
 #include <bookmrk.hxx>
 #include <rtl/ustring.hxx>
+#include <vcl/keycod.hxx>
 
 namespace sw {
     namespace mark {
@@ -31,7 +32,7 @@ namespace sw {
         {
         public:
             CrossRefBookmark(const SwPaM& rPaM,
-                const KeyCode& rCode,
+                const vcl::KeyCode& rCode,
                 const OUString& rName,
                 const OUString& rShortName,
                 const OUString& rPrefix);
@@ -65,7 +66,7 @@ namespace sw {
         {
         public:
             CrossRefHeadingBookmark(const SwPaM& rPaM,
-                const KeyCode& rCode,
+                const vcl::KeyCode& rCode,
                 const OUString& rName,
                 const OUString& rShortName);
             static bool IsLegalName(const OUString& rName);
@@ -76,7 +77,7 @@ namespace sw {
         {
         public:
             CrossRefNumItemBookmark(const SwPaM& rPaM,
-                const KeyCode& rCode,
+                const vcl::KeyCode& rCode,
                 const OUString& rName,
                 const OUString& rShortName);
             static bool IsLegalName(const OUString& rName);

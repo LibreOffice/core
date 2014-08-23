@@ -252,7 +252,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleCheckBox::getAccessibleActionKe
     if ( pWindow )
     {
         KeyEvent aKeyEvent = pWindow->GetActivationKey();
-        KeyCode aKeyCode = aKeyEvent.GetKeyCode();
+        vcl::KeyCode aKeyCode = aKeyEvent.GetKeyCode();
         if ( aKeyCode.GetCode() != 0 )
         {
             awt::KeyStroke aKeyStroke;

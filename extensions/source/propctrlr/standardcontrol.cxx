@@ -996,7 +996,7 @@ namespace pcr
         sal_uInt16 nSwitch = _rNEvt.GetType();
         if (EVENT_KEYINPUT == nSwitch)
         {
-            const KeyCode& aKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
+            const vcl::KeyCode& aKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
             sal_uInt16 nKey = aKeyCode.GetCode();
 
             if  (   (   (KEY_RETURN == nKey)
@@ -1101,7 +1101,7 @@ namespace pcr
 
         if (rNEvt.GetType() == EVENT_KEYINPUT)
         {
-            const KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+            const vcl::KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
             sal_uInt16 nKey = aKeyCode.GetCode();
 
             if ( nKey == KEY_RETURN && !aKeyCode.IsShift() )

@@ -478,7 +478,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
 
         // activation key
         KeyEvent aKeyEvent = m_pParent->GetActivationKey( m_pParent->GetItemId( m_nItemPos ) );
-        KeyCode aKeyCode = aKeyEvent.GetKeyCode();
+        vcl::KeyCode aKeyCode = aKeyEvent.GetKeyCode();
         Sequence< awt::KeyStroke > aSeq1(1);
         aSeq1[0].Modifiers = 0;
         Reference< XAccessible > xParent( getAccessibleParent() );
@@ -513,7 +513,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleMenuItem::getAccessibleActionKe
         pKeyBindingHelper->AddKeyBinding( aSeq2 );
 
         // accelerator key
-        KeyCode aAccelKeyCode = m_pParent->GetAccelKey( m_pParent->GetItemId( m_nItemPos ) );
+        vcl::KeyCode aAccelKeyCode = m_pParent->GetAccelKey( m_pParent->GetItemId( m_nItemPos ) );
         if ( aAccelKeyCode.GetCode() != 0 )
         {
             Sequence< awt::KeyStroke > aSeq3(1);

@@ -591,7 +591,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 OUString sName = ((SfxStringItem*)pItem)->GetValue();
-                rWrtSh.SetBookmark( KeyCode(), sName, OUString() );
+                rWrtSh.SetBookmark( vcl::KeyCode(), sName, OUString() );
             }
             else
             {

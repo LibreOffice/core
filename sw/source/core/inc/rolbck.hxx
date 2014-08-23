@@ -19,8 +19,9 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_ROLBCK_HXX
 
-#include <tools/solar.h>
 #include <svl/itemset.hxx>
+#include <tools/solar.h>
+#include <vcl/keycod.hxx>
 
 #include <vector>
 #include <set>
@@ -260,7 +261,7 @@ class SwHistoryBookmark : public SwHistoryHint
     private:
         const OUString m_aName;
         OUString m_aShortName;
-        KeyCode m_aKeycode;
+        vcl::KeyCode m_aKeycode;
         const sal_uLong m_nNode;
         const sal_uLong m_nOtherNode;
         const sal_Int32 m_nCntnt;

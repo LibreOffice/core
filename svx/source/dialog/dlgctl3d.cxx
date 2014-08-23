@@ -1108,7 +1108,7 @@ void SvxLightCtl3D::move( double fDeltaHor, double fDeltaVer )
 
 void SvxLightCtl3D::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode aCode(rKEvt.GetKeyCode());
+    const vcl::KeyCode aCode(rKEvt.GetKeyCode());
 
     if( aCode.GetModifier() )
     {

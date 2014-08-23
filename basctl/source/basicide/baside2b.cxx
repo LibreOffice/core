@@ -1597,8 +1597,8 @@ WatchWindow::WatchWindow (Layout* pParent) :
     long nTextLen = GetTextWidth( aWatchStr ) + DWBORDER + 3;
     aXEdit.SetPosPixel( Point( nTextLen, 3 ) );
     aXEdit.SetAccHdl( LINK( this, WatchWindow, EditAccHdl ) );
-    aXEdit.GetAccelerator().InsertItem( 1, KeyCode( KEY_RETURN ) );
-    aXEdit.GetAccelerator().InsertItem( 2, KeyCode( KEY_ESCAPE ) );
+    aXEdit.GetAccelerator().InsertItem( 1, vcl::KeyCode( KEY_RETURN ) );
+    aXEdit.GetAccelerator().InsertItem( 2, vcl::KeyCode( KEY_ESCAPE ) );
     aXEdit.Show();
 
     aRemoveWatchButton.Disable();

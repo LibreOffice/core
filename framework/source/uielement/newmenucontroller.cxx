@@ -113,7 +113,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
     }
 }
 
-void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode )
+void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const vcl::KeyCode& rKeyCode )
 {
     sal_uInt16        nCount( pPopupMenu->GetItemCount() );
     sal_uInt16        nId( 0 );
@@ -217,9 +217,9 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
             }
         }
 
-        KeyCode                         aEmptyKeyCode;
+        vcl::KeyCode                    aEmptyKeyCode;
         sal_uInt32                      nItemCount( pPopupMenu->GetItemCount() );
-        std::vector< KeyCode >          aMenuShortCuts;
+        std::vector< vcl::KeyCode >     aMenuShortCuts;
         std::vector< OUString >    aCmds;
         std::vector< sal_uInt32 >       aIds;
         for ( sal_uInt32 i = 0; i < nItemCount; i++ )
@@ -275,7 +275,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 void NewMenuController::retrieveShortcutsFromConfiguration(
     const Reference< XAcceleratorConfiguration >& rAccelCfg,
     const Sequence< OUString >& rCommands,
-    std::vector< KeyCode >& aMenuShortCuts )
+    std::vector< vcl::KeyCode >& aMenuShortCuts )
 {
     if ( rAccelCfg.is() )
     {

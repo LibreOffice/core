@@ -20,13 +20,14 @@
 #ifndef INCLUDED_VCL_MENU_HXX
 #define INCLUDED_VCL_MENU_HXX
 
-#include <tools/solar.h>
-#include <vcl/dllapi.h>
+#include <rsc/rsc-vcl-shared-types.hxx>
+#include <tools/color.hxx>
 #include <tools/rc.hxx>
 #include <tools/resid.hxx>
-#include <rsc/rsc-vcl-shared-types.hxx>
+#include <tools/solar.h>
+#include <vcl/dllapi.h>
 #include <vcl/bitmapex.hxx>
-#include <tools/color.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/vclevent.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -40,7 +41,6 @@ class MenuItemList;
 class HelpEvent;
 class Image;
 class PopupMenu;
-class KeyCode;
 class KeyEvent;
 class MenuFloatingWindow;
 class Window;
@@ -251,8 +251,8 @@ public:
     void                SetPopupMenu( sal_uInt16 nItemId, PopupMenu* pMenu );
     PopupMenu*          GetPopupMenu( sal_uInt16 nItemId ) const;
 
-    void                SetAccelKey( sal_uInt16 nItemId, const KeyCode& rKeyCode );
-    KeyCode             GetAccelKey( sal_uInt16 nItemId ) const;
+    void                SetAccelKey( sal_uInt16 nItemId, const vcl::KeyCode& rKeyCode );
+    vcl::KeyCode        GetAccelKey( sal_uInt16 nItemId ) const;
 
     void                CheckItem( sal_uInt16 nItemId, bool bCheck = true );
     bool                IsItemChecked( sal_uInt16 nItemId ) const;

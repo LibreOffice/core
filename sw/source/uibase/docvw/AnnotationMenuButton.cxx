@@ -187,7 +187,7 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
 
 void AnnotationMenuButton::KeyInput( const KeyEvent& rKeyEvt )
 {
-    const KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKeyEvt.GetKeyCode();
     const sal_uInt16 nKey = rKeyCode.GetCode();
     if ( nKey == KEY_TAB )
     {

@@ -173,7 +173,7 @@ public:
     // returns in 'rKeyCode' the single keycode that translates to the given unicode when using a keyboard layout of language 'aLangType'
     // returns false if no mapping exists or function not supported
     // this is required for advanced menu support
-    virtual bool        MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) = 0;
+    virtual bool        MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode ) = 0;
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS

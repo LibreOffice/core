@@ -429,7 +429,7 @@ void ScCsvRuler::Tracking( const TrackingEvent& rTEvt )
 
 void ScCsvRuler::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = rKCode.GetCode();
     bool bNoMod = !rKCode.GetModifier();
     bool bShift = (rKCode.GetModifier() == KEY_SHIFT);

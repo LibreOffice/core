@@ -882,8 +882,8 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                            sal_uInt16 nKeyCode, sal_uInt16 nCharCode, sal_uInt16 nRepeat, bool bForward )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    KeyCode     aKeyCode( nKeyCode, nKeyCode );
-    sal_uInt16      nEvCode = aKeyCode.GetCode();
+    vcl::KeyCode aKeyCode( nKeyCode, nKeyCode );
+    sal_uInt16 nEvCode = aKeyCode.GetCode();
 
     // allow application key listeners to remove the key event
     // but make sure we're not forwarding external KeyEvents, (ie where bForward is false)
@@ -1015,7 +1015,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     const OutputDevice *pChildOutDev = pChild->GetOutDev();
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
       pChildOutDev->HasMirroredGraphics() && pChild->IsRTLEnabled() )
-        aKeyCode = KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
+        aKeyCode = vcl::KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
     // call handler
     ImplDelData aDelData;

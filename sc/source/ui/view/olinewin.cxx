@@ -972,7 +972,7 @@ void ScOutlineWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScOutlineWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKCode = rKEvt.GetKeyCode();
     bool bNoMod = !rKCode.GetModifier();
     bool bShift = (rKCode.GetModifier() == KEY_SHIFT);
     bool bCtrl = (rKCode.GetModifier() == KEY_MOD1);

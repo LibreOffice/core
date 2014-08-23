@@ -651,7 +651,7 @@ void ScPreview::KeyInput( const KeyEvent& rKEvt )
     //  The + and - keys can't be configured as accelerator entries, so they must be handled directly
     //  (in ScPreview, not ScPreviewShell -> only if the preview window has the focus)
 
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     sal_uInt16 nKey = rKeyCode.GetCode();
     bool bHandled = false;
     if(!rKeyCode.GetModifier())

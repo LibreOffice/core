@@ -106,7 +106,7 @@ void SvxNoSpaceEdit::KeyInput( const KeyEvent& rKEvent )
     bool bValid = rKEvent.GetKeyCode().GetCode() != KEY_SPACE;
     if (bValid && bOnlyNumeric)
     {
-        const KeyCode& rKeyCode = rKEvent.GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rKEvent.GetKeyCode();
         sal_uInt16 nGroup = rKeyCode.GetGroup();
         sal_uInt16 nKey = rKeyCode.GetCode();
         bValid = ( KEYGROUP_NUM == nGroup || KEYGROUP_CURSOR == nGroup ||

@@ -1350,7 +1350,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
     sal_Int32 nSelect = LISTBOX_ENTRY_NOTFOUND;
     LB_EVENT_TYPE eLET = LET_KEYMOVE;
 
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     bool bShift = aKeyCode.IsShift();
     bool bCtrl  = aKeyCode.IsMod1() || aKeyCode.IsMod3();
@@ -2522,7 +2522,7 @@ bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
         if( !pData->GetModifier() && ( pData->GetMode() == COMMAND_WHEEL_SCROLL ) )
         {
             sal_uInt16 nKey = ( pData->GetDelta() < 0 ) ? KEY_DOWN : KEY_UP;
-            KeyEvent aKeyEvent( 0, KeyCode( nKey ) );
+            KeyEvent aKeyEvent( 0, vcl::KeyCode( nKey ) );
             bDone = ProcessKeyInput( aKeyEvent );
         }
     }

@@ -247,7 +247,7 @@ public:
     virtual void                SetInputContext( SalInputContext* pContext ) SAL_OVERRIDE;
     virtual void                EndExtTextInput( sal_uInt16 nFlags ) SAL_OVERRIDE;
     virtual OUString              GetKeyName( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
-    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) SAL_OVERRIDE;
+    virtual bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode ) SAL_OVERRIDE;
     virtual LanguageType        GetInputLanguage() SAL_OVERRIDE;
     virtual void                UpdateSettings( AllSettings& rSettings ) SAL_OVERRIDE;
     virtual void                Beep() SAL_OVERRIDE;

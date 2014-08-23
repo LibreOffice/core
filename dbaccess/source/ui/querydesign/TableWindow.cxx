@@ -508,7 +508,7 @@ void OTableWindow::Remove()
 
 bool OTableWindow::HandleKeyInput( const KeyEvent& rEvt )
 {
-    const KeyCode& rCode = rEvt.GetKeyCode();
+    const vcl::KeyCode& rCode = rEvt.GetKeyCode();
     sal_uInt16 nCode = rCode.GetCode();
     bool   bShift = rCode.IsShift();
     bool   bCtrl = rCode.IsMod1();
@@ -618,7 +618,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
                 break;
 
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            const KeyCode& rCode = pKeyEvent->GetKeyCode();
+            const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
             if ( rCode.IsMod1() )
             {
                 Point aStartPoint = GetPosPixel();
@@ -725,7 +725,7 @@ bool OTableWindow::PreNotify(NotifyEvent& rNEvt)
         case EVENT_KEYUP:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            const KeyCode& rCode = pKeyEvent->GetKeyCode();
+            const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
             sal_uInt16 nKeyCode = rCode.GetCode();
             if ( rCode.IsMod2() && nKeyCode != KEY_UP && nKeyCode != KEY_DOWN && nKeyCode != KEY_LEFT && nKeyCode != KEY_RIGHT )
             {

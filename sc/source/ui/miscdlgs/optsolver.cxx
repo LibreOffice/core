@@ -112,7 +112,7 @@ void ScCursorRefEdit::SetCursorLinks( const Link& rUp, const Link& rDown )
 
 void ScCursorRefEdit::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bUp = (aCode.GetCode() == KEY_UP);
     bool bDown = (aCode.GetCode() == KEY_DOWN);
     if ( !aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() && ( bUp || bDown ) )

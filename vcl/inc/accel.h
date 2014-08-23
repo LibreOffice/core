@@ -27,8 +27,8 @@ class Accelerator;
 class ImplAccelEntry
 {
 public:
-    sal_uInt16          mnId;
-    KeyCode         maKeyCode;
+    sal_uInt16      mnId;
+    vcl::KeyCode    maKeyCode;
     Accelerator*    mpAccel;
     Accelerator*    mpAutoAccel;
     bool            mbEnabled;

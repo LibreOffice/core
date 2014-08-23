@@ -438,7 +438,7 @@ private:
                             GetBreakIterator();
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >
                             getCursor() const;
-    bool                    isHandledKey( const KeyCode& _rKeyCode );
+    bool                    isHandledKey( const vcl::KeyCode& _rKeyCode );
 
     DECL_LINK(SelectHdl, void *);
     DECL_LINK(              NotifyHdl, SvtMiscOptions* );

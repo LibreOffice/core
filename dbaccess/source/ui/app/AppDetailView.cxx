@@ -311,7 +311,7 @@ void OCreationList::onSelected( SvTreeListEntry* _pEntry ) const
 
 void OCreationList::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rCode = rKEvt.GetKeyCode();
     if ( !rCode.IsMod1() && !rCode.IsMod2() && !rCode.IsShift() )
     {
         if ( rCode.GetCode() == KEY_RETURN )
@@ -612,7 +612,7 @@ void OApplicationDetailView::setTaskExternalMnemonics( MnemonicGenerator& _rMnem
 
 bool OApplicationDetailView::interceptKeyInput( const KeyEvent& _rEvent )
 {
-    const KeyCode& rKeyCode = _rEvent.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = _rEvent.GetKeyCode();
     if ( rKeyCode.GetModifier() == KEY_MOD2 )
         return getTasksWindow().HandleKeyInput( _rEvent );
 

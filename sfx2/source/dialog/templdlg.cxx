@@ -302,7 +302,7 @@ bool DropListBox_Impl::Notify( NotifyEvent& rNEvt )
     bool nRet = false;
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        const KeyCode&  rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         if(!rKeyCode.GetModifier())
         {
             if( pDialog->bCanDel && KEY_DELETE == rKeyCode.GetCode())
@@ -541,7 +541,7 @@ bool StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
     bool nRet = false;
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        const KeyCode&  rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         if ( !rKeyCode.GetModifier() && KEY_RETURN == rKeyCode.GetCode() )
         {
             aDoubleClickLink.Call( this );

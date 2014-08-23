@@ -2870,7 +2870,7 @@ void GtkSalFrame::EndExtTextInput( sal_uInt16 nFlags )
         m_pIMHandler->endExtTextInput( nFlags );
 }
 
-bool GtkSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+bool GtkSalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , vcl::KeyCode& )
 {
     // not supported yet
     return false;

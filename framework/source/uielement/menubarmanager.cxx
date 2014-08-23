@@ -835,7 +835,7 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
                 // Only non-popup menu items can have a short-cut
                 if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
                 {
-                    KeyCode aKeyCode( KEY_F1 );
+                    vcl::KeyCode aKeyCode( KEY_F1 );
                     pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
                 }
                 else if ( pMenu->GetPopupMenu( pMenuItemHandler->nItemId ) == 0 )
@@ -854,8 +854,8 @@ IMPL_LINK( MenuBarManager, Activate, Menu *, pMenu )
 
         if ( xDispatchProvider.is() )
         {
-            KeyCode             aEmptyKeyCode;
-            SvtCommandOptions   aCmdOptions;
+            vcl::KeyCode      aEmptyKeyCode;
+            SvtCommandOptions aCmdOptions;
             std::vector< MenuItemHandler* >::iterator p;
             for ( p = m_aMenuItemHandlerVector.begin(); p != m_aMenuItemHandlerVector.end(); ++p )
             {
@@ -1407,7 +1407,7 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
             // Only non-popup menu items can have a short-cut
             if ( pMenuItemHandler->aMenuItemURL == aCmdHelpIndex )
             {
-                KeyCode aKeyCode( KEY_F1 );
+                vcl::KeyCode aKeyCode( KEY_F1 );
                 pMenu->SetAccelKey( pMenuItemHandler->nItemId, aKeyCode );
             }
             else if ( pMenu->GetPopupMenu( pMenuItemHandler->nItemId ) == 0 )
@@ -1524,7 +1524,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
             }
         }
 
-        KeyCode aEmptyKeyCode;
+        vcl::KeyCode aEmptyKeyCode;
         Sequence< OUString > aSeq( aMenuShortCuts.size() );
         const sal_uInt32 nCount = aMenuShortCuts.size();
         for ( sal_uInt32 i = 0; i < nCount; ++i )

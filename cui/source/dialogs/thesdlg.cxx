@@ -236,7 +236,7 @@ SvTreeListEntry * ThesaurusAlternativesCtrl::AddEntry( sal_Int32 nVal, const OUS
 
 void ThesaurusAlternativesCtrl::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKey = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKey = rKEvt.GetKeyCode();
 
     if (rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_ESCAPE)
         GetParent()->KeyInput( rKEvt ); // parent will close dialog...

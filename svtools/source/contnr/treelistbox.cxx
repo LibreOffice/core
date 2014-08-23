@@ -147,8 +147,8 @@ SvInplaceEdit2::SvInplaceEdit2
     pEdit->SetSelection( rSelection );
     pEdit->SaveValue();
 
-    aAccReturn.InsertItem( SVLBOX_ACC_RETURN, KeyCode(KEY_RETURN) );
-    aAccEscape.InsertItem( SVLBOX_ACC_ESCAPE, KeyCode(KEY_ESCAPE) );
+    aAccReturn.InsertItem( SVLBOX_ACC_RETURN, vcl::KeyCode(KEY_RETURN) );
+    aAccEscape.InsertItem( SVLBOX_ACC_ESCAPE, vcl::KeyCode(KEY_ESCAPE) );
 
     aAccReturn.SetActivateHdl( LINK( this, SvInplaceEdit2, ReturnHdl_Impl) );
     aAccEscape.SetActivateHdl( LINK( this, SvInplaceEdit2, EscapeHdl_Impl) );
@@ -199,7 +199,7 @@ IMPL_LINK_NOARG_INLINE_END(SvInplaceEdit2, EscapeHdl_Impl)
 
 bool SvInplaceEdit2::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
 
     switch ( nCode )

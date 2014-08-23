@@ -130,7 +130,7 @@ namespace pcr
     {
         if (EVENT_KEYINPUT == rNEvt.GetType())
         {
-            const KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+            const vcl::KeyCode& aKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
             sal_uInt16 nKey = aKeyCode.GetCode();
 
             if (nKey == KEY_RETURN && !aKeyCode.IsShift())

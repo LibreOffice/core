@@ -22,6 +22,7 @@
 
 #include <cppuhelper/weakref.hxx>
 #include <sfx2/Metadatable.hxx>
+#include <vcl/keycod.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <map>
@@ -165,18 +166,18 @@ namespace sw {
         {
         public:
             Bookmark(const SwPaM& rPaM,
-                const KeyCode& rCode,
+                const vcl::KeyCode& rCode,
                 const OUString& rName,
                 const OUString& rShortName);
             virtual void InitDoc(SwDoc* const io_Doc) SAL_OVERRIDE;
 
             virtual const OUString& GetShortName() const SAL_OVERRIDE
                 { return m_sShortName; }
-            virtual const KeyCode& GetKeyCode() const SAL_OVERRIDE
+            virtual const vcl::KeyCode& GetKeyCode() const SAL_OVERRIDE
                 { return m_aCode; }
             virtual void SetShortName(const OUString& rShortName) SAL_OVERRIDE
                 { m_sShortName = rShortName; }
-            virtual void SetKeyCode(const KeyCode& rCode) SAL_OVERRIDE
+            virtual void SetKeyCode(const vcl::KeyCode& rCode) SAL_OVERRIDE
                 { m_aCode = rCode; }
 
             // ::sfx2::Metadatable
@@ -188,7 +189,7 @@ namespace sw {
                 ::com::sun::star::rdf::XMetadatable > MakeUnoObject() SAL_OVERRIDE;
 
         private:
-            KeyCode m_aCode;
+            vcl::KeyCode m_aCode;
             OUString m_sShortName;
         };
 

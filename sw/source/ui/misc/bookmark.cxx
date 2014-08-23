@@ -103,7 +103,7 @@ void SwInsertBookmarkDlg::Apply()
         OUString sEntry(comphelper::string::remove(m_pBookmarkBox->GetText(),
             m_pBookmarkBox->GetMultiSelectionSeparator()));
 
-        rSh.SetBookmark( KeyCode(), sEntry, OUString() );
+        rSh.SetBookmark( vcl::KeyCode(), sEntry, OUString() );
         rReq.AppendItem( SfxStringItem( FN_INSERT_BOOKMARK, sEntry ) );
         rReq.Done();
     }

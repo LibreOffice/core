@@ -134,7 +134,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
         return;
     }
 
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     bool bHandled = true;
     size_t nSelectedMenu = mnSelectedMenu;
     size_t nLastMenuPos = maMenuItems.size() - 1;
@@ -1174,7 +1174,7 @@ bool ScCheckListMenuWindow::Notify(NotifyEvent& rNEvt)
         case EVENT_KEYUP:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            const KeyCode& rCode = pKeyEvent->GetKeyCode();
+            const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
             bool bShift = rCode.IsShift();
             if (rCode.GetCode() == KEY_TAB)
             {
@@ -1456,7 +1456,7 @@ void ScCheckListBox::ExpandChildren( SvTreeListEntry* pParent )
 
 void ScCheckListBox::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKey = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKey = rKEvt.GetKeyCode();
 
     if ( rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_SPACE )
     {

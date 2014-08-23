@@ -66,10 +66,10 @@ void SAL_CALL MediaEventListenersImpl::keyPressed( const ::com::sun::star::awt::
 
     if( mpNotifyWindow )
     {
-        KeyCode aVCLKeyCode( e.KeyCode,
-                            ( ( e.Modifiers & 1 ) ? KEY_SHIFT : 0 ) |
-                            ( ( e.Modifiers & 2 ) ? KEY_MOD1 : 0 ) |
-                            ( ( e.Modifiers & 4 ) ? KEY_MOD2 : 0 ) );
+        vcl::KeyCode aVCLKeyCode( e.KeyCode,
+                                  ( ( e.Modifiers & 1 ) ? KEY_SHIFT : 0 ) |
+                                  ( ( e.Modifiers & 2 ) ? KEY_MOD1 : 0 ) |
+                                  ( ( e.Modifiers & 4 ) ? KEY_MOD2 : 0 ) );
         KeyEvent aVCLKeyEvt( e.KeyChar, aVCLKeyCode );
 
         Application::PostKeyEvent( VCLEVENT_WINDOW_KEYINPUT, reinterpret_cast< ::Window* >( mpNotifyWindow ), &aVCLKeyEvt );
@@ -86,10 +86,10 @@ void SAL_CALL MediaEventListenersImpl::keyReleased( const ::com::sun::star::awt:
 
     if( mpNotifyWindow )
     {
-        KeyCode aVCLKeyCode( e.KeyCode,
-                            ( ( e.Modifiers & 1 ) ? KEY_SHIFT : 0 ) |
-                            ( ( e.Modifiers & 2 ) ? KEY_MOD1 : 0 ) |
-                            ( ( e.Modifiers & 4 ) ? KEY_MOD2 : 0 ) );
+        vcl::KeyCode aVCLKeyCode( e.KeyCode,
+                                  ( ( e.Modifiers & 1 ) ? KEY_SHIFT : 0 ) |
+                                  ( ( e.Modifiers & 2 ) ? KEY_MOD1 : 0 ) |
+                                  ( ( e.Modifiers & 4 ) ? KEY_MOD2 : 0 ) );
         KeyEvent aVCLKeyEvt( e.KeyChar, aVCLKeyCode );
         Application::PostKeyEvent( VCLEVENT_WINDOW_KEYUP, reinterpret_cast< ::Window* >( mpNotifyWindow ), &aVCLKeyEvt );
     }

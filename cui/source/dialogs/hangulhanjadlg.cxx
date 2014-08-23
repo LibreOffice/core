@@ -1367,10 +1367,10 @@ namespace svx
         bool nHandled = false;
         if( rNEvt.GetType() == EVENT_KEYINPUT )
         {
-            const KeyEvent*             pKEvt = rNEvt.GetKeyEvent();
-            const KeyCode&              rKeyCode = pKEvt->GetKeyCode();
-            sal_uInt16                      nMod = rKeyCode.GetModifier();
-            sal_uInt16                      nCode = rKeyCode.GetCode();
+            const KeyEvent*     pKEvt = rNEvt.GetKeyEvent();
+            const vcl::KeyCode& rKeyCode = pKEvt->GetKeyCode();
+            sal_uInt16          nMod = rKeyCode.GetModifier();
+            sal_uInt16          nCode = rKeyCode.GetCode();
             if( nCode == KEY_TAB && ( !nMod || KEY_SHIFT == nMod ) )
             {
                 bool        bUp = KEY_SHIFT == nMod;

@@ -1249,7 +1249,7 @@ void PushButton::Tracking( const TrackingEvent& rTEvt )
 
 void PushButton::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     if ( !aKeyCode.GetModifier() &&
          ((aKeyCode.GetCode() == KEY_RETURN) || (aKeyCode.GetCode() == KEY_SPACE)) )
@@ -1275,7 +1275,7 @@ void PushButton::KeyInput( const KeyEvent& rKEvt )
 
 void PushButton::KeyUp( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) &&
          ((aKeyCode.GetCode() == KEY_RETURN) || (aKeyCode.GetCode() == KEY_SPACE)) )
@@ -2389,7 +2389,7 @@ void RadioButton::Tracking( const TrackingEvent& rTEvt )
 
 void RadioButton::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     if ( !aKeyCode.GetModifier() && (aKeyCode.GetCode() == KEY_SPACE) )
     {
@@ -2410,7 +2410,7 @@ void RadioButton::KeyInput( const KeyEvent& rKEvt )
 
 void RadioButton::KeyUp( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) && (aKeyCode.GetCode() == KEY_SPACE) )
     {
@@ -3271,7 +3271,7 @@ void CheckBox::Tracking( const TrackingEvent& rTEvt )
 
 void CheckBox::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     if ( !aKeyCode.GetModifier() && (aKeyCode.GetCode() == KEY_SPACE) )
     {
@@ -3292,7 +3292,7 @@ void CheckBox::KeyInput( const KeyEvent& rKEvt )
 
 void CheckBox::KeyUp( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) && (aKeyCode.GetCode() == KEY_SPACE) )
     {
@@ -3869,7 +3869,7 @@ void DisclosureButton::ImplDrawCheckBoxState()
 
 void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
 
     if( !aKeyCode.GetModifier()  &&
         ( ( aKeyCode.GetCode() == KEY_ADD ) ||

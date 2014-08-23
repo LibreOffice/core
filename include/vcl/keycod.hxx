@@ -28,6 +28,9 @@
 
 class Window;
 
+namespace vcl
+{
+
 class VCL_DLLPUBLIC KeyCode
 {
 private:
@@ -76,7 +79,9 @@ public:
     bool        operator !=( const KeyCode& rKeyCode ) const;
 };
 
-inline KeyCode::KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 )
+} // namespace vcl
+
+inline vcl::KeyCode::KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, bool bMod3 )
 {
     nCode = nKey;
     if( bShift )
@@ -90,7 +95,7 @@ inline KeyCode::KeyCode( sal_uInt16 nKey, bool bShift, bool bMod1, bool bMod2, b
     eFunc = KEYFUNC_DONTKNOW;
 }
 
-inline bool KeyCode::operator ==( const KeyCode& rKeyCode ) const
+inline bool vcl::KeyCode::operator ==( const vcl::KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (nCode == rKeyCode.nCode);
@@ -98,7 +103,7 @@ inline bool KeyCode::operator ==( const KeyCode& rKeyCode ) const
         return (GetFunction() == rKeyCode.GetFunction());
 }
 
-inline bool KeyCode::operator !=( const KeyCode& rKeyCode ) const
+inline bool vcl::KeyCode::operator !=( const vcl::KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (nCode != rKeyCode.nCode);
@@ -106,14 +111,14 @@ inline bool KeyCode::operator !=( const KeyCode& rKeyCode ) const
         return (GetFunction() != rKeyCode.GetFunction());
 }
 
-inline bool KeyCode::IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const
+inline bool vcl::KeyCode::IsDefinedKeyCodeEqual( const vcl::KeyCode& rKeyCode ) const
 {
     if ( (eFunc == KEYFUNC_DONTKNOW) && (rKeyCode.eFunc == KEYFUNC_DONTKNOW) )
         return (GetFullCode() == rKeyCode.GetFullCode());
     return (GetFunction() == rKeyCode.GetFunction());
 }
 
-inline KeyCode& KeyCode::operator = ( const KeyCode& rKeyCode )
+inline vcl::KeyCode& vcl::KeyCode::operator = ( const vcl::KeyCode& rKeyCode )
 {
     nCode = rKeyCode.nCode;
     eFunc = rKeyCode.eFunc;

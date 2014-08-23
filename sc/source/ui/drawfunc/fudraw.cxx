@@ -307,7 +307,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             // there is not yet a object selected
             if(pView->AreObjectsMarked())
             {
-                KeyCode aCode = rKEvt.GetKeyCode();
+                vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
                 if ( !aCode.IsMod1() && !aCode.IsMod2() )
                 {
@@ -364,7 +364,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             // there is not yet a object selected
             if(pView->AreObjectsMarked())
             {
-                KeyCode aCode = rKEvt.GetKeyCode();
+                vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
                 if ( aCode.IsMod1() )
                 {
@@ -389,7 +389,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
             // there is not yet a object selected
             if(pView->AreObjectsMarked())
             {
-                KeyCode aCode = rKEvt.GetKeyCode();
+                vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
                 if ( aCode.IsMod1() )
                 {

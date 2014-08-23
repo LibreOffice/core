@@ -21,10 +21,10 @@
 #define INCLUDED_SD_SOURCE_UI_SIDEBAR_SIDEBARFOCUSMANAGER_HXX
 
 #include <tools/link.hxx>
+#include <vcl/keycod.hxx>
 
 #include <memory>
 
-class KeyCode;
 class VclSimpleEvent;
 class Window;
 
@@ -56,7 +56,7 @@ public:
     void RegisterLink (
         ::Window* pSource,
         ::Window* pTarget,
-        const KeyCode& rKey);
+        const vcl::KeyCode& rKey);
 
     /** Register a link that will move the focus from the source window to
         the target window when the source window is focused and KEY_ESCAPE
@@ -92,7 +92,7 @@ public:
         When there is no rule for this combination of source window and key
         code then the focus stays where it is.
     */
-    bool TransferFocus (::Window* pSource, const KeyCode& rCode);
+    bool TransferFocus (::Window* pSource, const vcl::KeyCode& rCode);
 
 private:
     friend struct FocusManagerCreator;

@@ -458,7 +458,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         return false;
 
     Selection   aOldSel     = pEdit->GetSelection();
-    KeyCode     aCode       = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode      = rKEvt.GetKeyCode();
     sal_Unicode cChar       = rKEvt.GetCharCode();
     sal_uInt16      nKeyCode    = aCode.GetCode();
     bool        bShift      = aCode.IsShift();

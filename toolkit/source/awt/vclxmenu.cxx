@@ -632,7 +632,7 @@ namespace
 
     /** Copied from svtools/inc/acceleratorexecute.hxx */
     static css::awt::KeyEvent lcl_VCLKey2AWTKey(
-        const KeyCode& aVCLKey)
+        const vcl::KeyCode& aVCLKey)
     {
         css::awt::KeyEvent aAWTKey;
         aAWTKey.Modifiers = 0;
@@ -650,7 +650,7 @@ namespace
         return aAWTKey;
     }
 
-    KeyCode lcl_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
+    vcl::KeyCode lcl_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     {
         bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
         bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
@@ -658,7 +658,7 @@ namespace
         bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
         sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
 
-        return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
+        return vcl::KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
     }
 
 }
@@ -765,7 +765,7 @@ throw (css::uno::RuntimeException, std::exception)
 
     if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        KeyCode aVCLKeyCode = lcl_AWTKey2VCLKey( aKeyEvent );
+        vcl::KeyCode aVCLKeyCode = lcl_AWTKey2VCLKey( aKeyEvent );
         mpMenu->SetAccelKey( nItemId, aVCLKeyCode );
     }
 }
@@ -781,7 +781,7 @@ throw (css::uno::RuntimeException, std::exception)
     css::awt::KeyEvent aKeyEvent;
     if ( mpMenu && IsPopupMenu() && MENU_ITEM_NOTFOUND != mpMenu->GetItemPos( nItemId ) )
     {
-        KeyCode nKeyCode = mpMenu->GetAccelKey( nItemId );
+        vcl::KeyCode nKeyCode = mpMenu->GetAccelKey( nItemId );
         aKeyEvent = lcl_VCLKey2AWTKey( nKeyCode );
     }
 

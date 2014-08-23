@@ -223,8 +223,8 @@ private:
     SAL_DLLPRIVATE bool            ImplChangeHighlightUpDn( bool bUp, bool bNoCycle = false );
     SAL_DLLPRIVATE sal_uInt16          ImplGetItemLine( ImplToolItem* pCurrentItem );
     SAL_DLLPRIVATE ImplToolItem*   ImplGetFirstValidItem( sal_uInt16 nLine );
-    SAL_DLLPRIVATE bool            ImplOpenItem( KeyCode aKeyCode );
-    SAL_DLLPRIVATE bool            ImplActivateItem( KeyCode aKeyCode );
+    SAL_DLLPRIVATE bool            ImplOpenItem( vcl::KeyCode aKeyCode );
+    SAL_DLLPRIVATE bool            ImplActivateItem( vcl::KeyCode aKeyCode );
     SAL_DLLPRIVATE void            ImplShowFocus();
     SAL_DLLPRIVATE void            ImplHideFocus();
     SAL_DLLPRIVATE void            ImplUpdateInputEnable();

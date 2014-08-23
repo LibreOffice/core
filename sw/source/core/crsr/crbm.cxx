@@ -80,7 +80,7 @@ namespace
 
 // at CurCrsr.SPoint
 ::sw::mark::IMark* SwCrsrShell::SetBookmark(
-    const KeyCode& rCode,
+    const vcl::KeyCode& rCode,
     const OUString& rName,
     const OUString& rShortName,
     IDocumentMarkAccess::MarkType eMark)

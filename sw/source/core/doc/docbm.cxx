@@ -396,16 +396,16 @@ namespace sw { namespace mark
                 pMark = boost::shared_ptr<IMark>(new NavigatorReminder(rPaM));
                 break;
             case IDocumentMarkAccess::BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new Bookmark(rPaM, KeyCode(), rName, OUString()));
+                pMark = boost::shared_ptr<IMark>(new Bookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::DDE_BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new DdeBookmark(rPaM));
                 break;
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, OUString()));
+                pMark = boost::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, OUString()));
+                pMark = boost::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, vcl::KeyCode(), rName, OUString()));
                 break;
             case IDocumentMarkAccess::UNO_BOOKMARK:
                 pMark = boost::shared_ptr<IMark>(new UnoMark(rPaM));

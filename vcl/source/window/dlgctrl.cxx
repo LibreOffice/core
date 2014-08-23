@@ -574,7 +574,7 @@ namespace
 
 bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     sal_uInt16  nKeyCode = aKeyCode.GetCode();
     Window* pSWindow;
     Window* pTempWindow;
@@ -1116,7 +1116,7 @@ KeyEvent Window::GetActivationKey() const
             nCode = KEY_POINT;
         else if( nAccel == '-' )
             nCode = KEY_SUBTRACT;
-        KeyCode aKeyCode( nCode, false, false, true, false );
+        vcl::KeyCode aKeyCode( nCode, false, false, true, false );
         aKeyEvent = KeyEvent( nAccel, aKeyCode );
     }
     return aKeyEvent;

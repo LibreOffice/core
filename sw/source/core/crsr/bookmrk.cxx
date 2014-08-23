@@ -248,7 +248,7 @@ namespace sw { namespace mark
     }
 
     Bookmark::Bookmark(const SwPaM& aPaM,
-        const KeyCode& rCode,
+        const vcl::KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
         : DdeBookmark(aPaM)

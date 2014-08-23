@@ -1437,7 +1437,7 @@ sal_uInt32 OViewsWindow::getMarkedObjectCount() const
     return nCount;
 }
 
-void OViewsWindow::handleKey(const KeyCode& _rCode)
+void OViewsWindow::handleKey(const vcl::KeyCode& _rCode)
 {
     const sal_uInt16 nCode = _rCode.GetCode();
     if ( _rCode.IsMod1() )

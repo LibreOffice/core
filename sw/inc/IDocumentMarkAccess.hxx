@@ -25,7 +25,6 @@
 #include <boost/shared_ptr.hpp>
 
 class SwPaM;
-class KeyCode;
 struct SwPosition;
 class SwTxtNode;
 

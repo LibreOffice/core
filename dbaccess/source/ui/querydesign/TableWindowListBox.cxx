@@ -135,7 +135,7 @@ bool OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            const KeyCode& rCode = pKeyEvent->GetKeyCode();
+            const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
 
             if (rCode.GetCode() != KEY_RETURN)
             {

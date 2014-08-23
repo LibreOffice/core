@@ -169,7 +169,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
 }
 
 
-bool AcceleratorExecute::execute(const KeyCode& aVCLKey)
+bool AcceleratorExecute::execute(const vcl::KeyCode& aVCLKey)
 {
     css::awt::KeyEvent aAWTKey = AcceleratorExecute::st_VCLKey2AWTKey(aVCLKey);
     return execute(aAWTKey);
@@ -212,7 +212,7 @@ bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
 }
 
 
-css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
+css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const vcl::KeyCode& aVCLKey)
 {
     css::awt::KeyEvent aAWTKey;
     aAWTKey.Modifiers = 0;
@@ -230,7 +230,7 @@ css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
 }
 
 
-KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
+vcl::KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 {
     bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
     bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
@@ -238,7 +238,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
     sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
 
-    return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
+    return vcl::KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }
 
 OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)

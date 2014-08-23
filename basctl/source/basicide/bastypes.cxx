@@ -115,7 +115,7 @@ bool BaseWindow::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         KeyEvent aKEvt = *rNEvt.GetKeyEvent();
-        KeyCode aCode = aKEvt.GetKeyCode();
+        vcl::KeyCode aCode = aKEvt.GetKeyCode();
         sal_uInt16 nCode = aCode.GetCode();
 
         switch ( nCode )

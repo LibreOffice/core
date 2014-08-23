@@ -99,7 +99,7 @@ bool ColumnEdit::Notify( NotifyEvent& rNEvt )
     if ( nType == EVENT_KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        KeyCode aCode = pKEvt->GetKeyCode();
+        vcl::KeyCode aCode = pKEvt->GetKeyCode();
 
         if ( !aCode.IsMod1() && !aCode.IsMod2() )
         {
@@ -270,7 +270,7 @@ bool RowEdit::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        KeyCode aCode = pKEvt->GetKeyCode();
+        vcl::KeyCode aCode = pKEvt->GetKeyCode();
         if ( aCode.GetCode() == KEY_RETURN && !aCode.IsMod1() && !aCode.IsMod2() )
         {
             ScNavigatorDlg::ReleaseFocus();

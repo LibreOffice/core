@@ -133,7 +133,7 @@ SfxVersionInfo::SfxVersionInfo()
 
 void SfxVersionsTabListBox_Impl::KeyInput(const KeyEvent& rKeyEvent)
 {
-    const KeyCode& rCode = rKeyEvent.GetKeyCode();
+    const vcl::KeyCode& rCode = rKeyEvent.GetKeyCode();
     switch (rCode.GetCode())
     {
         case KEY_RETURN :

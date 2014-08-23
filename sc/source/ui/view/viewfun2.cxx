@@ -2786,7 +2786,7 @@ void ScViewFunc::InsertSpecialChar( const OUString& rStr, const Font& rFont )
     ApplyUserItemSet( aSetItem.GetItemSet() );
 
     while ( *pChar )
-        pViewShell->TabKeyInput( KeyEvent( *(pChar++), KeyCode() ) );
+        pViewShell->TabKeyInput( KeyEvent( *(pChar++), vcl::KeyCode() ) );
 }
 
 void ScViewFunc::UpdateLineAttrs( SvxBorderLine&       rLine,

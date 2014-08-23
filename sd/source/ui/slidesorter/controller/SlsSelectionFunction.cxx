@@ -390,7 +390,7 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
     FocusManager& rFocusManager (mrController.GetFocusManager());
     bool bResult = false;
 
-    const KeyCode& rCode (rEvent.GetKeyCode());
+    const vcl::KeyCode& rCode (rEvent.GetKeyCode());
     switch (rCode.GetCode())
     {
         case KEY_RETURN:

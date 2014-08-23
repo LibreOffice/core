@@ -59,14 +59,14 @@ void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, 
         rCode4 = aImplKeyFuncTab[nIndex+3];
 }
 
-KeyCode::KeyCode( KeyFuncType eFunction )
+vcl::KeyCode::KeyCode( KeyFuncType eFunction )
 {
     sal_uInt16 nDummy;
     ImplGetKeyCode( eFunction, nCode, nDummy, nDummy, nDummy );
     eFunc = eFunction;
 }
 
-KeyCode::KeyCode( const ResId& rResId )
+vcl::KeyCode::KeyCode( const ResId& rResId )
     : nCode(0)
     , eFunc(KEYFUNC_DONTKNOW)
 {
@@ -92,14 +92,14 @@ KeyCode::KeyCode( const ResId& rResId )
     }
 }
 
-OUString KeyCode::GetName( Window* pWindow ) const
+OUString vcl::KeyCode::GetName( Window* pWindow ) const
 {
     if ( !pWindow )
         pWindow = ImplGetDefaultWindow();
     return pWindow ? pWindow->ImplGetFrame()->GetKeyName( GetFullCode() ) : "";
 }
 
-KeyFuncType KeyCode::GetFunction() const
+KeyFuncType vcl::KeyCode::GetFunction() const
 {
     if ( eFunc != KEYFUNC_DONTKNOW )
         return eFunc;

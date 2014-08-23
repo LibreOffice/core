@@ -225,8 +225,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             case SwContentAtPos::SW_SMARTTAG:
             {
-                KeyCode aCode( KEY_SPACE );
-                KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
+                vcl::KeyCode aCode( KEY_SPACE );
+                vcl::KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
                 OUString aModStr( aModifiedCode.GetName() );
                 aModStr = aModStr.replaceFirst(aCode.GetName(), OUString());
                 aModStr = aModStr.replaceAll("+", OUString());

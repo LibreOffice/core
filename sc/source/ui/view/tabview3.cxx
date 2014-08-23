@@ -1237,7 +1237,7 @@ void ScTabView::MoveCursorEnter( bool bShift )          // bShift -> hoch/runter
 
 bool ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
 {
-    const KeyCode& rKCode = rKeyEvent.GetKeyCode();
+    const vcl::KeyCode& rKCode = rKeyEvent.GetKeyCode();
 
     enum { MOD_NONE, MOD_CTRL, MOD_ALT, MOD_BOTH } eModifier =
         rKCode.IsMod1() ?

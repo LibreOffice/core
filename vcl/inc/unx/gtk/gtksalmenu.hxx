@@ -71,7 +71,7 @@ public:
     virtual void                ShowItem( unsigned nPos, bool bShow ) SAL_OVERRIDE;
     virtual void                SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText ) SAL_OVERRIDE;
     virtual void                SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) SAL_OVERRIDE;
-    virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
+    virtual void                SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
     virtual void                GetSystemMenuData( SystemMenuData* pData ) SAL_OVERRIDE;
 
     virtual void                SetMenu( Menu* pMenu ) { mpVCLMenu = pMenu; }
@@ -95,7 +95,7 @@ public:
                                                       gboolean bIsSubmenu );
     void                        NativeSetEnableItem( gchar* aCommand, gboolean bEnable );
     void                        NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItemBits bits, gboolean bCheck );
-    void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const OUString& rKeyName );
+    void                        NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName );
 
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        Activate();

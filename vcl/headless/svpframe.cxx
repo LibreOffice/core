@@ -430,7 +430,7 @@ OUString SvpSalFrame::GetKeyName( sal_uInt16 )
     return OUString();
 }
 
-bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, KeyCode& )
+bool SvpSalFrame::MapUnicodeToKeyCode( sal_Unicode, LanguageType, vcl::KeyCode& )
 {
     return false;
 }

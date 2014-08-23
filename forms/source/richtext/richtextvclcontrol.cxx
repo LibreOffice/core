@@ -201,7 +201,7 @@ namespace frm
                 {
                     // Ctrl-Tab is used to step out of the control
                     // -> build a new key event without the Ctrl-key, and let the very base class handle it
-                    KeyCode aNewCode( KEY_TAB, bShift, false, false, false );
+                    vcl::KeyCode aNewCode( KEY_TAB, bShift, false, false, false );
                     ::KeyEvent aNewEvent( pKeyEvent->GetCharCode(), aNewCode );
                     Control::KeyInput( aNewEvent );
                     return true;   // handled

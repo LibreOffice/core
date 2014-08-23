@@ -1236,7 +1236,7 @@ namespace svt
     {
         KeyInputHandler aKeyInputHandler( *this, i_rKeyEvent );
 
-        const KeyCode& rKeyCode( i_rKeyEvent.GetKeyCode() );
+        const vcl::KeyCode& rKeyCode( i_rKeyEvent.GetKeyCode() );
         if ( rKeyCode.GetModifier() != 0 )
             // only interested in mere key presses
             return;

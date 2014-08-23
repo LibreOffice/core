@@ -60,7 +60,7 @@ namespace sw { namespace mark
         private:
             OUString m_aName;
             OUString m_aShortName;
-            KeyCode m_aCode;
+            vcl::KeyCode m_aCode;
             bool m_bSavePos;
             bool m_bSaveOtherPos;
             IDocumentMarkAccess::MarkType m_eOrigBkmType;

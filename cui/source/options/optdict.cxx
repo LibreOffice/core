@@ -779,7 +779,7 @@ IMPL_LINK(SvxEditDictionaryDialog, ModifyHdl, Edit*, pEdt)
 
 void SvxDictEdit::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode aKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     const sal_uInt16 nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN )
     {

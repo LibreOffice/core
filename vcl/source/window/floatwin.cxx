@@ -533,8 +533,8 @@ bool FloatingWindow::Notify( NotifyEvent& rNEvt )
         if ( rNEvt.GetType() == EVENT_KEYINPUT )
         {
             const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-            KeyCode         aKeyCode = pKEvt->GetKeyCode();
-            sal_uInt16          nKeyCode = aKeyCode.GetCode();
+            vcl::KeyCode    aKeyCode = pKEvt->GetKeyCode();
+            sal_uInt16      nKeyCode = aKeyCode.GetCode();
 
             if ( (nKeyCode == KEY_ESCAPE) && (GetStyle() & WB_CLOSEABLE) )
             {

@@ -403,7 +403,7 @@ public:
     virtual void                EndExtTextInput( sal_uInt16 nFlags ) SAL_OVERRIDE;
 
     virtual OUString              GetKeyName( sal_uInt16 nKeyCode ) SAL_OVERRIDE;
-    virtual bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode ) SAL_OVERRIDE;
+    virtual bool            MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode ) SAL_OVERRIDE;
 
     // returns the input language used for the last key stroke
     // may be LANGUAGE_DONTKNOW if not supported by the OS

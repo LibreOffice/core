@@ -1176,7 +1176,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, sal_uLon
     if( pParentToolBox->IsKeyEvent() )
     {
         // send HOME key to subtoolbar in order to select first item
-        KeyEvent aEvent( 0, KeyCode( KEY_HOME ) );
+        KeyEvent aEvent( 0, vcl::KeyCode( KEY_HOME ) );
         mpFloatWin->GetPreferredKeyInputWindow()->KeyInput( aEvent );
     }
 }

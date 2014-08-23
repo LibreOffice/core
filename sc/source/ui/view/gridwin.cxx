@@ -280,7 +280,7 @@ bool ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         KeyEvent aKeyEvt = *rNEvt.GetKeyEvent();
-        KeyCode aCode = aKeyEvt.GetKeyCode();
+        vcl::KeyCode aCode = aKeyEvt.GetKeyCode();
         if ( !aCode.GetModifier() )             // ohne alle Modifiers
         {
             sal_uInt16 nKey = aCode.GetCode();
@@ -3269,7 +3269,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
 void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
     // Cursor control for ref input dialog
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if( SC_MOD()->IsRefDialogOpen() )
     {
         if( !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
@@ -3326,7 +3326,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 
         if (DrawKeyInput(rKEvt))
         {
-            const KeyCode& rLclKeyCode = rKEvt.GetKeyCode();
+            const vcl::KeyCode& rLclKeyCode = rKEvt.GetKeyCode();
             if (rLclKeyCode.GetCode() == KEY_DOWN
                 || rLclKeyCode.GetCode() == KEY_UP
                 || rLclKeyCode.GetCode() == KEY_LEFT
@@ -3349,7 +3349,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
             if (pViewSh->SfxViewShell::KeyInput(rKEvt))             // von SfxViewShell
                 return;
 
-        KeyCode aCode = rKEvt.GetKeyCode();
+        vcl::KeyCode aCode = rKEvt.GetKeyCode();
         if ( aCode.GetCode() == KEY_ESCAPE && aCode.GetModifier() == 0 )
         {
             if ( bHadKeyMarker )

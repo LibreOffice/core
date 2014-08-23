@@ -40,7 +40,7 @@ public:
     virtual void EnableItem( unsigned nPos, bool bEnable ) SAL_OVERRIDE;
     virtual void SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OUString& rText ) SAL_OVERRIDE;
     virtual void SetItemImage( unsigned nPos, SalMenuItem* pSalMenuItem, const Image& rImage) SAL_OVERRIDE;
-    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
+    virtual void SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode& rKeyCode, const OUString& rKeyName ) SAL_OVERRIDE;
     virtual void GetSystemMenuData( SystemMenuData* pData ) SAL_OVERRIDE;
 };
 

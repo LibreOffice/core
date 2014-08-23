@@ -62,7 +62,6 @@ class DateTime;
 class EditFieldInfo;
 class JobSetup;
 class Color;
-class KeyCode;
 class Outliner;
 class OutputDevice;
 class Point;

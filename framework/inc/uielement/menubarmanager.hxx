@@ -193,7 +193,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >                      xMenuItemDispatch;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XPopupMenuController >           xPopupMenuController;
             ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >                       xPopupMenu;
-            KeyCode                                                                                     aKeyCode;
+            vcl::KeyCode                                                                                aKeyCode;
         };
 
         void             RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuShortCuts );

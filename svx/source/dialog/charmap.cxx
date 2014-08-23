@@ -251,7 +251,7 @@ int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 
 void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
     if( aCode.GetModifier() )
     {

@@ -125,7 +125,7 @@ namespace dbaui
             case EVENT_KEYINPUT:
             {
                 const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
-                const KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
+                const vcl::KeyCode& aKeyCode = pKeyEvent->GetKeyCode();
                 if ( m_pAccel.get() && m_pAccel->execute( aKeyCode ) )
                     // the accelerator consumed the event
                     return true;

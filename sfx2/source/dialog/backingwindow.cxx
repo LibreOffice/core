@@ -372,7 +372,7 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
-        const KeyCode& rKeyCode(pEvt->GetKeyCode());
+        const vcl::KeyCode& rKeyCode(pEvt->GetKeyCode());
         // Subwindows of BackingWindow: Sidebar and Thumbnail view
         if( rKeyCode.GetCode() == KEY_F6 )
         {
@@ -413,7 +413,7 @@ bool BackingWindow::Notify( NotifyEvent& rNEvt )
             mpAccExec->init( comphelper::getProcessComponentContext(), mxFrame);
         }
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
-        const KeyCode& rKeyCode(pEvt->GetKeyCode());
+        const vcl::KeyCode& rKeyCode(pEvt->GetKeyCode());
         const OUString aCommand = mpAccExec->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyCode));
         if((aCommand != "vnd.sun.star.findbar:FocusToFindbar") && pEvt && mpAccExec->execute(rKeyCode))
             return true;

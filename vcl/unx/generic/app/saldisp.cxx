@@ -691,7 +691,7 @@ OUString SalDisplay::GetKeyNameFromKeySym( KeySym nKeySym ) const
 
     // return an empty string for keysyms that are not bound to
     // any key code
-    XLIB_KeyCode aKeyCode = XKeysymToKeycode( GetDisplay(), nKeySym );
+    KeyCode aKeyCode = XKeysymToKeycode( GetDisplay(), nKeySym );
     if( aKeyCode != 0 && aKeyCode != NoSymbol )
     {
         if( !nKeySym )
@@ -733,7 +733,7 @@ void SalDisplay::ModifierMapping()
     // on Sun and SCO servers XLookupString does not account for NumLock
     if( GetServerVendor() == vendor_sun )
     {
-        XLIB_KeyCode aNumLock = XKeysymToKeycode( pDisp_, XK_Num_Lock );
+        KeyCode aNumLock = XKeysymToKeycode( pDisp_, XK_Num_Lock );
 
         if( aNumLock ) for( int i = ShiftMapIndex; i <= Mod5MapIndex; i++ )
         {

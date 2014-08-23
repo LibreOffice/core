@@ -1487,7 +1487,7 @@ TriState SvxMenuEntriesListBox::NotifyCopying(
 
 void SvxMenuEntriesListBox::KeyInput( const KeyEvent& rKeyEvent )
 {
-    KeyCode keycode = rKeyEvent.GetKeyCode();
+    vcl::KeyCode keycode = rKeyEvent.GetKeyCode();
 
     // support DELETE for removing the current entry
     if ( keycode == KEY_DELETE )

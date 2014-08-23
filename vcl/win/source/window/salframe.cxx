@@ -3344,7 +3344,7 @@ LanguageType WinSalFrame::GetInputLanguage()
         return (LanguageType) mnInputLang;
 }
 
-bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode )
+bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, vcl::KeyCode& rKeyCode )
 {
     bool bRet = FALSE;
     sal_IntPtr nLangType = aLangType;
@@ -3368,7 +3368,7 @@ bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangT
             //               Windows menu (applies to both left/right key)
             // Menu key    - this key is used to display context menu
             // AltGr key   - probably it has no sense
-            rKeyCode = KeyCode( ImplSalGetKeyCode( vkeycode ),
+            rKeyCode = vcl::KeyCode( ImplSalGetKeyCode( vkeycode ),
                 (shiftstate & 0x01) ? TRUE : FALSE,     // shift
                 (shiftstate & 0x02) ? TRUE : FALSE,     // ctrl
                 (shiftstate & 0x04) ? TRUE : FALSE,     // alt

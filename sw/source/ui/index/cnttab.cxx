@@ -559,7 +559,7 @@ sal_IntPtr SwIndexTreeLB::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 void SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
 {
     SvTreeListEntry* pEntry = FirstSelected();
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bChanged = false;
     if(pEntry)
     {
@@ -1506,7 +1506,7 @@ void SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
         !rSel.A()) || rSel.A() == nTextLen )
     {
         bool bCall = false;
-        KeyCode aCode = rKEvt.GetKeyCode();
+        vcl::KeyCode aCode = rKEvt.GetKeyCode();
         if(aCode.GetCode() == KEY_RIGHT && rSel.A() == nTextLen)
         {
             bNextControl = true;
@@ -1633,7 +1633,7 @@ public:
 void SwTOXButton::KeyInput( const KeyEvent& rKEvt )
 {
     bool bCall = false;
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
     if(aCode.GetCode() == KEY_RIGHT)
     {
         bNextControl = true;
@@ -2146,7 +2146,7 @@ bool SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent& rKEvt = *rNEvt.GetKeyEvent();
-        KeyCode aCode = rKEvt.GetKeyCode();
+        vcl::KeyCode aCode = rKEvt.GetKeyCode();
         if ( (aCode.GetCode() == KEY_F4) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
         {
             if ( m_pTokenWIN->GetActiveControl() )

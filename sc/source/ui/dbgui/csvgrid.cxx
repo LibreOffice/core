@@ -883,7 +883,7 @@ void ScCsvGrid::Tracking( const TrackingEvent& rTEvt )
 
 void ScCsvGrid::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = rKCode.GetCode();
     bool bShift = rKCode.IsShift();
     bool bMod1 = rKCode.IsMod1();

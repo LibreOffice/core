@@ -373,7 +373,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                         //  For FuText objects, edit mode is handled within CreateDefaultObject.
                         //  KEY_F2 is handled in FuDraw::KeyInput.
 
-                        pFuActual->KeyInput( KeyEvent( 0, KeyCode( KEY_F2 ) ) );
+                        pFuActual->KeyInput( KeyEvent( 0, vcl::KeyCode( KEY_F2 ) ) );
                     }
                 }
             }

@@ -504,7 +504,7 @@ void SwInputWindow::DelBoxCntnt()
 
 void InputEdit::KeyInput(const KeyEvent& rEvent)
 {
-    const KeyCode aCode = rEvent.GetKeyCode();
+    const vcl::KeyCode aCode = rEvent.GetKeyCode();
     if(aCode == KEY_RETURN || aCode == KEY_F2 )
         ((SwInputWindow*)GetParent())->ApplyFormula();
     else if(aCode == KEY_ESCAPE )

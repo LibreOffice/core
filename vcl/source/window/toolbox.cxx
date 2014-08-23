@@ -1130,8 +1130,8 @@ ImplTBDragMgr::ImplTBDragMgr()
     , mbResizeMode(false)
     , mbShowDragRect(false)
 {
-    maAccel.InsertItem( KEY_RETURN, KeyCode( KEY_RETURN ) );
-    maAccel.InsertItem( KEY_ESCAPE, KeyCode( KEY_ESCAPE ) );
+    maAccel.InsertItem( KEY_RETURN, vcl::KeyCode( KEY_RETURN ) );
+    maAccel.InsertItem( KEY_ESCAPE, vcl::KeyCode( KEY_ESCAPE ) );
     maAccel.SetSelectHdl( LINK( this, ImplTBDragMgr, SelectHdl ) );
 }
 
@@ -4267,7 +4267,7 @@ bool ToolBox::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         KeyEvent aKEvt = *rNEvt.GetKeyEvent();
-        KeyCode aKeyCode = aKEvt.GetKeyCode();
+        vcl::KeyCode aKeyCode = aKEvt.GetKeyCode();
         sal_uInt16  nKeyCode = aKeyCode.GetCode();
         switch( nKeyCode )
         {
@@ -4892,13 +4892,13 @@ void ToolBox::TriggerItem( sal_uInt16 nItemId, bool bShift, bool bCtrl )
         nModifier |= KEY_SHIFT;
     if( bCtrl )
         nModifier |= KEY_MOD1;
-    KeyCode aKeyCode( 0, nModifier );
+    vcl::KeyCode aKeyCode( 0, nModifier );
     ImplActivateItem( aKeyCode );
 }
 
 // calls the button's action handler
 // returns true if action was called
-bool ToolBox::ImplActivateItem( KeyCode aKeyCode )
+bool ToolBox::ImplActivateItem( vcl::KeyCode aKeyCode )
 {
     bool bRet = true;
     if( mnHighItemId )
@@ -4978,7 +4978,7 @@ bool ImplCloseLastPopup( Window *pParent )
 
 // opens a drop down toolbox item
 // returns true if item was opened
-bool ToolBox::ImplOpenItem( KeyCode aKeyCode )
+bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
 {
     sal_uInt16 nCode = aKeyCode.GetCode();
     bool bRet = true;
@@ -5025,7 +5025,7 @@ bool ToolBox::ImplOpenItem( KeyCode aKeyCode )
 
 void ToolBox::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     mnKeyModifier = aKeyCode.GetModifier();
     sal_uInt16 nCode = aKeyCode.GetCode();
 

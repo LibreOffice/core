@@ -59,9 +59,9 @@ void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
 // Cursor control for Edit Fields in Argument Dialog
 void ArgEdit::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode     aCode   = rKEvt.GetKeyCode();
-    bool        bUp     = (aCode.GetCode() == KEY_UP);
-    bool        bDown   = (aCode.GetCode() == KEY_DOWN);
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
+    bool bUp = (aCode.GetCode() == KEY_UP);
+    bool bDown = (aCode.GetCode() == KEY_DOWN);
 
     if (   pSlider
         && ( !aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
@@ -401,7 +401,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
     sal_uInt16 nSwitch=rNEvt.GetType();
     if(nSwitch==EVENT_KEYINPUT)// || nSwitch==EVENT_KEYUP)
     {
-        const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey=aKeyCode.GetCode();
         if( (nKey==KEY_RETURN && !aKeyCode.IsShift()) || nKey==KEY_TAB )
         {
@@ -543,7 +543,7 @@ void RefEdit::Modify()
 
 void RefEdit::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if( pAnyRefDlg && !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         pAnyRefDlg->ReleaseFocus( this );
     else
@@ -614,7 +614,7 @@ void RefButton::Click()
 
 void RefButton::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if( pAnyRefDlg && !rKeyCode.GetModifier() && (rKeyCode.GetCode() == KEY_F2) )
         pAnyRefDlg->ReleaseFocus( pRefEdit );
     else

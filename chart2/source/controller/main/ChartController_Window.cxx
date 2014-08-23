@@ -1292,7 +1292,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
             m_apAccelExecute->init( m_xCC, m_xFrame );
     }
 
-    KeyCode aKeyCode( rKEvt.GetKeyCode());
+    vcl::KeyCode aKeyCode( rKEvt.GetKeyCode());
     sal_uInt16 nCode = aKeyCode.GetCode();
     bool bAlternate = aKeyCode.IsMod2();
     bool bCtrl = aKeyCode.IsMod1();

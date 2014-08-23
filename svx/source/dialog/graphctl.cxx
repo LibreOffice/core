@@ -305,7 +305,7 @@ void GraphCtrl::MarkListHasChanged()
 
 void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode( rKEvt.GetKeyCode() );
+    vcl::KeyCode aCode( rKEvt.GetKeyCode() );
     bool    bProc = false;
 
     Dialog* pDialog = GetParentDialog();

@@ -895,7 +895,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
     bool bReturn = false;
     mpView->SetMarkHdlWhenTextEdit(true);
 
-    KeyCode nCode = rKEvt.GetKeyCode();
+    vcl::KeyCode nCode = rKEvt.GetKeyCode();
     bool bShift = nCode.IsShift();
 
     if(mxTextObj.is())
@@ -923,7 +923,7 @@ bool FuText::KeyInput(const KeyEvent& rKEvt)
     }
 
     sal_uInt16 nKey = nCode.GetCode();
-    KeyCode aKeyCode (nKey, bShift, nCode.IsMod1(), nCode.IsMod2(), nCode.IsMod3() );
+    vcl::KeyCode aKeyCode (nKey, bShift, nCode.IsMod1(), nCode.IsMod2(), nCode.IsMod3() );
     KeyEvent aKEvt(rKEvt.GetCharCode(), aKeyCode);
 
     bool bOK = true;

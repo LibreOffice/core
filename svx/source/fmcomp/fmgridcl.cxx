@@ -2008,7 +2008,7 @@ void FmGridControl::Select()
 void FmGridControl::KeyInput( const KeyEvent& rKEvt )
 {
     bool bDone = false;
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if (    IsDesignMode()
         &&  !rKeyCode.IsShift()
         &&  !rKeyCode.IsMod1()

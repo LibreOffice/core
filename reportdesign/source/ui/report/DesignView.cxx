@@ -202,7 +202,7 @@ bool ODesignView::PreNotify( NotifyEvent& rNEvt )
                     nRet = true;
                 else if ( nRet && m_pAccel.get() )
                 {
-                    const KeyCode& rCode = pKeyEvent->GetKeyCode();
+                    const vcl::KeyCode& rCode = pKeyEvent->GetKeyCode();
                     util::URL aUrl;
                     aUrl.Complete = m_pAccel->findCommand(svt::AcceleratorExecute::st_VCLKey2AWTKey(rCode));
                     if ( aUrl.Complete.isEmpty() || !m_rController.isCommandEnabled( aUrl.Complete ) )

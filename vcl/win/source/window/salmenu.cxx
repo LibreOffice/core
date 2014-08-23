@@ -331,7 +331,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
     }
 }
 
-void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const KeyCode&, const OUString& rKeyName )
+void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const vcl::KeyCode&, const OUString& rKeyName )
 {
     if( pSalMenuItem )
     {

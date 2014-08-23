@@ -1263,7 +1263,7 @@ bool ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     if ( pThisFrame->GetChildWindow( SID_OPENDLG_FUNCTION ) )
         return false;
 
-    KeyCode aCode   = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
     bool bShift     = aCode.IsShift();
     bool bControl   = aCode.IsMod1();
     bool bAlt       = aCode.IsMod2();

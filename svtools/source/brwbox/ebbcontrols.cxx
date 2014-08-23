@@ -58,7 +58,7 @@ namespace svt
                 if (!IsInDropDown())
                 {
                     const KeyEvent *pEvt = rNEvt.GetKeyEvent();
-                    const KeyCode rKey = pEvt->GetKeyCode();
+                    const vcl::KeyCode rKey = pEvt->GetKeyCode();
 
                     if ((rKey.GetCode() == KEY_UP || rKey.GetCode() == KEY_DOWN) &&
                         (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
@@ -166,7 +166,7 @@ namespace svt
                 if (!IsInDropDown())
                 {
                     const KeyEvent *pEvt = rNEvt.GetKeyEvent();
-                    const KeyCode rKey = pEvt->GetKeyCode();
+                    const vcl::KeyCode rKey = pEvt->GetKeyCode();
 
                     if ((rKey.GetCode() == KEY_UP || rKey.GetCode() == KEY_DOWN) &&
                         (!pEvt->GetKeyCode().IsShift() && pEvt->GetKeyCode().IsMod1()))
@@ -583,13 +583,13 @@ namespace svt
                 // which is used by both the text view and the edit browse box
 
                 const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-                const KeyCode&  rKeyCode  = pKeyEvent->GetKeyCode();
+                const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
                 sal_uInt16 nCode = rKeyCode.GetCode();
 
                 if ( ( nCode == KEY_RETURN ) && ( rKeyCode.GetModifier() == KEY_MOD1 ) )
                 {
                     KeyEvent aEvent( pKeyEvent->GetCharCode(),
-                        KeyCode( KEY_RETURN ),
+                        vcl::KeyCode( KEY_RETURN ),
                         pKeyEvent->GetRepeat()
                     );
                     if ( dispatchKeyEvent( aEvent ) )

@@ -138,7 +138,7 @@ namespace svt { namespace table
     {
         bool bHandled = false;
 
-        const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
         sal_uInt16 nKeyCode = rKeyCode.GetCode();
 
         struct _ActionMapEntry

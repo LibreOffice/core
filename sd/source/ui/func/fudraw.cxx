@@ -409,7 +409,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_TAB:
         {
-            KeyCode aCode = rKEvt.GetKeyCode();
+            vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
             if ( !aCode.IsMod1() && !aCode.IsMod2() )
             {
@@ -445,7 +445,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_END:
         {
-            KeyCode aCode = rKEvt.GetKeyCode();
+            vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
             if ( aCode.IsMod1() )
             {
@@ -463,7 +463,7 @@ bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_HOME:
         {
-            KeyCode aCode = rKEvt.GetKeyCode();
+            vcl::KeyCode aCode = rKEvt.GetKeyCode();
 
             if ( aCode.IsMod1() )
             {

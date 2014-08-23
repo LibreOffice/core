@@ -593,7 +593,7 @@ bool DockingWindow::Notify( NotifyEvent& rNEvt )
         }
         else if( rNEvt.GetType() == EVENT_KEYINPUT )
         {
-            const KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
+            const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
             if( rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&
                 rKey.IsShift() && rKey.IsMod1() )
             {

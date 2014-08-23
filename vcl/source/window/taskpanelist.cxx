@@ -164,7 +164,7 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     // and the shortcut conflicts with tab-control shortcut ), it is no more supported
     bool bSplitterOnly = false;
     bool bFocusInList = false;
-    KeyCode aKeyCode = aKeyEvent.GetKeyCode();
+    vcl::KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     bool bForward = !aKeyCode.IsShift();
     if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
     {

@@ -688,9 +688,9 @@ void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
   */
 void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 {
-    KeyCode aCode1 = aKey.GetKeyCode();
-    sal_uInt16  nCode1 = aCode1.GetCode();
-    sal_uInt16  nMod1  = aCode1.GetModifier();
+    vcl::KeyCode aCode1 = aKey.GetKeyCode();
+    sal_uInt16 nCode1 = aCode1.GetCode();
+    sal_uInt16 nMod1 = aCode1.GetModifier();
 
     // is it related to our list box ?
     if (
@@ -795,7 +795,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     long nMaxWidth  = 0;
     for ( sal_uInt16 i = 0; i < KEYCODE_ARRAY_SIZE; ++i )
     {
-        long nTmp = GetTextWidth( KeyCode( KEYCODE_ARRAY[i] ).GetName() );
+        long nTmp = GetTextWidth( vcl::KeyCode( KEYCODE_ARRAY[i] ).GetName() );
         if ( nTmp > nMaxWidth )
             nMaxWidth = nTmp;
     }
@@ -930,8 +930,8 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     sal_Int32 nListPos = 0;
     for (i1=0; i1<c1; ++i1)
     {
-        KeyCode aKey = KEYCODE_ARRAY[i1];
-        OUString  sKey = aKey.GetName();
+        vcl::KeyCode aKey = KEYCODE_ARRAY[i1];
+        OUString sKey = aKey.GetName();
         if (sKey.isEmpty())
             continue;
         TAccInfo*    pEntry   = new TAccInfo(i1, nListPos, aKey);
@@ -950,8 +950,8 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         const css::awt::KeyEvent& aAWTKey  = lKeys[i2];
               OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
               OUString     sLabel   = GetLabel4Command(sCommand);
-              KeyCode             aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
-              sal_uLong              nPos     = MapKeyCodeToPos(aKeyCode);
+              vcl::KeyCode aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
+              sal_uLong    nPos     = MapKeyCodeToPos(aKeyCode);
 
         if (nPos == TREELIST_ENTRY_NOTFOUND)
             continue;
@@ -971,8 +971,8 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     sal_uLong i3 = 0;
     for (i3=0; i3<c3; ++i3)
     {
-        const KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);
-              sal_uLong   nPos     = MapKeyCodeToPos(*pKeyCode);
+        const vcl::KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);
+              sal_uLong nPos = MapKeyCodeToPos(*pKeyCode);
 
         if (nPos == TREELIST_ENTRY_NOTFOUND)
             continue;
@@ -1483,7 +1483,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet* rSet )
 }
 
 
-sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
+sal_uLong SfxAcceleratorConfigPage::MapKeyCodeToPos(const vcl::KeyCode& aKey) const
 {
     sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
     SvTreeListEntry* pEntry = m_pEntriesBox->First();

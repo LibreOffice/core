@@ -41,7 +41,6 @@
 
 #define Window      XLIB_Window
 #define Font        XLIB_Font
-#define KeyCode     XLIB_KeyCode
 #define Time        XLIB_Time
 #define Region      XLIB_Region
 #define String      XLIB_String
@@ -103,7 +102,6 @@ extern "C" {
 
 #undef Window
 #undef Font
-#undef KeyCode
 #undef Time
 #undef String
 #undef Region

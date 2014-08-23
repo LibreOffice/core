@@ -31,7 +31,6 @@
 #define Icon        HIDE_XLIB_Icon
 
 /* Types from <X11/X.h> that clash, but we do use. */
-#define KeyCode     XLIB_KeyCode
 #define Region      XLIB_Region
 #define Time        XLIB_Time
 #define Window      XLIB_Window
@@ -49,9 +48,6 @@ extern "C" {
 
 /* From <X11/Intrinsic.h> */
 typedef unsigned long Pixel;
-
-#undef  KeyCode
-#define KeyCode         XLIB_KeyCode //undef in intrinsics
 
 #endif
 

@@ -888,7 +888,7 @@ bool OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        const KeyCode aKeyCode = pKEvt->GetKeyCode();
+        const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
 
         if( aKeyCode.GetCode() == KEY_PAGEUP ||
                 aKeyCode.GetCode() == KEY_PAGEDOWN)

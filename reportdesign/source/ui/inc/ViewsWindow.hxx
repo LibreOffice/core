@@ -302,7 +302,7 @@ namespace rptui
         void ForceMarkedToAnotherPage();
         bool IsAction() const;
         bool IsDragObj() const;
-        void handleKey(const KeyCode& _rCode);
+        void handleKey(const vcl::KeyCode& _rCode);
         void stopScrollTimer();
 
         /** return the section at the given point which is relative to the given section

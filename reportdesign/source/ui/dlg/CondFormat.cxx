@@ -475,7 +475,7 @@ namespace rptui
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent( _rNEvt.GetKeyEvent() );
-            const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
+            const vcl::KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
             if ( rKeyCode.IsMod1() && rKeyCode.IsMod2() )
             {
                 if ( rKeyCode.GetCode() == 0x0508 )

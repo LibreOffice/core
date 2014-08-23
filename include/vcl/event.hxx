@@ -42,23 +42,20 @@ enum TextDirectionality {
     TextDirectionality_TopToBottom_RightToLeft
 };
 
-
-// - KeyEvent -
-
 class VCL_DLLPUBLIC KeyEvent
 {
 private:
-    KeyCode         maKeyCode;
-    sal_uInt16          mnRepeat;
+    vcl::KeyCode    maKeyCode;
+    sal_uInt16      mnRepeat;
     sal_Unicode     mnCharCode;
 
 public:
                     KeyEvent();
-                    KeyEvent( sal_Unicode nChar, const KeyCode& rKeyCode,
+                    KeyEvent( sal_Unicode nChar, const vcl::KeyCode& rKeyCode,
                               sal_uInt16 nRepeat = 0 );
 
-    sal_Unicode     GetCharCode() const     { return mnCharCode; }
-    const KeyCode&  GetKeyCode() const      { return maKeyCode;  }
+    sal_Unicode         GetCharCode() const     { return mnCharCode; }
+    const vcl::KeyCode& GetKeyCode() const      { return maKeyCode;  }
     sal_uInt16          GetRepeat() const       { return mnRepeat;   }
 
     KeyEvent        LogicalTextDirectionality (TextDirectionality eMode) const;
@@ -72,7 +69,7 @@ inline KeyEvent::KeyEvent()
     mnRepeat    = 0;
 }
 
-inline KeyEvent::KeyEvent( sal_Unicode nChar, const KeyCode& rKeyCode,
+inline KeyEvent::KeyEvent( sal_Unicode nChar, const vcl::KeyCode& rKeyCode,
                            sal_uInt16 nRepeat ) :
             maKeyCode( rKeyCode )
 

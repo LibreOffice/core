@@ -247,7 +247,7 @@ bool FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
 {
     if ( EVENT_KEYINPUT == _rNEvt.GetType() )
     {
-        const KeyCode& rKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& rKeyCode = _rNEvt.GetKeyEvent()->GetKeyCode();
         if ( ( 0 == rKeyCode.GetModifier() ) && ( KEY_RETURN == rKeyCode.GetCode() ) )
         {
             if ( createSelectionControls() )

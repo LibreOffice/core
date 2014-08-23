@@ -21,11 +21,10 @@
 
 #include "Panel.hxx"
 #include <tools/link.hxx>
+#include <vcl/keycod.hxx>
 
 class Button;
-class KeyCode;
 class VclSimpleEvent;
-
 
 namespace sfx2 { namespace sidebar {
 
@@ -141,7 +140,7 @@ private:
         const sal_Int32 nDirection);
 
     void HandleKeyEvent (
-        const KeyCode& rKeyCode,
+        const vcl::KeyCode& rKeyCode,
         const Window& rWindow);
 
     FocusLocation GetFocusLocation (const Window& rWindow) const;

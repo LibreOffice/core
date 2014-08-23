@@ -221,7 +221,7 @@ void SvxCheckListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
 void SvxCheckListBox::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKey = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKey = rKEvt.GetKeyCode();
 
     if ( rKey.GetCode() == KEY_RETURN || rKey.GetCode() == KEY_SPACE )
     {

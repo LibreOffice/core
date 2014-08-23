@@ -2833,13 +2833,13 @@ PopupMenu* Edit::CreatePopupMenu()
         pPopup->SetMenuFlags ( MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES );
     if ( rStyleSettings.GetAcceleratorsInContextMenus() )
     {
-        pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, KeyCode( KEYFUNC_UNDO ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_CUT, KeyCode( KEYFUNC_CUT ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_COPY, KeyCode( KEYFUNC_COPY ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, KeyCode( KEYFUNC_PASTE ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, KeyCode( KEYFUNC_DELETE ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, KeyCode( KEY_A, false, true, false, false ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, KeyCode( KEY_S, true, true, false, false ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, vcl::KeyCode( KEYFUNC_UNDO ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_CUT, vcl::KeyCode( KEYFUNC_CUT ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_COPY, vcl::KeyCode( KEYFUNC_COPY ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, vcl::KeyCode( KEYFUNC_PASTE ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, vcl::KeyCode( KEYFUNC_DELETE ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, vcl::KeyCode( KEY_A, false, true, false, false ) );
+        pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, vcl::KeyCode( KEY_S, true, true, false, false ) );
     }
     return pPopup;
 }

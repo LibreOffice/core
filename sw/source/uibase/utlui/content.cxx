@@ -2592,7 +2592,7 @@ void  SwContentTree::GetFocus()
 
 void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 {
-    const KeyCode aCode = rEvent.GetKeyCode();
+    const vcl::KeyCode aCode = rEvent.GetKeyCode();
     if(aCode.GetCode() == KEY_RETURN)
     {
         SvTreeListEntry* pEntry = FirstSelected();
@@ -2729,7 +2729,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
                             {
                                 SwEditWin& pEditWindow =
                                     pActiveShell->GetView().GetEditWin();
-                                KeyCode tempKeycode( KEY_ESCAPE );
+                                vcl::KeyCode tempKeycode( KEY_ESCAPE );
                                 KeyEvent rKEvt( 0 , tempKeycode );
                                 ((Window*)&pEditWindow)->KeyInput( rKEvt );
                                 //rView.GetEditWin().GrabFocus();

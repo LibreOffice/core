@@ -717,7 +717,7 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 {
     bool bHandled = false;
 
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if ( 0 == rKeyCode.GetModifier() )
     {
         if ( rKeyCode.GetCode() == KEY_RETURN )

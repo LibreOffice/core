@@ -33,7 +33,7 @@ namespace
 namespace sw { namespace mark
 {
     CrossRefBookmark::CrossRefBookmark(const SwPaM& rPaM,
-        const KeyCode& rCode,
+        const vcl::KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName,
         const OUString& rPrefix)
@@ -67,7 +67,7 @@ namespace sw { namespace mark
     }
 
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
-        const KeyCode& rCode,
+        const vcl::KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
         : CrossRefBookmark(rPaM, rCode, rName, rShortName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix())
@@ -79,7 +79,7 @@ namespace sw { namespace mark
     }
 
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
-        const KeyCode& rCode,
+        const vcl::KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
         : CrossRefBookmark(rPaM, rCode, rName, rShortName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix())

@@ -2513,7 +2513,7 @@ OUString X11SalFrame::GetKeyName( sal_uInt16 nKeyCode )
     return GetDisplay()->GetKeyName( nKeyCode );
 }
 
-bool X11SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , KeyCode& )
+bool X11SalFrame::MapUnicodeToKeyCode( sal_Unicode , LanguageType , vcl::KeyCode& )
 {
     // not supported yet
     return false;

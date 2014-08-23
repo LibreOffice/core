@@ -353,7 +353,7 @@ void DialControl::MouseButtonUp( const MouseEvent& rMEvt )
 
 void DialControl::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode& rKCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKCode = rKEvt.GetKeyCode();
     if( !rKCode.GetModifier() && (rKCode.GetCode() == KEY_ESCAPE) )
         HandleEscapeEvent();
     else

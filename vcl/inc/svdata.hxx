@@ -29,12 +29,12 @@
 #include "tools/fldunit.hxx"
 #include "tools/color.hxx"
 #include "tools/debug.hxx"
-
-#include "vcl/vclevent.hxx"
-#include "vcl/bitmapex.hxx"
 #include "tools/solar.h"
-#include "vcl/svapp.hxx"
+#include "vcl/bitmapex.hxx"
 #include "vcl/dllapi.h"
+#include "vcl/keycod.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/vclevent.hxx"
 
 #include "unotools/options.hxx"
 
@@ -62,7 +62,6 @@ class ImplTBDragMgr;
 class ImplIdleMgr;
 class FloatingWindow;
 class AllSettings;
-class KeyCode;
 class NotifyEvent;
 class Timer;
 class AutoTimer;
@@ -353,7 +352,7 @@ void        ImplWindowAutoMnemonic( Window* pWindow );
 void        ImplUpdateSystemProcessWindow();
 Window*     ImplFindWindow( const SalFrame* pFrame, Point& rSalFramePos );
 
-bool        ImplCallHotKey( const KeyCode& rKeyCode );
+bool        ImplCallHotKey( const vcl::KeyCode& rKeyCode );
 void        ImplFreeHotKeyData();
 void        ImplFreeEventHookData();
 

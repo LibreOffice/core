@@ -1693,7 +1693,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeAutoCorrEdit(Window *pParen
 
 void AutoCorrEdit::KeyInput( const KeyEvent& rKEvt )
 {
-    const KeyCode aKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     const sal_uInt16 nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN )
     {
@@ -2130,7 +2130,7 @@ OfaAutoCompleteTabPage::OfaAutoCompleteTabPage(Window* pParent,
 
     for( const sal_uInt16* pKeys = aKeyCodes; *pKeys; ++pKeys )
     {
-        KeyCode aKCode( *pKeys );
+        vcl::KeyCode aKCode( *pKeys );
         sal_Int32 nPos = m_pDCBExpandKey->InsertEntry( aKCode.GetName() );
         m_pDCBExpandKey->SetEntryData( nPos, (void*)(sal_uLong)*pKeys );
         if( KEY_RETURN == *pKeys )      // default to RETURN
@@ -2326,7 +2326,7 @@ bool OfaAutoCompleteTabPage::AutoCompleteMultiListBox::PreNotify(
 
     if( !nHandled && EVENT_KEYUP == rNEvt.GetType() )
     {
-        const KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& rKeyCode = rNEvt.GetKeyEvent()->GetKeyCode();
         switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
         {
         case KEY_DELETE:

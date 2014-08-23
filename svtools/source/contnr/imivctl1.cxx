@@ -3306,8 +3306,8 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     SetText( rData );
     SaveValue();
 
-    aAccReturn.InsertItem( IMPICNVIEW_ACC_RETURN, KeyCode(KEY_RETURN) );
-    aAccEscape.InsertItem( IMPICNVIEW_ACC_ESCAPE, KeyCode(KEY_ESCAPE) );
+    aAccReturn.InsertItem( IMPICNVIEW_ACC_RETURN, vcl::KeyCode(KEY_RETURN) );
+    aAccEscape.InsertItem( IMPICNVIEW_ACC_ESCAPE, vcl::KeyCode(KEY_ESCAPE) );
 
     aAccReturn.SetActivateHdl( LINK( this, IcnViewEdit_Impl, ReturnHdl_Impl) );
     aAccEscape.SetActivateHdl( LINK( this, IcnViewEdit_Impl, EscapeHdl_Impl) );
@@ -3363,7 +3363,7 @@ IMPL_LINK( IcnViewEdit_Impl, EscapeHdl_Impl, Accelerator*, EMPTYARG  )
 
 void IcnViewEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aCode = rKEvt.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
 
     switch ( nCode )

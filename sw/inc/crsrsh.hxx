@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <tools/rtti.hxx>
+#include <vcl/keycod.hxx>
 
 #include <IShellCursorSupplier.hxx>
 #include "swdllapi.h"
@@ -38,7 +39,6 @@
 #include <node.hxx>
 #include <IDocumentMarkAccess.hxx>
 
-class KeyCode;
 class SfxItemSet;
 class SfxPoolItem;
 class SwCntntFrm;
@@ -559,7 +559,7 @@ public:
 
     // at CurCrsr.SPoint
     ::sw::mark::IMark* SetBookmark(
-        const KeyCode&,
+        const vcl::KeyCode&,
         const OUString& rName,
         const OUString& rShortName,
         IDocumentMarkAccess::MarkType eMark = IDocumentMarkAccess::BOOKMARK);

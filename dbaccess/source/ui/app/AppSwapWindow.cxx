@@ -121,7 +121,7 @@ void OApplicationSwapWindow::createIconAutoMnemonics( MnemonicGenerator& _rMnemo
 
 bool OApplicationSwapWindow::interceptKeyInput( const KeyEvent& _rEvent )
 {
-    const KeyCode& rKeyCode = _rEvent.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = _rEvent.GetKeyCode();
     if ( rKeyCode.GetModifier() == KEY_MOD2 )
         return m_aIconControl.DoKeyInput( _rEvent );
 

@@ -417,7 +417,7 @@ OUString SwPagePreviewWin::GetStatusStr( sal_uInt16 nPageCnt ) const
 
 void  SwPagePreviewWin::KeyInput( const KeyEvent &rKEvt )
 {
-    const KeyCode& rKeyCode = rKEvt.GetKeyCode();
+    const vcl::KeyCode& rKeyCode = rKEvt.GetKeyCode();
     bool bHandled = false;
     if(!rKeyCode.GetModifier())
     {

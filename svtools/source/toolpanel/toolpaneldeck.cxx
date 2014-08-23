@@ -450,7 +450,7 @@ namespace svt
         if ( i_rNotifyEvent.GetType() == EVENT_KEYINPUT )
         {
             const KeyEvent* pEvent = i_rNotifyEvent.GetKeyEvent();
-            const KeyCode& rKeyCode = pEvent->GetKeyCode();
+            const vcl::KeyCode& rKeyCode = pEvent->GetKeyCode();
             if ( rKeyCode.GetModifier() == KEY_MOD1 )
             {
                 bHandled = true;

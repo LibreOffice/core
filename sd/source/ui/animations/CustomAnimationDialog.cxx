@@ -373,7 +373,7 @@ bool DropdownMenuBox::PreNotify( NotifyEvent& rNEvt )
     sal_uInt16 nSwitch=rNEvt.GetType();
     if (nSwitch==EVENT_KEYINPUT)
     {
-        const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
+        const vcl::KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey=aKeyCode.GetCode();
 
         if (nKey==KEY_DOWN && aKeyCode.IsMod2())

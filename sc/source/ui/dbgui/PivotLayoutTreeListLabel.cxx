@@ -77,7 +77,7 @@ ScItemValue* ScPivotLayoutTreeListLabel::GetItem(SCCOL nColumn)
 
 void ScPivotLayoutTreeListLabel::KeyInput(const KeyEvent& rKeyEvent)
 {
-    KeyCode aCode = rKeyEvent.GetKeyCode();
+    vcl::KeyCode aCode = rKeyEvent.GetKeyCode();
     sal_uInt16 nCode = aCode.GetCode();
 
     switch (nCode)

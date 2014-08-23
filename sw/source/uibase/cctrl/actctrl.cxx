@@ -33,7 +33,7 @@ bool NumEditAction::Notify( NotifyEvent& rNEvt )
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        const KeyCode aKeyCode = pKEvt->GetKeyCode();
+        const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
         const sal_uInt16 nModifier = aKeyCode.GetModifier();
         if( aKeyCode.GetCode() == KEY_RETURN &&
                 !nModifier)
@@ -50,7 +50,7 @@ bool NumEditAction::Notify( NotifyEvent& rNEvt )
 
 void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
 {
-    const KeyCode aKeyCode = rEvt.GetKeyCode();
+    const vcl::KeyCode aKeyCode = rEvt.GetKeyCode();
     const sal_uInt16 nModifier = aKeyCode.GetModifier();
     if( aKeyCode.GetCode() == KEY_RETURN &&
             !nModifier)

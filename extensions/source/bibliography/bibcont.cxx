@@ -216,7 +216,7 @@ bool BibBookContainer::PreNotify( NotifyEvent& rNEvt )
     if( EVENT_KEYINPUT == rNEvt.GetType()  )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        const KeyCode aKeyCode = pKEvt->GetKeyCode();
+        const vcl::KeyCode aKeyCode = pKEvt->GetKeyCode();
         sal_uInt16 nKey = aKeyCode.GetCode();
         const sal_uInt16 nModifier = aKeyCode.GetModifier();
 

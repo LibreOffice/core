@@ -202,7 +202,7 @@ void MenuDispatcher::impl_setAccelerators( Menu* pMenu, const Accelerator& aAcce
             impl_setAccelerators( (Menu *)pPopup, aAccel );
         else if ( nId && !pMenu->GetPopupMenu(nId))
         {
-            KeyCode aCode = aAccel.GetKeyCode( nId );
+            vcl::KeyCode aCode = aAccel.GetKeyCode( nId );
             if ( aCode.GetCode() )
                 pMenu->SetAccelKey( nId, aCode );
         }

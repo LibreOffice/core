@@ -1136,7 +1136,7 @@ void FrameSelector::MouseButtonDown( const MouseEvent& rMEvt )
 void FrameSelector::KeyInput( const KeyEvent& rKEvt )
 {
     bool bHandled = false;
-    KeyCode aKeyCode = rKEvt.GetKeyCode();
+    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
     if( !aKeyCode.GetModifier() )
     {
         sal_uInt16 nCode = aKeyCode.GetCode();

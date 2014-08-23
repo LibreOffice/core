@@ -387,7 +387,7 @@ bool SwGlossaryGroupDlg::IsDeleteAllowed(const OUString &rGroup)
 
 void FEdit::KeyInput( const KeyEvent& rKEvent )
 {
-    KeyCode aCode = rKEvent.GetKeyCode();
+    vcl::KeyCode aCode = rKEvent.GetKeyCode();
     if( KEYGROUP_CURSOR == aCode.GetGroup() ||
         ( KEYGROUP_MISC == aCode.GetGroup() &&
           KEY_DELETE >= aCode.GetCode() ) ||

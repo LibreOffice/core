@@ -1273,7 +1273,7 @@ namespace svxform
 
     void NavigatorTree::KeyInput(const ::KeyEvent& rKEvt)
     {
-        const KeyCode& rCode = rKEvt.GetKeyCode();
+        const vcl::KeyCode& rCode = rKEvt.GetKeyCode();
 
         // delete?
         if (rKEvt.GetKeyCode().GetCode() == KEY_DELETE && !rKEvt.GetKeyCode().GetModifier())

@@ -91,9 +91,9 @@ namespace framework
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
             void retrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg,
                                                      const ::com::sun::star::uno::Sequence< OUString >& rCommands,
-                                                     std::vector< KeyCode >& aMenuShortCuts );
+                                                     std::vector< vcl::KeyCode >& aMenuShortCuts );
             void setAccelerators( PopupMenu* pPopupMenu );
-            void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode );
+            void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const vcl::KeyCode& rKeyCode );
             void setMenuImages( PopupMenu* pPopupMenu, bool bSetImages );
 
         private:

@@ -36,6 +36,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/apptypes.hxx>
+#include <vcl/keycod.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/metric.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -52,7 +53,6 @@ class WorkWindow;
 class MenuBar;
 class UnoWrapperBase;
 class Reflection;
-class KeyCode;
 class NotifyEvent;
 class KeyEvent;
 class MouseEvent;
@@ -1202,7 +1202,7 @@ public:
 
      @see GetReservedKeyCodeCount
     */
-    static const KeyCode*       GetReservedKeyCode( sal_uLong i );
+    static const vcl::KeyCode*  GetReservedKeyCode( sal_uLong i );
 
     ///@}
 
