@@ -254,7 +254,7 @@ void SwDoDrawCapital::Init( SwFntObj *pUpperFont, SwFntObj *pLowerFont )
 void SwDoDrawCapital::Do()
 {
     SV_STAT( nDrawText );
-    sal_uInt16 nOrgWidth = rInf.GetWidth();
+    const sal_uInt16 nOrgWidth = rInf.GetWidth();
     rInf.SetWidth( sal_uInt16(rInf.GetSize().Width()) );
     if ( rInf.GetUpper() )
         pUpperFnt->DrawText( rInf );
@@ -340,9 +340,9 @@ void SwDoCapitalCrsrOfst::Do()
 {
     if ( nOfst )
     {
-        if ( nOfst > rInf.GetSize().Width() )
+        if ( static_cast<long>(nOfst) > rInf.GetSize().Width() )
         {
-            nOfst = nOfst - sal_uInt16(rInf.GetSize().Width());
+            nOfst -= rInf.GetSize().Width();
             nCrsr = nCrsr + rInf.GetLen();
         }
         else
@@ -407,7 +407,7 @@ public:
 void SwDoDrawStretchCapital::Do()
 {
     SV_STAT( nDrawStretchText );
-    sal_uInt16 nPartWidth = sal_uInt16(rInf.GetSize().Width());
+    long nPartWidth = rInf.GetSize().Width();
 
     if( rInf.GetLen() )
     {
@@ -416,10 +416,10 @@ void SwDoDrawStretchCapital::Do()
         if( nDiff )
         {
             nDiff *= rInf.GetLen();
-            nDiff /= (long) nStrLen;
+            nDiff /= nStrLen;
             nDiff += nPartWidth;
             if( 0 < nDiff )
-                nPartWidth = sal_uInt16(nDiff);
+                nPartWidth = nDiff;
         }
 
         rInf.ApplyAutoColor();
