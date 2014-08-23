@@ -207,56 +207,56 @@ bool LwpObjectStream::Seek( sal_uInt16 pos)
  */
 bool LwpObjectStream::QuickReadBool(bool *pFailure)
 {
-    SVBT16 aValue = {0};
-    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    sal_uInt16 aValue = 0;
+    sal_uInt16 nRead = QuickRead(&aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
-    return static_cast<bool>(SVBT16ToShort(aValue));
+    return static_cast<bool>(OSL_NETWORD(aValue));
 }
 /**
  * @descr  Quick read sal_uInt32
  */
 sal_uInt32 LwpObjectStream::QuickReaduInt32(bool *pFailure)
 {
-    SVBT32 aValue = {0};
-    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    sal_uInt32 aValue = 0;
+    sal_uInt16 nRead = QuickRead(&aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
-    return SVBT32ToUInt32(aValue);
+    return OSL_NETDWORD(aValue);
 }
 /**
- * @descr  Quick read sal_uInt32
+ * @descr  Quick read sal_uInt16
  */
 sal_uInt16 LwpObjectStream::QuickReaduInt16(bool *pFailure)
 {
-    SVBT16 aValue = {0};
-    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    sal_uInt16 aValue = 0;
+    sal_uInt16 nRead = QuickRead(&aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
-    return SVBT16ToShort(aValue);
+    return OSL_NETWORD(aValue);
 }
 /**
  * @descr  Quick read sal_Int32
  */
 sal_Int32 LwpObjectStream::QuickReadInt32(bool *pFailure)
 {
-    SVBT32 aValue = {0};
-    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    sal_uInt32 aValue = 0;
+    sal_uInt16 nRead = QuickRead(&aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
-    return static_cast<sal_Int32>(SVBT32ToUInt32(aValue));
+    return static_cast<sal_Int32>(OSL_NETDWORD(aValue));
 }
 /**
  * @descr  Quick read sal_Int16
  */
 sal_Int16 LwpObjectStream::QuickReadInt16(bool *pFailure)
 {
-    SVBT16 aValue = {0};
-    sal_uInt16 nRead = QuickRead(aValue, sizeof(aValue));
+    sal_uInt16 aValue = 0;
+    sal_uInt16 nRead = QuickRead(&aValue, sizeof(aValue));
     if (pFailure)
         *pFailure = (nRead != sizeof(aValue));
 
-    return static_cast<sal_Int16>(SVBT16ToShort(aValue));
+    return static_cast<sal_Int16>(OSL_NETWORD(aValue));
 }
 /**
  * @descr  Quick read sal_uInt8
