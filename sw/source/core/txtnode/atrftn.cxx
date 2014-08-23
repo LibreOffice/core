@@ -90,6 +90,10 @@ namespace {
                                          const std::set<sal_uInt16> &rUsedNums,
                                          size_t numRequired)
     {
+        if (!numRequired)
+            return;
+
+        rLowestUnusedNums.reserve(numRequired);
         sal_uInt16 newNum = 0;
         std::set<sal_uInt16>::iterator it;
         //Start by using numbers from gaps in rUsedNums
@@ -98,16 +102,17 @@ namespace {
             while ( newNum < *it )
             {
                 rLowestUnusedNums.push_back( newNum++ );
-                if ( rLowestUnusedNums.size() >= numRequired )
+                if ( --numRequired == 0)
                     return;
             }
             newNum++;
         }
         //Filled in all gaps. Fill the rest of the list with new numbers.
-        while ( rLowestUnusedNums.size() < numRequired )
+        do
         {
             rLowestUnusedNums.push_back( newNum++ );
         }
+        while ( --numRequired > 0 );
     }
 
 }
