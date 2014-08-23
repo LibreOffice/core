@@ -33,6 +33,52 @@
       "revId": "e627769f79e7d849c8acef88b7683ea69f2058b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_de4ef995",
+        "filename": "svtools/source/graphic/grfcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-08-23T09:14:32Z",
+      "side": 1,
+      "message": "Call of GraphicCacheEntry ctor with first push_back.",
+      "range": {
+        "startLine": 922,
+        "startChar": 54,
+        "endLine": 922,
+        "endChar": 57
+      },
+      "revId": "e627769f79e7d849c8acef88b7683ea69f2058b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ad0253b_be433d6c",
+        "filename": "svtools/source/graphic/grfcache.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 923,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-08-23T09:14:32Z",
+      "side": 1,
+      "message": "Call of GraphicCacheEntry::AddGraphicObjectReference with second push_back.",
+      "range": {
+        "startLine": 923,
+        "startChar": 28,
+        "endLine": 923,
+        "endChar": 42
+      },
+      "revId": "e627769f79e7d849c8acef88b7683ea69f2058b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
