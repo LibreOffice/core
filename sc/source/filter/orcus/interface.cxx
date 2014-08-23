@@ -522,11 +522,12 @@ void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t /*e*/)
 {
 }
 
-void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t,
-            orcus::spreadsheet::color_elem_t)
+void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,
+            orcus::spreadsheet::color_elem_t red,
+            orcus::spreadsheet::color_elem_t green,
+            orcus::spreadsheet::color_elem_t blue)
 {
+    maCurrentFont.maColor = Color(alpha, red, green, blue);
 }
 
 size_t ScOrcusStyles::commit_font()
