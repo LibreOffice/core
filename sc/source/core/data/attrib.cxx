@@ -51,8 +51,9 @@ TYPEINIT1(ScDoubleItem,         SfxPoolItem);
 TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
 TYPEINIT1(ScCondFormatItem,    SfxPoolItem);
 
-//      General Help Function
-
+/**
+ * General Help Function
+ */
 bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxBorderLine* pOther )
 {
 
@@ -76,15 +77,16 @@ bool ScHasPriority( const ::editeng::SvxBorderLine* pThis, const ::editeng::SvxB
             return false;
         else
         {
-            return true;            //! ???
+            return true; // FIXME: What is this?
         }
     }
 }
 
-//      Item - Implementierungen
+/** Item - Implementations */
 
-// Merge
-
+/**
+ * Merge
+ */
 ScMergeAttr::ScMergeAttr():
     SfxPoolItem(ATTR_MERGE),
     nColMerge(0),
@@ -140,8 +142,9 @@ SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, sal_uInt16 /* nVer */ ) con
     return new ScMergeAttr(static_cast<SCCOL>(nCol),static_cast<SCROW>(nRow));
 }
 
-// MergeFlag
-
+/**
+ * MergeFlag
+ */
 ScMergeFlagAttr::ScMergeFlagAttr():
     SfxInt16Item(ATTR_MERGE_FLAG, 0)
 {
@@ -166,8 +169,9 @@ bool ScMergeFlagAttr::HasPivotPopupButton() const
     return (GetValue() & SC_MF_BUTTON_POPUP) != 0;
 }
 
-// Protection
-
+/**
+ * Protection
+ */
 ScProtectionAttr::ScProtectionAttr():
     SfxPoolItem(ATTR_PROTECTION),
     bProtection(true),
@@ -384,8 +388,9 @@ bool ScProtectionAttr::SetHidePrint( bool bHPrint)
     return true;
 }
 
-//      ScRangeItem - Tabellenbereich
-
+/**
+ * ScRangeItem - Table range
+ */
 bool ScRangeItem::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "unequal types" );
@@ -431,8 +436,9 @@ bool ScRangeItem::GetPresentation
     return true;
 }
 
-//      ScTableListItem - List from Tables (-numbers)
-
+/**
+ * ScTableListItem - List from Tables (-numbers)
+ */
 ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
     :   SfxPoolItem ( rCpy.Which() ),
         nCount      ( rCpy.nCount )
@@ -536,8 +542,9 @@ bool ScTableListItem::GetPresentation
     return false;
 }
 
-//      ScPageHFItem - Dates from the Head and Foot lines
-
+/**
+ * ScPageHFItem - Dates from the Head and Foot lines
+ */
 ScPageHFItem::ScPageHFItem( sal_uInt16 nWhichP )
     :   SfxPoolItem ( nWhichP ),
         pLeftArea   ( NULL ),
@@ -649,7 +656,6 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 static void lcl_SetSpace( OUString& rStr, const ESelection& rSel )
 {
     // Text replaced by a space to ensure they are positions:
-
     sal_Int32 nLen = rSel.nEndPos-rSel.nStartPos;
     rStr = rStr.replaceAt( rSel.nStartPos, nLen, " " );
 }
@@ -717,10 +723,9 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
          pCenter == NULL || pCenter->GetParagraphCount() == 0 ||
          pRight == NULL  || pRight->GetParagraphCount() == 0 )
     {
-        //  If successfully loaded, each object contains at least one paragraph.
-        //  Excel import in 5.1 created broken TextObjects (#67442#) that are
-        //  corrected here to avoid saving wrong files again (#90487#).
-
+        // If successfully loaded, each object contains at least one paragraph.
+        // Excel import in 5.1 created broken TextObjects (#67442#) that are
+        // corrected here to avoid saving wrong files again (#90487#).
         ScEditEngineDefaulter aEngine( EditEngine::CreatePool(), true );
         if ( pLeft == NULL || pLeft->GetParagraphCount() == 0 )
         {
@@ -739,7 +744,7 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
         }
     }
 
-    if ( nVer < 1 )             //old field command conversions
+    if ( nVer < 1 ) // old field command conversions
     {
         sal_uInt16 i;
         const OUString& rDel = ScGlobal::GetRscString( STR_HFCMD_DELIMITER );
@@ -775,9 +780,7 @@ SfxPoolItem* ScPageHFItem::Create( SvStream& rStream, sal_uInt16 nVer ) const
             pRight = aEngine.CreateTextObject();
         }
     }
-    else if ( nVer < 2 )
-    {   // not to do, SvxFileField is not exchanged for SvxExtFileField
-    }
+    else if ( nVer < 2 ) {} // nothing to do: SvxFileField is not exchanged for SvxExtFileField
 
     ScPageHFItem* pItem = new ScPageHFItem( Which() );
     pItem->SetArea( pLeft,    SC_HF_LEFTAREA   );
@@ -817,8 +820,9 @@ void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
     }
 }
 
-//  ScViewObjectModeItem - Display Mode of View Objects
-
+/**
+ * ScViewObjectModeItem - Display Mode of View Objects
+ */
 ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP )
     : SfxEnumItem( nWhichP, VOBJ_MODE_SHOW )
 {
@@ -863,11 +867,10 @@ bool ScViewObjectModeItem::GetPresentation
             break;
 
             default:
-            ePres = SFX_ITEM_PRESENTATION_NAMELESS;//this always goes!
+            ePres = SFX_ITEM_PRESENTATION_NAMELESS; // Default setting!
             break;
         }
         /* !!! fall-through !!! */
-
         case SFX_ITEM_PRESENTATION_NAMELESS:
         rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
         return true;
@@ -923,8 +926,9 @@ SfxPoolItem* ScViewObjectModeItem::Create(
     }
 }
 
-//      double
-
+/**
+ * Double
+ */
 ScDoubleItem::ScDoubleItem( sal_uInt16 nWhichP, double nVal )
     :   SfxPoolItem ( nWhichP ),
         nValue  ( nVal )
