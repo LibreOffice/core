@@ -251,6 +251,19 @@ void TabBar::HighlightDeck (const ::rtl::OUString& rsDeckId)
 
 
 
+void TabBar::RemoveDeckHighlight ()
+{
+    for (ItemContainer::iterator iItem(maItems.begin()),iEnd(maItems.end());
+         iItem!=iEnd;
+         ++iItem)
+    {
+        iItem->mpButton->Check(false);
+    }
+}
+
+
+
+
 void TabBar::DataChanged (const DataChangedEvent& rDataChangedEvent)
 {
     SetBackground(Theme::GetPaint(Theme::Paint_TabBarBackground).GetWallpaper());

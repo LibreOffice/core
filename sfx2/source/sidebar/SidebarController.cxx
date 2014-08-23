@@ -1012,6 +1012,9 @@ void SidebarController::RequestCloseDeck (void)
 {
     mbIsDeckRequestedOpen = false;
     UpdateDeckOpenState();
+
+    // remove highlight from TabBar, because Deck will be closed
+    mpTabBar->RemoveDeckHighlight();
 }
 
 

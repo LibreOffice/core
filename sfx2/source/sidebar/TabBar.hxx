@@ -81,6 +81,7 @@ public:
     void SetDecks (
         const ResourceManager::DeckContextDescriptorContainer& rDecks);
     void HighlightDeck (const ::rtl::OUString& rsDeckId);
+    void RemoveDeckHighlight ();
     void AddPopupMenuEntries (
         PopupMenu& rMenu,
         const sal_Int32 nFirstIndex);
