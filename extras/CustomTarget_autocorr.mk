@@ -15,12 +15,12 @@ extras_AUTOCORR_LANGS := \
 	ca:ca-ES \
 	cs:cs-CZ \
 	da:da-DK \
-	de:de-DE \
+	de:de \
 	en-AU:en-AU \
 	en-GB:en-GB \
 	en-US:en-US \
 	en-ZA:en-ZA \
-	es:es-ES \
+	es:es \
 	fa:fa-IR \
 	fi:fi-FI \
 	fr:fr \
@@ -28,7 +28,7 @@ extras_AUTOCORR_LANGS := \
 	hr:hr-HR \
 	hu:hu-HU \
 	is:is-IS \
-	it:it-IT \
+	it:it \
 	ja:ja-JP \
 	ko:ko-KR \
 	lb-LU:lb-LU \

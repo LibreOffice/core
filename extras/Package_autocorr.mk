@@ -15,12 +15,12 @@ $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr
 	acor_cs-CZ.dat \
 	acor_ca-ES.dat \
 	acor_da-DK.dat \
-	acor_de-DE.dat \
+	acor_de.dat \
 	acor_en-AU.dat \
 	acor_en-GB.dat \
 	acor_en-US.dat \
 	acor_en-ZA.dat \
-	acor_es-ES.dat \
+	acor_es.dat \
 	acor_fa-IR.dat \
 	acor_fi-FI.dat \
 	acor_fr.dat \
@@ -28,7 +28,7 @@ $(eval $(call gb_Package_add_files,extras_autocorr,$(LIBO_SHARE_FOLDER)/autocorr
 	acor_hr-HR.dat \
 	acor_hu-HU.dat \
 	acor_is-IS.dat \
-	acor_it-IT.dat \
+	acor_it.dat \
 	acor_ja-JP.dat \
 	acor_ko-KR.dat \
 	acor_lb-LU.dat \
