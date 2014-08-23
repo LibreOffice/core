@@ -72,7 +72,7 @@ OutputDevice* SwFntObj::pPixOut = NULL;
 namespace
 {
 
-sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
+long EvalGridWidthAdd( const SwTextGridItem *const pGrid, const SwDrawTextInfo &rInf )
 {
     SwDocShell* pDocShell = rInf.GetShell()->GetDoc()->GetDocShell();
     SfxStyleSheetBasePool* pBasePool = pDocShell->GetStyleSheetPool();
@@ -82,7 +82,13 @@ sal_uInt16 GetDefaultFontHeight( SwDrawTextInfo &rInf )
     SfxStyleSheetBase* pStyle = pBasePool->Find(sString, (SfxStyleFamily)SFX_STYLE_FAMILY_PARA);
     SfxItemSet& aTmpSet = pStyle->GetItemSet();
     SvxFontHeightItem &aDefaultFontItem = (SvxFontHeightItem&)aTmpSet.Get(RES_CHRATR_CJK_FONTSIZE);
-    return (sal_uInt16)aDefaultFontItem.GetHeight();
+
+    const SwDoc* pDoc = rInf.GetShell()->GetDoc();
+    const long nGridWidthAdd = GetGridWidth(*pGrid, *pDoc) - aDefaultFontItem.GetHeight();
+    if( SW_LATIN == rInf.GetFont()->GetActual() )
+        return nGridWidthAdd / 2;
+
+    return nGridWidthAdd;
 }
 
 }
@@ -996,14 +1002,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
-            const sal_uInt16  nDefaultFontHeight = GetDefaultFontHeight( rInf );
-
-            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
-            long nGridWidthAdd = GetGridWidth(*pGrid, *pDoc);
-            if( SW_LATIN == rInf.GetFont()->GetActual() )
-                nGridWidthAdd = ( nGridWidthAdd - nDefaultFontHeight ) / 2;
-            else
-                nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
+            const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
             long* pKernArray = new long[rInf.GetLen()];
 
@@ -1833,14 +1832,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
-            const sal_uInt16 nDefaultFontHeight = GetDefaultFontHeight( rInf );
-
-            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
-            long nGridWidthAdd = GetGridWidth(*pGrid, *pDoc);
-            if( SW_LATIN == rInf.GetFont()->GetActual() )
-                nGridWidthAdd = ( nGridWidthAdd - nDefaultFontHeight ) / 2;
-            else
-                nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
+            const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
             OutputDevice* pOutDev;
             if ( pPrinter )
             {
@@ -1853,7 +1845,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             aTxtSize.Width() = pOutDev->GetTextWidth( rInf.GetText(), rInf.GetIdx(), nLn );
             aTxtSize.Height() = pOutDev->GetTextHeight() +
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() );
-            aTxtSize.Width() += (nLn) * long( nGridWidthAdd );
+            aTxtSize.Width() += nLn * nGridWidthAdd;
             //if ( rInf.GetKern() && nLn )
             //    aTxtSize.Width() += ( nLn ) * long( rInf.GetKern() );
 
@@ -2107,14 +2099,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
 
-            const sal_uInt16 nDefaultFontHeight = GetDefaultFontHeight( rInf );
-
-            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
-            long nGridWidthAdd = GetGridWidth(*pGrid, *pDoc);
-            if( SW_LATIN == rInf.GetFont()->GetActual() )
-                nGridWidthAdd = ( nGridWidthAdd - nDefaultFontHeight ) / 2;
-            else
-                nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
+            const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
             for(sal_Int32 j = 0; j < rInf.GetLen(); j++)
             {
@@ -2356,14 +2341,7 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         SwTextGridItem const*const pGrid(GetGridItem(rInf.GetFrm()->FindPageFrm()));
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && !pGrid->IsSnapToChars() )
         {
-            const sal_uInt16 nDefaultFontHeight = GetDefaultFontHeight( rInf );
-
-            const SwDoc* pDoc = rInf.GetShell()->GetDoc();
-            long nGridWidthAdd = GetGridWidth(*pGrid, *pDoc);
-            if( SW_LATIN == rInf.GetFont()->GetActual() )
-                nGridWidthAdd = ( nGridWidthAdd - nDefaultFontHeight ) / 2 ;
-            else
-                nGridWidthAdd = nGridWidthAdd - nDefaultFontHeight;
+            const long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
             long* pKernArray = new long[rInf.GetLen()];
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
