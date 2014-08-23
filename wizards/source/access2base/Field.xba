@@ -767,22 +767,4 @@ Error_Function:
 	TraceError(TRACEABORT, Err, _CalledSub, Erl)
 	GoTo Exit_Function
 End Function		&apos;	WriteAll
-
-REM -----------------------------------------------------------------------------------------------------------------------
-REM --- CLASS PROPERTY SETs								        														---
-REM --- Workaround to bug https://www.libreoffice.org/bugzilla/show_bug.cgi?id=60752 (LibreOffice 4.0)					---
-REM -----------------------------------------------------------------------------------------------------------------------
-
-Property Set DefaultValue(ByVal pvDefaultValue As Variant)
-	Call _PropertySet(&quot;DefaultValue&quot;, pvDefaultValue)
-End Property		&apos;	DefaultValue (set)
-
-Property Set Description(ByVal pvDescription As Variant)
-	Call _PropertySet(&quot;Description&quot;, pvDescription)
-End Property		&apos;	Description (set)
-
-Property Set Value(ByVal pvValue As Variant)
-	Call _PropertySet(&quot;Value&quot;, pvValue)
-End Property		&apos;	Value (set)
-
 </script:module>

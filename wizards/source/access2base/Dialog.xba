@@ -659,26 +659,4 @@ Error_Function:
 	_PropertySet = False
 	GoTo Exit_Function
 End Function		&apos;	_PropertySet
-
-REM -----------------------------------------------------------------------------------------------------------------------
-REM --- CLASS PROPERTY SETs								        														---
-REM --- Workaround to bug https://www.libreoffice.org/bugzilla/show_bug.cgi?id=60752 (LibreOffice 4.0)					---
-REM -----------------------------------------------------------------------------------------------------------------------
-
-Property Set Caption(ByVal pvValue As Variant)
-	Call _PropertySet(&quot;Caption&quot;, pvValue)
-End Property	&apos;	Caption (set)
-
-Property Set Height(ByVal pvValue As Variant)
-	Call _PropertySet(&quot;Height&quot;, pvValue)
-End Property	&apos;	Height (set)
-
-Property Set Visible(ByVal pvValue As Variant)
-	Call _PropertySet(&quot;Visible&quot;, pvValue)
-End Property	&apos;	Visible (set)
-
-Property Set Width(ByVal pvValue As Variant)
-	Call _PropertySet(&quot;Width&quot;, pvValue)
-End Property	&apos;	Width (set)
-
 </script:module>

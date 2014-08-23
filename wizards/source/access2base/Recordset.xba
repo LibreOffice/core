@@ -1108,19 +1108,4 @@ Error_Function:
 	_PropertySet = False
 	GoTo Exit_Function
 End Function		&apos;	_PropertySet
-
-REM -----------------------------------------------------------------------------------------------------------------------
-REM --- CLASS PROPERTY SETs								        														---
-REM --- Workaround to bug https://www.libreoffice.org/bugzilla/show_bug.cgi?id=60752 (LibreOffice 4.0)					---
-REM -----------------------------------------------------------------------------------------------------------------------
-
-Property Set Bookmark(ByVal pvValue As Variant)
-	Call _PropertySet(&quot;Bookmark&quot;, pvValue)
-End Property	&apos;	Bookmark (set)
-
-Property Set Filter(ByVal pvValue As Variant)
-	Call _PropertySet(&quot;Filter&quot;, pvValue)
-End Property	&apos;	Filter (set)
-
-
 </script:module>
