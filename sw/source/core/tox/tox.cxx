@@ -345,20 +345,23 @@ SwForm& SwForm::operator=(const SwForm& rForm)
 
 sal_uInt16 SwForm::GetFormMaxLevel( TOXTypes eTOXType )
 {
-    sal_uInt16 nRet = 0;
     switch( eTOXType )
     {
-        case TOX_INDEX:         nRet = 5;                   break;
-        case TOX_USER:          nRet = MAXLEVEL+1;          break;
-        case TOX_CONTENT:       nRet = MAXLEVEL+1;          break;
+        case TOX_INDEX:
+            return 5;
+        case TOX_USER:
+        case TOX_CONTENT:
+            return MAXLEVEL + 1;
         case TOX_ILLUSTRATIONS:
-        case TOX_OBJECTS      :
-        case TOX_TABLES       : nRet = 2; break;
-        case TOX_BIBLIOGRAPHY :
+        case TOX_OBJECTS:
+        case TOX_TABLES:
+            return 2;
+        case TOX_BIBLIOGRAPHY:
         case TOX_CITATION:
-        case TOX_AUTHORITIES  : nRet = AUTH_TYPE_END + 1;       break;
+        case TOX_AUTHORITIES:
+            return AUTH_TYPE_END + 1;
     }
-    return nRet;
+    return 0;
 }
 
 void SwForm::AdjustTabStops( SwDoc& rDoc ) // #i21237#
@@ -463,7 +466,7 @@ SwTOXBase& SwTOXBase::CopyTOXBase( SwDoc* pDoc, const SwTOXBase& rSource )
         // type not in pDoc, so create it now
         const SwTOXTypes& rTypes = pDoc->GetTOXTypes();
         bool bFound = false;
-        for( sal_uInt16 n = rTypes.size(); n; )
+        for( size_t n = rTypes.size(); n; )
         {
             const SwTOXType* pCmp = rTypes[ --n ];
             if( pCmp->GetType() == pType->GetType() &&
