@@ -2797,7 +2797,8 @@ static bool lclConvertMoney( const OUString& aSearchUnit, double& rfRate, int& r
         { "CYP", 0.585274, 2 },
         { "SKK", 30.1260,  2 },
         { "EEK", 15.6466,  2 },
-        { "LVL", 0.702804, 2 }
+        { "LVL", 0.702804, 2 },
+        { "LTL", 3.45280,  2 }
     };
 
     static const size_t nConversionCount = sizeof( aConvertTable ) / sizeof( aConvertTable[0] );
