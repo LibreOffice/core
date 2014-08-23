@@ -51,7 +51,7 @@ namespace {
 
         rInvalid.clear();
 
-        for( sal_uInt16 n = 0; n < ftnIdxs.size(); ++n )
+        for( size_t n = 0; n < ftnIdxs.size(); ++n )
         {
             SwTxtFtn* pTxtFtn = ftnIdxs[ n ];
             if ( pTxtFtn != pExclude )
@@ -312,7 +312,7 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, bool bDelNode )
         DELETEZ( m_pStartNode );
 
         // loesche die Fussnote noch aus dem Array am Dokument
-        for( sal_uInt16 n = 0; n < pDoc->GetFtnIdxs().size(); ++n )
+        for( size_t n = 0; n < pDoc->GetFtnIdxs().size(); ++n )
             if( this == pDoc->GetFtnIdxs()[n] )
             {
                 pDoc->GetFtnIdxs().erase( pDoc->GetFtnIdxs().begin() + n );
