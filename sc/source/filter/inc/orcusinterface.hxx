@@ -31,6 +31,7 @@ class ScDocumentImport;
 class ScOrcusSheet;
 class ScOrcusFactory;
 class ScRangeData;
+class SfxItemSet;
 
 namespace com { namespace sun { namespace star { namespace task {
 
@@ -157,6 +158,7 @@ public:
 class ScOrcusStyles : public orcus::spreadsheet::iface::import_styles
 {
 private:
+    ScDocument& mrDoc;
 
     struct font
     {
@@ -167,6 +169,8 @@ private:
         Color maColor;
 
         font();
+
+        void applyToItemSet(SfxItemSet& rSet) const;
     };
 
     font maCurrentFont;
@@ -217,6 +221,7 @@ private:
         size_t mnBorderId;
         size_t mnProtectionId;
         size_t mnNumberFormatId;
+        size_t mnStyleXf;
 
         xf();
     };
@@ -236,7 +241,10 @@ private:
 
     cell_style maCurrentCellStyle;
 
+    void applyXfToItemSet(SfxItemSet& rSet, const xf& rXf);
+
 public:
+    ScOrcusStyles(ScDocument& rDoc);
     // font
 
     virtual void set_font_count(size_t n) SAL_OVERRIDE;
