@@ -39,7 +39,6 @@ writerfilter_OOXMLNAMESPACES= \
 	vml-main \
 	vml-officeDrawing \
 	vml-wordprocessingDrawing \
-	mce \
 	wp14 \
 	w14 \
 	a14 \

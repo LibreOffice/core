@@ -10432,33 +10432,6 @@
       <value tokenid="ooxml:Value_vmlOffice_ST_FillType_background">background</value>
     </resource>
   </namespace>
-  <namespace name="mce">
-    <start name="AlternateContent"/>
-    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/markup-compatibility/2006">
-      <define name="nsList">
-        <choice>
-            <data type="NCName"/>
-        </choice>
-      </define>
-      <define name="AlternateContent">
-        <element name="AlternateContent">
-            <ref name="Choice"/>
-        </element>
-      </define>
-      <define name="Choice">
-        <element name="Choice">
-          <attribute name="Requires">
-            <ref name="nsList"/>
-          </attribute>
-          <text/>
-        </element>
-      </define>
-    </grammar>
-    <resource name="AlternateContent" resource="Value"/>
-    <resource name="Choice" resource="Value">
-      <attribute name="Requires" tokenid="ooxml:mc_Requires"/>
-    </resource>
-  </namespace>
   <namespace name="vml-wordprocessingDrawing" file="vml-wordprocessingDrawing.rng">
     <start name="bordertop"/>
     <start name="borderleft"/>
