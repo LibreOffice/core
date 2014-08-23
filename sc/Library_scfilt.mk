@@ -96,6 +96,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/excel/xename \
 	sc/source/filter/excel/xepage \
 	sc/source/filter/excel/xepivot \
+	sc/source/filter/excel/xepivotxml \
 	sc/source/filter/excel/xerecord \
 	sc/source/filter/excel/xeroot \
 	sc/source/filter/excel/xestream \

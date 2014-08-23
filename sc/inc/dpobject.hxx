@@ -132,6 +132,7 @@ public:
     ScRange             GetNewOutputRange( bool& rOverflow );
 
     ScRange GetOutputRangeByType( sal_Int32 nType );
+    ScRange GetOutputRangeByType( sal_Int32 nType ) const;
 
     void                SetSaveData(const ScDPSaveData& rData);
     ScDPSaveData*       GetSaveData() const     { return pSaveData; }
@@ -287,9 +288,12 @@ public:
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
         SC_DLLPUBLIC ScDPCache* getExistingCache(const ScRange& rRange);
+        SC_DLLPUBLIC const ScDPCache* getExistingCache(const ScRange& rRange) const;
 
         void updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
+
+        SC_DLLPUBLIC const std::vector<ScRange>& getAllRanges() const;
     };
 
     /**

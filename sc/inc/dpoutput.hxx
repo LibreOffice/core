@@ -112,7 +112,8 @@ public:
     void            SetPosition( const ScAddress& rPos );
 
     void            Output();           //! Refresh?
-    ScRange         GetOutputRange( sal_Int32 nRegionType = ::com::sun::star::sheet::DataPilotOutputRangeType::WHOLE );
+    ScRange GetOutputRange( sal_Int32 nRegionType = ::com::sun::star::sheet::DataPilotOutputRangeType::WHOLE );
+    ScRange GetOutputRange( sal_Int32 nRegionType = ::com::sun::star::sheet::DataPilotOutputRangeType::WHOLE ) const;
     long            GetHeaderRows();
     bool            HasError();         // range overflow or exception from source
 

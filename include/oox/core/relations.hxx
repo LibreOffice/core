@@ -50,7 +50,8 @@ namespace core {
 #define CREATE_MSOFFICE_RELATION_TYPE( ascii ) \
     ( "http://schemas.microsoft.com/office/2006/relationships/" ascii )
 
-
+#define CREATE_XL_CONTENT_TYPE( ascii ) \
+    ( "application/vnd.openxmlformats-officedocument.spreadsheetml." ascii "+xml" )
 
 struct Relation
 {

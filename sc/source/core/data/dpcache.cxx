@@ -850,6 +850,14 @@ SCROW ScDPCache::GetDataSize() const
     return mnDataSize >= 0 ? mnDataSize : 0;
 }
 
+const ScDPCache::IndexArrayType* ScDPCache::GetFieldIndexArray( size_t nDim ) const
+{
+    if (nDim >= maFields.size())
+        return NULL;
+
+    return &maFields[nDim].maData;
+}
+
 const ScDPCache::ItemsType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");

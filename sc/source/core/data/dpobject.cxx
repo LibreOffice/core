@@ -936,6 +936,14 @@ ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
     return pOutput->GetOutputRange(nType);
 }
 
+ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType ) const
+{
+    if (!pOutput || pOutput->HasError())
+        return ScRange(ScAddress::INITIALIZE_INVALID);
+
+    return pOutput->GetOutputRange(nType);
+}
+
 static bool lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasPivotButton();
@@ -2905,6 +2913,25 @@ ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rRange)
     return itCache->second;
 }
 
+const ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rRange) const
+{
+    RangeIndexType::const_iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
+    if (it == maRanges.end())
+        // Not cached.
+        return NULL;
+
+    // Already cached.
+    size_t nIndex = std::distance(maRanges.begin(), it);
+    CachesType::const_iterator itCache = maCaches.find(nIndex);
+    if (itCache == maCaches.end())
+    {
+        OSL_FAIL("Cache pool and index pool out-of-sync !!!");
+        return NULL;
+    }
+
+    return itCache->second;
+}
+
 size_t ScDPCollection::SheetCaches::size() const
 {
     return maCaches.size();
@@ -2988,6 +3015,11 @@ bool ScDPCollection::SheetCaches::remove(const ScDPCache* p)
         }
     }
     return false;
+}
+
+const std::vector<ScRange>& ScDPCollection::SheetCaches::getAllRanges() const
+{
+    return maRanges;
 }
 
 ScDPCollection::NameCaches::NameCaches(ScDocument* pDoc) : mpDoc(pDoc) {}

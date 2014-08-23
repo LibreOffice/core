@@ -156,6 +156,7 @@ public:
     long GetDimMemberCount(long nDim) const;
     SCROW GetOrder( long nDim, SCROW nIndex ) const;
 
+    const IndexArrayType* GetFieldIndexArray( size_t nDim ) const;
     const ItemsType& GetDimMemberValues( SCCOL nDim ) const;
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(DBConnector& rDB);
