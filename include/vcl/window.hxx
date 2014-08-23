@@ -28,6 +28,7 @@
 #include <tools/wintypes.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
 #include <vcl/apptypes.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/vclevent.hxx>
 // Only for compatibility - because many people outside haven't included event.hxx
@@ -49,7 +50,6 @@ struct SystemEnvData;
 struct SystemParentData;
 class ImplBorderWindow;
 class Timer;
-class Cursor;
 class DockingManager;
 class ScrollBar;
 class Bitmap;
@@ -332,7 +332,7 @@ struct WindowResHeader
 
 class VCL_DLLPUBLIC Window : public OutputDevice, public Resource
 {
-    friend class Cursor;
+    friend class vcl::Cursor;
     friend class OutputDevice;
     friend class Application;
     friend class SystemWindow;
@@ -982,8 +982,8 @@ public:
     void                                LeaveWait();
     bool                                IsWait() const;
 
-    void                                SetCursor( Cursor* pCursor );
-    Cursor*                             GetCursor() const;
+    void                                SetCursor( vcl::Cursor* pCursor );
+    vcl::Cursor*                        GetCursor() const;
 
     void                                SetZoom( const Fraction& rZoom );
     const Fraction&                     GetZoom() const;

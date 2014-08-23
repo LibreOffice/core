@@ -67,7 +67,7 @@ protected:
     SdrOutliner*                pTextEditOutliner;     // Na eben der Outliner fuers TextEdit
     OutlinerView*               pTextEditOutlinerView; // die aktuelle View des Outliners
     Window*                     pTextEditWin;          // passendes Win zu pTextEditOutlinerView
-    Cursor*                     pTextEditCursorMerker; // Zum Restaurieren des Cursors am jeweiligen Win
+    vcl::Cursor*                pTextEditCursorMerker; // Zum Restaurieren des Cursors am jeweiligen Win
     ImpSdrEditPara*             pEditPara; // Da hau' ich erstmal alles rein um kompatibel zu bleiben...
     SdrObject*                  pMacroObj;
     SdrPageView*                pMacroPV;

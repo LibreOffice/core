@@ -275,7 +275,7 @@ namespace sdr
                 if(bTargetIsWindow)
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
-                    Cursor* pCursor = rWindow.GetCursor();
+                    vcl::Cursor* pCursor = rWindow.GetCursor();
 
                     if(pCursor && pCursor->IsVisible())
                     {
@@ -405,7 +405,7 @@ namespace sdr
                 if(bCursorWasEnabled)
                 {
                     Window& rWindow = static_cast< Window& >(rmOutputDevice);
-                    Cursor* pCursor = rWindow.GetCursor();
+                    vcl::Cursor* pCursor = rWindow.GetCursor();
 
                     if(pCursor)
                     {

@@ -151,7 +151,7 @@ struct ImpTextView
     Point               maStartDocPos;
 //    TextPaM             maMBDownPaM;
 
-    Cursor*             mpCursor;
+    vcl::Cursor*        mpCursor;
 
     TextDDInfo*         mpDDInfo;
 
@@ -204,7 +204,7 @@ TextView::TextView( TextEngine* pEng, Window* pWindow ) :
     mpImpl->mpSelEngine->SetSelectionMode( RANGE_SELECTION );
     mpImpl->mpSelEngine->EnableDrag( true );
 
-    mpImpl->mpCursor = new Cursor;
+    mpImpl->mpCursor = new vcl::Cursor;
     mpImpl->mpCursor->Show();
     pWindow->SetCursor( mpImpl->mpCursor );
     pWindow->SetInputContext( InputContext( pEng->GetFont(), INPUTCONTEXT_TEXT|INPUTCONTEXT_EXTTEXTINPUT ) );

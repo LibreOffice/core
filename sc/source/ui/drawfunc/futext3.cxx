@@ -114,7 +114,7 @@ void FuText::StopEditMode(bool /*bTextDirection*/)
     // or ScEndTextEdit (with drawview.hxx)
     pViewShell->SetDrawTextUndo( 0 );
 
-    Cursor* pCur = pWindow->GetCursor();
+    vcl::Cursor* pCur = pWindow->GetCursor();
     if( pCur && pCur->IsVisible() )
         pCur->Hide();
 

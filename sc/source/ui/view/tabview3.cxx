@@ -156,7 +156,7 @@ void ScTabView::HideAllCursors()
         if (pGridWin[i])
             if (pGridWin[i]->IsVisible())
             {
-                Cursor* pCur = pGridWin[i]->GetCursor();
+                vcl::Cursor* pCur = pGridWin[i]->GetCursor();
                 if (pCur)
                     if (pCur->IsVisible())
                         pCur->Hide();
@@ -1897,7 +1897,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     for (i=0; i<4; i++)
         if (pGridWin[i] && pGridWin[i]->IsVisible())
         {
-            Cursor* pCur = pGridWin[i]->GetCursor();
+            vcl::Cursor* pCur = pGridWin[i]->GetCursor();
             if (pCur && pCur->IsVisible())
                 pCur->Hide();
 

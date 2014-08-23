@@ -212,7 +212,7 @@ class ImpEditView : public vcl::unohelper::DragAndDropClient
 
 private:
     EditView*           pEditView;
-    Cursor*             pCursor;
+    vcl::Cursor*        pCursor;
     Color*              pBackgroundColor;
     EditEngine*         pEditEngine;
     Window*             pOutWin;
@@ -318,8 +318,8 @@ public:
     inline void     SetPointer( const Pointer& rPointer );
     inline const Pointer&   GetPointer();
 
-    inline void     SetCursor( const Cursor& rCursor );
-    inline Cursor*  GetCursor();
+    inline void     SetCursor( const vcl::Cursor& rCursor );
+    inline vcl::Cursor*     GetCursor();
 
     void            AddDragAndDropListeners();
     void            RemoveDragAndDropListeners();
@@ -1199,16 +1199,16 @@ inline const Pointer& ImpEditView::GetPointer()
     return *pPointer;
 }
 
-inline void ImpEditView::SetCursor( const Cursor& rCursor )
+inline void ImpEditView::SetCursor( const vcl::Cursor& rCursor )
 {
     delete pCursor;
-    pCursor = new Cursor( rCursor );
+    pCursor = new vcl::Cursor( rCursor );
 }
 
-inline Cursor* ImpEditView::GetCursor()
+inline vcl::Cursor* ImpEditView::GetCursor()
 {
     if ( !pCursor )
-        pCursor = new Cursor;
+        pCursor = new vcl::Cursor;
     return pCursor;
 }
 

@@ -77,7 +77,7 @@ void SwAnnotationWin::SetPostItText()
 {
     //If the cursor was visible, then make it visible again after
     //changing text, e.g. fdo#33599
-    Cursor *pCursor = GetOutlinerView()->GetEditView().GetCursor();
+    vcl::Cursor *pCursor = GetOutlinerView()->GetEditView().GetCursor();
     bool bCursorVisible = pCursor && pCursor->IsVisible();
 
     //If the new text is the same as the old text, keep the same insertion

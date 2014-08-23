@@ -26,6 +26,7 @@
 #include <i18nlangtag/lang.h>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
+#include <vcl/cursor.hxx>
 
 class EditEngine;
 class ImpEditEngine;
@@ -34,7 +35,6 @@ class SvxSearchItem;
 class SvxFieldItem;
 class Window;
 class Pointer;
-class Cursor;
 class KeyEvent;
 class MouseEvent;
 class DropEvent;
@@ -132,7 +132,7 @@ public:
 
     const Pointer&  GetPointer() const;
 
-    Cursor*         GetCursor() const;
+    vcl::Cursor*    GetCursor() const;
 
     void            InsertText( const OUString& rNew, bool bSelect = false );
 

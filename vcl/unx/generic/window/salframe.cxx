@@ -78,7 +78,6 @@
 #endif
 
 using namespace vcl_sal;
-using namespace vcl;
 
 #define CLIENT_EVENTS           StructureNotifyMask \
                                 | SubstructureNotifyMask \
@@ -898,9 +897,9 @@ X11SalFrame::~X11SalFrame()
      *  check if there is only the status frame left
      *  if so, free it
      */
-    if( ! GetDisplay()->getFrames().empty() && I18NStatus::exists() )
+    if( ! GetDisplay()->getFrames().empty() && vcl::I18NStatus::exists() )
     {
-        SalFrame* pStatusFrame = I18NStatus::get().getStatusFrame();
+        SalFrame* pStatusFrame = vcl::I18NStatus::get().getStatusFrame();
         std::list< SalFrame* >::const_iterator sit = GetDisplay()->getFrames().begin();
         if( pStatusFrame
             && *sit == pStatusFrame
@@ -2274,7 +2273,7 @@ MessageToXAutoLock( Display *p_display, int n_message )
 
 void X11SalFrame::StartPresentation( bool bStart )
 {
-    I18NStatus::get().show( !bStart, I18NStatus::presentation );
+    vcl::I18NStatus::get().show( !bStart, vcl::I18NStatus::presentation );
     if ( bStart )
         MessageToXAutoLock( GetXDisplay(), XAUTOLOCK_DISABLE );
     else
@@ -2486,7 +2485,7 @@ void X11SalFrame::SetInputContext( SalInputContext* pContext )
 
       if (mpInputContext == NULL)
     {
-        I18NStatus& rStatus( I18NStatus::get() );
+        vcl::I18NStatus& rStatus( vcl::I18NStatus::get() );
         rStatus.setParent( this );
         mpInputContext = new SalI18N_InputContext( this );
         if (mpInputContext->UseContext())
@@ -2801,7 +2800,7 @@ long X11SalFrame::HandleMouseEvent( XEvent *pEvent )
         nEvent              = SALEVENT_MOUSEMOVE;
         if( nVisibleFloats > 0 && mpParent )
         {
-            XLIB_Cursor aCursor = mpParent->GetCursor();
+            Cursor aCursor = mpParent->GetCursor();
             if( pEvent->xmotion.x >= 0 && pEvent->xmotion.x < (int)maGeometry.nWidth &&
                 pEvent->xmotion.y >= 0 && pEvent->xmotion.y < (int)maGeometry.nHeight )
                 aCursor = None;
@@ -3011,7 +3010,7 @@ GetAlternateKeyCode( const sal_uInt16 nKeyCode )
 void X11SalFrame::beginUnicodeSequence()
 {
     OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
-    DeletionListener aDeleteWatch( this );
+    vcl::DeletionListener aDeleteWatch( this );
 
     if( !rSeq.isEmpty() )
         endUnicodeSequence();
@@ -3073,7 +3072,7 @@ bool X11SalFrame::endUnicodeSequence()
 {
     OUString& rSeq( GetGenericData()->GetUnicodeCommand() );
 
-    DeletionListener aDeleteWatch( this );
+    vcl::DeletionListener aDeleteWatch( this );
     if( rSeq.getLength() > 1 && rSeq.getLength() < 6 )
     {
         // cut the "u"
@@ -3250,7 +3249,7 @@ long X11SalFrame::HandleKeyEvent( XKeyEvent *pEvent )
     if( !nKeyCode && !nLen && !nKeyString)
         return 0;
 
-    DeletionListener aDeleteWatch( this );
+    vcl::DeletionListener aDeleteWatch( this );
 
     if( nModCode == (KEY_SHIFT | KEY_MOD1) && pEvent->type == XLIB_KeyPress )
     {
@@ -3405,7 +3404,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
              *  a lookup choice windows that might have the focus now
              *      mpInputContext->UnsetICFocus( this );
              */
-            I18NStatus::get().show( false, I18NStatus::focus );
+            vcl::I18NStatus::get().show( false, vcl::I18NStatus::focus );
         }
     }
 
@@ -4074,7 +4073,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                         // don't set the focus into the IME status window
                         // since this will lead to a parent loss of focus, close status,
                         // reget focus, open status, .... flicker loop
-                        if ( (I18NStatus::get().getStatusFrame() != this) )
+                        if ( (vcl::I18NStatus::get().getStatusFrame() != this) )
                             bSetFocus = true;
                     }
 

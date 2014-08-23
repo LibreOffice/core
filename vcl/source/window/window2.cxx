@@ -1311,7 +1311,7 @@ bool Window::IsWait() const
     return (mpWindowImpl->mnWaitCount != 0);
 }
 
-Cursor* Window::GetCursor() const
+vcl::Cursor* Window::GetCursor() const
 {
     return mpWindowImpl->mpCursor;
 }

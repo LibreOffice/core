@@ -123,7 +123,7 @@ SwHHCWrapper::~SwHHCWrapper()
     // I.e. we like to check those too.
     if ( IsDrawObj() /*&& bLastRet*/ && m_pView->GetWrtShell().HasDrawView() )
     {
-        Cursor *pSave = m_pView->GetWindow()->GetCursor();
+        vcl::Cursor *pSave = m_pView->GetWindow()->GetCursor();
         {
             SwKeepConversionDirectionStateContext aContext;
 

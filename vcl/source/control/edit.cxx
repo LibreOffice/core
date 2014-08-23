@@ -90,7 +90,7 @@ static FncGetSpecialChars pImplFncGetSpecialChars = NULL;
 
 struct DDInfo
 {
-    Cursor          aCursor;
+    vcl::Cursor     aCursor;
     Selection       aDndStartSel;
     sal_Int32       nDropPos;
     bool            bStarterOfDD;
@@ -241,7 +241,7 @@ bool Edit::set_property(const OString &rKey, const OString &rValue)
 Edit::~Edit()
 {
     delete mpDDInfo;
-    Cursor* pCursor = GetCursor();
+    vcl::Cursor* pCursor = GetCursor();
     if ( pCursor )
     {
         SetCursor( NULL );
@@ -337,7 +337,7 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
     else if ( nStyle & WB_CENTER )
         mnAlign = EDIT_ALIGN_CENTER;
 
-    SetCursor( new Cursor );
+    SetCursor( new vcl::Cursor );
 
     SetPointer( Pointer( POINTER_TEXT ) );
     ImplInitSettings( true, true, true );
@@ -511,7 +511,7 @@ void Edit::ImplRepaint(bool bLayout)
         return;
     }
 
-    Cursor* pCursor = GetCursor();
+    vcl::Cursor* pCursor = GetCursor();
     bool bVisCursor = pCursor && pCursor->IsVisible();
     if ( pCursor )
         pCursor->Hide();
@@ -1074,8 +1074,8 @@ void Edit::ImplShowCursor( bool bOnlyIfVisible )
     if ( !IsUpdateMode() || ( bOnlyIfVisible && !IsReallyVisible() ) )
         return;
 
-    Cursor*     pCursor = GetCursor();
-    OUString    aText = ImplGetText();
+    vcl::Cursor* pCursor = GetCursor();
+    OUString aText = ImplGetText();
 
     long nTextPos = 0;
 

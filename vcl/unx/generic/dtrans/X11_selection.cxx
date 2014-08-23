@@ -277,7 +277,7 @@ SelectionManager::SelectionManager() :
     m_aDragRunning.reset();
 }
 
-XLIB_Cursor SelectionManager::createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY )
+Cursor SelectionManager::createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY )
 {
     Pixmap aPointer;
     Pixmap aMask;
@@ -303,7 +303,7 @@ XLIB_Cursor SelectionManager::createCursor( const unsigned char* pPointerData, c
                                  reinterpret_cast<const char*>(pMaskData),
                                  width,
                                  height );
-    XLIB_Cursor aCursor =
+    Cursor aCursor =
         XCreatePixmapCursor( m_pDisplay, aPointer, aMask,
                              &aBlack, &aWhite,
                              hotX,
@@ -2878,7 +2878,7 @@ sal_Bool SelectionManager::isDragImageSupported() throw(std::exception)
 
 sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction ) throw(std::exception)
 {
-    XLIB_Cursor aCursor = m_aNoneCursor;
+    Cursor aCursor = m_aNoneCursor;
     if( dragAction & DNDConstants::ACTION_MOVE )
         aCursor = m_aMoveCursor;
     else if( dragAction & DNDConstants::ACTION_COPY )
@@ -3459,7 +3459,7 @@ void SelectionManager::dragDoDispatch()
 void SelectionManager::setCursor( sal_Int32 cursor, XLIB_Window aDropWindow, XLIB_Time )
 {
     osl::MutexGuard aGuard( m_aMutex );
-    if( aDropWindow == m_aDropWindow && XLIB_Cursor(cursor) != m_aCurrentCursor )
+    if( aDropWindow == m_aDropWindow && Cursor(cursor) != m_aCurrentCursor )
     {
         if( m_xDragSourceListener.is() && ! m_bDropSent )
         {

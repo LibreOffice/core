@@ -33,6 +33,9 @@ class Window;
 #define CURSOR_DIRECTION_LTR            ((unsigned char)0x01)
 #define CURSOR_DIRECTION_RTL            ((unsigned char)0x02)
 
+namespace vcl
+{
+
 class VCL_DLLPUBLIC Cursor
 {
 private:
@@ -97,6 +100,8 @@ private:
     void ImplDoShow( bool bDrawDirect, bool bRestore );
     bool ImplDoHide( bool bStop );
 };
+
+} // namespace vcl
 
 #endif // INCLUDED_VCL_CURSOR_HXX
 

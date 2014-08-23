@@ -271,7 +271,7 @@ public:
 
 struct TextDDInfo
 {
-    Cursor          maCursor;
+    vcl::Cursor     maCursor;
     TextPaM         maDropPos;
 
     bool            mbStarterOfDD;

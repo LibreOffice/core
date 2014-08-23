@@ -31,7 +31,6 @@
 #define Icon        HIDE_XLIB_Icon
 
 /* Types from <X11/X.h> that clash, but we do use. */
-#define Cursor      XLIB_Cursor
 #define KeyCode     XLIB_KeyCode
 #define Region      XLIB_Region
 #define Time        XLIB_Time

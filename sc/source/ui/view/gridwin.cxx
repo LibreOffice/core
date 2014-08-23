@@ -3041,7 +3041,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
             if ( !bMouse )
             {
-                Cursor* pCur = pEditView->GetCursor();
+                vcl::Cursor* pCur = pEditView->GetCursor();
                 if ( pCur )
                 {
                     Point aLogicPos = pCur->GetPos();

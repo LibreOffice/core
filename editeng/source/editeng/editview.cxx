@@ -321,7 +321,7 @@ const Pointer& EditView::GetPointer() const
     return pImpEditView->GetPointer();
 }
 
-Cursor* EditView::GetCursor() const
+vcl::Cursor* EditView::GetCursor() const
 {
     return pImpEditView->pCursor;
 }

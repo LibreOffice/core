@@ -27,7 +27,6 @@
 /* X Types */
 #undef Window
 #undef Font
-#undef Cursor
 #undef KeyCode
 #undef Region
 #undef Icon

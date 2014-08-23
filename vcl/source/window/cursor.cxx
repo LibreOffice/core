@@ -115,11 +115,10 @@ static void ImplCursorInvert( ImplCursorData* pData )
     pWindow->EnableMapMode( bMapMode );
 }
 
-void Cursor::ImplDraw()
+void vcl::Cursor::ImplDraw()
 {
     if ( mpData && mpData->mpWindow && !mpData->mbCurVisible )
     {
-        // SAL_DEBUG("Cursor::ImplDraw");
         Window* pWindow         = mpData->mpWindow;
         mpData->maPixPos        = pWindow->LogicToPixel( maPos );
         mpData->maPixSize       = pWindow->LogicToPixel( maSize );
@@ -140,17 +139,16 @@ void Cursor::ImplDraw()
     }
 }
 
-void Cursor::ImplRestore()
+void vcl::Cursor::ImplRestore()
 {
     if ( mpData && mpData->mbCurVisible )
     {
-        // SAL_DEBUG("Cursor::ImplRestore");
         ImplCursorInvert( mpData );
         mpData->mbCurVisible = false;
     }
 }
 
-void Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
+void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
 {
     if ( mbVisible )
     {
@@ -193,7 +191,7 @@ void Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
     }
 }
 
-bool Cursor::ImplDoHide( bool bSuspend )
+bool vcl::Cursor::ImplDoHide( bool bSuspend )
 {
     bool bWasCurVisible = false;
     if ( mpData && mpData->mpWindow )
@@ -211,28 +209,28 @@ bool Cursor::ImplDoHide( bool bSuspend )
     return bWasCurVisible;
 }
 
-void Cursor::ImplShow( bool bDrawDirect )
+void vcl::Cursor::ImplShow( bool bDrawDirect )
 {
     ImplDoShow( bDrawDirect, false );
 }
 
-void Cursor::ImplHide( bool i_bStopTimer )
+void vcl::Cursor::ImplHide( bool i_bStopTimer )
 {
     assert( i_bStopTimer );
     ImplDoHide( !i_bStopTimer );
 }
 
-void Cursor::ImplResume( bool bRestore )
+void vcl::Cursor::ImplResume( bool bRestore )
 {
     ImplDoShow( false, bRestore );
 }
 
-bool Cursor::ImplSuspend()
+bool vcl::Cursor::ImplSuspend()
 {
     return ImplDoHide( true );
 }
 
-void Cursor::ImplNew()
+void vcl::Cursor::ImplNew()
 {
     if ( mbVisible && mpData && mpData->mpWindow )
     {
@@ -248,7 +246,7 @@ void Cursor::ImplNew()
     }
 }
 
-IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
+IMPL_LINK_NOARG(vcl::Cursor, ImplTimerHdl)
 {
     if ( mpData->mbCurVisible )
         ImplRestore();
@@ -257,7 +255,7 @@ IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
     return 0;
 }
 
-Cursor::Cursor()
+vcl::Cursor::Cursor()
 {
     mpData          = NULL;
     mpWindow        = NULL;
@@ -268,7 +266,7 @@ Cursor::Cursor()
     mbVisible       = false;
 }
 
-Cursor::Cursor( const Cursor& rCursor ) :
+vcl::Cursor::Cursor( const Cursor& rCursor ) :
     maSize( rCursor.maSize ),
     maPos( rCursor.maPos )
 {
@@ -281,7 +279,7 @@ Cursor::Cursor( const Cursor& rCursor ) :
     mbVisible       = rCursor.mbVisible;
 }
 
-Cursor::~Cursor()
+vcl::Cursor::~Cursor()
 {
     if ( mpData )
     {
@@ -292,7 +290,7 @@ Cursor::~Cursor()
     }
 }
 
-void Cursor::SetStyle( sal_uInt16 nStyle )
+void vcl::Cursor::SetStyle( sal_uInt16 nStyle )
 {
     if ( mnStyle != nStyle )
     {
@@ -301,7 +299,7 @@ void Cursor::SetStyle( sal_uInt16 nStyle )
     }
 }
 
-void Cursor::Show()
+void vcl::Cursor::Show()
 {
     if ( !mbVisible )
     {
@@ -310,7 +308,7 @@ void Cursor::Show()
     }
 }
 
-void Cursor::Hide()
+void vcl::Cursor::Hide()
 {
     if ( mbVisible )
     {
@@ -319,7 +317,7 @@ void Cursor::Hide()
     }
 }
 
-void Cursor::SetWindow( Window* pWindow )
+void vcl::Cursor::SetWindow( Window* pWindow )
 {
     if ( mpWindow != pWindow )
     {
@@ -328,7 +326,7 @@ void Cursor::SetWindow( Window* pWindow )
     }
 }
 
-void Cursor::SetPos( const Point& rPoint )
+void vcl::Cursor::SetPos( const Point& rPoint )
 {
     if ( maPos != rPoint )
     {
@@ -337,7 +335,7 @@ void Cursor::SetPos( const Point& rPoint )
     }
 }
 
-void Cursor::SetSize( const Size& rSize )
+void vcl::Cursor::SetSize( const Size& rSize )
 {
     if ( maSize != rSize )
     {
@@ -346,7 +344,7 @@ void Cursor::SetSize( const Size& rSize )
     }
 }
 
-void Cursor::SetWidth( long nNewWidth )
+void vcl::Cursor::SetWidth( long nNewWidth )
 {
     if ( maSize.Width() != nNewWidth )
     {
@@ -355,7 +353,7 @@ void Cursor::SetWidth( long nNewWidth )
     }
 }
 
-void Cursor::SetOrientation( short nNewOrientation )
+void vcl::Cursor::SetOrientation( short nNewOrientation )
 {
     if ( mnOrientation != nNewOrientation )
     {
@@ -364,7 +362,7 @@ void Cursor::SetOrientation( short nNewOrientation )
     }
 }
 
-void Cursor::SetDirection( unsigned char nNewDirection )
+void vcl::Cursor::SetDirection( unsigned char nNewDirection )
 {
     if ( mnDirection != nNewDirection )
     {
@@ -373,7 +371,7 @@ void Cursor::SetDirection( unsigned char nNewDirection )
     }
 }
 
-Cursor& Cursor::operator=( const Cursor& rCursor )
+vcl::Cursor& vcl::Cursor::operator=( const vcl::Cursor& rCursor )
 {
     maPos           = rCursor.maPos;
     maSize          = rCursor.maSize;
@@ -386,7 +384,7 @@ Cursor& Cursor::operator=( const Cursor& rCursor )
     return *this;
 }
 
-bool Cursor::operator==( const Cursor& rCursor ) const
+bool vcl::Cursor::operator==( const vcl::Cursor& rCursor ) const
 {
     return
         ((maPos         == rCursor.maPos)           &&

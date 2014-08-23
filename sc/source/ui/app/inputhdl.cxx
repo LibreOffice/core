@@ -987,7 +987,7 @@ void ScInputHandler::ShowTip( const OUString& rText )
     {
         Point aPos;
         pTipVisibleParent = pActiveView->GetWindow();
-        Cursor* pCur = pActiveView->GetCursor();
+        vcl::Cursor* pCur = pActiveView->GetCursor();
         if (pCur)
             aPos = pTipVisibleParent->LogicToPixel( pCur->GetPos() );
         aPos = pTipVisibleParent->OutputToScreenPixel( aPos );
@@ -1008,7 +1008,7 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
     {
         Point aPos;
         pTipVisibleSecParent = pActiveView->GetWindow();
-        Cursor* pCur = pActiveView->GetCursor();
+        vcl::Cursor* pCur = pActiveView->GetCursor();
         if ( pCur )
         {
             Point aLogicPos = pCur->GetPos();

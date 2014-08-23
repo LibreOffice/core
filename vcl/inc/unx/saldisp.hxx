@@ -257,7 +257,7 @@ protected:
 
     // until x bytes
 
-    XLIB_Cursor     aPointerCache_[POINTER_COUNT];
+    Cursor          aPointerCache_[POINTER_COUNT];
 
     // Keyboard
     bool        bNumLockFromXS_;    // Num Lock handled by X Server
@@ -318,7 +318,7 @@ public:
                                Status         *pStatus,
                                XIC = NULL ) const;
 
-    XLIB_Cursor           GetPointer( int ePointerStyle );
+    Cursor                GetPointer( int ePointerStyle );
     virtual int           CaptureMouse( SalFrame *pCapture );
 
     void                  Remove( XEvent   *pEvent );

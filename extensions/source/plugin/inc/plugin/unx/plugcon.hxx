@@ -43,7 +43,6 @@
 #define Font        XLIB_Font
 #define KeyCode     XLIB_KeyCode
 #define Time        XLIB_Time
-#define Cursor      XLIB_Cursor
 #define Region      XLIB_Region
 #define String      XLIB_String
 #define Boolean     XLIB_Boolean
@@ -106,7 +105,6 @@ extern "C" {
 #undef Font
 #undef KeyCode
 #undef Time
-#undef Cursor
 #undef String
 #undef Region
 #undef Boolean

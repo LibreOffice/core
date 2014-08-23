@@ -27,6 +27,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <list>
 #include <tools/wintypes.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/inputctx.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pointr.hxx>
@@ -43,7 +44,6 @@ class FixedText;
 class Window;
 class VclSizeGroup;
 class VirtualDevice;
-class Cursor;
 class PhysicalFontCollection;
 class ImplFontCache;
 class VCLXWindow;
@@ -229,7 +229,7 @@ public:
 
     ImplDelData*        mpFirstDel;
     void*               mpUserData;
-    Cursor*             mpCursor;
+    vcl::Cursor*        mpCursor;
     Pointer             maPointer;
     Fraction            maZoom;
     OUString            maText;

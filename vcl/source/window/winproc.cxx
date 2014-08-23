@@ -1311,7 +1311,7 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
             rRect = pChildOutDev->ImplLogicToDevicePixel( *pRect );
         else
         {
-            Cursor* pCursor = pChild->GetCursor();
+            vcl::Cursor* pCursor = pChild->GetCursor();
             if ( pCursor )
             {
                 Point aPos = pChildOutDev->ImplLogicToDevicePixel( pCursor->GetPos() );

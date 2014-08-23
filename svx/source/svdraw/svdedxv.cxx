@@ -809,7 +809,7 @@ SdrEndTextEditKind SdrObjEditView::SdrEndTextEdit(bool bDontDeleteReally)
     Window*       pTEWin         =pTextEditWin;
     SdrOutliner*  pTEOutliner    =pTextEditOutliner;
     OutlinerView* pTEOutlinerView=pTextEditOutlinerView;
-    Cursor*       pTECursorMerker=pTextEditCursorMerker;
+    vcl::Cursor*  pTECursorMerker=pTextEditCursorMerker;
     SdrUndoManager* pUndoEditUndoManager = 0;
     bool bNeedToUndoSavedRedoTextEdit(false);
 
@@ -1383,7 +1383,7 @@ bool SdrObjEditView::ImpIsTextEditAllSelected() const
 void SdrObjEditView::ImpMakeTextCursorAreaVisible()
 {
     if (pTextEditOutlinerView!=NULL && pTextEditWin!=NULL) {
-        Cursor* pCsr=pTextEditWin->GetCursor();
+        vcl::Cursor* pCsr=pTextEditWin->GetCursor();
         if (pCsr!=NULL) {
             Size aSiz(pCsr->GetSize());
             if (aSiz.Width()!=0 && aSiz.Height()!=0) {

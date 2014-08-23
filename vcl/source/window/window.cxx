@@ -3130,7 +3130,7 @@ bool Window::HasChildPathFocus( bool bSystemWindow ) const
     return false;
 }
 
-void Window::SetCursor( Cursor* pCursor )
+void Window::SetCursor( vcl::Cursor* pCursor )
 {
 
     if ( mpWindowImpl->mpCursor != pCursor )

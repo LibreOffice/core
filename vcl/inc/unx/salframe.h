@@ -70,7 +70,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 
     Pixmap          mhBackgroundPixmap;
 
-    XLIB_Cursor     hCursor_;
+    Cursor          hCursor_;
     int             nCaptured_;         // is captured
 
     X11SalGraphics  *pGraphics_;            // current frame graphics
@@ -190,7 +190,7 @@ public:
     long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
               sal_uIntPtr           GetStyle() const { return nStyle_; }
 
-    XLIB_Cursor     GetCursor() const { return hCursor_; }
+    Cursor          GetCursor() const { return hCursor_; }
     bool            IsCaptured() const { return nCaptured_ == 1; }
 #if !defined(__synchronous_extinput__)
     void            HandleExtTextEvent (XClientMessageEvent *pEvent);

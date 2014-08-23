@@ -40,7 +40,7 @@ class SwVisCrsr
     bool m_bIsVisible;
     bool m_bIsDragCrsr;
 
-    Cursor m_aTxtCrsr;
+    vcl::Cursor m_aTxtCrsr;
     const SwCrsrShell* m_pCrsrShell;
 
     void _SetPosAndShow();

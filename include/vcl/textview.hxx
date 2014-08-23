@@ -29,7 +29,6 @@
 class TextEngine;
 class OutputDevice;
 class Window;
-class Cursor;
 class KeyEvent;
 class MouseEvent;
 class CommandEvent;

@@ -313,11 +313,11 @@ namespace x11 {
         XLIB_Time                   m_nDragTimestamp;
 
         // drag cursors
-        XLIB_Cursor                 m_aMoveCursor;
-        XLIB_Cursor                 m_aCopyCursor;
-        XLIB_Cursor                 m_aLinkCursor;
-        XLIB_Cursor                 m_aNoneCursor;
-        XLIB_Cursor                 m_aCurrentCursor;
+        Cursor                      m_aMoveCursor;
+        Cursor                      m_aCopyCursor;
+        Cursor                      m_aLinkCursor;
+        Cursor                      m_aNoneCursor;
+        Cursor                      m_aCurrentCursor;
 
         // drag and drop
 
@@ -389,7 +389,7 @@ namespace x11 {
         void sendDropPosition( bool bForce, XLIB_Time eventXLIB_Time );
         bool updateDragAction( int modifierState );
         int getXdndVersion( XLIB_Window aXLIB_Window, XLIB_Window& rProxy );
-        XLIB_Cursor createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY );
+        Cursor createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY );
         // coordinates on root XLIB_Window
         void updateDragWindow( int nX, int nY, XLIB_Window aRoot );
 

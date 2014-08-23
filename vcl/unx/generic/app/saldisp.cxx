@@ -1438,12 +1438,12 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     nXHot = name##curs_x_hot; \
     nYHot = name##curs_y_hot
 
-XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
+Cursor SalDisplay::GetPointer( int ePointerStyle )
 {
     if( ePointerStyle >= POINTER_COUNT )
         return 0;
 
-    XLIB_Cursor &aCur = aPointerCache_[ePointerStyle];
+    Cursor &aCur = aPointerCache_[ePointerStyle];
 
     if( aCur != None )
         return aCur;

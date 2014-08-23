@@ -2324,7 +2324,7 @@ void ScPosWnd::Modify()
             if (!pWin)
                 pWin = this;
             Point aPos;
-            Cursor* pCur = pWin->GetCursor();
+            vcl::Cursor* pCur = pWin->GetCursor();
             if (pCur)
                 aPos = pWin->LogicToPixel( pCur->GetPos() );
             aPos = pWin->OutputToScreenPixel( aPos );

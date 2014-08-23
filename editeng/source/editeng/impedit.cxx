@@ -948,7 +948,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, sal_uInt8 nRangeCheck )
 
     if ( nRealDiffX || nRealDiffY )
     {
-        Cursor* pCrsr = GetCursor();
+        vcl::Cursor* pCrsr = GetCursor();
         bool bVisCursor = pCrsr->IsVisible();
         pCrsr->Hide();
         pOutWin->Update();
