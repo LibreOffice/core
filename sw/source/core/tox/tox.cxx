@@ -93,10 +93,8 @@ const PatternIni aPatternIni[] =
     {USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX}
 };
 
-static SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
+static void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
 {
-    SwFormTokens aRet;
-
     PatternIni aIni = aPatternIni[nTypeId];
     sal_uInt16 nVals[5];
     nVals[0] = aIni.n1;
@@ -105,12 +103,14 @@ static SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
     nVals[3] = aIni.n4;
     nVals[4] = aIni.n5;
 
+    rAuthTokens.reserve(9); // Worst case: Start+Sep1+Auth+3*(Sep2+Auth)
+
     SwFormToken aStartToken( TOKEN_AUTHORITY );
     aStartToken.nAuthorityField = AUTH_FIELD_IDENTIFIER;
-    aRet.push_back( aStartToken );
+    rAuthTokens.push_back( aStartToken );
     SwFormToken aSeparatorToken( TOKEN_TEXT );
     aSeparatorToken.sText = ": ";
-    aRet.push_back( aSeparatorToken );
+    rAuthTokens.push_back( aSeparatorToken );
     SwFormToken aTextToken( TOKEN_TEXT );
     aTextToken.sText = ", ";
 
@@ -119,17 +119,15 @@ static SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
         if(nVals[i] == USHRT_MAX)
             break;
         if( i > 0 )
-            aRet.push_back( aTextToken );
+            rAuthTokens.push_back( aTextToken );
 
          // -> #i21237#
         SwFormToken aToken(TOKEN_AUTHORITY);
 
         aToken.nAuthorityField = nVals[i];
-        aRet.push_back(aToken);
+        rAuthTokens.push_back(aToken);
         // <- #i21237#
     }
-
-    return aRet;
 }
 
 }
@@ -345,7 +343,11 @@ SwForm::SwForm( TOXTypes eTyp ) // #i21237#
         for( sal_uInt16 i = 1; i < GetFormMax(); ++i, ++nPoolId )    // Number 0 is the title
         {
             if(TOX_AUTHORITIES == eType)
-                SetPattern(i, lcl_GetAuthPattern(i));
+            {
+                SwFormTokens aAuthTokens;
+                lcl_FillAuthPattern(aAuthTokens, i);
+                SetPattern(i, aAuthTokens);
+            }
             else
                 SetPattern( i, aTokens );
 
