@@ -2979,6 +2979,18 @@ if test $_os = Darwin; then
         ;;
     esac
 
+    # New in Xcode 6 beta 4: The Swift compiler and Xcode enforce a minimum deployment target of OS X Mavericks.
+    # Setting an earlier deployment target results in a build failure.
+    XCODE_VERSION=`xcodebuild -version 2> /dev/null | $GREP Xcode | cut '-d ' -f2`
+    if test "$XCODE_VERSION" = "6.0"; then
+        AC_MSG_CHECKING([that macosx-version-min-required is supported by Xcode])
+        if test "$MAC_OS_X_VERSION_MIN_REQUIRED" -lt 1090; then
+            AC_MSG_ERROR([the minimum deployment target for Xcode 6 is 10.9])
+        else
+            AC_MSG_RESULT([ok])
+        fi
+    fi
+
     AC_MSG_CHECKING([that macosx-version-min-required is coherent with macosx-version-max-allowed])
     if test $MAC_OS_X_VERSION_MIN_REQUIRED -gt $MAC_OS_X_VERSION_MAX_ALLOWED; then
         AC_MSG_ERROR([the version minimumn required must be inferior or equal to the version maximum allowed])
