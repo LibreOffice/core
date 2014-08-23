@@ -1591,6 +1591,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         m_pHeadLineCB->Check( nRep > 0 );
         m_pHeadLineCB->SaveValue();
         m_pRepeatHeaderNF->SetValue( nRep );
+        m_pRepeatHeaderNF->SetMin( 1 );
         m_pRepeatHeaderNF->SaveValue();
     }
     if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SFX_ITEM_AVAILABLE )
