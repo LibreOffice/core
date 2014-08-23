@@ -221,10 +221,10 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
    }
 
    // determine start, end and length of wave line
-   sal_Int32 nKernStart = nStart ? rData.pKernArray[ sal_uInt16( nStart - 1 ) ] : 0;
-   sal_Int32 nKernEnd = rData.pKernArray[ sal_uInt16( nEnd - 1 ) ];
+   sal_Int32 nKernStart = nStart ? rData.pKernArray[ nStart - 1 ] : 0;
+   sal_Int32 nKernEnd = rData.pKernArray[ nEnd - 1 ];
 
-   sal_uInt16 nDir = rData.bBidiPor ? 1800 :
+   const sal_uInt16 nDir = rData.bBidiPor ? 1800 :
        UnMapDirection( rData.rFont.GetOrientation(), rData.bSwitchH2V );
 
    switch ( nDir )
@@ -707,7 +707,7 @@ static void lcl_DrawLineForWrongListData(
             Point aEnd;
             lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nNextStart, nNextEnd - nNextStart );
 
-            sal_uInt16 wrongPos = pWList->GetWrongPos(nNextStart + rInf.GetIdx());
+            const sal_uInt16 wrongPos = pWList->GetWrongPos(nNextStart + rInf.GetIdx());
 
             const SwWrongArea* wrongArea = pWList->GetElement(wrongPos);
 
@@ -1038,7 +1038,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         if (!MsLangId::isKorean(aLang))
                         {
                             long nSpaceSum = nSpaceAdd;
-                            for ( sal_uInt16 nI = 0; nI < rInf.GetLen(); ++nI )
+                            for ( sal_Int32 nI = 0; nI < rInf.GetLen(); ++nI )
                             {
                                 pKernArray[ nI ] += nSpaceSum;
                                 nSpaceSum += nSpaceAdd;
@@ -1211,7 +1211,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if (!MsLangId::isKorean(aLang))
                     {
                         long nSpaceSum = nSpaceAdd;
-                        for ( sal_uInt16 nI = 0; nI < rInf.GetLen(); ++nI )
+                        for ( sal_Int32 nI = 0; nI < rInf.GetLen(); ++nI )
                         {
                             pKernArray[ nI ] += nSpaceSum;
                             nSpaceSum += nSpaceAdd;
@@ -1342,7 +1342,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 pTmpFont->SetColor( aSaveColor );
             }
 
-            rInf.GetOut().DrawStretchText( aPos, (sal_uInt16)nTmpWidth,
+            rInf.GetOut().DrawStretchText( aPos, nTmpWidth,
                                            rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
         }
         else
@@ -1423,7 +1423,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if (!MsLangId::isKorean(aLang))
                 {
                     long nSpaceSum = nSpaceAdd;
-                    for ( sal_uInt16 nI = 0; nI < rInf.GetLen(); ++nI )
+                    for ( sal_Int32 nI = 0; nI < rInf.GetLen(); ++nI )
                     {
                         pKernArray[ nI ] += nSpaceSum;
                         pScrArray[ nI ] += nSpaceSum;
@@ -1550,12 +1550,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             // In case of Pair Kerning the printer influence on the positioning
             // grows
-            sal_uInt16 nMul = 3;
-
-            if ( pPrtFont->GetKerning() )
-                nMul = 1;
-
-            const sal_uInt16 nDiv = nMul+1;
+            const int nMul = pPrtFont->GetKerning() ? 1 : 3;
+            const int nDiv = nMul+1;
 
             // nSpaceSum contains the sum of the intermediate space distributed
             // among Spaces by the Justification.
@@ -1642,9 +1638,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             rInf.GetOut().SetLineColor( *pWaveCol );
 
                         Point aEnd;
-                        long nKernVal = pKernArray[ sal_uInt16( rInf.GetLen() - 1 ) ];
+                        long nKernVal = pKernArray[ rInf.GetLen() - 1 ];
 
-                        sal_uInt16 nDir = bBidiPor ?
+                        const sal_uInt16 nDir = bBidiPor ?
                                         1800 :
                                         UnMapDirection(
                                             GetFont().GetOrientation(),
@@ -1907,10 +1903,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
             // In case of Pair Kerning the printer influence on the positioning
             // grows
-            sal_uInt16 nMul = 3;
-            if ( pPrtFont->GetKerning() )
-                nMul = 1;
-            const sal_uInt16 nDiv = nMul+1;
+            const int nMul = pPrtFont->GetKerning() ? 1 : 3;
+            const int nDiv = nMul+1;
             for( sal_Int32 i = 1; i<nCnt; i++ )
             {
                 nCh = rInf.GetText()[ rInf.GetIdx() + i ];
@@ -2018,7 +2012,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             if (!MsLangId::isKorean(aLang))
             {
                 long nSpaceSum = nSpaceAdd;
-                for ( sal_uInt16 nI = 0; nI < rInf.GetLen(); ++nI )
+                for ( sal_Int32 nI = 0; nI < rInf.GetLen(); ++nI )
                 {
                     pKernArray[ nI ] += nSpaceSum;
                     nSpaceSum += nSpaceAdd;
@@ -2082,7 +2076,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
             nWidthPerChar = i * nGridWidth;
 
-            nCnt = (sal_uInt16)(rInf.GetOfst() / nWidthPerChar);
+            nCnt = rInf.GetOfst() / nWidthPerChar;
             if ( 2 * ( rInf.GetOfst() - nCnt * nWidthPerChar ) > nWidthPerChar )
                 ++nCnt;
 
@@ -2115,7 +2109,6 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         }
     }
 
-    sal_uInt16 nItrMode = i18n::CharacterIteratorMode::SKIPCELL;
     sal_Int32 nDone = 0;
     LanguageType aLang = LANGUAGE_NONE;
     bool bSkipCharacterCells = false;
@@ -2142,7 +2135,8 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         if ( bSkipCharacterCells )
         {
             nIdx = g_pBreakIt->GetBreakIter()->nextCharacters( rInf.GetText(),
-                        nIdx, g_pBreakIt->GetLocale( aLang ), nItrMode, 1, nDone );
+                        nIdx, g_pBreakIt->GetLocale( aLang ),
+                        i18n::CharacterIteratorMode::SKIPCELL, 1, nDone );
             if ( nIdx <= nLastIdx )
                 break;
         }
@@ -2298,8 +2292,8 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
     sal_Int32 nTxtBreak = 0;
     long nKern = 0;
 
-    sal_uInt16 nLn = ( rInf.GetLen() == COMPLETE_STRING ? rInf.GetText().getLength()
-                                               : rInf.GetLen() );
+    sal_Int32 nLn = rInf.GetLen() == COMPLETE_STRING
+        ? rInf.GetText().getLength() : rInf.GetLen();
 
     if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() &&
          rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
