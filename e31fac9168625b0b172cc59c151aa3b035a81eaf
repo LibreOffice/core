@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_9e3f61d6",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 2955,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-08-23T09:47:43Z",
+      "side": 1,
+      "message": "Can you update 10.5 too then?",
+      "revId": "e31fac9168625b0b172cc59c151aa3b035a81eaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
