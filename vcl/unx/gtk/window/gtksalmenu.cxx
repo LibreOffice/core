@@ -72,7 +72,7 @@ static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCo
     return aCommand;
 }
 
-static void KeyCodeToGdkKey ( const KeyCode& rKeyCode, guint* pGdkKeyCode, GdkModifierType *pGdkModifiers )
+static void KeyCodeToGdkKey ( const vcl::KeyCode& rKeyCode, guint* pGdkKeyCode, GdkModifierType *pGdkModifiers )
 {
     if ( pGdkKeyCode == NULL || pGdkModifiers == NULL )
         return;
@@ -304,7 +304,7 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
         // Get internal menu item values.
         OUString aText = pVCLMenu->GetItemText( nId );
         bool bEnabled = pVCLMenu->IsItemEnabled( nId );
-        KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
+        vcl::KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
         bool bChecked = pVCLMenu->IsItemChecked( nId );
         MenuItemBits itemBits = pVCLMenu->GetItemBits( nId );
 
@@ -609,7 +609,7 @@ void GtkSalMenu::NativeSetItemText( unsigned nSection, unsigned nItemPos, const 
         g_free( aLabel );
 }
 
-void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const KeyCode& rKeyCode, const OUString& rKeyName )
+void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, const vcl::KeyCode& rKeyCode, const OUString& rKeyName )
 {
     SolarMutexGuard aGuard;
 
@@ -817,7 +817,7 @@ void GtkSalMenu::SetItemImage( unsigned, SalMenuItem*, const Image& )
 {
 }
 
-void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const KeyCode&, const OUString& )
+void GtkSalMenu::SetAccelerator( unsigned, SalMenuItem*, const vcl::KeyCode&, const OUString& )
 {
 }
 
