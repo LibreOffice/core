@@ -42,7 +42,7 @@ $(eval $(call gb_Library_use_libraries,avmedia,\
 	tl \
 	utl \
 	vcl \
-	vclopengl \
+	$(call gb_Helper_optional,ENABLE_OPENGL,vclopengl) \
 	$(gb_UWINAPI) \
 ))
 

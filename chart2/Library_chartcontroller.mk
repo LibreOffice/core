@@ -22,6 +22,10 @@ $(eval $(call gb_Library_use_external,chartcontroller,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,chartcontroller))
 
+ifeq ($(ENABLE_OPENGL),TRUE)
+$(eval $(call gb_Library_add_defs,chartcontroller,-DENABLE_OPENGL))
+endif
+
 $(eval $(call gb_Library_use_libraries,chartcontroller,\
     basegfx \
     chartcore \
@@ -75,7 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/chartapiwrapper/WrappedCharacterHeightProperty \
     chart2/source/controller/chartapiwrapper/WrappedDataCaptionProperties \
     chart2/source/controller/chartapiwrapper/WrappedGapwidthProperty \
-    chart2/source/controller/chartapiwrapper/WrappedGL3DProperties \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/controller/chartapiwrapper/WrappedGL3DProperties) \
     chart2/source/controller/chartapiwrapper/WrappedNumberFormatProperty \
     chart2/source/controller/chartapiwrapper/WrappedScaleProperty \
     chart2/source/controller/chartapiwrapper/WrappedScaleTextProperties \
@@ -88,7 +92,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcontroller,\
     chart2/source/controller/chartapiwrapper/WrappedTextRotationProperty \
     chart2/source/controller/dialogs/ChangingResource \
     chart2/source/controller/dialogs/ChartTypeDialogController \
-    chart2/source/controller/dialogs/GL3DBarChartDialogController \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/controller/dialogs/GL3DBarChartDialogController) \
     chart2/source/controller/dialogs/DataBrowser \
     chart2/source/controller/dialogs/DataBrowserModel \
     chart2/source/controller/dialogs/DialogModel \

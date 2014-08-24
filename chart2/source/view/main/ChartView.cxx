@@ -50,8 +50,10 @@
 #include "DateHelper.hxx"
 #include "defines.hxx"
 #include <unonames.hxx>
+#ifdef ENABLE_OPENGL
 #include <GL3DBarChart.hxx>
 #include <GL3DHelper.hxx>
+#endif
 
 #include <rtl/uuid.h>
 #include <comphelper/scopeguard.hxx>
@@ -65,8 +67,10 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svx/unofill.hxx>
+#ifdef ENABLE_OPENGL
 #include <vcl/openglwin.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
+#endif
 
 #include <drawinglayer/XShapeDumper.hxx>
 
@@ -129,6 +133,7 @@ class theExplicitValueProviderUnoTunnelId  : public rtl::Static<UnoTunnelIdInit,
 
 }
 
+#ifdef ENABLE_OPENGL
 class GL2DRenderer : public IRenderer
 {
 public:
@@ -203,6 +208,7 @@ void GL2DRenderer::updateOpenGLWindow()
     }
     mpWindow = pWindow;
 }
+#endif ENABLE_OPENGL
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
@@ -245,7 +251,9 @@ ChartView::ChartView(
     , m_nScaleYDenominator(1)
     , m_bSdrViewIsInEditMode(false)
     , m_aResultingDiagramRectangleExcludingAxes(0,0,0,0)
+#ifdef ENABLE_OPENGL
     , mp2DRenderer(new GL2DRenderer(this))
+#endif
 {
     init();
 }
@@ -2429,6 +2437,7 @@ void ChartView::impl_refreshAddIn()
     }
 }
 
+#ifdef ENABLE_OPENGL
 /**
  * Is it a real 3D chart with a true 3D scene or a 3D chart in a 2D scene.
  */
@@ -2438,6 +2447,7 @@ bool ChartView::isReal3DChart()
 
     return GL3DHelper::isGL3DDiagram(xDiagram);
 }
+#endif
 
 void ChartView::createShapes()
 {
@@ -2481,6 +2491,7 @@ void ChartView::createShapes()
     pShapeFactory->clearPage(mxRootShape);
 
 #if HAVE_FEATURE_DESKTOP
+#ifdef ENABLE_OPENGL
     if(isReal3DChart())
     {
         createShapes3D();
@@ -2495,6 +2506,7 @@ void ChartView::createShapes()
         if(pWindow)
             pWindow->Show(false);
     }
+#endif
 #endif
 
     {
@@ -2642,7 +2654,9 @@ void ChartView::createShapes()
         //cleanup: remove all empty group shapes to avoid grey border lines:
         lcl_removeEmptyGroupShapes( mxRootShape );
 
+#ifdef ENABLE_OPENGL
         render();
+#endif
 
         if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
         {
@@ -2696,6 +2710,7 @@ void ChartView::createShapes()
     }
 }
 
+#ifdef ENABLE_OPENGL
 void ChartView::render()
 {
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
@@ -2709,6 +2724,7 @@ void ChartView::render()
         pShapeFactory->postRender(pWindow);
     }
 }
+#endif
 
 // util::XEventListener (base of XCloseListener)
 void SAL_CALL ChartView::disposing( const lang::EventObject& /* rSource */ )
@@ -3153,6 +3169,7 @@ IMPL_LINK_NOARG(ChartView, UpdateTimeBased)
     return 0;
 }
 
+#ifdef ENABLE_OPENGL
 void ChartView::createShapes3D()
 {
     OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
@@ -3215,12 +3232,15 @@ void ChartView::createShapes3D()
 
     m_pGL3DPlotter->render();
 }
+#endif
 
+#ifdef ENABLE_OPENGL
 void ChartView::updateOpenGLWindow()
 {
     if(!isReal3DChart())
         mp2DRenderer->updateOpenGLWindow();
 }
+#endif
 
 } //namespace chart
 

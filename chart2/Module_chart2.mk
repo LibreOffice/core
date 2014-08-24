@@ -12,8 +12,8 @@ $(eval $(call gb_Module_Module,chart2))
 $(eval $(call gb_Module_add_targets,chart2,\
     Library_chartcontroller \
     Library_chartcore \
-    Library_chartopengl \
-    Package_opengl \
+    $(call gb_Helper_optional,ENABLE_OPENGL,Library_chartopengl) \
+    $(call gb_Helper_optional,ENABLE_OPENGL,Package_opengl) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,chart2,\

@@ -246,7 +246,9 @@ ErrCode ScTabViewShell::DoVerb(long nVerb)
 
 void ScTabViewShell::Initialize()
 {
+#ifdef ENABLE_OPENGL
     AddOpenGLChartWindows();
+#endif
 }
 
 void ScTabViewShell::DeactivateOle()

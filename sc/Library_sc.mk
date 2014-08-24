@@ -27,6 +27,7 @@ $(eval $(call gb_Library_set_include,sc,\
 $(eval $(call gb_Library_add_defs,sc,\
     -DSC_DLLIMPLEMENTATION \
     -DSC_INFO_OSVERSION=\"$(OS)\" \
+    $(if $(ENABLE_OPENGL),-DENABLE_OPENGL) \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,sc,\
@@ -88,7 +89,7 @@ $(eval $(call gb_Library_use_libraries,sc,\
     $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
         vbahelper) \
     vcl \
-	vclopengl \
+    $(call gb_Helper_optional,ENABLE_OPENGL,vclopengl) \
     xo \
     $(gb_UWINAPI) \
 ))

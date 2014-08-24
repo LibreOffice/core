@@ -69,7 +69,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     utl \
     vbahelper \
     vcl \
-    vclopengl \
+    $(call gb_Helper_optional,ENABLE_OPENGL,vclopengl) \
     xo \
 	$(gb_UWINAPI) \
 ))

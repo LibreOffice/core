@@ -56,7 +56,9 @@
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#ifdef ENABLE_OPENGL
 #include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
+#endif
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -544,6 +546,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     ScDocument& rScDoc   = pScDocSh->GetDocument();
     bool bUndo (rScDoc.IsUndoEnabled());
 
+#ifdef ENABLE_OPENGL
     Window* pParentWindow = rData.GetActiveWin();
     OpenGLWindow* pChildWindow = new OpenGLWindow(pParentWindow);
     Size aWindowSize = pChildWindow->LogicToPixel( aSize, MapMode( MAP_100TH_MM ) );
@@ -559,6 +562,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
     }
     else
         SAL_WARN("sc", "not a grid window. You are in serious trouble");
+#endif
 
     if( pReqArgs )
     {
@@ -634,7 +638,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         // get chart position (from window size and data range)
         aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
     }
+#ifdef ENABLE_OPENGL
     pChildWindow->SetPosPixel(pChildWindow->LogicToPixel(aStart, MapMode(MAP_100TH_MM)));
+#endif
 
     Rectangle aRect (aStart, aSize);
     SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
@@ -729,7 +735,9 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     sal_Int16 nDialogRet = xDialog->execute();
                     if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                     {
+#ifdef ENABLE_OPENGL
                         pGridWindow->DeleteChildWindow(pChildWindow);
+#endif
                         // leave OLE inplace mode and unmark
                         OSL_ASSERT( pViewShell );
                         OSL_ASSERT( pView );

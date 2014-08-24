@@ -54,8 +54,10 @@ class VCoordinateSystem;
 class DrawModelWrapper;
 class SeriesPlotterContainer;
 class VDataSeries;
+#ifdef ENABLE_OPENGL
 class GL3DPlotterBase;
 class GL2DRenderer;
+#endif
 
 enum TimeBasedMode
 {
@@ -104,7 +106,9 @@ class ChartView : public ::cppu::WeakImplHelper10<
         , public ExplicitValueProvider
         , private SfxListener
 {
+#ifdef ENABLE_OPENGL
     friend class GL2DRenderer;
+#endif
 private:
     void init();
 
@@ -197,14 +201,18 @@ public:
                   std::exception) SAL_OVERRIDE;
 
     void setViewDirty();
+#ifdef ENABLE_OPENGL
     void updateOpenGLWindow();
+#endif
 
 private: //methods
     ChartView();
 
     void createShapes();
+#ifdef ENABLE_OPENGL
     void createShapes3D();
     bool isReal3DChart();
+#endif
     void getMetaFile( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream
                       , bool bUseHighContrast );
     SdrPage* getSdrPage();
@@ -217,7 +225,9 @@ private: //methods
 
     void impl_updateView();
 
+#ifdef ENABLE_OPENGL
     void render();
+#endif
 
     ::com::sun::star::awt::Rectangle impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes>& xDiagramPlusAxes_Shapes
@@ -277,10 +287,12 @@ private: //member
 
     ::com::sun::star::awt::Rectangle m_aResultingDiagramRectangleExcludingAxes;
 
-    boost::shared_ptr<GL3DPlotterBase> m_pGL3DPlotter;
     TimeBasedInfo maTimeBased;
     osl::Mutex maTimeMutex;
+#ifdef ENABLE_OPENGL
+    boost::shared_ptr<GL3DPlotterBase> m_pGL3DPlotter;
     boost::scoped_ptr<GL2DRenderer> mp2DRenderer;
+#endif
 };
 
 }

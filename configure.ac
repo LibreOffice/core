@@ -1086,7 +1086,7 @@ AC_ARG_ENABLE(cairo-canvas,
 
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
-        [Determines whether to build the OpenGL 3D slide transitions and canvas component.]))
+        [Determines whether to build the OpenGL support.]))
 
 AC_ARG_ENABLE(opencl,
     AS_HELP_STRING([--disable-opencl],
@@ -10497,7 +10497,7 @@ dnl ===================================================================
 dnl Check whether the OpenGL libraries are available
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether to build the OpenGL Transitions component])
+AC_MSG_CHECKING([whether to build the OpenGL support])
 ENABLE_OPENGL=
 
 if test -z "$enable_opengl"; then
@@ -10594,15 +10594,15 @@ dnl Check whether to enable glTF support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable glTF support])
 ENABLE_GLTF=
-if test "x$enable_gltf" != "xno" -a $_os != iOS -a $_os != Android; then
+if test "x$enable_gltf" != "xno" -a "$ENABLE_OPENGL" = "TRUE" -a $_os != iOS -a $_os != Android; then
     ENABLE_GLTF=TRUE
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_FEATURE_GLTF,1)
     if test "$with_system_libgltf" = "yes"; then
-	SYSTEM_LIBGLTF=TRUE
-	PKG_CHECK_MODULES( LIBGLTF, libgltf-0.0 )
+        SYSTEM_LIBGLTF=TRUE
+        PKG_CHECK_MODULES( LIBGLTF, libgltf-0.0 )
     else
-    	BUILD_TYPE="$BUILD_TYPE LIBGLTF"
+        BUILD_TYPE="$BUILD_TYPE LIBGLTF"
     fi
 else
     AC_MSG_RESULT([no])
