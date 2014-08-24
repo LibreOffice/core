@@ -154,7 +154,7 @@ SidebarController::SidebarController (
     if (mxReadOnlyModeDispatch.is())
         mxReadOnlyModeDispatch->addStatusListener(this, aURL);
 
-    SwitchToDeck(OUString("default"));
+    SwitchToDeck(gsDefaultDeckId);
 
     WeakReference<SidebarController> xWeakController (this);
     maSidebarControllerContainer.insert(
@@ -476,7 +476,7 @@ void SidebarController::UpdateConfigurations (void)
 
         // Find the new deck.  By default that is the same as the old
         // one.  If that is not set or not enabled, then choose the
-        // first enabled deck.
+        // first enabled deck (which is PropertyDeck).
         OUString sNewDeckId;
         for (ResourceManager::DeckContextDescriptorContainer::const_iterator
                  iDeck(aDecks.begin()),
