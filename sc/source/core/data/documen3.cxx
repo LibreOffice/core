@@ -524,15 +524,15 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
         return false;
     }
     rTab = 0;
-    OUString  aFilterName;        // wird vom Loader gefuellt
-    OUString  aOptions;       // Filter-Optionen
+    OUString  aFilterName; // Is filled by the Loader
+    OUString  aOptions; // Filter options
     sal_uInt32 nLinkCnt = pExtDocOptions ? pExtDocOptions->GetDocSettings().mnLinkCnt : 0;
     ScDocumentLoader aLoader( aFileName, aFilterName, aOptions, nLinkCnt + 1 );
     if ( aLoader.IsError() )
         return false;
     ScDocument* pSrcDoc = aLoader.GetDocument();
 
-    //  Tabelle kopieren
+    // Copy table
     SCTAB nSrcTab;
     if ( pSrcDoc->GetTable( aTabName, nSrcTab ) )
     {
@@ -542,7 +542,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
             return false;
         }
         rTab = GetTableCount() - 1;
-        // nicht neu einfuegen, nur Ergebnisse
+        // Don't insert anew, just the results
         TransferTab( pSrcDoc, nSrcTab, rTab, false, true );
     }
     else
@@ -552,7 +552,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
 
     bool bWasThere = HasLink( aFileName, aFilterName, aOptions );
     SetLink( rTab, SC_LINK_VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );
-    if ( !bWasThere )       // Link pro Quelldokument nur einmal eintragen
+    if ( !bWasThere ) // Add link only once per source document
     {
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( true );
@@ -742,9 +742,10 @@ bool ScDocument::HasSubTotalCells( const ScRange& rRange )
     return false;   // none found
 }
 
-//  kopiert aus diesem Dokument die Zellen von Positionen, an denen in pPosDoc
-//  auch Zellen stehen, nach pDestDoc
-
+/**
+ * From this document this method copies the cells of positions at which
+ * there are also cells in pPosDoc to pDestDoc
+ */
 void ScDocument::CopyUpdated( ScDocument* pPosDoc, ScDocument* pDestDoc )
 {
     SCTAB nCount = static_cast<SCTAB>(maTabs.size());
@@ -758,17 +759,16 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario 
     if (ValidTab(nSrcTab) && ValidTab(nDestTab) && nSrcTab < static_cast<SCTAB>(maTabs.size())
                 && nDestTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nSrcTab] && maTabs[nDestTab])
     {
-        //  Flags fuer aktive Szenarios richtig setzen
-        //  und aktuelle Werte in bisher aktive Szenarios zurueckschreiben
-
+        // Set flags correctly for active scenarios
+        // and write current values back to recently active scenarios
         ScRangeList aRanges = *maTabs[nSrcTab]->GetScenarioRanges();
 
-        //  nDestTab ist die Zieltabelle
+        // nDestTab is the target table
         for ( SCTAB nTab = nDestTab+1;
                 nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] && maTabs[nTab]->IsScenario();
                 nTab++ )
         {
-            if ( maTabs[nTab]->IsActiveScenario() )     // auch wenn's dasselbe Szenario ist
+            if ( maTabs[nTab]->IsActiveScenario() ) // Even if it's the same scenario
             {
                 bool bTouched = false;
                 for ( size_t nR=0, nRangeCount = aRanges.size(); nR < nRangeCount && !bTouched; nR++ )
@@ -786,8 +786,8 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, bool bNewScenario 
             }
         }
 
-        maTabs[nSrcTab]->SetActiveScenario(true);       // da kommt's her...
-        if (!bNewScenario)                          // Daten aus dem ausgewaehlten Szenario kopieren
+        maTabs[nSrcTab]->SetActiveScenario(true); // This is where it's from ...
+        if (!bNewScenario) // Copy data from the selected scenario
         {
             sc::AutoCalcSwitch aACSwitch(*this, false);
             maTabs[nSrcTab]->CopyScenarioTo( maTabs[nDestTab] );
@@ -860,29 +860,29 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
 
         if ( bInUnoBroadcast )
         {
-            //  Broadcasts from ScDocument::BroadcastUno are the only way that
-            //  uno object methods are called without holding a reference.
+            // Broadcasts from ScDocument::BroadcastUno are the only way that
+            // uno object methods are called without holding a reference.
             //
-            //  If RemoveUnoObject is called from an object dtor in the finalizer thread
-            //  while the main thread is calling BroadcastUno, the dtor thread must wait
-            //  (or the object's Notify might try to access a deleted object).
-            //  The SolarMutex can't be locked here because if a component is called from
-            //  a VCL event, the main thread has the SolarMutex locked all the time.
+            // If RemoveUnoObject is called from an object dtor in the finalizer thread
+            // while the main thread is calling BroadcastUno, the dtor thread must wait
+            // (or the object's Notify might try to access a deleted object).
+            // The SolarMutex can't be locked here because if a component is called from
+            // a VCL event, the main thread has the SolarMutex locked all the time.
             //
-            //  This check is done after calling EndListening, so a later BroadcastUno call
-            //  won't touch this object.
+            // This check is done after calling EndListening, so a later BroadcastUno call
+            // won't touch this object.
 
             comphelper::SolarMutex& rSolarMutex = Application::GetSolarMutex();
             if ( rSolarMutex.tryToAcquire() )
             {
-                //  BroadcastUno is always called with the SolarMutex locked, so if it
-                //  can be acquired, this is within the same thread (should not happen)
+                // BroadcastUno is always called with the SolarMutex locked, so if it
+                // can be acquired, this is within the same thread (should not happen)
                 OSL_FAIL( "RemoveUnoObject called from BroadcastUno" );
                 rSolarMutex.release();
             }
             else
             {
-                //  let the thread that called BroadcastUno continue
+                // Let the thread that called BroadcastUno continue
                 while ( bInUnoBroadcast )
                 {
                     osl::Thread::yield();
@@ -946,7 +946,7 @@ ScUnoRefList* ScDocument::EndUnoRefUndo()
 {
     ScUnoRefList* pRet = pUnoRefUndoList;
     pUnoRefUndoList = NULL;
-    return pRet;                // must be deleted by caller!
+    return pRet; // Must be deleted by caller!
 }
 
 void ScDocument::AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges )
@@ -1043,7 +1043,7 @@ void ScDocument::UpdateReference(
         }
     }
 
-    // after moving, no clipboard move ref-updates are possible
+    // After moving, no clipboard move ref-updates are possible
     if (rCxt.meMode != URM_COPY && IsClipboardSource())
     {
         ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
@@ -1072,9 +1072,9 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
             aSource.aEnd.SetTab( nClipTab );
             aDest.SetTab( nDestTab );
 
-            //  wie UpdateReference
+            // Like UpdateReference
             if (pRangeName)
-                pRangeName->UpdateTranspose( aSource, aDest );      // vor den Zellen!
+                pRangeName->UpdateTranspose( aSource, aDest ); // Before the cells!
             for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
                 if (maTabs[i])
                     maTabs[i]->UpdateTranspose( aSource, aDest, pUndoDoc );
@@ -1237,8 +1237,7 @@ bool ScDocument::SearchAndReplace(
     const ScMarkData& rMark, ScRangeList& rMatchedRanges,
     OUString& rUndoStr, ScDocument* pUndoDoc)
 {
-    //!     getrennte Markierungen pro Tabelle verwalten !!!!!!!!!!!!!
-
+    // FIXME: Manage separated marks per table!
     bool bFound = false;
     if (rTab >= static_cast<SCTAB>(maTabs.size()))
         OSL_FAIL("table out of range");
@@ -1262,7 +1261,7 @@ bool ScDocument::SearchAndReplace(
                         rSearchItem, nCol, nRow, rMark, rMatchedRanges, rUndoStr, pUndoDoc);
                 }
 
-            //  Markierung wird innen schon komplett gesetzt
+            // Mark is set completely inside already
         }
         else
         {
@@ -1315,8 +1314,9 @@ bool ScDocument::SearchAndReplace(
     return bFound;
 }
 
-//  Outline anpassen
-
+/**
+ * Adapt Outline
+ */
 bool ScDocument::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bShow )
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
@@ -1431,8 +1431,9 @@ bool ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
     return ValidTab(nTab) && maTabs[nTab] && maTabs[nTab]->HasRowHeader( nStartCol, nStartRow, nEndCol, nEndRow );
 }
 
-//  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
-
+/**
+ * Entries for AutoFilter listbox
+ */
 bool ScDocument::GetFilterEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
 {
@@ -1455,7 +1456,7 @@ bool ScDocument::GetFilterEntries(
             ScQueryParam aParam;
             pDBData->GetQueryParam( aParam );
 
-            // return all filter entries, if a filter condition is connected with a boolean OR
+            // Return all filter entries, if a filter condition is connected with a boolean OR
             if ( bFilter )
             {
                 SCSIZE nEntryCount = aParam.GetEntryCount();
@@ -1487,8 +1488,9 @@ bool ScDocument::GetFilterEntries(
     return false;
 }
 
-//  GetFilterEntriesArea - Eintraege fuer Filter-Dialog
-
+/**
+ * Entries for Filter dialog
+ */
 bool ScDocument::GetFilterEntriesArea(
     SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bCaseSens,
     std::vector<ScTypedStrData>& rStrings, bool& rHasDates)
@@ -1503,8 +1505,9 @@ bool ScDocument::GetFilterEntriesArea(
     return false;
 }
 
-//  GetDataEntries - Eintraege fuer Auswahlliste-Listbox (keine Zahlen / Formeln)
-
+/**
+ * Entries for selection list listbox (no numbers/formulas)
+ */
 bool ScDocument::GetDataEntries(
     SCCOL nCol, SCROW nRow, SCTAB nTab, bool bCaseSens,
     std::vector<ScTypedStrData>& rStrings, bool bLimit )
@@ -1542,13 +1545,13 @@ bool ScDocument::GetDataEntries(
     return bRet;
 }
 
-//  GetFormulaEntries - Eintraege fuer Formel-AutoEingabe
-
+/**
+ * Entries for Formula auto input
+ */
 bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
 {
 
-    //  Bereichsnamen
-
+    // Range name
     if ( pRangeName )
     {
         ScRangeName::const_iterator itr = pRangeName->begin(), itrEnd = pRangeName->end();
@@ -1556,8 +1559,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
             rStrings.insert(ScTypedStrData(itr->second->GetName(), 0.0, ScTypedStrData::Name));
     }
 
-    //  Datenbank-Bereiche
-
+    // Database collection
     if ( pDBCollection )
     {
         const ScDBCollection::NamedDBs& rDBs = pDBCollection->getNamedDBs();
@@ -1566,8 +1568,7 @@ bool ScDocument::GetFormulaEntries( ScTypedCaseStrSet& rStrings )
             rStrings.insert(ScTypedStrData(itr->GetName(), 0.0, ScTypedStrData::DbName));
     }
 
-    //  Inhalte von Beschriftungsbereichen
-
+    // Content of name ranges
     ScRangePairList* pLists[2];
     pLists[0] = GetColNameRanges();
     pLists[1] = GetRowNameRanges();
@@ -1601,7 +1602,7 @@ void ScDocument::GetEmbedded( ScRange& rRange ) const
     rRange = aEmbedRange;
 }
 
-Rectangle ScDocument::GetEmbeddedRect() const                       // 1/100 mm
+Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
 {
     Rectangle aRect;
     ScTable* pTable = NULL;
@@ -1708,7 +1709,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHidden
 
     Rectangle aPosRect = rMMRect;
     if ( IsNegativePage( nTab ) )
-        ScDrawLayer::MirrorRectRTL( aPosRect );         // always with positive (LTR) values
+        ScDrawLayer::MirrorRectRTL( aPosRect ); // Always with positive (LTR) values
 
     long nSize;
     long nTwips;
@@ -1766,7 +1767,7 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect, bool bHidden
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
 }
 
-void ScDocument::SetEmbedded( SCTAB nTab, const Rectangle& rRect )          // aus VisArea (1/100 mm)
+void ScDocument::SetEmbedded( SCTAB nTab, const Rectangle& rRect ) // From VisArea (1/100 mm)
 {
     bIsEmbedded = true;
     aEmbedRange = GetRange( nTab, rRect );
@@ -1792,7 +1793,7 @@ bool ScDocument::IsDocProtected() const
 
 bool ScDocument::IsDocEditable() const
 {
-    // import into read-only document is possible
+    // Import into read-only document is possible
     return !IsDocProtected() && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
 }
 
@@ -1875,7 +1876,7 @@ void ScDocument::SetLanguage( LanguageType eLatin, LanguageType eCjk, LanguageTy
         pPool->SetPoolDefaultItem( SvxLanguageItem( eCtlLanguage, ATTR_CTL_FONT_LANGUAGE ) );
     }
 
-    UpdateDrawLanguages();      // set edit engine defaults in drawing layer pool
+    UpdateDrawLanguages(); // Set edit engine defaults in drawing layer pool
 }
 
 Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
@@ -1955,7 +1956,7 @@ void ScDocument::DoMerge( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     if ( nEndCol > nStartCol && nEndRow > nStartRow )
         ApplyFlagsTab( nStartCol+1, nStartRow+1, nEndCol, nEndRow, nTab, SC_MF_HOR | SC_MF_VER );
 
-    // remove all covered notes (removed captions are collected by drawing undo if active)
+    // Remove all covered notes (removed captions are collected by drawing undo if active)
     sal_uInt16 nDelFlag = IDF_NOTE | (bDeleteCaptions ? 0 : IDF_NOCAPTIONS);
     if( nStartCol < nEndCol )
         DeleteAreaTab( nStartCol + 1, nStartRow, nEndCol, nStartRow, nTab, nDelFlag );
