@@ -237,9 +237,11 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,math, \
 	smd \
 ))
 
+ifeq ($(ENABLE_OPENGL),TRUE)
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
 	OGLTrans \
 ))
+endif
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	acc \
@@ -260,7 +262,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
 	chartcore \
 	chartcontroller \
-	chartopengl \
+	$(if $(ENABLE_OPENGL),chartopengl) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
 	configmgr \
@@ -395,7 +397,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	$(if $(DISABLE_SCRIPTING),,vbahelper) \
 	vcl \
 	vclcanvas \
-	vclopengl \
+	$(if $(ENABLE_OPENGL),vclopengl) \
 	$(if $(and $(filter unx,$(GUIBASE)),$(filter-out MACOSX,$(OS))), \
 		vclplug_gen \
 		$(if $(ENABLE_TDE),vclplug_tde) \

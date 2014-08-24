@@ -43,7 +43,9 @@
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 #include "UndoActions.hxx"
+#ifdef ENABLE_OPENGL
 #include <GL3DHelper.hxx>
+#endif
 
 #include <comphelper/InlineContainer.hxx>
 

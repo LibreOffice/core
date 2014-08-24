@@ -33,7 +33,9 @@
 #include "UndoManager.hxx"
 #include "ChartView.hxx"
 
+#ifdef ENABLE_OPENGL
 #include <vcl/openglwin.hxx>
+#endif
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 
@@ -108,7 +110,9 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , mnStart(0)
     , mnEnd(0)
     ,bSet(false)
+#ifdef ENABLE_OPENGL
     , mpOpenGLWindow(NULL)
+#endif
 {
     OSL_TRACE( "ChartModel: CTOR called" );
 
@@ -154,7 +158,9 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , mnStart(rOther.mnStart)
     , mnEnd(rOther.mnEnd)
     , bSet(false)
+#ifdef ENABLE_OPENGL
     , mpOpenGLWindow(NULL)
+#endif
 {
     OSL_TRACE( "ChartModel: Copy-CTOR called" );
 
@@ -1407,6 +1413,7 @@ void ChartModel::setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd)
     mbTimeBased = true;
 }
 
+#ifdef ENABLE_OPENGL
 void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     throw (uno::RuntimeException, std::exception)
 {
@@ -1415,6 +1422,7 @@ void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
     assert(pWindow);
     mpOpenGLWindow = pWindow;
 }
+#endif
 
 void ChartModel::update()
     throw (uno::RuntimeException, std::exception)
@@ -1428,7 +1436,9 @@ void ChartModel::update()
     {
         mpChartView->setViewDirty();
         mpChartView->update();
+#ifdef ENABLE_OPENGL
         mpChartView->updateOpenGLWindow();
+#endif
     }
 }
 

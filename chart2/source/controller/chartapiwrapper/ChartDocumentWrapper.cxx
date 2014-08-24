@@ -91,7 +91,9 @@ enum eServiceType
     SERVICE_NAME_STOCK_DIAGRAM,
     SERVICE_NAME_XY_DIAGRAM,
     SERVICE_NAME_BUBBLE_DIAGRAM,
+#ifdef ENABLE_OPENGL
     SERVICE_NAME_GL3DBAR_DIAGRAM,
+#endif
 
     SERVICE_NAME_DASH_TABLE,
     SERVICE_NAME_GARDIENT_TABLE,
@@ -122,7 +124,9 @@ tServiceNameMap & lcl_getStaticServiceNameMap()
         ( "com.sun.star.chart.StockDiagram",                   SERVICE_NAME_STOCK_DIAGRAM )
         ( "com.sun.star.chart.XYDiagram",                      SERVICE_NAME_XY_DIAGRAM )
         ( "com.sun.star.chart.BubbleDiagram",                  SERVICE_NAME_BUBBLE_DIAGRAM )
+#ifdef ENABLE_OPENGL
         ( "com.sun.star.chart.GL3DBarDiagram",                 SERVICE_NAME_GL3DBAR_DIAGRAM )
+#endif
 
         ( "com.sun.star.drawing.DashTable",                    SERVICE_NAME_DASH_TABLE )
         ( "com.sun.star.drawing.GradientTable",                SERVICE_NAME_GARDIENT_TABLE )
@@ -1269,6 +1273,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     bCreateDiagram = true;
                 }
                 break;
+#ifdef ENABLE_OPENGL
             case SERVICE_NAME_GL3DBAR_DIAGRAM:
                 if( xManagerFact.is())
                 {
@@ -1278,6 +1283,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                     bCreateDiagram = true;
                 }
                 break;
+#endif
 
             case SERVICE_NAME_DASH_TABLE:
             case SERVICE_NAME_GARDIENT_TABLE:

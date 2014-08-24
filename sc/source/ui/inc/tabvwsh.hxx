@@ -189,7 +189,9 @@ private:
     void          DoReadUserDataSequence( const ::com::sun::star::uno::Sequence<
                                      ::com::sun::star::beans::PropertyValue >& rSettings );
 
+#ifdef ENABLE_OPENGL
     void AddOpenGLChartWindows();
+#endif
 
     DECL_LINK( SimpleRefClose, void* );
     DECL_LINK( SimpleRefDone, OUString* );

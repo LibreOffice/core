@@ -30,7 +30,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
         Executable_svptest \
         Executable_svpclient \
         Executable_vcldemo) \
-    Library_vclopengl \
+    $(call gb_Helper_optional,ENABLE_OPENGL,Library_vclopengl) \
 ))
 
 $(eval $(call gb_Module_add_l10n_targets,vcl,\

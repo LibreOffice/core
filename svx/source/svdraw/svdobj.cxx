@@ -128,7 +128,9 @@
 #include <svx/xlnwtit.hxx>
 #include <svx/xpoly.hxx>
 #include <rtl/strbuf.hxx>
+#ifdef ENABLE_OPENGL
 #include <svdoopengl.hxx>
+#endif
 #include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -3300,7 +3302,9 @@ SdrObject* SdrObjFactory::MakeNewObject(sal_uInt32 nInvent, sal_uInt16 nIdent, S
             case sal_uInt16(OBJ_MEDIA      ): pObj=new SdrMediaObj();               break;
 #endif
             case sal_uInt16(OBJ_TABLE      ): pObj=new ::sdr::table::SdrTableObj(pModel);   break;
+#ifdef ENABLE_OPENGL
             case sal_uInt16(OBJ_OPENGL     ): pObj=new SdrOpenGLObj;                break;
+#endif
         }
     }
 

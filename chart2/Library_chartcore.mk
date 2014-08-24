@@ -21,6 +21,7 @@ $(eval $(call gb_Library_set_include,chartcore,\
 $(eval $(call gb_Library_add_defs,chartcore,\
     -DOOO_DLLIMPLEMENTATION_CHARTTOOLS \
     -DOOO_DLLIMPLEMENTATION_CHARTVIEW \
+    $(if $(ENABLE_OPENGL),-DENABLE_OPENGL) \
 ))
 
 $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/pch/precompiled_chartcore))
@@ -28,8 +29,8 @@ $(eval $(call gb_Library_set_precompiled_header,chartcore,$(SRCDIR)/chart2/inc/p
 $(eval $(call gb_Library_use_externals,chartcore,\
 	boost_headers \
 	glm_headers \
-	glew \
-	mesa_headers \
+	$(call gb_Helper_optional,ENABLE_OPENGL,glew) \
+	$(call gb_Helper_optional,ENABLE_OPENGL,mesa_headers) \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,chartcore,\
@@ -57,8 +58,7 @@ $(eval $(call gb_Library_use_libraries,chartcore,\
     ucbhelper \
     utl \
     vcl \
-    $(if $(filter FREEBSD LINUX MACOSX WNT,$(OS)), \
-        vclopengl) \
+        $(call gb_Helper_optional,ENABLE_OPENGL,vclopengl) \
 	$(gb_UWINAPI) \
 ))
 
@@ -85,7 +85,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/axes/VPolarCoordinateSystem \
     chart2/source/view/axes/VPolarGrid \
     chart2/source/view/axes/VPolarRadiusAxis \
-    chart2/source/view/charttypes/GL3DBarChart \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/view/charttypes/GL3DBarChart) \
     chart2/source/view/charttypes/AreaChart \
     chart2/source/view/charttypes/BarChart \
     chart2/source/view/charttypes/BarPositionHelper \
@@ -97,14 +97,14 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/charttypes/Splines \
     chart2/source/view/charttypes/VSeriesPlotter \
     chart2/source/view/diagram/VDiagram \
-    chart2/source/view/main/3DChartObjects \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/view/main/3DChartObjects) \
     chart2/source/view/main/ChartItemPool \
     chart2/source/view/main/ChartView \
     chart2/source/view/main/Clipping \
     chart2/source/view/main/DataPointSymbolSupplier \
     chart2/source/view/main/DrawModelWrapper \
-    chart2/source/view/main/GL3DPlotterBase \
-    chart2/source/view/main/GL3DRenderer \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/view/main/GL3DPlotterBase) \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/view/main/GL3DRenderer) \
     chart2/source/view/main/LabelPositionHelper \
     chart2/source/view/main/Linear3DTransformation \
     chart2/source/view/main/PlotterBase \
@@ -161,8 +161,8 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/model/template/ColumnLineDataInterpreter \
     chart2/source/model/template/DataInterpreter \
     chart2/source/model/template/FilledNetChartType \
-    chart2/source/model/template/GL3DBarChartType \
-    chart2/source/model/template/GL3DBarChartTypeTemplate \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/model/template/GL3DBarChartType) \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/model/template/GL3DBarChartTypeTemplate) \
     chart2/source/model/template/LineChartType \
     chart2/source/model/template/LineChartTypeTemplate \
     chart2/source/model/template/NetChartType \
@@ -199,7 +199,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/ExponentialRegressionCurveCalculator \
     chart2/source/tools/FillProperties \
     chart2/source/tools/FormattedStringHelper \
-    chart2/source/tools/GL3DHelper \
+    $(call gb_Helper_optional,ENABLE_OPENGL,chart2/source/tools/GL3DHelper) \
     chart2/source/tools/ImplOPropertySet \
     chart2/source/tools/InternalData \
     chart2/source/tools/InternalDataProvider \

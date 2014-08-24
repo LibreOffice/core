@@ -50,18 +50,29 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+#ifdef ENABLE_OPENGL
 #include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
+#endif
 
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
+#ifdef ENABLE_OPENGL
 #ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_23
 #define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_23
 #define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 23
 #include "comphelper/implbase_var.hxx"
 #endif
+#else
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 22
+#include "comphelper/implbase_var.hxx"
+#endif
+#endif
+
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -79,7 +90,11 @@ namespace impl
 {
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
+#ifdef ENABLE_OPENGL
 typedef ::comphelper::WeakImplHelper23<
+#else
+typedef ::comphelper::WeakImplHelper22<
+#endif
 //       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
@@ -102,7 +117,9 @@ typedef ::comphelper::WeakImplHelper23<
         ,::com::sun::star::document::XDocumentPropertiesSupplier
         ,::com::sun::star::chart2::data::XDataSource
         ,::com::sun::star::document::XUndoManagerSupplier
+#ifdef ENABLE_OPENGL
         ,::com::sun::star::chart2::X3DChartWindowProvider
+#endif
         ,::com::sun::star::qa::XDumper
         >
     ChartModel_Base;
@@ -580,9 +597,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+#ifdef ENABLE_OPENGL
     // X3DChartWindowProvider
     virtual void SAL_CALL setWindow( sal_uInt64 nWindowPtr )
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+#endif
 
     virtual void SAL_CALL update()
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -603,13 +622,17 @@ public:
     void getNextTimePoint();
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
+#ifdef ENABLE_OPENGL
     OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
+#endif
 
 private:
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
     bool bSet;
+#ifdef ENABLE_OPENGL
     OpenGLWindow* mpOpenGLWindow;
+#endif
 };
 
 }  // namespace chart

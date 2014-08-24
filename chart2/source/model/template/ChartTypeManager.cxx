@@ -33,7 +33,9 @@
 #include "StockChartTypeTemplate.hxx"
 #include "NetChartTypeTemplate.hxx"
 #include "BubbleChartTypeTemplate.hxx"
+#ifdef ENABLE_OPENGL
 #include "GL3DBarChartTypeTemplate.hxx"
+#endif
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -122,8 +124,10 @@ enum TemplateId
     TEMPLATE_STOCKVOLUMELOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE,
     TEMPLATE_BUBBLE,
+#ifdef ENABLE_OPENGL
     TEMPLATE_GL3DBAR,
     TEMPLATE_GL3DBAR_ROUNDED_RECTANGLE,
+#endif
 //    TEMPLATE_SURFACE,
 //     TEMPLATE_ADDIN,
     TEMPLATE_NOT_FOUND = 0xffff
@@ -199,8 +203,10 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         ( "com.sun.star.chart2.template.StockVolumeLowHighClose",        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE )
         ( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose",    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE )
         ( "com.sun.star.chart2.template.Bubble",                         TEMPLATE_BUBBLE )
+#ifdef ENABLE_OPENGL
         ( "com.sun.star.chart2.template.GL3DBar",                        TEMPLATE_GL3DBAR )
         ( "com.sun.star.chart2.template.GL3DBarRoundedRectangle",        TEMPLATE_GL3DBAR_ROUNDED_RECTANGLE )
+#endif
 //      ( "com.sun.star.chart2.template.Surface",                        TEMPLATE_SURFACE )
 //      ( "com.sun.star.chart2.template.Addin",                          TEMPLATE_ADDIN )
         );
@@ -534,12 +540,14 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 xTemplate.set( new BubbleChartTypeTemplate( m_xContext, aServiceSpecifier ));
                 break;
 
+#ifdef ENABLE_OPENGL
             case TEMPLATE_GL3DBAR:
                 xTemplate.set(new GL3DBarChartTypeTemplate(m_xContext, aServiceSpecifier));
                 break;
             case TEMPLATE_GL3DBAR_ROUNDED_RECTANGLE:
                 xTemplate.set(new GL3DBarChartTypeTemplate(m_xContext, aServiceSpecifier));
                 break;
+#endif
 
 //            case TEMPLATE_SURFACE:
 //            case TEMPLATE_ADDIN:

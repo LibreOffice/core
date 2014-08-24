@@ -806,9 +806,11 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case OBJ_TABLE:
                     pRet = new SvxTableShape( pObj );
                     break;
+#ifdef ENABLE_OPENGL
                 case OBJ_OPENGL:
                     pRet = new SvxOpenGLObject( pObj );
                     break;
+#endif
                 default: // unbekanntes 2D-Objekt auf der Page
                     OSL_FAIL("Nicht implementierter Starone-Shape erzeugt! [CL]");
                     pRet = new SvxShapeText( pObj );

@@ -39,7 +39,9 @@
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
+#ifdef ENABLE_OPENGL
 #include <vcl/openglwin.hxx>
+#endif
 
 #include "tabvwsh.hxx"
 #include "sc.hrc"
@@ -92,7 +94,9 @@
 #include <gridwin.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#ifdef ENABLE_OPENGL
 #include <com/sun/star/chart2/X3DChartWindowProvider.hpp>
+#endif
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -540,6 +544,7 @@ namespace {
 
 bool isGL3DDiagram( const css::uno::Reference<css::chart2::XDiagram>& xDiagram )
 {
+#ifdef ENABLE_OPENGL
     uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
 
     if (!xCooSysContainer.is())
@@ -565,12 +570,14 @@ bool isGL3DDiagram( const css::uno::Reference<css::chart2::XDiagram>& xDiagram )
                 return true;
         }
     }
+#endif
 
     return false;
 }
 
 }
 
+#ifdef ENABLE_OPENGL
 void ScTabViewShell::AddOpenGLChartWindows()
 {
     ScDocument* pDoc = GetViewData().GetDocument();
@@ -603,6 +610,7 @@ void ScTabViewShell::AddOpenGLChartWindows()
         }
     }
 }
+#endif
 
 // DoReadUserData is also called from ctor when switching from print preview
 

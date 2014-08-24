@@ -67,7 +67,9 @@ class SdrModel;
 class SvxDrawPage;
 class SvGlobalName;
 class Pair;
+#ifdef ENABLE_OPENGL
 class IOpenGLRenderer;
+#endif
 
 // Dimension arrows change size/position on save/reload (#i59051#)
 namespace basegfx
@@ -882,6 +884,7 @@ private:
     OUString referer_;
 };
 
+#ifdef ENABLE_OPENGL
 class SVX_DLLPUBLIC SvxOpenGLObject : public SvxShape
 {
 public:
@@ -891,6 +894,7 @@ public:
     void setRenderer(IOpenGLRenderer* pRenderer);
     IOpenGLRenderer* getRenderer();
 };
+#endif
 
 /*
  * This is a really ugly hack for the chart2 OpenGL backend

@@ -39,7 +39,9 @@
 #include "WrappedSplineProperties.hxx"
 #include "WrappedStockProperties.hxx"
 #include "WrappedSceneProperty.hxx"
+#ifdef ENABLE_OPENGL
 #include "WrappedGL3DProperties.hxx"
+#endif
 #include "RelativePositionHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "ControllerLockGuard.hxx"
@@ -472,7 +474,9 @@ private:
         WrappedSplineProperties::addProperties( aProperties );
         WrappedStockProperties::addProperties( aProperties );
         WrappedAutomaticPositionProperties::addProperties( aProperties );
+#ifdef ENABLE_OPENGL
         WrappedGL3DProperties::addProperties(aProperties);
+#endif
 
         ::std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
@@ -526,8 +530,10 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
     {
         const OUString aName( rTemplateServiceName.copy( aPrefix.getLength()));
 
+#if ENABLE_GL3D_BARCHART
         if (aName.indexOf("GL3DBar") != -1)
             return OUString("com.sun.star.chart.GL3DBarDiagram");
+#endif
 
         // "Area" "StackedArea" "PercentStackedArea" "ThreeDArea"
         // "StackedThreeDArea" "PercentStackedThreeDArea"
@@ -604,7 +610,9 @@ const tMakeStringStringMap& lcl_getChartTypeNameMap()
         ( "com.sun.star.chart2.NetChartType", "com.sun.star.chart.NetDiagram" )
         ( "com.sun.star.chart2.CandleStickChartType", "com.sun.star.chart.StockDiagram" )
         ( "com.sun.star.chart2.BubbleChartType", "com.sun.star.chart.BubbleDiagram" )
+#if ENABLE_GL3D_BARCHART
         ( "com.sun.star.chart2.GL3DBarChartType", "com.sun.star.chart.GL3DBarDiagram" )
+#endif
         ;
     return g_aChartTypeNameMap;
 }
@@ -2047,7 +2055,9 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     WrappedSplineProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedStockProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
+#ifdef ENABLE_OPENGL
     WrappedGL3DProperties::addWrappedProperties(aWrappedProperties, m_spChart2ModelContact);
+#endif
 
     aWrappedProperties.push_back( new WrappedDataRowSourceProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedStackingProperty( StackMode_Y_STACKED,m_spChart2ModelContact ) );

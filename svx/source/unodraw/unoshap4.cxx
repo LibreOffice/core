@@ -50,7 +50,9 @@
 #include "svx/svdview.hxx"
 #include "svdglob.hxx"
 #include "svx/svdstr.hrc"
+#ifdef ENABLE_OPENGL
 #include <svdoopengl.hxx>
+#endif
 #include <vcl/wmf.hxx>
 #include <svtools/embedhlp.hxx>
 
@@ -975,6 +977,7 @@ SvxDummyShapeContainer::~SvxDummyShapeContainer() throw()
 {
 }
 
+#ifdef ENABLE_OPENGL
 void SvxOpenGLObject::setRenderer(IOpenGLRenderer* pRenderer)
 {
     static_cast<SdrOpenGLObj*>(GetSdrObject())->setRenderer(pRenderer);
@@ -984,5 +987,6 @@ IOpenGLRenderer* SvxOpenGLObject::getRenderer()
 {
     return static_cast<SdrOpenGLObj*>(GetSdrObject())->getRenderer();
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
