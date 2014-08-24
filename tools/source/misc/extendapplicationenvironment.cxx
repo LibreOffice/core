@@ -46,10 +46,10 @@ namespace tools {
 void extendApplicationEnvironment() {
 #if defined UNX
     // Try to set RLIMIT_NOFILE as large as possible (failure is harmless):
-    rlimit l;
-    if (getrlimit(RLIMIT_NOFILE, &l) == 0) {
-        l.rlim_cur = l.rlim_max;
-        setrlimit(RLIMIT_NOFILE, &l);
+    rlimit lim;
+    if (getrlimit(RLIMIT_NOFILE, &lim) == 0) {
+        lim.rlim_cur = lim.rlim_max;
+        setrlimit(RLIMIT_NOFILE, &lim);
     }
 #endif
 
@@ -68,9 +68,9 @@ void extendApplicationEnvironment() {
         if (osl_getExecutableFile(&uri.pData) != osl_Process_E_None) {
             abort();
         }
-        sal_Int32 i = uri.lastIndexOf('/');
-        if (i >= 0) {
-            uri = uri.copy(0, i + 1);
+        sal_Int32 lastDirSeperatorPos = uri.lastIndexOf('/');
+        if (lastDirSeperatorPos >= 0) {
+            uri = uri.copy(0, lastDirSeperatorPos + 1);
         }
         env.append(rtl::Bootstrap::encode(uri));
 #if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
