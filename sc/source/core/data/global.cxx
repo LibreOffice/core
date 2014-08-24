@@ -125,14 +125,14 @@ sal_uInt16          ScGlobal::nStdRowHeight         = 256;
 long            ScGlobal::nLastRowHeightExtra   = 0;
 long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
-static sal_uInt16 nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
+static sal_uInt16 nPPTZoom = 0; // ScreenZoom used to determine nScreenPPTX/Y
 
 class SfxViewShell;
-SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
-sal_uInt16 nScClickMouseModifier = 0;                   //! dito
-sal_uInt16 nScFillModeMouseModifier = 0;                //! dito
+SfxViewShell* pScActiveViewShell = NULL; //FIXME: Make this a member
+sal_uInt16 nScClickMouseModifier = 0;    //FIXME: This too
+sal_uInt16 nScFillModeMouseModifier = 0; //FIXME: And this
 
-//      statische Funktionen
+// Static functions
 
 bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const SfxItemSet&  rOldAttrs,
@@ -144,16 +144,15 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
 
     if ( eNewState == eOldState )
     {
-        // beide Items gesetzt
-        // PoolItems, d.h. Pointer-Vergleich zulaessig
+        // Both Items set
+        // PoolItems, meaning comparing pointers is valid
         if ( SFX_ITEM_SET == eOldState )
             bInvalidate = (&rNewAttrs.Get( nWhich ) != &rOldAttrs.Get( nWhich ));
     }
     else
     {
-        // ein Default-Item dabei
-        // PoolItems, d.h. Item-Vergleich noetig
-
+        // Contains a Default Item
+        // PoolItems, meaning Item comparison necessary
         const SfxPoolItem& rOldItem = ( SFX_ITEM_SET == eOldState )
                     ? rOldAttrs.Get( nWhich )
                     : rOldAttrs.GetPool()->GetDefaultItem( nWhich );
@@ -197,9 +196,8 @@ bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
                                      const SfxItemSet& rOldAttrs )
 {
-    // Ueberpruefen, ob Attributaenderungen in rNewAttrs gegnueber
-    // rOldAttrs die Textbreite an einer Zelle ungueltig machen
-
+    // Check whether attribute changes in rNewAttrs compared to rOldAttrs render
+    // the text width at a cell invalid
     bNumFormatChanged =
             HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_VALUE_FORMAT );
     return ( bNumFormatChanged
@@ -241,7 +239,7 @@ const SvxSearchItem& ScGlobal::GetSearchItem()
 
 void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 {
-    // Hier waere ein Zuweisungsoperator ganz nett:
+    // FIXME: An assignement operator would be nice here
     delete pSearchItem;
     pSearchItem = (SvxSearchItem*)rNew.Clone();
 
@@ -290,8 +288,7 @@ ScUnoAddInCollection* ScGlobal::GetAddInCollection()
 
 ScUserList* ScGlobal::GetUserList()
 {
-    // Hack: Cfg-Item an der App ggF. laden
-
+    // Hack: Load Cfg item at the App
     global_InitAppOptions();
 
     if (!pUserList)
@@ -499,13 +496,13 @@ void ScGlobal::Init()
 {
     pEmptyOUString = new OUString;
 
-    //  Die Default-Sprache fuer Zahlenformate (ScGlobal::eLnge)
-    //  muss immer LANGUAGE_SYSTEM sein
-    //! Dann kann auch die Variable raus
+    // The default language for number formats (ScGlobal::eLnge) must
+    // always be LANGUAGE_SYSTEM
+    // FIXME: So remove this variable?
     eLnge = LANGUAGE_SYSTEM;
 
-    //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
-    //! abhaengen sollen, hier "Application::GetSettings().GetUILanguage()"
+    // FIXME: If the sort-order etc. should depend the installed Office version
+    //        use Application::GetSettings().GetUILanguage() here
     pSysLocale = new SvtSysLocale;
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
@@ -524,7 +521,7 @@ void ScGlobal::Init()
     // arguments are to be merged in, which in turn need strings of function
     // names from the compiler.
     ScParameterClassification::Init();
-    srand( (unsigned) time( NULL ) );       // Random Seed Init fuer Interpreter
+    srand( (unsigned) time( NULL ) );       // Random Seed Init for Interpreter
     ::comphelper::rng::seed( time( NULL ) ); // seed for libc rand() replacement
 
     InitAddIns();
@@ -532,7 +529,7 @@ void ScGlobal::Init()
     pStrClipDocName = new OUString( ScResId( SCSTR_NONAME ) );
     *pStrClipDocName += "1";
 
-    //  ScDocumentPool::InitVersionMaps() ist schon vorher gerufen worden
+    //  ScDocumentPool::InitVersionMaps() has been called earlier already
 }
 
 void ScGlobal::UpdatePPT( OutputDevice* pDev )
@@ -540,10 +537,10 @@ void ScGlobal::UpdatePPT( OutputDevice* pDev )
     sal_uInt16 nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
     if ( nCurrentZoom != nPPTZoom )
     {
-        //  Screen PPT values must be updated when ScreenZoom has changed.
-        //  If called from Window::DataChanged, the window is passed as pDev,
-        //  to make sure LogicToPixel uses a device which already uses the new zoom.
-        //  For the initial settings, NULL is passed and GetDefaultDevice used.
+        // Screen PPT values must be updated when ScreenZoom has changed.
+        // If called from Window::DataChanged, the window is passed as pDev,
+        // to make sure LogicToPixel uses a device which already uses the new zoom.
+        // For the initial settings, NULL is passed and GetDefaultDevice used.
 
         if ( !pDev )
             pDev = Application::GetDefaultDevice();
@@ -583,7 +580,7 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     VirtualDevice aVirtWindow( *pDefaultDev );
     aVirtWindow.SetMapMode(MAP_PIXEL);
     Font aDefFont;
-    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);        // font color doesn't matter here
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow); // Font color doesn't matter here
     aVirtWindow.SetFont(aDefFont);
     sal_uInt16 nTest = static_cast<sal_uInt16>(
         aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()), MAP_TWIP).Height());
@@ -602,7 +599,7 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
 
 void ScGlobal::Clear()
 {
-    // asyncs _vor_ ExitExternalFunc zerstoeren!
+    // Destroy asyncs _before_ ExitExternalFunc!
     for( ScAddInAsyncs::iterator it = theAddInAsyncTbl.begin(); it != theAddInAsyncTbl.end(); ++it )
     {
         delete *it;
@@ -620,11 +617,11 @@ void ScGlobal::Clear()
     delete[] ppRscString;
     ppRscString = NULL;
 
-    DELETEZ(pStarCalcFunctionList);     // vor ResMgr zerstoeren!
+    DELETEZ(pStarCalcFunctionList); // Destroy before ResMgr!
     DELETEZ(pStarCalcFunctionMgr);
     ScParameterClassification::Exit();
     ScCompiler::DeInit();
-    ScInterpreter::GlobalExit();            // statischen Stack loeschen
+    ScInterpreter::GlobalExit(); // Delete static Stack
 
     DELETEZ(pEmptyBrushItem);
     DELETEZ(pButtonBrushItem);
@@ -724,7 +721,6 @@ ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 void ScGlobal::ResetFunctionList()
 {
     // FunctionMgr has pointers into FunctionList, must also be updated
-
     DELETEZ( pStarCalcFunctionMgr );
     DELETEZ( pStarCalcFunctionList );
 }
@@ -845,12 +841,12 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
 bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
 {
-    if ( pObj1 == pObj2 )               // both empty or the same object
+    if ( pObj1 == pObj2 ) // Both empty or the same object
         return true;
 
     if ( pObj1 && pObj2 )
     {
-        //  first test for equal text content
+        // First test for equal text content
         sal_Int32 nParCount = pObj1->GetParagraphCount();
         if ( nParCount != pObj2->GetParagraphCount() )
             return false;
@@ -873,22 +869,22 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
 
 void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
 {
-    //  OpenURL wird immer ueber irgendwelche Umwege durch Mausklicks im GridWindow
-    //  aufgerufen, darum stimmen pScActiveViewShell und nScClickMouseModifier.
-    //SvtSecurityOptions to access Libreoffice global security parameters
+    // OpenURL is always called in the GridWindow by mouse clicks in some way or another.
+    // That's why pScActiveViewShell and nScClickMouseModifier are correct.
+    // SvtSecurityOptions to access Libreoffice global security parameters
     SvtSecurityOptions aSecOpt;
     bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
     bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
     if( bCtrlClickHappened && !( bCtrlClickSecOption ) )
     {
-        //return since ctrl+click happened when the
-        //ctrl+click security option was disabled, link should not open
+        // return since ctrl+click happened when the
+        // ctrl+click security option was disabled, link should not open
         return;
     }
     else if( !( bCtrlClickHappened ) && bCtrlClickSecOption )
     {
-        //ctrl+click did not happen; only click happened maybe with some
-        //other key combo. and security option is set, so return
+        // ctrl+click did not happen; only click happened maybe with some
+        // other key combo. and security option is set, so return
         return;
     }
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
@@ -910,8 +906,7 @@ void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
     SfxBoolItem aBrowsing( SID_BROWSE, true );
 
-    //  kein SID_SILENT mehr
-
+    // No SID_SILENT anymore
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
         pViewFrm->GetDispatcher()->Execute( SID_OPENDOC,
@@ -929,18 +924,16 @@ bool ScGlobal::IsSystemRTL()
 
 sal_uInt8 ScGlobal::GetDefaultScriptType()
 {
-    //  Used when text contains only WEAK characters.
-    //  Script type of office language is used then (same as GetEditDefaultLanguage,
-    //  to get consistent behavior of text in simple cells and EditEngine,
-    //  also same as GetAppLanguage() in Writer)
-
+    // Used when text contains only WEAK characters.
+    // Script type of office language is used then (same as GetEditDefaultLanguage,
+    // to get consistent behavior of text in simple cells and EditEngine,
+    // also same as GetAppLanguage() in Writer)
     return (sal_uInt8) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }
 
 LanguageType ScGlobal::GetEditDefaultLanguage()
 {
-    //  used for EditEngine::SetDefaultLanguage
-
+    // Used for EditEngine::SetDefaultLanguage
     return Application::GetSettings().GetLanguageTag().getLanguageType();
 }
 
@@ -1043,7 +1036,7 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
         const SvNumberformat* pHardFormat = rFormatter.GetEntry(
             ((const SfxUInt32Item*)pHardItem)->GetValue() );
 
-        sal_uLong nParentFmt = 0;   // pool default
+        sal_uLong nParentFmt = 0; // Pool default
         const SfxItemSet* pParent = rSet.GetParent();
         if ( pParent )
             nParentFmt = ((const SfxUInt32Item&)pParent->Get( ATTR_VALUE_FORMAT )).GetValue();
