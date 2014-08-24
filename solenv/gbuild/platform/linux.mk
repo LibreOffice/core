@@ -93,7 +93,7 @@ gb_CXXFLAGS := \
 	-fmessage-length=0 \
 	-fno-common \
 	-fno-strict-aliasing \
-	-fuse-cxa-atexit \
+	-fno-use-cxa-atexit \
 	-fvisibility-inlines-hidden \
 	-fvisibility=hidden \
 	-pipe \
