@@ -997,7 +997,10 @@ IMPL_LINK(SidebarController, OnMenuItemSelected, Menu*, pMenu)
             try
             {
                 if (nIndex >= MID_FIRST_PANEL && nIndex<MID_FIRST_HIDE)
+                {
+                    RequestOpenDeck();
                     SwitchToDeck(mpTabBar->GetDeckIdForIndex(nIndex - MID_FIRST_PANEL));
+                }
                 else if (nIndex >=MID_FIRST_HIDE)
                     if (pMenu->GetItemBits(nIndex) == MIB_CHECKABLE)
                         mpTabBar->ToggleHideFlag(nIndex-MID_FIRST_HIDE);
