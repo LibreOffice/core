@@ -51,29 +51,16 @@
 #define MN_TEXT_ATTR\
     MenuItem\
     {\
-        ITEM_FORMAT_ATTR_CHAR_FONT\
-    };\
-    MenuItem\
-    {\
-        ITEM_FORMAT_ATTR_CHAR_FONTHEIGHT\
-    };\
-    MenuItem\
-    {\
         Identifier = MN_FORMAT_STYLE ; \
         Command = ".uno:StyleMenu" ; \
-        Text [ en-US ] = "St~yle" ; \
+        Text [ en-US ] = "~Format" ; \
         SubMenu = Menu\
         {\
             ItemList = \
             {\
                 MenuItem\
                 {\
-                    ITEM_FORMAT_ATTR_CHAR_WEIGHT\
-                    Checkable = TRUE ; \
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_POSTURE\
+                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
                     Checkable = TRUE ; \
                 };\
                 MenuItem\
@@ -81,16 +68,7 @@
                     ITEM_FORMAT_ATTR_CHAR_OVERLINE\
                     Checkable = TRUE ; \
                 };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_UNDERLINE\
-                    Checkable = TRUE ; \
-                };\
-                MenuItem\
-                {\
-                    ITEM_FORMAT_ATTR_CHAR_STRIKEOUT\
-                    Checkable = TRUE ; \
-                };\
+                SEPARATOR ; \
                 MenuItem\
                 {\
                     ITEM_FORMAT_ATTR_CHAR_SHADOWED\
@@ -115,40 +93,6 @@
                     HelpId = CMD_FN_SET_SUB_SCRIPT ; \
                     Text [ en-US ] = "Subscript" ; \
                     Checkable = TRUE ; \
-                };\
-            };\
-        };\
-    };\
-    MenuItem\
-    {\
-        Identifier = MN_FORMAT_ALGN ; \
-        Command = ".uno:AlignTextMenu" ; \
-        Text [ en-US ] = "A~lignment" ; \
-        SubMenu = Menu\
-        {\
-            ItemList = \
-            {\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    ITEM_FORMAT_ATTR_PARA_ADJUST_LEFT\
-                };\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    ITEM_FORMAT_ATTR_PARA_ADJUST_RIGHT\
-                };\
-                MenuItem\
-                {\
-                    RadioCheck = TRUE ; \
-                    ITEM_FORMAT_ATTR_PARA_ADJUST_CENTER\
-                };\
-                MenuItem\
-                {\
-                    Identifier = SID_ATTR_PARA_ADJUST_BLOCK ; \
-                    HelpId = CMD_SID_ATTR_PARA_ADJUST_BLOCK ; \
-                    RadioCheck = TRUE ; \
-                    Text [ en-US ] = "Justified" ; \
                 };\
             };\
         };\
