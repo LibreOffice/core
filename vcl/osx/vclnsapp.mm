@@ -200,6 +200,24 @@
                     if( [NSApp sendAction: @selector(cut:) to: nil from: nil] )
                         return;
                 }
+                else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"a"] )
+                {
+                    if( [NSApp sendAction: @selector(selectAll:) to: nil from: nil] )
+                        return;
+                }
+                else if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"z"] )
+                {
+                    if( [NSApp sendAction: @selector(undo:) to: nil from: nil] )
+                        return;
+                }
+            }
+            else if( nModMask == (NSCommandKeyMask|NSShiftKeyMask) )
+            {
+                if( [[pEvent charactersIgnoringModifiers] isEqualToString: @"Z"] )
+                {
+                    if( [NSApp sendAction: @selector(redo:) to: nil from: nil] )
+                        return;
+                }
             }
         }
     }
