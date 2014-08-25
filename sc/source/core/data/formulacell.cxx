@@ -1830,7 +1830,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 if (pCode->IsRecalcModeAlways())
                 {
                     // The formula was previously volatile, but no more.
-                    EndListeningTo(pDocument);
+                    pDocument->EndListeningArea(BCA_LISTEN_ALWAYS, this);
                     pCode->SetExclusiveRecalcModeNormal();
                 }
                 else
@@ -3801,8 +3801,6 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
     if( pArr->IsRecalcModeAlways() )
     {
         pDoc->StartListeningArea(BCA_LISTEN_ALWAYS, this);
-        SetNeedsListening( false);
-        return;
     }
 
     pArr->Reset();
@@ -3841,8 +3839,6 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
     if( pArr->IsRecalcModeAlways() )
     {
         rDoc.StartListeningArea(BCA_LISTEN_ALWAYS, this);
-        SetNeedsListening( false);
-        return;
     }
 
     pArr->Reset();
@@ -3908,7 +3904,6 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
     if ( GetCode()->IsRecalcModeAlways() )
     {
         pDoc->EndListeningArea( BCA_LISTEN_ALWAYS, this );
-        return;
     }
 
     if (!pArr)
@@ -3954,7 +3949,6 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
     if (pArr->IsRecalcModeAlways())
     {
         rDoc.EndListeningArea(BCA_LISTEN_ALWAYS, this);
-        return;
     }
 
     pArr->Reset();
