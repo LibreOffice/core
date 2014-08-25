@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_090559c1",
+        "filename": "sw/source/core/docnode/nodedump.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-08-25T07:26:10Z",
+      "side": 1,
+      "message": "Please keep brace style consistent within the same file, so far all braces are at the start of the next line here.",
+      "revId": "621308b3a00d2ec3e4bc20dbd019ac02295e4d09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
