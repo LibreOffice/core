@@ -83,7 +83,6 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 
 using namespace ::com::sun::star;
@@ -2173,7 +2172,9 @@ bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
     {
         getBrowserView()->getVclControl()->GrabFocus();
 
-        QueryBox aQry(getBrowserView()->getVclControl(), ModuleRes(QUERY_BRW_SAVEMODIFIED));
+        MessageDialog aQry(getBrowserView()->getVclControl(),
+                           "SaveModifiedDialog",
+                           "dbaccess/ui/savemodifieddialog.ui");
 
         switch (aQry.Execute())
         {

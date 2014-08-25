@@ -22,13 +22,6 @@
 #include <svx/globlmn.hrc>
 #include "toolbox.hrc"
 
-QueryBox QUERY_BRW_SAVEMODIFIED
-{
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "The current record has been changed.\nDo you want to save the changes?" ;
-};
-
 String STR_QUERY_BRW_DELETE_ROWS
 {
     Text[ en-US ] = "Do you want to delete the selected data?" ;
