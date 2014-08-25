@@ -27,7 +27,6 @@
 #include "indexfieldscontrol.hxx"
 #include "indexcollection.hxx"
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/settings.hxx>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include "UITools.hxx"
@@ -573,7 +572,8 @@ namespace dbaui
 
             if (aSelected->isModified() || aSelected->isNew())
             {
-                QueryBox aQuestion(this, ModuleRes(QUERY_SAVE_CURRENT_INDEX));
+                MessageDialog aQuestion(this, "SaveIndexDialog",
+                                        "dbaccess/ui/saveindexdialog.ui");
                 nResponse = aQuestion.Execute();
             }
         }

@@ -63,16 +63,6 @@ String STR_NEED_INDEX_FIELDS
     Text [ en-US ] = "The index must contain at least one field.";
 };
 
-QueryBox QUERY_SAVE_CURRENT_INDEX
-{
-    Title [ en-US ] = "Exit Index Design";
-
-    Message [ en-US ] = "Do you want to save the changes made to the current index?";
-
-    Buttons = WB_YES_NO_CANCEL;
-    DefButton = WB_DEF_YES;
-};
-
 String STR_INDEX_NAME_ALREADY_USED
 {
     Text [ en-US ] = "There is already another index named \"$name$\".";
