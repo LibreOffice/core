@@ -268,7 +268,7 @@ String FMT_DDE_NORMAL
 };
 String FLD_INPUT_TEXT
 {
-    TEXT = "[Text]" ;
+    Text = "[Text]" ;
 };
 /*--------------------------------------------------------------------
     Description: SubType Extuser
@@ -393,19 +393,19 @@ String FMT_CHAPTER_NAMENO
  --------------------------------------------------------------------*/
 String FMT_NUM_ABC
 {
-    TEXT = "A B C" ;
+    Text = "A B C" ;
 };
 String FMT_NUM_SABC
 {
-    TEXT = "a b c" ;
+    Text = "a b c" ;
 };
 String FMT_NUM_ABC_N
 {
-    TEXT = "A .. AA .. AAA" ;
+    Text = "A .. AA .. AAA" ;
 };
 String FMT_NUM_SABC_N
 {
-    TEXT = "a .. aa .. aaa" ;
+    Text = "a .. aa .. aaa" ;
 };
 String FMT_NUM_ROMAN
 {
@@ -563,7 +563,7 @@ String FMT_MARK_OLE
  --------------------------------------------------------------------*/
 String FMT_TEXT
 {
-    TEXT = "Text" ;
+    Text = "Text" ;
 };
 /*--------------------------------------------------------------------
     Description: global String resources

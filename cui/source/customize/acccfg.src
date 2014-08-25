@@ -29,7 +29,7 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
     };
     String STR_HUMAN_APPNAME
     {
-        TEXT = "%PRODUCTNAME" ;
+        Text = "%PRODUCTNAME" ;
     };
     String STR_GROUP_STYLES
     {

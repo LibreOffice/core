@@ -31,12 +31,12 @@ String RID_SVXSTR_PRODMACROS
 
 String RID_SVXSTR_SELECTOR_ADD_COMMANDS
 {
-    TEXT [ en-US ] = "Add Commands" ;
+    Text [ en-US ] = "Add Commands" ;
 };
 
 String RID_SVXSTR_SELECTOR_RUN
 {
-    TEXT [ en-US ] = "Run" ;
+    Text [ en-US ] = "Run" ;
 };
 
 String RID_SVXSTR_ROW
