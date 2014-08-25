@@ -52,7 +52,7 @@ public:
      * model string.
      */
     virtual void Text(
-        sal_uInt16 nLength,      /// length of this portion in the model string
+        sal_Int32 nLength,      /// length of this portion in the model string
         sal_uInt16 nType,         /// type of this portion
         sal_Int32 nHeight = 0,   /// height of this portion
         sal_Int32 nWidth = 0     /// width of this portion
@@ -64,7 +64,7 @@ public:
      * the text which is displayed, and the type of the portion.
      */
     virtual void Special(
-        sal_uInt16 nLength,      /// length of this portion in the model string
+        sal_Int32 nLength,      /// length of this portion in the model string
         const OUString& rText, /// text which is painted on-screen
         sal_uInt16 nType,         /// type of this portion
         sal_Int32 nHeight = 0,     /// font height of the painted text
@@ -74,7 +74,7 @@ public:
     /** line break. This method is called whenever a line break in the
      * layout occurs.
      */
-    virtual void LineBreak(sal_uInt16 nWidth) = 0;
+    virtual void LineBreak(sal_Int32 nWidth) = 0;
 
     /** skip characters. The SwTxtFrame may only display partially
      * display a certain paragraph (e.g. when the paragaph is split
@@ -85,7 +85,7 @@ public:
      * Skip() between portions is not allowed.
      */
     virtual void Skip(
-        sal_uInt16 nLength   /// number of 'model string' characters to be skipped
+        sal_Int32 nLength   /// number of 'model string' characters to be skipped
         ) = 0;
 
     /** end of paragraph. This method is to be called when all the

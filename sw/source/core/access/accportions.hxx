@@ -97,10 +97,10 @@ public:
     virtual ~SwAccessiblePortionData();
 
     // SwPortionHandler methods
-    virtual void Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) SAL_OVERRIDE;
-    virtual void Special(sal_uInt16 nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) SAL_OVERRIDE;
-    virtual void LineBreak(sal_uInt16 nWidth) SAL_OVERRIDE;
-    virtual void Skip(sal_uInt16 nLength) SAL_OVERRIDE;
+    virtual void Text(sal_Int32 nLength, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) SAL_OVERRIDE;
+    virtual void Special(sal_Int32 nLength, const OUString& rText, sal_uInt16 nType, sal_Int32 nHeight = 0, sal_Int32 nWidth = 0) SAL_OVERRIDE;
+    virtual void LineBreak(sal_Int32 nWidth) SAL_OVERRIDE;
+    virtual void Skip(sal_Int32 nLength) SAL_OVERRIDE;
     virtual void Finish() SAL_OVERRIDE;
 
     virtual void SetAttrFieldType( sal_uInt16 nAttrFldType ) SAL_OVERRIDE;

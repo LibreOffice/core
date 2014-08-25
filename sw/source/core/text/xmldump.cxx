@@ -27,7 +27,7 @@ class XmlPortionDumper:public SwPortionHandler
 {
   private:
     xmlTextWriterPtr writer;
-    sal_uInt16 ofs;
+    sal_Int32 ofs;
 
     const char* getTypeName( sal_uInt16 nType )
     {
@@ -115,7 +115,7 @@ class XmlPortionDumper:public SwPortionHandler
         @param rText
                 text which is painted on-screen
       */
-    virtual void Text( sal_uInt16 nLength,
+    virtual void Text( sal_Int32 nLength,
                        sal_uInt16 nType,
                        sal_Int32 nHeight,
                        sal_Int32 nWidth) SAL_OVERRIDE
@@ -146,7 +146,7 @@ class XmlPortionDumper:public SwPortionHandler
         @param nHeight
                 font size of the painted text
       */
-    virtual void Special( sal_uInt16 nLength,
+    virtual void Special( sal_Int32 nLength,
                           const OUString & rText,
                           sal_uInt16 nType,
                           sal_Int32 nHeight,
@@ -175,7 +175,7 @@ class XmlPortionDumper:public SwPortionHandler
         ofs += nLength;
     }
 
-    virtual void LineBreak( sal_uInt16 nWidth ) SAL_OVERRIDE
+    virtual void LineBreak( sal_Int32 nWidth ) SAL_OVERRIDE
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "LineBreak" ) );
         if (nWidth > 0)
@@ -189,7 +189,7 @@ class XmlPortionDumper:public SwPortionHandler
       * @param nLength
       *         number of 'model string' characters to be skipped
       */
-    virtual void Skip( sal_uInt16 nLength ) SAL_OVERRIDE
+    virtual void Skip( sal_Int32 nLength ) SAL_OVERRIDE
     {
         xmlTextWriterStartElement( writer, BAD_CAST( "Skip" ) );
         xmlTextWriterWriteFormatAttribute( writer,
