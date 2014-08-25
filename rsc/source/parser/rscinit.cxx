@@ -94,7 +94,6 @@ void RscTypCont::Init()
     RscTop   *  pClassMenuItem;
     RscTop   *  pClassMenu;
     RscTop   *  pClassMessBox;
-    RscTop   *  pClassWarningBox;
     RscTop   *  pClassSplitter;
     RscTop   *  pClassSplitWindow;
     RscTop   *  pClassSpinButton;
@@ -468,13 +467,6 @@ void RscTypCont::Init()
     pClassMessBox = InitClassMessBox( pClassMgr, pMessButtons,
                                          pMessDefButton );
     pRoot->Insert( pClassMessBox );
-
-    // Klasse anlegen
-    nId = pHS->getID( "WarningBox" );
-    pClassWarningBox = new RscClass( nId, RSC_WARNINGBOX, pClassMessBox );
-    pClassWarningBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassWarningBox );
-    pRoot->Insert( pClassWarningBox );
 }
 {
     pClassSplitter = InitClassSplitter( pClassWindow );

@@ -448,12 +448,6 @@ WarningBox::WarningBox( Window* pParent, WinBits nStyle,
     ImplInitWarningBoxData();
 }
 
-WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
-    MessBox( pParent, rResId.SetRT( RSC_WARNINGBOX ) )
-{
-    ImplInitWarningBoxData();
-}
-
 void WarningBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();

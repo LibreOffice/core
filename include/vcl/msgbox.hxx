@@ -91,7 +91,6 @@ private:
 public:
                         WarningBox( Window* pParent, WinBits nStyle,
                                     const OUString& rMessage );
-                        WarningBox( Window* pParent, const ResId& rResId );
 
     void                SetDefaultCheckBoxText();
 
