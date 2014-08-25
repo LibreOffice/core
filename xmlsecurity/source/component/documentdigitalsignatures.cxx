@@ -36,7 +36,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
@@ -226,7 +226,7 @@ bool DocumentDigitalSignatures::ImplViewSignatures(
     }
     else
     {
-        WarningBox aBox( NULL, XMLSEC_RES( RID_XMLSECWB_NO_MOZILLA_PROFILE ) );
+        MessageDialog aBox(NULL, XMLSEC_RES(RID_XMLSECWB_NO_MOZILLA_PROFILE), VCL_MESSAGE_WARNING);
         aBox.Execute();
     }
 

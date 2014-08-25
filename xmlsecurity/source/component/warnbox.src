@@ -19,11 +19,9 @@
 
 #include <xmlsecurity/global.hrc>
 
-WarningBox RID_XMLSECWB_NO_MOZILLA_PROFILE
+String RID_XMLSECWB_NO_MOZILLA_PROFILE
 {
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ en-US ] = "Digital signatures functionality could not be used, because no Mozilla user profile was found. Please check the Mozilla installation." ;
+    Text [ en-US ] = "Digital signatures functionality could not be used, because no Mozilla user profile was found. Please check the Mozilla installation." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
