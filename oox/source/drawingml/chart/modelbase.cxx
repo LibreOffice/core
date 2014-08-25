@@ -32,8 +32,8 @@ NumberFormat::NumberFormat() :
 
 void NumberFormat::setAttributes( const AttributeList& rAttribs )
 {
+    mbSourceLinked = rAttribs.getBool( XML_sourceLinked, true);
     maFormatCode = rAttribs.getString( XML_formatCode, OUString() );
-    // TODO: if XML_sourceLinked is true, <c:formatCode> should be used instead.
 }
 
 LayoutModel::LayoutModel() :
