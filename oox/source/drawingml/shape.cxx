@@ -919,16 +919,16 @@ Reference< XShape > Shape::createAndInsert(
             {
                 Sequence< PropertyValue > aEffects( aEffectProperties.maEffects.size() );
                 sal_uInt32 i = 0;
-                for( std::vector< Effect* >::iterator it = aEffectProperties.maEffects.begin();
+                for( boost::ptr_vector< Effect >::iterator it = aEffectProperties.maEffects.begin();
                         it != aEffectProperties.maEffects.end(); ++it )
                 {
-                    PropertyValue aEffect = (*it)->getEffect();
+                    PropertyValue aEffect = it->getEffect();
                     if( !aEffect.Name.isEmpty() )
                     {
                         Sequence< PropertyValue > aEffectsGrabBag( 3 );
                         PUT_PROP( aEffectsGrabBag, 0, "Attribs", aEffect.Value );
 
-                        Color& aColor( (*it)->moColor );
+                        Color& aColor( it->moColor );
                         OUString sColorScheme = aColor.getSchemeName();
                         if( sColorScheme.isEmpty() )
                         {

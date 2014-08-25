@@ -35,16 +35,16 @@ void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
 void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
         const GraphicHelper& rGraphicHelper ) const
 {
-    for( std::vector< Effect* >::const_iterator it = maEffects.begin(); it != maEffects.end(); ++it )
-        if( (*it)->msName == "outerShdw" )
+    for( boost::ptr_vector< Effect >::const_iterator it = maEffects.begin(); it != maEffects.end(); ++it )
+        if( it->msName == "outerShdw" )
         {
             sal_Int32 nAttrDir = 0, nAttrDist = 0;
-            std::map< OUString, css::uno::Any >::iterator attribIt = (*it)->maAttribs.find( "dir" );
-            if( attribIt != (*it)->maAttribs.end() )
+            std::map< OUString, css::uno::Any >::const_iterator attribIt = it->maAttribs.find( "dir" );
+            if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrDir;
 
-            attribIt = (*it)->maAttribs.find( "dist" );
-            if( attribIt != (*it)->maAttribs.end() )
+            attribIt = it->maAttribs.find( "dist" );
+            if( attribIt != it->maAttribs.end() )
                 attribIt->second >>= nAttrDist;
 
             // Negative X or Y dist indicates left or up, respectively
@@ -56,8 +56,8 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
             rPropMap.setProperty( PROP_Shadow, true );
             rPropMap.setProperty( PROP_ShadowXDistance, nXDist);
             rPropMap.setProperty( PROP_ShadowYDistance, nYDist);
-            rPropMap.setProperty( PROP_ShadowColor, (*it)->moColor.getColor(rGraphicHelper, -1 ) );
-            rPropMap.setProperty( PROP_ShadowTransparence, (*it)->moColor.getTransparency());
+            rPropMap.setProperty( PROP_ShadowColor, it->moColor.getColor(rGraphicHelper, -1 ) );
+            rPropMap.setProperty( PROP_ShadowTransparence, it->moColor.getTransparency());
         }
 }
 
