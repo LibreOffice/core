@@ -517,7 +517,8 @@ sal_uInt16  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
     return SW_SERVICE_INVALID;
 }
 
-uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc* pDoc)
+uno::Reference<uno::XInterface>
+SwXServiceProvider::MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc)
 {
     SolarMutexGuard aGuard;
     uno::Reference< uno::XInterface >  xRet;
@@ -530,40 +531,41 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case  SW_SERVICE_TYPE_TEXTFRAME:
         {
-            xRet = SwXTextFrame::CreateXTextFrame(*pDoc, 0);
+            xRet = SwXTextFrame::CreateXTextFrame(rDoc, 0);
         }
         break;
         case  SW_SERVICE_TYPE_GRAPHIC  :
         case  SW_SERVICE_TYPE_TEXT_GRAPHIC /* #i47503# */ :
         {
-            xRet = SwXTextGraphicObject::CreateXTextGraphicObject(*pDoc, 0);
+            xRet = SwXTextGraphicObject::CreateXTextGraphicObject(rDoc, 0);
 
         }
         break;
         case  SW_SERVICE_TYPE_OLE      :
         {
-            xRet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*pDoc, 0);
+            xRet = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(rDoc, 0);
         }
         break;
         case  SW_SERVICE_TYPE_BOOKMARK :
         {
-            xRet = SwXBookmark::CreateXBookmark(*pDoc, 0);
+            xRet = SwXBookmark::CreateXBookmark(rDoc, 0);
         }
         break;
         case  SW_SERVICE_TYPE_FIELDMARK :
         {
-            xRet = SwXFieldmark::CreateXFieldmark(*pDoc, 0, false);
+            xRet = SwXFieldmark::CreateXFieldmark(rDoc, 0, false);
         }
         break;
         case  SW_SERVICE_TYPE_FORMFIELDMARK :
         {
-            xRet = SwXFieldmark::CreateXFieldmark(*pDoc, 0, true);
+            xRet = SwXFieldmark::CreateXFieldmark(rDoc, 0, true);
         }
         break;
         case  SW_SERVICE_VBAOBJECTPROVIDER :
 #ifndef DISABLE_SCRIPTING
         {
-            SwVbaObjectForCodeNameProvider* pObjProv = new SwVbaObjectForCodeNameProvider( pDoc->GetDocShell() );
+            SwVbaObjectForCodeNameProvider* pObjProv =
+                new SwVbaObjectForCodeNameProvider(rDoc.GetDocShell());
             xRet =  (cppu::OWeakObject*)pObjProv;
         }
 #endif
@@ -571,9 +573,9 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case  SW_SERVICE_VBACODENAMEPROVIDER :
 #ifndef DISABLE_SCRIPTING
         {
-            if ( pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
+            if (rDoc.GetDocShell() && ooo::vba::isAlienWordDoc(*rDoc.GetDocShell()))
             {
-                SwVbaCodeNameProvider* pObjProv = new SwVbaCodeNameProvider( pDoc->GetDocShell() );
+                SwVbaCodeNameProvider* pObjProv = new SwVbaCodeNameProvider(rDoc.GetDocShell());
                 xRet =  (cppu::OWeakObject*)pObjProv;
             }
         }
@@ -582,11 +584,12 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case  SW_SERVICE_VBAPROJECTNAMEPROVIDER :
 #ifndef DISABLE_SCRIPTING
         {
-                        uno::Reference< container::XNameContainer > xProjProv = pDoc->GetVBATemplateToProjectCache();
-                        if ( !xProjProv.is() && pDoc->GetDocShell()  && ooo::vba::isAlienWordDoc( *pDoc->GetDocShell() ) )
+                        uno::Reference< container::XNameContainer > xProjProv = rDoc.GetVBATemplateToProjectCache();
+                        if (!xProjProv.is() && rDoc.GetDocShell()
+                            && ooo::vba::isAlienWordDoc(*rDoc.GetDocShell()))
                         {
                 xProjProv = new SwVbaProjectNameProvider;
-                            pDoc->SetVBATemplateToProjectCache( xProjProv );
+                            rDoc.SetVBATemplateToProjectCache(xProjProv);
                         }
             xRet = xProjProv;
         }
@@ -595,28 +598,25 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case  SW_SERVICE_VBAGLOBALS :
 #ifndef DISABLE_SCRIPTING
         {
-            if ( pDoc )
+            uno::Any aGlobs;
+            BasicManager *pBasicMan = rDoc.GetDocShell()->GetBasicManager();
+            if (pBasicMan && !pBasicMan->GetGlobalUNOConstant("VBAGlobals", aGlobs))
             {
-                uno::Any aGlobs;
-                BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
-                if (pBasicMan && !pBasicMan->GetGlobalUNOConstant("VBAGlobals", aGlobs))
-                {
-                    uno::Sequence< uno::Any > aArgs(1);
-                    aArgs[ 0 ] <<= pDoc->GetDocShell()->GetModel();
-                    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
-                    pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-                }
-                aGlobs >>= xRet;
+                uno::Sequence< uno::Any > aArgs(1);
+                aArgs[ 0 ] <<= rDoc.GetDocShell()->GetModel();
+                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
+                pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
             }
+            aGlobs >>= xRet;
         }
 #endif
         break;
 
         case  SW_SERVICE_TYPE_FOOTNOTE :
-            xRet = SwXFootnote::CreateXFootnote(*pDoc, 0, false);
+            xRet = SwXFootnote::CreateXFootnote(rDoc, 0, false);
         break;
         case  SW_SERVICE_TYPE_ENDNOTE  :
-            xRet = SwXFootnote::CreateXFootnote(*pDoc, 0, true);
+            xRet = SwXFootnote::CreateXFootnote(rDoc, 0, true);
         break;
         case  SW_SERVICE_CONTENT_INDEX_MARK :
         case  SW_SERVICE_USER_INDEX_MARK    :
@@ -627,7 +627,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 eType = TOX_CONTENT;
             else if(SW_SERVICE_USER_INDEX_MARK == nObjectType)
                 eType = TOX_USER;
-            xRet = SwXDocumentIndexMark::CreateXDocumentIndexMark(*pDoc, 0, eType);
+            xRet = SwXDocumentIndexMark::CreateXDocumentIndexMark(rDoc, 0, eType);
         }
         break;
         case  SW_SERVICE_CONTENT_INDEX      :
@@ -659,7 +659,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             {
                 eType = TOX_TABLES;
             }
-            xRet = SwXDocumentIndex::CreateXDocumentIndex(*pDoc, 0, eType);
+            xRet = SwXDocumentIndex::CreateXDocumentIndex(rDoc, 0, eType);
         }
         break;
         case SW_SERVICE_INDEX_HEADER_SECTION :
@@ -669,7 +669,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
 
         break;
         case SW_SERVICE_REFERENCE_MARK :
-            xRet = SwXReferenceMark::CreateXReferenceMark(*pDoc, 0);
+            xRet = SwXReferenceMark::CreateXReferenceMark(rDoc, 0);
         break;
         case SW_SERVICE_STYLE_CHARACTER_STYLE:
         case SW_SERVICE_STYLE_PARAGRAPH_STYLE:
@@ -695,11 +695,11 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                     eFamily = SFX_STYLE_FAMILY_PSEUDO;
                 break;
             }
-            SwXStyle* pNewStyle = SFX_STYLE_FAMILY_PAGE == eFamily ?
-                new SwXPageStyle(pDoc->GetDocShell()) :
-                    eFamily == SFX_STYLE_FAMILY_FRAME ?
-                        new SwXFrameStyle ( pDoc ):
-                            new SwXStyle( pDoc, eFamily, nObjectType == SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE);
+            SwXStyle* pNewStyle = (SFX_STYLE_FAMILY_PAGE == eFamily)
+                ? new SwXPageStyle(rDoc.GetDocShell())
+                : (eFamily == SFX_STYLE_FAMILY_FRAME)
+                    ? new SwXFrameStyle(&rDoc)
+                    : new SwXStyle(&rDoc, eFamily, nObjectType == SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE);
             xRet = (cppu::OWeakObject*)pNewStyle;
         }
         break;
@@ -759,7 +759,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet = SwXTextField::CreateXTextField(0, 0, nObjectType);
             break;
         case SW_SERVICE_FIELDTYPE_ANNOTATION:
-            xRet = SwXTextField::CreateXTextField(pDoc, 0, nObjectType);
+            xRet = SwXTextField::CreateXTextField(&rDoc, 0, nObjectType);
             break;
         case SW_SERVICE_FIELDMASTER_USER:
         case SW_SERVICE_FIELDMASTER_DDE:
@@ -774,31 +774,31 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
                 case SW_SERVICE_FIELDMASTER_SET_EXP : nResId = RES_SETEXPFLD; break;
                 case SW_SERVICE_FIELDMASTER_DATABASE: nResId = RES_DBFLD; break;
             }
-            xRet = SwXFieldMaster::CreateXFieldMaster(pDoc, 0, nResId);
+            xRet = SwXFieldMaster::CreateXFieldMaster(&rDoc, 0, nResId);
         }
         break;
         case SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY:
         {
-            SwFieldType* pType = pDoc->getIDocumentFieldsAccess().GetFldType(RES_AUTHORITY, aEmptyOUStr, true);
+            SwFieldType* pType = rDoc.getIDocumentFieldsAccess().GetFldType(RES_AUTHORITY, aEmptyOUStr, true);
             if(!pType)
             {
-                SwAuthorityFieldType aType(pDoc);
-                pType = pDoc->getIDocumentFieldsAccess().InsertFldType(aType);
+                SwAuthorityFieldType aType(&rDoc);
+                pType = rDoc.getIDocumentFieldsAccess().InsertFldType(aType);
             }
-            xRet = SwXFieldMaster::CreateXFieldMaster(pDoc, pType);
+            xRet = SwXFieldMaster::CreateXFieldMaster(&rDoc, pType);
         }
         break;
         case SW_SERVICE_PARAGRAPH :
-            xRet = SwXParagraph::CreateXParagraph(*pDoc, 0);
+            xRet = SwXParagraph::CreateXParagraph(rDoc, 0);
         break;
         case SW_SERVICE_NUMBERING_RULES :
-            xRet = (cppu::OWeakObject*)new SwXNumberingRules(*pDoc);
+            xRet = (cppu::OWeakObject*)new SwXNumberingRules(rDoc);
         break;
         case SW_SERVICE_TEXT_COLUMNS :
             xRet = (cppu::OWeakObject*)new SwXTextColumns(0);
         break;
         case SW_SERVICE_DEFAULTS:
-            xRet = (cppu::OWeakObject*)new SwXTextDefaults( pDoc );
+            xRet = (cppu::OWeakObject*)new SwXTextDefaults(&rDoc);
         break;
         case SW_SERVICE_IMAP_RECTANGLE :
             xRet = SvUnoImageMapRectangleObject_createInstance( sw_GetSupportedMacroItems() );
@@ -814,15 +814,15 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             // paste, there should be no data provider, so that own data is used
             // This should not happen during copy/paste, as this will unlink
             // charts using table data.
-            OSL_ASSERT( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED );
-            if( pDoc->GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
-                xRet = (cppu::OWeakObject*) pDoc->getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ );
+            OSL_ASSERT(rDoc.GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED);
+            if (rDoc.GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED)
+                xRet = (cppu::OWeakObject*) rDoc.getIDocumentChartDataProviderAccess().GetChartDataProvider( true /* create - if not yet available */ );
         break;
         case SW_SERVICE_TYPE_META:
-            xRet = SwXMeta::CreateXMeta(*pDoc, false);
+            xRet = SwXMeta::CreateXMeta(rDoc, false);
         break;
         case SW_SERVICE_FIELDTYPE_METAFIELD:
-            xRet = SwXMeta::CreateXMeta(*pDoc, true);
+            xRet = SwXMeta::CreateXMeta(rDoc, true);
         break;
         default:
             throw uno::RuntimeException();

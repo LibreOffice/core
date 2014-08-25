@@ -1642,7 +1642,7 @@ css::uno::Reference<css::uno::XInterface> SwXTextDocument::create(
     const sal_uInt16 nType = SwXServiceProvider::GetProviderType(rServiceName);
     if (nType != SW_SERVICE_INVALID)
     {
-        return SwXServiceProvider::MakeInstance(nType, pDocShell->GetDoc());
+        return SwXServiceProvider::MakeInstance(nType, *pDocShell->GetDoc());
     }
     if (rServiceName == "com.sun.star.drawing.DashTable")
     {

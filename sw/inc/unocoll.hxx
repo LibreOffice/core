@@ -256,7 +256,7 @@ class SwXServiceProvider
 public:
     static OUString        GetProviderName(sal_uInt16 nObjectType);
     static sal_uInt16           GetProviderType(const OUString& rServiceName);
-    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >        MakeInstance(sal_uInt16 nObjectType, SwDoc* pDoc);
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >        MakeInstance(sal_uInt16 nObjectType, SwDoc & rDoc);
     static ::com::sun::star::uno::Sequence<OUString>   GetAllServiceNames();
 
 };
