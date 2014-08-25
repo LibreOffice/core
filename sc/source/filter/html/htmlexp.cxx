@@ -313,11 +313,11 @@ sal_uLong ScHTMLExport::Write()
 {
     if (!mbSkipHeaderFooter)
     {
-    rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype40 ).WriteChar( '>' )
-       .WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( SAL_NEWLINE_STRING );
-    TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
-    WriteHeader();
-    OUT_LF();
+        rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype40 ).WriteChar( '>' )
+           .WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( SAL_NEWLINE_STRING );
+        TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
+        WriteHeader();
+        OUT_LF();
     }
     WriteBody();
     OUT_LF();
@@ -555,70 +555,70 @@ void ScHTMLExport::WriteBody()
     // default text color black
     if (!mbSkipHeaderFooter)
     {
-    rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body );
+        rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body );
 
-    if (!mbSkipImages)
-    {
-        if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
+        if (!mbSkipImages)
         {
-            OUString aLink = pBrushItem->GetGraphicLink();
-            OUString aGrfNm;
-
-            // Embedded graphic -> write using WriteGraphic
-            if( aLink.isEmpty() )
+            if ( bAll && GPOS_NONE != pBrushItem->GetGraphicPos() )
             {
-                const Graphic* pGrf = pBrushItem->GetGraphic();
-                if( pGrf )
+                OUString aLink = pBrushItem->GetGraphicLink();
+                OUString aGrfNm;
+
+                // Embedded graphic -> write using WriteGraphic
+                if( aLink.isEmpty() )
                 {
-                    // Save graphic as (JPG) file
-                    aGrfNm = aStreamPath;
-                    sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
-                        "JPG", XOUTBMP_USE_NATIVE_IF_POSSIBLE );
-                    if( !nErr ) // Contains errors, as we have nothing to output
+                    const Graphic* pGrf = pBrushItem->GetGraphic();
+                    if( pGrf )
                     {
+                        // Save graphic as (JPG) file
+                        aGrfNm = aStreamPath;
+                        sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
+                            "JPG", XOUTBMP_USE_NATIVE_IF_POSSIBLE );
+                        if( !nErr ) // Contains errors, as we have nothing to output
+                        {
+                            aGrfNm = URIHelper::SmartRel2Abs(
+                                    INetURLObject(aBaseURL),
+                                    aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
+                            if ( HasCId() )
+                                MakeCIdURL( aGrfNm );
+                            aLink = aGrfNm;
+                        }
+                    }
+                }
+                else
+                {
+                    aGrfNm = aLink;
+                    if( bCopyLocalFileToINet || HasCId() )
+                    {
+                        CopyLocalFileToINet( aGrfNm, aStreamPath );
+                        if ( HasCId() )
+                            MakeCIdURL( aGrfNm );
+                    }
+                    else
                         aGrfNm = URIHelper::SmartRel2Abs(
                                 INetURLObject(aBaseURL),
                                 aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
-                        if ( HasCId() )
-                            MakeCIdURL( aGrfNm );
-                        aLink = aGrfNm;
-                    }
+                    aLink = aGrfNm;
                 }
-            }
-            else
-            {
-                aGrfNm = aLink;
-                if( bCopyLocalFileToINet || HasCId() )
+                if( !aLink.isEmpty() )
                 {
-                    CopyLocalFileToINet( aGrfNm, aStreamPath );
-                    if ( HasCId() )
-                        MakeCIdURL( aGrfNm );
+                    rStrm.WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_background ).WriteCharPtr( "=\"" );
+                    OUT_STR( URIHelper::simpleNormalizedMakeRelative(
+                                aBaseURL,
+                                aLink ) ).WriteChar( '\"' );
                 }
-                else
-                    aGrfNm = URIHelper::SmartRel2Abs(
-                            INetURLObject(aBaseURL),
-                            aGrfNm, URIHelper::GetMaybeFileHdl(), true, false);
-                aLink = aGrfNm;
-            }
-            if( !aLink.isEmpty() )
-            {
-                rStrm.WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_background ).WriteCharPtr( "=\"" );
-                OUT_STR( URIHelper::simpleNormalizedMakeRelative(
-                            aBaseURL,
-                            aLink ) ).WriteChar( '\"' );
             }
         }
-    }
-    if ( !aHTMLStyle.aBackgroundColor.GetTransparency() )
-    {   // A transparent background color should always result in default
-        // background of the browser. Also, HTMLOutFuncs::Out_Color() writes
-        // black #000000 for COL_AUTO which is the same as white #ffffff with
-        // transparency set to 0xff, our default background.
-        OUT_SP_CSTR_ASS( OOO_STRING_SVTOOLS_HTML_O_bgcolor );
-        HTMLOutFuncs::Out_Color( rStrm, aHTMLStyle.aBackgroundColor );
-    }
+        if ( !aHTMLStyle.aBackgroundColor.GetTransparency() )
+        {   // A transparent background color should always result in default
+            // background of the browser. Also, HTMLOutFuncs::Out_Color() writes
+            // black #000000 for COL_AUTO which is the same as white #ffffff with
+            // transparency set to 0xff, our default background.
+            OUT_SP_CSTR_ASS( OOO_STRING_SVTOOLS_HTML_O_bgcolor );
+            HTMLOutFuncs::Out_Color( rStrm, aHTMLStyle.aBackgroundColor );
+        }
 
-    rStrm.WriteChar( '>' ); OUT_LF();
+        rStrm.WriteChar( '>' ); OUT_LF();
     }
 
     if ( bAll )
