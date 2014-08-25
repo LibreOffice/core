@@ -629,14 +629,14 @@ public:
                     else if ( mpSecondArg->isConstant() && (*mpSecondArg)() == 1 )
                         aRet = mpFirstArg->fillNode( rEquations, NULL, nFlags );
                     else if ( ( mpFirstArg->getType() == BINARY_FUNC_DIV )      // don't care of (pi/180)
-                        && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpFirstArg.get())->mpFirstArg.get())->getType() == ENUM_FUNC_PI )
-                        && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpFirstArg.get())->mpSecondArg.get())->getType() == FUNC_CONST ) )
+                        && ( ((BinaryFunctionExpression*)mpFirstArg.get())->mpFirstArg.get()->getType() == ENUM_FUNC_PI )
+                        && ( ((BinaryFunctionExpression*)mpFirstArg.get())->mpSecondArg.get()->getType() == FUNC_CONST ) )
                     {
                         aRet = mpSecondArg->fillNode( rEquations, NULL, nFlags );
                     }
                     else if ( ( mpSecondArg->getType() == BINARY_FUNC_DIV )     // don't care of (pi/180)
-                        && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpSecondArg.get())->mpFirstArg.get())->getType() == ENUM_FUNC_PI )
-                        && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpSecondArg.get())->mpSecondArg.get())->getType() == FUNC_CONST ) )
+                        && ( ((BinaryFunctionExpression*)mpSecondArg.get())->mpFirstArg.get()->getType() == ENUM_FUNC_PI )
+                        && ( ((BinaryFunctionExpression*)mpSecondArg.get())->mpSecondArg.get()->getType() == FUNC_CONST ) )
                     {
                         aRet = mpFirstArg->fillNode( rEquations, NULL, nFlags );
                     }
