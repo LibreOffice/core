@@ -46,12 +46,12 @@
 #define ITEM_FORMAT_CHAR_DLG \
     Identifier = SID_CHAR_DLG ; \
     Command = ".uno:FontDialog" ; \
-    Text [ en-US ] = "C~haracter..." ;\
+    Text [ en-US ] = "C~haracter Formatting..." ;\
 
 #define ITEM_FORMAT_PARA_DLG \
     Identifier = SID_PARA_DLG ; \
     Command = ".uno:ParagraphDialog" ; \
-    Text [ en-US ] = "P~aragraph..." ;\
+    Text [ en-US ] = "P~aragraph Formatting..." ;\
 
 #define ITEM_FORMAT_FONTWORK \
     Identifier = SID_FONTWORK ; \
