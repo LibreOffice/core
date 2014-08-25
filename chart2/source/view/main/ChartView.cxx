@@ -2447,7 +2447,7 @@ bool ChartView::isReal3DChart()
     return GL3DHelper::isGL3DDiagram(xDiagram);
 }
 
-const char* envChartDummyFactory = getenv("CHART_DUMMY_FACTORY");
+static const char* envChartDummyFactory = getenv("CHART_DUMMY_FACTORY");
 
 void ChartView::createShapes()
 {
