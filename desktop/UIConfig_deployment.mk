@@ -13,6 +13,7 @@ $(eval $(call gb_UIConfig_add_uifiles,desktop,\
     desktop/uiconfig/ui/cmdlinehelp \
     desktop/uiconfig/ui/dependenciesdialog \
     desktop/uiconfig/ui/extensionmanager \
+    desktop/uiconfig/ui/installforalldialog \
     desktop/uiconfig/ui/licensedialog \
     desktop/uiconfig/ui/showlicensedialog \
     desktop/uiconfig/ui/updatedialog \

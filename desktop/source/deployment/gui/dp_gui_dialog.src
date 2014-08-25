@@ -74,16 +74,6 @@ String RID_STR_ACCEPT_LICENSE
     Text [ en-US ] = "Accept license for %EXTENSION_NAME";
 };
 
-String RID_STR_INSTALL_FOR_ALL
-{
-    Text [ en-US ] = "~For all users";
-};
-
-String RID_STR_INSTALL_FOR_ME
-{
-    Text [ en-US ] = "~Only for me";
-};
-
 String RID_STR_ERROR_UNKNOWN_STATUS
 {
     Text [ en-US ] = "Error: The status of this extension is unknown";

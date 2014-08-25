@@ -643,34 +643,19 @@ bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
     return ( RET_OK == aInfo.Execute() );
 }
 
-
 bool DialogHelper::installForAllUsers( bool &bInstallForAll ) const
 {
     const SolarMutexGuard guard;
-    QueryBox aQuery( m_pVCLWindow, getResId( RID_QUERYBOX_INSTALL_FOR_ALL ) );
-
-    OUString sMsgText(aQuery.GetMessText());
-    sMsgText = sMsgText.replaceAll(
-        "%PRODUCTNAME", utl::ConfigManager::getProductName());
-    aQuery.SetMessText(sMsgText);
-
-    sal_uInt16 nYesBtnID = aQuery.GetButtonId( 0 );
-    sal_uInt16 nNoBtnID = aQuery.GetButtonId( 1 );
-
-    if ( nYesBtnID != BUTTONDIALOG_BUTTON_NOTFOUND )
-        aQuery.SetButtonText( nYesBtnID, getResourceString( RID_STR_INSTALL_FOR_ME ) );
-    if ( nNoBtnID != BUTTONDIALOG_BUTTON_NOTFOUND )
-        aQuery.SetButtonText( nNoBtnID, getResourceString( RID_STR_INSTALL_FOR_ALL ) );
+    MessageDialog aQuery(m_pVCLWindow, "InstallForAllDialog",
+                         "desktop/ui/installforalldialog.ui");
 
     short nRet = aQuery.Execute();
-
-    if ( nRet == RET_CANCEL )
+    if (nRet == RET_CANCEL)
         return false;
 
     bInstallForAll = ( nRet == RET_NO );
     return true;
 }
-
 
 void DialogHelper::PostUserEvent( const Link& rLink, void* pCaller )
 {

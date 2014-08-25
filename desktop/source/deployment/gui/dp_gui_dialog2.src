@@ -40,11 +40,4 @@ Image RID_IMG_EXTENSION
     ImageBitmap = Bitmap { File = "extension_32.png"; };
 };
 
-QueryBox RID_QUERYBOX_INSTALL_FOR_ALL
-{
-    Buttons = WB_YES_NO_CANCEL;
-    DefButton = WB_DEF_YES;
-    Message[en-US] = "Make sure that no further users are working with the same %PRODUCTNAME, when installing an extension for all users in a multi user environment.\n\nFor whom do you want to install the extension?\n";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

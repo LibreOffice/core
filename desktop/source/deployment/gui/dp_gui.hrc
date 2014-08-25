@@ -23,7 +23,6 @@
 #include "deployment.hrc"
 #include "helpid.hrc"
 
-#define RID_QUERYBOX_INSTALL_FOR_ALL                              (RID_DEPLOYMENT_GUI_START + 2)
 #define RID_WARNINGBOX_VERSION_LESS                               (RID_DEPLOYMENT_GUI_START + 3)
 #define RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES           (RID_DEPLOYMENT_GUI_START + 4)
 #define RID_WARNINGBOX_VERSION_EQUAL                              (RID_DEPLOYMENT_GUI_START + 5)
@@ -77,8 +76,6 @@
 #define RID_STR_DISABLING_PACKAGES             (RID_DEPLOYMENT_GUI_START+88)
 #define RID_STR_ACCEPT_LICENSE                 (RID_DEPLOYMENT_GUI_START+89)
 
-#define RID_STR_INSTALL_FOR_ALL                (RID_DEPLOYMENT_GUI_START+90)
-#define RID_STR_INSTALL_FOR_ME                 (RID_DEPLOYMENT_GUI_START+91)
 #define RID_STR_ERROR_UNKNOWN_STATUS           (RID_DEPLOYMENT_GUI_START+92)
 #define RID_STR_CLOSE_BTN                      (RID_DEPLOYMENT_GUI_START+93)
 #define RID_STR_EXIT_BTN                       (RID_DEPLOYMENT_GUI_START+94)
