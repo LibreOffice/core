@@ -29,8 +29,8 @@
 #include <com/sun/star/java/RestartRequiredException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/rcid.h>
 #include <jvmfwk/framework.h>
@@ -159,8 +159,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bJavaDisabled_Handled = true;
             // Java disabled. Give user a chance to enable Java inside Office.
-            QueryBox aQueryBox( NULL, SvtResId( QBX_JAVADISABLED ) );
-            aQueryBox.SetText(SvtResId( STR_QUESTION_JAVADISABLED ).toString());
+            MessageDialog aQueryBox(NULL, "JavaDisabledDialog",
+                                    "svt/ui/javadisableddialog.ui");
             nResult = aQueryBox.Execute();
             if ( nResult == RET_YES )
             {
