@@ -435,10 +435,10 @@ public:
     sal_Int32       m_nParam2;
 
     Impl(SwModify *const pModify,
-            SwDoc & rDoc, sal_uInt16 const nResId, bool const bIsDescriptor)
+            SwDoc * pDoc, sal_uInt16 const nResId, bool const bIsDescriptor)
         : SwClient(pModify)
         , m_EventListeners(m_Mutex)
-        , m_pDoc(& rDoc)
+        , m_pDoc(pDoc)
         , m_bIsDescriptor(bIsDescriptor)
         , m_nResTypeId(nResId)
         , m_fParam1(0.0)
@@ -526,12 +526,12 @@ SwXFieldMaster::getSupportedServiceNames() throw (uno::RuntimeException, std::ex
 
 SwXFieldMaster::SwXFieldMaster(SwDoc *const pDoc, sal_uInt16 const nResId)
     : m_pImpl(new Impl(pDoc->getIDocumentStylePoolAccess().GetPageDescFromPool(RES_POOLPAGE_STANDARD),
-                *pDoc, nResId, true))
+                pDoc, nResId, true))
 {
 }
 
-SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc & rDoc)
-    : m_pImpl(new Impl(&rType, rDoc, rType.Which(), false))
+SwXFieldMaster::SwXFieldMaster(SwFieldType& rType, SwDoc * pDoc)
+    : m_pImpl(new Impl(&rType, pDoc, rType.Which(), false))
 {
 }
 
@@ -552,7 +552,7 @@ SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
     if (!xFM.is())
     {
         SwXFieldMaster *const pFM( (pType)
-                ? new SwXFieldMaster(*pType, *pDoc)
+                ? new SwXFieldMaster(*pType, pDoc)
                 : new SwXFieldMaster(pDoc, nResId));
         xFM.set(pFM);
         if (pType)

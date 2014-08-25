@@ -56,7 +56,7 @@ private:
 
     virtual ~SwXFieldMaster();
 
-    SwXFieldMaster(SwFieldType& rType, SwDoc & rDoc);
+    SwXFieldMaster(SwFieldType& rType, SwDoc * pDoc);
 
     /// descriptor
     SwXFieldMaster(SwDoc* pDoc, sal_uInt16 nResId);
