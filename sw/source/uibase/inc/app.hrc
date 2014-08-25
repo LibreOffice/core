@@ -42,7 +42,6 @@
 #define STR_REDLINE_UNKNOWN_AUTHOR      (RC_APP_BEGIN + 76)
 #define STR_WESTERN_FONT                (RC_APP_BEGIN + 77)
 #define STR_CJK_FONT                    (RC_APP_BEGIN + 78)
-#define MSG_PRINT_AS_MERGE              (RC_APP_BEGIN + 80)
 
 #define STR_ENV_TITLE                   (RC_APP_BEGIN + 91)
 #define STR_LAB_TITLE                   (RC_APP_BEGIN + 92)

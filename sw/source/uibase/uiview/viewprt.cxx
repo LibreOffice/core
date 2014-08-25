@@ -24,7 +24,6 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/prnmon.hxx>
@@ -202,7 +201,8 @@ void SwView::ExecutePrint(SfxRequest& rReq)
             if(!bSilent && !bFromMerge &&
                     SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
-                QueryBox aBox( &GetEditWin(), SW_RES( MSG_PRINT_AS_MERGE ));
+                MessageDialog aBox(&GetEditWin(), "PrintMergeDialog",
+                                   "modules/swriter/ui/printmergedialog.ui");
                 short nRet = aBox.Execute();
                 if(RET_YES == nRet)
                 {

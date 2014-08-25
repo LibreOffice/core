@@ -466,14 +466,6 @@ String STR_REDLINE_UNKNOWN_AUTHOR
     Text [ en-US ] = "Unknown Author";
 };
 
-QueryBox MSG_PRINT_AS_MERGE
-{
-    HelpId = HID_PRINT_AS_MERGE;
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "Your document contains address database fields. Do you want to print a form letter?";
-};
-
 String RID_MODULE_TOOLBOX
 {
     Text [ en-US ] = "Function Bar (viewing mode)" ;
