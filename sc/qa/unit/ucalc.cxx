@@ -5835,6 +5835,114 @@ void Test::testSortRefUpdate4()
     m_pDoc->DeleteTab(0);
 }
 
+// Make sure the refupdate works also with volatile cells, see fdo#83067
+/* FIXME: this test is not roll-over-midnight safe and will fail then! We may
+ * want to have something different, but due to the nature of volatile
+ * functions it's not that easy to come up with something reproducible staying
+ * stable over sorts.. ;-)  Check for time and don't run test a few seconds
+ * before midnight, ermm.. */
+void Test::testSortRefUpdate5()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    m_pDoc->InsertTab(0, "Sort");
+
+    double aValCheck[][3] = {
+        // Result, Unsorted order, Sorted result.
+        { 0, 4, 0 },
+        { 0, 1, 0 },
+        { 0, 3, 0 },
+        { 0, 2, 0 },
+    };
+    ScRange aSortRange;
+    {
+        const char* aData[][3] = {
+            { "Date", "Volatile", "Order" },
+            { "1999-05-05", "=TODAY()-$A2", "4" },
+            { "1994-10-18", "=TODAY()-$A3", "1" },
+            { "1996-06-30", "=TODAY()-$A4", "3" },
+            { "1995-11-21", "=TODAY()-$A5", "2" },
+        };
+
+        SCTAB nTab = 0;
+        ScAddress aPos(0,0,nTab);
+        clearRange(m_pDoc, ScRange(0, 0, nTab, 2, SAL_N_ELEMENTS(aData), nTab));
+        aSortRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+        CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aSortRange.aStart == aPos);
+
+        // Actual results and expected sorted results.
+        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+        {
+            double fVal = m_pDoc->GetValue(ScAddress(1,nRow+1,0));
+            aValCheck[nRow][0] = fVal;
+            aValCheck[static_cast<size_t>(aValCheck[nRow][1])-1][2] = fVal;
+        }
+    }
+
+    ScDBDocFunc aFunc(getDocShell());
+
+    // Sort A1:B5.
+    m_pDoc->SetAnonymousDBData( 0, new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                aSortRange.aStart.Col(), aSortRange.aStart.Row(), aSortRange.aEnd.Col(), aSortRange.aEnd.Row()));
+
+    // Sort by column A.
+    ScSortParam aSortData;
+    aSortData.nCol1 = aSortRange.aStart.Col();
+    aSortData.nCol2 = aSortRange.aEnd.Col();
+    aSortData.nRow1 = aSortRange.aStart.Row();
+    aSortData.nRow2 = aSortRange.aEnd.Row();
+    aSortData.bHasHeader = true;
+    aSortData.maKeyState[0].bDoSort = true;         // sort on
+    aSortData.maKeyState[0].nField = 0;             // Date
+    aSortData.maKeyState[0].bAscending = true;      // ascending
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Check the sorted values.
+    m_pDoc->CalcAll();
+    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    {
+        size_t i = static_cast<size_t>(m_pDoc->GetValue(ScAddress(2,nRow+1,0)));    // order 1..4
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(nRow+1), i);
+        CPPUNIT_ASSERT_EQUAL( aValCheck[i-1][2], m_pDoc->GetValue(ScAddress(1,nRow+1,0)));
+    }
+
+    // Make sure the formula cells have been adjusted correctly.
+    const char* aFormulaCheck[] = {
+        // Volatile
+        "TODAY()-$A2",
+        "TODAY()-$A3",
+        "TODAY()-$A4",
+        "TODAY()-$A5",
+    };
+    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aFormulaCheck)); ++nRow)
+    {
+        if (!checkFormula(*m_pDoc, ScAddress(1,nRow+1,0), aFormulaCheck[nRow]))
+            CPPUNIT_FAIL(OString("Wrong formula in B" + OString::number(nRow+2) + ".").getStr());
+    }
+
+    // Undo and check the result.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    pUndoMgr->Undo();
+    m_pDoc->CalcAll();
+    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    {
+        CPPUNIT_ASSERT_EQUAL( aValCheck[nRow][0], m_pDoc->GetValue(ScAddress(1,nRow+1,0)));
+        CPPUNIT_ASSERT_EQUAL( aValCheck[nRow][1], m_pDoc->GetValue(ScAddress(2,nRow+1,0)));
+    }
+
+    // Redo and check the result.
+    pUndoMgr->Redo();
+    m_pDoc->CalcAll();
+    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aValCheck)); ++nRow)
+    {
+        size_t i = static_cast<size_t>(m_pDoc->GetValue(ScAddress(2,nRow+1,0)));    // order 1..4
+        CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(nRow+1), i);
+        CPPUNIT_ASSERT_EQUAL( aValCheck[i-1][2], m_pDoc->GetValue(ScAddress(1,nRow+1,0)));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSortOutOfPlaceResult()
 {
     m_pDoc->InsertTab(0, "Sort");
