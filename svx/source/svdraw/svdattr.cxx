@@ -218,7 +218,7 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[SDRATTR_ONESIZEHEIGHT  -SDRATTR_START]=new SdrOneSizeHeightItem;
     mppLocalPoolDefaults[SDRATTR_LOGICSIZEWIDTH -SDRATTR_START]=new SdrLogicSizeWidthItem;
     mppLocalPoolDefaults[SDRATTR_LOGICSIZEHEIGHT-SDRATTR_START]=new SdrLogicSizeHeightItem;
-    mppLocalPoolDefaults[SDRATTR_ROTATEANGLE    -SDRATTR_START]=new SdrRotateAngleItem;
+    mppLocalPoolDefaults[SDRATTR_ROTATEANGLE    -SDRATTR_START]=new SdrAngleItem(SDRATTR_ROTATEANGLE, 0);
     mppLocalPoolDefaults[SDRATTR_SHEARANGLE     -SDRATTR_START]=new SdrShearAngleItem;
     mppLocalPoolDefaults[SDRATTR_MOVEX          -SDRATTR_START]=new SdrMoveXItem;
     mppLocalPoolDefaults[SDRATTR_MOVEY          -SDRATTR_START]=new SdrMoveYItem;

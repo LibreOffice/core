@@ -2179,7 +2179,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         }
     }
     if (rAttr.GetItemState(SDRATTR_ROTATEANGLE,true,&pPoolItem)==SFX_ITEM_SET) {
-        long n=((const SdrRotateAngleItem*)pPoolItem)->GetValue();
+        long n=((const SdrAngleItem*)pPoolItem)->GetValue();
         n-=GetRotateAngle();
         if (n!=0) {
             double nSin=sin(n*nPi180);
@@ -2289,7 +2289,7 @@ void SdrObject::TakeNotPersistAttr(SfxItemSet& rAttr, bool bMerge) const
     lcl_SetItem(rAttr,bMerge,makeSdrObjSizeProtectItem(IsResizeProtect()));
     lcl_SetItem(rAttr,bMerge,SdrObjPrintableItem(IsPrintable()));
     lcl_SetItem(rAttr,bMerge,SdrObjVisibleItem(IsVisible()));
-    lcl_SetItem(rAttr,bMerge,SdrRotateAngleItem(GetRotateAngle()));
+    lcl_SetItem(rAttr,bMerge,makeSdrRotateAngleItem(GetRotateAngle()));
     lcl_SetItem(rAttr,bMerge,SdrShearAngleItem(GetShearAngle()));
     lcl_SetItem(rAttr,bMerge,SdrOneSizeWidthItem(rSnap.GetWidth()-1));
     lcl_SetItem(rAttr,bMerge,SdrOneSizeHeightItem(rSnap.GetHeight()-1));
