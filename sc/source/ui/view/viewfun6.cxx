@@ -399,32 +399,30 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
                 }
                 break;
             case NUMBERFORMAT_DATETIME:
+                switch (nCurNumFormatType)
                 {
-                    switch (nCurNumFormatType)
-                    {
-                        case NUMBERFORMAT_DATE:
-                            {
-                                double fDate = rtl::math::approxFloor( fCell);
-                                Time aActTime( Time::SYSTEM );
-                                fVal = fDate + aActTime.GetTimeInDays();
-                            }
-                            break;
-                        case NUMBERFORMAT_TIME:
-                            {
-                                double fTime = fCell - rtl::math::approxFloor( fCell);
-                                Date aActDate( Date::SYSTEM );
-                                fVal = (aActDate - *pFormatter->GetNullDate()) + fTime;
-                            }
-                            break;
-                        default:
-                            {
-                                DateTime aActDateTime( DateTime::SYSTEM );
-                                // Converting the null date to DateTime forces the
-                                // correct operator-() to be used, resulting in a
-                                // fractional date+time instead of only date value.
-                                fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
-                            }
-                    }
+                    case NUMBERFORMAT_DATE:
+                        {
+                            double fDate = rtl::math::approxFloor( fCell);
+                            Time aActTime( Time::SYSTEM );
+                            fVal = fDate + aActTime.GetTimeInDays();
+                        }
+                        break;
+                    case NUMBERFORMAT_TIME:
+                        {
+                            double fTime = fCell - rtl::math::approxFloor( fCell);
+                            Date aActDate( Date::SYSTEM );
+                            fVal = (aActDate - *pFormatter->GetNullDate()) + fTime;
+                        }
+                        break;
+                    default:
+                        {
+                            DateTime aActDateTime( DateTime::SYSTEM );
+                            // Converting the null date to DateTime forces the
+                            // correct operator-() to be used, resulting in a
+                            // fractional date+time instead of only date value.
+                            fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
+                        }
                 }
                 break;
         }
