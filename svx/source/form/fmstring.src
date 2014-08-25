@@ -301,12 +301,6 @@ String RID_STR_AUTOFIELD
     Text [ en-US ] = "<AutoField>";
 };
 
-QueryBox RID_QRY_SAVEMODIFIED
-{
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?";
-};
 Resource RID_RSC_SQL_INTERNATIONAL
 {
     String 1

@@ -85,7 +85,6 @@
 #define RID_MENU_DATANAVIGATOR                      (RID_FORMS_START + 10)
 
 // QueryBox-Id's -----------------------------------------------------------
-#define RID_QRY_SAVEMODIFIED                        (RID_FORMS_START + 1)
 #define RID_QRY_LINK_WARNING                        (RID_FORMS_START + 6)
 
 // String-Id's -----------------------------------------------------------

@@ -37,8 +37,8 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/msgbox.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/app.hxx>
 #include <svl/intitem.hxx>
@@ -272,7 +272,8 @@ bool FmFormShell::PrepareClose(bool bUI)
 
                     if ( bModified && bUI )
                     {
-                        QueryBox aQry(NULL, SVX_RES(RID_QRY_SAVEMODIFIED));
+                        MessageDialog aQry(NULL, "SaveModifiedDialog",
+                                           "svx/ui/savemodifieddialog.ui");
                         switch (aQry.Execute())
                         {
                             case RET_NO:
