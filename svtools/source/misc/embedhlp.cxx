@@ -803,7 +803,8 @@ bool EmbeddedObjectRef::IsChart(const ::com::sun::star::uno::Reference < ::com::
 
 bool EmbeddedObjectRef::IsGLChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj)
 {
-    return IsChart(xObj) && getenv("CHART_DUMMY_FACTORY");
+    static const char* env = getenv("CHART_DUMMY_FACTORY");
+    return IsChart(xObj) && env;
 }
 
 void EmbeddedObjectRef::UpdateReplacement()
