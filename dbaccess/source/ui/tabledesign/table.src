@@ -326,13 +326,6 @@ String STR_STAT_WARNING
     Text [ en-US ] = "Warning!" ;
 };
 
-QueryBox TABLE_DESIGN_SAVEMODIFIED
-{
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "The table has been changed.\nDo you want to save the changes?" ;
-};
-
 String STR_TABLEDESIGN_CONNECTION_MISSING
 {
     Text [ en-US ] = "The table could not be saved due to problems connecting to the database.";

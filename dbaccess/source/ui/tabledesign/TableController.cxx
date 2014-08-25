@@ -563,7 +563,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
             ::boost::mem_fn(&OTableRow::isValid));
         if ( aIter != m_vRowList.end() )
         {
-            QueryBox aQry(getView(), ModuleRes(TABLE_DESIGN_SAVEMODIFIED));
+            MessageDialog aQry(getView(), "TableDesignSaveModifiedDialog",
+                               "dbaccess/ui/tabledesignsavemodifieddialog.ui");
             switch (aQry.Execute())
             {
                 case RET_YES:

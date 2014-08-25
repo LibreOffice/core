@@ -100,7 +100,6 @@
 
 // query boxes
 
-#define TABLE_DESIGN_SAVEMODIFIED       RID_QUERYBOX_START +  5
 #define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
 
 // images
