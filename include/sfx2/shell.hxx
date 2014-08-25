@@ -60,16 +60,12 @@ namespace svl
     class IUndoManager;
 }
 
-
-
-enum SfxInterfaceId
-
 /*  [Description]
 
     Id for <SfxInterface>s, gives a quasi-static access to the interface
     through an array to <SfxApplication>.
 */
-
+enum SfxInterfaceId
 {
     SFX_INTERFACE_NONE,
     SFX_INTERFACE_SFXAPP,
@@ -122,12 +118,8 @@ enum SfxInterfaceId
 //TODO/CLEANUP: replace by UNO constant
 #define SVVERB_SHOW -1
 
-
-
 typedef void (*SfxExecFunc)(SfxShell *, SfxRequest &rReq);
 typedef void (*SfxStateFunc)(SfxShell *, SfxItemSet &rSet);
-
-class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 
 /*  [Description]
 
@@ -143,7 +135,7 @@ class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
     the <SVIDL-Compiler>. For each SfxShell Subclass-File there is one
     such IDL-file to write.
 */
-
+class SFX2_DLLPUBLIC SfxShell: public SfxBroadcaster
 {
     friend class SfxObjectItem;
 
@@ -257,8 +249,6 @@ public:
     SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI);
 };
 
-
-SfxItemPool& SfxShell::GetPool() const
 /*
     [Description]
 
@@ -270,16 +260,11 @@ SfxItemPool& SfxShell::GetPool() const
     The SfxShell class itself does not have any SfxItemPool, therfore a
     null-pointer is returned.
 */
-
+SfxItemPool& SfxShell::GetPool() const
 {
     assert(pPool && "no pool");
     return *pPool;
 }
-
-inline void SfxShell::SetPool
-(
-    SfxItemPool*        pNewPool        // Pointer to the new Pool or null
-)
 
 /*  [Description]
 
@@ -289,7 +274,10 @@ inline void SfxShell::SetPool
     subclass does not take ownership of the orphaned pool. Before it is
     deleted it has to be deregisted with SetPool(0).
 */
-
+inline void SfxShell::SetPool
+(
+    SfxItemPool*        pNewPool        // Pointer to the new Pool or null
+)
 {
     pPool = pNewPool;
 }
