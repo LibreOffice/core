@@ -1560,9 +1560,9 @@ void OCopyTableWizard::showColumnTypeNotSupported(const OUString& _rColumnName)
     showError(sMessage);
 }
 
-void OCopyTableWizard::showError(const OUString& _sErrorMesage)
+void OCopyTableWizard::showError(const OUString& _sErrorMessage)
 {
-    SQLExceptionInfo aInfo(_sErrorMesage);
+    SQLExceptionInfo aInfo(_sErrorMessage);
     showError(aInfo.get());
 }
 
