@@ -25,6 +25,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <editeng/editview.hxx>
 
 #include "viewfunc.hxx"
 #include "detfunc.hxx"
@@ -44,6 +45,7 @@
 #include "markdata.hxx"
 #include "drawview.hxx"
 #include "globalnames.hxx"
+#include "inputhdl.hxx"
 
 #include <vector>
 
@@ -237,31 +239,210 @@ void ScViewFunc::DetectiveMarkSucc()
     MarkAndJumpToRanges(aDestRanges);
 }
 
-void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
-{
-    ScViewData* pViewData = GetViewData();
-    ScAddress aCurPos = pViewData->GetCurPos();
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-    Date aActDate( Date::SYSTEM );
-    double fDate = aActDate - *pFormatter->GetNullDate();
-    Time aActTime( Time::SYSTEM );
-    double fTime = aActTime.GetHour()    / static_cast<double>(::Time::hourPerDay)   +
-                   aActTime.GetMin()     / static_cast<double>(::Time::minutePerDay) +
-                   aActTime.GetSec()     / static_cast<double>(::Time::secondPerDay) +
-                   aActTime.GetNanoSec() / static_cast<double>(::Time::nanoSecPerDay);
-    pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
-    pDocSh->GetDocFunc().SetValueCell(aCurPos, fDate+fTime, true);
+/** Insert date or time into current cell.
 
-    // Set the new cell format only when it differs from the current cell
-    // format type.
-    sal_uInt32 nCurNumFormat = pDoc->GetNumberFormat(aCurPos);
-    const SvNumberformat* pEntry = pFormatter->GetEntry(nCurNumFormat);
-    if (!pEntry || !(pEntry->GetType() & nCellFmt))
-        SetNumberFormat(nCellFmt);
-    pUndoMgr->LeaveListAction();
+    If cell is in input or edit mode, insert date/time at cursor position, else
+    create a date or time or date+time cell as follows:
+
+    - key date on time cell  =>  current date + time of cell  =>  date+time formatted cell
+      - unless time cell was empty or 00:00 time  =>  current date  =>  date formatted cell
+    - key date on date+time cell  =>  current date + 00:00 time  =>  date+time formatted cell
+      - unless date was current date  =>  current date  =>  date formatted cell
+    - key date on other cell  =>  current date  =>  date formatted cell
+    - key time on date cell  =>  date of cell + current time  =>  date+time formatted cell
+      - unless date cell was empty  =>  current time  =>  time formatted cell
+    - key time on date+time cell  =>  current time  =>  time formatted cell
+      - unless cell was empty  =>  current date+time  =>  date+time formatted cell
+    - key time on other cell  =>  current time  =>  time formatted cell
+ */
+void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
+{
+    ScViewData& rViewData = *GetViewData();
+
+    ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl( rViewData.GetViewShell());
+    bool bInputMode = (pInputHdl && pInputHdl->IsInputMode());
+
+    ScDocShell* pDocSh = rViewData.GetDocShell();
+    ScDocument& rDoc = *pDocSh->GetDocument();
+    ScAddress aCurPos = rViewData.GetCurPos();
+    const sal_uInt32 nCurNumFormat = rDoc.GetNumberFormat(aCurPos);
+    SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
+    const SvNumberformat* pCurNumFormatEntry = pFormatter->GetEntry(nCurNumFormat);
+
+    if (bInputMode)
+    {
+        double fVal = 0.0;
+        switch (nReqFmt)
+        {
+            case NUMBERFORMAT_DATE:
+                {
+                    Date aActDate( Date::SYSTEM );
+                    fVal = aActDate - *pFormatter->GetNullDate();
+                }
+                break;
+            case NUMBERFORMAT_TIME:
+                {
+                    Time aActTime( Time::SYSTEM );
+                    fVal = aActTime.GetTimeInDays();
+                }
+                break;
+            default:
+                assert(!"unhandled current date/time request");
+                nReqFmt = NUMBERFORMAT_DATETIME;
+                // fallthru
+            case NUMBERFORMAT_DATETIME:
+                {
+                    DateTime aActDateTime( DateTime::SYSTEM );
+                    fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
+                }
+                break;
+        }
+
+        LanguageType nLang = (pCurNumFormatEntry ? pCurNumFormatEntry->GetLanguage() : ScGlobal::eLnge);
+        sal_uInt32 nFormat = pFormatter->GetStandardFormat( nReqFmt, nLang);
+        // This would return a more precise format with seconds and 100th
+        // seconds for a time request.
+        //nFormat = pFormatter->GetStandardFormat( fVal, nFormat, nReqFmt, nLang);
+        OUString aString;
+        Color* pColor;
+        pFormatter->GetOutputString( fVal, nFormat, aString, &pColor);
+
+        pInputHdl->DataChanging();
+        EditView* pTopView = pInputHdl->GetTopView();
+        if (pTopView)
+            pTopView->InsertText( aString);
+        EditView* pTableView = pInputHdl->GetTableView();
+        if (pTableView)
+            pTableView->InsertText( aString);
+        pInputHdl->DataChanged( false, true);
+    }
+    else
+    {
+        const short nCurNumFormatType = (pCurNumFormatEntry ?
+                (pCurNumFormatEntry->GetType() & ~NUMBERFORMAT_DEFINED) : NUMBERFORMAT_UNDEFINED);
+        bool bForceReqFmt = false;
+        const double fCell = rDoc.GetValue( aCurPos);
+        // Combine requested date/time stamp with existing cell time/date, if any.
+        switch (nReqFmt)
+        {
+            case NUMBERFORMAT_DATE:
+                switch (nCurNumFormatType)
+                {
+                    case NUMBERFORMAT_TIME:
+                        // An empty cell formatted as time (or 00:00 time) shall
+                        // not result in the current date with 00:00 time, but only
+                        // in current date.
+                        if (fCell != 0.0)
+                            nReqFmt = NUMBERFORMAT_DATETIME;
+                        break;
+                    case NUMBERFORMAT_DATETIME:
+                        {
+                            // Force to only date if the existing date+time is the
+                            // current date. This way inserting current date twice
+                            // on an existing date+time cell can be used to force
+                            // date, which otherwise would only be possible by
+                            // applying a date format.
+                            double fDate = rtl::math::approxFloor( fCell);
+                            if (fDate == (Date( Date::SYSTEM) - *pFormatter->GetNullDate()))
+                                bForceReqFmt = true;
+                        }
+                        break;
+                }
+                break;
+            case NUMBERFORMAT_TIME:
+                switch (nCurNumFormatType)
+                {
+                    case NUMBERFORMAT_DATE:
+                        // An empty cell formatted as date shall not result in the
+                        // null date and current time, but only in current time.
+                        if (fCell != 0.0)
+                            nReqFmt = NUMBERFORMAT_DATETIME;
+                        break;
+                    case NUMBERFORMAT_DATETIME:
+                        // Requesting current time on an empty date+time cell
+                        // inserts both current date+time.
+                        if (fCell == 0.0)
+                            nReqFmt = NUMBERFORMAT_DATETIME;
+                        else
+                        {
+                            // Add current time to an existing date+time where time is
+                            // zero and date is current date, else force time only.
+                            double fDate = rtl::math::approxFloor( fCell);
+                            double fTime = fCell - fDate;
+                            if (fTime == 0.0 && fDate == (Date( Date::SYSTEM) - *pFormatter->GetNullDate()))
+                                nReqFmt = NUMBERFORMAT_DATETIME;
+                            else
+                                bForceReqFmt = true;
+                        }
+                        break;
+                }
+                break;
+            default:
+                assert(!"unhandled current date/time request");
+                nReqFmt = NUMBERFORMAT_DATETIME;
+                // fallthru
+            case NUMBERFORMAT_DATETIME:
+                break;
+        }
+        double fVal = 0.0;
+        switch (nReqFmt)
+        {
+            case NUMBERFORMAT_DATE:
+                {
+                    Date aActDate( Date::SYSTEM );
+                    fVal = aActDate - *pFormatter->GetNullDate();
+                }
+                break;
+            case NUMBERFORMAT_TIME:
+                {
+                    Time aActTime( Time::SYSTEM );
+                    fVal = aActTime.GetTimeInDays();
+                }
+                break;
+            case NUMBERFORMAT_DATETIME:
+                switch (nCurNumFormatType)
+                {
+                    case NUMBERFORMAT_DATE:
+                        {
+                            double fDate = rtl::math::approxFloor( fCell);
+                            Time aActTime( Time::SYSTEM );
+                            fVal = fDate + aActTime.GetTimeInDays();
+                        }
+                        break;
+                    case NUMBERFORMAT_TIME:
+                        {
+                            double fTime = fCell - rtl::math::approxFloor( fCell);
+                            Date aActDate( Date::SYSTEM );
+                            fVal = (aActDate - *pFormatter->GetNullDate()) + fTime;
+                        }
+                        break;
+                    default:
+                        {
+                            DateTime aActDateTime( DateTime::SYSTEM );
+                            // Converting the null date to DateTime forces the
+                            // correct operator-() to be used, resulting in a
+                            // fractional date+time instead of only date value.
+                            fVal = aActDateTime - DateTime( *pFormatter->GetNullDate());
+                        }
+                }
+                break;
+        }
+
+        ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
+
+        pDocSh->GetDocFunc().SetValueCell(aCurPos, fVal, true);
+
+        // Set the new cell format only when it differs from the current cell
+        // format type. Preserve a date+time format unless we force a format
+        // through.
+        if (bForceReqFmt || (nReqFmt != nCurNumFormatType && nCurNumFormatType != NUMBERFORMAT_DATETIME))
+            SetNumberFormat(nReqFmt);
+        else
+            rViewData.UpdateInputHandler();     // update input bar with new value
+
+        pUndoMgr->LeaveListAction();
+    }
 }
 
 void ScViewFunc::ShowNote( bool bShow )
