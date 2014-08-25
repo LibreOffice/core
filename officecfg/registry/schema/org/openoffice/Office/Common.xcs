@@ -2196,7 +2196,7 @@
         <prop oor:name="GenerateThumbnail" oor:type="xs:boolean" oor:nillable="false">
           <!-- UIHints: Tools  Options - General  Save - [Section] Save -->
           <info>
-            <desc>Specifies whether to generate a thumbnail image and place it inside the 
+            <desc>Specifies whether to generate a thumbnail image and place it inside the
 	      the odf archive file, which makes it possible to see a preview of the document.</desc>
             <label>Store a preview of this document</label>
           </info>
@@ -3598,6 +3598,13 @@
             with external links</desc>
           </info>
           <value>0</value>
+        </prop>
+        <prop oor:name="StartCenterBackgroundColor" oor:type="xs:int" oor:nillable="false">
+          <!--Default 7514196 = TDF Green-->
+          <info>
+            <desc>Specifies the background color of the start center.</desc>
+          </info>
+          <value>7514196</value>
         </prop>
       </group>
     </group>

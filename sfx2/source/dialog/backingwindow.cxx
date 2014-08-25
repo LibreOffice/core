@@ -53,6 +53,8 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
+#include <officecfg/Office/Common.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -70,7 +72,6 @@ const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 float fMultiplier = 1.4f;
-const Color aButtonsBackground(114, 168, 84); // TDF green
 const Color aButtonsText(COL_WHITE);
 
 /***
@@ -291,6 +292,8 @@ void BackingWindow::initControls()
 
     mpHelpButton->SetControlForeground(aButtonsText);
     mpExtensionsButton->SetControlForeground(aButtonsText);
+
+    const Color aButtonsBackground(officecfg::Office::Common::Help::StartCenter::StartCenterBackgroundColor::get());
 
     mpAllButtonsBox->SetBackground(aButtonsBackground);
     mpSmallButtonsBox->SetBackground(aButtonsBackground);
