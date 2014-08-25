@@ -84,9 +84,6 @@
 #define MENU_FM_TEXTATTRIBITES_SPACING              (RID_FORMS_START + 9)
 #define RID_MENU_DATANAVIGATOR                      (RID_FORMS_START + 10)
 
-// QueryBox-Id's -----------------------------------------------------------
-#define RID_QRY_LINK_WARNING                        (RID_FORMS_START + 6)
-
 // String-Id's -----------------------------------------------------------
 #define RID_STR_INVALID_XMLNAME                     (RID_FORMS_START + 1)
 #define RID_STR_INVALID_XMLPREFIX                   (RID_FORMS_START + 2)
@@ -199,7 +196,6 @@
 #define RID_STR_DATANAV_ADD_SUBMISSION              (RID_FORMS_START + 141)
 #define RID_STR_DATANAV_EDIT_SUBMISSION             (RID_FORMS_START + 142)
 #define RID_STR_DATANAV_REMOVE_SUBMISSION           (RID_FORMS_START + 143)
-#define RID_STR_DATANAV_LINKWARN_BUTTON             (RID_FORMS_START + 144)
 #define RID_STR_SVT_SQL_SYNTAX_TABLE_OR_QUERY       (RID_FORMS_START + 145)
 #define RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS         (RID_FORMS_START + 146)
 #define RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS         (RID_FORMS_START + 147)

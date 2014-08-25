@@ -90,12 +90,6 @@ String RID_STR_QRY_REMOVE_BINDING
     Text [ en-US ] = "Deleting the binding '$BINDINGNAME' affects all controls currently bound to this binding.\n\nDo you really want to delete this binding?" ;
 };
 
-MessBox RID_QRY_LINK_WARNING
-{
-    Buttons = 0 ;
-    Message [ en-US ] = "This instance is linked with the form.\n\nThe changes you make to this instance will be lost when the form is reloaded.\n\nHow do you want to proceed?" ;
-};
-
 String RID_STR_INVALID_XMLNAME
 {
     Text [ en-US ] = "The name '%1' is not valid in XML. Please enter a different name." ;
@@ -291,11 +285,6 @@ String RID_STR_DATANAV_EDIT_SUBMISSION
 String RID_STR_DATANAV_REMOVE_SUBMISSION
 {
     Text [ en-US ] = "Delete Submission" ;
-};
-
-String RID_STR_DATANAV_LINKWARN_BUTTON
-{
-    Text [ en-US ] = "~Edit" ;
 };
 
 String RID_STR_ELEMENT

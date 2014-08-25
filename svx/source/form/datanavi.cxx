@@ -3322,20 +3322,11 @@ namespace svxform
         return 0;
     }
 
-    LinkedInstanceWarningBox::LinkedInstanceWarningBox( Window* pParent ) :
-
-        MessBox( pParent, SVX_RES( RID_QRY_LINK_WARNING ) )
-
+    LinkedInstanceWarningBox::LinkedInstanceWarningBox( Window* pParent )
+        : MessageDialog(pParent, "FormLinkWarnDialog", "svx/ui/formlinkwarndialog.ui")
     {
-        SetText( Application::GetDisplayName() );
-        SetImage( QueryBox::GetStandardImage() );
-        AddButton( SVX_RESSTR( RID_STR_DATANAV_LINKWARN_BUTTON ), RET_OK, BUTTONDIALOG_DEFBUTTON );
-        AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     }
 
-
 }   // namespace svxform
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

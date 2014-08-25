@@ -25,7 +25,6 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/toolbox.hxx>
@@ -648,7 +647,7 @@ namespace svxform
     };
 
 
-    class LinkedInstanceWarningBox : public MessBox
+    class LinkedInstanceWarningBox : public MessageDialog
     {
     public:
         LinkedInstanceWarningBox( Window* pParent );
