@@ -24,7 +24,6 @@
 // Strings
 
 #define STR_COMCORE_READERROR               (RC_COMCORE_BEGIN + 0)
-#define MSG_COMCORE_ASKSEARCH               (RC_COMCORE_BEGIN + 1)
 #define STR_TABLE_DEFNAME                   (RC_COMCORE_BEGIN + 2)
 #define STR_GRAPHIC_DEFNAME                 (RC_COMCORE_BEGIN + 3)
 #define STR_OBJECT_DEFNAME                  (RC_COMCORE_BEGIN + 4)

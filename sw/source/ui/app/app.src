@@ -371,13 +371,6 @@ String STR_STATSTR_SWGPRTOLENOTIFY
     Text [ en-US ] = "Adapt Objects...";
 };
 
-QueryBox MSG_COMCORE_ASKSEARCH
-{
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "To proceed with this action, you must first turn off the \"undo\" function. Do you want to turn off the \"undo\" function?" ;
-};
-
 Bitmap RID_GRAPHIC_REPLACEBMP
 {
     File = "grafikei.bmp" ;

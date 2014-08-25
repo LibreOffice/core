@@ -20,7 +20,7 @@
 #include <config_features.h>
 
 #include <vcl/dialog.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/settings.hxx>
 #include <viewopt.hxx>
@@ -601,7 +601,8 @@ short SwShellCrsr::MaxReplaceArived()
         } while( pShell != ( pSh = (SwViewShell*)pSh->GetNext() ) );
 
         {
-            nRet = QueryBox( pDlg, SW_RES( MSG_COMCORE_ASKSEARCH )).Execute();
+            nRet = MessageDialog(pDlg, "AskSearchDialog",
+                                 "modules/swriter/ui/asksearchdialog.ui").Execute();
         }
 
         for( sal_uInt16 n = 0; n < aArr.size(); ++n )
