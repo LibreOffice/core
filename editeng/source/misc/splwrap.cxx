@@ -20,12 +20,10 @@
 #include <rtl/ustring.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/langtab.hxx>
 
-#ifndef __RSC
 #include <tools/errinf.hxx>
-#endif
 #include <editeng/unolingu.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -317,7 +315,8 @@ void SvxSpellWrapper::StartThesaurus( const OUString &rWord, sal_uInt16 nLanguag
     Reference< XThesaurus >  xThes( SvxGetThesaurus() );
     if (!xThes.is())
     {
-        InfoBox( pWin, EE_RESSTR( RID_SVXSTR_HMERR_THESAURUS ) ).Execute();
+        MessageDialog(pWin, EE_RESSTR(RID_SVXSTR_HMERR_THESAURUS),
+                      VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute();
         return;
     }
 
@@ -462,8 +461,8 @@ bool SvxSpellWrapper::SpellNext( )
         // a BODY_area done, ask for the other BODY_area
         WAIT_OFF();
 
-        sal_uInt16 nResId = bReverse ? RID_SVXQB_BW_CONTINUE : RID_SVXQB_CONTINUE;
-        QueryBox aBox( pWin, EditResId( nResId ) );
+        sal_uInt16 nResId = bReverse ? RID_SVXSTR_QUERY_BW_CONTINUE : RID_SVXSTR_QUERY_CONTINUE;
+        MessageDialog aBox(pWin, EditResId(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
         if ( aBox.Execute() != RET_YES )
         {
             // sacrifice the other area if necessary ask for special area

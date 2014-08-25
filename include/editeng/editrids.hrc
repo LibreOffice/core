@@ -345,10 +345,8 @@
 #define RID_SVXSTR_DIC_ERR_UNKNOWN          (RID_EDIT_START + 297)
 #define RID_SVXSTR_DIC_ERR_FULL             (RID_EDIT_START + 298)
 #define RID_SVXSTR_DIC_ERR_READONLY         (RID_EDIT_START + 299)
-
-// ResIds fuer HM-QueryBoxen und Error-Strings
-#define RID_SVXQB_BW_CONTINUE               (RID_EDIT_START + 300)
-#define RID_SVXQB_CONTINUE                  (RID_EDIT_START + 301)
+#define RID_SVXSTR_QUERY_BW_CONTINUE        (RID_EDIT_START + 300)
+#define RID_SVXSTR_QUERY_CONTINUE           (RID_EDIT_START + 301)
 
 // EditEngine
 #define RID_EDITUNDO_DEL                    (RID_EDIT_START + 302)
