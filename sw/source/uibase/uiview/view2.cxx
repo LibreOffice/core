@@ -188,24 +188,35 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
     }
 }
 
-/* Create string for showing of page in statusbar */
-OUString SwView::GetPageStr( sal_uInt16 nPg, sal_uInt16 nLogPg,
-                            const OUString& rDisplay )
+/**
+ * Create string for showing the page number in the statusbar
+ *
+ * @param nPhyNum  The physical page number
+ * @param nVirtNum The logical page number (user-assigned)
+ * @param rPgStr   User-defined page name (will be used instead of nVirtNum)
+ *
+ * @return OUString Formatted string: Page 1/10 (rPgStr/logical page number)
+ **/
+OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr)
 {
-    OUString aStr( m_aPageStr );
-    if( !rDisplay.isEmpty() )
-        aStr += rDisplay;
-    else
-        aStr += OUString::number(nLogPg);
+    OUString aStr(m_aPageStr);
+    aStr += OUString::number(nPhyNum);
+    aStr += "/";
+    aStr += OUString::number(GetWrtShell().GetPageCnt());
 
-    if( nLogPg && nLogPg != nPg )
+    // Show user-defined page number in brackets if any.
+    OUString extra;
+    if (!rPgStr.isEmpty() && OUString::number(nPhyNum) != rPgStr)
+        extra = rPgStr;
+    else if (nPhyNum != nVirtNum)
+        extra = OUString::number(nVirtNum);
+    if (!extra.isEmpty())
     {
-        aStr += "   ";
-        aStr += OUString::number(nPg);
+        aStr += " (";
+        aStr += m_aPageStr;
+        aStr += extra;
+        aStr += ")";
     }
-    aStr += " / ";
-    aStr += OUString::number( GetWrtShell().GetPageCnt() );
-
     return aStr;
 }
 
