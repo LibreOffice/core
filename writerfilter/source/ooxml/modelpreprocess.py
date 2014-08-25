@@ -133,12 +133,6 @@ def preprocess(model):
             j.setAttribute("prefix", prefix)
             j.setAttribute("localname", localname)
 
-    for i in model.getElementsByTagName("grammar"):
-        if i.getAttribute("ns").startswith("http://schemas.openxmlformats.org/"):
-            i.setAttribute("application", i.getAttribute("ns").replace('http://schemas.openxmlformats.org/', '').split('/')[0])
-        else:
-            i.setAttribute("application", "")
-
 
 namespacesPath = sys.argv[1]
 modelPath = sys.argv[2]
