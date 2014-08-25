@@ -28,7 +28,7 @@
 #include <svl/itemiter.hxx>
 
 #include <svl/itempool.hxx>
-#include <svtools/itemdel.hxx>
+#include "itemdel.hxx"
 
 #include <comphelper/processfactory.hxx>
 

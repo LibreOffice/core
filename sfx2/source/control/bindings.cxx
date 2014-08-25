@@ -42,7 +42,7 @@
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svtools/itemdel.hxx>
+#include "itemdel.hxx"
 
 //Includes below due to nInReschedule
 #include "appdata.hxx"

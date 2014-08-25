@@ -26,7 +26,7 @@
 #include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itemset.hxx>
-#include <svtools/itemdel.hxx>
+#include "itemdel.hxx"
 #include <svl/visitem.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>

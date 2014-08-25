@@ -25,7 +25,7 @@
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/undo.hxx>
-#include <svtools/itemdel.hxx>
+#include "itemdel.hxx"
 #include <svtools/asynclink.hxx>
 #include <basic/sbx.hxx>
 

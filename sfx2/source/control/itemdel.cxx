@@ -20,7 +20,7 @@
 #include <sal/config.h>
 
 #include <boost/noncopyable.hpp>
-#include <svtools/itemdel.hxx>
+#include "itemdel.hxx"
 #include <vcl/svapp.hxx>
 #include <tools/errcode.hxx>
 #include <limits.h>

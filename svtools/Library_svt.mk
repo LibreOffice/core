@@ -181,7 +181,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/misc/imap \
     svtools/source/misc/imap2 \
     svtools/source/misc/imap3 \
-    svtools/source/misc/itemdel \
     svtools/source/misc/langtab \
     svtools/source/misc/langhelp \
     svtools/source/misc/openfiledroptargetlistener \

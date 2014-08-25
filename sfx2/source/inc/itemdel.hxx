@@ -16,14 +16,12 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_SVTOOLS_ITEMDEL_HXX
-#define INCLUDED_SVTOOLS_ITEMDEL_HXX
-
-#include <svtools/svtdllapi.h>
+#ifndef INCLUDED_SFX2_ITEMDEL_HXX
+#define INCLUDED_SFX2_ITEMDEL_HXX
 
 class SfxPoolItem;
 
-SVT_DLLPUBLIC void DeleteItemOnIdle( SfxPoolItem* pItem );
+void DeleteItemOnIdle( SfxPoolItem* pItem );
 
 #endif
 
