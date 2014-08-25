@@ -31,6 +31,7 @@ class ImplIdleMgr
 private:
     ImplIdleList*   mpIdleList;
     AutoTimer       maTimer;
+    bool            mbInDestruction;
 
 public:
                     ImplIdleMgr();

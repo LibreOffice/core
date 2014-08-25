@@ -30,7 +30,8 @@ struct ImplIdleData
 
 #define IMPL_IDLETIMEOUT         350
 
-ImplIdleMgr::ImplIdleMgr()
+ImplIdleMgr::ImplIdleMgr():
+    mbInDestruction(false)
 {
     mpIdleList  = new ImplIdleList();
 
@@ -40,9 +41,12 @@ ImplIdleMgr::ImplIdleMgr()
 
 ImplIdleMgr::~ImplIdleMgr()
 {
+    mbInDestruction = true;
     // Liste loeschen
     for ( size_t i = 0, n = mpIdleList->size(); i < n; ++i ) {
-        delete (*mpIdleList)[ i ];
+        ImplIdleData* pIdleData = (*mpIdleList)[ i ];
+        pIdleData->maIdleHdl.Call( GetpApp() );
+        delete pIdleData;
     }
     mpIdleList->clear();
     delete mpIdleList;
@@ -84,6 +88,9 @@ bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 
 void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
 {
+    if (mbInDestruction)
+        return;
+
     for ( ImplIdleList::iterator it = mpIdleList->begin(); it != mpIdleList->end(); ++it ) {
         if ( (*it)->maIdleHdl == rLink ) {
             delete *it;
