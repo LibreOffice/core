@@ -269,6 +269,9 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
         if( bUseAlternateBresenham )
         {
+            if (rem < 0 && ady <= 0)
+                return; //break will never be hit under these circumstances
+
             while(true)
             {
                 acc.set(color, rowIter);
@@ -347,6 +350,9 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
         if( bUseAlternateBresenham )
         {
+            if (rem < 0 && adx <= 0)
+                return; //break will never be hit under these circumstances
+
             while(true)
             {
                 acc.set(color, colIter);
