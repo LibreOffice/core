@@ -540,7 +540,7 @@ SwXFieldMaster::~SwXFieldMaster()
 }
 
 uno::Reference<beans::XPropertySet>
-SwXFieldMaster::CreateXFieldMaster(SwDoc & rDoc, SwFieldType *const pType,
+SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
         sal_uInt16 nResId)
 {
     // re-use existing SwXFieldMaster
@@ -552,8 +552,8 @@ SwXFieldMaster::CreateXFieldMaster(SwDoc & rDoc, SwFieldType *const pType,
     if (!xFM.is())
     {
         SwXFieldMaster *const pFM( (pType)
-                ? new SwXFieldMaster(*pType, rDoc)
-                : new SwXFieldMaster(& rDoc, nResId));
+                ? new SwXFieldMaster(*pType, *pDoc)
+                : new SwXFieldMaster(pDoc, nResId));
         xFM.set(pFM);
         if (pType)
         {
@@ -1309,7 +1309,7 @@ SwXTextField::getTextFieldMaster() throw (uno::RuntimeException, std::exception)
     }
 
     uno::Reference<beans::XPropertySet> const xRet(
-            SwXFieldMaster::CreateXFieldMaster(*m_pImpl->m_pDoc, pType));
+            SwXFieldMaster::CreateXFieldMaster(m_pImpl->m_pDoc, pType));
     return xRet;
 }
 
@@ -2758,7 +2758,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
             css::uno::Reference<css::uno::XInterface>());
 
     uno::Reference<beans::XPropertySet> const xRet(
-            SwXFieldMaster::CreateXFieldMaster(*GetDoc(), pType));
+            SwXFieldMaster::CreateXFieldMaster(GetDoc(), pType));
     return uno::makeAny(xRet);
 }
 

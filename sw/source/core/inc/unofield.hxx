@@ -65,7 +65,7 @@ public:
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet>
-        CreateXFieldMaster(SwDoc & rDoc, SwFieldType * pType,
+        CreateXFieldMaster(SwDoc * pDoc, SwFieldType * pType,
                 sal_uInt16 nResId = 0xFFFF);
 
     static OUString GetProgrammaticName(const SwFieldType& rType, SwDoc& rDoc);
