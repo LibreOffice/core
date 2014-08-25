@@ -35,8 +35,7 @@ bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 
 void SwExpandPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    OUString aString;
-    rPH.Special( GetLen(), aString, GetWhichPor() );
+    rPH.Special( GetLen(), OUString(), GetWhichPor() );
 }
 
 SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
@@ -199,8 +198,7 @@ bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 
 void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    OUString aString( cChar );
-    rPH.Special( GetLen(), aString, GetWhichPor() );
+    rPH.Special( GetLen(), OUString( cChar ), GetWhichPor() );
 }
 
 SwPostItsPortion::SwPostItsPortion( bool bScrpt )

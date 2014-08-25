@@ -352,8 +352,7 @@ bool SwHyphPortion::GetExpTxt( const SwTxtSizeInfo &/*rInf*/, OUString &rTxt ) c
 
 void SwHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    OUString aString( '-' );
-    rPH.Special( GetLen(), aString, GetWhichPor() );
+    rPH.Special( GetLen(), OUString('-'), GetWhichPor() );
 }
 
 bool SwHyphPortion::Format( SwTxtFormatInfo &rInf )
@@ -545,11 +544,10 @@ bool SwSoftHyphPortion::GetExpTxt( const SwTxtSizeInfo &rInf, OUString &rTxt ) c
 
 void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    const OUString aString( '-' );
     const sal_uInt16 nWhich = ! Width() ?
                           POR_SOFTHYPH_COMP :
                           GetWhichPor();
-    rPH.Special( GetLen(), aString, nWhich );
+    rPH.Special( GetLen(), OUString('-'), nWhich );
 }
 
 void SwSoftHyphStrPortion::Paint( const SwTxtPaintInfo &rInf ) const

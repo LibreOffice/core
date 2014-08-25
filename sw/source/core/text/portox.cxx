@@ -71,8 +71,7 @@ void SwIsoToxPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 void SwIsoToxPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    OUString aString;
-    rPH.Special( GetLen(), aString, GetWhichPor() );
+    rPH.Special( GetLen(), OUString(), GetWhichPor() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

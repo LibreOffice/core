@@ -1419,9 +1419,7 @@ bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 
 void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    OUString aString( aExpand );
-    aString += aErgo;
-    rPH.Special( GetLen(), aString, GetWhichPor() );
+    rPH.Special( GetLen(), aExpand + aErgo, GetWhichPor() );
 }
 
 void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
