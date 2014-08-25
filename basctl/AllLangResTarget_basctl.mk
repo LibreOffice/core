@@ -45,7 +45,6 @@ $(eval $(call gb_SrsTarget_add_files,basctl/res,\
 	basctl/source/basicide/moduldlg.src \
 	basctl/source/basicide/objdlg.src \
 	basctl/source/dlged/dlgresid.src \
-	basctl/source/dlged/managelang.src \
 ))
 
 # vim: set noet sw=4 ts=4:

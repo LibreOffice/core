@@ -134,11 +134,6 @@ String RID_STR_DEF_LANG
     Text [ en-US ] = "[Default Language]" ;
 };
 
-String RID_STR_DELETE
-{
-    Text [ en-US ] = "~Delete" ;
-};
-
 String RID_STR_CREATE_LANG
 {
     Text [ en-US ] = "<Press 'Add' to create language resources>" ;

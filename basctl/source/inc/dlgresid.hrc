@@ -50,18 +50,13 @@
 #define RID_STR_CLASS_TREECONTROL           ( RID_DLG_START +  23 )
 #define RID_STR_CLASS_SPINCONTROL           ( RID_DLG_START +  24 )
 #define RID_STR_DEF_LANG                    ( RID_DLG_START +  25 )
-#define RID_STR_DELETE                      ( RID_DLG_START +  26 )
-#define RID_STR_CREATE_LANG                 ( RID_DLG_START +  27 )
+#define RID_STR_CREATE_LANG                 ( RID_DLG_START +  26 )
 
 // Property Browser Headline Id's -----------------------------------------------------------
 
 #define RID_STR_BRWTITLE_PROPERTIES         ( RID_DLG_START +  60 )
 #define RID_STR_BRWTITLE_NO_PROPERTIES      ( RID_DLG_START +  61 )
 #define RID_STR_BRWTITLE_MULTISELECT        ( RID_DLG_START +  62 )
-
-// Manage Language Dialogs
-
-#define RID_QRYBOX_LANGUAGE                 ( RID_DLG_START +  70 )
 
 #endif // BASCTL_DLGRESID_HRC
 

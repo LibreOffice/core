@@ -36,7 +36,7 @@
 #include <svx/langbox.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 
 namespace basctl
@@ -59,7 +59,6 @@ ManageLanguageDialog::ManageLanguageDialog(Window* pParent, boost::shared_ptr<Lo
     : ModalDialog(pParent, "ManageLanguagesDialog", "modules/BasicIDE/ui/managelanguages.ui")
     , m_xLocalizationMgr(xLMgr)
     , m_sDefLangStr(IDE_RESSTR(RID_STR_DEF_LANG))
-    , m_sDeleteStr(IDE_RESSTR(RID_STR_DELETE))
     , m_sCreateLangStr(IDE_RESSTR(RID_STR_CREATE_LANG))
 {
     get(m_pLanguageLB, "treeview");
@@ -155,8 +154,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 
 IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 {
-    QueryBox aQBox( this, IDEResId( RID_QRYBOX_LANGUAGE ) );
-    aQBox.SetButtonText( RET_OK, m_sDeleteStr );
+    MessageDialog aQBox(this, "DeleteLangDialog", "modules/BasicIDE/ui/deletelang.ui");
     if ( aQBox.Execute() == RET_OK )
     {
         sal_uInt16 i, nCount = m_pLanguageLB->GetSelectEntryCount();
