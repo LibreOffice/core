@@ -191,13 +191,12 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const OUString& rBaseURL, Edi
 EditPaM ImpEditEngine::ReadBin( SvStream& rInput, EditSelection aSel )
 {
     // Simply abuse a temporary text object ...
-    EditTextObject* pObj = EditTextObject::Create( rInput, NULL );
+    boost::scoped_ptr<EditTextObject> pObj(EditTextObject::Create( rInput, NULL ));
 
     EditPaM aLastPaM = aSel.Max();
     if ( pObj )
         aLastPaM = InsertText( *pObj, aSel ).Max();
 
-    delete pObj;
     return aLastPaM;
 }
 
@@ -2499,7 +2498,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         return EE_SPELL_ERRORFOUND;
 
     EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-    AbstractThesaurusDialog* pDlg = pFact->CreateThesaurusDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) );
+    boost::scoped_ptr<AbstractThesaurusDialog> pDlg(pFact->CreateThesaurusDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) ));
     if ( pDlg->Execute() == RET_OK )
     {
         // Replace Word...
@@ -2510,7 +2509,6 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         pEditView->ShowCursor( true, false );
     }
 
-    delete pDlg;
     return EE_SPELL_OK;
 }
 

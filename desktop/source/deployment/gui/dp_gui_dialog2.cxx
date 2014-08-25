@@ -72,6 +72,7 @@
 
 #include <map>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 
 using namespace ::com::sun::star;
@@ -488,11 +489,9 @@ IMPL_LINK_NOARG(ExtBoxWithBtns_Impl, HandleOptionsBtn)
         if ( pFact )
         {
             OUString sExtensionId = GetEntryData( nActive )->m_xPackage->getIdentifier().Value;
-            VclAbstractDialog* pDlg = pFact->CreateOptionsDialog( this, sExtensionId, OUString() );
+            boost::scoped_ptr<VclAbstractDialog> pDlg(pFact->CreateOptionsDialog( this, sExtensionId, OUString() ));
 
             pDlg->Execute();
-
-            delete pDlg;
         }
     }
 

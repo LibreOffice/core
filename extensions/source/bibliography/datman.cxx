@@ -68,6 +68,7 @@
 #include "bib.hrc"
 #include "bibliography.hrc"
 #include <connectivity/dbtools.hxx>
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -1433,18 +1434,17 @@ void BibDataManager::RemoveMeAsUidListener()
 
 void BibDataManager::CreateMappingDialog(Window* pParent)
 {
-    MappingDialog_Impl* pDlg = new MappingDialog_Impl(pParent, this);
+    boost::scoped_ptr<MappingDialog_Impl> pDlg(new MappingDialog_Impl(pParent, this));
     if(RET_OK == pDlg->Execute() && pBibView)
     {
         reload();
     }
-    delete pDlg;
 }
 
 OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
 {
     OUString uRet;
-    DBChangeDialog_Impl * pDlg = new DBChangeDialog_Impl(pParent, this );
+    boost::scoped_ptr<DBChangeDialog_Impl> pDlg(new DBChangeDialog_Impl(pParent, this ));
     if(RET_OK == pDlg->Execute())
     {
         OUString sNewURL = pDlg->GetCurrentURL();
@@ -1453,7 +1453,6 @@ OUString BibDataManager::CreateDBChangeDialog(Window* pParent)
             uRet = sNewURL;
         }
     }
-    delete pDlg;
     return uRet;
 }
 

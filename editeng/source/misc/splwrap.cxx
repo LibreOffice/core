@@ -39,6 +39,7 @@
 #include <editeng/editrids.hrc>
 #include <editeng/editids.hrc>
 #include <editeng/editerr.hxx>
+#include <boost/scoped_ptr.hpp>
 
 #define WAIT_ON() if(pWin != NULL) { pWin->EnterWait(); }
 
@@ -322,13 +323,12 @@ void SvxSpellWrapper::StartThesaurus( const OUString &rWord, sal_uInt16 nLanguag
 
     WAIT_ON();  // while looking up for initial word
     EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-    AbstractThesaurusDialog* pDlg = pFact->CreateThesaurusDialog( pWin, xThes, rWord, nLanguage );
+    boost::scoped_ptr<AbstractThesaurusDialog> pDlg(pFact->CreateThesaurusDialog( pWin, xThes, rWord, nLanguage ));
     WAIT_OFF();
     if ( pDlg->Execute()== RET_OK )
     {
         ChangeThesWord( pDlg->GetWord() );
     }
-    delete pDlg;
 }
 
 
@@ -378,13 +378,12 @@ void SvxSpellWrapper::SpellDocument( )
         if (xHyphWord.is())
         {
             EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
-            AbstractHyphenWordDialog* pDlg = pFact->CreateHyphenWordDialog( pWin,
+            boost::scoped_ptr<AbstractHyphenWordDialog> pDlg(pFact->CreateHyphenWordDialog( pWin,
                             xHyphWord->getWord(),
                             LanguageTag( xHyphWord->getLocale() ).getLanguageType(),
-                            xHyph, this );
+                            xHyph, this ));
             pWin = pDlg->GetWindow();
             pDlg->Execute();
-            delete pDlg;
         }
         bDialog = false;
         pWin = pOld;

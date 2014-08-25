@@ -73,6 +73,7 @@
 #include "cursor.hxx"
 #include "accessibility.hxx"
 #include "ElementsDockingWindow.hxx"
+#include <boost/scoped_ptr.hpp>
 
 #define MINZOOM         25
 #define MAXZOOM         800
@@ -562,7 +563,7 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
             {
                 GetParent()->ToTop();
                 SmResId aResId( RID_VIEWMENU );
-                PopupMenu* pPopupMenu = new PopupMenu(aResId);
+                boost::scoped_ptr<PopupMenu> pPopupMenu(new PopupMenu(aResId));
                 pPopupMenu->SetSelectHdl(LINK(this, SmGraphicWindow, MenuSelectHdl));
                 Point aPos(5, 5);
                 if (rCEvt.IsMouseEvent())
@@ -573,7 +574,6 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
                 pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
                         ->ExecutePopup( aResId, this, &aPos );
 
-                delete pPopupMenu;
                 bCallBase = false;
             }
             break;
@@ -1749,7 +1749,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
         {
             if ( !GetViewFrame()->GetFrame().IsInPlace() )
             {
-                AbstractSvxZoomDialog *pDlg = 0;
+                boost::scoped_ptr<AbstractSvxZoomDialog> pDlg;
                 const SfxItemSet *pSet = rReq.GetArgs();
                 if ( !pSet )
                 {
@@ -1758,7 +1758,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet);
+                        pDlg.reset(pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet));
                         SAL_WARN_IF( !pDlg, "starmath", "Dialog creation failed!" );
                         pDlg->SetLimits( MINZOOM, MAXZOOM );
                         if( pDlg->Execute() != RET_CANCEL )
@@ -1797,7 +1797,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
                             break;
                     }
                 }
-                delete pDlg;
             }
         }
         break;
