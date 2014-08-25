@@ -744,9 +744,6 @@ bool NodeJava::createSettingsDocument() const
     CXmlDocPtr doc(xmlNewDoc((xmlChar *)"1.0"));
     if (! doc)
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
-    //Create a comment
-    xmlNewDocComment(
-        doc, (xmlChar *) "This is a generated file. Do not alter this file!");
 
     //Create the root element and name spaces
     xmlNodePtr root =   xmlNewDocNode(
