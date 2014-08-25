@@ -108,7 +108,7 @@
 
 #define STR_QUERY_UPDATE_LINKS                  (RID_SFX_APP_START + 192)
 #define STR_DDE_ERROR                           (RID_SFX_APP_START + 193)
-#define RID_SECURITY_WARNING_NO_HYPERLINKS      (RID_SFX_APP_START + 194)
+#define STR_SECURITY_WARNING_NO_HYPERLINKS      (RID_SFX_APP_START + 194)
 
 #define RID_SVXSTR_FILELINK                     (RID_SFX_APP_START + 195)
 #define RID_SVXSTR_GRAFIKLINK                   (RID_SFX_APP_START + 196)

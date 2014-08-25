@@ -53,7 +53,7 @@
 
 #include <vcl/wrkwin.hxx>
 #include <svl/intitem.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <sfx2/doctempl.hxx>
@@ -833,7 +833,9 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 SolarMutexGuard aGuard;
                 Window *pWindow = SfxGetpApp()->GetTopWindow();
 
-                WarningBox  aSecurityWarningBox( pWindow, SfxResId( RID_SECURITY_WARNING_NO_HYPERLINKS ));
+                MessageDialog aSecurityWarningBox(pWindow,
+                                                  SfxResId(STR_SECURITY_WARNING_NO_HYPERLINKS),
+                                                  VCL_MESSAGE_WARNING);
                 aSecurityWarningBox.SetText( SfxResId(RID_SECURITY_WARNING_TITLE).toString() );
                 aSecurityWarningBox.Execute();
                 return;

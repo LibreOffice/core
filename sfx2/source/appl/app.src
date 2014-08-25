@@ -326,11 +326,9 @@ String STR_DDE_ERROR
     Text [ en-US ] = "DDE link to % for % area % are not available." ;
 };
 
-WarningBox RID_SECURITY_WARNING_NO_HYPERLINKS
+String STR_SECURITY_WARNING_NO_HYPERLINKS
 {
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ en-US ] = "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.";
+    Text [ en-US ] = "For security reasons, the hyperlink cannot be executed.\nThe stated address will not be opened.";
 };
 
 String RID_SECURITY_WARNING_TITLE
