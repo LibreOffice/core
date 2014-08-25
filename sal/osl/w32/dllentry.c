@@ -261,11 +261,12 @@ static DWORD GetParentProcessId()
 
 static DWORD WINAPI ParentMonitorThreadProc( LPVOID lpParam )
 {
-    osl_setThreadName("headless ParentMonitorThread");
-
     DWORD_PTR dwParentProcessId = (DWORD_PTR)lpParam;
 
     HANDLE  hParentProcess = OpenProcess( SYNCHRONIZE, FALSE, dwParentProcessId );
+
+    osl_setThreadName("headless ParentMonitorThread");
+
     if ( IsValidHandle( hParentProcess ) )
     {
         if ( WAIT_OBJECT_0 == WaitForSingleObject( hParentProcess, INFINITE ) )
