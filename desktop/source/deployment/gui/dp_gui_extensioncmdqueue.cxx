@@ -62,7 +62,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/anytostring.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "dp_gui.h"
@@ -438,13 +437,13 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
                     verExc.NewVersion, verExc.Deployed->getVersion() ))
         {
         case dp_misc::LESS:
-            id = RID_WARNINGBOX_VERSION_LESS;
+            id = RID_STR_WARNING_VERSION_LESS;
             break;
         case dp_misc::EQUAL:
-            id = RID_WARNINGBOX_VERSION_EQUAL;
+            id = RID_STR_WARNING_VERSION_EQUAL;
             break;
         default: // dp_misc::GREATER
-            id = RID_WARNINGBOX_VERSION_GREATER;
+            id = RID_STR_WARNING_VERSION_GREATER;
             break;
         }
         OSL_ASSERT( verExc.Deployed.is() );
@@ -452,24 +451,25 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             verExc.Deployed->getDisplayName());
         {
             SolarMutexGuard guard;
-            WarningBox box( m_pDialogHelper? m_pDialogHelper->getWindow() : NULL, ResId(id, *DeploymentGuiResMgr::get()));
+            MessageDialog box(m_pDialogHelper? m_pDialogHelper->getWindow() : NULL,
+                ResId(id, *DeploymentGuiResMgr::get()), VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
             OUString s;
             if (bEqualNames)
             {
-                s = box.GetMessText();
+                s = box.get_primary_text();
             }
-            else if (id == RID_WARNINGBOX_VERSION_EQUAL)
+            else if (id == RID_STR_WARNING_VERSION_EQUAL)
             {
                 //hypothetical: requires two instances of an extension with the same
                 //version to have different display names. Probably the developer forgot
                 //to change the version.
                 s = ResId(RID_STR_WARNINGBOX_VERSION_EQUAL_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
             }
-            else if (id == RID_WARNINGBOX_VERSION_LESS)
+            else if (id == RID_STR_WARNING_VERSION_LESS)
             {
                 s = ResId(RID_STR_WARNINGBOX_VERSION_LESS_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
             }
-            else if (id == RID_WARNINGBOX_VERSION_GREATER)
+            else if (id == RID_STR_WARNING_VERSION_GREATER)
             {
                s = ResId(RID_STR_WARNINGBOX_VERSION_GREATER_DIFFERENT_NAMES, *DeploymentGuiResMgr::get()).toString();
             }
@@ -477,7 +477,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             s = s.replaceAll("$OLDNAME", verExc.Deployed->getDisplayName());
             s = s.replaceAll("$NEW", getVersion(verExc.NewVersion));
             s = s.replaceAll("$DEPLOYED", getVersion(verExc.Deployed));
-            box.SetMessText(s);
+            box.set_primary_text(s);
             approve = box.Execute() == RET_OK;
             abort = !approve;
         }

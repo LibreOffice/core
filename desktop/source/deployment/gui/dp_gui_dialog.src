@@ -111,47 +111,39 @@ String RID_STR_SHOW_LICENSE_CMD
     Text [ en-US ] = "Show license";
 };
 
-WarningBox RID_WARNINGBOX_INSTALL_EXTENSION {
-    Buttons = WB_OK_CANCEL;
-    DefButton = WB_DEF_OK;
-    Message[en-US] = "You are about to install the extension '%NAME'.\n"
+String RID_STR_WARNING_INSTALL_EXTENSION
+{
+    Text [en-US] = "You are about to install the extension '%NAME'.\n"
     "Click 'OK' to proceed with the installation.\n"
     "Click 'Cancel' to stop the installation.";
 };
 
-WarningBox RID_WARNINGBOX_REMOVE_EXTENSION {
-    Buttons = WB_OK_CANCEL;
-    DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "You are about to remove the extension '%NAME'.\n"
+String RID_STR_WARNING_REMOVE_EXTENSION
+{
+    Text [en-US] = "You are about to remove the extension '%NAME'.\n"
     "Click 'OK' to remove the extension.\n"
     "Click 'Cancel' to stop removing the extension.";
 };
 
-WarningBox RID_WARNINGBOX_REMOVE_SHARED_EXTENSION
+String RID_STR_WARNING_REMOVE_SHARED_EXTENSION
 {
-    Buttons = WB_OK_CANCEL;
-    DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "Make sure that no further users are working with the same "
+    Text [en-US] = "Make sure that no further users are working with the same "
     "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
     "Click 'OK' to remove the extension.\n"
     "Click 'Cancel' to stop removing the extension.";
 };
 
-WarningBox RID_WARNINGBOX_ENABLE_SHARED_EXTENSION
+String RID_STR_WARNING_ENABLE_SHARED_EXTENSION
 {
-    Buttons = WB_OK_CANCEL;
-    DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "Make sure that no further users are working with the same "
+    Text [en-US] = "Make sure that no further users are working with the same "
     "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
     "Click 'OK' to enable the extension.\n"
     "Click 'Cancel' to stop enabling the extension.";
 };
 
-WarningBox RID_WARNINGBOX_DISABLE_SHARED_EXTENSION
+String RID_STR_WARNING_DISABLE_SHARED_EXTENSION
 {
-    Buttons = WB_OK_CANCEL;
-    DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "Make sure that no further users are working with the same "
+    Text [en-US] = "Make sure that no further users are working with the same "
     "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
     "Click 'OK' to disable the extension.\n"
     "Click 'Cancel' to stop disabling the extension.";

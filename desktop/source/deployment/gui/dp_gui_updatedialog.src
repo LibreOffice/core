@@ -87,14 +87,4 @@ String RID_DLG_UPDATE_IGNORED_UPDATE {
     Text[en-US] = "This update will be ignored.\n";
 };
 
-WarningBox RID_WARNINGBOX_UPDATE_SHARED_EXTENSION
-{
-    Buttons = WB_OK_CANCEL;
-    DefButton = WB_DEF_CANCEL;
-    Message[en-US] = "Make sure that no further users are working with the same "
-    "%PRODUCTNAME, when changing shared extensions in a multi user environment.\n"
-    "Click 'OK' to update the extensions.\n"
-    "Click 'Cancel' to stop updating the extensions.";
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

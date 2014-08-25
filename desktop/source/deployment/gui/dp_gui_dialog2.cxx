@@ -36,7 +36,6 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 
@@ -589,11 +588,8 @@ bool DialogHelper::continueOnSharedExtension( const uno::Reference< deployment::
     if ( !bHadWarning && IsSharedPkgMgr( xPackage ) )
     {
         const SolarMutexGuard guard;
-        WarningBox aInfoBox( pParent, getResId( nResID ) );
-        OUString aMsgText = aInfoBox.GetMessText();
-        aMsgText = aMsgText.replaceAll(
-            "%PRODUCTNAME", utl::ConfigManager::getProductName());
-        aInfoBox.SetMessText( aMsgText );
+        MessageDialog aInfoBox(pParent, getResId(nResID),
+                               VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
 
         bHadWarning = true;
 
@@ -630,15 +626,15 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
     }
 }
 
-
 bool DialogHelper::installExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    WarningBox aInfo( m_pVCLWindow, getResId( RID_WARNINGBOX_INSTALL_EXTENSION ) );
+    MessageDialog aInfo(m_pVCLWindow, getResId(RID_STR_WARNING_INSTALL_EXTENSION),
+                        VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
 
-    OUString sText(aInfo.GetMessText());
+    OUString sText(aInfo.get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
-    aInfo.SetMessText(sText);
+    aInfo.set_primary_text(sText);
 
     return ( RET_OK == aInfo.Execute() );
 }
@@ -765,26 +761,24 @@ void ExtMgrDialog::prepareChecking()
     m_pExtensionBox->prepareChecking();
 }
 
-
 void ExtMgrDialog::checkEntries()
 {
     const SolarMutexGuard guard;
     m_pExtensionBox->checkEntries();
 }
 
-
 bool ExtMgrDialog::removeExtensionWarn( const OUString &rExtensionName ) const
 {
     const SolarMutexGuard guard;
-    WarningBox aInfo( const_cast< ExtMgrDialog* >(this), getResId( RID_WARNINGBOX_REMOVE_EXTENSION ) );
+    MessageDialog aInfo(const_cast<ExtMgrDialog*>(this), getResId(RID_STR_WARNING_REMOVE_EXTENSION),
+                        VCL_MESSAGE_WARNING, VCL_BUTTONS_OK_CANCEL);
 
-    OUString sText(aInfo.GetMessText());
+    OUString sText(aInfo.get_primary_text());
     sText = sText.replaceAll("%NAME", rExtensionName);
-    aInfo.SetMessText(sText);
+    aInfo.set_primary_text(sText);
 
     return ( RET_OK == aInfo.Execute() );
 }
-
 
 bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &xPackage,
                                   bool bEnable )
@@ -794,12 +788,12 @@ bool ExtMgrDialog::enablePackage( const uno::Reference< deployment::XPackage > &
 
     if ( bEnable )
     {
-        if ( ! continueOnSharedExtension( xPackage, this, RID_WARNINGBOX_ENABLE_SHARED_EXTENSION, m_bEnableWarning ) )
+        if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_ENABLE_SHARED_EXTENSION, m_bEnableWarning ) )
             return false;
     }
     else
     {
-        if ( ! continueOnSharedExtension( xPackage, this, RID_WARNINGBOX_DISABLE_SHARED_EXTENSION, m_bDisableWarning ) )
+        if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_DISABLE_SHARED_EXTENSION, m_bDisableWarning ) )
             return false;
     }
 
@@ -820,7 +814,7 @@ bool ExtMgrDialog::removePackage( const uno::Reference< deployment::XPackage > &
             return false;
     }
 
-    if ( ! continueOnSharedExtension( xPackage, this, RID_WARNINGBOX_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
+    if ( ! continueOnSharedExtension( xPackage, this, RID_STR_WARNING_REMOVE_SHARED_EXTENSION, m_bDeleteWarning ) )
         return false;
 
     m_pManager->getCmdQueue()->removeExtension( xPackage );
