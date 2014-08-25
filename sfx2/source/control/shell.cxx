@@ -113,12 +113,6 @@ void SfxShell::EmptyStateStub(SfxShell *, SfxItemSet &)
 {
 }
 
-/*  [Description]
-
-    The constructor of the SfxShell class initializes only simple types,
-    the corresponding SbxObject is only created on-demand. Therefore,
-    the application of a SfxShell instance is very cheap.
-*/
 SfxShell::SfxShell()
 :   pImp(0),
     pPool(0),
@@ -127,12 +121,6 @@ SfxShell::SfxShell()
     pImp = new SfxShell_Impl;
 }
 
-/*  [Description]
-
-    The constructor of the SfxShell class initializes only simple types,
-    the corresponding SbxObject is only created on-demand. Therefore,
-    the application of a SfxShell instance is very cheap.
-*/
 SfxShell::SfxShell( SfxViewShell *pViewSh )
 :   pImp(0),
     pPool(0),
@@ -142,12 +130,6 @@ SfxShell::SfxShell( SfxViewShell *pViewSh )
     pImp->pViewSh = pViewSh;
 }
 
-/*  [Description]
-
-    The connection to a possible corresponding SbxObject is dissolved.
-    The SbxObject may continoue to exist, but can not any longer perform
-    any functions and can not provide any properties.
-*/
 SfxShell::~SfxShell()
 {
 
@@ -155,72 +137,27 @@ SfxShell::~SfxShell()
     delete pImp;
 }
 
-/*  [Description]
-
-    Sets the name of the Shell object. With this name, the SfxShell instance
-    of BASIC can be expressed.
-*/
 void SfxShell::SetName( const OUString &rName )
 {
     pImp->aObjectName = rName;
 }
 
-/*  [Description]
-
-    Returns the name of the Shell object. With this name, the SfxShell instance
-    of BASIC can be expressed.
-*/
 const OUString& SfxShell::GetName() const
 {
     return pImp->aObjectName;
 }
 
-/*  [Description]
-
-    This method returns a pointer to the <SfxDispatcher>, when the SfxShell
-    is currently <UI-active> or a NULL-pointer if it is not UI-active.
-
-    The returned pointer is only valid in the immediate context of the method
-    call.
-*/
 SfxDispatcher* SfxShell::GetDispatcher() const
 {
     return pImp->pFrame ? pImp->pFrame->GetDispatcher() : 0;
 }
 
-/*  [Description]
-
-    Returns the SfxViewShell in which they are located in the subshells.
-    Otherwise, and if not specified by the App developer, this method
-    returns NULL.
-*/
 SfxViewShell* SfxShell::GetViewShell() const
 {
     return pImp->pViewSh;
 }
 
-/*  [Description]
-
-    This method returns a pointer to the <SfxViewFrame> to which this SfxShell
-    instance is associated or in which they currently is <UI-active>.
-    A NULL pointer is returned if this SfxShell instance is not UI-active at
-    the moment and also no SfxViewFrame is permanently assigned.
-
-    The returned pointer is only valid in the immediate context of the method
-    call.
-
-    [Note]
-
-    Only instances of a subclass of SfxApplication and SfxObjectShell
-    should here provide a NULL-pointer. Otherwise, there is an error in the
-    application program (wrong constructor was called from SfxShell).
-
-    [Cross-reference]
-
-    <SfxViewShell::GetViewFrame()const>
-*/
 SfxViewFrame* SfxShell::GetFrame() const
-
 {
     if ( pImp->pFrame )
         return pImp->pFrame;
@@ -229,20 +166,6 @@ SfxViewFrame* SfxShell::GetFrame() const
     return 0;
 }
 
-/*  [Description]
-
-    With this method any objects of <SfxPoolItemu> subclasses can be accessed.
-    This exchange method is needed if, for example special <SfxToolBoxControl>
-    subclasses need access to certain data such as the <SfxObjectShell>.
-
-    The returned instance belongs to the particular SfxShell and may be
-    used only in the immediate context of the method call.
-
-    [Cross-reference]
-
-    <SfxShell::PutItem(const SfxPoolItem&)>
-    <SfxShell::RemoveItem(sal_uInt16)>
-*/
 const SfxPoolItem* SfxShell::GetItem
 (
     sal_uInt16  nSlotId         // Slot-Id of the querying <SfxPoolItem>s
@@ -254,20 +177,6 @@ const SfxPoolItem* SfxShell::GetItem
     return 0;
 }
 
-/*  [Description]
-
-    With this method, any objects of subclasses of <SfxPoolItem> can be made
-    available. This exchange technology is needed if, for example, special
-    <SfxToolBoxControl> Subclasses need access to certain data such as the
-    <SfxObjectShell>
-
-    If a SfxPoolItem exists with the same slot ID, it is deleted automatically.
-
-    [Cross-reference]
-
-    <SfxShell::RemoveItem(sal_uInt16)>
-    <SfxShell::GetItem(sal_uInt16)>
-*/
 void SfxShell::PutItem
 (
     const SfxPoolItem&  rItem  /* Instance, of which a copy is created,
@@ -314,45 +223,16 @@ void SfxShell::PutItem
     }
 }
 
-/*  [Description]
-
-    With this virtual method, which is automatically overloaded by each subclass
-    with its own slots through the macro <SFX_DECL_INTERFACE>, one can access
-    each of the <SfxInterface> instance beloning to the subclass.
-
-    The class SfxShell itself has no own SfxInterface (no slots), therefore a
-    NULL-pointer is returned.
-*/
 SfxInterface* SfxShell::GetInterface() const
 {
     return GetStaticInterface();
 }
 
-/*  [Description]
-
-    Each Subclass of SfxShell can hava a <SfxUndoManager>. This can be set in
-    the derived class with <SfxShell:SetUndoManager()>.
-
-    The class SfxShell itself does not have a SfxUndoManager, a NULL-pointer
-    is therefore returned.
-*/
 ::svl::IUndoManager* SfxShell::GetUndoManager()
 {
     return pUndoMgr;
 }
 
-/*  [Description]
-
-    Sets a <SfxUndoManager> for this <SfxShell> Instance. For the undo
-    is only the undo-manager used for SfxShell at the top of the stack of each
-    <SfxDispatcher>.
-
-    On the given <SfxUndoManager> is automatically the current
-    Max-Undo-Action-Count setting set form the options.
-
-    'pNewUndoMgr' must exist until the Destuctor of SfxShell instance is called
-    or until the next 'SetUndoManager()'.
-*/
 void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
 {
     OSL_ENSURE( ( pUndoMgr == NULL ) || ( pNewUndoMgr == NULL ) || ( pUndoMgr == pNewUndoMgr ),
@@ -367,52 +247,16 @@ void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
             officecfg::Office::Common::Undo::Steps::get());
 }
 
-/*  [Description]
-
-    Returns a pointer to the <SfxRepeatTarget> instance that is used in
-    SID_REPEAT as repeat target when it is addressed from the <SfxUndoManager>
-    supplied by this SfxShell. The return value can be NULL.
-
-    [Note]
-
-    A derivation of <SfxShell> or one of its subclasses of <SfxRepeatTarget>
-    is not recommended, as compiler errors are provoked.
-    (due to Call-to-Pointer-to-Member-Function to the subclass).
-*/
 SfxRepeatTarget* SfxShell::GetRepeatTarget() const
 {
     return pImp->pRepeatTarget;
 }
 
-/*  [Description]
-
-    Sets the <SfxRepeatTarget> instance that is used in SID_REPEAT as
-    RepeatTarget, when the current supplied by this <SfxUndoManager> is
-    addressed. By 'pTarget==0' the SID_REPEAT is disabled for this SfxShell.
-    The instance '*pTarget' must live as long as it is registered.
-
-    [Note]
-
-    A derivation of <SfxShell> or one of its subclasses of <SfxRepeatTarget>
-    is not recommended, as compiler errors are provoked.
-    (due to Call-to-Pointer-to-Member-Function to the subclass).
-*/
 void SfxShell::SetRepeatTarget( SfxRepeatTarget *pTarget )
 {
     pImp->pRepeatTarget = pTarget;
 }
 
-/*  [Description]
-
-    With this method can the slots of the subclasses be invalidated through the
-    slot Id or alternatively through the Which ID. Slot IDs, which are
-    inherited by the subclass are also invalidert.
-
-    [Cross-reference]
-
-    <SfxBindings::Invalidate(sal_uInt16)>
-    <SfxBindings::InvalidateAll(sal_Bool)>
-*/
 void SfxShell::Invalidate
 (
     sal_uInt16          nId     /* Invalidated Slot-Id or Which-Id.
@@ -468,16 +312,6 @@ void SfxShell::Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId )
     }
 }
 
-/*  [Description]
-
-    This method controls the activation of SfxShell instance. First, by calling
-    the virtual method <SfxShell::Activate(sal_Bool)> which gives the subclass the
-    opportunity to respond to the event.
-
-    When bMDI == TRUE, the associated SbxObject is being 'armed', so that
-    unqualified methods of the object (without the name of the object)
-    from BASIC are found.
-*/
 void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 {
 #ifdef DBG_UTIL
@@ -501,15 +335,6 @@ void SfxShell::DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI )
     Activate(bMDI);
 }
 
-/*  [Description]
-
-    This method controls the deactivation of the SfxShell instance. When
-    bMDI == TRUE the SbxObject is first set to a status that only qualified
-    BASIC methods can be called.
-
-    Then the subclass gets the opportunity in every case to respond to the
-    event by calling the virtual method <SfxShell::Deactivate(sal_Bool)>.
-*/
 void SfxShell::DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI )
 {
 #ifdef DBG_UTIL
@@ -540,16 +365,6 @@ bool SfxShell::IsActive() const
     return pImp->bActive;
 }
 
-/*  [Description]
-
-    Virtual method that is called when enabling the SfxShell instance,
-    in order to give the Subclasses the opportunity to respond to the
-    to the enabling.
-
-    [Cross-reference]
-
-    StarView SystemWindow::Activate(bool)
-*/
 void SfxShell::Activate
 (
     bool    /*bMDI*/        /*  TRUE
@@ -567,15 +382,6 @@ void SfxShell::Activate
     BroadcastContextForActivation(true);
 }
 
-/*  [Description]
-
-    Virtual method that is called when disabling the SfxShell instance,
-    to give the Subclasses the opportunity to respond to the disabling.
-
-    [Cross-reference]
-
-    StarView SystemWindow::Dectivate(bool)
-*/
 void SfxShell::Deactivate
 (
     bool    /*bMDI*/        /*  TRUE
@@ -593,57 +399,23 @@ void SfxShell::Deactivate
     BroadcastContextForActivation(false);
 }
 
-/*  [Description]
-
-    A parent of the <SfxDispatcher> on which the SfxShell is located, has
-    become active, or the SfxShell instance was pushed on a <SfxDispatcher>,
-    which parent is active.
-
-    The base implementation is empty and does not need to be called.
-
-    [Cross-reference]
-
-    SfxShell::Activate()
-*/
 void SfxShell::ParentActivate
 (
 )
 {
 }
 
-/*  [Description]
-
-    The active parent of the <SfxDispatcher> on which the SfxShell is located,
-    has been disabled.
-
-    The base implementation is empty and does not need to be called.
-
-    [Cross-reference]
-
-    SfxShell::Deactivate()
-*/
 void SfxShell::ParentDeactivate
 (
 )
 {
 }
 
-/*  [Description]
-
-    This method provides the ResMgr of the <Resource-DLL> that are used by
-    the SfxShell instance. If this is a NULL-pointer, then the current
-    resource manager is to be used.
-*/
 ResMgr* SfxShell::GetResMgr() const
 {
     return GetInterface()->GetResMgr();
 }
 
-/*  [Description]
-
-    This method determines by calling the status function whether 'rSlot'
-    can be executed currently.
-*/
 bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
 {
     // Get Slot status
@@ -661,10 +433,6 @@ long ShellCall_Impl( void* pObj, void* pArg )
     return 0;
 }
 
-/*  [Description]
-
-    Asynchronous ExecuteSlot for the RELOAD
- */
 const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
 {
     if( !bAsync )
@@ -679,37 +447,6 @@ const SfxPoolItem* SfxShell::ExecuteSlot( SfxRequest& rReq, bool bAsync )
     }
 }
 
-/*  [Description]
-
-    This method allows you to forward a <SfxRequest> to the specified
-    base <SfxShell>.
-
-    [Example]
-
-    In a derived class of SfxViewShell the SID_PRINTDOCDIRECT will be
-    intercepted. Under certain circumstances a query should appear before
-    you print, and the request will be aborted if necessary.
-
-    Also in the IDL of this subclass of the above slot is entered. The status
-    method will contain in outline:
-
-    void SubViewShell::Exec( SfxRequest &rReq )
-    {
-        if ( rReq.GetSlot() == SID_PRINTDOCDIRECT )
-        {
-            'dialog'
-            if ( 'condition' )
-                ExecuteSlot( rReq, SfxViewShell::GetInterface() );
-        }
-    }
-
-    It usually takes no rReq.Done() to be called as that is already completed
-    in implementation of the SfxViewShell, for instance it has been canceled.
-
-    [Cross-reference]
-
-    <SfxShell::GetSlotState(sal_uInt16,const SfxInterface*,SfxItemSet*)>
-*/
 const SfxPoolItem* SfxShell::ExecuteSlot
 (
     SfxRequest          &rReq,  // the relayed <SfxRequest>
@@ -734,41 +471,6 @@ const SfxPoolItem* SfxShell::ExecuteSlot
     return rReq.GetReturnValue();
 }
 
-/*  [Description]
-
-    This method returns the status of the slot with the specified slot ID
-    on the specified interface.
-
-    If the slot is disabled or in this SfxShell (and their parent shells) are
-    not known, a Null-pointer is returned.
-
-    If the slot does not have a Status, a SfxVoidItem is returned.
-
-    The status is set directly in this Set when pStateSet != 0 , so that
-    overloaded Slots of the <SfxShell> Subclasses and also in the Status
-    method of the base implementation can be called.
-
-    [Example]
-
-    In a derived class of SfxViewShell the SID_PRINTDOCDIRECT will be
-    intercepted. Under certain circumstances a query should appear before
-    you print, and the request will be aborted if necessary.
-
-    Also in the IDL of this subclass of the above slot is entered. The status
-    method will contain in outline:
-
-    void SubViewShell::PrintState( SfxItemSet &rState )
-    {
-        if ( rState.GetItemState( SID_PRINTDOCDIRECT ) != SFX_ITEM_UNKNOWN )
-            GetSlotState( SID_PRINTDOCDIRECT, SfxViewShell::GetInterface(),
-                    &rState );
-        ...
-    }
-
-    [Cross-reference]
-
-    <SfxShell::ExecuteSlot(SfxRequest&)>
-*/
 const SfxPoolItem* SfxShell::GetSlotState
 (
     sal_uInt16              nSlotId,    // Slot-Id to the Slots in question
