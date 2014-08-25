@@ -29,7 +29,6 @@
 #include <com/sun/star/java/RestartRequiredException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/rcid.h>
@@ -123,8 +122,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
            // No suitable JRE found
             SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
-            WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_JAVANOTFOUND ) );
-            aWarningBox.SetText(SvtResId(STR_WARNING_JAVANOTFOUND).toString());
+            MessageDialog aWarningBox(NULL, SvtResId(STR_WARNING_JAVANOTFOUND), VCL_MESSAGE_WARNING);
+            aWarningBox.SetText(SvtResId(STR_WARNING_JAVANOTFOUND_TITLE));
             nResult = aWarningBox.Execute();
         }
         else
@@ -140,11 +139,11 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             SolarMutexGuard aSolarGuard;
             m_bInvalidSettings_Handled = true;
 #ifdef MACOSX
-            WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS_MAC ) );
+            MessageDialog aWarningBox(NULL, SvtResId(STR_WARNING_INVALIDJAVASETTINGS_MAC), VCL_MESSAGE_WARNING);
 #else
-            WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_INVALIDJAVASETTINGS ) );
+            MessageDialog aWarningBox(NULL, SvtResId(STR_WARNING_INVALIDJAVASETTINGS), VCL_MESSAGE_WARNING);
 #endif
-            aWarningBox.SetText(SvtResId(STR_WARNING_INVALIDJAVASETTINGS).toString());
+            aWarningBox.SetText(SvtResId(STR_WARNING_INVALIDJAVASETTINGS_TITLE));
             nResult = aWarningBox.Execute();
         }
         else
