@@ -197,7 +197,8 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             bool bMod1 = pKeyEvent->GetKeyCode().IsMod1();
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
-            if ( KEY_ESCAPE == nCode || (bMod1 && (KEY_F == nCode)) )
+            // Close the search bar on Escape
+            if ( KEY_ESCAPE == nCode )
             {
                 nRet = true;
                 GrabFocusToDocument();
@@ -217,7 +218,11 @@ bool FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                     }
                 }
             }
+            // Select text in the search box when Ctrl-F pressed
+            if ( bMod1 && nCode == KEY_F )
+                SetSelection( Selection( SELECTION_MIN, SELECTION_MAX ) );
 
+            // Execute the search when Enter, Ctrl-G or F3 pressed
             if ( KEY_RETURN == nCode || (bMod1 && (KEY_G == nCode)) || (KEY_F3 == nCode) )
             {
                 Remember_Impl(GetText());
