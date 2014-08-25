@@ -1977,8 +1977,10 @@ bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             if (!pNewMed->GetName().isEmpty())
                 bHasName = true;
             Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
+            EnableSetModified(false);
             getDocProperties()->setGenerator(
                ::utl::DocInfoHelper::GetGeneratorString() );
+            EnableSetModified(true);
         }
 
         uno::Reference< embed::XStorage > xStorage;
