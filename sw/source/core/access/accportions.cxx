@@ -72,14 +72,17 @@ SwAccessiblePortionData::SwAccessiblePortionData(
     pTxtNode( pTxtNd ),
     aBuffer(),
     nModelPosition( 0 ),
-    bFinished( false ),
     pViewOptions( pViewOpt ),
     sAccessibleString(),
     aLineBreaks(),
     aModelPositions(),
     aAccessiblePositions(),
+    aFieldPosition(),
+    aAttrFieldType(),
+    aPortionAttrs(),
     pSentences( 0 ),
     nBeforePortions( 0 ),
+    bFinished( false ),
     bLastIsSpecial( false )
 {
     OSL_ENSURE( pTxtNode != NULL, "Text node is needed!" );

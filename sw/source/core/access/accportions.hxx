@@ -43,7 +43,6 @@ class SwAccessiblePortionData : public SwPortionHandler
     // variables used while collecting the data
     OUStringBuffer aBuffer;
     sal_Int32 nModelPosition;
-    bool bFinished;
     const SwViewOption* pViewOptions;
 
     // the accessible string
@@ -67,6 +66,7 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t* pSentences;    /// positions of sentence breaks
 
     size_t nBeforePortions;     /// # of portions before first model character
+    bool bFinished;
     bool bLastIsSpecial;    /// set if last portion was 'Special()'
 
     /// returns the index of the first position whose value is smaller
