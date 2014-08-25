@@ -134,11 +134,9 @@ String STR_LO_MUST_BE_RESTARTED
     Text [ en-US ] = "%PRODUCTNAME must unfortunately be manually restarted once after installation or update." ;
 };
 
-QueryBox QBX_USERDATALOCKED
+String STR_QUERY_USERDATALOCKED
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
+    Text [ en-US ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
 };
 
 String STR_TITLE_USERDATALOCKED
