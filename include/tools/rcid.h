@@ -51,7 +51,6 @@
 
 #define RSC_WARNINGBOX          (RSC_NOTYPE + 0x32)
 
-#define RSC_QUERYBOX            (RSC_NOTYPE + 0x34)
 #define RSC_WINDOW              (RSC_NOTYPE + 0x35)
 #define RSC_SYSWINDOW           (RSC_NOTYPE + 0x36)
 #define RSC_WORKWIN             (RSC_NOTYPE + 0x37)

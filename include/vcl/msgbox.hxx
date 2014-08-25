@@ -118,7 +118,6 @@ private:
 public:
                         QueryBox( Window* pParent, WinBits nStyle,
                                   const OUString& rMessage );
-                        QueryBox( Window* pParent, const ResId& rResId );
 
     void                SetDefaultCheckBoxText();
 

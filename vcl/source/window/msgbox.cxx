@@ -513,12 +513,6 @@ QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) 
     ImplInitQueryBoxData();
 }
 
-QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
-    MessBox( pParent, rResId.SetRT( RSC_QUERYBOX ) )
-{
-    ImplInitQueryBoxData();
-}
-
 void QueryBox::SetDefaultCheckBoxText()
 {
     ResMgr* pResMgr = ImplGetResMgr();
