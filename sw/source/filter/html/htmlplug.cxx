@@ -1281,6 +1281,7 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
             utl::MediaDescriptor aMediaDescriptor;
             aMediaDescriptor["FilterName"] <<= aFilter;
+            aMediaDescriptor["FilterOptions"] <<= OUString("SkipHeaderFooter");
             aMediaDescriptor["OutputStream"] <<= xOutputStream;
             xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
             OString aData(reinterpret_cast<const char*>(aStream.GetData()), aStream.GetSize());

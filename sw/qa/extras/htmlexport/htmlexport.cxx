@@ -143,6 +143,8 @@ DECLARE_HTMLEXPORT_TEST(testSkipImageEmbedded, "skipimage-embedded.doc")
 
     // This was 0.
     assertXPath(pDoc, "//table", 1);
+    // This was 2, the HTML header was in the document two times.
+    assertXPath(pDoc, "//meta[@name='generator']", 1);
 }
 
 #endif
