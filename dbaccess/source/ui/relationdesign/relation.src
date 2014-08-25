@@ -47,13 +47,6 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text [ en-US ] = "The database does not support relations." ;
 };
 
-QueryBox RELATION_DESIGN_SAVEMODIFIED
-{
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "The relation design has been changed.\nDo you want to save the changes?" ;
-};
-
 String STR_QUERY_REL_DELETE_WINDOW
 {
     Text [ en-US ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";

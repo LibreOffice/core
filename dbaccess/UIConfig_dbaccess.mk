@@ -28,6 +28,7 @@ $(eval $(call gb_UIConfig_add_uifiles,dbaccess, \
     dbaccess/uiconfig/ui/dbwizmysqlnativepage \
     dbaccess/uiconfig/ui/dbwizspreadsheetpage \
     dbaccess/uiconfig/ui/dbwiztextpage \
+    dbaccess/uiconfig/ui/designsavemodifieddialog \
     dbaccess/uiconfig/ui/directsqldialog  \
     dbaccess/uiconfig/ui/emptypage \
     dbaccess/uiconfig/ui/fielddialog \

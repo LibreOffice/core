@@ -56,7 +56,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include "sqlmessage.hxx"
 #include "RelationController.hxx"
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include "TableWindowData.hxx"
 #include "UITools.hxx"
 #include "RTableConnectionData.hxx"
@@ -255,7 +255,8 @@ short ORelationController::saveModified()
     short nSaved = RET_YES;
     if(haveDataSource() && isModified())
     {
-        QueryBox aQry(getView(), ModuleRes(RELATION_DESIGN_SAVEMODIFIED));
+        MessageDialog aQry(getView(), "DesignSaveModifiedDialog",
+                                      "dbaccess/ui/designsavemodifieddialog.ui");
         nSaved = aQry.Execute();
         if(nSaved == RET_YES)
             Execute(ID_BROWSER_SAVEDOC,Sequence<PropertyValue>());
