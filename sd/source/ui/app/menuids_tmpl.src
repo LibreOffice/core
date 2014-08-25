@@ -420,7 +420,7 @@
     MenuItem {\
         Identifier = SID_PARA_DLG;\
         HelpId = CMD_SID_PARA_DLG;\
-        Text [ en-US ] = "P~aragraph...";\
+        Text [ en-US ] = "P~aragraph";\
     };
 
 #define MN_TEXT_ATTR\
