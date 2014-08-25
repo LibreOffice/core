@@ -371,13 +371,6 @@ String STR_TABLEDESIGN_COULD_NOT_DROP_COL
     Text [ en-US ] = "The column $column$ could not be deleted.";
 };
 
-QueryBox TABLE_DESIGN_ALL_ROWS_DELETED
-{
-    Buttons = WB_YES_NO_CANCEL ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "You are trying to delete all the columns in the table. A table cannot exist without columns. Should the table be deleted from the database? If not, the table will remain unchanged.";
-};
-
 String STR_AUTOINCREMENT_VALUE
 {
     Text [ en-US ] = "A~uto-increment statement";

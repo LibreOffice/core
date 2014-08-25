@@ -580,7 +580,8 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
         }
         else if ( !m_bNew )
         {
-            QueryBox aQry(getView(), ModuleRes(TABLE_DESIGN_ALL_ROWS_DELETED));
+            MessageDialog aQry(getView(), "DeleteAllRowsDialog",
+                               "dbaccess/ui/deleteallrowsdialog.ui");
             switch (aQry.Execute())
             {
                 case RET_YES:

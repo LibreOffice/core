@@ -98,10 +98,6 @@
 
     // FREE
 
-// query boxes
-
-#define TABLE_DESIGN_ALL_ROWS_DELETED   RID_QUERYBOX_START + 13
-
 // images
 
 #define TABLE_TREE_ICON                 RID_IMAGE_START +  0
