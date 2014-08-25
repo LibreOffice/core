@@ -2708,15 +2708,18 @@ void ChartView::createShapes()
 
 void ChartView::render()
 {
-    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
-    OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
-    if(pWindow)
-        pWindow->setRenderer(mp2DRenderer.get());
-    bool bRender = pShapeFactory->preRender(pWindow);
-    if(bRender)
+    if(!isReal3DChart())
     {
-        pShapeFactory->render(mxRootShape, pWindow != mp2DRenderer->getOpenGLWindow());
-        pShapeFactory->postRender(pWindow);
+        AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+        OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
+        if(pWindow)
+            pWindow->setRenderer(mp2DRenderer.get());
+        bool bRender = pShapeFactory->preRender(pWindow);
+        if(bRender)
+        {
+            pShapeFactory->render(mxRootShape, pWindow != mp2DRenderer->getOpenGLWindow());
+            pShapeFactory->postRender(pWindow);
+        }
     }
 }
 
