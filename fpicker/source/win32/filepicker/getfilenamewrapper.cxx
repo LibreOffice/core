@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include <osl/diagnose.h>
+#include <osl/thread.h>
 #include <sal/log.hxx>
 #include "getfilenamewrapper.hxx"
 
