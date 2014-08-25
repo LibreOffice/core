@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5ad0253b_491a3119",
+        "filename": "starmath/source/mathmlexport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-08-25T08:23:20Z",
+      "side": 1,
+      "message": "I am going to accept this as good enough fix for 4.2... But IMHO the real problem is somewhere else: the condition already establishes that pTemp has one subnode. That the subnode can be 0 looks really fishy.",
+      "revId": "6f41144e720fa37795a4af67b3f1179c752d421a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
