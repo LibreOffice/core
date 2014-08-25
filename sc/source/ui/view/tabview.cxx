@@ -57,9 +57,6 @@
 #define SPLIT_HANDLE_SIZE   5
 #define SC_ICONSIZE     36
 
-#define SC_SCROLLBAR_MIN    30
-#define SC_TABBAR_MIN       6
-
 using namespace ::com::sun::star;
 
 //  Corner-Button
@@ -341,7 +338,12 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
     aBorderPos = rOffset;
     aFrameSize = rSize;
 
+    const StyleSettings& rStyleSettings = pFrameWin->GetSettings().GetStyleSettings();
+
+    sal_Int32 nTabWidth = pFrameWin->GetFont().GetHeight() + 4;
+
     if ( aViewData.GetHSplitMode() != SC_SPLIT_NONE )
+    {
         if ( aViewData.GetHSplitPos() > nSizeX - SPLIT_MARGIN )
         {
             aViewData.SetHSplitMode( SC_SPLIT_NONE );
@@ -349,7 +351,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                 ActivatePart( SC_SPLIT_BOTTOMLEFT );
             InvalidateSplit();
         }
+    }
     if ( aViewData.GetVSplitMode() != SC_SPLIT_NONE )
+    {
         if ( aViewData.GetVSplitPos() > nSizeY - SPLIT_MARGIN )
         {
             aViewData.SetVSplitMode( SC_SPLIT_NONE );
@@ -357,12 +361,13 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                 ActivatePart( SC_SPLIT_BOTTOMLEFT );
             InvalidateSplit();
         }
+    }
 
     UpdateShow();
 
     if (bHScroll || bVScroll)       // Scrollbars horizontal oder vertikal
     {
-        long nScrollBarSize = pFrameWin->GetSettings().GetStyleSettings().GetScrollBarSize();
+        long nScrollBarSize = rStyleSettings.GetScrollBarSize();
         if (bVScroll)
         {
             nBarX = nScrollBarSize;
@@ -370,7 +375,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         }
         if (bHScroll)
         {
-            nBarY = nScrollBarSize;
+            nBarY = nScrollBarSize + nTabWidth;
             nSizeY -= nBarY - nOverlap;
         }
 
@@ -401,7 +406,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
             }
             nSizeRt = nSizeX - nSizeLt - nSizeSp;
 
-            long nTabSize = 0;
             if (bTabControl)
             {
                 // pending relative tab bar width from extended document options
@@ -410,39 +414,30 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
                     SetRelTabBarWidth( mfPendingTabBarWidth );
                     mfPendingTabBarWidth = -1.0;
                 }
-
-                nTabSize = pTabControl->GetSizePixel().Width()-nOverlap;
-
-                if ( aViewData.GetHSplitMode() != SC_SPLIT_FIX )    // bei linkem Scrollbar
-                {
-                    if (nTabSize > nSizeLt-SC_SCROLLBAR_MIN) nTabSize = nSizeLt-SC_SCROLLBAR_MIN;
-                    if (nTabSize < SC_TABBAR_MIN) nTabSize = SC_TABBAR_MIN;
-                    nSizeLt -= nTabSize;
-                }
-                else                                                // bei rechtem Scrollbar
-                {
-                    if (nTabSize > nSizeRt-SC_SCROLLBAR_MIN) nTabSize = nSizeRt-SC_SCROLLBAR_MIN;
-                    if (nTabSize < SC_TABBAR_MIN) nTabSize = SC_TABBAR_MIN;
-                    nSizeRt -= nTabSize;
-                }
             }
 
-            lcl_SetPosSize( *pTabControl, Point(nPosX-nOverlap, nPosY+nSizeY),
-                                                Size(nTabSize+nOverlap, nBarY), nTotalWidth, bLayoutRTL );
+            Point aTabPoint(nPosX - nOverlap, nPosY + nSizeY + nScrollBarSize);
+            Size aTabSize(nSizeX, nBarY - nScrollBarSize);
+            lcl_SetPosSize( *pTabControl, aTabPoint, aTabSize, nTotalWidth, bLayoutRTL );
             pTabControl->SetSheetLayoutRTL( bLayoutRTL );
 
-            lcl_SetPosSize( aHScrollLeft, Point(nPosX+nTabSize-nOverlap, nPosY+nSizeY),
-                                                Size(nSizeLt+2*nOverlap, nBarY), nTotalWidth, bLayoutRTL );
-            lcl_SetPosSize( *pHSplitter, Point( nPosX+nTabSize+nSizeLt, nPosY+nSizeY ),
-                                            Size( nSizeSp, nBarY ), nTotalWidth, bLayoutRTL );
-            lcl_SetPosSize( aHScrollRight, Point(nPosX+nTabSize+nSizeLt+nSizeSp-nOverlap,
-                                                    nPosY+nSizeY),
-                                            Size(nSizeRt+2*nOverlap, nBarY), nTotalWidth, bLayoutRTL );
+            Point aHScrollLeftPoint(nPosX - nOverlap, nPosY + nSizeY);
+            Size aHScrollLeftSize(nSizeLt + 2 * nOverlap, nScrollBarSize);
+            lcl_SetPosSize( aHScrollLeft, aHScrollLeftPoint, aHScrollLeftSize, nTotalWidth, bLayoutRTL );
+
+            Point aHSplitterPoint(nPosX + nSizeLt, nPosY + nSizeY);
+            Size aHSplitterSize(nSizeSp, nScrollBarSize);
+            lcl_SetPosSize( *pHSplitter, aHSplitterPoint, aHSplitterSize, nTotalWidth, bLayoutRTL );
+
+            Point aHScrollRightPoint(nPosX + nSizeLt + nSizeSp - nOverlap, nPosY + nSizeY);
+            Size aHScrollRightSize(nSizeRt + 2 * nOverlap, nScrollBarSize);
+
+            lcl_SetPosSize( aHScrollRight, aHScrollRightPoint, aHScrollRightSize, nTotalWidth, bLayoutRTL );
 
             //  SetDragRectPixel is done below
         }
 
-        if (bVScroll)                               // Scrollbars vertikal
+        if (bVScroll)
         {
             long nSizeUp = 0;       // upper scroll bar
             long nSizeSp = 0;       // splitter
@@ -560,7 +555,8 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
         }
         nSplitPosX = aViewData.GetHSplitPos();
         lcl_SetPosSize( *pHSplitter,
-            Point( nSplitPosX, nOutPosY ), Size( nSplitSizeX, nSplitHeight ), nTotalWidth, bLayoutRTL );
+                        Point(nSplitPosX, nOutPosY),
+                        Size( nSplitSizeX, nSplitHeight - nTabWidth ), nTotalWidth, bLayoutRTL );
         nLeftSize = nSplitPosX - nPosX;
         nSplitPosX += nSplitSizeX;
         nRightSize = nSizeX - nLeftSize - nSplitSizeX;

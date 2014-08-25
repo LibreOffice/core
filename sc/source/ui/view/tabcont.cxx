@@ -39,8 +39,7 @@
 
 ScTabControl::ScTabControl( Window* pParent, ScViewData* pData ) :
     TabBar( pParent,
-            WinBits(WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT |
-                    WB_MULTISELECT | WB_DRAG | WB_SIZEABLE) ),
+            WinBits(WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_RANGESELECT | WB_MULTISELECT | WB_DRAG ) ),
             DropTargetHelper( this ),
             DragSourceHelper( this ),
             pViewData( pData ),
