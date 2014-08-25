@@ -53,6 +53,7 @@ $(eval $(call gb_CppunitTest_use_vcl,sw_htmlexport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
 	basic/util/sb \
+	canvas/source/factory/canvasfactory \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     embeddedobj/util/embobj \
@@ -65,6 +66,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
     linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
+	sc/util/sc \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sw/util/sw \
