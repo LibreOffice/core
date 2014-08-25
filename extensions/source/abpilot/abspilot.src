@@ -54,20 +54,14 @@ String RID_STR_NEEDTYPESELECTION
     Text [ en-US ] = "Please select a type of address book.";
 };
 
-QueryBox RID_QRY_NOTABLES
+String RID_STR_QRY_NOTABLES
 {
-    Buttons = WB_YES_NO;
-    DefButton = WB_DEF_NO;
-
-    Message [ en-US ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
+    Text [ en-US ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
 };
 
-QueryBox RID_QRY_NO_EVO_GW
+String RID_STR_QRY_NO_EVO_GW
 {
-    Buttons = WB_YES_NO;
-    DefButton = WB_DEF_NO;
-
-    Message [ en-US ] = "You don't seem to have any GroupWise account configured in Evolution.\nDo you want to set it up as an address data source, anyway?";
+    Text [ en-US ] = "You don't seem to have any GroupWise account configured in Evolution.\nDo you want to set it up as an address data source, anyway?";
 };
 
 String RID_STR_DEFAULT_NAME

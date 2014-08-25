@@ -28,7 +28,7 @@
 #include "admininvokationpage.hxx"
 #include "tableselectionpage.hxx"
 #include <vcl/waitobj.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
 #include "abpfinalpage.hxx"
 #include "fieldmappingpage.hxx"
@@ -276,7 +276,7 @@ namespace abp
 
             if ( aTables.empty() )
             {
-                if ( RET_YES != QueryBox( this, ModuleRes( ( getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_QRY_NO_EVO_GW : RID_QRY_NOTABLES ) ) ).Execute() )
+                if (RET_YES != MessageDialog(this, ModuleRes(( getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_STR_QRY_NO_EVO_GW : RID_STR_QRY_NOTABLES)), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute())
                 {
                     // cannot ask the user, or the user chose to use this data source, though there are no tables
                     bAllow = false;
