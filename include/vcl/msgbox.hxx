@@ -45,13 +45,9 @@ protected:
     SAL_DLLPRIVATE void ImplInitButtons();
     SAL_DLLPRIVATE void ImplPosControls();
 
-protected:
-    SAL_DLLPRIVATE void ImplLoadRes( const ResId& rResId );
-
 public:
                         MessBox( Window* pParent, WinBits nStyle,
                                  const OUString& rTitle, const OUString& rMessage );
-                        MessBox( Window* pParent, const ResId& rResId );
                         virtual ~MessBox();
 
     virtual void        StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

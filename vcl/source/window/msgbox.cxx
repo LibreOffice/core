@@ -149,34 +149,6 @@ MessBox::MessBox( Window* pParent, WinBits nStyle,
         SetText( rTitle );
 }
 
-MessBox::MessBox( Window* pParent, const ResId& rResId ) :
-    ButtonDialog( WINDOW_MESSBOX )
-{
-    ImplInitMessBoxData();
-
-    GetRes( rResId.SetRT( RSC_MESSBOX ) );
-    sal_uInt16 nHiButtons   = ReadShortRes();
-    sal_uInt16 nLoButtons   = ReadShortRes();
-    sal_uInt16 nHiDefButton = ReadShortRes();
-    sal_uInt16 nLoDefButton = ReadShortRes();
-    OString aHelpId( ReadByteStringRes() );
-    /* sal_uInt16 bSysModal = */ ReadShortRes();
-    SetHelpId( aHelpId );
-    WinBits nBits = (((sal_uLong)nHiButtons << 16) + nLoButtons) |
-                    (((sal_uLong)nHiDefButton << 16) + nLoDefButton);
-    ImplInit( pParent, nBits | WB_MOVEABLE | WB_HORZ | WB_CENTER );
-
-    ImplLoadRes( rResId );
-    ImplInitButtons();
-}
-
-void MessBox::ImplLoadRes( const ResId& )
-{
-    SetText(     ReadStringRes() );
-    SetMessText( ReadStringRes() );
-    SetHelpText( ReadStringRes() );
-}
-
 MessBox::~MessBox()
 {
     delete mpVCLMultiLineEdit;

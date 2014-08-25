@@ -47,8 +47,6 @@
 #define RSC_IMAGE               (RSC_NOTYPE + 0x23)
 #define RSC_IMAGELIST           (RSC_NOTYPE + 0x24)
 
-#define RSC_MESSBOX             (RSC_NOTYPE + 0x30)
-
 #define RSC_WINDOW              (RSC_NOTYPE + 0x35)
 #define RSC_SYSWINDOW           (RSC_NOTYPE + 0x36)
 #define RSC_WORKWIN             (RSC_NOTYPE + 0x37)

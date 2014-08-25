@@ -49,8 +49,6 @@ void RscTypCont::Init()
     RscEnum *   pMapUnit;
     RscEnum *   pKey;
     RscEnum *   pTriState;
-    RscEnum *   pMessButtons;
-    RscEnum *   pMessDefButton;
     RscTupel *  pGeometry;
     RscArray *  pLangGeometry;
     RscCont  *  pStringList;
@@ -93,7 +91,6 @@ void RscTypCont::Init()
     RscTop   *  pClassAccel;
     RscTop   *  pClassMenuItem;
     RscTop   *  pClassMenu;
-    RscTop   *  pClassMessBox;
     RscTop   *  pClassSplitter;
     RscTop   *  pClassSplitWindow;
     RscTop   *  pClassSpinButton;
@@ -289,8 +286,6 @@ void RscTypCont::Init()
     aBaseLst.push_back( pMapUnit         = InitMapUnit() );
     aBaseLst.push_back( pKey             = InitKey() );
     aBaseLst.push_back( pTriState        = InitTriState() );
-    aBaseLst.push_back( pMessButtons     = InitMessButtons() );
-    aBaseLst.push_back( pMessDefButton   = InitMessDefButton() );
 
     aBaseLst.push_back( pGeometry        = InitGeometry() );
     aBaseLst.push_back( pLangGeometry    = InitLangGeometry( pGeometry ) );
@@ -463,10 +458,6 @@ void RscTypCont::Init()
     nId = aNmTb.Put( "SubMenu", VARNAME );
     pClassMenuItem->SetVariable( nId, pClassMenu, NULL, VAR_SVDYNAMIC,
                                  RSC_MENUITEM_MENU );
-
-    pClassMessBox = InitClassMessBox( pClassMgr, pMessButtons,
-                                         pMessDefButton );
-    pRoot->Insert( pClassMessBox );
 }
 {
     pClassSplitter = InitClassSplitter( pClassWindow );

@@ -146,8 +146,6 @@ class RscTypCont
     RscEnum *   InitMapUnit();
     RscEnum *   InitKey();
     RscEnum *   InitTriState();
-    RscEnum *   InitMessButtons();
-    RscEnum *   InitMessDefButton();
     RscTupel *  InitGeometry();
     RscArray *  InitLangGeometry( RscTupel * pGeo );
     RscArray *  InitSystemGeometry( RscTupel * pGeo );
@@ -191,9 +189,6 @@ class RscTypCont
     RscTop *    InitClassMenuItem( RscTop * pSuper, RscTop * pClassBitmap,
                                    RscTop * pClassKeyCode );
     RscTop *    InitClassMenu( RscTop * pSuper, RscTop * pMenuItem );
-    RscTop *    InitClassMessBox( RscTop * pSuper,
-                                  RscEnum * pMessButtons,
-                                  RscEnum * pMessDefButton );
     RscTop *    InitClassSplitter( RscTop * pSuper );
     RscTop *    InitClassSplitWindow( RscTop * pSuper );
     RscTop *    InitClassTime( RscTop * pSuper );

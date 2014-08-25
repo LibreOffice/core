@@ -927,38 +927,6 @@ RscTop * RscTypCont::InitClassMenu( RscTop * pSuper,
     return pClassMenu;
 }
 
-RscTop * RscTypCont::InitClassMessBox( RscTop * pSuper,
-                                       RscEnum * pMessButtons,
-                                       RscEnum * pMessDefButton )
-{
-    Atom        nId;
-    RscTop *    pClassMessBox;
-
-    // Klasse anlegen
-    nId = pHS->getID( "MessBox" );
-    pClassMessBox = new RscClass( nId, RSC_MESSBOX, pSuper );
-    pClassMessBox->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassMessBox );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "Buttons", VARNAME );
-    pClassMessBox->SetVariable( nId, pMessButtons );
-    nId = aNmTb.Put( "DefButton", VARNAME );
-    pClassMessBox->SetVariable( nId, pMessDefButton );
-    nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassMessBox->SetVariable( nId, &aStringLiteral );
-    nId = aNmTb.Put( "SysModal", VARNAME );
-    pClassMessBox->SetVariable( nId, &aBool );
-    nId = aNmTb.Put( "Title", VARNAME );
-    pClassMessBox->SetVariable( nId, &aLangString );
-    nId = aNmTb.Put( "Message", VARNAME );
-    pClassMessBox->SetVariable( nId, &aLangString );
-    nId = aNmTb.Put( "HelpText", VARNAME );
-    pClassMessBox->SetVariable( nId, &aLangString );
-
-    return pClassMessBox;
-}
-
 RscTop * RscTypCont::InitClassSplitter( RscTop * pSuper )
 {
     Atom        nId;

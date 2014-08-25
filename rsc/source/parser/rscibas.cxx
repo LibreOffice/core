@@ -391,34 +391,6 @@ RscEnum * RscTypCont::InitTriState()
     return pTriState;
 }
 
-RscEnum * RscTypCont::InitMessButtons()
-{
-    RscEnum * pMessButtons;
-    pMessButtons = new RscEnum( pHS->getID( "EnumMessButtons" ), RSC_NOTYPE );
-    SETCONST( pMessButtons, "WB_OK",                      sal::static_int_cast<sal_uInt32>(WB_OK) );
-    SETCONST( pMessButtons, "WB_OK_CANCEL",               sal::static_int_cast<sal_uInt32>(WB_OK_CANCEL) );
-    SETCONST( pMessButtons, "WB_YES_NO",                  sal::static_int_cast<sal_uInt32>(WB_YES_NO) );
-    SETCONST( pMessButtons, "WB_YES_NO_CANCEL",           sal::static_int_cast<sal_uInt32>(WB_YES_NO_CANCEL) );
-    SETCONST( pMessButtons, "WB_RETRY_CANCEL",            sal::static_int_cast<sal_uInt32>(WB_RETRY_CANCEL) );
-    SETCONST( pMessButtons, "WB_ABORT_RETRY_IGNORE",      sal::static_int_cast<sal_uInt32>(WB_ABORT_RETRY_IGNORE) );
-    return pMessButtons;
-}
-
-RscEnum * RscTypCont::InitMessDefButton()
-{
-    RscEnum * pMessDefButton;
-    pMessDefButton = new RscEnum( pHS->getID( "EnumMessDefButton" ),
-                                  RSC_NOTYPE );
-
-    SETCONST( pMessDefButton, "WB_DEF_OK",                  sal::static_int_cast<sal_uInt32>(WB_DEF_OK) );
-    SETCONST( pMessDefButton, "WB_DEF_CANCEL",              sal::static_int_cast<sal_uInt32>(WB_DEF_CANCEL) );
-    SETCONST( pMessDefButton, "WB_DEF_RETRY",               sal::static_int_cast<sal_uInt32>(WB_DEF_RETRY) );
-    SETCONST( pMessDefButton, "WB_DEF_YES",                 sal::static_int_cast<sal_uInt32>(WB_DEF_YES) );
-    SETCONST( pMessDefButton, "WB_DEF_NO",                  sal::static_int_cast<sal_uInt32>(WB_DEF_NO) );
-    SETCONST( pMessDefButton, "WB_DEF_IGNORE",              sal::static_int_cast<sal_uInt32>(WB_DEF_IGNORE) );
-    return pMessDefButton;
-}
-
 RscTupel * RscTypCont::InitGeometry()
 {
     RscTop *    pTupel;
