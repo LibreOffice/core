@@ -49,7 +49,7 @@ ChartWindow::ChartWindow( ChartController* pController, Window* pParent, WinBits
         : Window(pParent, nStyle)
         , m_pWindowController( pController )
         , m_bInPaint(false)
-        , m_pOpenGLWindow(getenv("CHART_DUMMY_FACTORY") ? new OpenGLWindow(this) : 0)
+        , m_pOpenGLWindow(new OpenGLWindow(this))
 {
     this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
