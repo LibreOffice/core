@@ -33,7 +33,7 @@
 #include <vcl/xtextedt.hxx>
 #include <vcl/settings.hxx>
 #include <tools/urlobj.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/scrbar.hxx>
@@ -822,7 +822,7 @@ void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
 
 short impl_askUserForWizardCancel(Window* pParent, sal_Int16 nRes)
 {
-    QueryBox aQuery(pParent, SVX_RES(nRes));
+    MessageDialog aQuery(pParent, SVX_RES(nRes), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
     if (aQuery.Execute() == RET_YES)
         return DLG_RET_OK;
     else
@@ -1150,7 +1150,7 @@ IMPL_LINK_NOARG(RecoveryDialog, CancelButtonHdl)
     switch (m_eRecoveryState)
     {
         case RecoveryDialog::E_RECOVERY_PREPARED:
-            if (impl_askUserForWizardCancel(this, RID_SVXQB_EXIT_RECOVERY) != DLG_RET_CANCEL)
+            if (impl_askUserForWizardCancel(this, RID_SVXSTR_QUERY_EXIT_RECOVERY) != DLG_RET_CANCEL)
             {
                 m_eRecoveryState = RecoveryDialog::E_RECOVERY_CANCELED;
                 execute();

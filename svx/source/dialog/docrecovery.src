@@ -22,11 +22,9 @@
 
 #include "docrecovery.hrc"
 
-QueryBox RID_SVXQB_EXIT_RECOVERY
+String RID_SVXSTR_QUERY_EXIT_RECOVERY
 {
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_YES ;
-    Message [ en-US ] = "Are you sure you want to cancel the %PRODUCTNAME document recovery?";
+    Text [ en-US ] = "Are you sure you want to cancel the %PRODUCTNAME document recovery?";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

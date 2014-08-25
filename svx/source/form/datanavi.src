@@ -60,46 +60,34 @@ ImageList RID_SVXIL_DATANAVI
     IdCount = { 6 ; } ;
 };
 
-QueryBox RID_QRY_REMOVE_MODEL
+String RID_STR_QRY_REMOVE_MODEL
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Deleting the model '$MODELNAME' affects all controls currently bound to this model.\nDo you really want to delete this model?" ;
+    Text [ en-US ] = "Deleting the model '$MODELNAME' affects all controls currently bound to this model.\nDo you really want to delete this model?" ;
 };
 
-QueryBox RID_QRY_REMOVE_INSTANCE
+String RID_STR_QRY_REMOVE_INSTANCE
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Deleting the instance '$INSTANCENAME' affects all controls currently bound to this instance.\nDo you really want to delete this instance?" ;
+    Text [ en-US ] = "Deleting the instance '$INSTANCENAME' affects all controls currently bound to this instance.\nDo you really want to delete this instance?" ;
 };
 
-QueryBox RID_QRY_REMOVE_ELEMENT
+String RID_STR_QRY_REMOVE_ELEMENT
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Deleting the element '$ELEMENTNAME' affects all controls currently bound to this element.\nDo you really want to delete this element?" ;
+    Text [ en-US ] = "Deleting the element '$ELEMENTNAME' affects all controls currently bound to this element.\nDo you really want to delete this element?" ;
 };
 
-QueryBox RID_QRY_REMOVE_ATTRIBUTE
+String RID_STR_QRY_REMOVE_ATTRIBUTE
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Do you really want to delete the attribute '$ATTRIBUTENAME'?" ;
+    Text [ en-US ] = "Do you really want to delete the attribute '$ATTRIBUTENAME'?" ;
 };
 
-QueryBox RID_QRY_REMOVE_SUBMISSION
+String RID_STR_QRY_REMOVE_SUBMISSION
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Deleting the submission '$SUBMISSIONNAME' affects all controls currently bound to this submission.\n\nDo you really want to delete this submission?" ;
+    Text [ en-US ] = "Deleting the submission '$SUBMISSIONNAME' affects all controls currently bound to this submission.\n\nDo you really want to delete this submission?" ;
 };
 
-QueryBox RID_QRY_REMOVE_BINDING
+String RID_STR_QRY_REMOVE_BINDING
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Deleting the binding '$BINDINGNAME' affects all controls currently bound to this binding.\n\nDo you really want to delete this binding?" ;
+    Text [ en-US ] = "Deleting the binding '$BINDINGNAME' affects all controls currently bound to this binding.\n\nDo you really want to delete this binding?" ;
 };
 
 MessBox RID_QRY_LINK_WARNING

@@ -941,13 +941,13 @@ namespace svxform
                     DBG_ASSERT( pNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no XNode" );
                     css::xml::dom::NodeType eChildType = pNode->m_xNode->getNodeType();
                     bool bIsElement = ( eChildType == css::xml::dom::NodeType_ELEMENT_NODE );
-                    sal_uInt16 nResId = bIsElement ? RID_QRY_REMOVE_ELEMENT : RID_QRY_REMOVE_ATTRIBUTE;
+                    sal_uInt16 nResId = bIsElement ? RID_STR_QRY_REMOVE_ELEMENT : RID_STR_QRY_REMOVE_ATTRIBUTE;
                     OUString sVar = bIsElement ? OUString(ELEMENTNAME) : OUString(ATTRIBUTENAME);
-                    QueryBox aQBox( this, SVX_RES( nResId ) );
-                    OUString sMessText = aQBox.GetMessText();
+                    MessageDialog aQBox(this, SVX_RES(nResId), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                    OUString sMessText = aQBox.get_primary_text();
                     sMessText = sMessText.replaceFirst(
                         sVar, m_xUIHelper->getNodeDisplayName( pNode->m_xNode, sal_False ) );
-                    aQBox.SetMessText( sMessText );
+                    aQBox.set_primary_text(sMessText);
                     if ( aQBox.Execute() == RET_YES )
                     {
                         SvTreeListEntry* pParent = m_pItemList->GetParent( pEntry );
@@ -973,7 +973,7 @@ namespace svxform
             {
                 DBG_ASSERT( pNode->m_xPropSet.is(), "XFormsPage::RemoveEntry(): no propset" );
                 bool bSubmission = ( DGTSubmission == m_eGroup );
-                sal_uInt16 nResId = bSubmission ? RID_QRY_REMOVE_SUBMISSION : RID_QRY_REMOVE_BINDING;
+                sal_uInt16 nResId = bSubmission ? RID_STR_QRY_REMOVE_SUBMISSION : RID_STR_QRY_REMOVE_BINDING;
                 OUString sProperty = bSubmission ? OUString(PN_SUBMISSION_ID) : OUString(PN_BINDING_ID);
                 OUString sSearch = bSubmission ? OUString(SUBMISSIONNAME) : OUString(BINDINGNAME);
                 OUString sName;
@@ -985,10 +985,11 @@ namespace svxform
                 {
                     SAL_WARN( "svx.form", "XFormsPage::RemoveEntry(): exception caught" );
                 }
-                QueryBox aQBox( this, SVX_RES( nResId ) );
-                OUString sMessText = aQBox.GetMessText();
+                MessageDialog aQBox(this, SVX_RES(nResId),
+                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                OUString sMessText = aQBox.get_primary_text();
                 sMessText = sMessText.replaceFirst( sSearch, sName);
-                aQBox.SetMessText( sMessText );
+                aQBox.set_primary_text(sMessText);
                 if ( aQBox.Execute() == RET_YES )
                 {
                     try
@@ -1577,10 +1578,11 @@ namespace svxform
             }
             else if (sIdent == "modelsremove")
             {
-                QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_MODEL ) );
-                OUString sText = aQBox.GetMessText();
+                MessageDialog aQBox(this, SVX_RES( RID_STR_QRY_REMOVE_MODEL),
+                                    VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                OUString sText = aQBox.get_primary_text();
                 sText = sText.replaceFirst( MODELNAME, sSelectedModel );
-                aQBox.SetMessText( sText );
+                aQBox.set_primary_text(sText);
                 if ( aQBox.Execute() == RET_YES )
                 {
                     try
@@ -1677,10 +1679,11 @@ namespace svxform
                 if ( pPage )
                 {
                     OUString sInstName = pPage->GetInstanceName();
-                    QueryBox aQBox( this, SVX_RES( RID_QRY_REMOVE_INSTANCE ) );
-                    OUString sMessText = aQBox.GetMessText();
+                    MessageDialog aQBox(this, SVX_RES(RID_STR_QRY_REMOVE_INSTANCE),
+                                        VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+                    OUString sMessText = aQBox.get_primary_text();
                     sMessText = sMessText.replaceFirst( INSTANCENAME, sInstName );
-                    aQBox.SetMessText( sMessText );
+                    aQBox.set_primary_text(sMessText);
                     if ( aQBox.Execute() == RET_YES )
                     {
                         bool bDoRemove = false;

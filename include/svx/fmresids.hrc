@@ -86,20 +86,18 @@
 
 // QueryBox-Id's -----------------------------------------------------------
 #define RID_QRY_SAVEMODIFIED                        (RID_FORMS_START + 1)
-#define RID_QRY_REMOVE_MODEL                        (RID_FORMS_START + 2)
-#define RID_QRY_REMOVE_INSTANCE                     (RID_FORMS_START + 3)
-#define RID_QRY_REMOVE_ELEMENT                      (RID_FORMS_START + 4)
-#define RID_QRY_REMOVE_ATTRIBUTE                    (RID_FORMS_START + 5)
 #define RID_QRY_LINK_WARNING                        (RID_FORMS_START + 6)
-#define RID_QRY_REMOVE_SUBMISSION                   (RID_FORMS_START + 7)
-#define RID_QRY_REMOVE_BINDING                      (RID_FORMS_START + 8)
 
 // String-Id's -----------------------------------------------------------
 #define RID_STR_INVALID_XMLNAME                     (RID_FORMS_START + 1)
 #define RID_STR_INVALID_XMLPREFIX                   (RID_FORMS_START + 2)
 #define RID_STR_DOUBLE_MODELNAME                    (RID_FORMS_START + 3)
 #define RID_STR_EMPTY_SUBMISSIONNAME                (RID_FORMS_START + 4)
-
+#define RID_STR_QRY_REMOVE_BINDING                  (RID_FORMS_START + 5)
+#define RID_STR_QRY_REMOVE_SUBMISSION               (RID_FORMS_START + 6)
+#define RID_STR_QRY_REMOVE_ATTRIBUTE                (RID_FORMS_START + 7)
+#define RID_STR_QRY_REMOVE_ELEMENT                  (RID_FORMS_START + 8)
+#define RID_STR_QRY_REMOVE_INSTANCE                 (RID_FORMS_START + 9)
 #define RID_STR_FORMSHELL                           (RID_FORMS_START +  10)
 #define RID_STR_STDFORMNAME                         (RID_FORMS_START +  11)
 #define RID_STR_REC_TEXT                            (RID_FORMS_START +  12)
@@ -156,7 +154,7 @@
 #define RID_STR_FILTER_FILTER_OR                    (RID_FORMS_START +  80)
 #define RID_STR_PROPTITLE_FORMATTED                 (RID_FORMS_START +  81)
 #define RID_STR_SYNTAXERROR                         (RID_FORMS_START +  82)
-    // FREE
+#define RID_STR_QRY_REMOVE_MODEL                    (RID_FORMS_START +  83)
 #define RID_STR_NOCONTROLS_FOR_EXTERNALDISPLAY      (RID_FORMS_START +  84)
 #define RID_STR_AUTOFIELD                           (RID_FORMS_START +  89)
 #define RID_STR_SVT_SQL_SYNTAX_ERROR                (RID_FORMS_START +  90)
