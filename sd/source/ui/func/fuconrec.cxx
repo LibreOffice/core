@@ -431,7 +431,7 @@ void FuConstructRectangle::SetAttributes(SfxItemSet& rAttr, SdrObject* pObj)
         nSlotId == SID_DRAW_SQUARE_ROUND_NOFILL)
     {
         // round corner
-        rAttr.Put(SdrEckenradiusItem(500));
+        rAttr.Put(makeSdrEckenradiusItem(500));
     }
     else if (nSlotId == SID_CONNECTOR_LINE              ||
              nSlotId == SID_CONNECTOR_LINE_ARROW_START  ||

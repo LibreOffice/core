@@ -540,7 +540,7 @@ void SdrTextObj::SetModel(SdrModel* pNewModel)
 
 bool SdrTextObj::NbcSetEckenradius(long nRad)
 {
-    SetObjectItem(SdrEckenradiusItem(nRad));
+    SetObjectItem(makeSdrEckenradiusItem(nRad));
     return true;
 }
 
@@ -1756,7 +1756,7 @@ bool SdrTextObj::IsRealyEdited() const
 
 long SdrTextObj::GetEckenradius() const
 {
-    return ((SdrEckenradiusItem&)(GetObjectItemSet().Get(SDRATTR_ECKENRADIUS))).GetValue();
+    return ((SdrMetricItem&)(GetObjectItemSet().Get(SDRATTR_ECKENRADIUS))).GetValue();
 }
 
 long SdrTextObj::GetMinTextFrameHeight() const

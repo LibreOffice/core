@@ -1386,11 +1386,11 @@ SfxItemSet SdrEditView::GetGeoAttrFromMarked() const
         }
 
         eState=aMarkAttr.GetItemState(SDRATTR_ECKENRADIUS);
-        long nRadius=((SdrEckenradiusItem&)(aMarkAttr.Get(SDRATTR_ECKENRADIUS))).GetValue();
+        long nRadius=((SdrMetricItem&)(aMarkAttr.Get(SDRATTR_ECKENRADIUS))).GetValue();
         if (eState==SFX_ITEM_DONTCARE) {
             aRetSet.InvalidateItem(SDRATTR_ECKENRADIUS);
         } else if (eState==SFX_ITEM_SET) {
-            aRetSet.Put(SdrEckenradiusItem(nRadius));
+            aRetSet.Put(makeSdrEckenradiusItem(nRadius));
         }
 
         basegfx::B2DHomMatrix aTransformation;
@@ -1593,8 +1593,8 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     // corner radius
     if (bEdgeRadiusAllowed && SFX_ITEM_SET==rAttr.GetItemState(SDRATTR_ECKENRADIUS,true,&pPoolItem)) {
-        long nRadius=((SdrEckenradiusItem*)pPoolItem)->GetValue();
-        aSetAttr.Put(SdrEckenradiusItem(nRadius));
+        long nRadius=((SdrMetricItem*)pPoolItem)->GetValue();
+        aSetAttr.Put(makeSdrEckenradiusItem(nRadius));
         bSetAttr=true;
     }
 

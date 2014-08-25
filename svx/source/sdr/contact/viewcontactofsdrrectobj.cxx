@@ -71,7 +71,7 @@ namespace sdr
                 aObjectRange.getMinX(), aObjectRange.getMinY()));
 
             // calculate corner radius
-            sal_uInt32 nCornerRadius(((SdrEckenradiusItem&)(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
+            sal_uInt32 nCornerRadius(((SdrMetricItem&)(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
             double fCornerRadiusX;
             double fCornerRadiusY;
             drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);

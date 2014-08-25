@@ -479,7 +479,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
         long nTmp = GetCoreValue( *m_pMtrRadius, ePoolUnit );
         nTmp = Fraction( nTmp ) * aUIScale;
 
-        rAttrs->Put( SdrEckenradiusItem( nTmp ) );
+        rAttrs->Put( makeSdrEckenradiusItem( nTmp ) );
         bModified = true;
     }
 
@@ -528,7 +528,7 @@ void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
         if( pItem )
         {
             const double fUIScale(double(pView->GetModel()->GetUIScale()));
-            const double fTmp((double)((const SdrEckenradiusItem*)pItem)->GetValue() / fUIScale);
+            const double fTmp((double)((const SdrMetricItem*)pItem)->GetValue() / fUIScale);
             SetMetricValue(*m_pMtrRadius, basegfx::fround(fTmp), ePoolUnit);
         }
         else

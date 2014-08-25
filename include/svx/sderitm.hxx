@@ -22,14 +22,9 @@
 #include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 
-/**
- * class SdrEckenradiusItem
- */
-class SdrEckenradiusItem: public SdrMetricItem {
-public:
-    SdrEckenradiusItem(long nRadius=0): SdrMetricItem(SDRATTR_ECKENRADIUS,nRadius) {}
-    SdrEckenradiusItem(SvStream& rIn) : SdrMetricItem(SDRATTR_ECKENRADIUS,rIn)     {}
-};
+inline SdrMetricItem makeSdrEckenradiusItem(long nRadius) {
+    return SdrMetricItem(SDRATTR_ECKENRADIUS, nRadius);
+}
 
 #endif
 
