@@ -32,6 +32,7 @@
 #include "NameContainer.hxx"
 #include "UndoManager.hxx"
 #include "ChartView.hxx"
+#include "GL3DHelper.hxx"
 
 #include <vcl/openglwin.hxx>
 
@@ -962,6 +963,12 @@ void SAL_CALL ChartModel::createDefaultChart()
     throw (css::uno::RuntimeException, std::exception)
 {
     insertDefaultChart();
+}
+
+sal_Bool SAL_CALL ChartModel::isOpenGLChart()
+    throw (css::uno::RuntimeException, std::exception)
+{
+    return GL3DHelper::isGL3DDiagram(m_xDiagram);
 }
 
 // ____ XTitled ____

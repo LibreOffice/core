@@ -438,6 +438,8 @@ public:
 
     virtual void SAL_CALL createDefaultChart() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
+    virtual sal_Bool SAL_CALL isOpenGLChart() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+
     // ____ XDataReceiver (public API) ____
     virtual void SAL_CALL
         attachDataProvider( const ::com::sun::star::uno::Reference<

@@ -804,7 +804,18 @@ bool EmbeddedObjectRef::IsChart(const ::com::sun::star::uno::Reference < ::com::
 bool EmbeddedObjectRef::IsGLChart(const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj)
 {
     static const char* env = getenv("CHART_DUMMY_FACTORY");
-    return IsChart(xObj) && env;
+    if (IsChart(xObj))
+    {
+        if (env)
+            return true;
+
+        uno::Reference< chart2::XChartDocument > xChartDoc(xObj->getComponent(), uno::UNO_QUERY);
+        if (!xChartDoc.is())
+            return false;
+
+        return xChartDoc->isOpenGLChart();
+    }
+    return false;
 }
 
 void EmbeddedObjectRef::UpdateReplacement()
