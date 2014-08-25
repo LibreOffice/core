@@ -218,7 +218,8 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() ),
     bTableDataWidth( true ),
     bTableDataHeight( true ),
-    mbSkipImages ( false )
+    mbSkipImages ( false ),
+    mbSkipHeaderFooter( false )
 {
     strcpy( sIndent, sIndentSource );
     sIndent[0] = 0;
@@ -231,6 +232,10 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     if (rFilterOptions == "SkipImages")
     {
         mbSkipImages = true;
+    }
+    else if (rFilterOptions == "SkipHeaderFooter")
+    {
+        mbSkipHeaderFooter = true;
     }
 
     for ( sal_uInt16 j=0; j < SC_HTML_FONTSIZES; j++ )
@@ -319,14 +324,18 @@ Size ScHTMLExport::MMToPixel( const Size& rSize )
 
 sal_uLong ScHTMLExport::Write()
 {
+    if (!mbSkipHeaderFooter)
+    {
     rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype ).WriteChar( ' ' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_doctype40 ).WriteChar( '>' )
        .WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( SAL_NEWLINE_STRING );
     TAG_ON_LF( OOO_STRING_SVTOOLS_HTML_html );
     WriteHeader();
     OUT_LF();
+    }
     WriteBody();
     OUT_LF();
-    TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_html );
+    if (!mbSkipHeaderFooter)
+        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_html );
 
     return rStrm.GetError();
 }
@@ -562,6 +571,8 @@ void ScHTMLExport::WriteBody()
     const SvxBrushItem* pBrushItem = (const SvxBrushItem*)&rSet.Get( ATTR_BACKGROUND );
 
     // default text color black
+    if (!mbSkipHeaderFooter)
+    {
     rStrm.WriteChar( '<' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_body );
 
     if (!mbSkipImages)
@@ -626,13 +637,15 @@ void ScHTMLExport::WriteBody()
     }
 
     rStrm.WriteChar( '>' ); OUT_LF();
+    }
 
     if ( bAll )
         WriteOverview();
 
     WriteTables();
 
-    TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_body );
+    if (!mbSkipHeaderFooter)
+        TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_body );
 }
 
 
