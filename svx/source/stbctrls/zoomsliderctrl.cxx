@@ -194,7 +194,6 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
 
 SvxZoomSliderControl::~SvxZoomSliderControl()
 {
-    delete mpImpl;
 }
 
 
@@ -255,8 +254,8 @@ void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eStat
         }
     }
 
-    if ( !mpImpl->mbOmitPaint && GetStatusBar().AreItemsVisible() )
-        GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
+    if (!mpImpl->mbOmitPaint)
+        forceRepaint();
 }
 
 
@@ -360,24 +359,7 @@ bool SvxZoomSliderControl::MouseButtonDown( const MouseEvent & rEvt )
     if ( nOldZoom == mpImpl->mnCurrentZoom )
         return true;
 
-    if ( GetStatusBar().AreItemsVisible() )
-        GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
-
-    mpImpl->mbOmitPaint = true; // optimization: paint before executing command,
-                                // then omit painting which is triggered by the execute function
-
-    SvxZoomSliderItem aZoomSliderItem( mpImpl->mnCurrentZoom );
-
-    ::com::sun::star::uno::Any a;
-    aZoomSliderItem.QueryValue( a );
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-    aArgs[0].Name = "ZoomSlider";
-    aArgs[0].Value = a;
-
-    execute( aArgs );
-
-    mpImpl->mbOmitPaint = false;
+    repaintAndExecute();
 
     return true;
 }
@@ -402,29 +384,39 @@ bool SvxZoomSliderControl::MouseMove( const MouseEvent & rEvt )
         {
             mpImpl->mnCurrentZoom = Offset2Zoom( nXDiff );
 
-            if ( GetStatusBar().AreItemsVisible() )
-                GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
-
-            mpImpl->mbOmitPaint = true; // optimization: paint before executing command,
-                                        // then omit painting which is triggered by the execute function
-
-            // commit state change
-            SvxZoomSliderItem aZoomSliderItem( mpImpl->mnCurrentZoom );
-
-            ::com::sun::star::uno::Any a;
-            aZoomSliderItem.QueryValue( a );
-
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
-            aArgs[0].Name = "ZoomSlider";
-            aArgs[0].Value = a;
-
-            execute( aArgs );
-
-            mpImpl->mbOmitPaint = false;
+            repaintAndExecute();
         }
     }
 
     return true;
+}
+
+void SvxZoomSliderControl::forceRepaint() const
+{
+    if (GetStatusBar().AreItemsVisible())
+        GetStatusBar().SetItemData(GetId(), 0);
+}
+
+void SvxZoomSliderControl::repaintAndExecute()
+{
+    forceRepaint();
+
+    mpImpl->mbOmitPaint = true; // optimization: paint before executing command,
+                                // then omit painting which is triggered by the execute function
+
+    // commit state change
+    SvxZoomSliderItem aZoomSliderItem(mpImpl->mnCurrentZoom);
+
+    css::uno::Any any;
+    aZoomSliderItem.QueryValue(any);
+
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(1);
+    aArgs[0].Name = "ZoomSlider";
+    aArgs[0].Value = any;
+
+    execute(aArgs);
+
+    mpImpl->mbOmitPaint = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
