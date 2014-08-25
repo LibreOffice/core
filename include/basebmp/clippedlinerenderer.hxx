@@ -89,7 +89,12 @@ inline bool prepareClip( sal_Int32  a1,
 
         if( clipCode1 & (aMinFlag|aMaxFlag) )
         {
-            cb = (ca + da - int(!bRoundTowardsPt2)) / (2*da);
+            sal_Int32 da2 = 2*da;
+
+            if (da2 == 0)
+                return false; // overflow
+
+            cb = (ca + da - int(!bRoundTowardsPt2)) / (da2);
 
             if( sb >= 0 )
             {
@@ -104,11 +109,16 @@ inline bool prepareClip( sal_Int32  a1,
                     return false; // fully clipped
             }
 
-            io_rem += ca - 2*da*cb;
+            io_rem += ca - da2*cb;
         }
         else
         {
-            ca = (cb - da + 2*db - int(bRoundTowardsPt2)) / (2*db);
+            sal_Int32 db2 = 2*db;
+
+            if (db2 == 0)
+                return false; // overflow
+
+            ca = (cb - da + db2 - int(bRoundTowardsPt2)) / (db2);
             if( sa >= 0 )
             {
                 o_as = a1 + ca;
@@ -122,7 +132,7 @@ inline bool prepareClip( sal_Int32  a1,
                     return false; // fully clipped
             }
 
-            io_rem += 2*db*ca - cb;
+            io_rem += db2*ca - cb;
         }
     }
     else
