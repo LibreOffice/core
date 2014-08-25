@@ -33,10 +33,9 @@ String STR_PDF_EXPORT_ODPWD
     Text[ en-US ] = "Set permission password";
 };
 
-WarningBox RID_PDF_WARNPDFAPASSWORD
+String STR_WARN_PASSWORD_PDFA
 {
-    Title[en-US] = "PDF/A Export";
-    Message[ en-US ] = "PDF/A does not allow encryption. The exported PDF file will not be password protected.";
+    Text [ en-US ] = "PDF/A does not allow encryption. The exported PDF file will not be password protected.";
 };
 
 String STR_WARN_TRANSP_PDFA_SHORT

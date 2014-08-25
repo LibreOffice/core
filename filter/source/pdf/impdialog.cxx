@@ -21,9 +21,9 @@
 
 #include "impdialog.hxx"
 #include "impdialog.hrc"
-#include "vcl/svapp.hxx"
-#include "vcl/msgbox.hxx"
+#include <vcl/layout.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
 #include "sfx2/passwd.hxx"
 #include "svtools/miscopt.hxx"
 
@@ -814,7 +814,7 @@ IMPL_LINK_NOARG(ImpPDFTabGeneralPage, ToggleExportPDFAHdl)
     // if a password was set, inform the user that this will not be used in PDF/A case
     if( mpCbPDFA1b->IsChecked() && pSecPage && pSecPage->hasPassword() )
     {
-        WarningBox aBox( this, PDFFilterResId( RID_PDF_WARNPDFAPASSWORD ) );
+        MessageDialog aBox(this, PDFFilterResId(STR_WARN_PASSWORD_PDFA), VCL_MESSAGE_WARNING);
         aBox.Execute();
     }
 

@@ -19,7 +19,7 @@
 
 #include <filter.hrc>
 
-#define RID_PDF_WARNPDFAPASSWORD        (RID_PDF_DIALOG_START + 6)
+#define STR_WARN_PASSWORD_PDFA          (RID_PDF_DIALOG_START + 6)
 
 //strings for PDF security, user password management
 #define STR_PDF_EXPORT_UDPWD            (RID_PDF_DIALOG_START + 7)
