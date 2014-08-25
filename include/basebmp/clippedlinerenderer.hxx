@@ -256,6 +256,12 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
     sal_Int32 xs = x1;
     sal_Int32 ys = y1;
     bool bUseAlternateBresenham=false;
+
+    sal_Int32 nMinY(rClipRect.getMinY());
+    sal_Int32 nMaxY(rClipRect.getMaxY()-1);
+    sal_Int32 nMinX(rClipRect.getMinX());
+    sal_Int32 nMaxX(rClipRect.getMaxX()-1);
+
     if( adx >= ady )
     {
         // semi-horizontal line
@@ -263,10 +269,10 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
         if( !prepareClip(x1, x2, y1, adx, ady, xs, ys, sx, sy,
                          rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
-                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
-                         rClipRect.getMaxX()-1, basegfx::tools::RectClipFlags::RIGHT,
-                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
-                         rClipRect.getMaxY()-1, basegfx::tools::RectClipFlags::BOTTOM,
+                         nMinX, basegfx::tools::RectClipFlags::LEFT,
+                         nMaxX, basegfx::tools::RectClipFlags::RIGHT,
+                         nMinY, basegfx::tools::RectClipFlags::TOP,
+                         nMaxY, basegfx::tools::RectClipFlags::BOTTOM,
                          bRoundTowardsPt2, bUseAlternateBresenham ) )
             return; // line fully clipped away, no active pixel inside rect
 
@@ -284,7 +290,8 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
             while(true)
             {
-                acc.set(color, rowIter);
+                if (xs >= nMinX && xs <= nMaxX && ys >= nMinY && ys <= nMaxY)
+                    acc.set(color, rowIter);
 
                 if( rem >= 0 )
                 {
@@ -313,7 +320,8 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
         {
             while(true)
             {
-                acc.set(color, rowIter);
+                if (xs >= nMinX && xs <= nMaxX && ys >= nMinY && ys <= nMaxY)
+                    acc.set(color, rowIter);
 
                 if( --n < 0 )
                     break;
@@ -344,10 +352,10 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
         if( !prepareClip(y1, y2, x1, ady, adx, ys, xs, sy, sx,
                          rem, n, clipCode1, clipCount1, clipCode2, clipCount2,
-                         rClipRect.getMinY(), basegfx::tools::RectClipFlags::TOP,
-                         rClipRect.getMaxY()-1, basegfx::tools::RectClipFlags::BOTTOM,
-                         rClipRect.getMinX(), basegfx::tools::RectClipFlags::LEFT,
-                         rClipRect.getMaxX()-1, basegfx::tools::RectClipFlags::RIGHT,
+                         nMinY, basegfx::tools::RectClipFlags::TOP,
+                         nMaxY, basegfx::tools::RectClipFlags::BOTTOM,
+                         nMinX, basegfx::tools::RectClipFlags::LEFT,
+                         nMaxY, basegfx::tools::RectClipFlags::RIGHT,
                          bRoundTowardsPt2, bUseAlternateBresenham ) )
             return; // line fully clipped away, no active pixel inside rect
 
@@ -365,7 +373,8 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
             while(true)
             {
-                acc.set(color, colIter);
+                if (xs >= nMinX && xs <= nMaxX && ys >= nMinY && ys <= nMaxY)
+                    acc.set(color, colIter);
 
                 if( rem >= 0 )
                 {
@@ -376,6 +385,7 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
 
                     xs += sx;
                     ys += sy;
+
                     rem -= ady;
 
                     currIter.x += sx;
@@ -394,7 +404,8 @@ void renderClippedLine( basegfx::B2IPoint             aPt1,
         {
             while(true)
             {
-                acc.set(color, colIter);
+                if (xs >= nMinX && xs <= nMaxX && ys >= nMinY && ys <= nMaxY)
+                    acc.set(color, colIter);
 
                 if( --n < 0 )
                     break;
