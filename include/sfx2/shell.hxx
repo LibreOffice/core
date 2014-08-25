@@ -60,8 +60,7 @@ namespace svl
     class IUndoManager;
 }
 
-/*  [Description]
-
+/**
     Id for <SfxInterface>s, gives a quasi-static access to the interface
     through an array to <SfxApplication>.
 */
@@ -121,8 +120,7 @@ enum SfxInterfaceId
 typedef void (*SfxExecFunc)(SfxShell *, SfxRequest &rReq);
 typedef void (*SfxStateFunc)(SfxShell *, SfxItemSet &rSet);
 
-/*  [Description]
-
+/**
     The class SfxShell is the base class for all classes, which provide
     the functionality of the form <Slot>s.
 
@@ -148,20 +146,18 @@ private:
     SfxShell&                                   operator = ( const SfxShell & ); // internal
 
 protected:
-    /*  [Description]
-
+    /**
         The constructor of the SfxShell class initializes only simple types,
         the corresponding SbxObject is only created on-demand. Therefore,
         the application of a SfxShell instance is very cheap.
         */
     SfxShell();
 
-/*  [Description]
-
-    The constructor of the SfxShell class initializes only simple types,
-    the corresponding SbxObject is only created on-demand. Therefore,
-    the application of a SfxShell instance is very cheap.
-*/
+    /**
+        The constructor of the SfxShell class initializes only simple types,
+        the corresponding SbxObject is only created on-demand. Therefore,
+        the application of a SfxShell instance is very cheap.
+        */
     SfxShell( SfxViewShell *pViewSh );
 
     SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell* pView );
@@ -172,16 +168,14 @@ protected:
 public:
     TYPEINFO_OVERRIDE();
 
-    /*  [Description]
-
+    /**
         The connection to a possible corresponding SbxObject is dissolved.
         The SbxObject may continoue to exist, but can not any longer perform
         any functions and can not provide any properties.
         */
     virtual                     ~SfxShell();
 
-    /*  [Description]
-
+    /**
         With this virtual method, which is automatically overloaded by each subclass
         with its own slots through the macro <SFX_DECL_INTERFACE>, one can access
         each of the <SfxInterface> instance beloning to the subclass.
@@ -192,22 +186,19 @@ public:
     virtual SfxInterface*       GetInterface() const;
     static SfxInterface*        GetStaticInterface() { return 0; }
 
-    /*  [Description]
-
+    /**
         Sets the name of the Shell object. With this name, the SfxShell instance
         of BASIC can be expressed.
         */
     void                        SetName( const OUString &rName );
 
-    /*  [Description]
-
+    /**
         Returns the name of the Shell object. With this name, the SfxShell instance
         of BASIC can be expressed.
         */
     const OUString&             GetName() const;
 
-    /*  [Description]
-
+    /**
         Returns the SfxViewShell in which they are located in the subshells.
         Otherwise, and if not specified by the App developer, this method
         returns NULL.
@@ -222,8 +213,7 @@ public:
     static void                 EmptyExecStub(SfxShell *pShell, SfxRequest &);
     static void                 EmptyStateStub(SfxShell *pShell, SfxItemSet &);
 
-    /*  [Description]
-
+    /**
         This method returns the status of the slot with the specified slot ID
         on the specified interface.
 
@@ -259,8 +249,7 @@ public:
         */
     const SfxPoolItem*          GetSlotState( sal_uInt16 nSlotId, const SfxInterface *pIF = 0, SfxItemSet *pStateSet = 0 );
 
-    /*  [Description]
-
+    /**
         This method allows you to forward a <SfxRequest> to the specified
         base <SfxShell>.
 
@@ -292,8 +281,7 @@ public:
         */
     const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, const SfxInterface *pIF = 0 );
 
-    /*  [Description]
-
+    /**
         Asynchronous ExecuteSlot for the RELOAD
         */
     const SfxPoolItem*          ExecuteSlot( SfxRequest &rReq, bool bAsync );
@@ -302,8 +290,7 @@ public:
     inline SfxItemPool&         GetPool() const;
     inline void                 SetPool( SfxItemPool *pNewPool ) ;
 
-    /*  [Description]
-
+    /**
         Each Subclass of SfxShell can hava a <SfxUndoManager>. This can be set in
         the derived class with <SfxShell:SetUndoManager()>.
 
@@ -312,8 +299,7 @@ public:
         */
     virtual ::svl::IUndoManager* GetUndoManager();
 
-    /*  [Description]
-
+    /**
         Sets a <SfxUndoManager> for this <SfxShell> Instance. For the undo
         is only the undo-manager used for SfxShell at the top of the stack of each
         <SfxDispatcher>.
@@ -326,8 +312,7 @@ public:
         */
     void                        SetUndoManager( ::svl::IUndoManager *pNewUndoMgr );
 
-    /*  [Description]
-
+    /**
         Returns a pointer to the <SfxRepeatTarget> instance that is used in
         SID_REPEAT as repeat target when it is addressed from the <SfxUndoManager>
         supplied by this SfxShell. The return value can be NULL.
@@ -340,8 +325,7 @@ public:
         */
     SfxRepeatTarget*            GetRepeatTarget() const;
 
-    /*  [Description]
-
+    /**
         Sets the <SfxRepeatTarget> instance that is used in SID_REPEAT as
         RepeatTarget, when the current supplied by this <SfxUndoManager> is
         addressed. By 'pTarget==0' the SID_REPEAT is disabled for this SfxShell.
@@ -355,8 +339,7 @@ public:
         */
     void                        SetRepeatTarget( SfxRepeatTarget *pTarget );
 
-    /*  [Description]
-
+    /**
         With this method can the slots of the subclasses be invalidated through the
         slot Id or alternatively through the Which ID. Slot IDs, which are
         inherited by the subclass are also invalidert.
@@ -370,8 +353,7 @@ public:
 
     bool                        IsActive() const;
 
-    /*  [Description]
-
+    /**
         Virtual method that is called when enabling the SfxShell instance,
         in order to give the Subclasses the opportunity to respond to the
         to the enabling.
@@ -382,8 +364,7 @@ public:
         */
     virtual void                Activate(bool bMDI);
 
-    /*  [Description]
-
+    /**
         Virtual method that is called when disabling the SfxShell instance,
         to give the Subclasses the opportunity to respond to the disabling.
 
@@ -393,8 +374,7 @@ public:
         */
     virtual void                Deactivate(bool bMDI);
 
-    /*  [Description]
-
+    /**
         A parent of the <SfxDispatcher> on which the SfxShell is located, has
         become active, or the SfxShell instance was pushed on a <SfxDispatcher>,
         which parent is active.
@@ -407,8 +387,7 @@ public:
         */
     virtual void                ParentActivate();
 
-    /*  [Description]
-
+    /**
         The active parent of the <SfxDispatcher> on which the SfxShell is located,
         has been disabled.
 
@@ -420,8 +399,7 @@ public:
         */
     virtual void                ParentDeactivate();
 
-    /*  [Description]
-
+    /**
         This method returns a pointer to the <SfxDispatcher>, when the SfxShell
         is currently <UI-active> or a NULL-pointer if it is not UI-active.
 
@@ -430,8 +408,7 @@ public:
         */
     SfxDispatcher*              GetDispatcher() const;
 
-    /*  [Description]
-
+    /**
         This method returns a pointer to the <SfxViewFrame> to which this SfxShell
         instance is associated or in which they currently is <UI-active>.
         A NULL pointer is returned if this SfxShell instance is not UI-active at
@@ -452,8 +429,7 @@ public:
         */
     SfxViewFrame*               GetFrame() const;
 
-    /*  [Description]
-
+    /**
         This method provides the ResMgr of the <Resource-DLL> that are used by
         the SfxShell instance. If this is a NULL-pointer, then the current
         resource manager is to be used.
@@ -463,8 +439,7 @@ public:
     void                        UIFeatureChanged();
 
     // Items
-    /*  [Description]
-
+    /**
         With this method any objects of <SfxPoolItemu> subclasses can be accessed.
         This exchange method is needed if, for example special <SfxToolBoxControl>
         subclasses need access to certain data such as the <SfxObjectShell>.
@@ -479,8 +454,7 @@ public:
         */
     const SfxPoolItem*          GetItem( sal_uInt16 nSlotId ) const;
 
-    /*  [Description]
-
+    /**
         With this method, any objects of subclasses of <SfxPoolItem> can be made
         available. This exchange technology is needed if, for example, special
         <SfxToolBoxControl> Subclasses need access to certain data such as the
@@ -530,14 +504,14 @@ public:
     */
     bool SetContextBroadcasterEnabled (const bool bIsEnabled);
 
-    /*  [Description]
+    /**
 
         This method determines by calling the status function whether 'rSlot'
         can be executed currently.
         */
     SAL_DLLPRIVATE bool CanExecuteSlot_Impl( const SfxSlot &rSlot );
 
-    /*  [Description]
+    /**
 
         This method controls the activation of SfxShell instance. First, by calling
         the virtual method <SfxShell::Activate(sal_Bool)> which gives the subclass the
@@ -549,7 +523,7 @@ public:
         */
     SAL_DLLPRIVATE void DoActivate_Impl( SfxViewFrame *pFrame, bool bMDI);
 
-    /*  [Description]
+    /**
 
         This method controls the deactivation of the SfxShell instance. When
         bMDI == TRUE the SbxObject is first set to a status that only qualified
@@ -561,9 +535,7 @@ public:
     SAL_DLLPRIVATE void DoDeactivate_Impl( SfxViewFrame *pFrame, bool bMDI);
 };
 
-/*
-    [Description]
-
+/**
     Each Subclass of SfxShell must reference a pool. This is partly set by
     SFx's own set of subclasses (eg <SfxViewShell>). In particular however
     this must be set directly from one derived SfxShell class and ny
@@ -578,8 +550,7 @@ SfxItemPool& SfxShell::GetPool() const
     return *pPool;
 }
 
-/*  [Description]
-
+/**
     With this method, the subclasses register their special <SfxItemPool>
     in the SfxShell. Each SfxShell instance must have access to a SfxItemPool.
     Usually this is the SfxItemPool of the SfxDocumentShell. The SfxShell
