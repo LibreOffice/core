@@ -170,7 +170,6 @@ void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
     if (aNullRect != aOutRect)
     {
         GetShell().GetDrawView()->SetAttributes(rAttr);
-//      Init();
     }
 }
 
@@ -283,87 +282,87 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    OutlinerView* pOutlinerView = pSdrView->GetTextEditOutlinerView();
     if( rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() )
     {
         switch(rReq.GetSlot())
         {
         case SID_THESAURUS:
-            pOLV->StartThesaurus();
+            pOutlinerView->StartThesaurus();
             break;
 
         case SID_HANGUL_HANJA_CONVERSION:
-            pOLV->StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL,
-                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false );
+            pOutlinerView->StartTextConversion(LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL,
+                    i18n::TextConversionOption::CHARACTER_BY_CHARACTER, true, false);
             break;
 
         case SID_CHINESE_CONVERSION:
             {
                 //open ChineseTranslationDialog
-                Reference< XComponentContext > xContext(
-                    ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
-                if(xContext.is())
+                Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
+                if (!xContext.is())
+                    return;
+
+                Reference<lang::XMultiComponentFactory> xMCF(xContext->getServiceManager());
+                if (!xMCF.is())
+                    return;
+
+                OUString sService("com.sun.star.linguistic2.ChineseTranslationDialog");
+                Reference<ui::dialogs::XExecutableDialog> xDialog(
+                        xMCF->createInstanceWithContext(sService, xContext), UNO_QUERY);
+
+                Reference<lang::XInitialization> xInit(xDialog, UNO_QUERY);
+
+                if (!xInit.is())
+                    return;
+
+                //  initialize dialog
+                Reference<awt::XWindow> xDialogParentWindow(0);
+                Sequence<Any> aSequence(1);
+                Any* pArray = aSequence.getArray();
+                PropertyValue aParam;
+                aParam.Name = "ParentWindow";
+                aParam.Value <<= makeAny(xDialogParentWindow);
+                pArray[0] <<= makeAny(aParam);
+                xInit->initialize( aSequence );
+
+                //execute dialog
+                sal_Int16 nDialogRet = xDialog->execute();
+                if(RET_OK == nDialogRet)
                 {
-                    Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
-                    if(xMCF.is())
+                    //get some parameters from the dialog
+                    bool bToSimplified = true;
+                    bool bUseVariants = true;
+                    bool bCommonTerms = true;
+                    Reference<beans::XPropertySet> xPropertySet(xDialog, UNO_QUERY);
+                    if (xPropertySet.is())
                     {
-                        Reference< ui::dialogs::XExecutableDialog > xDialog(
-                                xMCF->createInstanceWithContext(
-                                    OUString("com.sun.star.linguistic2.ChineseTranslationDialog")
-                                    , xContext), UNO_QUERY);
-                        Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
-                        if( xInit.is() )
+                        try
                         {
-                            //  initialize dialog
-                            Reference< awt::XWindow > xDialogParentWindow(0);
-                            Sequence<Any> aSeq(1);
-                            Any* pArray = aSeq.getArray();
-                            PropertyValue aParam;
-                            aParam.Name = "ParentWindow";
-                            aParam.Value <<= makeAny(xDialogParentWindow);
-                            pArray[0] <<= makeAny(aParam);
-                            xInit->initialize( aSeq );
-
-                            //execute dialog
-                            sal_Int16 nDialogRet = xDialog->execute();
-                            if( RET_OK == nDialogRet )
-                            {
-                                //get some parameters from the dialog
-                                bool bToSimplified = true;
-                                bool bUseVariants = true;
-                                bool bCommonTerms = true;
-                                Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
-                                if( xProp.is() )
-                                {
-                                    try
-                                    {
-                                        xProp->getPropertyValue( "IsDirectionToSimplified" ) >>= bToSimplified;
-                                        xProp->getPropertyValue( "IsUseCharacterVariants" ) >>= bUseVariants;
-                                        xProp->getPropertyValue( "IsTranslateCommonTerms" ) >>= bCommonTerms;
-                                    }
-                                    catch (const Exception&)
-                                    {
-                                    }
-                                }
-
-                                //execute translation
-                                sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
-                                sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
-                                sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
-                                if( !bCommonTerms )
-                                    nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
-
-                                Font aTargetFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT,
-                                            nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
-
-                                pOLV->StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false );
-                            }
+                            xPropertySet->getPropertyValue("IsDirectionToSimplified") >>= bToSimplified;
+                            xPropertySet->getPropertyValue("IsUseCharacterVariants") >>= bUseVariants;
+                            xPropertySet->getPropertyValue("IsTranslateCommonTerms") >>= bCommonTerms;
                         }
-                        Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
-                        if( xComponent.is() )
-                            xComponent->dispose();
+                        catch (const Exception&)
+                        {
+                        }
                     }
+
+                    //execute translation
+                    sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                    sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                    sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                    if(!bCommonTerms)
+                        nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+
+                    Font aTargetFont = OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, nTargetLang, DEFAULTFONT_FLAGS_ONLYONE);
+
+                    pOutlinerView->StartTextConversion(nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
                 }
+
+                Reference<lang::XComponent> xComponent(xDialog, UNO_QUERY);
+                if (xComponent.is())
+                    xComponent->dispose();
             }
             break;
 
