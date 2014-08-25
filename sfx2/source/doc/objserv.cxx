@@ -46,7 +46,6 @@
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <tools/urlobj.hxx>
 #include <svl/whiter.hxx>
-#include <vcl/msgbox.hxx>
 #include <vcl/layout.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -865,7 +864,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
         case SID_CANCELCHECKOUT:
         {
-            if (  QueryBox( NULL, SfxResId( RID_QUERY_CANCELCHECKOUT ) ).Execute( ) == RET_YES )
+            if (MessageDialog(NULL, SfxResId(STR_QUERY_CANCELCHECKOUT), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() == RET_YES)
             {
                 CancelCheckOut( );
 
@@ -1427,8 +1426,8 @@ void SfxObjectShell::ImplSign( bool bScriptingContent )
         if ( nVersion >= SvtSaveOptions::ODFVER_012 )
         {
 
-            if ( (bHasSign && QueryBox( NULL, SfxResId( MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN ) ).Execute() == RET_YES)
-              || (!bHasSign && QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_SAVEBEFORESIGN ) ).Execute() == RET_YES) )
+            if ( (bHasSign && MessageDialog(NULL, SfxResId(STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() == RET_YES)
+              || (!bHasSign && MessageDialog(NULL, SfxResId(RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN), VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() == RET_YES) )
             {
                 sal_uInt16 nId = SID_SAVEDOC;
                 if ( !GetMedium() || GetMedium()->GetName().isEmpty() )

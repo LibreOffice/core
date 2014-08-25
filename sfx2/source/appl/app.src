@@ -53,11 +53,9 @@ String STR_GB
 {
     Text [ en-US ] = "GB" ;
 };
-QueryBox MSG_QUERY_LASTVERSION
+String STR_QUERY_LASTVERSION
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Cancel all changes?" ;
+    Text [ en-US ] = "Cancel all changes?" ;
 };
 
 String STR_NO_WEBBROWSER_FOUND
@@ -345,25 +343,19 @@ String RID_DESKTOP
     Text = "%PRODUCTNAME" ;
 };
 
-QueryBox RID_XMLSEC_QUERY_LOSINGSIGNATURE
+String RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?" ;
+    Text [ en-US ] = "Saving will remove all existing signatures.\nDo you want to continue saving the document?" ;
 };
 
-QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
+String RID_SVXSTR_XMLSEC_QUERY_SAVEBEFORESIGN
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "The document has to be saved before it can be signed.\nDo you want to save the document?" ;
+    Text [ en-US ] = "The document has to be saved before it can be signed.\nDo you want to save the document?" ;
 };
 
-QueryBox RID_QUERY_CANCELCHECKOUT
+String STR_QUERY_CANCELCHECKOUT
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "This will discard all changes on the server since check-out.\nDo you want to proceed?" ;
+    Text [ en-US ] = "This will discard all changes on the server since check-out.\nDo you want to proceed?" ;
 };
 
 String STR_INFO_WRONGDOCFORMAT

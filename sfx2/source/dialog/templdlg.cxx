@@ -2115,11 +2115,13 @@ void SfxCommonTemplateDialog_Impl::DeleteHdl(void *)
         // we only want to show the dialog once and if we want to delete a style in use (UX-advice)
         if ( bUsedStyle )
         {
-            #if defined UNX
-                QueryBox aBox( SfxGetpApp()->GetTopWindow(), WB_YES_NO | WB_DEF_NO, aMsg );
-            #else
-                QueryBox aBox( GetWindow(), WB_YES_NO | WB_DEF_NO , aMsg );
-            #endif
+        #if defined UNX
+            MessageDialog aBox(SfxGetpApp()->GetTopWindow(), aMsg,
+                               VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        #else
+            MessageDialog aBox(GetWindow(), aMsg,
+                               VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
+        #endif
             aApproved = aBox.Execute() == RET_YES;
         }
 

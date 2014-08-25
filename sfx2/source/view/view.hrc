@@ -35,7 +35,7 @@
 
 #define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_VIEW_START+33)
 
-#define MSG_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
+#define STR_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
 #define STR_CANT_CLOSE                      (RID_SFX_VIEW_START+42)
 
 #endif

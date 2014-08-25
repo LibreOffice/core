@@ -41,7 +41,7 @@
 #include <svl/slstitm.hxx>
 #include <svl/whiter.hxx>
 #include <svl/undo.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/ehdl.hxx>
@@ -491,7 +491,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( nOpenMode == SFX_STREAM_READWRITE && !rReq.IsAPI() )
                     {
                         // ::com::sun::star::sdbcx::User offering to open it as a template
-                        QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_OPENASTEMPLATE) );
+                        MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
+                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                         if ( RET_YES == aBox.Execute() )
                         {
                             SfxApplication* pApp = SfxGetpApp();
@@ -574,7 +575,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( bDo && GetFrame().DocIsModified_Impl() &&
                  !rReq.IsAPI() && ( !pSilentItem || !pSilentItem->GetValue() ) )
             {
-                QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_LASTVERSION) );
+                MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_LASTVERSION),
+                                   VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                 bDo = ( RET_YES == aBox.Execute() );
             }
 
@@ -750,7 +752,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     if ( bForEdit && SID_EDITDOC == rReq.GetSlot() )
                     {
                         // ask user for opening as template
-                        QueryBox aBox( &GetWindow(), SfxResId(MSG_QUERY_OPENASTEMPLATE) );
+                        MessageDialog aBox(&GetWindow(), SfxResId(STR_QUERY_OPENASTEMPLATE),
+                                           VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO);
                         if ( RET_YES == aBox.Execute() )
                         {
                             SfxAllItemSet aSet( pApp->GetPool() );

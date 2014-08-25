@@ -50,8 +50,6 @@ IMPL_LINK( SfxNewStyleDlg, OKHdl, Control *, pControl )
     return 0;
 }
 
-
-
 IMPL_LINK_INLINE_START( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 {
     m_pOKBtn->Enable( !comphelper::string::remove(pBox->GetText(), ' ').isEmpty() );
@@ -59,16 +57,11 @@ IMPL_LINK_INLINE_START( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 }
 IMPL_LINK_INLINE_END( SfxNewStyleDlg, ModifyHdl, ComboBox *, pBox )
 
-// CTOR / DTOR -----------------------------------------------------------
-
-SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool ) :
-
-    ModalDialog( pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui" ),
-
-    aQueryOverwriteBox  ( this, SfxResId( MSG_OVERWRITE ) ),
-
-    rPool( rInPool )
-
+SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool )
+    : ModalDialog(pParent, "CreateStyleDialog", "sfx/ui/newstyle.ui")
+    , aQueryOverwriteBox(this, SfxResId(STR_QUERY_OVERWRITE),
+                         VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO)
+    , rPool(rInPool)
 {
     get(m_pColBox, "stylename");
     m_pColBox->set_width_request(m_pColBox->approximate_char_width() * 25);
@@ -86,8 +79,6 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
         pStyle = rPool.Next();
     }
 }
-
-
 
 SfxNewStyleDlg::~SfxNewStyleDlg()
 {

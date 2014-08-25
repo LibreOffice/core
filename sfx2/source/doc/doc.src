@@ -347,11 +347,9 @@ String STR_XMLSEC_ODF12_EXPECTED
     Text [ en-US ] = "The document format version is set to ODF 1.1 (OpenOffice.org 2.x) in Tools-Options-Load/Save-General. Signing documents requires ODF 1.2 (OpenOffice.org 3.x).";
 };
 
-QueryBox MSG_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN
+String STR_XMLSEC_QUERY_SAVESIGNEDBEFORESIGN
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "The document has to be saved before it can be signed. Saving the document removes all present signatures.\nDo you want to save the document?";
+    Text [ en-US ] = "The document has to be saved before it can be signed. Saving the document removes all present signatures.\nDo you want to save the document?";
 };
 
 String STR_QRYTEMPL_MESSAGE

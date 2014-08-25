@@ -63,7 +63,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/mimeconfighelper.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
@@ -666,7 +666,8 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
         {
             // notify the user that SaveAs is going to be done
             Window* pWin = SfxStoringHelper::GetModelWindow( m_xModel );
-            QueryBox aMessageBox( pWin, WB_OK_CANCEL | WB_DEF_OK, SfxResId(STR_NEW_FILENAME_SAVE).toString() );
+            MessageDialog aMessageBox(pWin, SfxResId(STR_NEW_FILENAME_SAVE),
+                                      VCL_MESSAGE_QUESTION, VCL_BUTTONS_OK_CANCEL);
             if ( aMessageBox.Execute() == RET_OK )
                 nResult = STATUS_SAVEAS;
             else
@@ -1438,7 +1439,8 @@ bool SfxStoringHelper::GUIStoreModel( uno::Reference< frame::XModel > xModel,
            || SIGNATURESTATE_SIGNATURES_NOTVALIDATED == nDocumentSignatureState
            || SIGNATURESTATE_SIGNATURES_PARTIAL_OK == nDocumentSignatureState)
         {
-            if ( QueryBox( NULL, SfxResId( RID_XMLSEC_QUERY_LOSINGSIGNATURE ) ).Execute() != RET_YES )
+            if (MessageDialog(NULL, SfxResId(RID_SVXSTR_XMLSEC_QUERY_LOSINGSIGNATURE),
+                              VCL_MESSAGE_QUESTION, VCL_BUTTONS_YES_NO).Execute() != RET_YES)
             {
                 // the user has decided not to store the document
                 throw task::ErrorCodeIOException(

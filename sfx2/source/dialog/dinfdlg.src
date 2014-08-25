@@ -172,11 +172,9 @@ Image SFX_IMG_PROPERTY_REMOVE
     MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
 };
 
-QueryBox SFX_QB_WRONG_TYPE
+String STR_SFX_QUERY_WRONG_TYPE
 {
-    Buttons = WB_OK_CANCEL ;
-    DefButton = WB_DEF_OK ;
-    Message [ en-US ] = "The value entered does not match the specified type.\nThe value will be stored as text." ;
+    Text [ en-US ] = "The value entered does not match the specified type.\nThe value will be stored as text." ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

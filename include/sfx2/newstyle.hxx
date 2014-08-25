@@ -23,7 +23,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <vcl/button.hxx>
-#include <vcl/msgbox.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -36,7 +36,7 @@ private:
     ComboBox* m_pColBox;
     OKButton* m_pOKBtn;
 
-    QueryBox                aQueryOverwriteBox;
+    MessageDialog aQueryOverwriteBox;
     SfxStyleSheetBasePool&  rPool;
 
     DECL_DLLPRIVATE_LINK( OKHdl, Control * );

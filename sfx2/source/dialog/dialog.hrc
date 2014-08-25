@@ -34,7 +34,7 @@
 
 #define RID_DLG_ALIEN_WARNING           ( RC_DIALOG_BEGIN + 0)
 #define STR_RESET                       ( RC_DIALOG_BEGIN + 0)
-#define MSG_OVERWRITE                   ( RC_DIALOG_BEGIN + 1)
+#define STR_QUERY_OVERWRITE             ( RC_DIALOG_BEGIN + 1)
 #define STR_TABPAGE_INVALIDNAME         ( RC_DIALOG_BEGIN + 13)
 #define STR_TABPAGE_INVALIDSTYLE        ( RC_DIALOG_BEGIN + 14)
 #define STR_POOL_STYLE_NAME             ( RC_DIALOG_BEGIN + 16)

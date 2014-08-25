@@ -73,11 +73,9 @@ String STR_ERROR_SEND_MAIL
     Text [ en-US ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings." ;
 };
 
-QueryBox MSG_QUERY_OPENASTEMPLATE
+String STR_QUERY_OPENASTEMPLATE
 {
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?" ;
+    Text [ en-US ] = "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?" ;
 };
 String STR_REPAIREDDOCUMENT
 {

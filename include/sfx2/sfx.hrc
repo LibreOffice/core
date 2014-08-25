@@ -106,8 +106,6 @@
 
 // temporary due to compatibility
 
-#define MSG_QUERY_LASTVERSION               RID_SFX_START
-
 #define RID_APPLICATION                     RID_SFX_START
 #define RID_DEFAULTIMAGELIST_SC             (RID_SFX_START+15)
 #define RID_DEFAULTIMAGELIST_LC             (RID_SFX_START+17)
@@ -142,7 +140,7 @@
 #define STR_KB                              (RID_SFX_START+112)
 #define STR_MB                              (RID_SFX_START+113)
 #define STR_GB                              (RID_SFX_START+114)
-
+#define STR_QUERY_LASTVERSION               (RID_SFX_START+115)
 #define STR_STANDARD_SHORTCUT               (RID_SFX_START+117)
 #define STR_REPAIREDDOCUMENT                (RID_SFX_START+118)
 #define STR_ERRUNOEVENTBINDUNG              (RID_SFX_START+119)
