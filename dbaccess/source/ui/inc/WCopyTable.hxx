@@ -407,7 +407,7 @@ namespace dbaui
         void showColumnTypeNotSupported(const OUString& _rColumnName);
 
         void removeColumnNameFromNameMap(const OUString& _sName);
-        void showError(const OUString& _sErrorMesage);
+        void showError(const OUString& _sErrorMessage);
         void showError(const ::com::sun::star::uno::Any& _aError);
     };
 }
