@@ -9,7 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(MACOSX) && !defined(WNT)
+#if !defined(MACOSX)
 
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
