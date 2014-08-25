@@ -46,7 +46,7 @@ private:
 
     void preTest(const char* filename) SAL_OVERRIDE
     {
-        if (getTestName() == "testExportOfImagesWithSkipImageEnabled")
+        if (getTestName().indexOf("SkipImage") != -1)
             setFilterOptions("SkipImages");
         else
             setFilterOptions("");
@@ -132,6 +132,21 @@ DECLARE_HTMLEXPORT_TEST(testExportOfImagesWithSkipImageEnabled, "textAndImage.do
 
     assertXPath(pDoc, "/html/body", 1);
     assertXPath(pDoc, "/html/body/p/img", 0);
+}
+
+DECLARE_HTMLEXPORT_TEST(testSkipImageEmbedded, "skipimage-embedded.doc")
+{
+    // Embedded spreadsheet was exported as image, so content was lost. Make
+    // sure it's exported as HTML instead.
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // This was 0.
+    assertXPath(pDoc, "//table", 1);
+    // This was 2, the HTML header was in the document two times.
+    assertXPath(pDoc, "//meta[@name='generator']", 1);
+    // This was 0, <table> was directly under <p>, which caused errors in the parser.
+    assertXPath(pDoc, "//span/table", 1);
 }
 
 #endif

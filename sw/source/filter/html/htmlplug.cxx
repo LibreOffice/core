@@ -41,6 +41,8 @@
 #include <frmfmt.hxx>
 
 #include <svl/ownlist.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <unotools/streamwrap.hxx>
 #include "pam.hxx"
 #include "doc.hxx"
 #include "ndtxt.hxx"
@@ -51,10 +53,13 @@
 #include "wrthtml.hxx"
 #include "htmlfly.hxx"
 #include "swcss1.hxx"
+#include "unocoll.hxx"
+#include "unoframe.hxx"
 #include <com/sun/star/embed/XClassifiedObject.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/classids.hxx>
@@ -1249,9 +1254,6 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
 {
     SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
 
-    if (rHTMLWrt.mbSkipImages)
-        return rWrt;
-
     const SwFmtCntnt& rFlyCntnt = rFrmFmt.GetCntnt();
     sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex()+1;
     SwOLENode *pOLENd = rHTMLWrt.pDoc->GetNodes()[ nStt ]->GetOLENode();
@@ -1259,6 +1261,40 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
     OSL_ENSURE( pOLENd, "OLE-Node erwartet" );
     if( !pOLENd )
         return rWrt;
+
+    if (rHTMLWrt.mbSkipImages)
+    {
+        // If we skip images, embedded objects would be completely lost.
+        // Instead, try to use the HTML export of the embedded object.
+        uno::Reference<drawing::XShape> xShape = SwXFrames::GetObject(const_cast<SwFrmFmt&>(rFrmFmt), FLYCNTTYPE_OLE);
+        uno::Reference<text::XTextContent> xTextContent(xShape, uno::UNO_QUERY);
+        uno::Reference<document::XEmbeddedObjectSupplier2> xEmbeddedObjectSupplier(xTextContent, uno::UNO_QUERY);
+        uno::Reference<frame::XStorable> xStorable(xEmbeddedObjectSupplier->getEmbeddedObject(), uno::UNO_QUERY);
+
+        // Figure out what is the filter name of the embedded object.
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xStorable, uno::UNO_QUERY);
+        OUString aFilter;
+        if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+            aFilter = "HTML (StarCalc)";
+
+        if (!aFilter.isEmpty())
+        {
+            SvMemoryStream aStream;
+            uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
+            utl::MediaDescriptor aMediaDescriptor;
+            aMediaDescriptor["FilterName"] <<= aFilter;
+            aMediaDescriptor["FilterOptions"] <<= OUString("SkipHeaderFooter");
+            aMediaDescriptor["OutputStream"] <<= xOutputStream;
+            xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+            OString aData(reinterpret_cast<const char*>(aStream.GetData()), aStream.GetSize());
+            // Wrap output in a <span> tag to avoid 'HTML parser error: Unexpected end tag: p'
+            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span);
+            rWrt.Strm().WriteCharPtr(aData.getStr());
+            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_span, false);
+        }
+
+        return rWrt;
+    }
 
     Graphic aGraphic( *pOLENd->GetGraphic() );
     sal_uLong nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
