@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "5ad0253b_a9af8593",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-08-25T11:01:49Z",
+      "side": 1,
+      "message": "That\u0027s the answer I feared ;-)\n\nSo when adding a new bit flag below, one has to remember and change another code place and adopt the new bit. I\u0027d rather avoid that. For a clean bitmask here better have a constant below with IDF_ALL_USED_BITS or some such so the intention is clear, and move this member function after the constant definition so it can pick it up.",
+      "parentUuid": "5ad0253b_fe5f7573",
+      "revId": "862a480da8702cce5981234705e47589e5b9de8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ad0253b_3e204df7",
         "filename": "sc/inc/global.hxx",
         "patchSetId": 1
