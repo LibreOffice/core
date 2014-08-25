@@ -22,3 +22,6 @@ leak:soltools/cpp/_cpp.c
 
 # resource managers, normally global objects
 leak:ResMgr::CreateResMgr
+
+# bridge's RTTI information, leaked knowingly
+leak:RTTI::getRTTI
