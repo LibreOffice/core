@@ -49,9 +49,9 @@ String SV_STDTEXT_PREFERENCES
     Text [ en-US ] = "Preferences...";
 };
 
-WarningBox  SV_EDIT_WARNING_BOX
+String SV_EDIT_WARNING_STR
 {
-    Message [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
+    Text [en-US] = "The inserted text exceeded the maximum length of this text field. The text was truncated.";
 };
 
 String SV_MAC_SCREENNNAME
