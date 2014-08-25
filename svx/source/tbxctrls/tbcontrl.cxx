@@ -138,7 +138,6 @@ public:
     inline void     SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
 
     void            SetDefaultStyle( const OUString& rDefault ) { sDefaultStyle = rDefault; }
-    DECL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control* );
 
 protected:
     virtual void    Select() SAL_OVERRIDE;
@@ -659,14 +658,6 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                 DrawEntry( rUDEvt, true, true );
         }
     }
-}
-
-IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
-{
-    (void)pThis;
-    if ( _pCtrl )
-        _pCtrl->GrabFocus();
-    return 0;
 }
 
 static bool lcl_GetDocFontList( const FontList** ppFontList, SvxFontNameBox_Impl* pBox )
