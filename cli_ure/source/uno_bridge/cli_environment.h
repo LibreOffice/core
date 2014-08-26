@@ -56,6 +56,7 @@ public:
     inline Cli_environment();
 
     ~Cli_environment();
+    !Cli_environment();
 
     /**
        Registers an UNO object as being mapped by this bridge. The resulting
