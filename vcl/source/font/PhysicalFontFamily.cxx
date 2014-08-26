@@ -294,7 +294,7 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
 
         PhysicalFontFace* pClonedFace = pFace->Clone();
 
-        assert( pClonedFace->GetFamilyName() == GetFamilyName() );
+        assert( pClonedFace->GetFamilyName().trim() == GetFamilyName().trim() );
         assert( rFontCollection.FindOrCreateFamily( GetEnglishSearchFontName( pClonedFace->GetFamilyName() ) ) == pFamily );
 
         if (! pFamily->AddFontFace( pClonedFace ) )
