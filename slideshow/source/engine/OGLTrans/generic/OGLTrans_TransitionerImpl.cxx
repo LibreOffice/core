@@ -561,12 +561,10 @@ void OGLTransitionerImpl::createTexture( GLuint* texID,
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 
 #if defined( GLX_EXT_texture_from_pixmap )
-    PFNGLXBINDTEXIMAGEEXTPROC myglXBindTexImageEXT = (PFNGLXBINDTEXIMAGEEXTPROC) glXGetProcAddress( (const GLubyte*) "glXBindTexImageEXT" );
-
     if( usePixmap ) {
         if( mbGenerateMipmap )
             glTexParameteri( GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, True);
-        myglXBindTexImageEXT (mpContext->getOpenGLWindow().dpy, pixmap, GLX_FRONT_LEFT_EXT, NULL);
+        glXBindTexImageEXT (mpContext->getOpenGLWindow().dpy, pixmap, GLX_FRONT_LEFT_EXT, NULL);
         if( mbGenerateMipmap && useMipmap ) {
             SAL_INFO("slideshow.opengl", "use mipmaps");
             glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -1234,9 +1232,8 @@ void OGLTransitionerImpl::disposeTextures()
 #if defined( GLX_EXT_texture_from_pixmap )
     GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
-    PFNGLXRELEASETEXIMAGEEXTPROC myglXReleaseTexImageEXT = (PFNGLXRELEASETEXIMAGEEXTPROC) glXGetProcAddress( (const GLubyte*) "glXReleaseTexImageEXT" );
     if( mbUseLeavingPixmap ) {
-        myglXReleaseTexImageEXT( rGLWindow.dpy, maLeavingPixmapGL, GLX_FRONT_LEFT_EXT );
+        glXReleaseTexImageEXT( rGLWindow.dpy, maLeavingPixmapGL, GLX_FRONT_LEFT_EXT );
         glXDestroyGLXPixmap( rGLWindow.dpy, maLeavingPixmapGL );
         maLeavingPixmapGL = 0;
         if( mbFreeLeavingPixmap ) {
@@ -1246,7 +1243,7 @@ void OGLTransitionerImpl::disposeTextures()
         }
     }
     if( mbUseEnteringPixmap ) {
-        myglXReleaseTexImageEXT( rGLWindow.dpy, maEnteringPixmapGL, GLX_FRONT_LEFT_EXT );
+        glXReleaseTexImageEXT( rGLWindow.dpy, maEnteringPixmapGL, GLX_FRONT_LEFT_EXT );
         glXDestroyGLXPixmap( rGLWindow.dpy, maEnteringPixmapGL );
         maEnteringPixmapGL = 0;
         if( mbFreeEnteringPixmap ) {
