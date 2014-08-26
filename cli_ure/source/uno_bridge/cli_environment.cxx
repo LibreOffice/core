@@ -47,12 +47,16 @@ inline Cli_environment::Cli_environment()
 #endif
 }
 
-Cli_environment::~Cli_environment()
+Cli_environment::~Cli_environment() ///< IDisposable Cli_environment::Dispose()
+{
+    this->!Cli_environment(); // call finalizer
+}
+
+Cli_environment::!Cli_environment() ///< Cli_environment::Finalize()
 {
     OSL_ENSURE(_numRegisteredObjects == 0,
                "cli uno bridge: CLI environment contains unrevoked objects");
 }
-
 
 System::Object^ Cli_environment::registerInterface(
     System::Object^ obj, System::String^ oid)
