@@ -91,8 +91,6 @@ Public sCurrSLOVAK as String
 Public sCurrESTONIAN as String
 Public sCurrLATVIAN as String
 Public sCurrLITHUANIAN as String
-Public sCurrUNKNOWN as String
-Public sCurrSYSUNKNOWN as String
 
 Public sPrgsRETRIEVAL as String
 Public sPrgsCONVERTING as String
@@ -218,8 +216,6 @@ Dim LocWorkPath as String
 		sCurrESTONIAN = GetResText(1516)
 		sCurrLATVIAN = GetResText(1517)
 		sCurrLITHUANIAN = GetResText(1518)
-		sCurrUNKNOWN = GetResText(1519)
-		sCurrSYSUNKNOWN = GetResText(1520)
 		.cmdCancel.Label =  sCANCEL
 		.cmdHelp.Label =  sHELP
 		.cmdBack.Label =  GetResText(1002)
