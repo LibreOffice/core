@@ -264,6 +264,8 @@ namespace sdr
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
                         aSet.Put(rSet);
+                        if (aSet.GetItemState(EE_CHAR_COLOR, false) == SFX_ITEM_ON)
+                            pOutliner->QuickRemoveCharAttribs( nPara, EE_CHAR_COLOR );
                         pOutliner->SetParaAttribs(nPara, aSet);
                     }
 
