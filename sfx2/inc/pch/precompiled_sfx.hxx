@@ -655,7 +655,6 @@
 #include <svtools/imaprect.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/inettbc.hxx>
-#include <svtools/itemdel.hxx>
 #include <svtools/javacontext.hxx>
 #include <svtools/langhelp.hxx>
 #include <svtools/localresaccess.hxx>
