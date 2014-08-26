@@ -318,11 +318,13 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
 
     setSlides( xLeavingSlide, xEnteringSlide );
 
+    CHECK_GL_ERROR();
     return mbValidOpenGLContext;
 }
 
 void OGLTransitionerImpl::impl_initializeFlags( bool const bValidContext )
 {
+    CHECK_GL_ERROR();
     mbValidOpenGLContext = bValidContext;
     if ( bValidContext ) {
         mnGLVersion = OpenGLHelper::getGLVersion();
@@ -333,6 +335,7 @@ void OGLTransitionerImpl::impl_initializeFlags( bool const bValidContext )
         /* TODO: check for version once the bug in fglrx driver is fixed */
         mbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
     }
+    CHECK_GL_ERROR();
 }
 
 bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presentation::XSlideShowView >& xView )
@@ -361,12 +364,14 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     sal_Int64 aVal = 0;
     aDeviceParams[1] >>= aVal;
 
+    SAL_WARN("slideshow", "created the context");
     mpContext = boost::make_shared<OpenGLContext>();
     mpContext->requestLegacyContext();
 
     if( !mpContext->init( reinterpret_cast< Window* >( aVal ) ) )
         return false;
 
+    CHECK_GL_ERROR();
     awt::Rectangle aCanvasArea = mxView->getCanvasArea();
     mpContext->setWinPosAndSize(Point(aCanvasArea.X, aCanvasArea.Y), Size(aCanvasArea.Width, aCanvasArea.Height));
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
@@ -375,10 +380,12 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     mbGenerateMipmap = rGLWindow.HasGLExtension( "GL_SGIS_generate_mipmap" );
 
+    CHECK_GL_ERROR();
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glClearColor (0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
+    CHECK_GL_ERROR();
 
     mpContext->swapBuffers();
 
@@ -391,6 +398,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     glEnable(GL_NORMALIZE);
 
     glViewport(0, 0, aCanvasArea.Width, aCanvasArea.Height);
+    CHECK_GL_ERROR();
 
     return true;
 }
@@ -424,7 +432,9 @@ void OGLTransitionerImpl::impl_prepareSlides()
     aSlideRect.Y1 = 0;
     aSlideRect.Y2 = maSlideSize.Height;
 
+    CHECK_GL_ERROR();
     mpContext->sync();
+    CHECK_GL_ERROR();
 
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
@@ -508,12 +518,14 @@ void OGLTransitionerImpl::impl_prepareSlides()
     if( !mbUseEnteringPixmap )
         maEnteringBytes = mxEnteringBitmap->getData(maSlideBitmapLayout, aSlideRect);
 
+    CHECK_GL_ERROR();
     GLInitSlides();
 
     SAL_WARN_IF(maSlideBitmapLayout.PlaneStride != 0, "slideshow.opengl","only handle no plane stride now");
 
     mpContext->sync();
 
+    CHECK_GL_ERROR();
 #if defined( UNX ) && !defined( MACOSX )
     // synchronized X still gives us much smoother play
     // I suspect some issues in above code in slideshow
@@ -555,11 +567,13 @@ void OGLTransitionerImpl::createTexture( GLuint* texID,
                      uno::Sequence<sal_Int8>& data,
                      const OGLFormat* pFormat )
 {
+    CHECK_GL_ERROR();
     glDeleteTextures( 1, texID );
     glGenTextures( 1, texID );
     glBindTexture( GL_TEXTURE_2D, *texID );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    CHECK_GL_ERROR();
 
 #if defined( GLX_EXT_texture_from_pixmap )
     if( usePixmap ) {
@@ -581,6 +595,7 @@ void OGLTransitionerImpl::createTexture( GLuint* texID,
     impl_createTexture( useMipmap, data, pFormat );
 #endif
     SAL_WARN_IF(!glIsTexture(*texID), "slideshow.opengl", "Can't generate Leaving slide textures in OpenGL");
+    CHECK_GL_ERROR();
 }
 
 namespace
@@ -944,6 +959,7 @@ void OGLTransitionerImpl::impl_createTexture(
 {
     if( !pFormat )
     {
+        CHECK_GL_ERROR();
         // force-convert color to ARGB8888 int color space
         uno::Sequence<sal_Int8> tempBytes(
             maSlideBitmapLayout.ColorSpace->convertToIntegerColorSpace(
@@ -979,10 +995,12 @@ void OGLTransitionerImpl::impl_createTexture(
             glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, largest_supported_anisotropy );
         }
     }
+    CHECK_GL_ERROR();
 }
 
 void OGLTransitionerImpl::prepareEnvironment()
 {
+    CHECK_GL_ERROR();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     double EyePos(10.0);
@@ -1006,6 +1024,7 @@ void OGLTransitionerImpl::prepareEnvironment()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glTranslated(0,0,-EyePos);
+    CHECK_GL_ERROR();
 }
 
 const OGLFormat* OGLTransitionerImpl::chooseFormats()
@@ -1147,6 +1166,7 @@ void OGLTransitionerImpl::GLInitSlides()
     if( !mbUseLeavingPixmap || !mbUseEnteringPixmap )
         pFormat = chooseFormats();
 
+    CHECK_GL_ERROR();
     createTexture( &maLeavingSlideGL,
 #if defined( GLX_EXT_texture_from_pixmap )
            maLeavingPixmapGL,
@@ -1165,7 +1185,9 @@ void OGLTransitionerImpl::GLInitSlides()
            maEnteringBytes,
            pFormat );
 
+    CHECK_GL_ERROR();
     mpContext->sync();
+    CHECK_GL_ERROR();
 }
 
 void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeException, std::exception)
@@ -1183,6 +1205,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
     if (isDisposed() || !mbValidOpenGLContext || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
         return;
 
+    CHECK_GL_ERROR();
     mpContext->makeCurrent();
 
     glEnable(GL_DEPTH_TEST);
@@ -1201,6 +1224,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 
     mpContext->show();
     mpContext->sync();
+    CHECK_GL_ERROR();
 
 #if OSL_DEBUG_LEVEL > 1
     maUpdateEndTime = microsec_clock::local_time();
@@ -1228,6 +1252,7 @@ void SAL_CALL OGLTransitionerImpl::viewChanged( const Reference< presentation::X
 
 void OGLTransitionerImpl::disposeTextures()
 {
+    CHECK_GL_ERROR();
     mpContext->makeCurrent();
 
 #if defined( GLX_EXT_texture_from_pixmap )
@@ -1266,6 +1291,7 @@ void OGLTransitionerImpl::disposeTextures()
 
     mbUseLeavingPixmap = false;
     mbUseEnteringPixmap = false;
+    CHECK_GL_ERROR();
 }
 
 void OGLTransitionerImpl::impl_dispose()
