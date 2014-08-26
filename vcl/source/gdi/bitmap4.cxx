@@ -1192,10 +1192,11 @@ bool Bitmap::ImplDuotoneFilter( const sal_uLong nColorOne, const sal_uLong nColo
         for( int y = 0; y < nHeight; y++ )
         {
             BitmapColor aColor = pReadAcc->GetColor( y, x );
+            sal_uInt8 luminance = aColor.GetLuminance();
             BitmapColor aResultColor(
-                    lcl_getDuotoneColorComponent( aColor.GetRed(), aColorOne.GetRed(), aColorTwo.GetRed() ) ,
-                    lcl_getDuotoneColorComponent( aColor.GetGreen(), aColorOne.GetGreen(), aColorTwo.GetGreen() ) ,
-                    lcl_getDuotoneColorComponent( aColor.GetBlue(), aColorOne.GetBlue(), aColorTwo.GetBlue() ) );
+                    lcl_getDuotoneColorComponent( luminance, aColorOne.GetRed(), aColorTwo.GetRed() ) ,
+                    lcl_getDuotoneColorComponent( luminance, aColorOne.GetGreen(), aColorTwo.GetGreen() ) ,
+                    lcl_getDuotoneColorComponent( luminance, aColorOne.GetBlue(), aColorTwo.GetBlue() ) );
             pWriteAcc->SetPixel( y, x, aResultColor );
         }
     }
