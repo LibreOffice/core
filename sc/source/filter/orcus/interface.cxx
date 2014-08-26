@@ -471,6 +471,7 @@ size_t ScOrcusSharedStrings::commit_segments()
 ScOrcusStyles::ScOrcusStyles(ScDocument& rDoc):
     mrDoc(rDoc)
 {
+    mrDoc.GetStyleSheetPool()->CreateStandardStyles();
 }
 
 ScOrcusStyles::font::font():
