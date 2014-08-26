@@ -224,7 +224,7 @@ public:
     Entity& getEntity()             { return *mpTop; }
     const Entity& getEntity() const { return *mpTop; }
     void parse();
-    void produce( CallbackType aType );
+    void produce( bool bForceFlush = false );
 
     bool hasNamespaceURL( const OUString& rPrefix ) const;
 
@@ -276,7 +276,7 @@ private:
         {
             Entity &rEntity = mpParser->getEntity();
             rEntity.getEvent( EXCEPTION );
-            mpParser->produce( EXCEPTION );
+            mpParser->produce( true );
         }
     }
 };
@@ -947,11 +947,10 @@ void FastSaxParserImpl::deleteUsedEvents()
     }
 }
 
-void FastSaxParserImpl::produce( CallbackType aType )
+void FastSaxParserImpl::produce( bool bForceFlush )
 {
     Entity& rEntity = getEntity();
-    if (aType == DONE ||
-        aType == EXCEPTION ||
+    if (bForceFlush ||
         rEntity.mnProducedEventsSize == rEntity.mnEventListSize)
     {
         osl::ResettableMutexGuard aGuard(rEntity.maEventProtector);
@@ -1063,7 +1062,7 @@ void FastSaxParserImpl::parse()
     while( nRead > 0 );
     rEntity.getEvent( DONE );
     if( rEntity.mbEnableThreads )
-        produce( DONE );
+        produce( true );
 }
 
 // The C-Callbacks
@@ -1186,7 +1185,7 @@ void FastSaxParserImpl::callbackStartElement( const XML_Char* pwName, const XML_
 
         rEntity.maNamespaceStack.push( NameWithToken(rEvent.msNamespace, nNamespaceToken) );
         if (rEntity.mbEnableThreads)
-            produce( START_ELEMENT );
+            produce();
         else
             rEntity.startElement( &rEvent );
     }
@@ -1209,7 +1208,7 @@ void FastSaxParserImpl::callbackEndElement( SAL_UNUSED_PARAMETER const XML_Char*
 
     rEntity.getEvent( END_ELEMENT );
     if (rEntity.mbEnableThreads)
-        produce( END_ELEMENT );
+        produce();
     else
         rEntity.endElement();
 }
@@ -1220,7 +1219,7 @@ void FastSaxParserImpl::callbackCharacters( const XML_Char* s, int nLen )
     Event& rEvent = rEntity.getEvent( CHARACTERS );
     rEvent.msChars = OUString(s, nLen, RTL_TEXTENCODING_UTF8);
     if (rEntity.mbEnableThreads)
-        produce( CHARACTERS );
+        produce();
     else
         rEntity.characters( rEvent.msChars );
 }
