@@ -999,7 +999,7 @@ void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float 
 {
     maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, nEvent));
     const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(nStr);
-    float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.05;
+    float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * nTextHeight / 2.0f;
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
     pScreenText->setPosition(rLeftTop, glm::vec2(rLeftTop.x + nRectWidth, rLeftTop.y - nTextHeight), rPos);
 }
@@ -1017,7 +1017,7 @@ void GL3DBarChart::updateRenderFPS()
         osl_getSystemTime(&maFPSRenderStartTime);
     }
     osl_getSystemTime(&maFPSRenderEndTime);
-    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.1f);
+    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.06f);
 }
 
 int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
@@ -1061,7 +1061,7 @@ void GL3DBarChart::updateDataUpdateFPS()
         osl_getSystemTime(&maDataUpdateStartTime);
     }
     osl_getSystemTime(&maDataUpdateEndTime);
-    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.69f, 0.99f), 0.1f);
+    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.69f, 0.99f), 0.06f);
 }
 
 void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
