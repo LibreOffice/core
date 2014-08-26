@@ -287,7 +287,7 @@ public:
     /**
        Whether the display has GLX extension on X11, always true otherwise (?)
      */
-    bool mbGLXPresent;
+    bool mbValidOpenGLContext;
 
     /**
        whether to generate mipmaped textures
@@ -313,18 +313,18 @@ bool OGLTransitionerImpl::initialize( const Reference< presentation::XSlideShowV
         const Reference< rendering::XBitmap >& xLeavingSlide,
         const Reference< rendering::XBitmap >& xEnteringSlide )
 {
-    bool const bGLXPresent( initWindowFromSlideShowView( xView ) );
-    impl_initializeFlags( bGLXPresent );
+    bool const bValidContext( initWindowFromSlideShowView( xView ) );
+    impl_initializeFlags( bValidContext );
 
     setSlides( xLeavingSlide, xEnteringSlide );
 
-    return mbGLXPresent;
+    return mbValidOpenGLContext;
 }
 
-void OGLTransitionerImpl::impl_initializeFlags( bool const bGLXPresent )
+void OGLTransitionerImpl::impl_initializeFlags( bool const bValidContext )
 {
-    mbGLXPresent = bGLXPresent;
-    if ( bGLXPresent ) {
+    mbValidOpenGLContext = bValidContext;
+    if ( bValidContext ) {
         mnGLVersion = OpenGLHelper::getGLVersion();
         SAL_INFO("slideshow.opengl", "GL version: " << mnGLVersion << "" );
 
@@ -1181,7 +1181,7 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 #endif
     osl::MutexGuard const guard( m_aMutex );
 
-    if (isDisposed() || !mbGLXPresent || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
+    if (isDisposed() || !mbValidOpenGLContext || mpTransition->getSettings().mnRequiredGLVersion > mnGLVersion)
         return;
 
     mpContext->makeCurrent();
@@ -1342,8 +1342,7 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , maSlideSize()
     , mbBrokenTexturesATI(false)
     , mnGLVersion(0)
-    , mbGLXPresent(false)
-    , mbMesa(false)
+    , mbValidOpenGLContext(false)
     , mbGenerateMipmap(false)
     , mbHasTFPVisual(false)
 {
