@@ -24,6 +24,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
 
 #include <formula/token.hxx>
 #include <tools/datetime.hxx>
@@ -475,7 +476,8 @@ ScOrcusStyles::ScOrcusStyles(ScDocument& rDoc):
 ScOrcusStyles::font::font():
     mbBold(false),
     mbItalic(false),
-    mnSize(10)
+    mnSize(10),
+    meUnderline(UNDERLINE_NONE)
 {
 }
 
@@ -488,6 +490,7 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
     rSet.Put(SvxWeightItem(eWeight, ATTR_FONT_WEIGHT));
 
     rSet.Put(SvxColorItem(maColor, ATTR_FONT_COLOR));
+    rSet.Put(SvxUnderlineItem(meUnderline, ATTR_FONT_UNDERLINE));
 }
 
 ScOrcusStyles::protection::protection():
@@ -583,8 +586,22 @@ void ScOrcusStyles::set_font_size(double point)
     maCurrentFont.mnSize = point;
 }
 
-void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t /*e*/)
+void ScOrcusStyles::set_font_underline(orcus::spreadsheet::underline_t e)
 {
+    switch(e)
+    {
+        case orcus::spreadsheet::underline_single:
+        case orcus::spreadsheet::underline_single_accounting:
+            maCurrentFont.meUnderline = UNDERLINE_SINGLE;
+            break;
+        case orcus::spreadsheet::underline_double:
+        case orcus::spreadsheet::underline_double_accounting:
+            maCurrentFont.meUnderline = UNDERLINE_DOUBLE;
+            break;
+        case orcus::spreadsheet::underline_none:
+            maCurrentFont.meUnderline = UNDERLINE_NONE;
+            break;
+    }
 }
 
 void ScOrcusStyles::set_font_color(orcus::spreadsheet::color_elem_t alpha,

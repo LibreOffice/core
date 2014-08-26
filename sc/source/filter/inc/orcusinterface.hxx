@@ -14,6 +14,7 @@
 #include "documentimport.hxx"
 
 #include <tools/color.hxx>
+#include <tools/fontenum.hxx>
 
 #include "sharedformulagroups.hxx"
 
@@ -167,6 +168,7 @@ private:
         OUString maName;
         double mnSize;
         Color maColor;
+        FontUnderline meUnderline;
 
         font();
 
