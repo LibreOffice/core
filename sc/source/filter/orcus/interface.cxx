@@ -24,6 +24,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/colritem.hxx>
+#include <editeng/brushitem.hxx>
 #include <editeng/udlnitem.hxx>
 
 #include <formula/token.hxx>
@@ -494,6 +495,14 @@ void ScOrcusStyles::font::applyToItemSet(SfxItemSet& rSet) const
     rSet.Put(SvxUnderlineItem(meUnderline, ATTR_FONT_UNDERLINE));
 }
 
+void ScOrcusStyles::fill::applyToItemSet(SfxItemSet& rSet) const
+{
+    if (maPattern.equalsIgnoreAsciiCase("none"))
+        return;
+
+    rSet.Put(SvxBrushItem(maFgColor, ATTR_BACKGROUND));
+}
+
 ScOrcusStyles::protection::protection():
     mbHidden(false),
     mbLocked(false)
@@ -627,22 +636,26 @@ void ScOrcusStyles::set_fill_count(size_t /*n*/)
     // needed at all?
 }
 
-void ScOrcusStyles::set_fill_pattern_type(const char* /*s*/, size_t /*n*/)
+void ScOrcusStyles::set_fill_pattern_type(const char* s, size_t n)
 {
+    maCurrentFill.maPattern = OUString(s, n, RTL_TEXTENCODING_UTF8);
 }
 
-void ScOrcusStyles::set_fill_fg_color(orcus::spreadsheet::color_elem_t /*alpha*/, orcus::spreadsheet::color_elem_t /*red*/, orcus::spreadsheet::color_elem_t /*green*/, orcus::spreadsheet::color_elem_t /*blue*/)
+void ScOrcusStyles::set_fill_fg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
 {
+    maCurrentFill.maFgColor = Color(alpha, red, green, blue);
 }
 
-void ScOrcusStyles::set_fill_bg_color(orcus::spreadsheet::color_elem_t /*alpha*/, orcus::spreadsheet::color_elem_t /*red*/, orcus::spreadsheet::color_elem_t /*green*/, orcus::spreadsheet::color_elem_t /*blue*/)
+void ScOrcusStyles::set_fill_bg_color(orcus::spreadsheet::color_elem_t alpha, orcus::spreadsheet::color_elem_t red, orcus::spreadsheet::color_elem_t green, orcus::spreadsheet::color_elem_t blue)
 {
+    maCurrentFill.maBgColor = Color(alpha, red, green, blue);
 }
 
 size_t ScOrcusStyles::commit_fill()
 {
     SAL_INFO("sc.orcus.style", "commit fill");
-    return 0;
+    maFills.push_back(maCurrentFill);
+    return maFills.size() - 1;
 }
 
 // border
