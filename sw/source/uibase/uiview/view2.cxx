@@ -118,7 +118,7 @@
 #include <app.hrc>
 #include <fmtclds.hxx>
 #include <helpid.h>
-#include <svtools/templdlg.hxx>
+#include <sfx2/templatedlg.hxx>
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>
 #include <reffld.hxx>
@@ -2438,10 +2438,9 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
         // call documents and template dialog
         SfxApplication* pSfxApp = SfxGetpApp();
         Window* pTopWin = pSfxApp->GetTopWindow();
-        boost::scoped_ptr<SvtDocumentTemplateDialog> pDocTemplDlg(new SvtDocumentTemplateDialog( pTopWin ));
-        pDocTemplDlg->SelectTemplateFolder();
 
-        int nRet = pDocTemplDlg->Execute();
+        SfxTemplateManagerDlg aDocTemplDlg;
+        int nRet = aDocTemplDlg.Execute();
         bool bNewWin = false;
         if ( nRet == RET_OK )
         {
@@ -2453,7 +2452,6 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             }
         }
 
-        pDocTemplDlg.reset();
         if ( bNewWin )
             // after the destruction of the dialogue its parent comes to top,
             // but we want that the new document is on top

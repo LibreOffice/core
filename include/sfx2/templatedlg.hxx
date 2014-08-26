@@ -10,6 +10,9 @@
 #ifndef INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
 #define INCLUDED_SFX2_INC_TEMPLATEDLG_HXX
 
+#include <sal/config.h>
+#include <sfx2/dllapi.h>
+
 #include <set>
 
 #include <vcl/dialog.hxx>
@@ -39,7 +42,7 @@ namespace com {
     }   }   }
 }
 
-class SfxTemplateManagerDlg : public ModelessDialog
+class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public ModelessDialog
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
 

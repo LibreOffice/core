@@ -24,16 +24,6 @@
 #define HID_FILEDLG_PREVIEW_CB                                 "SVT_HID_FILEDLG_PREVIEW_CB"
 #define HID_FILEDLG_STANDARD                                  "SVT_HID_FILEDLG_STANDARD"
 
-// Help ids of template dialog
-#define HID_TEMPLATEDLG_DIALOG                                 "SVT_HID_TEMPLATEDLG_DIALOG"
-#define HID_TEMPLATEDLG_ICONCTRL                               "SVT_HID_TEMPLATEDLG_ICONCTRL"
-#define HID_TEMPLATEDLG_FILEVIEW                               "SVT_HID_TEMPLATEDLG_FILEVIEW"
-#define HID_TEMPLATEDLG_TB_BACK                                "SVT_HID_TEMPLATEDLG_TB_BACK"
-#define HID_TEMPLATEDLG_TB_PREV                                "SVT_HID_TEMPLATEDLG_TB_PREV"
-#define HID_TEMPLATEDLG_TB_PRINT                               "SVT_HID_TEMPLATEDLG_TB_PRINT"
-#define HID_TEMPLATEDLG_TB_DOCINFO                             "SVT_HID_TEMPLATEDLG_TB_DOCINFO"
-#define HID_TEMPLATEDLG_TB_PREVIEW                             "SVT_HID_TEMPLATEDLG_TB_PREVIEW"
-
 // Help ids for the filepicker dialogs
 // help ids for fileview contextmenu
 #define HID_FILEVIEW_MENU_DELETE                               "SVT_HID_FILEVIEW_MENU_DELETE"

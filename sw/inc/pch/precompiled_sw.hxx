@@ -807,7 +807,6 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/svparser.hxx>
 #include <svtools/svtresid.hxx>
-#include <svtools/templdlg.hxx>
 #include <svtools/transfer.hxx>
 #include <svtools/treelistentry.hxx>
 #include <svtools/unoevent.hxx>

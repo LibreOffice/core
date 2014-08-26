@@ -114,7 +114,7 @@
 #include "sorgitm.hxx"
 #include <sfx2/sfxhelp.hxx>
 #include <sfx2/zoomitem.hxx>
-#include "templatedlg.hxx"
+#include <sfx2/templatedlg.hxx>
 
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>

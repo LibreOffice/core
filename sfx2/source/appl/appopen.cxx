@@ -66,7 +66,6 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/templdlg.hxx>
 #include <osl/file.hxx>
 #include <unotools/extendedsecurityoptions.hxx>
 #include <comphelper/docpasswordhelper.hxx>
@@ -98,7 +97,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/event.hxx>
-#include "templatedlg.hxx"
+#include <sfx2/templatedlg.hxx>
 #include "openuriexternally.hxx"
 
 #include <officecfg/Office/ProtocolHandler.hxx>

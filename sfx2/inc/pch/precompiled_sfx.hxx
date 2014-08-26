@@ -671,7 +671,6 @@
 #include <svtools/svparser.hxx>
 #include <svtools/svtresid.hxx>
 #include <svtools/templatefoldercache.hxx>
-#include <svtools/templdlg.hxx>
 #include <svtools/toolpanel/drawerlayouter.hxx>
 #include <svtools/toolpanel/tablayouter.hxx>
 #include <svtools/toolpanel/toolpaneldeck.hxx>

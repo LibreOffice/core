@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "templatedlg.hxx"
+#include <sfx2/templatedlg.hxx>
 
 #include "inputdlg.hxx"
 #include "templatesearchview.hxx"

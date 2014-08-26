@@ -19,21 +19,6 @@
 #ifndef _SVTOOLS_TEMPLWIN_HRC
 #define _SVTOOLS_TEMPLWIN_HRC
 
-#define FL_DOCTEMPLATE          10
-#define BTN_DOCTEMPLATE_MANAGE  11
-#define BTN_DOCTEMPLATE_EDIT    12
-#define BTN_DOCTEMPLATE_OPEN    13
-#define BTN_DOCTEMPLATE_CANCEL  14
-#define BTN_DOCTEMPLATE_HELP    15
-#define FT_DOCTEMPLATE_LINK     16
-#define BTN_DOCTEMPLATE_PACKAGE 17
-
-#define TI_DOCTEMPLATE_BACK     1
-#define TI_DOCTEMPLATE_PREV     2
-#define TI_DOCTEMPLATE_PRINT    3
-#define TI_DOCTEMPLATE_DOCINFO  4
-#define TI_DOCTEMPLATE_PREVIEW  5
-
 #define DI_TITLE                1
 #define DI_FROM                 2
 #define DI_DATE                 3
