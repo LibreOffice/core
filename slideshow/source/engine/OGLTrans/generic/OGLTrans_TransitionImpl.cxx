@@ -99,6 +99,7 @@ void OGLTransitionImpl::finish()
 
 static void blendSlide( double depth )
 {
+    CHECK_GL_ERROR();
     double showHeight = -1 + depth*2;
     GLfloat reflectionColor[] = {0, 0, 0, 0.25};
 
@@ -121,10 +122,12 @@ static void blendSlide( double depth )
     glVertex3f(  1, showHeight, 0 );
     glEnd();
     glEnable( GL_DEPTH_TEST );
+    CHECK_GL_ERROR();
 }
 
 static void slideShadow( double nTime, const Primitive& primitive, double sw, double sh )
 {
+    CHECK_GL_ERROR();
     double reflectionDepth = 0.3;
 
     glEnable(GL_BLEND);
@@ -138,6 +141,7 @@ static void slideShadow( double nTime, const Primitive& primitive, double sw, do
 
     glDisable(GL_BLEND);
     glEnable(GL_LIGHTING);
+    CHECK_GL_ERROR();
 }
 
 void OGLTransitionImpl::prepare_( double, double, double, double, double )
@@ -154,6 +158,7 @@ void OGLTransitionImpl::finishTransition_()
 
 void OGLTransitionImpl::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
+    CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
     glEnable(GL_TEXTURE_2D);
@@ -173,6 +178,7 @@ void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::
     displaySlides_( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
     displayScene( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
     glPopMatrix();
+    CHECK_GL_ERROR();
 }
 
 void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale )
@@ -188,6 +194,7 @@ OGLTransitionImpl::displaySlide(
         const ::sal_Int32 glSlideTex, const Primitives_t& primitives,
         double SlideWidthScale, double SlideHeightScale )
 {
+    CHECK_GL_ERROR();
    //TODO change to foreach
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
 
@@ -215,18 +222,22 @@ OGLTransitionImpl::displaySlide(
 
     for(unsigned int i(0); i < primitives.size(); ++i)
         primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
+    CHECK_GL_ERROR();
 }
 
 void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
 {
+    CHECK_GL_ERROR();
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     glEnable(GL_TEXTURE_2D);
     for(unsigned int i(0); i != rSceneObjects.size(); ++i)
         rSceneObjects[i]->display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
+    CHECK_GL_ERROR();
 }
 
 void Primitive::display(double nTime, double WidthScale, double HeightScale) const
 {
+    CHECK_GL_ERROR();
     glPushMatrix();
 
     applyOperations( nTime, WidthScale, HeightScale );
@@ -242,17 +253,21 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale) con
     glVertexPointer( 3, GL_DOUBLE, 0, &Vertices[0] );
     glDrawArrays( GL_TRIANGLES, 0, Vertices.size() );
     glPopMatrix();
+    CHECK_GL_ERROR();
 }
 
 void Primitive::applyOperations(double nTime, double WidthScale, double HeightScale) const
 {
+    CHECK_GL_ERROR();
     for(unsigned int i(0); i < Operations.size(); ++i)
         Operations[i]->interpolate( nTime ,WidthScale,HeightScale);
     glScaled(WidthScale,HeightScale,1);
+    CHECK_GL_ERROR();
 }
 
 void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight ) const
 {
+    CHECK_GL_ERROR();
     for(unsigned int i(0); i < maPrimitives.size(); ++i) {
         // fixme: allow various model spaces, now we make it so that
         // it is regular -1,-1 to 1,1, where the whole display fits in
@@ -264,6 +279,7 @@ void SceneObject::display(double nTime, double /* SlideWidth */, double /* Slide
         maPrimitives[i].display(nTime, 1, 1);
         glPopMatrix();
     }
+    CHECK_GL_ERROR();
 }
 
 void SceneObject::pushPrimitive(const Primitive &p)
@@ -294,6 +310,7 @@ void Iris::display(double nTime, double SlideWidth, double SlideHeight, double D
 
 void Iris::prepare()
 {
+    CHECK_GL_ERROR();
     static const GLubyte img[3] = { 80, 80, 80 };
 
     glGenTextures(1, &maTexture);
@@ -303,11 +320,14 @@ void Iris::prepare()
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    CHECK_GL_ERROR();
 }
 
 void Iris::finish()
 {
+    CHECK_GL_ERROR();
     glDeleteTextures(1, &maTexture);
+    CHECK_GL_ERROR();
 }
 
 namespace
@@ -911,16 +931,19 @@ inline double intervalInter(double t, double T0, double T1)
 
 void STranslate::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
+    CHECK_GL_ERROR();
     if(t <= nT0)
         return;
     if(!bInterpolate || t > nT1)
         t = nT1;
     t = intervalInter(t,nT0,nT1);
     glTranslated(SlideWidthScale*t*vector.getX(),SlideHeightScale*t*vector.getY(),t*vector.getZ());
+    CHECK_GL_ERROR();
 }
 
 void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
+    CHECK_GL_ERROR();
     if(t <= nT0)
         return;
     if(!bInterpolate || t > nT1)
@@ -931,10 +954,12 @@ void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScal
     glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
     glScaled(1/SlideWidthScale,1/SlideHeightScale,1);
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-origin.getZ());
+    CHECK_GL_ERROR();
 }
 
 void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
+    CHECK_GL_ERROR();
     if(t <= nT0)
         return;
     if(!bInterpolate || t > nT1)
@@ -943,10 +968,12 @@ void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale
     glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),origin.getZ());
     glScaled((1-t) + t*scale.getX(),(1-t) + t*scale.getY(),(1-t) + t*scale.getZ());
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-origin.getZ());
+    CHECK_GL_ERROR();
 }
 
 void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
+    CHECK_GL_ERROR();
     if(t <= nT0)
         return;
     if(!bInterpolate || t > nT1)
@@ -955,10 +982,12 @@ void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,dou
     glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),SlideWidthScale*origin.getZ());
     glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-SlideWidthScale*origin.getZ());
+    CHECK_GL_ERROR();
 }
 
 void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
+    CHECK_GL_ERROR();
     if(t <= nT0)
         return;
     if(!bInterpolate || t > nT1)
@@ -967,6 +996,7 @@ void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,do
     glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),SlideHeightScale*origin.getZ());
     glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-SlideHeightScale*origin.getZ());
+    CHECK_GL_ERROR();
 }
 
 SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1)
@@ -1184,6 +1214,7 @@ private:
 
 void FadeSmoothlyTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
+    CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
     glDisable(GL_DEPTH_TEST);
@@ -1201,6 +1232,7 @@ void FadeSmoothlyTransition::displaySlides_( double nTime, ::sal_Int32 glLeaving
     glEnable(GL_LIGHTING);
 
     glEnable(GL_DEPTH_TEST);
+    CHECK_GL_ERROR();
 }
 
 shared_ptr<OGLTransitionImpl>
@@ -1250,6 +1282,7 @@ private:
 
 void FadeThroughBlackTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale )
 {
+    CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
     glDisable(GL_DEPTH_TEST);
@@ -1270,6 +1303,7 @@ void FadeThroughBlackTransition::displaySlides_( double nTime, ::sal_Int32 glLea
     glEnable(GL_LIGHTING);
 
     glEnable(GL_DEPTH_TEST);
+    CHECK_GL_ERROR();
 }
 
 shared_ptr<OGLTransitionImpl>
@@ -1335,6 +1369,7 @@ private:
 void ShaderTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
                                               double SlideWidthScale, double SlideHeightScale )
 {
+    CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
     if( m_nProgramObject ) {
@@ -1349,6 +1384,7 @@ void ShaderTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideT
     glActiveTexture( GL_TEXTURE0 );
 
     displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
 }
 
 void ShaderTransition::prepareTransition_( ::sal_Int32 /* glLeavingSlideTex */, ::sal_Int32 /* glEnteringSlideTex */ )
@@ -1360,6 +1396,7 @@ void ShaderTransition::prepareTransition_( ::sal_Int32 /* glLeavingSlideTex */, 
 
 void ShaderTransition::finishTransition_()
 {
+    CHECK_GL_ERROR();
     if( m_nProgramObject ) {
         glDeleteProgram( m_nProgramObject );
         m_nProgramObject = 0;
@@ -1369,6 +1406,7 @@ void ShaderTransition::finishTransition_()
         glDeleteTextures( 1, &m_nHelperTexture );
         m_nHelperTexture = 0;
     }
+    CHECK_GL_ERROR();
 }
 
 int permutation256 [256]= {
@@ -1408,6 +1446,7 @@ int permutation256 [256]= {
 
 void initPermTexture(GLuint *texID)
 {
+    CHECK_GL_ERROR();
   glGenTextures(1, texID);
   glBindTexture(GL_TEXTURE_2D, *texID);
 
@@ -1426,10 +1465,12 @@ void initPermTexture(GLuint *texID)
   glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, 256, 256, 0, GL_RGBA, GL_UNSIGNED_BYTE, permutation2D );
   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
   glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    CHECK_GL_ERROR();
 }
 
 void ShaderTransition::impl_preparePermShader()
 {
+    CHECK_GL_ERROR();
     if( m_nProgramObject ) {
         glUseProgram( m_nProgramObject );
 
@@ -1453,6 +1494,7 @@ void ShaderTransition::impl_preparePermShader()
             glUniform1i( location, 2 );  // texture unit 2
         }
     }
+    CHECK_GL_ERROR();
 }
 
 }
