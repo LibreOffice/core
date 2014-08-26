@@ -186,6 +186,8 @@ private:
         OUString maPattern;
         Color maFgColor;
         Color maBgColor;
+
+        void applyToItemSet(SfxItemSet& rSet) const;
     };
 
     fill maCurrentFill;
