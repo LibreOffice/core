@@ -317,7 +317,11 @@ void OpenGLHelper::createFramebuffer(long nWidth, long nHeight, GLuint& nFramebu
     // attach a renderbuffer to depth attachment point
     glBindRenderbuffer(GL_RENDERBUFFER, nRenderbufferDepthId);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, nRenderbufferDepthId);
-    glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status != GL_FRAMEBUFFER_COMPLETE)
+    {
+        SAL_WARN("vcl.opengl", "invalid framebuffer status");
+    }
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -348,6 +352,8 @@ void OpenGLHelper::checkGLError(const char* pFile, size_t nLine)
             SAL_WARN("vcl.opengl", "GL Error #" << glErr << "(" << sError << ") in File " << pFile << " at line: " << nLine);
         else
             SAL_WARN("vcl.opengl", "GL Error #" << glErr << " (no message available) in File " << pFile << " at line: " << nLine);
+
+        glErr = glGetError();
     }
 }
 
