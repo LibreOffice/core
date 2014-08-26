@@ -147,7 +147,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::applyDuotone(
     ::Graphic aGraphic( *::unographic::Graphic::getImplementation( xIFace ) );
 
     BitmapEx    aBitmapEx( aGraphic.GetBitmapEx() );
-    Bitmap      aMask( aBitmapEx.GetMask() );
+    AlphaMask   aMask( aBitmapEx.GetAlpha() );
     Bitmap      aBitmap( aBitmapEx.GetBitmap() );
     BmpFilterParam aFilter( (sal_uLong) nColorOne, (sal_uLong) nColorTwo );
     aBitmap.Filter( BMP_FILTER_DUOTONE, &aFilter );
