@@ -128,9 +128,10 @@ void Text::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, co
     maBottomRight = rBottomRight;
 }
 
-ScreenText::ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, sal_uInt32 nId):
+ScreenText::ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, glm::vec4 rColor, sal_uInt32 nId):
     Renderable3DObject(pRenderer, nId),
-    maText(rTextCache.getText(rStr))
+    maText(rTextCache.getText(rStr)),
+    maColor(rColor)
 {
 }
 
@@ -144,7 +145,7 @@ void ScreenText::setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottom
 void ScreenText::render()
 {
     mpRenderer->CreateScreenTextTexture(maText.maPixels, maText.maSize,
-                                        maTopLeft, maBottomRight, ma3DPos,
+                                        maTopLeft, maBottomRight, ma3DPos, maColor,
                                         mnUniqueId);
 }
 

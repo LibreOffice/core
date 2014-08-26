@@ -91,7 +91,10 @@ private:
     void updateDataUpdateFPS();
     DECL_LINK(updateTimer, void*);
     int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
-    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, const glm::vec3& rPos = glm::vec3(0.0f, 0.0f, 0.0f), sal_uInt32 nEvent = 0);
+    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight,
+                                  const glm::vec3& rPos = glm::vec3(0.0f, 0.0f, 0.0f),
+                                  const glm::vec4& rColor = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                                  sal_uInt32 nEvent = 0);
     void recordBarHistory(sal_uInt32 &nBarID, float &nVal);
     void updateClickEvent();
     void calcDistance(std::vector<sal_uInt32> &vectorNearest);

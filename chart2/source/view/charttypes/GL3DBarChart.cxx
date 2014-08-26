@@ -861,7 +861,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
                                   rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
                                   rBarInfo.maPos.z);
     maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
-                OUString("Value: ") + OUString::number(rBarInfo.mnVal), CALC_POS_EVENT_ID));
+                OUString("Value: ") + OUString::number(rBarInfo.mnVal), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), CALC_POS_EVENT_ID));
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
     pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f), aTextPos);
     pScreenText->render();
@@ -995,9 +995,9 @@ void GL3DBarChart::contextDestroyed()
     mbValidContext = false;
 }
 
-void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, const glm::vec3& rPos, sal_uInt32 nEvent)
+void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, const glm::vec3& rPos, const glm::vec4& rColor, sal_uInt32 nEvent)
 {
-    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, nEvent));
+    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, rColor, nEvent));
     const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(nStr);
     float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * nTextHeight / 2.0f;
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
@@ -1017,7 +1017,7 @@ void GL3DBarChart::updateRenderFPS()
         osl_getSystemTime(&maFPSRenderStartTime);
     }
     osl_getSystemTime(&maFPSRenderEndTime);
-    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.06f);
+    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.06f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
 int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
@@ -1085,7 +1085,7 @@ void GL3DBarChart::updateClickEvent()
             if (idex + 1 == aList.size())
             {
                 aBarValue = OUString("Value: ") + OUString::number(*it);
-                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, CALC_POS_EVENT_ID));
+                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), CALC_POS_EVENT_ID));
                 const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
                 float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.03;
                 std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(nBarId);
@@ -1226,7 +1226,7 @@ void GL3DBarChart::updateScroll()
             for(size_t i = 0; i < aBarInfoList.size(); i++)
             {
                 OUString aBarValue = OUString("Value: ") + OUString::number(aBarInfoList[i].mnVal);
-                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, CALC_POS_EVENT_ID));
+                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), CALC_POS_EVENT_ID));
                 const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
                 float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.03;
                 glm::vec3 aTextPos = glm::vec3(aBarInfoList[i].maPos.x + BAR_SIZE_X / 2.0f,
