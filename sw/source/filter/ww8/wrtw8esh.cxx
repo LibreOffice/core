@@ -2170,7 +2170,7 @@ sal_Int32 SwBasicEscherEx::ToFract16(sal_Int32 nVal, sal_uInt32 nMax) const
             // negative fraction does not have "-0", fractional part is always
             // positive:  -0.4 represented as -1 + 0.6
             sal_Int32 const nDiv = (nVal / sal_Int32(nMax)) - 1;
-            sal_uInt32 nMSVal = (nDiv << 16) & 0xffff0000;
+            sal_uInt32 nMSVal = (sal_uInt32(nDiv) << 16) & 0xffff0000;
             nMSVal += (nVal * 65536) / sal_Int32(nMax) + (-nDiv * 65536);
             return nMSVal;
         }
