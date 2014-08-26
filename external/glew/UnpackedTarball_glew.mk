@@ -51,6 +51,7 @@ endif
 
 $(eval $(call gb_UnpackedTarball_add_patches,glew,\
 	external/glew/glew-debug.patch.1 \
+	external/glew/glew-config-guess.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:
