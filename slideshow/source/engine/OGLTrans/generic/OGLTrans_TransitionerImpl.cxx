@@ -294,11 +294,6 @@ public:
     bool mbMesa;
 
     /**
-       whether texture from pixmap extension is available
-    */
-    bool mbTextureFromPixmap;
-
-    /**
        whether to generate mipmaped textures
     */
     bool mbGenerateMipmap;
@@ -383,9 +378,6 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
 
     GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
-#ifdef UNX
-    mbTextureFromPixmap = rGLWindow.HasGLXExtension( "GLX_EXT_texture_from_pixmap" );
-#endif
     mbGenerateMipmap = rGLWindow.HasGLExtension( "GL_SGIS_generate_mipmap" );
 
     glEnable(GL_CULL_FACE);
@@ -446,7 +438,7 @@ void OGLTransitionerImpl::impl_prepareSlides()
 
     GLWindow& rGLWindow(mpContext->getOpenGLWindow());
 
-    if( mbTextureFromPixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
+    if( GLXEW_EXT_texture_from_pixmap && xLeavingSet.is() && xEnteringSet.is() && mbHasTFPVisual ) {
         Sequence< Any > leaveArgs;
         Sequence< Any > enterArgs;
         if( (xLeavingSet->getFastPropertyValue( 1 ) >>= leaveArgs) &&
@@ -1358,7 +1350,6 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , mnGLVersion(0)
     , mbGLXPresent(false)
     , mbMesa(false)
-    , mbTextureFromPixmap(false)
     , mbGenerateMipmap(false)
     , mbHasTFPVisual(false)
 {
