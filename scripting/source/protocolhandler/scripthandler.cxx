@@ -273,14 +273,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
         if ( pFact != NULL )
         {
-            VclAbstractDialog* pDlg =
-                pFact->CreateScriptErrorDialog( NULL, aException );
+            boost::scoped_ptr<VclAbstractDialog> pDlg(
+                pFact->CreateScriptErrorDialog( NULL, aException ));
 
-            if ( pDlg != NULL )
-            {
+            if ( pDlg )
                 pDlg->Execute();
-                delete pDlg;
-            }
         }
        }
 

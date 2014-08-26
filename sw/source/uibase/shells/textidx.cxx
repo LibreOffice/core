@@ -84,10 +84,9 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             {   // Several marks, which should it be?
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialog creation failed!");
-                VclAbstractDialog* pMultDlg = pFact->CreateMultiTOXMarkDlg(pMDI, aMgr);
+                boost::scoped_ptr<VclAbstractDialog> pMultDlg(pFact->CreateMultiTOXMarkDlg(pMDI, aMgr));
                 OSL_ENSURE(pMultDlg, "Dialog creation failed!");
                 nRet = pMultDlg->Execute();
-                delete pMultDlg;
             }
             if( nRet == RET_OK)
             {

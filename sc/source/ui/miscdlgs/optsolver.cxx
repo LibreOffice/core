@@ -543,14 +543,13 @@ IMPL_LINK( ScOptSolverDlg, BtnHdl, PushButton*, pBtn )
     else if ( pBtn == m_pBtnOpt )
     {
         //! move options dialog to UI lib?
-        ScSolverOptionsDialog* pOptDlg =
-            new ScSolverOptionsDialog( this, maImplNames, maDescriptions, maEngine, maProperties );
+        boost::scoped_ptr<ScSolverOptionsDialog> pOptDlg(
+            new ScSolverOptionsDialog( this, maImplNames, maDescriptions, maEngine, maProperties ));
         if ( pOptDlg->Execute() == RET_OK )
         {
             maEngine = pOptDlg->GetEngine();
             maProperties = pOptDlg->GetProperties();
         }
-        delete pOptDlg;
     }
 
     return 0;
