@@ -172,6 +172,7 @@ private:
     std::map<sal_uInt32, sal_uInt32> maBarColorMap;
     int mnColorRate;
     sal_uInt32 mnAutoFlyBarID;
+    bool mbBenchMarkMode;
 };
 
 }

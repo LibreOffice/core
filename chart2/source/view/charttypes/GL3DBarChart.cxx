@@ -24,7 +24,6 @@
 #include <windows.h>
 #endif
 
-#define BENCH_MARK_MODE true
 #define CALC_POS_EVENT_ID 1
 #define SHAPE_START_ID 10
 #define DATA_UPDATE_TIME 15
@@ -460,9 +459,15 @@ GL3DBarChart::GL3DBarChart(
     miFrameCount(0),
     miDataUpdateCounter(0),
     mnColorRate(0),
-    mnAutoFlyBarID(0)
+    mnAutoFlyBarID(0),
+    mbBenchMarkMode(false)
 {
-    if (BENCH_MARK_MODE)
+    char *aBenchMark = getenv("BENCHMARK_MODE");
+    if (aBenchMark)
+    {
+        mbBenchMarkMode = atoi(aBenchMark);
+    }
+    if (mbBenchMarkMode)
     {
         char *scrollFrame = getenv("SCROLL_RATE");
         if (scrollFrame)
@@ -499,7 +504,7 @@ GL3DBarChart::BarInformation::BarInformation(const glm::vec3& rPos, float nVal,
 
 GL3DBarChart::~GL3DBarChart()
 {
-    if (BENCH_MARK_MODE)
+    if (mbBenchMarkMode)
     {
         osl::MutexGuard aGuard(maMutex);
         mbRenderDie = true;
@@ -533,7 +538,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     maSeriesNames.reserve(rDataSeriesContainer.size());
     maBarMap.clear();
     maShapes.clear();
-    if (BENCH_MARK_MODE)
+    if (mbBenchMarkMode)
     {
         mnColorRate = 0;
     }
@@ -598,7 +603,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
                         BarInformation(glm::vec3(nXPos, nYPos, float(nVal/nMaxVal)),
                             nVal, nIndex, nSeriesIndex)));
             recordBarHistory(nId, nVal);
-            if (BENCH_MARK_MODE)
+            if (mbBenchMarkMode)
             {
                 std::map<sal_uInt32, sal_uInt32>::const_iterator it = maBarColorMap.find(nId);
                 if (it == maBarColorMap.end())
@@ -630,7 +635,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     glm::vec3 aBegin;
     aBegin.y = nYPos;
     glm::vec3 aEnd = aBegin;
-    aEnd.x = BENCH_MARK_MODE ? (mbScrollFlg ? nXEnd - BAR_SIZE_X : nXEnd) : nXEnd;
+    aEnd.x = mbBenchMarkMode ? (mbScrollFlg ? nXEnd - BAR_SIZE_X : nXEnd) : nXEnd;
     pAxis->setPosition(aBegin, aEnd);
     pAxis->setLineColor(COL_BLUE);
 
@@ -650,7 +655,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     opengl3D::Rectangle* pRect = static_cast<opengl3D::Rectangle*>(&maShapes.back());
     glm::vec3 aTopLeft;
     glm::vec3 aTopRight = aTopLeft;
-    aTopRight.x = BENCH_MARK_MODE ? (mbScrollFlg ? nXEnd - BAR_SIZE_X : nXEnd + 2 * BAR_DISTANCE_X) : (nXEnd + 2 * BAR_DISTANCE_X);
+    aTopRight.x = mbBenchMarkMode ? (mbScrollFlg ? nXEnd - BAR_SIZE_X : nXEnd + 2 * BAR_DISTANCE_X) : (nXEnd + 2 * BAR_DISTANCE_X);
     glm::vec3 aBottomRight = aTopRight;
     aBottomRight.y = nYPos;
     pRect->setPosition(aTopLeft, aTopRight, aBottomRight);
@@ -664,7 +669,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     uno::Sequence<OUString> aCats = rCatProvider.getSimpleCategories();
     for (sal_Int32 i = 0; i < aCats.getLength(); ++i)
     {
-        if (BENCH_MARK_MODE && mbScrollFlg && (i + 1 == aCats.getLength()))
+        if (mbBenchMarkMode && mbScrollFlg && (i + 1 == aCats.getLength()))
             break;
         maCategories.push_back(aCats[i]);
         if(aCats[i].isEmpty())
@@ -723,7 +728,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         mpCamera->setPosition(maCameraPosition);
         mpCamera->setDirection(maCameraDirection);
     }
-    if (BENCH_MARK_MODE && (!mpRenderThread.is()))
+    if (mbBenchMarkMode && (!mpRenderThread.is()))
     {
         //if scroll the bars, set the speed and distance first
         if (mbScrollFlg)
@@ -743,7 +748,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 
 void GL3DBarChart::update()
 {
-    if (BENCH_MARK_MODE)
+    if (mbBenchMarkMode)
         return;
     if(mpRenderThread.is())
         mpRenderThread->join();
@@ -778,7 +783,7 @@ public:
 
 void GL3DBarChart::moveToDefault()
 {
-    if(BENCH_MARK_MODE)
+    if(mbBenchMarkMode)
     {
         // add correct handling here!!
         if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL) && (maRenderEvent != EVENT_AUTO_FLY))
@@ -819,7 +824,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     if(nButtons != MOUSE_LEFT)
         return;
 
-    if (BENCH_MARK_MODE)
+    if (mbBenchMarkMode)
     {
         // add correct handling here !!
         if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL) && (maRenderEvent != EVENT_AUTO_FLY))
@@ -883,7 +888,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
 
 void GL3DBarChart::render()
 {
-    if (BENCH_MARK_MODE)
+    if (mbBenchMarkMode)
         return;
 
     update();
@@ -942,7 +947,7 @@ glm::vec3 GL3DBarChart::getCornerPosition(sal_Int8 nId)
 
 void GL3DBarChart::moveToCorner()
 {
-    if(BENCH_MARK_MODE)
+    if(mbBenchMarkMode)
     {
         // add correct handling here!!
         return;
@@ -973,7 +978,7 @@ void GL3DBarChart::scroll(long nDelta)
         glm::vec3 maDir = glm::normalize(maCameraPosition - maCameraDirection);
         maCameraPosition -= (float((nDelta/10)) * maDir);
         mpCamera->setPosition(maCameraPosition);
-        if(BENCH_MARK_MODE)
+        if(mbBenchMarkMode)
         {
             maVectorNearest.clear();
             getNearestBars(maVectorNearest);
