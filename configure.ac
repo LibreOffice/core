@@ -4108,7 +4108,6 @@ AC_SUBST(x_LDFLAGS)
 #
 # determine CPUNAME, GUIBASE, ...
 #
-LIB64="lib"
 SOLARINC=
 
 case "$host_os" in
@@ -4140,7 +4139,6 @@ cygwin*)
         if test "$BITNESS_OVERRIDE" = 64; then
             CPUNAME=X86_64
             RTL_ARCH=X86_64
-            LIB64="lib/x64"
             PLATFORMID=windows_x86_64
             OUTPATH=wntmscx$COMEX
         else
@@ -4276,7 +4274,6 @@ kfreebsd*)
     x86_64)
         CPUNAME=X86_64
         RTL_ARCH=X86_64
-        LIB64="lib64"
         PLATFORMID=kfreebsd_x86_64
         OUTPATH=unxkfgx6
         ;;
@@ -4376,14 +4373,12 @@ linux-gnu*)
     powerpc64)
         CPUNAME=POWERPC64
         RTL_ARCH=PowerPC_64
-        LIB64="lib64"
         PLATFORMID=linux_powerpc64
         OUTPATH=unxlngppc64
         ;;
     powerpc64le)
         CPUNAME=POWERPC64
         RTL_ARCH=PowerPC_64_LE
-        LIB64="lib64"
         PLATFORMID=linux_powerpc64_le
         OUTPATH=unxlngppc64
         ;;
@@ -4402,14 +4397,12 @@ linux-gnu*)
     s390x)
         CPUNAME=S390X
         RTL_ARCH=S390x
-        LIB64="lib64"
         PLATFORMID=linux_s390x
         OUTPATH=unxlngs390x
         ;;
     x86_64)
         CPUNAME=X86_64
         RTL_ARCH=X86_64
-        LIB64="lib64"
         PLATFORMID=linux_x86_64
         OUTPATH=unxlngx6
         ;;
