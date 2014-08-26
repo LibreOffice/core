@@ -21,9 +21,6 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-#define TOOLBOX_WIDTH       50
-#define TOOLBOX_HEIGHT      17
-
 Image IMG_AXIAL
 {
     ImageBitmap = Bitmap{File = "symphony/axial.png";};

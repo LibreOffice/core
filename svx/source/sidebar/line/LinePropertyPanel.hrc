@@ -22,14 +22,10 @@
 #define CUSTOM_W    74
 #define CUSTOM_H    POPUPPANEL_MARGIN_LARGE * 2 +  TEXT_HEIGHT + 12 +  TEXT_CONTROL_SPACING_VERTICAL
 
-#define STR_QH_TB_WIDTH     15
-#define STR_QH_TB_COLOR     16
-
 //color popup page
 #define VS_COLOR        1
 
 //style popup page
-#define VS_STYLE                1
 #define PB_OPTIONS              2
 
 //width popup page

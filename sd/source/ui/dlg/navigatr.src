@@ -22,7 +22,6 @@
 #include "res_bmp.hrc"
 #define BUTTON_WIDTH 13
 #define BUTTON_COUNT 7
-#define BUTTON_SIZE MAP_APPFONT( BUTTON_WIDTH, BUTTON_WIDTH );
 Window FLT_NAVIGATOR
 {
     HelpId = HID_SD_NAVIGATOR ;

@@ -69,10 +69,7 @@
 #define _FIXED_TEXT_HEIGHT          9
 #define _FIXED_TEXT_WIDTH           40
 #define CONTROL_HEIGHT              15
-#define CONTROL_WIDTH               45
 #define LISTBOX_HEIGHT              80
-#define TOOLBOX_HEIGHT              22
-#define TOOLBOX_WIDTH               23
 #define VS_SPACING_WIDTH            78
 
 //==============================numbering and bullet==============================
@@ -91,7 +88,6 @@
 #define NUM_IMAGE_SPACING   NB_IMAGE_SPACING
 
 #define FIXED_TEXT_HEIGHT        13
-#define FIXED_TEXT_WIDTH         80
 #define CUST_MORE_BUTTON_HEIGHT  15
 
 #define VS_WIDTH_BULLET     BULLET_IMAGE_WIDTH*3+BULLET_IMAGE_SPACING*2

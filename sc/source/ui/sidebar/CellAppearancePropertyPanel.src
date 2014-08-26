@@ -21,9 +21,6 @@
 #include "sc.hrc"
 #include "helpids.h"
 
-#define TOOLBOX_WIDTH       50
-#define TOOLBOX_HEIGHT      15
-
 #define TOOLBOX_BORDER_WIDTH    107
 #define POPUPPANEL_MARGIN_SMALL_PIXEL   8
 

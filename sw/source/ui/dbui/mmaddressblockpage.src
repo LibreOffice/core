@@ -19,9 +19,6 @@
 #include <dbui.hrc>
 #include <helpid.h>
 
-#define WORKAROUND\
-    Text [ en-US ] = "New Address Block";
-
 String ST_TITLE_EDIT
 {
     Text [ en-US ] = "Edit Address Block";

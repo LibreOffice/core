@@ -25,19 +25,8 @@
 #define PAGE_Y              215
 #define WIZARD_PAGE_X       225
 #define WIZARD_PAGE_Y       240
-#define START_X             6
-
-#define LISTBOX_HEIGHT      12
-#define FIXEDTEXT_HEIGHT     8
-#define RELATED_CONTROLS     4
-#define UNRELATED_CONTROLS   7
-#define EDIT_HEIGHT         12
-#define BUTTON_HEIGHT       14
-#define BUTTON_WIDTH        50
 
 //constants for the wizards
-#define INIT_Y               28
-#define INDENTED_X           6
 #define INDENT_BELOW_RADIO   10
 
 #define STR_PARENTTITLE_GENERAL             RID_STR_DLG_START + 0

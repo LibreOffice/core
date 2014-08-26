@@ -21,10 +21,6 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-#define TOOLBOX_WIDTH       50
-#define TOOLBOX_HEIGHT      14
-#define LISTBOX_HEIGHT      99
-
 Image IMG_LINE_COLOR
 {
     ImageBitmap = Bitmap{File = "symphony/Line_color.png";};

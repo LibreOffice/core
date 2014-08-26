@@ -27,7 +27,6 @@
 
 // Base
 #define RSC_BS_CHARHEIGHT                   8
-#define RSC_BS_CHARWIDTH                    4
 
 // control dimensions
 #define RSC_CD_PUSHBUTTON_WIDTH             50
@@ -38,41 +37,20 @@
 
 #define RSC_CD_TEXTBOX_HEIGHT               12      // also numeric fields etc.
 
-#define RSC_CD_CHECKBOX_HEIGHT              10      // also tristate
 #define RSC_CD_RADIOBUTTON_HEIGHT           10
 
 // spacings
 #define RSC_SP_CTRL_X                       6       // controls that are unrelated
 #define RSC_SP_CTRL_Y                       7
-#define RSC_SP_CTRL_GROUP_X                 3       // related controls, or controls in a groupbox
 #define RSC_SP_CTRL_GROUP_Y                 4
 #define RSC_SP_CTRL_DESC_X                  3       // between description text and related control
 #define RSC_SP_CTRL_DESC_Y                  3
-
-// overruled spacings between certain controls
-#define RSC_SP_FLGR_SPACE_X                 6       // between groupings made with FixedLine
-#define RSC_SP_FLGR_SPACE_Y                 4
-#define RSC_SP_GRP_SPACE_X                  6       // between groupings made with GroupBox
 
 // dialog inner border
 #define RSC_SP_DLG_INNERBORDER_LEFT         6
 #define RSC_SP_DLG_INNERBORDER_TOP          6
 #define RSC_SP_DLG_INNERBORDER_RIGHT        6
 #define RSC_SP_DLG_INNERBORDER_BOTTOM       6
-
-// tab page inner border
-#define RSC_SP_TBPG_INNERBORDER_TOP         3
-#define RSC_SP_TBPG_INNERBORDER_RIGHT       6
-#define RSC_SP_TBPG_INNERBORDER_BOTTOM      6
-
-// FixedLine group inner border
-#define RSC_SP_FLGR_INNERBORDER_TOP         3
-#define RSC_SP_FLGR_INNERBORDER_BOTTOM      0
-
-// GroupBox inner border
-#define RSC_SP_GRP_INNERBORDER_LEFT         6       // for GroupBox groupings
-#define RSC_SP_GRP_INNERBORDER_TOP          6
-#define RSC_SP_GRP_INNERBORDER_RIGHT        6
 
 #endif // _SVT_CONTROLDIMS_HRC_
 
