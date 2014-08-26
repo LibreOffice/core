@@ -1493,7 +1493,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
                 return false;
             }
 
-            DateTime aDT = pAction->GetDateTimeUTC();
+            DateTime aDT = pAction->GetDateTime();
             if (aDT.GetYear() != 2014 || aDT.GetMonth() != 7 || aDT.GetDay() != 11)
             {
                 cerr << "Wrong time stamp." << endl;
