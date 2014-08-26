@@ -229,6 +229,7 @@ const char* OpenGLHelper::GLErrorString(GLenum errorCode)
         {GL_STACK_OVERFLOW, "stack overflow"},
         {GL_STACK_UNDERFLOW, "stack underflow"},
         {GL_OUT_OF_MEMORY, "out of memory"},
+        {GL_INVALID_FRAMEBUFFER_OPERATION, "invalid framebuffer operation"},
 
         {0, NULL }
     };
