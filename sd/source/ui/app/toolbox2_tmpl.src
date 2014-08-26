@@ -137,14 +137,35 @@ ToolBox RID_DRAW_OBJ_TOOLBOX
     {
         TBI_FORMAT_BEZIER_EDIT_RC
         SEPARATOR
-        TBI ( ITEM_FORMAT_ATTRIBUTES_LINE )
-        TBI ( ITEM_TOOLBAR_ATTR_LINEEND_STYLE )
-        TBI ( ITEM_TOOLBAR_ATTR_LINE_STYLE )
-        TBI ( ITEM_TOOLBAR_ATTR_LINE_WIDTH )
-        TBI ( ITEM_TOOLBAR_ATTR_LINE_COLOR )
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTRIBUTES_LINE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_LINEEND_STYLE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_LINE_STYLE
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_LINE_WIDTH
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_LINE_COLOR
+        };
         SEPARATOR
-        TBI ( ITEM_FORMAT_ATTRIBUTES_AREA )
-        TBI ( ITEM_TOOLBAR_ATTR_FILL_STYLE )
+        ToolBoxItem
+        {
+            ITEM_FORMAT_ATTRIBUTES_AREA
+        };
+        ToolBoxItem
+        {
+            ITEM_TOOLBAR_ATTR_FILL_STYLE
+        };
         SEPARATOR
         TBI_ATTR_FILL_SHADOW
         TBI_TOGGLECOMMONTASKBAR

@@ -20,7 +20,6 @@
 #ifndef _TBXIDS_SRC
 #define _TBXIDS_SRC
 #define SEPARATOR       ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
-#define TBI(x)          ToolBoxItem { x };
 
  // Toolbox bar
 #define TBI_OBJECT_SELECT \
