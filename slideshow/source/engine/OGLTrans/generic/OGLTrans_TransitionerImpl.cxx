@@ -289,10 +289,6 @@ public:
      */
     bool mbGLXPresent;
 
-    /** Whether Mesa is the OpenGL vendor
-     */
-    bool mbMesa;
-
     /**
        whether to generate mipmaped textures
     */
@@ -333,8 +329,6 @@ void OGLTransitionerImpl::impl_initializeFlags( bool const bGLXPresent )
         SAL_INFO("slideshow.opengl", "GL version: " << mnGLVersion << "" );
 
         const GLubyte* vendor = glGetString( GL_VENDOR );
-        mbMesa = ( vendor && strstr( (const char *) vendor, "Mesa" ) );
-        SAL_INFO("slideshow.opengl", "GL vendor: " << vendor << " identified as Mesa: " << mbMesa << "" );
 
         /* TODO: check for version once the bug in fglrx driver is fixed */
         mbBrokenTexturesATI = (vendor && strcmp( (const char *) vendor, "ATI Technologies Inc." ) == 0 );
@@ -1414,12 +1408,6 @@ public:
 
         rtl::Reference< OGLTransitionerImpl > xRes( new OGLTransitionerImpl() );
         if ( !xRes->initialize( view, leavingBitmap, enteringBitmap ) )
-            return uno::Reference< presentation::XTransition >();
-
-        if( xRes->mbMesa && (
-            ( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::CROSSFADE ) ||
-            ( transitionType == animations::TransitionType::FADE && transitionSubType == animations::TransitionSubType::FADEOVERCOLOR ) ||
-            ( transitionType == animations::TransitionType::IRISWIPE && transitionSubType == animations::TransitionSubType::DIAMOND ) ) )
             return uno::Reference< presentation::XTransition >();
 
         boost::shared_ptr<OGLTransitionImpl> pTransition;
