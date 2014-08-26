@@ -145,6 +145,8 @@ DECLARE_HTMLEXPORT_TEST(testSkipImageEmbedded, "skipimage-embedded.doc")
     assertXPath(pDoc, "//table", 1);
     // This was 2, the HTML header was in the document two times.
     assertXPath(pDoc, "//meta[@name='generator']", 1);
+    // This was 0, <table> was directly under <p>, which caused errors in the parser.
+    assertXPath(pDoc, "//span/table", 1);
 }
 
 #endif
