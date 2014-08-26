@@ -64,7 +64,6 @@ class VCL_DLLPUBLIC FixedHyperlink : public FixedText
 
             With ResId or WinBits.
         */
-        FixedHyperlink( Window* pParent, const ResId& rId );
         FixedHyperlink( Window* pParent, WinBits nWinStyle = 0 );
 
         /** dtor

@@ -19,13 +19,6 @@
 
 #include <vcl/fixedhyper.hxx>
 
-FixedHyperlink::FixedHyperlink(Window* pParent, const ResId& rResId)
-    : FixedText(pParent, rResId)
-    , m_nTextLen(0)
-{
-    Initialize();
-}
-
 FixedHyperlink::FixedHyperlink(Window* pParent, WinBits nWinStyle)
     : FixedText(pParent, nWinStyle)
     , m_nTextLen(0)
