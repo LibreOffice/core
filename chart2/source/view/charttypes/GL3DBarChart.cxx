@@ -1061,7 +1061,7 @@ void GL3DBarChart::updateDataUpdateFPS()
         osl_getSystemTime(&maDataUpdateStartTime);
     }
     osl_getSystemTime(&maDataUpdateEndTime);
-    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.69f, 0.99f), 0.06f);
+    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.99f, 0.93f), 0.06f);
 }
 
 void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
