@@ -36,7 +36,7 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::i18n;
 
 Reference< XHyphenatedWord >  SwTxtFormatInfo::HyphWord(
-                                const OUString &rTxt, const sal_uInt16 nMinTrail )
+                                const OUString &rTxt, const sal_Int32 nMinTrail )
 {
     if( rTxt.getLength() < 4 || m_pFnt->IsSymbol(m_pVsh) )
         return 0;
@@ -225,9 +225,7 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         return false;
 
     OUString aSelTxt( rInf.GetTxt().copy(nWrdStart, nLen) );
-    sal_uInt16 nMinTrail = 0;
-    if( nWrdStart + nLen > nEnd )
-        nMinTrail = nWrdStart + nLen - nEnd - 1;
+    const sal_Int32 nMinTrail = ( nWrdStart + nLen > nEnd ) ? nWrdStart + nLen - nEnd - 1 : 0;
 
     //!! rHyphInf.SetHyphWord( ... ) mu??? hier geschehen
     xHyphWord = rInf.HyphWord( aSelTxt, nMinTrail );
