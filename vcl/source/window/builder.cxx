@@ -488,7 +488,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
                 }
             }
         }
-        SAL_WARN_IF(nButtons && !bHasDefButton, "vcl.layout", "No default button defined");
+        SAL_WARN_IF(nButtons && !bHasDefButton, "vcl.layout", "No default button defined in " << sUIFile);
     }
 #endif
 }
