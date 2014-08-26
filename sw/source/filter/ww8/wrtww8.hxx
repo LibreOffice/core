@@ -590,7 +590,7 @@ public:
     sal_uInt16 GetId( const SwTxtFmtColl& rColl ) const;
 
     /// Return the numeric id of the style.
-    sal_uInt16 GetId( const SwCharFmt& rFmt ) const;
+    sal_uInt16 GetId( const SwCharFmt* pFmt ) const;
 
     sal_uInt16 GetId( const SwTOXType& rTOXType );
 
@@ -1611,7 +1611,7 @@ public:
     void OutputStylesTable();
 
     /// Get id of the style (rFmt).
-    sal_uInt16 GetSlot( const SwFmt& rFmt ) const;
+    sal_uInt16 GetSlot( const SwFmt* pFmt ) const;
 
     /// Get styleId of the nId-th style (nId is its position in pFmtA).
     OString GetStyleId(sal_uInt16 nId) const;

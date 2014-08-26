@@ -2138,7 +2138,7 @@ void DocxAttributeOutput::StartRuby( const SwTxtNode& rNode, sal_Int32 nPos, con
     SwWW8AttrIter aAttrIt( m_rExport, rNode );
     aAttrIt.OutAttr( nPos, true );
 
-    sal_uInt16 nStyle = m_rExport.GetId( *rRuby.GetTxtRuby()->GetCharFmt() );
+    sal_uInt16 nStyle = m_rExport.GetId( rRuby.GetTxtRuby()->GetCharFmt() );
     OString aStyleId(m_rExport.pStyles->GetStyleId(nStyle));
     m_pSerializer->singleElementNS( XML_w, XML_rStyle,
             FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
@@ -6361,14 +6361,14 @@ void DocxAttributeOutput::TextINetFormat( const SwFmtINetFmt& rLink )
     const SwTxtINetFmt* pINetFmt = rLink.GetTxtINetFmt();
     const SwCharFmt* pCharFmt = pINetFmt->GetCharFmt();
 
-    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(*pCharFmt)));
+    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(pCharFmt)));
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
 
 void DocxAttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
 {
-    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(*rCharFmt.GetCharFmt())));
+    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(rCharFmt.GetCharFmt())));
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 }
@@ -6579,7 +6579,7 @@ void DocxAttributeOutput::TextFootnote_Impl( const SwFmtFtn& rFootnote )
     // footnote/endnote run properties
     const SwCharFmt* pCharFmt = rInfo.GetAnchorCharFmt( *m_rExport.pDoc );
 
-    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(*pCharFmt)));
+    OString aStyleId(m_rExport.pStyles->GetStyleId(m_rExport.GetId(pCharFmt)));
 
     m_pSerializer->singleElementNS( XML_w, XML_rStyle, FSNS( XML_w, XML_val ), aStyleId.getStr(), FSEND );
 

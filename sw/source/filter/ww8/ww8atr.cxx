@@ -1718,7 +1718,7 @@ void WW8AttributeOutput::TextINetFormat( const SwFmtINetFmt& rINet )
         else
             m_rWW8Export.pO->push_back( 80 );
 
-        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( *pFmt ) );
+        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( pFmt ) );
     }
 }
 
@@ -3281,7 +3281,7 @@ void WW8Export::WriteFtnBegin( const SwFmtFtn& rFtn, ww::bytes* pOutArr )
         SwWW8Writer::InsUInt16( aAttrArr, NS_sprm::LN_CIstd );
     else
         aAttrArr.push_back( 80 );
-    SwWW8Writer::InsUInt16( aAttrArr, GetId( *pCFmt ) );
+    SwWW8Writer::InsUInt16( aAttrArr, GetId( pCFmt ) );
 
                                                 // fSpec-Attribut true
                             // Fuer Auto-Nummer muss ein Spezial-Zeichen
@@ -3403,7 +3403,7 @@ void WW8AttributeOutput::TextCharFormat( const SwFmtCharFmt& rCharFmt )
         else
             m_rWW8Export.pO->push_back( 80 );
 
-        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( *rCharFmt.GetCharFmt() ) );
+        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( rCharFmt.GetCharFmt() ) );
     }
 }
 

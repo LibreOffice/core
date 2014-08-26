@@ -1689,7 +1689,7 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
             if ( pSwCharFmt )
             {
                 m_rWW8Export.InsUInt16( NS_sprm::LN_CIstd );
-                m_rWW8Export.InsUInt16( m_rWW8Export.GetId( *pSwCharFmt ) );
+                m_rWW8Export.InsUInt16( m_rWW8Export.GetId( pSwCharFmt ) );
             }
 
             m_rWW8Export.InsUInt16( NS_sprm::LN_CHpsPos );            // Lower the chars
@@ -1704,7 +1704,7 @@ void WW8AttributeOutput::FormatDrop( const SwTxtNode& rNode, const SwFmtDrop &rS
             if ( pSwCharFmt )
             {
                 m_rWW8Export.InsUInt16( 80 );
-                m_rWW8Export.InsUInt16( m_rWW8Export.GetId( *pSwCharFmt ) );
+                m_rWW8Export.InsUInt16( m_rWW8Export.GetId( pSwCharFmt ) );
             }
 
             m_rWW8Export.pO->push_back( 101 );      // Lower the chars

@@ -117,9 +117,9 @@ public:
 
 // GetId( SwCharFmt ) for use in text -> zero is not allowed,
 // use "Default Char Style" instead
-sal_uInt16 MSWordExportBase::GetId( const SwCharFmt& rFmt ) const
+sal_uInt16 MSWordExportBase::GetId( const SwCharFmt* pFmt ) const
 {
-    sal_uInt16 nRet = pStyles->GetSlot( rFmt );
+    sal_uInt16 nRet = pStyles->GetSlot( pFmt );
     return ( nRet != 0x0fff ) ? nRet : 10;      // Default Char Style
 }
 
@@ -127,7 +127,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwCharFmt& rFmt ) const
 // "Standard" instead
 sal_uInt16 MSWordExportBase::GetId( const SwTxtFmtColl& rColl ) const
 {
-    sal_uInt16 nRet = pStyles->GetSlot( rColl );
+    sal_uInt16 nRet = pStyles->GetSlot( &rColl );
     return ( nRet != 0xfff ) ? nRet : 0;        // Default TxtFmtColl
 }
 
@@ -163,11 +163,11 @@ MSWordStyles::~MSWordStyles()
 }
 
 // Sty_SetWWSlot() dependencies for the styles -> zero is allowed
-sal_uInt16 MSWordStyles::GetSlot( const SwFmt& rFmt ) const
+sal_uInt16 MSWordStyles::GetSlot( const SwFmt* pFmt ) const
 {
     sal_uInt16 n;
     for ( n = 0; n < nUsedSlots; n++ )
-        if ( pFmtA[n] == &rFmt )
+        if ( pFmtA[n] == pFmt )
             return n;
     return 0xfff;                   // 0xfff: WW: zero
 }
@@ -541,7 +541,7 @@ void MSWordStyles::GetStyleData( SwFmt* pFmt, bool& bFmtColl, sal_uInt16& nBase,
 
     // Derived from?
     if ( !pFmt->IsDefault() )
-        nBase = GetSlot( *pFmt->DerivedFrom() );
+        nBase = GetSlot( pFmt->DerivedFrom() );
 
     SwFmt* pNext;
     if ( bFmtColl )
@@ -549,7 +549,7 @@ void MSWordStyles::GetStyleData( SwFmt* pFmt, bool& bFmtColl, sal_uInt16& nBase,
     else
         pNext = pFmt; // CharFmt: next CharFmt == self
 
-    nNext = GetSlot( *pNext );
+    nNext = GetSlot( pNext );
 }
 
 void WW8AttributeOutput::DefaultStyle( sal_uInt16 nStyle )

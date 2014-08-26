@@ -2410,7 +2410,7 @@ void RtfAttributeOutput::TextINetFormat(const SwFmtINetFmt& rURL)
 
         if (pTxtAtr && 0 != (pFmt = pTxtAtr->GetCharFmt()))
         {
-            sal_uInt16 nStyle = m_rExport.GetId(*pFmt);
+            sal_uInt16 nStyle = m_rExport.GetId(pFmt);
             OString* pString = m_rExport.GetStyle(nStyle);
             if (pString)
                 m_aStyles.append(*pString);
@@ -2420,7 +2420,7 @@ void RtfAttributeOutput::TextINetFormat(const SwFmtINetFmt& rURL)
 
 void RtfAttributeOutput::TextCharFormat(const SwFmtCharFmt& rCharFmt)
 {
-    sal_uInt16 nStyle = m_rExport.GetId(*rCharFmt.GetCharFmt());
+    sal_uInt16 nStyle = m_rExport.GetId(rCharFmt.GetCharFmt());
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CS);
     m_aStyles.append((sal_Int32)nStyle);
     OString* pString = m_rExport.GetStyle(nStyle);
@@ -2626,7 +2626,7 @@ void RtfAttributeOutput::ParaNumRule_Impl(const SwTxtNode* pTxtNd, sal_Int32 nLv
         aLR.SetTxtLeft(aLR.GetTxtLeft() + pFmt->GetIndentAt());
         aLR.SetTxtFirstLineOfst(pFmt->GetFirstLineOffset());
 
-        sal_uInt16 nStyle = m_rExport.GetId(*pFmt->GetCharFmt());
+        sal_uInt16 nStyle = m_rExport.GetId(pFmt->GetCharFmt());
         OString* pString = m_rExport.GetStyle(nStyle);
         if (pString)
             m_aStyles.append(*pString);
