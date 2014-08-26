@@ -70,7 +70,6 @@ void RscTypCont::Init()
     RscTop   *  pClassSystemWindow;
     RscTop   *  pClassWorkWindow;
     RscTop   *  pClassDialog;
-    RscTop   *  pClassModalDialog;
     RscTop   *  pClassControl;
     RscTop   *  pClassButton;
     RscTop   *  pClassCheckBox;
@@ -355,10 +354,6 @@ void RscTypCont::Init()
                                  RSC_DIALOG, pClassSystemWindow );
     pClassDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aBaseLst.push_back( pClassDialog );
-
-    // Klasse anlegen
-    pClassModalDialog = InitClassModalDialog( pClassDialog );
-    pRoot->Insert( pClassModalDialog );
 }
 {
     pClassControl = InitClassControl( pClassWindow );

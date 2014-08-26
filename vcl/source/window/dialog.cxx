@@ -1291,13 +1291,6 @@ ModalDialog::ModalDialog( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-ModalDialog::ModalDialog( Window* pParent, const ResId& rResId ) :
-    Dialog( WINDOW_MODALDIALOG )
-{
-    rResId.SetRT( RSC_MODALDIALOG );
-    init( pParent, rResId );
-}
-
 ModalDialog::ModalDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription ) :
     Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODALDIALOG)
 {

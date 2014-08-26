@@ -170,7 +170,6 @@ class RscTypCont
                                  RscArray * pLangGeo );
     RscTop *    InitClassSystemWindow( RscTop * pSuper );
     RscTop *    InitClassWorkWindow( RscTop * pSuper );
-    RscTop *    InitClassModalDialog( RscTop * pSuper );
     RscTop *    InitClassControl( RscTop * pSuper );
     RscTop *    InitClassCheckBox( RscTop * pSuper );
     RscTop *    InitClassPushButton( RscTop * pSuper );

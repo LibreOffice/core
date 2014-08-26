@@ -161,7 +161,6 @@ class VCL_DLLPUBLIC ModalDialog : public Dialog
 public:
     explicit        ModalDialog( Window* pParent, WinBits nStyle = WB_STDMODAL );
     explicit        ModalDialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription );
-    explicit        ModalDialog( Window* pParent, const ResId& rResId );
 
 protected:
     using Window::Show;

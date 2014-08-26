@@ -1461,7 +1461,6 @@ OString ResMgr::GetAutoHelpId()
             case RSC_DOCKINGWINDOW:     aHID.append( "DockingWindow" );    break;
             case RSC_WORKWIN:           aHID.append( "WorkWindow" );       break;
             case RSC_FLOATINGWINDOW:    aHID.append( "FloatingWindow" );   break;
-            case RSC_MODALDIALOG:       aHID.append( "ModalDialog" );      break;
             default: return OString();
         }
     }
@@ -1473,7 +1472,6 @@ OString ResMgr::GetAutoHelpId()
             case RSC_DOCKINGWINDOW:
             case RSC_WORKWIN:
             case RSC_FLOATINGWINDOW:
-            case RSC_MODALDIALOG:
                 // intentionally no breaks!
                 // auto help ids for controls
                 switch( pRC->pResource->GetRT() ) {

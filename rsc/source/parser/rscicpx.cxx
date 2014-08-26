@@ -357,22 +357,6 @@ RscTop * RscTypCont::InitClassWorkWindow( RscTop * pSuper )
     return pClassWorkWindow;
 }
 
-RscTop * RscTypCont::InitClassModalDialog( RscTop * pSuper )
-{
-    Atom        nId;
-    RscTop *    pClassDialog;
-
-    // Klasse anlegen
-    nId = pHS->getID( "ModalDialog" );
-    pClassDialog = new RscClass( nId, RSC_MODALDIALOG, pSuper );
-    pClassDialog->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassDialog );
-
-    InsWinBit( pClassDialog, "SysModal", nSysmodalId );
-
-    return pClassDialog;
-}
-
 RscTop * RscTypCont::InitClassControl( RscTop * pSuper )
 {
     Atom        nId;
