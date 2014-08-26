@@ -1,0 +1,24 @@
+--- icu/source/common/ubidi.c.orig	2014-08-09 20:54:39.338833533 +0100
++++ icu/source/common/ubidi.c	2014-08-09 20:55:48.625469055 +0100
+@@ -2097,6 +2097,12 @@
+     return DirProp_ON;
+ }
+ 
++static int
++isolatesavailable(UBiDi *pBiDi) {
++    return (pBiDi->isolateCount < SIMPLE_ISOLATES_SIZE-1 ||
++            pBiDi->isolateCount < pBiDi->isolatesSize/sizeof(Isolate)-1);
++}
++
+ static void
+ resolveImplicitLevels(UBiDi *pBiDi,
+                       int32_t start, int32_t limit,
+@@ -2240,7 +2246,7 @@
+     /* look for the last char not a BN or LRE/RLE/LRO/RLO/PDF */
+     for(i=limit-1; i>start&&(DIRPROP_FLAG(dirProps[i])&MASK_BN_EXPLICIT); i--);
+     dirProp=dirProps[i];
+-    if((dirProp==LRI || dirProp==RLI) && limit<pBiDi->length) {
++    if((dirProp==LRI || dirProp==RLI) && limit<pBiDi->length && isolatesavailable(pBiDi)) {
+         pBiDi->isolateCount++;
+         pBiDi->isolates[pBiDi->isolateCount].stateImp=stateImp;
+         pBiDi->isolates[pBiDi->isolateCount].state=levState.state;
