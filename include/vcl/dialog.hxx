@@ -70,8 +70,6 @@ private:
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
-    SAL_DLLPRIVATE void    ImplDialogRes( const ResId& rResId );
-    SAL_DLLPRIVATE WinBits init(Window *pParent, const ResId& rResId);
 
     SAL_DLLPRIVATE void    setPosSizeOnContainee(Size aSize, VclContainer &rBox);
 public:

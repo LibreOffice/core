@@ -521,22 +521,10 @@ Dialog::Dialog( Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-WinBits Dialog::init(Window *pParent, const ResId& rResId)
-{
-    WinBits nStyle = ImplInitRes( rResId );
-
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    return nStyle;
-}
-
-
 void Dialog::set_action_area(VclButtonBox* pActionArea)
 {
     mpActionArea = pActionArea;
 }
-
 
 void Dialog::set_content_area(VclBox* pContentArea)
 {
