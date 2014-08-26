@@ -1268,14 +1268,15 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         uno::Reference<text::XTextContent> xTextContent = SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rHTMLWrt.pDoc, const_cast<SwFrmFmt*>(&rFrmFmt));
         uno::Reference<document::XEmbeddedObjectSupplier2> xEmbeddedObjectSupplier(xTextContent, uno::UNO_QUERY);
         uno::Reference<frame::XStorable> xStorable(xEmbeddedObjectSupplier->getEmbeddedObject(), uno::UNO_QUERY);
+        SAL_WARN_IF(!xStorable.is(), "sw.html", "OutHTML_FrmFmtOLENodeGrf: no embedded object");
 
         // Figure out what is the filter name of the embedded object.
         uno::Reference<lang::XServiceInfo> xServiceInfo(xStorable, uno::UNO_QUERY);
         OUString aFilter;
-        if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+        if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
             aFilter = "HTML (StarCalc)";
 
-        if (!aFilter.isEmpty())
+        if (xStorable.is() && !aFilter.isEmpty())
         {
             SvMemoryStream aStream;
             uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
