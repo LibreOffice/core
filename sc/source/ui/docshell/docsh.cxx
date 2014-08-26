@@ -326,7 +326,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                             {
                                 xub_StrLen nIndex = nNameLength - nLinkTabNameLength;
                                 INetURLObject aINetURLObject(aDocURLBuffer.makeStringAndClear());
-                                if(aName == aLinkTabName.copy(nIndex, nLinkTabNameLength) &&
+                                if(aName.match( aLinkTabName, nIndex) &&
                                     (aName[nIndex - 1] == '#') && // before the table name should be the # char
                                     !aINetURLObject.HasError()) // the docname should be a valid URL
                                 {
