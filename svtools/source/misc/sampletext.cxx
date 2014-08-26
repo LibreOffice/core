@@ -1164,7 +1164,7 @@ namespace
 
             if (bKore && !bJpan && !bHans)
                 eScript = USCRIPT_KOREAN;
-            else if (bJpan && !bKore && !bHant)
+            else if (bJpan && !bKore && !bHans)
                 eScript = USCRIPT_JAPANESE;
             else if (bHant && !bHans && !bKore && !bJpan)
                 eScript = USCRIPT_TRADITIONAL_HAN;
