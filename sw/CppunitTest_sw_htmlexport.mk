@@ -67,6 +67,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_htmlexport,\
     oox/util/oox \
     package/source/xstor/xstor \
 	sc/util/sc \
+	sc/util/scfilt \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sw/util/sw \
