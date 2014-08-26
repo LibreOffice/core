@@ -521,9 +521,6 @@ private:
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
     Range GetLineXPosStartEnd( const ParaPortion* pParaPortion, const EditLine* pLine ) const;
 
-    void                SetParaAttrib( sal_uInt8 nFunc, EditSelection aSel, sal_uInt16 nValue );
-    sal_uInt16          GetParaAttrib( sal_uInt8 nFunc, EditSelection aSel );
-    void                SetCharAttrib( EditSelection aSel, const SfxPoolItem& rItem );
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
