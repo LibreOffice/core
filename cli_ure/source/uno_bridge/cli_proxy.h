@@ -46,6 +46,8 @@ public:
     UnoInterfaceInfo(Bridge const * bridge, uno_Interface* unoI,
                      typelib_InterfaceTypeDescription* td);
     ~UnoInterfaceInfo();
+    !UnoInterfaceInfo();
+
     uno_Interface * m_unoI; // wrapped interface
     System::Type ^ m_type;
     typelib_InterfaceTypeDescription* m_typeDesc;
@@ -112,6 +114,7 @@ public:
     void addUnoInterface(uno_Interface* pUnoI,
                          typelib_InterfaceTypeDescription* pTd);
     ~UnoInterfaceProxy();
+    !UnoInterfaceProxy();
 
     /**
      */
