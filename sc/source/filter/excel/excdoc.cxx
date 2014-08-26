@@ -244,18 +244,15 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
     }
 
     // document protection options
-    if( GetOutput() == EXC_OUTPUT_BINARY )
+    lcl_AddWorkbookProtection( aRecList, *this );
+
+    if( GetBiff() == EXC_BIFF8 )
     {
-        lcl_AddWorkbookProtection( aRecList, *this );
-
-        if( GetBiff() == EXC_BIFF8 )
-        {
-            Add( new XclExpProt4Rev );
-            Add( new XclExpProt4RevPass );
-        }
-
-        lcl_AddBookviews( aRecList, *this );
+        Add( new XclExpProt4Rev );
+        Add( new XclExpProt4RevPass );
     }
+
+    lcl_AddBookviews( aRecList, *this );
 
     Add( new XclExpXmlStartSingleElementRecord( XML_workbookPr ) );
     if ( GetBiff() == EXC_BIFF8 && GetOutput() != EXC_OUTPUT_BINARY )
