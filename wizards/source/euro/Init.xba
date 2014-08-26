@@ -97,7 +97,7 @@ Public sPrgsCONVERTING as String
 Public sPrgsUNPROTECT as String
 Public sInclusiveSubDir as String
 
-Public Const SBCOUNTRYCOUNT = 18
+Public Const SBCOUNTRYCOUNT = 19
 Public CurMimeType as String
 Public CurCellCount as Long
 Public oSheets as Object
