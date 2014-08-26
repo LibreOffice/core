@@ -2381,7 +2381,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     WW8PLCFspecial* pPF = pPlcxMan->GetFdoa();
     if( !pPF )
     {
-        OSL_ENSURE( false, "Where is the grapic (1) ?" );
+        OSL_ENSURE( false, "Where is the graphic (1) ?" );
         return 0;
     }
 
