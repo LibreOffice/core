@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SVXCOMMANDS_H
 #define INCLUDED_SVX_SVXCOMMANDS_H
 
-#define CMD_SID_INET_DLG                            ".uno:InternetDialog"
 #define CMD_SID_OBJECT_ALIGN_CENTER                 ".uno:AlignCenter"
 #define CMD_SID_OBJECT_ALIGN_DOWN                   ".uno:AlignDown"
 #define CMD_SID_OBJECT_ALIGN_LEFT                   ".uno:ObjectAlignLeft"
@@ -27,7 +26,6 @@
 #define CMD_SID_OBJECT_ALIGN_RIGHT                  ".uno:ObjectAlignRight"
 #define CMD_SID_OBJECT_ALIGN_UP                     ".uno:AlignUp"
 #define CMD_SID_FM_AUTOCONTROLFOCUS                 ".uno:AutoControlFocus"
-#define CMD_SID_AUTOFORMAT                          ".uno:AutoFormat"
 #define CMD_SID_BEZIER_CLOSE                        ".uno:BezierClose"
 #define CMD_SID_BEZIER_CONVERT                      ".uno:BezierConvert"
 #define CMD_SID_BEZIER_CUTLINE                      ".uno:BezierCutLine"
@@ -83,12 +81,6 @@
 #define CMD_SID_GALLERY_ENABLE_ADDCOPY              ".uno:GalleryEnableAddCopy"
 #define CMD_SID_GALLERY_FORMATS                     ".uno:InsertGalleryPic"
 #define CMD_SID_ATTR_GRAF_CROP                      ".uno:GrafAttrCrop"
-#define CMD_SID_GRFFILTER_MOSAIC                    ".uno:GraphicFilterMosaic"
-#define CMD_SID_GRFFILTER_POSTER                    ".uno:GraphicFilterPoster"
-#define CMD_SID_GRFFILTER_EMBOSS                    ".uno:GraphicFilterRelief"
-#define CMD_SID_GRFFILTER_SEPIA                     ".uno:GraphicFilterSepia"
-#define CMD_SID_GRFFILTER_SMOOTH                    ".uno:GraphicFilterSmooth"
-#define CMD_SID_GRFFILTER_SOLARIZE                  ".uno:GraphicFilterSolarize"
 #define CMD_SID_GRID_USE                            ".uno:GridUse"
 #define CMD_SID_GRID_VISIBLE                        ".uno:GridVisible"
 #define CMD_SID_OUTLINE_MAKE                        ".uno:Group"
