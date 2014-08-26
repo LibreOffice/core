@@ -665,7 +665,6 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
                 case GLBLDOC_UNKNOWN:
                 {
                     sEntry = aContextStrings[ST_TEXT   - ST_GLOBAL_CONTEXT_FIRST];
-                    aImage = aEntryImages.GetImage(SID_SW_START + GLOBAL_CONTENT_TEXT);
                 }
                 break;
                 case GLBLDOC_TOXBASE:
