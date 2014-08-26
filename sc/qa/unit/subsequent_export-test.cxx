@@ -1517,7 +1517,7 @@ void ScExportTest::testTrackChangesSimpleXLSX()
                 return false;
             }
 
-            DateTime aDTNew = pAction->GetDateTimeUTC();
+            DateTime aDTNew = pAction->GetDateTime();
             if (aDTNew <= aDT)
             {
                 cerr << "Time stamp of the new revision should be more recent than that of the last revision." << endl;
