@@ -21,6 +21,7 @@
 #define INCLUDED_SC_INC_STLPOOL_HXX
 
 #include <svl/style.hxx>
+#include "scdllapi.h"
 
 class ScStyleSheet;
 class ScDocument;
@@ -42,7 +43,7 @@ public:
     SfxStyleSheetBase*  GetActualStyleSheet ()
                                 { return pActualStyleSheet; }
 
-    void                CreateStandardStyles();
+    void SC_DLLPUBLIC CreateStandardStyles();
     void                CopyStdStylesFrom( ScStyleSheetPool* pSrcPool );
 
     void                CopyStyleFrom( ScStyleSheetPool* pSrcPool,
