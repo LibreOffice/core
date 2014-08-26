@@ -87,7 +87,13 @@ UnoInterfaceInfo::UnoInterfaceInfo(Bridge const * bridge, uno_Interface* unoI,
         }
     }
 }
-UnoInterfaceInfo::~UnoInterfaceInfo()
+
+UnoInterfaceInfo::~UnoInterfaceInfo() ///< IDisposable UnoInterfaceInfo::Dispose()
+{
+    this->!UnoInterfaceInfo(); // call finalizer
+}
+
+UnoInterfaceInfo::!UnoInterfaceInfo() ///< UnoInterfaceInfo::Finalize()
 {
     //accessing unmanaged objects is ok.
    m_bridge->m_uno_env->revokeInterface(
@@ -124,7 +130,12 @@ UnoInterfaceProxy::UnoInterfaceProxy(
 
 }
 
-UnoInterfaceProxy::~UnoInterfaceProxy()
+UnoInterfaceProxy::~UnoInterfaceProxy() ///< IDisposable UnoInterfaceProxy::Dispose()
+{
+    this->!UnoInterfaceProxy(); // call finalizer
+}
+
+UnoInterfaceProxy::!UnoInterfaceProxy() ///< UnoInterfaceProxy::Finalize()
 {
 #if OSL_DEBUG_LEVEL >= 2
     sd::Trace::WriteLine(System::String::Format(
@@ -139,7 +150,6 @@ UnoInterfaceProxy::~UnoInterfaceProxy()
     CliEnvHolder::g_cli_env->revokeInterface(m_oid);
     m_bridge->release();
 }
-
 
 System::Object^ UnoInterfaceProxy::create(
     Bridge * bridge,
