@@ -30,6 +30,10 @@ leak:RTTI::getRTTI
 # glib not built with asan/lsan
 leak:libglib
 
+# ignore gdk reported leaks, most likely false positives
+# gdk not built with asan/lsan
+leak:libgdk
+
 # ignore fontconfig reported leaks, most likely false positives
 # fontconfig not built with asan/lsan
 leak:libfontconfig.so
