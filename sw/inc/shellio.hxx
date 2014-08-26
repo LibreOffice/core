@@ -461,10 +461,7 @@ public:
     void SetOrganizerMode( bool bSet ) { bOrganizerMode = bSet; }
 };
 
-#ifndef SW_DECL_WRITER_DEFINED
-#define SW_DECL_WRITER_DEFINED
 typedef tools::SvRef<Writer> WriterRef;
-#endif
 
 // Base class for all storage writers.
 class SW_DLLPUBLIC StgWriter : public Writer
