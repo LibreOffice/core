@@ -67,7 +67,7 @@ static GLfloat coordReverseVertices[] = {
 };
 
 #define CHECK_GL_FRAME_BUFFER_STATUS() \
-    status = glCheckFramebufferStatus(GL_FRAMEBUFFER);\
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);\
     if( status != GL_FRAMEBUFFER_COMPLETE ) {\
         SAL_WARN("chart2.opengl", "OpenGL error: " << status );\
         return -1;\
@@ -243,7 +243,6 @@ int OpenGLRender::RenderLine2FBO(int)
         CHECK_GL_ERROR();
         m_Line2DShapePointList.pop_front();
     }
-    GLenum status;
     CHECK_GL_ERROR();
     CHECK_GL_FRAME_BUFFER_STATUS();
     m_fZStep += Z_STEP;
