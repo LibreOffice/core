@@ -3512,28 +3512,25 @@ bool SfxObjectShell::CopyStoragesOfUnknownMediaType( const uno::Reference< embed
     return bResult;
 }
 
-bool SfxObjectShell::GenerateAndStoreThumbnail( bool bEncrypted,
-                                                    bool bIsTemplate,
-                                                    const uno::Reference< embed::XStorage >& xStor )
+bool SfxObjectShell::GenerateAndStoreThumbnail(bool bEncrypted, bool bIsTemplate, const uno::Reference<embed::XStorage>& xStorage)
 {
-    bIsInGenerateThumbnail = true;//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    bIsInGenerateThumbnail = true;
 
     bool bResult = false;
 
-    try {
-        uno::Reference< embed::XStorage > xThumbnailStor =
-                                        xStor->openStorageElement( OUString("Thumbnails"),
-                                                                    embed::ElementModes::READWRITE );
-        if ( xThumbnailStor.is() )
+    try
+    {
+        uno::Reference<embed::XStorage> xThumbnailStorage = xStorage->openStorageElement(OUString("Thumbnails"), embed::ElementModes::READWRITE);
+
+        if (xThumbnailStorage.is())
         {
-            uno::Reference< io::XStream > xStream = xThumbnailStor->openStreamElement(
-                                                        OUString("thumbnail.png"),
-                                                        embed::ElementModes::READWRITE );
+            uno::Reference<io::XStream> xStream = xThumbnailStorage->openStreamElement(OUString("thumbnail.png"), embed::ElementModes::READWRITE);
 
             if (xStream.is() && WriteThumbnail(bEncrypted, bIsTemplate, xStream))
             {
-                uno::Reference< embed::XTransactedObject > xTransact( xThumbnailStor, uno::UNO_QUERY_THROW );
-                xTransact->commit();
+                uno::Reference<embed::XTransactedObject> xTransactedObject(xThumbnailStorage, uno::UNO_QUERY_THROW);
+                xTransactedObject->commit();
                 bResult = true;
             }
         }
@@ -3542,49 +3539,45 @@ bool SfxObjectShell::GenerateAndStoreThumbnail( bool bEncrypted,
     {
     }
 
-    bIsInGenerateThumbnail = false;//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
+    bIsInGenerateThumbnail = false;
 
     return bResult;
 }
 
-bool SfxObjectShell::WriteThumbnail( bool bEncrypted,
-                                     bool bIsTemplate,
-                                     const uno::Reference< io::XStream >& xStream )
+bool SfxObjectShell::WriteThumbnail(bool bEncrypted, bool bIsTemplate, const uno::Reference<io::XStream>& xStream)
 {
     bool bResult = false;
 
-    if ( xStream.is() )
-    {
-        try {
-            uno::Reference< io::XTruncate > xTruncate( xStream->getOutputStream(), uno::UNO_QUERY_THROW );
-            xTruncate->truncate();
+    if (!xStream.is())
+        return false;
 
-            uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
-            if ( xSet.is() )
-                xSet->setPropertyValue("MediaType",
-                                        uno::makeAny( OUString("image/png") ) );
-            if ( bEncrypted )
+    try
+    {
+        uno::Reference<io::XTruncate> xTruncate(xStream->getOutputStream(), uno::UNO_QUERY_THROW);
+        xTruncate->truncate();
+
+        uno::Reference <beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
+        if (xSet.is())
+            xSet->setPropertyValue("MediaType", uno::makeAny(OUString("image/png")));
+        if (bEncrypted)
+        {
+            OUString sFactoryName = OUString::createFromAscii(GetFactory().GetShortName());
+            sal_uInt16 nResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(sFactoryName, bIsTemplate);
+            if (nResID)
+                bResult = GraphicHelper::getThumbnailReplacement_Impl(nResID, xStream);
+        }
+        else
+        {
+            boost::shared_ptr<GDIMetaFile> pMetaFile = GetPreviewMetaFile(false);
+            if (pMetaFile)
             {
-                sal_uInt16 nResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(
-                                        OUString::createFromAscii( GetFactory().GetShortName() ),
-                                        bIsTemplate );
-                if ( nResID )
-                    bResult = GraphicHelper::getThumbnailReplacement_Impl(nResID, xStream);
-            }
-            else
-            {
-                ::boost::shared_ptr<GDIMetaFile> pMetaFile =
-                    GetPreviewMetaFile( false );
-                if ( pMetaFile )
-                {
-                    bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl(
-                                pMetaFile.get(), xStream);
-                }
+                bResult = GraphicHelper::getThumbnailFormatFromGDI_Impl(pMetaFile.get(), xStream);
             }
         }
-        catch( uno::Exception& )
-        {}
     }
+    catch(uno::Exception&)
+    {}
 
     return bResult;
 }
