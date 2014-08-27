@@ -2791,6 +2791,24 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     return bTableRowEnd;
 }
 
+rtl_TextEncoding SwWW8ImplReader::GetCharSetFromLanguage()
+{
+    /*
+     #i22206#/#i52786#
+     The (default) character set used for a run of text is the default
+     character set for the version of Word that last saved the document.
+
+     This is a bit tentative, more might be required if the concept is correct.
+     When later version of word write older 6/95 documents the charset is
+     correctly set in the character runs involved, so its hard to reproduce
+     documents that require this to be sure of the process involved.
+    */
+    const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
+    LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
+    ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
+    return msfilter::util::getBestTextEncodingFromLocale(aLocale);
+}
+
 rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
 {
     /*
@@ -2809,22 +2827,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl) && nAktColl < vColl.size())
             eSrcCharSet = vColl[nAktColl].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-        {
-            /*
-             #i22206#/#i52786#
-             The (default) character set used for a run of text is the default
-             character set for the version of Word that last saved the document.
-
-             This is a bit tentative, more might be required if the concept is correct.
-             When later version of word write older 6/95 documents the charset is
-             correctly set in the character runs involved, so its hard to reproduce
-             documents that require this to be sure of the process involved.
-            */
-            const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
-            LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
-            ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
-            eSrcCharSet = msfilter::util::getBestTextEncodingFromLocale(aLocale);
-        }
+            eSrcCharSet = GetCharSetFromLanguage();
     }
     return eSrcCharSet;
 }
