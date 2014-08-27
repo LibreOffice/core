@@ -521,7 +521,7 @@ void PDFOutDev::processLink(Link* link, Catalog*)
     link->getRect( &x1, &y1, &x2, &y2 );
 
     LinkAction* pAction = link->getAction();
-    if( pAction->getKind() == actionURI )
+    if (pAction && pAction->getKind() == actionURI)
     {
         const char* pURI = static_cast<LinkURI*>(pAction)->getURI()->getCString();
 
