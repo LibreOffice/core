@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_74f8287d",
+        "filename": "sc/inc/global.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-08-27T09:20:21Z",
+      "side": 1,
+      "message": "Ah well, but IDF_ALL is not all used bits, it excludes the internal use IDF_NOCAPTIONS, IDF_ADDNOTES and IDF_SPECIAL_BOOLEAN.\n\nI suggest a new constant IDF_ALL_USED_BITS \u003d IDF_ALL | ...",
+      "revId": "2a3cd07565da5310c463e9a853a4a56568047df8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
