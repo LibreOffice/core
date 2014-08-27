@@ -2942,8 +2942,8 @@ sal_Size Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
         nConverted += nThisConverted;
 
         if (
-            nInfo & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR ||
-            nInfo & RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR
+            nInfo & RTL_TEXTTOUNICODE_INFO_UNDEFINED ||
+            nInfo & RTL_TEXTTOUNICODE_INFO_MBUNDEFINED
            )
         {
             sal_Size nOtherConverted;
