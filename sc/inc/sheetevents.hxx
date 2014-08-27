@@ -29,7 +29,8 @@
 #define SC_SHEETEVENT_RIGHTCLICK    4
 #define SC_SHEETEVENT_CHANGE        5
 #define SC_SHEETEVENT_CALCULATE     6
-#define SC_SHEETEVENT_COUNT         7
+#define SC_SHEETEVENT_LEFTCLICK     7
+#define SC_SHEETEVENT_COUNT         8
 
 class ScSheetEvents
 {

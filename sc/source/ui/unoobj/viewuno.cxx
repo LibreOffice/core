@@ -1170,6 +1170,7 @@ bool ScTabViewObj::IsMouseListening() const
     ScDocument* pDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
     return
+        pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_LEFTCLICK, true ) ||
         pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_RIGHTCLICK, true ) ||
         pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_DOUBLECLICK, true ) ||
         pDoc->HasSheetEventScript( nTab, SC_SHEETEVENT_SELECT, true );
@@ -1211,12 +1212,27 @@ bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         }
     }
 
+    /*
+     * (18:04:32) moggi: put a breakpoint into the code emitting the signal and into the ScGridWindow methods
+(18:04:32) moggi: and check who is calling in the different cases
+(18:04:33) moggi: ScGridWindow should get all mouse events that are inside of the sheet area
+*/
+
     // handle sheet events
     bool bDoubleClick = ( e.Buttons == awt::MouseButton::LEFT && e.ClickCount == 2 );
     bool bRightClick = ( e.Buttons == awt::MouseButton::RIGHT && e.ClickCount == 1 );
-    if ( ( bDoubleClick || bRightClick ) && !bReturn && xTarget.is())
+    bool bLeftClick = ( e.Buttons == awt::MouseButton::LEFT && e.ClickCount == 1 );
+
+    if ( ( bDoubleClick || bRightClick || bLeftClick ) && !bReturn && xTarget.is())
     {
-        sal_Int32 nEvent = bDoubleClick ? SC_SHEETEVENT_DOUBLECLICK : SC_SHEETEVENT_RIGHTCLICK;
+      sal_Int32 nEvent;
+
+      if (bDoubleClick)
+        nEvent = SC_SHEETEVENT_DOUBLECLICK;
+      else if (bLeftClick)
+        nEvent = SC_SHEETEVENT_LEFTCLICK;
+        else
+          nEvent = SC_SHEETEVENT_RIGHTCLICK;
 
         ScTabViewShell* pViewSh = GetViewShell();
         ScViewData& rViewData = pViewSh->GetViewData();

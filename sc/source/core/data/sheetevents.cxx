@@ -36,7 +36,8 @@ OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
         "OnDoubleClick",            // SC_SHEETEVENT_DOUBLECLICK
         "OnRightClick",             // SC_SHEETEVENT_RIGHTCLICK
         "OnChange",                 // SC_SHEETEVENT_CHANGE
-        "OnCalculate"               // SC_SHEETEVENT_CALCULATE
+        "OnCalculate" ,             // SC_SHEETEVENT_CALCULATE
+        "OnLeftClick"               // SC_SHEETEVENT_LEFTCLICK
     };
     return OUString::createFromAscii(aEventNames[nEvent]);
 }

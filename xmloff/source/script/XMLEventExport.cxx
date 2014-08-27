@@ -345,6 +345,7 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnRightClick",       XML_NAMESPACE_OFFICE, "contextmenu" },
     { "OnChange",           XML_NAMESPACE_OFFICE, "content-changed" },
     { "OnCalculate",        XML_NAMESPACE_OFFICE, "calculated" },
+    { "OnLeftClick",        XML_NAMESPACE_OFFICE, "left-click" },
 
     { NULL, 0, 0 }
 };

@@ -338,6 +338,11 @@ String RID_SVXSTR_EVENT_DOUBLECLICK
     Text [ en-US ] = "Double click" ;
 };
 
+String RID_SVXSTR_EVENT_LEFTCLICK
+{
+    Text [ en-US ] = "Left click" ;
+};
+
 String RID_SVXSTR_EVENT_RIGHTCLICK
 {
     Text [ en-US ] = "Right click" ;

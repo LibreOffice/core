@@ -271,6 +271,7 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentClosed",  RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED ) );
     aDisplayNames.push_back( EventDisplayName( "OnSelect",              RID_SVXSTR_EVENT_SELECTIONCHANGED ) );
     aDisplayNames.push_back( EventDisplayName( "OnDoubleClick",         RID_SVXSTR_EVENT_DOUBLECLICK ) );
+    aDisplayNames.push_back( EventDisplayName( "OnLeftClick",           RID_SVXSTR_EVENT_LEFTCLICK ) );
     aDisplayNames.push_back( EventDisplayName( "OnRightClick",          RID_SVXSTR_EVENT_RIGHTCLICK ) );
     aDisplayNames.push_back( EventDisplayName( "OnCalculate",           RID_SVXSTR_EVENT_CALCULATE ) );
     aDisplayNames.push_back( EventDisplayName( "OnChange",              RID_SVXSTR_EVENT_CONTENTCHANGED ) );

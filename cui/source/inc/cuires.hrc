@@ -432,6 +432,9 @@
 #define RID_SVXSTR_CONFIRM_RESTORE_DEFAULT                  (RID_SVX_START + 1284)
 #define RID_SVXSTR_CONFIRM_SET_LANGUAGE                     (RID_SVX_START + 1285)
 
+// calc sheet event on left click
+#define RID_SVXSTR_EVENT_LEFTCLICK                          (RID_SVX_START + 1286)
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
