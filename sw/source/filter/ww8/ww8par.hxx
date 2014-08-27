@@ -1922,6 +1922,7 @@ public:     // eigentlich private, geht aber leider nur public
     rtl_TextEncoding GetCurrentCharSet();
     rtl_TextEncoding GetCurrentCJKCharSet();
     rtl_TextEncoding GetCharSetFromLanguage();
+    rtl_TextEncoding GetCJKCharSetFromLanguage();
 
     void PostProcessAttrs();
     static void ReadEmbeddedData(SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr);

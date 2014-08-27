@@ -2809,6 +2809,24 @@ rtl_TextEncoding SwWW8ImplReader::GetCharSetFromLanguage()
     return msfilter::util::getBestTextEncodingFromLocale(aLocale);
 }
 
+rtl_TextEncoding SwWW8ImplReader::GetCJKCharSetFromLanguage()
+{
+    /*
+     #i22206#/#i52786#
+     The (default) character set used for a run of text is the default
+     character set for the version of Word that last saved the document.
+
+     This is a bit tentative, more might be required if the concept is correct.
+     When later version of word write older 6/95 documents the charset is
+     correctly set in the character runs involved, so its hard to reproduce
+     documents that require this to be sure of the process involved.
+    */
+    const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_CJK_LANGUAGE);
+    LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
+    ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
+    return msfilter::util::getBestTextEncodingFromLocale(aLocale);
+}
+
 rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
 {
     /*
@@ -2846,33 +2864,12 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCJKCharSet()
     {
         if (!maFontSrcCJKCharSets.empty())
             eSrcCharSet = maFontSrcCJKCharSets.top();
-        if (!vColl.empty())
-        {
-            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
-                eSrcCharSet = vColl[nCharFmt].GetCJKCharSet();
-            if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && nAktColl < vColl.size())
-                eSrcCharSet = vColl[nAktColl].GetCJKCharSet();
-        }
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
+            eSrcCharSet = vColl[nCharFmt].GetCJKCharSet();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && StyleExists(nAktColl) && nAktColl < vColl.size())
+            eSrcCharSet = vColl[nAktColl].GetCJKCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-        { // patch from cmc for #i52786#
-            /*
-             #i22206#/#i52786#
-             The (default) character set used for a run of text is the default
-             character set for the version of Word that last saved the document.
-
-             This is a bit tentative, more might be required if the concept is correct.
-             When later version of word write older 6/95 documents the charset is
-             correctly set in the character runs involved, so its hard to reproduce
-             documents that require this to be sure of the process involved.
-            */
-            const SvxLanguageItem *pLang =
-                (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
-            if (pLang)
-            {
-                ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(pLang->GetLanguage()));
-                eSrcCharSet = msfilter::util::getBestTextEncodingFromLocale(aLocale);
-            }
-        }
+            eSrcCharSet = GetCJKCharSetFromLanguage();
     }
     return eSrcCharSet;
 }
