@@ -262,8 +262,7 @@ sal_uLong SwASCIIParser::ReadChars()
         nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
         rtl_TextEncoding eCharSet;
         bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
-        OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must "
-            "have failed");
+        OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must have failed");
         if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
         {
             aEmpty.SetCharSet(eCharSet);
