@@ -467,14 +467,14 @@ GL3DBarChart::GL3DBarChart(
     mbBenchMarkMode(false),
     maHistoryCounter(0)
 {
-    char *aBenchMark = getenv("BENCHMARK_MODE");
+    static const char *aBenchMark = getenv("BENCHMARK_MODE");
     if (aBenchMark)
     {
         mbBenchMarkMode = atoi(aBenchMark);
     }
     if (mbBenchMarkMode)
     {
-        char *scrollFrame = getenv("SCROLL_RATE");
+        static const char *scrollFrame = getenv("SCROLL_RATE");
         if (scrollFrame)
         {
             miScrollRate = atoi(scrollFrame);
