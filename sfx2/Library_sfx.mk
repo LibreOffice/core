@@ -32,6 +32,8 @@ $(eval $(call gb_Library_use_custom_headers,sfx,\
 $(eval $(call gb_Library_use_sdk_api,sfx))
 
 $(eval $(call gb_Library_set_include,sfx,\
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/uibase/inc \
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/source/inc \
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
@@ -73,6 +75,7 @@ $(eval $(call gb_Library_use_libraries,sfx,\
     ucbhelper \
     utl \
     vcl \
+    sw \
     $(gb_UWINAPI) \
 ))
 
