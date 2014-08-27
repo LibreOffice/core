@@ -351,7 +351,7 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 {
     if ( CanInputDone( bForced ) )
     {
-        if (bAccInserted)           // Accelerator wieder abschalten
+        if (bAccInserted)           // disable accelerator
         {
             Application::RemoveAccel( pAccel.get() );
             bAccInserted = false;
@@ -365,7 +365,7 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             // restore the parent of the edit field
             pRefEdit->SetParent(mpOldEditParent);
 
-            // Fenster wieder gross
+            // the window is at the old size again
             m_pWindow->SetOutputSizePixel(aOldDialogSize);
 
             // set button parent
@@ -377,7 +377,7 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 
         if (!mbOldEditParentLayoutEnabled)
         {
-            // pEditCell an alte Position
+            // set pEditCell to old position
             pRefEdit->SetPosSizePixel(aOldEditPos, aOldEditSize);
 
             // set button position
@@ -387,14 +387,14 @@ void ScFormulaReferenceHelper::RefInputDone( bool bForced )
             }
         }
 
-        // Fenstertitel anpassen
+        // Adjust window title
         m_pWindow->SetText(sOldDialogText);
 
         // set button image
         if( pRefBtn )
             pRefBtn->SetStartImage();
 
-        // Alle anderen: Show();
+        // All others: Show();
         for (winvec::iterator aI = m_aHiddenWidgets.begin(); aI != m_aHiddenWidgets.end(); ++aI)
         {
             Window *pWindow = *aI;
@@ -460,7 +460,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         //this is widget-layout-ified
         if (!mbOldEditParentLayoutEnabled)
         {
-            // Alte Daten merken
+            // Save current state
             aOldDialogSize = m_pWindow->GetOutputSizePixel();
             aOldEditPos = pRefEdit->GetPosPixel();
             if (pRefBtn)
@@ -474,7 +474,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
                 pRefBtn->SetParent(m_pWindow);
         }
 
-        // Fenstertitel anpassen
+        // Save and adjust window title
         sOldDialogText = m_pWindow->GetText();
         if (Window *pLabel = pRefEdit->GetLabelWidgetForShrinkMode())
         {
@@ -535,7 +535,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
 
         if (!mbOldDlgLayoutEnabled)
         {
-            // Edit-Feld verschieben und anpassen
+            // move and adapt edit field
             Size aNewDlgSize(aOldDialogSize.Width(), aOldEditSize.Height());
             Size aNewEditSize(aNewDlgSize);
             long nOffset = 0;
@@ -558,7 +558,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
             if( pRefBtn )
                 pRefBtn->SetPosPixel( Point( aOldDialogSize.Width() - pRefBtn->GetSizePixel().Width(), 0 ) );
 
-            // Fenster verkleinern
+            // shrink window
             m_pWindow->SetOutputSizePixel(aNewDlgSize);
         }
 
@@ -617,9 +617,9 @@ bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if ( pViewFrm && pViewFrm->HasChildWindow(FID_INPUTLINE_STATUS) )
     {
-        //  Die Eingabezeile wird per ToolBox::Disable disabled, muss darum auch
-        //  per ToolBox::Enable wieder aktiviert werden (vor dem Enable des AppWindow),
-        //  damit die Buttons auch wieder enabled gezeichnet werden.
+        //  The input row is disabled with ToolBox::Disable disabled, thus it must be
+        //  reenabled with ToolBox::Enable (before the AppWindow is enabled)
+        //  for the buttons to be drawn as enabled.
         SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_INPUTLINE_STATUS);
         if (pChild)
         {
@@ -890,7 +890,7 @@ bool ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be
 
 bool ScRefHandler::IsRefInputMode() const
 {
-    return m_rWindow.IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
+    return m_rWindow.IsVisible(); // references can only be input to visible windows
 }
 
 bool ScRefHandler::DoClose( sal_uInt16 nId )
@@ -911,18 +911,18 @@ void ScRefHandler::ViewShellChanged()
 
 void ScRefHandler::AddRefEntry()
 {
-    //  wenn nicht ueberladen, gibt es keine Mehrfach-Referenzen
+    //  needs to be overloaded for multi-references
 }
 
 bool ScRefHandler::IsTableLocked() const
 {
-    // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
+    // the default is that the sheet can be switched during while the reference is edited
 
     return false;
 }
 
-//  RefInputStart/Done: Zoom-In (AutoHide) auf einzelnes Feld
-//  (per Button oder Bewegung)
+//  RefInputStart/Done: Zoom-In (AutoHide) on single field
+//  (using button oder movement)
 
 void ScRefHandler::RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton )
 {

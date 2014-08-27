@@ -61,7 +61,7 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
 long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 {
 /*
-    mit Nachkommastellen:
+    with decimal digits
 
     double  nVal    = m_pEdValue->GetValue( eUnit );
     sal_uInt16  nDecs   = m_pEdValue->GetDecimalDigits();
@@ -77,7 +77,7 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 
     return nVal / nFactor;
 */
-    // erstmal Nachkommastellen abschneiden - nich so doll...
+    // first cut off the decimal digits - not that great...
 
     return sal::static_int_cast<long>( m_pEdValue->Denormalize( m_pEdValue->GetValue( eUnit ) ) );
 }

@@ -130,8 +130,8 @@ void ScHighlightChgDlg::Init()
     HighlightHandle(m_pHighlightBox);
 }
 
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-// neue Selektion im Referenz-Edit angezeigt wird.
+// Set the reference to a cell range selected with the mouse. This is then
+// shown as the new selection in the reference field.
 
 void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {

@@ -185,7 +185,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
     if ( pCurData )
     {
 
-        // Ausgabe des Zelltextes:
+        // Emit the cell text
 
         OUString  cellString;
         bool    bNumFormat  = pCurData->GetIncludeValueFormat();
@@ -251,7 +251,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             SvxHorJustifyItem    aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
             SvxCellHorJustify      eJustification;
 
-            // Ausrichtung:
+            // Justification:
 
             eJustification  = mbRTL ? SVX_HOR_JUSTIFY_RIGHT : bJustify ?
                 (SvxCellHorJustify)(((const SvxHorJustifyItem*)pCurData->GetItem( nFmtIndex, ATTR_HOR_JUSTIFY ))->GetValue()) :
@@ -274,9 +274,8 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
                 if ( theMaxStrSize.Height() < aStrSize.Height() )
                 {
-                    // wenn der String in diesem Font nicht
-                    // in die Zelle passt, wird wieder der
-                    // Standard-Font genommen:
+                    // if the string does not fit in the row using this font,
+                    // the default font is used
                     aScriptedText.SetDefaultFont();
                     aStrSize = aScriptedText.GetTextSize();
                 }
@@ -303,7 +302,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                                   - aStrSize.Width()
                                   - FRAME_OFFSET );
 
-            // vertikal (immer zentrieren):
+            // vertical (always center):
 
             aPos.Y() += (mnRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
 
@@ -329,23 +328,23 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                         break;
                     case SVX_HOR_JUSTIFY_STANDARD:
                     default:
-                        // Standard wird hier nicht behandelt
+                        // Standard is not handled here
                         break;
                 }
             }
             else
             {
 
-                // Standardausrichtung:
+                // Standard justification
 
                 if ( (nCol == 0) || (nRow == 0) )
                 {
-                    // Text-Label links oder Summe linksbuendig
+                    // Text label to the left or sum left adjusted
                     aPos.X() += FRAME_OFFSET;
                 }
                 else
                 {
-                     // Zahlen/Datum rechtsbuendig
+                     // Numbers/Dates right adjusted
                     aPos.X() += nRightX;
                 }
             }

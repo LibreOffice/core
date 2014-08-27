@@ -312,11 +312,11 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
         SfxMedium* pMed = pDocInserter->CreateMedium();
         if ( pMed )
         {
-            //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
+            //  ERRCTX_SFX_OPENDOC -> "Error loading document"
             SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
 
             if ( pDocShTables )
-                pDocShTables->DoClose();        // delete passiert beim Zuweisen auf die Ref
+                pDocShTables->DoClose();        // deletion is done when assigning to the reference
 
             pMed->UseInteractionHandler( true );    // to enable the filter options dialog
 
@@ -330,9 +330,9 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
 
             sal_uLong nErr = pDocShTables->GetErrorCode();
             if ( nErr )
-                ErrorHandler::HandleError( nErr );              // auch Warnings
+                ErrorHandler::HandleError( nErr );              // warnings, too
 
-            if ( !pDocShTables->GetError() )                    // nur Errors
+            if ( !pDocShTables->GetError() )                    // errors only
             {
                 FillTables_Impl( &pDocShTables->GetDocument() );
                 m_pFtPath->SetText( pDocShTables->GetTitle( SFX_TITLE_FULLNAME ) );
