@@ -21,6 +21,9 @@
 
 #include <stdio.h>
 
+#include "docsh.hxx"
+#include "view.hxx"
+#include <svx/fmshell.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -859,8 +862,15 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
         {
             case SID_EDITDOC:
             {
-                if ( !pSh || !pSh->HasName() || !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT )
-                  || pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+                SwDocShell *pWSh;
+                FmFormShell *pFSh;
+                if ( !pSh ||
+                     !pSh->HasName() ||
+                     !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT ) ||
+                     ( pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
+                       ( !(pWSh = dynamic_cast<SwDocShell*>(pSh)) ||
+                         !(pFSh = pWSh->GetView()->GetFormShell()) ||
+                         !pFSh->IsDesignMode())))
                     rSet.DisableItem( SID_EDITDOC );
                 else
                 {

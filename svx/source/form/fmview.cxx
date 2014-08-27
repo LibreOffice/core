@@ -130,9 +130,6 @@ void FmFormView::Init()
         }
     }
 
-    if( pObjShell && pObjShell->IsReadOnly() )
-        bInitDesignMode = false;
-
     // dieses wird in der Shell vorgenommen
     // bDesignMode = !bInitDesignMode;  // erzwingt, dass SetDesignMode ausgefuehrt wird
     SetDesignMode( bInitDesignMode );
