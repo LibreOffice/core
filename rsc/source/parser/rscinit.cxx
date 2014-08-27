@@ -73,7 +73,6 @@ void RscTypCont::Init()
     RscTop   *  pClassButton;
     RscTop   *  pClassCheckBox;
     RscTop   *  pClassPushButton;
-    RscTop   *  pClassCancelButton;
     RscTop   *  pClassHelpButton;
     RscTop   *  pClassRadioButton;
     RscTop   *  pClassImageButton;
@@ -372,14 +371,6 @@ void RscTypCont::Init()
     pClassHelpButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
     aNmTb.Put( nId, CLASSNAME, pClassHelpButton );
     pRoot->Insert( pClassHelpButton );
-
-    // Klasse anlegen
-    nId = pHS->getID( "CancelButton" );
-    pClassCancelButton = new RscClass( nId, RSC_CANCELBUTTON,
-                                        pClassPushButton );
-    pClassCancelButton->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassCancelButton );
-    pRoot->Insert( pClassCancelButton );
 }
 {
     pClassRadioButton = InitClassRadioButton( pClassButton );
