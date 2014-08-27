@@ -130,10 +130,11 @@ void OSectionView::MakeVisible( const Rectangle& rRect, Window& rWin )
 void OSectionView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     SdrView::Notify(rBC,rHint);
-    if ( rHint.ISA(SdrHint) )
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if ( pSdrHint )
     {
-        const SdrObject* pObj = ((SdrHint&)rHint).GetObject();
-        const SdrHintKind eKind = ((SdrHint&)rHint).GetKind();
+        const SdrObject* pObj = pSdrHint->GetObject();
+        const SdrHintKind eKind = pSdrHint->GetKind();
         // check for change of selected object
         if(HINT_OBJCHG == eKind && pObj && IsObjMarked(const_cast<SdrObject*>(pObj)))
             AdjustMarkHdl();

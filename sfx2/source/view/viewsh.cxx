@@ -1560,9 +1560,10 @@ SfxViewShell* SfxViewShell::GetNext
 void SfxViewShell::Notify( SfxBroadcaster& rBC,
                             const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxEventHint)) )
+    const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
+    if ( pEventHint )
     {
-        switch ( ((SfxEventHint&)rHint).GetEventId() )
+        switch ( pEventHint->GetEventId() )
         {
             case SFX_EVENT_LOADFINISHED:
             {

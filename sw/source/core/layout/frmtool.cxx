@@ -3215,9 +3215,9 @@ void SwFrmHolder::Reset()
 
 void SwFrmHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING && &rBC == pFrm )
     {
-        if ( ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_DYING && &rBC == pFrm )
             pFrm = 0;
     }
 }

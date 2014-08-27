@@ -1675,8 +1675,9 @@ FmXFormView::ObjectRemoveListener::ObjectRemoveListener( FmXFormView* pParent )
 
 void FmXFormView::ObjectRemoveListener::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (rHint.ISA(SdrHint) && (((SdrHint&)rHint).GetKind() == HINT_OBJREMOVED))
-        m_pParent->ObjectRemovedInAliveMode(((SdrHint&)rHint).GetObject());
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (pSdrHint && pSdrHint->GetKind() == HINT_OBJREMOVED)
+        m_pParent->ObjectRemovedInAliveMode(pSdrHint->GetObject());
 }
 
 

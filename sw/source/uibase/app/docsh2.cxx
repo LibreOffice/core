@@ -215,7 +215,7 @@ void SwDocShell::DoFlushDocInfo()
 static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
     using namespace com::sun::star::script::vba::VBAEventId;
-    if ( rHint.ISA( SfxEventHint ) )
+    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         uno::Sequence< uno::Any > aArgs;
         sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
@@ -244,7 +244,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
 
     sal_uInt16 nAction = 0;
-    if( rHint.ISA(SfxSimpleHint) )
+    if( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
         // switch for more actions
         switch( ((SfxSimpleHint&) rHint).GetId() )
@@ -255,7 +255,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             break;
         }
     }
-    else if( rHint.ISA(SfxEventHint) &&
+    else if( dynamic_cast<const SfxEventHint*>(&rHint) &&
         ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_LOADFINISHED )
     {
         // #i38126# - own action id

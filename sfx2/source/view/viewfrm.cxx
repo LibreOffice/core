@@ -245,9 +245,10 @@ public:
 
 void SfxViewNotificatedFrameList_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint )
     {
-        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        switch( pSimpleHint->GetId() )
         {
             case SFX_HINT_DYING:
                 SfxViewFrame* pFrame = (SfxViewFrame*) &rBC;
@@ -1251,9 +1252,10 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
         return;
 
     // we know only SimpleHints
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint )
     {
-        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        switch( pSimpleHint->GetId() )
         {
             case SFX_HINT_MODECHANGED:
             {
@@ -1317,12 +1319,13 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
         }
     }
-    else if ( rHint.IsA(TYPE(SfxEventHint)) )
+    else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
+        const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
         // When the Document is loaded asynchronously, was the Dispatcher
         // set as ReadOnly, to what must be returned when the document itself
         // is not read only, and the loading is finished.
-        switch ( ((SfxEventHint&)rHint).GetEventId() )
+        switch ( pEventHint->GetEventId() )
         {
             case SFX_EVENT_MODIFYCHANGED:
             {

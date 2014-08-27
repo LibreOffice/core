@@ -137,10 +137,10 @@ public:
     bool                IsValid() const {return bValid;}
 };
 
-void    SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
+void SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( rHint.ISA(SfxSimpleHint) &&
-            (((SfxSimpleHint&) rHint).GetId() == SFX_HINT_DYING))
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+    if( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING)
         bValid = false;
 }
 

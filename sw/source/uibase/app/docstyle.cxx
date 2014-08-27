@@ -3039,10 +3039,11 @@ void SwStyleSheetIterator::InvalidateIterator()
 void SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     // search and remove from View-List!!
-    if( rHint.ISA( SfxStyleSheetHint ) &&
-        SFX_STYLESHEET_ERASED == ((SfxStyleSheetHint&) rHint).GetHint() )
+    const SfxStyleSheetHint* pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
+    if( pStyleSheetHint &&
+        SFX_STYLESHEET_ERASED == pStyleSheetHint->GetHint() )
     {
-        SfxStyleSheetBase* pStyle = ((SfxStyleSheetHint&)rHint).GetStyleSheet();
+        SfxStyleSheetBase* pStyle = pStyleSheetHint->GetStyleSheet();
 
         if (pStyle)
             aLst.RemoveName(pStyle->GetFamily(), pStyle->GetName());

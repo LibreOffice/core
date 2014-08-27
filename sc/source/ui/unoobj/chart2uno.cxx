@@ -1017,8 +1017,8 @@ ScChart2DataProvider::~ScChart2DataProvider()
 
 void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         m_pDocument = NULL;
     }
@@ -2417,8 +2417,8 @@ ScChart2DataSource::~ScChart2DataSource()
 
 void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         m_pDocument = NULL;
     }
@@ -2839,9 +2839,10 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 
 void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint )
     {
-        sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
+        sal_uLong nId = pSimpleHint->GetId();
         if ( nId ==SFX_HINT_DYING )
         {
             m_pDocument = NULL;
@@ -2874,7 +2875,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 m_bGotDataChangedHint = true;
         }
     }
-    else if ( rHint.ISA( ScUpdateRefHint ) )
+    else if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         // Create a range list from the token list, have the range list
         // updated, and bring the change back to the token list.
@@ -2919,7 +2920,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
                 m_pDocument->AddUnoRefChange(m_nObjectId, *pUndoRanges);
         }
     }
-    else if ( rHint.ISA( ScUnoRefUndoHint ) )
+    else if ( dynamic_cast<const ScUnoRefUndoHint*>(&rHint) )
     {
         const ScUnoRefUndoHint& rUndoHint = static_cast<const ScUnoRefUndoHint&>(rHint);
 
@@ -2954,7 +2955,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
 IMPL_LINK( ScChart2DataSequence, ValueListenerHdl, SfxHint*, pHint )
 {
-    if ( m_pDocument && pHint && pHint->ISA( SfxSimpleHint ) &&
+    if ( m_pDocument && pHint && dynamic_cast<const SfxSimpleHint*>(pHint) &&
             ((const SfxSimpleHint*)pHint)->GetId() & SC_HINT_DATACHANGED)
     {
         //  This may be called several times for a single change, if several formulas

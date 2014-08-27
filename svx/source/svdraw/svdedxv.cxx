@@ -143,7 +143,7 @@ void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrGlueEditView::Notify(rBC,rHint);
     // change of printer while editing
-    SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
     if (pSdrHint!=NULL && pTextEditOutliner!=NULL) {
         SdrHintKind eKind=pSdrHint->GetKind();
         if (eKind==HINT_REFDEVICECHG) {

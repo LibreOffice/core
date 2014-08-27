@@ -42,7 +42,7 @@
 
 void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA(SfxSimpleHint))                       // ohne Parameter
+    if (dynamic_cast<const SfxSimpleHint*>(&rHint))                       // ohne Parameter
     {
         sal_uLong nSlot = ((SfxSimpleHint&)rHint).GetId();
         switch ( nSlot )
@@ -131,7 +131,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.ISA(ScPaintHint))                    // neu zeichnen
+    else if (dynamic_cast<const ScPaintHint*>(&rHint))                    // neu zeichnen
     {
         ScPaintHint* pHint = (ScPaintHint*) &rHint;
         sal_uInt16 nParts = pHint->GetParts();
@@ -166,7 +166,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             HideNoteMarker();
         }
     }
-    else if (rHint.ISA(ScEditViewHint))                 // Edit-View anlegen
+    else if (dynamic_cast<const ScEditViewHint*>(&rHint))                 // Edit-View anlegen
     {
         //  ScEditViewHint kommt nur an aktiver View an
 
@@ -197,7 +197,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if (rHint.ISA(ScTablesHint))               // Tabelle eingefuegt / geloescht
+    else if (dynamic_cast<const ScTablesHint*>(&rHint))               // Tabelle eingefuegt / geloescht
     {
             //  aktuelle Tabelle zuerst holen (kann bei DeleteTab an ViewData geaendert werden)
         SCTAB nActiveTab = GetViewData().GetTabNo();
@@ -288,7 +288,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         bool bForce = !bStayOnActiveTab;
         SetTabNo( nNewTab, bForce, false, bStayOnActiveTab );
     }
-    else if (rHint.ISA(ScIndexHint))
+    else if (dynamic_cast<const ScIndexHint*>(&rHint))
     {
         const ScIndexHint& rIndexHint = (const ScIndexHint&)rHint;
         sal_uInt16 nId = rIndexHint.GetId();

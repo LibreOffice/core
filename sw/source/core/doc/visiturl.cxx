@@ -42,7 +42,7 @@ SwURLStateChanged::~SwURLStateChanged()
 
 void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if( rHint.ISA( INetURLHistoryHint ) && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
+    if( dynamic_cast<const INetURLHistoryHint*>(&rHint) && pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() )
     {
         // This URL has been changed:
         const INetURLObject* pIURL = ((INetURLHistoryHint&)rHint).GetObject();

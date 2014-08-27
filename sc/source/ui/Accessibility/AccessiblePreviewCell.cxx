@@ -81,14 +81,11 @@ void SAL_CALL ScAccessiblePreviewCell::disposing()
 
 void ScAccessiblePreviewCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ))
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint && pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
-        {
-            if (mpTextHelper)
-                mpTextHelper->UpdateChildren();
-        }
+        if (mpTextHelper)
+            mpTextHelper->UpdateChildren();
     }
 
     ScAccessibleContextBase::Notify(rBC, rHint);

@@ -57,7 +57,6 @@ typedef ::std::multimap< sal_Int16, OUString, ::std::less< sal_Int16 > > IndexTo
         DlgEdHint(DlgEdHint&);
         void operator =(DlgEdHint&);
     public:
-        TYPEINFO_OVERRIDE();
         DlgEdHint( DlgEdHintKind eHint );
         virtual ~DlgEdHint();
 

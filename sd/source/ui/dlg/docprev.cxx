@@ -293,7 +293,8 @@ void SdDocPreviewWin::updateViewSettings()
 
 void SdDocPreviewWin::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_COLORS_CHANGED )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_COLORS_CHANGED )
     {
         updateViewSettings();
     }

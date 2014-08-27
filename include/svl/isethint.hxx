@@ -32,8 +32,6 @@ class SVL_DLLPUBLIC SfxItemSetHint: public SfxHint
     SfxItemSet*         _pItemSet;
 
 public:
-                        TYPEINFO_OVERRIDE();
-
                         SfxItemSetHint( const SfxItemSet &rItemSet );
     virtual             ~SfxItemSetHint();
 

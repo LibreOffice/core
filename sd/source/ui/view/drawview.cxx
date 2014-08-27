@@ -373,7 +373,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
 
 void DrawView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    if ( mpDrawViewShell && rHint.ISA(SdrHint) )
+    if ( mpDrawViewShell && dynamic_cast<const SdrHint*>(&rHint) )
     {
         SdrHintKind eHintKind = ( (SdrHint&) rHint).GetKind();
 

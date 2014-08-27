@@ -90,11 +90,11 @@ void SAL_CALL ScAccessiblePageHeaderArea::disposing()
 
 void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint)
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         // only notify if child exist, otherwise it is not necessary
-        if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        if (pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpTextHelper)
                 mpTextHelper->UpdateChildren();

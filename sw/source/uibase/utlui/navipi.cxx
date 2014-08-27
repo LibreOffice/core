@@ -999,14 +999,14 @@ void SwNavigationPI::Notify( SfxBroadcaster& rBrdc, const SfxHint& rHint )
 {
     if(&rBrdc == pCreateView)
     {
-        if(rHint.ISA(SfxSimpleHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
+        if(dynamic_cast<const SfxSimpleHint*>(&rHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
         {
             pCreateView = 0;
         }
     }
     else
     {
-        if(rHint.ISA(SfxEventHint))
+        if(dynamic_cast<const SfxEventHint*>(&rHint))
         {
             if( pxObjectShell &&
                         ((SfxEventHint&) rHint).GetEventId() == SFX_EVENT_CLOSEAPP)

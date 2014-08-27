@@ -255,9 +255,9 @@ bool ScStyleSheet::IsUsed() const
 
 void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) )
-        if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
-            GetItemSet().SetParent( NULL );
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
+        GetItemSet().SetParent( NULL );
 }
 
 //  schmutzige Tricks, um die Standard-Vorlage immer als "Standard" zu speichern,

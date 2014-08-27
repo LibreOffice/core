@@ -490,20 +490,15 @@ Image PreviewRenderer::ScaleBitmap (
 
 void PreviewRenderer::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if (rHint.IsA(TYPE(SfxSimpleHint))
-        && mpDocShellOfView != NULL)
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint && mpDocShellOfView && pSimpleHint->GetId() == SFX_HINT_DYING)
     {
-        const SfxSimpleHint* pSimpleHint = PTR_CAST(SfxSimpleHint, &rHint);
-        if (pSimpleHint != NULL
-            && pSimpleHint->GetId() == SFX_HINT_DYING)
-        {
-            // The doc shell is dying.  Our view uses its item pool and
-            // has to be destroyed as well.  The next call to
-            // ProvideView will create a new one (for another
-            // doc shell, of course.)
-            mpView.reset();
-            mpDocShellOfView = NULL;
-        }
+        // The doc shell is dying.  Our view uses its item pool and
+        // has to be destroyed as well.  The next call to
+        // ProvideView will create a new one (for another
+        // doc shell, of course.)
+        mpView.reset();
+        mpDocShellOfView = NULL;
     }
 }
 

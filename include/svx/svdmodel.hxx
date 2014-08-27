@@ -124,8 +124,6 @@ public:
     SdrHintKind                             meHint;
 
 public:
-    TYPEINFO_OVERRIDE();
-
     explicit SdrHint(SdrHintKind eNewHint);
     explicit SdrHint(const SdrObject& rNewObj);
 

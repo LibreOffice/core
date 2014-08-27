@@ -37,9 +37,6 @@ TYPEINIT1(ScPivotItem,          SfxPoolItem);
 TYPEINIT1(ScSolveItem,          SfxPoolItem);
 TYPEINIT1(ScTabOpItem,          SfxPoolItem);
 
-TYPEINIT1(ScTablesHint,         SfxHint);
-TYPEINIT1(ScEditViewHint,       SfxHint);
-TYPEINIT1(ScIndexHint,          SfxHint);
 
 /**
  * Status update for entry field

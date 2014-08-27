@@ -765,9 +765,10 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 {
     if ( &_rBC == &xDocSh )
     {   // it's our document
-        if ( _rHint.ISA( SfxSimpleHint ) )
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &_rHint );
+        if ( pSimpleHint )
         {
-            if ( SFX_HINT_DEINITIALIZING == static_cast< const SfxSimpleHint& >( _rHint ).GetId() )
+            if ( SFX_HINT_DEINITIALIZING == pSimpleHint->GetId() )
             {
                 // our document is dying (possibly because we're shuting down, and the document was notified
                 // earlier than we are?)
@@ -777,7 +778,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
                 xDocSh.Clear();
             }
         }
-        else if(_rHint.ISA(SfxEventHint))
+        else if(dynamic_cast<const SfxEventHint*>(&_rHint))
         {
             if(SFX_EVENT_PREPARECLOSEDOC == static_cast< const SfxEventHint& >( _rHint ).GetEventId())
             {

@@ -189,8 +189,8 @@ ScFunctionAccess::~ScFunctionAccess()
 
 void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) &&
-        ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DEINITIALIZING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DEINITIALIZING )
     {
         //  document must not be used anymore
         aDocCache.Clear();

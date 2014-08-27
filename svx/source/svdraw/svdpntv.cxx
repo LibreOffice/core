@@ -120,8 +120,6 @@ OutputDevice* SdrPaintView::GetFirstOutputDevice() const
 
 
 
-TYPEINIT1( SvxViewHint, SfxHint );
-
 SvxViewHint::SvxViewHint (HintType eHintType)
     : meHintType(eHintType)
 {
@@ -258,15 +256,16 @@ void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     //If the stylesheet has been destroyed
     if (&rBC == pDefaultStyleSheet)
     {
-        if (rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+        if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING)
             pDefaultStyleSheet = NULL;
         return;
     }
 
     bool bObjChg=!bSomeObjChgdFlag; // if true, evaluate for ComeBack timer
     if (bObjChg) {
-        SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
-        if (pSdrHint!=NULL) {
+        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+        if (pSdrHint) {
             SdrHintKind eKind=pSdrHint->GetKind();
             if (eKind==HINT_OBJCHG || eKind==HINT_OBJINSERTED || eKind==HINT_OBJREMOVED) {
                 if (bObjChg) {

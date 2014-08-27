@@ -67,7 +67,6 @@ class FmNavInsertedHint : public SfxHint
     sal_uInt32 nPos;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos );
     virtual ~FmNavInsertedHint();
 
@@ -81,7 +80,6 @@ class FmNavModelReplacedHint : public SfxHint
     FmEntryData* pEntryData;    // die Daten des Eintrages, der ein neues Model bekommen hat
 
 public:
-    TYPEINFO_OVERRIDE();
     FmNavModelReplacedHint( FmEntryData* pAffectedEntryData );
     virtual ~FmNavModelReplacedHint();
 
@@ -94,7 +92,6 @@ class FmNavRemovedHint : public SfxHint
     FmEntryData* pEntryData;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmNavRemovedHint( FmEntryData* pInsertedEntryData );
     virtual ~FmNavRemovedHint();
 
@@ -108,7 +105,6 @@ class FmNavNameChangedHint : public SfxHint
     OUString          aNewName;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName );
     virtual ~FmNavNameChangedHint();
 
@@ -120,7 +116,6 @@ public:
 class FmNavClearedHint : public SfxHint
 {
 public:
-    TYPEINFO_OVERRIDE();
     FmNavClearedHint();
     virtual ~FmNavClearedHint();
 };
@@ -130,11 +125,10 @@ class FmNavViewMarksChanged : public SfxHint
 {
     FmFormView* pView;
 public:
-    TYPEINFO_OVERRIDE();
     FmNavViewMarksChanged(FmFormView* pWhichView) { pView = pWhichView; }
     virtual ~FmNavViewMarksChanged() {}
 
-    FmFormView* GetAffectedView() { return pView; }
+    const FmFormView* GetAffectedView() const { return pView; }
 };
 
 
@@ -225,7 +219,6 @@ class FmNavRequestSelectHint : public SfxHint
     FmEntryDataArray    m_arredToSelect;
     bool                m_bMixedSelection;
 public:
-    TYPEINFO_OVERRIDE();
     FmNavRequestSelectHint()
         : m_bMixedSelection(false)
     {
@@ -233,7 +226,7 @@ public:
     virtual ~FmNavRequestSelectHint() {}
 
     void SetMixedSelection(bool bMixedSelection) { m_bMixedSelection = bMixedSelection; }
-    bool IsMixedSelection() { return m_bMixedSelection; }
+    bool IsMixedSelection() const { return m_bMixedSelection; }
     void AddItem(FmEntryData* pEntry) { m_arredToSelect.insert(pEntry); }
     void ClearItems() { m_arredToSelect.clear(); }
     FmEntryDataArray& GetItems() { return m_arredToSelect; }

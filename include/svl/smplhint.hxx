@@ -21,7 +21,7 @@
 
 #include <svl/svldllapi.h>
 #include <svl/hint.hxx>
-#include <tools/rtti.hxx>
+#include <tools/solar.h>
 
 #define SFX_HINT_DYING              0x00000001
 #define SFX_HINT_NAMECHANGED        0x00000002
@@ -62,7 +62,6 @@ class SVL_DLLPUBLIC SfxSimpleHint: public SfxHint
 private:
     sal_uLong mnId;
 public:
-    TYPEINFO_OVERRIDE();
     SfxSimpleHint( sal_uLong nId ) { mnId = nId; }
     sal_uLong GetId() const { return mnId; }
 };
@@ -75,14 +74,12 @@ public:
             Type  aObj; \
         \
         public: \
-            TYPEINFO_OVERRIDE(); \
             Name( sal_uInt16 nId, const Type& rObject ); \
             virtual ~Name(); \
             const Type& GetObject() const { return aObj; } \
         }
 
 #define IMPL_OBJHINT(Name, Type) \
-        TYPEINIT1(Name, SfxSimpleHint); \
         Name::Name( sal_uInt16 nID, const Type& rObject ): \
             SfxSimpleHint( nID ), aObj(rObject) \
             { } \

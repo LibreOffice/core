@@ -418,10 +418,10 @@ void ScAccessibleSpreadsheet::VisAreaChanged()
 
 void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint)
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        if ((rRef.GetId() == SC_HINT_ACC_CURSORCHANGED))
+        if (pSimpleHint->GetId() == SC_HINT_ACC_CURSORCHANGED)
         {
             if (mpViewShell)
             {
@@ -432,7 +432,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 {
                     NotifyRefMode();
                     m_bFormulaLastMode = true;
-                    return ;
+                    return;
                 }
                 if (m_bFormulaLastMode)
                 {//Last Notify Mode  Is Formula Mode.
@@ -599,7 +599,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 m_LastMarkedRanges = *mpMarkedRanges;
             }
         }
-        else if ((rRef.GetId() == SC_HINT_DATACHANGED))
+        else if (pSimpleHint->GetId() == SC_HINT_DATACHANGED)
         {
             if (!mbDelIns)
                 CommitTableModelChange(maRange.aStart.Row(), maRange.aStart.Col(), maRange.aEnd.Row(), maRange.aEnd.Col(), AccessibleTableModelChangeType::UPDATE);
@@ -657,9 +657,9 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             }
         }*/
     }
-    else if (rHint.ISA( ScUpdateRefHint ))
+    else if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+        const ScUpdateRefHint& rRef = static_cast<const ScUpdateRefHint&>(rHint);
         if (rRef.GetMode() == URM_INSDEL && rRef.GetDz() == 0) //test whether table is inserted or deleted
         {
             if (((rRef.GetRange().aStart.Col() == maRange.aStart.Col()) &&

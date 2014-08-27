@@ -45,9 +45,8 @@ OColorListener::~OColorListener()
 
 void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
 {
-    if (rHint.ISA(SfxSimpleHint)
-        && (static_cast< SfxSimpleHint const & >(rHint).GetId()
-            == SFX_HINT_COLORS_CHANGED))
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_COLORS_CHANGED)
     {
         m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
         m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;

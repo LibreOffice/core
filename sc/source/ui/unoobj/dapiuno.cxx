@@ -296,8 +296,8 @@ void ScDataPilotTablesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -639,8 +639,8 @@ void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update?
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -1338,12 +1338,12 @@ void SAL_CALL ScDataPilotTableObj::removeModifyListener( const uno::Reference<ut
 
 void ScDataPilotTableObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA(ScDataPilotModifiedHint) &&
+    if ( dynamic_cast<const ScDataPilotModifiedHint*>(&rHint) &&
          static_cast<const ScDataPilotModifiedHint&>(rHint).GetName() == aName )
     {
         Refreshed_Impl();
     }
-    else if ( rHint.ISA( ScUpdateRefHint ) )
+    else if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         ScRange aRange( 0, 0, nTab );
         ScRangeList aRanges;

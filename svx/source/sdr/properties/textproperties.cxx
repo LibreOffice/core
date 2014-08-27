@@ -554,7 +554,7 @@ namespace sdr
                 const svx::ITextProvider& rTextProvider(getTextProvider());
                 if(HAS_BASE(SfxStyleSheet, &rBC))
                 {
-                    SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
+                    const SfxSimpleHint* pSimple = dynamic_cast<const SfxSimpleHint*>(&rHint);
                     sal_uInt32 nId(pSimple ? pSimple->GetId() : 0L);
 
                     if(SFX_HINT_DATACHANGED == nId)
@@ -595,7 +595,7 @@ namespace sdr
                 }
                 else if(HAS_BASE(SfxStyleSheetBasePool, &rBC))
                 {
-                    SfxStyleSheetHintExtended* pExtendedHint = PTR_CAST(SfxStyleSheetHintExtended, &rHint);
+                    const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint);
 
                     if(pExtendedHint
                         && SFX_STYLESHEET_MODIFIED == pExtendedHint->GetHint())

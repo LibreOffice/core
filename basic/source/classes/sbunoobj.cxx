@@ -2030,7 +2030,7 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     if( bNeedIntrospection )
         doIntrospection();
 
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
@@ -3617,7 +3617,7 @@ SbxVariable* SbUnoService::Find( const OUString& rName, SbxClassType )
 void SbUnoService::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
 {
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
@@ -3838,7 +3838,7 @@ SbUnoSingleton::SbUnoSingleton( const OUString& aName_,
 void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                            const SfxHint& rHint, const TypeId& rHintType )
 {
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();
@@ -5012,7 +5012,7 @@ void SbUnoStructRefObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCTyp
 {
     if ( !mbMemberCacheInit )
         initMemberCache();
-    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* pHint = dynamic_cast<const SbxHint*>(&rHint);
     if( pHint )
     {
         SbxVariable* pVar = pHint->GetVar();

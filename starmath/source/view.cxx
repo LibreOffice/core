@@ -2037,9 +2037,10 @@ IMPL_LINK( SmViewShell, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
 
 void SmViewShell::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint )
     {
-        switch( ( (SfxSimpleHint&) rHint ).GetId() )
+        switch( pSimpleHint->GetId() )
         {
             case SFX_HINT_MODECHANGED:
             case SFX_HINT_DOCCHANGED:

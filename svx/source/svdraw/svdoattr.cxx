@@ -124,7 +124,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 
 void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
-    SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
+    const SfxSimpleHint* pSimple = dynamic_cast<const SfxSimpleHint*>(&rHint);
     bool bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());
 
     if(bDataChg)
