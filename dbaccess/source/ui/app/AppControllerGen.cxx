@@ -690,7 +690,7 @@ void OApplicationController::onLoadedMenu(const Reference< ::com::sun::star::fra
     }
 }
 
-void OApplicationController::doAction(sal_uInt16 _nId ,ElementOpenMode _eOpenMode)
+void OApplicationController::doAction(sal_uInt16 _nId, const ElementOpenMode _eOpenMode)
 {
     ::std::vector< OUString> aList;
     getSelectionElementNames(aList);
