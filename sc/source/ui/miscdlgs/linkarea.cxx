@@ -220,7 +220,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
                 pMed->SetFilter( pNewFilter );
         }
 
-        //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
+        //  ERRCTX_SFX_OPENDOC -> "Error loading document"
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
 
         if (pSourceShell)

@@ -189,10 +189,10 @@ IMPL_LINK( ScSolverDlg, BtnHdl, PushButton*, pBtn )
     {
         theTargetValStr = m_pEdTargetVal->GetText();
 
-        // Zu ueberpruefen:
-        // 1. enthalten die Strings korrekte Tabellenkoordinaten/def.Namen?
-        // 2. verweist die Formel-Koordinate wirklich auf eine Formelzelle?
-        // 3. wurde ein korrekter Zielwert eingegeben
+        // The following code checks:
+        // 1. do the strings contain correct references / defined names?
+        // 2. does the formula coordinate refer to a cell containing a formula?
+        // 3. has a valid target value been entered?
 
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
         sal_uInt16  nRes1 = theFormulaCell .Parse( m_pEdFormulaCell->GetText(),  pDoc, eConv );

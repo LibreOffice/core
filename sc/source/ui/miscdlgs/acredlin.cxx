@@ -1786,8 +1786,8 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
         {
             sal_Int32 nPos = pInfo->aExtraString.indexOf("AcceptChgDat:");
 
-            // Versuche, den Alignment-String "ALIGN:(...)" einzulesen; wenn
-            // er nicht vorhanden ist, liegt eine "altere Version vor
+            // Try to read the alignment string "ALIGN:(...)"; if it is missing
+            // we have an old version
             if ( nPos != -1 )
             {
                 sal_Int32 n1 = pInfo->aExtraString.indexOf('(', nPos);
@@ -1796,7 +1796,7 @@ void ScAcceptChgDlg::Initialize(SfxChildWinInfo *pInfo)
                     sal_Int32 n2 = pInfo->aExtraString.indexOf(')', n1);
                     if ( n2 != -1 )
                     {
-                        // Alignment-String herausschneiden
+                        // cut out alignment string
                         aStr = pInfo->aExtraString.copy(nPos, n2 - nPos + 1);
                         pInfo->aExtraString = pInfo->aExtraString.replaceAt(nPos, n2 - nPos + 1, "");
                         aStr = aStr.copy( n1-nPos+1 );

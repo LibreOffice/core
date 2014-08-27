@@ -363,7 +363,7 @@ ScInsertContentsDlg::~ScInsertContentsDlg()
     if( mpBtnLink->IsChecked() )
         ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_LINK;
 
-    if (!bFillMode)     // im FillMode ist None gecheckt und alle 3 disabled
+    if (!bFillMode)     // in FillMode, None is checked and all three options are disabled
     {
         if ( mpRbMoveNone->IsChecked() )
             ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;
@@ -385,7 +385,6 @@ sal_uInt16  ScInsertContentsDlg::GetFormulaCmdBits() const
         ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_MUL;
     else if(mpRbDiv->IsChecked())
         ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_DIV;
-    // Bits fuer Checkboxen ausblenden
     if (bUsedShortCut)
         return nShortCutFormulaCmdBits;
     return ScInsertContentsDlg::nPreviousFormulaChecks;

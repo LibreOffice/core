@@ -54,14 +54,14 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pPa
     get(m_pBtnOk, "ok");
     get(m_pBtnCancel, "cancel");
 
-    //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
+    //  in order to keep the the Strings with the FixedTexts in the resource:
     Init();
-    SetDispatcherLock( true ); // Modal-Modus einschalten
+    SetDispatcherLock( true ); // activate modal mode
 }
 
 ScSimpleRefDlg::~ScSimpleRefDlg()
 {
-    SetDispatcherLock( false ); // Modal-Modus einschalten
+    SetDispatcherLock( false ); // deactivate modal mode
 }
 
 void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
@@ -82,8 +82,8 @@ void ScSimpleRefDlg::Init()
     bCloseFlag=false;
 }
 
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-//  neue Selektion im Referenz-Fenster angezeigt wird.
+// Set the reference to a cell range selected with the mouse. This is then
+// shown as the new selection in the reference field.
 void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( m_pEdAssign->IsEnabled() )
@@ -128,9 +128,9 @@ void ScSimpleRefDlg::SetActive()
 {
     m_pEdAssign->GrabFocus();
 
-    //  kein NameModifyHdl, weil sonst Bereiche nicht geaendert werden koennen
-    //  (nach dem Aufziehen der Referenz wuerde der alte Inhalt wieder angezeigt)
-    //  (der ausgewaehlte DB-Name hat sich auch nicht veraendert)
+    //  no NameModifyHdl.  Otherwise ranges could not be altered
+    //  (after marking the reference, the old field content would be shown)
+    //  (also, the selected DB name has also not been altered)
 
     RefInputDone();
 }

@@ -330,8 +330,7 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
                 }
                 if (it == itEnd)
                 {
-                    // Format mit dem Namen noch nicht vorhanden, also
-                    // umbenennen
+                    // no format with this name yet, so we can rename
 
                     m_pLbFormat->RemoveEntry(nIndex );
                     const ScAutoFormatData* p = pFormat->findByIndex(nIndex);

@@ -103,7 +103,7 @@ void ScTabOpDlg::Init()
     m_pEdFormulaRange->GrabFocus();
     pEdActive = m_pEdFormulaRange;
 
-    //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
+    //@BugID 54702 Enable/Disable only in the base class
     //SFX_APPWINDOW->Enable();
 }
 
@@ -232,11 +232,11 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
         ScTabOpParam::Mode eMode = ScTabOpParam::Column;
         sal_uInt16 nError = 0;
 
-        // Zu ueberpruefen:
-        // 1. enthalten die Strings korrekte Tabellenkoordinaten/def.Namen?
-        // 2. IstFormelRang Zeile bei leerer Zeile bzw. Spalte bei leerer Spalte
-        //    bzw. Einfachreferenz bei beidem?
-        // 3. Ist mindestens Zeile oder Spalte und Formel voll?
+        // The following code checks:
+        // 1. do the strings contain correct cell references / defined names?
+        // 2. is formula range row if row is empty or column if column is empty
+        //    or single reference if both?
+        // 3. is at least one of row or column non-empty?
 
         if (m_pEdFormulaRange->GetText().isEmpty())
             nError = TABOPERR_NOFORMULA;
@@ -270,7 +270,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                     nError = TABOPERR_WRONGCOL;
                 else
                 {
-                    if (eMode == ScTabOpParam::Row)                         // beides
+                    if (eMode == ScTabOpParam::Row)                         // both
                     {
                         eMode = ScTabOpParam::Both;
                         ConvertSingleRef( pDoc, m_pEdFormulaRange->GetText(), nCurTab,
