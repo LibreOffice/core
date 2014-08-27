@@ -598,9 +598,10 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     //  Not interested in reference update hints here
 
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocShell = NULL;       // has become invalid
@@ -640,7 +641,7 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( rHint.ISA( ScPointerChangedHint ) )
+    else if ( dynamic_cast<const ScPointerChangedHint*>(&rHint) )
     {
         sal_uInt16 nFlags = ((const ScPointerChangedHint&)rHint).GetFlags();
         if (nFlags & SC_POINTERCHANGED_NUMFMT)
@@ -2432,8 +2433,8 @@ void ScDrawPagesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -2542,8 +2543,8 @@ void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -2948,11 +2949,11 @@ ScTableColumnsObj::~ScTableColumnsObj()
 
 void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.ISA( SfxSimpleHint ) &&
+    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
@@ -3214,11 +3215,11 @@ ScTableRowsObj::~ScTableRowsObj()
 
 void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.ISA( SfxSimpleHint ) &&
+    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
@@ -3491,8 +3492,8 @@ void ScSpreadsheetSettingsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -3543,8 +3544,8 @@ void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! nTab bei Referenz-Update anpassen!!!
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -3671,11 +3672,11 @@ ScScenariosObj::~ScScenariosObj()
 
 void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         //! Referenz-Update fuer Tab und Start/Ende
     }
-    else if ( rHint.ISA( SfxSimpleHint ) &&
+    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden

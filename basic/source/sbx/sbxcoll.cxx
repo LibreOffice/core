@@ -117,7 +117,7 @@ SbxVariable* SbxCollection::Find( const OUString& rName, SbxClassType t )
 void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
                                 const SfxHint& rHint, const TypeId& rId2 )
 {
-    const SbxHint* p = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p )
     {
         sal_uLong nId = p->GetId();

@@ -281,10 +281,10 @@ void Listener::Notify (
     SfxBroadcaster& rBroadcaster,
     const SfxHint& rHint)
 {
-    if (rHint.ISA(SdrHint))
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (pSdrHint)
     {
-        SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        switch (rSdrHint.GetKind())
+        switch (pSdrHint->GetKind())
         {
             case HINT_MODELCLEARED:
                 if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
@@ -295,16 +295,16 @@ void Listener::Notify (
                 break;
             case HINT_PAGEORDERCHG:
                 if (&rBroadcaster == mrSlideSorter.GetModel().GetDocument())
-                    HandleModelChange(rSdrHint.GetPage());
+                    HandleModelChange(pSdrHint->GetPage());
                 break;
 
             default:
                 break;
         }
     }
-    else if (rHint.ISA(ViewShellHint))
+    else if (dynamic_cast<const ViewShellHint*>(&rHint))
     {
-        ViewShellHint& rViewShellHint (*PTR_CAST(ViewShellHint,&rHint));
+        const ViewShellHint& rViewShellHint = static_cast<const ViewShellHint&>(rHint);
         switch (rViewShellHint.GetHintId())
         {
             case ViewShellHint::HINT_PAGE_RESIZE_START:
@@ -336,9 +336,9 @@ void Listener::Notify (
                 break;
         }
     }
-    else if (rHint.ISA(SfxSimpleHint))
+    else if (dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
-        SfxSimpleHint& rSfxSimpleHint (*PTR_CAST(SfxSimpleHint,&rHint));
+        const SfxSimpleHint& rSfxSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
         switch (rSfxSimpleHint.GetId())
         {
             case SFX_HINT_DOCCHANGED:

@@ -203,7 +203,8 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if ( &rBC == pDocSh )
     {
         //  from DocShell, only SFX_HINT_DYING is interesting
-        if ( rHint.ISA(SfxSimpleHint) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+        if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
         {
             pDocSh = NULL;
             EndListening(*SfxGetpApp());
@@ -212,8 +213,9 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else if (rBC.ISA(SfxApplication))
     {
-        if ( !aItemStr.isEmpty() && rHint.ISA(SfxSimpleHint) &&
-                ((const SfxSimpleHint&)rHint).GetId() == SC_HINT_AREAS_CHANGED )
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+        if ( !aItemStr.isEmpty() && pSimpleHint &&
+                pSimpleHint->GetId() == SC_HINT_AREAS_CHANGED )
         {
             //  check if named range was modified
             ScRange aNew;
@@ -225,21 +227,21 @@ void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         //  must be from Area broadcasters
 
-        const ScHint* pScHint = PTR_CAST( ScHint, &rHint );
+        const ScHint* pScHint = dynamic_cast<const ScHint*>( &rHint );
         if (pScHint && (pScHint->GetId() & SC_HINT_DATACHANGED))
             bDataChanged = true;
-        else if (rHint.ISA(ScAreaChangedHint))      // position of broadcaster changed
+        else if ( dynamic_cast<const ScAreaChangedHint*>(&rHint) )      // position of broadcaster changed
         {
-            ScRange aNewRange = ((const ScAreaChangedHint&)rHint).GetRange();
+            ScRange aNewRange = static_cast<const ScAreaChangedHint&>(rHint).GetRange();
             if ( aRange != aNewRange )
             {
                 bRefreshListener = true;
                 bDataChanged = true;
             }
         }
-        else if (rHint.ISA(SfxSimpleHint))
+        else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
         {
-            sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+            sal_uLong nId = static_cast<const SfxSimpleHint&>(rHint).GetId();
             if (nId == SFX_HINT_DYING)
             {
                 //  If the range is being deleted, listening must be restarted

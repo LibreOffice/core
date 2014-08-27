@@ -22,8 +22,6 @@
 #include <svl/itemset.hxx>
 
 
-TYPEINIT1(SfxItemSetHint, SfxHint);
-
 /**
  * Copies the SfxItemSet passed as a parameter.
  */
@@ -31,7 +29,6 @@ SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 :   _pItemSet( rItemSet.Clone() )
 {
 }
-
 
 SfxItemSetHint::~SfxItemSetHint()
 {

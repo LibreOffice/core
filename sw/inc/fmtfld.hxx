@@ -136,7 +136,6 @@ public:
         , pView(pV)
     {}
 
-    TYPEINFO_OVERRIDE();
     const SwFmtFld* GetField() const { return pFld; }
     sal_Int16 Which() const { return nWhich; }
     const SwView* GetView() const { return pView; }

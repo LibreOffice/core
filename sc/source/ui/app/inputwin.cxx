@@ -2205,15 +2205,16 @@ void ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( !bFormulaMode )
     {
         // Does the list of range names need updating?
-        if ( rHint.ISA(SfxSimpleHint) )
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+        if ( pSimpleHint )
         {
-            sal_uLong nHintId = ((SfxSimpleHint&)rHint).GetId();
+            sal_uLong nHintId = pSimpleHint->GetId();
             if ( nHintId == SC_HINT_AREAS_CHANGED || nHintId == SC_HINT_NAVIGATOR_UPDATEALL)
                 FillRangeNames();
         }
-        else if ( rHint.ISA(SfxEventHint) )
+        else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
         {
-            sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+            sal_uLong nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
             if ( nEventId == SFX_EVENT_ACTIVATEDOC )
                 FillRangeNames();
         }

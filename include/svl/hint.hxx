@@ -20,13 +20,10 @@
 #define INCLUDED_SVL_HINT_HXX
 
 #include <svl/svldllapi.h>
-#include <tools/rtti.hxx>
 
 class SVL_DLLPUBLIC SfxHint
 {
 public:
-    TYPEINFO();
-
     virtual ~SfxHint();
 };
 
@@ -38,7 +35,6 @@ public:
             Type* pObj; \
         \
         public: \
-            TYPEINFO_OVERRIDE(); \
             explicit Name( Type* Object ); \
             virtual ~Name(); \
         \
@@ -46,7 +42,6 @@ public:
         }
 
 #define IMPL_PTRHINT(Name, Type) \
-        TYPEINIT1(Name, SfxHint);   \
         Name::Name( Type* pObject ) { pObj = pObject; } \
         Name::~Name() {}
 

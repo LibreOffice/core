@@ -40,7 +40,6 @@ class ScTabDeletedHint : public SfxHint
 private:
     SCTAB   nTab;
 public:
-            TYPEINFO_OVERRIDE();
             ScTabDeletedHint( SCTAB nTabNo = SCTAB_MAX );
     virtual ~ScTabDeletedHint();
 
@@ -52,7 +51,6 @@ class ScTabSizeChangedHint : public SfxHint
 private:
     SCTAB   nTab;
 public:
-            TYPEINFO_OVERRIDE();
             ScTabSizeChangedHint( SCTAB nTabNo = SCTAB_MAX );
     virtual ~ScTabSizeChangedHint();
 

@@ -60,7 +60,6 @@ class SVX_DLLPUBLIC FmDesignModeChangedHint : public SfxHint
     bool m_bDesignMode;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmDesignModeChangedHint( bool bDesMode );
     virtual ~FmDesignModeChangedHint();
 

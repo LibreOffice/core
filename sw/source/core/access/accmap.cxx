@@ -150,7 +150,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
 {
     // do not broadcast notifications for writer fly frames, because there
     // are no shapes that need to know about them.
-    const SdrHint *pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrHint *pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
     if ( !pSdrHint ||
          ( pSdrHint->GetObject() &&
            ( pSdrHint->GetObject()->ISA(SwFlyDrawObj) ||

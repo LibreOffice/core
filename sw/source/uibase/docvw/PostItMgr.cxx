@@ -255,7 +255,7 @@ void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
 
 void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxEventHint) ) )
+    if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         sal_uInt32 nId = ((SfxEventHint&)rHint).GetEventId();
         if ( nId == SW_EVENT_LAYOUT_FINISHED )
@@ -267,7 +267,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( rHint.IsA(TYPE(SfxSimpleHint) ) )
+    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
         sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
         switch ( nId )
@@ -312,7 +312,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if ( rHint.IsA(TYPE(SwFmtFldHint) ) )
+    else if ( dynamic_cast<const SwFmtFldHint*>(&rHint) )
     {
         const SwFmtFldHint& rFmtHint = static_cast<const SwFmtFldHint&>(rHint);
         SwFmtFld* pFld = const_cast <SwFmtFld*>( rFmtHint.GetField() );

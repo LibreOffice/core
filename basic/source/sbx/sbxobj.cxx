@@ -138,7 +138,7 @@ void SbxObject::Clear()
 void SbxObject::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                             const SfxHint& rHint, const TypeId& )
 {
-    const SbxHint* p = PTR_CAST(SbxHint,&rHint);
+    const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p )
     {
         sal_uLong nId = p->GetId();

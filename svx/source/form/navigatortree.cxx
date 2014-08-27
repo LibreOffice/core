@@ -549,24 +549,24 @@ namespace svxform
 
     void NavigatorTree::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        if( rHint.ISA(FmNavRemovedHint) )
+        if( dynamic_cast<const FmNavRemovedHint*>(&rHint) )
         {
-            FmNavRemovedHint* pRemovedHint = (FmNavRemovedHint*)&rHint;
+            const FmNavRemovedHint* pRemovedHint = static_cast<const FmNavRemovedHint*>(&rHint);
             FmEntryData* pEntryData = pRemovedHint->GetEntryData();
             Remove( pEntryData );
         }
 
-        else if( rHint.ISA(FmNavInsertedHint) )
+        else if( dynamic_cast<const FmNavInsertedHint*>(&rHint) )
         {
-            FmNavInsertedHint* pInsertedHint = (FmNavInsertedHint*)&rHint;
+            const FmNavInsertedHint* pInsertedHint = static_cast<const FmNavInsertedHint*>(&rHint);
             FmEntryData* pEntryData = pInsertedHint->GetEntryData();
             sal_uInt32 nRelPos = pInsertedHint->GetRelPos();
             Insert( pEntryData, nRelPos );
         }
 
-        else if( rHint.ISA(FmNavModelReplacedHint) )
+        else if( dynamic_cast<const FmNavModelReplacedHint*>(&rHint) )
         {
-            FmEntryData* pData = ((FmNavModelReplacedHint*)&rHint)->GetEntryData();
+            FmEntryData* pData = static_cast<const FmNavModelReplacedHint*>(&rHint)->GetEntryData();
             SvTreeListEntry* pEntry = FindEntry( pData );
             if (pEntry)
             {   // das Image neu setzen
@@ -575,14 +575,14 @@ namespace svxform
             }
         }
 
-        else if( rHint.ISA(FmNavNameChangedHint) )
+        else if( dynamic_cast<const FmNavNameChangedHint*>(&rHint) )
         {
-            FmNavNameChangedHint* pNameChangedHint = (FmNavNameChangedHint*)&rHint;
+            const FmNavNameChangedHint* pNameChangedHint = static_cast<const FmNavNameChangedHint*>(&rHint);
             SvTreeListEntry* pEntry = FindEntry( pNameChangedHint->GetEntryData() );
             SetEntryText( pEntry, pNameChangedHint->GetNewName() );
         }
 
-        else if( rHint.ISA(FmNavClearedHint) )
+        else if( dynamic_cast<const FmNavClearedHint*>(&rHint) )
         {
             SvTreeListBox::Clear();
 
@@ -592,10 +592,10 @@ namespace svxform
             m_pRootEntry = InsertEntry( SVX_RESSTR(RID_STR_FORMS), aRootImage, aRootImage,
                 NULL, false, 0, NULL );
         }
-        else if (!m_bMarkingObjects && rHint.ISA(FmNavRequestSelectHint))
+        else if (!m_bMarkingObjects && dynamic_cast<const FmNavRequestSelectHint*>(&rHint))
         {   // wenn m_bMarkingObjects sal_True ist, markiere ich gerade selber Objekte, und da der ganze Mechanismus dahinter synchron ist,
             // ist das genau der Hint, der durch mein Markieren ausgeloest wird, also kann ich ihn ignorieren
-            FmNavRequestSelectHint* pershHint = (FmNavRequestSelectHint*)&rHint;
+            FmNavRequestSelectHint* pershHint = const_cast<FmNavRequestSelectHint*>(static_cast<const FmNavRequestSelectHint*>(&rHint));
             FmEntryDataArray& arredToSelect = pershHint->GetItems();
             SynchronizeSelection(arredToSelect);
 

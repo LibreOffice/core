@@ -66,8 +66,6 @@ static OUString aTitlePropName( "Title" );
 // DlgEdHint
 
 
-TYPEINIT1( DlgEdHint, SfxHint );
-
 DlgEdHint::DlgEdHint(Kind eHint)
     : eKind(eHint)
     , pDlgEdObj(0)

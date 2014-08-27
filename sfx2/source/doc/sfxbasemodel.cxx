@@ -2746,11 +2746,11 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
 
     if ( &rBC == m_pData->m_pObjectShell )
     {
-        SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
         if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
             changing();
 
-        SfxEventHint* pNamedHint = PTR_CAST( SfxEventHint, &rHint );
+        const SfxEventHint* pNamedHint = dynamic_cast<const SfxEventHint*>(&rHint);
         if ( pNamedHint )
         {
 
@@ -2819,7 +2819,7 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             }
 
 
-            SfxViewEventHint* pViewHint = PTR_CAST( SfxViewEventHint, &rHint );
+            const SfxViewEventHint* pViewHint = dynamic_cast<const SfxViewEventHint*>(&rHint);
             postEvent_Impl( pNamedHint->GetEventName(), pViewHint ? pViewHint->GetController() : Reference< frame::XController2 >() );
         }
 

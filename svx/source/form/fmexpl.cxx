@@ -69,8 +69,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-TYPEINIT1( FmNavInsertedHint, SfxHint );
-
 FmNavInsertedHint::FmNavInsertedHint( FmEntryData* pInsertedEntryData, sal_uInt32 nRelPos )
     :pEntryData( pInsertedEntryData )
     ,nPos( nRelPos )
@@ -87,8 +85,6 @@ FmNavInsertedHint::~FmNavInsertedHint()
 
 // class FmNavInsertedHint
 
-TYPEINIT1( FmNavModelReplacedHint, SfxHint );
-
 FmNavModelReplacedHint::FmNavModelReplacedHint( FmEntryData* pAffectedEntryData )
     :pEntryData( pAffectedEntryData )
 {
@@ -99,8 +95,6 @@ FmNavModelReplacedHint::~FmNavModelReplacedHint()
 {
 }
 
-TYPEINIT1( FmNavRemovedHint, SfxHint );
-
 FmNavRemovedHint::FmNavRemovedHint( FmEntryData* pRemovedEntryData )
     :pEntryData( pRemovedEntryData )
 {
@@ -110,8 +104,6 @@ FmNavRemovedHint::FmNavRemovedHint( FmEntryData* pRemovedEntryData )
 FmNavRemovedHint::~FmNavRemovedHint()
 {
 }
-
-TYPEINIT1( FmNavNameChangedHint, SfxHint );
 
 FmNavNameChangedHint::FmNavNameChangedHint( FmEntryData* pData, const OUString& rNewName )
     :pEntryData( pData )
@@ -124,8 +116,6 @@ FmNavNameChangedHint::~FmNavNameChangedHint()
 {
 }
 
-TYPEINIT1( FmNavClearedHint, SfxHint );
-
 FmNavClearedHint::FmNavClearedHint()
 {
 }
@@ -135,15 +125,6 @@ FmNavClearedHint::~FmNavClearedHint()
 {
 }
 
-
-// class FmNavRequestSelectHint
-
-TYPEINIT1(FmNavRequestSelectHint, SfxHint);
-
-
-// class FmNavViewMarksChanged
-
-TYPEINIT1(FmNavViewMarksChanged, SfxHint);
 
 FmEntryDataList::FmEntryDataList()
 {

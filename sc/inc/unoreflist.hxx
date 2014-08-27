@@ -62,7 +62,6 @@ class ScUnoRefUndoHint : public SfxHint
     ScUnoRefEntry   aEntry;
 
 public:
-                TYPEINFO_OVERRIDE();
                 ScUnoRefUndoHint( const ScUnoRefEntry& rRefEntry );
                 virtual ~ScUnoRefUndoHint();
 

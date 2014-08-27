@@ -193,7 +193,8 @@ void OXUndoEnvironment::ModeChanged()
 
 void OXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (rHint.ISA(SfxSimpleHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_MODECHANGED )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_MODECHANGED )
         ModeChanged();
 }
 

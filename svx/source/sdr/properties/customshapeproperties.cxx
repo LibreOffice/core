@@ -212,8 +212,8 @@ namespace sdr
             TextProperties::Notify( rBC, rHint );
 
             bool bRemoveRenderGeometry = false;
-            const SfxStyleSheetHint *pStyleHint = PTR_CAST( SfxStyleSheetHint, &rHint );
-            const SfxSimpleHint *pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+            const SfxStyleSheetHint* pStyleHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
+            const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
 
             if ( pStyleHint && pStyleHint->GetStyleSheet() == GetStyleSheet() )
             {

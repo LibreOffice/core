@@ -146,17 +146,17 @@ void ImpEditEngine::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         SfxStyleSheet* pStyle = NULL;
         sal_uLong nId = 0;
 
-        if ( rHint.ISA( SfxStyleSheetHint ) )
+        const SfxStyleSheetHint* pStyleSheetHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
+        if ( pStyleSheetHint )
         {
-            const SfxStyleSheetHint& rH = (const SfxStyleSheetHint&) rHint;
-            DBG_ASSERT( rH.GetStyleSheet()->ISA( SfxStyleSheet ), "No SfxStyleSheet!" );
-            pStyle = (SfxStyleSheet*) rH.GetStyleSheet();
-            nId = rH.GetHint();
+            DBG_ASSERT( pStyleSheetHint->GetStyleSheet()->ISA( SfxStyleSheet ), "No SfxStyleSheet!" );
+            pStyle = (SfxStyleSheet*) pStyleSheetHint->GetStyleSheet();
+            nId = pStyleSheetHint->GetHint();
         }
-        else if ( ( rHint.Type() == TYPE(SfxSimpleHint ) ) && ( rBC.ISA( SfxStyleSheet ) ) )
+        else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) && rBC.ISA( SfxStyleSheet ) )
         {
             pStyle = (SfxStyleSheet*)&rBC;
-            nId = ((SfxSimpleHint&)rHint).GetId();
+            nId = dynamic_cast<const SfxSimpleHint*>(&rHint)->GetId();
         }
 
         if ( pStyle )

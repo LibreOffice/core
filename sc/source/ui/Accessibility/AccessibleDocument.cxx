@@ -405,48 +405,45 @@ void ScChildrenShapes::SetDrawBroadcaster()
 
 void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SdrHint ) )
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (pSdrHint)
     {
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-        if (pSdrHint)
+        SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
+        if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->GetPage() == GetDrawPage()) &&
+            (pObj->GetPage() == pObj->GetObjList()) ) //only do something if the object lies direct on the page
         {
-            SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-            if (pObj && /*(pObj->GetLayer() != SC_LAYER_INTERN) && */(pObj->GetPage() == GetDrawPage()) &&
-                (pObj->GetPage() == pObj->GetObjList()) ) //only do something if the object lies direct on the page
+            switch (pSdrHint->GetKind())
             {
-                switch (pSdrHint->GetKind())
+                case HINT_OBJCHG :         // Objekt geaendert
                 {
-                    case HINT_OBJCHG :         // Objekt geaendert
+                    uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                    if (xShape.is())
                     {
-                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                        if (xShape.is())
-                        {
-                            ScShapeDataLess aLess;
-                            std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), aLess); // sort, because the z index or layer could be changed
-                            CheckWhetherAnchorChanged(xShape);
-                        }
+                        ScShapeDataLess aLess;
+                        std::sort(maZOrderedShapes.begin(), maZOrderedShapes.end(), aLess); // sort, because the z index or layer could be changed
+                        CheckWhetherAnchorChanged(xShape);
                     }
-                    break;
-                    case HINT_OBJINSERTED :    // Neues Zeichenobjekt eingefuegt
-                    {
-                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                        if (xShape.is())
-                            AddShape(xShape, true);
-                    }
-                    break;
-                    case HINT_OBJREMOVED :     // Zeichenobjekt aus Liste entfernt
-                    {
-                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                        if (xShape.is())
-                            RemoveShape(xShape);
-                    }
-                    break;
-                    default :
-                    {
-                        // other events are not interesting
-                    }
-                    break;
                 }
+                break;
+                case HINT_OBJINSERTED :    // Neues Zeichenobjekt eingefuegt
+                {
+                    uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                    if (xShape.is())
+                        AddShape(xShape, true);
+                }
+                break;
+                case HINT_OBJREMOVED :     // Zeichenobjekt aus Liste entfernt
+                {
+                    uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
+                    if (xShape.is())
+                        RemoveShape(xShape);
+                }
+                break;
+                default :
+                {
+                    // other events are not interesting
+                }
+                break;
             }
         }
     }
@@ -1516,10 +1513,10 @@ IMPL_LINK( ScAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
 
 void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( ScAccGridWinFocusLostHint ) )
+    if (dynamic_cast<const ScAccGridWinFocusLostHint*>(&rHint) )
     {
-        const ScAccGridWinFocusLostHint& rRef = (const ScAccGridWinFocusLostHint&)rHint;
-        if (rRef.GetOldGridWin() == meSplitPos)
+        const ScAccGridWinFocusLostHint* pFocusLostHint = static_cast<const ScAccGridWinFocusLostHint *>(&rHint);
+        if (pFocusLostHint->GetOldGridWin() == meSplitPos)
         {
             if (mxTempAcc.is() && mpTempAccEdit)
                 mpTempAccEdit->LostFocus();
@@ -1529,10 +1526,10 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 CommitFocusLost();
         }
     }
-    else if (rHint.ISA( ScAccGridWinFocusGotHint ) )
+    else if (dynamic_cast<const ScAccGridWinFocusGotHint*>(&rHint) )
     {
-        const ScAccGridWinFocusGotHint& rRef = (const ScAccGridWinFocusGotHint&)rHint;
-        if (rRef.GetNewGridWin() == meSplitPos)
+        const ScAccGridWinFocusGotHint* pFocusGotHint = static_cast<const ScAccGridWinFocusGotHint*>(&rHint);
+        if (pFocusGotHint->GetNewGridWin() == meSplitPos)
         {
             uno::Reference<XAccessible> xAccessible;
             if (mpChildrenShapes)
@@ -1560,11 +1557,11 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    else if (rHint.ISA( SfxSimpleHint ))
+    else if (dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
+        const SfxSimpleHint* pSimpleHint = static_cast<const SfxSimpleHint*>(&rHint);
         // only notify if child exist, otherwise it is not necessary
-        if ((rRef.GetId() == SC_HINT_ACC_TABLECHANGED) &&
+        if ((pSimpleHint->GetId() == SC_HINT_ACC_TABLECHANGED) &&
             mpAccessibleSpreadsheet)
         {
             FreeAccessibleSpreadsheet();
@@ -1588,12 +1585,12 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             if (mpAccessibleSpreadsheet)
                 mpAccessibleSpreadsheet->FireFirstCellFocus();
         }
-        else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        else if (pSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
             if (mpChildrenShapes)
                 mpChildrenShapes->SetDrawBroadcaster();
         }
-        else if ((rRef.GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
+        else if ((pSimpleHint->GetId() == SC_HINT_ACC_ENTEREDITMODE)) // this event comes only on creating edit field of a cell
         {
             if (mpViewShell->GetViewData().HasEditView(meSplitPos))
             {
@@ -1617,7 +1614,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
             }
         }
-        else if (rRef.GetId() == SC_HINT_ACC_LEAVEEDITMODE)
+        else if (pSimpleHint->GetId() == SC_HINT_ACC_LEAVEEDITMODE)
         {
             if (mxTempAcc.is())
             {
@@ -1632,7 +1629,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     CommitFocusGained();
             }
         }
-        else if ((rRef.GetId() == SC_HINT_ACC_VISAREACHANGED) || (rRef.GetId() == SC_HINT_ACC_WINDOWRESIZED))
+        else if ((pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED) || (pSimpleHint->GetId() == SC_HINT_ACC_WINDOWRESIZED))
         {
             Rectangle aOldVisArea(maVisArea);
             maVisArea = GetVisibleArea_Impl();

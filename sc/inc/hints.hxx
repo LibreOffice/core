@@ -33,7 +33,6 @@ class ScPaintHint : public SfxHint
     ScPaintHint(); // disabled
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint = PAINT_ALL );
                     virtual ~ScPaintHint();
 
@@ -59,8 +58,6 @@ class ScUpdateRefHint : public SfxHint
     SCsTAB          nDz;
 
 public:
-                    TYPEINFO_OVERRIDE();
-
                     ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
                                         SCsCOL nX, SCsROW nY, SCsTAB nZ );
                     virtual ~ScUpdateRefHint();
@@ -79,7 +76,6 @@ class ScPointerChangedHint : public SfxHint
     sal_uInt16          nFlags;
 
 public:
-                    TYPEINFO_OVERRIDE();
 
                     virtual ~ScPointerChangedHint();
 
@@ -105,7 +101,6 @@ class ScLinkRefreshedHint : public SfxHint
                             //! also use source data for area links?
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScLinkRefreshedHint();
                     virtual ~ScLinkRefreshedHint();
 
@@ -132,7 +127,6 @@ class ScAutoStyleHint : public SfxHint
     sal_uLong   nTimeout;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
                                         sal_uLong nT, const OUString& rSt2 );
                     virtual ~ScAutoStyleHint();
@@ -148,7 +142,6 @@ class ScDBRangeRefreshedHint : public SfxHint
     ScImportParam   aParam;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScDBRangeRefreshedHint( const ScImportParam& rP );
                     virtual ~ScDBRangeRefreshedHint();
 
@@ -160,7 +153,6 @@ class ScDataPilotModifiedHint : public SfxHint
     OUString        maName;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScDataPilotModifiedHint( const OUString& rName );
                     virtual ~ScDataPilotModifiedHint();
 

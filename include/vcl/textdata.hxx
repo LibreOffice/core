@@ -128,12 +128,10 @@ private:
     sal_uLong   mnValue;
 
 public:
-            TYPEINFO_OVERRIDE();
             TextHint( sal_uLong nId );
             TextHint( sal_uLong nId, sal_uLong nValue );
 
     sal_uLong   GetValue() const        { return mnValue; }
-    void    SetValue( sal_uLong n )     { mnValue = n; }
 };
 
 struct TEIMEInfos

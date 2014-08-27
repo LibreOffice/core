@@ -1004,9 +1004,10 @@ ScFilterDescriptorBase::~ScFilterDescriptorBase()
 
 void ScFilterDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint )
     {
-        sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nId = pSimpleHint->GetId();
         if ( nId == SFX_HINT_DYING )
         {
             pDocSh = NULL;          // invalid
@@ -1659,9 +1660,10 @@ ScDatabaseRangeObj::~ScDatabaseRangeObj()
 void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
 
-    if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
         pDocShell = NULL;       // ungueltig geworden
-    else if ( rHint.ISA (ScDBRangeRefreshedHint) )
+    else if ( dynamic_cast<const ScDBRangeRefreshedHint*>(&rHint) )
     {
         ScDBData* pDBData = GetDBData_Impl();
         const ScDBRangeRefreshedHint& rRef = (const ScDBRangeRefreshedHint&)rHint;
@@ -2216,8 +2218,8 @@ void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -2411,8 +2413,8 @@ void ScUnnamedDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }

@@ -459,7 +459,7 @@ void UpdateStyleList(ListBox& rLbStyle, ScDocument* pDoc)
 
 void ScConditionFrmtEntry::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    SfxStyleSheetHint* pHint = PTR_CAST(SfxStyleSheetHint, &rHint);
+    const SfxStyleSheetHint* pHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
     if(!pHint)
         return;
 
@@ -1286,7 +1286,7 @@ void ScDateFrmtEntry::SetInactive()
 
 void ScDateFrmtEntry::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    SfxStyleSheetHint* pHint = PTR_CAST(SfxStyleSheetHint, &rHint);
+    const SfxStyleSheetHint* pHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
     if(!pHint)
         return;
 

@@ -816,7 +816,7 @@ Rectangle SvxGraphCtrlAccessibleContext::GetBoundingBox( void ) throw( RuntimeEx
 
 void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
 
     if( pSdrHint )
     {
@@ -852,7 +852,7 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
     }
     else
     {
-        const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
+        const SfxSimpleHint* pSfxHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
 
         // Has our SdDrawDocument just died?
         if(pSfxHint && pSfxHint->GetId() == SFX_HINT_DYING)

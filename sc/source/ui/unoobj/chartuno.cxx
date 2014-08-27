@@ -104,8 +104,8 @@ void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }
@@ -463,8 +463,8 @@ void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }

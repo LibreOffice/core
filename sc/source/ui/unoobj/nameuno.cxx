@@ -100,7 +100,8 @@ void ScNamedRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     // reference update is of no interest
 
-    if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
         pDocShell = NULL;       // became invalid
 }
 
@@ -480,8 +481,8 @@ void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     // reference update is of no interest
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // became invalid
     }
@@ -942,7 +943,8 @@ void ScLabelRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Ref-Update !!!
 
-    if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
         pDocShell = NULL;       // became invalid
 }
 
@@ -1060,8 +1062,8 @@ void ScLabelRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  reference update is of no interest
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // became invalid
     }

@@ -39,7 +39,6 @@
 #include <svl/smplhint.hxx>
 
 TYPEINIT3(SwFmtFld, SfxPoolItem, SwModify, SfxBroadcaster)
-TYPEINIT1(SwFmtFldHint, SfxHint);
 
 // constructor for default item in attribute-pool
 SwFmtFld::SwFmtFld( sal_uInt16 nWhich )

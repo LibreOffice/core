@@ -328,9 +328,9 @@ void SvxTextEditSourceImpl::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     // #i105988 keep reference to this object
     rtl::Reference< SvxTextEditSourceImpl > xThis( this );
 
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-    const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
-    const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    const SvxViewHint* pViewHint = dynamic_cast<const SvxViewHint*>(&rHint);
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
 
     if (pSimpleHint)
     {

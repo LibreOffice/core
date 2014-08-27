@@ -650,10 +650,10 @@ void EventMultiplexer::Implementation::Notify (
     SfxBroadcaster&,
     const SfxHint& rHint)
 {
-    if (rHint.ISA(SdrHint))
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (pSdrHint)
     {
-        SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        switch (rSdrHint.GetKind())
+        switch (pSdrHint->GetKind())
         {
             case HINT_MODELCLEARED:
             case HINT_PAGEORDERCHG:
@@ -666,25 +666,25 @@ void EventMultiplexer::Implementation::Notify (
 
             case HINT_OBJCHG:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_CHANGED,
-                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;
 
             case HINT_OBJINSERTED:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_INSERTED,
-                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;
 
             case HINT_OBJREMOVED:
                 CallListeners(EventMultiplexerEvent::EID_SHAPE_REMOVED,
-                    const_cast<void*>(static_cast<const void*>(rSdrHint.GetPage())));
+                    const_cast<void*>(static_cast<const void*>(pSdrHint->GetPage())));
                 break;
             default:
                 break;
         }
     }
-    else if (rHint.ISA(SfxSimpleHint))
+    else if (dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
-        SfxSimpleHint& rSimpleHint (*PTR_CAST(SfxSimpleHint, &rHint));
+        const SfxSimpleHint& rSimpleHint = static_cast<const SfxSimpleHint&>(rHint);
         if (rSimpleHint.GetId() == SFX_HINT_DYING)
             mpDocument = NULL;
     }

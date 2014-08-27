@@ -54,8 +54,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-TYPEINIT1(SfxPrintingHint, SfxViewEventHint);
-
 class SfxPrinterController : public vcl::PrinterController, public SfxListener
 {
     Any                                     maCompleteSelection;
@@ -170,9 +168,10 @@ SfxPrinterController::SfxPrinterController( const boost::shared_ptr<Printer>& i_
 
 void SfxPrinterController::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    if ( rHint.IsA(TYPE(SfxSimpleHint)) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint )
     {
-        if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+        if ( pSimpleHint->GetId() == SFX_HINT_DYING )
         {
             EndListening(*mpViewShell);
             EndListening(*mpObjectShell);

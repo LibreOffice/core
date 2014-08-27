@@ -162,7 +162,7 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
 
 void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
+    if (dynamic_cast<const ScTabDeletedHint*>(&rHint))                        // Tabelle geloescht
     {
         SCTAB nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
         if (ValidTab(nDelTab))
@@ -172,15 +172,14 @@ void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 HideSdrPage();
         }
     }
-    else if (rHint.ISA(ScTabSizeChangedHint))               // Groesse geaendert
+    else if (dynamic_cast<const ScTabSizeChangedHint*>(&rHint))               // Groesse geaendert
     {
         if ( nTab == ((ScTabSizeChangedHint&)rHint).GetTab() )
             UpdateWorkArea();
     }
-    else if ( rHint.ISA( SdrHint ) )
+    else if ( const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint ) )
     {
-        if (const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint ))
-            adjustAnchoredPosition(*pSdrHint, *pDoc, nTab);
+        adjustAnchoredPosition(*pSdrHint, *pDoc, nTab);
         FmFormView::Notify( rBC,rHint );
     }
     else

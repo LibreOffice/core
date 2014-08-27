@@ -24,8 +24,6 @@
 
 
 
-TYPEINIT1( SvxEditSourceHint, TextHint );
-
 SvxEditSourceHint::SvxEditSourceHint( sal_uLong _nId ) :
     TextHint( _nId ),
     mnStart( 0 ),
@@ -44,9 +42,6 @@ sal_uLong SvxEditSourceHint::GetValue() const
 {
     return TextHint::GetValue();
 }
-
-
-TYPEINIT1( SvxEditSourceHintEndPara , SvxEditSourceHint );
 
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH

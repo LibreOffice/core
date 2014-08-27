@@ -287,9 +287,9 @@ void FmXUndoEnvironment::ModeChanged()
 
 void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (rHint.ISA(SdrHint))
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (pSdrHint)
     {
-        SdrHint* pSdrHint = (SdrHint*)&rHint;
         switch( pSdrHint->GetKind() )
         {
             case HINT_OBJINSERTED:
@@ -307,9 +307,9 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.ISA(SfxSimpleHint))
+    else if (dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
-        switch ( ((SfxSimpleHint&)rHint).GetId() )
+        switch ( static_cast<const SfxSimpleHint*>(&rHint)->GetId() )
         {
             case SFX_HINT_DYING:
                 dispose();
@@ -320,9 +320,9 @@ void FmXUndoEnvironment::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.ISA(SfxEventHint))
+    else if (dynamic_cast<const SfxEventHint*>(&rHint))
     {
-        switch (((SfxEventHint&)rHint).GetEventId())
+        switch ( static_cast<const SfxEventHint*>(&rHint)->GetEventId() )
         {
         case SFX_EVENT_CREATEDOC:
             case SFX_EVENT_OPENDOC:

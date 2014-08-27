@@ -32,7 +32,7 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     bool bDataChanged = false;
 
-    if (rHint.ISA(SfxSimpleHint))
+    if (dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
         sal_uLong nSlot = ((const SfxSimpleHint&)rHint).GetId();
         switch ( nSlot )
@@ -50,7 +50,7 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.ISA(ScPaintHint))
+    else if (dynamic_cast<const ScPaintHint*>(&rHint))
     {
         if ( ((const ScPaintHint&)rHint).GetPrintFlag() )
         {
@@ -59,7 +59,7 @@ void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 bDataChanged = true;
         }
     }
-    else if (rHint.ISA(SdrHint))
+    else if (dynamic_cast<const SdrHint*>(&rHint))
     {
         // SdrHints are no longer used for invalidating, thus react on objectchange instead
         if(HINT_OBJCHG == ((const SdrHint&)rHint).GetKind())

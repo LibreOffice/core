@@ -101,11 +101,10 @@ class ScTablesHint : public SfxHint
     SCTAB nTab2;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScTablesHint(sal_uInt16 nNewId, SCTAB nTable1, SCTAB nTable2=0);
                     virtual ~ScTablesHint();
 
-    sal_uInt16          GetId() const           { return nId; }
+    sal_uInt16      GetId() const           { return nId; }
     SCTAB           GetTab1() const         { return nTab1; }
     SCTAB           GetTab2() const         { return nTab2; }
 };
@@ -116,7 +115,6 @@ class ScEditViewHint : public SfxHint
     ScAddress                   aCursorPos;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScEditViewHint( ScEditEngineDefaulter* pEngine, const ScAddress& rCurPos );
                     virtual ~ScEditViewHint();
 
@@ -135,12 +133,11 @@ class ScIndexHint : public SfxHint
     sal_uInt16 nIndex;
 
 public:
-                    TYPEINFO_OVERRIDE();
                     ScIndexHint(sal_uInt16 nNewId, sal_uInt16 nIdx);
                     virtual ~ScIndexHint();
 
-    sal_uInt16          GetId() const           { return nId; }
-    sal_uInt16          GetIndex() const        { return nIndex; }
+    sal_uInt16      GetId() const           { return nId; }
+    sal_uInt16      GetIndex() const        { return nIndex; }
 };
 
 // Parameter item for the sort dialog:

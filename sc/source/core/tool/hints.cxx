@@ -19,14 +19,6 @@
 
 #include "hints.hxx"
 
-TYPEINIT1(ScPaintHint, SfxHint);
-TYPEINIT1(ScUpdateRefHint, SfxHint);
-TYPEINIT1(ScPointerChangedHint, SfxHint);
-TYPEINIT1(ScLinkRefreshedHint, SfxHint);
-TYPEINIT1(ScAutoStyleHint, SfxHint);
-TYPEINIT1(ScDBRangeRefreshedHint, SfxHint);
-TYPEINIT1(ScDataPilotModifiedHint, SfxHint);
-
 // ScPaintHint - info what has to be repainted
 
 ScPaintHint::ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint ) :

@@ -221,10 +221,10 @@ void MasterPageObserver::Implementation::Notify(
     SfxBroadcaster& rBroadcaster,
     const SfxHint& rHint)
 {
-    if (rHint.ISA(SdrHint))
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (pSdrHint)
     {
-        SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        switch (rSdrHint.GetKind())
+        switch (pSdrHint->GetKind())
         {
             case HINT_PAGEORDERCHG:
                 // Process the modified set of pages only when the number of

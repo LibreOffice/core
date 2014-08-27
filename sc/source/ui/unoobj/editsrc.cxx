@@ -192,11 +192,11 @@ void ScAnnotationEditSource::UpdateData()
 
 void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA( ScUpdateRefHint ) )
+    if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
         //! Ref-Update
     }
-    else if ( rHint.ISA( SfxSimpleHint ) )
+    else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
         sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )

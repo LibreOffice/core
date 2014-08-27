@@ -365,17 +365,16 @@ void SfxPickList::ExecuteMenuEntry( sal_uInt16 nId )
 
 void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.IsA( TYPE( SfxStringHint )))
+    const SfxStringHint* pStringHint = dynamic_cast<const SfxStringHint*>(&rHint);
+    if ( pStringHint )
     {
-        SfxStringHint* pStringHint = (SfxStringHint*) &rHint;
-
         if ( pStringHint->GetId() == SID_OPENURL )
             INetURLHistory::GetOrCreate()->PutUrl( INetURLObject( pStringHint->GetObject() ));
     }
 
-    if ( rHint.IsA( TYPE( SfxEventHint )))
+    const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
+    if ( pEventHint )
     {
-        SfxEventHint* pEventHint = PTR_CAST(SfxEventHint,&rHint);
         // only ObjectShell-related events with media interest
         SfxObjectShell* pDocSh = pEventHint ? pEventHint->GetObjShell() : NULL;
         if( !pDocSh )

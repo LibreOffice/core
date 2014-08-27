@@ -164,7 +164,6 @@ sdr::contact::ViewContact* SdrEdgeObj::CreateObjectSpecificViewContact()
 }
 
 
-
 TYPEINIT1(SdrEdgeObj,SdrTextObj);
 
 SdrEdgeObj::SdrEdgeObj()
@@ -1567,7 +1566,7 @@ line (CL). The number of object margins per object varies between 0 and 3:
 
 void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SfxSimpleHint* pSimple=PTR_CAST(SfxSimpleHint,&rHint);
+    const SfxSimpleHint* pSimple = dynamic_cast<const SfxSimpleHint*>(&rHint);
     sal_uIntPtr nId=pSimple==0 ? 0 : pSimple->GetId();
     bool bDataChg=nId==SFX_HINT_DATACHANGED;
     bool bDying=nId==SFX_HINT_DYING;
@@ -1587,7 +1586,7 @@ void SdrEdgeObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
     SdrTextObj::Notify(rBC,rHint);
     if (nNotifyingCount==0) { // a locking flag
         ((SdrEdgeObj*)this)->nNotifyingCount++;
-        SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
+        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
         if (bDataChg) { // StyleSheet changed
             ImpSetAttrToEdgeInfo(); // when changing templates, copy values from Pool to aEdgeInfo
         }

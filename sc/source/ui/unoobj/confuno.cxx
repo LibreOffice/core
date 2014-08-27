@@ -97,8 +97,8 @@ void ScDocumentConfiguration::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
-    if ( rHint.ISA( SfxSimpleHint ) &&
-            ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING )
     {
         pDocShell = NULL;       // ungueltig geworden
     }

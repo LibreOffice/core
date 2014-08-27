@@ -1064,8 +1064,8 @@ namespace accessibility
                 mnParasChanged != -1 )
             {
                 // determine hint type
-                const TextHint* pTextHint = PTR_CAST( TextHint, pEvent );
-                const SvxEditSourceHint* pEditSourceHint = PTR_CAST( SvxEditSourceHint, pEvent );
+                const TextHint* pTextHint = dynamic_cast<const TextHint*>( pEvent );
+                const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( pEvent );
 
                 if( !pEditSourceHint && pTextHint &&
                     (pTextHint->GetId() == TEXT_HINT_PARAINSERTED ||
@@ -1234,11 +1234,11 @@ namespace accessibility
                 const SfxHint& rHint = *(pHint.get());
 
                 // determine hint type
-                const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-                const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
-                const TextHint* pTextHint = PTR_CAST( TextHint, &rHint );
-                const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
-                const SvxEditSourceHint* pEditSourceHint = PTR_CAST( SvxEditSourceHint, &rHint );
+                const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
+                const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+                const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint );
+                const SvxViewHint* pViewHint = dynamic_cast<const SvxViewHint*>( &rHint );
+                const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint );
 
                 try
                 {
@@ -1415,11 +1415,11 @@ namespace accessibility
         mbInNotify = true;
 
         // determine hint type
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-        const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
-        const TextHint* pTextHint = PTR_CAST( TextHint, &rHint );
-        const SvxViewHint* pViewHint = PTR_CAST( SvxViewHint, &rHint );
-        const SvxEditSourceHint* pEditSourceHint = PTR_CAST( SvxEditSourceHint, &rHint );
+        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
+        const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+        const TextHint* pTextHint = dynamic_cast<const TextHint*>( &rHint );
+        const SvxViewHint* pViewHint = dynamic_cast<const SvxViewHint*>( &rHint );
+        const SvxEditSourceHint* pEditSourceHint = dynamic_cast<const SvxEditSourceHint*>( &rHint );
 
         try
         {

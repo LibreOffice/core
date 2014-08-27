@@ -45,8 +45,6 @@ public:
         HINT_COMPLEX_MODEL_CHANGE_END
     };
 
-    TYPEINFO_OVERRIDE();
-
     ViewShellHint (HintId nHintId);
 
     HintId GetHintId (void) const { return meHintId;}

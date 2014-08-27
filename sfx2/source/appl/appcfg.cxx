@@ -97,7 +97,7 @@ public:
 
 void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
+    const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if( pHint && pHint->GetId() == SFX_HINT_DYING && pTimer->IsActive() )
     {
         pTimer->Stop();

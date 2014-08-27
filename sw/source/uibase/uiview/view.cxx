@@ -1591,7 +1591,7 @@ SwGlossaryHdl* SwView::GetGlosHdl()
 void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     bool bCallBase = true;
-    if ( rHint.ISA(SfxSimpleHint) )
+    if ( dynamic_cast<const SfxSimpleHint*>(&rHint) )
     {
         sal_uInt32 nId = ((SfxSimpleHint&)rHint).GetId();
         switch ( nId )
@@ -1663,7 +1663,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 break;
         }
     }
-    else if(rHint.ISA(FmDesignModeChangedHint))
+    else if(dynamic_cast<const FmDesignModeChangedHint*>(&rHint))
     {
         bool bDesignMode = ((FmDesignModeChangedHint&)rHint).GetDesignMode();
         if (!bDesignMode && GetDrawFuncPtr())
