@@ -79,27 +79,18 @@
 #include <svx/svdoashp.hxx>
 #include <svx/unoshape.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::style;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
-using ::com::sun::star::beans::PropertyState;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::beans::XPropertyState;
-using ::com::sun::star::container::XEnumeration;
-using ::com::sun::star::container::XEnumerationAccess;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::geometry::IntegerRectangle2D;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::style::LineSpacing;
-using ::com::sun::star::text::XText;
-using ::com::sun::star::text::XTextContent;
-using ::com::sun::star::text::XTextField;
-using ::com::sun::star::text::XTextRange;
+using namespace ::css;
+using namespace ::css::beans;
+using namespace ::css::drawing;
+using namespace ::css::i18n;
+using namespace ::css::style;
+using namespace ::css::text;
+using namespace ::css::uno;
+using namespace ::css::container;
+using namespace ::css::text;
+
+using ::css::geometry::IntegerRectangle2D;
+using ::css::io::XOutputStream;
 using ::sax_fastparser::FSHelperPtr;
 
 namespace oox {

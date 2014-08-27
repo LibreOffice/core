@@ -76,34 +76,24 @@
 #include <svx/unoapi.hxx>
 #include <oox/export/chartexport.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing;
-using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::table;
-using ::com::sun::star::beans::PropertyState;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::beans::XPropertyState;
-using ::com::sun::star::container::XEnumeration;
-using ::com::sun::star::container::XEnumerationAccess;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::document::XExporter;
-using ::com::sun::star::document::XFilter;
-using ::com::sun::star::drawing::FillStyle;
-using ::com::sun::star::graphic::XGraphic;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::lang::XComponent;
-using ::com::sun::star::text::XSimpleText;
-using ::com::sun::star::text::XText;
-using ::com::sun::star::text::XTextContent;
-using ::com::sun::star::text::XTextField;
-using ::com::sun::star::text::XTextRange;
+using namespace ::css;
+using namespace ::css::beans;
+using namespace ::css::uno;
+using namespace ::css::drawing;
+using namespace ::css::i18n;
+using namespace ::css::table;
+using namespace ::css::container;
+using namespace ::css::document;
+using namespace ::css::text;
+
+using ::css::graphic::XGraphic;
+using ::css::io::XOutputStream;
+using ::css::lang::XComponent;
+using ::css::chart2::XChartDocument;
+using ::css::frame::XModel;
+using ::css::sheet::XSpreadsheetDocument;
+
 using ::oox::core::XmlFilterBase;
-using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
 using ::sax_fastparser::FSHelperPtr;
 
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
