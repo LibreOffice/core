@@ -1538,13 +1538,10 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     if (nX2 > nXRight) nX2 = nXRight;
     if (nY2 > nYBottom) nY2 = nYBottom;
 
-    double nPPTX = pViewData->GetPPTX();
-    double nPPTY = pViewData->GetPPTY();
-
     ScInvertMerger aInvert( &rPixelRects );
 
-    Point aScrPos = pViewData->GetScrPos( nX1, nY1, eWhich );
-    long nScrY = aScrPos.Y();
+    Point aScrPosPix = pViewData->GetScrPos( nX1, nY1, eWhich );
+    long nScrYTwips = pViewData->PixelToLogicVertical( aScrPosPix.Y() );
     bool bWasHidden = false;
     for (SCROW nY=nY1; nY<=nY2; nY++)
     {
@@ -1584,14 +1581,14 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                     nLoopEndX = nX1;
             }
 
-            long nEndY = nScrY + ScViewData::ToPixel( nHeightTwips, nPPTY ) - 1;
-            long nScrX = aScrPos.X();
+            long nEndYTwips = nScrYTwips + nHeightTwips - pViewData->PixelToLogicVertical( 1 );
+            long nScrXTwips = pViewData->PixelToLogicHorizontal( aScrPosPix.X() );
             for (SCCOL nX=nX1; nX<=nLoopEndX; nX++)
             {
-                long nWidth = ScViewData::ToPixel( pDoc->GetColWidth( nX,nTab ), nPPTX );
+                long nWidth = pDoc->GetColWidth( nX,nTab );
                 if ( nWidth > 0 )
                 {
-                    long nEndX = nScrX + ( nWidth - 1 ) * nLayoutSign;
+                    long nEndXTwips = nScrXTwips + ( nWidth - pViewData->PixelToLogicHorizontal( 1 ) ) * nLayoutSign;
                     if (bTestMerge)
                     {
                         SCROW nThisY = nY;
@@ -1628,35 +1625,53 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                                 ScMergeAttr* pMerge = (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
                                 if (pMerge->GetColMerge() > 0 || pMerge->GetRowMerge() > 0)
                                 {
-                                    Point aEndPos = pViewData->GetScrPos(
+                                    Point aEndPosPix = pViewData->GetScrPos(
                                             nThisX + pMerge->GetColMerge(),
                                             nThisY + pMerge->GetRowMerge(), eWhich );
-                                    if ( aEndPos.X() * nLayoutSign > nScrX * nLayoutSign && aEndPos.Y() > nScrY )
+                                    Point aEndPosTwips = PixelToLogic( aEndPosPix,
+                                                                       pViewData->GetPaintMapMode()  );
+                                    if ( ( aEndPosTwips.X() * nLayoutSign > nScrXTwips * nLayoutSign ) &&
+                                         ( aEndPosTwips.Y() > nScrYTwips ) )
                                     {
-                                        aInvert.AddRect( Rectangle( nScrX,nScrY,
-                                                    aEndPos.X()-nLayoutSign,aEndPos.Y()-1 ) );
+                                        aInvert.AddRect(
+                                            Rectangle(
+                                                LogicToPixel( Point( nScrXTwips ,nScrYTwips ),
+                                                              pViewData->GetPaintMapMode() ),
+                                                Size( aEndPosPix.getX() - nLayoutSign,
+                                                      aEndPosPix.getY() - 1 ) ) );
                                     }
                                 }
-                                else if ( nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
+                                else if ( ( nEndXTwips * nLayoutSign >= nScrXTwips * nLayoutSign ) &&
+                                          ( nEndYTwips >= nScrYTwips ) )
                                 {
-                                    aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                                    aInvert.AddRect( LogicToPixel(
+                                                         Rectangle( nScrXTwips,
+                                                                    nScrYTwips,
+                                                                    nEndXTwips,
+                                                                    nEndYTwips ),
+                                                         pViewData->GetPaintMapMode() ) );
                                 }
                             }
                         }
                     }
                     else        // !bTestMerge
                     {
-                        if ( aMultiMark.IsCellMarked( nX, nY, true ) == bRepeat &&
-                                                nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
+                        if ( ( aMultiMark.IsCellMarked( nX, nY, true ) == bRepeat ) &&
+                             ( nEndXTwips * nLayoutSign >= nScrXTwips * nLayoutSign ) &&
+                             ( nEndYTwips >= nScrYTwips ) )
                         {
-                            aInvert.AddRect( Rectangle( nScrX,nScrY,nEndX,nEndY ) );
+                            aInvert.AddRect( LogicToPixel(
+                                                 Rectangle( nScrXTwips,
+                                                            nScrYTwips,
+                                                            nEndXTwips,
+                                                            nEndYTwips ),
+                                                 pViewData->GetPaintMapMode() ) );
                         }
                     }
-
-                    nScrX = nEndX + nLayoutSign;
+                    nScrXTwips = nEndXTwips + pViewData->PixelToLogicHorizontal( nLayoutSign );
                 }
             }
-            nScrY = nEndY + 1;
+            nScrYTwips = nEndYTwips + pViewData->PixelToLogicVertical( 1 );
         }
     }
 }
