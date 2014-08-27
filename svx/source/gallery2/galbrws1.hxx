@@ -25,9 +25,10 @@
 #include <vcl/menu.hxx>
 #include <svl/lstner.hxx>
 #include <vector>
-#include "svx/galbrws.hxx"
 
 #include <boost/function.hpp>
+
+class GalleryBrowser1;
 
 // - GalleryButton -
 

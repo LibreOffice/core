@@ -300,11 +300,6 @@ void SvtIconChoiceCtrl::CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics 
     _pImp->CreateAutoMnemonics( &_rUsedMnemonics );
 }
 
-void SvtIconChoiceCtrl::CreateAutoMnemonics( void )
-{
-    _pImp->CreateAutoMnemonics();
-}
-
 SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::GetSelectedEntry( sal_uLong& rPos ) const
 {
     return _pImp->GetFirstSelectedEntry( rPos );

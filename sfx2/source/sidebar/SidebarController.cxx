@@ -537,20 +537,6 @@ void SidebarController::OpenThenSwitchToDeck (
     mpTabBar->Invalidate();
 }
 
-
-
-
-void SidebarController::RequestSwitchToDeck (
-    const ::rtl::OUString& rsDeckId)
-{
-    maContextChangeUpdate.CancelRequest();
-    maAsynchronousDeckSwitch.RequestCall(
-        ::boost::bind(&SidebarController::OpenThenSwitchToDeck, this, rsDeckId));
-}
-
-
-
-
 void SidebarController::SwitchToDeck (
     const ::rtl::OUString& rsDeckId)
 {
@@ -563,9 +549,6 @@ void SidebarController::SwitchToDeck (
             SwitchToDeck(*pDeckDescriptor, maCurrentContext);
     }
 }
-
-
-
 
 void SidebarController::SwitchToDeck (
     const DeckDescriptor& rDeckDescriptor,

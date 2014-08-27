@@ -81,7 +81,6 @@
 #include <svx/fntctl.hxx>
 #include <svx/fntszctl.hxx>
 #include <svx/grafctrl.hxx>
-#include <svx/galbrws.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
 #include <svx/verttexttbxctrl.hxx>

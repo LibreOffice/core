@@ -81,7 +81,6 @@ protected:
 
 public:
     SvtFileView( Window* pParent, WinBits nBits, bool bOnlyFolder, bool bMultiSelection );
-    SvtFileView( Window* pParent, WinBits nBits, sal_uInt8 nFlags );
     virtual ~SvtFileView();
 
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
@@ -116,17 +115,6 @@ public:
                                 const FileViewAsyncAction* pAsyncDescriptor,
                                 const ::com::sun::star::uno::Sequence< OUString >& rBlackList
                             );
-
-    FileViewResult          Initialize(
-                                const OUString& rFolderURL,
-                                const OUString& rFilter,
-                                const FileViewAsyncAction* pAsyncDescriptor );
-    /** initialze the view with a sequence of contents, which have already been obtained elsewhere
-
-        This method will never return <member>eStillRunning</member>, since it will fill the
-        view synchronously
-    */
-    bool                    Initialize( const ::com::sun::star::uno::Sequence< OUString >& aContents );
 
     /** initializes the view with the content of a folder given by an UCB content
     */
@@ -182,13 +170,8 @@ public:
     SvTreeListEntry*            FirstSelected() const;
     SvTreeListEntry*            NextSelected( SvTreeListEntry* pEntry ) const;
     void                    EnableAutoResize();
-    void                    SetFocus();
 
-    void                    EnableContextMenu( bool bEnable );
     void                    EnableDelete( bool bEnable );
-    void                    EnableNameReplacing( bool bEnable = true );
-                                // translate folder names or display doc-title instead of file name
-                                // EnableContextMenu( sal_True )/EnableDelete(sal_True) disable name replacing!
 
                             // save and load column size and sort order
     OUString                GetConfigString() const;

@@ -72,7 +72,6 @@
 #include <svx/fontwork.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
-#include <svx/galbrws.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>

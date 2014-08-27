@@ -1843,11 +1843,6 @@ bool SfxDockingWindow::IsAutoHide_Impl() const
         return false;
 }
 
-void SfxDockingWindow::AutoShow( bool bShow )
-{
-    AutoShow_Impl(bShow);
-}
-
 void SfxDockingWindow::AutoShow_Impl( bool bShow )
 {
     if ( pImp->pSplitWin )

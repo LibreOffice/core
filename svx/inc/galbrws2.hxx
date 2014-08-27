@@ -27,10 +27,11 @@
 #include <vcl/toolbox.hxx>
 #include <svtools/transfer.hxx>
 #include <svl/lstner.hxx>
+#include <svx/galctrl.hxx>
 #include <svtools/miscopt.hxx>
-#include "svx/galbrws.hxx"
 
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
 

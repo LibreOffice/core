@@ -24,7 +24,6 @@
 
 #include <svx/fontwork.hxx>
 #include <svx/bmpmask.hxx>
-#include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/SvxColorChildWindow.hxx>
 #include <sfx2/objface.hxx>

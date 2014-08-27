@@ -19,7 +19,6 @@
 
 #include <svx/svdmark.hxx>
 #include <svx/svdview.hxx>
-#include <svx/galbrws.hxx>
 #include <svx/gallery.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/bindings.hxx>

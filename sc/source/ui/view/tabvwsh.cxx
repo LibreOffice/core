@@ -18,7 +18,6 @@
  */
 
 #include "scitems.hxx"
-#include <svx/galbrws.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
 #include <svl/srchitem.hxx>

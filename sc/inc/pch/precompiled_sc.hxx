@@ -737,7 +737,6 @@
 #include <svx/fontworkgallery.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
 #include <svx/framelinkarray.hxx>
-#include <svx/galbrws.hxx>
 #include <svx/gallery.hxx>
 #include <svx/galleryitem.hxx>
 #include <svx/grafctrl.hxx>

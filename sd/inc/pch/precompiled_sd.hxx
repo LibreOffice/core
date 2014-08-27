@@ -651,7 +651,6 @@
 #include <svx/fontworkbar.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/formatpaintbrushctrl.hxx>
-#include <svx/galbrws.hxx>
 #include <svx/gallery.hxx>
 #include <svx/galleryitem.hxx>
 #include <svx/globl3d.hxx>

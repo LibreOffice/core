@@ -656,16 +656,10 @@ bool GalleryBrowser2::KeyInput( const KeyEvent& rKEvt, Window* pWindow )
 {
     Point       aSelPos;
     const sal_uIntPtr   nItemId = ImplGetSelectedItemId( NULL, aSelPos );
-    GalleryBrowser* pParentBrowser = dynamic_cast<GalleryBrowser*>(GetParent());
     bool bRet = false;
-    if (pParentBrowser != NULL)
-        bRet = pParentBrowser->KeyInput( rKEvt, pWindow );
-    else
-    {
-        svx::sidebar::GalleryControl* pParentControl = dynamic_cast<svx::sidebar::GalleryControl*>(GetParent());
-        if (pParentControl != NULL)
-            bRet = pParentControl->GalleryKeyInput(rKEvt, pWindow);
-    }
+    svx::sidebar::GalleryControl* pParentControl = dynamic_cast<svx::sidebar::GalleryControl*>(GetParent());
+    if (pParentControl != NULL)
+        bRet = pParentControl->GalleryKeyInput(rKEvt, pWindow);
 
     if( !bRet && !maViewBox.HasFocus() && nItemId && mpCurTheme )
     {

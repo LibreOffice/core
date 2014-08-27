@@ -58,7 +58,6 @@
 #include <svx/f3dchild.hxx>
 #include <svx/fontwork.hxx>
 #include <svx/fontworkbar.hxx>
-#include <svx/galbrws.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/imapdlg.hxx>

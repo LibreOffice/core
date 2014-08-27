@@ -21,7 +21,6 @@
 
 #include "hintids.hxx"
 #include <vcl/graph.hxx>
-#include <svx/galbrws.hxx>
 #include <svl/srchitem.hxx>
 #include <SwSpellDialogChildWindow.hxx>
 #include <svl/eitem.hxx>

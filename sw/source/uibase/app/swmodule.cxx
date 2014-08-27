@@ -23,7 +23,6 @@
 #include <swerror.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/graph.hxx>
-#include <svx/galbrws.hxx>
 #include <svx/svdobj.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/fntszctl.hxx>

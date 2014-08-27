@@ -205,10 +205,6 @@ inline bool PushButton::IsChecked() const
     return (GetState() == TRISTATE_TRUE);
 }
 
-
-// - OKButton -
-
-
 class VCL_DLLPUBLIC OKButton : public PushButton
 {
 protected:
@@ -222,13 +218,9 @@ private:
 
 public:
     explicit        OKButton( Window* pParent, WinBits nStyle = WB_DEFBUTTON );
-    explicit        OKButton( Window* pParent, const ResId& );
 
     virtual void    Click() SAL_OVERRIDE;
 };
-
-
-// - CancelButton -
 
 
 class VCL_DLLPUBLIC CancelButton : public PushButton
@@ -244,7 +236,6 @@ private:
 
 public:
     explicit        CancelButton( Window* pParent, WinBits nStyle = 0 );
-    explicit        CancelButton( Window* pParent, const ResId& );
 
     virtual void    Click() SAL_OVERRIDE;
 };

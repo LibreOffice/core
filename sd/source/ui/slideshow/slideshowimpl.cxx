@@ -52,7 +52,6 @@
 #include <svx/bmpmask.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/hyperdlg.hxx>
-#include <svx/galbrws.hxx>
 #include "NavigatorChildWindow.hxx"
 #include "AnimationChildWindow.hxx"
 #include "notifydocumentevent.hxx"

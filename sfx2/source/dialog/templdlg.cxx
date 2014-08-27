@@ -371,16 +371,7 @@ SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(Window *pParentWnd,
     pWin->SetMinOutputSizePixel(pWin->pImpl->GetMinOutputSizePixel());
 }
 
-void SfxTemplateDialogWrapper::SetParagraphFamily()
-{
-    // forward to SfxTemplateDialog, because SfxTemplateDialog isn't exported
-    static_cast< SfxTemplateDialog* >( GetWindow() )->SetParagraphFamily();
-}
-
-
-
 //===== SfxTemplatePanelControl ===============================================
-
 SfxTemplatePanelControl::SfxTemplatePanelControl (
     SfxBindings* pBindings,
     Window* pParentWindow)

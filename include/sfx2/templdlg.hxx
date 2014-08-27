@@ -66,8 +66,6 @@ public:
                 SfxTemplateDialogWrapper
                     (Window*,sal_uInt16,SfxBindings*,SfxChildWinInfo*);
                 SFX_DECL_CHILDWINDOW_WITHID(SfxTemplateDialogWrapper);
-
-    void            SetParagraphFamily();
 };
 
 // class SfxTemplatePanelControl -----------------------------------------

@@ -1647,18 +1647,6 @@ OKButton::OKButton( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-OKButton::OKButton( Window* pParent, const ResId& rResId ) :
-    PushButton( WINDOW_OKBUTTON )
-{
-    rResId.SetRT( RSC_OKBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 void OKButton::Click()
 {
     // close parent if no link set
@@ -1702,18 +1690,6 @@ CancelButton::CancelButton( Window* pParent, WinBits nStyle ) :
     PushButton( WINDOW_CANCELBUTTON )
 {
     ImplInit( pParent, nStyle );
-}
-
-CancelButton::CancelButton( Window* pParent, const ResId& rResId ) :
-    PushButton( WINDOW_CANCELBUTTON )
-{
-    rResId.SetRT( RSC_CANCELBUTTON );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
 }
 
 void CancelButton::Click()

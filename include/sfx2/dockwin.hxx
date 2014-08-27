@@ -100,7 +100,6 @@ public:
     Size                GetMinOutputSizePixel() const;
     virtual bool        Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
     virtual void        FadeIn( bool );
-    void                AutoShow( bool bShow = true );
     DECL_LINK(TimerHdl, void *);
 
     SAL_DLLPRIVATE void Initialize_Impl();

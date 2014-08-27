@@ -289,10 +289,6 @@ public:
                                        );
 
     /** creates automatic mnemonics for all icon texts in the control
-    */
-    void                CreateAutoMnemonics( void );
-
-    /** creates automatic mnemonics for all icon texts in the control
 
     @param _rUsedMnemonics
         a MnemonicGenerator at which some other mnemonics are already registered.

@@ -479,7 +479,6 @@ public:
 
     sal_uLong               GetEntryPos( const OUString& rURL );
 
-    inline void             EnableContextMenu( bool bEnable );
     inline void             EnableDelete( bool bEnable );
 
     void                    Resort_Impl( sal_Int16 nColumn, bool bAscending );
@@ -487,7 +486,6 @@ public:
                                              const OUString& rTitle,
                                              bool bWrapAround );
 
-    inline bool             EnableNameReplacing( bool bEnable = true ); // returns false, if action wasn't possible
     void                    SetActualFolder( const INetURLObject& rActualFolder );
 
     void                    SetSelectHandler( const Link& _rHdl );
@@ -509,37 +507,11 @@ protected:
     virtual void onTimeout( CallbackTimer* _pInstigator ) SAL_OVERRIDE;
 };
 
-inline void SvtFileView_Impl::EnableContextMenu( bool bEnable )
-{
-    mpView->EnableContextMenuHandling( bEnable );
-    if( bEnable )
-        mbReplaceNames = false;
-}
-
 inline void SvtFileView_Impl::EnableDelete( bool bEnable )
 {
     mpView->EnableDelete( bEnable );
     if( bEnable )
         mbReplaceNames = false;
-}
-
-inline bool SvtFileView_Impl::EnableNameReplacing( bool bEnable )
-{
-    mpView->EnableRename( bEnable );
-
-    bool bRet;
-    if( mpView->IsDeleteOrContextMenuEnabled() )
-    {
-        DBG_ASSERT( !mbReplaceNames, "SvtFileView_Impl::EnableNameReplacing(): state should be not possible!" );
-        bRet = !bEnable; // only for enabling this is an unsuccessful result
-    }
-    else
-    {
-        mbReplaceNames = bEnable;
-        bRet = true;
-    }
-
-    return bRet;
 }
 
 inline void SvtFileView_Impl::EndEditing( bool _bCancel )
@@ -1120,24 +1092,6 @@ SvtFileView::SvtFileView( Window* pParent, WinBits nBits,
     pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
 }
 
-SvtFileView::SvtFileView( Window* pParent, WinBits nStyle, sal_uInt8 nFlags ) :
-
-    Control( pParent, nStyle )
-{
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler > xInteractionHandler(
-        InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
-    Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
-
-    mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags, nFlags & FILEVIEW_ONLYFOLDER );
-
-    SetSortColumn( (nFlags & FILEVIEW_SHOW_NONE) == 0 );
-
-    HeaderBar *pHeaderBar = mpImp->mpView->GetHeaderBar();
-    pHeaderBar->SetSelectHdl( LINK( this, SvtFileView, HeaderSelect_Impl ) );
-    pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
-}
-
 SvtFileView::~SvtFileView()
 {
     // use temp pointer to prevent access of deleted member (GetFocus())
@@ -1321,39 +1275,6 @@ FileViewResult SvtFileView::Initialize(
     return eFailure;
 }
 
-
-FileViewResult SvtFileView::Initialize(
-    const OUString& rURL,
-    const OUString& rFilter,
-    const FileViewAsyncAction* pAsyncDescriptor )
-{
-    return Initialize( rURL, rFilter, pAsyncDescriptor, ::com::sun::star::uno::Sequence< OUString >());
-}
-
-
-
-
-bool SvtFileView::Initialize( const Sequence< OUString >& aContents )
-{
-    WaitObject aWaitCursor( this );
-
-    mpImp->maViewURL = "";
-    mpImp->maCurrentFilter = mpImp->maAllFilter;
-
-    mpImp->Clear();
-    mpImp->CreateVector_Impl( aContents );
-    if( GetSortColumn() )
-        mpImp->SortFolderContent_Impl();
-
-    mpImp->OpenFolder_Impl();
-
-    mpImp->maOpenDoneLink.Call( this );
-
-    return true;
-}
-
-
-
 FileViewResult SvtFileView::ExecuteFilter( const OUString& rFilter, const FileViewAsyncAction* pAsyncDescriptor )
 {
     mpImp->maCurrentFilter = rFilter.toAsciiLowerCase();
@@ -1364,14 +1285,10 @@ FileViewResult SvtFileView::ExecuteFilter( const OUString& rFilter, const FileVi
     return eResult;
 }
 
-
-
 void SvtFileView::CancelRunningAsyncAction()
 {
     mpImp->CancelRunningAsyncAction();
 }
-
-
 
 void SvtFileView::SetNoSelection()
 {
@@ -1422,55 +1339,30 @@ SvTreeListEntry* SvtFileView::NextSelected( SvTreeListEntry* pEntry ) const
     return mpImp->mpView->NextSelected( pEntry );
 }
 
-
-
 void SvtFileView::EnableAutoResize()
 {
     mpImp->mpView->EnableAutoResize();
 }
-
-
-
-void SvtFileView::SetFocus()
-{
-    mpImp->mpView->GrabFocus();
-}
-
 
 const OUString& SvtFileView::GetViewURL() const
 {
     return mpImp->maViewURL;
 }
 
-
 void SvtFileView::SetOpenDoneHdl( const Link& rHdl )
 {
     mpImp->maOpenDoneLink = rHdl;
 }
-
-
-void SvtFileView::EnableContextMenu( bool bEnable )
-{
-    mpImp->EnableContextMenu( bEnable );
-}
-
 
 void SvtFileView::EnableDelete( bool bEnable )
 {
     mpImp->EnableDelete( bEnable );
 }
 
-void SvtFileView::EnableNameReplacing( bool bEnable )
-{
-    mpImp->EnableNameReplacing( bEnable );
-}
-
-
 void SvtFileView::EndInplaceEditing( bool _bCancel )
 {
     return mpImp->EndEditing( _bCancel );
 }
-
 
 IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
 {

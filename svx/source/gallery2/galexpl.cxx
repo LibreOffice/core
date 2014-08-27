@@ -23,7 +23,6 @@
 #include <sfx2/viewfrm.hxx>
 #include "svx/gallery1.hxx"
 #include "svx/galtheme.hxx"
-#include "svx/galbrws.hxx"
 #include "svx/gallery.hxx"
 #include "galobj.hxx"
 
