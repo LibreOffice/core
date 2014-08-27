@@ -1677,7 +1677,7 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_
         // forward
         nY = nPosY;
         long nScrPosY = 0;
-        AddPixelsWhile( nScrPosY, nScrSizeY, nY, MAXROW, nPPTY, pDoc, nTabNo);
+        AddTwipsWhile( nScrPosY, nScrSizeY, nY, MAXROW );
         // Original loop ended on last evaluated +1 or if that was MAXROW even
         // on MAXROW+2.
         nY += (nY == MAXROW ? 2 : 1);
@@ -1688,7 +1688,7 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, sal_
         // backward
         nY = nPosY-1;
         long nScrPosY = 0;
-        AddPixelsWhileBackward( nScrPosY, nScrSizeY, nY, 0, nPPTY, pDoc, nTabNo);
+        AddTwipsWhileBackward( nScrPosY, nScrSizeY, nY, 0 );
         // Original loop ended on last evaluated -1 or if that was 0 even on
         // -2.
         nY -= (nY == 0 ? 2 : 1);
@@ -1799,7 +1799,9 @@ bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     }
 
     if (nClickY > 0)
-        AddPixelsWhile( nScrY, nClickY, rPosY, MAXROW, nPPTY, pDoc, nTabNo );
+    {
+       AddTwipsWhile( aScrPosTwips.Y(), nClickY, rPosY, MAXROW );
+    }
     else
     {
         /* TODO: could need some "SubPixelsWhileBackward" method */
@@ -3024,11 +3026,13 @@ void ScViewData::SetRefEnd( SCCOL nNewX, SCROW nNewY, SCTAB nNewZ )
     nRefEndX = nNewX; nRefEndY = nNewY; nRefEndZ = nNewZ;
 }
 
-void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
-        SCROW nEndRow, double nPPTY, const ScDocument * pDoc, SCTAB nTabNo )
+void ScViewData::AddTwipsWhile( long & rScrYTwips, long nEndPix,
+                                SCROW & rPosY, SCROW nEndRow ) const
 {
     SCROW nRow = rPosY;
-    while (rScrY <= nEndPixels && nRow <= nEndRow)
+    const long nEndTwips = PixelToLogicVertical( nEndPix );
+
+    while ( rScrYTwips <= nEndTwips && nRow <= nEndRow )
     {
         SCROW nHeightEndRow;
         sal_uInt16 nHeight = pDoc->GetRowHeight( nRow, nTabNo, NULL, &nHeightEndRow);
@@ -3039,21 +3043,20 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
         else
         {
             SCROW nRows = nHeightEndRow - nRow + 1;
-            sal_Int64 nPixel = ToPixel( nHeight, nPPTY);
-            sal_Int64 nAdd = nPixel * nRows;
-            if (nAdd + rScrY > nEndPixels)
+            sal_Int64 nAdd = nHeight * nRows;
+            if ( nAdd + rScrYTwips > nEndTwips )
             {
-                sal_Int64 nDiff = rScrY + nAdd - nEndPixels;
-                nRows -= static_cast<SCROW>(nDiff / nPixel);
-                nAdd = nPixel * nRows;
+                sal_Int64 nDiff = rScrYTwips + nAdd - nEndTwips;
+                nRows -= static_cast<SCROW>( nDiff / nHeight );
+                nAdd = nHeight * nRows;
                 // We're looking for a value that satisfies loop condition.
-                if (nAdd + rScrY <= nEndPixels)
+                if ( nAdd + rScrYTwips <= nEndTwips )
                 {
                     ++nRows;
-                    nAdd += nPixel;
+                    nAdd += nHeight;
                 }
             }
-            rScrY += static_cast<long>(nAdd);
+            rScrYTwips += static_cast<long>(nAdd);
             nRow += nRows;
         }
     }
@@ -3062,12 +3065,13 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
     rPosY = nRow;
 }
 
-void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
-        SCROW & rPosY, SCROW nStartRow, double nPPTY, const ScDocument * pDoc,
-        SCTAB nTabNo )
+void ScViewData::AddTwipsWhileBackward( long & rScrYTwips, long nEndPixels,
+                                        SCROW & rPosY, SCROW nStartRow ) const
 {
+    // TODO: update this function to reality
     SCROW nRow = rPosY;
-    while (rScrY <= nEndPixels && nRow >= nStartRow)
+    long nEndTwips = PixelToLogicVertical( nEndPixels );
+    while ( rScrYTwips <= nEndTwips && nRow >= nStartRow )
     {
         SCROW nHeightStartRow;
         sal_uInt16 nHeight = pDoc->GetRowHeight( nRow, nTabNo, &nHeightStartRow, NULL);
@@ -3078,21 +3082,20 @@ void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
         else
         {
             SCROW nRows = nRow - nHeightStartRow + 1;
-            sal_Int64 nPixel = ToPixel( nHeight, nPPTY);
-            sal_Int64 nAdd = nPixel * nRows;
-            if (nAdd + rScrY > nEndPixels)
+            sal_Int64 nAdd = nHeight * nRows;
+            if ( nAdd + rScrYTwips > nEndTwips )
             {
-                sal_Int64 nDiff = nAdd + rScrY - nEndPixels;
-                nRows -= static_cast<SCROW>(nDiff / nPixel);
-                nAdd = nPixel * nRows;
+                sal_Int64 nDiff = nAdd + rScrYTwips - nEndPixels;
+                nRows -= static_cast<SCROW>( nDiff / nHeight );
+                nAdd = nHeight * nRows;
                 // We're looking for a value that satisfies loop condition.
-                if (nAdd + rScrY <= nEndPixels)
+                if ( nAdd + rScrYTwips <= nEndTwips )
                 {
                     ++nRows;
-                    nAdd += nPixel;
+                    nAdd += nHeight;
                 }
             }
-            rScrY += static_cast<long>(nAdd);
+            rScrYTwips += static_cast<long>(nAdd);
             nRow -= nRows;
         }
     }

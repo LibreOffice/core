@@ -369,12 +369,16 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
     }
 
     long nScrY = 0;
-    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, MAXROW, nPPTY, pDoc, nTab);
+    pViewData->AddTwipsWhile( nScrY,
+                              pViewData->LogicToPixelVertical( aLogicRect.Top() ),
+                              nY1, MAXROW );
     SCROW nY2 = nY1;
     if (nScrY <= aPixRect.Bottom() && nY2 < MAXROW)
     {
         ++nY2;
-        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
+        pViewData->AddTwipsWhile( nScrY,
+                                  pViewData->LogicToPixelVertical( aLogicRect.Bottom() ),
+                                  nY2, MAXROW );
     }
 
     // We specifically need to set the visible range here -- by default it is
