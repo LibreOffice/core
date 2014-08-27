@@ -1670,7 +1670,7 @@ void OpenGL3DRenderer::RenderExtrude3DObject()
 void OpenGL3DRenderer::CreateScreenTextTexture(
         const boost::shared_array<sal_uInt8> &bitmapBuf,
         ::Size maSizePixels, const glm::vec2& vTopLeft,
-        const glm::vec2& vBottomRight, glm::vec3 vPos, glm::vec4 screenTextColor, sal_uInt32 nUniqueId)
+        const glm::vec2& vBottomRight, glm::vec3 vPos, glm::vec4 vScreenTextColor, sal_uInt32 nUniqueId)
 {
     long bmpWidth = maSizePixels.Width();
     long bmpHeight = maSizePixels.Height();
@@ -1694,7 +1694,7 @@ void OpenGL3DRenderer::CreateScreenTextTexture(
     aTextInfo.vertex[10] = vBottomRight.y;
     aTextInfo.vertex[11] = 0;
     aTextInfo.pos = vPos;
-    aTextInfo.textColor = screenTextColor;
+    aTextInfo.textColor = vScreenTextColor;
 
     CHECK_GL_ERROR();
     glGenTextures(1, &aTextInfo.texture);
