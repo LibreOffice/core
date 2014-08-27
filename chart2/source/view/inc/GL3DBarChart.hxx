@@ -47,6 +47,7 @@ enum RenderEventType
     EVENT_DRAG_RIGHT,
     EVENT_SCROLL,
     EVENT_SHOW_SCROLL,
+    EVENT_SHOW_SELECT,
     EVENT_AUTO_FLY,
     EVENT_DIE
 };
@@ -154,7 +155,9 @@ private:
     bool mbRenderDie;
     ::osl::Condition maClickCond;
     RenderEventType maRenderEvent;
-    sal_uInt32 mSelectBarId;
+    RenderEventType maPreRenderEvent;
+    sal_uInt32 mnSelectBarId;
+    sal_uInt32 mnPreSelectBarId;
     Point maClickPos;
     sal_uInt32 miScrollRate;
     bool mbScrollFlg;
@@ -174,7 +177,6 @@ private:
     std::map<sal_uInt32, float> maDistanceMap;
     std::map<sal_uInt32, sal_uInt32> maBarColorMap;
     int mnColorRate;
-    sal_uInt32 mnAutoFlyBarID;
     bool mbBenchMarkMode;
     sal_uInt32 maHistoryCounter;
 };
