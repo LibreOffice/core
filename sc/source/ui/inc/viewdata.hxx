@@ -495,18 +495,16 @@ public:
         segments. Upon return rPosY is the last row evaluated <= nEndRow, rScrY
         may be > nEndPixels!
      */
-    static void     AddPixelsWhile( long & rScrY, long nEndPixels,
-                                    SCROW & rPosY, SCROW nEndRow, double nPPTY,
-                                    const ScDocument * pDoc, SCTAB nTabNo );
+    void     AddTwipsWhile( long & rScrYTwips, long nEndPixels,
+                            SCROW & rPosY, SCROW nEndRow ) const;
 
     /** while (rScrY <= nEndPixels && rPosY >= nStartRow) add pixels of row
         heights converted with nPPTY to rScrY, optimized for row height
         segments. Upon return rPosY is the last row evaluated >= nStartRow,
         rScrY may be > nEndPixels!
      */
-    static void     AddPixelsWhileBackward( long & rScrY, long nEndPixels,
-                                    SCROW & rPosY, SCROW nStartRow, double nPPTY,
-                                    const ScDocument * pDoc, SCTAB nTabNo );
+    void     AddTwipsWhileBackward( long & rScrYTwips, long nEndPixels,
+                                     SCROW & rPosY, SCROW nStartRow  ) const;
 };
 
 inline long ScViewData::ToPixel( sal_uInt16 nTwips, double nFactor )
