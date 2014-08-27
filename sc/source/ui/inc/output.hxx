@@ -77,6 +77,8 @@ private:
 
     class DrawEditParam
     {
+    private:
+        const ScOutputData*     mpOutputData;
     public:
         SvxCellHorJustify       meHorJustAttr;      ///< alignment attribute
         SvxCellHorJustify       meHorJustContext;   ///< context depending on attribute, content and direction
@@ -110,12 +112,15 @@ private:
         const RowInfo*          mpThisRowInfo;
         const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
 
-        explicit DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue);
+        explicit DrawEditParam( const ScOutputData* pOutputData,
+                                const ScPatternAttr* pPattern,
+                                const SfxItemSet* pCondSet,
+                                bool bCellIsValue);
 
         bool readCellContent(ScDocument* pDoc, bool bShowNullValues, bool bShowFormulas, bool bSyntaxMode, bool bUseStyleColor, bool bForceAutoColor, bool& rWrapFields);
         void setPatternToEngine(bool bUseStyleColor);
-        void calcMargins(long& rTop, long& rLeft, long& rBottom, long& rRight, double nPPTX, double nPPTY) const;
-        void calcPaperSize(Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const;
+        void calcMargins( long& rTop, long& rLeft, long& rBottom, long& rRight ) const;
+        void calcPaperSize( Size& rPaperSize, const Rectangle& rAlignRect ) const;
         void getEngineSize(ScFieldEditEngine* pEngine, long& rWidth, long& rHeight) const;
         bool hasLineBreak() const;
         bool isHyperlinkCell() const;

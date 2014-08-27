@@ -2286,7 +2286,12 @@ void ScOutputData::ShrinkEditEngine( EditEngine& rEngine, const Rectangle& rAlig
     }
 }
 
-ScOutputData::DrawEditParam::DrawEditParam(const ScPatternAttr* pPattern, const SfxItemSet* pCondSet, bool bCellIsValue) :
+ScOutputData::DrawEditParam::DrawEditParam(
+    const ScOutputData* pOutputData,
+    const ScPatternAttr* pPattern,
+    const SfxItemSet* pCondSet,
+    bool bCellIsValue) :
+    mpOutputData( pOutputData ),
     meHorJustAttr( lcl_GetValue<SvxHorJustifyItem, SvxCellHorJustify>(*pPattern, ATTR_HOR_JUSTIFY, pCondSet) ),
     meHorJustContext( meHorJustAttr ),
     meHorJustResult( meHorJustAttr ),
@@ -2424,7 +2429,8 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     mpEngine->SetBackgroundColor( aBackCol );
 }
 
-void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& rBottomM, long& rRightM, double nPPTX, double nPPTY) const
+void ScOutputData::DrawEditParam::calcMargins(
+    long& rTopM, long& rLeftM, long& rBottomM, long& rRightM ) const
 {
     const SvxMarginItem& rMargin =
         static_cast<const SvxMarginItem&>(mpPattern->GetItem(ATTR_MARGIN, mpCondSet));
@@ -2433,22 +2439,29 @@ void ScOutputData::DrawEditParam::calcMargins(long& rTopM, long& rLeftM, long& r
     if (meHorJustAttr == SVX_HOR_JUSTIFY_LEFT || meHorJustAttr == SVX_HOR_JUSTIFY_RIGHT)
         nIndent = lcl_GetValue<SfxUInt16Item, sal_uInt16>(*mpPattern, ATTR_INDENT, mpCondSet);
 
-    rLeftM   = static_cast<long>(((rMargin.GetLeftMargin() + nIndent) * nPPTX));
-    rTopM    = static_cast<long>((rMargin.GetTopMargin() * nPPTY));
-    rRightM  = static_cast<long>((rMargin.GetRightMargin() * nPPTX));
-    rBottomM = static_cast<long>((rMargin.GetBottomMargin() * nPPTY));
+    rLeftM = mpOutputData->LogicToPixelHorizontal(
+        static_cast<long>( rMargin.GetLeftMargin() + nIndent ) );
+    rTopM  = mpOutputData->LogicToPixelHorizontal(
+        static_cast<long>( rMargin.GetTopMargin() ) );
+    rRightM = mpOutputData->LogicToPixelHorizontal(
+        static_cast<long>( rMargin.GetRightMargin() ) );
+    rBottomM = mpOutputData->LogicToPixelHorizontal(
+        static_cast<long>( rMargin.GetBottomMargin() ) );
+    // TODO: these need converting to pixels form logic
     if(meHorJustAttr == SVX_HOR_JUSTIFY_RIGHT)
     {
-        rLeftM   = static_cast<long>((rMargin.GetLeftMargin()  * nPPTX));
-        rRightM  = static_cast<long>(((rMargin.GetRightMargin() + nIndent) * nPPTX));
+        rLeftM  = mpOutputData->LogicToPixelHorizontal(
+            static_cast<long>( rMargin.GetLeftMargin() ) );
+        rRightM  = mpOutputData->LogicToPixelHorizontal(
+            static_cast<long>( rMargin.GetRightMargin() + nIndent ) );
     }
 }
 
 void ScOutputData::DrawEditParam::calcPaperSize(
-    Size& rPaperSize, const Rectangle& rAlignRect, double nPPTX, double nPPTY) const
+    Size& rPaperSize, const Rectangle& rAlignRect ) const
 {
     long nTopM, nLeftM, nBottomM, nRightM;
-    calcMargins(nTopM, nLeftM, nBottomM, nRightM, nPPTX, nPPTY);
+    calcMargins( nTopM, nLeftM, nBottomM, nRightM );
 
     if (isVerticallyOriented())
     {
@@ -2749,7 +2762,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     //! mirror margin values for RTL?
     //! move margin down to after final GetOutputArea call
     long nTopM, nLeftM, nBottomM, nRightM;
-    rParam.calcMargins(nTopM, nLeftM, nBottomM, nRightM, mnPPTX, mnPPTY);
+    rParam.calcMargins( nTopM, nLeftM, nBottomM, nRightM );
 
     SCCOL nXForPos = rParam.mnX;
     if ( nXForPos < nX1 )
@@ -2779,7 +2792,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
                        rParam.mbCellIsValue, true, false, aAreaParam );
 
         //! special ScEditUtil handling if formatting for printer
-        rParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, mnPPTX, mnPPTY);
+        rParam.calcPaperSize( aPaperSize, aAreaParam.maAlignRect );
     }
     if (rParam.mbPixelToLogic)
     {
@@ -4548,7 +4561,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         // fdo#32530: Check if the first character is RTL.
                         OUString aStr = mpDoc->GetString(nCellX, nCellY, nTab);
 
-                        DrawEditParam aParam(pPattern, pCondSet, lcl_SafeIsValue(aCell));
+                        DrawEditParam aParam( this, pPattern, pCondSet, lcl_SafeIsValue(aCell) );
                         aParam.meHorJustContext = getAlignmentFromContext( aParam.meHorJustAttr,
                                 aParam.mbCellIsValue, aStr, *pPattern, pCondSet, mpDoc, nTab);
                         aParam.meHorJustResult = (aParam.meHorJustAttr == SVX_HOR_JUSTIFY_BLOCK) ?
