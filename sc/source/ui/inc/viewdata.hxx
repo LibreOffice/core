@@ -481,6 +481,8 @@ public:
 
     static inline long ToPixel( sal_uInt16 nTwips, double nFactor );
 
+    MapMode& GetPaintMapMode() { return maPaintMapMode; }
+
     /** while (rScrY <= nEndPixels && rPosY <= nEndRow) add pixels of row
         heights converted with nPPTY to rScrY, optimized for row height
         segments. Upon return rPosY is the last row evaluated <= nEndRow, rScrY
