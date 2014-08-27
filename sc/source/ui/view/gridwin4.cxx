@@ -380,7 +380,21 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
     // We specifically need to set the visible range here -- by default it is
     // set in UpdateVisibleRange which however uses the viewdata, which is
     // completely irrelevant for tiled rendering.
-    maVisibleRange.set( nX1, nY1, nX2, nY2 );
+    // However we don't want to fiddle with the visible range for normal
+    // rendering (i.e. pOutDev == this).
+    if ( pOutDev != this )
+    {
+        // We need to iterate positions from the origin when doing tiled
+        // rendering to ensure that tile edges actually match -- the
+        // visible area is used for FillData which is used for the
+        // position determination.
+        // However ultimately we probably want to kill the use of FillData
+        // for position determination since we no longer scale the values
+        // that we put in there?
+        nX1 = 0;
+        nY1 = 0;
+        maVisibleRange.set( nX1, nY1, nX2, nY2 );
+    }
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS, pOutDev );           // nicht weiterzeichnen
     bIsInPaint = false;
 }
