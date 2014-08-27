@@ -29,6 +29,7 @@
 #include <editeng/svxenum.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/svxids.hrc>
+#include <svx/fmshell.hxx>
 #include <editeng/editstat.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
@@ -63,7 +64,6 @@ class SwEditWin;
 class SwWrtShell;
 class SwView_Impl;
 struct SwSearchOptions;
-class FmFormShell;
 class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
@@ -593,8 +593,8 @@ public:
                  SfxShell       *GetCurShell()  { return m_pShell; }
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
-    inline       FmFormShell    *GetFormShell() { return m_pFormShell; }
-    inline const FmFormShell    *GetFormShell() const { return m_pFormShell; }
+    inline virtual       FmFormShell    *GetFormShell()       SAL_OVERRIDE { return m_pFormShell; }
+    inline virtual const FmFormShell    *GetFormShell() const SAL_OVERRIDE { return m_pFormShell; }
 
     // so that in the SubShells' DTors m_pShell can be reset if applicable
     void ResetSubShell()    { m_pShell = 0; }

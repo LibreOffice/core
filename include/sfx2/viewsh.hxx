@@ -207,6 +207,9 @@ public:
     void                        RemoveSubShell( SfxShell *pShell=NULL );
     SfxShell*                   GetSubShell( sal_uInt16 );
 
+    virtual       SfxShell*     GetFormShell()       { return 0; };
+    virtual const SfxShell*     GetFormShell() const { return 0; };
+
     // Focus, KeyInput, Cursor
     void                        GotFocus() const;
     inline void                 LostFocus() const;

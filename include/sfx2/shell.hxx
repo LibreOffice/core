@@ -160,7 +160,7 @@ protected:
                                 SfxShell();
                                 SfxShell( SfxViewShell *pViewSh );
 
-    SAL_DLLPRIVATE void SetViewShell_Impl( SfxViewShell* pView );
+    void SetViewShell_Impl( SfxViewShell* pView );
     SAL_DLLPRIVATE void Invalidate_Impl( SfxBindings& rBindings, sal_uInt16 nId );
     SAL_DLLPRIVATE SfxShellObject* GetShellObj_Impl() const;
     SAL_DLLPRIVATE void SetShellObj_Impl( SfxShellObject* pObj );
@@ -201,6 +201,8 @@ public:
     void                        SetRepeatTarget( SfxRepeatTarget *pTarget );
 
     virtual void                Invalidate(sal_uInt16 nId = 0);
+
+    virtual bool                IsDesignMode() const { return false; };
 
     bool                        IsActive() const;
     virtual void                Activate(bool bMDI);
