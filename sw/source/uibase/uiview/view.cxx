@@ -693,7 +693,6 @@ void SwView::_CheckReadonlySelection()
 
 SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
-    m_aPageStr( SW_RES( STR_PAGE )),
     m_nNewPage(USHRT_MAX),
     m_nOldPageNum(0),
     m_pNumRuleNodeFromDoc(0),

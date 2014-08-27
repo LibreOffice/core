@@ -170,7 +170,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     SvxHtmlOptions      m_aHTMLOpt;
     Timer               m_aTimer;         // for delayed ChgLnks during an action
-    OUString            m_aPageStr;       // status view, current page
     OUString            m_sSwViewData,
     //and the new cursor position if the user double click in the PagePreview
                         m_sNewCrsrPos;

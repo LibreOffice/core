@@ -193,30 +193,23 @@ static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, sal_uInt16 nWhi
  *
  * @param nPhyNum  The physical page number
  * @param nVirtNum The logical page number (user-assigned)
- * @param rPgStr   User-defined page name (will be used instead of nVirtNum)
+ * @param rPgStr   User-defined page name (will be shown if different from logical page number)
  *
- * @return OUString Formatted string: Page 1/10 (rPgStr/logical page number)
+ * @return OUString Formatted string: Page 1/10 (Page nVirtNumv/rPgStr)
  **/
 OUString SwView::GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const OUString& rPgStr)
 {
-    OUString aStr(m_aPageStr);
-    aStr += OUString::number(nPhyNum);
-    aStr += "/";
-    aStr += OUString::number(GetWrtShell().GetPageCnt());
-
     // Show user-defined page number in brackets if any.
     OUString extra;
     if (!rPgStr.isEmpty() && OUString::number(nPhyNum) != rPgStr)
         extra = rPgStr;
     else if (nPhyNum != nVirtNum)
         extra = OUString::number(nVirtNum);
-    if (!extra.isEmpty())
-    {
-        aStr += " (";
-        aStr += m_aPageStr;
-        aStr += extra;
-        aStr += ")";
-    }
+
+    OUString aStr(extra.isEmpty() ? SW_RES(STR_PAGE_COUNT) : SW_RES(STR_PAGE_COUNT_CUSTOM));
+    aStr = aStr.replaceFirst("%1", OUString::number(nPhyNum));
+    aStr = aStr.replaceFirst("%2", OUString::number(GetWrtShell().GetPageCnt()));
+    aStr = aStr.replaceFirst("%3", extra);
     return aStr;
 }
 
