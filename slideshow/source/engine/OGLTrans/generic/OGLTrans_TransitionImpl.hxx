@@ -348,17 +348,17 @@ public:
     virtual ~Operation(){}
 
 protected:
-    /** Should this operation be interpolated . If TRUE, the transform will smoothly move from making no difference from t = 0.0 to nT0 to being completely transformed from t = nT1 to 1. If FALSE, the transform will be inneffectual from t = 0 to nT0, and completely transformed from t = nT0 to 1.
+    /** Should this operation be interpolated . If TRUE, the transform will smoothly move from making no difference from t = 0.0 to mnT0 to being completely transformed from t = mnT1 to 1. If FALSE, the transform will be inneffectual from t = 0 to mnT0, and completely transformed from t = mnT0 to 1.
     */
-    bool bInterpolate;
+    bool mbInterpolate;
 
     /** time to begin the transformation
     */
-    double nT0;
+    double mnT0;
 
     /** time to finish the transformation
     */
-    double nT1;
+    double mnT1;
 public:
     /** this is the function that is called to give the Operation to OpenGL.
 
@@ -375,8 +375,8 @@ public:
     virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const = 0;
 
 protected:
-    Operation():
-        bInterpolate(false), nT0(0.0), nT1(0.0){}
+    Operation(bool bInterpolate, double nT0, double nT1):
+        mbInterpolate(bInterpolate), mnT0(nT0), mnT1(nT1){}
 };
 
 /** this class is a generic CounterClockWise(CCW) rotation with an axis angle

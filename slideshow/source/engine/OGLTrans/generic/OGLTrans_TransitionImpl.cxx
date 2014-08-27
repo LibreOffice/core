@@ -876,54 +876,44 @@ boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uIn
 
 SRotate::SRotate(const basegfx::B3DVector& Axis, const basegfx::B3DVector& Origin,
         double Angle, bool bInter, double T0, double T1):
+    Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
     angle(Angle)
 {
-    nT0 = T0;
-    nT1 = T1;
-    bInterpolate = bInter;
 }
 
 SScale::SScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,
         bool bInter, double T0, double T1):
+    Operation(bInter, T0, T1),
     scale(Scale),
     origin(Origin)
 {
-    nT0 = T0;
-    nT1 = T1;
-    bInterpolate = bInter;
 }
 
 RotateAndScaleDepthByWidth::RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,
         const basegfx::B3DVector& Origin, double Angle, bool bInter, double T0, double T1):
+    Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
     angle(Angle)
 {
-    nT0 = T0;
-    nT1 = T1;
-    bInterpolate = bInter;
 }
 
 RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,
         const basegfx::B3DVector& Origin, double Angle, bool bInter, double T0, double T1):
+    Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
     angle(Angle)
 {
-    nT0 = T0;
-    nT1 = T1;
-    bInterpolate = bInter;
 }
 
 
 STranslate::STranslate(const basegfx::B3DVector& Vector, bool bInter, double T0, double T1):
+    Operation(bInter, T0, T1),
     vector(Vector)
 {
-    nT0 = T0;
-    nT1 = T1;
-    bInterpolate = bInter;
 }
 
 boost::shared_ptr<SRotate>
@@ -970,11 +960,11 @@ inline double intervalInter(double t, double T0, double T1)
 void STranslate::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     CHECK_GL_ERROR();
-    if(t <= nT0)
+    if(t <= mnT0)
         return;
-    if(!bInterpolate || t > nT1)
-        t = nT1;
-    t = intervalInter(t,nT0,nT1);
+    if(!mbInterpolate || t > mnT1)
+        t = mnT1;
+    t = intervalInter(t,mnT0,mnT1);
     glTranslated(SlideWidthScale*t*vector.getX(),SlideHeightScale*t*vector.getY(),t*vector.getZ());
     CHECK_GL_ERROR();
 }
@@ -982,11 +972,11 @@ void STranslate::interpolate(double t,double SlideWidthScale,double SlideHeightS
 void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     CHECK_GL_ERROR();
-    if(t <= nT0)
+    if(t <= mnT0)
         return;
-    if(!bInterpolate || t > nT1)
-        t = nT1;
-    t = intervalInter(t,nT0,nT1);
+    if(!mbInterpolate || t > mnT1)
+        t = mnT1;
+    t = intervalInter(t,mnT0,mnT1);
     glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),origin.getZ());
     glScaled(SlideWidthScale,SlideHeightScale,1);
     glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
@@ -998,11 +988,11 @@ void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScal
 void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     CHECK_GL_ERROR();
-    if(t <= nT0)
+    if(t <= mnT0)
         return;
-    if(!bInterpolate || t > nT1)
-        t = nT1;
-    t = intervalInter(t,nT0,nT1);
+    if(!mbInterpolate || t > mnT1)
+        t = mnT1;
+    t = intervalInter(t,mnT0,mnT1);
     glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),origin.getZ());
     glScaled((1-t) + t*scale.getX(),(1-t) + t*scale.getY(),(1-t) + t*scale.getZ());
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-origin.getZ());
@@ -1012,11 +1002,11 @@ void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale
 void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     CHECK_GL_ERROR();
-    if(t <= nT0)
+    if(t <= mnT0)
         return;
-    if(!bInterpolate || t > nT1)
-        t = nT1;
-    t = intervalInter(t,nT0,nT1);
+    if(!mbInterpolate || t > mnT1)
+        t = mnT1;
+    t = intervalInter(t,mnT0,mnT1);
     glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),SlideWidthScale*origin.getZ());
     glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-SlideWidthScale*origin.getZ());
@@ -1026,11 +1016,11 @@ void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,dou
 void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,double SlideHeightScale) const
 {
     CHECK_GL_ERROR();
-    if(t <= nT0)
+    if(t <= mnT0)
         return;
-    if(!bInterpolate || t > nT1)
-        t = nT1;
-    t = intervalInter(t,nT0,nT1);
+    if(!mbInterpolate || t > mnT1)
+        t = mnT1;
+    t = intervalInter(t,mnT0,mnT1);
     glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),SlideHeightScale*origin.getZ());
     glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-SlideHeightScale*origin.getZ());
@@ -1038,11 +1028,9 @@ void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,do
 }
 
 SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStartPosition,
-        double dEndPosition, bool bInter, double T0, double T1)
+        double dEndPosition, bool bInter, double T0, double T1):
+    Operation(bInter, T0, T1)
 {
-    nT0 = T0;
-    nT1 = T1;
-    bInterpolate = bInter;
     width = dWidth;
     height = dHeight;
     startPosition = dStartPosition;
@@ -1051,11 +1039,11 @@ SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStar
 
 void SEllipseTranslate::interpolate(double t,double /* SlideWidthScale */,double /* SlideHeightScale */) const
 {
-    if(t <= nT0)
+    if(t <= mnT0)
         return;
-    if(!bInterpolate || t > nT1)
-        t = nT1;
-    t = intervalInter(t,nT0,nT1);
+    if(!mbInterpolate || t > mnT1)
+        t = mnT1;
+    t = intervalInter(t,mnT0,mnT1);
 
     double a1, a2, x, y;
     a1 = startPosition*2*M_PI;
