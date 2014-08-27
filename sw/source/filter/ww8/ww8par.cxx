@@ -2866,15 +2866,8 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCJKCharSet()
                 (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
             if (pLang)
             {
-                switch (pLang->GetLanguage())
-                {
-                    case LANGUAGE_CZECH:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1250;
-                        break;
-                    default:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1252;
-                        break;
-                }
+                ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(pLang->GetLanguage()));
+                eSrcCharSet = msfilter::util::getBestTextEncodingFromLocale(aLocale);
             }
         }
     }
