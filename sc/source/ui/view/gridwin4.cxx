@@ -336,36 +336,42 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
 
     bIsInPaint = true;
 
-    Rectangle aPixRect = pOutDev->LogicToPixel( rRect );
+    // We are handed a rectangle in the logic coordinates currently applying
+    // to the window. But we might be (probably will be) painting in different
+    // logic coordinates. Hence the multi-stage conversion.
+    // In fact most of the drawing in ScGridWin is done in Pixel coordinates, but
+    // we need logic coordinates for converting the cells to pixels and all
+    // related calculations.
+    const Rectangle aPixRect = pOutDev->LogicToPixel( rRect );
+    const Rectangle aLogicRect = pOutDev->PixelToLogic( aPixRect,
+                                                  pViewData->GetPaintMapMode() );
 
     SCCOL nX1 = pViewData->GetPosX(eHWhich);
     SCROW nY1 = pViewData->GetPosY(eVWhich);
 
     SCTAB nTab = pViewData->GetTabNo();
 
-    double nPPTX = pViewData->GetPPTX();
-    double nPPTY = pViewData->GetPPTY();
-
-    Rectangle aMirroredPixel = aPixRect;
+    Rectangle aMirroredTwips = aLogicRect;
     if ( pDoc->IsLayoutRTL( nTab ) )
     {
         //  mirror and swap
-        long nWidth = GetSizePixel().Width();
-        aMirroredPixel.Left()  = nWidth - 1 - aPixRect.Right();
-        aMirroredPixel.Right() = nWidth - 1 - aPixRect.Left();
+        long nWidth = pOutDev->PixelToLogic( GetSizePixel(),
+                                             pViewData->GetPaintMapMode() ).Width();
+        aMirroredTwips.Left()  = nWidth - 1 - aLogicRect.Right();
+        aMirroredTwips.Right() = nWidth - 1 - aLogicRect.Left();
     }
 
-    long nScrX = ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
-    while ( nScrX <= aMirroredPixel.Left() && nX1 < MAXCOL )
+    long nScrX = pDoc->GetColWidth( nX1, nTab );
+    while ( nScrX <= aMirroredTwips.Left() && nX1 < MAXCOL )
     {
         ++nX1;
-        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX1, nTab ), nPPTX );
+        nScrX += pDoc->GetColWidth( nX1, nTab );
     }
     SCCOL nX2 = nX1;
-    while ( nScrX <= aMirroredPixel.Right() && nX2 < MAXCOL )
+    while ( nScrX <= aMirroredTwips.Right() && nX2 < MAXCOL )
     {
         ++nX2;
-        nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
+        nScrX += pDoc->GetColWidth( nX2, nTab );
     }
 
     long nScrY = 0;
@@ -373,7 +379,7 @@ void ScGridWindow::Paint( const Rectangle& rRect, OutputDevice* pOutDev )
                               pViewData->LogicToPixelVertical( aLogicRect.Top() ),
                               nY1, MAXROW );
     SCROW nY2 = nY1;
-    if (nScrY <= aPixRect.Bottom() && nY2 < MAXROW)
+    if (nScrY <= aLogicRect.Bottom() && nY2 < MAXROW)
     {
         ++nY2;
         pViewData->AddTwipsWhile( nScrY,
