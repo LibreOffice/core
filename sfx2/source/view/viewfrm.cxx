@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 
+#include <svx/fmshell.hxx>
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -862,8 +863,15 @@ void SfxViewFrame::StateReload_Impl( SfxItemSet& rSet )
         {
             case SID_EDITDOC:
             {
-                if ( !pSh || !pSh->HasName() || !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT )
-                  || pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+                SfxViewShell *pVSh;
+                FmFormShell *pFSh;
+                if ( !pSh ||
+                     !pSh->HasName() ||
+                     !( pSh->Get_Impl()->nLoadedFlags &  SFX_LOADED_MAINDOCUMENT ) ||
+                     ( pSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
+                       ( !(pVSh = pSh->GetViewShell())  ||
+                         !(pFSh = pVSh->GetFormShell()) ||
+                         !pFSh->IsDesignMode())))
                     rSet.DisableItem( SID_EDITDOC );
                 else
                 {
