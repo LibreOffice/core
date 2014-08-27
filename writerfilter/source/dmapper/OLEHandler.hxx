@@ -34,7 +34,11 @@ namespace com{ namespace sun{ namespace star{
         class XInputStream;
     }
     namespace text{
+        class XTextContent;
         class XTextDocument;
+    }
+    namespace uno {
+        class XComponentContext;
     }
 }}}
 namespace writerfilter {
@@ -51,6 +55,8 @@ class OLEHandler : public LoggedProperties
     OUString     m_sDrawAspect;
     OUString     m_sObjectId;
     OUString     m_sr_id;
+    /// The stream URL right after the import of the raw data.
+    OUString     m_aURL;
 
     sal_Int32                   m_nDxaOrig;
     sal_Int32                   m_nDyaOrig;
@@ -72,7 +78,7 @@ class OLEHandler : public LoggedProperties
 
     // Interoperability
     virtual void saveInteropProperties( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const& xTextDocument,
-                                        const OUString& sObjectName );
+                                        const OUString& sObjectName, const OUString& sOldObjectName = OUString() );
 
 public:
     OLEHandler(DomainMapper& rDomainMapper);
@@ -81,6 +87,14 @@ public:
     inline ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > getShape( ) { return m_xShape; };
 
     inline bool isOLEObject( ) { return m_xInputStream.is( ); };
+
+    /// In case of a valid CLSID, import the native data to the previously created empty OLE object.
+    void importStream(css::uno::Reference<css::uno::XComponentContext> xComponentContext,
+                      css::uno::Reference<css::text::XTextDocument> xTextDocument,
+                      css::uno::Reference<css::text::XTextContent> xOLE);
+
+    /// Get the CLSID of the OLE object, in case we can find one based on m_sProgId.
+    OUString getCLSID();
 
     OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const & xTextDocument );
 
