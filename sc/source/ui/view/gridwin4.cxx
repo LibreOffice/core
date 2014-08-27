@@ -1014,7 +1014,9 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     }
 
     Paint( Rectangle( Point(nTilePosX, nTilePosY),
-                      rDevice.PixelToLogic(Size(nOutputWidth, nOutputHeight))),
+                      rDevice.LogicToPixel(
+                          Size( nTileWidth, nTileHeight ),
+                          pViewData->GetPaintMapMode() ) ),
            &rDevice );
 
     if ( pDrawView )
