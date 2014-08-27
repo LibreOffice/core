@@ -56,7 +56,7 @@
 #define RSC_CONTROL             (RSC_NOTYPE + 0x44)
 #define RSC_BUTTON              (RSC_NOTYPE + 0x45)
 #define RSC_PUSHBUTTON          (RSC_NOTYPE + 0x46)
-#define RSC_OKBUTTON            (RSC_NOTYPE + 0x47)
+
 #define RSC_CANCELBUTTON        (RSC_NOTYPE + 0x48)
 #define RSC_HELPBUTTON          (RSC_NOTYPE + 0x49)
 #define RSC_IMAGEBUTTON         (RSC_NOTYPE + 0x4a)
