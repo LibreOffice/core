@@ -255,7 +255,7 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale) con
     if(!Normals.empty())
     {
         CHECK_GL_ERROR();
-        glNormalPointer( GL_DOUBLE , 0 , &Normals[0] );
+        glNormalPointer( GL_FLOAT , 0 , &Normals[0] );
         CHECK_GL_ERROR();
         glEnableClientState( GL_NORMAL_ARRAY );
         CHECK_GL_ERROR();
@@ -263,9 +263,9 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale) con
     CHECK_GL_ERROR();
     glEnableClientState( GL_TEXTURE_COORD_ARRAY );
     CHECK_GL_ERROR();
-    glTexCoordPointer( 2, GL_DOUBLE, 0, &TexCoords[0] );
+    glTexCoordPointer( 2, GL_FLOAT, 0, &TexCoords[0] );
     CHECK_GL_ERROR();
-    glVertexPointer( 3, GL_DOUBLE, 0, &Vertices[0] );
+    glVertexPointer( 3, GL_FLOAT, 0, &Vertices[0] );
     CHECK_GL_ERROR();
     glDrawArrays( GL_TRIANGLES, 0, Vertices.size() );
     CHECK_GL_ERROR();
