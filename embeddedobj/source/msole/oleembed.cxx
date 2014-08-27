@@ -263,18 +263,18 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
         // the stream must be seekable
         uno::Reference< io::XSeekable > xSeekable( m_xObjectStream, uno::UNO_QUERY_THROW );
         xSeekable->seek( 0 );
-        OUString aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xFactory, OUString(), m_xObjectStream->getInputStream() );
+        m_aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xFactory, OUString(), m_xObjectStream->getInputStream() );
 
         // use the solution only for OOXML format currently
-        if ( !aFilterName.isEmpty()
-          && ( aFilterName == "Calc MS Excel 2007 XML" || aFilterName == "Impress MS PowerPoint 2007 XML" || aFilterName == "MS Word 2007 XML" ) )
+        if ( !m_aFilterName.isEmpty()
+          && ( m_aFilterName == "Calc MS Excel 2007 XML" || m_aFilterName == "Impress MS PowerPoint 2007 XML" || m_aFilterName == "MS Word 2007 XML" ) )
         {
             uno::Reference< container::XNameAccess > xFilterFactory(
                 m_xFactory->createInstance("com.sun.star.document.FilterFactory"),
                 uno::UNO_QUERY_THROW );
 
             OUString aDocServiceName;
-            uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
+            uno::Any aFilterAnyData = xFilterFactory->getByName( m_aFilterName );
             uno::Sequence< beans::PropertyValue > aFilterData;
             if ( aFilterAnyData >>= aFilterData )
             {
@@ -307,7 +307,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 aArgs[1].Name = "ReadOnly";
                 aArgs[1].Value <<= sal_True;
                 aArgs[2].Name = "FilterName";
-                aArgs[2].Value <<= aFilterName;
+                aArgs[2].Value <<= m_aFilterName;
                 aArgs[3].Name = "URL";
                 aArgs[3].Value <<= OUString( "private:stream" );
                 aArgs[4].Name = "InputStream";
@@ -842,7 +842,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 }
             }
 
-            if ( !m_pOwnView && m_xObjectStream.is() )
+            if ( !m_pOwnView && m_xObjectStream.is() && m_aFilterName != "Text" )
             {
                 try {
                     uno::Reference< io::XSeekable > xSeekable( m_xObjectStream, uno::UNO_QUERY );
@@ -863,7 +863,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 }
             }
 
-            if ( !m_pOwnView || !m_pOwnView->Open() )
+            if ( m_aFilterName != "Text" && (!m_pOwnView || !m_pOwnView->Open()) )
             {
                 //Make a RO copy and see if the OS can find something to at
                 //least display the content for us
