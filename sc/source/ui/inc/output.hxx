@@ -22,6 +22,8 @@
 
 #include "address.hxx"
 #include "cellvalue.hxx"
+#include "viewdata.hxx"
+
 #include <tools/color.hxx>
 #include <tools/fract.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -148,6 +150,42 @@ private:
     // This may be NULL -- i.e. it should be used when available,
     // but otherwise ignored.
     ScViewData* mpViewData;
+
+    // These save us the need to check mpViewData every single
+    // time we want a conversion.
+    // TODO: we might want to use some default conversion for
+    // the cases where mpViewData == 0, i.e. for prinfun?
+    inline long LogicToPixelVertical( long nTwips ) const
+    {
+        if ( mpViewData )
+            return mpViewData->LogicToPixelVertical( nTwips );
+        else
+            return nTwips;
+    }
+
+    inline long LogicToPixelHorizontal( long nTwips ) const
+    {
+        if ( mpViewData )
+            return mpViewData->LogicToPixelHorizontal( nTwips );
+        else
+            return nTwips;
+    }
+
+    inline long PixelToLogicVertical( long nPix ) const
+    {
+        if ( mpViewData )
+            return mpViewData->PixelToLogicVertical( nPix );
+        else
+            return nPix;
+    }
+
+    inline long PixelToLogicHorizontal( long nPix ) const
+    {
+        if ( mpViewData )
+            return mpViewData->PixelToLogicHorizontal( nPix );
+        else
+            return nPix;
+    }
 
     ScTableInfo& mrTabInfo;
     RowInfo* pRowInfo;          // Info block
