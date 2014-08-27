@@ -84,7 +84,7 @@ void OGLTransitionImpl::prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEn
         rSceneObjects[i]->prepare();
     }
 
-    prepareTransition_( glLeavingSlideTex, glEnteringSlideTex );
+    prepareTransition( glLeavingSlideTex, glEnteringSlideTex );
 }
 
 void OGLTransitionImpl::finish()
@@ -94,7 +94,7 @@ void OGLTransitionImpl::finish()
         rSceneObjects[i]->finish();
     }
 
-    finishTransition_();
+    finishTransition();
 }
 
 static void blendSlide( double depth )
@@ -144,15 +144,15 @@ static void slideShadow( double nTime, const Primitive& primitive, double sw, do
     CHECK_GL_ERROR();
 }
 
-void OGLTransitionImpl::prepare_( double, double, double, double, double )
+void OGLTransitionImpl::prepare( double, double, double, double, double )
 {
 }
 
-void OGLTransitionImpl::prepareTransition_( ::sal_Int32, ::sal_Int32 )
+void OGLTransitionImpl::prepareTransition( ::sal_Int32, ::sal_Int32 )
 {
 }
 
-void OGLTransitionImpl::finishTransition_()
+void OGLTransitionImpl::finishTransition()
 {
 }
 
@@ -173,7 +173,7 @@ void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::
     const double SlideHeightScale = SlideHeight/DispHeight;
 
     CHECK_GL_ERROR();
-    prepare_( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
+    prepare( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
 
     CHECK_GL_ERROR();
     glPushMatrix();
@@ -1132,11 +1132,11 @@ public:
         {}
 
 private:
-    virtual void prepare_( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) SAL_OVERRIDE;
+    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) SAL_OVERRIDE;
     // mmPrepare = &OGLTransitionImpl::prepareDiamond;
 };
 
-void DiamondTransition::prepare_( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */ )
+void DiamondTransition::prepare( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */ )
 {
     Primitive Slide1, Slide2;
 
@@ -1390,9 +1390,9 @@ protected:
 
 private:
     virtual void displaySlides_( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidthScale, double SlideHeightScale ) SAL_OVERRIDE;
-    virtual void prepareTransition_( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex ) SAL_OVERRIDE;
-    virtual void finishTransition_() SAL_OVERRIDE;
-    virtual GLuint makeShader_() = 0;
+    virtual void prepareTransition( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex ) SAL_OVERRIDE;
+    virtual void finishTransition() SAL_OVERRIDE;
+    virtual GLuint makeShader() = 0;
 
     void impl_preparePermShader();
 
@@ -1426,14 +1426,14 @@ void ShaderTransition::displaySlides_( double nTime, ::sal_Int32 glLeavingSlideT
     CHECK_GL_ERROR();
 }
 
-void ShaderTransition::prepareTransition_( ::sal_Int32 /* glLeavingSlideTex */, ::sal_Int32 /* glEnteringSlideTex */ )
+void ShaderTransition::prepareTransition( ::sal_Int32 /* glLeavingSlideTex */, ::sal_Int32 /* glEnteringSlideTex */ )
 {
-    m_nProgramObject = makeShader_();
+    m_nProgramObject = makeShader();
 
     impl_preparePermShader();
 }
 
-void ShaderTransition::finishTransition_()
+void ShaderTransition::finishTransition()
 {
     CHECK_GL_ERROR();
     if( m_nProgramObject ) {
@@ -1549,10 +1549,10 @@ public:
     {}
 
 private:
-    virtual GLuint makeShader_() SAL_OVERRIDE;
+    virtual GLuint makeShader() SAL_OVERRIDE;
 };
 
-GLuint StaticNoiseTransition::makeShader_()
+GLuint StaticNoiseTransition::makeShader()
 {
     return OpenGLHelper::LoadShaders( "basicVertexShader", "staticFragmentShader" );
 }
@@ -1600,10 +1600,10 @@ public:
     {}
 
 private:
-    virtual GLuint makeShader_() SAL_OVERRIDE;
+    virtual GLuint makeShader() SAL_OVERRIDE;
 };
 
-GLuint DissolveTransition::makeShader_()
+GLuint DissolveTransition::makeShader()
 {
     return OpenGLHelper::LoadShaders( "basicVertexShader", "dissolveFragmentShader" );
 }
