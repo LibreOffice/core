@@ -632,12 +632,14 @@ void DocxAttributeOutput::WriteSdtBlock( sal_Int32& nSdtPrToken,
                 pSdtPrTokenAttributes = 0;
             }
 
-            uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
-            for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
-                m_pSerializer->singleElement( aChildren[i].Token,
-                                              FSNS(XML_w, XML_val),
-                                              rtl::OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                              FSEND );
+            if (nSdtPrToken ==  FSNS( XML_w, XML_date ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartObj ) || nSdtPrToken ==  FSNS( XML_w, XML_docPartList ) || nSdtPrToken ==  FSNS( XML_w14, XML_checkbox )) {
+                uno::Sequence<xml::FastAttribute> aChildren = pSdtPrTokenChildren->getFastAttributes();
+                for( sal_Int32 i=0; i < aChildren.getLength(); ++i )
+                    m_pSerializer->singleElement( aChildren[i].Token,
+                                                  FSNS(XML_w, XML_val),
+                                                  rtl::OUStringToOString( aChildren[i].Value, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                                  FSEND );
+            }
 
             m_pSerializer->endElement( nSdtPrToken );
         }
