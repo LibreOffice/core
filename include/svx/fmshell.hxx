@@ -166,8 +166,8 @@ public:
                 const OutputDevice& i_rDevice
             ) const;
 
-    bool        IsDesignMode() const { return m_bDesignMode; }
-    void        SetDesignMode( bool _bDesignMode );
+    virtual bool IsDesignMode() const { return m_bDesignMode; }
+    void         SetDesignMode( bool _bDesignMode );
 
 protected:
     void GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich);

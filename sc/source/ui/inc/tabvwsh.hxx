@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_TABVWSH_HXX
 
+#include <svx/fmshell.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
@@ -33,7 +34,6 @@
 
 #include <boost/ptr_container/ptr_map.hpp>
 
-class FmFormShell;
 class SbxObject;
 class SdrOle2Obj;
 class SfxBindings;
@@ -366,7 +366,8 @@ public:
     inline void     SetScSbxObject( SbxObject* pOb )
                     { pScSbxObject = pOb; }
 
-    FmFormShell*    GetFormShell() const    { return pFormShell; }
+    virtual const FmFormShell* GetFormShell() const SAL_OVERRIDE { return pFormShell; }
+    virtual       FmFormShell* GetFormShell()       SAL_OVERRIDE { return pFormShell; }
 
     void    InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                             sal_uInt16 nMode );
