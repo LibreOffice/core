@@ -1883,6 +1883,8 @@ public:     // eigentlich private, geht aber leider nur public
     sal_uLong LoadDoc( SwPaM&,WW8Glossary *pGloss=0);
     rtl_TextEncoding GetCurrentCharSet();
     rtl_TextEncoding GetCurrentCJKCharSet();
+    rtl_TextEncoding GetCharSetFromLanguage();
+    rtl_TextEncoding GetCJKCharSetFromLanguage();
 
     void PostProcessAttrs();
     static void ReadEmbeddedData(SvMemoryStream& rStrm, SwDocShell* pDocShell, struct HyperLinksTable& hlStr);
