@@ -446,7 +446,6 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mbIs3DChart( false )
     , mbStacked(false)
     , mbPercent(false)
-    , mbClustered(false)
 {
 }
 
@@ -2656,13 +2655,15 @@ void ChartExport::exportDataLabels(
     aParam.mbExport = !mbIs3DChart;
     aParam.meDefault = rInfo.mnDefLabelPos;
     aParam.allowAll();
-    switch (getChartType()) // diagram chart type
+    switch (eChartType) // diagram chart type
     {
         case chart::TYPEID_PIE:
+            if(getChartType() == chart::TYPEID_DOUGHNUT)
+                aParam.mbExport = false;
+            else
             // All pie charts support label placement.
             aParam.mbExport = true;
         break;
-        case chart::TYPEID_DOUGHNUT:
         case chart::TYPEID_AREA:
         case chart::TYPEID_RADARLINE:
         case chart::TYPEID_RADARAREA:
@@ -2670,13 +2671,22 @@ void ChartExport::exportDataLabels(
             aParam.mbExport = false;
         break;
         case chart::TYPEID_BAR:
-            if (mbStacked || mbPercent || mbClustered)
+            if (mbStacked || mbPercent)
             {
                 aParam.maAllowedValues.clear();
                 aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::CENTER);
                 aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::INSIDE);
                 aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::NEAR_ORIGIN);
                 aParam.meDefault = css::chart::DataLabelPlacement::CENTER;
+            }
+            else  // Clustered bar chart
+            {
+                aParam.maAllowedValues.clear();
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::CENTER);
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::INSIDE);
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::OUTSIDE);
+                aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::NEAR_ORIGIN);
+                aParam.meDefault = css::chart::DataLabelPlacement::OUTSIDE;
             }
         break;
         default:
@@ -2818,7 +2828,6 @@ void ChartExport::exportGrouping( bool isBar )
         if( isBar && !isDeep3dChart() )
         {
             grouping = "clustered";
-            mbClustered = true;
         }
         else
             grouping = "standard";
