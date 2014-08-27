@@ -2787,6 +2787,42 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
     return bTableRowEnd;
 }
 
+rtl_TextEncoding SwWW8ImplReader::GetCharSetFromLanguage()
+{
+    /*
+     #i22206#/#i52786#
+     The (default) character set used for a run of text is the default
+     character set for the version of Word that last saved the document.
+
+     This is a bit tentative, more might be required if the concept is correct.
+     When later version of word write older 6/95 documents the charset is
+     correctly set in the character runs involved, so its hard to reproduce
+     documents that require this to be sure of the process involved.
+    */
+    const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
+    LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
+    ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
+    return msfilter::util::getBestTextEncodingFromLocale(aLocale);
+}
+
+rtl_TextEncoding SwWW8ImplReader::GetCJKCharSetFromLanguage()
+{
+    /*
+     #i22206#/#i52786#
+     The (default) character set used for a run of text is the default
+     character set for the version of Word that last saved the document.
+
+     This is a bit tentative, more might be required if the concept is correct.
+     When later version of word write older 6/95 documents the charset is
+     correctly set in the character runs involved, so its hard to reproduce
+     documents that require this to be sure of the process involved.
+    */
+    const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_CJK_LANGUAGE);
+    LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
+    ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
+    return msfilter::util::getBestTextEncodingFromLocale(aLocale);
+}
+
 rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
 {
     /*
@@ -2805,22 +2841,7 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCharSet()
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl) && nAktColl < vColl.size())
             eSrcCharSet = vColl[nAktColl].GetCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-        {
-            /*
-             #i22206#/#i52786#
-             The (default) character set used for a run of text is the default
-             character set for the version of Word that last saved the document.
-
-             This is a bit tentative, more might be required if the concept is correct.
-             When later version of word write older 6/95 documents the charset is
-             correctly set in the character runs involved, so its hard to reproduce
-             documents that require this to be sure of the process involved.
-            */
-            const SvxLanguageItem *pLang = (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
-            LanguageType eLang = pLang ? pLang->GetLanguage() : LANGUAGE_SYSTEM;
-            ::com::sun::star::lang::Locale aLocale(LanguageTag::convertToLocale(eLang));
-            eSrcCharSet = msfilter::util::getBestTextEncodingFromLocale(aLocale);
-        }
+            eSrcCharSet = GetCharSetFromLanguage();
     }
     return eSrcCharSet;
 }
@@ -2839,40 +2860,12 @@ rtl_TextEncoding SwWW8ImplReader::GetCurrentCJKCharSet()
     {
         if (!maFontSrcCJKCharSets.empty())
             eSrcCharSet = maFontSrcCJKCharSets.top();
-        if (!vColl.empty())
-        {
-            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
-                eSrcCharSet = vColl[nCharFmt].GetCJKCharSet();
-            if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && nAktColl < vColl.size())
-                eSrcCharSet = vColl[nAktColl].GetCJKCharSet();
-        }
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
+            eSrcCharSet = vColl[nCharFmt].GetCJKCharSet();
+        if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && StyleExists(nAktColl) && nAktColl < vColl.size())
+            eSrcCharSet = vColl[nAktColl].GetCJKCharSet();
         if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW)
-        { // patch from cmc for #i52786#
-            /*
-             #i22206#/#i52786#
-             The (default) character set used for a run of text is the default
-             character set for the version of Word that last saved the document.
-
-             This is a bit tentative, more might be required if the concept is correct.
-             When later version of word write older 6/95 documents the charset is
-             correctly set in the character runs involved, so its hard to reproduce
-             documents that require this to be sure of the process involved.
-            */
-            const SvxLanguageItem *pLang =
-                (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
-            if (pLang)
-            {
-                switch (pLang->GetLanguage())
-                {
-                    case LANGUAGE_CZECH:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1250;
-                        break;
-                    default:
-                        eSrcCharSet = RTL_TEXTENCODING_MS_1252;
-                        break;
-                }
-            }
-        }
+            eSrcCharSet = GetCJKCharSetFromLanguage();
     }
     return eSrcCharSet;
 }
@@ -3040,8 +3033,51 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, sal_Int32 nEnd, sal_Int32 nCp
     // the correct FilePos has already been reached.
     const sal_Int32 nStrLen = std::min(nValidStrLen, SAL_MAX_INT32-1);
 
-    const rtl_TextEncoding eSrcCharSet = bVer67 ? GetCurrentCharSet() :
+    rtl_TextEncoding eSrcCharSet = bVer67 ? GetCurrentCharSet() :
         RTL_TEXTENCODING_MS_1252;
+    if (bVer67 && eSrcCharSet == RTL_TEXTENCODING_MS_932)
+    {
+        /*
+         fdo#82904
+
+         Older documents exported as word 95 that use unicode aware fonts will
+         have the charset of those fonts set to RTL_TEXTENCODING_MS_932 on
+         export as the conversion from RTL_TEXTENCODING_UNICODE. This is a serious
+         pain.
+
+         We will try and use a fallback encoding if the conversion from
+         RTL_TEXTENCODING_MS_932 fails, but you can get unlucky and get a document
+         which isn't really in RTL_TEXTENCODING_MS_932 but parts of it form
+         valid RTL_TEXTENCODING_MS_932 by chance :-(
+
+         We're not the only ones that struggle with this: Here's the help from
+         MSOffice 2003 on the topic:
+
+         <<
+          Earlier versions of Microsoft Word were sometimes used in conjunction with
+          third-party language-processing add-in programs designed to support Chinese or
+          Korean on English versions of Microsoft Windows. Use of these add-ins sometimes
+          results in incorrect text display in more recent versions of Word.
+
+          However, you can set options to convert these documents so that text is
+          displayed correctly. On the Tools menu, click Options, and then click the
+          General tab. In the English Word 6.0/95 documents list, select Contain Asian
+          text (to have Word interpret the text as Asian code page data, regardless of
+          its font) or Automatically detect Asian text (to have Word attempt to determine
+          which parts of the text are meant to be Asian).
+        >>
+
+        What we can try here is to ignore a RTL_TEXTENCODING_MS_932 codepage if
+        the language is not Japanese
+        */
+
+        const SfxPoolItem * pItem = GetFmtAttr(RES_CHRATR_CJK_LANGUAGE);
+        if (pItem != NULL && LANGUAGE_JAPANESE != static_cast<const SvxLanguageItem *>(pItem)->GetLanguage())
+        {
+            SAL_WARN("sw.ww8", "discarding word95 RTL_TEXTENCODING_MS_932 encoding");
+            eSrcCharSet = GetCharSetFromLanguage();
+        }
+    }
     const rtl_TextEncoding eSrcCJKCharSet = bVer67 ? GetCurrentCJKCharSet() :
         RTL_TEXTENCODING_MS_1252;
 
