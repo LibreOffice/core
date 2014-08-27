@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_d42ffcf4",
+        "filename": "sc/source/ui/src/popup.src",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-08-27T10:11:22Z",
+      "side": 0,
+      "message": "I\u0027m opposing specifically this change, see https://bugs.freedesktop.org/show_bug.cgi?id\u003d81132#c28",
+      "revId": "7163f563cef2db7117ba8639daeeb4d07f753f1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
