@@ -1534,55 +1534,54 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         aScrSize.Height() = pView->GetGridHeight(eWhichY);
     }
 
-    sal_uInt16 nTSize;
+    const Size& aScrSizeLogic = GetActiveWin()->PixelToLogic( aScrSize,
+                                                              maPaintMapMode );
 
     SCCOL   nPosX = GetPosX(eWhichX);
     SCCOL   nX;
 
-    long nScrPosX=0;
+    long nScrPosXTwips = 0;
     if (nWhereX >= nPosX)
-        for (nX=nPosX; nX<nWhereX && (bAllowNeg || nScrPosX<=aScrSize.Width()); nX++)
+    {
+        for ( nX=nPosX; nX<nWhereX && (bAllowNeg || nScrPosXTwips<=aScrSizeLogic.Width()); nX++ )
         {
             if ( nX > MAXCOL )
-                nScrPosX = 65535;
+            {
+                nScrPosXTwips = LONG_MAX;
+            }
             else
             {
-                nTSize = pDoc->GetColWidth( nX, nTabNo );
-                if (nTSize)
-                {
-                    long nSizeXPix = ToPixel( nTSize, nPPTX );
-                    nScrPosX += nSizeXPix;
-                }
+                nScrPosXTwips += pDoc->GetColWidth( nX, nTabNo );
             }
         }
+    }
     else if (bAllowNeg)
+    {
         for (nX=nPosX; nX>nWhereX;)
         {
             --nX;
-            nTSize = pDoc->GetColWidth( nX, nTabNo );
-            if (nTSize)
-            {
-                long nSizeXPix = ToPixel( nTSize, nPPTX );
-                nScrPosX -= nSizeXPix;
-            }
+            nScrPosXTwips -= pDoc->GetColWidth( nX, nTabNo );
         }
+    }
 
     SCROW   nPosY = GetPosY(eWhichY);
     SCROW   nY;
 
-    long nScrPosY=0;
+    long nScrPosYTwips=0;
     if (nWhereY >= nPosY)
-        for (nY=nPosY; nY<nWhereY && (bAllowNeg || nScrPosY<=aScrSize.Height()); nY++)
+    {
+        for ( nY=nPosY; nY<nWhereY && (bAllowNeg || nScrPosYTwips<=aScrSizeLogic.Height()); nY++ )
         {
             if ( nY > MAXROW )
-                nScrPosY = 65535;
+            {
+                nScrPosYTwips = LONG_MAX;
+            }
             else
             {
-                nTSize = pDoc->GetRowHeight( nY, nTabNo );
+                sal_uInt16 nTSize = pDoc->GetRowHeight( nY, nTabNo );
                 if (nTSize)
                 {
-                    long nSizeYPix = ToPixel( nTSize, nPPTY );
-                    nScrPosY += nSizeYPix;
+                    nScrPosYTwips += nTSize;
                 }
                 else if ( nY < MAXROW )
                 {
@@ -1595,27 +1594,34 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 }
             }
         }
+    }
     else if (bAllowNeg)
-        for (nY=nPosY; nY>nWhereY;)
+    {
+        for ( nY = nPosY; nY > nWhereY; --nY )
         {
-            --nY;
-            nTSize = pDoc->GetRowHeight( nY, nTabNo );
-            if (nTSize)
-            {
-                long nSizeYPix = ToPixel( nTSize, nPPTY );
-                nScrPosY -= nSizeYPix;
-            }
+            nScrPosYTwips -= pDoc->GetRowHeight( nY, nTabNo );
         }
+    }
+
+    Point aPointPix = GetActiveWin()->LogicToPixel( Point( nScrPosXTwips, nScrPosYTwips ),
+                                                    maPaintMapMode );
 
     if ( pDoc->IsLayoutRTL( nTabNo ) )
     {
         //  mirror horizontal position
-        nScrPosX = aScrSize.Width() - 1 - nScrPosX;
+        aPointPix.X() = aScrSize.Width() - 1 - aPointPix.X();
     }
 
-    if (nScrPosX > 32767) nScrPosX=32767;
-    if (nScrPosY > 32767) nScrPosY=32767;
-    return Point( nScrPosX, nScrPosY );
+    // We check both versions as:
+    // - We need to ensure that the max value is 32767
+    // - But it's possible that we'll lose information when converting
+    //   from logic to pixels above.
+    if ( aPointPix.getX() > 32767 || nScrPosXTwips == LONG_MAX )
+        aPointPix.X() = 32767;
+    if ( aPointPix.getY() > 32767 || nScrPosYTwips == LONG_MAX )
+        aPointPix.Y() = 32767;
+
+    return aPointPix;
 }
 
 //      Number of cells on a screen
