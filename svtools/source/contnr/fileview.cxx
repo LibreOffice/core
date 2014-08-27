@@ -91,8 +91,6 @@ using ::svt::FolderDescriptor;
 #define COLUMN_SIZE         3
 #define COLUMN_DATE         4
 
-#define SEPARATOR_STR  "----------------------------------"
-
 #define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
 
