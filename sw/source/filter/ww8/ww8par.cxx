@@ -5846,6 +5846,9 @@ void SwWW8ImplReader::SetOutlineStyles()
     {
         SwWW8StyInf* pStyleInf = (*aStyleIter);
 
+        if (!pStyleInf->bColl) //Character Style
+            continue;
+
         const sal_uInt16 nOutlineStyleListLevelOfWW8BuiltInHeadingStyle
             = 1 << pStyleInf->mnWW8OutlineLevel;
         if (nOutlineStyleListLevelOfWW8BuiltInHeadingStyle
