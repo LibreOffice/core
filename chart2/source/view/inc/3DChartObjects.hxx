@@ -108,10 +108,12 @@ private:
 class ScreenText : public Renderable3DObject
 {
 public:
-    ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr, glm::vec4 rColor, sal_uInt32 nId);
+    ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr,
+            const glm::vec4& rColor, sal_uInt32 nId);
 
     virtual void render() SAL_OVERRIDE;
-    void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight, glm::vec3 r3DPos = glm::vec3(0.0, 0.0, 0.0));
+    void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight,
+            const glm::vec3& r3DPos = glm::vec3(0.0, 0.0, 0.0));
 
 private:
     TextCacheItem maText;
