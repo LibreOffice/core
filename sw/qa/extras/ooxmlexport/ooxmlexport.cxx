@@ -201,6 +201,15 @@ DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFDO83044, "fdo83044.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+
+    if (!pXmlDoc)
+       return;
+
+    assertXPath(pXmlDoc, "/w:document/w:body/w:sdt/w:sdtPr/w:text", 1);
+}
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
