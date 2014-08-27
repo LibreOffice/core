@@ -39,6 +39,7 @@ $(eval $(call gb_Library_use_externals,OGLTrans,\
 	boost_headers \
 	glew \
 	mesa_headers \
+	glm_headers \
 ))
 
 $(eval $(call gb_Library_set_componentfile,OGLTrans,slideshow/source/engine/OGLTrans/ogltrans))

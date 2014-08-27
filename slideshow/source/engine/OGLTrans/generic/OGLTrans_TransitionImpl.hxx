@@ -29,6 +29,7 @@
 #define INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 
 #include <config_lgpl.h>
+#include <glm/glm.hpp>
 
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -293,7 +294,7 @@ public:
     Location of third Vertex on slide
 
     */
-    void pushTriangle(const basegfx::B2DVector& SlideLocation0,const basegfx::B2DVector& SlideLocation1,const basegfx::B2DVector& SlideLocation2);
+    void pushTriangle(const glm::vec2& SlideLocation0,const glm::vec2& SlideLocation1,const glm::vec2& SlideLocation2);
 
     /** clear all the vertices, normals, tex coordinates, and normals
     */
@@ -304,11 +305,11 @@ public:
         @return
         the list of vertices
     */
-    const std::vector<basegfx::B3DVector>& getVertices() const {return Vertices;}
+    const std::vector<glm::vec3>& getVertices() const {return Vertices;}
 
     /** guards against directly changing the vertices
     */
-    const std::vector<basegfx::B3DVector>& getNormals() const {return Normals;}
+    const std::vector<glm::vec3>& getNormals() const {return Normals;}
 
     /** guards against directly changing the vertices
 
@@ -316,7 +317,7 @@ public:
         the list of Texture Coordinates
 
     */
-    const std::vector<basegfx::B2DVector>& getTexCoords() const {return TexCoords;}
+    const std::vector<glm::vec2>& getTexCoords() const {return TexCoords;}
 
     /** list of Operations to be performed on this primitive.These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
 
@@ -329,15 +330,15 @@ public:
 private:
     /** list of vertices
     */
-    std::vector<basegfx::B3DVector> Vertices;
+    std::vector<glm::vec3> Vertices;
 
     /** list of Normals
     */
-    std::vector<basegfx::B3DVector> Normals;
+    std::vector<glm::vec3> Normals;
 
     /** list of Texture Coordinates
     */
-    std::vector<basegfx::B2DVector> TexCoords;
+    std::vector<glm::vec2> TexCoords;
 };
 
 /** This class is to be derived to make any operation (tranform) you may need in order to construct your transitions
@@ -407,16 +408,17 @@ public:
         transformation ending time
 
     */
-    SRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+    SRotate(const glm::vec3& Axis, const glm::vec3& Origin, double Angle,
+            bool bInter, double T0, double T1);
     virtual ~SRotate(){}
 private:
     /** axis to rotate CCW about
     */
-    basegfx::B3DVector axis;
+    glm::vec3 axis;
 
     /** position that rotation axis runs through
     */
-    basegfx::B3DVector origin;
+    glm::vec3 origin;
 
     /** angle in radians of CCW rotation
     */
@@ -424,7 +426,8 @@ private:
 };
 
 boost::shared_ptr<SRotate>
-makeSRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+makeSRotate(const glm::vec3& Axis, const glm::vec3& Origin, double Angle,
+        bool bInter, double T0, double T1);
 
 /** scaling transformation
 */
@@ -451,15 +454,15 @@ public:
         transformation ending time
 
     */
-    SScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,bool bInter, double T0, double T1);
+    SScale(const glm::vec3& Scale, const glm::vec3& Origin,bool bInter, double T0, double T1);
     virtual ~SScale(){}
 private:
-    basegfx::B3DVector scale;
-    basegfx::B3DVector origin;
+    glm::vec3 scale;
+    glm::vec3 origin;
 };
 
 boost::shared_ptr<SScale>
-makeSScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,bool bInter, double T0, double T1);
+makeSScale(const glm::vec3& Scale, const glm::vec3& Origin,bool bInter, double T0, double T1);
 
 /** translation transformation
 */
@@ -483,16 +486,16 @@ public:
         transformation ending time
 
     */
-    STranslate(const basegfx::B3DVector& Vector,bool bInter, double T0, double T1);
+    STranslate(const glm::vec3& Vector,bool bInter, double T0, double T1);
     virtual ~STranslate(){}
 private:
     /** vector to translate by
     */
-    basegfx::B3DVector vector;
+    glm::vec3 vector;
 };
 
 boost::shared_ptr<STranslate>
-makeSTranslate(const basegfx::B3DVector& Vector,bool bInter, double T0, double T1);
+makeSTranslate(const glm::vec3& Vector,bool bInter, double T0, double T1);
 
 /** translation transformation
 */
@@ -539,16 +542,16 @@ class RotateAndScaleDepthByWidth: public Operation
 public:
     virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const SAL_OVERRIDE;
 
-    RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+    RotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
     virtual ~RotateAndScaleDepthByWidth(){}
 private:
-    basegfx::B3DVector axis;
-    basegfx::B3DVector origin;
+    glm::vec3 axis;
+    glm::vec3 origin;
     double angle;
 };
 
 boost::shared_ptr<RotateAndScaleDepthByWidth>
-makeRotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
 
 /** Same as SRotate, except the depth is scaled by the width of the slide divided by the height of the window.
 */
@@ -557,16 +560,16 @@ class RotateAndScaleDepthByHeight: public Operation
 public:
     virtual void interpolate(double t,double SlideWidthScale,double SlideHeightScale) const SAL_OVERRIDE;
 
-    RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+    RotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
     virtual ~RotateAndScaleDepthByHeight(){}
 private:
-    basegfx::B3DVector axis;
-    basegfx::B3DVector origin;
+    glm::vec3 axis;
+    glm::vec3 origin;
     double angle;
 };
 
 boost::shared_ptr<RotateAndScaleDepthByHeight>
-makeRotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1);
+makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1);
 
 #endif // INCLUDED_SLIDESHOW_TRANSITION_HXX_
 

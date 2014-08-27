@@ -424,19 +424,19 @@ boost::shared_ptr<OGLTransitionImpl> makeOutsideCubeFaceToLeft()
 {
     Primitive Slide;
 
-    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
-    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
+    Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
 
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),90,false,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,-1),90,false,0.0,1.0));
 
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
     Operations_t aOperations;
-    aOperations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),-90,true,0.0,1.0));
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,-1),-90,true,0.0,1.0));
 
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
 }
@@ -445,19 +445,19 @@ boost::shared_ptr<OGLTransitionImpl> makeInsideCubeFaceToLeft()
 {
     Primitive Slide;
 
-    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
-    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
+    Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
 
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),-90,false,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,1),-90,false,0.0,1.0));
 
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
     Operations_t aOperations;
-    aOperations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),90,true,0.0,1.0));
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,1),90,true,0.0,1.0));
 
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations);
 }
@@ -466,13 +466,13 @@ boost::shared_ptr<OGLTransitionImpl> makeFallLeaving()
 {
     Primitive Slide;
 
-    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
-    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
+    Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
 
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(1,0,0),basegfx::B3DVector(0,-1,0), 90,true,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(1,0,0),glm::vec3(0,-1,0), 90,true,0.0,1.0));
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
@@ -489,19 +489,19 @@ boost::shared_ptr<OGLTransitionImpl> makeTurnAround()
     TransitionSettings aSettings;
     aSettings.mbReflectSlides = true;
 
-    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
-    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
+    Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0),-180,false,0.0,1.0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0),-180,false,0.0,1.0));
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
     Operations_t aOperations;
-    aOperations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, -1.5),true, 0, 0.5));
-    aOperations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, 1.5), true, 0.5, 1));
-    aOperations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0, 1, 0),basegfx::B3DVector(0, 0, 0), -180, true, 0.0, 1.0));
+    aOperations.push_back(makeSTranslate(glm::vec3(0, 0, -1.5),true, 0, 0.5));
+    aOperations.push_back(makeSTranslate(glm::vec3(0, 0, 1.5), true, 0.5, 1));
+    aOperations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0),glm::vec3(0, 0, 0), -180, true, 0.0, 1.0));
 
     return makeSimpleTransition(aLeavingPrimitives, aEnteringPrimitives, aOperations, aSettings);
 }
@@ -510,14 +510,14 @@ boost::shared_ptr<OGLTransitionImpl> makeTurnDown()
 {
     Primitive Slide;
 
-    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
-    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
+    Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, 0.0001), false, -1.0, 0.0));
-    Slide.Operations.push_back(makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(-1, 1, 0), -90, true, 0.0, 1.0));
-    Slide.Operations.push_back(makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(-1, 1, 0), 90, false, -1.0, 0.0));
+    Slide.Operations.push_back(makeSTranslate(glm::vec3(0, 0, 0.0001), false, -1.0, 0.0));
+    Slide.Operations.push_back(makeSRotate (glm::vec3(0, 0, 1), glm::vec3(-1, 1, 0), -90, true, 0.0, 1.0));
+    Slide.Operations.push_back(makeSRotate (glm::vec3(0, 0, 1), glm::vec3(-1, 1, 0), 90, false, -1.0, 0.0));
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back(Slide);
 
@@ -531,13 +531,13 @@ boost::shared_ptr<OGLTransitionImpl> makeIris()
 {
     Primitive Slide;
 
-    Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
-    Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
+    Slide.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
+    Slide.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
     Primitives_t aEnteringPrimitives;
     aEnteringPrimitives.push_back (Slide);
 
-    Slide.Operations.push_back (makeSTranslate (basegfx::B3DVector (0, 0,  0.000001), false, -1, 0));
-    Slide.Operations.push_back (makeSTranslate (basegfx::B3DVector (0, 0, -0.000002), false, 0.5, 1));
+    Slide.Operations.push_back (makeSTranslate (glm::vec3 (0, 0,  0.000001), false, -1, 0));
+    Slide.Operations.push_back (makeSTranslate (glm::vec3 (0, 0, -0.000002), false, 0.5, 1));
     Primitives_t aLeavingPrimitives;
     aLeavingPrimitives.push_back (Slide);
 
@@ -557,12 +557,12 @@ boost::shared_ptr<OGLTransitionImpl> makeIris()
         cyo = (of*y + 1)/2;
         lcxo = (of*lx + 1)/2;
         lcyo = (of*ly + 1)/2;
-        irisPart.pushTriangle (basegfx::B2DVector (lcx, lcy),
-                               basegfx::B2DVector (lcxo, lcyo),
-                               basegfx::B2DVector (cx, cy));
-        irisPart.pushTriangle (basegfx::B2DVector (cx, cy),
-                               basegfx::B2DVector (lcxo, lcyo),
-                               basegfx::B2DVector (cxo, cyo));
+        irisPart.pushTriangle (glm::vec2 (lcx, lcy),
+                               glm::vec2 (lcxo, lcyo),
+                               glm::vec2 (cx, cy));
+        irisPart.pushTriangle (glm::vec2 (cx, cy),
+                               glm::vec2 (lcxo, lcyo),
+                               glm::vec2 (cxo, cyo));
         lx = x;
         ly = y;
         t += 1.0/nSteps;
@@ -577,15 +577,15 @@ boost::shared_ptr<OGLTransitionImpl> makeIris()
 
         rx = cos ((2*M_PI*i)/nParts);
         ry = sin ((2*M_PI*i)/nParts);
-        irisPart.Operations.push_back (makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(rx, ry, 0),  angle, true, 0.0, 0.5));
-        irisPart.Operations.push_back (makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(rx, ry, 0), -angle, true, 0.5, 1));
+        irisPart.Operations.push_back (makeSRotate (glm::vec3(0, 0, 1), glm::vec3(rx, ry, 0),  angle, true, 0.0, 0.5));
+        irisPart.Operations.push_back (makeSRotate (glm::vec3(0, 0, 1), glm::vec3(rx, ry, 0), -angle, true, 0.5, 1));
         if (i > 0) {
-            irisPart.Operations.push_back (makeSTranslate (basegfx::B3DVector(rx, ry, 0),  false, -1, 0));
-            irisPart.Operations.push_back (makeSRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(0, 0, 0), i*360.0/nParts, false, -1, 0));
-            irisPart.Operations.push_back (makeSTranslate (basegfx::B3DVector(-1, 0, 0),  false, -1, 0));
+            irisPart.Operations.push_back (makeSTranslate (glm::vec3(rx, ry, 0),  false, -1, 0));
+            irisPart.Operations.push_back (makeSRotate (glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), i*360.0/nParts, false, -1, 0));
+            irisPart.Operations.push_back (makeSTranslate (glm::vec3(-1, 0, 0),  false, -1, 0));
         }
-        irisPart.Operations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, 1), false, -2, 0.0));
-        irisPart.Operations.push_back (makeSRotate (basegfx::B3DVector(1, .5, 0), basegfx::B3DVector(1, 0, 0), -30, false, -1, 0));
+        irisPart.Operations.push_back(makeSTranslate(glm::vec3(0, 0, 1), false, -2, 0.0));
+        irisPart.Operations.push_back (makeSRotate (glm::vec3(1, .5, 0), glm::vec3(1, 0, 0), -30, false, -1, 0));
         pIris->pushPrimitive (irisPart);
     }
 
@@ -653,30 +653,23 @@ boost::shared_ptr<OGLTransitionImpl> makeRochade()
     w = 2.2;
     h = 10;
 
-    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
-    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
+    Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
 
     Slide.Operations.push_back(makeSEllipseTranslate(w, h, 0.25, -0.25, true, 0, 1));
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), -45, true, 0, 1));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), -45, true, 0, 1));
     Primitives_t aLeavingSlide;
     aLeavingSlide.push_back(Slide);
 
     Slide.Operations.clear();
     Slide.Operations.push_back(makeSEllipseTranslate(w, h, 0.75, 0.25, true, 0, 1));
-    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(0, 0, -h), false, -1, 0));
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), -45, true, 0, 1));
-    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), 45, false, -1, 0));
+    Slide.Operations.push_back(makeSTranslate(glm::vec3(0, 0, -h), false, -1, 0));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), -45, true, 0, 1));
+    Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0,1,0),glm::vec3(0,0,0), 45, false, -1, 0));
     Primitives_t aEnteringSlide;
     aEnteringSlide.push_back(Slide);
 
     return makeRochadeTransition(aLeavingSlide, aEnteringSlide, aSettings);
-}
-
-// TODO(Q3): extract to basegfx
-inline basegfx::B2DVector clamp(const basegfx::B2DVector& v)
-{
-    return basegfx::B2DVector(min(max(v.getX(),-1.0),1.0),
-                              min(max(v.getY(),-1.0),1.0));
 }
 
 inline double randFromNeg1to1()
@@ -685,10 +678,16 @@ inline double randFromNeg1to1()
 }
 
 // TODO(Q3): extract to basegfx
-inline basegfx::B3DVector randNormVectorInXYPlane()
+inline glm::vec3 randNormVectorInXYPlane()
 {
-    basegfx::B3DVector toReturn(randFromNeg1to1(),randFromNeg1to1(),0.0);
-    return toReturn/toReturn.getLength();
+    glm::vec3 toReturn(randFromNeg1to1(),randFromNeg1to1(),0.0);
+    return glm::normalize(toReturn);
+}
+
+template<typename T>
+T clamp(const T& rIn)
+{
+    return glm::clamp(rIn, -1.0, 1.0);
 }
 
 boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles )
@@ -699,21 +698,21 @@ boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles
         makeNByMTileFlip(1,1);
         return makeSimpleTransition();
     }
-    double Radius(1.0/static_cast<double>( nCircles ));
-    double dRadius(Radius);
-    double LastRadius(0.0);
-    double NextRadius(2*Radius);
+    float Radius(1.0/static_cast<double>( nCircles ));
+    float dRadius(Radius);
+    float LastRadius(0.0);
+    float NextRadius(2*Radius);
 
     /// now we know there is at least two circles
     /// the first will always be a full circle
     /// the last will always be the outer shell of the slide with a circle hole
 
     //add the full circle
-    vector<basegfx::B2DVector> unScaledTexCoords;
-    double TempAngle(0.0);
+    vector<glm::vec2> unScaledTexCoords;
+    float TempAngle(0.0);
     for(unsigned int Point(0); Point < nPointsOnCircles; ++Point)
     {
-        unScaledTexCoords.push_back( basegfx::B2DVector( cos(TempAngle - 3.1415926/2.0) , sin(TempAngle- 3.1415926/2.0) ) );
+        unScaledTexCoords.push_back( glm::vec2( cos(TempAngle - 3.1415926/2.0) , sin(TempAngle- 3.1415926/2.0) ) );
 
         TempAngle += dAngle;
     }
@@ -725,16 +724,16 @@ boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles
         Primitive LeavingSlide;
         for(int Point(0); Point + 1 < nPointsOnCircles; ++Point)
         {
-            EnteringSlide.pushTriangle( basegfx::B2DVector( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ Point + 1 ] / 2.0 + basegfx::B2DVector( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ Point ] / 2.0 + basegfx::B2DVector( 0.5 , 0.5 ) );
-            LeavingSlide.pushTriangle( basegfx::B2DVector( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ Point + 1 ] / 2.0 + basegfx::B2DVector( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ Point ] / 2.0 + basegfx::B2DVector( 0.5, 0.5) );
+            EnteringSlide.pushTriangle( glm::vec2( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ Point + 1 ] / 2.0f + glm::vec2( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ Point ] / 2.0f + glm::vec2( 0.5 , 0.5 ) );
+            LeavingSlide.pushTriangle( glm::vec2( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ Point + 1 ] / 2.0f + glm::vec2( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ Point ] / 2.0f + glm::vec2( 0.5, 0.5) );
         }
-        EnteringSlide.pushTriangle( basegfx::B2DVector(0.5,0.5) , Radius * unScaledTexCoords[ 0 ] / 2.0 + basegfx::B2DVector( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ nPointsOnCircles - 1 ] / 2.0 + basegfx::B2DVector( 0.5 , 0.5 ) );
-        LeavingSlide.pushTriangle( basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) );
+        EnteringSlide.pushTriangle( glm::vec2(0.5,0.5) , Radius * unScaledTexCoords[ 0 ] / 2.0f + glm::vec2( 0.5 , 0.5 ) , Radius * unScaledTexCoords[ nPointsOnCircles - 1 ] / 2.0f + glm::vec2( 0.5 , 0.5 ) );
+        LeavingSlide.pushTriangle( glm::vec2(0.5,0.5) , Radius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) , Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) );
 
-        basegfx::B3DVector axis(randNormVectorInXYPlane());
-        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
-        LeavingSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
-        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
+        glm::vec3 axis(randNormVectorInXYPlane());
+        EnteringSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
+        LeavingSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , -180, false,0.0,1.0) );
 
         aEnteringSlide.push_back(EnteringSlide);
         aLeavingSlide.push_back(LeavingSlide);
@@ -749,23 +748,23 @@ boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles
         Primitive EnteringSlide;
         for(int Side(0); Side < nPointsOnCircles - 1; ++Side)
         {
-            EnteringSlide.pushTriangle(Radius*unScaledTexCoords[Side]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) );
-            EnteringSlide.pushTriangle(Radius*unScaledTexCoords[Side]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) );
+            EnteringSlide.pushTriangle(Radius*unScaledTexCoords[Side]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) );
+            EnteringSlide.pushTriangle(Radius*unScaledTexCoords[Side]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) , Radius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) );
 
-            LeavingSlide.pushTriangle(Radius*unScaledTexCoords[Side]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) );
-            LeavingSlide.pushTriangle(Radius*unScaledTexCoords[Side]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) );
+            LeavingSlide.pushTriangle(Radius*unScaledTexCoords[Side]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) );
+            LeavingSlide.pushTriangle(Radius*unScaledTexCoords[Side]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) , Radius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) );
         }
 
-        EnteringSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) );
-        EnteringSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) );
+        EnteringSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) );
+        EnteringSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) , Radius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) );
 
-        LeavingSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) );
-        LeavingSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) , Radius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) );
+        LeavingSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) );
+        LeavingSlide.pushTriangle(Radius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) , Radius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) );
 
-        basegfx::B3DVector axis(randNormVectorInXYPlane());
-        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
-        LeavingSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
-        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
+        glm::vec3 axis(randNormVectorInXYPlane());
+        EnteringSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
+        LeavingSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , 180, true, Radius/2.0 , (NextRadius + 1)/2.0 ) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , -180, false,0.0,1.0) );
 
         aEnteringSlide.push_back(EnteringSlide);
         aLeavingSlide.push_back(LeavingSlide);
@@ -781,23 +780,23 @@ boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles
         for(int Side(0); Side < nPointsOnCircles - 1; ++Side)
         {
 
-            EnteringSlide.pushTriangle(clamp(Radius*unScaledTexCoords[Side])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) );
-            EnteringSlide.pushTriangle(clamp(Radius*unScaledTexCoords[Side])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) , clamp(Radius*unScaledTexCoords[Side + 1])/2.0 + basegfx::B2DVector(0.5,0.5) );
+            EnteringSlide.pushTriangle(clamp(Radius*unScaledTexCoords[Side])/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) );
+            EnteringSlide.pushTriangle(clamp(Radius*unScaledTexCoords[Side])/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) , clamp(Radius*unScaledTexCoords[Side + 1])/2.0f + glm::vec2(0.5,0.5) );
 
-            LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[Side])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) );
-            LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[Side])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0 + basegfx::B2DVector(0.5,0.5) , clamp(Radius*unScaledTexCoords[Side + 1])/2.0 + basegfx::B2DVector(0.5,0.5) );
+            LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[Side])/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) );
+            LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[Side])/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[Side + 1]/2.0f + glm::vec2(0.5,0.5) , clamp(Radius*unScaledTexCoords[Side + 1])/2.0f + glm::vec2(0.5,0.5) );
         }
 
-        EnteringSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) );
-        EnteringSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) , clamp(Radius*unScaledTexCoords[0])/2.0 + basegfx::B2DVector(0.5,0.5) );
+        EnteringSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) );
+        EnteringSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) , clamp(Radius*unScaledTexCoords[0])/2.0f + glm::vec2(0.5,0.5) );
 
-        LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[nPointsOnCircles - 1]/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) );
-        LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0 + basegfx::B2DVector(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0 + basegfx::B2DVector(0.5,0.5) , clamp(Radius*unScaledTexCoords[0])/2.0 + basegfx::B2DVector(0.5,0.5) );
+        LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[nPointsOnCircles - 1]/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) );
+        LeavingSlide.pushTriangle(clamp(Radius*unScaledTexCoords[nPointsOnCircles - 1])/2.0f + glm::vec2(0.5,0.5) , LastRadius*unScaledTexCoords[0]/2.0f + glm::vec2(0.5,0.5) , clamp(Radius*unScaledTexCoords[0])/2.0f + glm::vec2(0.5,0.5) );
 
-        basegfx::B3DVector axis(randNormVectorInXYPlane());
-        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, (LastRadius + dRadius)/2.0 , 1.0 ) );
-        LeavingSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , 180, true, (LastRadius + dRadius)/2.0 , 1.0 ) );
-        EnteringSlide.Operations.push_back( makeSRotate( axis , basegfx::B3DVector(0,0,0) , -180, false,0.0,1.0) );
+        glm::vec3 axis(randNormVectorInXYPlane());
+        EnteringSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , 180, true, (LastRadius + dRadius)/2.0 , 1.0 ) );
+        LeavingSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , 180, true, (LastRadius + dRadius)/2.0 , 1.0 ) );
+        EnteringSlide.Operations.push_back( makeSRotate( axis , glm::vec3(0,0,0) , -180, false,0.0,1.0) );
 
         aEnteringSlide.push_back(EnteringSlide);
         aLeavingSlide.push_back(LeavingSlide);
@@ -817,17 +816,17 @@ boost::shared_ptr<OGLTransitionImpl> makeHelix( ::sal_uInt16 nRows )
     {
         Primitive Tile;
 
-        Tile.pushTriangle(basegfx::B2DVector( 1.0 , iDn ) , basegfx::B2DVector( 0.0 , iDn ) , basegfx::B2DVector( 0.0 , iPDn ));
+        Tile.pushTriangle(glm::vec2( 1.0 , iDn ) , glm::vec2( 0.0 , iDn ) , glm::vec2( 0.0 , iPDn ));
 
-        Tile.pushTriangle(basegfx::B2DVector( 1.0 , iPDn ) , basegfx::B2DVector( 1.0 , iDn ) , basegfx::B2DVector( 0.0 , iPDn ));
+        Tile.pushTriangle(glm::vec2( 1.0 , iPDn ) , glm::vec2( 1.0 , iDn ) , glm::vec2( 0.0 , iPDn ));
 
-        Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , 180 ,
+        Tile.Operations.push_back( makeSRotate( glm::vec3( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , 180 ,
                                                 true,min(max(static_cast<double>(i - nRows/2.0)*invN/2.0,0.0),1.0),
                                                 min(max(static_cast<double>(i + nRows/2.0)*invN/2.0,0.0),1.0) ) );
 
         aLeavingSlide.push_back(Tile);
 
-        Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , -180 , false,0.0,1.0) );
+        Tile.Operations.push_back( makeSRotate( glm::vec3( 0 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , -180 , false,0.0,1.0) );
 
         aEnteringSlide.push_back(Tile);
 
@@ -854,13 +853,13 @@ boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uIn
         {
             Primitive Tile;
 
-            Tile.pushTriangle(basegfx::B2DVector( iPDn , jDm ) , basegfx::B2DVector( iDn , jDm ) , basegfx::B2DVector( iDn , jPDm ));
+            Tile.pushTriangle(glm::vec2( iPDn , jDm ) , glm::vec2( iDn , jDm ) , glm::vec2( iDn , jPDm ));
 
-            Tile.pushTriangle(basegfx::B2DVector( iPDn , jPDm ) , basegfx::B2DVector( iPDn , jDm ) , basegfx::B2DVector( iDn , jPDm ));//bottom left corner of tile
+            Tile.pushTriangle(glm::vec2( iPDn , jPDm ) , glm::vec2( iPDn , jDm ) , glm::vec2( iDn , jPDm ));//bottom left corner of tile
 
-            Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , 180 , true, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
+            Tile.Operations.push_back( makeSRotate( glm::vec3( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , 180 , true, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
             aLeavingSlide.push_back(Tile);
-            Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , -180, false, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
+            Tile.Operations.push_back( makeSRotate( glm::vec3( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0f , -180, false, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
 
             aEnteringSlide.push_back(Tile);
 
@@ -874,7 +873,7 @@ boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uIn
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-SRotate::SRotate(const basegfx::B3DVector& Axis, const basegfx::B3DVector& Origin,
+SRotate::SRotate(const glm::vec3& Axis, const glm::vec3& Origin,
         double Angle, bool bInter, double T0, double T1):
     Operation(bInter, T0, T1),
     axis(Axis),
@@ -883,7 +882,7 @@ SRotate::SRotate(const basegfx::B3DVector& Axis, const basegfx::B3DVector& Origi
 {
 }
 
-SScale::SScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,
+SScale::SScale(const glm::vec3& Scale, const glm::vec3& Origin,
         bool bInter, double T0, double T1):
     Operation(bInter, T0, T1),
     scale(Scale),
@@ -891,8 +890,8 @@ SScale::SScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin
 {
 }
 
-RotateAndScaleDepthByWidth::RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,
-        const basegfx::B3DVector& Origin, double Angle, bool bInter, double T0, double T1):
+RotateAndScaleDepthByWidth::RotateAndScaleDepthByWidth(const glm::vec3& Axis,
+        const glm::vec3& Origin, double Angle, bool bInter, double T0, double T1):
     Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
@@ -900,8 +899,8 @@ RotateAndScaleDepthByWidth::RotateAndScaleDepthByWidth(const basegfx::B3DVector&
 {
 }
 
-RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,
-        const basegfx::B3DVector& Origin, double Angle, bool bInter, double T0, double T1):
+RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const glm::vec3& Axis,
+        const glm::vec3& Origin, double Angle, bool bInter, double T0, double T1):
     Operation(bInter, T0, T1),
     axis(Axis),
     origin(Origin),
@@ -910,26 +909,26 @@ RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const basegfx::B3DVecto
 }
 
 
-STranslate::STranslate(const basegfx::B3DVector& Vector, bool bInter, double T0, double T1):
+STranslate::STranslate(const glm::vec3& Vector, bool bInter, double T0, double T1):
     Operation(bInter, T0, T1),
     vector(Vector)
 {
 }
 
 boost::shared_ptr<SRotate>
-makeSRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1)
+makeSRotate(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1)
 {
     return make_shared<SRotate>(Axis, Origin, Angle, bInter, T0, T1);
 }
 
 boost::shared_ptr<SScale>
-makeSScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,bool bInter, double T0, double T1)
+makeSScale(const glm::vec3& Scale, const glm::vec3& Origin,bool bInter, double T0, double T1)
 {
     return make_shared<SScale>(Scale, Origin, bInter, T0, T1);
 }
 
 boost::shared_ptr<STranslate>
-makeSTranslate(const basegfx::B3DVector& Vector,bool bInter, double T0, double T1)
+makeSTranslate(const glm::vec3& Vector,bool bInter, double T0, double T1)
 {
     return make_shared<STranslate>(Vector, bInter, T0, T1);
 }
@@ -941,13 +940,13 @@ makeSEllipseTranslate(double dWidth, double dHeight, double dStartPosition, doub
 }
 
 boost::shared_ptr<RotateAndScaleDepthByWidth>
-makeRotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1)
+makeRotateAndScaleDepthByWidth(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1)
 {
     return make_shared<RotateAndScaleDepthByWidth>(Axis, Origin, Angle, bInter, T0, T1);
 }
 
 boost::shared_ptr<RotateAndScaleDepthByHeight>
-makeRotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle,bool bInter, double T0, double T1)
+makeRotateAndScaleDepthByHeight(const glm::vec3& Axis,const glm::vec3& Origin,double Angle,bool bInter, double T0, double T1)
 {
     return make_shared<RotateAndScaleDepthByHeight>(Axis, Origin, Angle, bInter, T0, T1);
 }
@@ -965,7 +964,7 @@ void STranslate::interpolate(double t,double SlideWidthScale,double SlideHeightS
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*t*vector.getX(),SlideHeightScale*t*vector.getY(),t*vector.getZ());
+    glTranslated(SlideWidthScale*t*vector.x,SlideHeightScale*t*vector.y,t*vector.z);
     CHECK_GL_ERROR();
 }
 
@@ -977,11 +976,11 @@ void SRotate::interpolate(double t,double SlideWidthScale,double SlideHeightScal
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),origin.getZ());
+    glTranslated(SlideWidthScale*origin.x,SlideHeightScale*origin.y,origin.z);
     glScaled(SlideWidthScale,SlideHeightScale,1);
-    glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
+    glRotated(t*angle,axis.x,axis.y,axis.z);
     glScaled(1/SlideWidthScale,1/SlideHeightScale,1);
-    glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-origin.getZ());
+    glTranslated(-SlideWidthScale*origin.x,-SlideHeightScale*origin.y,-origin.z);
     CHECK_GL_ERROR();
 }
 
@@ -993,9 +992,9 @@ void SScale::interpolate(double t,double SlideWidthScale,double SlideHeightScale
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),origin.getZ());
-    glScaled((1-t) + t*scale.getX(),(1-t) + t*scale.getY(),(1-t) + t*scale.getZ());
-    glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-origin.getZ());
+    glTranslated(SlideWidthScale*origin.x,SlideHeightScale*origin.y,origin.z);
+    glScaled((1-t) + t*scale.x,(1-t) + t*scale.y,(1-t) + t*scale.z);
+    glTranslated(-SlideWidthScale*origin.x,-SlideHeightScale*origin.y,-origin.z);
     CHECK_GL_ERROR();
 }
 
@@ -1007,9 +1006,9 @@ void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,dou
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),SlideWidthScale*origin.getZ());
-    glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
-    glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-SlideWidthScale*origin.getZ());
+    glTranslated(SlideWidthScale*origin.x,SlideHeightScale*origin.y,SlideWidthScale*origin.z);
+    glRotated(t*angle,axis.x,axis.y,axis.z);
+    glTranslated(-SlideWidthScale*origin.x,-SlideHeightScale*origin.y,-SlideWidthScale*origin.z);
     CHECK_GL_ERROR();
 }
 
@@ -1021,9 +1020,9 @@ void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,do
     if(!mbInterpolate || t > mnT1)
         t = mnT1;
     t = intervalInter(t,mnT0,mnT1);
-    glTranslated(SlideWidthScale*origin.getX(),SlideHeightScale*origin.getY(),SlideHeightScale*origin.getZ());
-    glRotated(t*angle,axis.getX(),axis.getY(),axis.getZ());
-    glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-SlideHeightScale*origin.getZ());
+    glTranslated(SlideWidthScale*origin.x,SlideHeightScale*origin.y,SlideHeightScale*origin.z);
+    glRotated(t*angle,axis.x,axis.y,axis.z);
+    glTranslated(-SlideWidthScale*origin.x,-SlideHeightScale*origin.y,-SlideHeightScale*origin.z);
     CHECK_GL_ERROR();
 }
 
@@ -1079,20 +1078,20 @@ void Primitive::swap(Primitive& rOther)
     swap(TexCoords, rOther.TexCoords);
 }
 
-void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const basegfx::B2DVector& SlideLocation1,const basegfx::B2DVector& SlideLocation2)
+void Primitive::pushTriangle(const glm::vec2& SlideLocation0,const glm::vec2& SlideLocation1,const glm::vec2& SlideLocation2)
 {
-    vector<basegfx::B3DVector> Verts;
-    vector<basegfx::B2DVector> Texs;
+    vector<glm::vec3> Verts;
+    vector<glm::vec2> Texs;
     Verts.reserve(3);
     Texs.reserve(3);
 
-    Verts.push_back(basegfx::B3DVector( 2*SlideLocation0.getX() - 1, -2*SlideLocation0.getY() + 1 , 0.0 ));
-    Verts.push_back(basegfx::B3DVector( 2*SlideLocation1.getX() - 1, -2*SlideLocation1.getY() + 1 , 0.0 ));
-    Verts.push_back(basegfx::B3DVector( 2*SlideLocation2.getX() - 1, -2*SlideLocation2.getY() + 1 , 0.0 ));
+    Verts.push_back(glm::vec3( 2*SlideLocation0.x - 1, -2*SlideLocation0.y + 1 , 0.0 ));
+    Verts.push_back(glm::vec3( 2*SlideLocation1.x - 1, -2*SlideLocation1.y + 1 , 0.0 ));
+    Verts.push_back(glm::vec3( 2*SlideLocation2.x - 1, -2*SlideLocation2.y + 1 , 0.0 ));
 
     //figure out if they're facing the correct way, and make them face the correct way.
-    basegfx::B3DVector Normal( basegfx::cross( Verts[0] - Verts[1] , Verts[1] - Verts[2] ) );
-    if(Normal.getZ() >= 0.0)//if the normal is facing us
+    glm::vec3 Normal( glm::cross( Verts[0] - Verts[1] , Verts[1] - Verts[2] ) );
+    if(Normal.z >= 0.0)//if the normal is facing us
     {
         Texs.push_back(SlideLocation0);
         Texs.push_back(SlideLocation1);
@@ -1104,9 +1103,9 @@ void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const base
         Texs.push_back(SlideLocation2);
         Texs.push_back(SlideLocation1);
         Verts.clear();
-        Verts.push_back(basegfx::B3DVector( 2*SlideLocation0.getX() - 1, -2*SlideLocation0.getY() + 1 , 0.0 ));
-        Verts.push_back(basegfx::B3DVector( 2*SlideLocation2.getX() - 1, -2*SlideLocation2.getY() + 1 , 0.0 ));
-        Verts.push_back(basegfx::B3DVector( 2*SlideLocation1.getX() - 1, -2*SlideLocation1.getY() + 1 , 0.0 ));
+        Verts.push_back(glm::vec3( 2*SlideLocation0.x - 1, -2*SlideLocation0.y + 1 , 0.0 ));
+        Verts.push_back(glm::vec3( 2*SlideLocation2.x - 1, -2*SlideLocation2.y + 1 , 0.0 ));
+        Verts.push_back(glm::vec3( 2*SlideLocation1.x - 1, -2*SlideLocation1.y + 1 , 0.0 ));
     }
 
     Vertices.push_back(Verts[0]);
@@ -1117,9 +1116,9 @@ void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const base
     TexCoords.push_back(Texs[1]);
     TexCoords.push_back(Texs[2]);
 
-    Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
-    Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
-    Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
+    Normals.push_back(glm::vec3(0,0,1));//all normals always face the screen when untransformed.
+    Normals.push_back(glm::vec3(0,0,1));//all normals always face the screen when untransformed.
+    Normals.push_back(glm::vec3(0,0,1));//all normals always face the screen when untransformed.
 }
 
 namespace
@@ -1141,32 +1140,32 @@ void DiamondTransition::prepare_( double nTime, double /* SlideWidth */, double 
 {
     Primitive Slide1, Slide2;
 
-    Slide1.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
-    Slide1.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
+    Slide1.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
+    Slide1.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
     Primitives_t aEnteringSlidePrimitives;
     aEnteringSlidePrimitives.push_back (Slide1);
 
     if( nTime >= 0.5 ) {
         double m = 1 - nTime;
 
-        Slide2.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (m,0), basegfx::B2DVector (0,m));
-        Slide2.pushTriangle (basegfx::B2DVector (nTime,0), basegfx::B2DVector (1,0), basegfx::B2DVector (1,m));
-        Slide2.pushTriangle (basegfx::B2DVector (1,nTime), basegfx::B2DVector (1,1), basegfx::B2DVector (nTime,1));
-        Slide2.pushTriangle (basegfx::B2DVector (0,nTime), basegfx::B2DVector (m,1), basegfx::B2DVector (0,1));
+        Slide2.pushTriangle (glm::vec2 (0,0), glm::vec2 (m,0), glm::vec2 (0,m));
+        Slide2.pushTriangle (glm::vec2 (nTime,0), glm::vec2 (1,0), glm::vec2 (1,m));
+        Slide2.pushTriangle (glm::vec2 (1,nTime), glm::vec2 (1,1), glm::vec2 (nTime,1));
+        Slide2.pushTriangle (glm::vec2 (0,nTime), glm::vec2 (m,1), glm::vec2 (0,1));
     } else {
         double l = 0.5 - nTime;
         double h = 0.5 + nTime;
 
-        Slide2.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0.5,l));
-        Slide2.pushTriangle (basegfx::B2DVector (0.5,l), basegfx::B2DVector (1,0), basegfx::B2DVector (h,0.5));
-        Slide2.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (1,1), basegfx::B2DVector (h,0.5));
-        Slide2.pushTriangle (basegfx::B2DVector (h,0.5), basegfx::B2DVector (1,1), basegfx::B2DVector (0.5,h));
-        Slide2.pushTriangle (basegfx::B2DVector (0.5,h), basegfx::B2DVector (1,1), basegfx::B2DVector (0,1));
-        Slide2.pushTriangle (basegfx::B2DVector (l,0.5), basegfx::B2DVector (0.5,h), basegfx::B2DVector (0,1));
-        Slide2.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (l,0.5), basegfx::B2DVector (0,1));
-        Slide2.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (0.5,l), basegfx::B2DVector (l,0.5));
+        Slide2.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0.5,l));
+        Slide2.pushTriangle (glm::vec2 (0.5,l), glm::vec2 (1,0), glm::vec2 (h,0.5));
+        Slide2.pushTriangle (glm::vec2 (1,0), glm::vec2 (1,1), glm::vec2 (h,0.5));
+        Slide2.pushTriangle (glm::vec2 (h,0.5), glm::vec2 (1,1), glm::vec2 (0.5,h));
+        Slide2.pushTriangle (glm::vec2 (0.5,h), glm::vec2 (1,1), glm::vec2 (0,1));
+        Slide2.pushTriangle (glm::vec2 (l,0.5), glm::vec2 (0.5,h), glm::vec2 (0,1));
+        Slide2.pushTriangle (glm::vec2 (0,0), glm::vec2 (l,0.5), glm::vec2 (0,1));
+        Slide2.pushTriangle (glm::vec2 (0,0), glm::vec2 (0.5,l), glm::vec2 (l,0.5));
     }
-    Slide2.Operations.push_back (makeSTranslate (basegfx::B3DVector (0, 0, 0.00000001), false, -1, 0));
+    Slide2.Operations.push_back (makeSTranslate (glm::vec3 (0, 0, 0.00000001), false, -1, 0));
     Primitives_t aLeavingSlidePrimitives;
     aLeavingSlidePrimitives.push_back (Slide2);
 
@@ -1201,22 +1200,22 @@ boost::shared_ptr<OGLTransitionImpl> makeVenetianBlinds( bool vertical, int part
         Primitive Slide;
         n = (i + 1)/(double)parts;
         if( vertical ) {
-            Slide.pushTriangle (basegfx::B2DVector (ln,0), basegfx::B2DVector (n,0), basegfx::B2DVector (ln,1));
-            Slide.pushTriangle (basegfx::B2DVector (n,0), basegfx::B2DVector (ln,1), basegfx::B2DVector (n,1));
-            Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(n + ln - 1, 0, -t30*p), -120, true, 0.0, 1.0));
+            Slide.pushTriangle (glm::vec2 (ln,0), glm::vec2 (n,0), glm::vec2 (ln,1));
+            Slide.pushTriangle (glm::vec2 (n,0), glm::vec2 (ln,1), glm::vec2 (n,1));
+            Slide.Operations.push_back(makeRotateAndScaleDepthByWidth(glm::vec3(0, 1, 0), glm::vec3(n + ln - 1, 0, -t30*p), -120, true, 0.0, 1.0));
         } else {
-            Slide.pushTriangle (basegfx::B2DVector (0,ln), basegfx::B2DVector (1,ln), basegfx::B2DVector (0,n));
-            Slide.pushTriangle (basegfx::B2DVector (1,ln), basegfx::B2DVector (0,n), basegfx::B2DVector (1,n));
-            Slide.Operations.push_back(makeRotateAndScaleDepthByHeight(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - n - ln, -t30*p), -120, true, 0.0, 1.0));
+            Slide.pushTriangle (glm::vec2 (0,ln), glm::vec2 (1,ln), glm::vec2 (0,n));
+            Slide.pushTriangle (glm::vec2 (1,ln), glm::vec2 (0,n), glm::vec2 (1,n));
+            Slide.Operations.push_back(makeRotateAndScaleDepthByHeight(glm::vec3(1, 0, 0), glm::vec3(0, 1 - n - ln, -t30*p), -120, true, 0.0, 1.0));
         }
         aLeavingSlide.push_back (Slide);
 
         if( vertical ) {
-            Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(2*n - 1, 0, 0), -60, false, -1, 0));
-            Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(0, 1, 0), basegfx::B3DVector(n + ln - 1, 0, 0), 180, false, -1, 0));
+            Slide.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), glm::vec3(2*n - 1, 0, 0), -60, false, -1, 0));
+            Slide.Operations.push_back(makeSRotate(glm::vec3(0, 1, 0), glm::vec3(n + ln - 1, 0, 0), 180, false, -1, 0));
         } else {
-            Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - 2*n, 0), -60, false, -1, 0));
-            Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(1, 0, 0), basegfx::B3DVector(0, 1 - n - ln, 0), 180, false, -1, 0));
+            Slide.Operations.push_back(makeSRotate(glm::vec3(1, 0, 0), glm::vec3(0, 1 - 2*n, 0), -60, false, -1, 0));
+            Slide.Operations.push_back(makeSRotate(glm::vec3(1, 0, 0), glm::vec3(0, 1 - n - ln, 0), 180, false, -1, 0));
         }
         aEnteringSlide.push_back (Slide);
         ln = n;
@@ -1293,8 +1292,8 @@ boost::shared_ptr<OGLTransitionImpl> makeFadeSmoothly()
 {
     Primitive Slide;
 
-    Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
-    Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
+    Slide.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
+    Slide.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
     Primitives_t aLeavingSlide;
     aLeavingSlide.push_back (Slide);
     Primitives_t aEnteringSlide;
@@ -1364,8 +1363,8 @@ boost::shared_ptr<OGLTransitionImpl> makeFadeThroughBlack()
 {
     Primitive Slide;
 
-    Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
-    Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
+    Slide.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
+    Slide.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
     Primitives_t aLeavingSlide;
     aLeavingSlide.push_back (Slide);
     Primitives_t aEnteringSlide;
@@ -1576,8 +1575,8 @@ boost::shared_ptr<OGLTransitionImpl> makeStatic()
 {
     Primitive Slide;
 
-    Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
-    Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
+    Slide.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
+    Slide.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
     Primitives_t aLeavingSlide;
     aLeavingSlide.push_back (Slide);
     Primitives_t aEnteringSlide;
@@ -1627,8 +1626,8 @@ boost::shared_ptr<OGLTransitionImpl> makeDissolve()
 {
     Primitive Slide;
 
-    Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
-    Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
+    Slide.pushTriangle (glm::vec2 (0,0), glm::vec2 (1,0), glm::vec2 (0,1));
+    Slide.pushTriangle (glm::vec2 (1,0), glm::vec2 (0,1), glm::vec2 (1,1));
     Primitives_t aLeavingSlide;
     aLeavingSlide.push_back (Slide);
     Primitives_t aEnteringSlide;
@@ -1645,25 +1644,25 @@ boost::shared_ptr<OGLTransitionImpl> makeNewsflash()
 {
     Primitive Slide;
 
-    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
-    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
-    Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0,0,0),3000,true,0,0.5));
-    Slide.Operations.push_back(makeSScale(basegfx::B3DVector(0.01,0.01,0.01),basegfx::B3DVector(0,0,0),true,0,0.5));
-    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(-10000, 0, 0),false, 0.5, 2));
+    Slide.pushTriangle(glm::vec2(0,0),glm::vec2(1,0),glm::vec2(0,1));
+    Slide.pushTriangle(glm::vec2(1,0),glm::vec2(0,1),glm::vec2(1,1));
+    Slide.Operations.push_back(makeSRotate(glm::vec3(0,0,1),glm::vec3(0,0,0),3000,true,0,0.5));
+    Slide.Operations.push_back(makeSScale(glm::vec3(0.01,0.01,0.01),glm::vec3(0,0,0),true,0,0.5));
+    Slide.Operations.push_back(makeSTranslate(glm::vec3(-10000, 0, 0),false, 0.5, 2));
     Primitives_t aLeavingSlide;
     aLeavingSlide.push_back(Slide);
 
     Slide.Operations.clear();
-    Slide.Operations.push_back(makeSRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0,0,0),-3000,true,0.5,1));
-    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(-100, 0, 0),false, -1, 1));
-    Slide.Operations.push_back(makeSTranslate(basegfx::B3DVector(100, 0, 0),false, 0.5, 1));
-    Slide.Operations.push_back(makeSScale(basegfx::B3DVector(0.01,0.01,0.01),basegfx::B3DVector(0,0,0),false,-1,1));
-    Slide.Operations.push_back(makeSScale(basegfx::B3DVector(100,100,100),basegfx::B3DVector(0,0,0),true,0.5,1));
+    Slide.Operations.push_back(makeSRotate(glm::vec3(0,0,1),glm::vec3(0,0,0),-3000,true,0.5,1));
+    Slide.Operations.push_back(makeSTranslate(glm::vec3(-100, 0, 0),false, -1, 1));
+    Slide.Operations.push_back(makeSTranslate(glm::vec3(100, 0, 0),false, 0.5, 1));
+    Slide.Operations.push_back(makeSScale(glm::vec3(0.01,0.01,0.01),glm::vec3(0,0,0),false,-1,1));
+    Slide.Operations.push_back(makeSScale(glm::vec3(100,100,100),glm::vec3(0,0,0),true,0.5,1));
     Primitives_t aEnteringSlide;
     aEnteringSlide.push_back(Slide);
 
     Operations_t aOverallOperations;
-    aOverallOperations.push_back(makeSRotate(basegfx::B3DVector(0,0,1),basegfx::B3DVector(0.2,0.2,0),1080,true,0,1));
+    aOverallOperations.push_back(makeSRotate(glm::vec3(0,0,1),glm::vec3(0.2,0.2,0),1080,true,0,1));
 
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide, aOverallOperations);
 }
