@@ -172,11 +172,16 @@ void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::
     const double SlideWidthScale = SlideWidth/DispWidth;
     const double SlideHeightScale = SlideHeight/DispHeight;
 
+    CHECK_GL_ERROR();
     prepare_( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
 
+    CHECK_GL_ERROR();
     glPushMatrix();
+    CHECK_GL_ERROR();
     displaySlides_( nTime, glLeavingSlideTex, glEnteringSlideTex, SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
     displayScene( nTime, SlideWidth, SlideHeight, DispWidth, DispHeight );
+    CHECK_GL_ERROR();
     glPopMatrix();
     CHECK_GL_ERROR();
 }
@@ -195,8 +200,9 @@ OGLTransitionImpl::displaySlide(
         double SlideWidthScale, double SlideHeightScale )
 {
     CHECK_GL_ERROR();
-   //TODO change to foreach
+    //TODO change to foreach
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
+    CHECK_GL_ERROR();
 
     // display slide reflection
     // note that depth test is turned off while blending the shadow
@@ -240,18 +246,29 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale) con
     CHECK_GL_ERROR();
     glPushMatrix();
 
+    CHECK_GL_ERROR();
     applyOperations( nTime, WidthScale, HeightScale );
 
+    CHECK_GL_ERROR();
     glEnableClientState( GL_VERTEX_ARRAY );
+    CHECK_GL_ERROR();
     if(!Normals.empty())
     {
+        CHECK_GL_ERROR();
         glNormalPointer( GL_DOUBLE , 0 , &Normals[0] );
+        CHECK_GL_ERROR();
         glEnableClientState( GL_NORMAL_ARRAY );
+        CHECK_GL_ERROR();
     }
+    CHECK_GL_ERROR();
     glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+    CHECK_GL_ERROR();
     glTexCoordPointer( 2, GL_DOUBLE, 0, &TexCoords[0] );
+    CHECK_GL_ERROR();
     glVertexPointer( 3, GL_DOUBLE, 0, &Vertices[0] );
+    CHECK_GL_ERROR();
     glDrawArrays( GL_TRIANGLES, 0, Vertices.size() );
+    CHECK_GL_ERROR();
     glPopMatrix();
     CHECK_GL_ERROR();
 }
@@ -271,13 +288,17 @@ void SceneObject::display(double nTime, double /* SlideWidth */, double /* Slide
     for(unsigned int i(0); i < maPrimitives.size(); ++i) {
         // fixme: allow various model spaces, now we make it so that
         // it is regular -1,-1 to 1,1, where the whole display fits in
+        CHECK_GL_ERROR();
         glPushMatrix();
+        CHECK_GL_ERROR();
         if (DispHeight > DispWidth)
             glScaled(DispHeight/DispWidth, 1, 1);
         else
             glScaled(1, DispWidth/DispHeight, 1);
         maPrimitives[i].display(nTime, 1, 1);
+        CHECK_GL_ERROR();
         glPopMatrix();
+        CHECK_GL_ERROR();
     }
     CHECK_GL_ERROR();
 }
@@ -305,6 +326,7 @@ Iris::Iris()
 void Iris::display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight ) const
 {
     glBindTexture(GL_TEXTURE_2D, maTexture);
+    CHECK_GL_ERROR();
     SceneObject::display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
 }
 
@@ -1217,19 +1239,32 @@ void FadeSmoothlyTransition::displaySlides_( double nTime, ::sal_Int32 glLeaving
     CHECK_GL_ERROR();
     applyOverallOperations( nTime, SlideWidthScale, SlideHeightScale );
 
+    CHECK_GL_ERROR();
     glDisable(GL_DEPTH_TEST);
 
+    CHECK_GL_ERROR();
     displaySlide( nTime, glLeavingSlideTex, getScene().getLeavingSlide(), SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
 
+    CHECK_GL_ERROR();
     glDisable(GL_LIGHTING);
+    CHECK_GL_ERROR();
     glEnable(GL_BLEND);
+    CHECK_GL_ERROR();
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    CHECK_GL_ERROR();
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    CHECK_GL_ERROR();
     glColor4f( 1, 1, 1, nTime );
+    CHECK_GL_ERROR();
     displaySlide( nTime, glEnteringSlideTex, getScene().getEnteringSlide(), SlideWidthScale, SlideHeightScale );
+    CHECK_GL_ERROR();
     glDisable(GL_BLEND);
+    CHECK_GL_ERROR();
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    CHECK_GL_ERROR();
     glEnable(GL_LIGHTING);
+    CHECK_GL_ERROR();
 
     glEnable(GL_DEPTH_TEST);
     CHECK_GL_ERROR();
