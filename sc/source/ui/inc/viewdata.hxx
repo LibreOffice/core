@@ -482,11 +482,11 @@ public:
 
     static inline long ToPixel( sal_uInt16 nTwips, double nFactor );
 
-    long LogicToPixelVertical( long nTwips );
-    long LogicToPixelHorizontal( long nTwips );
+    long LogicToPixelVertical( long nTwips ) const;
+    long LogicToPixelHorizontal( long nTwips ) const;
 
-    long PixelToLogicVertical( long nPix );
-    long PixelToLogicHorizontal( long nPix );
+    long PixelToLogicVertical( long nPix ) const;
+    long PixelToLogicHorizontal( long nPix ) const;
 
     /** while (rScrY <= nEndPixels && rPosY <= nEndRow) add pixels of row
         heights converted with nPPTY to rScrY, optimized for row height
