@@ -932,11 +932,13 @@ void ScTable::SortReorderByRow(
 
             std::vector<PatternSpan>::iterator it = aSpans.begin(), itEnd = aSpans.end();
             for (; it != itEnd; ++it)
+            {
+                assert(it->mpPattern); // should never be NULL.
                 pDocument->GetPool()->Put(*it->mpPattern);
+            }
 
             for (it = aSpans.begin(); it != itEnd; ++it)
             {
-                assert(it->mpPattern); // should never be NULL.
                 aCol[nThisCol].SetPatternArea(it->mnRow1, it->mnRow2, *it->mpPattern, true);
                 pDocument->GetPool()->Remove(*it->mpPattern);
             }
