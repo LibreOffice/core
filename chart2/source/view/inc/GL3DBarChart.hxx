@@ -91,7 +91,7 @@ private:
     void updateDataUpdateFPS();
     DECL_LINK(updateTimer, void*);
     int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
-    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight,
+    void addScreenTextShape(OUString &nStr, glm::vec2 rLeftOrRightTop, float nTextHeight, bool bLeftTopFlag = true,
                                   const glm::vec3& rPos = glm::vec3(0.0f, 0.0f, 0.0f),
                                   const glm::vec4& rColor = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
                                   sal_uInt32 nEvent = 0);
@@ -176,6 +176,7 @@ private:
     int mnColorRate;
     sal_uInt32 mnAutoFlyBarID;
     bool mbBenchMarkMode;
+    sal_uInt32 maHistoryCounter;
 };
 
 }

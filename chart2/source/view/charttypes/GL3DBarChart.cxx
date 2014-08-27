@@ -460,7 +460,8 @@ GL3DBarChart::GL3DBarChart(
     miDataUpdateCounter(0),
     mnColorRate(0),
     mnAutoFlyBarID(0),
-    mbBenchMarkMode(false)
+    mbBenchMarkMode(false),
+    maHistoryCounter(0)
 {
     char *aBenchMark = getenv("BENCHMARK_MODE");
     if (aBenchMark)
@@ -743,6 +744,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         mpRenderThread->launch();
     }
     miDataUpdateCounter++;
+    maHistoryCounter++;
     mbNeedsNewRender = true;
 }
 
@@ -995,13 +997,17 @@ void GL3DBarChart::contextDestroyed()
     mbValidContext = false;
 }
 
-void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftTop, float nTextHeight, const glm::vec3& rPos, const glm::vec4& rColor, sal_uInt32 nEvent)
+void GL3DBarChart::addScreenTextShape(OUString &nStr, glm::vec2 rLeftOrRightTop, float nTextHeight, bool bLeftTopFlag,
+                                            const glm::vec3& rPos, const glm::vec4& rColor, sal_uInt32 nEvent)
 {
     maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, nStr, rColor, nEvent));
     const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(nStr);
     float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * nTextHeight / 2.0f;
     opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
-    pScreenText->setPosition(rLeftTop, glm::vec2(rLeftTop.x + nRectWidth, rLeftTop.y - nTextHeight), rPos);
+    if (bLeftTopFlag)
+        pScreenText->setPosition(rLeftOrRightTop, glm::vec2(rLeftOrRightTop.x + nRectWidth, rLeftOrRightTop.y - nTextHeight), rPos);
+    else
+        pScreenText->setPosition(glm::vec2(rLeftOrRightTop.x - nRectWidth, rLeftOrRightTop.y), glm::vec2(rLeftOrRightTop.x, rLeftOrRightTop.y - nTextHeight), rPos);
 }
 
 void GL3DBarChart::updateRenderFPS()
@@ -1017,7 +1023,8 @@ void GL3DBarChart::updateRenderFPS()
         osl_getSystemTime(&maFPSRenderStartTime);
     }
     osl_getSystemTime(&maFPSRenderEndTime);
-    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.06f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.06f, true,
+                       glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
 int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
@@ -1061,7 +1068,8 @@ void GL3DBarChart::updateDataUpdateFPS()
         osl_getSystemTime(&maDataUpdateStartTime);
     }
     osl_getSystemTime(&maDataUpdateEndTime);
-    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.99f, 0.93f), 0.06f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
+    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.99f, 0.93f), 0.06f, true,
+                        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
 }
 
 void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
@@ -1078,11 +1086,20 @@ void GL3DBarChart::updateClickEvent()
     {
         sal_uInt32 nBarId = maRenderEvent == EVENT_CLICK ? mSelectBarId : mnAutoFlyBarID;
         std::list<float>& aList = maBarHistory[nBarId];
-        sal_uInt32 idex = 0;
+        sal_uInt32 aIdex = 0;
+        OUString aTitle;
+        OUString aBarValue;
+        //write title
+        if (aList.size() > 1)
+        {
+            aTitle = OUString("Time      ");
+            addScreenTextShape(aTitle, glm::vec2(0.8f, 0.99f), 0.1f, false);
+            aTitle = OUString("   Value");
+            addScreenTextShape(aTitle, glm::vec2(0.8f, 0.99f), 0.1f);
+        }
         for (std::list<float>::iterator it = aList.begin();it != aList.end();++it)
         {
-            OUString aBarValue;
-            if (idex + 1 == aList.size())
+            if (aIdex + 1 == aList.size())
             {
                 aBarValue = OUString("Value: ") + OUString::number(*it);
                 maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), CALC_POS_EVENT_ID));
@@ -1098,10 +1115,20 @@ void GL3DBarChart::updateClickEvent()
             }
             else
             {
-                aBarValue = OUString("History_") + OUString::number(idex) + OUString(": ") + OUString::number(*it);
-                addScreenTextShape(aBarValue, glm::vec2(0.65f, 0.99f - (idex * 0.1f)), 0.1f);
+                aTitle = OUString("[Time:") + OUString::number((maHistoryCounter - aList.size() + aIdex)) + "]: ";
+                if (aIdex == 0)
+                {
+                    aTitle = OUString("Most Recent") + aTitle;
+                }
+                else if ((aIdex + 2) == aList.size())
+                {
+                    aTitle = OUString("Least Recent") + aTitle;
+                }
+                addScreenTextShape(aTitle, glm::vec2(0.8f, 0.99f - ((aIdex + 1) * 0.1f)), 0.1f, false);
+                aBarValue = OUString::number(*it);
+                addScreenTextShape(aBarValue, glm::vec2(0.8f, 0.99f - ((aIdex + 1) * 0.1f)), 0.1f);
             }
-            idex++;
+            aIdex++;
         }
     }
 }
