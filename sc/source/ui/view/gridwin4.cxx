@@ -965,21 +965,30 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     // that VirtualDevices use a DPI of 96. We might as well do this
     // calculation now, rather than after another dimension conversion,
     // to minimise errors.
-    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
+    // TODO: width wise we need the print scaling compensation stuff?
+    Fraction scaleX = Fraction( 100*nOutputWidth, 96*96 ) * Fraction(1440L) /
                                 Fraction( nTileWidth);
-    Fraction scaleY =  Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
+    if ( pViewData->GetDocShell() )
+    {
+        scaleX *= pViewData->GetDocShell()->GetOutputFactor();
+    }
+    Fraction scaleY =  Fraction( 100*nOutputHeight, 96*96 ) * Fraction(1440L) /
                                  Fraction( nTileHeight);
 
     rDevice.SetOutputSizePixel( Size( nOutputWidth, nOutputHeight ) );
+
+    pViewData->SetZoom( scaleX, scaleY, false );
+    // We now need to force a recalculation of PaintMapMode, which
+    // happens when ScViewData::CalcPPT is called by RefreshZoom.
+    pViewData->RefreshZoom();
+
+    // We only need to propagate the origin through to Draw()
+    // through the device.
     MapMode aMapMode( rDevice.GetMapMode() );
-    aMapMode.SetMapUnit( MAP_TWIP );
-    aMapMode.SetOrigin( Point( -nTilePosX, -nTilePosY ) );
-
-    aMapMode.SetScaleX( scaleX );
-    aMapMode.SetScaleY( scaleY );
-
-    maPaintMapMode = aMapMode;
-//    rDevice.SetMapMode( aMapMode );
+    aMapMode.SetOrigin( rDevice.LogicToPixel(
+                            Point(-nTilePosX, -nTilePosY ),
+                            pViewData->GetPaintMapMode() ) );
+    rDevice.SetMapMode( aMapMode );
 
     ScTabViewShell* pTabViewSh = pViewData->GetViewShell();
     SdrView* pDrawView = pTabViewSh->GetScDrawView();
