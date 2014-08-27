@@ -187,19 +187,19 @@ private:
       *
       * Default implementation does nothing.
       */
-    virtual void prepare_( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
+    virtual void prepare( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
 
     /** This function is called after glx context is ready to let the transition prepare GL related things, like GLSL program.
       *
       * Default implementation does nothing.
       */
-    virtual void prepareTransition_( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
+    virtual void prepareTransition( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex );
 
     /** This function is called when the transition needs to clear after itself, like delete own textures etc.
       *
       * Default implementation does nothing.
       */
-    virtual void finishTransition_();
+    virtual void finishTransition();
 
     /** This function is called in display method to display the slides.
       *
