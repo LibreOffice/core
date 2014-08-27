@@ -488,6 +488,8 @@ public:
     long PixelToLogicVertical( long nPix ) const;
     long PixelToLogicHorizontal( long nPix ) const;
 
+    MapMode& GetPaintMapMode() { return maPaintMapMode; }
+
     /** while (rScrY <= nEndPixels && rPosY <= nEndRow) add pixels of row
         heights converted with nPPTY to rScrY, optimized for row height
         segments. Upon return rPosY is the last row evaluated <= nEndRow, rScrY
