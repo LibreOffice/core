@@ -80,7 +80,7 @@ void OGLTransitionImpl::setScene(TransitionScene const& rScene)
 void OGLTransitionImpl::prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex )
 {
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
-    for(unsigned int i(0); i != rSceneObjects.size(); ++i) {
+    for(size_t i(0); i != rSceneObjects.size(); ++i) {
         rSceneObjects[i]->prepare();
     }
 
@@ -90,7 +90,7 @@ void OGLTransitionImpl::prepare( ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEn
 void OGLTransitionImpl::finish()
 {
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
-    for(unsigned int i(0); i != rSceneObjects.size(); ++i) {
+    for(size_t i(0); i != rSceneObjects.size(); ++i) {
         rSceneObjects[i]->finish();
     }
 
@@ -189,7 +189,7 @@ void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::
 void OGLTransitionImpl::applyOverallOperations( double nTime, double SlideWidthScale, double SlideHeightScale )
 {
     const Operations_t& rOverallOperations(maScene.getOperations());
-    for(unsigned int i(0); i != rOverallOperations.size(); ++i)
+    for(size_t i(0); i != rOverallOperations.size(); ++i)
         rOverallOperations[i]->interpolate(nTime,SlideWidthScale,SlideHeightScale);
 }
 
@@ -217,7 +217,7 @@ OGLTransitionImpl::displaySlide(
         glTranslated( 0, 2 - surfaceLevel, 0 );
 
         glCullFace(GL_FRONT);
-        for(unsigned int i(0); i < primitives.size(); ++i)
+        for(size_t i(0); i < primitives.size(); ++i)
             primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
         glCullFace(GL_BACK);
 
@@ -226,7 +226,7 @@ OGLTransitionImpl::displaySlide(
         glPopMatrix();
     }
 
-    for(unsigned int i(0); i < primitives.size(); ++i)
+    for(size_t i(0); i < primitives.size(); ++i)
         primitives[i].display(nTime, SlideWidthScale, SlideHeightScale);
     CHECK_GL_ERROR();
 }
@@ -236,7 +236,7 @@ void OGLTransitionImpl::displayScene( double nTime, double SlideWidth, double Sl
     CHECK_GL_ERROR();
     const SceneObjects_t& rSceneObjects(maScene.getSceneObjects());
     glEnable(GL_TEXTURE_2D);
-    for(unsigned int i(0); i != rSceneObjects.size(); ++i)
+    for(size_t i(0); i != rSceneObjects.size(); ++i)
         rSceneObjects[i]->display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
     CHECK_GL_ERROR();
 }
@@ -276,7 +276,7 @@ void Primitive::display(double nTime, double WidthScale, double HeightScale) con
 void Primitive::applyOperations(double nTime, double WidthScale, double HeightScale) const
 {
     CHECK_GL_ERROR();
-    for(unsigned int i(0); i < Operations.size(); ++i)
+    for(size_t i(0); i < Operations.size(); ++i)
         Operations[i]->interpolate( nTime ,WidthScale,HeightScale);
     glScaled(WidthScale,HeightScale,1);
     CHECK_GL_ERROR();
@@ -285,7 +285,7 @@ void Primitive::applyOperations(double nTime, double WidthScale, double HeightSc
 void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight ) const
 {
     CHECK_GL_ERROR();
-    for(unsigned int i(0); i < maPrimitives.size(); ++i) {
+    for(size_t i(0); i < maPrimitives.size(); ++i) {
         // fixme: allow various model spaces, now we make it so that
         // it is regular -1,-1 to 1,1, where the whole display fits in
         CHECK_GL_ERROR();
