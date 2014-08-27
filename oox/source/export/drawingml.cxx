@@ -1464,112 +1464,130 @@ inline static const char* GetAutoNumType( sal_Int16 nNumberingType, bool bSDot, 
 
 void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sal_Int16 nLevel )
 {
-    if( nLevel >= 0 && GETA( NumberingRules ) )
+    if( nLevel < 0 || !GETA( NumberingRules ) )
+        return;
+
+    Reference< XIndexAccess > rXIndexAccess;
+
+    if (!(mAny >>= rXIndexAccess) || nLevel >= rXIndexAccess->getCount())
+        return;
+
+    DBG(fprintf (stderr, "numbering rules\n"));
+
+    Sequence<PropertyValue> aPropertySequence;
+    rXIndexAccess->getByIndex(nLevel) >>= aPropertySequence;
+
+    if (!aPropertySequence.hasElements())
+        return;
+
+    sal_Int32 nPropertyCount = aPropertySequence.getLength();
+
+    const PropertyValue* pPropValue = aPropertySequence.getArray();
+
+    sal_Int16 nNumberingType = SVX_NUM_NUMBER_NONE;
+    bool bSDot = false;
+    bool bPBehind = false;
+    bool bPBoth = false;
+    sal_Unicode aBulletChar = 0x2022; // a bullet
+    awt::FontDescriptor aFontDesc;
+    bool bHasFontDesc = false;
+    OUString aGraphicURL;
+    sal_Int16 nBulletRelSize = 0;
+
+    for ( sal_Int32 i = 0; i < nPropertyCount; i++ )
     {
-        Reference< XIndexAccess > rXIndexAccess;
-
-        if ( ( mAny >>= rXIndexAccess ) && nLevel < rXIndexAccess->getCount() )
+        const void* pValue = pPropValue[ i ].Value.getValue();
+        if ( pValue )
         {
-            DBG(fprintf (stderr, "numbering rules\n"));
+            OUString aPropName( pPropValue[ i ].Name );
+            DBG(fprintf (stderr, "pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
+            if ( aPropName == "NumberingType" )
+            {
+                nNumberingType = *( (sal_Int16*)pValue );
+            }
+            else if ( aPropName == "Prefix" )
+            {
+                if( *(OUString*)pValue == ")")
+                    bPBoth = true;
+            }
+            else if ( aPropName == "Suffix" )
+            {
+                if( *(OUString*)pValue == ".")
+                    bSDot = true;
+                else if( *(OUString*)pValue == ")")
+                    bPBehind = true;
+            }
+            else if ( aPropName == "BulletChar" )
+            {
+                aBulletChar = OUString ( *( (OUString*)pValue ) )[ 0 ];
+                //printf ("bullet char: %d\n", aBulletChar.getStr());
+            }
+            else if ( aPropName == "BulletFont" )
+            {
+                aFontDesc = *( (awt::FontDescriptor*)pValue );
+                bHasFontDesc = true;
 
-            Sequence< PropertyValue > aPropertySequence;
-            rXIndexAccess->getByIndex( nLevel ) >>= aPropertySequence;
+                // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
+                // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
+                // Because there might exist a lot of damaged documemts I added this two lines
+                // which fixes the bullet problem for the export.
+                if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
+                    aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
-            const PropertyValue* pPropValue = aPropertySequence.getArray();
-
-            sal_Int32 nPropertyCount = aPropertySequence.getLength();
-
-            if ( nPropertyCount ) {
-
-                sal_Int16 nNumberingType = SVX_NUM_NUMBER_NONE;
-                bool bSDot = false;
-                bool bPBehind = false;
-                bool bPBoth = false;
-                sal_Unicode aBulletChar = 0x2022; // a bullet
-                awt::FontDescriptor aFontDesc;
-                bool bHasFontDesc = false;
-                OUString aGraphicURL;
-                sal_Int16 nBulletRelSize = 0;
-
-                for ( sal_Int32 i = 0; i < nPropertyCount; i++ ) {
-                    const void* pValue = pPropValue[ i ].Value.getValue();
-                    if ( pValue ) {
-                        OUString aPropName( pPropValue[ i ].Name );
-                        DBG(fprintf (stderr, "pro name: %s\n", OUStringToOString( aPropName, RTL_TEXTENCODING_UTF8 ).getStr()));
-                        if ( aPropName == "NumberingType" )
-                            nNumberingType = *( (sal_Int16*)pValue );
-                        else if ( aPropName == "Prefix" ) {
-                            if( *(OUString*)pValue == ")")
-                                bPBoth = true;
-                        } else if ( aPropName == "Suffix" ) {
-                            if( *(OUString*)pValue == ".")
-                                bSDot = true;
-                            else if( *(OUString*)pValue == ")")
-                                bPBehind = true;
-                        } else if ( aPropName == "BulletChar" )
-                        {
-                            aBulletChar = OUString ( *( (OUString*)pValue ) )[ 0 ];
-                            //printf ("bullet char: %d\n", aBulletChar.getStr());
-                        }
-                        else if ( aPropName == "BulletFont" )
-                        {
-                            aFontDesc = *( (awt::FontDescriptor*)pValue );
-                            bHasFontDesc = true;
-
-                            // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
-                            // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
-                            // Because there might exist a lot of damaged documemts I added this two lines
-                            // which fixes the bullet problem for the export.
-                            if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
-                                aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
-
-                        } else if ( aPropName == "BulletRelSize" ) {
-                            nBulletRelSize = *( (sal_Int16*)pValue );
-                        } else if ( aPropName == "GraphicURL" ) {
-                            aGraphicURL = ( *(OUString*)pValue );
-                            DBG(fprintf (stderr, "graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
-                        } else if ( aPropName == "GraphicSize" )
-                        {
-                            if ( pPropValue[ i ].Value.getValueType() == cppu::UnoType<awt::Size>::get())
-                            {
-                                // don't cast awt::Size to Size as on 64-bits they are not the same.
-                                ::com::sun::star::awt::Size aSize;
-                                pPropValue[ i ].Value >>= aSize;
-                                //aBuGraSize.nA = aSize.Width;
-                                //aBuGraSize.nB = aSize.Height;
-                                DBG(fprintf(stderr, "graphic size: %dx%d\n", int( aSize.Width ), int( aSize.Height )));
-                            }
-                        }
-                    }
+            }
+            else if ( aPropName == "BulletRelSize" )
+            {
+                nBulletRelSize = *( (sal_Int16*)pValue );
+            }
+            else if ( aPropName == "GraphicURL" )
+            {
+                aGraphicURL = ( *(OUString*)pValue );
+                DBG(fprintf (stderr, "graphic url: %s\n", OUStringToOString( aGraphicURL, RTL_TEXTENCODING_UTF8 ).getStr()));
+            }
+            else if ( aPropName == "GraphicSize" )
+            {
+                if ( pPropValue[ i ].Value.getValueType() == cppu::UnoType<awt::Size>::get())
+                {
+                    // don't cast awt::Size to Size as on 64-bits they are not the same.
+                    ::com::sun::star::awt::Size aSize;
+                    pPropValue[ i ].Value >>= aSize;
+                    //aBuGraSize.nA = aSize.Width;
+                    //aBuGraSize.nB = aSize.Height;
+                    DBG(fprintf(stderr, "graphic size: %dx%d\n", int( aSize.Width ), int( aSize.Height )));
                 }
+            }
+        }
+    }
 
-                const char* pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
+    const char* pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
 
-                if( nLevel >= 0 ) {
-                    if( !aGraphicURL.isEmpty() ) {
-                        OUString sRelId = WriteImage( aGraphicURL );
+    if( nLevel >= 0 )
+    {
+        if( !aGraphicURL.isEmpty() )
+        {
+            OUString sRelId = WriteImage( aGraphicURL );
 
-                        mpFS->startElementNS( XML_a, XML_buBlip, FSEND );
-                        mpFS->singleElementNS( XML_a, XML_blip, FSNS( XML_r, XML_embed ), USS( sRelId ), FSEND );
-                        mpFS->endElementNS( XML_a, XML_buBlip );
-                    } else {
-                        if( nBulletRelSize && nBulletRelSize != 100 )
-                            mpFS->singleElementNS( XML_a, XML_buSzPct,
-                                                   XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
-                        if( bHasFontDesc )
-                            mpFS->singleElementNS( XML_a, XML_buFont,
-                                                   XML_typeface, OUStringToOString( aFontDesc.Name, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                                   XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : NULL,
-                                                   FSEND );
+            mpFS->startElementNS( XML_a, XML_buBlip, FSEND );
+            mpFS->singleElementNS( XML_a, XML_blip, FSNS( XML_r, XML_embed ), USS( sRelId ), FSEND );
+            mpFS->endElementNS( XML_a, XML_buBlip );
+        }
+        else
+        {
+            if( nBulletRelSize && nBulletRelSize != 100 )
+                mpFS->singleElementNS( XML_a, XML_buSzPct,
+                                       XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
+            if( bHasFontDesc )
+                mpFS->singleElementNS( XML_a, XML_buFont,
+                                       XML_typeface, OUStringToOString( aFontDesc.Name, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                       XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : NULL,
+                                       FSEND );
 
-                        if( pAutoNumType )
-                            mpFS->singleElementNS( XML_a, XML_buAutoNum, XML_type, pAutoNumType, FSEND );
-                        else {
-                            aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
-                            mpFS->singleElementNS( XML_a, XML_buChar, XML_char, USS( OUString( aBulletChar ) ), FSEND );
-                        }
-                    }
-                }
+            if( pAutoNumType )
+                mpFS->singleElementNS( XML_a, XML_buAutoNum, XML_type, pAutoNumType, FSEND );
+            else
+            {
+                aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
+                mpFS->singleElementNS( XML_a, XML_buChar, XML_char, USS( OUString( aBulletChar ) ), FSEND );
             }
         }
     }
