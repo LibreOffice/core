@@ -3101,25 +3101,25 @@ void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
     rPosY = nRow;
 }
 
-long ScViewData::LogicToPixelVertical( long nTwips )
+long ScViewData::LogicToPixelVertical( long nTwips ) const
 {
     return GetActiveWin()->LogicToPixel( Point( 0, nTwips ),
                                          maPaintMapMode ).getY();
 }
 
-long ScViewData::LogicToPixelHorizontal( long nTwips )
+long ScViewData::LogicToPixelHorizontal( long nTwips ) const
 {
     return GetActiveWin()->LogicToPixel( Point( nTwips, 0 ),
                                          maPaintMapMode ).getX();
 }
 
-long ScViewData::PixelToLogicVertical( long nPix )
+long ScViewData::PixelToLogicVertical( long nPix ) const
 {
     return GetActiveWin()->PixelToLogic( Point( 0, nPix ),
                                          maPaintMapMode ).getY();
 }
 
-long ScViewData::PixelToLogicHorizontal( long nPix )
+long ScViewData::PixelToLogicHorizontal( long nPix ) const
 {
     return GetActiveWin()->PixelToLogic( Point( nPix, 0 ),
                                          maPaintMapMode ).getX();
