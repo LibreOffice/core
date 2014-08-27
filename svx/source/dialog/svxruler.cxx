@@ -3368,9 +3368,10 @@ void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
     */
 
     // start update
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
     if(bActive &&
-       rHint.Type() == TYPE(SfxSimpleHint) &&
-       ((SfxSimpleHint&) rHint ).GetId() == SFX_HINT_UPDATEDONE )
+       pSimpleHint &&
+       pSimpleHint->GetId() == SFX_HINT_UPDATEDONE )
      {
         Update();
         EndListening(*pBindings);

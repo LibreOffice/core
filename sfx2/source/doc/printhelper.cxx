@@ -795,7 +795,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
 
 void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    SfxPrintingHint* pPrintHint = PTR_CAST( SfxPrintingHint, &rHint );
+    const SfxPrintingHint* pPrintHint = dynamic_cast<const SfxPrintingHint*>(&rHint);
     if ( &rBC != m_pObjectShell
         || !pPrintHint
         || pPrintHint->GetWhich() == SFX_PRINTABLESTATE_CANCELJOB )

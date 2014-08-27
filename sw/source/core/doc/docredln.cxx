@@ -48,8 +48,6 @@
 
 using namespace com::sun::star;
 
-TYPEINIT1(SwRedlineHint, SfxHint);
-
 #ifdef DBG_UTIL
 
     void sw_DebugRedline( const SwDoc* pDoc )

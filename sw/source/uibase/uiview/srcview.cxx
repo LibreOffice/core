@@ -767,11 +767,12 @@ sal_Int32 SwSrcView::PrintSource(
 
 void SwSrcView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) &&
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint &&
             (
-                ((SfxSimpleHint&) rHint).GetId() == SFX_HINT_MODECHANGED ||
+                pSimpleHint->GetId() == SFX_HINT_MODECHANGED ||
                 (
-                    ((SfxSimpleHint&) rHint).GetId() == SFX_HINT_TITLECHANGED &&
+                    pSimpleHint->GetId() == SFX_HINT_TITLECHANGED &&
                     !GetDocShell()->IsReadOnly() && aEditWin.IsReadonly()
                 )
             )

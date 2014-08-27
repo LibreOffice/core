@@ -1292,9 +1292,9 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
-            bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);      // Name geaendert?
-            if (bExtended)
-                aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
+            const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint); // Name geaendert?
+            if (pExtendedHint)
+                aOldName = pExtendedHint->GetOldName();
 
             if ( aNewName != aOldName )
                 aDocument.RenamePageStyleInUse( aOldName, aNewName );
@@ -1310,7 +1310,7 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
 
             aModificator.SetDocumentModified();
 
-            if (bExtended)
+            if (pExtendedHint)
             {
                 SfxBindings* pBindings = GetViewBindings();
                 if (pBindings)
@@ -1330,9 +1330,9 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
         {
             OUString aNewName = pStyle->GetName();
             OUString aOldName = aNewName;
-            bool bExtended = rHint.ISA(SfxStyleSheetHintExtended);
-            if (bExtended)
-                aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
+            const SfxStyleSheetHintExtended* pExtendedHint = dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint);
+            if (pExtendedHint)
+                aOldName = pExtendedHint->GetOldName();
             if ( aNewName != aOldName )
             {
                 for(SCTAB i = 0; i < aDocument.GetTableCount(); ++i)

@@ -396,9 +396,10 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SfxViewShell::Notify(rBC, rHint);
 
-    if (rHint.IsA(TYPE(SfxEventHint)))
+    const SfxEventHint* pEventHint = dynamic_cast<const SfxEventHint*>(&rHint);
+    if (pEventHint)
     {
-        switch (static_cast<const SfxEventHint&>(rHint).GetEventId())
+        switch (pEventHint->GetEventId())
         {
             case SFX_EVENT_OPENDOC:
                 if( GetDocument() && GetDocument()->IsStartWithPresentation() )

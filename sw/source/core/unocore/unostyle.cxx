@@ -977,7 +977,7 @@ void SAL_CALL SwXStyleFamily::removeVetoableChangeListener( const OUString&, con
 
 void SwXStyleFamily::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    SfxSimpleHint *pHint = PTR_CAST( SfxSimpleHint, &rHint );
+    const SfxSimpleHint *pHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
     if( pHint && ( pHint->GetId() & SFX_HINT_DYING ) )
     {
         pBasePool = 0;
@@ -3274,7 +3274,7 @@ uno::Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
 
 void SwXStyle::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    SfxSimpleHint *pHint = PTR_CAST( SfxSimpleHint, &rHint );
+    const SfxSimpleHint* pHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if( pHint )
     {
         if(( pHint->GetId() & SFX_HINT_DYING ) || ( pHint->GetId() & SFX_STYLESHEET_ERASED))

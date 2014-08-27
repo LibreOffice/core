@@ -144,9 +144,6 @@ using namespace ::com::sun::star::form::runtime;
 using namespace ::com::sun::star::frame;
 using namespace ::svxform;
 
-TYPEINIT1( FmDesignModeChangedHint, SfxHint );
-
-
 FmDesignModeChangedHint::FmDesignModeChangedHint( bool bDesMode )
     :m_bDesignMode( bDesMode )
 {

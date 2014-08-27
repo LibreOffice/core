@@ -231,11 +231,9 @@ class FmFilterHint : public SfxHint
     FmFilterData*   m_pData;
 
 public:
-    TYPEINFO_OVERRIDE();
     FmFilterHint(FmFilterData* pData):m_pData(pData){}
     FmFilterData* GetData() const { return m_pData; }
 };
-TYPEINIT1( FmFilterHint, SfxHint );
 
 
 class FmFilterInsertedHint : public FmFilterHint
@@ -243,54 +241,42 @@ class FmFilterInsertedHint : public FmFilterHint
     sal_uLong m_nPos;   // Position relative to the parent of the data
 
 public:
-    TYPEINFO_OVERRIDE();
     FmFilterInsertedHint(FmFilterData* pData, sal_uLong nRelPos)
         :FmFilterHint(pData)
         ,m_nPos(nRelPos){}
 
     sal_uLong GetPos() const { return m_nPos; }
 };
-TYPEINIT1( FmFilterInsertedHint, FmFilterHint );
 
 
 class FmFilterRemovedHint : public FmFilterHint
 {
 public:
-    TYPEINFO_OVERRIDE();
     FmFilterRemovedHint(FmFilterData* pData)
         :FmFilterHint(pData){}
-
 };
-TYPEINIT1( FmFilterRemovedHint, FmFilterHint );
 
 
 class FmFilterTextChangedHint : public FmFilterHint
 {
 public:
-    TYPEINFO_OVERRIDE();
     FmFilterTextChangedHint(FmFilterData* pData)
         :FmFilterHint(pData){}
-
 };
-TYPEINIT1( FmFilterTextChangedHint, FmFilterHint );
 
 
 class FilterClearingHint : public SfxHint
 {
 public:
-    TYPEINFO_OVERRIDE();
     FilterClearingHint(){}
 };
-TYPEINIT1( FilterClearingHint, SfxHint );
 
 
 class FmFilterCurrentChangedHint : public SfxHint
 {
 public:
-    TYPEINFO_OVERRIDE();
     FmFilterCurrentChangedHint(){}
 };
-TYPEINIT1( FmFilterCurrentChangedHint, SfxHint );
 
 
 // class FmFilterAdapter, Listener an den FilterControls
@@ -1483,28 +1469,28 @@ bool FmFilterNavigator::Select( SvTreeListEntry* pEntry, bool bSelect )
 
 void FmFilterNavigator::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if (rHint.ISA(FmFilterInsertedHint))
+    if ( dynamic_cast<const FmFilterInsertedHint*>(&rHint) )
     {
-        FmFilterInsertedHint* pHint = (FmFilterInsertedHint*)&rHint;
+        const FmFilterInsertedHint* pHint = dynamic_cast<const FmFilterInsertedHint*>(&rHint);
         Insert(pHint->GetData(), pHint->GetPos());
     }
-    else if( rHint.ISA(FilterClearingHint) )
+    else if( dynamic_cast<const FilterClearingHint*>(&rHint) )
     {
         SvTreeListBox::Clear();
     }
-    else if( rHint.ISA(FmFilterRemovedHint) )
+    else if( dynamic_cast<const FmFilterRemovedHint*>(&rHint) )
     {
-        FmFilterRemovedHint* pHint = (FmFilterRemovedHint*)&rHint;
+        const FmFilterRemovedHint* pHint = dynamic_cast<const FmFilterRemovedHint*>(&rHint);
         Remove(pHint->GetData());
     }
-    else if( rHint.ISA(FmFilterTextChangedHint) )
+    else if( dynamic_cast<const FmFilterTextChangedHint*>(&rHint) )
     {
-        FmFilterTextChangedHint* pHint = (FmFilterTextChangedHint*)&rHint;
+        const FmFilterTextChangedHint* pHint = dynamic_cast<const FmFilterTextChangedHint*>(&rHint);
         SvTreeListEntry* pEntry = FindEntry(pHint->GetData());
         if (pEntry)
             SetEntryText( pEntry, pHint->GetData()->GetText());
     }
-    else if( rHint.ISA(FmFilterCurrentChangedHint) )
+    else if( dynamic_cast<const FmFilterCurrentChangedHint*>(&rHint) )
     {
         // invalidate the entries
         for (SvTreeListEntry* pEntry = First(); pEntry != NULL;

@@ -1591,9 +1591,10 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, pTim )
 void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     // tap update
-    if(rHint.Type() == TYPE(SfxSimpleHint))
+    const SfxSimpleHint* pSfxSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if(pSfxSimpleHint)
     {
-        switch(((SfxSimpleHint&) rHint ).GetId())
+        switch(pSfxSimpleHint->GetId())
         {
           case SFX_HINT_UPDATEDONE:
             {
@@ -1663,12 +1664,12 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
     // possible that a new one is registered after the timer is up -
     // works bad in UpdateStyles_Impl ()!
 
-    sal_uIntPtr nId = rHint.ISA(SfxSimpleHint) ? ( (SfxSimpleHint&)rHint ).GetId() : 0;
+    sal_uIntPtr nId = pSfxSimpleHint ? pSfxSimpleHint->GetId() : 0;
 
     if(!bDontUpdate && nId != SFX_HINT_DYING &&
-       (rHint.Type() == TYPE(SfxStyleSheetPoolHint)||
-       rHint.Type() == TYPE(SfxStyleSheetHint) ||
-       rHint.Type() == TYPE( SfxStyleSheetHintExtended )))
+       (dynamic_cast<const SfxStyleSheetPoolHint*>(&rHint) ||
+        dynamic_cast<const SfxStyleSheetHint*>(&rHint) ||
+        dynamic_cast<const SfxStyleSheetHintExtended*>(&rHint)))
     {
         if(!pTimer)
         {

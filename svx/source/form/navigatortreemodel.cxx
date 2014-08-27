@@ -691,9 +691,9 @@ namespace svxform
 
     void NavigatorTreeModel::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
-        if( rHint.ISA(SdrHint) )
+        const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+        if( pSdrHint )
         {
-            SdrHint* pSdrHint = (SdrHint*)&rHint;
             switch( pSdrHint->GetKind() )
             {
                 case HINT_OBJINSERTED:
@@ -707,13 +707,13 @@ namespace svxform
             }
         }
         // hat sich die shell verabschiedet?
-        else if ( rHint.ISA(SfxSimpleHint) && ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING)
+        else if ( dynamic_cast<const SfxSimpleHint*>(&rHint) && static_cast<const SfxSimpleHint*>(&rHint)->GetId() == SFX_HINT_DYING)
             UpdateContent((FmFormShell*)NULL);
 
         // hat sich die Markierung der Controls veraendert ?
-        else if (rHint.ISA(FmNavViewMarksChanged))
+        else if (dynamic_cast<const FmNavViewMarksChanged*>(&rHint))
         {
-            FmNavViewMarksChanged* pvmcHint = (FmNavViewMarksChanged*)&rHint;
+            const FmNavViewMarksChanged* pvmcHint = static_cast<const FmNavViewMarksChanged*>(&rHint);
             BroadcastMarkedObjects( pvmcHint->GetAffectedView()->GetMarkedObjectList() );
         }
     }

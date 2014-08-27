@@ -851,10 +851,10 @@ void AccessibleSlideSorterView::Implementation::Notify (
     SfxBroadcaster&,
     const SfxHint& rHint)
 {
-    if (rHint.ISA(SdrHint))
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (pSdrHint)
     {
-        SdrHint& rSdrHint (*PTR_CAST(SdrHint,&rHint));
-        switch (rSdrHint.GetKind())
+        switch (pSdrHint->GetKind())
         {
             case HINT_PAGEORDERCHG:
                 RequestUpdateChildren();
@@ -863,9 +863,9 @@ void AccessibleSlideSorterView::Implementation::Notify (
                 break;
         }
     }
-    else if (rHint.ISA(sd::ViewShellHint))
+    else if (dynamic_cast<const sd::ViewShellHint*>(&rHint))
     {
-        sd::ViewShellHint& rViewShellHint (*PTR_CAST(sd::ViewShellHint, &rHint));
+        const sd::ViewShellHint& rViewShellHint = static_cast<const sd::ViewShellHint&>(rHint);
         switch (rViewShellHint.GetHintId())
         {
             case sd::ViewShellHint::HINT_COMPLEX_MODEL_CHANGE_START:

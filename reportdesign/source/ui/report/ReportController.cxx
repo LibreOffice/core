@@ -2567,9 +2567,8 @@ IMPL_LINK( OReportController, EventLstHdl, VclWindowEvent*, _pEvent )
 
 void OReportController::Notify(SfxBroadcaster & /* _rBc */, SfxHint const & _rHint)
 {
-    if (_rHint.ISA(DlgEdHint)
-        && (static_cast< DlgEdHint const & >(_rHint).GetKind()
-            == RPTUI_HINT_SELECTIONCHANGED))
+    const DlgEdHint* pDlgEdHint = dynamic_cast<const DlgEdHint*>(&_rHint);
+    if (pDlgEdHint && pDlgEdHint->GetKind() == RPTUI_HINT_SELECTIONCHANGED)
     {
         const sal_Int32 nSelectionCount = getDesignView()->getMarkedObjectCount();
         if ( m_nSelectionCount != nSelectionCount )

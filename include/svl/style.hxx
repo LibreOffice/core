@@ -341,10 +341,8 @@ class SVL_DLLPUBLIC SfxStyleSheetPoolHint : public SfxHint
     sal_uInt16 nHint;
 
 public:
-    TYPEINFO_OVERRIDE();
-
                         SfxStyleSheetPoolHint(sal_uInt16 nArgHint) :  nHint(nArgHint){}
-    sal_uInt16              GetHint() const
+    sal_uInt16          GetHint() const
                         { return nHint; }
 };
 
@@ -353,15 +351,13 @@ public:
 class SVL_DLLPUBLIC SfxStyleSheetHint: public SfxHint
 {
     SfxStyleSheetBase*  pStyleSh;
-    sal_uInt16              nHint;
+    sal_uInt16          nHint;
 
 public:
-                        TYPEINFO_OVERRIDE();
-
                         SfxStyleSheetHint( sal_uInt16, SfxStyleSheetBase& );
     SfxStyleSheetBase*  GetStyleSheet() const
                         { return pStyleSh; }
-    sal_uInt16              GetHint() const
+    sal_uInt16          GetHint() const
                         { return nHint; }
 };
 
@@ -370,11 +366,9 @@ class SVL_DLLPUBLIC SfxStyleSheetHintExtended: public SfxStyleSheetHint
     OUString            aName;
 
 public:
-                        TYPEINFO_OVERRIDE();
-
                         SfxStyleSheetHintExtended( sal_uInt16, const OUString& rOld,
                                                    SfxStyleSheetBase& );
-    const OUString&       GetOldName() { return aName; }
+    const OUString&     GetOldName() const { return aName; }
 };
 
 class SVL_DLLPUBLIC SfxUnoStyleSheet : public ::cppu::ImplInheritanceHelper2< SfxStyleSheet, ::com::sun::star::style::XStyle, ::com::sun::star::lang::XUnoTunnel >

@@ -21,8 +21,6 @@
 
 namespace sd {
 
-TYPEINIT1(ViewShellHint, SfxHint);
-
 ViewShellHint::ViewShellHint (HintId eHintId)
     : SfxHint(),
       meHintId(eHintId)

@@ -94,7 +94,6 @@ class BASIC_DLLPUBLIC SbxHint : public SfxSimpleHint
 {
     SbxVariable* pVar;
 public:
-    TYPEINFO_OVERRIDE();
     SbxHint( sal_uIntPtr n, SbxVariable* v ) : SfxSimpleHint( n ), pVar( v ) {}
     SbxVariable* GetVar() const { return pVar; }
 };

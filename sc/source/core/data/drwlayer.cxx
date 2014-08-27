@@ -85,9 +85,6 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(ScTabDeletedHint, SfxHint);
-TYPEINIT1(ScTabSizeChangedHint, SfxHint);
-
 static ScDrawObjFactory* pFac = NULL;
 static E3dObjFactory* pF3d = NULL;
 static sal_uInt16 nInst = 0;

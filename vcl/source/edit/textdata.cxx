@@ -268,8 +268,6 @@ void IdleFormatter::ForceTimeout()
     }
 }
 
-TYPEINIT1( TextHint, SfxSimpleHint );
-
 TextHint::TextHint( sal_uLong Id ) : SfxSimpleHint( Id )
 {
     mnValue = 0;

@@ -175,8 +175,8 @@ SdrMarkView::~SdrMarkView()
 
 void SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
-    if (pSdrHint!=NULL)
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
+    if (pSdrHint)
     {
         SdrHintKind eKind=pSdrHint->GetKind();
 

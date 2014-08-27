@@ -119,8 +119,9 @@ void SvxFontMenuControl::StateChanged(
 
 void SvxFontMenuControl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.Type() != TYPE(SfxSimpleHint) &&
-         ( (SfxSimpleHint&)rHint ).GetId() == SFX_HINT_DOCCHANGED )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>( &rHint );
+    if ( pSimpleHint &&
+         pSimpleHint->GetId() == SFX_HINT_DOCCHANGED )
         FillMenu();
 }
 

@@ -2015,8 +2015,6 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SdrModel::getUnoTunnelImpleme
 
 
 
-TYPEINIT1(SdrHint,SfxHint);
-
 SdrHint::SdrHint(SdrHintKind eNewHint)
 :   mpPage(0L),
     mpObj(0L),

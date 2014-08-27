@@ -527,9 +527,8 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 
     /* if the dummy gets a notify about a changed attribute, he takes care that
        the actual ment style sheet sends broadcasts. */
-    SfxSimpleHint* pSimple = PTR_CAST(SfxSimpleHint, &rHint);
-    sal_uLong nId = pSimple == NULL ? 0 : pSimple->GetId();
-    if (nId == SFX_HINT_DATACHANGED && nFamily == SD_STYLE_FAMILY_PSEUDO)
+    const SfxSimpleHint* pSimple = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimple && pSimple->GetId() == SFX_HINT_DATACHANGED && nFamily == SD_STYLE_FAMILY_PSEUDO)
     {
         SdStyleSheet* pRealStyle = GetRealStyleSheet();
         if (pRealStyle)

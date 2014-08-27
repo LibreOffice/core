@@ -748,26 +748,23 @@ void ScShapeChildren::SetDrawBroadcaster()
 
 void ScShapeChildren::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
-    if ( rHint.ISA( SdrHint ) )
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>( &rHint );
+    if (pSdrHint)
     {
-        const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-        if (pSdrHint)
+        SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
+        if (pObj && (pObj->GetPage() == GetDrawPage()))
         {
-            SdrObject* pObj = const_cast<SdrObject*>(pSdrHint->GetObject());
-            if (pObj && (pObj->GetPage() == GetDrawPage()))
+            switch (pSdrHint->GetKind())
             {
-                switch (pSdrHint->GetKind())
+                case HINT_OBJCHG :         // Objekt geaendert
                 {
-                    case HINT_OBJCHG :         // Objekt geaendert
-                    {
-                    }
-                    break;
-                    default :
-                    {
-                        // other events are not interesting
-                    }
-                    break;
                 }
+                break;
+                default :
+                {
+                    // other events are not interesting
+                }
+                break;
             }
         }
     }
@@ -1298,11 +1295,11 @@ void SAL_CALL ScAccessibleDocumentPagePreview::disposing()
 
 void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if (rHint.ISA( SfxSimpleHint ) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint)
     {
-        const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
         // only notify if child exist, otherwise it is not necessary
-        if ((rRef.GetId() == SC_HINT_DATACHANGED))
+        if (pSimpleHint->GetId() == SC_HINT_DATACHANGED)
         {
             if (mpTable) // if there is no table there is nothing to notify, because no one recongnizes the change
             {
@@ -1352,11 +1349,11 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
                 }
             }
         }
-        else if (rRef.GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
+        else if (pSimpleHint->GetId() == SC_HINT_ACC_MAKEDRAWLAYER)
         {
             GetShapeChildren()->SetDrawBroadcaster();
         }
-        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        else if (pSimpleHint->GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             Size aOutputSize;
             Window* pSizeWindow = mpViewShell->GetWindow();
@@ -1374,11 +1371,11 @@ void ScAccessibleDocumentPagePreview::Notify( SfxBroadcaster& rBC, const SfxHint
             CommitChange(aEvent);
         }
     }
-    else if ( rHint.ISA(ScAccWinFocusLostHint) )
+    else if ( dynamic_cast<const ScAccWinFocusLostHint*>(&rHint) )
     {
         CommitFocusLost();
     }
-    else if ( rHint.ISA(ScAccWinFocusGotHint) )
+    else if ( dynamic_cast<const ScAccWinFocusGotHint*>(&rHint) )
     {
         CommitFocusGained();
     }

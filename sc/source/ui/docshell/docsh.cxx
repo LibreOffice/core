@@ -599,16 +599,16 @@ bool ScDocShell::Load( SfxMedium& rMedium )
 
 void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if (rHint.ISA(ScTablesHint) )
+    const ScTablesHint* pScHint = dynamic_cast< const ScTablesHint* >( &rHint );
+    if (pScHint)
     {
-        const ScTablesHint& rScHint = static_cast< const ScTablesHint& >( rHint );
-        if (rScHint.GetId() == SC_TAB_INSERTED)
+        if (pScHint->GetId() == SC_TAB_INSERTED)
         {
             uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
             if ( xVbaEvents.is() ) try
             {
                 uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= rScHint.GetTab1();
+                aArgs[0] <<= pScHint->GetTab1();
                 xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_NEWSHEET, aArgs );
             }
             catch( uno::Exception& )
@@ -617,9 +617,9 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
         }
     }
 
-    if (rHint.ISA(SfxSimpleHint)) // Without parameter
+    if ( dynamic_cast<const SfxSimpleHint*>(&rHint) ) // Without parameter
     {
-        sal_uLong nSlot = ((const SfxSimpleHint&)rHint).GetId();
+        sal_uLong nSlot = static_cast<const SfxSimpleHint&>(rHint).GetId();
         switch ( nSlot )
         {
             case SFX_HINT_TITLECHANGED:
@@ -629,9 +629,9 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 break;
         }
     }
-    else if (rHint.ISA(SfxStyleSheetHint)) // Template changed
-        NotifyStyle((const SfxStyleSheetHint&) rHint);
-    else if (rHint.ISA(ScAutoStyleHint))
+    else if ( dynamic_cast<const SfxStyleSheetHint*>(&rHint) ) // Template changed
+        NotifyStyle( static_cast<const SfxStyleSheetHint&>(rHint) );
+    else if ( dynamic_cast<const ScAutoStyleHint*>(&rHint) )
     {
         //! direct call for AutoStyles
 
@@ -649,9 +649,9 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
             pAutoStyleList = new ScAutoStyleList(this);
         pAutoStyleList->AddInitial( aRange, aName1, nTimeout, aName2 );
     }
-    else if ( rHint.ISA( SfxEventHint ) )
+    else if ( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
-        sal_uLong nEventId = ((SfxEventHint&)rHint).GetEventId();
+        sal_uLong nEventId = static_cast<const SfxEventHint*>(&rHint)->GetEventId();
         switch ( nEventId )
         {
             case SFX_EVENT_LOADFINISHED:

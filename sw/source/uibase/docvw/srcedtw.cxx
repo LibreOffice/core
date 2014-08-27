@@ -727,7 +727,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
 
 void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if ( rHint.ISA( TextHint ) )
+    if ( dynamic_cast<const TextHint*>(&rHint) )
     {
         const TextHint& rTextHint = (const TextHint&)rHint;
         if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )

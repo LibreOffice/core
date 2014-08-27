@@ -22,7 +22,6 @@
 #include "global.hxx"
 #include "address.hxx"
 #include "simplehintids.hxx"
-#include <tools/rtti.hxx>
 #include <svl/hint.hxx>
 
 class SvtBroadcaster;
@@ -32,7 +31,6 @@ class ScHint : public SfxSimpleHint
     ScAddress   aAddress;
 
 public:
-    TYPEINFO_OVERRIDE();
     ScHint( sal_uLong n, const ScAddress& a );
     const ScAddress&    GetAddress() const { return aAddress; }
           ScAddress&    GetAddress()       { return aAddress; }
@@ -44,7 +42,6 @@ class ScAreaChangedHint : public SfxHint
 private:
     ScRange aNewRange;
 public:
-                    TYPEINFO_OVERRIDE();
                     ScAreaChangedHint(const ScRange& rRange) : aNewRange(rRange) {}
     const ScRange&  GetRange() const { return aNewRange; }
 };

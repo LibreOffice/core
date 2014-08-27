@@ -522,7 +522,7 @@ namespace sdr
         {
             bool bHintUsed(false);
 
-            SfxStyleSheetHint *pStyleHint = PTR_CAST(SfxStyleSheetHint, &rHint);
+            const SfxStyleSheetHint* pStyleHint = dynamic_cast<const SfxStyleSheetHint*>(&rHint);
 
             if(pStyleHint && pStyleHint->GetStyleSheet() == GetStyleSheet())
             {

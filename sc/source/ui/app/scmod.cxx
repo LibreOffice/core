@@ -321,9 +321,10 @@ void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt3
 
 void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    if ( rHint.ISA(SfxSimpleHint) )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint )
     {
-        sal_uLong nHintId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uLong nHintId = pSimpleHint->GetId();
         if ( nHintId == SFX_HINT_DEINITIALIZING )
         {
             // ConfigItems must be removed before ConfigManager

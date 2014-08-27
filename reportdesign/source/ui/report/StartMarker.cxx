@@ -241,9 +241,8 @@ void OStartMarker::setTitle(const OUString& _sTitle)
 void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
 {
     OColorListener::Notify(rBc, rHint);
-    if (rHint.ISA(SfxSimpleHint)
-        && (static_cast< SfxSimpleHint const & >(rHint).GetId()
-            == SFX_HINT_COLORS_CHANGED))
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if (pSimpleHint && pSimpleHint->GetId() == SFX_HINT_COLORS_CHANGED)
     {
         setColor();
         Invalidate(INVALIDATE_CHILDREN);

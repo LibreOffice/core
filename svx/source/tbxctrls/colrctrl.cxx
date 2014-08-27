@@ -247,7 +247,7 @@ SvxColorDockingWindow::~SvxColorDockingWindow()
 
 void SvxColorDockingWindow::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
-    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
+    const SfxPoolItemHint* pPoolItemHint = dynamic_cast<const SfxPoolItemHint*>(&rHint);
     if ( pPoolItemHint
          && ( pPoolItemHint->GetObject()->ISA( SvxColorListItem ) ) )
     {

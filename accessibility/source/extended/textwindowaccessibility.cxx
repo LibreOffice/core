@@ -1560,10 +1560,10 @@ void SAL_CALL Document::disposing()
 // virtual
 void Document::Notify(::SfxBroadcaster &, ::SfxHint const & rHint)
 {
-    if (rHint.ISA(::TextHint))
+    const TextHint* pTextHint = dynamic_cast<const TextHint*>(&rHint);
+    if (pTextHint)
     {
-        ::TextHint const & rTextHint
-              = static_cast< ::TextHint const & >(rHint);
+        ::TextHint const & rTextHint = *pTextHint;
         switch (rTextHint.GetId())
         {
         case TEXT_HINT_PARAINSERTED:

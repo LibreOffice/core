@@ -654,7 +654,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
 // Catch hint for DocInfo
 void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-    if( rHint.ISA( SfxEventHint ) )
+    if( dynamic_cast<const SfxEventHint*>(&rHint) )
     {
         SfxEventHint& rEvHint = (SfxEventHint&) rHint;
         SwDocShell* pDocSh = PTR_CAST( SwDocShell, rEvHint.GetObjShell() );
@@ -705,7 +705,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
         }
     }
-    else if(rHint.ISA(SfxItemSetHint))
+    else if(dynamic_cast<const SfxItemSetHint*>(&rHint))
     {
         if( SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
         {
@@ -715,7 +715,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 pList->Update();
         }
     }
-    else if(rHint.ISA(SfxSimpleHint))
+    else if(dynamic_cast<const SfxSimpleHint*>(&rHint))
     {
         sal_uInt16 nHintId = ((SfxSimpleHint&)rHint).GetId();
         if(SFX_HINT_DEINITIALIZING == nHintId)

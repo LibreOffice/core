@@ -1019,7 +1019,7 @@ void SvxShape::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
 
     // #i55919# HINT_OBJCHG is only interesting if it's for this object
 
-    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+    const SdrHint* pSdrHint = dynamic_cast<const SdrHint*>(&rHint);
     if (!pSdrHint || ( /* (pSdrHint->GetKind() != HINT_OBJREMOVED)  && */
         (pSdrHint->GetKind() != HINT_MODELCLEARED) &&
         // #110094#-9 (pSdrHint->GetKind() != HINT_OBJLISTCLEAR) &&
