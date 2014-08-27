@@ -114,7 +114,7 @@ void ScColBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTX() );
+        nSizeTwips = pViewData->PixelToLogicHorizontal( nNewSize );
 
     ScMarkData& rMark = pViewData->GetMarkData();
 
@@ -274,7 +274,7 @@ void ScRowBar::SetEntrySize( SCCOLROW nPos, sal_uInt16 nNewSize )
         eMode = SC_SIZE_OPTIMAL;
     }
     else
-        nSizeTwips = (sal_uInt16) ( nNewSize / pViewData->GetPPTY() );
+        nSizeTwips = pViewData->PixelToLogicVertical( nNewSize );
 
     ScMarkData& rMark = pViewData->GetMarkData();
 
