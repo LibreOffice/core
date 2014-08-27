@@ -1050,12 +1050,12 @@ void GL3DBarChart::updateDataUpdateFPS()
         int iFPS = miDataUpdateCounter * 1000 / nDeltaMs;
         if (iFPS)
         {
-            maDataUpdateFPS = OUString("Data Update FPS: ") + OUString::number(iFPS);
+            maDataUpdateFPS = OUString("Data Update Rate: ") + OUString::number(iFPS);
         }
         else
         {
             float fFPS = (float)miDataUpdateCounter * 1000 / (float)nDeltaMs;
-            maDataUpdateFPS = OUString("Data Update FPS: ") + OUString::number(fFPS);
+            maDataUpdateFPS = OUString("Data Update Rate: ") + OUString::number(fFPS);
         }
         miDataUpdateCounter = 0;
         osl_getSystemTime(&maDataUpdateStartTime);
