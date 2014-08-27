@@ -415,6 +415,7 @@ certain functionality.
 @li @c sw.uno - Writer UNO interfaces
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 @li @c sw.ww8.level2 - further info for sw.ww8
+@li @c sw.html - Writer HTML import/export
 
 @section writerfilter
 

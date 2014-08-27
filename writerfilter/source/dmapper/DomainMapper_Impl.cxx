@@ -1354,8 +1354,13 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
         uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
 
-        xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
-                        uno::makeAny( rStreamName ));
+        OUString aCLSID = pOLEHandler->getCLSID();
+        if (aCLSID.isEmpty())
+            xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
+                            uno::makeAny( rStreamName ));
+        else
+            xOLEProperties->setPropertyValue("CLSID", uno::makeAny(OUString(aCLSID)));
+
         awt::Size aSize = pOLEHandler->getSize();
         if( !aSize.Width )
             aSize.Width = 1000;
@@ -1396,6 +1401,9 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
 
 
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
+
+        if (!aCLSID.isEmpty())
+            pOLEHandler->importStream(m_xComponentContext, GetTextDocument(), xOLE);
 
     }
     catch( const uno::Exception& )
