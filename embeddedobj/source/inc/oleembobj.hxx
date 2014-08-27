@@ -191,6 +191,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper5
     // if the following member is set, the object works in wrapper mode
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XEmbeddedObject > m_xWrappedObject;
     bool m_bTriedConversion;
+    OUString m_aFilterName; // if m_bTriedConversion, then the filter detected by that
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
 
