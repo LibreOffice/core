@@ -149,6 +149,19 @@ DECLARE_HTMLEXPORT_TEST(testSkipImageEmbedded, "skipimage-embedded.doc")
     assertXPath(pDoc, "//span/table", 1);
 }
 
+DECLARE_HTMLEXPORT_TEST(testSkipImageEmbeddedDocument, "skipimage-embedded-document.docx")
+{
+    // Similar to testSkipImageEmbedded, but with an embedded Writer object,
+    // not a Calc one, and this time OOXML, not WW8.
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    // This was 2, the HTML header was in the document two times.
+    assertXPath(pDoc, "//meta[@name='generator']", 1);
+    // Text of embedded document was missing.
+    assertXPathContent(pDoc, "/html/body/p/span/p/span", "Inner.");
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

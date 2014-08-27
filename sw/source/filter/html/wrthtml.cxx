@@ -112,6 +112,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , bPreserveForm( false )
     , bCfgNetscape4( false )
     , mbSkipImages(false)
+    , mbSkipHeaderFooter(false)
 
 {
     SetBaseURL( rBaseURL );
@@ -149,6 +150,10 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     if (sFilterOptions == "SkipImages")
     {
         mbSkipImages = true;
+    }
+    else if (sFilterOptions == "SkipHeaderFooter")
+    {
+        mbSkipHeaderFooter = true;
     }
 }
 
@@ -391,9 +396,12 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     if( bLFPossible )
         OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_body, false );
-    OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html, false );
+    if (!mbSkipHeaderFooter)
+    {
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_body, false );
+        OutNewLine();
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html, false );
+    }
 
     // loesche die Tabelle mit den freifliegenden Rahmen
     sal_uInt16 i;
@@ -902,6 +910,8 @@ sal_uInt16 SwHTMLWriter::OutHeaderAttrs()
 const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 {
     OStringBuffer sOut;
+    if (!mbSkipHeaderFooter)
+    {
     sOut.append(OString(OOO_STRING_SVTOOLS_HTML_doctype) + " " + OString(OOO_STRING_SVTOOLS_HTML_doctype40));
     HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
 
@@ -935,6 +945,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     rHeaderAttrs = OutHeaderAttrs();
 
     OutFootEndNoteInfo();
+    }
 
     const SwPageDesc *pPageDesc = 0;
 
@@ -964,6 +975,8 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     if( !pPageDesc )
         pPageDesc = &pDoc->GetPageDesc( 0 );
 
+    if (!mbSkipHeaderFooter)
+    {
     // und nun ... das Style-Sheet!!!
     if( bCfgOutStyles )
     {
@@ -1015,6 +1028,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         OutBasicBodyEvents();
 
     Strm().WriteChar( '>' );
+    }
 
     return pPageDesc;
 }
