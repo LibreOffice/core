@@ -570,6 +570,10 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
     }
     else
     {
+        // To not run in a depth loop, use a coloring algorithm on
+        // SdrEdgeObj BoundRect calculations
+        mbBoundRectCalculationRunning = true;
+
         if(mbSuppressed)
         {
             // #i123048# If layouting was ever suppressed, it needs to be done once
@@ -580,10 +584,6 @@ void SdrEdgeObj::ImpRecalcEdgeTrack()
             ImpSetAttrToEdgeInfo();
             mbSuppressed = false;
         }
-
-        // To not run in a depth loop, use a coloring algorithm on
-        // SdrEdgeObj BoundRect calculations
-        mbBoundRectCalculationRunning = true;
 
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetCurrentBoundRect();
         SetRectsDirty();
