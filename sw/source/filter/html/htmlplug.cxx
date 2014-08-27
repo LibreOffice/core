@@ -1273,8 +1273,13 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // Figure out what is the filter name of the embedded object.
         uno::Reference<lang::XServiceInfo> xServiceInfo(xStorable, uno::UNO_QUERY);
         OUString aFilter;
-        if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
-            aFilter = "HTML (StarCalc)";
+        if (xServiceInfo.is())
+        {
+            if (xServiceInfo->supportsService("com.sun.star.sheet.SpreadsheetDocument"))
+                aFilter = "HTML (StarCalc)";
+            else if (xServiceInfo->supportsService("com.sun.star.text.TextDocument"))
+                aFilter = "HTML (StarWriter)";
+        }
 
         if (xStorable.is() && !aFilter.isEmpty())
         {
