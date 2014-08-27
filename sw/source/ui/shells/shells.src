@@ -107,6 +107,14 @@ String STR_PAGE
 {
         Text [ en-US ] = "Page " ;
 };
+String STR_PAGE_COUNT
+{
+        Text [ en-US ] = "Page %1 of %2" ;
+};
+String STR_PAGE_COUNT_CUSTOM
+{
+        Text [ en-US ] = "Page %1 of %2 (Page %3)" ;
+};
 String RID_TEXT_TOOLBOX
 {
         Text [ en-US ] = "Text Object Bar" ;
