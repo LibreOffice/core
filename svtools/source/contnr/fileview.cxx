@@ -205,8 +205,6 @@ public:
 
     void            EnableAutoResize() { mbAutoResize = true; }
     void            EnableDelete( bool bEnable ) { mbEnableDelete = bEnable; }
-    void            EnableRename( bool bEnable ) { mbEnableRename = bEnable; }
-    bool            IsDeleteOrContextMenuEnabled() { return mbEnableDelete || IsContextMenuHandlingEnabled(); }
 
     Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
 
@@ -468,7 +466,6 @@ public:
     // #83004# -------
     void                        ReplaceTabWithString( OUString& aValue );
     void                    CreateDisplayText_Impl();
-    void                    CreateVector_Impl( const Sequence < OUString > &rList );
     void                    SortFolderContent_Impl();
 
     void                    EntryRemoved( const OUString& rURL );
@@ -2026,95 +2023,6 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), false );
     }
 }
-
-
-// this function converts the sequence of strings into a vector of SortingData
-// the string should have the form :
-// title \t type \t size \t date \t target url \t is folder \t image url
-
-void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
-{
-    ::osl::MutexGuard aGuard( maMutex );
-
-    OUString aTab( "\t" );
-
-    sal_uInt32 nCount = (sal_uInt32) rList.getLength();
-
-    for( sal_uInt32 i = 0; i < nCount; i++ )
-    {
-        SortingData_Impl*   pEntry = new SortingData_Impl;
-        OUString            aValue = rList[i];
-        OUString            aDisplayText;
-        sal_Int32           nIndex = 0;
-
-        // get the title
-        pEntry->SetNewTitle( aValue.getToken( 0, '\t', nIndex ) );
-        aDisplayText = pEntry->GetTitle();
-        ReplaceTabWithString( aDisplayText );
-        aDisplayText += aTab;
-
-        // get the type
-        if ( nIndex >= 0 )
-        {
-            pEntry->maType = aValue.getToken( 0, '\t', nIndex );
-            aDisplayText += pEntry->maType;
-        }
-        aDisplayText += aTab;
-
-        // get the size
-        if ( nIndex >= 0 )
-        {
-            OUString aSize = aValue.getToken( 0, '\t', nIndex );
-            aDisplayText += aSize;
-
-            if ( !aSize.isEmpty() )
-                pEntry->maSize = aSize.toInt64();
-        }
-        aDisplayText += aTab;
-
-        // get the date
-        if ( nIndex >= 0 )
-        {
-            OUString aDate = aValue.getToken( 0, '\t', nIndex );
-            aDisplayText += aDate;
-
-            if ( !aDate.isEmpty() )
-            {
-                SAL_WARN( "svtools.contnr", "Don't know, how to convert date" );
-                ;// convert date string to date
-            }
-        }
-        // get the target url
-        if ( nIndex >= 0 )
-        {
-            pEntry->maTargetURL = aValue.getToken( 0, '\t', nIndex );
-        }
-        // get the size
-        if ( nIndex >= 0 )
-        {
-            OUString aBool = aValue.getToken( 0, '\t', nIndex );
-            if ( !aBool.isEmpty() )
-                pEntry->mbIsFolder = aBool.toBoolean();
-        }
-        // get the image url
-        if ( nIndex >= 0 )
-        {
-            pEntry->maImageURL = aValue.getToken( 0, '\t', nIndex );
-        }
-
-        // set the display text
-        pEntry->maDisplayText = aDisplayText;
-
-        // detect the image
-        if( aValue != SEPARATOR_STR )
-        {
-            INetURLObject aObj( !pEntry->maImageURL.isEmpty() ? pEntry->maImageURL : pEntry->maTargetURL );
-            pEntry->maImage = SvFileInformationManager::GetImage( aObj, false );
-        }
-        maContent.push_back( pEntry );
-    }
-}
-
 
 void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, bool bAscending )
 {
