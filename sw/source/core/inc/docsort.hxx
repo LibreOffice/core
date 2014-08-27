@@ -44,9 +44,14 @@ namespace com {
     }
 }
 
-class SwMovedBoxes : public std::vector<const SwTableBox*>
+class SwMovedBoxes
 {
+private:
+    std::vector<const SwTableBox*> mBoxes;
+
 public:
+    void push_back(const SwTableBox* &rpTableBox) {mBoxes.push_back(rpTableBox);}
+
     sal_uInt16 GetPos(const SwTableBox* pTableBox) const;
 };
 

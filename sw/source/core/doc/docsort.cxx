@@ -948,8 +948,8 @@ const SfxItemSet* FlatFndBox::GetItemSet(sal_uInt16 n_Col, sal_uInt16 n_Row) con
 
 sal_uInt16 SwMovedBoxes::GetPos(const SwTableBox* pTableBox) const
 {
-    const_iterator it = std::find(begin(), end(), pTableBox);
-    return it == end() ? USHRT_MAX : it - begin();
+    std::vector<const SwTableBox*>::const_iterator it = std::find(mBoxes.begin(), mBoxes.end(), pTableBox);
+    return it == mBoxes.end() ? USHRT_MAX : it - mBoxes.begin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
