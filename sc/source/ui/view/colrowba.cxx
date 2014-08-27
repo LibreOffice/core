@@ -81,9 +81,18 @@ sal_uInt16 ScColBar::GetEntrySize( SCCOLROW nEntryNo ) const
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     if (pDoc->ColHidden(static_cast<SCCOL>(nEntryNo), nTab))
+    {
         return 0;
+    }
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetColWidth( static_cast<SCCOL>(nEntryNo), nTab ), pViewData->GetPPTX() );
+    {
+        Point aBefore = pViewData->GetScrPos( nEntryNo, 0, SC_SPLIT_BOTTOMLEFT );
+        Point aAfter = pViewData->GetScrPos( nEntryNo + 1, 0, SC_SPLIT_BOTTOMLEFT );
+
+        bool bLayoutRTL = IsLayoutRTL();
+        long nLayoutSign = bLayoutRTL ? -1 : 1;
+        return ( aAfter.getX() - aBefore.getX() ) * nLayoutSign;
+    }
 }
 
 OUString ScColBar::GetEntryText( SCCOLROW nEntryNo ) const
@@ -236,10 +245,16 @@ sal_uInt16 ScRowBar::GetEntrySize( SCCOLROW nEntryNo ) const
     SCTAB nTab = pViewData->GetTabNo();
     SCROW nLastRow = -1;
     if (pDoc->RowHidden(nEntryNo, nTab, NULL, &nLastRow))
+    {
         return 0;
+    }
     else
-        return (sal_uInt16) ScViewData::ToPixel( pDoc->GetOriginalHeight( nEntryNo,
-                    nTab ), pViewData->GetPPTY() );
+    {
+        Point aBefore = pViewData->GetScrPos( 0, nEntryNo, SC_SPLIT_BOTTOMLEFT );
+        Point aAfter = pViewData->GetScrPos( 0, nEntryNo + 1, SC_SPLIT_BOTTOMLEFT );
+
+        return aAfter.getY() - aBefore.getY();
+    }
 }
 
 OUString ScRowBar::GetEntryText( SCCOLROW nEntryNo ) const
