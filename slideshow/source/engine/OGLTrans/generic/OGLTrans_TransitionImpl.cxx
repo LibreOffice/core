@@ -874,28 +874,43 @@ boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uIn
     return makeSimpleTransition(aLeavingSlide, aEnteringSlide);
 }
 
-SRotate::SRotate(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle, bool bInter, double T0, double T1):axis(Axis),origin(Origin),angle(Angle)
+SRotate::SRotate(const basegfx::B3DVector& Axis, const basegfx::B3DVector& Origin,
+        double Angle, bool bInter, double T0, double T1):
+    axis(Axis),
+    origin(Origin),
+    angle(Angle)
 {
     nT0 = T0;
     nT1 = T1;
     bInterpolate = bInter;
 }
 
-SScale::SScale(const basegfx::B3DVector& Scale,const basegfx::B3DVector& Origin, bool bInter, double T0, double T1):scale(Scale),origin(Origin)
+SScale::SScale(const basegfx::B3DVector& Scale, const basegfx::B3DVector& Origin,
+        bool bInter, double T0, double T1):
+    scale(Scale),
+    origin(Origin)
 {
     nT0 = T0;
     nT1 = T1;
     bInterpolate = bInter;
 }
 
-RotateAndScaleDepthByWidth::RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle, bool bInter, double T0, double T1):axis(Axis),origin(Origin),angle(Angle)
+RotateAndScaleDepthByWidth::RotateAndScaleDepthByWidth(const basegfx::B3DVector& Axis,
+        const basegfx::B3DVector& Origin, double Angle, bool bInter, double T0, double T1):
+    axis(Axis),
+    origin(Origin),
+    angle(Angle)
 {
     nT0 = T0;
     nT1 = T1;
     bInterpolate = bInter;
 }
 
-RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,const basegfx::B3DVector& Origin,double Angle, bool bInter, double T0, double T1):axis(Axis),origin(Origin),angle(Angle)
+RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const basegfx::B3DVector& Axis,
+        const basegfx::B3DVector& Origin, double Angle, bool bInter, double T0, double T1):
+    axis(Axis),
+    origin(Origin),
+    angle(Angle)
 {
     nT0 = T0;
     nT1 = T1;
@@ -903,7 +918,8 @@ RotateAndScaleDepthByHeight::RotateAndScaleDepthByHeight(const basegfx::B3DVecto
 }
 
 
-STranslate::STranslate(const basegfx::B3DVector& Vector, bool bInter, double T0, double T1):vector(Vector)
+STranslate::STranslate(const basegfx::B3DVector& Vector, bool bInter, double T0, double T1):
+    vector(Vector)
 {
     nT0 = T0;
     nT1 = T1;
@@ -1021,7 +1037,8 @@ void RotateAndScaleDepthByHeight::interpolate(double t,double SlideWidthScale,do
     CHECK_GL_ERROR();
 }
 
-SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1)
+SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStartPosition,
+        double dEndPosition, bool bInter, double T0, double T1)
 {
     nT0 = T0;
     nT1 = T1;
