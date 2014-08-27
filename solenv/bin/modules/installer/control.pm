@@ -477,7 +477,6 @@ sub set_addsystemintegration
 
     if ( $installer::globals::languagepack ) { $installer::globals::addsystemintegration = 0; }
     if ( $installer::globals::helppack ) { $installer::globals::addsystemintegration = 0; }
-    if (( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "portable" )) { $installer::globals::addsystemintegration = 0; }
 
     my $infoline = "Value of \$installer::globals::addsystemintegration: $installer::globals::addsystemintegration\n";
     push( @installer::globals::globallogfileinfo, $infoline);

@@ -334,8 +334,6 @@ sub setglobalvariables
 
     # Defaulting to native package format for epm
 
-    if ( ! $installer::globals::packageformat ) { $installer::globals::packageformat = "native"; }
-
     # no languages defined as parameter
     if ($installer::globals::languagelist eq "") { $installer::globals::languages_defined_in_productlist = 1; }
 

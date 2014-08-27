@@ -1525,7 +1525,7 @@ AC_ARG_WITH(package-format,
         [Specify package format(s) for LibreOffice installation sets. The
          implicit --without-package-format leads to no installation sets being
          generated. Possible values: aix, archive, bsd, deb, dmg,
-         installed, msi, native, pkg, portable, and rpm.
+         installed, msi, pkg, and rpm.
          Example: --with-package-format='deb rpm']),
 ,)
 
@@ -4608,7 +4608,7 @@ AC_MSG_CHECKING([which package format to use])
 if test -n "$with_package_format" -a "$with_package_format" != no; then
     for i in $with_package_format; do
         case "$i" in
-        aix | bsd | deb | pkg | rpm | native | portable | archive | dmg | installed | msi)
+        aix | bsd | deb | pkg | rpm | archive | dmg | installed | msi)
             ;;
         *)
             AC_MSG_ERROR([unsupported format $i. Supported by EPM are:
@@ -4617,8 +4617,6 @@ bsd - FreeBSD, NetBSD, or OpenBSD software distribution
 deb - Debian software distribution
 pkg - Solaris software distribution
 rpm - RedHat software distribution
-native - "Native" software distribution for the platform
-portable - Portable software distribution
 
 LibreOffice additionally supports:
 archive - .tar.gz or .zip
