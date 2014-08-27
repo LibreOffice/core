@@ -173,7 +173,7 @@ public class ConverterServlet extends HttpServlet {
                     out.println( "</head>" );
                     out.println( "<body><br><p>");
                     out.println( "<b>Sorry, the conversion failed!</b></p>");
-                    out.println( "<p><b>Error Mesage:</b><br>" + exc.getMessage() + "<br>");
+                    out.println( "<p><b>Error Message:</b><br>" + exc.getMessage() + "<br>");
                     exc.printStackTrace(out);
                     out.println( "</p></body><html>");
                 }
