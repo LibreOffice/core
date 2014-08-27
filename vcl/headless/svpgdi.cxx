@@ -584,6 +584,9 @@ void SvpSalGraphics::copyBits( const SalTwoRect& rPosAry,
 void SvpSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                                  const SalBitmap& rSalBitmap )
 {
+    if( !m_aDevice.get() )
+        return;
+
     const SvpSalBitmap& rSrc = static_cast<const SvpSalBitmap&>(rSalBitmap);
     basegfx::B2IBox aSrcRect( rPosAry.mnSrcX, rPosAry.mnSrcY,
                      rPosAry.mnSrcX+rPosAry.mnSrcWidth,
