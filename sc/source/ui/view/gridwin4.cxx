@@ -464,7 +464,13 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     OSL_ENSURE( ValidCol(nX2) && ValidRow(nY2), "GridWin Draw Bereich zu gross" );
 
-    UpdateVisibleRange();
+    // We can only do this for non-tiled rendering as it manipulates
+    // maVisibleRange on the basis of what pViewData thinks is on screen,
+    // whereas for tiled rendering we are completely independent of our
+    // usual screen-rendering assumptions and therefore have already
+    // set maVisibleRange as appropriate in Paint().
+    if ( pOutDev == this )
+        UpdateVisibleRange();
 
     if (nX2 < maVisibleRange.mnCol1 || nY2 < maVisibleRange.mnRow1)
         return;
