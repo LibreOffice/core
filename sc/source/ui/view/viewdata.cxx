@@ -919,8 +919,8 @@ Rectangle ScViewData::GetEditArea( ScSplitPos eWhich, SCCOL nPosX, SCROW nPosY,
                                     bool bForceToTop )
 {
     return ScEditUtil( pDoc, nPosX, nPosY, nTabNo, GetScrPos(nPosX,nPosY,eWhich,true),
-                        pWin, nPPTX, nPPTY, GetZoomX(), GetZoomY() ).
-                            GetEditArea( pPattern, bForceToTop );
+                       pWin, maPaintMapMode, GetZoomX(), GetZoomY() ).
+        GetEditArea( pPattern, bForceToTop );
 }
 
 void ScViewData::SetEditEngine( ScSplitPos eWhich,
@@ -970,8 +970,9 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     bool bAsianVertical = pNewEngine->IsVertical();     // set by InputHandler
 
     Rectangle aPixRect = ScEditUtil( pDoc, nNewX,nNewY,nTabNo, GetScrPos(nNewX,nNewY,eWhich),
-                                        pWin, nPPTX,nPPTY,GetZoomX(),GetZoomY() ).
-                                            GetEditArea( pPattern, true );
+                                     pWin, maPaintMapMode,
+                                     GetZoomX(),GetZoomY() ).
+        GetEditArea( pPattern, true );
 
     //  when right-aligned, leave space for the cursor
     //  in vertical mode, editing is always right-aligned
@@ -1045,7 +1046,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
 
             Fraction aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( pDoc,nNewX,nNewY,nTabNo, Point(0,0), pWin,
-                                    HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( pPattern, false );
+                                              maPaintMapMode, aFract, aFract ).
+                GetEditArea( pPattern, false );
             aPaperSize.Width() = aUtilRect.GetWidth();
         }
         pNewEngine->SetPaperSize( aPaperSize );

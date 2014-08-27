@@ -2790,8 +2790,10 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
-                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
+            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY,
+                                              nTab, Point(0,0), pFmtDevice,
+                                              mpViewData->GetPaintMapMode(),
+                                              aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
         }
         rParam.mpEngine->SetPaperSize(aLogicSize);
@@ -3812,8 +3814,10 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
-                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
+            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY,
+                                              nTab, Point(0,0), pFmtDevice,
+                                              mpViewData->GetPaintMapMode(),
+                                              aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
         }
         rParam.mpEngine->SetPaperSize(aLogicSize);
@@ -4168,8 +4172,10 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
             Fraction aFract(1,1);
-            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
-                HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
+            Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY,
+                                              nTab, Point(0,0), pFmtDevice,
+                                              mpViewData->GetPaintMapMode(),
+                                              aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
         }
         rParam.mpEngine->SetPaperSize(aLogicSize);
