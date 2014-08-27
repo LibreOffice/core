@@ -1746,18 +1746,17 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
                 continue;
             }
 
-            sal_uInt16 nHeight = pDoc->GetRowHeight(nRow, nTabNo);
-            nOutHeight += ToPixel(nHeight, nPPTY);
+            nOutHeightTwips += pDoc->GetRowHeight(nRow, nTabNo);
         }
 
-        rSizeXPix = nOutWidth;
-        rSizeYPix = nOutHeight;
+        rSizeXPix = LogicToPixelHorizontal( nOutWidthTwips );
+        rSizeYPix = LogicToPixelVertical( nOutHeightTwips );
         return true;
     }
     else
     {
-        rSizeXPix = ToPixel( pDoc->GetColWidth( nX, nTabNo ), nPPTX );
-        rSizeYPix = ToPixel( pDoc->GetRowHeight( nY, nTabNo ), nPPTY );
+        rSizeXPix = LogicToPixelHorizontal( pDoc->GetColWidth( nX, nTabNo ) );
+        rSizeYPix = LogicToPixelVertical( pDoc->GetRowHeight( nY, nTabNo ) );
         return false;
     }
 }
