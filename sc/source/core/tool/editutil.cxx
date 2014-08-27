@@ -280,24 +280,27 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
     if (!pPattern)
         pPattern = pDoc->GetPattern( nCol, nRow, nTab );
 
-    Point aStartPos = aScrPos;
+    Point aStartPosTwips = pDev->PixelToLogic( aScrPos, maPaintMapMode );
 
     bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     const ScMergeAttr* pMerge = (const ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
-    long nCellX = (long) ( pDoc->GetColWidth(nCol,nTab) * nPPTX );
+    long nCellXTwips = pDoc->GetColWidth(nCol,nTab);
     if ( pMerge->GetColMerge() > 1 )
     {
         SCCOL nCountX = pMerge->GetColMerge();
         for (SCCOL i=1; i<nCountX; i++)
-            nCellX += (long) ( pDoc->GetColWidth(nCol+i,nTab) * nPPTX );
+            nCellXTwips += pDoc->GetColWidth(nCol+i,nTab);
     }
-    long nCellY = (long) ( pDoc->GetRowHeight(nRow,nTab) * nPPTY );
+    long nCellYTwips = pDoc->GetRowHeight(nRow,nTab);
     if ( pMerge->GetRowMerge() > 1 )
     {
         SCROW nCountY = pMerge->GetRowMerge();
-        nCellY += (long) pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
+        for ( SCROW i = nRow + 1; i <= nRow + nCountY - 1; i++ )
+        {
+            nCellYTwips += pDoc->GetRowHeight( i, nTab );
+        }
     }
 
     const SvxMarginItem* pMargin = (const SvxMarginItem*)&pPattern->GetItem(ATTR_MARGIN);
@@ -305,14 +308,14 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
     if ( ((const SvxHorJustifyItem&)pPattern->GetItem(ATTR_HOR_JUSTIFY)).GetValue() ==
                 SVX_HOR_JUSTIFY_LEFT )
         nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
-    long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
-    aStartPos.X()   += nPixDifX * nLayoutSign;
-    nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     // wegen Umbruch etc.
+    long nLogicDifX = pMargin->GetLeftMargin() + nIndent;
+    aStartPosTwips.X () += nLogicDifX * nLayoutSign;
+    nCellXTwips -= nLogicDifX + pMargin->GetRightMargin();     // wegen Umbruch etc.
 
     //  vertikale Position auf die in der Tabelle anpassen
 
-    long nPixDifY;
-    long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
+    long nLogicDifY;
+    long nTopMargin = pMargin->GetTopMargin();
     SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
@@ -322,45 +325,51 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
 
     if ( eJust == SVX_VER_JUSTIFY_TOP ||
             ( bForceToTop && ( SC_MOD()->GetInputOptions().GetTextWysiwyg() || bAsianVertical ) ) )
-        nPixDifY = nTopMargin;
+        nLogicDifY = nTopMargin;
     else
     {
         MapMode aMode = pDev->GetMapMode();
         pDev->SetMapMode( MAP_PIXEL );
 
-        long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
-                                                pDev, nPPTX, nPPTY, aZoomX, aZoomY, false );
-        if (!nTextHeight)
+        // TODO: continue from here...
+        long nTextHeightTwips = pDoc->GetNeededSize( nCol, nRow, nTab,
+                                                pDev, 1, 1, aZoomX, aZoomY, false );
+        if (!nTextHeightTwips)
         {                                   // leere Zelle
             Font aFont;
             // font color doesn't matter here
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
             pDev->SetFont(aFont);
-            nTextHeight = pDev->GetTextHeight() + nTopMargin +
-                            (long) ( pMargin->GetBottomMargin() * nPPTY );
+            // TODO: also fix this
+            nTextHeightTwips = pDev->PixelToLogic( Size( 0, pDev->GetTextHeight() ),
+                                                   maPaintMapMode ).getWidth() +
+                nTopMargin + pMargin->GetBottomMargin();
         }
 
         pDev->SetMapMode(aMode);
 
-        if ( nTextHeight > nCellY + nTopMargin || bForceToTop )
-            nPixDifY = 0;                           // zu gross -> oben anfangen
+        if ( nTextHeightTwips > nCellYTwips + nTopMargin || bForceToTop )
+            nLogicDifY = 0;                           // zu gross -> oben anfangen
         else
         {
             if ( eJust == SVX_VER_JUSTIFY_CENTER )
-                nPixDifY = nTopMargin + ( nCellY - nTextHeight ) / 2;
+                nLogicDifY = nTopMargin + ( nCellYTwips - nTextHeightTwips ) / 2;
             else
-                nPixDifY = nCellY - nTextHeight + nTopMargin;       // JUSTIFY_BOTTOM
+                nLogicDifY = nCellYTwips - nTextHeightTwips + nTopMargin;       // JUSTIFY_BOTTOM
         }
     }
 
-    aStartPos.Y() += nPixDifY;
-    nCellY      -= nPixDifY;
+    aStartPosTwips.Y() += nLogicDifY;
+    nCellYTwips -= nLogicDifY;
 
     if ( bLayoutRTL )
-        aStartPos.X() -= nCellX - 2;    // excluding grid on both sides
+        aStartPosTwips.X() -= nCellXTwips - 2;    // excluding grid on both sides
 
                                                         //  -1 -> Gitter nicht ueberschreiben
-    return Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );
+    return pDev->LogicToPixel(
+        Rectangle( aStartPosTwips,
+                   Size( nCellXTwips - 1, nCellYTwips - 1 ) ),
+        maPaintMapMode );
 }
 
 ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
