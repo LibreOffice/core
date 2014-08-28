@@ -18,6 +18,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 using namespace sw;
 
@@ -143,5 +144,7 @@ ToxWhitespaceStripperTest::PositionAfterStringCanBeRequested()
 
 // Put the test suite in the registry
 CPPUNIT_TEST_SUITE_REGISTRATION(ToxWhitespaceStripperTest);
+
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
