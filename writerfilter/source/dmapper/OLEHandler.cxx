@@ -220,27 +220,15 @@ void OLEHandler::saveInteropProperties(uno::Reference<text::XTextDocument> const
 
 void OLEHandler::importStream(uno::Reference<uno::XComponentContext> xComponentContext, uno::Reference<text::XTextDocument> xTextDocument, uno::Reference<text::XTextContent> xOLE)
 {
-    OUString aFilterService, aFilterName;
+    OUString aFilterService;
     if (m_sProgId == "Word.Document.12")
-    {
         aFilterService = "com.sun.star.comp.Writer.WriterFilter";
-        aFilterName = "writer_MS_Word_2007";
-    }
 
     if (!m_xInputStream.is() || aFilterService.isEmpty())
         return;
 
     // Create the filter service.
     uno::Reference<uno::XInterface> xInterface = xComponentContext->getServiceManager()->createInstanceWithContext(aFilterService, xComponentContext);
-
-    // Initialize it.
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "Type";
-    aArgs[0].Value <<= OUString(aFilterName);
-    uno::Sequence<uno::Any> aAnySeq(1);
-    aAnySeq[0] <<= aArgs;
-    uno::Reference<lang::XInitialization> xInitialization(xInterface, uno::UNO_QUERY);
-    xInitialization->initialize(aAnySeq);
 
     // Set target document.
     uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY);

@@ -87,16 +87,10 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         dmapper_logger->startDocument();
 #endif
 
-    writerfilter::dmapper::SourceDocumentType eType =
-        (m_sFilterName == "writer_MS_Word_2007" || m_sFilterName == "writer_MS_Word_2007_Template" ||
-         m_sFilterName == "writer_OOXML" || m_sFilterName == "writer_OOXML_Text_Template" ) ?
-            writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
-
-    writerfilter::dmapper::DomainMapper* aDomainMapper = new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, uno::Reference<text::XTextRange>());
-    writerfilter::Stream::Pointer_t pStream(aDomainMapper);
-    //create the tokenizer and domain mapper
-    if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
-    {
+        writerfilter::dmapper::SourceDocumentType eType = writerfilter::dmapper::DOCUMENT_OOXML;
+        writerfilter::dmapper::DomainMapper* aDomainMapper = new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, uno::Reference<text::XTextRange>());
+        writerfilter::Stream::Pointer_t pStream(aDomainMapper);
+        //create the tokenizer and domain mapper
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
         uno::Reference<task::XStatusIndicator> xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STATUSINDICATOR(), uno::Reference<task::XStatusIndicator>());
         writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream, xStatusIndicator));
@@ -166,15 +160,14 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         {
             // TODO found, handle it.
         }
-    }
 
-    pStream.reset();
+        pStream.reset();
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endDocument();
+        dmapper_logger->endDocument();
 #endif
 
-    return sal_True;
+        return sal_True;
     }
     return sal_False;
 }
@@ -225,23 +218,8 @@ void WriterFilter::setSourceDocument( const uno::Reference< lang::XComponent >& 
 
 
 
-void WriterFilter::initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception)
+void WriterFilter::initialize( const uno::Sequence< uno::Any >& /*aArguments*/ ) throw (uno::Exception, uno::RuntimeException, std::exception)
 {
-   uno::Sequence < beans::PropertyValue > aAnySeq;
-   sal_Int32 nLength = aArguments.getLength();
-   if ( nLength && ( aArguments[0] >>= aAnySeq ) )
-   {
-       const beans::PropertyValue * pValue = aAnySeq.getConstArray();
-       nLength = aAnySeq.getLength();
-       for ( sal_Int32 i = 0 ; i < nLength; i++)
-       {
-           if ( pValue[i].Name == "Type" )
-           {
-               pValue[i].Value >>= m_sFilterName;
-               break;
-           }
-       }
-   }
 }
 
 
