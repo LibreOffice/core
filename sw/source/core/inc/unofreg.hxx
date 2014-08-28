@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Exception.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
