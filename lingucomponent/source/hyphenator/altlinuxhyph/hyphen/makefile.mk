@@ -29,7 +29,7 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 .IF "$(GUI)"=="OS2"
-HNJLIB=hyphen.lib
+HNJLIB=-lhyphen
 .ELIF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 HNJLIB=-lhyphen
 .ELSE
@@ -54,7 +54,11 @@ SLOFILES=	\
         $(SLO)$/hreg.obj\
         $(SLO)$/hyphenimp.obj
 
+.IF "$(GUI)" == "OS2"
+REALNAME:=hyphen_u
+.ELSE
 REALNAME:=hyphen.uno
+.ENDIF
 SHL1TARGET= $(REALNAME)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \

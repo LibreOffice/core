@@ -36,7 +36,7 @@ TARGETTYPE=CUI
 .IF "$(ENABLE_COINMP)" == "YES"
 SCPDEFS+=-DENABLE_COINMP
 .IF "$(SYSTEM_COINMP)" == "NO"
-.IF "$(GUI)"!="WNT"
+.IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
 # For the non-Windows platforms all libraries related to CoinMP have to be
 # added explicitly.
 SCPDEFS+=-DADD_ALL_COINMP_LIBRARIES

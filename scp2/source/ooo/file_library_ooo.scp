@@ -1384,7 +1384,11 @@ End
 File gid_File_Lib_Spell
     TXT_FILE_BODY;
     Styles = (PACKED);
+#ifdef OS2
+    Name = LIBNAME(spell);
+#else
     Name = LIBNAME(spell.uno);
+#endif
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif
@@ -1535,7 +1539,11 @@ End
 File gid_File_Lib_Hyph
     TXT_FILE_BODY;
     Styles = (PACKED);
+#ifdef OS2
+    Name = LIBNAME(hyphen_u);
+#else
     Name = LIBNAME(hyphen.uno);
+#endif
     Dir = SCP2_OOO_BIN_DIR;
 End
 #endif

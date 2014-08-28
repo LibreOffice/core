@@ -51,7 +51,11 @@ SLOFILES=	\
         $(SLO)$/sreg.obj\
         $(SLO)$/sspellimp.obj
 
+.IF "$(GUI)" == "OS2"
+REALNAME:=$(TARGET)
+.ELSE
 REALNAME:=$(TARGET).uno
+.ENDIF
 SHL1TARGET= $(REALNAME)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
