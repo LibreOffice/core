@@ -24,7 +24,6 @@
 #include <label.hxx>
 #include <labprt.hxx>
 #include <labimg.hxx>
-#include "swuilabimp.hxx"
 
 #include <cmdid.h>
 #include <boost/scoped_ptr.hpp>
