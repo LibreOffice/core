@@ -1485,18 +1485,15 @@ void CalcCntnt( SwLayoutFrm *pLay,
                 bool bAgain = false;
                 SwPageFrm* pPageFrm = pFrm->FindPageFrm();
                 size_t nCnt = pFrm->GetDrawObjs()->size();
-                for ( size_t i = 0; i < nCnt; ++i )
+                size_t i = 0;
+                while ( i < nCnt )
                 {
                     // #i28701#
                     SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
-                    // determine, if anchored object has to be formatted.
-                    if ( pAnchoredObj->PositionLocked() )
-                    {
-                        continue;
-                    }
 
-                    // format anchored object
-                    if ( pAnchoredObj->IsFormatPossible() )
+                    // determine if anchored object has to be
+                    // formatted and, in case, format it
+                    if ( !pAnchoredObj->PositionLocked() && pAnchoredObj->IsFormatPossible() )
                     {
                         // #i43737# - no invalidation of
                         // anchored object needed - causes loops for as-character
@@ -1557,10 +1554,12 @@ void CalcCntnt( SwLayoutFrm *pLay,
                             break;
                         if ( pFrm->GetDrawObjs()->size() < nCnt )
                         {
-                            --i;
                             --nCnt;
+                            // Do not increment index, in this case
+                            continue;
                         }
                     }
+                    ++i;
                 }
 
                 // #i28701# - restart layout process, if

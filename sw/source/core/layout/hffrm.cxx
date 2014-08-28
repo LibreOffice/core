@@ -646,9 +646,10 @@ bool SwHeadFootFrm::GetEatSpacing() const
 
 void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
 {
-    for ( int i = 0; pPage->GetSortedObjs() &&
-                        pPage->GetSortedObjs()->size() &&
-                        i < (int)pPage->GetSortedObjs()->size(); ++i )
+    size_t i = 0;
+    while ( pPage->GetSortedObjs() &&
+            pPage->GetSortedObjs()->size() &&
+            i < pPage->GetSortedObjs()->size() )
     {
         SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
         if ( pObj->ISA(SwFlyFrm) )
@@ -657,9 +658,11 @@ void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
             if ( pFrm->IsAnLower( pFlyFrm ) )
             {
                 delete pFlyFrm;
-                --i;
+                // Do not increment index, in this case
+                continue;
             }
         }
+        ++i;
     }
 }
 

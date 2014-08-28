@@ -812,8 +812,8 @@ void SwPageFrm::Cut()
         // move Flys whose anchor is on a different page (draw objects are not relevant here)
         if ( GetSortedObjs() )
         {
-            for ( int i = 0; GetSortedObjs() &&
-                             (sal_uInt16)i < GetSortedObjs()->size(); ++i )
+            size_t i = 0;
+            while ( GetSortedObjs() && i < GetSortedObjs()->size() )
             {
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
@@ -826,11 +826,13 @@ void SwPageFrm::Cut()
                     if ( pAnchPage && (pAnchPage != this) )
                     {
                         MoveFly( pFly, pAnchPage );
-                        --i;
                         pFly->InvalidateSize();
                         pFly->_InvalidatePos();
+                        // Do not increment index, in this case
+                        continue;
                     }
                 }
+                ++i;
             }
         }
         // cleanup Window
@@ -1469,9 +1471,8 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
         if ( pPage->GetSortedObjs() )
         {
             pPage->GetSortedObjs();
-            for ( int i = 0;
-                  pPage->GetSortedObjs() && sal_uInt16(i) < pPage->GetSortedObjs()->size();
-                  ++i)
+            size_t i = 0;
+            while ( pPage->GetSortedObjs() && i< pPage->GetSortedObjs()->size() )
             {
                 // #i28701#
                 SwFrmFmt& rFmt = (*pPage->GetSortedObjs())[i]->GetFrmFmt();
@@ -1494,9 +1495,11 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 #else
                         rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
 #endif
-                        --i;
+                        // Do not increment index, in this case
+                        continue;
                     }
                 }
+                ++i;
             }
         }
         pPage = (SwPageFrm*)pPage->GetNext();
