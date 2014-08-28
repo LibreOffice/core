@@ -245,8 +245,8 @@ extern "C"
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpexpand1_component_getFactory(
     const sal_Char * pImplName,
-    lang::XMultiServiceFactory * pServiceManager,
-    registry::XRegistryKey * pRegistryKey )
+    void * pServiceManager,
+    void * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
         pImplName, pServiceManager, pRegistryKey, s_entries );
