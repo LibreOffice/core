@@ -1144,7 +1144,7 @@ bool ScOutputData::IsAvailable( SCCOL nX, SCROW nY )
 // rParam           output: various area parameters.
 
 void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY,
-                                  SCCOL nCellX, SCROW nCellY, long nNeeded,
+                                  SCCOL nCellX, SCROW nCellY, long nNeededPix,
                                   const ScPatternAttr& rPattern,
                                   sal_uInt16 nHorJustify, bool bCellIsValue,
                                   bool bBreak, bool bOverwrite,
@@ -1155,46 +1155,45 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    long nCellPosX = nPosX;         // find nCellX position, starting at nX/nPosX
+    long nCellPosXTwips = nPosX;         // find nCellX position, starting at nX/nPosX
     SCCOL nCompCol = nX;
     while ( nCellX > nCompCol )
     {
         //! extra member function for width?
         long nColWidth = ( nCompCol <= nX2 ) ?
-                pRowInfo[0].pCellInfo[nCompCol+1].nWidth :
-                (long) ( mpDoc->GetColWidth( nCompCol, nTab ) * mnPPTX );
-        nCellPosX += nColWidth * nLayoutSign;
+            pRowInfo[0].pCellInfo[nCompCol+1].nWidth :
+            mpDoc->GetColWidth( nCompCol, nTab );
+        nCellPosXTwips += nColWidth * nLayoutSign;
         ++nCompCol;
     }
     while ( nCellX < nCompCol )
     {
         --nCompCol;
         long nColWidth = ( nCompCol <= nX2 ) ?
-                pRowInfo[0].pCellInfo[nCompCol+1].nWidth :
-                (long) ( mpDoc->GetColWidth( nCompCol, nTab ) * mnPPTX );
-        nCellPosX -= nColWidth * nLayoutSign;
+            pRowInfo[0].pCellInfo[nCompCol+1].nWidth :
+            mpDoc->GetColWidth( nCompCol, nTab );
+        nCellPosXTwips -= nColWidth * nLayoutSign;
     }
 
-    long nCellPosY = nPosY;         // find nCellY position, starting at nArrY/nPosY
+    long nCellPosYTwips = nPosY;         // find nCellY position, starting at nArrY/nPosY
     SCSIZE nCompArr = nArrY;
     SCROW nCompRow = pRowInfo[nCompArr].nRowNo;
     while ( nCellY > nCompRow )
     {
         if ( nCompArr + 1 < nArrCount )
         {
-            nCellPosY += pRowInfo[nCompArr].nHeight;
+            nCellPosYTwips += pRowInfo[nCompArr].nHeight;
             ++nCompArr;
             nCompRow = pRowInfo[nCompArr].nRowNo;
         }
         else
         {
-            sal_uInt16 nDocHeight = mpDoc->GetRowHeight( nCompRow, nTab );
-            if ( nDocHeight )
-                nCellPosY += (long) ( nDocHeight * mnPPTY );
+            nCellPosYTwips += mpDoc->GetRowHeight( nCompRow, nTab );
             ++nCompRow;
         }
     }
-    nCellPosY -= (long) mpDoc->GetScaledRowHeight( nCellY, nCompRow-1, nTab, mnPPTY );
+
+    nCellPosYTwips -= (long) mpDoc->GetScaledRowHeight( nCellY, nCompRow-1, nTab, 1.0 );
 
     const ScMergeAttr* pMerge = (const ScMergeAttr*)&rPattern.GetItem( ATTR_MERGE );
     bool bMerged = pMerge->IsMerged();
@@ -1205,61 +1204,62 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
     if ( nMergeRows == 0 )
         nMergeRows = 1;
 
-    long nMergeSizeX = 0;
+    long nMergeSizeXTwips = 0;
     for ( long i=0; i<nMergeCols; i++ )
     {
         long nColWidth = ( nCellX+i <= nX2 ) ?
-                pRowInfo[0].pCellInfo[nCellX+i+1].nWidth :
-                (long) ( mpDoc->GetColWidth( sal::static_int_cast<SCCOL>(nCellX+i), nTab ) * mnPPTX );
-        nMergeSizeX += nColWidth;
+            pRowInfo[0].pCellInfo[nCellX+i+1].nWidth :
+            mpDoc->GetColWidth( sal::static_int_cast<SCCOL>(nCellX+i), nTab );
+        nMergeSizeXTwips += nColWidth;
     }
-    long nMergeSizeY = 0;
+    long nMergeSizeYTwips = 0;
     short nDirect = 0;
     if ( rThisRowInfo.nRowNo == nCellY )
     {
         // take first row's height from row info
-        nMergeSizeY += rThisRowInfo.nHeight;
+        nMergeSizeYTwips += rThisRowInfo.nHeight;
         nDirect = 1;        // skip in loop
     }
     // following rows always from document
-    nMergeSizeY += (long) mpDoc->GetScaledRowHeight( nCellY+nDirect, nCellY+nMergeRows-1, nTab, mnPPTY);
+    nMergeSizeYTwips += mpDoc->GetScaledRowHeight( nCellY + nDirect, nCellY + nMergeRows - 1, nTab, 1.0 );
 
-    --nMergeSizeX;      // leave out the grid horizontally, also for alignment (align between grid lines)
+    nMergeSizeXTwips -= PixelToLogicHorizontal( 1 );      // leave out the grid horizontally, also for alignment (align between grid lines)
 
-    rParam.mnColWidth = nMergeSizeX; // store the actual column width.
+    rParam.mnColWidth = LogicToPixelHorizontal( nMergeSizeXTwips ); // store the actual column width.
     rParam.mnLeftClipLength = rParam.mnRightClipLength = 0;
 
     // construct the rectangles using logical left/right values (justify is called at the end)
 
     //  rAlignRect is the single cell or merged area, used for alignment.
 
-    rParam.maAlignRect.Left() = nCellPosX;
-    rParam.maAlignRect.Right() = nCellPosX + ( nMergeSizeX - 1 ) * nLayoutSign;
-    rParam.maAlignRect.Top() = nCellPosY;
-    rParam.maAlignRect.Bottom() = nCellPosY + nMergeSizeY - 1;
+    rParam.maAlignRect.Left() = LogicToPixelHorizontal( nCellPosXTwips );
+    rParam.maAlignRect.Right() = LogicToPixelHorizontal(
+        nCellPosXTwips + ( nMergeSizeXTwips ) * nLayoutSign ) - 1 * nLayoutSign;
+    rParam.maAlignRect.Top() = LogicToPixelVertical( nCellPosYTwips );
+    rParam.maAlignRect.Bottom() = LogicToPixelVertical( nCellPosYTwips + nMergeSizeYTwips ) - 1;
 
     //  rClipRect is all cells that are used for output.
     //  For merged cells this is the same as rAlignRect, otherwise neighboring cells can also be used.
 
     rParam.maClipRect = rParam.maAlignRect;
-    if ( nNeeded > nMergeSizeX )
+    if ( PixelToLogicHorizontal( nNeededPix ) > nMergeSizeXTwips )
     {
         SvxCellHorJustify eHorJust = (SvxCellHorJustify)nHorJustify;
 
-        long nMissing = nNeeded - nMergeSizeX;
-        long nLeftMissing = 0;
-        long nRightMissing = 0;
+        long nMissingTwips = PixelToLogicHorizontal( nNeededPix ) - nMergeSizeXTwips;
+        long nLeftMissingTwips = 0;
+        long nRightMissingTwips = 0;
         switch ( eHorJust )
         {
             case SVX_HOR_JUSTIFY_LEFT:
-                nRightMissing = nMissing;
+                nRightMissingTwips = nMissingTwips;
                 break;
             case SVX_HOR_JUSTIFY_RIGHT:
-                nLeftMissing = nMissing;
+                nLeftMissingTwips = nMissingTwips;
                 break;
             case SVX_HOR_JUSTIFY_CENTER:
-                nLeftMissing = nMissing / 2;
-                nRightMissing = nMissing - nLeftMissing;
+                nLeftMissingTwips = nMissingTwips / 2;
+                nRightMissingTwips = nMissingTwips - nLeftMissingTwips;
                 break;
             default:
             {
@@ -1269,7 +1269,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
 
         // nLeftMissing, nRightMissing are logical, eHorJust values are visual
         if ( bLayoutRTL )
-            ::std::swap( nLeftMissing, nRightMissing );
+            ::std::swap( nLeftMissingTwips, nRightMissingTwips );
 
         SCCOL nRightX = nCellX;
         SCCOL nLeftX = nCellX;
@@ -1277,50 +1277,48 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         {
             //  look for empty cells into which the text can be extended
 
-            while ( nRightMissing > 0 && nRightX < MAXCOL && ( bOverwrite || IsAvailable( nRightX+1, nCellY ) ) )
+            while ( nRightMissingTwips > 0 && nRightX < MAXCOL && ( bOverwrite || IsAvailable( nRightX+1, nCellY ) ) )
             {
                 ++nRightX;
-                long nAdd = (long) ( mpDoc->GetColWidth( nRightX, nTab ) * mnPPTX );
-                nRightMissing -= nAdd;
-                rParam.maClipRect.Right() += nAdd * nLayoutSign;
+                long nAdd = mpDoc->GetColWidth( nRightX, nTab );
+                nRightMissingTwips -= nAdd;
+                rParam.maClipRect.Right() += LogicToPixelHorizontal( nAdd * nLayoutSign );
 
                 if ( rThisRowInfo.nRowNo == nCellY && nRightX >= nX1 && nRightX <= nX2 )
                     rThisRowInfo.pCellInfo[nRightX].bHideGrid = true;
             }
 
-            while ( nLeftMissing > 0 && nLeftX > 0 && ( bOverwrite || IsAvailable( nLeftX-1, nCellY ) ) )
+            while ( nLeftMissingTwips > 0 && nLeftX > 0 && ( bOverwrite || IsAvailable( nLeftX-1, nCellY ) ) )
             {
                 if ( rThisRowInfo.nRowNo == nCellY && nLeftX >= nX1 && nLeftX <= nX2 )
                     rThisRowInfo.pCellInfo[nLeftX].bHideGrid = true;
 
                 --nLeftX;
-                long nAdd = (long) ( mpDoc->GetColWidth( nLeftX, nTab ) * mnPPTX );
-                nLeftMissing -= nAdd;
-                rParam.maClipRect.Left() -= nAdd * nLayoutSign;
+                long nAdd = mpDoc->GetColWidth( nLeftX, nTab );
+                nLeftMissingTwips -= nAdd;
+                rParam.maClipRect.Left() -= LogicToPixelHorizontal( nAdd ) * nLayoutSign;
             }
         }
 
         //  Set flag and reserve space for clipping mark triangle,
         //  even if rThisRowInfo isn't for nCellY (merged cells).
-        if ( nRightMissing > 0 && bMarkClipped && nRightX >= nX1 && nRightX <= nX2 && !bBreak && !bCellIsValue )
+        if ( nRightMissingTwips > 0 && bMarkClipped && nRightX >= nX1 && nRightX <= nX2 && !bBreak && !bCellIsValue )
         {
             rThisRowInfo.pCellInfo[nRightX+1].nClipMark |= SC_CLIPMARK_RIGHT;
             bAnyClipped = true;
-            long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
-            rParam.maClipRect.Right() -= nMarkPixel * nLayoutSign;
+            rParam.maClipRect.Right() -= LogicToPixelHorizontal( SC_CLIPMARK_SIZE ) * nLayoutSign;
         }
-        if ( nLeftMissing > 0 && bMarkClipped && nLeftX >= nX1 && nLeftX <= nX2 && !bBreak && !bCellIsValue )
+        if ( nLeftMissingTwips > 0 && bMarkClipped && nLeftX >= nX1 && nLeftX <= nX2 && !bBreak && !bCellIsValue )
         {
             rThisRowInfo.pCellInfo[nLeftX+1].nClipMark |= SC_CLIPMARK_LEFT;
             bAnyClipped = true;
-            long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
-            rParam.maClipRect.Left() += nMarkPixel * nLayoutSign;
+            rParam.maClipRect.Left() += LogicToPixelHorizontal( SC_CLIPMARK_SIZE ) * nLayoutSign;
         }
 
-        rParam.mbLeftClip = ( nLeftMissing > 0 );
-        rParam.mbRightClip = ( nRightMissing > 0 );
-        rParam.mnLeftClipLength = nLeftMissing;
-        rParam.mnRightClipLength = nRightMissing;
+        rParam.mbLeftClip = ( nLeftMissingTwips > 0 );
+        rParam.mbRightClip = ( nRightMissingTwips > 0 );
+        rParam.mnLeftClipLength = LogicToPixelHorizontal( nLeftMissingTwips );
+        rParam.mnRightClipLength = LogicToPixelHorizontal( nRightMissingTwips );
     }
     else
     {
@@ -1335,7 +1333,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
         {
             // filter drop-down width is now independent from row height
             const long nFilter = DROPDOWN_BITMAP_SIZE;
-            bool bFit = ( nNeeded + nFilter <= nMergeSizeX );
+            bool bFit = ( PixelToLogicHorizontal( nNeededPix + nFilter ) <= nMergeSizeXTwips );
             if ( bFit || bCellIsValue )
             {
                 // content fits even in the remaining area without the filter button
