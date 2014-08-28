@@ -1756,8 +1756,8 @@ void SfxMedium::Transfer_Impl()
         if (pImp->m_aLogicName.startsWith("private:stream"))
         {
             // TODO/LATER: support storing to SID_STREAM
-               SFX_ITEMSET_ARG( pImp->m_pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, false);
-             if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
+            SFX_ITEMSET_ARG( pImp->m_pSet, pOutStreamItem, SfxUnoAnyItem, SID_OUTPUTSTREAM, false);
+            if( pOutStreamItem && ( pOutStreamItem->GetValue() >>= rOutStream ) )
             {
                 if ( pImp->xStorage.is() )
                     CloseStorage();
@@ -1799,7 +1799,7 @@ void SfxMedium::Transfer_Impl()
                     catch( const Exception& )
                     {}
                 }
-               }
+            }
             else
             {
                 SAL_WARN( "sfx.doc", "Illegal Output stream parameter!" );
