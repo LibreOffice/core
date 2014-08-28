@@ -94,7 +94,7 @@ public:
                       css::uno::Reference<css::text::XTextContent> xOLE);
 
     /// Get the CLSID of the OLE object, in case we can find one based on m_sProgId.
-    OUString getCLSID();
+    OUString getCLSID(css::uno::Reference<css::uno::XComponentContext> xComponentContext) const;
 
     OUString copyOLEOStream( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument > const & xTextDocument );
 

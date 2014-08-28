@@ -1319,7 +1319,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, OLEHandlerPtr pO
         uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance(sEmbeddedService), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
 
-        OUString aCLSID = pOLEHandler->getCLSID();
+        OUString aCLSID = pOLEHandler->getCLSID(m_xComponentContext);
         if (aCLSID.isEmpty())
             xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_STREAM_NAME ),
                             uno::makeAny( rStreamName ));

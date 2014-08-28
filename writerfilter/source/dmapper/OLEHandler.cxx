@@ -25,6 +25,7 @@
 #include <ooxml/resourceids.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEmbeddedObjectResolver.hpp>
@@ -247,11 +248,11 @@ void OLEHandler::importStream(uno::Reference<uno::XComponentContext> xComponentC
     saveInteropProperties(xTextDocument, xPropertySet->getPropertyValue("StreamName").get<OUString>(), m_aURL);
 }
 
-OUString OLEHandler::getCLSID()
+OUString OLEHandler::getCLSID(uno::Reference<uno::XComponentContext> xComponentContext) const
 {
     OUString aRet;
 
-    if (m_sProgId == "Word.Document.12")
+    if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get(xComponentContext) && m_sProgId == "Word.Document.12")
         aRet = "8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";
 
     return aRet;
