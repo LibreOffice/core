@@ -125,21 +125,12 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
 
     OUString aType = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_TYPENAME(), OUString() );
     OUString aDocService = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_DOCUMENTSERVICE(), OUString() );
-    OUString aUrl = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString() );
-
-    // Get the file name extension.
-    INetURLObject aParser(aUrl);
-    OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
-    aExt = aExt.toAsciiLowerCase();
 
     if ((aType == "generic_HTML") || (aType == "calc_HTML"))
     {
         uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY);
         if (!xInStream.is() || !IsHTMLStream(xInStream))
             return OUString();
-
-        // Decide which filter to use based on the document service first,
-        // then on extension if that's not available.
 
         if ((aDocService == CALC_DOCSERVICE) || (aType == "calc_HTML"))
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_HTML_FILTER);
@@ -151,6 +142,13 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
 
     else if (aType == "generic_Text")
     {
+        // Get the file name extension.
+        INetURLObject aParser(aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), OUString() ) );
+        OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
+        aExt = aExt.toAsciiLowerCase();
+
+        // Decide which filter to use based on the document service first,
+        // then on extension if that's not available.
         if (aDocService == CALC_DOCSERVICE)
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= OUString(CALC_TEXT_FILTER);
         else if (aDocService == WRITER_DOCSERVICE)
