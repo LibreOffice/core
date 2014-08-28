@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_tox, \
 	svt \
 	svx \
 	svxcore \
+	sw \
 	test \
 	unotest \
 	vcl \
@@ -49,10 +50,6 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_tox, \
 	xmlreader \
 	xo \
 	$(gb_UWINAPI) \
-))
-
-$(eval $(call gb_CppunitTest_use_library_objects,sw_tox, \
-	sw \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,sw_tox, \
