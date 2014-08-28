@@ -967,6 +967,11 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
 }
 
+void DocxAttributeOutput::SetStateOfFlyFrame( sal_Int16 nStateOfFlyFrame )
+{
+    m_nStateOfFlyFrame = nStateOfFlyFrame;
+}
+
 void DocxAttributeOutput::SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode )
 {
     m_bAnchorLinkedToNode = bAnchorLinkedToNode ;
@@ -8143,7 +8148,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
             if (m_bStartedCharSdt)
                 m_bEndCharSdt = true;
         }
-        else if (i->first == "SdtPr")
+        else if (i->first == "SdtPr" && FLY_NOT_PROCESSED != m_nStateOfFlyFrame )
         {
             uno::Sequence<beans::PropertyValue> aGrabBagSdt =
                     i->second.get< uno::Sequence<beans::PropertyValue> >();
@@ -8284,6 +8289,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
     , m_pParagraphSdtPrTokenAttributes(NULL)
     , m_pParagraphSdtPrDataBindingAttrs(NULL)
     , m_nRunSdtPrToken(0)
+    , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
     , m_pRunSdtPrTokenChildren(NULL)
     , m_pRunSdtPrDataBindingAttrs(NULL)
     , m_bParagraphSdtHasId(false)

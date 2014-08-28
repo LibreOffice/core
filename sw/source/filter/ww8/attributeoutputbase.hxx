@@ -309,6 +309,8 @@ public:
     /// Has different headers/footers for the title page.
     virtual void SectionTitlePage() = 0;
 
+    /// Set the state of the Fly at current position
+    virtual void SetStateOfFlyFrame( sal_Int16 /*nStateOfFlyFrame*/ ){};
     /// If the node has an anchor linked.
     virtual void SetAnchorIsLinkedToNode( bool /*bAnchorLinkedToNode*/){};
 

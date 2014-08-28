@@ -672,6 +672,22 @@ DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p[1]/w:r/w:t", "third");
 }
 
+DECLARE_OOXMLEXPORT_TEST(testFD083057, "fdo83057.docx")
+{
+    xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
+    if (!pXmlDoc)
+        return;
+
+    // A fly frame was attached to a para which started with a hint (run) containing an SDT.
+    // This SDT was handled while exporting the FLYFRAME and also the text of the run.
+    // So, eventhough the original file had only one sdt in the header, the RT file had two;
+    // one for a seperate run as expected, and one incorrectly exported in the alternateContent (FLYFRAME)
+
+    // Assert that the file has only one sdt, in a seperate run
+    assertXPath(pXmlDoc, "//w:sdt", 1);
+    assertXPath(pXmlDoc, "//mc:AlternateContent//w:sdt", 0);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

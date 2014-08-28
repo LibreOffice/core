@@ -215,6 +215,7 @@ public:
     /// End of the tag that encloses the run.
     void EndRedline( const SwRedlineData * pRedlineData );
 
+    virtual void SetStateOfFlyFrame( sal_Int16 nStateOfFlyFrame ) SAL_OVERRIDE;
     virtual void SetAnchorIsLinkedToNode( bool bAnchorLinkedToNode = false ) SAL_OVERRIDE;
     virtual bool IsFlyProcessingPostponed() SAL_OVERRIDE;
     virtual void ResetFlyProcessingFlag() SAL_OVERRIDE;
@@ -907,6 +908,8 @@ private:
     ::sax_fastparser::FastAttributeList *m_pParagraphSdtPrDataBindingAttrs;
     /// members to control the existence of grabbagged SDT properties in the text run
     sal_Int32 m_nRunSdtPrToken;
+    /// State of the Fly at current position
+    sal_Int16 m_nStateOfFlyFrame;
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrTokenChildren;
     ::sax_fastparser::FastAttributeList *m_pRunSdtPrDataBindingAttrs;
     /// Value of the <w:alias> paragraph SDT element.

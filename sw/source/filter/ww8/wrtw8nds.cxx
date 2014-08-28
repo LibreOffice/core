@@ -2077,6 +2077,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             bPostponeWritingText = true ;
 
         nStateOfFlyFrame = aAttrIter.OutFlys( nAktPos );
+        AttrOutput().SetStateOfFlyFrame( nStateOfFlyFrame );
         AttrOutput().SetAnchorIsLinkedToNode( bPostponeWritingText && (FLY_POSTPONED != nStateOfFlyFrame) );
         // Append bookmarks in this range after flys, exclusive of final
         // position of this range
