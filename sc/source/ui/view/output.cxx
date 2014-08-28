@@ -207,15 +207,15 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     nVisY2 = nY2;
     mpDoc->StripHidden( nVisX1, nVisY1, nVisX2, nVisY2, nTab );
 
-    nScrW = 0;
+    nScrWTwips = 0;
     for (SCCOL nX=nVisX1; nX<=nVisX2; nX++)
-        nScrW += pRowInfo[0].pCellInfo[nX+1].nWidth;
+        nScrWTwips += pRowInfo[0].pCellInfo[nX+1].nWidth;
 
-    nMirrorW = nScrW;
+    nMirrorWTwips = nScrWTwips;
 
-    nScrH = 0;
+    nScrHTwips = 0;
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
-        nScrH += pRowInfo[nArrY].nHeight;
+        nScrHTwips += pRowInfo[nArrY].nHeight;
 
     bTabProtected = mpDoc->IsTabProtected( nTab );
     nTabTextDirection = mpDoc->GetEditTextDirection( nTab );
@@ -247,7 +247,7 @@ void ScOutputData::SetContentDevice( OutputDevice* pContentDev )
 
 void ScOutputData::SetMirrorWidth( long nNew )
 {
-    nMirrorW = nNew;
+    nMirrorWTwips = PixelToLogicHorizontal( nNew );
 }
 
 void ScOutputData::SetGridColor( const Color& rColor )
@@ -313,8 +313,8 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 {
     SCCOL nX;
     SCROW nY;
-    long nPosX;
-    long nPosY;
+    long nPosXTwips;
+    long nPosYTwips;
     SCSIZE nArrY;
     ScBreakType nBreak    = BREAK_NONE;
     ScBreakType nBreakOld = BREAK_NONE;
@@ -355,9 +355,9 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 
     // vertical lines
 
-    nPosX = nScrX;
+    nPosXTwips = PixelToLogicHorizontal( nScrX );
     if ( bLayoutRTL )
-        nPosX += nMirrorW - nOneX;
+        nPosXTwips += nMirrorWTwips - nOneX;
 
     for (nX=nX1; nX<=nX2; nX++)
     {
@@ -366,7 +366,7 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
         sal_uInt16 nWidth = pRowInfo[0].pCellInfo[nXplus1].nWidth;
         if (nWidth)
         {
-            nPosX += nWidth * nLayoutSign;
+            nPosXTwips += nWidth * nLayoutSign;
 
             if ( bPage )
             {
@@ -415,12 +415,12 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                     while ( nVisX < MAXCOL && !mpDoc->GetColWidth(nVisX,nTab) )
                         ++nVisX;
 
-                    nPosY = nScrY;
+                    nPosYTwips = nScrY;
                     long nNextY;
                     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
                     {
                         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-                        nNextY = nPosY + pThisRowInfo->nHeight;
+                        nNextY = nPosYTwips + pThisRowInfo->nHeight;
 
                         bool bHOver = pThisRowInfo->pCellInfo[nXplus1].bHideGrid;
                         if (!bHOver)
@@ -444,37 +444,18 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 
                         if (pThisRowInfo->bChanged && !bHOver)
                         {
-                            if ( mpViewData )
-                            {
-                                aGrid.AddVerLine( mpViewData->LogicToPixelHorizontal( nPosX - nSignedOneX ),
-                                                  mpViewData->LogicToPixelVertical( nPosY ),
-                                                  mpViewData->LogicToPixelVertical( nNextY - nOneY ) );
-                            }
-                            else
-                            {
-                                aGrid.AddVerLine( nPosX - nSignedOneX,
-                                                  nPosY,
-                                                  nNextY - nOneY );
-                            }
+                            aGrid.AddVerLine( LogicToPixelHorizontal( nPosXTwips ) - nSignedOneX,
+                                              LogicToPixelVertical( nPosYTwips ),
+                                              LogicToPixelVertical( nNextY - nOneY ) );
                          }
-                        nPosY = nNextY;
+                        nPosYTwips = nNextY;
                     }
                 }
                 else
                 {
-                    if ( mpViewData )
-                    {
-                        aGrid.AddVerLine( mpViewData->LogicToPixelHorizontal( nPosX - nSignedOneX ),
-                                          mpViewData->LogicToPixelVertical( nScrY ),
-                                          mpViewData->LogicToPixelVertical( nScrY + nScrH - nOneY ) );
-                    }
-                    else
-                    {
-                        aGrid.AddVerLine( nPosX - nSignedOneX,
-                                          nScrY,
-                                          nScrY + nScrH - nOneY );
-
-                    }
+                    aGrid.AddVerLine( LogicToPixelHorizontal( nPosXTwips ) - nSignedOneX,
+                                      nScrY,
+                                      nScrY + LogicToPixelVertical( nScrHTwips ) - nOneY );
                 }
             }
         }
@@ -484,13 +465,13 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
 
     bool bHiddenRow = true;
     SCROW nHiddenEndRow = -1;
-    nPosY = nScrY;
+    nPosYTwips = PixelToLogicVertical( nScrY );
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         SCSIZE nArrYplus1 = nArrY+1;
         nY = pRowInfo[nArrY].nRowNo;
         SCROW nYplus1 = nY+1;
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosYTwips += pRowInfo[nArrY].nHeight;
 
         if (pRowInfo[nArrY].bChanged)
         {
@@ -537,15 +518,15 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                 {
                     SCROW nVisY = pRowInfo[nArrYplus1].nRowNo;
 
-                    nPosX = nScrX;
+                    nPosXTwips = PixelToLogicHorizontal( nScrX );
                     if ( bLayoutRTL )
-                        nPosX += nMirrorW - nOneX;
+                        nPosXTwips += PixelToLogicHorizontal( nMirrorWTwips - nOneX );
 
-                    long nNextX;
+                    long nNextXTwips;
                     for (SCCOL i=nX1; i<=nX2; i++)
                     {
-                        nNextX = nPosX + pRowInfo[0].pCellInfo[i+1].nWidth * nLayoutSign;
-                        if (nNextX != nPosX)                                // visible
+                        nNextXTwips = nPosXTwips + pRowInfo[0].pCellInfo[i+1].nWidth * nLayoutSign;
+                        if (nNextXTwips != nPosXTwips)                                // visible
                         {
                             bool bVOver;
                             if ( bNextYisNextRow )
@@ -562,15 +543,19 @@ void ScOutputData::DrawGrid( bool bGrid, bool bPage )
                             }
                             if (!bVOver)
                             {
-                                aGrid.AddHorLine( nPosX, nNextX-nSignedOneX, nPosY-nOneY );
+                                aGrid.AddHorLine( LogicToPixelHorizontal( nPosXTwips ),
+                                                  LogicToPixelHorizontal( nNextXTwips ) - nSignedOneX,
+                                                  LogicToPixelVertical( nPosYTwips ) - nOneY );
                             }
                         }
-                        nPosX = nNextX;
+                        nPosXTwips = nNextXTwips;
                     }
                 }
                 else
                 {
-                    aGrid.AddHorLine( nScrX, nScrX+nScrW-nOneX, nPosY-nOneY );
+                    aGrid.AddHorLine( nScrX,
+                                      nScrX + LogicToPixelHorizontal( nScrWTwips ) - nSignedOneX,
+                                      LogicToPixelVertical( nPosYTwips ) - nOneY );
                 }
             }
         }
@@ -797,7 +782,10 @@ void ScOutputData::DrawDocumentBackground()
     Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
     long nOneX = aOnePixel.Width();
     long nOneY = aOnePixel.Height();
-    Rectangle aRect(nScrX - nOneX, nScrY - nOneY, nScrX + nScrW, nScrY + nScrH);
+    Rectangle aRect(nScrX - nOneX,
+                    nScrY - nOneY,
+                    nScrX + nScrWTwips,
+                    nScrY + nScrHTwips);
     Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
     mpDev->SetFillColor(aBgColor);
     mpDev->DrawRect(aRect);
@@ -993,7 +981,7 @@ void ScOutputData::DrawBackground()
     bool bCellContrast = mbUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    long nPosY = nScrY;
+    long nPosYTwips = PixelToLogicVertical( nScrY );
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
@@ -1017,10 +1005,13 @@ void ScOutputData::DrawBackground()
                     nRowHeight += pRowInfo[nArrY+nSkip].nHeight;    // after incrementing
                 }
 
-                long nPosX = nScrX;
+                long nPosXTwips = PixelToLogicHorizontal( nScrX );
                 if ( bLayoutRTL )
-                    nPosX += nMirrorW - nOneX;
-                aRect = Rectangle( nPosX, nPosY-nOneY, nPosX, nPosY+nRowHeight-nOneY );
+                    nPosXTwips += nMirrorWTwips - PixelToLogicHorizontal(  nOneX );
+                aRect = Rectangle( LogicToPixelHorizontal( nPosXTwips ),
+                                   LogicToPixelVertical( nPosYTwips ) - nOneY,
+                                   LogicToPixelHorizontal( nPosXTwips ),
+                                   LogicToPixelVertical( nPosYTwips + nRowHeight ) - nOneY );
 
                 const SvxBrushItem* pOldBackground = NULL;
                 const SvxBrushItem* pBackground;
@@ -1069,16 +1060,21 @@ void ScOutputData::DrawBackground()
                     pColor = pInfo->pColorScale;
                     const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar;
                     const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet;
-                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo );
+                    drawCells( pColor, pBackground, pOldColor, pOldBackground, aRect,
+                               LogicToPixelHorizontal( nPosXTwips ),
+                               nSignedOneX, mpDev, pDataBarInfo, pOldDataBarInfo,
+                               pIconSetInfo, pOldIconSetInfo );
 
-                    nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+                    nPosXTwips += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
                 }
-                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect, nPosX, nSignedOneX, mpDev, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
+                drawCells( NULL, NULL, pOldColor, pOldBackground, aRect,
+                           LogicToPixelHorizontal( nPosXTwips ),
+                           nSignedOneX, mpDev, NULL, pOldDataBarInfo, NULL, pOldIconSetInfo );
 
                 nArrY += nSkip;
             }
         }
-        nPosY += nRowHeight;
+        nPosYTwips += nRowHeight;
     }
 }
 
@@ -1089,6 +1085,8 @@ void ScOutputData::DrawShadow()
 
 void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBottom)
 {
+    // TODO: all of me
+
     mpDev->SetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
@@ -1102,11 +1100,11 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
     {
         Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
         long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
+        nInitPosX += nMirrorWTwips - nOneX;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    long nPosY = nScrY - pRowInfo[0].nHeight;
+    long nPosY = LogicToPixelVertical( nScrY ) - pRowInfo[0].nHeight;
     for (SCSIZE nArrY=0; nArrY<nArrCount; nArrY++)
     {
         bool bCornerY = ( nArrY == 0 ) || ( nArrY+1 == nArrCount );
@@ -1262,7 +1260,7 @@ void ScOutputData::DrawClear()
             }
 
             aRect = Rectangle( Point( nScrX, nPosY ),
-                    Size( nScrW+1-nOneX, nRowHeight+1-nOneY) );
+                    Size( nScrWTwips+1-nOneX, nRowHeight+1-nOneY) );
             mpDev->DrawRect( aRect );
 
             nArrY += nSkip;
@@ -1330,7 +1328,7 @@ void ScOutputData::DrawFrame()
     {
         Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
         long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
+        nInitPosX += nMirrorWTwips - nOneX;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
@@ -1497,11 +1495,11 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
     {
         Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
         long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
+        nInitPosX += nMirrorWTwips - nOneX;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    Rectangle aClipRect( Point(nScrX, nScrY), Size(nScrW, nScrH) );
+    Rectangle aClipRect( Point(nScrX, nScrY), Size(nScrWTwips, nScrHTwips) );
     if (bMetaFile)
     {
         mpDev->Push();
@@ -1852,11 +1850,11 @@ Region ScOutputData::GetChangedAreaRegion()
     Region aRegion;
     Rectangle aDrawingRect;
     bool bHad(false);
-    long nPosY = nScrY;
+    long nPosYTwips = PixelToLogicVertical( nScrY );
     SCSIZE nArrY;
 
     aDrawingRect.Left() = nScrX;
-    aDrawingRect.Right() = nScrX+nScrW-1;
+    aDrawingRect.Right() = nScrX + LogicToPixelHorizontal( nScrWTwips ) - 1;
 
     for(nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -1866,11 +1864,11 @@ Region ScOutputData::GetChangedAreaRegion()
         {
             if(!bHad)
             {
-                aDrawingRect.Top() = nPosY;
+                aDrawingRect.Top() = LogicToPixelVertical( nPosYTwips );
                 bHad = true;
             }
 
-            aDrawingRect.Bottom() = nPosY + pRowInfo[nArrY].nHeight - 1;
+            aDrawingRect.Bottom() = LogicToPixelVertical( nPosYTwips + pRowInfo[nArrY].nHeight ) - 1;
         }
         else if(bHad)
         {
@@ -1878,7 +1876,7 @@ Region ScOutputData::GetChangedAreaRegion()
             bHad = false;
         }
 
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosYTwips += pRowInfo[nArrY].nHeight;
     }
 
     if(bHad)
@@ -1895,10 +1893,10 @@ bool ScOutputData::SetChangedClip()
 
     Rectangle aDrawingRect;
     aDrawingRect.Left() = nScrX;
-    aDrawingRect.Right() = nScrX+nScrW-1;
+    aDrawingRect.Right() = nScrX + LogicToPixelHorizontal( nScrWTwips ) - 1;
 
     bool    bHad    = false;
-    long    nPosY   = nScrY;
+    long    nPosYTwips = PixelToLogicVertical( nScrY );
     SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -1908,17 +1906,17 @@ bool ScOutputData::SetChangedClip()
         {
             if (!bHad)
             {
-                aDrawingRect.Top() = nPosY;
+                aDrawingRect.Top() = LogicToPixelVertical( nPosYTwips );
                 bHad = true;
             }
-            aDrawingRect.Bottom() = nPosY + pRowInfo[nArrY].nHeight - 1;
+            aDrawingRect.Bottom() = LogicToPixelVertical( nPosYTwips + pRowInfo[nArrY].nHeight ) - 1;
         }
         else if (bHad)
         {
             aPoly.Insert( Polygon( mpDev->PixelToLogic(aDrawingRect) ) );
             bHad = false;
         }
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosYTwips += pRowInfo[nArrY].nHeight;
     }
 
     if (bHad)
