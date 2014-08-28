@@ -1560,6 +1560,9 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
         }
     }
 
+    if (nNumberingType == SVX_NUM_NUMBER_NONE)
+        return;
+
     if( !aGraphicURL.isEmpty() )
     {
         OUString sRelId = WriteImage( aGraphicURL );
