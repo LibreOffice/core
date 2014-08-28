@@ -1437,9 +1437,9 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
 
     bool bProgress = false;
 
-    long nInitPosX = nScrX;
+    long nInitPosXTwips = PixelToLogicHorizontal( nScrX );
     if ( bLayoutRTL )
-        nInitPosX += nMirrorW - 1;              // pixels
+        nInitPosXTwips += nMirrorWTwips - PixelToLogicHorizontal( 1 );              // pixels
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     SCCOL nLastContentCol = MAXCOL;
@@ -1453,7 +1453,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     // variables for GetOutputArea
     OutputAreaParam aAreaParam;
     bool bCellIsValue = false;
-    long nNeededWidth = 0;
+    long nNeededWidthPix = 0;
     const ScPatternAttr* pPattern = NULL;
     const SfxItemSet* pCondSet = NULL;
     const ScPatternAttr* pOldPattern = NULL;
@@ -1465,16 +1465,16 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
     ::boost::ptr_vector<ScPatternAttr> aAltPatterns;
 
     std::vector<long> aDX;
-    long nPosY = nScrY;
+    long nPosYTwips = PixelToLogicVertical( nScrY );
     for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         if ( pThisRowInfo->bChanged )
         {
             SCROW nY = pThisRowInfo->nRowNo;
-            long nPosX = nInitPosX;
+            long nPosXTwips = nInitPosXTwips;
             if ( nLoopStartX < nX1 )
-                nPosX -= pRowInfo[0].pCellInfo[nLoopStartX+1].nWidth * nLayoutSign;
+                nPosXTwips -= pRowInfo[0].pCellInfo[nLoopStartX+1].nWidth * nLayoutSign;
             for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
                 bool bMergeEmpty = false;
@@ -1673,7 +1673,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         pOldPattern = NULL;
                     bNeedEdit = aVars.HasEditCharacters() || (bFormulaCell && aCell.mpFormula->IsMultilineResult());
                 }
-                long nTotalMargin = 0;
+                long nTotalMarginPix = 0;
                 SvxCellHorJustify eOutHorJust = SVX_HOR_JUSTIFY_STANDARD;
                 if (bDoCell && !bNeedEdit)
                 {
@@ -1696,19 +1696,22 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                     bool bRepeat = aVars.IsRepeat() && !bBreak;
                     bool bShrink = aVars.IsShrink() && !bBreak && !bRepeat;
 
-                    nTotalMargin =
-                        static_cast<long>(aVars.GetLeftTotal() * mnPPTX) +
-                        static_cast<long>(aVars.GetMargin()->GetRightMargin() * mnPPTX);
+                    nTotalMarginPix = LogicToPixelHorizontal(
+                        aVars.GetLeftTotal() + aVars.GetMargin()->GetRightMargin() );
 
-                    nNeededWidth = aVars.GetTextSize().Width() + nTotalMargin;
+                    nNeededWidthPix = aVars.GetTextSize().Width() + nTotalMarginPix;
 
                     // GetOutputArea gives justfied rectangles
-                    GetOutputArea( nX, nArrY, nPosX, nPosY, nCellX, nCellY, nNeededWidth,
+                    GetOutputArea( nX, nArrY,
+                                   nPosXTwips,
+                                   nPosYTwips,
+                                   nCellX, nCellY,
+                                   nNeededWidthPix, // Pixels
                                    *pPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
                                    bCellIsValue || bRepeat || bShrink, bBreak, false,
                                    aAreaParam );
 
-                    aVars.RepeatToFill( aAreaParam.mnColWidth - nTotalMargin );
+                    aVars.RepeatToFill( aAreaParam.mnColWidth - nTotalMarginPix );
                     if ( bShrink )
                     {
                         if ( aVars.GetOrient() != SVX_ORIENTATION_STANDARD )
@@ -1719,7 +1722,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         }
                         else if ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip )     // horizontal
                         {
-                            long nAvailable = aAreaParam.maAlignRect.GetWidth() - nTotalMargin;
+                            long nAvailable = aAreaParam.maAlignRect.GetWidth() - nTotalMarginPix;
                             long nScaleSize = aVars.GetTextSize().Width();         // without margin
 
                             if ( nScaleSize > 0 )       // 0 if the text is empty (formulas, number formats)
@@ -1752,7 +1755,7 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
 
                     if ( bRepeat && !aAreaParam.mbLeftClip && !aAreaParam.mbRightClip )
                     {
-                        long nAvailable = aAreaParam.maAlignRect.GetWidth() - nTotalMargin;
+                        long nAvailable = aAreaParam.maAlignRect.GetWidth() - nTotalMarginPix;
                         long nRepeatSize = aVars.GetTextSize().Width();         // without margin
                         // When formatting for the printer, the text sizes don't always add up.
                         // Round down (too few repetitions) rather than exceeding the cell size then:
@@ -1779,10 +1782,10 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                             bNeedEdit = ( aAreaParam.mbLeftClip || aAreaParam.mbRightClip );
                         else
                         {
-                            long nHeight = aVars.GetTextSize().Height() +
-                                            (long)(aVars.GetMargin()->GetTopMargin()*mnPPTY) +
-                                            (long)(aVars.GetMargin()->GetBottomMargin()*mnPPTY);
-                            bNeedEdit = ( nHeight > aAreaParam.maClipRect.GetHeight() );
+                            long nHeightPix = aVars.GetTextSize().Height() +
+                                LogicToPixelVertical( aVars.GetMargin()->GetTopMargin() ) +
+                                LogicToPixelVertical( aVars.GetMargin()->GetBottomMargin() );
+                            bNeedEdit = ( nHeightPix > aAreaParam.maClipRect.GetHeight() );
                         }
                     }
                     if (!bNeedEdit)
@@ -1810,12 +1813,12 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                             aVars.SetHashText();
                         else
                             // Adjust the decimals to fit the available column width.
-                            aVars.SetTextToWidthOrHash(aCell, aAreaParam.mnColWidth - nTotalMargin);
+                            aVars.SetTextToWidthOrHash( aCell, aAreaParam.mnColWidth - nTotalMarginPix );
 
-                        nNeededWidth = aVars.GetTextSize().Width() +
-                                    (long) ( aVars.GetLeftTotal() * mnPPTX ) +
-                                    (long) ( aVars.GetMargin()->GetRightMargin() * mnPPTX );
-                        if ( nNeededWidth <= aAreaParam.maClipRect.GetWidth() )
+                        nNeededWidthPix = aVars.GetTextSize().Width() +
+                            LogicToPixelHorizontal(
+                                aVars.GetLeftTotal() + aVars.GetMargin()->GetRightMargin() );
+                        if ( nNeededWidthPix <= aAreaParam.maClipRect.GetWidth() )
                         {
                             // Cell value is no longer clipped.  Reset relevant parameters.
                             aAreaParam.mbLeftClip = aAreaParam.mbRightClip = false;
@@ -1832,15 +1835,17 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                     long nAvailWidth = aAreaParam.maAlignRect.GetWidth();
                     long nOutHeight = aAreaParam.maAlignRect.GetHeight();
 
-                    bool bOutside = ( aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW );
+                    bool bOutside = ( aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrWTwips );
                     if ( aAreaParam.maClipRect.Left() < nScrX )
                     {
                         aAreaParam.maClipRect.Left() = nScrX;
                         aAreaParam.mbLeftClip = true;
                     }
-                    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
+                    if ( aAreaParam.maClipRect.Right() >
+                         nScrX + LogicToPixelHorizontal( nScrWTwips ) )
                     {
-                        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
+                        aAreaParam.maClipRect.Right() =
+                            nScrX + LogicToPixelHorizontal( nScrWTwips );          //! minus one?
                         aAreaParam.mbRightClip = true;
                     }
 
@@ -1852,9 +1857,11 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         aAreaParam.maClipRect.Top() = nScrY;
                         bVClip = true;
                     }
-                    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
+                    if ( aAreaParam.maClipRect.Bottom() >
+                         nScrY + LogicToPixelVertical( nScrHTwips ) )
                     {
-                        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;         //! minus one?
+                        aAreaParam.maClipRect.Bottom() =
+                            nScrY + LogicToPixelVertical( nScrHTwips );         //! minus one?
                         bVClip = true;
                     }
 
@@ -1867,17 +1874,19 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         switch (eOutHorJust)
                         {
                             case SVX_HOR_JUSTIFY_LEFT:
-                                nJustPosX += (long) ( aVars.GetLeftTotal() * mnPPTX );
+                                nJustPosX += LogicToPixelHorizontal(
+                                    aVars.GetLeftTotal() );
                                 break;
                             case SVX_HOR_JUSTIFY_RIGHT:
                                 nJustPosX += nAvailWidth - aVars.GetTextSize().Width() -
-                                            (long) ( aVars.GetRightTotal() * mnPPTX );
+                                    LogicToPixelHorizontal( aVars.GetRightTotal() );
                                 bRightAdjusted = true;
                                 break;
                             case SVX_HOR_JUSTIFY_CENTER:
                                 nJustPosX += ( nAvailWidth - aVars.GetTextSize().Width() +
-                                            (long) ( aVars.GetLeftTotal() * mnPPTX ) -
-                                            (long) ( aVars.GetMargin()->GetRightMargin() * mnPPTX ) ) / 2;
+                                               LogicToPixelHorizontal(
+                                                   aVars.GetLeftTotal() -
+                                                   aVars.GetMargin()->GetRightMargin() ) ) / 2;
                                 break;
                             default:
                             {
@@ -1891,22 +1900,26 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                             case SVX_VER_JUSTIFY_TOP:
                             case SVX_VER_JUSTIFY_BLOCK:
                                 {
-                                    long nTop = (long)( aVars.GetMargin()->GetTopMargin() * mnPPTY );
+                                    long nTop = LogicToPixelVertical(
+                                        aVars.GetMargin()->GetTopMargin() );
                                     nJustPosY += nTop;
                                     nTestClipHeight += nTop;
                                 }
                                 break;
                             case SVX_VER_JUSTIFY_BOTTOM:
                                 {
-                                    long nBot = (long)( aVars.GetMargin()->GetBottomMargin() * mnPPTY );
+                                    long nBot = LogicToPixelVertical(
+                                        aVars.GetMargin()->GetBottomMargin() );
                                     nJustPosY += nOutHeight - aVars.GetTextSize().Height() - nBot;
                                     nTestClipHeight += nBot;
                                 }
                                 break;
                             case SVX_VER_JUSTIFY_CENTER:
                                 {
-                                    long nTop = (long)( aVars.GetMargin()->GetTopMargin() * mnPPTY );
-                                    long nBot = (long)( aVars.GetMargin()->GetBottomMargin() * mnPPTY );
+                                    long nTop = LogicToPixelVertical(
+                                        aVars.GetMargin()->GetTopMargin() );
+                                    long nBot = LogicToPixelVertical(
+                                        aVars.GetMargin()->GetBottomMargin() );
                                     nJustPosY += ( nOutHeight + nTop -
                                                     aVars.GetTextSize().Height() - nBot ) / 2;
                                     nTestClipHeight += std::abs( nTop - nBot );
@@ -1937,12 +1950,14 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                             if (!bHClip)
                             {
                                 aAreaParam.maClipRect.Left() = nScrX;
-                                aAreaParam.maClipRect.Right() = nScrX+nScrW;
+                                aAreaParam.maClipRect.Right() =
+                                    nScrX + LogicToPixelHorizontal( nScrWTwips );
                             }
                             if (!bVClip)
                             {
                                 aAreaParam.maClipRect.Top() = nScrY;
-                                aAreaParam.maClipRect.Bottom() = nScrY+nScrH;
+                                aAreaParam.maClipRect.Bottom() =
+                                    nScrY + LogicToPixelHorizontal( nScrHTwips );
                             }
 
                             //  aClipRect is not used after SetClipRegion/IntersectClipRegion,
@@ -2076,10 +2091,10 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         }
                     }
                 }
-                nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+                nPosXTwips += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
             }
         }
-        nPosY += pRowInfo[nArrY].nHeight;
+        nPosYTwips += pRowInfo[nArrY].nHeight;
     }
     if ( bProgress )
         ScProgress::DeleteInterpretProgress();
