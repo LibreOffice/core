@@ -1952,12 +1952,15 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
         nScanlineFormat >  FORMAT_MAX )
         return BitmapDeviceSharedPtr();
 
-
-
-    sal_Int32  nScanlineStride(0);
-
+    sal_uInt8 nBitsPerPixel = bitsPerPixel[nScanlineFormat];
+    if (rSize.getX() > (SAL_MAX_INT32-7) / nBitsPerPixel)
+    {
+        SAL_WARN("basebmp", "suspicious bitmap width " <<
+                 rSize.getX() << " for depth " << nBitsPerPixel);
+        return BitmapDeviceSharedPtr();
+    }
     // round up to full 8 bit, divide by 8
-    nScanlineStride = (rSize.getX()*bitsPerPixel[nScanlineFormat] + 7) >> 3;
+    sal_Int32 nScanlineStride = (rSize.getX()*nBitsPerPixel + 7) >> 3;
 
     // rounded up to next full power-of-two number of bytes
     const sal_uInt32 bytesPerPixel = nextPow2(
