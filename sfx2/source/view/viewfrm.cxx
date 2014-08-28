@@ -416,6 +416,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     return;
                 }
 
+                RemoveInfoBar("readonly");
                 pSh->SetReadOnlyUI( false );
             }
 
@@ -1246,7 +1247,6 @@ const SvBorder& SfxViewFrame::GetBorderPixelImpl
 
 void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
-
     if( IsDowning_Impl())
         return;
 
@@ -1268,8 +1268,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 SfxDispatcher *pDispat = GetDispatcher();
                 bool bWasReadOnly = pDispat->GetReadOnly_Impl();
                 bool bIsReadOnly = xObjSh->IsReadOnly();
-                if ( !bWasReadOnly != !bIsReadOnly )
+                if ( bWasReadOnly != bIsReadOnly )
                 {
+
                     // Then also TITLE_CHANGED
                     UpdateTitle();
                     rBind.Invalidate( SID_FILE_NAME );
@@ -1356,6 +1357,14 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     // because each document has its own SfxBindings.
                     //GetDispatcher()->GetBindings()->InvalidateAll(true);
                 }
+                else
+                {
+                    std::vector< PushButton* > aButtons;
+                    PushButton* pBtn = new PushButton( &GetWindow(), SfxResId(BT_READONLY_EDIT));
+                    pBtn->SetClickHdl(LINK(this, SfxViewFrame, SwitchReadOnlyHandler));
+                    aButtons.push_back( pBtn );
+                    AppendInfoBar("readonly", SfxResId(STR_READONLY_DOCUMENT), aButtons);
+                }
 
                 break;
             }
@@ -1368,6 +1377,12 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             }
         }
     }
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, SwitchReadOnlyHandler)
+{
+    GetDispatcher()->Execute(SID_EDITDOC);
+    return 0;
 }
 
 
