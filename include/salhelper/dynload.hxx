@@ -172,13 +172,13 @@ public:
     /// returns a poiner to the initialized API function structure.
     API* SAL_CALL getApi() const
     {
-        return (API*)m_pLoader->getApi();
+        return static_cast<API*>(m_pLoader->getApi());
     }
 
     /// cast operator, which cast to a poiner with the initialized API function structure.
     API* SAL_CALL operator->() const
     {
-        return (API*)m_pLoader->getApi();
+        return static_cast<API*>(m_pLoader->getApi());
     }
 
     /// checks if the loader works on a loaded and initialized library.

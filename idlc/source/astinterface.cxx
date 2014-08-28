@@ -140,7 +140,7 @@ bool AstInterface::dump(RegistryKey& rKey)
                 if (!increment(&nAttributes, "attributes")) {
                     return false;
                 }
-                AstAttribute * attr = (AstAttribute *)(*i);
+                AstAttribute * attr = static_cast<AstAttribute *>(*i);
                 if (attr->isBound()) {
                     version = TYPEREG_VERSION_1;
                 }
@@ -227,13 +227,12 @@ bool AstInterface::dump(RegistryKey& rKey)
     {
         switch ((*i)->getNodeType()) {
         case NT_attribute:
-
-            ((AstAttribute *)(*i))->dumpBlob(
+            static_cast<AstAttribute *>(*i)->dumpBlob(
                 aBlob, attributeIndex++, &methodIndex);
             break;
 
         case NT_operation:
-            ((AstOperation *)(*i))->dumpBlob(aBlob, methodIndex++);
+            static_cast<AstOperation *>(*i)->dumpBlob(aBlob, methodIndex++);
             break;
 
         default:

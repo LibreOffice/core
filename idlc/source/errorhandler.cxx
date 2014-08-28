@@ -564,7 +564,7 @@ void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstD
 {
     if ( nodeType == NT_interface &&
          (pDecl->getNodeType() == NT_interface) &&
-         !((AstInterface*)pDecl)->isDefined() )
+         !(static_cast<AstInterface*>(pDecl)->isDefined()) )
     {
         errorHeader(EIDL_INHERIT_FWD_ERROR);
         fprintf(stderr, "interface '%s' cannot inherit from forward declared interface '%s'\n",
@@ -579,7 +579,7 @@ void ErrorHandler::inheritanceError(NodeType nodeType, const OString* name, AstD
     idlc()->incErrorCount();
 }
 
-void ErrorHandler::forwardLookupError(AstDeclaration* pForward,
+void ErrorHandler::forwardLookupError(const AstDeclaration* pForward,
                                       const OString& name)
 {
     errorHeader(EIDL_FWD_DECL_LOOKUP);
