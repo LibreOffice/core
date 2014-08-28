@@ -29,8 +29,13 @@
 
 using namespace ::com::sun::star;
 
-struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; const char* pUserData; sal_uLong nFormatType;
+struct FileFormat
+{
+    const char* pName;
+    const char* pFilterName;
+    const char* pTypeName;
+    const char* pUserData;
+    sal_uLong nFormatType;
 };
 
 // These values are taken from "Flags" in filter/source/config/fragments/filters/*
@@ -47,7 +52,8 @@ pFilterName: <node oor:Name="...">
 pTypeName: <prop oor:Name="UIName">...</prop>
 nFormatType: <prop oor:name="Flags">...</prop>
 */
-FileFormat aFileFormats[] = {
+FileFormat aFileFormats[] =
+{
     { "odp",  "impress8", "impress8", "", ODP_FORMAT_TYPE },
     { "ppt",  "MS PowerPoint 97", "Microsoft PowerPoint 97/2000/XP/2003", "sdfilt", PPT_FORMAT_TYPE },
     { "pptx", "Impress MS PowerPoint 2007 XML", "MS PowerPoint 2007 XML", "", PPTX_FORMAT_TYPE },

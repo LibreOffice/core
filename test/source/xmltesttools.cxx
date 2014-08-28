@@ -17,7 +17,7 @@ XmlTestTools::XmlTestTools()
 XmlTestTools::~XmlTestTools()
 {}
 
-htmlDocPtr XmlTestTools::parseXml(utl::TempFile& aTempFile)
+xmlDocPtr XmlTestTools::parseXml(utl::TempFile& aTempFile)
 {
     SvFileStream aFileStream(aTempFile.GetURL(), STREAM_READ);
     return parseXmlStream(&aFileStream);
