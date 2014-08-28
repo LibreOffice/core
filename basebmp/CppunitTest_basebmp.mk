@@ -7,23 +7,23 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,basebmp_cpputest))
+$(eval $(call gb_CppunitTest_CppunitTest,basebmp))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,basebmp_cpputest))
+$(eval $(call gb_CppunitTest_use_sdk_api,basebmp))
 
-$(eval $(call gb_CppunitTest_use_external,basebmp_cpputest,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,basebmp,boost_headers))
 
-$(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\
+$(eval $(call gb_CppunitTest_use_libraries,basebmp,\
     basebmp \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,basebmp_cpputest,\
+$(eval $(call gb_CppunitTest_use_libraries,basebmp,\
     basegfx \
     sal \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,basebmp_cpputest,\
+$(eval $(call gb_CppunitTest_add_exception_objects,basebmp,\
     basebmp/test/basictest \
     basebmp/test/bmpmasktest \
     basebmp/test/bmptest \

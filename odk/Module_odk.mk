@@ -52,7 +52,7 @@ $(eval $(call gb_Module_add_targets,odk,\
 endif
 
 $(eval $(call gb_Module_add_check_targets,odk,\
-	CppunitTest_checkapi \
+	CppunitTest_odk_checkapi \
 	CustomTarget_allheaders \
 	CustomTarget_check \
 ))
