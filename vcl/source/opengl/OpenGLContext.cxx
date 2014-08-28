@@ -333,6 +333,11 @@ APIENTRY
 debug_callback(GLenum source, GLenum type, GLuint id,
         GLenum severity, GLsizei , const GLchar* message, GLvoid* )
 {
+    // ignore Nvidia's : "Program/shader state performance warning: Fragment Shader is going to be recompiled because the shader key based on GL state mismatches."
+    // the GLSL compiler is a bit too aggressive in optimizing the state based on the current OpenGL state
+    if (id == 131218)
+        return;
+
     SAL_WARN("vcl.opengl", "OpenGL debug message: source: " << getSourceString(source) << ", type: "
             << getTypeString(type) << ", id: " << id << ", severity: " << getSeverityString(severity) << " with message: " << message);
 }
