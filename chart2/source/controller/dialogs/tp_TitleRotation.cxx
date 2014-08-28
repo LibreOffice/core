@@ -82,7 +82,7 @@ bool SchAlignmentTabPage::FillItemSet(SfxItemSet* rOutAttrs)
     rOutAttrs->Put( SfxInt32Item( SCHATTR_TEXT_DEGREES, nDegrees ) );
 
     SvxFrameDirection aDirection( m_pLbTextDirection->GetSelectEntryValue() );
-    rOutAttrs->Put( SfxInt32Item( EE_PARA_WRITINGDIR, aDirection ) );
+    rOutAttrs->Put( SvxFrameDirectionItem( aDirection, EE_PARA_WRITINGDIR ) );
 
     return true;
 }

@@ -129,7 +129,7 @@ bool SchAxisLabelTabPage::FillItemSet( SfxItemSet* rOutAttrs )
         rOutAttrs->Put( SfxBoolItem( SCHATTR_AXIS_SHOWDESCR, m_pCbShowDescription->IsChecked() ) );
 
     if( m_pLbTextDirection->GetSelectEntryCount() > 0 )
-        rOutAttrs->Put( SfxInt32Item( EE_PARA_WRITINGDIR, m_pLbTextDirection->GetSelectEntryValue() ) );
+        rOutAttrs->Put( SvxFrameDirectionItem( m_pLbTextDirection->GetSelectEntryValue(), EE_PARA_WRITINGDIR ) );
 
     return true;
 }

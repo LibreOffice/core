@@ -53,6 +53,7 @@
 #include <GL3DBarChart.hxx>
 #include <GL3DHelper.hxx>
 
+#include <editeng/frmdiritem.hxx>
 #include <rtl/uuid.h>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -1366,7 +1367,7 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
             if( nWritingMode != -1 && nWritingMode != text::WritingMode2::PAGE )
             {
                 if( pDrawModelWrapper.get() )
-                    pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SfxInt32Item(EE_PARA_WRITINGDIR, nWritingMode) );
+                    pDrawModelWrapper->GetItemPool().SetPoolDefaultItem(SvxFrameDirectionItem(static_cast<SvxFrameDirection>(nWritingMode), EE_PARA_WRITINGDIR) );
             }
         }
         catch( const uno::Exception& ex )
@@ -1383,7 +1384,7 @@ sal_Int16 lcl_getDefaultWritingModeFromPool( ::boost::shared_ptr< DrawModelWrapp
     {
         const SfxPoolItem* pItem = &(pDrawModelWrapper->GetItemPool().GetDefaultItem( EE_PARA_WRITINGDIR ));
         if( pItem )
-            nWritingMode = static_cast< sal_Int16 >((static_cast< const SfxInt32Item * >( pItem ))->GetValue());
+            nWritingMode = static_cast< sal_Int16 >((static_cast< const SvxFrameDirectionItem * >( pItem ))->GetValue());
     }
     return nWritingMode;
 }
