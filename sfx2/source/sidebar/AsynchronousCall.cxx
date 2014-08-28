@@ -29,35 +29,16 @@ AsynchronousCall::AsynchronousCall (void)
 {
 }
 
-
-
-
 AsynchronousCall::AsynchronousCall (const Action& rAction)
     : maAction(rAction),
       mnCallId(0)
 {
 }
 
-
-
-
 AsynchronousCall::~AsynchronousCall (void)
 {
     CancelRequest();
 }
-
-
-
-
-void AsynchronousCall::RequestCall (const Action& rAction)
-{
-    CancelRequest();
-    maAction = rAction;
-    RequestCall();
-}
-
-
-
 
 void AsynchronousCall::RequestCall (void)
 {
@@ -68,9 +49,6 @@ void AsynchronousCall::RequestCall (void)
     }
 }
 
-
-
-
 void AsynchronousCall::CancelRequest (void)
 {
     if (mnCallId != 0)
@@ -80,9 +58,6 @@ void AsynchronousCall::CancelRequest (void)
     }
 }
 
-
-
-
 IMPL_LINK(AsynchronousCall, HandleUserCall, void*, EMPTYARG )
 {
     mnCallId = 0;
@@ -91,7 +66,6 @@ IMPL_LINK(AsynchronousCall, HandleUserCall, void*, EMPTYARG )
 
     return sal_True;
 }
-
 
 } } // end of namespace sfx2::sidebar
 

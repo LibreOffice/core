@@ -3817,18 +3817,6 @@ void SvTreeListBox::EnableContextMenuHandling( void )
     pImp->bContextMenuHandling = true;
 }
 
-void SvTreeListBox::EnableContextMenuHandling( bool b )
-{
-    assert(pImp && "-SvTreeListBox::EnableContextMenuHandling(): No implementation!");
-    pImp->bContextMenuHandling = b;
-}
-
-bool SvTreeListBox::IsContextMenuHandlingEnabled( void ) const
-{
-    assert(pImp && "-SvTreeListBox::IsContextMenuHandlingEnabled(): No implementation!");
-    return pImp->bContextMenuHandling;
-}
-
 void SvTreeListBox::EnableList( bool _bEnable )
 {
     // call base class method

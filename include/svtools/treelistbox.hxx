@@ -772,8 +772,6 @@ public:
     virtual void    ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry );
 
     void            EnableContextMenuHandling( void );
-    void            EnableContextMenuHandling( bool bEnable );
-    bool            IsContextMenuHandlingEnabled( void ) const;
 
     void            EnableList( bool _bEnable );
 

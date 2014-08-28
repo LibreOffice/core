@@ -155,14 +155,6 @@ SfxTemplateDialog::~SfxTemplateDialog()
     delete pImpl;
 }
 
-void SfxTemplateDialog::SetParagraphFamily()
-{
-    // first select the paragraph family
-    pImpl->FamilySelect( SFX_STYLE_FAMILY_PARA );
-    // then select the automatic filter
-    pImpl->SetAutomaticFilter();
-}
-
 void SfxTemplateDialog::DataChanged( const DataChangedEvent& _rDCEvt )
 {
     if ( ( DATACHANGED_SETTINGS == _rDCEvt.GetType() ) &&
@@ -174,8 +166,6 @@ void SfxTemplateDialog::DataChanged( const DataChangedEvent& _rDCEvt )
 
     SfxDockingWindow::DataChanged( _rDCEvt );
 }
-
-
 
 void SfxTemplateDialog::Update()
 {

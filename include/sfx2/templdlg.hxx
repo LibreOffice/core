@@ -50,8 +50,6 @@ public:
 
     virtual void                Update();
 
-    void                        SetParagraphFamily();
-
     // converts from SFX_STYLE_FAMILY Ids to 1-5
     static sal_uInt16 SFX2_DLLPUBLIC SfxFamilyIdToNId(SfxStyleFamily nFamily);
     // converts from 1-5 to SFX_STYLE_FAMILY Ids
