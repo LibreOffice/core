@@ -9,8 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#if !defined(MACOSX)
-
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <rtl/byteseq.hxx>
@@ -163,8 +161,6 @@ DECLARE_HTMLEXPORT_TEST(testSkipImageEmbeddedDocument, "skipimage-embedded-docum
     // Text of embedded document was missing.
     assertXPathContent(pDoc, "/html/body/p/span/p/span", "Inner.");
 }
-
-#endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
