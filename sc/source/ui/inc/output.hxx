@@ -199,9 +199,9 @@ private:
     SCTAB nTab;                 // sheet
     long nScrX;                 // Output Startpos. (Pixel)
     long nScrY;
-    long nScrW;                 // Output size (Pixel)
-    long nScrH;
-    long nMirrorW;              // Visible output width for mirroring (default: nScrW)
+    long nScrWTwips;
+    long nScrHTwips;
+    long nMirrorWTwips;              // Visible output width for mirroring (default: nScrW)
     SCCOL nX1;                  // Start-/End coordinates
     SCROW nY1;                  //  ( incl. hidden )
     SCCOL nX2;
@@ -341,8 +341,22 @@ public:
     void    SetShowFormulas   ( bool bSet = true );
     void    SetShowSpellErrors( bool bSet = true );
     void    SetMirrorWidth( long nNew );
-    long    GetScrW() const     { return nScrW; }
-    long    GetScrH() const     { return nScrH; }
+
+    long    GetScrW() const
+    {
+        if ( mpViewData )
+            return mpViewData->LogicToPixelHorizontal( nScrWTwips );
+        else
+            return nScrWTwips;
+    }
+
+    long    GetScrH() const
+    {
+        if ( mpViewData )
+            return mpViewData->LogicToPixelVertical( nScrHTwips );
+        else
+            return nScrHTwips;
+    }
 
     void    SetSnapPixel( bool bSet = true );
 
