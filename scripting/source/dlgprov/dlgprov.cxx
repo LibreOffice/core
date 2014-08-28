@@ -818,8 +818,8 @@ static OUString aResourceResolverPropName("ResourceResolver");
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL dlgprov_component_getFactory(
-        const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
-        registry::XRegistryKey * pRegistryKey )
+        const sal_Char * pImplName, void * pServiceManager,
+        void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper(
             pImplName, pServiceManager, pRegistryKey, ::dlgprov::s_component_entries );

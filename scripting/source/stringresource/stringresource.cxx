@@ -2988,8 +2988,8 @@ static const struct ::cppu::ImplementationEntry s_component_entries [] =
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL stringresource_component_getFactory(
-        const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
-        registry::XRegistryKey * pRegistryKey )
+        const sal_Char * pImplName, void * pServiceManager,
+        void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper(
             pImplName, pServiceManager, pRegistryKey, ::stringresource::s_component_entries );

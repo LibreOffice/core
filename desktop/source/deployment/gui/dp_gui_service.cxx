@@ -331,11 +331,11 @@ extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL deploymentgui_component_getFactory(
     sal_Char const * pImplName,
-    lang::XMultiServiceFactory * pServiceManager,
-    registry::XRegistryKey * pRegistryKey )
+    void * pServiceManager,
+    void * pRegistryKey )
 {
     return component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
+        pImplName, static_cast<css::lang::XMultiServiceFactory *>(pServiceManager), static_cast<css::registry::XRegistryKey *>(pRegistryKey), dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
 }
 
 } // extern "C"

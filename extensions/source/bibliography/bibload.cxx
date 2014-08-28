@@ -193,7 +193,7 @@ Sequence< OUString > BibliographyLoader::getSupportedServiceNames_Static(void) t
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL bib_component_getFactory(
-        const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, void * /*pRegistryKey*/ )
+        const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
     {
         void * pRet = 0;
         if (BibliographyLoader::getImplementationName_Static().equalsAscii( pImplName ) )
@@ -201,7 +201,7 @@ extern "C"
             // create the factory
             Reference< XSingleServiceFactory > xFactory =
                 cppu::createSingleFactory(
-                    pServiceManager,
+                    static_cast<css::lang::XMultiServiceFactory *>(pServiceManager),
                     BibliographyLoader::getImplementationName_Static(),
                     BibliographyLoader_CreateInstance,
                     BibliographyLoader::getSupportedServiceNames_Static() );
