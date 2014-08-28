@@ -940,39 +940,39 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
     OStringBuffer sOut;
     if (!mbSkipHeaderFooter)
     {
-    sOut.append(OString(OOO_STRING_SVTOOLS_HTML_doctype) + " " + OString(OOO_STRING_SVTOOLS_HTML_doctype40));
-    HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
+        sOut.append(OString(OOO_STRING_SVTOOLS_HTML_doctype) + " " + OString(OOO_STRING_SVTOOLS_HTML_doctype40));
+        HTMLOutFuncs::Out_AsciiTag( Strm(), sOut.makeStringAndClear().getStr() );
 
-    // baue den Vorspann
-    OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html );
+        // baue den Vorspann
+        OutNewLine();
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_html );
 
-    OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head );
+        OutNewLine();
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head );
 
-    IncIndentLevel();   // Inhalt von <HEAD> einruecken
+        IncIndentLevel();   // Inhalt von <HEAD> einruecken
 
-    // DokumentInfo
-    OString sIndent = GetIndentString();
+        // DokumentInfo
+        OString sIndent = GetIndentString();
 
-    uno::Reference<document::XDocumentProperties> xDocProps;
-    SwDocShell *pDocShell(pDoc->GetDocShell());
-    if (pDocShell)
-    {
-        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-            pDocShell->GetModel(), uno::UNO_QUERY_THROW);
-        xDocProps.set(xDPS->getDocumentProperties());
-    }
+        uno::Reference<document::XDocumentProperties> xDocProps;
+        SwDocShell *pDocShell(pDoc->GetDocShell());
+        if (pDocShell)
+        {
+            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
+                                                                       pDocShell->GetModel(), uno::UNO_QUERY_THROW);
+            xDocProps.set(xDPS->getDocumentProperties());
+        }
 
-    // xDocProps may be null here (when copying)
-    SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), xDocProps,
-                                     sIndent.getStr(), eDestEnc,
-                                     &aNonConvertableCharacters );
+        // xDocProps may be null here (when copying)
+        SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), xDocProps,
+                                         sIndent.getStr(), eDestEnc,
+                                         &aNonConvertableCharacters );
 
-    // Kommentare und Meta-Tags des ersten Absatzes
-    rHeaderAttrs = OutHeaderAttrs();
+        // Kommentare und Meta-Tags des ersten Absatzes
+        rHeaderAttrs = OutHeaderAttrs();
 
-    OutFootEndNoteInfo();
+        OutFootEndNoteInfo();
     }
 
     const SwPageDesc *pPageDesc = 0;
@@ -1005,57 +1005,57 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
     if (!mbSkipHeaderFooter)
     {
-    // und nun ... das Style-Sheet!!!
-    if( bCfgOutStyles )
-    {
-        OutStyleSheet( *pPageDesc );
-    }
+        // und nun ... das Style-Sheet!!!
+        if( bCfgOutStyles )
+        {
+            OutStyleSheet( *pPageDesc );
+        }
 
-    // und nun ... das BASIC und JavaScript!
-    if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
-        OutBasic();
+        // und nun ... das BASIC und JavaScript!
+        if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
+            OutBasic();
 
-    DecIndentLevel();   // Inhalt von <HEAD> einruecken
-    OutNewLine();
-    HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head, false );
+        DecIndentLevel();   // Inhalt von <HEAD> einruecken
+        OutNewLine();
+        HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_head, false );
 
-    // der Body wird nicht eingerueckt, weil sonst alles eingerueckt waere!
-    OutNewLine();
-    sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_body));
-    Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        // der Body wird nicht eingerueckt, weil sonst alles eingerueckt waere!
+        OutNewLine();
+        sOut.append("<" + OString(OOO_STRING_SVTOOLS_HTML_body));
+        Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-    // language
-    OutLanguage( eLang );
+        // language
+        OutLanguage( eLang );
 
-    // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
-    // und sich geaendert hat.
-    OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_text,
-                  pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false ),
-                  *this );
+        // Textfarbe ausgeben, wenn sie an der Standard-Vorlage gesetzt ist
+        // und sich geaendert hat.
+        OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_text,
+                      pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false ),
+                      *this );
 
-    // Farben fuer (un)besuchte Links
-    OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_link,
-                  pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL ),
-                  *this );
-    OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_vlink,
-                  pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_INET_VISIT ),
-                  *this );
+        // Farben fuer (un)besuchte Links
+        OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_link,
+                      pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL ),
+                      *this );
+        OutBodyColor( OOO_STRING_SVTOOLS_HTML_O_vlink,
+                      pDoc->getIDocumentStylePoolAccess().GetCharFmtFromPool( RES_POOLCHR_INET_VISIT ),
+                      *this );
 
-    const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();
+        const SfxItemSet& rItemSet = pPageDesc->GetMaster().GetAttrSet();
 
-    OutBackground( rItemSet, true );
+        OutBackground( rItemSet, true );
 
-    nDirection = GetHTMLDirection( rItemSet );
-    OutDirection( nDirection );
+        nDirection = GetHTMLDirection( rItemSet );
+        OutDirection( nDirection );
 
-    if( bCfgOutStyles )
-        OutCSS1_BodyTagStyleOpt( *this, rItemSet );
+        if( bCfgOutStyles )
+            OutCSS1_BodyTagStyleOpt( *this, rItemSet );
 
-    // Events anhaengen
-    if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
-        OutBasicBodyEvents();
+        // Events anhaengen
+        if( pDoc->GetDocShell() )   // nur mit DocShell ist Basic moeglich
+            OutBasicBodyEvents();
 
-    Strm().WriteChar( '>' );
+        Strm().WriteChar( '>' );
     }
 
     return pPageDesc;
