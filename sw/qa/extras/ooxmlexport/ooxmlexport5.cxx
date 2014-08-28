@@ -659,6 +659,18 @@ DECLARE_OOXMLEXPORT_TEST(test2colHeader, "2col-header.docx")
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testfdo83048, "fdo83048.docx")
+{
+    // Issue was wrong SDT properties were getting exported for Date SDT
+    xmlDocPtr pXmlDoc = parseExport("word/footer1.xml");
+    if (!pXmlDoc)
+       return;
+
+    // Make sure Date is inside SDT tag.
+    // This will happen only if right SDT properties are exported.
+    assertXPath(pXmlDoc, "/w:ftr/w:sdt/w:sdtContent/w:p[1]/w:sdt/w:sdtContent/w:r[1]/w:t", "1/2/2013");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testSdt2Run, "sdt-2-run.docx")
 {
     xmlDocPtr pXmlDoc = parseExport();
