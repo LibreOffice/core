@@ -562,13 +562,19 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     case typelib_TypeClass_INTERFACE:
     {
-        Reference< XUnoTunnel > tunnel;
-        a >>= tunnel;
-        if( tunnel.is() )
+        // fdo#46678 must unlock GIL because getSomething could acquire locks,
+        // and queryInterface too...
         {
-            sal_Int64 that = tunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
-            if( that )
-                return ((Adapter*)sal::static_int_cast< sal_IntPtr >(that))->getWrappedObject();
+            PyThreadDetach d;
+
+            Reference<XUnoTunnel> tunnel;
+            a >>= tunnel;
+            if (tunnel.is())
+            {
+                sal_Int64 that = tunnel->getSomething( ::pyuno::Adapter::getUnoTunnelImplementationId() );
+                if( that )
+                    return ((Adapter*)sal::static_int_cast< sal_IntPtr >(that))->getWrappedObject();
+            }
         }
         //This is just like the struct case:
         return PyRef( PyUNO_new (a, getImpl()->cargo->xInvocation), SAL_NO_ACQUIRE );
