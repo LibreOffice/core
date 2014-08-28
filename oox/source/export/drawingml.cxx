@@ -1063,7 +1063,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
 
             if ( nPropertyCount ) {
 
-                sal_Int16 nNumberingType = -1;
+                sal_Int16 nNumberingType = SVX_NUM_NUMBER_NONE;
                 bool bSDot = false;
                 bool bPBehind = false;
                 bool bPBoth = false;
@@ -1124,6 +1124,9 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                         }
                     }
                 }
+
+                if (nNumberingType == SVX_NUM_NUMBER_NONE)
+                    return;
 
                 const char* pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
 
