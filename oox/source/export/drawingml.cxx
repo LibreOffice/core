@@ -1386,11 +1386,12 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
     if( sText.isEmpty()) {
         Reference< XPropertySet > xPropSet( rRun, UNO_QUERY );
 
-        try {
-        if( !xPropSet.is() || !( xPropSet->getPropertyValue( "PlaceholderText" ) >>= sText ) )
-            return;
-        if( sText.isEmpty() )
-            return;
+        try
+        {
+            if( !xPropSet.is() || !( xPropSet->getPropertyValue( "PlaceholderText" ) >>= sText ) )
+                return;
+            if( sText.isEmpty() )
+                return;
         }
         catch (const Exception &) {
             return;
@@ -1422,44 +1423,45 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
         mpFS->endElementNS( XML_a, XML_r );
 }
 
-#define AUTONUM(x) \
-                        if( bPBoth ) \
-                            pAutoNumType = #x "ParenBoth"; \
-                        else if( bPBehind ) \
-                            pAutoNumType = #x "ParenR"; \
-                        else if( bSDot ) \
-                            pAutoNumType = #x "Period";
-
-inline static const char* GetAutoNumType( sal_Int16 nNumberingType, bool bSDot, bool bPBehind, bool bPBoth )
+OUString GetAutoNumType(sal_Int16 nNumberingType, bool bSDot, bool bPBehind, bool bPBoth)
 {
-    const char* pAutoNumType = NULL;
+    OUString sPrefixSuffix;
+
+    if (bPBoth)
+        sPrefixSuffix = "ParenBoth";
+    else if (bPBehind)
+        sPrefixSuffix = "ParenR";
+    else if (bSDot)
+        sPrefixSuffix = "Period";
 
     switch( (SvxExtNumType)nNumberingType )
-        {
+    {
         case SVX_NUM_CHARS_UPPER_LETTER_N :
         case SVX_NUM_CHARS_UPPER_LETTER :
-            AUTONUM( alphaUc );
-            break;
+            return OUString("alphaUc") + sPrefixSuffix;
+
         case SVX_NUM_CHARS_LOWER_LETTER_N :
         case SVX_NUM_CHARS_LOWER_LETTER :
-            AUTONUM( alphaLc );
-            break;
+            return OUString("alphaLc") + sPrefixSuffix;
+
         case SVX_NUM_ROMAN_UPPER :
-            AUTONUM( romanUc );
-            break;
+            return OUString("romanUc") + sPrefixSuffix;
+
         case SVX_NUM_ROMAN_LOWER :
-            AUTONUM( romanLc );
-            break;
+            return OUString("romanLc") + sPrefixSuffix;
+
         case SVX_NUM_ARABIC :
-            AUTONUM( arabic )
+        {
+            if (sPrefixSuffix.isEmpty())
+                return OUString("arabicPlain");
             else
-                pAutoNumType = "arabicPlain";
-                        break;
+                return OUString("arabic") + sPrefixSuffix;
+        }
         default:
             break;
-        }
+    }
 
-    return pAutoNumType;
+    return OUString();
 }
 
 void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sal_Int16 nLevel )
@@ -1520,7 +1522,6 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
             else if ( aPropName == "BulletChar" )
             {
                 aBulletChar = OUString ( *( (OUString*)pValue ) )[ 0 ];
-                //printf ("bullet char: %d\n", aBulletChar.getStr());
             }
             else if ( aPropName == "BulletFont" )
             {
@@ -1549,7 +1550,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                 if ( pPropValue[ i ].Value.getValueType() == cppu::UnoType<awt::Size>::get())
                 {
                     // don't cast awt::Size to Size as on 64-bits they are not the same.
-                    ::com::sun::star::awt::Size aSize;
+                    css::awt::Size aSize;
                     pPropValue[ i ].Value >>= aSize;
                     //aBuGraSize.nA = aSize.Width;
                     //aBuGraSize.nB = aSize.Height;
@@ -1559,36 +1560,37 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
         }
     }
 
-    const char* pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
-
-    if( nLevel >= 0 )
+    if( !aGraphicURL.isEmpty() )
     {
-        if( !aGraphicURL.isEmpty() )
-        {
-            OUString sRelId = WriteImage( aGraphicURL );
+        OUString sRelId = WriteImage( aGraphicURL );
 
-            mpFS->startElementNS( XML_a, XML_buBlip, FSEND );
-            mpFS->singleElementNS( XML_a, XML_blip, FSNS( XML_r, XML_embed ), USS( sRelId ), FSEND );
-            mpFS->endElementNS( XML_a, XML_buBlip );
+        mpFS->startElementNS( XML_a, XML_buBlip, FSEND );
+        mpFS->singleElementNS( XML_a, XML_blip, FSNS( XML_r, XML_embed ), USS( sRelId ), FSEND );
+        mpFS->endElementNS( XML_a, XML_buBlip );
+    }
+    else
+    {
+        if( nBulletRelSize && nBulletRelSize != 100 )
+            mpFS->singleElementNS( XML_a, XML_buSzPct,
+                                   XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
+        if( bHasFontDesc )
+            mpFS->singleElementNS( XML_a, XML_buFont,
+                                   XML_typeface, OUStringToOString( aFontDesc.Name, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                   XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : NULL,
+                                   FSEND );
+
+        OUString pAutoNumType = GetAutoNumType( nNumberingType, bSDot, bPBehind, bPBoth );
+
+        if (!pAutoNumType.isEmpty())
+        {
+            mpFS->singleElementNS(XML_a, XML_buAutoNum,
+                                  XML_type, OUStringToOString(pAutoNumType, RTL_TEXTENCODING_UTF8).getStr(),
+                                  FSEND);
         }
         else
         {
-            if( nBulletRelSize && nBulletRelSize != 100 )
-                mpFS->singleElementNS( XML_a, XML_buSzPct,
-                                       XML_val, IS( std::max( (sal_Int32)25000, std::min( (sal_Int32)400000, 1000*( (sal_Int32)nBulletRelSize ) ) ) ), FSEND );
-            if( bHasFontDesc )
-                mpFS->singleElementNS( XML_a, XML_buFont,
-                                       XML_typeface, OUStringToOString( aFontDesc.Name, RTL_TEXTENCODING_UTF8 ).getStr(),
-                                       XML_charset, (aFontDesc.CharSet == awt::CharSet::SYMBOL) ? "2" : NULL,
-                                       FSEND );
-
-            if( pAutoNumType )
-                mpFS->singleElementNS( XML_a, XML_buAutoNum, XML_type, pAutoNumType, FSEND );
-            else
-            {
-                aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
-                mpFS->singleElementNS( XML_a, XML_buChar, XML_char, USS( OUString( aBulletChar ) ), FSEND );
-            }
+            aBulletChar = SubstituteBullet( aBulletChar, aFontDesc );
+            mpFS->singleElementNS(XML_a, XML_buChar, XML_char, USS( OUString( aBulletChar ) ), FSEND);
         }
     }
 }
