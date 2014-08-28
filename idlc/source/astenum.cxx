@@ -45,7 +45,7 @@ AstConstant* AstEnum::checkValue(AstExpression* pExpr)
     while ( iter != end)
     {
         pDecl = *iter;
-        pConst = (AstConstant*)pDecl;
+        pConst = static_cast<AstConstant*>(pDecl);
 
         if (pConst->getConstValue()->compare(pExpr))
             return pConst;
@@ -88,7 +88,7 @@ bool AstEnum::dump(RegistryKey& rKey)
         {
             pDecl = *iter;
             if ( pDecl->getNodeType() == NT_enum_val )
-                ((AstConstant*)pDecl)->dumpBlob(aBlob, index++, false);
+                static_cast<AstConstant*>(pDecl)->dumpBlob(aBlob, index++, false);
 
             ++iter;
         }

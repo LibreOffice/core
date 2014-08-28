@@ -507,7 +507,7 @@ NPP_New(NPMIMEType pluginType,
     PLUGIN_MSG msg;
     memset((char*)&msg, 0, sizeof(PLUGIN_MSG));
     msg.msg_id = SO_NEW_INSTANCE;
-    msg.instance_id = (plugin_Int32)instance;
+    msg.instance_id = reinterpret_cast<plugin_Int32>(instance);
     if (!sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
         return NPERR_GENERIC_ERROR;
 
@@ -528,7 +528,7 @@ NPP_Destroy(NPP instance, NPSavedData** /*save*/)
     PLUGIN_MSG msg;
     memset((char*)&msg, 0, sizeof(PLUGIN_MSG));
     msg.msg_id = SO_DESTROY;
-    msg.instance_id = (plugin_Int32)instance;
+    msg.instance_id = reinterpret_cast<plugin_Int32>(instance);
 #ifdef UNIX
     msg.wnd_id =(plugin_Int32)((PluginInstance*) instance->pdata)->window;
 #endif //end of UNIX
@@ -580,14 +580,14 @@ NPP_SetWindow(NPP instance, NPWindow* window)
     PLUGIN_MSG msg;
     memset((char*)&msg, 0, sizeof(msg));
     msg.msg_id = SO_SET_WINDOW;
-    msg.instance_id = (plugin_Int32)instance;
+    msg.instance_id = reinterpret_cast<plugin_Int32>(instance);
 
     if ( window )
     {
         // Set window info for instance
 #ifdef UNIX
         ws_info        = (NPSetWindowCallbackStruct *)window->ws_info;
-        This->window   = (Window) window->window;
+        This->window   = reinterpret_cast<Window>( window->window);
         This->x        = window->x;
         This->y        = window->y;
         This->width    = window->width;
@@ -608,7 +608,7 @@ NPP_SetWindow(NPP instance, NPWindow* window)
         debug_fprintf(NSP_LOG_APPEND, "W=(%d) H=(%d)\n", window->width, window->height);
 
         // fill the window dependent part of the message
-        msg.wnd_id = (plugin_Int32) window->window;
+        msg.wnd_id = reinterpret_cast<plugin_Int32>(window->window);
         msg.wnd_x = window->x;
         msg.wnd_y = window->y;
         msg.wnd_w = window->width;
@@ -815,7 +815,7 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
     PLUGIN_MSG msg;
     memset((char*)&msg, 0, sizeof(PLUGIN_MSG));
     msg.msg_id = SO_SET_URL;
-    msg.instance_id = (plugin_Int32)instance;
+    msg.instance_id = reinterpret_cast<plugin_Int32>(instance);
 #ifdef UNIX
     msg.wnd_id =(plugin_Int32)(This->window);
     sprintf(msg.url, "file://%s", localPathNew);
@@ -831,7 +831,7 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
     // send SO_SET_WINDOW message
 //    memset((char*)&msg, 0, sizeof(PLUGIN_MSG));
     msg.msg_id = SO_SET_WINDOW;
-    msg.instance_id = (plugin_Int32)instance;
+    msg.instance_id = reinterpret_cast<plugin_Int32>(instance);
 //  msg.wnd_id =(plugin_Int32)((PluginInstance*) instance->pdata)->window;
 #ifdef UNIX
     msg.wnd_x = This->x;
@@ -869,7 +869,7 @@ NPP_Print(NPP instance, NPPrint* printInfo)
         PLUGIN_MSG msg;
         memset((char*)&msg, 0, sizeof(PLUGIN_MSG));
         msg.msg_id = SO_PRINT;
-        msg.instance_id = (plugin_Int32)instance;
+        msg.instance_id = reinterpret_cast<plugin_Int32>(instance);
         if(!sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
             debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile send SO_SET_WINDOW return failure \n");
     /**************************************/

@@ -60,7 +60,7 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
         }
         if ( (pDeclaration->getNodeType() == NT_interface)
              && (pDecl->getNodeType() == NT_interface)
-             && !((AstInterface*)pDeclaration)->isDefined() )
+             && !(static_cast<AstInterface*>(pDeclaration)->isDefined()) )
         {
             m_declarations.push_back(pDecl);
             return pDecl;
@@ -214,7 +214,7 @@ AstDeclaration* AstScope::lookupByNameLocal(const OString& name) const
 
 AstDeclaration* AstScope::lookupInInherited(const OString& scopedName) const
 {
-    AstInterface* pInterface = (AstInterface*)this;
+    const AstInterface* pInterface = dynamic_cast<const AstInterface*>(this);
 
     if ( !pInterface )
         return NULL;
@@ -313,7 +313,7 @@ AstDeclaration* AstScope::lookupPrimitiveType(ExprType type)
 
     if ( pDecl && (pDecl->getNodeType() == NT_predefined) )
     {
-        AstBaseType* pBaseType = (AstBaseType*)pDecl;
+        AstBaseType* pBaseType = static_cast<AstBaseType*>(pDecl);
 
         if ( pBaseType->getExprType() == type )
             return pDecl;

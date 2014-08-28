@@ -131,7 +131,7 @@ bool AstStruct::dump(RegistryKey& rKey)
             pDecl = *iter;
             if ( pDecl->getNodeType() == NT_member )
             {
-                pMember = (AstMember*)pDecl;
+                pMember = static_cast<AstMember*>(pDecl);
                 RTFieldAccess flags = RT_ACCESS_READWRITE;
                 OString typeName;
                 if (pMember->getType()->getNodeType() == NT_type_parameter) {

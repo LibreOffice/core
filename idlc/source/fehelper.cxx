@@ -49,7 +49,7 @@ bool FeDeclarator::checkType(AstDeclaration const * type)
 
 AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
 {
-    AstType*    pType;
+    const AstType*    pType;
 
     if ( pDecl == 0 )
     {
@@ -60,7 +60,7 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
         idlc()->error()->noTypeError(pDecl);
         return NULL;
     }
-    pType = (AstType*)pDecl;
+    pType = static_cast<const AstType*>(pDecl);
     if (m_declType == FD_simple || m_pComplexPart == NULL)
         return pType;
 

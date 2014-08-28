@@ -48,22 +48,22 @@ AstDeclaration* SAL_CALL scopeAsDecl(AstScope* pScope)
     {
         case NT_service:
         case NT_singleton:
-            return (AstService*)(pScope);
+            return static_cast<AstService*>(pScope);
         case NT_module:
         case NT_root:
-            return (AstModule*)(pScope);
+            return static_cast<AstModule*>(pScope);
         case NT_constants:
-            return (AstConstants*)(pScope);
+            return static_cast<AstConstants*>(pScope);
         case NT_interface:
-            return (AstInterface*)(pScope);
+            return static_cast<AstInterface*>(pScope);
         case NT_operation:
-            return (AstOperation*)(pScope);
+            return static_cast<AstOperation*>(pScope);
         case NT_exception:
-            return (AstException*)(pScope);
+            return static_cast<AstException*>(pScope);
         case NT_struct:
-            return (AstStruct*)(pScope);
+            return static_cast<AstStruct*>(pScope);
         case NT_enum:
-            return (AstEnum*)(pScope);
+            return static_cast<AstEnum*>(pScope);
         default:
             return NULL;
     }
@@ -76,23 +76,23 @@ AstScope* SAL_CALL declAsScope(AstDeclaration* pDecl)
     switch(pDecl->getNodeType())
     {
         case NT_interface:
-            return (AstInterface*)(pDecl);
+            return static_cast<AstInterface*>(pDecl);
         case NT_service:
         case NT_singleton:
-            return (AstService*)(pDecl);
+            return static_cast<AstService*>(pDecl);
         case NT_module:
         case NT_root:
-            return (AstModule*)(pDecl);
+            return static_cast<AstModule*>(pDecl);
         case NT_constants:
-            return (AstConstants*)(pDecl);
+            return static_cast<AstConstants*>(pDecl);
         case NT_exception:
-            return (AstException*)(pDecl);
+            return static_cast<AstException*>(pDecl);
         case NT_struct:
-            return (AstStruct*)(pDecl);
+            return static_cast<AstStruct*>(pDecl);
         case NT_enum:
-            return (AstEnum*)(pDecl);
+            return static_cast<AstEnum*>(pDecl);
         case NT_operation:
-            return (AstOperation*)(pDecl);
+            return static_cast<AstOperation*>(pDecl);
         default:
             return NULL;
    }
@@ -127,21 +127,21 @@ static void SAL_CALL predefineXInterface(AstModule* pRoot)
     pParentScope->addDeclaration(pInterface);
 
     // define XInterface::queryInterface
-    AstOperation* pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_any)),
+    AstOperation* pOp = new AstOperation(static_cast<AstType*>(pRoot->lookupPrimitiveType(ET_any)),
                                          OString("queryInterface"), pInterface);
     AstParameter* pParam = new AstParameter(DIR_IN, false,
-                                            (AstType*)(pRoot->lookupPrimitiveType(ET_type)),
+                                            static_cast<AstType*>(pRoot->lookupPrimitiveType(ET_type)),
                                             OString("aType"), pOp);
     pOp->addDeclaration(pParam);
     pInterface->addMember(pOp);
 
     // define XInterface::acquire
-    pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_void)),
+    pOp = new AstOperation(static_cast<AstType*>(pRoot->lookupPrimitiveType(ET_void)),
                            OString("acquire"), pInterface);
     pInterface->addMember(pOp);
 
     // define XInterface::release
-    pOp = new AstOperation((AstType*)(pRoot->lookupPrimitiveType(ET_void)),
+    pOp = new AstOperation(static_cast<AstType*>(pRoot->lookupPrimitiveType(ET_void)),
                            OString("release"), pInterface);
     pInterface->addMember(pOp);
 }

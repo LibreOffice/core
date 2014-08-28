@@ -118,7 +118,7 @@ public:
 
     void    flagError(ErrorCode e, sal_uInt32 flag);
 
-    void    forwardLookupError(AstDeclaration* pForward, const OString& name);
+    void    forwardLookupError(const AstDeclaration* pForward, const OString& name);
 
     void    constantExpected(AstDeclaration* pDecl, const OString& name);
 

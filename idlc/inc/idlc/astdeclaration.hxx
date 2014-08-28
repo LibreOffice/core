@@ -75,6 +75,8 @@ public:
         { return m_fullName.getStr()+1; }
     AstScope* getScope()
         { return m_pScope; }
+    const AstScope* getScope() const
+        { return m_pScope; }
     void setScope(AstScope* pSc)
         { m_pScope = pSc; }
     NodeType getNodeType() const

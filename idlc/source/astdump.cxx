@@ -77,7 +77,7 @@ bool AstModule::dump(RegistryKey& rKey)
             if ( pDecl->getNodeType() == NT_const &&
                  pDecl->isInMainfile() )
             {
-                ((AstConstant*)pDecl)->dumpBlob(
+                static_cast<AstConstant*>(pDecl)->dumpBlob(
                     aBlob, index++,
                     getNodeType() == NT_module && pDecl->isPublished());
             }
@@ -197,7 +197,7 @@ bool AstService::dump(RegistryKey& rKey)
         case NT_service_member:
             if (getNodeType() == NT_singleton) {
                 OSL_ASSERT(superName.isEmpty());
-                superName = ((AstServiceMember *)(*i))->
+                superName = (static_cast<AstServiceMember *>(*i))->
                     getRealService()->getRelativName();
                 break;
             }
@@ -247,16 +247,16 @@ bool AstService::dump(RegistryKey& rKey)
     {
         switch ((*i)->getNodeType()) {
         case NT_operation:
-            ((AstOperation *)(*i))->dumpBlob(writer, constructorIndex++);
+            static_cast<AstOperation *>(*i)->dumpBlob(writer, constructorIndex++);
             break;
 
         case NT_property:
-            ((AstAttribute *)(*i))->dumpBlob(writer, propertyIndex++, 0);
+            static_cast<AstAttribute *>(*i)->dumpBlob(writer, propertyIndex++, 0);
             break;
 
         case NT_interface_member:
         {
-            AstInterfaceMember * decl = (AstInterfaceMember *)(*i);
+            AstInterfaceMember * decl = static_cast<AstInterfaceMember *>(*i);
             writer.setReferenceData(
                 referenceIndex++, decl->getDocumentation(), RT_REF_SUPPORTS,
                 (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
@@ -268,7 +268,7 @@ bool AstService::dump(RegistryKey& rKey)
         case NT_service_member:
             if (getNodeType() == NT_service)
             {
-                AstServiceMember * decl = (AstServiceMember *)(*i);
+                AstServiceMember * decl = static_cast<AstServiceMember *>(*i);
                 writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_EXPORTS,
                     (decl->isOptional() ? RT_ACCESS_OPTIONAL : RT_ACCESS_INVALID),
                     OStringToOUString(decl->getRealService()->getRelativName(),
@@ -278,7 +278,7 @@ bool AstService::dump(RegistryKey& rKey)
 
         case NT_observes:
             {
-                AstObserves * decl = (AstObserves *)(*i);
+                AstObserves * decl = static_cast<AstObserves *>(*i);
                 writer.setReferenceData(referenceIndex++, decl->getDocumentation(), RT_REF_OBSERVES,
                     RT_ACCESS_INVALID,
                     OStringToOUString( decl->getRealInterface()->getRelativName(),
@@ -288,7 +288,7 @@ bool AstService::dump(RegistryKey& rKey)
 
         case NT_needs:
             {
-                AstNeeds * decl = (AstNeeds *)(*i);
+                AstNeeds * decl = static_cast<AstNeeds *>(*i);
                 writer.setReferenceData( referenceIndex++, decl->getDocumentation(), RT_REF_NEEDS,
                     RT_ACCESS_INVALID,
                     OStringToOUString( decl->getRealService()->getRelativName(),

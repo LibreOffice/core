@@ -70,7 +70,7 @@ bool AstOperation::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
             pDecl = *iter;
             if ( pDecl->getNodeType() == NT_parameter )
             {
-                AstParameter* pParam = (AstParameter*)pDecl;
+                AstParameter* pParam = static_cast<AstParameter*>(pDecl);
                 switch (pParam->getDirection())
                 {
                     case DIR_IN :

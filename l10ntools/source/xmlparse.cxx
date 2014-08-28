@@ -188,7 +188,7 @@ bool XMLFile::Write( ofstream &rStream , XMLNode *pCur )
             break;
             case XML_NODE_TYPE_ELEMENT:
             {
-                XMLElement *pElement = ( XMLElement * ) pCur;
+                XMLElement *pElement = static_cast<XMLElement*>(pCur);
                 rStream  << "<";
                 rStream << pElement->GetName().getStr();
                 if ( pElement->GetAttributeList())
@@ -257,7 +257,7 @@ void XMLFile::Print( XMLNode *pCur, sal_uInt16 nLevel )
             break;
             case XML_NODE_TYPE_ELEMENT:
             {
-                XMLElement *pElement = ( XMLElement * ) pCur;
+                XMLElement *pElement = static_cast<XMLElement*>(pCur);
 
                 fprintf( stdout, "<%s", pElement->GetName().getStr());
                 if ( pElement->GetAttributeList())
@@ -467,7 +467,7 @@ void XMLFile::SearchL10NElements( XMLChildNode *pCur, int nPos )
             break;
             case XML_NODE_TYPE_ELEMENT:
             {
-                XMLElement *pElement = ( XMLElement * ) pCur;
+                XMLElement *pElement = static_cast<XMLElement*>(pCur);
                 const OString sName(pElement->GetName().toAsciiLowerCase());
                 OString sLanguage, sTmpStrVal, sOldref;
                 if ( pElement->GetAttributeList())
@@ -534,7 +534,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                 {
                     for ( size_t i = 0; i < GetChildList()->size(); i++ )
                     {
-                        pElement = (XMLParentNode*)(*GetChildList())[ i ];
+                        pElement = static_cast<XMLParentNode*>((*GetChildList())[ i ]);
                         if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) CheckExportStatus( pElement );//, i);
                     }
                 }
@@ -542,7 +542,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
             break;
             case XML_NODE_TYPE_ELEMENT:
             {
-                XMLElement *pElement = ( XMLElement * ) pCur;
+                XMLElement *pElement = static_cast<XMLElement*>(pCur);
                 if (pElement->GetName().equalsIgnoreAsciiCase("TOPIC"))
                 {
                     if ( pElement->GetAttributeList())
@@ -566,7 +566,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                 else if ( pElement->GetChildList() )
                 {
                     for (size_t k = 0; k < pElement->GetChildList()->size(); ++k)
-                        CheckExportStatus( (XMLParentNode*)(*pElement->GetChildList())[k] );
+                        CheckExportStatus( static_cast<XMLParentNode*>((*pElement->GetChildList())[k]) );
                 }
             }
             break;
