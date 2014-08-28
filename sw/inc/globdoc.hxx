@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_GLOBDOC_HXX
 #define INCLUDED_SW_INC_GLOBDOC_HXX
 
-#include <swdll.hxx>
 #include "docsh.hxx"
 
 class SwGlobalDocShell : public SwDocShell

@@ -25,7 +25,7 @@
 #include <boost/operators.hpp>
 #include <boost/shared_ptr.hpp>
 #include <map>
-#include "swdll.hxx"
+#include <swdllapi.h>
 
 struct SwPosition;
 

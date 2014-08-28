@@ -16,6 +16,7 @@
 #include <rtl/byteseq.hxx>
 
 #include <swmodule.hxx>
+#include <swdll.hxx>
 #include <usrpref.hxx>
 
 #include <test/htmltesttools.hxx>

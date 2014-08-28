@@ -46,6 +46,7 @@
 #include <unoprnms.hxx>
 #include <docsh.hxx>
 #include <swmodule.hxx>
+#include <swdll.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/acorrcfg.hxx>

@@ -51,6 +51,7 @@
 #include <ndtxt.hxx>
 #include <swfltopt.hxx>
 #include <swerror.h>
+#include <swdll.hxx>
 #include <osl/module.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_WDOCSH_HXX
 #include "swdllapi.h"
 #include "docsh.hxx"
-#include <swdll.hxx>
 
 class SW_DLLPUBLIC SwWebDocShell: public SwDocShell
 {

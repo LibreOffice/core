@@ -46,6 +46,7 @@
 #include "swcrsr.hxx"
 #include "swscanner.hxx"
 #include "swmodule.hxx"
+#include <swdll.hxx>
 #include "swtypes.hxx"
 #include "fmtftn.hxx"
 #include "fmtrfmrk.hxx"
