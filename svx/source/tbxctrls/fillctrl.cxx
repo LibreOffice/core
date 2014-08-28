@@ -24,6 +24,7 @@
 #include <sfx2/viewsh.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/toolbox.hxx>
 #include <svx/dialogs.hrc>
 
 #define TMP_STR_BEGIN   "["
