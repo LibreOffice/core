@@ -2961,6 +2961,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_citation") ||
+                m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_date") ||
                 (m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_id") &&
                         m_pImpl->m_pSdtHelper->getInteropGrabBagSize() == 1)) && !m_pImpl->m_pSdtHelper->isOutsideAParagraph())
         {
