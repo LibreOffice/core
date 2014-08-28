@@ -1187,14 +1187,14 @@ void ScViewData::EditGrowX()
             if ( nEditStartCol > nLeft )
             {
                 --nEditStartCol;
-                long nLeftPix = ToPixel( pLocalDoc->GetColWidth( nEditStartCol, nTabNo ), nPPTX );
+                long nLeftPix = LogicToPixelHorizontal( pLocalDoc->GetColWidth( nEditStartCol, nTabNo ) );
                 nLogicLeft = pWin->PixelToLogic(Size(nLeftPix,0)).Width();
             }
             long nLogicRight = 0;
             if ( nEditEndCol < nRight )
             {
                 ++nEditEndCol;
-                long nRightPix = ToPixel( pLocalDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
+                long nRightPix = LogicToPixelHorizontal( pLocalDoc->GetColWidth( nEditEndCol, nTabNo ) );
                 nLogicRight = pWin->PixelToLogic(Size(nRightPix,0)).Width();
             }
 
@@ -1219,7 +1219,7 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && nEditStartCol > nLeft)
         {
             --nEditStartCol;
-            long nPix = ToPixel( pLocalDoc->GetColWidth( nEditStartCol, nTabNo ), nPPTX );
+            long nPix = LogicToPixelHorizontal( pLocalDoc->GetColWidth( nEditStartCol, nTabNo ) );
             long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
             if ( !bLayoutRTL )
                 aArea.Left() -= nLogicWidth;
@@ -1242,7 +1242,7 @@ void ScViewData::EditGrowX()
         while (aArea.GetWidth() + 0 < nTextWidth && nEditEndCol < nRight)
         {
             ++nEditEndCol;
-            long nPix = ToPixel( pLocalDoc->GetColWidth( nEditEndCol, nTabNo ), nPPTX );
+            long nPix = LogicToPixelHorizontal( pLocalDoc->GetColWidth( nEditEndCol, nTabNo ) );
             long nLogicWidth = pWin->PixelToLogic(Size(nPix,0)).Width();
             if ( bLayoutRTL )
                 aArea.Left() -= nLogicWidth;
@@ -1370,7 +1370,7 @@ void ScViewData::EditGrowY( bool bInitial )
     {
         ++nEditEndRow;
         ScDocument* pLocalDoc = GetDocument();
-        long nPix = ToPixel( pLocalDoc->GetRowHeight( nEditEndRow, nTabNo ), nPPTY );
+        long nPix = LogicToPixelHorizontal( pLocalDoc->GetRowHeight( nEditEndRow, nTabNo ) );
         aArea.Bottom() += pWin->PixelToLogic(Size(0,nPix)).Height();
 
         if ( aArea.Bottom() > aArea.Top() + aSize.Height() - 1 )
@@ -1635,6 +1635,8 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
     SCsCOL  nX;
     sal_uInt16  nScrPosX = 0;
     if (nScrSizeX == SC_SIZE_NONE) nScrSizeX = (sal_uInt16) aScrSize.Width();
+    nScrSizeX = GetActiveWin()->PixelToLogic( Point( nScrSizeX, 0 ),
+                                              maPaintMapMode ).getX();
 
     if (nDir==1)
         nX = nPosX;             // vorwaerts
@@ -1649,12 +1651,7 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
             bOut = true;
         else
         {
-            sal_uInt16 nTSize = pDoc->GetColWidth( nColNo, nTabNo );
-            if (nTSize)
-            {
-                long nSizeXPix = ToPixel( nTSize, nPPTX );
-                nScrPosX = sal::static_int_cast<sal_uInt16>( nScrPosX + (sal_uInt16) nSizeXPix );
-            }
+            nScrPosX += pDoc->GetColWidth( nColNo, nTabNo );
         }
     }
 
@@ -1663,7 +1660,9 @@ SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, sal_
     else
         nX = (nPosX-1)-nX;
 
-    if (nX>0) --nX;
+    if ( nX > 0 )
+        --nX;
+
     return nX;
 }
 
