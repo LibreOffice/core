@@ -2467,7 +2467,7 @@ void ScOutputData::DrawClipMarks()
 
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
-        nInitPosX += nMirrorW - 1;              // always in pixels
+        nInitPosX += LogicToPixelHorizontal( nMirrorWTwips ) - 1;              // always in pixels
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     Rectangle aCellRect;
@@ -2497,26 +2497,34 @@ void ScOutputData::DrawClipMarks()
                                 nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & SC_MF_HOR ) )
                         {
                             --nOverX;
-                            nStartPosX -= nLayoutSign * (long) ( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
+                            nStartPosX -= nLayoutSign *
+                                LogicToPixelHorizontal( mpDoc->GetColWidth(nOverX,nTab) );
                         }
 
                         while ( nOverY > 0 && ( ((const ScMergeFlagAttr*)mpDoc->GetAttr(
                                 nOverX, nOverY, nTab, ATTR_MERGE_FLAG ))->GetValue() & SC_MF_VER ) )
                         {
                             --nOverY;
-                            nStartPosY -= nLayoutSign * (long) ( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
+                            nStartPosY -= nLayoutSign *
+                                LogicToPixelVertical( mpDoc->GetRowHeight(nOverY,nTab) );
                         }
 
-                        long nOutWidth = (long) ( mpDoc->GetColWidth(nOverX,nTab) * mnPPTX );
-                        long nOutHeight = (long) ( mpDoc->GetRowHeight(nOverY,nTab) * mnPPTY );
+                        long nOutWidth = LogicToPixelHorizontal(
+                            mpDoc->GetColWidth(nOverX,nTab) );
+                        long nOutHeight = LogicToPixelVertical(
+                            mpDoc->GetRowHeight(nOverY,nTab) );
 
                         const ScMergeAttr* pMerge = (const ScMergeAttr*)
                                     mpDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE );
                         SCCOL nCountX = pMerge->GetColMerge();
                         for (SCCOL i=1; i<nCountX; i++)
-                            nOutWidth += (long) ( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
+                        {
+                            nOutWidth += LogicToPixelHorizontal(
+                                mpDoc->GetColWidth(nOverX+i,nTab) );
+                        }
                         SCROW nCountY = pMerge->GetRowMerge();
-                        nOutHeight += (long) mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY);
+                        nOutHeight += LogicToPixelVertical(
+                            mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, 1.0 ) );
 
                         if ( bLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
@@ -2524,8 +2532,8 @@ void ScOutputData::DrawClipMarks()
                     }
                     else
                     {
-                        long nOutWidth = pRowInfo[0].pCellInfo[nX+1].nWidth;
-                        long nOutHeight = pThisRowInfo->nHeight;
+                        long nOutWidth = LogicToPixelHorizontal( pRowInfo[0].pCellInfo[nX+1].nWidth );
+                        long nOutHeight = LogicToPixelVertical( pThisRowInfo->nHeight );
 
                         if ( pInfo->bMerged && pInfo->pPatternAttr )
                         {
@@ -2535,9 +2543,12 @@ void ScOutputData::DrawClipMarks()
                                     (ScMergeAttr*)&pInfo->pPatternAttr->GetItem(ATTR_MERGE);
                             SCCOL nCountX = pMerge->GetColMerge();
                             for (SCCOL i=1; i<nCountX; i++)
-                                nOutWidth += (long) ( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
+                            {
+                                nOutWidth += LogicToPixelHorizontal( mpDoc->GetColWidth(nOverX+i,nTab) );
+                            }
                             SCROW nCountY = pMerge->GetRowMerge();
-                            nOutHeight += (long) mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY);
+                            nOutHeight += LogicToPixelVertical(
+                                mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, 1.0) );
                         }
 
                         long nStartPosX = nPosX;
@@ -2554,7 +2565,7 @@ void ScOutputData::DrawClipMarks()
                     else
                         aCellRect.Right() -= 1;
 
-                    long nMarkPixel = (long)( SC_CLIPMARK_SIZE * mnPPTX );
+                    long nMarkPixel = LogicToPixelHorizontal( SC_CLIPMARK_SIZE );
                     Size aMarkSize( nMarkPixel, (nMarkPixel-1)*2 );
 
                     if ( pInfo->nClipMark & ( bLayoutRTL ? SC_CLIPMARK_RIGHT : SC_CLIPMARK_LEFT ) )
