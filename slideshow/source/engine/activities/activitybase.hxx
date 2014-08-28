@@ -111,7 +111,7 @@ protected:
     ShapeAttributeLayerSharedPtr getShapeAttributeLayer() const
         { return mpAttributeLayer; }
 
-    bool isRepeatCountValid() const { return maRepeats; }
+    bool isRepeatCountValid() const { return bool(maRepeats); }
     double getRepeatCount() const { return *maRepeats; }
     bool isAutoReverse() const { return mbAutoReverse; }
 

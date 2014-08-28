@@ -117,9 +117,9 @@ void applyTableStylePart( oox::drawingml::FillProperties& rFillProperties,
     if (rTableStylePart.getTextColor().isUsed())
         aTextCharProps.maCharColor = rTableStylePart.getTextColor();
     if( rTableStylePart.getTextBoldStyle().is_initialized() )
-        aTextCharProps.moBold = rTableStylePart.getTextBoldStyle();
+        aTextCharProps.moBold = *rTableStylePart.getTextBoldStyle();
     if( rTableStylePart.getTextItalicStyle().is_initialized() )
-        aTextCharProps.moItalic = rTableStylePart.getTextItalicStyle();
+        aTextCharProps.moItalic = *rTableStylePart.getTextItalicStyle();
 }
 
 void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell >& rxCell, const TableCell& rTableCell )

@@ -573,12 +573,12 @@ namespace vclcanvas
 
         // repaint all affected sprites on top of background into
         // VDev.
+        ::basegfx::B2DPoint outPos( ::vcl::unotools::b2DPointFromPoint(aOutputPosition) );
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
                          ::boost::bind( &spriteRedrawStub2,
                                         ::boost::ref( maVDev.get() ),
-                                        ::boost::cref(
-                                            ::vcl::unotools::b2DPointFromPoint(aOutputPosition)),
+                                        ::boost::cref( outPos ),
                                         _1 ) );
 
         // flush to screen

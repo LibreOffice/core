@@ -125,12 +125,13 @@ namespace slideshow
         void MediaShape::implViewsChanged()
         {
             // resize all ViewShapes
+            ::basegfx::B2DRectangle bounds( getBounds() );
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
                              ::boost::bind(
                                  &ViewMediaShape::resize,
                                  _1,
-                                 ::boost::cref( getBounds())) );
+                                 ::boost::cref( bounds )) );
         }
 
 
