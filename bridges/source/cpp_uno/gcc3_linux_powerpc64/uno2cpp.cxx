@@ -233,7 +233,7 @@ static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
                 "fmr    %0,     1\n\t"
                 : "=f" (dret), "=r" (r3), "=r" (r4) : );
 
-    MapReturn(r3, r4, dret, pReturnTypeRef, pRegisterReturn);
+    MapReturn(r3, r4, dret, pReturnTypeDescr, pRegisterReturn);
 }
 
 // Macros for easier insertion of values to registers or stack
