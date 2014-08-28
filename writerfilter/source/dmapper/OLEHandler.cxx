@@ -184,24 +184,16 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 
 void OLEHandler::saveInteropProperties(uno::Reference<text::XTextDocument> const& xTextDocument, const OUString& sObjectName, const OUString& sOldObjectName)
 {
-    const OUString sGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    const OUString sEmbeddingsPropName = "EmbeddedObjects";
+    static const OUString sEmbeddingsPropName = "EmbeddedObjects";
 
     // get interop grab bag from document
     uno::Reference< beans::XPropertySet > xDocProps( xTextDocument, uno::UNO_QUERY );
-    uno::Sequence< beans::PropertyValue > aGrabBag;
-    xDocProps->getPropertyValue( sGrabBagPropName ) >>= aGrabBag;
+    comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG));
 
     // get EmbeddedObjects property inside grab bag
-    sal_Int32 i = 0;
-    sal_Int32 nBagLength = aGrabBag.getLength();
-    uno::Sequence< beans::PropertyValue > objectsList;
-    for( ; i < nBagLength; ++i )
-        if ( aGrabBag[i].Name == sEmbeddingsPropName )
-        {
-            aGrabBag[i].Value >>= objectsList;
-            break;
-        }
+    comphelper::SequenceAsHashMap objectsList;
+    if (aGrabBag.find(sEmbeddingsPropName) != aGrabBag.end())
+        objectsList << aGrabBag[sEmbeddingsPropName];
 
     uno::Sequence< beans::PropertyValue > aGrabBagAttribute(2);
     aGrabBagAttribute[0].Name = "ProgID";
@@ -209,35 +201,21 @@ void OLEHandler::saveInteropProperties(uno::Reference<text::XTextDocument> const
     aGrabBagAttribute[1].Name = "DrawAspect";
     aGrabBagAttribute[1].Value = uno::Any( m_sDrawAspect );
 
-    // save ProgID of current object
-    sal_Int32 length = objectsList.getLength();
-
     // If we got an "old name", erase that first.
     if (!sOldObjectName.isEmpty())
     {
-        comphelper::SequenceAsHashMap aMap(objectsList);
-        comphelper::SequenceAsHashMap::iterator it = aMap.find(sOldObjectName);
-        if (it != aMap.end())
-            aMap.erase(it);
-        objectsList = aMap.getAsConstPropertyValueList();
+        comphelper::SequenceAsHashMap::iterator it = objectsList.find(sOldObjectName);
+        if (it != objectsList.end())
+            objectsList.erase(it);
     }
 
-    objectsList.realloc( length + 1 );
-    objectsList[length].Name = sObjectName;
-    objectsList[length].Value = uno::Any( aGrabBagAttribute );
+    objectsList[sObjectName] = uno::Any( aGrabBagAttribute );
 
     // put objects list back into the grab bag
-    if( i == nBagLength )
-    {
-        aGrabBag.realloc( nBagLength + 1 );
-        aGrabBag[nBagLength].Name = sEmbeddingsPropName;
-        aGrabBag[nBagLength].Value = uno::Any( objectsList );
-    }
-    else
-        aGrabBag[i].Value = uno::Any( objectsList );
+    aGrabBag[sEmbeddingsPropName] = uno::Any(objectsList.getAsConstPropertyValueList());
 
     // put grab bag back into the document
-    xDocProps->setPropertyValue( sGrabBagPropName, uno::Any( aGrabBag ) );
+    xDocProps->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, uno::Any(aGrabBag.getAsConstPropertyValueList()));
 }
 
 void OLEHandler::importStream(uno::Reference<uno::XComponentContext> xComponentContext, uno::Reference<text::XTextDocument> xTextDocument, uno::Reference<text::XTextContent> xOLE)
