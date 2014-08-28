@@ -1997,8 +1997,8 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
     {
         long nMinX = nScrX;
         long nMinY = nScrY;
-        long nMaxX = nScrX + nScrW - 1;
-        long nMaxY = nScrY + nScrH - 1;
+        long nMaxX = nScrX + nScrWTwips - 1;
+        long nMaxY = nScrY + nScrHTwips - 1;
         if ( bLayoutRTL )
         {
             long nTemp = nMinX;
@@ -2041,7 +2041,7 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
 
         long nPosX = nScrX;
         if ( bLayoutRTL )
-            nPosX += nMirrorW - 1;      // always in pixels
+            nPosX += nMirrorWTwips - 1;      // always in pixels
 
         for (SCCOL nX=nX1; nX<=nX2; nX++)
         {
@@ -2125,8 +2125,8 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
     {
         long nMinX = nScrX;
         long nMinY = nScrY;
-        long nMaxX = nScrX+nScrW-1;
-        long nMaxY = nScrY+nScrH-1;
+        long nMaxX = nScrX+nScrWTwips-1;
+        long nMaxY = nScrY+nScrHTwips-1;
         if ( bLayoutRTL )
         {
             long nTemp = nMinX;
@@ -2169,7 +2169,7 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
 
         long nPosX = nScrX;
         if ( bLayoutRTL )
-            nPosX += nMirrorW - 1;      // always in pixels
+            nPosX += nMirrorWTwips - 1;      // always in pixels
 
         for (SCCOL nX=nX1; nX<=nX2+1; nX++)
         {
@@ -2302,7 +2302,7 @@ void ScOutputData::DrawNoteMarks()
 
     long nInitPosX = nScrX;
     if ( bLayoutRTL )
-        nInitPosX += nMirrorW - 1;              // always in pixels
+        nInitPosX += nMirrorWTwips - 1;              // always in pixels
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     long nPosY = nScrY;
@@ -2355,7 +2355,7 @@ void ScOutputData::DrawNoteMarks()
                             ++nNextX;
                         }
                     }
-                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
+                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrWTwips ) )
                         mpDev->DrawRect( Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
                 }
 
@@ -2377,7 +2377,7 @@ void ScOutputData::AddPDFNotes()
     {
         Size aOnePixel = mpDev->PixelToLogic(Size(1,1));
         long nOneX = aOnePixel.Width();
-        nInitPosX += nMirrorW - nOneX;
+        nInitPosX += nMirrorWTwips - nOneX;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
@@ -2421,7 +2421,7 @@ void ScOutputData::AddPDFNotes()
                             ++nNextX;
                         }
                     }
-                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
+                    if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrWTwips ) )
                     {
                         Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
                         const ScPostIt* pNote = mpDoc->GetNote(nMergeX, nMergeY, nTab);
