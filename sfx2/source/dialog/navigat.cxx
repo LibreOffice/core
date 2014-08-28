@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <sfx2/bindings.hxx>
 #include <sfx2/navigat.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>

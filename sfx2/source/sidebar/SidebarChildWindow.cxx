@@ -18,6 +18,7 @@
  */
 
 #include "TabBar.hxx"
+#include <sfx2/bindings.hxx>
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include "SidebarDockingWindow.hxx"
 #include <sfx2/sfxsids.hrc>
