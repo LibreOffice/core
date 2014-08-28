@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_37907295",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/converter/xml/OfficeDocument.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-08-28T16:35:32Z",
+      "side": 1,
+      "message": "IOException(String message, Throwable cause)",
+      "revId": "218d3be5e7ff3d909acd921e8796935d7f7c5860",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
