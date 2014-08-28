@@ -9,6 +9,31 @@
                                      /*  This array does not have two elements             */
                                      /*    Array Size is actually fData->fHeader->fCatCount         */
                                      /*    CAUTION:  see RBBITableBuilder::getTableSize()  */
+--- source/common/rbbitblb.cpp
++++ source/common/rbbitblb.cpp
+@@ -1072,10 +1072,10 @@
+     numRows = fDStates->size();
+     numCols = fRB->fSetBuilder->getNumCharCategories();
+ 
+-    //  Note  The declaration of RBBIStateTableRow is for a table of two columns.
+-    //        Therefore we subtract two from numCols when determining
++    //  Note  The declaration of RBBIStateTableRow is for a table of one columns.
++    //        Therefore we subtract one from numCols when determining
+     //        how much storage to add to a row for the total columns.
+-    rowSize = sizeof(RBBIStateTableRow) + sizeof(uint16_t)*(numCols-2);
++    rowSize = sizeof(RBBIStateTableRow) + sizeof(uint16_t)*(numCols-1);
+     size   += numRows * rowSize;
+     return size;
+ }
+@@ -1105,7 +1105,7 @@
+     }
+ 
+     table->fRowLen    = sizeof(RBBIStateTableRow) +
+-                            sizeof(uint16_t) * (fRB->fSetBuilder->getNumCharCategories() - 2);
++                            sizeof(uint16_t) * (fRB->fSetBuilder->getNumCharCategories() - 1);
+     table->fNumStates = fDStates->size();
+     table->fFlags     = 0;
+     if (fRB->fLookAheadHardBreak) {
 --- source/common/ucmndata.h
 +++ source/common/ucmndata.h
 @@ -50,7 +50,7 @@
