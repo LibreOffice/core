@@ -4617,6 +4617,17 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     case RTF_OUTLINELEVEL:
         m_aStates.top().aParagraphSprms.set(NS_ooxml::LN_CT_PPrBase_outlineLvl, pIntValue);
         break;
+    case RTF_TRGAPH:
+        // Half of the space between the cells of a table row: default left/right table cell margin.
+        if (nParam > 0)
+        {
+            RTFSprms aAttributes;
+            aAttributes.set(NS_ooxml::LN_CT_TblWidth_type, RTFValue::Pointer_t(new RTFValue(NS_ooxml::LN_Value_ST_TblWidth_dxa)));
+            aAttributes.set(NS_ooxml::LN_CT_TblWidth_w, pIntValue);
+            lcl_putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_left, RTFValue::Pointer_t(new RTFValue(aAttributes)));
+            lcl_putNestedSprm(m_aStates.top().aTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblCellMar, NS_ooxml::LN_CT_TblCellMar_right, RTFValue::Pointer_t(new RTFValue(aAttributes)));
+        }
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle value '" << lcl_RtfToString(nKeyword) << "'");

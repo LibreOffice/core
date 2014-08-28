@@ -2086,6 +2086,16 @@ DECLARE_RTFIMPORT_TEST(testFdo86750, "fdo86750.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("#anchor"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo74229, "fdo74229.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was 0, due to ignoring RTF_TRGAPH.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(67)), getProperty<sal_Int32>(xCell, "RightBorderDistance"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
