@@ -1392,7 +1392,8 @@ void OTableController::assignTable()
                     setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
                     if(!isEditable())
                     {
-                        ::std::for_each(m_vRowList.begin(),m_vRowList.end(),boost::bind( &OTableRow::SetReadOnly, _1, boost::cref( sal_True )));
+                        sal_Bool t( sal_True );
+                        ::std::for_each(m_vRowList.begin(),m_vRowList.end(),boost::bind( &OTableRow::SetReadOnly, _1, boost::cref( t )));
                     }
                     m_bNew = false;
                     // be notified when the table is in disposing
