@@ -151,7 +151,13 @@ inline unsigned getCustomDiagID(
 inline std::unique_ptr<llvm::raw_fd_ostream> create_raw_fd_ostream(
     char const * Filename, std::string & ErrorInfo)
 {
-#if (__clang_major__ == 3 && __clang_minor__ >= 5) || __clang_major__ > 3
+#if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ > 3
+    std::error_code ec;
+    std::unique_ptr<llvm::raw_fd_ostream> s(
+        new llvm::raw_fd_ostream(Filename, ec, llvm::sys::fs::F_None));
+    ErrorInfo = ec ? "error: " + ec.message() : std::string();
+    return s;
+#elif __clang_major__ == 3 && __clang_minor__ == 5
     return std::unique_ptr<llvm::raw_fd_ostream>(
         new llvm::raw_fd_ostream(Filename, ErrorInfo, llvm::sys::fs::F_None));
 #else
