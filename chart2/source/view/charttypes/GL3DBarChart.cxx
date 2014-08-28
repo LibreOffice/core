@@ -310,6 +310,7 @@ void RenderBenchMarkThread::MoveToBar()
         maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
         mpChart->maClickCond.set();
         mbExecuting = true;
+        mbNeedFlyBack = false;
         mpChart->mpRenderer->StartClick(mpChart->mnSelectBarId);
     }
     MoveCamera();
@@ -339,6 +340,7 @@ void RenderBenchMarkThread::AutoMoveToBar()
         maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
         mpChart->mpRenderer->StartClick(mpChart->mnSelectBarId);
         mbAutoFlyExecuting = true;
+        mbNeedFlyBack = false;
     }
     MoveCamera();
 }
