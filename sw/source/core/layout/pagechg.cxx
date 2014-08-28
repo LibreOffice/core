@@ -250,7 +250,7 @@ SwPageFrm::~SwPageFrm()
     {
         // Objects can be anchored at pages that are before their anchors (why ever...).
         // In such cases, we would access already freed memory.
-        for ( sal_uInt16 i = 0; i < pSortedObjs->Count(); ++i )
+        for ( size_t i = 0; i < pSortedObjs->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pSortedObjs)[i];
             pAnchoredObj->SetPageFrm( 0L );
@@ -813,7 +813,7 @@ void SwPageFrm::Cut()
         if ( GetSortedObjs() )
         {
             for ( int i = 0; GetSortedObjs() &&
-                             (sal_uInt16)i < GetSortedObjs()->Count(); ++i )
+                             (sal_uInt16)i < GetSortedObjs()->size(); ++i )
             {
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
@@ -910,7 +910,7 @@ static void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
     pFrm->Prepare( PREP_REGISTER );
     if( pFrm->GetDrawObjs() )
     {
-        for( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
+        for( size_t i = 0; i < pFrm->GetDrawObjs()->size(); ++i )
         {
             // #i28701#
             SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
@@ -940,7 +940,7 @@ void SwPageFrm::PrepareRegisterChg()
     }
     if( GetSortedObjs() )
     {
-        for( sal_uInt16 i = 0; i < GetSortedObjs()->Count(); ++i )
+        for( size_t i = 0; i < GetSortedObjs()->size(); ++i )
         {
             // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
@@ -1325,7 +1325,7 @@ void SwRootFrm::RemoveSuperfluous()
             // header/footer are supported now.
             bool bOnlySuperfluosObjs = true;
             SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for ( sal_uInt16 i = 0; bOnlySuperfluosObjs && i < rObjs.Count(); ++i )
+            for ( size_t i = 0; bOnlySuperfluosObjs && i < rObjs.size(); ++i )
             {
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
@@ -1470,7 +1470,7 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
         {
             pPage->GetSortedObjs();
             for ( int i = 0;
-                  pPage->GetSortedObjs() && sal_uInt16(i) < pPage->GetSortedObjs()->Count();
+                  pPage->GetSortedObjs() && sal_uInt16(i) < pPage->GetSortedObjs()->size();
                   ++i)
             {
                 // #i28701#
@@ -1486,10 +1486,10 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                     {
                         // It can move by itself. Just send a modify to its anchor attribute.
 #if OSL_DEBUG_LEVEL > 1
-                        const sal_uInt32 nCnt = pPage->GetSortedObjs()->Count();
+                        const size_t nCnt = pPage->GetSortedObjs()->size();
                         rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
                         OSL_ENSURE( !pPage->GetSortedObjs() ||
-                                nCnt != pPage->GetSortedObjs()->Count(),
+                                nCnt != pPage->GetSortedObjs()->size(),
                                 "Object couldn't be reattached!" );
 #else
                         rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
@@ -1601,7 +1601,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
         }
         else if ( pFrm->GetDrawObjs() )
         {
-            for ( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
+            for ( size_t i = 0; i < pFrm->GetDrawObjs()->size(); ++i )
             {
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
@@ -1768,7 +1768,7 @@ static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
     else
         pSortedObj = pFrm->GetDrawObjs();
 
-    for ( sal_uInt16 i = 0; pSortedObj && i < pSortedObj->Count(); ++i)
+    for ( size_t i = 0; pSortedObj && i < pSortedObj->size(); ++i)
     {
         SwAnchoredObject* pAnchoredObj = (*pSortedObj)[i];
 

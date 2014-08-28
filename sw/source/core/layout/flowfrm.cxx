@@ -287,7 +287,7 @@ sal_uInt8 SwFlowFrm::BwdMoveNecessary( const SwPageFrm *pPage, const SwRect &rRe
         // #i28701# - new type <SwSortedObjs>
         const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         sal_uLong nIndex = ULONG_MAX;
-        for ( sal_uInt16 i = 0; nRet < 3 && i < rObjs.Count(); ++i )
+        for ( size_t i = 0; nRet < 3 && i < rObjs.size(); ++i )
         {
             // #i28701# - consider changed type of
             // <SwSortedObjs> entries.
@@ -1041,7 +1041,7 @@ bool SwFlowFrm::IsPrevObjMove() const
         // #i26945# - re-factoring
         // use <GetVertPosOrientFrm()> to determine, if object has followed the
         // text flow to the next layout frame
-        for ( sal_uInt16 i = 0; i < pPre->GetDrawObjs()->Count(); ++i )
+        for ( size_t i = 0; i < pPre->GetDrawObjs()->size(); ++i )
         {
             // #i28701# - consider changed type of
             // <SwSortedObjs> entries.
@@ -2238,8 +2238,7 @@ bool SwFlowFrm::MoveBwd( bool &rbReformat )
         // has restarted the layout process.
         else if ( m_rThis.GetDrawObjs() )
         {
-            sal_uInt32 i = 0;
-            for ( ; i < m_rThis.GetDrawObjs()->Count(); ++i )
+            for ( size_t i = 0; i < m_rThis.GetDrawObjs()->size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*m_rThis.GetDrawObjs())[i];
                 // #i47697# - refine condition - see above

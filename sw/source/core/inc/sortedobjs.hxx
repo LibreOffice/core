@@ -54,14 +54,14 @@ class SwSortedObjs
         SwSortedObjs();
         ~SwSortedObjs();
 
-        sal_uInt32 Count() const;
+        size_t size() const;
 
         /** direct access to the entries
 
             @param _nIndex
-            input parameter - index of entry, valid value range [0..Count()-1]
+            input parameter - index of entry, valid value range [0..size()-1]
         */
-        SwAnchoredObject* operator[]( sal_uInt32 _nIndex ) const;
+        SwAnchoredObject* operator[]( size_t _nIndex ) const;
 
         bool Insert( SwAnchoredObject& _rAnchoredObj );
 
@@ -79,12 +79,12 @@ class SwSortedObjs
         /** Position of object <_rAnchoredObj> in sorted list
 
             Returns the number of the list position of object <_rAnchoredObj>.
-            Returns <Count()>, if object isn't contained in list.
+            Returns <size()>, if object isn't contained in list.
 
-            @return sal_uInt32
+            @return size_t
             Number of the list position of object <_rAnchoredObj>
         */
-        sal_uInt32 ListPosOf( const SwAnchoredObject& _rAnchoredObj ) const;
+        size_t ListPosOf( const SwAnchoredObject& _rAnchoredObj ) const;
 };
 
 #endif

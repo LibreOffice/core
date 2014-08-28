@@ -6679,7 +6679,7 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
             else if ( pLow->GetDrawObjs() )
             {
                 const SwSortedObjs& rObjs = *(pLow->GetDrawObjs());
-                for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
+                for ( size_t i = 0; i < rObjs.size(); ++i )
                 {
                     const SwAnchoredObject* pAnchoredObj = rObjs[i];
                     if ( pPage->GetFmt()->GetDoc()->getIDocumentDrawModelAccess().IsVisibleLayerId(
@@ -7155,7 +7155,7 @@ void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
         SwLayoutFrm::RefreshExtraData( aRect );
 
         if ( bLineInFly && GetSortedObjs() )
-            for ( sal_uInt16 i = 0; i < GetSortedObjs()->Count(); ++i )
+            for ( size_t i = 0; i < GetSortedObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -7190,7 +7190,7 @@ void SwLayoutFrm::RefreshExtraData( const SwRect &rRect ) const
             ((SwTxtFrm*)pCnt)->PaintExtraData( rRect );
         }
         if ( bLineInFly && pCnt->GetDrawObjs() )
-            for ( sal_uInt32 i = 0; i < pCnt->GetDrawObjs()->Count(); ++i )
+            for ( size_t i = 0; i < pCnt->GetDrawObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*pCnt->GetDrawObjs())[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )

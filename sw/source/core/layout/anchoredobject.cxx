@@ -462,10 +462,9 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOfOtherObjs() const
     bool bRet( false );
 
     const SwSortedObjs* pObjs = GetAnchorFrm()->GetDrawObjs();
-    if ( pObjs->Count() > 1 )
+    if ( pObjs->size() > 1 )
     {
-        sal_uInt32 i = 0;
-        for ( ; i < pObjs->Count(); ++i )
+        for ( size_t i = 0; i < pObjs->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             if ( pAnchoredObj != this &&
@@ -640,8 +639,7 @@ void SwAnchoredObject::UpdateObjInSortedList()
             {
                 const SwSortedObjs* pObjs = GetAnchorFrm()->GetDrawObjs();
                 // determine start index
-                sal_uInt32 i = 0;
-                for ( ; i < pObjs->Count(); ++i )
+                for ( size_t i = 0; i < pObjs->size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                     if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
@@ -655,8 +653,7 @@ void SwAnchoredObject::UpdateObjInSortedList()
             {
                 const SwSortedObjs* pObjs = GetPageFrm()->GetSortedObjs();
                 // determine start index
-                sal_uInt32 i = pObjs->ListPosOf( *this ) + 1;
-                for ( ; i < pObjs->Count(); ++i )
+                for ( size_t i = pObjs->ListPosOf( *this ) + 1; i < pObjs->size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                     if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )
@@ -767,10 +764,9 @@ void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrap
 void SwAnchoredObject::SetTmpConsiderWrapInfluenceOfOtherObjs( const bool bTmpConsiderWrapInfluence )
 {
     const SwSortedObjs* pObjs = GetAnchorFrm()->GetDrawObjs();
-    if ( pObjs->Count() > 1 )
+    if ( pObjs->size() > 1 )
     {
-        sal_uInt32 i = 0;
-        for ( ; i < pObjs->Count(); ++i )
+        for ( size_t i = 0; i < pObjs->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             if ( pAnchoredObj != this )

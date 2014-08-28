@@ -415,8 +415,7 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm )
 
     bool bSuccess( true );
 
-    sal_uInt32 i = 0;
-    for ( ; i < pAnchorFrm->GetDrawObjs()->Count(); ++i )
+    for ( size_t i = 0; i < pAnchorFrm->GetDrawObjs()->size(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = (*pAnchorFrm->GetDrawObjs())[i];
 
@@ -459,15 +458,15 @@ bool SwObjectFormatter::_FormatObjsAtFrm( SwTxtFrm* _pMasterTxtFrm )
             // considering changes at <pAnchorFrm->GetDrawObjs()> during
             // format of the object.
             if ( !pAnchorFrm->GetDrawObjs() ||
-                 i > pAnchorFrm->GetDrawObjs()->Count() )
+                 i > pAnchorFrm->GetDrawObjs()->size() )
             {
                 break;
             }
             else
             {
-                sal_uInt32 nActPosOfObj =
+                const size_t nActPosOfObj =
                     pAnchorFrm->GetDrawObjs()->ListPosOf( *pAnchoredObj );
-                if ( nActPosOfObj == pAnchorFrm->GetDrawObjs()->Count() ||
+                if ( nActPosOfObj == pAnchorFrm->GetDrawObjs()->size() ||
                      nActPosOfObj > i )
                 {
                     --i;

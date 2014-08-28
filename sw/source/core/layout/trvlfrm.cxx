@@ -390,7 +390,7 @@ bool SwPageFrm::FillSelection( SwSelectionList& rList, const SwRect& rRect ) con
         if( GetSortedObjs() )
         {
             const SwSortedObjs &rObjs = *GetSortedObjs();
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if( !pAnchoredObj->ISA(SwFlyFrm) )
@@ -2565,7 +2565,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
         if ( pPage->GetSortedObjs() )
         {
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( !pAnchoredObj->ISA(SwFlyFrm) )
@@ -2598,7 +2598,7 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
 
                     bool bSub = true;
                     const sal_uInt32 nPos = pObj->GetOrdNum();
-                    for ( sal_uInt16 k = 0; bSub && k < aSortObjs.Count(); ++k )
+                    for ( size_t k = 0; bSub && k < aSortObjs.size(); ++k )
                     {
                         OSL_ENSURE( aSortObjs[k]->ISA(SwFlyFrm),
                             "<SwRootFrm::CalcFrmRects(..)> - object in <aSortObjs> of unexpected type" );

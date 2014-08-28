@@ -1105,8 +1105,7 @@ class ExtraFormatToPositionObjs
                 SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
                 if ( pObjs )
                 {
-                    sal_uInt32 i = 0;
-                    for ( i = 0; i < pObjs->Count(); ++i )
+                    for ( size_t i = 0; i < pObjs->size(); ++i )
                     {
                         SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
 
@@ -1125,8 +1124,7 @@ class ExtraFormatToPositionObjs
             SwSortedObjs* pObjs = rFrm.GetDrawObjs();
             if ( pObjs )
             {
-                sal_uInt32 i = 0;
-                for ( i = 0; i < pObjs->Count(); ++i )
+                for ( size_t i = 0; i < pObjs->size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
 
@@ -1200,8 +1198,7 @@ class ExtraFormatToPositionObjs
                 SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
                 if ( pObjs )
                 {
-                    sal_uInt32 i = 0;
-                    for ( i = 0; i < pObjs->Count(); ++i )
+                    for ( size_t i = 0; i < pObjs->size(); ++i )
                     {
                         SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
 

@@ -41,7 +41,7 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
         {
             const SwPageFrm& rPgFrm = static_cast< const SwPageFrm& >( rFrm );
             const SwSortedObjs *pObjs = rPgFrm.GetSortedObjs();
-            if( pObjs && pObjs->Count() )
+            if( pObjs && pObjs->size() )
             {
                 aCurr = (*pObjs)[nNextObj++]->GetDrawObj();
             }
@@ -49,12 +49,12 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
         else if( rFrm.IsTxtFrm() )
         {
             const SwSortedObjs *pObjs = rFrm.GetDrawObjs();
-            if ( pObjs && pObjs->Count() )
+            if ( pObjs && pObjs->size() )
             {
                 aCurr = (*pObjs)[nNextObj++]->GetDrawObj();
                 while( aCurr.IsValid() && !aCurr.IsBoundAsChar() )
                 {
-                    aCurr = (nNextObj < pObjs->Count())
+                    aCurr = (nNextObj < pObjs->size())
                             ? (*pObjs)[nNextObj++]->GetDrawObj()
                             : static_cast< const SdrObject *>( 0 );
                 }
@@ -108,14 +108,14 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
         {
             const SwPageFrm& rPgFrm = static_cast< const SwPageFrm& >( rFrm );
             const SwSortedObjs *pObjs = rPgFrm.GetSortedObjs();
-            aCurr = ( pObjs && nNextObj < pObjs->Count() )
+            aCurr = ( pObjs && nNextObj < pObjs->size() )
                     ? (*pObjs)[nNextObj++]->GetDrawObj()
                     : static_cast< const SdrObject *>( 0 );
         }
         else if( rFrm.IsTxtFrm() )
         {
             const SwSortedObjs* pObjs = rFrm.GetDrawObjs();
-            const sal_uInt32 nObjsCount = pObjs ? pObjs->Count() : 0;
+            const size_t nObjsCount = pObjs ? pObjs->size() : 0;
             aCurr = ( pObjs && nNextObj < nObjsCount )
                     ? (*pObjs)[nNextObj++]->GetDrawObj()
                     : static_cast< const SdrObject *>( 0 );

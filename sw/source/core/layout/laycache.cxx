@@ -276,7 +276,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
             if( pPage->GetSortedObjs() )
             {
                 SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-                for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+                for ( size_t i = 0; i < rObjs.size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = rObjs[i];
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -941,7 +941,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
         // sort objects on this page by ordnum
         std::set< const SdrObject*, SdrObjectCompare > aFlySet;
-        for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+        for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = rObjs[i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )  // a text frame?

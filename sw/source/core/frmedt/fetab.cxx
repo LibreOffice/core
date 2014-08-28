@@ -1589,7 +1589,7 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
         // check flys first
         if ( pPage->GetSortedObjs() )
         {
-            for ( sal_uInt16 i = 0; !pFrm && i < pPage->GetSortedObjs()->Count(); ++i )
+            for ( size_t i = 0; !pFrm && i < pPage->GetSortedObjs()->size(); ++i )
             {
                 SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
                 if ( pObj->ISA(SwFlyFrm) )

@@ -1081,8 +1081,7 @@ void SwViewShell::VisPortChgd( const SwRect &rRect)
                     {
                         const long nOfst = GetOut()->PixelToLogic(
                             Size(Imp()->GetDrawView()->GetMarkHdlSizePixel()/2,0)).Width();
-                        for ( sal_uInt32 i = 0;
-                              i < pPage->GetSortedObjs()->Count(); ++i )
+                        for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
                         {
                             SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
                             // ignore objects that are not actually placed on the page

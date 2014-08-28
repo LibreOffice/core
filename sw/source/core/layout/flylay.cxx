@@ -608,7 +608,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
     if ( pNew->GetDrawObjs() )
     {
         SwSortedObjs &rObjs = *pNew->GetDrawObjs();
-        for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+        for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pTmpObj = rObjs[i];
             if ( pTmpObj->ISA(SwFlyFrm) )
@@ -661,7 +661,7 @@ void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
     if (pSortedObjs)
     {
         pSortedObjs->Remove(*pToRemove);
-        if (!pSortedObjs->Count())
+        if (!pSortedObjs->size())
         {
             delete pSortedObjs;
             pSortedObjs = 0;
@@ -719,7 +719,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     if ( pSortedObjs )
     {
         pSortedObjs->Remove( *pToMove );
-        if ( !pSortedObjs->Count() )
+        if ( !pSortedObjs->size() )
         {   DELETEZ( pSortedObjs );
         }
     }
@@ -755,7 +755,7 @@ void SwPageFrm::MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest )
     if ( pToMove->GetDrawObjs() )
     {
         SwSortedObjs &rObjs = *pToMove->GetDrawObjs();
-        for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
+        for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pObj = rObjs[i];
             if ( pObj->ISA(SwFlyFrm) )
@@ -840,7 +840,7 @@ void SwPageFrm::RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj )
     if ( pSortedObjs )
     {
         pSortedObjs->Remove( _rToRemoveObj );
-        if ( !pSortedObjs->Count() )
+        if ( !pSortedObjs->size() )
         {
             DELETEZ( pSortedObjs );
         }

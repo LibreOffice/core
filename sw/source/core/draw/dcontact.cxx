@@ -500,7 +500,7 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     }
     if ( pFlyFrm->GetDrawObjs() )
     {
-        for ( sal_uInt8 i = 0; i < pFlyFrm->GetDrawObjs()->Count(); ++i)
+        for ( size_t i = 0; i < pFlyFrm->GetDrawObjs()->size(); ++i)
         {
             // #i28701# - consider type of objects in sorted object list.
             SdrObject* pObj = (*pFlyFrm->GetDrawObjs())[i]->DrawObj();
@@ -535,7 +535,7 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     pFlyFrm->DeleteCnt();
     if ( pFlyFrm->GetDrawObjs() )
     {
-        for ( sal_uInt8 i = 0; i < pFlyFrm->GetDrawObjs()->Count(); ++i)
+        for ( size_t i = 0; i < pFlyFrm->GetDrawObjs()->size(); ++i)
         {
             // #i28701# - consider type of objects in sorted object list.
             SdrObject* pObj = (*pFlyFrm->GetDrawObjs())[i]->DrawObj();

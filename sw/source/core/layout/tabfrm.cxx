@@ -267,7 +267,7 @@ static void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
         }
         if ( pLowerFrm->GetDrawObjs() )
         {
-            for ( sal_uInt16 i = 0; i < pLowerFrm->GetDrawObjs()->Count(); ++i )
+            for ( size_t i = 0; i < pLowerFrm->GetDrawObjs()->size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pLowerFrm->GetDrawObjs())[i];
 
@@ -2535,7 +2535,7 @@ bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
         long nYDiff = (*fnRect->fnYDiff)( (Prt().*fnRect->fnGetTop)(), rUpper );
         if( nYDiff > 0 )
             (aRect.*fnRect->fnAddBottom)( -nYDiff );
-        for ( sal_uInt16 i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
+        for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -3607,7 +3607,7 @@ long CalcHeightWidthFlys( const SwFrm *pFrm )
         }
         if ( pObjs )
         {
-            for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
+            for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 // #i26945# - if <pTmp> is follow, the
@@ -4447,7 +4447,7 @@ static bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, bool bInva )
                     + lDiffX, bInva );
             if ( pFrm->GetDrawObjs() )
             {
-                for ( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
+                for ( size_t i = 0; i < pFrm->GetDrawObjs()->size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                     // #i26945# - check, if anchored object
@@ -4819,7 +4819,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         if ( pPg->GetSortedObjs() )
         {
             SwRect aRect( Prt() ); aRect += Frm().Pos();
-            for ( sal_uInt16 i = 0; i < pPg->GetSortedObjs()->Count(); ++i )
+            for ( size_t i = 0; i < pPg->GetSortedObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pAnchoredObj = (*pPg->GetSortedObjs())[i];
                 SwRect aTmp( pAnchoredObj->GetObjRect() );

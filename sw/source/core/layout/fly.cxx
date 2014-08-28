@@ -294,7 +294,7 @@ void SwFlyFrm::DeleteCnt()
     SwFrm* pFrm = pLower;
     while ( pFrm )
     {
-        while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
+        while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->size() )
         {
             SwAnchoredObject *pAnchoredObj = (*pFrm->GetDrawObjs())[0];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -1484,8 +1484,8 @@ void CalcCntnt( SwLayoutFrm *pLay,
             {
                 bool bAgain = false;
                 SwPageFrm* pPageFrm = pFrm->FindPageFrm();
-                sal_uInt32 nCnt = pFrm->GetDrawObjs()->Count();
-                for ( sal_uInt16 i = 0; i < nCnt; ++i )
+                size_t nCnt = pFrm->GetDrawObjs()->size();
+                for ( size_t i = 0; i < nCnt; ++i )
                 {
                     // #i28701#
                     SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
@@ -1555,7 +1555,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
 
                         if ( !pFrm->GetDrawObjs() )
                             break;
-                        if ( pFrm->GetDrawObjs()->Count() < nCnt )
+                        if ( pFrm->GetDrawObjs()->size() < nCnt )
                         {
                             --i;
                             --nCnt;
@@ -2048,7 +2048,7 @@ void SwFrm::RemoveFly( SwFlyFrm *pToRemove )
     }
 
     mpDrawObjs->Remove( *pToRemove );
-    if ( !mpDrawObjs->Count() )
+    if ( !mpDrawObjs->size() )
         DELETEZ( mpDrawObjs );
 
     pToRemove->ChgAnchorFrm( 0 );
@@ -2142,7 +2142,7 @@ void SwFrm::RemoveDrawObj( SwAnchoredObject& _rToRemoveObj )
         pPage->RemoveDrawObjFromPage( _rToRemoveObj );
 
     mpDrawObjs->Remove( _rToRemoveObj );
-    if ( !mpDrawObjs->Count() )
+    if ( !mpDrawObjs->size() )
         DELETEZ( mpDrawObjs );
 
     _rToRemoveObj.ChgAnchorFrm( 0 );
@@ -2158,8 +2158,7 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
         // page.
         const SwPageFrm* pPageFrm = FindPageFrm();
         // #i28701# - re-factoring
-        sal_uInt32 i = 0;
-        for ( ; i < GetDrawObjs()->Count(); ++i )
+        for ( size_t i = 0; i < GetDrawObjs()->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
             if ( _bNoInvaOfAsCharAnchoredObjs &&
@@ -2228,7 +2227,7 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
     if ( pPageFrm && pPageFrm->GetSortedObjs() )
     {
         SwSortedObjs& rObjs = *(pPageFrm->GetSortedObjs());
-        for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
+        for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pObj = rObjs[i];
             // #i26945# - check, if anchored object is a lower
@@ -2663,11 +2662,11 @@ SwTwips SwFlyFrm::CalcContentHeight(const SwBorderAttrs *pAttrs, const SwTwips n
         }
         if ( GetDrawObjs() )
         {
-            sal_uInt32 nCnt = GetDrawObjs()->Count();
+            const size_t nCnt = GetDrawObjs()->size();
             SwTwips nTop = (Frm().*fnRect->fnGetTop)();
             SwTwips nBorder = (Frm().*fnRect->fnGetHeight)() -
             (Prt().*fnRect->fnGetHeight)();
-            for ( sal_uInt16 i = 0; i < nCnt; ++i )
+            for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )

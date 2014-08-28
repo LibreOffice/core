@@ -254,7 +254,7 @@ SwFrmNotify::~SwFrmNotify()
         {
             const SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
             SwPageFrm* pPageFrm = 0;
-            for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 // OD 2004-03-31 #i26791# - no general distinction between
                 // Writer fly frames and drawing objects
@@ -982,7 +982,7 @@ SwCntntNotify::~SwCntntNotify()
              pMasterFrm->GetDrawObjs() )
         {
             SwSortedObjs* pObjs = pMasterFrm->GetDrawObjs();
-            for ( sal_uInt32 i = 0; i < pObjs->Count(); ++i )
+            for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
@@ -1870,7 +1870,7 @@ static bool lcl_hasTabFrm(const SwTxtFrm* pTxtFrm)
     if (pTxtFrm->GetDrawObjs())
     {
         const SwSortedObjs* pSortedObjs = pTxtFrm->GetDrawObjs();
-        if (pSortedObjs->Count() > 0)
+        if (pSortedObjs->size() > 0)
         {
             SwAnchoredObject* pObject = (*pSortedObjs)[0];
             if (pObject->IsA(TYPE(SwFlyFrm)))
@@ -2187,11 +2187,11 @@ const SdrObject *SwOrderIter::Top()
     if ( pPage->GetSortedObjs() )
     {
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
-        if ( pObjs->Count() )
+        if ( pObjs->size() )
         {
             sal_uInt32 nTopOrd = 0;
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
-            for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
+            for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
                 if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
@@ -2215,10 +2215,10 @@ const SdrObject *SwOrderIter::Bottom()
     {
         sal_uInt32 nBotOrd = USHRT_MAX;
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
-        if ( pObjs->Count() )
+        if ( pObjs->size() )
         {
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
-            for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
+            for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
                 if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
@@ -2243,10 +2243,10 @@ const SdrObject *SwOrderIter::Next()
     {
         sal_uInt32 nOrd = USHRT_MAX;
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
-        if ( pObjs->Count() )
+        if ( pObjs->size() )
         {
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
-            for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
+            for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
                 if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
@@ -2270,11 +2270,11 @@ const SdrObject *SwOrderIter::Prev()
     if ( pPage->GetSortedObjs() )
     {
         const SwSortedObjs *pObjs = pPage->GetSortedObjs();
-        if ( pObjs->Count() )
+        if ( pObjs->size() )
         {
             sal_uInt32 nOrd = 0;
             (*pObjs)[0]->GetDrawObj()->GetOrdNum();  // force updating
-            for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
+            for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 const SdrObject* pObj = (*pObjs)[i]->GetDrawObj();
                 if ( bFlysOnly && !pObj->ISA(SwVirtFlyDrawObj) )
@@ -2305,7 +2305,7 @@ static void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
 {
     OSL_ENSURE( _pFrm->GetDrawObjs(), "no DrawObjs in lcl_RemoveObjsFromPage." );
     SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
-    for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+    for ( size_t i = 0; i < rObjs.size(); ++i )
     {
         SwAnchoredObject* pObj = rObjs[i];
         // #115759# - reset member, at which the anchored
@@ -2468,7 +2468,7 @@ static void lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
 {
     OSL_ENSURE( _pFrm->GetDrawObjs(), "no DrawObjs in lcl_AddObjsToPage." );
     SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
-    for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+    for ( size_t i = 0; i < rObjs.size(); ++i )
     {
         SwAnchoredObject* pObj = rObjs[i];
 
@@ -2663,7 +2663,7 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
 static void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
 {
     SwSortedObjs *pObjs = (SwSortedObjs*)pAnch->GetDrawObjs();
-    for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
+    for ( size_t i = 0; i < pObjs->size(); ++i )
     {
         SwAnchoredObject* pObj = (*pObjs)[i];
         if ( pObj->ISA(SwFlyFrm) )
@@ -2837,7 +2837,7 @@ static void lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
         if ( pCnt->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 SwAnchoredObject* pObj = rObjs[i];
                 if ( pObj->ISA(SwFlyFrm) )
@@ -2948,7 +2948,7 @@ void Notify_Background( const SdrObject* pObj,
     {
         pObj->GetOrdNum();
         const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-        for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+        for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = rObjs[i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )

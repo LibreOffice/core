@@ -317,11 +317,11 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
 
         // Dump Anchored objects if any
         SwSortedObjs* pAnchored = GetDrawObjs();
-        if ( pAnchored && pAnchored->Count( ) > 0 )
+        if ( pAnchored && pAnchored->size() > 0 )
         {
             xmlTextWriterStartElement( writer, BAD_CAST( "anchored" ) );
 
-            for ( sal_uInt32 i = 0, len = pAnchored->Count(); i < len; i++ )
+            for ( size_t i = 0, len = pAnchored->size(); i < len; ++i )
             {
                 SwAnchoredObject* pObject = (*pAnchored)[i];
                 pObject->dumpAsXml( writer );

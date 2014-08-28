@@ -130,8 +130,7 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
 
     bool bSuccess( true );
 
-    sal_uInt32 i = 0;
-    for ( ; i < rPageFrm.GetSortedObjs()->Count(); ++i )
+    for ( size_t i = 0; i < rPageFrm.GetSortedObjs()->size(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = (*rPageFrm.GetSortedObjs())[i];
 
@@ -164,15 +163,15 @@ bool SwObjectFormatterLayFrm::_AdditionalFormatObjsOnPage()
             // considering changes at <GetAnchorFrm().GetDrawObjs()> during
             // format of the object.
             if ( !rPageFrm.GetSortedObjs() ||
-                 i > rPageFrm.GetSortedObjs()->Count() )
+                 i > rPageFrm.GetSortedObjs()->size() )
             {
                 break;
             }
             else
             {
-                sal_uInt32 nActPosOfObj =
+                const size_t nActPosOfObj =
                     rPageFrm.GetSortedObjs()->ListPosOf( *pAnchoredObj );
-                if ( nActPosOfObj == rPageFrm.GetSortedObjs()->Count() ||
+                if ( nActPosOfObj == rPageFrm.GetSortedObjs()->size() ||
                      nActPosOfObj > i )
                 {
                     --i;

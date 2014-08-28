@@ -1529,7 +1529,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, bool bTst )
         {
             const SwSortedObjs &rObjs = *pBoss->GetDrawObjs();
             OSL_ENSURE( pBoss->IsPageFrm(), "Header/Footer out of page?" );
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -1695,8 +1695,8 @@ void SwFrm::ValidateThisAndAllLowers( const sal_uInt16 nStage )
         const SwSortedObjs* pObjs = GetDrawObjs();
         if ( pObjs )
         {
-            const sal_uInt32 nCnt = pObjs->Count();
-            for ( sal_uInt32 i = 0; i < nCnt; ++i )
+            const size_t nCnt = pObjs->size();
+            for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchObj = (*pObjs)[i];
                 if ( pAnchObj->ISA(SwFlyFrm) )
@@ -1891,7 +1891,7 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, bool bTst, bool bInfo )
             const SwSortedObjs* pSorted = pPage ? pPage->GetSortedObjs() : 0;
             if( pSorted )
             {
-                for ( sal_uInt16 i = 0; i < pSorted->Count(); ++i )
+                for ( size_t i = 0; i < pSorted->size(); ++i )
                 {
                     const SwAnchoredObject* pAnchoredObj = (*pSorted)[i];
                     const SwRect aBound( pAnchoredObj->GetObjRectWithSpaces() );
@@ -3026,7 +3026,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
 static void InvaPercentFlys( SwFrm *pFrm, SwTwips nDiff )
 {
     OSL_ENSURE( pFrm->GetDrawObjs(), "Can't find any Objects" );
-    for ( sal_uInt16 i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
+    for ( size_t i = 0; i < pFrm->GetDrawObjs()->size(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
         if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -3155,8 +3155,8 @@ static bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
 
         if ( pFrm->GetDrawObjs() )
         {
-            sal_uInt32 nCnt = pFrm->GetDrawObjs()->Count();
-            for ( sal_uInt16 i = 0; i < nCnt; ++i )
+            const size_t nCnt = pFrm->GetDrawObjs()->size();
+            for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -3281,8 +3281,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
         if ( pObjs )
         {
-            sal_uInt32 i = 0;
-            for ( i = 0; i < pObjs->Count(); ++i )
+            for ( size_t i = 0; i < pObjs->size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
 
@@ -3479,8 +3478,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     SwSortedObjs* pTmpObjs = pTmpPageFrm ? pTmpPageFrm->GetSortedObjs() : 0L;
                     if ( pTmpObjs )
                     {
-                        sal_uInt32 i = 0;
-                        for ( i = 0; i < pTmpObjs->Count(); ++i )
+                        for ( size_t i = 0; i < pTmpObjs->size(); ++i )
                         {
                             SwAnchoredObject* pAnchoredObj = (*pTmpObjs)[i];
 
@@ -3635,7 +3633,7 @@ static void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
 static void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
 {
     SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-    for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+    for ( size_t i = 0; i < rObjs.size(); ++i )
     {
         SwAnchoredObject* pAnchoredObj = rObjs[i];
         if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -3667,7 +3665,7 @@ void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
         if ( pPage->GetSortedObjs() )
         {
             const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -3709,7 +3707,7 @@ void SwRootFrm::InvalidateAllObjPos()
         if ( pPageFrm->GetSortedObjs() )
         {
             const SwSortedObjs& rObjs = *(pPageFrm->GetSortedObjs());
-            for ( sal_uInt8 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 const SwFmtAnchor& rAnch = pAnchoredObj->GetFrmFmt().GetAnchor();

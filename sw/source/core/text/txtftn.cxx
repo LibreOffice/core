@@ -222,7 +222,7 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
         if ( pStartFrm->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pStartFrm->GetDrawObjs();
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 SwRect aRect( pAnchoredObj->GetObjRect() );

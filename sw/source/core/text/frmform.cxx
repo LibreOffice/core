@@ -980,7 +980,7 @@ void SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     // no split of text frame, which only contains a as-character anchored object
     const bool bOnlyContainsAsCharAnchoredObj =
             !IsFollow() && nStrLen == 1 &&
-            GetDrawObjs() && GetDrawObjs()->Count() == 1 &&
+            GetDrawObjs() && GetDrawObjs()->size() == 1 &&
             (*GetDrawObjs())[0]->GetFrmFmt().GetAnchor().GetAnchorId() == FLY_AS_CHAR;
     if ( nNew && bOnlyContainsAsCharAnchoredObj )
     {

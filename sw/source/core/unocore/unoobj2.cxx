@@ -185,7 +185,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
         if( pObjs )
         {
             std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
-            for( sal_uInt32 i = 0; i < pObjs->Count(); ++i )
+            for( size_t i = 0; i < pObjs->size(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();

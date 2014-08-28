@@ -647,8 +647,8 @@ bool SwHeadFootFrm::GetEatSpacing() const
 void DelFlys( SwLayoutFrm *pFrm, SwPageFrm *pPage )
 {
     for ( int i = 0; pPage->GetSortedObjs() &&
-                        pPage->GetSortedObjs()->Count() &&
-                        i < (int)pPage->GetSortedObjs()->Count(); ++i )
+                        pPage->GetSortedObjs()->size() &&
+                        i < (int)pPage->GetSortedObjs()->size(); ++i )
     {
         SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
         if ( pObj->ISA(SwFlyFrm) )

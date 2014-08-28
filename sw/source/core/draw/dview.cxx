@@ -258,10 +258,9 @@ SdrObject* SwDrawView::GetMaxToTopObj( SdrObject* pObj ) const
                 if ( pPage->GetSortedObjs() )
                 {
                     size_t nOrdNum = 0;
-                    for ( sal_uInt16 i = 0; i < pPage->GetSortedObjs()->Count(); ++i )
+                    for ( size_t i = 0; i < pPage->GetSortedObjs()->size(); ++i )
                     {
-                        const SdrObject *pO =
-                                    (*pPage->GetSortedObjs())[i]->GetDrawObj();
+                        const SdrObject *pO = (*pPage->GetSortedObjs())[i]->GetDrawObj();
 
                         if ( pO->GetOrdNumDirect() > nOrdNum )
                         {

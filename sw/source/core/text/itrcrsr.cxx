@@ -1868,7 +1868,7 @@ bool SwTxtFrm::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) c
     if( GetDrawObjs() )
     {
         const SwSortedObjs &rObjs = *GetDrawObjs();
-        for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+        for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             const SwAnchoredObject* pAnchoredObj = rObjs[i];
             if( !pAnchoredObj->ISA(SwFlyFrm) )

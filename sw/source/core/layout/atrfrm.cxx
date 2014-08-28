@@ -2815,7 +2815,7 @@ void SwFlyFrmFmt::MakeFrms()
             {
                 // #i28701# - new type <SwSortedObjs>
                 SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
-                for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
+                for( size_t i = 0; i < rObjs.size(); ++i)
                 {
                     // #i28701# - consider changed type of
                     // <SwSortedObjs> entries.

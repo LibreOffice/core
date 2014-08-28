@@ -148,7 +148,7 @@ void SwTxtFrm::MoveFlyInCnt( SwTxtFrm *pNew, sal_Int32 nStart, sal_Int32 nEnd )
     SwSortedObjs *pObjs = 0L;
     if ( 0 != (pObjs = GetDrawObjs()) )
     {
-        for ( sal_uInt32 i = 0; GetDrawObjs() && i < pObjs->Count(); ++i )
+        for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
         {
             // OD 2004-03-29 #i26791#
             // #i28701# - consider changed type of

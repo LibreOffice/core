@@ -474,9 +474,10 @@ void SwObjectFormatterTxtFrm::_InvalidatePrevObjs( SwAnchoredObject& _rAnchoredO
         if ( pObjs )
         {
             // determine start index
-            sal_Int32 i = pObjs->ListPosOf( _rAnchoredObj ) - 1;
-            for ( ; i >= 0; --i )
+            size_t i = pObjs->ListPosOf( _rAnchoredObj );
+            while (i > 0)
             {
+                --i;
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 if ( pAnchoredObj->GetFrmFmt().GetWrapInfluenceOnObjPos().
                         // #i35017# - handle ITERATIVE as ONCE_SUCCESSIVE
@@ -503,8 +504,7 @@ void SwObjectFormatterTxtFrm::_InvalidateFollowObjs( SwAnchoredObject& _rAnchore
     if ( pObjs )
     {
         // determine start index
-        sal_uInt32 i = pObjs->ListPosOf( _rAnchoredObj ) + 1;
-        for ( ; i < pObjs->Count(); ++i )
+        for ( size_t i = pObjs->ListPosOf( _rAnchoredObj ) + 1; i < pObjs->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             pAnchoredObj->InvalidateObjPosForConsiderWrapInfluence( true );
@@ -772,10 +772,9 @@ bool SwObjectFormatterTxtFrm::_AtLeastOneObjIsTmpConsiderWrapInfluence()
     bool bRet( false );
 
     const SwSortedObjs* pObjs = GetAnchorFrm().GetDrawObjs();
-    if ( pObjs && pObjs->Count() > 1 )
+    if ( pObjs && pObjs->size() > 1 )
     {
-        sal_uInt32 i = 0;
-        for ( ; i < pObjs->Count(); ++i )
+        for ( size_t i = 0; i < pObjs->size(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
             if ( pAnchoredObj->ConsiderObjWrapInfluenceOnObjPos() )

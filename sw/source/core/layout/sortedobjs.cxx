@@ -39,16 +39,16 @@ SwSortedObjs::~SwSortedObjs()
 {
 }
 
-sal_uInt32 SwSortedObjs::Count() const
+size_t SwSortedObjs::size() const
 {
     return maSortedObjLst.size();
 }
 
-SwAnchoredObject* SwSortedObjs::operator[]( sal_uInt32 _nIndex ) const
+SwAnchoredObject* SwSortedObjs::operator[]( size_t _nIndex ) const
 {
     SwAnchoredObject* pAnchoredObj = 0L;
 
-    if ( _nIndex >= Count() )
+    if ( _nIndex >= size() )
     {
         OSL_FAIL( "<SwSortedObjs::operator[]> - index out of range" );
     }
@@ -252,7 +252,7 @@ bool SwSortedObjs::Update( SwAnchoredObject& _rAnchoredObj )
         return false;
     }
 
-    if ( Count() == 1 )
+    if ( size() == 1 )
     {
         // given anchored object is the only one in the list.
         return true;
@@ -264,10 +264,8 @@ bool SwSortedObjs::Update( SwAnchoredObject& _rAnchoredObj )
     return Contains( _rAnchoredObj );
 }
 
-sal_uInt32 SwSortedObjs::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) const
+size_t SwSortedObjs::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) const
 {
-    sal_uInt32 nRetLstPos = Count();
-
     std::vector< SwAnchoredObject* >::const_iterator aIter =
         std::find( maSortedObjLst.begin(), maSortedObjLst.end(), &_rAnchoredObj );
 
@@ -276,10 +274,10 @@ sal_uInt32 SwSortedObjs::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) cons
         // #i51941#
         std::vector< SwAnchoredObject* >::difference_type nPos =
                                                 aIter - maSortedObjLst.begin();
-        nRetLstPos = sal_uInt32( nPos );
+        return static_cast<size_t>( nPos );
     }
 
-    return nRetLstPos;
+    return size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

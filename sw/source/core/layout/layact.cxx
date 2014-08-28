@@ -138,9 +138,8 @@ bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *pCnt,
     SwRegionRects aTmp( rRect );
     const SwSortedObjs &rObjs = *pPage->GetSortedObjs();
     const SwFlyFrm *pSelfFly = pCnt->FindFlyFrm();
-    sal_uInt16 i;
 
-    for ( i = 0; i < rObjs.Count() && !aTmp.empty(); ++i )
+    for ( size_t i = 0; i < rObjs.size() && !aTmp.empty(); ++i )
     {
         SdrObject *pO = rObjs[i]->DrawObj();
         if ( !pO->ISA(SwVirtFlyDrawObj) )
@@ -333,7 +332,7 @@ bool SwLayAction::RemoveEmptyBrowserPages()
         SwPageFrm *pPage = (SwPageFrm*)pRoot->Lower();
         do
         {
-            if ( (pPage->GetSortedObjs() && pPage->GetSortedObjs()->Count()) ||
+            if ( (pPage->GetSortedObjs() && pPage->GetSortedObjs()->size()) ||
                  pPage->ContainsCntnt() )
                 pPage = (SwPageFrm*)pPage->GetNext();
             else
@@ -442,8 +441,7 @@ static void unlockPositionOfObjects( SwPageFrm *pPageFrm )
     SwSortedObjs* pObjs = pPageFrm->GetSortedObjs();
     if ( pObjs )
     {
-        sal_uInt32 i = 0;
-        for ( ; i < pObjs->Count(); ++i )
+        for ( size_t i = 0; i < pObjs->size(); ++i )
         {
             SwAnchoredObject* pObj = (*pObjs)[i];
             pObj->UnlockPosition();
@@ -938,7 +936,7 @@ static const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBotto
         if ( pCnt->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-            for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+            for ( size_t i = 0; i < rObjs.size(); ++i )
             {
                 const SwAnchoredObject* pObj = rObjs[i];
                 if ( pObj->ISA(SwFlyFrm) )
@@ -974,7 +972,7 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
 {
     OSL_ENSURE( _pPage->GetSortedObjs(), "FindFirstInvaObj, no Objs" );
 
-    for ( sal_uInt16 i = 0; i < _pPage->GetSortedObjs()->Count(); ++i )
+    for ( size_t i = 0; i < _pPage->GetSortedObjs()->size(); ++i )
     {
         const SwAnchoredObject* pObj = (*_pPage->GetSortedObjs())[i];
         if ( pObj->ISA(SwFlyFrm) )
@@ -1181,7 +1179,7 @@ bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         static_cast<SwPageFrm*>(prPage->GetPrev())->GetSortedObjs();
                     if ( pObjs )
                     {
-                        for ( sal_uInt32 i = 0; i < pObjs->Count(); ++i )
+                        for ( size_t i = 0; i < pObjs->size(); ++i )
                         {
                             SwAnchoredObject* pObj = (*pObjs)[i];
                             if ( pObj->GetAnchorFrmContainingAnchPos() == pCntnt )
@@ -1988,7 +1986,7 @@ bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
     if ( pCnt->GetDrawObjs() )
     {
         const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
-        for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
+        for ( size_t i = 0; i < rObjs.size(); ++i )
         {
             SwAnchoredObject* pObj = rObjs[i];
             if ( pObj->ISA(SwFlyFrm) )
@@ -2066,8 +2064,8 @@ bool SwLayIdle::DoIdleJob( IdleJobType eJob, bool bVisAreaOnly )
         }
         if ( pPage->GetSortedObjs() )
         {
-            for ( sal_uInt16 i = 0; pPage->GetSortedObjs() &&
-                                i < pPage->GetSortedObjs()->Count(); ++i )
+            for ( size_t i = 0; pPage->GetSortedObjs() &&
+                                i < pPage->GetSortedObjs()->size(); ++i )
             {
                 const SwAnchoredObject* pObj = (*pPage->GetSortedObjs())[i];
                 if ( pObj->ISA(SwFlyFrm) )

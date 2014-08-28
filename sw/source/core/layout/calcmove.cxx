@@ -608,7 +608,7 @@ static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot
 {
     // And then there can be paragraph anchored frames that sit below their paragraph.
     long nMax = 0;
-    for ( sal_uInt16 i = 0; i < pSortedObjs->Count(); ++i )
+    for ( size_t i = 0; i < pSortedObjs->size(); ++i )
     {
         // #i28701# - consider changed type of <SwSortedObjs>
         // entries.
@@ -867,7 +867,7 @@ bool SwTxtNode::IsCollapse() const
         bool bInTable = this->FindTableNode( ) != NULL;
 
         SwSortedObjs* pObjs = this->getLayoutFrm( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() )->GetDrawObjs( );
-        sal_uInt32 nObjs = ( pObjs != NULL ) ? pObjs->Count( ) : 0;
+        const size_t nObjs = ( pObjs != NULL ) ? pObjs->size( ) : 0;
 
         return pNdBefore!=NULL && pNdAfter!=NULL && nObjs == 0 && bInTable;
     }
@@ -930,7 +930,7 @@ bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 // (RootFrm::ImplCalcBrowseWidth())
                 long nMinWidth = 0;
 
-                for (sal_uInt16 i = 0; GetDrawObjs() && i < GetDrawObjs()->Count();++i)
+                for (size_t i = 0; GetDrawObjs() && i < GetDrawObjs()->size(); ++i)
                 {
                     // #i28701# - consider changed type of
                     // <SwSortedObjs> entries

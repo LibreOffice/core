@@ -33,7 +33,7 @@ private:
 
     const SwAccessibleChildSList& rList;    // The frame we are iterating over
     sw::access::SwAccessibleChild aCurr;    // The current object
-    sal_uInt16 nNextObj;                    // The index of the current sdr object
+    size_t nNextObj;                        // The index of the current sdr object
 
     inline SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList& rLst )
         : rList( rLst )

@@ -434,7 +434,7 @@ bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
     if( pSorted ) // bOn actually makes sure that we have objects on the side,
                   // but who knows who deleted somehting in the meantime?
     {
-        for ( sal_uInt16 i = 0; i < pSorted->Count(); ++i )
+        for ( size_t i = 0; i < pSorted->size(); ++i )
         {
             const SwAnchoredObject* pObj = (*pSorted)[i];
 
@@ -866,7 +866,7 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
     SWAP_IF_SWAPPED( pCurrFrm )
 
     const SwSortedObjs *pSorted = pPage->GetSortedObjs();
-    const sal_uInt32 nCount = pSorted ? pSorted->Count() : 0;
+    const size_t nCount = pSorted ? pSorted->size() : 0;
     // --> #108724# Page header/footer content doesn't have to wrap around
     //              floating screen objects
     const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
@@ -903,7 +903,7 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
 
         const IDocumentDrawModelAccess* pIDDMA = pCurrFrm->GetTxtNode()->getIDocumentDrawModelAccess();
 
-        for( sal_uInt32 i = 0; i < nCount; i++ )
+        for( size_t i = 0; i < nCount; ++i )
         {
             // #i68520#
             // do not consider hidden objects
@@ -997,11 +997,11 @@ SwTwips SwTxtFly::CalcMinBottom() const
     const SwCntntFrm *pLclMaster = GetMaster();
     OSL_ENSURE(pLclMaster, "SwTxtFly without master");
     const SwSortedObjs *pDrawObj = pLclMaster ? pLclMaster->GetDrawObjs() : NULL;
-    const sal_uInt32 nCount = pDrawObj ? pDrawObj->Count() : 0;
+    const size_t nCount = pDrawObj ? pDrawObj->size() : 0;
     if( nCount )
     {
         SwTwips nEndOfFrm = pCurrFrm->Frm().Bottom();
-        for( sal_uInt32 i = 0; i < nCount; i++ )
+        for( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pDrawObj)[ i ];
             const SwFmtSurround &rFlyFmt = pAnchoredObj->GetFrmFmt().GetSurround();

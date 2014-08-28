@@ -558,7 +558,7 @@ SwPosFlyFrms SwDoc::GetAllFlyFmts( const SwPaM* pCmpRange, bool bDrawAlso,
         if( pPage->GetSortedObjs() )
         {
             SwSortedObjs &rObjs = *pPage->GetSortedObjs();
-            for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
+            for( size_t i = 0; i < rObjs.size(); ++i)
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )

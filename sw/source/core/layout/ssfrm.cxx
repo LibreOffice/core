@@ -274,8 +274,8 @@ void SwFrm::CheckDirChange()
         if ( GetDrawObjs() )
         {
             const SwSortedObjs *pObjs = GetDrawObjs();
-            sal_uInt32 nCnt = pObjs->Count();
-            for ( sal_uInt32 i = 0; i < nCnt; ++i )
+            const size_t nCnt = pObjs->size();
+            for ( size_t i = 0; i < nCnt; ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 if( pAnchoredObj->ISA(SwFlyFrm) )
@@ -358,7 +358,7 @@ void SwFrm::Destroy()
 
     if( mpDrawObjs )
     {
-        for ( sal_uInt32 i = mpDrawObjs->Count(); i; )
+        for ( size_t i = mpDrawObjs->size(); i; )
         {
             SwAnchoredObject* pAnchoredObj = (*mpDrawObjs)[--i];
             if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -463,10 +463,9 @@ void SwLayoutFrm::Destroy()
             //We don't want to create an endless loop only because one couldn't
             //unregister.
 
-            sal_uInt32 nCnt;
-            while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() )
+            while ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->size() )
             {
-                nCnt = pFrm->GetDrawObjs()->Count();
+                const size_t nCnt = pFrm->GetDrawObjs()->size();
                 // #i28701#
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[0];
                 if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -484,7 +483,7 @@ void SwLayoutFrm::Destroy()
                     }
                 }
                 if ( pFrm->GetDrawObjs() &&
-                     nCnt == pFrm->GetDrawObjs()->Count() )
+                     nCnt == pFrm->GetDrawObjs()->size() )
                 {
                     pFrm->GetDrawObjs()->Remove( *pAnchoredObj );
                 }
@@ -494,10 +493,9 @@ void SwLayoutFrm::Destroy()
             pFrm = pLower;
         }
         //Delete the Flys, the last one also deletes the array.
-        sal_uInt32 nCnt;
-        while ( GetDrawObjs() && GetDrawObjs()->Count() )
+        while ( GetDrawObjs() && GetDrawObjs()->size() )
         {
-            nCnt = GetDrawObjs()->Count();
+            const size_t nCnt = GetDrawObjs()->size();
 
             // #i28701#
             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[0];
@@ -515,7 +513,7 @@ void SwLayoutFrm::Destroy()
                     pContact->DisconnectObjFromLayout( pSdrObj );
                 }
             }
-            if ( GetDrawObjs() && nCnt == GetDrawObjs()->Count() )
+            if ( GetDrawObjs() && nCnt == GetDrawObjs()->size() )
             {
                 GetDrawObjs()->Remove( *pAnchoredObj );
             }

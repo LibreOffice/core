@@ -126,7 +126,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             {
                 SwFrmFmt* pMyFlyFrmFmt( &GetFrmFmt() );
                 SwSortedObjs &rObjs = *pCntnt->GetDrawObjs();
-                for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
+                for( size_t i = 0; i < rObjs.size(); ++i)
                 {
                     SwFlyFrm* pFlyFrm = dynamic_cast<SwFlyFrm*>(rObjs[i]);
                     if ( pFlyFrm &&

@@ -561,7 +561,7 @@ void SwTxtFrm::HideAndShowObjects()
         if ( IsHiddenNow() )
         {
             // complete paragraph is hidden. Thus, hide all objects
-            for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
+            for ( size_t i = 0; i < GetDrawObjs()->size(); ++i )
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
@@ -589,7 +589,7 @@ void SwTxtFrm::HideAndShowObjects()
             // Thus, show all objects, which are anchored at paragraph and
             // hide/show objects, which are anchored at/as character, according
             // to the visibility of the anchor character.
-            for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
+            for ( size_t i = 0; i < GetDrawObjs()->size(); ++i )
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
@@ -1159,7 +1159,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 && !IsFollow() && GetDrawObjs() )
             {
                 SwSortedObjs *pObjs = GetDrawObjs();
-                for ( int i = 0; GetDrawObjs() && i < int(pObjs->Count()); ++i )
+                for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
                 {
                     SwAnchoredObject* pAnchoredObj = (*pObjs)[sal_uInt16(i)];
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
@@ -1648,8 +1648,8 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 {
                     if ( GetDrawObjs() )
                     {
-                        const sal_uInt32 nCnt = GetDrawObjs()->Count();
-                        for ( sal_uInt16 i = 0; i < nCnt; ++i )
+                        const size_t nCnt = GetDrawObjs()->size();
+                        for ( size_t i = 0; i < nCnt; ++i )
                         {
                             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
                             // #i28701# - consider all

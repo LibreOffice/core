@@ -120,7 +120,7 @@ bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_Int32 nNew )
             if( pVsh )
             {
                 if( pVsh->GetNext() != pVsh ||
-                    ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->Count() ) )
+                    ( pFrm->GetDrawObjs() && pFrm->GetDrawObjs()->size() ) )
                 {
                     if( !pFrm->GetOfst() )
                         return false;

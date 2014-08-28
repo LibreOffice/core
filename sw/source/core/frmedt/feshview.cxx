@@ -415,15 +415,13 @@ bool SwFEShell::MoveAnchor( sal_uInt16 nDir )
                 SwFlyFrm* pNewFly = NULL;
                 if( pPage->GetSortedObjs() )
                 {
-                    int i;
                     bool bOld = false;
                     Point aCenter( pOld->Frm().Left() + pOld->Frm().Width()/2,
                                    pOld->Frm().Top() + pOld->Frm().Height()/2 );
                     Point aBest;
-                    for( i = 0; (sal_uInt16)i<pPage->GetSortedObjs()->Count(); ++i )
+                    for( size_t i = 0; i<pPage->GetSortedObjs()->size(); ++i )
                     {
-                        SwAnchoredObject* pAnchObj =
-                                                (*pPage->GetSortedObjs())[i];
+                        SwAnchoredObject* pAnchObj = (*pPage->GetSortedObjs())[i];
                         if( pAnchObj->ISA(SwFlyFrm) )
                         {
                             SwFlyFrm* pTmp = static_cast<SwFlyFrm*>(pAnchObj);
@@ -759,8 +757,8 @@ static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
             aRect = GetBoundRectOfAnchoredObj( pO );
         }
 
-        sal_uInt32 nCount = pPage->GetSortedObjs() ? pPage->GetSortedObjs()->Count() : 0;
-        for ( sal_uInt32 i = 0; i < nCount; ++i )
+        const size_t nCount = pPage->GetSortedObjs() ? pPage->GetSortedObjs()->size() : 0;
+        for ( size_t i = 0; i < nCount; ++i )
         {
             SwAnchoredObject* pAnchoredObj = (*pPage->GetSortedObjs())[i];
             if ( !pAnchoredObj->ISA(SwFlyFrm) )
