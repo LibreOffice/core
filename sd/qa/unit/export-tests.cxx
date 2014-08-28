@@ -8,6 +8,7 @@
  */
 
 #include "sdmodeltestbase.hxx"
+#include "Outliner.hxx"
 
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
@@ -21,8 +22,11 @@
 #include <editeng/numitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/postitem.hxx>
+#include <editeng/bulletitem.hxx>
+
 #include <rsc/rscsfx.hxx>
 
+#include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdograf.hxx>
@@ -64,6 +68,7 @@ public:
     void testN828390();
     void testBnc880763();
     void testBnc862510_5();
+    void testBnc822347_EmptyBullet();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testN821567);
@@ -76,6 +81,7 @@ public:
     CPPUNIT_TEST(testN828390);
     CPPUNIT_TEST(testBnc880763);
     CPPUNIT_TEST(testBnc862510_5);
+    CPPUNIT_TEST(testBnc822347_EmptyBullet);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -416,6 +422,37 @@ void SdFiltersTest::testBnc862510_5()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(7510), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
+
+    xDocShRef->DoClose();
+}
+
+// In numbering a bullet could be defined as empty (no character).
+// When exporting to OOXML make sure that the bullet is ignored and
+// not written into the file.
+void SdFiltersTest::testBnc822347_EmptyBullet()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/bnc822347_EmptyBullet.odp"), ODP);
+    xDocShRef = saveAndReload(xDocShRef, PPTX);
+
+    SdDrawDocument* pDoc = xDocShRef->GetDoc();
+    SdrOutliner* pOutliner = pDoc->GetInternalOutliner();
+    const SdrPage* pPage = pDoc->GetPage(1);
+    SdrObject* pObject = pPage->GetObj(0);
+    SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
+    CPPUNIT_ASSERT(pTextObject);
+
+    OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+    const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
+
+    OUString sText = aEdit.GetText(0);
+    CPPUNIT_ASSERT_EQUAL(OUString("M3 Feature Test"), sText);
+
+    pOutliner->SetText(*pOutlinerParagraphObject);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pOutliner->GetParagraphCount());
+
+    const sal_Int16 nDepth = pOutliner->GetDepth(0);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), nDepth); // depth >= 0 means that the paragraph has bullets enabled
 
     xDocShRef->DoClose();
 }
