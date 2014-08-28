@@ -49,8 +49,9 @@ class SvStream;
 class SwFlyCache;
 typedef boost::ptr_vector<SwFlyCache> SwPageFlyCache;
 
-class SwLayCacheImpl : public std::vector<sal_uLong>
+class SwLayCacheImpl
 {
+    std::vector<sal_uLong> mIndices;
     std::deque<sal_Int32> aOffset;
     std::vector<sal_uInt16> aType;
     SwPageFlyCache aFlyCache;
@@ -58,10 +59,13 @@ class SwLayCacheImpl : public std::vector<sal_uLong>
     void Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset );
 
 public:
-    SwLayCacheImpl() : bUseFlyCache(false) {}
+    SwLayCacheImpl() : mIndices(), aOffset(), aType(), aFlyCache(), bUseFlyCache(false) {}
+
+    size_t size() const { return mIndices.size(); }
+
     bool Read( SvStream& rStream );
 
-    sal_uLong GetBreakIndex( sal_uInt16 nIdx ) const { return std::vector<sal_uLong>::operator[]( nIdx ); }
+    sal_uLong GetBreakIndex( sal_uInt16 nIdx ) const { return mIndices[ nIdx ]; }
     sal_Int32 GetBreakOfst( size_t nIdx ) const { return aOffset[ nIdx ]; }
     sal_uInt16 GetBreakType( sal_uInt16 nIdx ) const { return aType[ nIdx ]; }
 

@@ -73,7 +73,7 @@ void SwLayoutCache::Read( SvStream &rStream )
 void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset )
 {
     aType.push_back( nType );
-    std::vector<sal_uLong>::push_back( nIndex );
+    mIndices.push_back( nIndex );
     aOffset.push_back( nOffset );
 }
 
@@ -486,7 +486,7 @@ SwLayHelper::SwLayHelper( SwDoc *pD, SwFrm* &rpF, SwFrm* &rpP, SwPageFrm* &rpPg,
                           ->GetIndex();
         nNodeIndex -= nStartOfContent;
         nIndex = 0;
-        while( nIndex < pImpl->size() && (*pImpl)[ nIndex ] < nNodeIndex )
+        while( nIndex < pImpl->size() && pImpl->GetBreakIndex( nIndex ) < nNodeIndex )
         {
             ++nIndex;
         }
@@ -881,7 +881,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                 }
             }
         } while( bLongTab || ( pImpl && nIndex < pImpl->size() &&
-                 (*pImpl)[ nIndex ] == nNodeIndex ) );
+                 pImpl->GetBreakIndex( nIndex ) == nNodeIndex ) );
     }
     bFirst = false;
     return bRet;
