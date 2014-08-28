@@ -79,9 +79,8 @@ private:
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) SAL_OVERRIDE;
 
-#ifndef _SFX_HXX
+    DECL_LINK( SwitchReadOnlyHandler, void * );
     SAL_DLLPRIVATE void KillDispatcher_Impl();
-#endif
 
     virtual                 ~SfxViewFrame();
 

@@ -26,8 +26,6 @@
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false" toolbar:helpid="5502"/>
  <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:helpid="5331"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="6312"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:helpid="6674"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Print"/>

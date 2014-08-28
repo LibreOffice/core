@@ -92,7 +92,11 @@ String STR_REPAIREDDOCUMENT
 
 String STR_NONCHECKEDOUT_DOCUMENT
 {
-    Text [ en-US ] = "Document is not checked out on server" ;
+    Text [ en-US ] = "This document is not checked out on the server." ;
+};
+String STR_READONLY_DOCUMENT
+{
+    Text [ en-US ] = "This document is opened in read-only mode." ;
 };
 
 PushButton BT_CHECKOUT
@@ -100,6 +104,12 @@ PushButton BT_CHECKOUT
     Pos = MAP_APPFONT( 0 , 0 );
     Size = MAP_APPFONT( 30 , 0 );
     Text[ en-US ] = "Check out";
+};
+PushButton BT_READONLY_EDIT
+{
+    Pos = MAP_APPFONT( 0 , 0 );
+    Size = MAP_APPFONT( 70 , 0 );
+    Text[ en-US ] = "Edit document";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
