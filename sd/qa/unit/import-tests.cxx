@@ -32,7 +32,9 @@
 #include <svx/svdotable.hxx>
 #include <svx/xflclit.hxx>
 #include <animations/animationnodehelper.hxx>
+#include <sax/tools/converter.hxx>
 
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
@@ -71,6 +73,7 @@ public:
     void testN862510_4();
     void testBnc870237();
     void testBnc887225();
+    void testCreationDate();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -90,6 +93,7 @@ public:
     CPPUNIT_TEST(testN862510_4);
     CPPUNIT_TEST(testBnc870237);
     CPPUNIT_TEST(testBnc887225);
+    CPPUNIT_TEST(testCreationDate);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -551,6 +555,18 @@ void SdFiltersTest::testBnc870237()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrMetricItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
 
     xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testCreationDate()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/fdo71434.pptx"), PPTX);
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(xDocShRef->GetModel(), uno::UNO_QUERY);
+    uno::Reference<document::XDocumentProperties> xDocumentProperties = xDocumentPropertiesSupplier->getDocumentProperties();
+    util::DateTime aDate = xDocumentProperties->getCreationDate();
+    OUStringBuffer aBuffer;
+    sax::Converter::convertDateTime(aBuffer, aDate, 0);
+    // Metadata wasn't imported, this was 0000-00-00.
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-11-09T10:37:56"), aBuffer.makeStringAndClear());
 }
 
 void SdFiltersTest::testBnc887225()
