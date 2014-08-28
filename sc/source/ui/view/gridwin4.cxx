@@ -464,7 +464,14 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     }
 
     MapMode aPixelMapMode = MapMode( MAP_PIXEL );
-    aPixelMapMode.SetOrigin( pOutDev->GetMapMode().GetOrigin() );
+    // We should only fiddle with the origin for tiled rendering (as it is set to
+    // something otherwise useful for normal rendering).
+    // Perhaps it would be better to instead pass in the desired origin to set for tiled
+    // rendering?
+    if ( pOutDev != this )
+    {
+        aPixelMapMode.SetOrigin( pOutDev->GetMapMode().GetOrigin() );
+    }
 
     ScModule* pScMod = SC_MOD();
     bool bTextWysiwyg = pScMod->GetInputOptions().GetTextWysiwyg();
@@ -651,10 +658,13 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     }
 
     // define drawing layer map mode and paint rectangle
-    MapMode aDrawMode = pViewData->GetPaintMapMode();
-    Point aOrigin = aPixelMapMode.GetOrigin();
-    aDrawMode.SetMapUnit( MAP_100TH_MM );
-    aDrawMode.SetOrigin( pOutDev->PixelToLogic( aOrigin, aDrawMode ) );
+    MapMode aDrawMode = GetDrawMapMode();
+    if ( pOutDev != this )
+    {
+        Point aOrigin = aPixelMapMode.GetOrigin();
+        aDrawMode.SetMapUnit( MAP_100TH_MM );
+        aDrawMode.SetOrigin( pOutDev->PixelToLogic( aOrigin, aDrawMode ) );
+    }
 
     Rectangle aDrawingRectLogic;
 
