@@ -181,6 +181,16 @@ private:
     int mnColorRate;
     bool mbBenchMarkMode;
     sal_uInt32 maHistoryCounter;
+
+
+    // these form a pair:
+    // main thread sets condition 1 and waits until it can take the mutex
+    // render thread checks condition 1 before taking the mutex and waits in case it
+    // is set until condition 2 is set
+    //
+    // only necessary for the benchmark mode
+    osl::Condition maCond1;
+    osl::Condition maCond2;
 };
 
 }

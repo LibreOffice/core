@@ -79,6 +79,27 @@ double findMaxValue(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer)
     return nMax;
 }
 
+class SharedResourceAccess
+{
+private:
+    osl::Condition& mrCond1;
+    osl::Condition& mrCond2;
+
+public:
+
+    SharedResourceAccess(osl::Condition& rCond1, osl::Condition& rCond2):
+        mrCond1(rCond1),
+        mrCond2(rCond2)
+    {
+        mrCond1.set();
+    }
+
+    ~SharedResourceAccess()
+    {
+        mrCond2.set();
+    }
+};
+
 }
 
 class RenderThread : public salhelper::Thread
@@ -418,6 +439,7 @@ void RenderBenchMarkThread::execute()
     {
         {
             osl::MutexGuard aGuard(mpChart->maMutex);
+            mpChart->maCond2.reset();
             if (mpChart->mbRenderDie)
                 break;
             UpdateScreenText();
@@ -425,14 +447,11 @@ void RenderBenchMarkThread::execute()
             renderFrame();
             mpChart->miFrameCount++;
         }
-        #ifdef WNT
-            Sleep(1);
-        #else
-            TimeValue nTV;
-            nTV.Seconds = 0;
-            nTV.Nanosec = 1000000;
-            osl_waitThread(&nTV);
-        #endif
+        if (mpChart->maCond1.check())
+        {
+            mpChart->maCond1.reset();
+            mpChart->maCond2.wait();
+        }
     }
 }
 
@@ -517,6 +536,7 @@ GL3DBarChart::~GL3DBarChart()
 {
     if (mbBenchMarkMode)
     {
+        SharedResourceAccess(maCond1, maCond2);
         osl::MutexGuard aGuard(maMutex);
         mbRenderDie = true;
     }
@@ -531,6 +551,7 @@ GL3DBarChart::~GL3DBarChart()
 void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSeriesContainer,
         ExplicitCategoriesProvider& rCatProvider)
 {
+    SharedResourceAccess(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
     mpRenderer->ReleaseShapes();
     // Each series of data flows from left to right, and multiple series are
@@ -803,6 +824,7 @@ void GL3DBarChart::moveToDefault()
             return;
 
         {
+            SharedResourceAccess(maCond1, maCond2);
             osl::MutexGuard aGuard(maMutex);
             maRenderEvent = EVENT_MOVE_TO_DEFAULT;
         }
@@ -845,6 +867,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
             return;
 
         {
+            SharedResourceAccess(maCond1, maCond2);
             osl::MutexGuard aGuard(maMutex);
             maClickPos = rPos;
             mnPreSelectBarId = mnSelectBarId;
@@ -913,6 +936,7 @@ void GL3DBarChart::render()
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 )
 {
     long nDirection = rEndPos.X() - rStartPos.X();
+    SharedResourceAccess(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
     if ((maRenderEvent == EVENT_NONE) || (maRenderEvent == EVENT_SHOW_SCROLL) ||
         (maRenderEvent == EVENT_AUTO_FLY) || (maRenderEvent == EVENT_SHOW_SELECT))
@@ -989,6 +1013,7 @@ void GL3DBarChart::moveToCorner()
 void GL3DBarChart::scroll(long nDelta)
 {
     {
+        SharedResourceAccess(maCond1, maCond2);
         osl::MutexGuard aGuard(maMutex);
         if ((maRenderEvent != EVENT_NONE) && (maRenderEvent != EVENT_SHOW_SCROLL) &&
             (maRenderEvent != EVENT_AUTO_FLY) && (maRenderEvent == EVENT_SHOW_SELECT))
@@ -1009,6 +1034,7 @@ void GL3DBarChart::scroll(long nDelta)
 
 void GL3DBarChart::contextDestroyed()
 {
+    SharedResourceAccess(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
     mbValidContext = false;
 }
@@ -1055,6 +1081,7 @@ int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
 
 void GL3DBarChart::updateScreenText()
 {
+    SharedResourceAccess(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
     maScreenTextShapes.clear();
     mpRenderer->ReleaseScreenTextShapes();
