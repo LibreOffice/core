@@ -28,28 +28,32 @@ import org.openoffice.xmerge.merger.Iterator;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 /**
- *  <p>A very simple and direct difference algorithm for row
- *  <code>Node</code> objects in a spreadsheet.  Basically, it will
- *  compare objects in sequence and does not look ahead (unlike LCS).</p>
+ *  A very simple and direct difference algorithm for row
+ *  <code>Node</code> objects in a spreadsheet.
  *
- *  <p><ol><li>
- *    If two objects are the same, skip to next one.
- *  </li><li>
- *    Otherwise check whether the row repeated attribute is the same.
- *  </li><li>
- *    If the row repeated attribute is the same, then compare two rows
- *    and mark it as <i>change</i> if those rows are different.
- *  </li><li>
- *    If the row repeated attribute is different, then split the rows and
- *    continue to compare.
- *  </li><li>
- *    If there are more objects in the modseq than the original sequence,
- *    then all of the extra ones in the modified sequence are marked as add.
- *  </li><li>
- *    If there are more objects in the original sequence than the modified
- *    sequence, then all the extra one in the modified sequence are marked
- *    as delete.
- *  </li></ol></p>
+ *  <p>Basically, it will compare objects in sequence and does not look ahead
+ *  (unlike LCS).</p>
+ *
+ *  <ol>
+ *    <li>
+ *      If two objects are the same, skip to next one.
+ *    </li><li>
+ *      Otherwise check whether the row repeated attribute is the same.
+ *    </li><li>
+ *      If the row repeated attribute is the same, then compare two rows
+ *      and mark it as <i>change</i> if those rows are different.
+ *    </li><li>
+ *      If the row repeated attribute is different, then split the rows and
+ *      continue to compare.
+ *    </li><li>
+ *      If there are more objects in the modseq than the original sequence,
+ *      then all of the extra ones in the modified sequence are marked as add.
+ *    </li><li>
+ *      If there are more objects in the original sequence than the modified
+ *      sequence, then all the extra one in the modified sequence are marked
+ *      as delete.
+ *    </li>
+ *  </ol>
  *
  *  <p>NOTE: The algorithm will have potential side effect to split rows.</p>
  */
