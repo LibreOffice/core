@@ -27,7 +27,7 @@ class SwWrtShell;
 struct SwConversionArgs;
 class SwPaM;
 
-class SwHHCWrapper : public editeng::HangulHanjaConversion
+class SW_DLLPUBLIC SwHHCWrapper : public editeng::HangulHanjaConversion
 {
     SwView *    m_pView;
     Window*     m_pWin;

@@ -262,8 +262,8 @@ void SwHHCWrapper::ChangeText( const OUString &rNewText,
                 nIndex = rOrigText.getLength();
             }
 
-            if (rOrigText[nIndex] == rNewText[nPos] ||
-                nPos == nConvTextLen /* end of string also terminates non-matching char sequence */)
+            if (nPos == nConvTextLen || /* end of string also terminates non-matching char sequence */
+                rOrigText[nIndex] == rNewText[nPos])
             {
                 // substring that needs to be replaced found?
                 if (nChgPos != -1 && nConvChgPos != -1)
