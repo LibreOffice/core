@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,libmspub,build) :
 			--disable-shared \
 			--without-docs \
 			--disable-tools \
-			--disable-debug \
+			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
 			--disable-werror \
 			--disable-weffc \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
