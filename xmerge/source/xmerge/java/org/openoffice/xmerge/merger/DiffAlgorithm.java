@@ -19,24 +19,25 @@
 package org.openoffice.xmerge.merger;
 
 /**
- * This is the difference algorithm interface.  It is an interface so
- * that different algorithms may be plugged-in to actually compute
- * the differences.
+ * This is the difference algorithm interface.
  *
- * NOTE: this code may not be thread safe.
+ * <p>It is an interface so that different algorithms may be plugged-in to
+ * actually compute the differences.</p>
+ *
+ * <p>NOTE: this code may not be thread safe.</p>
  */
 public interface DiffAlgorithm {
 
     /**
-     *  Returns a <code>Difference</code> array.  This method finds out
-     *  the difference between two sequences.
+     * Returns a {@code Difference} array.
      *
-     *  @param  orgSeq  The original sequence of object.
-     *  @param  modSeq  The modified (or changed) sequence to
-     *                  compare against with the origial.
+     * <p>This method finds out the difference between two sequences.</p>
      *
-     *  @return  A <code>Difference</code> array.
+     * @param   orgSeq  The original sequence of object.
+     * @param   modSeq  The modified (or changed) sequence to compare against
+     *                  with the origial.
+     *
+     * @return  A {@code Difference} array.
      */
     Difference[] computeDiffs(Iterator orgSeq, Iterator modSeq);
 }
-

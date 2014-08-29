@@ -28,23 +28,21 @@ import org.openoffice.xmerge.merger.diff.TextNodeEntry;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- *  This is an implementation of the <code>NodeMergeAlgorithm</code>
- *  interface.  It is used to merge two paragraph <code>Node</code>
- *  objects based on character comparisons.
+ * This is an implementation of the {@code NodeMergeAlgorithm} interface.
+ *
+ * <p>It is used to merge two paragraph {@code Node} objects based on character
+ * comparisons.</p>
  */
-public final class CharacterBaseParagraphMerge
-                   implements NodeMergeAlgorithm {
-
-
+public final class CharacterBaseParagraphMerge implements NodeMergeAlgorithm {
 
     /**
-     *  Merge two paragraph <code>Node</code> by using Longest Common
-     *  Subsequence (LCS) character algorithm defined in {@link
-     *  org.openoffice.xmerge.merger.diff.CharArrayLCSAlgorithm
-     *  CharArrayLCSAlgorithm}
+     * Merge two paragraph {@code Node} by using Longest Common Subsequence
+     * (LCS) character algorithm defined in {@link
+     * org.openoffice.xmerge.merger.diff.CharArrayLCSAlgorithm
+     * CharArrayLCSAlgorithm}.
      *
-     *  @param  orgPara  The original paragraph <code>Node</code>.
-     *  @param  modPara  The modified paragraph <code>Node</code>.
+     * @param  orgPara  The original paragraph {@code Node}.
+     * @param  modPara  The modified paragraph {@code Node}.
      */
     public void merge(Node orgPara, Node modPara) {
         CharacterParser orgParser = new CharacterParser(orgPara);
@@ -65,7 +63,6 @@ public final class CharacterBaseParagraphMerge
 
         applyDifference(orgParser, modParser, diffResult);
     }
-
 
     private void applyDifference(CharacterParser orgParser,
                                  CharacterParser modParser,
@@ -135,15 +132,14 @@ public final class CharacterBaseParagraphMerge
     }
 
     private void coreMerge(int startDiffNum, int endDiffNum, Difference[] diffs,
-                        CharacterParser modParser,
-                        TextNodeEntry orgTextNode, int extraChar) {
+                           CharacterParser modParser,
+                           TextNodeEntry orgTextNode, int extraChar) {
 
         Node orgNode = orgTextNode.node();
         char[] modTextArray = modParser.getCharArray();
         String tmpString;
 
         // Handle situation where getNodeValue returns null
-
         if (orgNode.getNodeValue() != null)
            tmpString = orgNode.getNodeValue();
         else
@@ -167,11 +163,9 @@ public final class CharacterBaseParagraphMerge
         int lastDiffPosition = -1;
 
         // starting to diff
-
         for (int j = startDiffNum; j < endDiffNum; j++) {
 
             // copy any contents before the diff
-
             if (diffs[j].getOrgPosition() > orgTextPosition) {
                 // need to flush first
                 if (cacheLength > 0) {
@@ -199,7 +193,6 @@ public final class CharacterBaseParagraphMerge
 
             // for any deleted characters, just skip without copy
             // but still need to take care the cached characters
-
             if (diffs[j].getOperation() == Difference.DELETE) {
                 orgTextPosition++;
 
@@ -216,7 +209,6 @@ public final class CharacterBaseParagraphMerge
                 }
 
                 continue;
-
 
             // check whether we should flush the cache.
             // For changed diffs, only continuous changes can be cached
@@ -289,4 +281,3 @@ public final class CharacterBaseParagraphMerge
         }
     }
 }
-

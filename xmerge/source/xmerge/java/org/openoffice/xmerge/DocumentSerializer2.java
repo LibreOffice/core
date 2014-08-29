@@ -21,43 +21,43 @@ package org.openoffice.xmerge;
 import java.io.IOException;
 
 /**
- *  <p>A <code>DocumentSerializer2</code> represents a converter that
- *  converts a &quot;Office&quot; <code>Document</code> to a
- *  &quot;Device&quot; <code>Document</code> format.</p>
+ * A {@code DocumentSerializer2} represents a converter that converts a
+ * &quot;Office&quot; {@code Document} to a &quot;Device&quot; {@code Document}
+ * format.
  *
- *  <p>The <code>PluginFactory</code> {@link
- *  org.openoffice.xmerge.DocumentSerializerFactory#createDocumentSerializer
- *  createDocumentSerializer} method creates a <code>DocumentSerializer</code>,
- *  which may or may not implement <code>DocumentSerializer2</code>.
- *  When it is constructed, a
- *  &quot;Office&quot; <code>Document</code> object is passed in to
- *  be used as input.</p>
+ * <p>The {@code PluginFactory} {@link
+ * org.openoffice.xmerge.DocumentSerializerFactory#createDocumentSerializer
+ * createDocumentSerializer} method creates a {@code DocumentSerializer}, which
+ * may or may not implement {@code DocumentSerializer2}. When it is constructed,
+ * a &quot;Office&quot; {@code Document} object is passed in to be used as
+ * input.</p>
  *
- *  @see     org.openoffice.xmerge.PluginFactory
- *  @see     org.openoffice.xmerge.DocumentSerializerFactory
+ * @see  org.openoffice.xmerge.PluginFactory
+ * @see  org.openoffice.xmerge.DocumentSerializerFactory
  */
 public interface DocumentSerializer2 extends DocumentSerializer {
 
     /**
-     *  <p>Convert the data passed into the <code>DocumentSerializer2</code>
-     *  constructor into the &quot;Device&quot; <code>Document</code>
-     *  format. The URL's passed may be used to resolve links and to name
-     *  the output device document(s).</p>
+     * Convert the data passed into the {@code DocumentSerializer2} constructor
+     * into the &quot;Device&quot; {@code Document} format.
      *
-     *  <p>This method may or may not be thread-safe.  It is expected
-     *  that the user code does not call this method in more than one
-     *  thread.  And for most cases, this method is only done once.</p>
+     * <p>The URL's passed may be used to resolve links and to name the output
+     * device document(s).</p>
      *
-     *  @return  <code>ConvertData</code> object to pass back the
-     *           converted data.
+     * <p>This method may or may not be thread-safe.  It is expected that the
+     * user code does not call this method in more than one thread.  And for
+     * most cases, this method is only done once.</p>
      *
-     *  @param   officeURL         URL of the office document (may be null if unknown)
-     *  @param   deviceURL         URL of the device document (may be null if unknown)
+     * @return  {@code ConvertData} object to pass back the converted data.
      *
-     *  @throws  ConvertException  If any conversion error occurs.
-     *  @throws  IOException       If any I/O error occurs.
+     * @param   officeURL         URL of the office document (may be null if
+     *                            unknown)
+     * @param   deviceURL         URL of the device document (may be null if
+     *                            unknown)
+     *
+     * @throws  ConvertException  If any conversion error occurs.
+     * @throws  IOException       If any I/O error occurs.
      */
     ConvertData serialize(String officeURL, String deviceURL) throws
         ConvertException, IOException;
 }
-

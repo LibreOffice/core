@@ -23,19 +23,18 @@ import org.w3c.dom.Node;
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
-
 /**
- *  <p>This is an implementation of the <code>Iterator</code> interface.
- *  It will traverse the tree and find the Paragraph/Heading <code>Node</code>
- *  sequences.</p>
+ * This is an implementation of the {@code Iterator} interface.
  *
- *  <p>Note: Once the XML Tree is parsed, then the <code>Iterator</code> will
- *  be a snap shot of that tree. That means even the tree is modified later,
- *  than the cached paragraph <code>Node</code> list will not be updated
- *  accordingly.  For this reason and for performance reasons this
- *  <code>Iterator</code> does not support any operation methods such as
- *  insert, remove or replace.  The main purpose of this
- *  <code>Iterator</code> is to be used with difference, not with merge.</p>
+ * <p>It will traverse the tree and find the Paragraph/Heading {@code Node}
+ * sequences.</p>
+ *
+ * <p>Note: Once the XML Tree is parsed, then the {@code Iterator} will be a
+ * snap shot of that tree. That means even the tree is modified later, than the
+ * cached paragraph {@code Node} list will not be updated accordingly. For this
+ * reason and for performance reasons this {@code Iterator} does not support any
+ * operation methods such as insert, remove or replace. The main purpose of this
+ * {@code Iterator} is to be used with difference, not with merge.</p>
  */
 public final class ParaNodeIterator extends NodeIterator {
 
@@ -44,28 +43,26 @@ public final class ParaNodeIterator extends NodeIterator {
     private static final String SUPPORTED_TAG2 = OfficeConstants.TAG_HEADING;
 
     /**
-     *  Standard constructor.
+     * Standard constructor.
      *
-     *  @param  cc    The <code>ConverterCapabilities</code>.
-     *  @param  node  The initial root <code>Node</code>.
+     * @param  cc    The {@code ConverterCapabilities}.
+     * @param  node  The initial root {@code Node}.
      */
     public ParaNodeIterator(ConverterCapabilities cc, Node node) {
         // not using convertercapabilities unless it's needed in future.
         super(cc, node);
     }
 
-
     /**
-     *  Overwrite the parent <code>nodeSupported</code> method.
+     * Overwrite the parent <code>nodeSupported</code> method.
      *
-     *  @param  node  <code>Node</code> to check.
+     * @param   node  {@code Node} to check.
      *
-     *  @return  true if the <code>Node</code> is supported, false
-     *           otherwise.
+     * @return  {@code true} if the {@code Node} is supported, {@code false}
+     *          otherwise.
      */
     @Override
     protected boolean nodeSupported(Node node) {
-
         // can use an array later to check all possible tags for
         // future expansion
         return node.getNodeType() == Node.ELEMENT_NODE &&
@@ -73,4 +70,3 @@ public final class ParaNodeIterator extends NodeIterator {
                 node.getNodeName().equals(SUPPORTED_TAG2));
     }
 }
-

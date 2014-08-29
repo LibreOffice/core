@@ -21,69 +21,54 @@ package org.openoffice.xmerge.util;
 import java.util.ResourceBundle;
 
 /**
- *  <p>Provides a singleton resource class for converter messages.</p>
+ * Provides a singleton resource class for converter messages.
  *
- *  <p>By default, this class will search for a
- *  <code>ResourceBundle</code> class file or properties file based
- *  on the default locale.</p>
+ * <p>By default, this class will search for a {@code ResourceBundle} class file
+ * or properties file based on the default locale.</p>
  *
- *  <p>A properties file resources.properties will be provided.</p>
+ * <p>A properties file resources.properties will be provided.</p>
  *
- *  <p>Note that if the resource bundle object is not loaded, the
- *  construction of the singleton object will throw a
- *  <code>MissingResourceException</code>, which is a
- *  <code>RuntimeException</code>, thus I opted to not explicitly
- *  declare it.  If it does throw <code>MissingResourceException</code>,
- *  it may be due to a packaging problem.</p>
- *
+ * <p>Note that if the resource bundle object is not loaded, the construction of
+ * the singleton object will throw a {@code MissingResourceException}, which is
+ * a {@code RuntimeException}, thus I opted to not explicitly declare it.  If it
+ * does throw {@code MissingResourceException}, it may be due to a packaging
+ * problem.</p>
  */
 public final class Resources
 {
     private ResourceBundle rb = null;
-
     private static Resources instance = null;
 
-
     /**
-     *  This method returns the singleton instance
-     *  of this class.
+     * This method returns the singleton instance of this class.
      *
-     *  @return  The singleton <code>Resources</code>
-     *           instance.
+     * @return  The singleton {@code Resources} instance.
      */
-    public synchronized static Resources getInstance()
-    {
-        if (instance == null)
-        {
+    public synchronized static Resources getInstance() {
+        if (instance == null) {
             instance = new Resources();
         }
 
         return instance;
     }
 
-
     /**
-     *  Default constructor is only accessible within this class.
-     *  Load the resource bundle that contains the resource
-     *  <code>String</code> values.
+     * Default constructor is only accessible within this class.
+     *
+     * <p>Load the resource bundle that contains the resource {@code String}
+     * values.</p>
      */
-    private Resources()
-    {
+    private Resources() {
         rb = ResourceBundle.getBundle("org.openoffice.xmerge.util.resources");
     }
 
-
     /**
-     *  This method returns the corresponding <code>String</code> given
-     *  the key.
+     * This method returns the corresponding {@code String} given the key.
      *
-     *  @param   key     Key string for getting the message
-     *                   <code>String</code>.
-     *  @return  Message <code>String</code> corresponding to the key.
+     * @param   key      Key string for getting the message {@code String}.
+     * @return  Message  {@code String} corresponding to the key.
      */
-    public String getString(String key)
-    {
+    public String getString(String key) {
         return rb.getString(key);
     }
 }
-

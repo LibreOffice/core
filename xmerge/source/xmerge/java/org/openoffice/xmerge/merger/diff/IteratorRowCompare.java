@@ -28,30 +28,30 @@ import org.openoffice.xmerge.merger.Iterator;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 /**
- *  A very simple and direct difference algorithm for row
- *  <code>Node</code> objects in a spreadsheet.
+ * A very simple and direct difference algorithm for row {@code Node} objects in
+ * a spreadsheet.
  *
- *  <p>Basically, it will compare objects in sequence and does not look ahead
- *  (unlike LCS).</p>
+ * <p>Basically, it will compare objects in sequence and does not look ahead
+ * (unlike LCS).</p>
  *
- *  <ol>
- *    <li>
- *      If two objects are the same, skip to next one.
- *    </li><li>
- *      Otherwise check whether the row repeated attribute is the same.
- *    </li><li>
- *      If the row repeated attribute is the same, then compare two rows
- *      and mark it as <i>change</i> if those rows are different.
- *    </li><li>
- *      If the row repeated attribute is different, then split the rows and
- *      continue to compare.
- *    </li><li>
- *      If there are more objects in the modseq than the original sequence,
- *      then all of the extra ones in the modified sequence are marked as add.
+ * <ol>
+ *   <li>
+ *     If two objects are the same, skip to next one.
+ *   </li><li>
+ *     Otherwise check whether the row repeated attribute is the same.
+ *   </li><li>
+ *     If the row repeated attribute is the same, then compare two rows and mark
+ *     it as <i>change</i> if those rows are different.
+ *   </li><li>
+ *     If the row repeated attribute is different, then split the rows and
+ *     continue to compare.
+ *   </li><li>
+ *     If there are more objects in the modseq than the original sequence, then
+ *     all of the extra ones in the modified sequence are marked as add.
  *    </li><li>
  *      If there are more objects in the original sequence than the modified
- *      sequence, then all the extra one in the modified sequence are marked
- *      as delete.
+ *      sequence, then all the extra one in the modified sequence are marked as
+ *      delete.
  *    </li>
  *  </ol>
  *
@@ -61,17 +61,18 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
 public class IteratorRowCompare implements DiffAlgorithm {
 
     /**
-     *  Compute the differences of the given two sequences.
-     *  Refer to the class description.
+     * Compute the differences of the given two sequences.
      *
-     *  Return an array of <code>Difference</code> objects.  This method finds
-     *  out the difference between two sequences.
+     * <p>Refer to the class description.</p>
      *
-     *  @param  orgSeq  The original sequence.
-     *  @param  modSeq  The modified (or changed) sequence to
-     *                 compare against with the origial.
+     * <p>Return an array of {@code Difference} objects.  This method finds out
+     * the difference between two sequences.</p>
      *
-     *  @return  An array of Difference objects.
+     * @param   orgSeq  The original sequence.
+     * @param   modSeq  The modified (or changed) sequence to compare against
+     *                  with the origial.
+     *
+     * @return  An array of Difference objects.
      */
     public Difference[] computeDiffs(Iterator orgSeq, Iterator modSeq) {
 
@@ -190,14 +191,12 @@ public class IteratorRowCompare implements DiffAlgorithm {
             modSeq.refresh();
         }
 
-
         // convert the vector to array
         Difference[] diffArray = new Difference[diffVector.size()];
         diffVector.toArray(diffArray);
 
         return diffArray;
     }
-
 
     private Element splitRepeatedRow(Element orgRow, int splitNum, int orgNum) {
         // NOTE: should we really want to do deep clone?
@@ -230,4 +229,3 @@ public class IteratorRowCompare implements DiffAlgorithm {
         return splitRow;
     }
 }
-

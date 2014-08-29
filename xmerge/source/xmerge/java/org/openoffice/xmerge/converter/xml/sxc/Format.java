@@ -21,34 +21,32 @@ package org.openoffice.xmerge.converter.xml.sxc;
 import java.awt.Color;
 
 /**
- *  This class specifies the format for a given spreadsheet cell.
- *
+ * This class specifies the format for a given spreadsheet cell.
  */
 public class Format implements Cloneable {
 
-    /**  Horizontal Alignment Constants. */
+    /** Horizontal Alignment Constants. */
     final public static int RIGHT_ALIGN     = 0x01;
     final public static int CENTER_ALIGN    = 0x02;
     final public static int LEFT_ALIGN      = 0x03;
 
-
-    /**  Vertical Alignment Constants. */
+    /** Vertical Alignment Constants. */
     final public static int TOP_ALIGN       = 0x01;
     final public static int MIDDLE_ALIGN    = 0x02;
     final public static int BOTTOM_ALIGN    = 0x03;
 
     /** Indicates <i>bold</i> text. */
-    final public static int BOLD        = 0x01;
+    final public static int BOLD            = 0x01;
     /** Indicates <i>italic</i> text. */
-    final public static int ITALIC      = 0x02;
+    final public static int ITALIC          = 0x02;
     /** Indicates <i>underlined</i> text. */
-    final public static int UNDERLINE   = 0x04;
+    final public static int UNDERLINE       = 0x04;
     /** Indicates <i>strike-through</i> in the text. */
-    final public static int STRIKETHRU  = 0x08;
+    final public static int STRIKETHRU      = 0x08;
     /** Indicates <i>superscripted</i> text. */
-    final public static int SUPERSCRIPT = 0x10;
+    final public static int SUPERSCRIPT     = 0x10;
     /** Indicates <i>subscripted</i> text. */
-    final public static int SUBSCRIPT   = 0x20;
+    final public static int SUBSCRIPT       = 0x20;
 
     final public static int LEFT_BORDER     = 0x40;
     final public static int RIGHT_BORDER    = 0x80;
@@ -77,19 +75,19 @@ public class Format implements Cloneable {
     private int mask = 0;
 
     /**
-     *  Constructor for creating a new <code>Format</code>.
+     * Constructor for creating a new {@code Format}.
      */
     public Format() {
         clearFormatting();
     }
 
     /**
-     * Constructor that creates a new <code>Format</code> object
-     * by setting all the format attributes.
+     * Constructor that creates a new {@code Format} object by setting all the
+     * format attributes.
      *
-     * @param attributes  Attributes flags (alignment, bold, etc.)
-     * @param fontSize    Size of the font in points.
-     * @param fontName    Name of the font to use.
+     * @param  attributes  Attributes flags (alignment, bold, etc.)
+     * @param  fontSize    Size of the font in points.
+     * @param  fontName    Name of the font to use.
      */
        public Format(int attributes, int fontSize, String fontName) {
 
@@ -99,10 +97,10 @@ public class Format implements Cloneable {
     }
 
     /**
-     *  Constructor for creating a new <code>Format</code> object
-     *  based on an existing one.
+     * Constructor for creating a new {@code Format} object based on an
+     * existing one.
      *
-     *  @param  fmt  <code>Format</code> to copy.
+     * @param  fmt  {@code Format} to copy.
      */
     public Format(Format fmt) {
         category = fmt.getCategory();
@@ -122,7 +120,7 @@ public class Format implements Cloneable {
     }
 
     /**
-     *  Reset this <code>Format</code> description.
+     * Reset this {@code Format} description.
      */
     public void clearFormatting() {
        category = "";
@@ -140,10 +138,10 @@ public class Format implements Cloneable {
     }
 
     /**
-     *  Set one or more text attributes.
+     * Set one or more text attributes.
      *
-     *  @param  flags  Flag attributes to set.
-     *  @param  toggle True to set flags, false to clear them.
+     * @param  flags   Flag attributes to set.
+     * @param  toggle  {@code true} to set flags, {@code false} to clear them.
      */
     public void setAttribute(int flags, boolean toggle) {
         mask |= flags;
@@ -155,13 +153,13 @@ public class Format implements Cloneable {
     }
 
     /**
-     *  Return true if the <code>attribute</code> is set to <i>on</i>
+     * Return {@code true} if the {@code attribute} is set to <i>on</i>.
      *
-     *  @param  attribute  Attribute to check ({@link #BOLD},
-     *                     {@link #ITALIC}, etc.)
+     * @param   attribute  Attribute to check ({@link #BOLD}, {@link #ITALIC},
+     *                     etc.).
      *
-     *  @return  true if <code>attribute</code> is set to <i>on</i>,
-     *           otherwise false.
+     * @return  {@code true} if {@code attribute} is set to <i>on</i>, otherwise
+     *          {@code false}.
      */
     public boolean getAttribute(int attribute) {
         if ((mask & attribute) == 0)
@@ -169,145 +167,144 @@ public class Format implements Cloneable {
         return (!((attributes & attribute) == 0));
     }
 
-
-
     /**
-     *  Set the formatting category of this object, ie number, date,
-     *  currency.The <code>OfficeConstants</code> class contains string
-     *  constants for the category types.
+     * Set the formatting category of this object, ie number, date, currency.
      *
-     *  @see  org.openoffice.xmerge.converter.xml.OfficeConstants
+     * <p>The <code>OfficeConstants</code> class contains string constants for
+     * the category types.</p>
      *
-     *  @param   newCategory  The name of the category to be set.
+     * @see     org.openoffice.xmerge.converter.xml.OfficeConstants
+     *
+     * @param   newCategory  The name of the category to be set.
      */
     public void setCategory(String newCategory) {
         category = newCategory;
     }
 
      /**
-      *  Return the formatting category of the object.
+      * Return the formatting category of the object.
       *
-      *  @see org.openoffice.xmerge.converter.xml.OfficeConstants
+      * @see     org.openoffice.xmerge.converter.xml.OfficeConstants
       *
-      *  @return  The formatting category of the object.
+      * @return  The formatting category of the object.
       */
      public String getCategory() {
          return category;
      }
 
      /**
-      *  In the case of Formula returns the value of the formula.
+      * In the case of Formula returns the value of the formula.
       *
-      *  @return  The value of the formula
+      * @return  The value of the formula.
       */
      public String getValue() {
          return value;
      }
 
-     /**
-     *  In the case of formula the contents are set as the formula string and
-     *  the value of the formula is a formatting attribute.
+    /**
+     * In the case of formula the contents are set as the formula string and
+     * the value of the formula is a formatting attribute.
      *
-     *  @param   newValue the formuala value
+     * @param   newValue the formuala value
      */
     public void setValue(String newValue) {
         value = newValue;
     }
 
      /**
-      *  Set the <code>Format</code> specifier for this category.
+      * Set the {@code Format} specifier for this category.
       *
-      *  @param  formatString  The new <code>Format</code> specifier.
+      * @param  formatString  The new {@code Format} specifier.
       */
      public void setFormatSpecifier(String formatString) {
          formatSpecifier = formatString;
      }
 
      /**
-      *  Get the <code>Format</code> specifier for this category.
+      * Get the {@code Format} specifier for this category.
       *
-      *  @return  <code>Format</code> specifier for this category.
+      * @return  {@code Format} specifier for this category.
       */
      public String getFormatSpecifier() {
          return formatSpecifier;
      }
 
      /**
-      *  Set the precision of the number to be displayed.
+      * Set the precision of the number to be displayed.
       *
-      *  @param  precision  The number of decimal places to display.
+      * @param  precision  The number of decimal places to display.
       */
      public void setDecimalPlaces(int precision) {
          decimalPlaces = precision;
      }
 
      /**
-      *  Get the number of decimal places displayed.
+      * Get the number of decimal places displayed.
       *
-      *  @return  Number of decimal places.
+      * @return  Number of decimal places.
       */
      public int getDecimalPlaces() {
          return decimalPlaces;
      }
 
      /**
-      *  Set the font used for this cell.
+      * Set the font used for this cell.
       *
-      *  @param  fontName  The name of the font.
+      * @param  fontName  The name of the font.
       */
      public void setFontName(String fontName) {
          this.fontName = fontName;
      }
 
      /**
-      *  Get the font used for this cell.
+      * Get the font used for this cell.
       *
-      *  @return  The font name.
+      * @return  The font name.
       */
      public String getFontName() {
          return fontName;
      }
 
      /**
-      *  Set the font size (in points) used for this cell.
+      * Set the font size (in points) used for this cell.
       *
-      *  @param  fontSize  The font size in points.
+      * @param  fontSize  The font size in points.
       */
      public void setFontSize(int fontSize) {
          sizeInPoints = fontSize;
      }
 
      /**
-      *  Get the font size (in points) used for this cell.
+      * Get the font size (in points) used for this cell.
       *
-      *  @return  The font size in points.
+      * @return  The font size in points.
       */
      public int getFontSize() {
          return sizeInPoints;
      }
 
-      /**
-      *  Set the vertical alignment used for this cell.
+     /**
+      * Set the vertical alignment used for this cell.
       *
-      *  @param  vertAlign  The vertical alignment.
+      * @param  vertAlign  The vertical alignment.
       */
      public void setVertAlign(int vertAlign) {
          this.vertAlign = vertAlign;
      }
 
      /**
-      *  Get the vertical alignment used for this cell.
+      * Get the vertical alignment used for this cell.
       *
-      *  @return  The vertical alignment.
+      * @return  The vertical alignment.
       */
      public int getVertAlign() {
          return vertAlign;
      }
 
-      /**
-      *  Set the alignment used for this cell.
+     /**
+      * Set the alignment used for this cell.
       *
-      *  @param  align The alignment to use.
+      * @param  align  The alignment to use.
       */
      public void setAlign(int align) {
          this.align = align;
@@ -323,10 +320,9 @@ public class Format implements Cloneable {
      }
 
      /**
-      *  Set the Foreground <code>Color</code> for this cell.
+      * Set the Foreground {@code Color} for this cell.
       *
-      *  @param  c  A <code>Color</code> object representing the
-      *                 foreground color.
+      * @param  c  A {@code Color} object representing the foreground color.
       */
      public void setForeground(Color c) {
          if(c!=null)
@@ -334,19 +330,18 @@ public class Format implements Cloneable {
      }
 
      /**
-      *  Get the Foreground <code>Color</code> for this cell.
+      * Get the Foreground {@code Color} for this cell.
       *
-      *  @return  Foreground <code>Color</code> value.
+      * @return  Foreground {@code Color} value.
       */
      public Color getForeground() {
          return foreground;
      }
 
      /**
-      *  Set the Background <code>Color</code> for this cell
+      * Set the Background {@code Color} for this cell.
       *
-      *  @param  c  A <code>Color</code> object representing
-      *                 the background color.
+      * @param  c  A {@code Color} object representing the background color.
       */
      public void setBackground(Color c) {
          if(c!=null)
@@ -354,18 +349,18 @@ public class Format implements Cloneable {
      }
 
      /**
-      *  Get the Background <code>Color</code> for this cell
+      * Get the Background {@code Color} for this cell.
       *
-      *  @return  Background <code>Color</code> value
+      * @return  Background {@code Color} value.
       */
      public Color getBackground() {
          return background;
      }
 
      /**
-      *  Get a string representation of this <code>Format</code>
+      * Get a {@code String} representation of this {@code Format}.
       *
-      *  @return  A string indicating the value and category.
+      * @return  A {@code String} indicating the value and category.
       */
      @Override
     public String toString() {
@@ -373,10 +368,9 @@ public class Format implements Cloneable {
      }
 
     /**
-     * Tests if the current <code>Format</code> object has default attribute
-     * values.
+     * Tests if the current {@code Format} object has default attribute values.
      *
-     * @return true if it contains default value
+     * @return {@code true} if it contains default value.
      */
     public boolean isDefault() {
 
@@ -401,14 +395,12 @@ public class Format implements Cloneable {
     }
 
     /**
-     *  Return true if passed <code>Format</code> specifies as much or less
-     *  than this <code>Format</code>, and nothing it specifies
-     *  contradicts this <code>Format</code>.
+     * Return true if passed {@code Format} specifies as much or less than this
+     * {@code Format}, and nothing it specifies contradicts this {@code Format}.
      *
-     *  @param  rhs  The <code>Format</code> to check.
+     * @param   rhs  The {@code Format} to check.
      *
-     *  @return  true if <code>rhs</code> is a subset, false
-     *           otherwise.
+     * @return  {@code true} if {@code rhs} is a subset, {@code false} otherwise.
      */
     public boolean isSubset(Format rhs) {
         if (rhs.getClass() != this.getClass())

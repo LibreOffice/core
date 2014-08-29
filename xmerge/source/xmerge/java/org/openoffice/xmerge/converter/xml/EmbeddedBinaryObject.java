@@ -22,7 +22,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 
-
 /**
  * This class represents embedded object's in an OpenOffice.org document that
  * have a binary representation.
@@ -42,7 +41,6 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
         super(name, type);
     }
 
-
     /**
      * Package private constructor for use when reading an object from a
      * compressed SX? file.
@@ -56,11 +54,10 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
         super(name, type, source);
     }
 
-
     /**
      * This method returns the data for this object.
      *
-     * @return  A <code>byte</code> array containing the object's data.
+     * @return  A {@code byte} array containing the object's data.
      */
     public byte[] getBinaryData() {
 
@@ -74,11 +71,10 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
         return objData;
     }
 
-
     /**
      * Sets the data for this object.
      *
-     * @param   data    A <code>byte</code> array containing data for the object.
+     * @param   data    A {@code byte} array containing data for the object.
      */
     public void setBinaryData(byte[] data) {
         objData = data;
@@ -89,8 +85,8 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
      * Package private method for writing the data of the EmbeddedObject to a
      * SX? file.
      *
-     * @param   zip     An <code>OfficeZip</code> instance representing the file
-     *                  the data is to be written to.
+     * @param   zip     An {@code OfficeZip} instance representing the file the
+     *                  data is to be written to.
      */
     @Override
     void write(OfficeZip zip) {
@@ -98,7 +94,6 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
             zip.setNamedBytes(objName, objData);
         }
     }
-
 
     /**
      * Package private method that constructs the manifest.xml entries for this
@@ -113,6 +108,4 @@ public class EmbeddedBinaryObject extends EmbeddedObject {
 
         manifestDoc.getDocumentElement().appendChild(objNode);
     }
-
 }
-

@@ -65,46 +65,41 @@ public final class PluginFactoryImpl extends PluginFactory
     private final static ConverterCapabilities converterCap =
         new ConverterCapabilitiesImpl();
 
-
     /**
-     *  Returns an instance of <code>DocumentSerializerImpl</code>,
-     *  which is an implementation of the <code>DocumentSerializer</code>
-     *  interface.
+     * Returns an instance of {@code DocumentSerializerImpl}, which is an
+     * implementation of the {@code DocumentSerializer} interface.
      *
-     *  @param  doc  <code>Document</code> object to be
-     *               converted/serialized.
+     * @param   doc  {@code Document} object to be converted/serialized.
      *
-     *  @return  A <code>DocumentSerializerImpl</code> object.
+     * @return  A {@code DocumentSerializerImpl} object.
      */
     public DocumentSerializer createDocumentSerializer(Document doc) {
         return new DocumentSerializerImpl(this,doc);
     }
 
-
     /**
-     *  Returns an instance of <code>DocumentDeserializerImpl</code>,
-     *  which is an implementation of the <code>DocumentDeserializer</code>
-     *  interface.
+     * Returns an instance of <code>DocumentDeserializerImpl</code>,
+     * which is an implementation of the <code>DocumentDeserializer</code>
+     * interface.
      *
-     *  @param  cd   <code>ConvertData</code> object.
+     * @param   cd  {@code ConvertData} object.
      *
-     *  @return  A DocumentDeserializerImpl object.
+     * @return  A {@code DocumentDeserializerImpl} object.
      */
     public DocumentDeserializer createDocumentDeserializer(ConvertData cd) {
-
         return new DocumentDeserializerImpl(this,cd);
     }
 
-     @Override
-    public org.openoffice.xmerge.Document createDeviceDocument(String str, java.io.InputStream inputStream) throws java.io.IOException {
+    @Override
+    public org.openoffice.xmerge.Document createDeviceDocument(String str,
+            java.io.InputStream inputStream) throws java.io.IOException {
         String ext = this.getDeviceFileExtension();
         DOMDocument domDoc = new DOMDocument(str,ext);
         domDoc.read(inputStream);
         return domDoc;
     }
 
-
-     @Override
+    @Override
     public Document createOfficeDocument(String name, InputStream is)
         throws IOException {
 
@@ -115,7 +110,7 @@ public final class PluginFactoryImpl extends PluginFactory
     }
 
      @Override
-    public Document createOfficeDocument(String name, InputStream is,boolean isZip)
+    public Document createOfficeDocument(String name, InputStream is, boolean isZip)
         throws IOException {
 
         // read zipped XML stream
@@ -125,58 +120,53 @@ public final class PluginFactoryImpl extends PluginFactory
     }
 
     /**
-     *  Returns a <code>String</code> containing the file extension of a
-     *  <code>Document</code>. This method uses a properties file to determine
-     *  a mapping from the device mime in the <code>ConverterInfo</code> to a
-     *  particular file extension. If a mapping is not specified, the default
-     *  is ".txt".
+     * Returns a {@code String} containing the file extension of a
+     * {@code Document}.
      *
-     *  @return  <code>String</code>.
+     * <p>This method uses a properties file to determine a mapping from the
+     * device mime in the {@code ConverterInfo} to a particular file extension.
+     * If a mapping is not specified, the default is ".txt".</p>
+     *
+     * @return  The file extension of a {@code Document}.
      */
+    public String getDeviceFileExtension() {
+        Class<? extends PluginFactoryImpl> c = this.getClass();
+        InputStream is = c.getResourceAsStream("XsltPlugin.properties");
+        Properties props = new Properties();
+        String ext = ".txt";
+        String mimeType = null;
+        ConverterInfo ci = this.getConverterInfo();
+        Iterator<String> enumerate = ci.getDeviceMime();
+        while (enumerate.hasNext()) {
+            mimeType = enumerate.next();
+        }
+        try {
+            props.load(is);
 
-
-    public String getDeviceFileExtension(){
-    Class<? extends PluginFactoryImpl> c = this.getClass();
-    InputStream is = c.getResourceAsStream("XsltPlugin.properties");
-    Properties props = new Properties();
-    String ext= ".txt";
-    String mimeType = null;
-    ConverterInfo ci = this.getConverterInfo();
-    Iterator<String> enumerate = ci.getDeviceMime();
-    while (enumerate.hasNext()) {
-        mimeType= enumerate.next();
-    }
-    try {
-        props.load(is);
-
-         String info = props.getProperty(mimeType);
-         if (info != null) {
-             ext = info;
-         }
-    } catch (Exception e) {
+            String info = props.getProperty(mimeType);
+            if (info != null) {
+                ext = info;
+            }
+        } catch (Exception e) {
 
         // It is okay for the property file to not exist.
-
-    }
-    return ext;
+        }
+        return ext;
     }
 
     /**
-     *  Returns an instance of <code>DocumentMergerImpl</code>,
-     *  which is an implementation of the <code>DocumentMerger</code>
-     *  interface.
+     * Returns an instance of {@code DocumentMergerImpl}, which is an
+     * implementation of the {@code DocumentMerger} interface.
      *
-     *  @param  doc  <code>Document</code> to merge.
+     * @param   doc  {@code Document} to merge.
      *
-     *  @return  A DocumentMergerImpl object.
+     * @return  A {@code DocumentMergerImpl} object.
      */
     public DocumentMerger createDocumentMerger(Document doc) {
-    ConverterCapabilities cc = converterCap;
+        ConverterCapabilities cc = converterCap;
         DocumentMergerImpl merger = new DocumentMergerImpl(doc, cc);
         return merger;
-
     }
-
 }
 
 

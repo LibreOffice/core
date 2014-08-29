@@ -18,62 +18,46 @@
 
 package org.openoffice.xmerge.util;
 
-
 /**
- * <p>Helper class providing static methods to convert data to/from
- *    twips</p>
- *
+ * Helper class providing static methods to convert data to/from twips.
  */
 public class TwipsConverter {
 
     /**
-     * <p>Convert from twips to cm's</p>
+     * Convert from twips to cm's.
      *
-     * @param   value   The <code>short</code> to be converted.
+     * @param   value  The {@code short} to be converted.
      *
-     * @return   float containing the converted
+     * @return  {@code float} containing the converted.
      */
     public static float twips2cm(int value) {
-
         float inches = (float) value/1440;
         float cm = inches*(float)2.54;
-
         return cm;
     }
 
-
-
     /**
-     * <p>Convert from cm's to twips</p>
+     * Convert from cm's to twips.
      *
-     * @param   value   <code>byte</code> array containing the LE representation
-     *                  of the value.
+     * @param   value  {@code byte} array containing the LE representation of
+     *                 the value.
      *
-     * @return  int containing the converted value.
+     * @return  {@code int} containing the converted value.
      */
     public static int cm2twips(float value) {
-
         int twips = (int) ((value/2.54)*1440);
-
         return twips;
     }
 
-
-
-
-
     /**
-     * <p>Convert from cm's to twips</p>
+     * Convert from cm's to twips.
      *
-     * @param   value   <code>byte</code> array containing the LE representation
-     *                  of the value.
+     * @param   value  {@code byte} array containing the LE representation of
+     *                 the value.
      *
-     * @return  int containing the converted value.
+     * @return  {@code int} containing the converted value.
      */
     public static int inches2twips(float value) {
-
         return (int) (value*1440);
     }
-
-
 }

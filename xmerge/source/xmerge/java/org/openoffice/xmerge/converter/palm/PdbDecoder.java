@@ -23,63 +23,53 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 
 /**
- *  <p>Provides functionality to decode a PDB formatted file into
- *  a <code>PalmDB</code> object given an <code>InputStream</code>.
- *  This class is only used by the <code>PalmDB</code> object.</p>
+ * Provides functionality to decode a PDB formatted file into a {@code PalmDB}
+ * object given an {@code InputStream}.
  *
- *  <p>Sample usage:</p>
+ * <p>This class is only used by the {@code PalmDB} object.</p>
  *
- *  <blockquote><pre><code>
- *     PdbDecoder decoder = new PdbDecoder("sample.pdb");
- *     PalmDB palmDB = decoder.parse();
- *  </code></pre></blockquote>
+ * <p>Sample usage:</p>
+ * <blockquote><pre>{@code PdbDecoder decoder = new PdbDecoder("sample.pdb");
+ * PalmDB palmDB = decoder.parse();}</pre></blockquote>
  *
- *  <p>This decoder has the following assumptions on the PDB file:</p>
+ * <p>This decoder has the following assumptions on the PDB file:</p>
+ * <ol>
+ *   <li>There is only one RecordList section in the PDB.</li>
+ *   <li>The {@code Record} indices in the RecordList are sorted in order, i.e.
+ *       the first {@code Record} index refers to {@code Record} 0, and so
+ *       forth.</li>
+ *   <li>The raw {@code Record} in the {@code Record} section are sorted as
+ *       well in order, i.e. first {@code Record} comes ahead of second
+ *       {@code Record}, etc.</li>
+ * </ol>
  *
- *  <ol>
- *    <li>There is only one RecordList section in the PDB.</li>
- *    <li>The <code>Record</code> indices in the RecordList are sorted in
- *        order, i.e. the first <code>Record</code> index refers to
- *        <code>Record</code> 0, and so forth.</li>
- *    <li>The raw <code>Record</code> in the <code>Record</code> section
- *        are sorted as well in order, i.e. first <code>Record</code>
- *        comes ahead of second <code>Record</code>, etc.</li>
- *  </ol>
+ * <p>Other decoders assume these as well.</p>
  *
- *  <p>Other decoders assume these as well.</p>
- *
- *  @see     PalmDB
- *  @see     Record
+ * @see  PalmDB
+ * @see  Record
  */
 public final class PdbDecoder {
 
-
-
-
     /**
-     *  <p>This method decodes a PDB file into a <code>PalmDB</code>
-     *  object.</p>
+     * This method decodes a PDB file into a {@code PalmDB} object.
      *
-     *  <p>First, the header data is read using the <code>PdbHeader</code>
-     *  <code>read</code> method.  Next, the RecordList section is
-     *  read and the <code>Record</code> offsets are stored for use when
-     *  parsing the Records.  Based on these offsets, the bytes
-     *  corresponding to each <code>Record</code> are read and each is
-     *  stored in a  <code>Record</code> object.  Lastly, the data is
-     *  used to create a <code>PalmDB</code> object.</p>
+     * <p>First, the header data is read using the {@code PdbHeader.read}
+     * method.  Next, the RecordList section is read and the {@code Record}
+     * offsets are stored for use when parsing the Records.  Based on these
+     * offsets, the bytes corresponding to each {@code Record} are read and
+     * each is stored in a {@code Record} object.  Lastly, the data is used
+     * to create a {@code PalmDB} object.</p>
      *
-     *  @param  b  <code>byte[]</code> containing PDB.
+     * @param   b  {@code byte[]} containing PDB.
      *
-     *  @throws  IOException  If I/O error occurs.
+     * @throws  IOException  If I/O error occurs.
      */
-
      public PalmDB parse(byte[] b) throws IOException {
 
      ByteArrayInputStream bais = new ByteArrayInputStream(b);
      DataInputStream dis = new DataInputStream(bais);
 
         // read the PDB header
-
         PdbHeader header = new PdbHeader();
         header.read(dis);
 
@@ -87,7 +77,6 @@ public final class PdbDecoder {
         if (header.numRecords != 0) {
 
             // read in the record indices + offsets
-
             int recOffset[] = new int[header.numRecords];
             byte recAttrs[] = new byte[header.numRecords];
 
@@ -97,20 +86,18 @@ public final class PdbDecoder {
 
                 // read in attributes (1 byte) + unique id (3 bytes)
                 // take away the unique id, store the attributes
-
                 int attr = dis.readInt();
                 recAttrs[i] = (byte) (attr >>> 24);
             }
 
             // read the records
-
             int lastIndex = header.numRecords - 1;
 
             for (int i = 0; i < lastIndex; i++) {
 
                 //dis.seek(recOffset[i]);
-        dis.reset();
-        dis.skip(recOffset[i]);
+                dis.reset();
+                dis.skip(recOffset[i]);
                 int len = recOffset[i+1] - recOffset[i];
                 byte[] bytes = new byte[len];
                 dis.readFully(bytes);
@@ -118,26 +105,18 @@ public final class PdbDecoder {
             }
 
             // last record
-
             dis.reset();
-        int len = dis.available() - recOffset[lastIndex];
-        dis.skip(recOffset[lastIndex]);
-        byte[] bytes = new byte[len];
+            int len = dis.available() - recOffset[lastIndex];
+            dis.skip(recOffset[lastIndex]);
+            byte[] bytes = new byte[len];
             dis.readFully(bytes);
             recArray[lastIndex] = new Record(bytes, recAttrs[lastIndex]);
         }
 
-
-
         // create PalmDB and return it
-
         PalmDB pdb = new PalmDB(header.pdbName, header.creatorID,
             header.typeID, header.version, header.attribute, recArray);
 
         return pdb;
     }
-
-
-
 }
-

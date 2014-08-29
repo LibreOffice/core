@@ -24,18 +24,17 @@ import org.w3c.dom.Element;
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
-
 /**
- *  <p>This is an implementations of the <code>Iterator</code> interface.
- *  It will traverse the tree and find cell <code>Node</code> sequences.</p>
+ * This is an implementations of the {@code Iterator} interface.
  *
- *  <p>Note: Once the XML Tree is parsed, then the <code>Iterator</code>
- *  will be a snap shot of that tree. That means even the tree is
- *  modified later, than the cached paragraph <code>Node</code> list will
- *  not be updated accordingly.  For this reason and for performance reasons
- *  this <code>Iterator</code> does not support any operation methods such
- *  as insert, remove or replace.  The main purpose of this
- *  <code>Iterator</code> is to be used with difference, not with merge.</p>
+ * <p>It will traverse the tree and find cell {@code Node} sequences.</p>
+ *
+ * <p>Note: Once the XML Tree is parsed, then the {@code Iterator} will be a
+ * snap shot of that tree. That means even the tree is modified later, than the
+ * cached paragraph {@code Node} list will not be updated accordingly.  For this
+ * reason and for performance reasons this {@code Iterator} does not support any
+ * operation methods such as insert, remove or replace. The main purpose of this
+ * {@code Iterator} is to be used with difference, not with merge.</p>
  */
 public final class CellNodeIterator extends NodeIterator  {
 
@@ -43,23 +42,24 @@ public final class CellNodeIterator extends NodeIterator  {
     private static final String SUPPORTED_TAG1 = OfficeConstants.TAG_TABLE_CELL;
 
     /**
-     *  The standard constructor.
+     * The standard constructor.
      *
-     *  @param  cc    The <code>ConverterCapabilities</code>.
-     *  @param  node  The initial root <code>Node</code>.
+     * @param  cc    The {@code ConverterCapabilities}.
+     * @param  node  The initial root {@code Node}.
      */
     public CellNodeIterator(ConverterCapabilities cc, Node node) {
         super(cc, node);
     }
 
-
     /**
-     *  Overwrite the parent <code>nodeSupported</code> method.  Only cell
-     *  <code>Node</code> objects are supported.
+     * Overwrite the parent {@code nodeSupported} method.
      *
-     *  @param  node  The <code>Node</code> to check.
+     * <p>Only cell {@code Node} objects are supported.</p>
      *
-     *  @return  true if the <code>Node</code> is supported, false otherwise.
+     * @param   node  The {@code Node} to check.
+     *
+     * @return  {@code true} if the {@code Node} is supported, {@code false}
+     *          otherwise.
      */
     @Override
     protected boolean nodeSupported(Node node) {
@@ -69,7 +69,6 @@ public final class CellNodeIterator extends NodeIterator  {
         return node.getNodeType() == Node.ELEMENT_NODE &&
                 node.getNodeName().equals(SUPPORTED_TAG1);
     }
-
 
     @Override
     protected boolean childrenEqual(Node node1, Node node2) {
@@ -95,4 +94,3 @@ public final class CellNodeIterator extends NodeIterator  {
         return equal;
     }
 }
-
