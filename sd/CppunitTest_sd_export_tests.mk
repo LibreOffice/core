@@ -9,15 +9,15 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sd_export_test))
+$(eval $(call gb_CppunitTest_CppunitTest,sd_export_tests))
 
-$(eval $(call gb_CppunitTest_use_external,sd_export_test,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,sd_export_tests,boost_headers))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sd_export_test, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sd_export_tests, \
     sd/qa/unit/export-tests \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sd_export_test, \
+$(eval $(call gb_CppunitTest_use_libraries,sd_export_tests, \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
     basegfx \
     comphelper \
@@ -51,21 +51,21 @@ $(eval $(call gb_CppunitTest_use_libraries,sd_export_test, \
     $(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sd_export_test,\
+$(eval $(call gb_CppunitTest_set_include,sd_export_tests,\
     -I$(SRCDIR)/sd/source/ui/inc \
     -I$(SRCDIR)/sd/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sd_export_test,\
+$(eval $(call gb_CppunitTest_use_api,sd_export_tests,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sd_export_test))
-$(eval $(call gb_CppunitTest_use_vcl,sd_export_test))
+$(eval $(call gb_CppunitTest_use_ure,sd_export_tests))
+$(eval $(call gb_CppunitTest_use_vcl,sd_export_tests))
 
-$(eval $(call gb_CppunitTest_use_components,sd_export_test,\
+$(eval $(call gb_CppunitTest_use_components,sd_export_tests,\
     animations/source/animcore/animcore \
     basic/util/sb \
     chart2/source/chartcore \
@@ -106,11 +106,11 @@ $(eval $(call gb_CppunitTest_use_components,sd_export_test,\
     xmlsecurity/util/xmlsecurity \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sd_export_test))
+$(eval $(call gb_CppunitTest_use_configuration,sd_export_tests))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sd_export_test))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sd_export_tests))
 
-$(eval $(call gb_CppunitTest_add_arguments,sd_export_test,\
+$(eval $(call gb_CppunitTest_add_arguments,sd_export_tests,\
     "-env:SVG_DISABLE_FONT_EMBEDDING=YEAH" \
 ))
 
