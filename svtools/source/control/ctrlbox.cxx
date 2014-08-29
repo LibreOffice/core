@@ -19,6 +19,7 @@
 
 #include <config_folders.h>
 
+#include <i18nutil/unicode.hxx>
 #include <tools/stream.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/svapp.hxx>
@@ -1604,7 +1605,7 @@ void FontSizeBox::Modify()
             const sal_Unicode* pStr = aStr.getStr();
             while ( *pStr )
             {
-                if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') )
+                if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') && !unicode::isSpace(*pStr) )
                 {
                     if ( ('-' == *pStr || '+' == *pStr) && !bPtRelative )
                         bPtRelative = true;
