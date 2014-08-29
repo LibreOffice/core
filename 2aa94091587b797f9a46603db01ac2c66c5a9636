@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_f7879a10",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "You can remove such pointless comments",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_57cbee72",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1404,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "You can remove the german string here",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_f7a0baa7",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2176,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "Template after timer",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_37c87274",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2182,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "Template for immediate",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_17c5765a",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2187,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "Execute request to apply template",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_97af4694",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2257,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "Need to reinterpret after loading (build links)",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_7795ca3e",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2267,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "Get/Create link object",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_5792ce58",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2288,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "multiple times",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_379f5261",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2393,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "roundoff error starting with numbers greater than 2**48",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_179c5668",
+        "filename": "sc/source/core/tool/interpr2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2524,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-29T08:42:13Z",
+      "side": 1,
+      "message": "can\u0027t be found",
+      "revId": "2aa94091587b797f9a46603db01ac2c66c5a9636",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
