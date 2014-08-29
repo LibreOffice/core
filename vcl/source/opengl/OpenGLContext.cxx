@@ -906,4 +906,10 @@ const SystemChildWindow* OpenGLContext::getChildWindow() const
     return m_pChildWindow;
 }
 
+bool OpenGLContext::supportMultiSampling() const
+{
+    return m_aGLWin.bMultiSampleSupported;
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
