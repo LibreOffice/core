@@ -998,7 +998,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                     nLen = 1;
 
                 _InvalidateRange( SwCharRange( nPos, nLen) );
-                sal_uInt16 nTmp = ((SwUpdateAttr*)pNew)->getWhichAttr();
+                const sal_uInt16 nTmp = ((SwUpdateAttr*)pNew)->getWhichAttr();
 
                 if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
@@ -1161,7 +1161,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 SwSortedObjs *pObjs = GetDrawObjs();
                 for ( size_t i = 0; GetDrawObjs() && i < pObjs->size(); ++i )
                 {
-                    SwAnchoredObject* pAnchoredObj = (*pObjs)[sal_uInt16(i)];
+                    SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);

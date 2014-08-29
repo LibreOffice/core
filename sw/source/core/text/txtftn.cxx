@@ -973,7 +973,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
 OUString lcl_GetPageNumber( const SwPageFrm* pPage )
 {
     OSL_ENSURE( pPage, "GetPageNumber: Homeless TxtFrm" );
-    sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
+    const sal_uInt16 nVirtNum = pPage->GetVirtPageNum();
     const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
     return rNum.GetNumStr( nVirtNum );
 }
@@ -1188,7 +1188,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
         pCurrPor = pQuo;
     }
 
-    pCurr->Width( pCurr->Width() + sal_uInt16( nQuoWidth ) );
+    pCurr->Width( pCurr->Width() + nQuoWidth );
 
     // Und noch einmal adjustieren wegen des Adjustment und nicht zu Letzt
     // wegen folgendem Sonderfall: In der Zeile hat der DummUser durchgaengig

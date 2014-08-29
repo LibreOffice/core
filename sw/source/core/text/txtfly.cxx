@@ -281,10 +281,10 @@ const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
 
     LongDqPtr pTmp = pTextRanger[ 0 ]->GetTextRanges( aRange );
 
-    sal_uInt16 nCount;
-    if( 0 != ( nCount = pTmp->size() ) )
+    const size_t nCount = pTmp->size();
+    if( 0 != nCount )
     {
-        sal_uInt16 nIdx = 0;
+        size_t nIdx = 0;
         while( nIdx < nCount && (*pTmp)[ nIdx ] < nXPos )
             ++nIdx;
         bool bOdd = (nIdx % 2);
@@ -503,8 +503,8 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
     {
-        sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
-        for( sal_uInt16 i = 0; i < nCount; ++i )
+        const sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
+        for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
         {
             // #i68520#
             const SwAnchoredObject* pTmpAnchoredObj = (*mpAnchoredObjList)[i];
@@ -568,7 +568,7 @@ bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     {
         // What a huge effort ...
         SwSaveClip aClipVout( rInf.GetpOut() );
-        for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+        for( size_t i = 0; i < aRegion.size(); ++i )
         {
             SwRect &rRect = aRegion[i];
             if( rRect != aRegion.GetOrigin() )
@@ -592,8 +592,8 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
     SwAnchoredObjList::size_type nCount( bOn ? GetAnchoredObjList()->size() : 0 );
     if ( bOn && nCount > 0 )
     {
-        sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
-        for( sal_uInt16 i = 0; i < nCount; ++i )
+        const sal_uInt16 nHellId = pPage->getRootFrm()->GetCurrShell()->getIDocumentDrawModelAccess()->GetHellId();
+        for( SwAnchoredObjList::size_type i = 0; i < nCount; ++i )
         {
             // #i68520#
             const SwAnchoredObject* pAnchoredObjTmp = (*mpAnchoredObjList)[i];
@@ -635,7 +635,7 @@ void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         }
     }
 
-    for( sal_uInt16 i = 0; i < aRegion.size(); ++i )
+    for( size_t i = 0; i < aRegion.size(); ++i )
     {
         if ( bNoGraphic )
         {
