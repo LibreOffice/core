@@ -1895,20 +1895,28 @@ void ScViewData::SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX )
         long nTPosX = pThisTab->nTPosX[eWhich];
         long nPixPosX = pThisTab->nPixPosX[eWhich];
         SCCOL i;
+
+        // Really not sure what we should do -- is nPixPosX
+        // just a pix version of nTPosX, in which case we should
+        // completely remove nPixPosX and provide it dynamically?
         if ( nNewPosX > nOldPosX )
+        {
             for ( i=nOldPosX; i<nNewPosX; i++ )
             {
                 long nThis = pDoc->GetColWidth( i,nTabNo );
                 nTPosX -= nThis;
-                nPixPosX -= ToPixel(sal::static_int_cast<sal_uInt16>(nThis), nPPTX);
+                nPixPosX -= LogicToPixelHorizontal( nThis );
             }
+        }
         else
+        {
             for ( i=nNewPosX; i<nOldPosX; i++ )
             {
                 long nThis = pDoc->GetColWidth( i,nTabNo );
                 nTPosX += nThis;
-                nPixPosX += ToPixel(sal::static_int_cast<sal_uInt16>(nThis), nPPTX);
+                nPixPosX += LogicToPixelHorizontal( nThis );
             }
+        }
 
         pThisTab->nPosX[eWhich] = nNewPosX;
         pThisTab->nTPosX[eWhich] = nTPosX;
@@ -1931,23 +1939,27 @@ void ScViewData::SetPosY( ScVSplitPos eWhich, SCROW nNewPosY )
         long nPixPosY = pThisTab->nPixPosY[eWhich];
         SCROW i, nHeightEndRow;
         if ( nNewPosY > nOldPosY )
+        {
             for ( i=nOldPosY; i<nNewPosY; i++ )
             {
                 long nThis = pDoc->GetRowHeight( i, nTabNo, NULL, &nHeightEndRow );
                 SCROW nRows = std::min( nNewPosY, nHeightEndRow + 1) - i;
                 i = nHeightEndRow;
                 nTPosY -= nThis * nRows;
-                nPixPosY -= ToPixel(sal::static_int_cast<sal_uInt16>(nThis), nPPTY) * nRows;
+                nPixPosY -= LogicToPixelVertical( nThis ) * nRows;
             }
+        }
         else
+        {
             for ( i=nNewPosY; i<nOldPosY; i++ )
             {
                 long nThis = pDoc->GetRowHeight( i, nTabNo, NULL, &nHeightEndRow );
                 SCROW nRows = std::min( nOldPosY, nHeightEndRow + 1) - i;
                 i = nHeightEndRow;
                 nTPosY += nThis * nRows;
-                nPixPosY += ToPixel(sal::static_int_cast<sal_uInt16>(nThis), nPPTY) * nRows;
+                nPixPosY += LogicToPixelVertical( nThis ) * nRows;
             }
+        }
 
         pThisTab->nPosY[eWhich] = nNewPosY;
         pThisTab->nTPosY[eWhich] = nTPosY;
