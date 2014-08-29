@@ -51,7 +51,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 			--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
-			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
+			$(if $(ENABLE_DEBUG),--enable-debug) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& cd lib \
 		&& $(MAKE) \
@@ -63,7 +63,7 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 	$(call gb_ExternalProject_run,build,\
 		./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
 			--disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 \
-			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
+			$(if $(ENABLE_DEBUG),--enable-debug) \
 			CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
 			LIBS="-lws2_32 -lwinmm $(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED_LIBSTDCPP))" \
 			LDFLAGS="$(patsubst ;, -L,$(ILIB))" \

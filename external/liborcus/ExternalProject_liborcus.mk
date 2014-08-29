@@ -96,7 +96,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 			--with-pic \
 			--enable-static \
 			--disable-shared \
-			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-spreadsheet-model \
 			--without-tools \
 			--disable-werror \

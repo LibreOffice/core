@@ -68,7 +68,7 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			--disable-shared \
 			--enable-static \
 			--with-pic \
-			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			--disable-werror \
 			BOOST_CFLAGS="$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS),-I$(call gb_UnpackedTarball_get_dir,boost)) -I$(BUILDDIR)/config_$(gb_Side)" \
 			GLEW_CFLAGS="$(if $(SYSTEM_GLEW),$(GLEW_CFLAGS),-I$(call gb_UnpackedTarball_get_dir,glew)/include)" \

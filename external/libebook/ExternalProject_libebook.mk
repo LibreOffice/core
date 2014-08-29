@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,libebook,build) :
 			--without-docs \
 			--without-tools \
 			--disable-tests \
-			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
+			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
 			$(if $(VERBOSE)$(verbose),--disable-silent-rules,--enable-silent-rules) \
 			--disable-werror \
 			--disable-weffc \
