@@ -56,7 +56,7 @@ using namespace formula;
 
 #define SCdEpsilon                1.0E-7
 
-// Datum und Zeit
+// Date and Time
 
 double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         bool bStrict, bool bCheckGregorian )
@@ -963,7 +963,7 @@ void ScInterpreter::ScNPV()
     if ( MustHaveParamCount( nParamCount, 2, 31 ) )
     {
         double nVal = 0.0;
-        // Wir drehen den Stack um!!
+        //We turn the stack upside down!
         FormulaToken* pTemp[ 31 ];
         for( short i = 0; i < nParamCount; i++ )
             pTemp[ i ] = pStack[ sp - i - 1 ];
@@ -971,7 +971,7 @@ void ScInterpreter::ScNPV()
         if (nGlobalError == 0)
         {
             double  nCount = 1.0;
-            double  nZins = GetDouble();
+            double  nInterest = GetDouble();
             --nParamCount;
             size_t nRefInList = 0;
             ScRange aRange;
@@ -981,7 +981,7 @@ void ScInterpreter::ScNPV()
                 {
                     case svDouble :
                     {
-                        nVal += (GetDouble() / pow(1.0 + nZins, (double)nCount));
+                        nVal += (GetDouble() / pow(1.0 + nInterest, (double)nCount));
                         nCount++;
                     }
                     break;
@@ -994,7 +994,7 @@ void ScInterpreter::ScNPV()
                         if (!aCell.hasEmptyValue() && aCell.hasNumeric())
                         {
                             double nCellVal = GetCellValue(aAdr, aCell);
-                            nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
+                            nVal += (nCellVal / pow(1.0 + nInterest, (double)nCount));
                             nCount++;
                         }
                     }
@@ -1008,7 +1008,7 @@ void ScInterpreter::ScNPV()
                         ScHorizontalValueIterator aValIter( pDok, aRange );
                         while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                         {
-                            nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
+                            nVal += (nCellVal / pow(1.0 + nInterest, (double)nCount));
                             nCount++;
                         }
                         if ( nErr != 0 )
@@ -1025,22 +1025,22 @@ void ScInterpreter::ScNPV()
 
 void ScInterpreter::ScIRR()
 {
-    double fSchaetzwert;
+    double fEstimated;
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 1, 2 ) )
         return;
     if (nParamCount == 2)
-        fSchaetzwert = GetDouble();
+        fEstimated = GetDouble();
     else
-        fSchaetzwert = 0.1;
-    sal_uInt16 sPos = sp;                       // Stack-Position merken
+        fEstimated = 0.1;
+    sal_uInt16 sPos = sp;                       //memory the position of the stack
     double fEps = 1.0;
-    double x, xNeu, fWert, fZaehler, fNenner, nCount;
-    if (fSchaetzwert == -1.0)
-        x = 0.1;                            // default gegen Nulldivisionen
+    double x, xNew, fValue, fNom, fDenom, nCount;
+    if (fEstimated == -1.0)
+        x = 0.1;                            // default result for divion by zero
     else
-        x = fSchaetzwert;                   // Startwert
+        x = fEstimated;                   // startvalue
     switch (GetStackType())
     {
         case svDoubleRef :
@@ -1055,34 +1055,34 @@ void ScInterpreter::ScIRR()
     sal_uInt16 nItCount = 0;
     ScRange aRange;
     while (fEps > SCdEpsilon && nItCount < nIterationsMax)
-    {                                       // Newton-Verfahren:
-        sp = sPos;                          // Stack zuruecksetzen
+    {                                       // Newtons method:
+        sp = sPos;                          // reset stack
         nCount = 0.0;
-        fZaehler = 0.0;
-        fNenner = 0.0;
+        fNom = 0.0;
+        fDenom = 0.0;
         sal_uInt16 nErr = 0;
         PopDoubleRef( aRange );
         ScValueIterator aValIter(pDok, aRange, mnSubTotalFlags);
-        if (aValIter.GetFirst(fWert, nErr))
+        if (aValIter.GetFirst(fValue, nErr))
         {
-            fZaehler +=           fWert / pow(1.0+x,(double)nCount);
-            fNenner  += -nCount * fWert / pow(1.0+x,nCount+1.0);
+            fNom +=           fValue / pow(1.0+x,(double)nCount);
+            fDenom  += -nCount * fValue / pow(1.0+x,nCount+1.0);
             nCount++;
-            while ((nErr == 0) && aValIter.GetNext(fWert, nErr))
+            while ((nErr == 0) && aValIter.GetNext(fValue, nErr))
             {
-                fZaehler +=           fWert / pow(1.0+x,(double)nCount);
-                fNenner  += -nCount * fWert / pow(1.0+x,nCount+1.0);
+                fNom +=           fValue / pow(1.0+x,(double)nCount);
+                fDenom  += -nCount * fValue / pow(1.0+x,nCount+1.0);
                 nCount++;
             }
             SetError(nErr);
         }
-        xNeu = x - fZaehler / fNenner;  // x(i+1) = x(i)-f(x(i))/f'(x(i))
+        xNew = x - fNom / fDenom;  // x(i+1) = x(i)-f(x(i))/f'(x(i))
         nItCount++;
-        fEps = fabs(xNeu - x);
-        x = xNeu;
+        fEps = fabs(xNew - x);
+        x = xNew;
     }
-    if (fSchaetzwert == 0.0 && fabs(x) < SCdEpsilon)
-        x = 0.0;                        // auf Null normieren
+    if (fEstimated == 0.0 && fabs(x) < SCdEpsilon)
+        x = 0.0;                        // adjust to zero
     if (fEps < SCdEpsilon)
         PushDouble(x);
     else
@@ -1156,26 +1156,26 @@ void ScInterpreter::ScISPMT()
 }
 
 // Finanzfunktionen
-double ScInterpreter::ScGetBw(double fZins, double fZzr, double fRmz,
+double ScInterpreter::ScGetBw(double fInterest, double fZzr, double fRmz,
                               double fZw, double fF)
 {
     double fBw;
-    if (fZins == 0.0)
+    if (fInterest == 0.0)
         fBw = fZw + fRmz * fZzr;
     else if (fF > 0.0)
-        fBw = (fZw * pow(1.0 + fZins, -fZzr))
-                + (fRmz * (1.0 - pow(1.0 + fZins, -fZzr + 1.0)) / fZins)
+        fBw = (fZw * pow(1.0 + fInterest, -fZzr))
+                + (fRmz * (1.0 - pow(1.0 + fInterest, -fZzr + 1.0)) / fInterest)
                 + fRmz;
     else
-        fBw = (fZw * pow(1.0 + fZins, -fZzr))
-                + (fRmz * (1.0 - pow(1.0 + fZins, -fZzr)) / fZins);
+        fBw = (fZw * pow(1.0 + fInterest, -fZzr))
+                + (fRmz * (1.0 - pow(1.0 + fInterest, -fZzr)) / fInterest);
     return -fBw;
 }
 
 void ScInterpreter::ScBW()
 {
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
-    double nRmz, nZzr, nZins, nZw = 0, nFlag = 0;
+    double nRmz, nZzr, nInterest, nZw = 0, nFlag = 0;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
@@ -1185,8 +1185,8 @@ void ScInterpreter::ScBW()
         nZw   = GetDouble();
     nRmz  = GetDouble();
     nZzr  = GetDouble();
-    nZins = GetDouble();
-    PushDouble(ScGetBw(nZins, nZzr, nRmz, nZw, nFlag));
+    nInterest = GetDouble();
+    PushDouble(ScGetBw(nInterest, nZzr, nRmz, nZw, nFlag));
 }
 
 void ScInterpreter::ScDIA()
@@ -1195,36 +1195,36 @@ void ScInterpreter::ScDIA()
     if ( MustHaveParamCount( GetByte(), 4 ) )
     {
         double nZr = GetDouble();
-        double nDauer = GetDouble();
+        double nTimeLength = GetDouble();
         double nRest = GetDouble();
-        double nWert = GetDouble();
-        double nDia = ((nWert - nRest) * (nDauer - nZr + 1.0)) /
-                      ((nDauer * (nDauer + 1.0)) / 2.0);
+        double nValue = GetDouble();
+        double nDia = ((nValue - nRest) * (nTimeLength - nZr + 1.0)) /
+                      ((nTimeLength * (nTimeLength + 1.0)) / 2.0);
         PushDouble(nDia);
     }
 }
 
-double ScInterpreter::ScGetGDA(double fWert, double fRest, double fDauer,
-                double fPeriode, double fFactor)
+double ScInterpreter::ScGetGDA(double fValue, double fRest, double fTimeLength,
+                double fPeriod, double fFactor)
 {
-    double fGda, fZins, fAlterWert, fNeuerWert;
-    fZins = fFactor / fDauer;
-    if (fZins >= 1.0)
+    double fGda, fInterest, fOldValue, fNewValue;
+    fInterest = fFactor / fTimeLength;
+    if (fInterest >= 1.0)
     {
-        fZins = 1.0;
-        if (fPeriode == 1.0)
-            fAlterWert = fWert;
+        fInterest = 1.0;
+        if (fPeriod == 1.0)
+            fOldValue = fValue;
         else
-            fAlterWert = 0.0;
+            fOldValue = 0.0;
     }
     else
-        fAlterWert = fWert * pow(1.0 - fZins, fPeriode - 1.0);
-    fNeuerWert = fWert * pow(1.0 - fZins, fPeriode);
+        fOldValue = fValue * pow(1.0 - fInterest, fPeriod - 1.0);
+    fNewValue = fValue * pow(1.0 - fInterest, fPeriod);
 
-    if (fNeuerWert < fRest)
-        fGda = fAlterWert - fRest;
+    if (fNewValue < fRest)
+        fGda = fOldValue - fRest;
     else
-        fGda = fAlterWert - fNeuerWert;
+        fGda = fOldValue - fNewValue;
     if (fGda < 0.0)
         fGda = 0.0;
     return fGda;
@@ -1241,15 +1241,15 @@ void ScInterpreter::ScGDA()
             nFactor = GetDouble();
         else
             nFactor = 2.0;
-        double nPeriode = GetDouble();
-        double nDauer   = GetDouble();
+        double nPeriod = GetDouble();
+        double nTimeLength   = GetDouble();
         double nRest    = GetDouble();
-        double nWert    = GetDouble();
-        if (nWert < 0.0 || nRest < 0.0 || nFactor <= 0.0 || nRest > nWert
-                        || nPeriode < 1.0 || nPeriode > nDauer)
+        double nValue    = GetDouble();
+        if (nValue < 0.0 || nRest < 0.0 || nFactor <= 0.0 || nRest > nValue
+                        || nPeriod < 1.0 || nPeriod > nTimeLength)
             PushIllegalArgument();
         else
-            PushDouble(ScGetGDA(nWert, nRest, nDauer, nPeriode, nFactor));
+            PushDouble(ScGetGDA(nValue, nRest, nTimeLength, nPeriod, nFactor));
     }
 }
 
@@ -1259,53 +1259,53 @@ void ScInterpreter::ScGDA2()
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 5 ) )
         return ;
-    double nMonate;
+    double nMonths;
     if (nParamCount == 4)
-        nMonate = 12.0;
+        nMonths = 12.0;
     else
-        nMonate = ::rtl::math::approxFloor(GetDouble());
-    double nPeriode = GetDouble();
-    double nDauer = GetDouble();
+        nMonths = ::rtl::math::approxFloor(GetDouble());
+    double nPeriod = GetDouble();
+    double nTimeLength = GetDouble();
     double nRest = GetDouble();
-    double nWert = GetDouble();
-    if (nMonate < 1.0 || nMonate > 12.0 || nDauer > 1200.0 || nRest < 0.0 ||
-        nPeriode > (nDauer + 1.0) || nRest > nWert || nWert < 0.0)
+    double nValue = GetDouble();
+    if (nMonths < 1.0 || nMonths > 12.0 || nTimeLength > 1200.0 || nRest < 0.0 ||
+        nPeriod > (nTimeLength + 1.0) || nRest > nValue || nValue < 0.0)
     {
         PushIllegalArgument();
         return;
     }
-    double nAbRate = 1.0 - pow(nRest / nWert, 1.0 / nDauer);
-    nAbRate = ::rtl::math::approxFloor((nAbRate * 1000.0) + 0.5) / 1000.0;
-    double nErsteAbRate = nWert * nAbRate * nMonate / 12.0;
+    double nOffRate = 1.0 - pow(nRest / nValue, 1.0 / nTimeLength);
+    nOffRate = ::rtl::math::approxFloor((nOffRate * 1000.0) + 0.5) / 1000.0;
+    double nFirstOffRate = nValue * nOffRate * nMonths / 12.0;
     double nGda2 = 0.0;
-    if (::rtl::math::approxFloor(nPeriode) == 1)
-        nGda2 = nErsteAbRate;
+    if (::rtl::math::approxFloor(nPeriod) == 1)
+        nGda2 = nFirstOffRate;
     else
     {
-        double nSummAbRate = nErsteAbRate;
-        double nMin = nDauer;
-        if (nMin > nPeriode) nMin = nPeriode;
+        double nSumOffRate = nFirstOffRate;
+        double nMin = nTimeLength;
+        if (nMin > nPeriod) nMin = nPeriod;
         sal_uInt16 iMax = (sal_uInt16)::rtl::math::approxFloor(nMin);
         for (sal_uInt16 i = 2; i <= iMax; i++)
         {
-            nGda2 = (nWert - nSummAbRate) * nAbRate;
-            nSummAbRate += nGda2;
+            nGda2 = (nValue - nSumOffRate) * nOffRate;
+            nSumOffRate += nGda2;
         }
-        if (nPeriode > nDauer)
-            nGda2 = ((nWert - nSummAbRate) * nAbRate * (12.0 - nMonate)) / 12.0;
+        if (nPeriod > nTimeLength)
+            nGda2 = ((nValue - nSumOffRate) * nOffRate * (12.0 - nMonths)) / 12.0;
     }
     PushDouble(nGda2);
 }
 
-double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
-                             double fDauer1,double fPeriode,double fFactor)
+double ScInterpreter::ScInterVDB(double fValue,double fRest,double fTimeLength,
+                             double fTimeLength1,double fPeriod,double fFactor)
 {
     double fVdb=0;
-    double fIntEnd   = ::rtl::math::approxCeil(fPeriode);
+    double fIntEnd   = ::rtl::math::approxCeil(fPeriod);
     sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
 
     double fTerm, fLia;
-    double fRestwert = fWert - fRest;
+    double fSalvageValue = fValue - fRest;
     bool bNowLia = false;
 
     double fGda;
@@ -1315,8 +1315,8 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
     {
         if(!bNowLia)
         {
-            fGda = ScGetGDA(fWert, fRest, fDauer, (double) i, fFactor);
-            fLia = fRestwert/ (fDauer1 - (double) (i-1));
+            fGda = ScGetGDA(fValue, fRest, fTimeLength, (double) i, fFactor);
+            fLia = fSalvageValue/ (fTimeLength1 - (double) (i-1));
 
             if (fLia > fGda)
             {
@@ -1326,7 +1326,7 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
             else
             {
                 fTerm = fGda;
-                fRestwert -= fGda;
+                fSalvageValue -= fGda;
             }
         }
         else
@@ -1335,7 +1335,7 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
         }
 
         if ( i == nLoopEnd)
-            fTerm *= ( fPeriode + 1.0 - fIntEnd );
+            fTerm *= ( fPeriod + 1.0 - fIntEnd );
 
         fVdb += fTerm;
     }
@@ -1353,7 +1353,7 @@ void ScInterpreter::ScVDB()
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 5, 7 ) )
     {
-        double fWert, fRest, fDauer, fAnfang, fEnde, fFactor, fVdb = 0.0;
+        double fValue, fRest, fTimeLength, fStart, fEnd, fFactor, fVdb = 0.0;
         bool bFlag;
         if (nParamCount == 7)
             bFlag = GetBool();
@@ -1363,18 +1363,18 @@ void ScInterpreter::ScVDB()
             fFactor = GetDouble();
         else
             fFactor = 2.0;
-        fEnde   = GetDouble();
-        fAnfang = GetDouble();
-        fDauer  = GetDouble();
+        fEnd   = GetDouble();
+        fStart = GetDouble();
+        fTimeLength  = GetDouble();
         fRest   = GetDouble();
-        fWert   = GetDouble();
-        if (fAnfang < 0.0 || fEnde < fAnfang || fEnde > fDauer || fWert < 0.0
-                          || fRest > fWert || fFactor <= 0.0)
+        fValue   = GetDouble();
+        if (fStart < 0.0 || fEnd < fStart || fEnd > fTimeLength || fValue < 0.0
+                          || fRest > fValue || fFactor <= 0.0)
             PushIllegalArgument();
         else
         {
-            double fIntStart = ::rtl::math::approxFloor(fAnfang);
-            double fIntEnd   = ::rtl::math::approxCeil(fEnde);
+            double fIntStart = ::rtl::math::approxFloor(fStart);
+            double fIntEnd   = ::rtl::math::approxCeil(fEnd);
             sal_uLong nLoopStart = (sal_uLong) fIntStart;
             sal_uLong nLoopEnd   = (sal_uLong) fIntEnd;
 
@@ -1383,13 +1383,13 @@ void ScInterpreter::ScVDB()
             {
                 for (sal_uLong i = nLoopStart + 1; i <= nLoopEnd; i++)
                 {
-                    double fTerm = ScGetGDA(fWert, fRest, fDauer, (double) i, fFactor);
+                    double fTerm = ScGetGDA(fValue, fRest, fTimeLength, (double) i, fFactor);
 
-                    //  Teilperioden am Anfang / Ende beruecksichtigen:
+                    //respect partial period in the Beginning/ End:
                     if ( i == nLoopStart+1 )
-                        fTerm *= ( DblMin( fEnde, fIntStart + 1.0 ) - fAnfang );
+                        fTerm *= ( DblMin( fEnd, fIntStart + 1.0 ) - fStart );
                     else if ( i == nLoopEnd )
-                        fTerm *= ( fEnde + 1.0 - fIntEnd );
+                        fTerm *= ( fEnd + 1.0 - fIntEnd );
 
                     fVdb += fTerm;
                 }
@@ -1400,22 +1400,22 @@ void ScInterpreter::ScVDB()
                 double fTimeLength1=fTimeLength;
 
                 //@ The question of all questions: 'Is this right'
-                if(!::rtl::math::approxEqual(fAnfang,::rtl::math::approxFloor(fAnfang)))
+                if(!::rtl::math::approxEqual(fStart,::rtl::math::approxFloor(fStart)))
                 {
                     if(fFactor>1)
                     {
-                        if(fAnfang>fDauer/2 || ::rtl::math::approxEqual(fAnfang,fDauer/2))
+                        if(fStart>fTimeLength/2 || ::rtl::math::approxEqual(fStart,fTimeLength/2))
                         {
-                            double fPart=fAnfang-fDauer/2;
-                            fAnfang=fDauer/2;
-                            fEnde-=fPart;
-                            fDauer1+=1;
+                            double fPart=fStart-fTimeLength/2;
+                            fStart=fTimeLength/2;
+                            fEnd-=fPart;
+                            fTimeLength1+=1;
                         }
                     }
                 }
 
-                fWert-=ScInterVDB(fWert,fRest,fDauer,fDauer1,fAnfang,fFactor);
-                fVdb=ScInterVDB(fWert,fRest,fDauer,fDauer-fAnfang,fEnde-fAnfang,fFactor);
+                fValue-=ScInterVDB(fValue,fRest,fTimeLength,fTimeLength1,fStart,fFactor);
+                fVdb=ScInterVDB(fValue,fRest,fTimeLength,fTimeLength-fStart,fEnd-fStart,fFactor);
             }
         }
         PushDouble(fVdb);
@@ -1426,10 +1426,10 @@ void ScInterpreter::ScLaufz()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double nZukunft = GetDouble();
-        double nGegenwart = GetDouble();
-        double nZins = GetDouble();
-        PushDouble(log(nZukunft / nGegenwart) / log(1.0 + nZins));
+        double nFuture = GetDouble();
+        double nPresent = GetDouble();
+        double nInterest = GetDouble();
+        PushDouble(log(nFuture / nPresent) / log(1.0 + nInterest));
     }
 }
 
@@ -1438,10 +1438,10 @@ void ScInterpreter::ScLIA()
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double nDauer = GetDouble();
+        double nTimeLength = GetDouble();
         double nRest = GetDouble();
-        double nWert = GetDouble();
-        PushDouble((nWert - nRest) / nDauer);
+        double nValue = GetDouble();
+        PushDouble((nValue - nRest) / nTimeLength);
     }
 }
 
@@ -1465,7 +1465,7 @@ double ScInterpreter::ScGetRmz(double fRate, double fNper, double fPv,
 
 void ScInterpreter::ScRMZ()
 {
-    double nZins, nZzr, nBw, nZw = 0, nFlag = 0;
+    double nInterest, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
@@ -1476,8 +1476,8 @@ void ScInterpreter::ScRMZ()
         nZw   = GetDouble();
     nBw   = GetDouble();
     nZzr  = GetDouble();
-    nZins = GetDouble();
-    PushDouble(ScGetRmz(nZins, nZzr, nBw, nZw, nFlag));
+    nInterest = GetDouble();
+    PushDouble(ScGetRmz(nInterest, nZzr, nBw, nZw, nFlag));
 }
 
 void ScInterpreter::ScZGZ()
@@ -1485,33 +1485,33 @@ void ScInterpreter::ScZGZ()
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double nZukunftswert = GetDouble();
-        double nGegenwartswert = GetDouble();
-        double nZeitraum = GetDouble();
-        PushDouble(pow(nZukunftswert / nGegenwartswert, 1.0 / nZeitraum) - 1.0);
+        double nValueInFuture = GetDouble();
+        double nValueNow = GetDouble();
+        double nSpaceOfTime = GetDouble();
+        PushDouble(pow(nValueInFuture / nValueNow, 1.0 / nSpaceOfTime) - 1.0);
     }
 }
 
-double ScInterpreter::ScGetZw(double fZins, double fZzr, double fRmz,
+double ScInterpreter::ScGetZw(double fInterest, double fZzr, double fRmz,
                               double fBw, double fF)
 {
     double fZw;
-    if (fZins == 0.0)
+    if (fInterest == 0.0)
         fZw = fBw + fRmz * fZzr;
     else
     {
-        double fTerm = pow(1.0 + fZins, fZzr);
+        double fTerm = pow(1.0 + fInterest, fZzr);
         if (fF > 0.0)
-            fZw = fBw * fTerm + fRmz*(1.0 + fZins)*(fTerm - 1.0)/fZins;
+            fZw = fBw * fTerm + fRmz*(1.0 + fInterest)*(fTerm - 1.0)/fInterest;
         else
-            fZw = fBw * fTerm + fRmz*(fTerm - 1.0)/fZins;
+            fZw = fBw * fTerm + fRmz*(fTerm - 1.0)/fInterest;
     }
     return -fZw;
 }
 
 void ScInterpreter::ScZW()
 {
-    double nZins, nZzr, nRmz, nBw = 0, nFlag = 0;
+    double nInterest, nZzr, nRmz, nBw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
@@ -1522,13 +1522,13 @@ void ScInterpreter::ScZW()
         nBw   = GetDouble();
     nRmz  = GetDouble();
     nZzr  = GetDouble();
-    nZins = GetDouble();
-    PushDouble(ScGetZw(nZins, nZzr, nRmz, nBw, nFlag));
+    nInterest = GetDouble();
+    PushDouble(ScGetZw(nInterest, nZzr, nRmz, nBw, nFlag));
 }
 
 void ScInterpreter::ScZZR()
 {
-    double nZins, nRmz, nBw, nZw = 0, nFlag = 0;
+    double nInterest, nRmz, nBw, nZw = 0, nFlag = 0;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 3, 5 ) )
         return;
@@ -1538,14 +1538,14 @@ void ScInterpreter::ScZZR()
         nZw   = GetDouble();
     nBw   = GetDouble();
     nRmz  = GetDouble();
-    nZins = GetDouble();
-    if (nZins == 0.0)
+    nInterest = GetDouble();
+    if (nInterest == 0.0)
         PushDouble(-(nBw + nZw)/nRmz);
     else if (nFlag > 0.0)
-        PushDouble(log(-(nZins*nZw-nRmz*(1.0+nZins))/(nZins*nBw+nRmz*(1.0+nZins)))
-                  /log(1.0+nZins));
+        PushDouble(log(-(nInterest*nZw-nRmz*(1.0+nInterest))/(nInterest*nBw+nRmz*(1.0+nInterest)))
+                  /log(1.0+nInterest));
     else
-        PushDouble(log(-(nZins*nZw-nRmz)/(nZins*nBw+nRmz))/log(1.0+nZins));
+        PushDouble(log(-(nInterest*nZw-nRmz)/(nInterest*nBw+nRmz))/log(1.0+nInterest));
 }
 
 bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
@@ -1708,32 +1708,32 @@ void ScInterpreter::ScZins()
     PushDouble(fGuess);
 }
 
-double ScInterpreter::ScGetZinsZ(double fZins, double fZr, double fZzr, double fBw,
+double ScInterpreter::ScGetZinsZ(double fInterest, double fZr, double fZzr, double fBw,
                                  double fZw, double fF, double& fRmz)
 {
-    fRmz = ScGetRmz(fZins, fZzr, fBw, fZw, fF);     // fuer kapz auch bei fZr == 1
-    double fZinsZ;
+    fRmz = ScGetRmz(fInterest, fZzr, fBw, fZw, fF);     // fuer kapz auch bei fZr == 1
+    double fInterestZ;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if (fZr == 1.0)
     {
         if (fF > 0.0)
-            fZinsZ = 0.0;
+            fInterestZ = 0.0;
         else
-            fZinsZ = -fBw;
+            fInterestZ = -fBw;
     }
     else
     {
         if (fF > 0.0)
-            fZinsZ = ScGetZw(fZins, fZr-2.0, fRmz, fBw, 1.0) - fRmz;
+            fInterestZ = ScGetZw(fInterest, fZr-2.0, fRmz, fBw, 1.0) - fRmz;
         else
-            fZinsZ = ScGetZw(fZins, fZr-1.0, fRmz, fBw, 0.0);
+            fInterestZ = ScGetZw(fInterest, fZr-1.0, fRmz, fBw, 0.0);
     }
-    return fZinsZ * fZins;
+    return fInterestZ * fInterest;
 }
 
 void ScInterpreter::ScZinsZ()
 {
-    double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
+    double nInterest, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
@@ -1745,19 +1745,19 @@ void ScInterpreter::ScZinsZ()
     nBw   = GetDouble();
     nZzr  = GetDouble();
     nZr   = GetDouble();
-    nZins = GetDouble();
+    nInterest = GetDouble();
     if (nZr < 1.0 || nZr > nZzr)
         PushIllegalArgument();
     else
     {
         double nRmz;
-        PushDouble(ScGetZinsZ(nZins, nZr, nZzr, nBw, nZw, nFlag, nRmz));
+        PushDouble(ScGetZinsZ(nInterest, nZr, nZzr, nBw, nZw, nFlag, nRmz));
     }
 }
 
 void ScInterpreter::ScKapz()
 {
-    double nZins, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
+    double nInterest, nZr, nZzr, nBw, nZw = 0, nFlag = 0;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     sal_uInt8 nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 4, 6 ) )
@@ -1769,14 +1769,14 @@ void ScInterpreter::ScKapz()
     nBw   = GetDouble();
     nZzr  = GetDouble();
     nZr   = GetDouble();
-    nZins = GetDouble();
+    nInterest = GetDouble();
     if (nZr < 1.0 || nZr > nZzr)
         PushIllegalArgument();
     else
     {
         double nRmz;
-        double nZinsz = ScGetZinsZ(nZins, nZr, nZzr, nBw, nZw, nFlag, nRmz);
-        PushDouble(nRmz - nZinsz);
+        double nInterestz = ScGetZinsZ(nInterest, nZr, nZzr, nBw, nZw, nFlag, nRmz);
+        PushDouble(nRmz - nInterestz);
     }
 }
 
@@ -1785,37 +1785,37 @@ void ScInterpreter::ScKumZinsZ()
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
-        double fZins, fZzr, fBw, fAnfang, fEnde, fF;
+        double fInterest, fZzr, fBw, fStart, fEnd, fF;
         fF      = GetDouble();
-        fEnde   = ::rtl::math::approxFloor(GetDouble());
-        fAnfang = ::rtl::math::approxFloor(GetDouble());
+        fEnd   = ::rtl::math::approxFloor(GetDouble());
+        fStart = ::rtl::math::approxFloor(GetDouble());
         fBw     = GetDouble();
         fZzr    = GetDouble();
-        fZins   = GetDouble();
-        if (fAnfang < 1.0 || fEnde < fAnfang || fZins <= 0.0 ||
-            fEnde > fZzr  || fZzr <= 0.0 || fBw <= 0.0)
+        fInterest   = GetDouble();
+        if (fStart < 1.0 || fEnd < fStart || fInterest <= 0.0 ||
+            fEnd > fZzr  || fZzr <= 0.0 || fBw <= 0.0)
             PushIllegalArgument();
         else
         {
-            sal_uLong nAnfang = (sal_uLong) fAnfang;
-            sal_uLong nEnde = (sal_uLong) fEnde ;
-            double fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
-            double fZinsZ = 0.0;
-            if (nAnfang == 1)
+            sal_uLong nStart = (sal_uLong) fStart;
+            sal_uLong nEnd = (sal_uLong) fEnd ;
+            double fRmz = ScGetRmz(fInterest, fZzr, fBw, 0.0, fF);
+            double fInterestZ = 0.0;
+            if (nStart == 1)
             {
                 if (fF <= 0.0)
-                    fZinsZ = -fBw;
-                nAnfang++;
+                    fInterestZ = -fBw;
+                nStart++;
             }
-            for (sal_uLong i = nAnfang; i <= nEnde; i++)
+            for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (fF > 0.0)
-                    fZinsZ += ScGetZw(fZins, (double)(i-2), fRmz, fBw, 1.0) - fRmz;
+                    fInterestZ += ScGetZw(fInterest, (double)(i-2), fRmz, fBw, 1.0) - fRmz;
                 else
-                    fZinsZ += ScGetZw(fZins, (double)(i-1), fRmz, fBw, 0.0);
+                    fInterestZ += ScGetZw(fInterest, (double)(i-1), fRmz, fBw, 0.0);
             }
-            fZinsZ *= fZins;
-            PushDouble(fZinsZ);
+            fInterestZ *= fInterest;
+            PushDouble(fInterestZ);
         }
     }
 }
@@ -1825,36 +1825,36 @@ void ScInterpreter::ScKumKapZ()
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if ( MustHaveParamCount( GetByte(), 6 ) )
     {
-        double fZins, fZzr, fBw, fAnfang, fEnde, fF;
+        double fInterest, fZzr, fBw, fStart, fEnd, fF;
         fF      = GetDouble();
-        fEnde   = ::rtl::math::approxFloor(GetDouble());
-        fAnfang = ::rtl::math::approxFloor(GetDouble());
+        fEnd   = ::rtl::math::approxFloor(GetDouble());
+        fStart = ::rtl::math::approxFloor(GetDouble());
         fBw     = GetDouble();
         fZzr    = GetDouble();
-        fZins   = GetDouble();
-        if (fAnfang < 1.0 || fEnde < fAnfang || fZins <= 0.0 ||
-            fEnde > fZzr  || fZzr <= 0.0 || fBw <= 0.0)
+        fInterest   = GetDouble();
+        if (fStart < 1.0 || fEnd < fStart || fInterest <= 0.0 ||
+            fEnd > fZzr  || fZzr <= 0.0 || fBw <= 0.0)
             PushIllegalArgument();
         else
         {
-            double fRmz = ScGetRmz(fZins, fZzr, fBw, 0.0, fF);
+            double fRmz = ScGetRmz(fInterest, fZzr, fBw, 0.0, fF);
             double fKapZ = 0.0;
-            sal_uLong nAnfang = (sal_uLong) fAnfang;
-            sal_uLong nEnde = (sal_uLong) fEnde;
-            if (nAnfang == 1)
+            sal_uLong nStart = (sal_uLong) fStart;
+            sal_uLong nEnd = (sal_uLong) fEnd;
+            if (nStart == 1)
             {
                 if (fF <= 0.0)
-                    fKapZ = fRmz + fBw * fZins;
+                    fKapZ = fRmz + fBw * fInterest;
                 else
                     fKapZ = fRmz;
-                nAnfang++;
+                nStart++;
             }
-            for (sal_uLong i = nAnfang; i <= nEnde; i++)
+            for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (fF > 0.0)
-                    fKapZ += fRmz - (ScGetZw(fZins, (double)(i-2), fRmz, fBw, 1.0) - fRmz) * fZins;
+                    fKapZ += fRmz - (ScGetZw(fInterest, (double)(i-2), fRmz, fBw, 1.0) - fRmz) * fInterest;
                 else
-                    fKapZ += fRmz - ScGetZw(fZins, (double)(i-1), fRmz, fBw, 0.0) * fZins;
+                    fKapZ += fRmz - ScGetZw(fInterest, (double)(i-1), fRmz, fBw, 0.0) * fInterest;
             }
             PushDouble(fKapZ);
         }
@@ -1866,14 +1866,14 @@ void ScInterpreter::ScEffektiv()
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fPerioden = GetDouble();
+        double fPeriodn = GetDouble();
         double fNominal = GetDouble();
-        if (fPerioden < 1.0 || fNominal <= 0.0)
+        if (fPeriodn < 1.0 || fNominal <= 0.0)
             PushIllegalArgument();
         else
         {
-            fPerioden = ::rtl::math::approxFloor(fPerioden);
-            PushDouble(pow(1.0 + fNominal/fPerioden, fPerioden) - 1.0);
+            fPeriodn = ::rtl::math::approxFloor(fPeriodn);
+            PushDouble(pow(1.0 + fNominal/fPeriodn, fPeriodn) - 1.0);
         }
     }
 }
@@ -1883,14 +1883,14 @@ void ScInterpreter::ScNominal()
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fPerioden = GetDouble();
-        double fEffektiv = GetDouble();
-        if (fPerioden < 1.0 || fEffektiv <= 0.0)
+        double fPeriodn = GetDouble();
+        double fEffective = GetDouble();
+        if (fPeriodn < 1.0 || fEffective <= 0.0)
             PushIllegalArgument();
         else
         {
-            fPerioden = ::rtl::math::approxFloor(fPerioden);
-            PushDouble( (pow(fEffektiv + 1.0, 1.0 / fPerioden) - 1.0) * fPerioden );
+            fPeriodn = ::rtl::math::approxFloor(fPeriodn);
+            PushDouble( (pow(fEffective + 1.0, 1.0 / fPeriodn) - 1.0) * fPeriodn );
         }
     }
 }
@@ -2174,7 +2174,7 @@ void ScInterpreter::ScStyle()
         OUString aStyle2;                             // Template after timer
         if (nParamCount >= 3)
             aStyle2 = GetString().getString();
-        long nTimeOut = 0;                          // Timeout
+        long nTimeOut = 0;                          // timeout
         if (nParamCount >= 2)
             nTimeOut = (long)(GetDouble()*1000.0);
         OUString aStyle1 = GetString().getString();               // Template for immediate
@@ -2183,7 +2183,6 @@ void ScInterpreter::ScStyle()
             nTimeOut = 0;
 
         // Execute request to apply template
-
         if ( !pDok->IsClipOrUndo() )
         {
             SfxObjectShell* pShell = pDok->GetDocumentShell();
@@ -2226,8 +2225,8 @@ static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
 
 void ScInterpreter::ScDde()
 {
-    //  Applikation, Datei, Bereich
-    //  Application, Topic, Item
+    //  application, file, scope
+    //  application, Topic, Item
 
     sal_uInt8 nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 4 ) )
@@ -2257,8 +2256,7 @@ void ScInterpreter::ScDde()
         if ( rArr.IsRecalcModeNormal() )
             rArr.SetExclusiveRecalcModeOnLoad();
 
-            //  solange der Link nicht ausgewertet ist, Idle abklemmen
-            //  (um zirkulaere Referenzen zu vermeiden)
+            //  while the link ist not evaluated idle must be disabled (to avoid circular references)
 
         bool bOldEnabled = pDok->IsIdleEnabled();
         pDok->EnableIdle(false);
@@ -2267,7 +2265,7 @@ void ScInterpreter::ScDde()
 
         ScDdeLink* pLink = lcl_GetDdeLink( pLinkMgr, aAppl, aTopic, aItem, nMode );
 
-        //! Dde-Links (zusaetzlich) effizienter am Dokument speichern !!!!!
+        //! Save Dde-links (in addition) more efficient at document !!!!!
         //      ScDdeLink* pLink = pDok->GetDdeLink( aAppl, aTopic, aItem );
 
         bool bWasError = ( pMyFormulaCell && pMyFormulaCell->GetRawError() != 0 );
@@ -2288,7 +2286,7 @@ void ScInterpreter::ScDde()
 
             if (pMyFormulaCell)
             {
-                // StartListening erst nach dem Update, sonst circular reference
+                // StartListening after the Update to avoid circular references
                 pMyFormulaCell->StartListening( *pLink );
             }
         }
@@ -2298,14 +2296,13 @@ void ScInterpreter::ScDde()
                 pMyFormulaCell->StartListening( *pLink );
         }
 
-        //  Wenn aus dem Reschedule beim Ausfuehren des Links ein Fehler
-        //  (z.B. zirkulaere Referenz) entstanden ist, der vorher nicht da war,
-        //  das Fehler-Flag zuruecksetzen:
+        //  If an new Error from Reschedule appears when the link is executed then reset the errorflag
+
 
         if ( pMyFormulaCell && pMyFormulaCell->GetRawError() && !bWasError )
             pMyFormulaCell->SetErrCode(0);
 
-            //  Wert abfragen
+            //  check the value
 
         const ScMatrix* pLinkMat = pLink->GetResult();
         if (pLinkMat)
@@ -2315,7 +2312,7 @@ void ScInterpreter::ScDde()
             ScMatrixRef pNewMat = GetNewMat( nC, nR);
             if (pNewMat)
             {
-                pLinkMat->MatCopy(*pNewMat);        // kopieren
+                pLinkMat->MatCopy(*pNewMat);        // copy
                 PushMatrix( pNewMat );
             }
             else
@@ -2396,9 +2393,9 @@ void ScInterpreter::ScBase()
                     double fInt = ::rtl::math::approxFloor( fVal / fBase );
                     double fMult = fInt * fBase;
 #if OSL_DEBUG_LEVEL > 1
-                    // =BASIS(1e308;36) => GPF mit
+                    // =BASIS(1e308;36) => GPF with
                     // nDig = (size_t) ::rtl::math::approxFloor( fVal - fMult );
-                    // trotz vorheriger Pruefung ob fVal >= fMult
+                    // in spite off previous test if fVal >= fMult
                     double fDebug1 = fVal - fMult;
                     // fVal    := 7,5975311883090e+290
                     // fMult   := 7,5975311883090e+290
@@ -2407,16 +2404,16 @@ void ScInterpreter::ScBase()
                     double fDebug2 = ::rtl::math::approxSub( fVal, fMult );
                     // und ::rtl::math::approxSub( fVal, fMult ) == 0
                     double fDebug3 = ( fInt ? fVal / fInt : 0.0 );
-                    // Nach dem strange fDebug1 und fVal < fMult  ist eigentlich
-                    // fDebug2 == fBase, trotzdem wird das mit einem Vergleich
-                    // nicht erkannt, dann schlaegt bDirt zu und alles wird wieder gut..
+
+                    // Actual after strange fDebug1 and fVal < fMult is fDebug2 == fBase, but
+                    // anyway it can't be compared, then bDirt is executed an everything is good...
 
                     // prevent compiler warnings
                     (void)fDebug1; (void)fDebug2; (void)fDebug3;
 #endif
                     size_t nDig;
                     if ( fVal < fMult )
-                    {   // da ist was gekippt
+                    {   // something is wrong there
                         bDirt = true;
                         nDig = 0;
                     }
@@ -2492,7 +2489,7 @@ void ScInterpreter::ScDecimal()
                             ( (nBase ==  2 && (*p == 'b' || *p == 'B'))
                             ||(nBase == 16 && (*p == 'h' || *p == 'H')) )
                         )
-                        ;       // 101b und F00Dh sind ok
+                        ;       // 101b and F00Dh are ok
                     else
                     {
                         PushIllegalArgument();
