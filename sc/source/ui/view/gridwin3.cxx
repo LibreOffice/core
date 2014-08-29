@@ -249,20 +249,16 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
     {
         Fraction aScaleX;
         Fraction aScaleY;
-        if (pDrView)
-            pDrView->GetScale( aScaleX, aScaleY );
-        else
-        {
-            SCCOL nEndCol = 0;
-            SCROW nEndRow = 0;
-            pDoc->GetTableArea( nTab, nEndCol, nEndRow );
-            if (nEndCol<20) nEndCol = 20;
-            if (nEndRow<20) nEndRow = 1000;
-            ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, this,
-                                    pViewData->GetZoomX(),pViewData->GetZoomY(),
-                                    pViewData->GetPPTX(),pViewData->GetPPTY(),
-                                    aScaleX,aScaleY );
-        }
+        // if (pDrView)
+        // {
+        //     pDrView->GetScale( aScaleX, aScaleY );
+        // }
+        // else
+        // {
+            const MapMode& aPaintMapMode = pViewData->GetPaintMapMode();
+            aScaleX = aPaintMapMode.GetScaleX();
+            aScaleY = aPaintMapMode.GetScaleY();
+        // }
         aDrawMode.SetScaleX(aScaleX);
         aDrawMode.SetScaleY(aScaleY);
     }
