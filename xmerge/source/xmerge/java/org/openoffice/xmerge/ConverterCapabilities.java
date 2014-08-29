@@ -19,40 +19,36 @@
 package org.openoffice.xmerge;
 
 /**
- *  <p>A <code>ConverterCapabilities</code> object is used by
- *  <code>DocumentMerger</code> implementations.  The
- *  <code>ConverterCapabilities</code> indicates which
- *  &quot;Office&quot; XML tags are supported by the
- *  &quot;Device&quot; format.</p>
+ * A {@code ConverterCapabilities} object is used by {@code DocumentMerger}
+ * implementations.
  *
- *  @see  org.openoffice.xmerge.PluginFactory
- *  @see  org.openoffice.xmerge.DocumentMerger
+ * <p>The {@code ConverterCapabilities} indicates which &quot;Office&quot; XML
+ * tags are supported by the &quot;Device&quot; format.</p>
+ *
+ * @see  org.openoffice.xmerge.PluginFactory
+ * @see  org.openoffice.xmerge.DocumentMerger
  */
 public interface ConverterCapabilities {
 
-
     /**
-     *  Test to see if the device document format supports the
-     *  tag in question.
+     * Test to see if the device document format supports the tag in question.
      *
-     *  @param  tag  The tag to check.
+     * @param   tag  The tag to check.
      *
-     *  @return  true if the device format supports the
-     *           tag, false otherwise.
+     * @return  {@code true} if the device format supports the tag,
+     *          {@code false} otherwise.
      */
     boolean canConvertTag(String tag);
 
-
     /**
-     *  Test to see if the device document format supports the
-     *  tag attribute in question.
+     * Test to see if the device document format supports the tag attribute in
+     * question.
      *
-     *  @param  tag        The tag to check.
-     *  @param  attribute  The tag attribute to check.
+     * @param   tag        The tag to check.
+     * @param   attribute  The tag attribute to check.
      *
-     *  @return  true if the device format supports the
-     *          attribute, false otherwise.
+     * @return  {@code true} if the device format supports the attribute,
+     *          {@code false} otherwise.
      */
     boolean canConvertAttribute(String tag, String attribute);
 }
-

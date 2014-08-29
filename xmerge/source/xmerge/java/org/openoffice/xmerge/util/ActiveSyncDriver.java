@@ -47,8 +47,8 @@ public class ActiveSyncDriver {
         }
     }
 
-
-    private boolean Convert(String srcMime, String dstMime, String srcFile, String dstFile) throws Exception {
+    private boolean Convert(String srcMime, String dstMime, String srcFile,
+                            String dstFile) throws Exception {
         /*
          * The classpath passed in by XMergeSync.dll should contain all of the
          * jar files, but at the least it will contain xmerge.jar, so strip off
@@ -72,7 +72,6 @@ public class ActiveSyncDriver {
         if (ooClassDir == null) {
             return true;
         }
-
 
         /*
          * The XMergeSync.dll should will have checked for the presence of the

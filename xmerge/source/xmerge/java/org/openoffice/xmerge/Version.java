@@ -19,10 +19,10 @@
 package org.openoffice.xmerge;
 
 /**
- *  This class provides a quick utility to check the version of the
- *  jar file.  It has a main method that prints out the version
- *  info.  It also provides two static methods for runtime classes
- *  to query.
+ * This class provides a quick utility to check the version of the jar file.
+ *
+ * <p>It has a main method that prints out the version info.  It also provides
+ * two static methods for runtime classes to query.</p>
  */
 public final class Version {
 
@@ -31,41 +31,38 @@ public final class Version {
     private static final Package pkg = version.getClass().getPackage();
 
     /**
-     *  Private constructor to provide a singleton instance.
+     * Private constructor to provide a singleton instance.
      */
     private Version() {
     }
 
     /**
-     *  Returns specification version.
+     * Returns specification version.
      *
-     *  @return  The specification version.
+     * @return  The specification version.
      */
     public static String getSpecificationVersion() {
         return pkg.getSpecificationVersion();
     }
 
     /**
-     *  Returns implementation version.
+     * Returns implementation version.
      *
-     *  @return  The implementation version.
+     * @return  The implementation version.
      */
-
     public static String getImplementationVersion() {
         return pkg.getImplementationVersion();
     }
 
     /**
-     *  Main method for printing out version info.
+     * Main method for printing out version info.
      *
-     *  @param  args  Array of arguments, not used.
+     * @param  args  Array of arguments, not used.
      */
     public static void main(String args[]) {
-
         System.out.println("Specification-Title: " + pkg.getSpecificationTitle());
         System.out.println("Specification-Vendor: " + pkg.getSpecificationVendor());
         System.out.println("Specification-Version: " + pkg.getSpecificationVersion());
         System.out.println("Implementation-Version: " + pkg.getImplementationVersion());
     }
 }
-

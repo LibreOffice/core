@@ -21,41 +21,41 @@ package org.openoffice.xmerge;
 import java.io.IOException;
 
 /**
- *  <p>A <code>DocumentDeserializer</code> represents a converter that
- *  converts &quot;Device&quot; <code>Document</code> objects into the
- *  &quot;Office&quot; <code>Document</code> format.</p>
+ * A {@code DocumentDeserializer} represents a converter that converts
+ * &quot;Device&quot; {@code Document} objects into the &quot;Office&quot;
+ * {@code Document} format.
  *
- *  <p>The <code>PluginFactory</code> {@link
- *  org.openoffice.xmerge.DocumentDeserializerFactory#createDocumentDeserializer
- *  createDocumentDeserializer} method creates a <code>DocumentDeserializer</code>,
- *  which may or may not implement <code>DocumentDeserializer2</code>.
- *  When it is constructed, a
- *  <code>ConvertData</code> object is passed in to be used as input.</p>
+ * <p>The {@code PluginFactory} {@link
+ * org.openoffice.xmerge.DocumentDeserializerFactory#createDocumentDeserializer
+ * createDocumentDeserializer} method creates a {@code DocumentDeserializer},
+ * which may or may not implement {@code DocumentDeserializer2}.  When it is
+ * constructed, a {@code ConvertData} object is passed in to be used as input.
+ * </p>
  *
- *  @see     org.openoffice.xmerge.PluginFactory
- *  @see     org.openoffice.xmerge.DocumentDeserializerFactory
+ * @see  org.openoffice.xmerge.PluginFactory
+ * @see  org.openoffice.xmerge.DocumentDeserializerFactory
  */
 public interface DocumentDeserializer2 extends DocumentSerializer {
 
     /**
-     *  <p>Convert the data passed into the <code>DocumentDeserializer2</code>
-     *  constructor into the &quot;Office&quot; <code>Document</code>
-     *  format. The URL's passed may be used to resolve links and to choose the
-     *  name of the output office document.</p>
+     * Convert the data passed into the {@code DocumentDeserializer2}
+     * constructor into the &quot;Office&quot; {@code Document} format.
      *
-     *  <p>This method may or may not be thread-safe.  It is expected
-     *  that the user code does not call this method in more than one
-     *  thread.  And for most cases, this method is only done once.</p>
+     * <p>The URL's passed may be used to resolve links and to choose the name
+     * of the output office document.</p>
      *
-     *  @return  The resulting <code>Document</code> object from conversion.
+     * <p>This method may or may not be thread-safe.  It is expected that the
+     * user code does not call this method in more than one thread.  And for
+     * most cases, this method is only done once.</p>
      *
-     *  @param   deviceURL         URL of the device document (may be null if unknown)
-     *  @param   officeURL         URL of the office document (may be null if unknown)
+     * @return  The resulting {@code Document} object from conversion.
      *
-     *  @throws  ConvertException  If any Convert error occurs.
-     *  @throws  IOException       If any I/O error occurs.
+     * @param   deviceURL         URL of the device document (may be null if unknown)
+     * @param   officeURL         URL of the office document (may be null if unknown)
+     *
+     * @throws  ConvertException  If any Convert error occurs.
+     * @throws  IOException       If any I/O error occurs.
      */
     Document deserialize(String deviceURL, String officeURL) throws
         ConvertException, IOException;
 }
-

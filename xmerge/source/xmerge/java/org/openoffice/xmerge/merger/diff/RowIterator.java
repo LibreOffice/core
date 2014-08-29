@@ -23,10 +23,11 @@ import org.w3c.dom.Node;
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
-
 /**
- *  This is an implementation of the <code>Iterator</code> interface and extends
- *  <code>NodeIterator</code>.  It will traverse the tree and find row sequences.
+ * This is an implementation of the {@code Iterator} interface and extends
+ * {@code NodeIterator}
+ *
+ * <p>It will traverse the tree and find row sequences.</p>
  */
 public final class RowIterator extends NodeIterator {
 
@@ -35,22 +36,24 @@ public final class RowIterator extends NodeIterator {
     // considered to be not equivalent.
 
     /**
-     *  Standard constructor.
+     * Standard constructor.
      *
-     *  @param  cc    The <code>ConverterCapabilities</code>.
-     *  @param  node  The initial root <code>Node</code>.
+     * @param  cc    The {@code ConverterCapabilities}.
+     * @param  node  The initial root {@code Node}.
      */
     public RowIterator(ConverterCapabilities cc, Node node) {
         super(cc, node);
     }
 
     /**
-     *  Overwrite the parent <code>nodeSupported</code> method.  Only
-     *  row <code>Node</code> objects are supported.
+     * Overwrite the parent {@code nodeSupported} method.
      *
-     *  @param  node  <code>Node</code> to check.
+     * <p>Only row {@code Node} objects are supported.</p>
      *
-     *  @return  true if the <code>Node</code> is supported, false otherwise.
+     * @param   node  {@code Node} to check.
+     *
+     * @return  {@code true} if the {@code Node} is supported, {@code false}
+     *          otherwise.
      */
     @Override
     protected boolean nodeSupported(Node node) {
@@ -61,4 +64,3 @@ public final class RowIterator extends NodeIterator {
                 node.getNodeName().equals(OfficeConstants.TAG_TABLE_ROW);
     }
 }
-
