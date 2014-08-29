@@ -44,4 +44,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_calc,\
 	writerperfect/qa/unit/WpftCalcFilterTest \
 ))
 
+$(call gb_CppunitTest_get_target,writerperfect_calc): \
+    $(call gb_Library_get_target,ipb)
+
 # vim: set noet sw=4 ts=4:
