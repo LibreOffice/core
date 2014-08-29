@@ -2800,7 +2800,10 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         //  call GetOutputArea with nNeeded=0, to get only the cell width
 
         //! handle nArrY == 0
-        GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, 0,
+        GetOutputArea( nXForPos, nArrYForPos,
+                       PixelToLogicHorizontal( rParam.mnPosX ),
+                       PixelToLogicVertical( rParam.mnPosY ),
+                       rParam.mnCellX, rParam.mnCellY, 0,
                        *rParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
                        rParam.mbCellIsValue, true, false, aAreaParam );
 
@@ -2863,7 +2866,10 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
     if (!rParam.mbBreak || bShrink)
     {
         // for break, the first GetOutputArea call is sufficient
-        GetOutputArea( nXForPos, nArrYForPos, rParam.mnPosX, rParam.mnPosY, rParam.mnCellX, rParam.mnCellY, nNeededPixel,
+        GetOutputArea( nXForPos, nArrYForPos,
+                       PixelToLogicHorizontal( rParam.mnPosX ),
+                       PixelToLogicVertical( rParam.mnPosY ),
+                       rParam.mnCellX, rParam.mnCellY, nNeededPixel,
                        *rParam.mpPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
                        rParam.mbCellIsValue || bRepeat || bShrink, false, false, aAreaParam );
 
@@ -2962,7 +2968,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             nStartX += nLeftM;
     }
 
-    bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
+    bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrWTwips);
     if (bOutside)
         return;
 
@@ -2971,9 +2977,9 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         aAreaParam.maClipRect.Left() = nScrX;
         aAreaParam.mbLeftClip = true;
     }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
+    if ( aAreaParam.maClipRect.Right() > nScrX + LogicToPixelHorizontal( nScrWTwips ) )
     {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
+        aAreaParam.maClipRect.Right() = nScrX + LogicToPixelHorizontal( nScrWTwips );          //! minus one?
         aAreaParam.mbRightClip = true;
     }
 
@@ -2991,9 +2997,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         aAreaParam.maClipRect.Top() = nScrY;
         bClip = true;
     }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
+    if ( aAreaParam.maClipRect.Bottom() >
+         nScrY + PixelToLogicVertical( nScrHTwips ) )
     {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
+        aAreaParam.maClipRect.Bottom() =
+            nScrY + PixelToLogicVertical( nScrHTwips );     //! minus one?
         bClip = true;
     }
 
@@ -3175,7 +3183,7 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, long nEngineHeight, con
         pClipMarkCell->nClipMark |= SC_CLIPMARK_RIGHT;      //! also allow left?
         bAnyClipped = true;
 
-        const long nMarkPixel = static_cast<long>( SC_CLIPMARK_SIZE * mnPPTX );
+        const long nMarkPixel = PixelToLogicHorizontal( SC_CLIPMARK_SIZE );
         if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
             aAreaParam.maClipRect.Right() -= nMarkPixel;
     }
