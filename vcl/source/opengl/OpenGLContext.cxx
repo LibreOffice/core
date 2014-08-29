@@ -833,4 +833,9 @@ void OpenGLContext::show()
         m_pWindow->Show();
 }
 
+bool OpenGLContext::supportMultiSampling() const
+{
+    return m_aGLWin.bMultiSampleSupported;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -23,7 +23,6 @@ OGLWindow::OGLWindow( glTFHandle& rHandle, OpenGLContext& rContext, Window& rEve
     , meZoomLevel( media::ZoomLevel_ORIGINAL )
     , m_aLastMousePos(Point(0,0))
     , m_bIsOrbitMode( false )
-    , m_fCameraDistance(0.0)
 {
 }
 
@@ -267,15 +266,15 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     glm::vec3 vMove = vView-vEye;
                     vMove = glm::normalize(vMove);
                     vMove *= 25.0f;
-                    glm::vec3 vStrafe = glm::cross(vView-vEye, vUp);
+                    glm::vec3 vStrafe = glm::cross(vMove, vUp);
                     vStrafe = glm::normalize(vStrafe);
                     vStrafe *= 25.0f;
-                    glm::vec3 vMup = glm::cross(vView-vEye,glm::vec3(1.0f,0.0f,0.0f) );
-                    vMup = glm::normalize(vMup);
-                    vMup *= 25.0f;
+                    glm::vec3 vMup = vUp * 25.0f;
 
                     if( !m_bIsOrbitMode )
                     {
+                        if(nCode == KEY_E)vMoveBy += vMup*(0.0005f*fModelSize);
+                        if(nCode == KEY_Q)vMoveBy -= vMup*(0.0005f*fModelSize);
                         if(nCode == KEY_W)vMoveBy += vMove*(0.0005f*fModelSize);
                         if(nCode == KEY_S)vMoveBy -= vMove*(0.0005f*fModelSize);
                         if(nCode == KEY_A)vMoveBy -= vStrafe*(0.0005f*fModelSize);
@@ -283,15 +282,24 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                     }
                     else
                     {
-                        if(nCode == KEY_E)vMoveBy += vMove*(0.0005f*fModelSize);
-                        if(nCode == KEY_Q)vMoveBy -= vMove*(0.0005f*fModelSize);
+                        bool bZoomIn = false;
+                        bool bZoomOut = false;
+                        if(nCode == KEY_E)
+                        {
+                            vMoveBy += vMove*(0.0005f*fModelSize);
+                            bZoomIn = true;
+                        }
+                        if(nCode == KEY_Q)
+                        {
+                            vMoveBy -= vMove*(0.0005f*fModelSize);
+                            bZoomOut = true;
+                        }
 
                         // Limit zooming in orbit mode
-                        m_fCameraDistance += vMoveBy.z;
-                        if ((m_fCameraDistance < 0.5 * fModelSize && vMoveBy.z < 0.0 ) ||
-                            (m_fCameraDistance > 2 * fModelSize && vMoveBy.z > 0.0 ))
+                        float fCameraDistFromModelGlobe = glm::length(vEye + vMoveBy - vView) - fModelSize / 2.0f;
+                        if ((fCameraDistFromModelGlobe < 0.5 * fModelSize && bZoomIn ) ||
+                            (fCameraDistFromModelGlobe > 2 * fModelSize && bZoomOut ))
                         {
-                            m_fCameraDistance -= vMoveBy.z;
                             vMoveBy = glm::vec3(0.0);
                         }
                     }
@@ -333,12 +341,6 @@ IMPL_LINK(OGLWindow, CameraHandler, VclWindowEvent*, pEvent)
                 {
                     gltf_orbit_mode_start(&m_rHandle);
                     m_bIsOrbitMode = true;
-                    // Set default camera distance
-                    glm::vec3 vEye;
-                    glm::vec3 vView;
-                    glm::vec3 vUp;
-                    gltf_get_camera_pos(&m_rHandle, &vEye,&vView,&vUp);
-                    m_fCameraDistance = vEye.z - gltf_get_model_center_pos(&m_rHandle)->z - (gltf_get_model_size(&m_rHandle)/2.0);
                 }
             }
             else if(nCode == KEY_F)
