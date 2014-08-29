@@ -2096,6 +2096,12 @@ DECLARE_RTFIMPORT_TEST(testFdo74229, "fdo74229.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(67)), getProperty<sal_Int32>(xCell, "RightBorderDistance"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo79959, "fdo79959.rtf")
+{
+    // This was false, as the style was imported as " Test", i.e. no whitespace stripping.
+    CPPUNIT_ASSERT_EQUAL(true, static_cast<bool>(getStyles("ParagraphStyles")->hasByName("Test")));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

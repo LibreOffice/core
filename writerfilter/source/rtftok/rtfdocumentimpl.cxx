@@ -1184,8 +1184,9 @@ void RTFDocumentImpl::text(OUString& rString)
             case DESTINATION_STYLEENTRY:
                 if (m_aStates.top().aTableAttributes.find(NS_ooxml::LN_CT_Style_type))
                 {
-                    m_aStyleNames[m_nCurrentStyleIndex] = aName;
-                    RTFValue::Pointer_t pValue(new RTFValue(aName));
+                    // Word strips whitespace around style names.
+                    m_aStyleNames[m_nCurrentStyleIndex] = aName.trim();
+                    RTFValue::Pointer_t pValue(new RTFValue(aName.trim()));
                     m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_styleId, pValue);
                     m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
 
