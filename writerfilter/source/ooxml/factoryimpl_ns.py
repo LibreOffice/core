@@ -424,24 +424,30 @@ def factoryChooseAction(actionNode):
     for condNode in getChildrenByName(actionNode, "cond"):
         ret.append("    {")
         ret.append("        OOXMLPropertySetEntryToInteger aHandler(%s);" % idToLabel(condNode.getAttribute("tokenid")))
-        ret.append("        dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler)->getPropertySetAttrs()->resolve(aHandler);")
+        ret.append("        if (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))")
+        ret.append("            pStream->getPropertySetAttrs()->resolve(aHandler);")
         ret.append("")
         ret.append("        if (sal::static_int_cast<Id>(aHandler.getValue()) == %s)" % idToLabel(condNode.getAttribute("value")))
         ret.append("        {")
         extra_space = "        "
 
     if actionNode.getAttribute("action") in ("handleXNotes", "handleHdrFtr", "handleComment", "handlePicture", "handleBreak", "handleOLE", "handleFontRel"):
-        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerProperties*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
+        ret.append("    %sif (OOXMLFastContextHandlerProperties* pProperties = dynamic_cast<OOXMLFastContextHandlerProperties*>(pHandler))" % extra_space)
+        ret.append("    %s    pProperties->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") == "propagateCharacterPropertiesAsSet":
         ret.append("    %spHandler->propagateCharacterPropertiesAsSet(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
     elif actionNode.getAttribute("action") in ("startCell", "endCell"):
-        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerTextTableCell*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
+        ret.append("    %sif (OOXMLFastContextHandlerTextTableCell* pTextTableCell = dynamic_cast<OOXMLFastContextHandlerTextTableCell*>(pHandler))" % extra_space)
+        ret.append("    %s    pTextTableCell->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") in ("startRow", "endRow"):
-        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
+        ret.append("    %sif (OOXMLFastContextHandlerTextTableRow* pTextTableRow = dynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler))" % extra_space)
+        ret.append("    %s    pTextTableRow->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") == "handleGridBefore":
-        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
+        ret.append("    %sif (OOXMLFastContextHandlerTextTableRow* pTextTableRow = dynamic_cast<OOXMLFastContextHandlerTextTableRow*>(pHandler))" % extra_space)
+        ret.append("    %s    pTextTableRow->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") in ("sendProperty", "handleHyperlink"):
-        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerStream*>(pHandler)->%s();" % (extra_space, actionNode.getAttribute("action")))
+        ret.append("    %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % extra_space)
+        ret.append("    %s    pStream->%s();" % (extra_space, actionNode.getAttribute("action")))
     elif actionNode.getAttribute("action") == "fieldstart":
         ret.append("    %spHandler->startField();" % (extra_space))
     elif actionNode.getAttribute("action") == "fieldsep":
@@ -449,7 +455,8 @@ def factoryChooseAction(actionNode):
     elif actionNode.getAttribute("action") == "fieldend":
         ret.append("    %spHandler->endField();" % (extra_space))
     elif actionNode.getAttribute("action") == "printproperty":
-        ret.append("    %sdynamic_cast<OOXMLFastContextHandlerStream*>(pHandler)->sendProperty(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
+        ret.append("    %sif (OOXMLFastContextHandlerStream* pStream = dynamic_cast<OOXMLFastContextHandlerStream*>(pHandler))" % extra_space)
+        ret.append("    %s    pStream->sendProperty(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
     elif actionNode.getAttribute("action") == "sendPropertiesWithId":
         ret.append("    %spHandler->sendPropertiesWithId(%s);" % (extra_space, idToLabel(actionNode.getAttribute("sendtokenid"))))
     elif actionNode.getAttribute("action") == "text":
@@ -637,8 +644,8 @@ def factoryAttributeActionDefineInner(nsNode, defineNode):
         for resourceNode in [i for i in getChildrenByName(nsNode, "resource") if i.getAttribute("name") == defineName]:
             resource = resourceNode.getAttribute("resource")
             break
+        ret.append("        if (OOXMLFastContextHandler%s* pHandler = dynamic_cast<OOXMLFastContextHandler%s*>(_pHandler))" % (resource, resource))
         ret.append("        {")
-        ret.append("            OOXMLFastContextHandler%s* pHandler = dynamic_cast<OOXMLFastContextHandler%s*>(_pHandler);" % (resource, resource))
         ret.extend(block)
         ret.append("        }")
 
