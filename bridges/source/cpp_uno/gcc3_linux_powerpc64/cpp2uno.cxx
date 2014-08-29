@@ -21,7 +21,7 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <uno/data.h>
 #include <typelib/typedescription.hxx>
-
+#include <osl/endian.h>
 #include "bridges/cpp_uno/shared/bridge.hxx"
 #include "bridges/cpp_uno/shared/cppinterfaceproxy.hxx"
 #include "bridges/cpp_uno/shared/types.hxx"
