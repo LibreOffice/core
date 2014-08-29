@@ -31,7 +31,7 @@ import java.util.Properties;
 /**
  *  This class is used for logging debug messages.
  *  Currently, there are three types of logging:  {@link #INFO},
- *  {@link #TRACE} &amp; {@link #ERROR}.  Use the Debug.properties
+ *  {@link #TRACE} {@literal &} {@link #ERROR}.  Use the Debug.properties
  *  file to set or unset each type.  Also use Debug.properties
  *  to set the writer to either <code>System.out</code>,
  *  <code>System.err</code>, or to a file.

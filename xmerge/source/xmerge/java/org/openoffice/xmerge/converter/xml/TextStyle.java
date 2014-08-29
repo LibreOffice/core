@@ -35,7 +35,6 @@ import org.openoffice.xmerge.util.Debug;
  */
 public class TextStyle extends Style implements Cloneable {
 
-
     /** Indicates <i>bold</i> text. */
     final private static int BOLD        = 0x01;
     /** Indicates <i>italic</i> text. */
@@ -48,7 +47,6 @@ public class TextStyle extends Style implements Cloneable {
     final private static int SUPERSCRIPT = 0x10;
     /** Indicates <i>subscripted</i> text. */
     final private static int SUBSCRIPT   = 0x20;
-
 
     /** Values of text attributes. */
     private int values = 0;
@@ -111,7 +109,6 @@ public class TextStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
      *  Constructor for use when going from client device format to DOM
      *
@@ -150,7 +147,6 @@ public class TextStyle extends Style implements Cloneable {
         this.fontName = fontName;
     }
 
-
     /**
      *  Parse a color specification of the form <i>#rrggbb</i>
      *
@@ -175,7 +171,6 @@ public class TextStyle extends Style implements Cloneable {
         }
         return new Color(red, green, blue);
     }
-
 
     /**
      *  Set an attribute.
@@ -257,13 +252,6 @@ public class TextStyle extends Style implements Cloneable {
         }
     }
 
-
-
-
-
-
-
-
     /**
      *  Return the font size for this <code>Style</code>.
      *
@@ -272,7 +260,6 @@ public class TextStyle extends Style implements Cloneable {
     public int getFontSize() {
         return sizeInPoints;
     }
-
 
     /**
      *  Return the name of the font for this <code>Style</code>.
@@ -283,7 +270,6 @@ public class TextStyle extends Style implements Cloneable {
     public String getFontName() {
         return fontName;
     }
-
 
     /**
      *  Return the font <code>Color</code> for this <code>Style</code>.
@@ -296,7 +282,6 @@ public class TextStyle extends Style implements Cloneable {
         return fontColor;
     }
 
-
     /**
      *  Return the background <code>Color</code> for this
      *  <code>Style</code>.  Can be null if none was specified.
@@ -307,10 +292,6 @@ public class TextStyle extends Style implements Cloneable {
     public Color getBackgroundColor() {
         return bgColor;
     }
-
-
-
-
 
     /**
      *  Return a <code>Style</code> object corresponding to this one,
@@ -375,7 +356,6 @@ public class TextStyle extends Style implements Cloneable {
         return resolved;
     }
 
-
     /**
      *  Set one or more text attributes to <i>on</i>.
      *
@@ -386,7 +366,6 @@ public class TextStyle extends Style implements Cloneable {
         values |= flags;
     }
 
-
     /**
      *  Set one or more text attributes to <i>off</i>.
      *
@@ -396,7 +375,6 @@ public class TextStyle extends Style implements Cloneable {
         mask |= flags;
         values &= ~flags;
     }
-
 
     /**
      *  Private function to return the value as an element in
@@ -413,7 +391,6 @@ public class TextStyle extends Style implements Cloneable {
             return "\"\",";
     }
 
-
     /**
      *  Private function to return the value as a last element in
      *  a Comma Separated Value (CSV) format.
@@ -429,7 +406,6 @@ public class TextStyle extends Style implements Cloneable {
             return "\"\"";
     }
 
-
     /**
      *  Print a Comma Separated Value (CSV) header line for the
      *  spreadsheet dump.
@@ -440,7 +416,6 @@ public class TextStyle extends Style implements Cloneable {
         + toCSV("Bold") + toCSV("Italic") + toCSV("Underline")
         + toCSV("Strikethru") + toCSV("Superscript") + toLastCSV("Subscript"));
     }
-
 
     /**
      *  Dump this <code>Style</code> as a Comma Separated Value (CSV) line.
@@ -455,7 +430,6 @@ public class TextStyle extends Style implements Cloneable {
         System.out.println(toCSV(name) + toCSV(family) + toCSV(parent)
         + toCSV(fontName) + toCSV("" + sizeInPoints) + attributes + toLastCSV(null));
     }
-
 
     /**
      *  Create a new <code>Node</code> in the <code>Document</code>, and
@@ -474,7 +448,6 @@ public class TextStyle extends Style implements Cloneable {
         writeAttributes(node);
         return node;
     }
-
 
     /**
      *  Return true if <code>style</code> specifies as much or less
@@ -524,7 +497,6 @@ public class TextStyle extends Style implements Cloneable {
         return true;
     }
 
-
     /**
      *  Write this <code>Style</code> object's attributes to a
      *  <code>Node</code> in the <code>Document</code>.
@@ -573,7 +545,6 @@ public class TextStyle extends Style implements Cloneable {
                               buildColorString(bgColor));
     }
 
-
     /**
      *  Given a <code>Color</code>, return a string of the form
      *  <i>#rrggbb</i>.
@@ -597,7 +568,6 @@ public class TextStyle extends Style implements Cloneable {
         return colorString;
     }
 
-
     private static String[] ignored = {
         "style:text-autospace",  "style:text-underline-color",
         "fo:margin-left", "fo:margin-right", "fo:text-indent",
@@ -611,8 +581,7 @@ public class TextStyle extends Style implements Cloneable {
         "style:line-break", "fo:keep-with-next"
     };
 
-
-    /*
+    /**
      * This code checks whether an attribute is one that we
      * intentionally ignore.
      *
@@ -630,4 +599,3 @@ public class TextStyle extends Style implements Cloneable {
         return false;
     }
 }
-

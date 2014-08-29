@@ -21,35 +21,33 @@ package org.openoffice.xmerge;
 import java.io.IOException;
 
 /**
- *  <p>A <code>DocumentDeserializer</code> represents a converter that
- *  converts &quot;Device&quot; <code>Document</code> objects into the
- *  &quot;Office&quot; <code>Document</code> format.</p>
+ * A {@code DocumentDeserializer} represents a converter that converts
+ * &quot;Device&quot; {@code Document} objects into the &quot;Office&quot;
+ * {@code Document} format.
  *
- *  <p>The <code>DocumentDeserializer</code> object is created by
- *  the <code>PluginFactory</code> {@link
- *  org.openoffice.xmerge.DocumentDeserializerFactory#createDocumentDeserializer
- *  createDocumentDeserializer} method.  When it is constructed, a
- *  <code>ConvertData</code> object is passed in to be used as input.</p>
+ * <p>The {@code DocumentDeserializer} object is created by the
+ * {@code PluginFactory} {@link
+ * org.openoffice.xmerge.DocumentDeserializerFactory#createDocumentDeserializer
+ * createDocumentDeserializer} method.  When it is constructed, a
+ * {@code ConvertData} object is passed in to be used as input.</p>
  *
- *  @see     org.openoffice.xmerge.PluginFactory
- *  @see     org.openoffice.xmerge.DocumentDeserializerFactory
+ * @see     org.openoffice.xmerge.PluginFactory
+ * @see     org.openoffice.xmerge.DocumentDeserializerFactory
  */
 public interface DocumentDeserializer {
 
     /**
-     *  <p>Convert the data passed into the <code>DocumentDeserializer</code>
-     *  constructor into the &quot;Office&quot; <code>Document</code>
-     *  format.</p>
+     * Convert the data passed into the {@code DocumentDeserializer} constructor
+     * into the &quot;Office&quot; {@code Document} format.
      *
-     *  <p>This method may or may not be thread-safe.  It is expected
-     *  that the user code does not call this method in more than one
-     *  thread.  And for most cases, this method is only done once.</p>
+     * <p>This method may or may not be thread-safe.  It is expected that the
+     * user code does not call this method in more than one thread.  And for
+     * most cases, this method is only done once.</p>
      *
-     *  @return  The resulting <code>Document</code> object from conversion.
+     * @return  The resulting {@code Document} object from conversion.
      *
-     *  @throws  ConvertException  If any Convert error occurs.
-     *  @throws  IOException       If any I/O error occurs.
+     * @throws  ConvertException  If any Convert error occurs.
+     * @throws  IOException       If any I/O error occurs.
      */
     Document deserialize() throws ConvertException, IOException;
 }
-

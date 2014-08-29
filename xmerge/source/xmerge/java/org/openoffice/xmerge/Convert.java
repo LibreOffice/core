@@ -25,64 +25,60 @@ import java.util.Iterator;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 /**
- *  The <code>Convert</code> class manages a conversion from one
- *  mime-type to another.  The <code>ConvertFactory</code> is
- *  responsible for returning the appropriate <code>Convert</code>
- *  class for a specified conversion.  This class is responsible
- *  for all interactions with the <code>PluginFactory</code>
- *  implementation.
+ * The {@code Convert} class manages a conversion from one mime-type to another.
  *
- *  @see  ConverterFactory
- *  @see  PluginFactory
- *  @see  org.openoffice.xmerge.util.registry.ConverterInfo
+ * <p> The {@code ConvertFactory} is responsible for returning the appropriate
+ * {@code Convert} class for a specified conversion. This class is responsible
+ * for all interactions with the {@code PluginFactory} implementation.</p>
+ *
+ * @see ConverterFactory
+ * @see PluginFactory
+ * @see org.openoffice.xmerge.util.registry.ConverterInfo
  */
 public class Convert implements Cloneable {
 
     /**
-     *  ConvertInfo that corresponds to the from-mime/to-mime
-     *  conversion.
+     * ConvertInfo that corresponds to the from-mime/to-mime conversion.
      */
     private ConverterInfo ci;
 
     /**
-     *  true if converting to the Office format, false if converting
-     *  to the device format.
+     * {@code true} if converting to the Office format, {@code false} if
+     * converting to the device format.
      */
     private boolean toOffice;
 
     /**
-     *  Holds the convert input data.
+     * Holds the convert input data.
      */
     private ConvertData inputCD = new ConvertData();
 
-
     /**
-     *  Construct a Convert class with specified <code>ConvertInfo</code>
-     *  registry information.
+     * Construct a Convert class with specified {@code ConvertInfo} registry
+     * information.
      *
-     *  @param  ci        A <code>ConvertInfo</code> object containing
-     *                    registry information corresponding to a
-     *                    specific plug-in.
-     *  @param  toOffice  true if converting to the Office format,
-     *                    false if converting to the device format.
+     * @param  ci        A {@code ConvertInfo} object containing registry
+     *                   information corresponding to a specific plug-in.
+     * @param  toOffice  {@code true} if converting to the Office format,
+     *                   {@code false} if converting to the device format.
      */
     public Convert(ConverterInfo ci, boolean toOffice) {
         this.ci = ci;
         this.toOffice = toOffice;
     }
 
-
     /**
-     *  Adds an <code>InputStream</code> to be used as input by the
-     *  <code>Convert</code> class.  It is possible that many files
-     *  need to be converted into a single output <code>Document</code>,
-     *  so this function may be called more than one time.  It is the
-     *  plug-in's responsibility to know how to handle the input.
+     * Adds an {@code InputStream} to be used as input by the {@code Convert}
+     * class.
      *
-     *  @param  name  The name corresponding to the <code>InputStream</code>.
-     *  @param  is    <code>InputStream</code> to be used as input.
+     * <p>It is possible that many files need to be converted into a single
+     * output {@code Document}, so this function may be called more than one
+     * time. It is the plug-in's responsibility to know how to handle the input.
+     * </p>
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @param   name  The name corresponding to the {@code InputStream}.
+     * @param   is    {@code InputStream} to be used as input.
+     * @throws  IOException  If any I/O error occurs.
      */
     public void addInputStream(String name, InputStream is)
         throws IOException {
@@ -97,18 +93,20 @@ public class Convert implements Cloneable {
         inputCD.addDocument(inputDoc);
     }
 
-     /**
-     *  Adds an <code>InputStream</code> to be used as input by the
-     *  <code>Convert</code> class.  It is possible that many files
-     *  need to be converted into a single output <code>Document</code>,
-     *  so this function may be called more than one time.  It is the
-     *  plug-in's responsibility to know how to handle the input.
+    /**
+     * Adds an {@code InputStream} to be used as input by the {@code Convert}
+     * class.
      *
-     *  @param  name  The name corresponding to the <code>InputStream</code>.
-     *  @param  is    <code>InputStream</code> to be used as input.
-     *  @param  isZip <code>boolean</code> to identify that incoming stream is      *                zipped
+     * <p>It is possible that many files need to be converted into a single
+     * output {@code Document}, so this function may be called more than one
+     * time. It is the plug-in's responsibility to know how to handle the input.
+     * </p>
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @param   name  The name corresponding to the {@code InputStream}.
+     * @param   is    {@code InputStream} to be used as input.
+     * @param   isZip {@code boolean} to identify that incoming stream is * zipped.
+     *
+     * @throws  IOException  If any I/O error occurs.
      */
     public void addInputStream(String name, InputStream is,boolean isZip)
         throws IOException {
@@ -125,40 +123,38 @@ public class Convert implements Cloneable {
 
 
     /**
-     *  Returns a <code>DocumentMerger</code> for the given <code>Document</code>.
+     * Returns a {@code DocumentMerger} for the given {@code Document}.
      *
-     *  @param  origDoc The <code>Document</code> were later changes will be merged to
+     * @param   origDoc The {@code Document} were later changes will be merged to
+     * @return  The {@code DocumentMerger} object for the given document.
      *
-     *  @return  The <code>DocumentMerger</code> object for the given document.
-     *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
-    public DocumentMerger getDocumentMerger(Document origDoc)
-        throws IOException {
-
-     DocumentMergerFactory myDocMergerFactory = ci.getDocMergerFactory();
-     DocumentMerger merger = myDocMergerFactory.createDocumentMerger(origDoc);
-     return merger;
+    public DocumentMerger getDocumentMerger(Document origDoc) throws IOException {
+        DocumentMergerFactory myDocMergerFactory = ci.getDocMergerFactory();
+        DocumentMerger merger = myDocMergerFactory.createDocumentMerger(origDoc);
+        return merger;
     }
 
     /**
-     *  Resets the input queue, so that the user can use this class to
-     *  perform another conversion.  This causes the
-     *  <code>addInputStream</code> method to accept input for the next
-     *  conversion.
+     * Resets the input queue, so that the user can use this class to perform
+     * another conversion.
+     *
+     * <p>This causes the {@code addInputStream} method to accept input for the
+     * next conversion.</p>
      */
     private void reset() {
         inputCD.reset();
     }
 
-
     /**
-     *  Clones a Convert object so another Convert object can
-     *  do the same conversion.  <code>InputStream</code> objects passed
-     *  in via calls to the <code>addInputStream</code> method are not
-     *  copied.
+     * Clones a Convert object so another Convert object can do the same
+     * conversion.
      *
-     *  @return  The cloned <code>Convert</code> object.
+     * <p>{@code InputStream} objects passed in via calls to the
+     * {@code addInputStream} method are not copied.</p>
+     *
+     * @return  The cloned {@code Convert} object.
      */
     @Override
     public Object clone() {
@@ -175,16 +171,14 @@ public class Convert implements Cloneable {
         return aClone;
     }
 
-
     /**
-     *  Convert the input specified in calls to the <code>addInputStream</code>
-     *  method to the output format specified by this <code>Convert</code>
-     *  class.
+     * Convert the input specified in calls to the {@code addInputStream}
+     * method to the output format specified by this {@code Convert} class.
      *
-     *  @return  The output data.
+     * @return  The output data.
      *
-     *  @throws  ConvertException  If any conversion error occurs.
-     *  @throws  IOException       If any I/O error occurs.
+     * @throws  ConvertException  If any conversion error occurs.
+     * @throws  IOException       If any I/O error occurs.
      */
     public ConvertData convert() throws ConvertException, IOException {
 
@@ -192,7 +186,7 @@ public class Convert implements Cloneable {
 
         if (toOffice) {
 
-            //  From device format to Office format
+            // From device format to Office format
 
             DocumentDeserializerFactory myDocDeserializerFactory =
                 ci.getDocDeserializerFactory();
@@ -206,7 +200,7 @@ public class Convert implements Cloneable {
 
         } else {
 
-            //  From Office format to device format
+            // From Office format to device format
 
             DocumentSerializerFactory myDocSerializerFactory =
                 ci.getDocSerializerFactory();
@@ -221,27 +215,20 @@ public class Convert implements Cloneable {
         }
     }
 
-
-
     /**
-     *  Returns the appropriate &quot;Office&quot; <code>Document</code>
-     *  object for this plug-in.
+     * Returns the appropriate &quot;Office&quot; {@code Document} object for
+     * this plug-in.
      *
-     *  @param  name  The name of the <code>Document</code> to create.
-     *  @param  is    The <code>InputStream</code> corresponding to the
-     *                <code>Document</code> to create.
+     * @param   name  The name of the {@code Document} to create.
+     * @param   is    The {@code InputStream} corresponding to the
+     *                {@code Document} to create.
+     * @return  The appropriate &quot;Office&quot; {@code Document} object for
+     *          this plug-in.
      *
-     *  @return  The appropriate &quot;Office&quot; <code>Document</code>
-     *           object for this plug-in.
-     *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     public Document getOfficeDocument(String name, InputStream is)
         throws IOException {
         return(ci.getPluginFactory().createOfficeDocument(name, is));
     }
-
-
-
 }
-

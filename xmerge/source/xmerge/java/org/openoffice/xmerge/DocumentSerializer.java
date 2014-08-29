@@ -21,36 +21,34 @@ package org.openoffice.xmerge;
 import java.io.IOException;
 
 /**
- *  <p>A <code>DocumentSerializer</code> represents a converter that
- *  converts a &quot;Office&quot; <code>Document</code> to a
- *  &quot;Device&quot; <code>Document</code> format.</p>
+ * A {@code DocumentSerializer} represents a converter that converts a
+ * &quot;Office&quot; {@code Document} to a &quot;Device&quot; {@code Document}
+ * format.
  *
- *  <p>The <code>DocumentSerializer</code> object is created by a
- *  the <code>PluginFactory</code> {@link
- *  org.openoffice.xmerge.DocumentSerializerFactory#createDocumentSerializer
- *  createDocumentSerializer} method.  When it is constructed, a
- *  &quot;Office&quot; <code>Document</code> object is passed in to
- *  be used as input.</p>
- *  @see     org.openoffice.xmerge.PluginFactory
- *  @see     org.openoffice.xmerge.DocumentSerializerFactory
+ * <p>The {@code DocumentSerializer} object is created by a the
+ * {@code PluginFactory} {@link
+ * org.openoffice.xmerge.DocumentSerializerFactory#createDocumentSerializer
+ * createDocumentSerializer} method.  When it is constructed, a
+ * &quot;Office&quot; {@code Document} object is passed in to be used as input.
+ * </p>
+ *
+ * @see     org.openoffice.xmerge.PluginFactory
+ * @see     org.openoffice.xmerge.DocumentSerializerFactory
  */
 public interface DocumentSerializer {
 
     /**
-     *  <p>Convert the data passed into the <code>DocumentSerializer</code>
-     *  constructor into the &quot;Device&quot; <code>Document</code>
-     *  format.</p>
+     * Convert the data passed into the {@code DocumentSerializer} constructor
+     * into the &quot;Device&quot; {@code Document} format.
      *
-     *  <p>This method may or may not be thread-safe.  It is expected
-     *  that the user code does not call this method in more than one
-     *  thread.  And for most cases, this method is only done once.</p>
+     * <p>This method may or may not be thread-safe.  It is expected that the
+     * user code does not call this method in more than one thread.  And for
+     * most cases, this method is only done once.</p>
      *
-     *  @return <code>ConvertData</code> object to pass back the
-     *           converted data.
+     * @return  {@code ConvertData} object to pass back the converted data.
      *
-     *  @throws  ConvertException  If any conversion error occurs.
-     *  @throws  IOException       If any I/O error occurs.
+     * @throws  ConvertException  If any conversion error occurs.
+     * @throws  IOException       If any I/O error occurs.
      */
     ConvertData serialize() throws ConvertException, IOException;
 }
-
