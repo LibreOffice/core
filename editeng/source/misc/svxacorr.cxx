@@ -586,7 +586,8 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
         }
     }
 
-    // Replace [A-z0-9]--[A-z0-9] double dash with "emDash" or "enDash".
+    // Replace [A-z0-9]--[A-z0-9] double dash with "emDash" or "enDash"
+    // [0-9]--[0-9] double dash always replaced with "enDash"
     // Finnish and Hungarian use enDash instead of emDash.
     bool bEnDash = (eLang == LANGUAGE_HUNGARIAN || eLang == LANGUAGE_FINNISH);
     if( ((cEmDash && !bEnDash) || (cEnDash && bEnDash)) && 4 <= nEndPos - nSttPos )
@@ -602,7 +603,8 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
         {
             nSttPos = nSttPos + nFndPos;
             rDoc.Delete( nSttPos, nSttPos + 2 );
-            rDoc.Insert( nSttPos, (bEnDash ? OUString(cEnDash) : OUString(cEmDash)) );
+            rDoc.Insert( nSttPos, (bEnDash || (rCC.isDigit( sTmp, nFndPos - 1 ) &&
+                rCC.isDigit( sTmp, nFndPos + 2 )) ? OUString(cEnDash) : OUString(cEmDash)) );
             bRet = true;
         }
     }
