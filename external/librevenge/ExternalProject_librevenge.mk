@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,librevenge,build) :
 			--with-pic \
 			--enable-shared \
 			--disable-static \
-			--disable-debug \
+			$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug,--disable-debug) \
 			--disable-werror \
 			--disable-weffc \
 			--disable-streams \
