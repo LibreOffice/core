@@ -416,6 +416,11 @@ void ScDPObject::SetOutRange(const ScRange& rRange)
         pOutput->SetPosition( rRange.aStart );
 }
 
+const ScRange& ScDPObject::GetOutRange() const
+{
+    return aOutRange;
+}
+
 void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc, bool /*bFromRefUpdate*/)
 {
     if ( pSheetDesc && rDesc == *pSheetDesc )
@@ -921,7 +926,7 @@ void ScDPObject::Output( const ScAddress& rPos )
     pDoc->ApplyFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), SC_MF_DP_TABLE);
 }
 
-const ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
+ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
 {
     CreateOutput();
 
@@ -3609,6 +3614,36 @@ bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
 
     maTables.push_back(pDPObj);
     return true;
+}
+
+ScDPCollection::SheetCaches& ScDPCollection::GetSheetCaches()
+{
+    return maSheetCaches;
+}
+
+const ScDPCollection::SheetCaches& ScDPCollection::GetSheetCaches() const
+{
+    return maSheetCaches;
+}
+
+ScDPCollection::NameCaches& ScDPCollection::GetNameCaches()
+{
+    return maNameCaches;
+}
+
+const ScDPCollection::NameCaches& ScDPCollection::GetNameCaches() const
+{
+    return maNameCaches;
+}
+
+ScDPCollection::DBCaches& ScDPCollection::GetDBCaches()
+{
+    return maDBCaches;
+}
+
+const ScDPCollection::DBCaches& ScDPCollection::GetDBCaches() const
+{
+    return maDBCaches;
 }
 
 ScRangeList ScDPCollection::GetAllTableRanges( SCTAB nTab ) const

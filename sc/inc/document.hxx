@@ -551,9 +551,9 @@ public:
 
     SC_DLLPUBLIC const ScRangeData* GetRangeAtBlock( const ScRange& rBlock, OUString* pName=NULL ) const;
 
-    bool HasPivotTable() const;
+    SC_DLLPUBLIC bool HasPivotTable() const;
     SC_DLLPUBLIC ScDPCollection*       GetDPCollection();
-    const ScDPCollection* GetDPCollection() const { return pDPCollection; }
+    SC_DLLPUBLIC const ScDPCollection* GetDPCollection() const;
     SC_DLLPUBLIC ScDPObject* GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
     ScDPObject*         GetDPAtBlock( const ScRange& rBlock ) const;
 

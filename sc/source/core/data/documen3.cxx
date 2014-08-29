@@ -323,6 +323,11 @@ ScDPCollection* ScDocument::GetDPCollection()
     return pDPCollection;
 }
 
+const ScDPCollection* ScDocument::GetDPCollection() const
+{
+    return pDPCollection;
+}
+
 ScDPObject* ScDocument::GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
 {
     if (!pDPCollection)

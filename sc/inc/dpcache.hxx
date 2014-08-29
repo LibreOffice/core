@@ -118,7 +118,7 @@ private:
     GroupFieldsType maGroupFields;
     mutable StringSetType maStringPool;
 
-    LabelsType maLabelNames;    // Stores dimension names.
+    LabelsType maLabelNames; // Stores dimension names and the data layout dimension name at position 0.
     mdds::flat_segment_tree<SCROW, bool> maEmptyRows;
     SCROW mnDataSize;
     SCROW mnRowCount;
@@ -129,7 +129,7 @@ public:
     const OUString* InternString(const OUString& rStr) const;
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
-    const ObjectSetType& GetAllReferences() const { return maRefObjects;}
+    const ObjectSetType& GetAllReferences() const;
 
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
     OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
@@ -160,15 +160,25 @@ public:
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(DBConnector& rDB);
 
-    SCROW GetRowCount() const { return mnRowCount;}
+    /**
+     * Row count is the number of records plus any trailing empty rows in case
+     * the source data is sheet and contains trailing empty rows.
+     */
+    SCROW GetRowCount() const;
+
+    /**
+     * Data size is the number of records without any trailing empty rows for
+     * sheet source data.  For any other source type, this should equal the
+     * row count.
+     */
     SCROW GetDataSize() const;
     SCROW GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
     OUString GetDimensionName(LabelsType::size_type nDim) const;
     bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 
-    ScDocument* GetDoc() const { return mpDoc;}
-    long GetColumnCount() const { return mnColumnCount;}
+    ScDocument* GetDoc() const;
+    long GetColumnCount() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 

@@ -130,13 +130,14 @@ public:
 
     void                Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( bool& rOverflow );
-    const ScRange       GetOutputRangeByType( sal_Int32 nType );
+
+    ScRange GetOutputRangeByType( sal_Int32 nType );
 
     void                SetSaveData(const ScDPSaveData& rData);
     ScDPSaveData*       GetSaveData() const     { return pSaveData; }
 
     void                SetOutRange(const ScRange& rRange);
-    const ScRange&      GetOutRange() const     { return aOutRange; }
+    const ScRange&      GetOutRange() const;
 
     void                SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const { return mbHeaderLayout;}
@@ -394,9 +395,12 @@ public:
     void FreeTable(ScDPObject* pDPObj);
     SC_DLLPUBLIC bool InsertNewTable(ScDPObject* pDPObj);
 
-    SheetCaches& GetSheetCaches() { return maSheetCaches;}
-    NameCaches& GetNameCaches() { return maNameCaches;}
-    DBCaches& GetDBCaches() { return maDBCaches;}
+    SC_DLLPUBLIC SheetCaches& GetSheetCaches();
+    SC_DLLPUBLIC const SheetCaches& GetSheetCaches() const;
+    NameCaches& GetNameCaches();
+    SC_DLLPUBLIC const NameCaches& GetNameCaches() const;
+    DBCaches& GetDBCaches();
+    SC_DLLPUBLIC const DBCaches& GetDBCaches() const;
 
     ScRangeList GetAllTableRanges( SCTAB nTab ) const;
     bool IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const;

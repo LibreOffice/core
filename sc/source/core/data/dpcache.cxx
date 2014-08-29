@@ -646,6 +646,16 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     return bRet;
 }
 
+ScDocument* ScDPCache::GetDoc() const
+{
+    return mpDoc;
+}
+
+long ScDPCache::GetColumnCount() const
+{
+    return mnColumnCount;
+}
+
 bool ScDPCache::IsRowEmpty(SCROW nRow) const
 {
     bool bEmpty = true;
@@ -829,6 +839,11 @@ size_t ScDPCache::GetGroupFieldCount() const
     return maGroupFields.size();
 }
 
+SCROW ScDPCache::GetRowCount() const
+{
+    return mnRowCount;
+}
+
 SCROW ScDPCache::GetDataSize() const
 {
     OSL_ENSURE(mnDataSize <= GetRowCount(), "Data size should never be larger than the row count.");
@@ -905,6 +920,11 @@ void ScDPCache::RemoveReference(ScDPObject* pObj) const
     maRefObjects.erase(pObj);
     if (maRefObjects.empty())
         mpDoc->GetDPCollection()->RemoveCache(this);
+}
+
+const ScDPCache::ObjectSetType& ScDPCache::GetAllReferences() const
+{
+    return maRefObjects;
 }
 
 SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
