@@ -86,7 +86,7 @@ public final class PdbEncoder {
 
 
     /**
-     *  <p>Write out a PDB into the given <code>OutputStream</code>.</p>
+     *  Write out a PDB into the given <code>OutputStream</code>.
      *
      *  <p>First, write out the header data by using the
      *  <code>PdbHeader</code> <code>write</code> method. Next,
@@ -98,12 +98,12 @@ public final class PdbEncoder {
      *  <code>Record</code> index info, where each <code>Record</code>
      *  index info contains:</p>
      *
-     *  <p><ul>
-     *  <li>4 bytes local offset of the <code>Record</code> from the
-     *      top of the PDB.</li>
-     *  <li>1 byte of <code>Record</code> attribute.</li>
-     *  <li>3 bytes unique <code>Record</code> ID.</li>
-     *  </ul></p>
+     *  <ul>
+     *    <li>4 bytes local offset of the <code>Record</code> from the
+     *        top of the PDB.</li>
+     *    <li>1 byte of <code>Record</code> attribute.</li>
+     *    <li>3 bytes unique <code>Record</code> ID.</li>
+     *  </ul>
      *
      *  <p>There should be a total of <code>header.numRecords</code>
      *  of <code>Record</code> index info</p>.

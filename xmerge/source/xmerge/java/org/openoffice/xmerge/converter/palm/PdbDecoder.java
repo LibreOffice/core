@@ -36,15 +36,15 @@ import java.io.DataInputStream;
  *
  *  <p>This decoder has the following assumptions on the PDB file:</p>
  *
- *  <p><ol>
- *  <li>There is only one RecordList section in the PDB.</li>
- *  <li>The <code>Record</code> indices in the RecordList are sorted in
- *      order, i.e. the first <code>Record</code> index refers to
- *      <code>Record</code> 0, and so forth.</li>
- *  <li>The raw <code>Record</code> in the <code>Record</code> section
- *      are sorted as well in order, i.e. first <code>Record</code>
- *      comes ahead of second <code>Record</code>, etc.</li>
- *  </ol></p>
+ *  <ol>
+ *    <li>There is only one RecordList section in the PDB.</li>
+ *    <li>The <code>Record</code> indices in the RecordList are sorted in
+ *        order, i.e. the first <code>Record</code> index refers to
+ *        <code>Record</code> 0, and so forth.</li>
+ *    <li>The raw <code>Record</code> in the <code>Record</code> section
+ *        are sorted as well in order, i.e. first <code>Record</code>
+ *        comes ahead of second <code>Record</code>, etc.</li>
+ *  </ol>
  *
  *  <p>Other decoders assume these as well.</p>
  *

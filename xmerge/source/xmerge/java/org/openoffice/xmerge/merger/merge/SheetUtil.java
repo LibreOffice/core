@@ -33,14 +33,17 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
 public class SheetUtil {
 
     /**
-     *  <p>Empty the content of a cell value.   This includes the following:
-     *  </p>
+     *  Empty the content of a cell value.
      *
-     *  <p><ul><li>
-     *    Remove all of the supported attributes.
-     *  </li><li>
-     *    Remove the first <i>text:p</i> <code>Node</code> for most of the cells.
-     *  </li></ul></p>
+     *  <p>This includes the following:</p>
+     *
+     *  <ul>
+     *    <li>
+     *      Remove all of the supported attributes.
+     *    </li><li>
+     *      Remove the first <i>text:p</i> <code>Node</code> for most of the cells.
+     *    </li>
+     *  </ul>
      *
      *  @param  cc    The <code>ConverterCapabilities</code>.
      *  @param  node  The <code>Node</code>.
