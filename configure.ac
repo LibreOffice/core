@@ -1395,6 +1395,10 @@ AC_ARG_ENABLE(gltf,
     AS_HELP_STRING([--disable-gltf],
         [Determines whether to build libraries related to glTF 3D model rendering.]))
 
+AC_ARG_ENABLE(collada,
+    AS_HELP_STRING([--disable-collada],
+        [Disable collada support (Rendering 3D models stored in *.dae and *.kmz format).]))
+
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -10572,10 +10576,6 @@ if test "x$enable_gltf" != "xno" -a $_os != Darwin -a $_os != iOS -a $_os != And
     else
     	BUILD_TYPE="$BUILD_TYPE LIBGLTF"
     fi
-    # otherwise build fails in collada2gltf external because of std::shared_ptr
-    if test "$have_std_shared_ptr" = "yes"; then
-        BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
-    fi
 else
     AC_MSG_RESULT([no])
 fi
@@ -10583,6 +10583,21 @@ AC_SUBST(ENABLE_GLTF)
 AC_SUBST(SYSTEM_LIBGLTF)
 AC_SUBST(LIBGLTF_CFLAGS)
 AC_SUBST(LIBGLTF_LIBS)
+
+dnl ===================================================================
+dnl Check whether to enable COLLADA support
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable COLLADA support])
+ENABLE_COLLADA=
+if test "$enable_collada" != "no" -a "$ENABLE_GLTF" = "TRUE" -a "$have_std_shared_ptr" = "yes"; then
+    AC_MSG_RESULT([yes])
+    ENABLE_COLLADA=TRUE
+    AC_DEFINE(HAVE_FEATURE_COLLADA,1)
+    BUILD_TYPE="$BUILD_TYPE COLLADA2GLTF"
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_COLLADA)
 
 # pdf import?
 AC_MSG_CHECKING([whether to build the PDF import feature])
