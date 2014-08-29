@@ -160,7 +160,7 @@ void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab)
 
 #else
 
-void testFile(OUString&, ScDocument*, SCTAB, StringType) {}
+void testFile(OUString&, ScDocument&, SCTAB, StringType) {}
 void testCondFile(OUString&, ScDocument*, SCTAB) {}
 
 #endif
