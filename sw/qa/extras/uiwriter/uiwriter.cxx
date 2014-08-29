@@ -6,6 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -19,6 +20,8 @@
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
 #include <textboxhelper.hxx>
+#include <view.hxx>
+#include <hhcwrp.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -48,6 +51,10 @@ public:
     void testShapeTextboxVertadjust();
     void testShapeTextboxAutosize();
     void testFdo82191();
+    void testChinesConversionBlank();
+    void testChinesConversionNonChineseText();
+    void testChinesConversionTraditionalToSimplified();
+    void testChinesConversionSimplifiedToTraditional();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -65,6 +72,11 @@ public:
     CPPUNIT_TEST(testShapeTextboxVertadjust);
     CPPUNIT_TEST(testShapeTextboxAutosize);
     CPPUNIT_TEST(testFdo82191);
+    CPPUNIT_TEST(testChinesConversionBlank);
+    CPPUNIT_TEST(testChinesConversionNonChineseText);
+    CPPUNIT_TEST(testChinesConversionTraditionalToSimplified);
+    CPPUNIT_TEST(testChinesConversionSimplifiedToTraditional);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -413,6 +425,116 @@ void SwUiWriterTest::testFdo82191()
     // This was one: the textbox of the shape wasn't copied.
     CPPUNIT_ASSERT_EQUAL(size_t(2), aTextBoxes.size());
 }
+
+
+// Chinese conversion tests
+
+static const OUString CHINESE_TRADITIONAL_CONTENT(sal_Unicode(0x9F8D));
+static const OUString CHINESE_SIMPLIFIED_CONTENT(sal_Unicode(0x9F99));
+static const OUString NON_CHINESE_CONTENT ("Hippopotamus");
+
+// Tests that a blank document is still blank after conversion
+void SwUiWriterTest::testChinesConversionBlank()
+{
+
+    // Given
+    SwDoc* pDoc = createDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    // When
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
+                        i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
+                        true, false, false );
+    aWrap.Convert();
+
+
+    // Then
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT_EQUAL(OUString(), pTxtNode->GetTxt());
+
+}
+
+// Tests that non Chinese text is unchanged after conversion
+void SwUiWriterTest::testChinesConversionNonChineseText()
+{
+
+    // Given
+    SwDoc* pDoc = createDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, NON_CHINESE_CONTENT);
+
+
+    // When
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
+                        i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
+                        true, false, false );
+    aWrap.Convert();
+
+
+    // Then
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT_EQUAL(NON_CHINESE_CONTENT, pTxtNode->GetTxt());
+
+}
+
+// Tests conversion of traditional Chinese charactes to simplified Chinese
+void SwUiWriterTest::testChinesConversionTraditionalToSimplified()
+{
+
+    // Given
+    SwDoc* pDoc = createDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, CHINESE_TRADITIONAL_CONTENT);
+
+
+    // When
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
+                        i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
+                        true, false, false );
+    aWrap.Convert();
+
+
+    // Then
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT_EQUAL(CHINESE_SIMPLIFIED_CONTENT, pTxtNode->GetTxt());
+
+}
+
+// Tests conversion of simplified Chinese charactes to traditional Chinese
+void SwUiWriterTest::testChinesConversionSimplifiedToTraditional()
+{
+
+    // Given
+    SwDoc* pDoc = createDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    SwNodeIndex aIdx(pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+    pDoc->getIDocumentContentOperations().InsertString(aPaM, CHINESE_SIMPLIFIED_CONTENT);
+
+
+    // When
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_SIMPLIFIED, LANGUAGE_CHINESE_TRADITIONAL, NULL,
+                        i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
+                        true, false, false );
+    aWrap.Convert();
+
+
+    // Then
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+    CPPUNIT_ASSERT_EQUAL(CHINESE_TRADITIONAL_CONTENT, pTxtNode->GetTxt());
+
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();
