@@ -18,6 +18,7 @@
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <vector>
 
@@ -72,6 +73,40 @@ const char* toOOXMLAxisType( sheet::DataPilotFieldOrientation eOrient )
     }
 
     return "";
+}
+
+const char* toOOXMLSubtotalType( sheet::GeneralFunction eFunc )
+{
+    switch (eFunc)
+    {
+        case sheet::GeneralFunction_SUM:
+            return "sum";
+        case sheet::GeneralFunction_COUNT:
+            return "count";
+        case sheet::GeneralFunction_AVERAGE:
+            return "average";
+        case sheet::GeneralFunction_MAX:
+            return "max";
+        case sheet::GeneralFunction_MIN:
+            return "min";
+        case sheet::GeneralFunction_PRODUCT:
+            return "product";
+        case sheet::GeneralFunction_COUNTNUMS:
+            return "countNums";
+        case sheet::GeneralFunction_STDEV:
+            return "stdDev";
+        case sheet::GeneralFunction_STDEVP:
+            return "stdDevp";
+        case sheet::GeneralFunction_VAR:
+            return "var";
+        case sheet::GeneralFunction_VARP:
+            return "varp";
+        case sheet::GeneralFunction_NONE:
+        case sheet::GeneralFunction_AUTO:
+        default:
+            ;
+    }
+    return NULL;
 }
 
 }
@@ -354,6 +389,18 @@ void XclExpXmlPivotTables::SaveXml( XclExpXmlStream& rStrm )
     }
 }
 
+namespace {
+
+struct DataField
+{
+    long mnPos; // field index in pivot cache.
+    const ScDPSaveDimension* mpDim;
+
+    DataField( long nPos, const ScDPSaveDimension* pDim ) : mnPos(nPos), mpDim(pDim) {}
+};
+
+}
+
 void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDPObject& rDPObj, sal_Int32 nCacheId )
 {
     typedef boost::unordered_map<OUString, long, OUStringHash> NameToIdMapType;
@@ -383,7 +430,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
     std::vector<long> aRowFields;
     std::vector<long> aColFields;
     std::vector<long> aPageFields;
-    std::vector<long> aDataFields;
+    std::vector<DataField> aDataFields;
 
     // Use dimensions in the save data to get their correct ordering.
     // Dimension order here is significant as they specify the order of
@@ -426,7 +473,7 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
                 aPageFields.push_back(nPos);
             break;
             case sheet::DataPilotFieldOrientation_DATA:
-                aDataFields.push_back(nPos);
+                aDataFields.push_back(DataField(nPos, &rDim));
             break;
             case sheet::DataPilotFieldOrientation_HIDDEN:
             default:
@@ -607,18 +654,23 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
             XML_count, OString::number(static_cast<long>(aDataFields.size())),
             FSEND);
 
-        std::vector<long>::iterator it = aDataFields.begin(), itEnd = aDataFields.end();
+        std::vector<DataField>::iterator it = aDataFields.begin(), itEnd = aDataFields.end();
         for (; it != itEnd; ++it)
         {
-            long nDimIdx = *it;
+            long nDimIdx = it->mnPos;
             assert(aCachedDims[nDimIdx]); // the loop above should have screened for NULL's.
-            const ScDPSaveDimension& rDim = *aCachedDims[nDimIdx];
+            const ScDPSaveDimension& rDim = *it->mpDim;
             const OUString* pName = rDim.GetLayoutName();
             pPivotStrm->write("<")->writeId(XML_dataField);
             if (pName)
                 rStrm.WriteAttributes(XML_name, XclXmlUtils::ToOString(*pName), FSEND);
 
             rStrm.WriteAttributes(XML_fld, OString::number(nDimIdx).getStr(), FSEND);
+
+            sheet::GeneralFunction eFunc = static_cast<sheet::GeneralFunction>(rDim.GetFunction());
+            const char* pSubtotal = toOOXMLSubtotalType(eFunc);
+            if (pSubtotal)
+                rStrm.WriteAttributes(XML_subtotal, pSubtotal, FSEND);
 
             pPivotStrm->write("/>");
         }
