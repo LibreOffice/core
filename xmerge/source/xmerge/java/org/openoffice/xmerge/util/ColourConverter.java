@@ -18,24 +18,24 @@
 
 package org.openoffice.xmerge.util;
 
-
 import java.awt.Color;
 
 /**
  * Utility class mapping RGB colour specifications to the colour indices used
- * in the Pocket PC. The original converter was written for use with Pocket
- * Word it was later put into the utils so Pocket excel could use this code
- * also. For this reason the default values are those used by Pocket Word but
- * a colour table can be passed in through the constructor to map the 16
- * values to a colour table.
+ * in the Pocket PC.
  *
- * These colour indices are based on the Windows VGA 16 colour palette, which
+ * <p>The original converter was written for use with Pocket Word it was later
+ * put into the utils so Pocket excel could use this code also. For this reason
+ * the default values are those used by Pocket Word but a colour table can be
+ * passed in through the constructor to map the 16 values to a colour table.</p>
+ *
+ * <p>These colour indices are based on the Windows VGA 16 colour palette, which
  * later was used as the basis for the named colours in the HTML 3.2
- * specification.
+ * specification.</p>
  *
- * In Pocket Word's case, the match to the VGA 16 palette is not exact as it
+ * <p>In Pocket Word's case, the match to the VGA 16 palette is not exact as it
  * swaps Grey and Silver, with Silver being the darker colour (i.e. having the
- * lower RGB value).
+ * lower RGB value).</p>
  */
 
 public class ColourConverter {
@@ -91,31 +91,29 @@ public class ColourConverter {
     private short tableLookup[] = null;
 
     /**
-     * Default constructor used in the case where a lookup table is not
-     * required
+     * Default constructor used in the case where a lookup table is not required.
      */
     public ColourConverter() {
 
     }
 
     /**
-     * Constructor that passes in the colour lookup table. This is required in
-     * cases where the 16 colour values are something other than there default
-     * values (e.g. in the case of pocket Excel)
+     * Constructor that passes in the colour lookup table.
      *
-     * @param lookup a 16 bit array mapping the 16 colours to their values
+     * <p>This is required in cases where the 16 colour values are something
+     * other than there default values (e.g. in the case of pocket Excel).</p>
+     *
+     * @param  lookup  a 16 bit array mapping the 16 colours to their values.
      */
     public ColourConverter(short lookup[]) {
-
         tableLookup = lookup;
     }
 
     /**
-     * Uses the colour table if it exists to translate default values to
-     * values in the colorTable
+     * Uses the colour table if it exists to translate default values to values
+     * in the colorTable.
      */
     private short colourLookup(short colour) {
-
         if(tableLookup!=null) {
             return tableLookup[colour];
         } else {
@@ -124,8 +122,8 @@ public class ColourConverter {
     }
 
     /**
-     * Uses the colour table if it exists to translate default values to
-     * values in the colorTable
+     * Uses the colour table if it exists to translate default values to values
+     * in the colorTable.
      */
     private short indexLookup(short index) {
 
@@ -143,13 +141,13 @@ public class ColourConverter {
         return result;
     }
     /**
-     * This method maps a Pocket Word colour index value to an RGB value as
-     * used by OpenOffice.
+     * This method maps a Pocket Word colour index value to an RGB value as used
+     * by OpenOffice.
      *
-     * @param   colour   The index into Pocket Word's colour table.
+     * @param   colour  The index into Pocket Word's colour table.
      *
-     * @return  A Color object representing the RGB value of the Pocket Word
-     *          colour.
+     * @return  A {@code Color} object representing the RGB value of the Pocket
+     *          Word colour.
      */
     public Color convertToRGB (short colour) {
 
@@ -229,15 +227,15 @@ public class ColourConverter {
         return new Color(r, g, b);
     }
 
-
     /**
      * This method approximates an RGB value (as used by Writer) to one of the
-     * 16 available colours
+     * 16 available colours.
      *
-     * Most of the supported colours have their components set to either 0, 128
-     * or 255.  The exception is 'Grey' which is 0xC0C0C0.
+     * <p>Most of the supported colours have their components set to either 0,
+     * 128 or 255. The exception is 'Grey' which is {@literal 0xC0C0C0}.</p>
      *
-     * @param colour    Color object representing the RGB value of the colour.
+     * @param   colour  {@code Color} object representing the RGB value of the
+     *                  colour.
      *
      * @return  Index into the Pocket Word colour table which represents the
      *          closest match to the specified colour.
@@ -252,8 +250,7 @@ public class ColourConverter {
           int blue = colour.getBlue();
 
         // We need to convert the pale colors to their base color rather than
-        // white so we modify the rgb values if the colour is sufficiently
-        // white
+        // white so we modify the rgb values if the colour is sufficiently white.
            if(red>0xC0 && green>0xC0 && blue>0xC0) {
 
             if(red!=0xFF)
@@ -264,21 +261,17 @@ public class ColourConverter {
                 blue = getClosest(blue, reducedMap);
         }
 
-           /*
-         * Need to derive an RGB value that has been rounded to match the ones
-         * Pocket Word knows about.
-            */
+        // Need to derive an RGB value that has been rounded to match the ones
+        // Pocket Word knows about.
         matchedRGB += getClosest(red)   << 16;
         matchedRGB += getClosest(green) << 8;
            matchedRGB += getClosest(blue);
 
-        /*
-         * The colour map used by Pocket Word doesn't have any combinations of
-         * values beyond 0 and any other value.  A value of 255 in any RGB
-         * code indicates a dominant colour.  Other colours are only modifiers
-         * to the principal colour(s).  Thus, for this conversion, modifiers
-         * can be dropped.
-         */
+        // The colour map used by Pocket Word doesn't have any combinations of
+        // values beyond 0 and any other value.  A value of 255 in any RGB code
+        // indicates a dominant colour.  Other colours are only modifiers to the
+        // principal colour(s).  Thus, for this conversion, modifiers can be
+        // dropped.
         if ((matchedRGB & 0xFF0000) == 0xFF0000 || (matchedRGB & 0xFF00) == 0xFF00
                 || (matchedRGB & 0xFF) == 0xFF) {
                     if ((matchedRGB & 0xFF0000) == 0x800000) {
@@ -384,8 +377,7 @@ public class ColourConverter {
         return colourLookup(indexColour);
     }
 
-
-    /*
+    /**
      * Default implementation, checks for the closest of value to 0, 128 or 255.
      */
     private int getClosest(int value) {
@@ -394,8 +386,7 @@ public class ColourConverter {
         return getClosest(value, points);
     }
 
-
-    /*
+    /**
      * Utility method that returns the closest of the three points to the value
      * supplied.
      */
@@ -415,8 +406,7 @@ public class ColourConverter {
         }
     }
 
-
-    /*
+    /**
      * Checks to see if the supplied colour can be considered to be grey.
      */
     private boolean isGrey(Color c) {
@@ -434,4 +424,3 @@ public class ColourConverter {
         return false;
     }
 }
-

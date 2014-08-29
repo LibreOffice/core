@@ -25,48 +25,43 @@ import java.io.IOException;
 import java.util.Date;
 
 /**
- *  <p>Provides functionality to encode a <code>PalmDB</code> object
- *  into a PDB formatted file given a file <code>OutputStream</code>.
- *  This class is only used by the <code>PalmDB</code> object.</p>
+ * Provides functionality to encode a {@code PalmDB} object into a PDB
+ * formatted file given a file {@code OutputStream}.
  *
- *  <p>One needs to create one <code>PdbEncoder</code> object per
- *  <code>PalmDB</code> object to be encoded.  This class keeps
- *  the PDB header data and functionality in the <code>PdbHeader</code>
- *  class.</p>
+ * <p>This class is only used by the {@code PalmDB} object.</p>
  *
- *  <p>Sample usage:</p>
+ * <p>One needs to create one {@code PdbEncoder} object per {@code PalmDB}
+ * object to be encoded. This class keeps the PDB header data and functionality
+ * in the {@code PdbHeader} class.</p>
  *
- *  <blockquote><pre><code>
- *     PdbEncoder encoder = new PdbEncoder(palmDB, "STRW", "data");
- *     encoder.write(new FileOutputStream("sample.pdb"));
- *  </code></pre></blockquote>
+ * <p>Sample usage:</p>
+ * <blockquote><pre>{@code PdbEncoder encoder = new PdbEncoder(palmDB, "STRW", "data");
+ * encoder.write(new FileOutputStream("sample.pdb"));}</pre></blockquote>
  *
- *  @see     PalmDB
- *  @see     Record
+ * @see     PalmDB
+ * @see     Record
  */
 public final class PdbEncoder {
 
-    /**  PDB header. */
+    /** PDB header. */
     private PdbHeader header = null;
 
-    /**  the PalmDB object. */
+    /** the PalmDB object. */
     private PalmDB db = null;
 
-    /**
-     *  The pattern for unique_id=0x00BABE(start).
-     */
+    /** The pattern for unique_id=0x00BABE(start). */
     private final static int START_UNIQUE_ID = 0x00BABE;
 
 
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param   db       The <code>PalmDB</code> to be encoded.
+     * @param db The {@code PalmDB} to be encoded.
      */
     public PdbEncoder(PalmDB db) {
 
         header = new PdbHeader();
-    header.version = db.getVersion();
+        header.version = db.getVersion();
 
         header.attribute = db.getAttribute();
 
@@ -84,33 +79,29 @@ public final class PdbEncoder {
         header.numRecords = db.getRecordCount();
     }
 
-
     /**
-     *  Write out a PDB into the given <code>OutputStream</code>.
+     * Write out a PDB into the given {@code OutputStream}.
      *
-     *  <p>First, write out the header data by using the
-     *  <code>PdbHeader</code> <code>write</code> method. Next,
-     *  calculate the RecordList section and write it out.
-     *  Lastly, write out the bytes corresponding to each
-     *  <code>Record</code>.</p>
+     * <p>First, write out the header data by using the {@code PdbHeader.write}
+     * method. Next, calculate the RecordList section and write it out. Lastly,
+     * write out the bytes corresponding to each {@code Record}.</p>
      *
-     *  <p>The RecordList section contains a list of
-     *  <code>Record</code> index info, where each <code>Record</code>
-     *  index info contains:</p>
+     * <p>The RecordList section contains a list of {@code Record} index info,
+     * where each {@code Record} index info contains:</p>
      *
-     *  <ul>
-     *    <li>4 bytes local offset of the <code>Record</code> from the
-     *        top of the PDB.</li>
-     *    <li>1 byte of <code>Record</code> attribute.</li>
-     *    <li>3 bytes unique <code>Record</code> ID.</li>
-     *  </ul>
+     * <ul>
+     *   <li>4 bytes local offset of the {@code Record} from the top of the
+     *       PDB.</li>
+     *   <li>1 byte of {@code Record} attribute.</li>
+     *   <li>3 bytes unique {@code Record} ID.</li>
+     * </ul>
      *
-     *  <p>There should be a total of <code>header.numRecords</code>
-     *  of <code>Record</code> index info</p>.
+     * <p>There should be a total of {@code header.numRecords} of {@code Record}
+     * index info.</p>
      *
-     *  @param  os  <code>OutputStream</code> to write out PDB.
+     * @param   os  {@code OutputStream} to write out PDB.
      *
-     *  @throws  IOException  If I/O error occurs.
+     * @throws  IOException  If I/O error occurs.
      */
     public void write(OutputStream os) throws IOException {
 
@@ -123,7 +114,6 @@ public final class PdbEncoder {
         if (header.numRecords > 0) {
 
             // compute for recOffset[]
-
             int recOffset[] = new int[header.numRecords];
             byte recAttr[] = new byte[header.numRecords];
 
@@ -132,7 +122,6 @@ public final class PdbEncoder {
             recOffset[0] = PdbUtil.HEADER_SIZE + (header.numRecords * 8);
 
             int lastIndex = header.numRecords - 1;
-
             for (int i = 0; i < lastIndex; i++) {
 
                 Record rec = db.getRecord(i);
@@ -143,13 +132,10 @@ public final class PdbEncoder {
             }
 
             // grab the last record's attribute.
-
             Record lastRec = db.getRecord(lastIndex);
             recAttr[lastIndex] = lastRec.getAttributes();
 
-
             int uid = START_UNIQUE_ID;
-
             for (int i = 0; i < header.numRecords; i++) {
 
                 // write out each record offset
@@ -166,16 +152,13 @@ public final class PdbEncoder {
             }
 
             // write out the raw records
-
             for (int i = 0; i < header.numRecords; i++) {
 
                 Record rec = db.getRecord(i);
                 byte bytes[] = rec.getBytes();
                 dos.write(bytes);
             }
-
         } else {
-
             // placeholder bytes if there are no records in the list.
             dos.writeShort(0);
         }
@@ -183,4 +166,3 @@ public final class PdbEncoder {
         dos.flush();
     }
 }
-

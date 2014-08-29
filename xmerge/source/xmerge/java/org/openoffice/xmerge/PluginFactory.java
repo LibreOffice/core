@@ -23,161 +23,141 @@ import java.io.InputStream;
 import java.io.IOException;
 
 /**
- *  <p>A <code>PluginFactory</code> encapsulates the
- *  conversions from one <code>Document</code> format to another.
- *  It provides conversions in both directions.  Refer to the
- *  <a href="package-summary.html#package_description">
- *  package description</a> for its usage.</p>
+ * A {@code PluginFactory} encapsulates the conversions from one {@code Document}
+ * format to another.
  *
- *  <p>Conversion from the &quot;Office&quot; <code>Document</code>
- *  format to a &quot;Device&quot; <code>Document</code> format may
- *  be lossy, i.e. some information may be lost.  If a plug-in
- *  implements the <code>DocumentMergerFactory</code> interface,
- *  then there is the possibility for merging the changes done on the
- *  &quot;Device&quot; <code>Document</code> back to the original
- *  &quot;Office&quot; <code>Document</code> via the
- *  <code>DocumentMerger</code> interface.</p>
+ * <p>It provides conversions in both directions.  Refer to the
+ * <a href="package-summary.html#package_description"> package description</a>
+ * for its usage.</p>
  *
- *  <p>Plug-ins that convert from the &quot;Device&quot;
- *  <code>Document</code> format to the &quot;Office&quot;
- *  <code>Document</code> format must implement the
- *  <code>DocumentDeserializerFactory</code> interface.  Plug-ins
- *  that convert from the &quot;Office&quot; <code>Document</code>
- *  format to the &quot;Device&quot; format must implement the
- *  <code>DocumentSerializerFactory</code> interface.
+ * <p>Conversion from the &quot;Office&quot; {@code Document} format to a
+ * &quot;Device&quot; {@code Document} format may be lossy, i.e. some
+ * information may be lost.  If a plug-in implements the
+ * {@code DocumentMergerFactory} interface, then there is the possibility for
+ * merging the changes done on the &quot;Device&quot; {@code Document} back to
+ * the original &quot;Office&quot; {@code Document} via the {@code DocumentMerger}
+ * interface.</p>
  *
- *  <p>All plug-ins should have an associated Plugin Configuration XML
- *  File which describes the capabilities of the plug-in.  If the
- *  plug-in is bundled in a jarfile, then this XML file is also bundled
- *  with the jarfile.  The data in the XML file is managed by the
- *  <code>ConverterInfo</code> object.  The <code>ConverterInfoMgr</code>
- *  manages a registry of all <code>ConverterInfo</code> objects.  For
- *  more information about this XML file, refer to
- *  <a href="converter/xml/sxc/package-summary.html">
- *  org.openoffice.xmerge.util.registry</a>.</p>
+ * <p>Plug-ins that convert from the &quot;Device&quot; {@code Document} format
+ * to the &quot;Office&quot; {@code Document} format must implement the
+ * {@code DocumentDeserializerFactory} interface.  Plug-ins that convert from
+ * the &quot;Office&quot; {@code Document} format to the &quot;Device&quot;
+ * format must implement the {@code DocumentSerializerFactory} interface.</p>
  *
- *  @see     Document
- *  @see     DocumentSerializer
- *  @see     DocumentSerializerFactory
- *  @see     DocumentDeserializer
- *  @see     DocumentDeserializerFactory
- *  @see     DocumentMerger
- *  @see     DocumentMergerFactory
- *  @see     ConverterInfo
- *  @see     org.openoffice.xmerge.util.registry.ConverterInfoMgr
+ * <p>All plug-ins should have an associated Plugin Configuration XML File which
+ * describes the capabilities of the plug-in.  If the plug-in is bundled in a
+ * jarfile, then this XML file is also bundled with the jarfile.  The data in
+ * the XML file is managed by the {@code ConverterInfo} object.  The
+ * {@code ConverterInfoMgr} manages a registry of all {@code ConverterInfo}
+ * objects.  For more information about this XML file, refer to
+ * <a href="converter/xml/sxc/package-summary.html">org.openoffice.xmerge.util.registry</a>.
+ * </p>
+ *
+ * @see  Document
+ * @see  DocumentSerializer
+ * @see  DocumentSerializerFactory
+ * @see  DocumentDeserializer
+ * @see  DocumentDeserializerFactory
+ * @see  DocumentMerger
+ * @see  DocumentMergerFactory
+ * @see  ConverterInfo
+ * @see  org.openoffice.xmerge.util.registry.ConverterInfoMgr
  */
 
 public abstract class PluginFactory {
 
    /**
-    *  Cached <code>ConvertInfo</code> object.
+    * Cached {@code ConvertInfo} object.
     */
     private ConverterInfo ciCache;
 
-
    /**
-    *  Constructor that caches the <code>ConvertInfo</code> that
-    *  corresponds to the registry information for this plug-in.
+    * Constructor that caches the {@code ConvertInfo} that corresponds to the
+    * registry information for this plug-in.
     *
-    *  @param  ci  <code>ConvertInfo</code> object.
+    * @param   ci  {@code ConvertInfo} object.
     */
     public PluginFactory(ConverterInfo ci) {
         ciCache=ci;
     }
 
-
    /**
-    *  Returns the <code>ConvertInfo</code> that corresponds to this
-    *  plug-in.
+    * Returns the {@code ConvertInfo} that corresponds to this plug-in.
     *
-    *  @return  The <code>ConvertInfo</code> that corresponds to this
-    *           plug-in.
+    * @return  The {@code ConvertInfo} that corresponds to this plug-in.
     */
     public ConverterInfo getConverterInfo () {
         return ciCache;
     }
 
-
     /**
-     *  <p>Create a <code>Document</code> object that corresponds to
-     *  the Office data passed in via the <code>InputStream</code>
-     *  object.  This abstract method must be implemented for each
-     *  plug-in.</p>
+     * Create a {@code Document} object that corresponds to the Office data
+     * passed in via the {@code InputStream} object.
      *
-     *  <p>This method will read from the given <code>InputStream</code>
-     *  object.  The returned <code>Document</code> object will contain
-     *  the necessary data for the other objects created by the
-     *  <code>PluginFactory</code> to process, like a
-     *  <code>DocumentSerializer</code> object and a
-     *  <code>DocumentMerger</code> object.</p>
+     * <p>This abstract method must be implemented for each plug-in.</p>
      *
-     *  @param  name  The <code>Document</code> name.
-     *  @param  is    <code>InputStream</code> object corresponding
-     *                to the <code>Document</code>.
+     * <p>This method will read from the given {@code InputStream} object.  The
+     * returned {@code Document} object will contain the necessary data for the
+     * other objects created by the {@code PluginFactory} to process, like a
+     * {@code DocumentSerializer} object and a {@code DocumentMerger} object.</p>
      *
-     *  @return  A <code>Document</code> object representing the
-     *           particular <code>Document</code> format for the
-     *           <code>PluginFactory</code>.
+     * @param   name  The {@code Document} name.
+     * @param   is    {@code InputStream} object corresponding to the
+     *                {@code Document}.
      *
-     *  @throws   IOException   If any I/O error occurs.
+     * @return  A {@code Document} object representing the particular
+     *          {@code Document} format for the {@code PluginFactory}.
+     *
+     * @throws  IOException   If any I/O error occurs.
      */
     public abstract Document createOfficeDocument(String name, InputStream is)
         throws IOException;
 
-
     /**
-     *  <p>Create a <code>Document</code> object that corresponds to
-     *  the Office data passed in via the <code>InputStream</code>
-     *  object.  This abstract method must be implemented for each
-     *  plug-in.</p>
+     * Create a {@code Document} object that corresponds to the Office data
+     * passed in via the {@code InputStream} object.
      *
-     *  <p>This method will read from the given <code>InputStream</code>
-     *  object.  The returned <code>Document</code> object will contain
-     *  the necessary data for the other objects created by the
-     *  <code>PluginFactory</code> to process, like a
-     *  <code>DocumentSerializer</code> object and a
-     *  <code>DocumentMerger</code> object.</p>
+     * <p>This abstract method must be implemented for each plug-in.</p>
      *
-     *  @param  name  The <code>Document</code> name.
-     *  @param  is    <code>InputStream</code> object corresponding
-     *                to the <code>Document</code>.
-     *  @param  isZip <code>boolean</code> to show that the created office
-     *                document is to be zipped.
+     * <p>This method will read from the given {@code InputStream} object.  The
+     * returned {@code Document} object will contain the necessary data for the
+     * other objects created by the {@code PluginFactory} to process, like a
+     * {@code DocumentSerializer} object and a {@code DocumentMerger} object.</p>
      *
-     *  @return  A <code>Document</code> object representing the
-     *           particular <code>Document</code> format for the
-     *           <code>PluginFactory</code>.
+     * @param   name  The {@code Document} name.
+     * @param   is    {@code InputStream} object corresponding to the
+     *                {@code Document}.
+     * @param   isZip {@code boolean} to show that the created office document
+     *                is to be zipped.
      *
-     *  @throws   IOException   If any I/O error occurs.
+     * @return  A {@code Document} object representing the particular
+     *          {@code Document} format for the {@code PluginFactory}.
+     *
+     * @throws  IOException   If any I/O error occurs.
      */
-    public abstract Document createOfficeDocument(String name, InputStream is,boolean isZip)
-        throws IOException;
-
+    public abstract Document createOfficeDocument(String name, InputStream is,
+            boolean isZip) throws IOException;
 
     /**
-     *  <p>Create a <code>Document</code> object that corresponds to
-     *  the device data passed in via the <code>InputStream</code>
-     *  object.  This abstract method must be implemented for each
-     *  plug-in.</p>
+     * Create a {@code Document} object that corresponds to the device data
+     * passed in via the {@code InputStream} object.
      *
-     *  <p>This method will read from the given <code>InputStream</code>
-     *  object.  The returned <code>Document</code> object will contain
-     *  the necessary data for the other objects created by the
-     *  <code>PluginFactory</code> to process, like a
-     *  <code>DocumentSerializer</code> object and a
-     *  <code>DocumentMerger</code> object.</p>
+     * <p>This abstract method must be implemented for each plug-in.</p>
      *
-     *  @param  name  The <code>Document</code> name.
-     *  @param  is    <code>InputStream</code> object corresponding
-     *                to the <code>Document</code>.
+     * <p>This method will read from the given {@code InputStream} object.  The
+     * returned {@code Document} object will contain the necessary data for the
+     * other objects created by the {@code PluginFactory} to process, like a
+     * {@code DocumentSerializer} object and a {@code DocumentMerger} object.</p>
      *
-     *  @return  A <code>Document</code> object representing the
-     *           particular <code>Document</code> format for the
-     *           <code>PluginFactory</code>.
+     * @param   name  The {@code Document} name.
+     * @param   is    {@code InputStream} object corresponding to the
+     *                {@code Document}.
      *
-     *  @throws   IOException   If any I/O error occurs.
+     * @return  A {@code Document} object representing the particular
+     *          {@code Document} format for the {@code PluginFactory}.
+     *
+     * @throws  IOException   If any I/O error occurs.
      */
     public abstract Document createDeviceDocument(String name, InputStream is)
         throws IOException;
 }
-

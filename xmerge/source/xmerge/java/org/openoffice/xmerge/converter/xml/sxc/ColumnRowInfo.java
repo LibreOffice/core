@@ -19,9 +19,10 @@
 package org.openoffice.xmerge.converter.xml.sxc;
 
 /**
- * This is a class to define a table-column structure. This can then be
- * used by plugins to write or read their own column types.
+ * This is a class to define a table-column structure.
  *
+ * <p>This can then be used by plugins to write or read their own column types.
+ * </p>
  */
 public class ColumnRowInfo {
 
@@ -38,9 +39,9 @@ public class ColumnRowInfo {
     private Format fmt = new Format();
 
     /**
-     * Constructor for a <code>ColumnRowInfo</code>
+     * Constructor for a {@code ColumnRowInfo}.
      *
-     * @param type whether ROW or COLUMN record .
+     * @param type whether {@code ROW} or {@code COLUMN} record.
      */
     public ColumnRowInfo(int type) {
 
@@ -48,11 +49,11 @@ public class ColumnRowInfo {
     }
 
     /**
-     * Constructor for a <code>ColumnRowInfo</code>
+     * Constructor for a {@code ColumnRowInfo}.
      *
-     * @param dimension if it's a row the height, a column the width.
-     * @param repeated how many times it is repeated.
-     * @param type whether ROW or COLUMN record.
+     * @param dimension  if it's a row the height, a column the width.
+     * @param repeated   how many times it is repeated.
+     * @param type       whether {@code ROW} or {@code COLUMN} record.
      */
     private ColumnRowInfo(int dimension, int repeated, int type) {
 
@@ -62,13 +63,12 @@ public class ColumnRowInfo {
     }
 
     /**
-     * Constructor for a <code>ColumnRowInfo</code> that includes userDefined
-     * field.
+     * Constructor for a {@code ColumnRowInfo} that includes userDefined field.
      *
-     * @param dimension if it's a row the height, a column the width.
-     * @param repeated how many times it is repeated.
-     * @param type whether ROW or COLUMN record.
-     * @param userDefined whether the record is manually set.
+     * @param dimension    if it's a row the height, a column the width.
+     * @param repeated     how many times it is repeated.
+     * @param type         whether {@code ROW} or {@code COLUMN} record.
+     * @param userDefined  whether the record is manually set.
      */
     public ColumnRowInfo(int dimension, int repeated, int type, boolean userDefined) {
 
@@ -87,9 +87,9 @@ public class ColumnRowInfo {
     }
 
     /**
-     * Get the current format.
+     * Get the current {@code Format}.
      *
-     * @return The current format.
+     * @return The current {@code Format}.
      */
     public Format getFormat() {
 
@@ -137,9 +137,9 @@ public class ColumnRowInfo {
     }
 
     /**
-     * Does this <code>ColumnRowInfo</code> represent a row?
+     * Does this {@code ColumnRowInfo} represent a row?
      *
-     * @return True if a row, false if not.
+     * @return {@code true} if a row, {@code false} if not.
      */
     public boolean isRow() {
 
@@ -147,9 +147,9 @@ public class ColumnRowInfo {
     }
 
     /**
-     * Does this <code>ColumnRowInfo</code> represent a column?
+     * Does this {@code ColumnRowInfo} represent a column?
      *
-     * @return True if a column, false if not.
+     * @return {@code true} if a column, {@code false} if not.
      */
     public boolean isColumn() {
 
@@ -157,9 +157,9 @@ public class ColumnRowInfo {
     }
 
     /**
-     * Test if the row height as been set manually
+     * Test if the row height as been set manually.
      *
-     * @return true if user defined otherwise false
+     * @return {@code true} if user defined otherwise {@code false}.
      */
     public boolean isUserDefined() {
 
@@ -167,9 +167,9 @@ public class ColumnRowInfo {
     }
 
     /**
-     * Test if the row height is default
+     * Test if the row height is default.
      *
-     * @return true if default otherwise false
+     * @return {@code true} if default otherwise {@code false}.
      */
     public boolean isDefaultSize() {
 
