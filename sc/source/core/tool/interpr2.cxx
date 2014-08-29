@@ -94,8 +94,6 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     }
 }
 
-// Funktionen
-
 void ScInterpreter::ScGetActDate()
 {
     nFuncFmtType = NUMBERFORMAT_DATE;
@@ -1399,9 +1397,9 @@ void ScInterpreter::ScVDB()
             else
             {
 
-                double fDauer1=fDauer;
+                double fTimeLength1=fTimeLength;
 
-                //@Die Frage aller Fragen: "Ist das hier richtig"
+                //@ The question of all questions: 'Is this right'
                 if(!::rtl::math::approxEqual(fAnfang,::rtl::math::approxFloor(fAnfang)))
                 {
                     if(fFactor>1)
@@ -2173,18 +2171,18 @@ void ScInterpreter::ScStyle()
     sal_uInt8 nParamCount = GetByte();
     if (nParamCount >= 1 && nParamCount <= 3)
     {
-        OUString aStyle2;                             // Vorlage nach Timer
+        OUString aStyle2;                             // Template after timer
         if (nParamCount >= 3)
             aStyle2 = GetString().getString();
         long nTimeOut = 0;                          // Timeout
         if (nParamCount >= 2)
             nTimeOut = (long)(GetDouble()*1000.0);
-        OUString aStyle1 = GetString().getString();               // Vorlage fuer sofort
+        OUString aStyle1 = GetString().getString();               // Template for immediate
 
         if (nTimeOut < 0)
             nTimeOut = 0;
 
-        //  Request ausfuehren, um Vorlage anzuwenden
+        // Execute request to apply template
 
         if ( !pDok->IsClipOrUndo() )
         {
@@ -2254,7 +2252,7 @@ void ScInterpreter::ScDde()
             return;
         }
 
-            //  Nach dem Laden muss neu interpretiert werden (Verknuepfungen aufbauen)
+            // Need to reinterpret after loading (build links)
 
         if ( rArr.IsRecalcModeNormal() )
             rArr.SetExclusiveRecalcModeOnLoad();
@@ -2265,7 +2263,7 @@ void ScInterpreter::ScDde()
         bool bOldEnabled = pDok->IsIdleEnabled();
         pDok->EnableIdle(false);
 
-            //  Link-Objekt holen / anlegen
+            // Get/ Create link object
 
         ScDdeLink* pLink = lcl_GetDdeLink( pLinkMgr, aAppl, aTopic, aItem, nMode );
 
@@ -2285,8 +2283,8 @@ void ScInterpreter::ScDde()
                     pBindings->Invalidate( SID_LINKS );             // Link-Manager enablen
             }
 
-                                    //! asynchron auswerten ???
-            pLink->TryUpdate();     //  TryUpdate ruft Update nicht mehrfach auf
+                                    //! evaluate asynchron ???
+            pLink->TryUpdate();     //  TryUpdate doesn't call Update multiple times
 
             if (pMyFormulaCell)
             {
@@ -2392,9 +2390,9 @@ void ScInterpreter::ScBase()
                 bool bDirt = false;
                 while ( fVal && p > pBuf )
                 {
-//! mit fmod Rundungsfehler ab 2**48
+//! roundoff error starting with numbers greater than 2**48
 //                  double fDig = ::rtl::math::approxFloor( fmod( fVal, fBase ) );
-// so ist es etwas besser
+// a little bit better:
                     double fInt = ::rtl::math::approxFloor( fVal / fBase );
                     double fMult = fInt * fBase;
 #if OSL_DEBUG_LEVEL > 1
@@ -2523,7 +2521,8 @@ void ScInterpreter::ScConvert()
         if ( nGlobalError )
             PushError( nGlobalError);
         else
-        {   // erst die angegebene Reihenfolge suchen, wenn nicht gefunden den Kehrwert
+        {
+            // first of all search for the given order; if it can't be found then search for the inverse
             double fConv;
             if ( ScGlobal::GetUnitConverter()->GetValue( fConv, aFromUnit, aToUnit ) )
                 PushDouble( fVal * fConv );
