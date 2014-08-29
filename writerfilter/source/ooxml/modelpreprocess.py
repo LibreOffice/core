@@ -23,16 +23,12 @@ def prefixFromUrl(url):
 
 
 def prefixForGrammar(namespace):
-    ns = nsForGrammar(namespace)
+    ns = namespace.getElementsByTagName("grammar")[0].getAttribute("ns")
     if ns in list(ooxUrlAliases.keys()):
         prefix = ooxUrlAliases[ns]
         return prefix
     else:
         return prefixFromUrl(ns)
-
-
-def nsForGrammar(namespace):
-    return namespace.getElementsByTagName("grammar")[0].getAttribute("ns")
 
 
 def parseNamespaceAliases(node, ret):
@@ -70,14 +66,7 @@ def check(model):
 
 def preprocess(model):
     for i in model.getElementsByTagName("namespace"):
-        ns = i.getElementsByTagName("grammar")[0].getAttribute("ns")
-        if ns.startswith("http://schemas.openxmlformats.org/"):
-            i.setAttribute("prefix", ns.replace('http://schemas.openxmlformats.org/', '').replace('/', '_').replace('-', '_'))
-        else:
-            i.setAttribute("prefix", "")
-
         grammarprefix = prefixForGrammar(i)
-        grammarns = nsForGrammar(i)
 
         grammarNamespaceAliases = defaultNamespaceAliases()
         grammar = i.getElementsByTagName("grammar")[0]
@@ -109,19 +98,6 @@ def preprocess(model):
                     prefix = grammarprefix
             else:
                 prefix = grammarprefix
-
-            # ns
-            ns = ""
-            if ":" in j.getAttribute("name"):
-                nameprefix = j.getAttribute("name").split(':')[0]
-                if nameprefix in list(localNamespaceAliases.keys()):
-                    ns = localNamespaceAliases[nameprefix]
-            elif j.localName == "attribute":
-                # if parent node is resource, then we're outside the grammar element
-                if grammar.getAttribute("attributeFormDefault") == "qualified" and not j.parentNode.localName == "resource":
-                    ns = grammarns
-            else:
-                ns = grammarns
 
             # localname
             if ":" in j.getAttribute("name"):
