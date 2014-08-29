@@ -76,7 +76,7 @@ $(writerfilter_GEN_ooxml_Factory_hxx) : $(writerfilter_SRC)/ooxml/factoryinc.py 
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs, $(writerfilter_PYTHONCOMMAND) $< $(writerfilter_GEN_ooxml_Model_processed)) > $@
 
-$(writerfilter_GEN_ooxml_Model_validated) : $(writerfilter_SRC_ooxml_Model)
+$(writerfilter_GEN_ooxml_Model_validated) : $(writerfilter_SRC)/../documentation/ooxml/model.rng $(writerfilter_SRC_ooxml_Model)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),build,VAL,1)
 	$(call gb_Helper_abbreviate_dirs,\
 		$(writerfilter_XMLLINTCOMMAND) --noout --relaxng $(writerfilter_SRC)/../documentation/ooxml/model.rng $(writerfilter_SRC_ooxml_Model) > $@ 2>&1 \

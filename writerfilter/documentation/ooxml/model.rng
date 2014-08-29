@@ -259,9 +259,6 @@ documentation for that file. The schema has two parts:
       <optional>
         <attribute name="file"/>
       </optional>
-      <optional>
-        <attribute name="url"/>
-      </optional>
       <zeroOrMore>
         <ref name="start-element"/>
       </zeroOrMore>
