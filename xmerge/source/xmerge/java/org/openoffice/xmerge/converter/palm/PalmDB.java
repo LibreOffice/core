@@ -44,12 +44,12 @@ import java.io.UnsupportedEncodingException;
  *  <code>bName</code>, and a corresponding String object <code>sName</code>
  *  that contains characters without the '\0' characters.</p>
  *
- *  <p>The {@link #write write} method is called within the
+ *  <p>The <code>write</code> method is called within the
  *  {@link org.openoffice.xmerge.converter.palm.PalmDocument#write
  *  PalmDocument.write} method for writing out its data to the <code>OutputStream</code>
  *  object.</p>
  *
- *  <p>The {@link #read read} method is called within the
+ *  <p>The <code>read</code> method is called within the
  *  {@link org.openoffice.xmerge.converter.palm.PalmDocument#read
  *  PalmDocument.read} method for reading in its data from the <code>InputStream</code>
  *  object.</p>
