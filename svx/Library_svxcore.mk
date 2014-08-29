@@ -56,6 +56,7 @@ $(eval $(call gb_Library_use_libraries,svxcore,\
     comphelper \
     cppuhelper \
     cppu \
+    dbtools \
     drawinglayer \
     editeng \
     fwe \

@@ -1071,7 +1071,6 @@ DbTextField::DbTextField(DbGridColumn& _rColumn)
             :DbLimitedLengthField(_rColumn)
             ,m_pEdit( NULL )
             ,m_pPainterImplementation( NULL )
-            ,m_nKeyType(::com::sun::star::util::NumberFormat::TEXT)
             ,m_bIsSimpleEdit( true )
 {
 }
@@ -1148,9 +1147,6 @@ void DbTextField::Init( Window& rParent, const Reference< XRowSet >& xCursor)
 
     implAdjustGenericFieldSetting( xModel );
 
-    if (m_rColumn.GetParent().getNumberFormatter().is() && m_rColumn.GetKey())
-        m_nKeyType  = comphelper::getNumberFormatType(m_rColumn.GetParent().getNumberFormatter()->getNumberFormatsSupplier()->getNumberFormats(), m_rColumn.GetKey());
-
     DbLimitedLengthField::Init( rParent, xCursor );
 }
 
@@ -1172,18 +1168,10 @@ void DbTextField::PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect
 
 OUString DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Reference< XNumberFormatter >& xFormatter, Color** /*ppColor*/)
 {
-    OUString aString;
-    if ( _rxField.is() )
-        try
-        {
-            aString = getFormattedValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+    const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xPS(_rxField, UNO_QUERY);
+    ::dbtools::FormattedColumnValue fmter( xFormatter, xPS );
 
-    return aString;
+    return fmter.getFormattedValue();
 }
 
 
