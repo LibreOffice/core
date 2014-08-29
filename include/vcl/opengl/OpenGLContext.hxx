@@ -172,6 +172,8 @@ public:
         return mbInitialized;
     }
 
+    bool supportMultiSampling() const;
+
     static SystemWindowData generateWinData(Window* pParent);
 
 private:
