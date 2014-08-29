@@ -9,15 +9,15 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_CppunitTest_CppunitTest,sc_annonationshapeobj))
+$(eval $(call gb_CppunitTest_CppunitTest,sc_annotationshapeobj))
 
-$(eval $(call gb_CppunitTest_use_external,sc_annonationshapeobj,boost_headers))
+$(eval $(call gb_CppunitTest_use_external,sc_annotationshapeobj,boost_headers))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,sc_annonationshapeobj, \
+$(eval $(call gb_CppunitTest_add_exception_objects,sc_annotationshapeobj, \
     sc/qa/extras/scannotationshapeobj \
 ))
 
-$(eval $(call gb_CppunitTest_use_libraries,sc_annonationshapeobj, \
+$(eval $(call gb_CppunitTest_use_libraries,sc_annotationshapeobj, \
     basegfx \
     comphelper \
     cppu \
@@ -53,20 +53,20 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_annonationshapeobj, \
 	$(gb_UWINAPI) \
 ))
 
-$(eval $(call gb_CppunitTest_set_include,sc_annonationshapeobj,\
+$(eval $(call gb_CppunitTest_set_include,sc_annotationshapeobj,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 
-$(eval $(call gb_CppunitTest_use_api,sc_annonationshapeobj,\
+$(eval $(call gb_CppunitTest_use_api,sc_annotationshapeobj,\
     offapi \
     udkapi \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,sc_annonationshapeobj))
+$(eval $(call gb_CppunitTest_use_ure,sc_annotationshapeobj))
 
-$(eval $(call gb_CppunitTest_use_components,sc_annonationshapeobj,\
+$(eval $(call gb_CppunitTest_use_components,sc_annotationshapeobj,\
     basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
@@ -98,8 +98,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_annonationshapeobj,\
     unoxml/source/service/unoxml \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sc_annonationshapeobj))
+$(eval $(call gb_CppunitTest_use_configuration,sc_annotationshapeobj))
 
-$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_annonationshapeobj))
+$(eval $(call gb_CppunitTest_use_unittest_configuration,sc_annotationshapeobj))
 
 # vim: set noet sw=4 ts=4:
