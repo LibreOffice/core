@@ -161,9 +161,9 @@ public class Message {
      * <p>Valid only for request messages and reply messages that represent
      * normal termination.  Any returned array must not be modified.</p>
      *
-     * @return the in and in&ndash {
+     * @return the in and in&ndash; {
      * }out arguments for a request (possibly
-     * <code>null</code> for a paramterless function), the out and in&dash {
+     * <code>null</code> for a paramterless function), the out and in&ndash; {
      * }out
      * arguments for a reply that represents normal termination (possibly
      * <code>null</code> for a parameterless function), <code>null</code> for a
