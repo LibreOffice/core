@@ -166,6 +166,8 @@ public:
         return mbInitialized;
     }
 
+    bool supportMultiSampling() const;
+
     static SystemWindowData generateWinData(Window* pParent);
 private:
     SAL_DLLPRIVATE bool initWindow();

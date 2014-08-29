@@ -63,6 +63,8 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 		export CPPFLAGS='$(libgltf_CPPFLAGS)' \
 		&& export PKG_CONFIG="" \
 		&& ./configure \
+			--disable-shared \
+			--enable-static \
 			--with-pic \
 			--disable-debug \
 			--disable-werror \
