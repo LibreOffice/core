@@ -967,16 +967,25 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
 
     if( !rParentName.isEmpty() )
     {
+        OUString const name(GetName());
+        sal_Int32 const sep(name.indexOf(SD_LT_SEPARATOR));
+        OUString const master((sep == -1) ? OUString() : name.copy(0, sep));
         boost::shared_ptr<SfxStyleSheetIterator> aSSSI = boost::make_shared<SfxStyleSheetIterator>(mxPool.get(), nFamily);
         for (SfxStyleSheetBase *pStyle = aSSSI->First(); pStyle; pStyle = aSSSI->Next())
         {
             // we hope that we have only sd style sheets
             SdStyleSheet* pSdStyleSheet = static_cast<SdStyleSheet*>(pStyle);
-            if (pSdStyleSheet->msApiName == rParentName)
+            OUString const curName(pStyle->GetName());
+            sal_Int32 const curSep(curName.indexOf(SD_LT_SEPARATOR));
+            OUString const curMaster((curSep == -1)
+                    ? OUString() : curName.copy(0, sep));
+            // check that the master matches, as msApiName exists once per
+            // master page
+            if (pSdStyleSheet->msApiName == rParentName && master == curMaster)
             {
                 if( pStyle != this )
                 {
-                    SetParent( pStyle->GetName() );
+                    SetParent(curName);
                 }
                 return;
             }

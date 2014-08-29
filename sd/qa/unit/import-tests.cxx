@@ -51,6 +51,8 @@
 
 #include <config_features.h>
 
+#include <stlpool.hxx>
+
 using namespace ::com::sun::star;
 
 /// Impress import filters tests.
@@ -61,6 +63,7 @@ public:
     void testSmoketest();
     void testN759180();
     void testN778859();
+    void testMasterPageStyleParent();
     void testFdo64512();
     void testFdo71075();
     void testN828390();
@@ -90,6 +93,7 @@ public:
     CPPUNIT_TEST(testSmoketest);
     CPPUNIT_TEST(testN759180);
     CPPUNIT_TEST(testN778859);
+    CPPUNIT_TEST(testMasterPageStyleParent);
     CPPUNIT_TEST(testFdo64512);
     CPPUNIT_TEST(testFdo71075);
     CPPUNIT_TEST(testN828390);
@@ -484,6 +488,45 @@ void SdFiltersTest::testN828390_5()
         CPPUNIT_ASSERT( pNumFmt );
         CPPUNIT_ASSERT_EQUAL_MESSAGE( "Bullet's relative size is wrong!", pNumFmt->GetNumRule()->GetLevel(1).GetBulletRelSize(), sal_uInt16(75) ); // != 25
     }
+
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testMasterPageStyleParent()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc("/sd/qa/unit/data/odp/masterpage_style_parent.odp"));
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    SdStyleSheetPool *const pPool(pDoc->GetSdStyleSheetPool());
+
+    int parents(0);
+    SfxStyleSheetIterator iter(pPool, SD_STYLE_FAMILY_MASTERPAGE);
+    for (SfxStyleSheetBase * pStyle = iter.First(); pStyle; pStyle = iter.Next())
+    {
+        OUString const name(pStyle->GetName());
+        OUString const parent(pStyle->GetParent());
+        if (!parent.isEmpty())
+        {
+            ++parents;
+            // check that parent exists
+            SfxStyleSheetBase *const pParentStyle(
+                    pPool->Find(parent, SD_STYLE_FAMILY_MASTERPAGE));
+            CPPUNIT_ASSERT(pParentStyle);
+            CPPUNIT_ASSERT_EQUAL(pParentStyle->GetName(), parent);
+            // check that parent has the same master page as pStyle
+            CPPUNIT_ASSERT(parent.indexOf(SD_LT_SEPARATOR) != -1);
+            CPPUNIT_ASSERT(name.indexOf(SD_LT_SEPARATOR) != -1);
+            CPPUNIT_ASSERT_EQUAL(
+                    parent.copy(0, parent.indexOf(SD_LT_SEPARATOR)),
+                    name.copy(0, name.indexOf(SD_LT_SEPARATOR)));
+        }
+    }
+    // check that there are actually parents...
+    CPPUNIT_ASSERT_EQUAL(16, parents);
 
     xDocShRef->DoClose();
 }
