@@ -1729,11 +1729,11 @@ bool ScViewData::GetMergeSizePixel( SCCOL nX, SCROW nY, long& rSizeXPix, long& r
     const ScMergeAttr* pMerge = (const ScMergeAttr*) pDoc->GetAttr( nX,nY,nTabNo, ATTR_MERGE );
     if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
     {
-        long nOutWidth = 0;
-        long nOutHeight = 0;
+        long nOutWidthTwips = 0;
+        long nOutHeightTwips = 0;
         SCCOL nCountX = pMerge->GetColMerge();
         for (SCCOL i=0; i<nCountX; i++)
-            nOutWidth += ToPixel( pDoc->GetColWidth(nX+i,nTabNo), nPPTX );
+            nOutWidthTwips += pDoc->GetColWidth(nX+i,nTabNo);
         SCROW nCountY = pMerge->GetRowMerge();
 
         for (SCROW nRow = nY; nRow <= nY+nCountY-1; ++nRow)
@@ -1781,24 +1781,27 @@ bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     SCsROW nStartPosY = GetPosY(eVWhich);
     rPosX = nStartPosX;
     rPosY = nStartPosY;
-    long nScrX = 0;
-    long nScrY = 0;
+
+    Point aScrPosTwips = Point( 0, 0 );
+
+    Point aClickLogic = GetActiveWin()->PixelToLogic( Point( nClickX, nClickY ),
+                                                      maPaintMapMode );
 
     if (nClickX > 0)
     {
-        while ( rPosX<=MAXCOL && nClickX >= nScrX )
+        while ( ( rPosX <= MAXCOL ) && ( aClickLogic.getX() >= aScrPosTwips.getX() ) )
         {
-            nScrX += ToPixel( pDoc->GetColWidth( rPosX, nTabNo ), nPPTX );
+            aScrPosTwips.X() += pDoc->GetColWidth( rPosX, nTabNo );
             ++rPosX;
         }
         --rPosX;
     }
     else
     {
-        while ( rPosX>0 && nClickX < nScrX )
+        while ( ( rPosX > 0 ) && ( aClickLogic.getX() < aScrPosTwips.getX() ) )
         {
             --rPosX;
-            nScrX -= ToPixel( pDoc->GetColWidth( rPosX, nTabNo ), nPPTX );
+            aScrPosTwips.X() -= pDoc->GetColWidth( rPosX, nTabNo );
         }
     }
 
@@ -1809,10 +1812,10 @@ bool ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
     else
     {
         /* TODO: could need some "SubPixelsWhileBackward" method */
-        while ( rPosY>0 && nClickY < nScrY )
+        while ( ( rPosY > 0 ) && ( nClickY < aScrPosTwips.getY() ) )
         {
             --rPosY;
-            nScrY -= ToPixel( pDoc->GetRowHeight( rPosY, nTabNo ), nPPTY );
+            aScrPosTwips.Y() -= pDoc->GetRowHeight( rPosY, nTabNo );
         }
     }
 
@@ -1962,17 +1965,21 @@ void ScViewData::RecalcPixPos()             // after zoom changes
 {
     for (sal_uInt16 eWhich=0; eWhich<2; eWhich++)
     {
-        long nPixPosX = 0;
+        long nPosXTwips = 0;
         SCCOL nPosX = pThisTab->nPosX[eWhich];
         for (SCCOL i=0; i<nPosX; i++)
-            nPixPosX -= ToPixel(pDoc->GetColWidth(i,nTabNo), nPPTX);
-        pThisTab->nPixPosX[eWhich] = nPixPosX;
+        {
+            nPosXTwips -= pDoc->GetColWidth( i, nTabNo );
+        }
+        pThisTab->nPixPosX[eWhich] = LogicToPixelHorizontal( nPosXTwips );
 
-        long nPixPosY = 0;
+        long nPosYTwips = 0;
         SCROW nPosY = pThisTab->nPosY[eWhich];
         for (SCROW j=0; j<nPosY; j++)
-            nPixPosY -= ToPixel(pDoc->GetRowHeight(j,nTabNo), nPPTY);
-        pThisTab->nPixPosY[eWhich] = nPixPosY;
+        {
+            nPosYTwips -= pDoc->GetRowHeight( j, nTabNo );
+        }
+        pThisTab->nPixPosY[eWhich] = LogicToPixelVertical( nPosYTwips );
     }
 }
 
@@ -1993,10 +2000,8 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
     SCCOL nCol;
     SCROW nRow;
-    sal_uInt16 nTSize;
-    long nSizePix;
-    long nScrPosX = 0;
-    long nScrPosY = 0;
+    long nScrPosXTwips = 0;
+    long nScrPosYTwips = 0;
 
     SetActivePart( SC_SPLIT_BOTTOMLEFT );
     SetPosX( SC_SPLIT_LEFT, nCol1 );
@@ -2004,25 +2009,16 @@ void ScViewData::SetScreen( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 
     for (nCol=nCol1; nCol<=nCol2; nCol++)
     {
-        nTSize = pDoc->GetColWidth( nCol, nTabNo );
-        if (nTSize)
-        {
-            nSizePix = ToPixel( nTSize, nPPTX );
-            nScrPosX += (sal_uInt16) nSizePix;
-        }
+        nScrPosXTwips += pDoc->GetColWidth( nCol, nTabNo );
     }
 
     for (nRow=nRow1; nRow<=nRow2; nRow++)
     {
-        nTSize = pDoc->GetRowHeight( nRow, nTabNo );
-        if (nTSize)
-        {
-            nSizePix = ToPixel( nTSize, nPPTY );
-            nScrPosY += (sal_uInt16) nSizePix;
-        }
+        nScrPosYTwips += pDoc->GetRowHeight( nRow, nTabNo );
     }
 
-    aScrSize = Size( nScrPosX, nScrPosY );
+    aScrSize = Size( LogicToPixelHorizontal( nScrPosXTwips ),
+                     LogicToPixelVertical( nScrPosYTwips ) );
 }
 
 void ScViewData::SetScreenPos( const Point& rVisAreaStart )
