@@ -395,16 +395,21 @@ void XclExpXmlPivotTables::SavePivotTableXml( XclExpXmlStream& rStrm, const ScDP
         const ScDPSaveDimension& rDim = rDims[i];
 
         long nPos = -1; // position in cache
-        OUString aSrcName = ScDPUtil::getSourceDimensionName(rDim.GetName());
-        NameToIdMapType::iterator it = aNameToIdMap.find(aSrcName);
-        if (it != aNameToIdMap.end())
-            nPos = it->second;
+        if (rDim.IsDataLayout())
+            nPos = -2; // Excel uses an index of -2 to indicate a data layout field.
+        else
+        {
+            OUString aSrcName = ScDPUtil::getSourceDimensionName(rDim.GetName());
+            NameToIdMapType::iterator it = aNameToIdMap.find(aSrcName);
+            if (it != aNameToIdMap.end())
+                nPos = it->second;
 
-        if (nPos == -1)
-            continue;
+            if (nPos == -1)
+                continue;
 
-        if (!aCachedDims[nPos])
-            continue;
+            if (!aCachedDims[nPos])
+                continue;
+        }
 
         sheet::DataPilotFieldOrientation eOrient =
             static_cast<sheet::DataPilotFieldOrientation>(rDim.GetOrientation());
