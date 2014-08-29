@@ -3352,11 +3352,6 @@ $(call gb_LinkTarget_use_external_project,$(1),libgltf)
 
 endef
 
-define gb_ExternalProject__use_libgltf
-$(call gb_ExternalProject_use_external_project,$(1),libgltf)
-
-endef
-
 else # SYSTEM_LIBGLTF
 
 define gb_LinkTarget__use_libgltf
@@ -3365,9 +3360,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 	$(LIBGLTF_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LIBGLTF_LIBS))
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_LIBGLTF \
-)
 
 endef
 
