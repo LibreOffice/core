@@ -393,7 +393,6 @@ class DbTextField : public DbLimitedLengthField
 {
     ::svt::IEditImplementation* m_pEdit;
     ::svt::IEditImplementation* m_pPainterImplementation;
-    sal_Int16                   m_nKeyType;
     bool                    m_bIsSimpleEdit;
 
 protected:
