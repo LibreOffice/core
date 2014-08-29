@@ -6,6 +6,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <swmodeltestbase.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
@@ -19,6 +20,8 @@
 #include <fmtclds.hxx>
 #include <dcontact.hxx>
 #include <textboxhelper.hxx>
+#include <view.hxx>
+#include <hhcwrp.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -48,6 +51,10 @@ public:
     void testShapeTextboxVertadjust();
     void testShapeTextboxAutosize();
     void testFdo82191();
+    void testChinesConversionBlank();
+    void testChinesConversionNonChineseText();
+    void testChinesConversionTraditionalToSimplified();
+    void testChinesConversionSimplifiedToTraditional();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -65,6 +72,11 @@ public:
     CPPUNIT_TEST(testShapeTextboxVertadjust);
     CPPUNIT_TEST(testShapeTextboxAutosize);
     CPPUNIT_TEST(testFdo82191);
+    CPPUNIT_TEST(testChinesConversionBlank);
+    CPPUNIT_TEST(testChinesConversionNonChineseText);
+    CPPUNIT_TEST(testChinesConversionTraditionalToSimplified);
+    CPPUNIT_TEST(testChinesConversionSimplifiedToTraditional);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -413,6 +425,42 @@ void SwUiWriterTest::testFdo82191()
     // This was one: the textbox of the shape wasn't copied.
     CPPUNIT_ASSERT_EQUAL(size_t(2), aTextBoxes.size());
 }
+
+void SwUiWriterTest::testChinesConversionBlank()
+{
+
+    // Given
+    SwDoc* pDoc = createDoc();
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    // ... TODO Do some setup of the document content here
+
+    // When
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
+                        i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
+                        true, false, false );
+    aWrap.Convert();
+
+    // Then
+    // ... TODO Test that the document is in the right state after conversion
+    CPPUNIT_ASSERT(false);
+}
+
+void SwUiWriterTest::testChinesConversionNonChineseText()
+{
+//    CPPUNIT_ASSERT(false);
+}
+
+void SwUiWriterTest::testChinesConversionTraditionalToSimplified()
+{
+//    CPPUNIT_ASSERT(false);
+}
+
+void SwUiWriterTest::testChinesConversionSimplifiedToTraditional()
+{
+//    CPPUNIT_ASSERT(false);
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
 CPPUNIT_PLUGIN_IMPLEMENT();

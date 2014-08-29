@@ -13,12 +13,17 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
+#include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/document/MacroExecMode.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
+//#include <unotest/macros_test.hxx>
+#include <com/sun/star/frame/Desktop.hpp>
 
 #include <editeng/langitem.hxx>
 #include <editeng/charhiddenitem.hxx>
@@ -55,6 +60,10 @@
 #include "modeltoviewhelper.hxx"
 #include "scriptinfo.hxx"
 #include "IMark.hxx"
+#include <unotxdoc.hxx>
+
+#include <hhcwrp.hxx>
+
 
 typedef tools::SvRef<SwDocShell> SwDocShellRef;
 
@@ -62,7 +71,7 @@ using namespace ::com::sun::star;
 
 /* Implementation of Swdoc-Test class */
 
-class SwDocTest : public test::BootstrapFixture
+class SwDocTest : public test::BootstrapFixture //, public unotest::MacrosTest
 {
 public:
     SwDocTest()
@@ -83,6 +92,7 @@ public:
     void testGraphicAnchorDeletion();
     void testTransliterate();
     void testMarkMove();
+    void testChinesConversionBlank();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(testTransliterate);
@@ -95,6 +105,8 @@ public:
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
     CPPUNIT_TEST(testMarkMove);
+    CPPUNIT_TEST(testChinesConversionBlank);
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1152,6 +1164,81 @@ void SwDocTest::testMarkMove()
     CPPUNIT_ASSERT_EQUAL(
         pBM2->GetMarkEnd().nNode.GetIndex(),
         pBM3->GetMarkEnd().nNode.GetIndex());
+}
+
+
+uno::Reference<css::lang::XComponent> loadFromDesktop(const OUString& rURL, const OUString& rDocService)
+{
+    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory > xFactory;
+    xFactory = xContext->getServiceManager();
+
+    com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> xSFactory;
+    xSFactory = uno::Reference<lang::XMultiServiceFactory>(xFactory, uno::UNO_QUERY_THROW);
+
+    // com::sun::star::uno::Reference<com::sun::star::lang::XMultiComponentFactory> m_xFactory;
+    css::uno::Reference< css::frame::XDesktop2> xDesktop;
+    xDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(xSFactory)));
+
+
+    CPPUNIT_ASSERT_MESSAGE("no desktop", xDesktop.is());
+    uno::Reference<frame::XComponentLoader> xLoader = uno::Reference<frame::XComponentLoader>(xDesktop, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_MESSAGE("no loader", xLoader.is());
+    uno::Sequence<beans::PropertyValue> args(1);
+    args[0].Name = "MacroExecutionMode";
+    args[0].Handle = -1;
+    args[0].Value <<= document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    args[0].State = beans::PropertyState_DIRECT_VALUE;
+
+    if (!rDocService.isEmpty())
+    {
+        args.realloc(2);
+        args[1].Name = "DocumentService";
+        args[1].Handle = -1;
+        args[1].Value <<= rDocService;
+        args[1].State = beans::PropertyState_DIRECT_VALUE;
+    }
+
+    uno::Reference<lang::XComponent> xComponent = xLoader->loadComponentFromURL(rURL, OUString("_default"), 0, args);
+    OUString sMessage = "loading failed: " + rURL;
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());
+
+    return xComponent;
+
+}
+
+void SwDocTest::testChinesConversionBlank()
+{
+std::cerr << "@@@@@ 00000\n";
+
+    uno::Reference<lang::XComponent> xComponent;
+    utl::TempFile pTempFile;
+    // Copied in from unotest/source/cpp/macros_test.cxx because including it leads to a link error
+    xComponent = loadFromDesktop(pTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+std::cerr << "@@@@@ 11111\n";
+
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(xComponent.get());
+
+    SwView* pView = pTxtDoc->GetDocShell()->GetView();
+
+std::cerr << "@@@@@ 22222\n";
+
+    const uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
+
+std::cerr << "@@@@@ 33333\n";
+
+    SwHHCWrapper aWrap( pView, xContext, LANGUAGE_CHINESE_TRADITIONAL, LANGUAGE_CHINESE_SIMPLIFIED, NULL,
+                        i18n::TextConversionOption::CHARACTER_BY_CHARACTER, false,
+                        true, false, false );
+
+std::cerr << "@@@@@ 44444\n";
+
+    aWrap.Convert();
+
+std::cerr << "@@@@@ 55555\n";
+
+    CPPUNIT_ASSERT(false);
 }
 
 void SwDocTest::setUp()

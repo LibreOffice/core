@@ -478,7 +478,7 @@ void TextConvWrapper::ChangeText( const OUString &rNewText,
             }
 
             // end of string also terminates non-matching char sequence
-            if (rOrigText[nIndex] == rNewText[nPos] || nPos == nConvTextLen)
+            if (nPos == nConvTextLen || rOrigText[nIndex] == rNewText[nPos])
             {
                 // substring that needs to be replaced found?
                 if (nChgPos>=0 && nConvChgPos>=0)
