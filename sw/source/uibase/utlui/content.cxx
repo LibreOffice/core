@@ -1078,10 +1078,9 @@ static void* lcl_GetOutlineKey( SwContentTree* pTree, SwOutlineContent* pContent
     {
         SwWrtShell* pShell = pTree->GetWrtShell();
         sal_Int32 nPos = pContent->GetYPos();
-        if( nPos )
-        {
-            key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
-        }
+
+        key = (void*)pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos );
+
     }
     return key;
 }
