@@ -39,6 +39,7 @@
 #include <dpcache.hxx>
 #include <dpobject.hxx>
 #include <dpsave.hxx>
+#include <dputil.hxx>
 
 #include <svx/svdoole2.hxx>
 #include "tabprotection.hxx"
@@ -122,6 +123,7 @@ public:
     void testSheetProtection();
 
     void testPivotTableXLSX();
+    void testPivotTableTwoDataFieldsXLSX();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -160,6 +162,7 @@ public:
 #endif
     CPPUNIT_TEST(testSheetProtection);
     CPPUNIT_TEST(testPivotTableXLSX);
+    CPPUNIT_TEST(testPivotTableTwoDataFieldsXLSX);
     CPPUNIT_TEST(testFunctionsExcel2010ODS);
 
     CPPUNIT_TEST_SUITE_END();
@@ -2102,6 +2105,125 @@ void ScExportTest::testPivotTableXLSX()
     } aTest;
 
     ScDocShellRef xDocSh = loadDoc("pivot-table/many-fields-in-cache.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = &xDocSh->GetDocument();
+
+    // Initial check.
+    bool bCheck = aTest.check(*pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Initial check failed.", bCheck);
+
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
+    xDocSh->DoClose();
+    CPPUNIT_ASSERT(xDocSh2.Is());
+    pDoc = &xDocSh2->GetDocument();
+
+    // Reload check.
+    bCheck = aTest.check(*pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Reload check failed.", bCheck);
+
+    xDocSh2->DoClose();
+}
+
+void ScExportTest::testPivotTableTwoDataFieldsXLSX()
+{
+    struct
+    {
+        bool check( const ScDocument& rDoc )
+        {
+            if (!rDoc.HasPivotTable())
+            {
+                cerr << "The document should have pivot table." << endl;
+                return false;
+            }
+
+            const ScDPCollection* pDPs = rDoc.GetDPCollection();
+            if (!pDPs)
+            {
+                cerr << "Pivot table container should exist." << endl;
+                return false;
+            }
+
+            ScRange aSrcRange(1,1,1,2,8,1); // B2:C9 on the 2nd sheet.
+            const ScDPCache* pCache = pDPs->GetSheetCaches().getExistingCache(aSrcRange);
+            if (!pCache)
+            {
+                cerr << "The document should have a pivot cache for B2:C9 on 'Src'." << endl;
+                return false;
+            }
+
+            const char* pNames[] = { "Name", "Value" };
+
+            size_t nCount = pCache->GetFieldCount();
+            if (nCount != SAL_N_ELEMENTS(pNames))
+            {
+                cout << "Incorrect number of fields in pivot cache." << endl;
+                return false;
+            }
+
+            const ScDPObject* pDPObj = rDoc.GetDPAtCursor(0,2,0); // A3
+            if (!pDPObj)
+            {
+                cerr << "A pivot table should exist over A3." << endl;
+                return false;
+            }
+
+            // Output range should be A3:C12.
+            ScRange aOutRange = pDPObj->GetOutRange();
+            if (ScRange(0,2,0,2,11,0) != aOutRange)
+            {
+                cerr << "Incorrect output range." << endl;
+                return false;
+            }
+
+            const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+            if (!pSaveData)
+            {
+                cerr << "Save data should exist in each pivot table object." << endl;
+                return false;
+            }
+
+            std::vector<const ScDPSaveDimension*> aDims;
+            pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
+            if (aDims.size() != 1 || aDims[0]->GetName() != "Name")
+            {
+                cerr << "Pivot table should have one row field labeld 'Name'" << endl;
+                return false;
+            }
+
+            pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
+            if (aDims.size() != 2 ||
+                ScDPUtil::getSourceDimensionName(aDims[0]->GetName()) != "Value" ||
+                ScDPUtil::getSourceDimensionName(aDims[1]->GetName()) != "Value")
+            {
+                cerr << "Pivot table should have two duplicated data fields both of which are named 'Value'." << endl;
+                return false;
+            }
+
+            if (aDims[0]->GetFunction() != sheet::GeneralFunction_SUM)
+            {
+                cerr << "First data field should be SUM." << endl;
+                return false;
+            }
+
+            if (aDims[1]->GetFunction() != sheet::GeneralFunction_COUNT)
+            {
+                cerr << "First data field should be COUNT." << endl;
+                return false;
+            }
+
+            pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aDims);
+            if (aDims.size() != 1 || !aDims[0]->IsDataLayout())
+            {
+                cerr << "Pivot table should have one column field which is a data layout field." << endl;
+                return false;
+            }
+
+            return true;
+        }
+
+    } aTest;
+
+    ScDocShellRef xDocSh = loadDoc("pivot-table/two-data-fields.", XLSX);
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pDoc = &xDocSh->GetDocument();
 
