@@ -34,27 +34,29 @@ import org.w3c.dom.NodeList;
  */
 public class BookSettings implements OfficeConstants {
 
-    /**  A w3c <code>Document</code>. */
+    /** A w3c {@code Document}. */
     private org.w3c.dom.Document settings = null;
 
-    private boolean hasColumnRowHeaders = true;
-    private String  activeSheet         = "";
-    private ArrayList<SheetSettings>  worksheetSettings   = new ArrayList<SheetSettings>();
+    private boolean hasColumnRowHeaders   = true;
+    private String  activeSheet           = "";
+    private ArrayList<SheetSettings> worksheetSettings
+                                          = new ArrayList<SheetSettings>();
 
     /**
-     * Constructor for a <code>BookSettings</code>. Reads document settings
-     * from xml and inits SheetSettings variables.
+     * Constructor for a {@code BookSettings}.
      *
-     * @param root The root XML node to read from.
+     * <p>Reads document settings from xml and inits SheetSettings variables.</p>
+     *
+     * @param  root  The root XML node to read from.
      */
     public BookSettings(Node root) {
         readNode(root);
     }
 
     /**
-     * Constructor for a <code>BookSettings</code>
+     * Constructor for a {@code BookSettings}.
      *
-     * @param worksheetSettings If it's a row the height, a column the width
+     * @param  worksheetSettings  If it's a row the height, a column the width
      */
     public BookSettings(ArrayList<SheetSettings> worksheetSettings) {
         this.worksheetSettings = worksheetSettings;
@@ -63,52 +65,49 @@ public class BookSettings implements OfficeConstants {
     /**
      * Set the flag indicating whether we have row/column headers.
      *
-     * @param hasColumnRowHeaders Flag to enable or disable headers.
+     * @param  hasColumnRowHeaders  Flag to enable or disable headers.
      */
     public void setColumnRowHeaders(boolean hasColumnRowHeaders) {
         this.hasColumnRowHeaders = hasColumnRowHeaders;
     }
 
-
-
     /**
-     * Gets the <code>Vector</code> of <code>SheetSettings</code>
+     * Gets the {@code Vector} of {@code SheetSettings}.
      *
-     * @return <code>Vector</code> of <code>SheetSettings</code>
+     * @return {@code Vector} of {@code SheetSettings}
      */
     public ArrayList<SheetSettings> getSheetSettings() {
         return worksheetSettings;
     }
 
     /**
-     * Gets the active sheet name
+     * Gets the active sheet name.
      *
      * @return the active sheet name
      */
     public String getActiveSheet() {
-
         return activeSheet;
     }
 
     /**
-     * Sets the active sheet name
+     * Sets the active sheet name.
      *
-     * @param activeSheet the active sheet name
+     * @param  activeSheet  the active sheet name.
      */
     public void setActiveSheet(String activeSheet) {
-
         this.activeSheet = activeSheet;
     }
 
     /**
-     * Adds an XML entry for a particular setting
+     * Adds an XML entry for a particular setting.
      *
-     * @param root the root node at which to add the xml entry
-     * @param attribute the name of the attribute to add
-     * @param type the attribute type (int, short etc)
-     * @param value the value of the attribute
+     * @param  root       the root node at which to add the xml entry.
+     * @param  attribute  the name of the attribute to add.
+     * @param  type       the attribute type ({@code int}, {@code short} etc).
+     * @param  value      the value of the attribute.
      */
-    private void addConfigItem(Node root, String attribute, String type, String value) {
+    private void addConfigItem(Node root, String attribute, String type,
+                               String value) {
 
         Element configItem = settings.createElement(TAG_CONFIG_ITEM);
         configItem.setAttribute(ATTRIBUTE_CONFIG_NAME, attribute);
@@ -120,10 +119,10 @@ public class BookSettings implements OfficeConstants {
     }
 
     /**
-     * Writes out a settings.xml entry for this BookSettings object
+     * Writes out a settings.xml entry for this {@code BookSettings} object.
      *
-     * @param settings a <code>Document</code> object representing the settings.xml
-     * @param root the root xml node to add to
+     * @param  settings  a {@code Document} object representing the settings.xml
+     * @param  root      the root xml node to add to.
      */
     public void writeNode(org.w3c.dom.Document settings, Node root) {
 
@@ -140,13 +139,12 @@ public class BookSettings implements OfficeConstants {
     }
 
     /**
-     * Sets a variable based on a String value read from XML
+     * Sets a variable based on a {@code String} value read from XML.
      *
-     * @param name xml name of the attribute to set
-     * @param value String value fo the attribute
+     * @param  name   xml name of the attribute to set.
+     * @param  value  {@code String} value for the attribute.
      */
     private void addAttribute(String name, String value) {
-
         if(name.equals("ActiveTable")) {
             activeSheet = value;
         } else if(name.equals("HasColumnRowHeaders")) {
@@ -156,9 +154,9 @@ public class BookSettings implements OfficeConstants {
     }
 
     /**
-     * Reads document settings from xml and inits SheetSettings variables
+     * Reads document settings from xml and inits {@code SheetSettings} variables.
      *
-     * @param root XML Node to read from
+     * @param  root  XML {@code Node} to read from.
      */
     private void readNode(Node root) {
 

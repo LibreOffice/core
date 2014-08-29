@@ -21,10 +21,11 @@ package org.openoffice.xmerge.merger.diff;
 import org.w3c.dom.Node;
 
 /**
- *  A small class to hold the start/end character position and the
- *  <code>Node</code> pointer in a text <code>Node</code>.  It is
- *  mainly used for character parser to make a list of text
- *  <code>Node</code> cache entries.
+ * A small class to hold the start/end character position and the {@code Node}
+ * pointer in a text {@code Node}.
+ *
+ * <p>It is mainly used for character parser to make a list of text {@code Node}
+ * cache entries.</p>
  */
 public class TextNodeEntry {
 
@@ -33,11 +34,11 @@ public class TextNodeEntry {
     private Node node_;
 
     /**
-     *  Constructor
+     * Constructor
      *
-     *  @param  startChar  The start character position.
-     *  @param  endChar    The end character position.
-     *  @param  node       The text <code>Node</code>.
+     * @param  startChar  The start character position.
+     * @param  endChar    The end character position.
+     * @param  node       The text {@code Node}.
      */
     public TextNodeEntry(int startChar, int endChar, Node node) {
         startChar_ = startChar;
@@ -46,32 +47,29 @@ public class TextNodeEntry {
     }
 
     /**
-     *  Returns the start character.
+     * Returns the start character.
      *
-     *  @return  The start character.
+     * @return  The start character.
      */
     public int startChar() {
         return startChar_;
     }
 
-
     /**
-     *  Returns the end character.
+     * Returns the end character.
      *
-     *  @return  The end character.
+     * @return  The end character.
      */
     public int endChar() {
         return endChar_;
     }
 
-
     /**
-     *  Returns the <code>Node</code>.
+     * Returns the {@code Node}.
      *
-     *  @return  The <code>Node</code>.
+     * @return  The {@code Node}.
      */
     public Node node() {
         return node_;
     }
 }
-

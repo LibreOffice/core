@@ -21,139 +21,130 @@ package org.openoffice.xmerge.converter.palm;
 import java.io.UnsupportedEncodingException;
 
 /**
- *  <p>This class contains data for a single Palm database for use during
- *  a conversion process.</p>
+ * This class contains data for a single Palm database for use during a
+ * conversion process.
  *
- *  <p>It contains zero or more <code>Record</code> objects stored in an
- *  array.  The index of the <code>Record</code> object in the array is
- *  the <code>Record</code> id or number for that specific <code>Record</code> object.
- *  Note that this class does not check for maximum number of Records
- *  allowable in an actual PDB.</p>
+ * <p>It contains zero or more {@code Record} objects stored in an array.  The
+ * index of the {@code Record} object in the array is the {@code Record} id or
+ * number for that specific {@code Record} object.  Note that this class does
+ * not check for maximum number of Records allowable in an actual PDB.</p>
  *
- *  <p>This class also contains the PDB name associated with the Palm
- *  database it represents.  A PDB name consists of 32 bytes of a
- *  certain encoding (extended ASCII in this case).</p>
+ * <p>This class also contains the PDB name associated with the Palm database
+ * it represents.  A PDB name consists of 32 bytes of a certain encoding
+ * (extended ASCII in this case).</p>
  *
- *  <p>The non default constructors take in a name parameter which may not
- *  be the exact PDB name to be used.  The name parameter in
- *  <code>String</code> or <code>byte</code> array are converted to an exact
- *  <code>NAME_LENGTH</code> byte array.  If the length of the name is less
- *  than <code>NAME_LENGTH</code>, it is padded with '\0' characters.  If it
- *  is more, it gets truncated.  The last character in the resulting byte
- *  array is always a '\0' character.  The resulting byte array is stored in
- *  <code>bName</code>, and a corresponding String object <code>sName</code>
- *  that contains characters without the '\0' characters.</p>
+ * <p>The non default constructors take in a name parameter which may not be
+ * the exact PDB name to be used.  The name parameter in {@code String} or
+ * {@code byte} array are converted to an exact {@code NAME_LENGTH} byte array.
+ * If the length of the name is less than {@code NAME_LENGTH}, it is padded
+ * with {@code '\0'} characters.  If it is more, it gets truncated.  The last
+ * character in the resulting byte array is always a {@code '\0'} character.
+ * The resulting byte array is stored in {@code bName}, and a corresponding
+ * {@code String} object {@code sName} that contains characters without the
+ * {@code '\0'} characters.</p>
  *
- *  <p>The <code>write</code> method is called within the
- *  {@link org.openoffice.xmerge.converter.palm.PalmDocument#write
- *  PalmDocument.write} method for writing out its data to the <code>OutputStream</code>
- *  object.</p>
+ * <p>The {@code write} method is called within the {@link
+ * org.openoffice.xmerge.converter.palm.PalmDocument#write
+ * PalmDocument.write} method for writing out its data to the
+ * {@code OutputStream} object.</p>
  *
- *  <p>The <code>read</code> method is called within the
- *  {@link org.openoffice.xmerge.converter.palm.PalmDocument#read
- *  PalmDocument.read} method for reading in its data from the <code>InputStream</code>
- *  object.</p>
+ * <p>The {@code read} method is called within the {@link
+ * org.openoffice.xmerge.converter.palm.PalmDocument#read PalmDocument.read}
+ * method for reading in its data from the {@code InputStream} object.</p>
  *
- *  @see     PalmDocument
- *  @see     Record
+ * @see  PalmDocument
+ * @see  Record
  */
 
 public final class PalmDB {
 
-
-
-    /**  Number of bytes for the name field in the PDB. */
+    /** Number of bytes for the name field in the PDB. */
     public final static int NAME_LENGTH = 32;
 
-    /**  List of <code>Record</code> objects. */
+    /** List of {@code Record} objects. */
     private Record[] records;
 
-    /**  PDB name in bytes. */
+    /** PDB name in bytes. */
     private byte[] bName = null;
 
-    /**  PDB name in String. */
+    /** PDB name in String. */
     private String sName = null;
 
-    /**  Creator ID. */
+    /** Creator ID. */
     private int creatorID = 0;
 
-    /**  Type ID */
+    /** Type ID */
     private int typeID = 0;
 
     /**
-     *  PDB version. Palm UInt16.
-     *  It is treated as a number here, since there is no unsigned 16 bit
-     *  in Java, int is used instead, but only 2 bytes are written out or
-     *  read in.
+     * PDB version. Palm UInt16.
+     * It is treated as a number here, since there is no unsigned 16 bit in Java,
+     * {@code int} is used instead, but only 2 bytes are written out or read in.
      */
     private int version = 0;
 
     /**
-     *  PDB attribute - flags for the database.
-     *  Palm UInt16. Unsignedness should be irrelevant.
+     * PDB attribute - flags for the database.
+     * Palm UInt16. Unsignedness should be irrelevant.
      */
     private short attribute = 0;
 
-
     /**
-     *  Default constructor.
+     * Default constructor.
      *
-     *  @param  creatorID  The PDB Creator ID.
-     *  @param  typeID     The PDB Type ID.
-     *  @param  version    The PDB header version.
-     *  @param  attribute  The PDB header attribute.
+     * @param  creatorID  The PDB Creator ID.
+     * @param  typeID     The PDB Type ID.
+     * @param  version    The PDB header version.
+     * @param  attribute  The PDB header attribute.
      */
     public PalmDB(int creatorID, int typeID, int version, short attribute) {
-
         records = new Record[0];
         setAttributes(creatorID, typeID, version, attribute);
     }
 
-
     /**
-     *  Constructor to create <code>PalmDB</code> object with
-     *  <code>Record</code> objects.  <code>recs.length</code>
-     * can be zero for an empty PDB.
+     * Constructor to create {@code PalmDB} object with {@code Record} objects.
      *
-     *  @param  name       Suggested PDB name in a <code>String</code>.
-     *  @param  creatorID  The PDB Creator ID.
-     *  @param  typeID     The PDB Type ID.
-     *  @param  version    The PDB header version.
-     *  @param  attribute  The PDB header attribute.
-     *  @param  recs       Array of <code>Record</code> objects.
+     * <p>{@code recs.length} can be zero for an empty PDB.</p>
      *
-     *  @throws  UnsupportedEncodingException  If <code>name</code> is
-     *                                         not properly encoded.
-     *  @throws  NullPointerException          If <code>recs</code> is null.
+     * @param  name       Suggested PDB name in a {@code String}.
+     * @param  creatorID  The PDB Creator ID.
+     * @param  typeID     The PDB Type ID.
+     * @param  version    The PDB header version.
+     * @param  attribute  The PDB header attribute.
+     * @param  recs       Array of {@code Record} objects.
+     *
+     * @throws  UnsupportedEncodingException  If {@code name} is not properly
+     *                                        encoded.
+     * @throws  NullPointerException          If {@code recs} is {@code null}.
      */
     public PalmDB(String name, int creatorID, int typeID, int version,
-        short attribute, Record[] recs)
-        throws UnsupportedEncodingException {
+                  short attribute, Record[] recs)
+            throws UnsupportedEncodingException {
 
         this(name.getBytes(PdbUtil.ENCODING), creatorID, typeID, version,
             attribute, recs);
     }
 
-
     /**
-     *  Constructor to create object with <code>Record</code>
-     *  objects.  <code>recs.length</code> can be zero for an
-     *  empty PDB.
+     * Constructor to create object with {@code Record} objects.
      *
-     *  @param   name      Suggested PDB name in a <code>byte</code>
-     *                     array.
-     *  @param  creatorID  The PDB Creator ID.
-     *  @param  typeID     The PDB Type ID.
-     *  @param  version    The PDB header version.
-     *  @param  attribute  The PDB header attribute.
-     *  @param   recs      Array of <code>Record</code> objects.
+     * <p>{@code recs.length} can be zero for an empty PDB.</p>
      *
-     *  @throws  UnsupportedEncodingException  If <code>name</code> is
-     *                                         not properly encoded.
-     *  @throws  NullPointerException          If recs is null.
+     * @param   name       Suggested PDB name in a {@code byte} array.
+     * @param   creatorID  The PDB Creator ID.
+     * @param   typeID     The PDB Type ID.
+     * @param   version    The PDB header version.
+     * @param   attribute  The PDB header attribute.
+     * @param   recs       Array of {@code Record} objects.
+     *
+     * @throws  UnsupportedEncodingException  If {@code name} is not properly
+     *                                        encoded.
+     * @throws  NullPointerException          If {@code recs} is {@code null}.
      */
     public PalmDB(byte[] name, int creatorID, int typeID, int version,
-        short attribute, Record[] recs) throws UnsupportedEncodingException {
+                  short attribute, Record[] recs)
+            throws UnsupportedEncodingException {
 
         store(name);
 
@@ -162,36 +153,35 @@ public final class PalmDB {
         setAttributes(creatorID, typeID, version, attribute);
     }
 
-
     /**
-     *  Set the attributes for the <code>PalmDB</code> object.
+     * Set the attributes for the {@code PalmDB} object.
      *
-     *  @param  creatorID  The PDB Creator ID.
-     *  @param  typeID     The PDB Type ID.
-     *  @param  version    The PDB header version.
-     *  @param  attribute  The PDB header attribute.
+     * @param  creatorID  The PDB Creator ID.
+     * @param  typeID     The PDB Type ID.
+     * @param  version    The PDB header version.
+     * @param  attribute  The PDB header attribute.
      */
-    private void setAttributes (int creatorID, int typeID, int version, short attribute) {
+    private void setAttributes (int creatorID, int typeID, int version,
+                                short attribute) {
         this.creatorID = creatorID;
         this.typeID = typeID;
         this.version = version;
         this.attribute = attribute;
     }
 
-
     /**
-     *  This private method is mainly used by the constructors above.
-     *  to store bytes into name and also create a <code>String</code>
-     *  representation. and also by the <code>read</code> method.
+     * This private method is mainly used by the constructors above.
      *
-     *  TODO: Note that this method assumes that the <code>byte</code>
-     *  array parameter contains one character per <code>byte</code>,
-     *  else it would truncate improperly.
+     * <p>to store bytes into name and also create a {@code String}
+     * representation, and also by the {@code read} method.</p>
      *
-     *  @param  bytes  PDB name in <code>byte</code> array.
+     * <p>TODO: Note that this method assumes that the {@code byte} array
+     * parameter contains one character per {@code byte}, else it would
+     * truncate improperly.</p>
      *
-     *  @throws  UnsupportedEncodingException  If ENCODING is
-     *           not supported.
+     * @param   bytes  PDB name in {@code byte<} array.
+     *
+     * @throws  UnsupportedEncodingException  If ENCODING is not supported.
      */
     private void store(byte[] bytes) throws UnsupportedEncodingException {
 
@@ -202,11 +192,9 @@ public final class PalmDB {
         // Note that the last byte in bName has to be '\0'.
 
         int lastIndex = NAME_LENGTH - 1;
-
         int len = (bytes.length < lastIndex)? bytes.length: lastIndex;
 
         int i;
-
         for (i = 0; i < len; i++) {
 
             if (bytes[i] == 0) {
@@ -220,130 +208,105 @@ public final class PalmDB {
         sName = new String(bName, 0, i, PdbUtil.ENCODING);
     }
 
-
     /**
-     *  Returns creator ID.
+     * Returns creator ID.
      *
-     *  @return  The creator ID.
+     * @return  The creator ID.
      */
     public int getCreatorID() {
-
         return creatorID;
     }
 
-
     /**
-     *  Returns type ID.
+     * Returns type ID.
      *
-     *  @return  The type ID.
+     * @return  The type ID.
      */
     public int getTypeID() {
-
         return typeID;
     }
 
-
     /**
-     *  Returns attribute flag.
+     * Returns attribute flag.
      *
-     *  @return  The attribute flag.
+     * @return  The attribute flag.
      */
     public short getAttribute() {
-
         return attribute;
     }
 
-
     /**
-     *  Returns version.
+     * Returns version.
      *
-     *  @return  The version.
+     * @return  The version.
      */
     public int getVersion() {
-
         return version;
     }
 
-
     /**
-     *  Return the number of Records contained in this
-     *  PDB <code>PalmDB</code> object.
+     * Return the number of Records contained in this PDB {@code PalmDB} object.
      *
-     *  @return  Number of <code>Record</code> objects.
+     * @return  Number of {@code Record} objects.
      */
     public int getRecordCount() {
-
         return records.length;
     }
 
-
     /**
-     *  Return the specific <code>Record</code> object associated
-     *  with the <code>Record</code> number.
+     * Return the specific {@code Record} object associated with the
+     * {@code Record} number.
      *
-     *  @param  index  <code>Record</code> index number.
+     * @param   index  {@code Record} index number.
      *
-     *  @return  The <code>Record</code> object in the specified index
+     * @return  The {@code Record} object in the specified index
      *
-     *  @throws  ArrayIndexOutOfBoundsException  If index is out of bounds.
+     * @throws  ArrayIndexOutOfBoundsException  If index is out of bounds.
      */
     public Record getRecord(int index) {
-
         return records[index];
     }
 
-
     /**
-     *  Return the list of <code>Record</code> objects.
+     * Return the list of {@code Record} objects.
      *
-     *  @return  The array of <code>Record</code> objects.
+     * @return  The array of {@code Record} objects.
      */
     public Record[] getRecords() {
-
         return records;
     }
 
     /**
-     *  Return the PDB name associated with this object.
+     * Return the PDB name associated with this object.
      *
-     *  @return  The PDB name.
+     * @return  The PDB name.
      */
     public String getPDBNameString() {
-
         return sName;
     }
 
-
     /**
-     *  Return the PDB name associated with this object in
-     *  <code>byte</code> array of exact length of 32 bytes.
+     * Return the PDB name associated with this object in {@code byte} array of
+     * exact length of 32 bytes.
      *
-     *  @return  The PDB name in <code>byte</code> array of
-     *           length 32.
+     * @return  The PDB name in {@code byte} array of length 32.
      */
     public byte[] getPDBNameBytes() {
-
         return bName;
     }
 
-
-
-
-
-
     /**
-     *  Override equals method of <code>Object</code>.
+     * Override equals method of {@code Object}.
      *
-     *  Two <code>PalmDB</code> objects are equal if they contain
-     *  the same information, i.e. PDB name and Records.
+     * <p>Two {@code PalmDB} objects are equal if they contain the same
+     * information, i.e. PDB name and Records.</p>
      *
-     *  This is used primarily for testing purposes only for now.
+     * <p>This is used primarily for testing purposes only for now.</p>
      *
-     *  @param  obj  A <code>PalmDB</code> <code>Object</code> to
-     *               compare.
+     * @param   obj  A {@code PalmDB} {@code Object} to compare.
      *
-     *  @return  true if <code>obj</code> is equal to this, otherwise
-     *           false.
+     * @return  {@code true} if {@code obj} is equal to this, otherwise
+     *          {@code false}.
      */
     @Override
     public boolean equals(Object obj) {
@@ -357,38 +320,26 @@ public final class PalmDB {
             checkLabel: {
 
                 // compare sName
-
                 if (!sName.equals(pdb.sName)) {
-
                     break checkLabel;
                 }
 
                 // compare bName
-
                 if (bName.length != pdb.bName.length) {
-
                     break checkLabel;
                 }
-
                 for (int i = 0; i < bName.length; i++) {
-
                     if (bName[i] != pdb.bName[i]) {
-
                         break checkLabel;
                     }
                 }
 
                 // compare each Record
-
                 if (records.length != pdb.records.length) {
-
                     break checkLabel;
                 }
-
                 for (int i = 0; i < records.length; i++) {
-
                     if (!records[i].equals(pdb.records[i])) {
-
                         break checkLabel;
                     }
                 }
@@ -401,4 +352,3 @@ public final class PalmDB {
         return bool;
     }
 }
-

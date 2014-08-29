@@ -34,36 +34,34 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *  <p>General spreadsheet implementation of <code>DocumentDeserializer</code>
- *  for the {@link
- *  org.openoffice.xmerge.converter.xml.sxc.SxcPluginFactory
- *  SxcPluginFactory}.  Used with SXC <code>Document</code> objects.</p>
+ * General spreadsheet implementation of {@code DocumentDeserializer} for the
+ * {@link org.openoffice.xmerge.converter.xml.sxc.SxcPluginFactory
+ * SxcPluginFactory}.
  *
- *  <p>The <code>deserialize</code> method uses a <code>DocDecoder</code>
- *  to read the device spreadsheet format into a <code>String</code>
- *  object, then it calls <code>buildDocument</code> to create a
- *  <code>SxcDocument</code> object from it.</p>
+ * <p>Used with SXC {@code Document} objects.</p>
  *
+ * <p>The {@code deserialize} method uses a {@code DocDecoder} to read the device
+ * spreadsheet format into a {@code String} object, then it calls
+ * {@code buildDocument} to create a {@code SxcDocument} object from it.</p>
  */
 public abstract class SxcDocumentDeserializer implements OfficeConstants,
     DocumentDeserializer {
 
     /**
-     *  A <code>SpreadsheetDecoder</code> object for decoding from
-     *  device formats.
+     * A {@code SpreadsheetDecoder} object for decoding from device formats.
      */
     private SpreadsheetDecoder decoder = null;
 
-    /**  A w3c <code>Document</code>. */
+    /** A w3c {@code Document}. */
     private org.w3c.dom.Document settings = null;
 
-    /**  A w3c <code>Document</code>. */
+    /** A w3c {@code Document}. */
     private org.w3c.dom.Document doc = null;
 
-    /**  An <code>ConvertData</code> object assigned to this object. */
+    /** A {@code ConvertData} object assigned to this object. */
     private ConvertData cd = null;
 
-    /** A style catalog for the workbook  */
+    /** A {@code StyleCatalog} for the workbook. */
     private StyleCatalog styleCat = null;
 
     private int textStyles = 1;
@@ -71,75 +69,67 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     private int rowStyles = 1;
 
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param  cd  <code>ConvertData</code> consisting of a
-     *              device content object.
+     * @param  cd  {@code ConvertData} consisting of a device content object.
      */
     public SxcDocumentDeserializer(ConvertData cd) {
         this.cd = cd;
     }
 
-
     /**
-     *  This abstract method will be implemented by concrete subclasses
-     *  and will return an application-specific Decoder.
+     * This {@code abstract} method will be implemented by concrete subclasses
+     * and will return an application-specific Decoder.
      *
-     *  @param  workbook  The WorkBook to read.
-     *  @param  password  The WorkBook password.
+     * @param   workbook  The WorkBook to read.
+     * @param   password  The WorkBook password.
      *
-     *  @return  The appropriate <code>SpreadSheetDecoder</code>.
+     * @return  The appropriate {@code SpreadSheetDecoder}.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     public abstract SpreadsheetDecoder createDecoder(String workbook, String[] worksheetNames, String password)
         throws IOException;
 
-
     /**
-     *  <p>This method will return the name of the WorkBook from the
-     *  <code>ConvertData</code>.  Allows for situations where the
-     *  WorkBook name differs from the Device Content name.</p>
+     * This method will return the name of the WorkBook from the
+     * {@code ConvertData}.
      *
-     *  <p>Implemented in the Deserializer as the Decoder's constructor requires
-     *  a name.</p>
+     * <p>Allows for situations where the WorkBook name differs from the Device
+     * Content name.</p>
      *
-     *  @param  cd  The <code>ConvertData</code> containing the Device
-     *              content.
+     * <p>Implemented in the Deserializer as the Decoder's constructor requires
+     * a name.</p>
      *
-     *  @return  The WorkBook name.
+     * @param   cd  The {@code ConvertData} containing the Device content.
+     *
+     * @return  The WorkBook name.
      */
     protected abstract String getWorkbookName(ConvertData cd) throws IOException;
 
-
     /**
-     *  This method will return the name of the WorkSheet from the
-     *  <code>ConvertData</code>.
+     * This method will return the name of the WorkSheet from the
+     * {@code ConvertData}.
      *
-     *  @param  cd  The <code>ConvertData</code> containing the Device
-     *              content.
+     * @param   cd  The {@code ConvertData} containing the Device content.
      *
-     *  @return  The WorkSheet names.
+     * @return  The WorkSheet names.
      */
     protected abstract String[] getWorksheetNames(ConvertData cd) throws IOException;
 
-
     /**
-     *  <p>Method to convert a set of &quot;Device&quot;
-     *  <code>Document</code> objects into a <code>SxcDocument</code>
-     *  object and returns it as a <code>Document</code>.</p>
+     * Method to convert a set of &quot;Device&quot; {@code Document} objects
+     * into a {@code SxcDocument} object and returns it as a {@code Document}.
      *
-     *  <p>This method is not thread safe for performance reasons.
-     *  This method should not be called from within two threads.
-     *  It would be best to call this method only once per object
-     *  instance.</p>
+     * <p>This method is not thread safe for performance reasons. This method
+     * should not be called from within two threads. It would be best to call
+     * this method only once per object instance.</p>
      *
-     *  @return  document  An <code>SxcDocument</code> consisting
-     *                     of the data converted from the input
-     *                     stream.
+     * @return  document  A {@code SxcDocument} consisting of the data converted
+     *                    from the input stream.
      *
-     *  @throws  ConvertException  If any conversion error occurs.
-     *  @throws  IOException       If any I/O error occurs.
+     * @throws  ConvertException  If any conversion error occurs.
+     * @throws  IOException       If any I/O error occurs.
      */
     public Document deserialize() throws ConvertException,
         IOException {
@@ -163,7 +153,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // be the name of the StarCalc file minus the file extension suffix.
 
         // Create a Decoder to decode the DeviceContent to a spreadsheet document
-        // TODO - we aren't using a password in StarCalc, so we can
+        // ToDo - we aren't using a password in StarCalc, so we can
         // use any value for password here.  If StarCalc XML supports
         // passwords in the future, we should try to get the correct
         // password value here.
@@ -182,14 +172,14 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     }
 
     /**
-     * This initializes a font table so we can include some basic font
-     * support for spreadsheets.
-     *
+     * This initializes a font table so we can include some basic font support
+     * for spreadsheets.
      */
     private void initFontTable() {
 
-        String fontTable[]= new String[] {  "Tahoma", "Tahoma", "swiss", "variable",
-                                            "Courier New", "&apos;Courier New&apos;", "modern", "fixed"};
+        String fontTable[]= new String[] { "Tahoma", "Tahoma", "swiss", "variable",
+                                           "Courier New", "&apos;Courier New&apos;",
+                                           "modern", "fixed" };
         //  Traverse to the office:body element.
         //  There should only be one.
         NodeList list = doc.getElementsByTagName(TAG_OFFICE_FONT_DECLS);
@@ -211,10 +201,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     }
 
     /**
-     *  Outer level method used to decode a WorkBook
-     *  into a <code>Document</code>.
+     * Outer level method used to decode a WorkBook into a {@code Document}.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void decode() throws IOException {
 
@@ -259,16 +248,12 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
     }
 
-
-
     /**
-     *  This method process the settings portion
-     *  of the <code>Document</code>.
+     * This method process the settings portion of the {@code Document}.
      *
-     *  @param  root  The root <code>Node</code> of the
-     *                <code>Document</code> we are building.  This
-     *                <code>Node</code> should be a TAG_OFFICE_SETTINGS
-     *                tag.
+     * @param  root  The root {@code Node} of the {@code Document} we are
+     *               building.  This {@code Node} should be a
+     *               {@code TAG_OFFICE_SETTINGS} tag.
      */
     protected void processSettings(Node root) {
 
@@ -286,15 +271,14 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     }
 
     /**
-     *  This method process a Name Definition Table and generates a portion
-     *  of the <code>Document</code>.
+     * This method process a Name Definition Table and generates a portion of
+     * the {@code Document}.
      *
-     *  @param  root  The root <code>Node</code> of the
-     *                <code>Document</code> we are building.  This
-     *                <code>Node</code> should be a TAG_OFFICE_BODY
-     *                tag.
+     * @param   root  The root {@code Node} of the {@code Document} we are
+     *                building.  This {@code Node} should be a
+     *                {@code TAG_OFFICE_BODY} tag.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void processNameDefinition(Node root, Iterator<NameDefinition> eNameDefinitions) throws IOException {
 
@@ -314,16 +298,16 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     }
 
     /**
-     *  This method process a WorkSheet and generates a portion
-     *  of the <code>Document</code>.  A spreadsheet is represented
-     *  as a table Node in StarOffice XML format.
+     * This method process a WorkSheet and generates a portion of the
+     * {@code Document}.
      *
-     *  @param  root  The root <code>Node</code> of the
-     *                <code>Document</code> we are building.  This
-     *                <code>Node</code> should be a TAG_OFFICE_BODY
-     *                tag.
+     * <p>A spreadsheet is represented as a table Node in StarOffice XML format.</p>
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @param   root  The root {@code Node} of the {@code Document} we are
+     *                building.  This {@code Node} should be a
+     *                {@code TAG_OFFICE_BODY} tag.
+     *
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void processTable(Node root) throws IOException {
 
@@ -338,7 +322,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // Set the table name attribute
         tableElement.setAttribute(ATTRIBUTE_TABLE_NAME, sheetName);
 
-        // TODO - style currently hardcoded - get real value
+        // ToDo - style currently hardcoded - get real value
         // Set table style-name attribute
         tableElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, "Default");
 
@@ -347,7 +331,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         Debug.log(Debug.TRACE, "<SheetName>" + sheetName + "</SheetName>");
 
-        // add the various different table-columns
+        // Add the various different table-columns
         processColumns(tableElement);
 
         // Get each cell and add to doc
@@ -357,18 +341,16 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     }
 
     /**
-     *  <p>This method process the cells in a <code>Document</code>
-     *  and generates a portion of the <code>Document</code>.</p>
+     * This method process the cells in a {@code Document} and generates a
+     * portion of the {@code Document}.
      *
-     *  <p>This method assumes that records are sorted by
-     *  row and then column.</p>
+     * <p>This method assumes that records are sorted by row and then column.</p>
      *
-     *  @param  root  The <code>Node</code> of the <code>Document</code>
-     *                we are building that we will append our cell
-     *                <code>Node</code> objects.  This <code>Node</code>
-     *                should be a TAG_TABLE tag.
+     * @param   root  The {@code Node} of the {@code Document} we are building
+     *                that we will append our cell {@code Node} objects.  This
+     *                {@code Node} should be a {@code TAG_TABLE} tag.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void processColumns(Node root) throws IOException {
 
@@ -406,18 +388,16 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
     }
 
     /**
-     *  <p>This method process the cells in a <code>Document</code>
-     *  and generates a portion of the <code>Document</code>.</p>
+     * This method process the cells in a {@code Document} and generates a
+     * portion of the {@code Document}.
      *
-     *  <p>This method assumes that records are sorted by
-     *  row and then column.</p>
+     * <p>This method assumes that records are sorted by row and then column.</p>
      *
-     *  @param  root  The <code>Node</code> of the <code>Document</code>
-     *                we are building that we will append our cell
-     *                <code>Node</code> objects.  This <code>Node</code>
-     *                should be a TAG_TABLE tag.
+     * @param   root  The {@code Node} of the {@code Document} we are building
+     *                that we will append our cell {@code Node} objects.  This
+     *                {@code Node} should be a {@code TAG_TABLE} tag.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void processCells(Node root) throws IOException {
 
@@ -437,7 +417,6 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         // The number of columns in the spreadsheet
         int lastColumn = decoder.getNumberOfColumns();
-
 
         Node autoStylesNode = null;
 
@@ -476,7 +455,6 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
                 // Create an element node for the new row
                 rowElement = doc.createElement(TAG_TABLE_ROW);
-
 
                 for(Iterator<ColumnRowInfo> e = decoder.getColumnRowInfos();e.hasNext();) {
                     ColumnRowInfo cri = e.next();
@@ -552,7 +530,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             if (autoStylesNode == null) {
                 autoStylesNode = doc.createElement(TAG_OFFICE_AUTOMATIC_STYLES);
                 doc.insertBefore(autoStylesNode, bodyNode);
-               }
+            }
 
             CellStyle tStyle = new
             CellStyle(  "Default",SxcConstants.TABLE_CELL_STYLE_FAMILY,
@@ -599,44 +577,40 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
         // Now write the style catalog to the document
         if(autoStylesNode!=null) {
-            Debug.log(Debug.TRACE,"Well the autostyle node was found!!!");
+            Debug.log(Debug.TRACE, "Well the autostyle node was found!!!");
             NodeList nl = styleCat.writeNode(doc, "dummy").getChildNodes();
             int nlLen = nl.getLength();     // nl.item reduces the length
-        for (int i = 0; i < nlLen; i++) {
-            autoStylesNode.appendChild(nl.item(0));
-        }
+            for (int i = 0; i < nlLen; i++) {
+                autoStylesNode.appendChild(nl.item(0));
+            }
         }
 
         if (row != 0) {
-
             // The sheet does have rows, so write out a /tr
             Debug.log(Debug.TRACE, "</tr>");
         }
     }
 
-
     /**
-     *  This method will add empty rows to the <code>Document</code>.
-     *  It is called when the conversion process encounters
-     *  a row (or rows) that do not contain any data in its cells.
+     * This method will add empty rows to the {@code Document}.
      *
-     *  @param  numEmptyRows   The number of empty rows that we
-     *                         need to add to the <code>Document</code>.
-     *  @param  root           The <code>Node</code> of the
-     *                         <code>Document</code> we are building
-     *                         that we will append our empty row
-     *                         <code>Node</code> objects.  This
-     *                         <code>Node</code> should be a TAG_TABLE
-     *                         tag.
-     *  @param  numEmptyCells  The number of empty cells in the
-     *                         empty row.
+     * <p>It is called when the conversion process encounters a row (or rows)
+     * that do not contain any data in its cells.</p>
+     *
+     * @param  numEmptyRows   The number of empty rows that we need to add to
+     *                        the {@code Document}.
+     * @param  root           The {@code Node} of the {@code Document} we are
+     *                        building that we will append our empty row
+     *                        {@code Node} objects.  This {@code Node} should
+     *                        be a {@code TAG_TABLE} tag.
+     * @param  numEmptyCells  The number of empty cells in the empty row.
      */
     protected void addEmptyRows(int numEmptyRows, Node root, int numEmptyCells) {
 
         // Create an element node for the row
         Element rowElement = doc.createElement(TAG_TABLE_ROW);
 
-        // TODO - style currently hardcoded - get real value
+        // ToDo - style currently hardcoded - get real value
         // Set row style-name attribute
         rowElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, "Default");
 
@@ -657,29 +631,25 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
 
     }
 
-
     /**
-     *  This method will add empty cells to the <code>Document</code>.
-     *  It is called when the conversion process encounters a row
-     *  that contains some cells without data.
+     * This method will add empty cells to the {@code Document}.
      *
-     *  @param   numColsSkipped  The number of empty cells
-     *                           that we need to add to the
-     *                           current row.
-     *  @param   row             The <code>Node</code> of the
-     *                           <code>Document</code> we
-     *                           are building that we will
-     *                           append our empty cell
-     *                           <code>Node</code> objects.
-     *                           This <code>Node</code> should
-     *                           be a TAG_TABLE_ROW tag.
+     * <p>It is called when the conversion process encounters a row that
+     * contains some cells without data.</p>
+     *
+     * @param   numColsSkipped  The number of empty cells that we need to add to
+     *                          the current row.
+     * @param   row             The {@code Node} of the {@code Document} we are
+     *                          building that we will append our empty cell
+     *                          {@code Node} objects. This {@code Node} should
+     *                          be a {@code TAG_TABLE_ROW} tag.
      */
     protected void addEmptyCells(int numColsSkipped, Node row) {
 
         // Create an empty cellElement
         Element cellElement = doc.createElement(TAG_TABLE_CELL);
 
-        // TODO - style currently hardcoded - get real value
+        // ToDo - style currently hardcoded - get real value
         // Set cell style-name attribute
         cellElement.setAttribute(ATTRIBUTE_TABLE_STYLE_NAME, "Default");
 
@@ -701,17 +671,15 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         }
     }
 
-
     /**
-     *  This method process the data in a cell and sets
-     *  the appropriate attributes on the cell <code>Element</code>.
+     * This method process the data in a cell and sets the appropriate attributes
+     * on the cell {@code Element}.
      *
-     *  @param   cellElement  A TAG_TABLE_CELL <code>Element</code>
-     *                        that we will be adding attributes to
-     *                        based on the type of data in the cell.
-     *  @param   type         The type of data contained in the cell.
-     *  @param   contents     The contents of the data contained in
-     *                        the cell.
+     * @param   cellElement  A {@code TAG_TABLE_CELL} {@code Element} that we
+     *                       will be adding attributes to based on the type of
+     *                       data in the cell.
+     * @param   type         The type of data contained in the cell.
+     * @param   contents     The contents of the data contained in the cell.
      */
     protected void processCellData(Element cellElement, String type,
                                  String contents) {
@@ -750,9 +718,9 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
                                          contents.toLowerCase());
 
             } else if (type.equals(CELLTYPE_CURRENCY)) {
-                // TODO - StarOffice XML format requires a correct style to
+                // ToDo - StarOffice XML format requires a correct style to
                 // display currencies correctly.  Need to implement styles.
-                // TODO - USD is for US currencies.  Need to pick up
+                // ToDo - USD is for US currencies.  Need to pick up
                 // the correct currency location from the source file.
                 cellElement.setAttribute(ATTRIBUTE_TABLE_CURRENCY, "USD");
 
@@ -770,6 +738,4 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
             }
         }
     }
-
 }
-

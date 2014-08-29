@@ -36,90 +36,84 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- *  <p>General spreadsheet implementation of <code>DocumentSerializer</code>
- *  for the {@link
- *  org.openoffice.xmerge.converter.xml.sxc.SxcPluginFactory
- *  SxcPluginFactory}.  Used with SXC <code>Document</code> objects.</p>
+ * General spreadsheet implementation of {@code DocumentSerializer} for the
+ * {@link org.openoffice.xmerge.converter.xml.sxc.SxcPluginFactory
+ * SxcPluginFactory}.
  *
- *  <p>The <code>serialize</code> method traverses the DOM
- *  <code>Document</code> from the given <code>Document</code> object.
- *  It uses a <code>DocEncoder</code> object for the actual conversion
- *  of contents to the device spreadsheet format.</p>
+ * <p>Used with SXC {@code Document} objects.</p>
  *
+ * <p>The {@code serialize} method traverses the DOM {@code Document} from the
+ * given {@code Document} object. It uses a {@code DocEncoder} object for the
+ * actual conversion of contents to the device spreadsheet format.</p>
  */
 public abstract class SxcDocumentSerializer implements OfficeConstants,
     DocumentSerializer {
 
-    /**  <code>Format</code> object describing the cell. */
+    /** {@code Format} object describing the cell. */
     private Format fmt = null;
 
-    /**  The row number. */
+    /** The row number. */
     private int rowID = 1;
 
-    /**  The column number. */
+    /** The column number. */
     private int colID = 1;
 
-    /**  The number of times the current row is repeated. */
+    /** The number of times the current row is repeated. */
     private int rowsRepeated = 1;
 
-    /**  The number of times the current column is repeated. */
+    /** The number of times the current column is repeated. */
     private int colsRepeated = 1;
 
-    /**  The number of times the current column is repeated. */
+    /** The number of times the current column is repeated. */
     private StyleCatalog styleCat = null;
+
     /**
-     *  An array of column widths of the current worksheet.  Width is
-     *  measured in number of characters.
+     * An array of column widths of the current worksheet.
+     * Width is measured in number of characters.
      */
     private ArrayList<ColumnRowInfo> ColumnRowList;
 
     /**
-     *  A <code>SpreadsheetEncoder</code> object for encoding to
-     *  appropriate format.
+     * A {@code SpreadsheetEncoder} object for encoding to appropriate format.
      */
     protected SpreadsheetEncoder encoder = null;
 
-    /**  <code>SxcDocument</code> object that this converter processes. */
+    /** {@code SxcDocument} object that this converter processes. */
     protected SxcDocument sxcDoc = null;
 
-
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param  document  Input <code>SxcDocument</code>
-     *                    <code>Document</code>.
+     * @param  document  Input {@code SxcDocument} {@code Document}.
      */
     public SxcDocumentSerializer(Document document) {
         fmt = new Format();
         sxcDoc = (SxcDocument) document;
     }
 
-
     /**
-     *  <p>Method to convert a DOM <code>Document</code> into
-     *  &quot;Device&quot; <code>Document</code> objects.</p>
+     * Method to convert a DOM {@code Document} into &quot;Device&quot;
+     * {@code Document} objects.
      *
-     *  <p>This method is not thread safe for performance reasons.
-     *  This method should not be called from within two threads.
-     *  It would be best to call this method only once per object
-     *  instance.</p>
+     * <p>This method is not thread safe for performance reasons. This method
+     * should not be called from within two threads. It would be best to call
+     * this method only once per object instance.</p>
      *
-     *  @return  <code>ConvertData</code> containing &quot;Device&quot;
-     *           <code>Document</code> objects.
+     * @return  {@code ConvertData} containing &quot;Device&quot;
+     *          {@code Document}objects.
      *
-     *  @throws  ConvertException  If any conversion error occurs.
-     *  @throws  IOException       If any I/O error occurs.
+     * @throws  ConvertException  If any conversion error occurs.
+     * @throws  IOException       If any I/O error occurs.
      */
     public abstract ConvertData serialize() throws ConvertException,
         IOException;
 
-
     /**
-     *  This method traverses <i>office:settings</i> <code>Element</code>.
+     * This method traverses <i>office:settings</i> {@code Element}.
      *
-     *  @param  node  <i>office:settings</i> <code>Node</code>.
+     * @param   node  <i>office:settings</i> {@code Node}.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     public void traverseSettings(Node node) throws IOException {
         if (node.hasChildNodes()) {
@@ -154,12 +148,12 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         }
     }
 
-    /*
-     * Handles the loading of defined styles from the style.xml file as well
-     * as automatic styles from the content.xml file.
+    /**
+     * Handles the loading of defined styles from the style.xml file as well as
+     * automatic styles from the content.xml file.
      *
-     * Any change to a defined style, such as a short bold section, falls into
-     * the latter category.
+     * <p>Any change to a defined style, such as a short bold section, falls
+     * into the latter category.
      */
     protected void loadStyles(SxcDocument sxcDoc) {
 
@@ -188,11 +182,11 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
     }
 
     /**
-     *  This method traverses <i>office:body</i> <code>Element</code>.
+     * This method traverses <i>office:body</i> {@code Element}.
      *
-     *  @param  node  <i>office:body</i> <code>Node</code>.
+     * @param   node  <i>office:body</i> {@code Node}.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void traverseBody(Node node) throws IOException {
 
@@ -242,14 +236,12 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         Debug.log(Debug.TRACE, "</DEBUGLOG>");
     }
 
-
     /**
-     *  This method traverses the <i>table:table</i> element
-     *  <code>Node</code>.
+     * This method traverses the <i>table:table</i> element {@code Node}.
      *
-     *  @param  node  A <i>table:table</i> <code>Node</code>.
+     * @param   node  A <i>table:table</i> {@code Node}.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void traverseNamedExpressions(Node node) throws IOException {
 
@@ -274,12 +266,11 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
     }
 
     /**
-     *  This method traverses the <i>table:table</i> element
-     *  <code>Node</code>.
+     * This method traverses the <i>table:table</i> element {@code Node}.
      *
-     *  @param  node  A <i>table:table</i> <code>Node</code>.
+     * @param   node  A <i>table:table</i> {@code Node}.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void traverseTable(Node node) throws IOException {
 
@@ -288,7 +279,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         ColumnRowList = new ArrayList<ColumnRowInfo>();
 
         // Get table attributes
-        // TODO - extract style from attribute
+        // ToDo - extract style from attribute
 
         NamedNodeMap att = node.getAttributes();
 
@@ -339,12 +330,11 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
     }
 
     /**
-     *  This method traverses the <i>table:table-row</i> element
-     *  <code>Node</code>.
+     * This method traverses the <i>table:table-row</i> element {@code Node}.
      *
-     *  @param  node  A <i>table:table-row</i> <code>Node</code>.
+     * @param   node  A <i>table:table-row</i> {@code Node}.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void traverseTableRow(Node node) throws IOException {
 
@@ -454,12 +444,12 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         Debug.log(Debug.TRACE, "</TR>");
     }
 
-
     /**
-     *  This method traverses the <i>table:table-column</i>
-     *  <code>Node</code>.  Not yet implemented.
+     * This method traverses the <i>table:table-column</i> {@code Node}.
      *
-     *  @param  node  A <i>table:table-column</i> <code>Node</code>.
+     * <p>Not yet implemented.</p>
+     *
+     *  @param   node  A <i>table:table-column</i> {@code Node}.
      *
      *  @throws  IOException  If any I/O error occurs.
      */
@@ -527,12 +517,11 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
     }
 
     /**
-     *  This method traverses a <i>table:table-cell</i> element
-     *  <code>Node</code>.
+     * This method traverses a <i>table:table-cell</i> element {@code Node}.
      *
-     *  @param  node  a <i>table:table-cell</i> <code>Node</code>.
+     * @param   node  a <i>table:table-cell</i> {@code Node}.
      *
-     *  @throws  IOException  if any I/O error occurs.
+     * @throws  IOException  if any I/O error occurs.
      */
     protected void traverseCell(Node node) throws IOException {
 
@@ -541,15 +530,11 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         int debug_i=0;
         Node debug_attrib = null;
         fmt.clearFormatting();
-        if (cellAtt == null || cellAtt.item(0) == null)
-        {
+        if (cellAtt == null || cellAtt.item(0) == null) {
            Debug.log(Debug.INFO, "No Cell Attributes\n");
            // return;
-        }
-        else
-        {
-           while ((debug_attrib = cellAtt.item(debug_i++)) != null)
-           {
+        } else {
+           while ((debug_attrib = cellAtt.item(debug_i++)) != null) {
               Debug.log(Debug.INFO, "Cell Attribute " + debug_i +
                  ": " + debug_attrib.getNodeName() + " : " +
                  debug_attrib.getNodeValue() + "\n");
@@ -749,13 +734,12 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
     }
 
-
     /**
-     *  This method traverses the <i>text:p</i> element <code>Node</code>.
+     * This method traverses the <i>text:p</i> element {@code Node}.
      *
-     *  @param  node  A <i>text:p</i> <code>Node</code>.
+     * @param   node  A <i>text:p</i> {@code Node}.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void traverseParagraph(Node node) throws IOException {
 
@@ -763,14 +747,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         int debug_i=0;
         Node debug_attrib = null;
-        if (cellAtt == null || cellAtt.item(0) == null)
-        {
+        if (cellAtt == null || cellAtt.item(0) == null) {
            Debug.log(Debug.INFO, "No Paragraph Attributes\n");
-        }
-        else
-        {
-           while ((debug_attrib = cellAtt.item(debug_i++)) != null)
-           {
+        } else {
+           while ((debug_attrib = cellAtt.item(debug_i++)) != null) {
               Debug.log(Debug.INFO, "Paragraph Attribute " + debug_i +
                  ": " + debug_attrib.getNodeName() + " : " +
                  debug_attrib.getNodeValue() + "\n");
@@ -821,17 +801,17 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         }
     }
 
-
     /**
-     *  This method will take the input cell value and add
-     *  it to the spreadsheet <code>Document</code> we are currently
-     *  encoding.  This method correctly handles cells that are
-     *  repeated in either the row, cell, or both directions.
+     * This method will take the input cell value and add it to the spreadsheet
+     * {@code Document} we are currently encoding.
      *
-     *  @param  cellValue  The contents of the cell we want to add
-     *                     to the spreadsheet <code>Document</code>.
+     * <p>This method correctly handles cells that are repeated in either the
+     * row, cell, or both directions.</p>
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @param   cellValue  The contents of the cell we want to add to the
+     *                     spreadsheet {@code Document}.
+     *
+     * @throws  IOException  If any I/O error occurs.
      */
     protected void addCell(String cellValue) throws IOException {
 
@@ -852,7 +832,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
                 Debug.log(Debug.TRACE, "<TD>");
 
-
                 // Add the cell data to the encoded spreadsheet document
                 encoder.addCell(row, col, fmt, cellValue);
 
@@ -868,23 +847,21 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
     }
 
-
-
     /**
-     *  This method takes a <i>table:table-cell</i> <code>Node</code>
-     *  and traverses down to the <i>text:p</i> tag.  The value is
-     *  extracted from the <i>text:p</i> tag and the number of decimal
-     *  places is calculated.
+     * This method takes a <i>table:table-cell</i> {@code Node} and traverses
+     * down to the <i>text:p</i> tag.
      *
-     *  @param  node  A <i>table:table-cell</i> <code>Node</code>.
+     * <p>The value is extracted from the <i>text:p</i> tag and the number of
+     * decimal places is calculated.</p>
      *
-     *  @return  The number of decimal places in the display
-     *           string of the data in the input <code>Node</code>.
+     * @param   node  A <i>table:table-cell</i> {@code Node}.
+     *
+     * @return  The number of decimal places in the display string of the data
+     *          in the input {@code Node}.
      */
     protected int getDecimalPlaces(Node node) {
 
         int decimals = 0;
-
         Element element = null;
 
         // cast org.w3c.dom.Node to org.w3c.dom.Element
@@ -902,21 +879,16 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         }
 
         Node paragraph = list.item(0);
-
         if (paragraph.hasChildNodes()) {
 
             NodeList nodeList = paragraph.getChildNodes();
-
             int len = nodeList.getLength();
-
             for (int j = 0; j < len; j++) {
 
                 Node child = nodeList.item(j);
-
                 if (child.getNodeType() == Node.TEXT_NODE) {
 
                     String s = child.getNodeValue();
-
                     int k = s.lastIndexOf(".");
                     if (k > 0) {
                         s = s.substring(k+1);
@@ -928,6 +900,4 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         return decimals;
     }
-
 }
-

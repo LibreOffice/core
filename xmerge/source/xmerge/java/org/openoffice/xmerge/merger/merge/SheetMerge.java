@@ -25,43 +25,41 @@ import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.merger.NodeMergeAlgorithm;
 
 /**
- *  This class extends the <code>DocumentMerge</code> class.
- *  This class will merge two spreadsheet documents.
- *  The main difference between this implementation and
- *  <code>DocumentMerge</code>
- *  is that this merge will try to maintain unsupported features by
- *  examining the cell <code>node</code> objects one by one when it
- *  removes a node from the original <code>Iterator</code>.
+ * This class extends the {@code DocumentMerge} class.
+ *
+ * <p>This class will merge two spreadsheet documents.</p>
+ *
+ * <p>The main difference between this implementation and {@code DocumentMerge}
+ * is that this merge will try to maintain unsupported features by examining the
+ * cell {@code node} objects one by one when it removes a node from the original
+ * {@code Iterator}.</p>
  */
 public final class SheetMerge extends DocumentMerge {
 
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param  cc     The <code>ConverterCapabilities</code>.
-     *  @param  merge  The <code>NodeMergeAlgorithm</code>.
+     * @param  cc     The {@code ConverterCapabilities}.
+     * @param  merge  The {@code NodeMergeAlgorithm}.
      */
     public SheetMerge(ConverterCapabilities cc, NodeMergeAlgorithm merge) {
         super(cc, merge);
     }
 
-
     /**
-     *  Remove specified <code>Node</code>.
+     * Remove specified {@code Node}.
      *
-     *  @param  node  <code>Node</code> to remove.
+     * @param  node  {@code Node} to remove.
      */
     @Override
     protected void removeNode(Node node) {
-
         clearRow(node);
     }
 
-
     /**
-     *  Clear the row corresponding to the <code>Node</code>
+     * Clear the row corresponding to the {@code Node}.
      *
-     *  @param  node  <code>Node</code> containing the row to clear.
+     * @param  node  {@code Node} containing the row to clear.
      */
     private void clearRow(Node node) {
         NodeList children = node.getChildNodes();
@@ -76,4 +74,3 @@ public final class SheetMerge extends DocumentMerge {
         }
     }
 }
-

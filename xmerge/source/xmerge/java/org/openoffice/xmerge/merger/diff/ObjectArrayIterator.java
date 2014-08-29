@@ -21,25 +21,22 @@ package org.openoffice.xmerge.merger.diff;
 import org.openoffice.xmerge.merger.Iterator;
 
 /**
- *  <p>This is an implementation of the <code>Iterator</code> interface.
- *  It is based upon a simple <code>Object</code> array.</p>
+ * This is an implementation of the {@code Iterator} interface.
+ *
+ * <p>It is based upon a simple {@code Object} array.</p>
  *
  * <p>Note: this class is not thread safe for performance reasons.</p>
  */
 public final class ObjectArrayIterator implements Iterator {
 
-
-    /**
-     *  The <code>Object</code> array.
-     */
+    /** The {@code Object} array. */
     private Object [] objArray;
     private int currentPosition;
 
-
     /**
-     *  Standard constructor.
+     * Standard constructor.
      *
-     *  @param  objArray  The <code>Object</code> array.
+     * @param  objArray  The {@code Object} array.
      */
     public ObjectArrayIterator(Object [] objArray) {
         if (objArray != null) {
@@ -51,7 +48,6 @@ public final class ObjectArrayIterator implements Iterator {
         }
     }
 
-
     public Object next() {
         if (currentPosition < objArray.length - 1) {
             currentPosition++;
@@ -59,9 +55,7 @@ public final class ObjectArrayIterator implements Iterator {
         } else {
             return null;
         }
-
     }
-
 
     public Object previous() {
         if (currentPosition > 0) {
@@ -72,12 +66,10 @@ public final class ObjectArrayIterator implements Iterator {
         }
     }
 
-
     public Object start() {
         currentPosition = 0;
         return currentElement();
     }
-
 
     public Object end() {
         if (objArray.length > 0) {
@@ -85,7 +77,6 @@ public final class ObjectArrayIterator implements Iterator {
         }
         return currentElement();
     }
-
 
     public Object currentElement() {
         if (objArray.length > 0) {
@@ -95,21 +86,19 @@ public final class ObjectArrayIterator implements Iterator {
         }
     }
 
-
     /**
-     *  Replace current <code>Object</code>.
+     * Replace current {@code Object}.
      *
-     *  @param  object  <code>Object</code> to replace.
+     * @param  object  {@code Object} to replace.
      */
     public void replace(Object object) {
         objArray[currentPosition] = object;
     }
 
-
     /**
-     *  Insert <code>Object</code> after current <code>Object</code>.
+     * Insert {@code Object} after current {@code Object}.
      *
-     *  @param  object  <code>Object</code> to insert.
+     * @param  object  {@code Object} to insert.
      */
     public void insert(Object object) {
         Object [] objArray2 = new Object[objArray.length+1];
@@ -130,9 +119,9 @@ public final class ObjectArrayIterator implements Iterator {
     }
 
     /**
-     *  Append <code>Object</code> after current <code>Object</code>.
+     * Append {@code Object} after current {@code Object}.
      *
-     *  @param  object  <code>Object</code> to append.
+     * @param  object  {@code Object} to append.
      */
     public void append(Object object) {
         Object [] objArray2 = new Object[objArray.length + 1];
@@ -154,7 +143,7 @@ public final class ObjectArrayIterator implements Iterator {
     }
 
     /**
-     *  Remove current <code>Object</code>.
+     * Remove current {@code Object}.
      */
     public void remove() {
         Object [] objArray2 = new Object[objArray.length - 1];
@@ -188,4 +177,3 @@ public final class ObjectArrayIterator implements Iterator {
         // do nothing
     }
 }
-

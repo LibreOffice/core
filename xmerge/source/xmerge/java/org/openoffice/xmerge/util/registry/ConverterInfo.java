@@ -30,64 +30,59 @@ import org.openoffice.xmerge.DocumentSerializerFactory;
 import org.openoffice.xmerge.PluginFactory;
 
 /**
- *  Class for storing the information about a converter plugin.
+ * Class for storing the information about a converter plug-in.
  */
 public class ConverterInfo {
 
-    /**
-     *  Keep track of the valid Office mime types
-     */
+    /** Keep track of the valid Office mime types. */
     private static final String[] validOfficeTypes = new String[] {
         // This needs to be updated to reflect all valid office types.
         "staroffice/sxw",
         "staroffice/sxc"
     };
 
-
-    private String           piJarName;
-    private String           piOfficeMime;
-    private ArrayList<String>        piDeviceMime;
-    private String           piDisplayName;
-    private String           piDescription;
-    private String           piVersion;
-    private String           piVendor;
-    private String           piClassImpl;
-    private String           piXsltSerial;
-    private String           piXsltDeserial;
-    private boolean          piCanSerialize      = false;
-    private boolean          piCanDeserialize    = false;
-    private boolean          piCanMerge          = false;
-    private ClassLoader      piClassLoader       = null;
-    private PluginFactory    piPluginFactory;
+    private String             piJarName;
+    private String             piOfficeMime;
+    private ArrayList<String>  piDeviceMime;
+    private String             piDisplayName;
+    private String             piDescription;
+    private String             piVersion;
+    private String             piVendor;
+    private String             piClassImpl;
+    private String             piXsltSerial;
+    private String             piXsltDeserial;
+    private boolean            piCanSerialize    = false;
+    private boolean            piCanDeserialize  = false;
+    private boolean            piCanMerge        = false;
+    private ClassLoader        piClassLoader     = null;
+    private PluginFactory      piPluginFactory;
 
 
     /**
-     *  The constructor builds a ConverterInfo structure.
+     * The constructor builds a ConverterInfo structure.
      *
-     *  @param  jarName      The URL of the jarfile.
-     *  @param  officeMime   The office mime-type.
-     *  @param  deviceMime   The device mime-type.
-     *  @param  displayName  The display name.
-     *  @param  description  The description.
-     *  @param  version      The version.
-     *  @param  vendor       The vendor name.
-     *  @param  impl         The implementation class name of
-     *                       PluginFactory.
-     *  @param  xsltSerial   The url of the serializer xsl stylesheet
-     *  @param  xsltDeserial The url of the deserializer xsl stylesheet
+     * @param   jarName      The URL of the jarfile.
+     * @param   officeMime   The office mime-type.
+     * @param   deviceMime   The device mime-type.
+     * @param   displayName  The display name.
+     * @param   description  The description.
+     * @param   version      The version.
+     * @param   vendor       The vendor name.
+     * @param   impl         The implementation class name of
+     *                       {@code PluginFactory}.
+     * @param   xsltSerial   The URL of the serializer XSL stylesheet
+     * @param   xsltDeserial The URL of the deserializer XSL stylesheet
      *
-     *  @throws RegistryException   If <code>ci</code> cannot
-     *                              be loaded.
+     * @throws  RegistryException  If {@code ci} cannot be loaded.
      */
     public ConverterInfo(String jarName, String officeMime,
-                         ArrayList<String> deviceMime, String displayName, String description,
-    String version, String vendor, String impl,String xsltSerial,
-    String xsltDeserial)
-        throws RegistryException {
+                         ArrayList<String> deviceMime, String displayName,
+                         String description, String version, String vendor,
+                         String impl,String xsltSerial, String xsltDeserial)
+            throws RegistryException {
 
         if (!isValidOfficeType(officeMime.trim())) {
-            RegistryException re = new RegistryException(
-                "Invalid office type");
+            RegistryException re = new RegistryException( "Invalid office type");
             throw re;
         }
 
@@ -98,8 +93,8 @@ public class ConverterInfo {
         piDescription = description.trim();
         piVersion     = version.trim();
         piVendor      = vendor.trim();
-    piXsltSerial  = xsltSerial.trim();
-    piXsltDeserial= xsltDeserial.trim();
+        piXsltSerial  = xsltSerial.trim();
+        piXsltDeserial= xsltDeserial.trim();
         piClassImpl   = impl.trim();
         piClassLoader = this.getClass().getClassLoader();
 
@@ -139,24 +134,21 @@ public class ConverterInfo {
         }
     }
 
-     /**
-     *  The constructor builds a ConverterInfo structure.
+    /**
+     * The constructor builds a ConverterInfo structure.
      *
-     *  @param  jarName      The URL of the jarfile.
-     *  @param  officeMime   The office mime-type.
-     *  @param  deviceMime   The device mime-type.
-     *  @param  displayName  The display name.
-     *  @param  description  The description.
-     *  @param  version      The version.
-     *  @param  vendor       The vendor name.
-     *  @param  impl         The implementation class name of
-     *                       PluginFactory.
+     * @param   jarName      The URL of the jarfile.
+     * @param   officeMime   The office mime-type.
+     * @param   deviceMime   The device mime-type.
+     * @param   displayName  The display name.
+     * @param   description  The description.
+     * @param   version      The version.
+     * @param   vendor       The vendor name.
+     * @param   impl         The implementation class name of
+     *                       {@code PluginFactory}.
      *
-     *  @throws RegistryException   If <code>ci</code> cannot
-     *                              be loaded.
+     * @throws  RegistryException  If {@code ci} cannot be loaded.
      */
-
-
     public ConverterInfo(String jarName, String officeMime,
         ArrayList<String> deviceMime, String displayName, String description,
         String version, String vendor, String impl)
@@ -214,166 +206,157 @@ public class ConverterInfo {
         }
     }
 
-
-
-
     /**
-     *  Returns an instance of the DocumentDeserializerFactory interface.
+     * Returns an instance of the {@code DocumentDeserializerFactory} interface.
      *
-     *  @return  instance of the DocumentDeserializer for this ConverterInfo.
+     * @return  instance of the {@code DocumentDeserializer} for this
+     *          {@code ConverterInfo}.
      */
     public DocumentSerializerFactory getDocSerializerFactory() {
         return (DocumentSerializerFactory)piPluginFactory;
     }
 
-
     /**
-     *  Returns an instance of the DocumentSerializerFactory interface.
+     * Returns an instance of the {@code DocumentSerializerFactory} interface.
      *
-     *  @return  instance of the DocumentSerializer for this ConverterInfo.
+     * @return  instance of the {@code DocumentSerializer} for this
+     *          {@code ConverterInfo}.
      */
     public DocumentDeserializerFactory getDocDeserializerFactory() {
         return (DocumentDeserializerFactory)piPluginFactory;
     }
 
-
     /**
-     *  Returns an instance of the DocumentMergerFactory interface.
+     * Returns an instance of the DocumentMergerFactory interface.
      *
-     *  @return  instance of the DocumentMergerFactory for this ConverterInfo.
+     * @return  instance of the {@code DocumentMergerFactory} for this
+     *          {@code ConverterInfo}.
      */
     public DocumentMergerFactory getDocMergerFactory() {
         return (DocumentMergerFactory)piPluginFactory;
     }
 
-
     /**
-     *  Returns the jar file name.
+     * Returns the jar file name.
      *
-     *  @return  The jar file name, null if none exists.
+     * @return  The jar file name, {@code null} if none exists.
      */
     public String getJarName() {
         return piJarName;
     }
 
-
     /**
-     *  Returns the office mime-type.
+     * Returns the office mime-type.
      *
-     *  @return  The office mime-type, null if none exists.
+     * @return  The office mime-type, {@code null} if none exists.
      */
     public String getOfficeMime() {
         return piOfficeMime;
     }
 
-
     /**
-     *  Returns an <code>Enumeration</code> of <code>String</code>
-     *  objects indicating the device mime-type.
+     * Returns an {@code Enumeration} of {@code String} objects indicating the
+     * device mime-type.
      *
-     *  @return  An <code>Enumeration</code> of <code>String</code>
-     *           objects indicating the device mime-type.
+     * @return  An {@code Enumeration} of {@code String} objects indicating the
+     *          device mime-type.
      */
     public Iterator<String> getDeviceMime() {
         return(piDeviceMime.iterator());
     }
 
-
     /**
-     *  Returns the display name.
+     * Returns the display name.
      *
-     *  @return  The display name, null if none exists.
+     * @return  The display name, {@code null} if none exists.
      */
     public String getDisplayName() {
         return piDisplayName;
     }
 
-
     /**
-     *  Returns the description.
+     * Returns the description.
      *
-     *  @return  The description, null if none exists.
+     * @return  The description, {@code null} if none exists.
      */
     public String getDescription() {
         return piDescription;
     }
 
-
     /**
-     *  Returns the version.
+     * Returns the version.
      *
-     *  @return  The version, null if none exists.
+     * @return  The version, {@code null} if none exists.
      */
     public String getVersion() {
         return piVersion;
     }
 
-
     /**
-     *  Returns the vendor name.
+     * Returns the vendor name.
      *
-     *  @return  The vendor name, null if none exists.
+     * @return  The vendor name, {@code null} if none exists.
      */
     public String getVendor() {
         return piVendor;
     }
 
-
     /**
-     *  Returns the implementation class name of PluginFactory.
+     * Returns the implementation class name of PluginFactory.
      *
-     *  @return  The implementation class name of PluginFactory,
-     *           null if none exists.
+     * @return  The implementation class name of {@code PluginFactory},
+     *          {@code null} if none exists.
      */
     public String getClassImpl() {
         return piClassImpl;
     }
 
-
     /**
-     *  Returns the PluginFactory instance for this plug-in.
+     * Returns the {@code PluginFactory} instance for this plug-in.
      *
-     *  @return  The PluginFactory instance for this plug-in.
+     * @return  The {@code PluginFactory} instance for this plug-in.
      */
     public PluginFactory getPluginFactory() {
         return piPluginFactory;
     }
 
-
     /**
-     *  Returns true if this plug-in has a serializier, false otherwise.
+     * Returns {@code true} if this plug-in has a serializer, {@code false}
+     * otherwise.
      *
-     *  @return  true if this plug-in has a serializier, false otherwise.
+     * @return  {@code true} if this plug-in has a serializer, {@code false}
+     *          otherwise.
      */
     public boolean canSerialize() {
         return piCanSerialize;
     }
 
-
     /**
-     *  Returns true if this plug-in has a deserializier, false otherwise.
+     * Returns {@code true} if this plug-in has a deserializer, {@code false}
+     * otherwise.
      *
-     *  @return  true if this plug-in has a deserializier, false otherwise.
+     * @return  {@code true} if this plug-in has a deserializer, {@code false}
+     *          otherwise.
      */
     public boolean canDeserialize() {
         return piCanDeserialize;
     }
 
-
     /**
-     *  Returns true if this plug-in has a merger, false otherwise.
+     * Returns {@code true} if this plug-in has a merger, {@code false}
+     * otherwise.
      *
-     *  @return  true if this plug-in has a merger, false otherwise.
+     * @return  {@code true} if this plug-in has a merger, {@code false}
+     *          otherwise.
      */
     public boolean canMerge() {
         return piCanMerge;
     }
 
-
     /**
-     *  Returns true if the officeMime is a valid Office mime type.
+     * Returns {@code true} if the officeMime is a valid Office mime type.
      *
-     *  @return  true if the officeMime is a valid Office mime type.
+     * @return  {@code true} if the officeMime is a valid Office mime type.
      */
     public static boolean isValidOfficeType(String officeMime) {
 
@@ -384,29 +367,26 @@ public class ConverterInfo {
             }
         }
 
-       return rc;
+        return rc;
     }
 
     /**
-     *  Returns a <code>String</code> containing the Xslt stylesheet url that
-     *  is to be used by the Xslt Plugin Serializer.
+     * Returns a {@code String} containing the Xslt stylesheet URL that is to be
+     * used by the Xslt Plug-in Serializer.
      *
-     *  @return  <code>String</code>
+     *  @return  {@code String}.
      */
-
-     public String getXsltSerial() {
+    public String getXsltSerial() {
         return piXsltSerial;
     }
 
     /**
-     * Returns a <code>String</code> containing the xslt stylesheet url that
-     * is to be used by the Xslt Plugin Deserializer.
+     * Returns a {@code String} containing the xslt stylesheet URL that is to be
+     * used by the Xslt Plug-in Deserializer.
      *
-     *  @return  <code>String</code>
+     *  @return  {@code String}.
      */
-
     public String getXsltDeserial() {
         return piXsltDeserial;
     }
 }
-

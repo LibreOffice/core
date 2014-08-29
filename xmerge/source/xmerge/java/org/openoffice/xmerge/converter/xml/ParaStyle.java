@@ -25,13 +25,12 @@ import org.w3c.dom.Element;
 
 import org.openoffice.xmerge.util.Debug;
 
-
 abstract class conversionAlgorithm {
     abstract int I(String val);
 }
 
 /**
- *  This algorithm expects only values in millimeters, e.g. "20.3mm".
+ * This algorithm expects only values in millimeters, e.g. {@literal "20.3mm"}.
  */
 class horizSize extends conversionAlgorithm {
     @Override
@@ -54,10 +53,9 @@ class horizSize extends conversionAlgorithm {
     }
 }
 
-
-/*
- *  This algorithm does line height - can be either millimeters or
- *  a percentage.
+/**
+ * This algorithm does line height {@literal -} can be either millimeters or a
+ * percentage.
  */
 class lineHeight extends conversionAlgorithm {
     @Override
@@ -88,9 +86,8 @@ class lineHeight extends conversionAlgorithm {
     }
 }
 
-
 /**
- *  This class converts alignment values.
+ * This class converts alignment values.
  */
 class alignment extends conversionAlgorithm {
     @Override
@@ -115,51 +112,50 @@ class alignment extends conversionAlgorithm {
     }
 }
 
-
 /**
- *  This class represents a paragraph <code>Style</code>.
+ * This class represents a paragraph {@code Style}.
  *
- *  <table summary="" border="1" cellpadding="1">
- *    <tr><td>Attribute</td><td>Value</td></tr>
- *    <tr><td>MARGIN_LEFT</td><td>mm * 100</td></tr>
- *    <tr><td>MARGIN_RIGHT</td><td>mm * 100</td></tr>
- *    <tr><td>MARGIN_TOP</td><td>mm * 100 (space on top of paragraph)</td></tr>
- *    <tr><td>MARGIN_BOTTOM</td><td>mm * 100</td></tr>
- *    <tr><td>TEXT_INDENT</td><td>mm * 100 (first line indent)</td></tr>
- *    <tr>
- *      <td>LINE_HEIGHT</td>
- *      <td>mm * 100, unless or'ed with LH_PCT, in which
- *          case it is a percentage (e.g. 200% for double spacing)
- *          Can also be or'ed with LH_ATLEAST.  Value is stored
- *          in bits indicated by LH_VALUEMASK.</td>
- *    </tr>
- *    <tr><td>TEXT_ALIGN</td><td>ALIGN_RIGHT, ALIGN_CENTER, ALIGN_JUST, ALIGN_LEFT</td></tr>
- *  </table>
+ * <blockquote><table summary="Paragraph style attributes and their values"
+ * border="1" cellpadding="3" cellspacing="0">
+ *   <caption>Table with all paragraph style attributes and their values</caption>
+ *   <tr><th>Attribute</th><th>Value</th></tr>
+ *   <tr><td>MARGIN_LEFT</td><td>mm * 100</td></tr>
+ *   <tr><td>MARGIN_RIGHT</td><td>mm * 100</td></tr>
+ *   <tr><td>MARGIN_TOP</td><td>mm * 100 (space on top of paragraph)</td></tr>
+ *   <tr><td>MARGIN_BOTTOM</td><td>mm * 100</td></tr>
+ *   <tr><td>TEXT_INDENT</td><td>mm * 100 (first line indent)</td></tr>
+ *   <tr>
+ *     <td>LINE_HEIGHT</td>
+ *     <td>mm * 100, unless or'ed with LH_PCT, in which case it is a percentage
+ *         (e.g. 200% for double spacing) Can also be or'ed with LH_ATLEAST.
+ *         Value is stored in bits indicated by LH_VALUEMASK.</td>
+ *   </tr>
+ *   <tr>
+ *     <td>TEXT_ALIGN</td>
+ *     <td>ALIGN_RIGHT, ALIGN_CENTER, ALIGN_JUST, ALIGN_LEFT</td>
+ *   </tr>
+ * </table></blockquote>
  */
 public class ParaStyle extends Style implements Cloneable {
 
-
-
-
-
-    /**  Indent left property. */
+    /** Indent left property. */
     private static final int TEXT_INDENT      = 4;
-    /**  Indent right property. */
+    /** Indent right property. */
     private static final int LINE_HEIGHT      = 5;
-    /**  Align text property. */
+    /** Align text property. */
     private static final int TEXT_ALIGN       = 6;
     // This must always be one more than highest property
-    /**  Total number of properties. */
+    /** Total number of properties. */
     private static final int NR_PROPERTIES    = 7;
 
     /**
-     *  Array of flags indicating which attributes are set for this
-     *  paragraph <code>Style</code>.
+     * Array of flags indicating which attributes are set for this paragraph
+     * {@code Style}.
      */
     private boolean isSet[] = new boolean[NR_PROPERTIES];
-    /**  Array of attribute values for this paragraph <code>tyle</code>. */
+    /** Array of attribute values for this paragraph {@code Style}. */
     private int  value[] = new int[NR_PROPERTIES];
-    /**  Array of attribute names for this paragraph <code>Style</code>. */
+    /** Array of attribute names for this paragraph {@code Style}. */
     private String attrName[] = {
         "fo:margin-left",
         "fo:margin-right",
@@ -170,7 +166,7 @@ public class ParaStyle extends Style implements Cloneable {
         "fo:text-align"
     };
 
-    /**  Array of attribute structures for this paragraph <code>Style</code>. */
+    /** Array of attribute structures for this paragraph {@code Style}. */
     private Class<?> algor[] = {
         horizSize.class,
         horizSize.class,
@@ -181,22 +177,22 @@ public class ParaStyle extends Style implements Cloneable {
         alignment.class
     };
 
-    /**  Align right. */
+    /** Align right. */
     public static final int ALIGN_RIGHT   = 1;
-    /**  Align center. */
+    /** Align center. */
     public static final int ALIGN_CENTER  = 2;
-    /**  Align justified. */
+    /** Align justified. */
     public static final int ALIGN_JUST    = 3;
-    /**  Align left. */
+    /** Align left. */
     public static final int ALIGN_LEFT    = 4;
 
-    /**  Line height percentage.  */
+    /** Line height percentage.  */
     public static final int LH_PCT        = 0x40000000;
 
-    /**  Line height mask.  */
-    private static final int LH_VALUEMASK  = 0x00FFFFFF;
+    /** Line height mask.  */
+    private static final int LH_VALUEMASK = 0x00FFFFFF;
 
-    /**  Ignored tags. */
+    /** Ignored tags. */
     private static String[] ignored = {
         "style:font-name", "fo:font-size", "fo:font-weight", "fo:color",
         "fo:language", "fo:country", "style:font-name-asian",
@@ -208,15 +204,13 @@ public class ParaStyle extends Style implements Cloneable {
         "text:number-lines", "text:line-number"
     };
 
-
     /**
-     *  Constructor for use when going from DOM to client device format.
+     * Constructor for use when going from DOM to client device format.
      *
-     *  @param  node  A <i>style:style</i> <code>Node</code> which, which
-     *                is assumed to have <i>family</i> attribute of
-     *                <i>paragraph</i>.
-     *  @param  sc    The <code>StyleCatalog</code>, which is used for
-     *                looking up ancestor <code>Style</code> objects.
+     * @param  node  A <i>style:style</i> {@code Node} which, which is assumed
+     *               to have <i>family</i> attribute of <i>paragraph</i>.
+     * @param  sc    The {@code StyleCatalog}, which is used for looking up
+     *               ancestor {@code Style} objects.
      */
     public ParaStyle(Node node, StyleCatalog sc) {
 
@@ -246,19 +240,18 @@ public class ParaStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
-     *  Constructor for use when going from client device format to DOM.
+     * Constructor for use when going from client device format to DOM.
      *
-     *  @param  name       Name of the <code>Style</code>.  Can be null.
-     *  @param  familyName Family of the <code>Style</code> - usually
-     *                     <i>paragraph</i>, <i>text</i>, etc.  Can be null.
-     *  @param  parentName Name of the parent <code>Style</code>, or null
-     *                     if none.
-     *  @param  attribs    Array of attributes to set.
-     *  @param  values     Array of values to set.
-     *  @param  sc         The <code>StyleCatalog</code>, which is used for
-     *                     looking up ancestor <code>Style</code> objects.
+     * @param  name       Name of the {@code Style}.  Can be {@code null}.
+     * @param  familyName Family of the {@code Style} {@literal -} usually
+     *                    <i>paragraph</i>, <i>text</i>, etc. Can be {@code null}.
+     * @param  parentName Name of the parent {@code Style}, or {@code null}
+     *                    if none.
+     * @param  attribs    Array of attributes to set.
+     * @param  values     Array of values to set.
+     * @param  sc         The {@code StyleCatalog}, which is used for looking up
+     *                    ancestor {@code Style} objects.
      */
     public ParaStyle(String name, String familyName, String parentName,
     String attribs[], String values[], StyleCatalog sc) {
@@ -268,20 +261,17 @@ public class ParaStyle extends Style implements Cloneable {
                 setAttribute(attribs[i], values[i]);
     }
 
-
     /**
-     *  Alternate constructor for use when going from client device
-     *  format to DOM.
+     * Alternate constructor for use when going from client device format to DOM.
      *
-     *  @param  name       Name of the <code>Style</code>.  Can be null.
-     *  @param  familyName Family of the <code>Style</code> - usually
-     *                     <i>paragraph</i>, <i>text</i>, etc.  Can be null.
-     *  @param  parentName Name of the parent <code>Style</code>, or
-     *                     null if none.
-     *  @param  attribs    Array of attributes indices to set.
-     *  @param  values     Array of values to set.
-     *  @param  lookup     The <code>StyleCatalog</code>, which is used for
-     *                     looking up ancestor <code>Style</code> objects.
+     * @param  name       Name of the {@code Style}.  Can be {@code null}.
+     * @param  familyName Family of the {@code Style} {@literal -} usually
+     *                    <i>paragraph</i>, <i>text</i>, etc. Can be {@code null}.
+     * @param  parentName Name of the parent {@code Style}, or null if none.
+     * @param  attribs    Array of attributes indices to set.
+     * @param  values     Array of values to set.
+     * @param  lookup     The {@code StyleCatalog}, which is used for looking
+     *                    up ancestor {@code Style} objects.
      */
     public ParaStyle(String name, String familyName, String parentName,
     int attribs[], String values[], StyleCatalog lookup) {
@@ -291,14 +281,12 @@ public class ParaStyle extends Style implements Cloneable {
                 setAttribute(attribs[i], values[i]);
     }
 
-
     /**
-     *  This code checks whether an attribute is one that we
-     *  intentionally ignore.
+     * This code checks whether an attribute is one that we intentionally ignore.
      *
-     *  @param  attribute  The attribute to check.
+     * @param  attribute  The attribute to check.
      *
-     *  @return  true if attribute can be ignored, false otherwise.
+     * @return  {@code true} if attribute can be ignored, {@code false} otherwise.
      */
     private boolean isIgnored(String attribute) {
         for (int i = 0; i < ignored.length; i++) {
@@ -308,12 +296,11 @@ public class ParaStyle extends Style implements Cloneable {
         return false;
     }
 
-
     /**
-     *  Set an attribute for this paragraph <code>Style</code>.
+     * Set an attribute for this paragraph {@code Style}.
      *
-     *  @param  attr   The attribute to set.
-     *  @param  value  The attribute value to set.
+     * @param  attr   The attribute to set.
+     * @param  value  The attribute value to set.
      */
     private void setAttribute(String attr, String value) {
         for (int i = 0; i < NR_PROPERTIES; i++) {
@@ -326,18 +313,11 @@ public class ParaStyle extends Style implements Cloneable {
             Debug.log(Debug.INFO, "ParaStyle Unhandled: " + attr + "=" + value);
     }
 
-
-
-
-
-
-
-
     /**
-     *  Set an attribute for this paragraph <code>Style</code>.
+     * Set an attribute for this paragraph {@code Style}.
      *
-     *  @param  attr   The attribute index to set.
-     *  @param  value  The attribute value to set.
+     * @param  attr   The attribute index to set.
+     * @param  value  The attribute value to set.
      */
     private void setAttribute(int attr, String value) {
         isSet[attr] = true;
@@ -348,11 +328,10 @@ public class ParaStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
-     *  Return the <code>Style</code> in use.
+     * Return the {@code Style} in use.
      *
-     *  @return  The fully-resolved copy of the <code>Style</code> in use.
+     * @return  The fully-resolved copy of the {@code Style} in use.
      */
     @Override
     public Style getResolved() {
@@ -395,14 +374,13 @@ public class ParaStyle extends Style implements Cloneable {
         return resolved;
     }
 
-
     /**
-     *  Private function to return the value as an element in
-     *  a Comma Separated Value (CSV) format.
+     * Private function to return the value as an element in a Comma Separated
+     * Value (CSV) format.
      *
-     *  @param  value  The value to format.
+     * @param   value  The value to format.
      *
-     *  @return  The formatted value.
+     * @return  The formatted value.
      */
     private static String toCSV(String value) {
         if (value != null)
@@ -411,14 +389,13 @@ public class ParaStyle extends Style implements Cloneable {
             return "\"\",";
     }
 
-
     /**
-     *  Private function to return the value as a last element in
-     *  a Comma Separated Value (CSV) format.
+     * Private function to return the value as a last element in a Comma
+     * Separated Value (CSV) format.
      *
-     *  @param  value  The value to format.
+     * @param   value  The value to format.
      *
-     *  @return  The formatted value.
+     * @return  The formatted value.
      */
     private static String toLastCSV(String value) {
         if (value != null)
@@ -427,10 +404,8 @@ public class ParaStyle extends Style implements Cloneable {
             return "\"\"";
     }
 
-
     /**
-     *  Print a Comma Separated Value (CSV) header line for the
-     *  spreadsheet dump.
+     * Print a Comma Separated Value (CSV) header line for the spreadsheet dump.
      */
     public static void dumpHdr() {
         System.out.println(toCSV("Name") + toCSV("Family") + toCSV("parent")
@@ -439,10 +414,8 @@ public class ParaStyle extends Style implements Cloneable {
         + toCSV("line height") + toLastCSV("txt align"));
     }
 
-
     /**
-     *  Dump this <code>Style</code> as a Comma Separated Value (CSV)
-     *  line.
+     * Dump this {@code Style} as a Comma Separated Value (CSV) line.
      */
     public void dumpCSV() {
         String attributes = "";
@@ -457,15 +430,13 @@ public class ParaStyle extends Style implements Cloneable {
         + attributes + toLastCSV(null));
     }
 
-
     /**
-     *  Create the <code>Node</code> with the specified elements.
+     * Create the {@code Node} with the specified elements.
      *
-     *  @param parentDoc  Parent <code>Document</code> of the
-     *                    <code>Node</code> to create.
-     *  @param name       Name of the <code>Node</code>.
+     * @param   parentDoc  Parent {@code Document} of the {@code Node} to create.
+     * @param   name       Name of the {@code Node}.
      *
-     *  @return  The created <code>Node</code>.
+     * @return  The created {@code Node}.
      */
     @Override
     public Node createNode(org.w3c.dom.Document parentDoc, String name) {
@@ -474,15 +445,13 @@ public class ParaStyle extends Style implements Cloneable {
         return node;
     }
 
-
     /**
-     *  Return true if <code>style</code> is a subset of the
-     *  <code>Style</code>.
+     * Return {@code true} if {@code style} is a subset of the {@code Style}.
      *
-     *  @param  style  <code>Style</code> to check.
+     * @param   style  {@code Style} to check.
      *
-     *  @return  true if <code>style</code> is a subset, false
-     *           otherwise.
+     * @return  {@code true} if <code>style</code> is a subset, {@code false}
+     *          otherwise.
      */
     @Override
     public boolean isSubset(Style style) {
@@ -517,14 +486,12 @@ public class ParaStyle extends Style implements Cloneable {
         return true;
     }
 
-
     /**
-     *  Add <code>Style</code> attributes to the given
-     *  <code>Node</code>.  This may involve writing child
-     *  <code>Node</code> objects as well.
+     * Add {@code Style} attributes to the given {@code Node}.
      *
-     *  @param  node  The <code>Node</code> to add <code>Style</code>
-     *                attributes.
+     * <p>This may involve writing child {@code Node} objects as well.</p>
+     *
+     * @param  node  The {@code Node} to add {@code Style} attributes.
      */
     private void writeAttributes(Element node) {
         for (int i = 0; i <= TEXT_INDENT; i++) {
@@ -559,4 +526,3 @@ public class ParaStyle extends Style implements Cloneable {
         }
     }
 }
-

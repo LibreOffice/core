@@ -33,18 +33,32 @@ import org.xml.sax.SAXException;
 
 /**
  * This class represents those embedded objects in an OpenOffice.org document
- * that have an XML representation.  Currently, according to the OpenOffice.org
- * File Format 1.0 document, there are 6 such objects:
+ * that have an XML representation.
  *
- *      Formulae created with Math              (application/vnd.sun.xml.math)
- *      Charts created with Chart               (application/vnd.sun.xml.chart)
- *      Spreadsheets created with Calc          (application/vnd.sun.xml.calc)
- *      Text created with Writer                (application/vnd.sun.xml.writer)
- *      Drawings created with Draw              (application/vnd.sun.xml.draw)
- *      Presentations created with Impress      (application/vnd.sun.xml.impress)
+ * <p>Currently, according to the OpenOffice.org File Format 1.0 document,
+ * there are 6 such objects:</p>
+ * <blockquote><table summary="" border="1" cellpadding="3" cellspacing="0">
+ *   <tr>
+ *     <th>Description</th><th>Object</th>
+ *   </tr><tr>
+ *     <td>Formula created with Math</td><td>application/vnd.sun.xml.math</td>
+ *   </tr><tr>
+ *     <td>Charts created with Chart</td><td>application/vnd.sun.xml.chart</td>
+ *   </tr><tr>
+ *     <td>Spreadsheets created with Calc</td>
+ *     <td>application/vnd.sun.xml.calc</td>
+ *   </tr><tr>
+ *     <td>Text created with Writer</td><td>application/vnd.sun.xml.writer</td>
+ *   </tr><tr>
+ *     <td>Drawings created with Draw</td><td>application/vnd.sun.xml.draw</td>
+ *   </tr><tr>
+ *     <td>Presentations created with Impress</td>
+ *     <td>application/vnd.sun.xml.impress</td>
+ *   </tr>
+ * </table></blockquote>
  *
- * These object types are stored using a combination of content, settings and styles
- * XML files.
+ * <p>These object types are stored using a combination of content, settings and
+ * styles XML files.</p>
  */
 public class EmbeddedXMLObject extends EmbeddedObject {
 
@@ -58,8 +72,8 @@ public class EmbeddedXMLObject extends EmbeddedObject {
     /**
      * Constructor for an embedded object stored using an XML representation.
      *
-     * @param   name    The name of the object.
-     * @param   type    The mime-type of the object.  See the class summary.
+     * @param  name  The name of the object.
+     * @param  type  The mime-type of the object.  See the class summary.
      */
     public EmbeddedXMLObject(String name, String type) {
         super(name, type);
@@ -69,23 +83,22 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      * Package private constructor for use when reading an object from a
      * compressed SX? file.
      *
-     * @param   name    The name of the object.
-     * @param   type    The mime-type of the object.  See the class summary.
-     * @param   source  The OfficeZip representation of the SX? file that stores
-     *                  the object.
+     * @param  name    The name of the object.
+     * @param  type    The mime-type of the object.  See the class summary.
+     * @param  source  The OfficeZip representation of the SX? file that stores
+     *                 the object.
      */
     EmbeddedXMLObject(String name, String type, OfficeZip source) {
         super(name, type, source);
     }
 
-
     /**
      * Returns the content data for this embedded object.
      *
-     * @return DOM representation of "content.xml"
+     * @return  DOM representation of "content.xml".
      *
-     * @throws  SAXException    If any parser error occurs
-     * @throws  IOException     If any IO error occurs
+     * @throws  SAXException  If any parser error occurs.
+     * @throws  IOException   If any IO error occurs.
      */
     public Document getContentDOM() throws SAXException, IOException {
 
@@ -96,25 +109,23 @@ public class EmbeddedXMLObject extends EmbeddedObject {
         return contentDOM;
     }
 
-
     /**
      * Sets the content data for the embedded object.
      *
-     * @param   content     DOM representation of the object's content.
+     * @param  content  DOM representation of the object's content.
      */
     public void setContentDOM(Document content) {
         contentDOM = content;
         hasChanged = true;
     }
 
-
     /**
      * Returns the settings data for this embedded object.
      *
-     * @return DOM representation of "settings.xml"
+     * @return  DOM representation of "settings.xml"
      *
-     * @throws  SAXException    If any parser error occurs
-     * @throws  IOException     If any IO error occurs
+     * @throws  SAXException  If any parser error occurs.
+     * @throws  IOException   If any IO error occurs.
      */
     public Document getSettingsDOM() throws SAXException, IOException {
 
@@ -125,25 +136,23 @@ public class EmbeddedXMLObject extends EmbeddedObject {
         return settingsDOM;
     }
 
-
     /**
      * Sets the settings data for the embedded object.
      *
-     * @param   settings     DOM representation of the object's styles.
+     * @param  settings  DOM representation of the object's styles.
      */
     public void setSettingsDOM(Document settings) {
         settingsDOM = settings;
         hasChanged = true;
     }
 
-
     /**
      * Returns the style data for this embedded object.
      *
-     * @return DOM representation of "styles.xml"
+     * @return  DOM  representation of "styles.xml".
      *
-     * @throws  SAXException    If any parser error occurs
-     * @throws  IOException     If any IO error occurs
+     * @throws  SAXException  If any parser error occurs.
+     * @throws  IOException   If any IO error occurs.
      */
     public Document getStylesDOM() throws SAXException, IOException {
 
@@ -154,29 +163,27 @@ public class EmbeddedXMLObject extends EmbeddedObject {
         return stylesDOM;
     }
 
-
     /**
      * Sets the styles data for the embedded object.
      *
-     * @param   styles     DOM representation of the object's styles.
+     * @param  styles  DOM representation of the object's styles.
      */
     public void setStylesDOM(Document styles) {
         stylesDOM = styles;
         hasChanged = true;
     }
 
-
     /**
      * This method extracts the data for the given XML file from the SX? file
      * and creates a DOM representation of it.
      *
-     * @param   name    The name of the XML file to retrieve.  It is paired with
-     *                  the object name to access the SX? file.
+     * @param   name  The name of the XML file to retrieve.  It is paired with
+     *                the object name to access the SX? file.
      *
      * @return  DOM representation of the named XML file.
      *
-     * @throws  SAXException    If any parser error occurs
-     * @throws  IOException     If any IO error occurs
+     * @throws  SAXException  If any parser error occurs.
+     * @throws  IOException   If any IO error occurs.
      */
     private Document getNamedDOM(String name) throws SAXException, IOException {
         if (zipFile == null) {
@@ -194,24 +201,21 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             byte[] data = zipFile.getNamedBytes((objName + "/" + name));
             if (data != null) {
                 return OfficeDocument.parse(builder, data);
-            }
-            else {
+            } else {
                 return null;
             }
 
-        }
-        catch (ParserConfigurationException pce) {
+        } catch (ParserConfigurationException pce) {
             throw new SAXException(pce);
         }
     }
-
 
     /**
      * Package private method for writing the data of the EmbeddedObject to a
      * SX? file.
      *
-     * @param   zip     An <code>OfficeZip</code> instance representing the file
-     *                  the data is to be written to.
+     * @param  zip  An {@code OfficeZip} instance representing the file the data
+     *              is to be written to.
      */
     @Override
     void write(OfficeZip zip) throws IOException {
@@ -235,7 +239,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
      * Package private method that constructs the manifest.xml entries for this
      * embedded object.
      *
-     * @param  manifestDoc    <code>Document</code> containing the manifest entries.
+     * @param  manifestDoc  {@code Document} containing the manifest entries.
      */
     @Override
     void writeManifestData(Document manifestDoc) throws DOMException {
@@ -266,7 +270,6 @@ public class EmbeddedXMLObject extends EmbeddedObject {
             stylesNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_PATH, (objName + "/styles.xml"));
         }
 
-
         Element objectNode = manifestDoc.createElement(OfficeConstants.TAG_MANIFEST_FILE);
 
         objectNode.setAttribute(OfficeConstants.ATTRIBUTE_MANIFEST_FILE_TYPE, objType);
@@ -274,5 +277,4 @@ public class EmbeddedXMLObject extends EmbeddedObject {
 
         root.appendChild(objectNode);
     }
-
 }

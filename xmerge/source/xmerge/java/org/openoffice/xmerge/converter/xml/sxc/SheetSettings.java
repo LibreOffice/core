@@ -32,7 +32,7 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
  */
 public class SheetSettings implements OfficeConstants {
 
-    /**  A w3c <code>Document</code>. */
+    /** A w3c {@code Document}. */
     private org.w3c.dom.Document settings = null;
 
     private String  sheetName;
@@ -46,63 +46,58 @@ public class SheetSettings implements OfficeConstants {
     private int     posTop      = 0;
     private int     paneNumber  = 2;
 
-
     final private static int SPLIT   = 0x01;
     final private static int FREEZE  = 0x02;
 
     /**
-     * Default Constructor for a <code>SheetSettings</code>
-     *
+     * Default Constructor for a {@code SheetSettings}.
      */
     public SheetSettings() {
     }
 
     /**
-     * Constructor that takes a <code>Node</code> to build a <code>SheetSettings</code>
+     * Constructor that takes a {@code Node} to build a {@code SheetSettings}.
      *
-     * @param root XML Node to read from
+     * @param root XML {@code Node} to read from.
      */
     public SheetSettings(Node root) {
         readNode(root);
     }
 
     /**
-     * Constructor for a <code>SheetSettings</code>
+     * Constructor for a {@code SheetSettings}.
      *
-     * @param name The name for the new sheet
+     * @param name The name for the new sheet.
      */
     public SheetSettings(String name) {
         sheetName = name;
     }
 
     /**
-     * sets the position of the acitve cell
+     * Sets the position of the active cell.
      *
-     * @param activeCell the current curor position
+     * @param  activeCell  the current cursor position.
      */
     public void setCursor(Point activeCell) {
-
         cursorX = (int) activeCell.getX();
         cursorY = (int) activeCell.getY();
     }
 
     /**
-     * Gets the position of the acitve cell
+     * Gets the position of the active cell.
      *
-     * @return The position as a <code>Point</code>
+     * @return The position as a {@code Point}.
      */
     public Point getCursor() {
-
         return (new Point(cursorX, cursorY));
     }
 
     /**
-     * Sets the position  of the freeze
+     * Sets the position of the freeze.
      *
-     * @param splitPoint the point at where the split occurs
+     * @param  splitPoint  the point at where the split occurs.
      */
     public void setFreeze(Point splitPoint) {
-
         splitTypeX      = FREEZE;
         splitTypeY      = FREEZE;
         splitPointX     = (int) splitPoint.getX();
@@ -110,9 +105,9 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * Sets the position of the split
+     * Sets the position of the split.
      *
-     * @param splitPoint the point at where the split occurs
+     * @param  splitPoint  the point at where the split occurs.
      */
     public void setSplit(Point splitPoint) {
 
@@ -123,9 +118,9 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * gets the position of the split
+     * Gets the position of the split.
      *
-     * @return The position as a <code>Point</code> where the split occurs
+     * @return The position as a {@code Point} where the split occurs.
      */
     public Point getSplit() {
 
@@ -133,88 +128,94 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * gets the type of the split
+     * Gets the type of the split.
      *
-     * @return The split type as a <code>Point</code>
+     * @return The split type as a {@code Point}.
      */
     public Point getSplitType() {
 
         return (new Point(splitTypeX, splitTypeY));
     }
 
-
-
     /**
-     * Gets the leftmost column visibile in the right pane.
+     * Gets the leftmost column visible in the right pane.
      *
-     * @return the 0-based index to the column
+     * @return the 0-based index to the column.
      */
     public int getLeft() {
-
         return posLeft;
     }
+
     /**
      * Gets the top row visible in the lower pane.
      *
-     * @return The top row visible in the lower pane
+     * @return The top row visible in the lower pane.
      */
     public int getTop() {
-
         return posTop;
     }
 
     /**
-     * Gets the active Panel
-     * 0 - Bottom Right, 1 - Top Right
-     * 2 - Bottom Left, 3 - Top Left
+     * Gets the active Panel.
      *
-     * @return int representing the active panel
+     * <blockquote><table summary="Table with all values for an active panel"
+     * border="1" cellpadding="3" cellspacing="0">
+     *   <tr><th>Value</th><th>Meaning</th></tr>
+     *   <tr><td align="center">0</td><td>Bottom Right</td></tr>
+     *   <tr><td align="center">1</td><td>Top Right</td></tr>
+     *   <tr><td align="center">2</td><td>Bottom Left</td></tr>
+     *   <tr><td align="center">3</td><td>Top Left</td></tr>
+     * </table></blockquote>
+     *
+     * @return {@code int} representing the active panel.
      */
     public int getPaneNumber() {
-
         return paneNumber;
     }
 
     /**
-     * Sets the sheetname this settings object applies to
+     * Sets the {@code sheetName} this settings object applies to.
      *
-     * @param sheetName the name of the worksheet
+     * @param  sheetName  the name of the worksheet.
      */
     public void setSheetName(String sheetName) {
-
         this.sheetName = sheetName;
-
     }
 
     /**
-     * Sets the active pane number
-     * 0 - Bottom Right, 1 - Top Right
-     * 2 - Bottom Left, 3 - Top Left
+     * Sets the active pane number.
      *
-     * @param paneNumber the pane number
+     * <blockquote><table summary="Table with all values for an active panel"
+     * border="1" cellpadding="3" cellspacing="0">
+     *   <tr><th>Value</th><th>Meaning</th></tr>
+     *   <tr><td align="center">0</td><td>Bottom Right</td></tr>
+     *   <tr><td align="center">1</td><td>Top Right</td></tr>
+     *   <tr><td align="center">2</td><td>Bottom Left</td></tr>
+     *   <tr><td align="center">3</td><td>Top Left</td></tr>
+     * </table></blockquote>
+     *
+     * @param  paneNumber  the pane number.
      */
     public void setPaneNumber(int paneNumber) {
-
         this.paneNumber = paneNumber;
     }
 
     /**
-     * Gets the name of the worksheet these <code>Settings</code> apply to
+     * Gets the name of the worksheet these {@code Settings} apply to.
      *
-     * @return the name of the worksheet
+     * @return the name of the worksheet.
      */
     public String getSheetName() {
-
         return sheetName;
     }
 
     /**
-     * Adds an XML entry for a particular setting
+     * Adds an XML entry for a particular setting.
      *
-     * @param root the root node at which to add the xml entry
-     * @param attribute the name of the attribute to add
-     * @param type the attribute type (int, short etc)
-     * @param value the value of the attribute
+     * @param  root       the root {@code Node} at which to add the xml entry.
+     * @param  attribute  the name of the attribute to add.
+     * @param  type       the attribute type ({@code int}, {@code short} etc).
+     * @param  value      the value of the attribute.
      */
     private void addConfigItem(Node root, String attribute, String type, String value) {
 
@@ -228,10 +229,10 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * Writes out a settings.xml entry for this SheetSettings object
+     * Writes out a settings.xml entry for this {@code SheetSettings} object.
      *
-     * @param settings a <code>Document</code> object representing the settings.xml
-     * @param root the root xml node to add to
+     * @param  settings  a {@code Document} object representing the settings.xml
+     * @param  root      the root xml node to add to.
      */
     public void writeNode(org.w3c.dom.Document settings, Node root) {
 
@@ -265,10 +266,10 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * Sets a variable based on a String value read from XML
+     * Sets a variable based on a {@code String} value read from XML.
      *
-     * @param name xml name of the attribute to set
-     * @param value String value fo the attribute
+     * @param  name   xml name of the attribute to set.
+     * @param  value  {@code String} value for the attribute.
      */
     private void addAttribute(String name, String value) {
 
@@ -297,9 +298,9 @@ public class SheetSettings implements OfficeConstants {
     }
 
     /**
-     * Reads document settings from xml and inits SheetSettings variables
+     * Reads document settings from xml and inits {@code SheetSettings} variables.
      *
-     * @param root XML Node to read from
+     * @param  root  XML {@code Node} to read from.
      */
     private void readNode(Node root) {
 
