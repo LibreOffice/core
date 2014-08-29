@@ -17,11 +17,12 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -670,6 +671,12 @@ DECLARE_RTFEXPORT_TEST(testFdo82006, "fdo82006.rtf")
     // These were 176 (100 twips), as \sbauto and \sbbefore were ignored.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaTopMargin"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(0), "ParaBottomMargin"));
+}
+
+DECLARE_RTFEXPORT_TEST(testFdo32613, "fdo32613.odt")
+{
+    // This was AS_CHARACTER, RTF export did not support writing anchored pictures.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
 #endif

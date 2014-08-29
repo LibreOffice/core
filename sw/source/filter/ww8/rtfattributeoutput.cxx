@@ -2847,6 +2847,37 @@ void RtfAttributeOutput::FormatSurround(const SwFmtSurround& rSurround)
         m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYMAINCNT);
         m_aRunText->append((sal_Int32) aMC.GetValue());
     }
+    else if (m_rExport.bOutFlyFrmAttrs && m_rExport.bRTFFlySyntax)
+    {
+        // See DocxSdrExport::startDMLAnchorInline() for SwFmtSurround -> WR / WRK mappings.
+        sal_Int32 nWr = -1;
+        boost::optional<sal_Int32> oWrk;
+        switch (rSurround.GetValue())
+        {
+        case SURROUND_NONE:
+            nWr = 1; // top and bottom
+            break;
+        case SURROUND_THROUGHT:
+            nWr = 3; // none
+            break;
+        case SURROUND_PARALLEL:
+            nWr = 2; // around
+            oWrk = 0; // both sides
+            break;
+        case SURROUND_IDEAL:
+        default:
+            nWr = 2; // around
+            oWrk = 3; // largest
+            break;
+        }
+        m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPWR);
+        m_rExport.OutLong(nWr);
+        if (oWrk)
+        {
+            m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPWRK);
+            m_rExport.OutLong(*oWrk);
+        }
+    }
 }
 
 void RtfAttributeOutput::FormatVertOrientation(const SwFmtVertOrient& rFlyVert)
@@ -3435,7 +3466,7 @@ static void lcl_AppendSP(OStringBuffer& rBuffer,
 
 static OString ExportPICT(const SwFlyFrmFmt* pFlyFrmFmt, const Size& rOrig, const Size& rRendered, const Size& rMapped,
                           const SwCropGrf& rCr, const char* pBLIPType, const sal_uInt8* pGraphicAry,
-                          unsigned long nSize, const RtfExport& rExport, SvStream* pStream = 0)
+                          unsigned long nSize, const RtfExport& rExport, SvStream* pStream = 0, bool bWritePicProp = true)
 {
     OStringBuffer aRet;
     if (pBLIPType && nSize && pGraphicAry)
@@ -3444,7 +3475,7 @@ static OString ExportPICT(const SwFlyFrmFmt* pFlyFrmFmt, const Size& rOrig, cons
 
         aRet.append("{" OOO_STRING_SVTOOLS_RTF_PICT);
 
-        if (pFlyFrmFmt)
+        if (pFlyFrmFmt && bWritePicProp)
         {
             OUString sDescription = pFlyFrmFmt->GetObjDescription();
             //write picture properties - wzDescription at first
@@ -3667,6 +3698,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         aRendered.Height() = rS.GetHeight();
     }
 
+    const SwPosition* pAnchor = pFlyFrmFmt->GetAnchor().GetCntntAnchor();
+    sw::Frame aFrame(*pFlyFrmFmt, *pAnchor);
+
     /*
        If the graphic is not of type WMF then we will have to store two
        graphics, one in the native format wrapped in shppict, and the other in
@@ -3674,11 +3708,41 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
        a wmf already then we don't need any such wrapping
        */
     bool bIsWMF = pBLIPType && std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
-    if (!bIsWMF)
-        m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
+    if (aFrame.IsInline())
+    {
+        if (!bIsWMF)
+            m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
+    }
+    else
+    {
+        m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
+        m_pFlyFrameSize = &aRendered;
+        m_rExport.mpParentFrame = &aFrame;
+        m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
+        m_rExport.OutputFormat(aFrame.GetFrmFmt(), false, false, true);
+        m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
+        m_rExport.mpParentFrame = NULL;
+        m_pFlyFrameSize = 0;
 
+        std::vector< std::pair<OString, OString> > aFlyProperties;
+        aFlyProperties.push_back(std::make_pair<OString, OString>("shapeType", OString::number(ESCHER_ShpInst_PictureFrame)));
+        aFlyProperties.push_back(std::make_pair<OString, OString>("wzDescription", msfilter::rtfutil::OutString(pFlyFrmFmt->GetObjDescription(), m_rExport.eCurrentEncoding)));
+        aFlyProperties.push_back(std::make_pair<OString, OString>("wzName", msfilter::rtfutil::OutString(pFlyFrmFmt->GetObjTitle(), m_rExport.eCurrentEncoding)));
+        for (size_t i = 0; i < aFlyProperties.size(); ++i)
+        {
+            m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");
+            m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SN " ");
+            m_rExport.Strm().WriteCharPtr(aFlyProperties[i].first.getStr());
+            m_rExport.Strm().WriteCharPtr("}{" OOO_STRING_SVTOOLS_RTF_SV " ");
+            m_rExport.Strm().WriteCharPtr(aFlyProperties[i].second.getStr());
+            m_rExport.Strm().WriteCharPtr("}}");
+        }
+        m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{" OOO_STRING_SVTOOLS_RTF_SN " pib" "}{" OOO_STRING_SVTOOLS_RTF_SV " ");
+    }
+
+    bool bWritePicProp = aFrame.IsInline();
     if (pBLIPType)
-        ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm());
+        ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm(), bWritePicProp);
     else
     {
         aStream.Seek(0);
@@ -3688,24 +3752,29 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         nSize = aStream.Tell();
         pGraphicAry = (sal_uInt8*)aStream.GetData();
 
-        ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm());
+        ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm(), bWritePicProp);
     }
 
-    if (!bIsWMF)
+    if (aFrame.IsInline())
     {
-        m_rExport.Strm().WriteCharPtr("}" "{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
+        if (!bIsWMF)
+        {
+            m_rExport.Strm().WriteCharPtr("}" "{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
 
-        aStream.Seek(0);
-        GraphicConverter::Export(aStream, rGraphic, CVT_WMF);
-        pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
-        aStream.Seek(STREAM_SEEK_TO_END);
-        nSize = aStream.Tell();
-        pGraphicAry = (sal_uInt8*)aStream.GetData();
+            aStream.Seek(0);
+            GraphicConverter::Export(aStream, rGraphic, CVT_WMF);
+            pBLIPType = OOO_STRING_SVTOOLS_RTF_WMETAFILE;
+            aStream.Seek(STREAM_SEEK_TO_END);
+            nSize = aStream.Tell();
+            pGraphicAry = (sal_uInt8*)aStream.GetData();
 
-        ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm());
+            ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm());
 
-        m_rExport.Strm().WriteChar('}');
+            m_rExport.Strm().WriteChar('}');
+        }
     }
+    else
+        m_rExport.Strm().WriteCharPtr("}}}}"); // Close SV, SP, SHPINST and SHP.
 
     if (bSwapped)
         const_cast<Graphic&>(rGraphic).SwapOut();
