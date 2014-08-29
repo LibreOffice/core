@@ -329,7 +329,7 @@ public final class SOFormulaParser extends ComponentBase
      * This method is a simple helper function to used in the static component initialisation functions as well as
      * in getSupportedServiceNames.
      */
-    private static String[] getServiceNames()
+    public static String[] getServiceNames()
     {
         return new String[]
                 {

@@ -53,7 +53,7 @@ public class CallQueryWizard
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    private static class QueryWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
+    public static class QueryWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
     {
         private PropertyValue[] m_wizardContext;
 
