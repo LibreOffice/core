@@ -94,8 +94,6 @@ double ScInterpreter::GetDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int1
     }
 }
 
-//functions
-
 void ScInterpreter::ScGetActDate()
 {
     nFuncFmtType = NUMBERFORMAT_DATE;
@@ -1401,7 +1399,7 @@ void ScInterpreter::ScVDB()
 
                 double fTimeLength1=fTimeLength;
 
-                //@Die Frage aller Fragen: "Ist das hier richtig"/ The question of all questions: 'Is this right'
+                //@ The question of all questions: 'Is this right'
                 if(!::rtl::math::approxEqual(fStart,::rtl::math::approxFloor(fStart)))
                 {
                     if(fFactor>1)
@@ -2173,18 +2171,18 @@ void ScInterpreter::ScStyle()
     sal_uInt8 nParamCount = GetByte();
     if (nParamCount >= 1 && nParamCount <= 3)
     {
-        OUString aStyle2;                             // model after timer
+        OUString aStyle2;                             // Template after timer
         if (nParamCount >= 3)
             aStyle2 = GetString().getString();
         long nTimeOut = 0;                          // timeout
         if (nParamCount >= 2)
             nTimeOut = (long)(GetDouble()*1000.0);
-        OUString aStyle1 = GetString().getString();               // model now
+        OUString aStyle1 = GetString().getString();               // Template for immediate
 
         if (nTimeOut < 0)
             nTimeOut = 0;
 
-        // Do request to execute model
+        // Execute request to apply template
 
         if ( !pDok->IsClipOrUndo() )
         {
@@ -2254,7 +2252,7 @@ void ScInterpreter::ScDde()
             return;
         }
 
-            // after the loading process new relations were built
+            // Need to reinterpret after loading (build links)
 
         if ( rArr.IsRecalcModeNormal() )
             rArr.SetExclusiveRecalcModeOnLoad();
@@ -2264,7 +2262,7 @@ void ScInterpreter::ScDde()
         bool bOldEnabled = pDok->IsIdleEnabled();
         pDok->EnableIdle(false);
 
-            //  link object must be generated/ get fetched
+            // Get/ Create link object
 
         ScDdeLink* pLink = lcl_GetDdeLink( pLinkMgr, aAppl, aTopic, aItem, nMode );
 
@@ -2285,7 +2283,7 @@ void ScInterpreter::ScDde()
             }
 
                                     //! evaluate asynchron ???
-            pLink->TryUpdate();     //  TryUpdate doesn't call Update multiple
+            pLink->TryUpdate();     //  TryUpdate doesn't call Update multiple times
 
             if (pMyFormulaCell)
             {
@@ -2390,7 +2388,7 @@ void ScInterpreter::ScBase()
                 bool bDirt = false;
                 while ( fVal && p > pBuf )
                 {
-//! if fmod is used there is a roundoff error of 2**48
+//! roundoff error starting with numbers greater than 2**48
 //                  double fDig = ::rtl::math::approxFloor( fmod( fVal, fBase ) );
 // a little bit better:
                     double fInt = ::rtl::math::approxFloor( fVal / fBase );
@@ -2521,7 +2519,7 @@ void ScInterpreter::ScConvert()
         if ( nGlobalError )
             PushError( nGlobalError);
         else
-        {   // first of all search for the given order; if it can't be find then search for the inverse
+        {   // first of all search for the given order; if it can't be found then search for the inverse
             double fConv;
             if ( ScGlobal::GetUnitConverter()->GetValue( fConv, aFromUnit, aToUnit ) )
                 PushDouble( fVal * fConv );
