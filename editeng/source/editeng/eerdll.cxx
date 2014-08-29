@@ -163,7 +163,7 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[53] = new SvxCharSetColorItem( Color( COL_RED ), RTL_TEXTENCODING_DONTKNOW, EE_FEATURE_NOTCONV );
         ppDefItems[54] = new SvxFieldItem( SvxFieldData(), EE_FEATURE_FIELD );
 
-        DBG_ASSERT( EDITITEMCOUNT == 55, "ITEMCOUNT geaendert, DefItems nicht angepasst!" );
+        assert(EDITITEMCOUNT == 55 && "ITEMCOUNT changed, adjust DefItems!");
 
         // Init DefFonts:
         GetDefaultFonts( *(SvxFontItem*)ppDefItems[EE_CHAR_FONTINFO - EE_ITEMS_START],
