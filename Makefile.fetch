@@ -37,7 +37,7 @@ endif
 
 # fetch__Download_item url tarball-name md5sum
 define fetch__Download_item
-$(if $(wildcard $(TARFILE_LOCATION)/$2),, \
+$(if $(and $(wildcard $(TARFILE_LOCATION)/$2), $(filter-out libgltf-0.0.1.tar.bz2,$2)),, \
 cd $(TARFILE_LOCATION)/tmp \
 $(call fetch_Download__wget_command,$1,$2) \
 $(if $3,$(call fetch_Download__checksum_command,$2,$3)) \
