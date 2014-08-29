@@ -25,20 +25,20 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- *  <p>This is a parser to return a character array for difference purpose.
- *  It will use depth first search to traverse all the characters inside the
- *  text <code>Node</code> under a given <code>Node</code> (most likely to be
- *  a paragraph <code>Node</code>).</p>
+ * This is a parser to return a character array for difference purpose.
  *
- *  <p>Note: Once the XML Tree is parsed, then the <code>Iterator</code> will be
- *  a snap shot of  that tree.  That means even the tree is modified later, than
- *  the cached paragraph <code>Node</code> list will not be updated accordingly.
- *  For this reason and for performance reasons this <code>Iterator</code> does
- *  not support any operation methods such as insert, remove or replace.  The
- *  main purpose of this <code>Iterator</code> is to be used with difference,
- *  not with merge.</p>
+ * <p>It will use depth first search to traverse all the characters inside the
+ * text {@code Node} under a given {@code Node} (most likely to be a paragraph
+ * {@code Node}).</p>
+ *
+ * <p>Note: Once the XML Tree is parsed, then the {@code Iterator} will be a
+ * snap shot of  that tree.  That means even the tree is modified later, than
+ * the cached paragraph {@code Node} list will not be updated accordingly. For
+ * this reason and for performance reasons this {@code Iterator} does not
+ * support any operation methods such as insert, remove or replace. The main
+ * purpose of this {@code Iterator} is to be used with difference, not with
+ * merge.</p>
  */
 public class CharacterParser {
 
@@ -47,11 +47,10 @@ public class CharacterParser {
     private List<TextNodeEntry> nodeList_ = null;
     private char[] charArray;
 
-
     /**
-     *  Standard constructor.
+     * Standard constructor.
      *
-     *  @param  node  The initial root <code>Node</code>.
+     * @param  node  The initial root {@code Node}.
      */
     public CharacterParser(Node node) {
         textNodes = new TextNodeIterator(node);
@@ -60,11 +59,10 @@ public class CharacterParser {
         parseNodes();
     }
 
-
     /**
-     *  Returns the <code>Node</code> pointer with the given character position.
+     * Returns the {@code Node} pointer with the given character position.
      *
-     *  @return  The <code>Node</code> pointer with the given character position.
+     * @return  The {@code Node} pointer with the given character position.
      */
     public List<TextNodeEntry> getNodeList() {
         // will go through the nodeList to find the corresponding node
@@ -112,20 +110,18 @@ public class CharacterParser {
         charArray = strBuf.toString().toCharArray();
     }
 
-
     /**
-     *  Adds a new <code>Node</code> entry.
+     * Adds a new {@code Node} entry.
      *
-     *  @param  textLen  The text length.
-     *  @param  node     The <code>Node</code>.
+     * @param  textLen  The text length.
+     * @param  node     The {@code Node}.
      */
     private void addNewNodeEntry(int textLen, Node node) {
 
         TextNodeEntry nodeEntry = new TextNodeEntry(currentPosition,
                                       currentPosition + textLen - 1, node);
-        currentPosition     = currentPosition + textLen;
+        currentPosition         = currentPosition + textLen;
 
         nodeList_.add(nodeEntry);
     }
 }
-

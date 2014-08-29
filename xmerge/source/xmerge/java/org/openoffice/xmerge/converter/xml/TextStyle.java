@@ -30,11 +30,9 @@ import org.w3c.dom.Element;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- *  Represents a text <code>Style</code> in an OpenOffice document.
- *
+ * Represents a text {@code Style} in an OpenOffice document.
  */
 public class TextStyle extends Style implements Cloneable {
-
 
     /** Indicates <i>bold</i> text. */
     final private static int BOLD        = 0x01;
@@ -49,7 +47,6 @@ public class TextStyle extends Style implements Cloneable {
     /** Indicates <i>subscripted</i> text. */
     final private static int SUBSCRIPT   = 0x20;
 
-
     /** Values of text attributes. */
     private int values = 0;
     /** Bitwise mask of text attributes. */
@@ -59,19 +56,19 @@ public class TextStyle extends Style implements Cloneable {
     private int sizeInPoints = 0;
     /** Font name. */
     private String fontName = null;
-    /** Font <code>Color</code>. */
+    /** Font {@code Color}. */
     private Color fontColor = null;
-    /** Background <code>Color</code>. */
+    /** Background {@code Color}. */
     private Color bgColor = null;
 
     /**
-     *  Constructor for use when going from DOM to client device format.
+     * Constructor for use when going from DOM to client device format.
      *
-     *  @param  node  The <i>style:style</i> <code>Node</code> containing
-     *                the <code>Style</code>.  (This <code>Node</code> is
-     *                assumed have a <i>family</i> attribute of <i>text</i>).
-     *  @param  sc    The <code>StyleCatalog</code>, which is used for
-     *                looking up ancestor <code>Style</code> objects.
+     * @param  node  The <i>style:style</i> {@code Node} containing the
+     *               {@code Style}.  (This {@code Node} is assumed have a
+     *               <i>family</i> attribute of <i>text</i>).
+     * @param  sc    The {@code StyleCatalog}, which is used for looking up
+     *               ancestor {@code Style} objects.
      */
     public TextStyle(Node node, StyleCatalog sc) {
         super(node, sc);
@@ -111,35 +108,31 @@ public class TextStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
-     *  Constructor for use when going from client device format to DOM
+     * Constructor for use when going from client device format to DOM
      *
-     *  @param  name     Name of text <code>Style</code>.  Can be null.
-     *  @param  family   Family of text <code>Style</code> (usually
-     *                   <i>text</i>).  Can be null.
-     *  @param  parent   Name of parent text <code>Style</code>, or null
-     *                   for none.
-     *  @param  mask     Bitwise mask of text attributes that this text
-     *                   <code>Style</code> will specify.  Can be any
-     *                   combination of the following, or'ed together:
-     *                   {@link #BOLD}, {@link #ITALIC}, {@link #UNDERLINE},
-     *                   {@link #STRIKETHRU}, {@link #SUPERSCRIPT},
-     *                   {@link #SUBSCRIPT}.  This parameter determines what
-     *                   attributes this <code>Style</code> will specify.
-     *                   When an attribute is specified in a
-     *                   <code>Style</code>, its value can be either
-     *                   <i>on</i> or <i>off</i>.  The on/off value for
-     *                   each attribute is controlled by the
-     *                   <code>values</code> parameter.
-     *  @param values    Values of text attributes that this text
-     *                   <code>Style</code> will be setting.  Any of the
-     *                   attributes ({@link #BOLD}, etc) listed for
-     *                   <code>mask</code> can be used for this.
-     *  @param fontSize  Font size in points.
-     *  @param fontName  Name of font.
-     *  @param sc        The <code>StyleCatalog</code>, which is used for
-     *                   looking up ancestor <code>Style</code> objects.
+     * @param  name     Name of text {@code Style}.  Can be {@code null}.
+     * @param  family   Family of text {@code Style} (usually <i>text</i>).
+     *                  Can be {@code null}.
+     * @param  parent   Name of parent text {@code Style}, or {@code null} for
+     *                  none.
+     * @param  mask     Bitwise mask of text attributes that this text
+     *                  {@code Style} will specify.  Can be any combination of
+     *                  the following, or'ed together: {@link #BOLD},
+     *                  {@link #ITALIC}, {@link #UNDERLINE}, {@link #STRIKETHRU},
+     *                  {@link #SUPERSCRIPT}, {@link #SUBSCRIPT}. This parameter
+     *                  determines what attributes this {@code Style} will
+     *                  specify. When an attribute is specified in a
+     *                  {@code Style}, its value can be either <i>on</i> or
+     *                  <i>off</i>.  The on/off value for each attribute is
+     *                  controlled by the {@code values} parameter.
+     * @param values    Values of text attributes that this text {@code Style}
+     *                  will be setting.  Any of the attributes ({@link #BOLD},
+     *                  etc) listed for {@code mask} can be used for this.
+     * @param fontSize  Font size in points.
+     * @param fontName  Name of font.
+     * @param sc        The {@code StyleCatalog}, which is used for looking up
+     *                  ancestor {@code Style} objects.
      */
     public TextStyle(String name, String family, String parent,
     int mask, int values, int fontSize, String fontName, StyleCatalog sc) {
@@ -150,13 +143,12 @@ public class TextStyle extends Style implements Cloneable {
         this.fontName = fontName;
     }
 
-
     /**
-     *  Parse a color specification of the form <i>#rrggbb</i>
+     * Parse a color specification of the form <i>#rrggbb</i>
      *
-     *  @param  value  <code>Color</code> specification to parse.
+     * @param   value  {@code Color} specification to parse.
      *
-     *  @return  The <code>Color</code> associated the value.
+     * @return  The {@code Color} associated the value.
      */
     private Color parseColorString(String value) {
         // Assume color value is of form #rrggbb
@@ -176,12 +168,11 @@ public class TextStyle extends Style implements Cloneable {
         return new Color(red, green, blue);
     }
 
-
     /**
-     *  Set an attribute.
+     * Set an attribute.
      *
-     *  @param  attr   The attribute to set.
-     *  @param  value  The attribute value to set.
+     * @param  attr   The attribute to set.
+     * @param  value  The attribute value to set.
      */
     private void handleAttribute(String attr, String value) {
 
@@ -257,70 +248,56 @@ public class TextStyle extends Style implements Cloneable {
         }
     }
 
-
-
-
-
-
-
-
     /**
-     *  Return the font size for this <code>Style</code>.
+     * Return the font size for this {@code Style}.
      *
-     *  @return  The font size in points
+     * @return  The font size in points
      */
     public int getFontSize() {
         return sizeInPoints;
     }
 
-
     /**
-     *  Return the name of the font for this <code>Style</code>.
+     * Return the name of the font for this {@code Style}.
      *
-     *  @return  Name of font, or null if no font is specified by
-     *          this <code>Style</code>.
+     * @return  Name of font, or null if no font is specified by this
+     *          {@code Style}.
      */
     public String getFontName() {
         return fontName;
     }
 
-
     /**
-     *  Return the font <code>Color</code> for this <code>Style</code>.
-     *  Can be null if none was specified.
+     * Return the font {@code Color} for this {@code Style}.
      *
-     *  @return  <code>Color</code> value for this <code>Style</code>.
-     *           Can be null.
+     * <p>Can be {@code null} if none was specified.</p>
+     *
+     * @return  {@code Color} value for this {@code Style}. Can be {@code null}.
      */
     public Color getFontColor() {
         return fontColor;
     }
 
-
     /**
-     *  Return the background <code>Color</code> for this
-     *  <code>Style</code>.  Can be null if none was specified.
+     * Return the background {@code Color} for this  {@code Style}.
      *
-     *  @return  Background <code>Color</code> value for this
-     *           <code>Style</code>.  Can be null.
+     * <p>Can be {@code null} if none was specified.</p>
+     *
+     * @return  Background {@code Color} value for this {@code Style}. Can be
+     *          {@code null}.
      */
     public Color getBackgroundColor() {
         return bgColor;
     }
 
-
-
-
-
     /**
-     *  Return a <code>Style</code> object corresponding to this one,
-     *  but with all of the inherited information from parent
-     *  <code>Style</code> objects filled in.  The object returned will
-     *  be a new object, not a reference to this object, even if it does
-     *  not need any information added.
+     * Return a {@code Style} object corresponding to this one, but with all of
+     * the inherited information from parent {@code Style} objects filled in.
      *
-     *  @return  The <code>StyleCatalog</code> in which to look up
-     *           ancestors.
+     * <p>The object returned will be a new object, not a reference to this
+     * object, even if it does not need any information added.</p>
+     *
+     * @return  The {@code StyleCatalog} in which to look up ancestors.
      */
     @Override
     public Style getResolved() {
@@ -375,36 +352,33 @@ public class TextStyle extends Style implements Cloneable {
         return resolved;
     }
 
-
     /**
-     *  Set one or more text attributes to <i>on</i>.
+     * Set one or more text attributes to <i>on</i>.
      *
-     *  @param  flags  Flag values to set <i>on</i>.
+     * @param  flags  Flag values to set <i>on</i>.
      */
     private void turnAttributesOn(int flags) {
         mask |= flags;
         values |= flags;
     }
 
-
     /**
-     *  Set one or more text attributes to <i>off</i>.
+     * Set one or more text attributes to <i>off</i>.
      *
-     *  @param  flags  The flag values to set <i>off</i>.
+     * @param  flags  The flag values to set <i>off</i>.
      */
     private void turnAttributesOff(int flags) {
         mask |= flags;
         values &= ~flags;
     }
 
-
     /**
-     *  Private function to return the value as an element in
-     *  a Comma Separated Value (CSV) format.
+     * Private function to return the value as an element in a Comma Separated
+     * Value (CSV) format.
      *
-     *  @param  value The value to format.
+     * @param   value The value to format.
      *
-     *  @return  The formatted value.
+     * @return  The formatted value.
      */
     private static String toCSV(String value) {
         if (value != null)
@@ -413,14 +387,13 @@ public class TextStyle extends Style implements Cloneable {
             return "\"\",";
     }
 
-
     /**
-     *  Private function to return the value as a last element in
-     *  a Comma Separated Value (CSV) format.
+     * Private function to return the value as a last element in a Comma
+     * Separated Value (CSV) format.
      *
-     *  @param  value  The value to format.
+     * @param   value  The value to format.
      *
-     *  @return  The formatted value.
+     * @return  The formatted value.
      */
     private static String toLastCSV(String value) {
         if (value != null)
@@ -429,10 +402,8 @@ public class TextStyle extends Style implements Cloneable {
             return "\"\"";
     }
 
-
     /**
-     *  Print a Comma Separated Value (CSV) header line for the
-     *  spreadsheet dump.
+     * Print a Comma Separated Value (CSV) header line for the spreadsheet dump.
      */
     public static void dumpHdr() {
         System.out.println(toCSV("Name") + toCSV("Family") + toCSV("parent")
@@ -441,9 +412,8 @@ public class TextStyle extends Style implements Cloneable {
         + toCSV("Strikethru") + toCSV("Superscript") + toLastCSV("Subscript"));
     }
 
-
     /**
-     *  Dump this <code>Style</code> as a Comma Separated Value (CSV) line.
+     * Dump this {@code Style} as a Comma Separated Value (CSV) line.
      */
     public void dumpCSV() {
         String attributes = "";
@@ -456,17 +426,15 @@ public class TextStyle extends Style implements Cloneable {
         + toCSV(fontName) + toCSV("" + sizeInPoints) + attributes + toLastCSV(null));
     }
 
-
     /**
-     *  Create a new <code>Node</code> in the <code>Document</code>, and
-     *  write this <code>Style</code> to it.
+     * Create a new {@code Node} in the {@code Document}, and write this
+     * {@code Style} to it.
      *
-     *  @param  parentDoc  Parent <code>Document</code> of the
-     *                    <code>Node</code> to create.
-     *  @param  name       Name to use for the new <code>Node</code> (e.g.
-     *                    <i>style:style</i>)
+     * @param   parentDoc  Parent {@code Document} of the {@code Node} to create.
+     * @param   name       Name to use for the new {@code Node} (e.g.
+     *                     <i>style:style</i>)
      *
-     *  @return  Created <code>Node</code>.
+     * @return  Created {@code Node}.
      */
     @Override
     public Node createNode(org.w3c.dom.Document parentDoc, String name) {
@@ -475,16 +443,14 @@ public class TextStyle extends Style implements Cloneable {
         return node;
     }
 
-
     /**
-     *  Return true if <code>style</code> specifies as much or less
-     *  than this <code>Style</code>, and nothing it specifies
-     *  contradicts this <code>Style</code>.
+     * Return {@code true} if {@code style} specifies as much or less than this
+     * {@code Style}, and nothing it specifies contradicts this {@code Style}.
      *
-     *  @param  style  The <code>Style</code> to check.
+     * @param   style  The {@code Style} to check.
      *
-     *  @return  true if <code>style</code> is a subset, false
-     *           otherwise.
+     * @return  {@code true} if {@code style} is a subset, {@code false}
+     *          otherwise.
      */
     @Override
     public boolean isSubset(Style style) {
@@ -524,13 +490,11 @@ public class TextStyle extends Style implements Cloneable {
         return true;
     }
 
-
     /**
-     *  Write this <code>Style</code> object's attributes to a
-     *  <code>Node</code> in the <code>Document</code>.
+     * Write this {@code Style} object's attributes to a {@code Node} in the
+     * {@code Document}.
      *
-     *  @param  node  The <code>Node</code> to add <code>Style</code>
-     *                attributes.
+     * @param  node  The {@code Node} to add {@code Style} attributes.
      */
     private void writeAttributes(Element node) {
 
@@ -573,14 +537,12 @@ public class TextStyle extends Style implements Cloneable {
                               buildColorString(bgColor));
     }
 
-
     /**
-     *  Given a <code>Color</code>, return a string of the form
-     *  <i>#rrggbb</i>.
+     * Given a {@code Color}, return a string of the form <i>{@literal #rrggbb}</i>.
      *
-     *  @param  c  The <code>Color</code> value.
+     * @param   c  The {@code Color} value.
      *
-     *  @return  The <code>Color</code> value in the form <i>#rrggbb</i>.
+     * @return  The {@code Color} value in the form <i>{@literal #rrggbb}</i>.
      */
     private String buildColorString(Color c) {
         int v[] = new int[3];
@@ -597,7 +559,6 @@ public class TextStyle extends Style implements Cloneable {
         return colorString;
     }
 
-
     private static String[] ignored = {
         "style:text-autospace",  "style:text-underline-color",
         "fo:margin-left", "fo:margin-right", "fo:text-indent",
@@ -611,15 +572,13 @@ public class TextStyle extends Style implements Cloneable {
         "style:line-break", "fo:keep-with-next"
     };
 
-
-    /*
-     * This code checks whether an attribute is one that we
-     * intentionally ignore.
+    /**
+     * This code checks whether an attribute is one that we intentionally ignore.
      *
-     *  @param  attribute  The attribute to check.
+     * @param   attribute  The attribute to check.
      *
-     *  @return  true if <code>attribute</code> can be ignored,
-     *           otherwise false.
+     * @return  {@code true} if {@code attribute} can be ignored, otherwise
+     *          {@code false}.
      */
     private boolean isIgnored(String attribute) {
         for (String ignored1 : ignored) {
@@ -630,4 +589,3 @@ public class TextStyle extends Style implements Cloneable {
         return false;
     }
 }
-

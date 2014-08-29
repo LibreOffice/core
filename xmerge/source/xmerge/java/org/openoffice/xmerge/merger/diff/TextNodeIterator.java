@@ -22,43 +22,42 @@ import org.w3c.dom.Node;
 
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
-
 /**
- *  <p>This is an implementation of the <code>Iterator</code> interface.
- *  It will traverse the tree and find text/space/tab <code>Node</code>
- *  sequences.</p>
+ * This is an implementation of the {@code Iterator} interface.
  *
- *  <p>Note: Once the XML Tree is parsed, then the <code>Iterator</code>
- *  will be a snap shot of that tree. That means even the tree is modified
- *  later, than the cached paragraph <code>Node</code> list will not be
- *  updated accordingly.  For this reason  and for performance reasons
- *  this <code>Iterator</code> does not support any operation methods
- *  such as insert, remove or replace.  The main purpose of this
- *  <code>Iterator</code> is to be used with difference, not with merge.</p>
+ * <p>It will traverse the tree and find text/space/tab {@code Node} sequences.
+ * </p>
+ *
+ * <p>Note: Once the XML Tree is parsed, then the {@code Iterator} will be a
+ * snap shot of that tree. That means even the tree is modified later, than the
+ * cached paragraph {@code Node} list will not be updated accordingly. For this
+ * reason  and for performance reasons this {@code Iterator} does not support
+ * any operation methods such as insert, remove or replace.  The main purpose of
+ * this {@code Iterator} is to be used with difference, not with merge.</p>
  */
 public final class TextNodeIterator extends NodeIterator {
 
     /**
-     *  Standard constructor.
+     * Standard constructor.
      *
-     *  @param  node  The initial root <code>Node</code>.
+     * @param  node  The initial root {@code Node}.
      */
     public TextNodeIterator(Node node) {
         super(null, node);
     }
 
     /**
-     *  Overwrite the parent <code>nodeSupported</code> method.  Only text
-     *  <code>Node</code> objects are supported.
+     * Overwrite the parent {@code nodeSupported} method.
      *
-     *  @param  node  <code>Node</code> to check.
+     * <p>Only text {@code Node} objects are supported.</p>
      *
-     *  @return  true if the <code>Node</code> is supported, false
-     *           otherwise.
+     * @param   node  {@code Node} to check.
+     *
+     * @return  {@code true} if the {@code Node} is supported, {@code false}
+     *          otherwise.
      */
     @Override
     protected boolean nodeSupported(Node node) {
-
         // can use an array later to check all possible tags for
         // future expansion
         return node.getNodeType() == Node.TEXT_NODE ||
@@ -67,4 +66,3 @@ public final class TextNodeIterator extends NodeIterator {
                 node.getNodeName().equals(OfficeConstants.TAG_LINE_BREAK);
     }
 }
-

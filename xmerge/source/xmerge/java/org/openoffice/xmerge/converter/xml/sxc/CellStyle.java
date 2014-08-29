@@ -30,20 +30,20 @@ import org.openoffice.xmerge.converter.xml.StyleCatalog;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- *  Represents a text <code>Style</code> in an OpenOffice document.
+ * Represents a text {@code Style} in an OpenOffice document.
  */
 public class CellStyle extends Style implements Cloneable {
 
     private Format fmt = new Format();
 
     /**
-     *  Constructor for use when going from DOM to client device format.
+     * Constructor for use when going from DOM to client device format.
      *
-     *  @param  node  The <i>style:style</i> <code>Node</code> containing
-     *                the <code>Style</code>.  (This <code>Node</code> is
-     *                assumed have a <i>family</i> attribute of <i>text</i>).
-     *  @param  sc    The <code>StyleCatalog</code>, which is used for
-     *                looking up ancestor <code>Style</code> objects.
+     * @param  node  The <i>style:style</i> {@code Node} containing the
+     *               {@code Style}.  (This {@code Node} is assumed have a
+     *               <i>family</i> attribute of <i>text</i>).
+     * @param  sc    The {@code StyleCatalog}, which is used for looking up
+     *               ancestor {@code Style} objects.
      */
     public CellStyle(Node node, StyleCatalog sc) {
         super(node, sc);
@@ -83,39 +83,39 @@ public class CellStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
-     *  Constructor for use when going from client device format to DOM
+     * Constructor for use when going from client device format to DOM.
      *
-     *  @param  name    Name of cell <code>Style</code>.  Can be null.
-     *  @param  family  Family of text <code>Style</code> (usually
-     *                  <i>text</i>).  Can be null.
-     *  @param  parent  Name of parent text <code>Style</code>, or null
-     *                  for none.
-     *  @param  fmt     size in points.
-     *  @param  sc      The <code>StyleCatalog</code>, which is used for
-     *                  looking up ancestor <code>Style</code> objects.
+     * @param  name    Name of cell {@code Style}.  Can be {@code null}.
+     * @param  family  Family of text {@code Style} (usually <i>text</i>). Can
+     *                 be {@code null}.
+     * @param  parent  Name of parent text {@code Style}, or {@code null} for
+     *                 none.
+     * @param  fmt     size in points.
+     * @param  sc      The {@code StyleCatalog}, which is used for looking up
+     *                 ancestor {@code Style} objects.
      */
-    public CellStyle(String name, String family, String parent,Format fmt, StyleCatalog sc) {
+    public CellStyle(String name, String family, String parent,Format fmt,
+            StyleCatalog sc) {
         super(name, family, parent, sc);
         this.fmt = fmt;
     }
 
     /**
-     * Returns the <code>Format</code> object for this particular style
+     * Returns the {@code Format} object for this particular style.
      *
-     * @return the <code>Format</code> object
+     * @return the {@code Format} object
      */
     public Format getFormat() {
         return fmt;
     }
 
     /**
-     *  Parse a color specification of the form <i>#rrggbb</i>
+     * Parse a color specification of the form <i>{@literal #rrggbb}</i>.
      *
-     *  @param  value  <code>Color</code> specification to parse.
+     * @param   value  {@code Color} specification to parse.
      *
-     *  @return  The <code>Color</code> associated the value.
+     * @return  The {@code Color} associated the value.
      */
     private Color parseColorString(String value) {
         // Assume color value is of form #rrggbb
@@ -135,12 +135,11 @@ public class CellStyle extends Style implements Cloneable {
         return new Color(red, green, blue, 0);
     }
 
-
     /**
-     *  Set an attribute.
+     * Set an attribute.
      *
-     *  @param  attr   The attribute to set.
-     *  @param  value  The attribute value to set.
+     * @param  attr   The attribute to set.
+     * @param  value  The attribute value to set.
      */
     private void handleAttribute(String attr, String value) {
 
@@ -252,16 +251,14 @@ public class CellStyle extends Style implements Cloneable {
         }
     }
 
-
     /**
-     *  Return a <code>Style</code> object corresponding to this one,
-     *  but with all of the inherited information from parent
-     *  <code>Style</code> objects filled in.  The object returned will
-     *  be a new object, not a reference to this object, even if it does
-     *  not need any information added.
+     * Return a {@code Style} object corresponding to this one, but with all of
+     * the inherited information from parent {@code Style} objects filled in.
      *
-     *  @return  The <code>StyleCatalog</code> in which to look up
-     *           ancestors.
+     * <p>The object returned will be a new object, not a reference to this
+     * object, even if it does not need any information added.</p>
+     *
+     * @return  The {@code StyleCatalog} in which to look up ancestors.
      */
     @Override
     public Style getResolved() {
@@ -321,17 +318,15 @@ public class CellStyle extends Style implements Cloneable {
         return resolved;
     }
 
-
     /**
-     *  Create a new <code>Node</code> in the <code>Document</code>, and
-     *  write this <code>Style</code> to it.
+     * Create a new {@code Node} in the {@code Document}, and write this
+     * {@code Style} to it.
      *
-     *  @param  parentDoc  Parent <code>Document</code> of the
-     *                    <code>Node</code> to create.
-     *  @param  name       Name to use for the new <code>Node</code> (e.g.
-     *                    <i>style:style</i>)
+     * @param   parentDoc  Parent {@code Document} of the {@code Node} to create.
+     * @param   name       Name to use for the new {@code Node} (e.g.
+     *                     <i>style:style</i>)
      *
-     *  @return  Created <code>Node</code>.
+     * @return  Created {@code Node}.
      */
     @Override
     public Node createNode(org.w3c.dom.Document parentDoc, String name) {
@@ -340,16 +335,14 @@ public class CellStyle extends Style implements Cloneable {
         return node;
     }
 
-
     /**
-     *  Return true if <code>style</code> specifies as much or less
-     *  than this <code>Style</code>, and nothing it specifies
-     *  contradicts this <code>Style</code>.
+     * Return {@code true} if {@code style} specifies as much or less than this
+     * {@code Style}, and nothing it specifies contradicts this {@code Style}.
      *
-     *  @param  style  The <code>Style</code> to check.
+     * @param   style  The {@code Style} to check.
      *
-     *  @return  true if <code>style</code> is a subset, false
-     *           otherwise.
+     * @return  {@code true} if {@code style} is a subset, {@code false}
+     *          otherwise.
      */
     @Override
     public boolean isSubset(Style style) {
@@ -365,13 +358,11 @@ public class CellStyle extends Style implements Cloneable {
         return true;
     }
 
-
     /**
-     *  Write this <code>Style</code> object's attributes to a
-     *  <code>Node</code> in the <code>Document</code>.
+     * Write this {@code Style} object's attributes to a {@code Node} in the
+     * {@code Document}.
      *
-     *  @param  node  The <code>Node</code> to add <code>Style</code>
-     *                attributes.
+     * @param  node  The {@code Node} to add {@code Style} attributes.
      */
     private void writeAttributes(Element node) {
 
@@ -442,14 +433,12 @@ public class CellStyle extends Style implements Cloneable {
 
     }
 
-
     /**
-     *  Given a <code>Color</code>, return a string of the form
-     *  <i>#rrggbb</i>.
+     * Given a {@code Color}, return a string of the form <i>{@literal #rrggbb}</i>.
      *
-     *  @param  c  The <code>Color</code> value.
+     * @param   c  The {@code Color} value.
      *
-     *  @return  The <code>Color</code> value in the form <i>#rrggbb</i>.
+     * @return  The {@code Color} value in the form <i>{@literal #rrggbb}</i>.
      */
     private String buildColorString(Color c) {
         int v[] = new int[3];
@@ -466,7 +455,6 @@ public class CellStyle extends Style implements Cloneable {
         return colorString;
     }
 
-
     private static String[] ignored = {
         "style:text-autospace",  "style:text-underline-color",
         "fo:margin-left", "fo:margin-right", "fo:text-indent",
@@ -480,15 +468,13 @@ public class CellStyle extends Style implements Cloneable {
         "style:line-break", "fo:keep-with-next"
     };
 
-
-    /*
-     * This code checks whether an attribute is one that we
-     * intentionally ignore.
+    /**
+     * This code checks whether an attribute is one that we intentionally ignore.
      *
-     *  @param  attribute  The attribute to check.
+     * @param   attribute  The attribute to check.
      *
-     *  @return  true if <code>attribute</code> can be ignored,
-     *           otherwise false.
+     * @return  {@code true} if {@code attribute} can be ignored, otherwise
+     *          {@code false}.
      */
     private boolean isIgnored(String attribute) {
         for (int i = 0; i < ignored.length; i++) {
@@ -498,4 +484,3 @@ public class CellStyle extends Style implements Cloneable {
         return false;
     }
 }
-

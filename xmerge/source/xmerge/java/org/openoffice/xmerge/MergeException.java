@@ -19,18 +19,16 @@
 package org.openoffice.xmerge;
 
 /**
- *  This <code>Exception</code> is thrown by merge algorithms.
+ * This {@code Exception} is thrown by merge algorithms.
  */
 public class MergeException extends Exception {
 
     /**
-     *  Exception thrown by merge algorithms.
+     * Exception thrown by merge algorithms.
      *
-     *  @param  message  Message to be included in the
-     *                   <code>Exception</code>.
+     * @param  message  Message to be included in the {@code Exception}.
      */
     public MergeException(String message) {
         super(message);
     }
 }
-

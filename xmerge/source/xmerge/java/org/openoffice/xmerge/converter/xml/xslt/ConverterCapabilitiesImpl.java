@@ -22,15 +22,13 @@ import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 /**
- *  <p>Xslt implementation of <code>ConverterCapabilities</code> for
- *  the {@link
- *  org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl
- *  PluginFactoryImpl}.</p>
+ * Xslt implementation of {@code ConverterCapabilities} for the {@link
+ * org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl PluginFactoryImpl}.
  *
- *  <p>Used with StarWriter XML to/from XSLT supported formats conversions.  The
- *  <code>ConverterCapibilies</code> specify which &quot;Office&quot;
- *  <code>Document</code> tags and attributes are supported on the
- *  &quot;Device&quot; <code>Document</code> format.</p>
+ * <p>Used with StarWriter XML to/from XSLT supported formats conversions.  The
+ * {@code ConverterCapibilies} specify which &quot;Office&quot; {@code Document}
+ * tags and attributes are supported on the &quot;Device&quot; {@code Document}
+ * format.</p>
  */
 public final class ConverterCapabilitiesImpl
     implements ConverterCapabilities {
@@ -69,11 +67,9 @@ public final class ConverterCapabilitiesImpl
         return false;
     }
 
-    public boolean canConvertAttribute(String tag,
-                                       String attribute) {
+    public boolean canConvertAttribute(String tag, String attribute) {
 
         if (OfficeConstants.TAG_SPACE.equals(tag)) {
-
             if (OfficeConstants.ATTRIBUTE_SPACE_COUNT.equals(attribute))
                 return true;
         }
@@ -81,4 +77,3 @@ public final class ConverterCapabilitiesImpl
         return false;
     }
 }
-
