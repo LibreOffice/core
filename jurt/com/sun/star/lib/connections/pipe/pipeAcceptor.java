@@ -83,7 +83,7 @@ public final class pipeAcceptor implements XAcceptor {
      * <code><var>type</var></code><!--
      *     -->*(<code><var>key</var>=<var>value</var></code>),
      * where <code><var>type</var></code> should be <code>pipe</code>
-     * (ignoring case).  Supported keys (ignoring case) currently are
+     * (ignoring case).  Supported keys (ignoring case) currently are</p>
      * <dl>
      * <dt><code>host</code>
      * <dd>The name or address of the accepting interface (defaults to
@@ -96,7 +96,7 @@ public final class pipeAcceptor implements XAcceptor {
      * <dt><code>tcpnodelay</code>
      * <dd>A flag (<code>0</code>/<code>1</code>) enabling or disabling Nagle's
      *     algorithm on the resulting connection.
-     * </dl></p>
+     * </dl>
      *
      * @param connectionDescription the description of the connection.
      * @return an <code>XConnection</code> to the client.
