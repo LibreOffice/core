@@ -350,7 +350,6 @@ public:
 
     /** Writes the entire pivot table. */
     virtual void        Save( XclExpStream& rStrm ) SAL_OVERRIDE;
-    virtual void        SaveXml( XclExpXmlStream& rStrm ) SAL_OVERRIDE;
 
 private:
     /** Returns a pivot table field by its name. */
@@ -432,10 +431,8 @@ public:
 
     /** Writes all pivot caches (all Workbook records and cache streams). */
     void                WritePivotCaches( XclExpStream& rStrm );
-    void                WritePivotCachesXml( XclExpXmlStream& rStrm );
     /** Writes all pivot tables of the specified Calc sheet. */
     void                WritePivotTables( XclExpStream& rStrm, SCTAB nScTab );
-    void                WritePivotTablesXml( XclExpXmlStream& rStrm, SCTAB nScTab );
 
 private:
     /** Finds an existing (if enabled in mbShareCaches) or creates a new pivot cache.
