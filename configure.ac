@@ -317,6 +317,9 @@ if test -n "$with_android_ndk"; then
     if test $host_cpu = arm; then
         android_cpu=arm
         android_platform_prefix=$android_cpu-linux-androideabi
+    elif test $host_cpu = aarch64; then
+        android_cpu=aarch64
+        android_platform_prefix=$android_cpu-linux-android
     elif test $host_cpu = mips; then
         android_cpu=mips
         android_platform_prefix=$android_cpu-linux-androideabi
@@ -328,7 +331,7 @@ if test -n "$with_android_ndk"; then
     fi
 
     case "$with_android_ndk_toolchain_version" in
-    4.6|4.7|4.8)
+    4.6|4.7|4.8|4.9)
         ANDROID_BINUTILS_DIR=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$with_android_ndk_toolchain_version
         ANDROID_COMPILER_DIR=$ANDROID_BINUTILS_DIR
         ;;
@@ -383,8 +386,13 @@ if test -n "$with_android_ndk"; then
         ;;
     esac
 
+    ANDROID_API_LEVEL=15
     if test $host_cpu = arm; then
         android_gnu_prefix=arm-linux-androideabi
+    elif test $host_cpu = aarch64; then
+        android_gnu_prefix=aarch64-linux-android
+        ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR="${with_android_ndk_toolchain_version}/"
+        ANDROID_API_LEVEL=L
     elif test $host_cpu = mips; then
         android_gnu_prefix=mipsel-linux-android
     elif test $ANDROID_NDK_VERSION = r8; then
@@ -394,13 +402,7 @@ if test -n "$with_android_ndk"; then
         android_gnu_prefix=i686-linux-android
     fi
 
-    test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-15/arch-$android_cpu
-    test -z "$AR" && AR=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ar
-    test -z "$NM" && NM=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-nm
-    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-objdump
-    test -z "$RANLIB" && RANLIB=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ranlib
-    test -z "$STRIP" && STRIP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-strip
-
+    ANDROID_ARCH=$android_cpu
     if test $host_cpu = arm; then
         ANDROID_APP_ABI=armeabi-v7a
         if test -n "$ANDROID_USING_CLANG"; then
@@ -412,6 +414,10 @@ if test -n "$with_android_ndk"; then
         fi
         ANDROIDCFLAGS="$ANDROIDCFLAGS -mthumb"
         ANDROIDCFLAGS="$ANDROIDCFLAGS -march=armv7-a -mfloat-abi=softfp -mfpu=neon"
+        ANDROIDCFLAGS="$ANDROIDCFLAGS -Wl,--fix-cortex-a8"
+    elif test $host_cpu = aarch64; then
+        ANDROID_APP_ABI=arm64-v8a
+        ANDROID_ARCH=arm64
     elif test $host_cpu = mips; then
         ANDROID_APP_ABI=mips
         ANDROIDCFLAGS=""
@@ -421,8 +427,7 @@ if test -n "$with_android_ndk"; then
     fi
     ANDROIDCFLAGS="$ANDROIDCFLAGS -ffunction-sections -fdata-sections"
     ANDROIDCFLAGS="$ANDROIDCFLAGS -L$ANDROID_NDK_HOME/sources/cxx-stl/gnu-libstdc++/${ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR}libs/$ANDROID_APP_ABI"
-    ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot $ANDROID_NDK_HOME/platforms/android-15/arch-$android_cpu"
-    ANDROIDCFLAGS="$ANDROIDCFLAGS -Wl,--fix-cortex-a8"
+    ANDROIDCFLAGS="$ANDROIDCFLAGS --sysroot $ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}"
 
     if test -n "$ANDROID_USING_CLANG"; then
         ANDROIDCFLAGS="$ANDROIDCFLAGS -Qunused-arguments"
@@ -430,11 +435,17 @@ if test -n "$with_android_ndk"; then
         ANDROIDCFLAGS="$ANDROIDCFLAGS -Wno-psabi"
     fi
 
+    test -z "$SYSBASE" && export SYSBASE=$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}
+    test -z "$AR" && AR=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ar
+    test -z "$NM" && NM=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-nm
+    test -z "$OBJDUMP" && OBJDUMP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-objdump
+    test -z "$RANLIB" && RANLIB=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-ranlib
+    test -z "$STRIP" && STRIP=$ANDROID_BINUTILS_BIN/$android_gnu_prefix-strip
+
     # When using the 4.6 or newer toolchain, use the gold linker
     case "$with_android_ndk_toolchain_version" in
     4.[[6789]]*|[[56789]].*|clang*)
-        # The NDK doesn't have ld.gold for MIPS for some reason
-        if test "$host_cpu" != mips -a "$ENABLE_LTO" != TRUE; then
+        if test "$host_cpu" = arm -a "$ENABLE_LTO" != TRUE; then
             ANDROIDCFLAGS="$ANDROIDCFLAGS -fuse-ld=gold"
         fi
         ;;
@@ -451,6 +462,8 @@ if test -n "$with_android_ndk"; then
         ANDROID_NDK_GDBSERVER=$ANDROID_NDK_HOME/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver
     elif test -f $ANDROID_NDK_HOME/prebuilt/android-$android_cpu/gdbserver/gdbserver; then
         ANDROID_NDK_GDBSERVER=$ANDROID_NDK_HOME/prebuilt/android-$android_cpu/gdbserver/gdbserver
+    elif test $android_cpu = aarch64; then
+        ANDROID_NDK_GDBSERVER=$ANDROID_NDK_HOME/prebuilt/android-arm64/gdbserver/gdbserver
     else
         AC_MSG_ERROR([Can't find gdbserver for your Android target])
     fi
@@ -751,7 +764,7 @@ linux-android*)
     fi
 
     # Verify that the NDK and SDK options are proper
-    if test ! -f "$ANDROID_NDK_HOME/platforms/android-15/arch-arm/usr/lib/libc.a"; then
+    if test ! -f "$ANDROID_NDK_HOME/platforms/android-${ANDROID_API_LEVEL}/arch-${ANDROID_ARCH}/usr/lib/libc.a"; then
         AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
     fi
 
@@ -4432,6 +4445,12 @@ linux-android*)
         RTL_ARCH=ARM_EABI
         PLATFORMID=android_arm_eabi
         OUTPATH=unxandr
+        ;;
+    aarch64)
+        CPUNAME=AARCH64
+        RTL_ARCH=AARCH64
+        PLATFORMID=android_aarch64
+        OUTPATH=unxandaarch64
         ;;
     mips|mipsel)
         CPUNAME=GODSON # Weird, but maybe that's the LO convention?

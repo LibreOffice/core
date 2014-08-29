@@ -395,14 +395,16 @@ Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
                                               jstring string)
 {
     const char *s;
+    char *s_copy;
 
     (void) clazz;
 
     s = (*env)->GetStringUTFChars(env, string, NULL);
+    s_copy = strdup(s);
 
-    LOGI("putenv(%s)", s);
+    LOGI("putenv(%s)", s_copy);
 
-    putenv(s);
+    putenv(s_copy);
 
 #if 0
     {
@@ -777,7 +779,7 @@ extract_files(const char *root,
             strcat(newfilename, dent->d_name);
 
             if (stat(newfilename, &st) == 0 &&
-                (gzipped || st.st_size == size)) {
+                (gzipped || st.st_size == (long long) size)) {
                 free(filename);
                 free(newfilename);
                 continue;
@@ -793,13 +795,13 @@ extract_files(const char *root,
 
             if (!gzipped) {
                 if (fwrite(apkentry, size, 1, f) != 1) {
-                    LOGE("extract_files: Could not write %d bytes to %s: %s", size, newfilename, strerror(errno));
+                    LOGE("extract_files: Could not write %lld bytes to %s: %s", (long long) size, newfilename, strerror(errno));
                 } else {
-                    LOGI("extract_files: Copied %s to %s: %d bytes", filename, newfilename, size);
+                    LOGI("extract_files: Copied %s to %s: %lld bytes", filename, newfilename, (long long) size);
                 }
             } else {
                 size = extract_gzipped(filename, apkentry, size, f);
-                LOGI("extract_files: Decompressed %s to %s: %d bytes", filename, newfilename, size);
+                LOGI("extract_files: Decompressed %s to %s: %lld bytes", filename, newfilename, (long long) size);
             }
 
             fclose(f);

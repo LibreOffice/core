@@ -35,7 +35,7 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,gcc3_uno)) : \
 	EXTRAOBJECTLISTS += $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_linux_arm)/armhelper.objectlist
 endif
 
-else ifeq ($(OS)-$(CPUNAME),LINUX-AARCH64)
+else ifneq (,$(filter ANDROID-AARCH64 LINUX-AARCH64,$(OS)-$(CPUNAME)))
 
 bridges_SELECTED_BRIDGE := gcc3_linux_aarch64
 bridge_exception_objects := abi callvirtualfunction cpp2uno uno2cpp
