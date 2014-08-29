@@ -3198,9 +3198,11 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
         aAreaParam.maClipRect.Left() = nScrX;
         aAreaParam.mbLeftClip = true;
     }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
+    if ( aAreaParam.maClipRect.Right() >
+         nScrX + LogicToPixelHorizontal(nScrWTwips ) )
     {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
+        aAreaParam.maClipRect.Right() = nScrX +
+            LogicToPixelHorizontal( nScrWTwips );          //! minus one?
         aAreaParam.mbRightClip = true;
     }
 
@@ -3218,9 +3220,11 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
         aAreaParam.maClipRect.Top() = nScrY;
         bClip = true;
     }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
+    if ( aAreaParam.maClipRect.Bottom() >
+         nScrY + LogicToPixelVertical( nScrHTwips ) )
     {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
+        aAreaParam.maClipRect.Bottom() = nScrY +
+            LogicToPixelVertical( nScrHTwips );     //! minus one?
         bClip = true;
     }
 
@@ -3282,7 +3286,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
     //! mirror margin values for RTL?
     //! move margin down to after final GetOutputArea call
     long nTopM, nLeftM, nBottomM, nRightM;
-    rParam.calcMargins(nTopM, nLeftM, nBottomM, nRightM, mnPPTX, mnPPTY);
+    rParam.calcMargins( nTopM, nLeftM, nBottomM, nRightM );
 
     SCCOL nXForPos = rParam.mnX;
     if ( nXForPos < nX1 )
@@ -3312,7 +3316,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
                        rParam.mbCellIsValue, true, false, aAreaParam );
 
         //! special ScEditUtil handling if formatting for printer
-        rParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, mnPPTX, mnPPTY);
+        rParam.calcPaperSize( aPaperSize, aAreaParam.maAlignRect );
     }
     if (rParam.mbPixelToLogic)
     {
@@ -3444,7 +3448,7 @@ void ScOutputData::DrawEditBottomTop(DrawEditParam& rParam)
             nStartX += nLeftM;
     }
 
-    const bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
+    const bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrWTwips);
     if (bOutside)
         return;
 
@@ -3542,7 +3546,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
     //! mirror margin values for RTL?
     //! move margin down to after final GetOutputArea call
     long nTopM, nLeftM, nBottomM, nRightM;
-    rParam.calcMargins(nTopM, nLeftM, nBottomM, nRightM, mnPPTX, mnPPTY);
+    rParam.calcMargins( nTopM, nLeftM, nBottomM, nRightM );
 
     SCCOL nXForPos = rParam.mnX;
     if ( nXForPos < nX1 )
@@ -3572,7 +3576,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
                        rParam.mbCellIsValue, true, false, aAreaParam );
 
         //! special ScEditUtil handling if formatting for printer
-        rParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, mnPPTX, mnPPTY);
+        rParam.calcPaperSize( aPaperSize, aAreaParam.maAlignRect );
     }
     if (rParam.mbPixelToLogic)
     {
@@ -3706,7 +3710,7 @@ void ScOutputData::DrawEditTopBottom(DrawEditParam& rParam)
             nStartX += nLeftM;
     }
 
-    const bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
+    const bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrWTwips);
     if (bOutside)
         return;
 
@@ -3809,7 +3813,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
     //! mirror margin values for RTL?
     //! move margin down to after final GetOutputArea call
     long nTopM, nLeftM, nBottomM, nRightM;
-    rParam.calcMargins(nTopM, nLeftM, nBottomM, nRightM, mnPPTX, mnPPTY);
+    rParam.calcMargins( nTopM, nLeftM, nBottomM, nRightM );
 
     SCCOL nXForPos = rParam.mnX;
     if ( nXForPos < nX1 )
@@ -3837,7 +3841,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
                    rParam.mbCellIsValue, true, false, aAreaParam );
 
     //! special ScEditUtil handling if formatting for printer
-    rParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, mnPPTX, mnPPTY);
+    rParam.calcPaperSize( aPaperSize, aAreaParam.maAlignRect );
 
     if (rParam.mbPixelToLogic)
     {
@@ -3948,7 +3952,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             nStartX += nLeftM;
     }
 
-    bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
+    bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrWTwips);
     if (bOutside)
         return;
 
@@ -3957,9 +3961,9 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         aAreaParam.maClipRect.Left() = nScrX;
         aAreaParam.mbLeftClip = true;
     }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
+    if ( aAreaParam.maClipRect.Right() > nScrX + nScrWTwips )
     {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
+        aAreaParam.maClipRect.Right() = nScrX + nScrWTwips;          //! minus one?
         aAreaParam.mbRightClip = true;
     }
 
@@ -3977,9 +3981,9 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         aAreaParam.maClipRect.Top() = nScrY;
         bClip = true;
     }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
+    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrHTwips )
     {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
+        aAreaParam.maClipRect.Bottom() = nScrY + nScrHTwips;     //! minus one?
         bClip = true;
     }
 
@@ -4097,9 +4101,9 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
 
     Point aURLStart = aLogicStart;      // copy before modifying for orientation
 
-    Size aPaperLogic = rParam.mpEngine->GetPaperSize();
-    aPaperLogic.Width() = nEngineWidth;
-    rParam.mpEngine->SetPaperSize(aPaperLogic);
+    Size aPaperTwips = rParam.mpEngine->GetPaperSize();
+    aPaperTwips.Width() = nEngineWidth;
+    rParam.mpEngine->SetPaperSize(aPaperTwips);
 
     rParam.adjustForRTL();
 
@@ -4167,7 +4171,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
     //! mirror margin values for RTL?
     //! move margin down to after final GetOutputArea call
     long nTopM, nLeftM, nBottomM, nRightM;
-    rParam.calcMargins(nTopM, nLeftM, nBottomM, nRightM, mnPPTX, mnPPTY);
+    rParam.calcMargins( nTopM, nLeftM, nBottomM, nRightM );
 
     SCCOL nXForPos = rParam.mnX;
     if ( nXForPos < nX1 )
@@ -4195,7 +4199,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
                    rParam.mbCellIsValue, true, false, aAreaParam );
 
     //! special ScEditUtil handling if formatting for printer
-    rParam.calcPaperSize(aPaperSize, aAreaParam.maAlignRect, mnPPTX, mnPPTY);
+    rParam.calcPaperSize( aPaperSize, aAreaParam.maAlignRect );
 
     if (rParam.mbPixelToLogic)
     {
@@ -4298,7 +4302,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
 
     nStartX += nLeftM;
 
-    bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrW);
+    bool bOutside = (aAreaParam.maClipRect.Right() < nScrX || aAreaParam.maClipRect.Left() >= nScrX + nScrWTwips);
     if (bOutside)
         return;
 
@@ -4307,9 +4311,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         aAreaParam.maClipRect.Left() = nScrX;
         aAreaParam.mbLeftClip = true;
     }
-    if ( aAreaParam.maClipRect.Right() > nScrX + nScrW )
+    if ( aAreaParam.maClipRect.Right() > nScrX + nScrWTwips )
     {
-        aAreaParam.maClipRect.Right() = nScrX + nScrW;          //! minus one?
+        aAreaParam.maClipRect.Right() = nScrX + nScrWTwips;          //! minus one?
         aAreaParam.mbRightClip = true;
     }
 
@@ -4327,9 +4331,9 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         aAreaParam.maClipRect.Top() = nScrY;
         bClip = true;
     }
-    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrH )
+    if ( aAreaParam.maClipRect.Bottom() > nScrY + nScrHTwips )
     {
-        aAreaParam.maClipRect.Bottom() = nScrY + nScrH;     //! minus one?
+        aAreaParam.maClipRect.Bottom() = nScrY + nScrHTwips;     //! minus one?
         bClip = true;
     }
 
@@ -4466,10 +4470,10 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
     const SfxItemSet*    pOldPreviewFontSet = NULL;
     ScRefCellValue aCell;
 
-    long nInitPosX = nScrX;
+    long nInitPosXTwips = PixelToLogicHorizontal( nScrX );
     if ( bLayoutRTL )
     {
-        nInitPosX += nMirrorW - 1;
+        nInitPosXTwips += nMirrorWTwips - 1;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
@@ -4479,20 +4483,24 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
         nLastContentCol = sal::static_int_cast<SCCOL>(
             nLastContentCol - mpDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT ) );
 
-    long nRowPosY = nScrY;
+    long nRowPosYTwips = PixelToLogicVertical( nScrY );
     for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
 
-        if (nArrY==1) nRowPosY = nScrY;                         // vorher wird einzeln berechnet
+        if ( nArrY==1 )
+        {
+            nRowPosYTwips = PixelToLogicVertical( nScrY );                         // vorher wird einzeln berechnet
+        }
 
         if ( pThisRowInfo->bChanged || nArrY==0 )
         {
-            long nPosX = 0;
+            long nPosXTwips = 0;
             for (SCCOL nX=0; nX<=nX2; nX++)                 // wegen Ueberhaengen
             {
                 boost::scoped_ptr< ScPatternAttr > pPreviewPattr;
-                if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
+                if (nX==nX1)
+                    nPosXTwips = nInitPosXTwips;                 // positions before nX1 are calculated individually
 
                 CellInfo*   pInfo = &pThisRowInfo->pCellInfo[nX+1];
                 if (pInfo->bEditEngine)
@@ -4503,10 +4511,10 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                     SCROW nCellY = nY;
                     bool bDoCell = false;
 
-                    long nPosY = nRowPosY;
+                    long nPosYTwips = nRowPosYTwips;
                     if ( nArrY == 0 )
                     {
-                        nPosY = nScrY;
+                        nPosYTwips = PixelToLogicVertical( nScrY );
                         nY = pRowInfo[1].nRowNo;
                         SCCOL nOverX;                   // start of the merged cells
                         SCROW nOverY;
@@ -4597,9 +4605,9 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         aParam.mnCellX = nCellX;
                         aParam.mnCellY = nCellY;
                         aParam.mnTab = nTab;
-                        aParam.mnPosX = nPosX;
-                        aParam.mnPosY = nPosY;
-                        aParam.mnInitPosX = nInitPosX;
+                        aParam.mnPosX = LogicToPixelHorizontal( nPosXTwips );
+                        aParam.mnPosY = LogicToPixelVertical( nPosYTwips );
+                        aParam.mnInitPosX = LogicToPixelHorizontal( nInitPosXTwips );
                         aParam.mpPreviewFontSet = pPreviewFontSet;
                         aParam.mpPreviewFontSet = pPreviewFontSet;
                         aParam.mpOldPattern = pOldPattern;
@@ -4637,10 +4645,10 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         bHyphenatorSet = aParam.mbHyphenatorSet;
                     }
                 }
-                nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+                nPosXTwips += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
             }
         }
-        nRowPosY += pRowInfo[nArrY].nHeight;
+        nRowPosYTwips += pRowInfo[nArrY].nHeight;
     }
 
     pEngine.reset();
@@ -4670,26 +4678,29 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
     const SfxItemSet*    pOldCondSet = NULL;
     ScRefCellValue aCell;
 
-    long nInitPosX = nScrX;
+    long nInitPosXTwips = PixelToLogicHorizontal( nScrX );
     if ( bLayoutRTL )
     {
-        nInitPosX += nMirrorW - 1;
+        nInitPosXTwips += nMirrorWTwips - 1;
     }
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    long nRowPosY = nScrY;
+    long nRowPosYTwips = PixelToLogicVertical( nScrY );
     for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-        long nCellHeight = (long) pThisRowInfo->nHeight;
-        if (nArrY==1) nRowPosY = nScrY;                         // vorher wird einzeln berechnet
+        long nCellHeightTwips = (long) pThisRowInfo->nHeight;
+        if (nArrY==1)
+            nRowPosYTwips = PixelToLogicVertical( nScrY );
 
         if ( ( pThisRowInfo->bChanged || nArrY==0 ) && pThisRowInfo->nRotMaxCol != SC_ROTMAX_NONE )
         {
-            long nPosX = 0;
+            long nPosXTwips = 0;
             for (SCCOL nX=0; nX<=nRotMax; nX++)
             {
-                if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
+                // We calculate positions before nX1 individually (?)
+                if (nX==nX1)
+                    nPosXTwips = nInitPosXTwips;
 
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
                 if ( pInfo->nRotateDir != SC_ROTDIR_NONE )
@@ -4708,7 +4719,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(sal_False)
 
-                        long nPosY = nRowPosY;
+                        long nPosYTwips = nRowPosYTwips;
                         bool bVisChanged = false;
 
                         //! Rest von zusammengefasster Zelle weiter oben funktioniert nicht!
@@ -4731,7 +4742,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                         if (aCell.isEmpty() || IsEmptyCellText(pThisRowInfo, nX, nY))
                             bHidden = true;     // nRotateDir is also set without a cell
 
-                        long nCellWidth = (long) pRowInfo[0].pCellInfo[nX+1].nWidth;
+                        long nCellWidthTwips = (long) pRowInfo[0].pCellInfo[nX+1].nWidth;
 
                         SvxCellHorJustify eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
                                             pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet)).GetValue();
@@ -4746,39 +4757,44 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
                         bool bMerged = pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1;
 
-                        long nStartX = nPosX;
-                        long nStartY = nPosY;
+                        long nStartXTwips = nPosXTwips;
+                        long nStartYTwips = nPosYTwips;
                         if (nX<nX1)
                         {
                             if ((bBreak || eOrient!=SVX_ORIENTATION_STANDARD) && !bMerged)
                                 bHidden = true;
                             else
                             {
-                                nStartX = nInitPosX;
+                                nStartXTwips = nInitPosXTwips;
                                 SCCOL nCol = nX1;
                                 while (nCol > nX)
                                 {
                                     --nCol;
-                                    nStartX -= nLayoutSign * (long) pRowInfo[0].pCellInfo[nCol+1].nWidth;
+                                    nStartXTwips -= nLayoutSign *
+                                        (long) pRowInfo[0].pCellInfo[nCol+1].nWidth;
                                 }
                             }
                         }
-                        long nCellStartX = nStartX;
+                        long nCellStartXTwips = nStartXTwips;
 
                         //  Ersatzdarstellung fuer zu kleinen Text weggelassen
 
                         if (!bHidden)
                         {
-                            long nOutWidth = nCellWidth - 1;
-                            long nOutHeight = nCellHeight;
+                            long nOutWidthTwips = nCellWidthTwips - PixelToLogicHorizontal( 1 );
+                            long nOutHeightTwips = nCellHeightTwips;
 
                             if ( bMerged )                              // Zusammengefasst
                             {
                                 SCCOL nCountX = pMerge->GetColMerge();
                                 for (SCCOL i=1; i<nCountX; i++)
-                                    nOutWidth += (long) ( mpDoc->GetColWidth(nX+i,nTab) * mnPPTX );
+                                    nOutWidthTwips += (long) mpDoc->GetColWidth(nX+i,nTab);
                                 SCROW nCountY = pMerge->GetRowMerge();
-                                nOutHeight += (long) mpDoc->GetScaledRowHeight( nY+1, nY+nCountY-1, nTab, mnPPTY);
+                                // TODO: sum the rows?
+                                for ( SCROW i = nY + 1; i <= nY + nCountY - 1; i++ )
+                                {
+                                    nOutHeightTwips += mpDoc->GetRowHeight( i, nTab );
+                                }
                             }
 
                             SvxCellVerJustify eVerJust = (SvxCellVerJustify)((const SvxVerJustifyItem&)
@@ -4836,18 +4852,21 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 nIndent = ((const SfxUInt16Item&)pPattern->
                                                     GetItem(ATTR_INDENT, pCondSet)).GetValue();
 
-                            long nTotalHeight = nOutHeight; // ohne Rand abzuziehen
+                            // Without subtracting the margins
+                            long nTotalHeightPixel = LogicToPixelVertical(
+                                nOutHeightTwips );
                             if ( bPixelToLogic )
-                                nTotalHeight = mpRefDevice->PixelToLogic(Size(0,nTotalHeight)).Height();
+                                nTotalHeightPixel =
+                                    mpRefDevice->PixelToLogic(Size(0,nTotalHeightPixel)).Height();
 
-                            long nLeftM = (long) ( (pMargin->GetLeftMargin() + nIndent) * mnPPTX );
-                            long nTopM  = (long) ( pMargin->GetTopMargin() * mnPPTY );
-                            long nRightM  = (long) ( pMargin->GetRightMargin() * mnPPTX );
-                            long nBottomM = (long) ( pMargin->GetBottomMargin() * mnPPTY );
-                            nStartX += nLeftM;
-                            nStartY += nTopM;
-                            nOutWidth -= nLeftM + nRightM;
-                            nOutHeight -= nTopM + nBottomM;
+                            long nLeftMTwips = (long) (pMargin->GetLeftMargin() + nIndent);
+                            long nTopMTwips  = (long) pMargin->GetTopMargin();
+                            long nRightMTwips  = (long) pMargin->GetRightMargin();
+                            long nBottomMTwips = (long) pMargin->GetBottomMargin();
+                            nStartXTwips += nLeftMTwips;
+                            nStartYTwips += nTopMTwips;
+                            nOutWidthTwips -= nLeftMTwips + nRightMTwips;
+                            nOutHeightTwips -= nTopMTwips + nBottomMTwips;
 
                             //  Rotation schon hier, um bei Umbruch auch PaperSize anzupassen
                             long nAttrRotate = 0;
@@ -4877,7 +4896,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                             Size aPaperSize = Size( 1000000, 1000000 );
                             if (eOrient==SVX_ORIENTATION_STACKED)
-                                aPaperSize.Width() = nOutWidth;             // zum Zentrieren
+                                // In order to center it
+                                aPaperSize.Width() = LogicToPixelHorizontal( nOutWidthTwips );
                             else if (bBreak)
                             {
                                 if (nAttrRotate)
@@ -4886,12 +4906,13 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     //! ab, solange die Zeilen nicht einzeln versetzt ausgegeben
                                     //! werden koennen -> darum unbegrenzt, also kein Umbruch.
                                     //! Mit versetzten Zeilen waere das folgende richtig:
-                                    aPaperSize.Width() = (long)(nOutHeight / fabs(nSin));
+                                    aPaperSize.Width() = (long) (
+                                        LogicToPixelHorizontal( nOutHeightTwips ) / fabs(nSin) );
                                 }
                                 else if (eOrient == SVX_ORIENTATION_STANDARD)
-                                    aPaperSize.Width() = nOutWidth;
+                                    aPaperSize.Width() = LogicToPixelHorizontal( nOutWidthTwips );
                                 else
-                                    aPaperSize.Width() = nOutHeight - 1;
+                                    aPaperSize.Width() = LogicToPixelHorizontal( nOutHeightTwips - 1 );
                             }
                             if (bPixelToLogic)
                                 pEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
@@ -4952,25 +4973,29 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     // everything is in pixels
                                     long nEnginePixel = mpRefDevice->LogicToPixel(
                                                             Size(0,nEngineHeight)).Height();
-                                    long nEffHeight = nOutHeight - (long)(nEnginePixel * nAbsCos) + 2;
-                                    long nNewWidth = (long)(nEffHeight / nAbsSin) + 2;
-                                    bool bFits = ( nNewWidth >= aPaperSize.Width() );
+                                    // TODO: continue conversion here...
+                                    long nEffHeightTwips = nOutHeightTwips -
+                                        PixelToLogicVertical( (long)(nEnginePixel * nAbsCos) + 2 );
+                                    long nNewWidthTwips = (long)(nEffHeightTwips / nAbsSin) + 2;
+                                    bool bFits =
+                                        ( LogicToPixelHorizontal( nNewWidthTwips ) >=
+                                          aPaperSize.Width() );
                                     if ( bFits )
                                         nSteps = 0;
                                     else
                                     {
-                                        if ( nNewWidth < 4 )
+                                        if ( LogicToPixelHorizontal( nNewWidthTwips ) < 4 )
                                         {
                                             // can't fit -> fall back to using half height
-                                            nEffHeight = nOutHeight / 2;
-                                            nNewWidth = (long)(nEffHeight / nAbsSin) + 2;
+                                            nEffHeightTwips = nOutHeightTwips / 2;
+                                            nNewWidthTwips = (long)(nEffHeightTwips / nAbsSin) + 2;
                                             nSteps = 0;
                                         }
                                         else
                                             --nSteps;
 
                                         // set paper width and get new text height
-                                        aPaperSize.Width() = nNewWidth;
+                                        aPaperSize.Width() = LogicToPixelHorizontal( nNewWidthTwips );
                                         if (bPixelToLogic)
                                             pEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
                                         else
@@ -5010,15 +5035,31 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             if (!bHidden)
                             {
                                 bool bClip = false;
-                                Size aClipSize = Size( nScrX+nScrW-nStartX, nScrY+nScrH-nStartY );
+                                Size aClipSize = Size(
+                                    nScrX + LogicToPixelHorizontal( nScrWTwips - nStartXTwips ),
+                                    nScrY + LogicToPixelVertical( nScrHTwips - nStartYTwips ) );
 
                                 //  weiterschreiben
 
                                 Size aCellSize;
-                                if (bPixelToLogic)
-                                    aCellSize = mpRefDevice->PixelToLogic( Size( nOutWidth, nOutHeight ) );
-                                else
-                                    aCellSize = Size( nOutWidth, nOutHeight );  // Scale ist 1
+
+                                // Yes, we really need this conversion:
+                                // our Twips units here are all using ViewData's PaintMapMode,
+                                // whereas the window/output-device could be using an arbitrary
+                                // map-mode which is not necessarily related to the PaintMapMode
+                                {
+                                    long nOutWidth = LogicToPixelHorizontal( nOutWidthTwips );
+                                    long nOutHeight = LogicToPixelVertical( nOutHeightTwips );
+                                    if (bPixelToLogic)
+                                    {
+                                        aCellSize = mpRefDevice->PixelToLogic(
+                                            Size( nOutWidth, nOutHeight ) );
+                                    }
+                                    else
+                                    {
+                                        aCellSize = Size( nOutWidth, nOutHeight );  // Scale ist 1
+                                    }
+                                }
 
                                 long nGridWidth = nEngineWidth;
                                 bool bNegative = false;
@@ -5044,20 +5085,34 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 if ( bPixelToLogic )
                                     nNeededWidth =  mpRefDevice->LogicToPixel(Size(nNeededWidth,0)).Width();
 
-                                GetOutputArea( nX, nArrY, nCellStartX, nPosY, nCellX, nCellY, nNeededWidth,
+                                GetOutputArea( nX, nArrY,
+                                               nCellStartXTwips, nPosYTwips,
+                                               nCellX, nCellY, nNeededWidth,
                                                 *pPattern, sal::static_int_cast<sal_uInt16>(eOutHorJust),
                                                 false, false, true, aAreaParam );
+
+                                // TODO: duplication much?
+                                long nLeftM = LogicToPixelHorizontal( nLeftMTwips );
+                                long nRightM = LogicToPixelHorizontal( nRightMTwips );
+                                long nTopM = LogicToPixelVertical( nTopMTwips );
+                                long nBottomM = LogicToPixelVertical( nBottomMTwips );
 
                                 if ( bShrink )
                                 {
                                     long nPixelWidth = bPixelToLogic ?
                                         mpRefDevice->LogicToPixel(Size(nEngineWidth,0)).Width() : nEngineWidth;
+                                    // TODO: these margins are in pixels
+                                    // TODO: continue here
                                     long nNeededPixel = nPixelWidth + nLeftM + nRightM;
 
                                     aAreaParam.mbLeftClip = aAreaParam.mbRightClip = true;
 
                                     // always do height
-                                    ShrinkEditEngine( *pEngine, aAreaParam.maAlignRect, nLeftM, nTopM, nRightM, nBottomM,
+                                    // TODO: reimplement ShrinkEditEngine
+                                    ShrinkEditEngine( *pEngine,
+                                                      aAreaParam.maAlignRect,
+                                                      nLeftM, nTopM,
+                                                      nRightM, nBottomM,
                                         false, sal::static_int_cast<sal_uInt16>(eOrient), nAttrRotate, bPixelToLogic,
                                         nEngineWidth, nEngineHeight, nNeededPixel, aAreaParam.mbLeftClip, aAreaParam.mbRightClip );
 
@@ -5078,6 +5133,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         nEngineWidth = (long) ( nRealHeight / fabs( nSin ) );
                                 }
 
+                                const long nStartX = LogicToPixelHorizontal( nStartXTwips );
                                 long nClipStartX = nStartX;
                                 if (nX<nX1)
                                 {
@@ -5092,6 +5148,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     }
                                 }
 
+                                const long nStartY = LogicToPixelVertical( nStartYTwips );
+                                const long nRowPosY = LogicToPixelVertical( nRowPosYTwips );
                                 long nClipStartY = nStartY;
                                 if (nArrY==0 || bVisChanged)
                                 {
@@ -5114,7 +5172,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                         //  gedrehten, ausgerichteten Text nur an den
                                         //  Seitengrenzen clippen
                                         nClipStartX = nScrX;
-                                        aClipSize.Width() = nScrW;
+                                        aClipSize.Width() = nScrWTwips;
                                     }
 
                                     if (bPixelToLogic)
@@ -5169,7 +5227,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                             pEngine->SetDefaultItem(
                                                 SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
-                                            aPaperSize.Width() = nOutWidth;
+                                            aPaperSize.Width() = LogicToPixelHorizontal( nOutWidthTwips );
                                             if (bPixelToLogic)
                                                 pEngine->SetPaperSize(mpRefDevice->PixelToLogic(aPaperSize));
                                             else
@@ -5191,6 +5249,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
 
                                 if ( bLayoutRTL )
                                 {
+                                    const long nCellWidth = LogicToPixelHorizontal( nCellWidthTwips );
                                     if (bPixelToLogic)
                                         aLogicStart.X() -= mpRefDevice->PixelToLogic(
                                                         Size( nCellWidth, 0 ) ).Width();
@@ -5255,7 +5314,8 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                     if ( eRotMode != SVX_ROTATE_MODE_STANDARD )
                                     {
                                         //! begrenzen !!!
-                                        double nSkew = nTotalHeight * nCos / fabs(nSin);
+                                        double nSkew = nTotalHeightPixel *
+                                            nCos / fabs(nSin);
                                         if ( eRotMode == SVX_ROTATE_MODE_CENTER )
                                             nAddX -= nSkew * 0.5;
                                         if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nSin > 0.0 ) ||
@@ -5311,10 +5371,10 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                         }
                     }
                 }
-                nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+                nPosXTwips += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
             }
         }
-        nRowPosY += pRowInfo[nArrY].nHeight;
+        nRowPosYTwips += pRowInfo[nArrY].nHeight;
     }
 }
 
