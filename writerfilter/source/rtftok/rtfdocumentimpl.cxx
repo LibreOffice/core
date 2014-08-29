@@ -1121,8 +1121,8 @@ void RTFDocumentImpl::text(OUString& rString)
                             if (m_aStates.top().aTableAttributes.find(NS_rtf::LN_SGC))
                             {
                                 OUString aName = m_aStates.top().aDestinationText.makeStringAndClear();
-                                m_aStyleNames[m_nCurrentStyleIndex] = aName;
-                                RTFValue::Pointer_t pValue(new RTFValue(aName));
+                                m_aStyleNames[m_nCurrentStyleIndex] = aName.trim();
+                                RTFValue::Pointer_t pValue(new RTFValue(aName.trim()));
                                 m_aStates.top().aTableAttributes.set(NS_ooxml::LN_CT_Style_styleId, pValue);
                                 m_aStates.top().aTableSprms.set(NS_ooxml::LN_CT_Style_name, pValue);
 
