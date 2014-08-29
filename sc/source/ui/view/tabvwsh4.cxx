@@ -536,41 +536,6 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
     //! if ViewData has more tables than document, remove tables in ViewData
 }
 
-namespace {
-
-bool isGL3DDiagram( const css::uno::Reference<css::chart2::XDiagram>& xDiagram )
-{
-    uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
-
-    if (!xCooSysContainer.is())
-        return false;
-
-    uno::Sequence< uno::Reference<chart2::XCoordinateSystem> > aCooSysList = xCooSysContainer->getCoordinateSystems();
-    for (sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS)
-    {
-        uno::Reference<chart2::XCoordinateSystem> xCooSys = aCooSysList[nCS];
-
-        //iterate through all chart types in the current coordinate system
-        uno::Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCooSys, uno::UNO_QUERY);
-        OSL_ASSERT( xChartTypeContainer.is());
-        if( !xChartTypeContainer.is() )
-            continue;
-
-        uno::Sequence< uno::Reference<chart2::XChartType> > aChartTypeList = xChartTypeContainer->getChartTypes();
-        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
-        {
-            uno::Reference<chart2::XChartType> xChartType = aChartTypeList[nT];
-            OUString aChartType = xChartType->getChartType();
-            if( aChartType == "com.sun.star.chart2.GL3DBarChartType" )
-                return true;
-        }
-    }
-
-    return false;
-}
-
-}
-
 // DoReadUserData is also called from ctor when switching from print preview
 
 void ScTabViewShell::DoReadUserData( const OUString& rData )
