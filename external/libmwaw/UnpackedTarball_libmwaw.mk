@@ -18,6 +18,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,libmwaw,\
 	external/libmwaw/0002-librevenge-stream-is-optional-don-t-depend-on-it.patch \
 	external/libmwaw/0001-msvc2013-does-not-like-this.patch \
 	external/libmwaw/0001-MWAWDocument.cxx-remove-an-useless-debug-message.patch \
+	external/libmwaw/ubsan.patch.0 \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -1,0 +1,11 @@
+See <https://sourceforge.net/p/libmwaw/tickets/6/attachment/minimal.patch>:
+--- src/lib/MWAWPictMac.cxx
++++ src/lib/MWAWPictMac.cxx
+@@ -1060,7 +1060,6 @@
+     if (type5==WP_NONE) return;
+     else m_types.push_back(type5);
+   }
+-  virtual ~OpCode() {}
+ 
+   /** tries to read the data in the file
+    *
