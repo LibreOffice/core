@@ -36,6 +36,9 @@
 #include <postit.hxx>
 #include <tokenstringcontext.hxx>
 #include <chgtrack.hxx>
+#include <dpcache.hxx>
+#include <dpobject.hxx>
+#include <dpsave.hxx>
 
 #include <svx/svdoole2.hxx>
 #include "tabprotection.hxx"
@@ -56,6 +59,8 @@
 #include <test/xmltesttools.hxx>
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/GeneralFunction.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -116,6 +121,8 @@ public:
     void testRelativePaths();
     void testSheetProtection();
 
+    void testPivotTableXLSX();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
 #if !defined(MACOSX) && !defined(DRAGONFLY)
@@ -152,6 +159,7 @@ public:
     CPPUNIT_TEST(testRelativePaths);
 #endif
     CPPUNIT_TEST(testSheetProtection);
+    CPPUNIT_TEST(testPivotTableXLSX);
     CPPUNIT_TEST(testFunctionsExcel2010ODS);
 
     CPPUNIT_TEST_SUITE_END();
@@ -1955,6 +1963,7 @@ void testSheetProtection_Impl(ScDocument& rDoc)
 }
 
 }
+
 void ScExportTest::testSheetProtection()
 {
     ScDocShellRef xDocSh = loadDoc("sheet-protection.", ODS);
@@ -1970,6 +1979,144 @@ void ScExportTest::testSheetProtection()
         ScDocument& rDoc = xDocSh2->GetDocument();
         testSheetProtection_Impl(rDoc);
     }
+
+    xDocSh2->DoClose();
+}
+
+void ScExportTest::testPivotTableXLSX()
+{
+    struct
+    {
+        bool check( const ScDocument& rDoc )
+        {
+            if (!rDoc.HasPivotTable())
+            {
+                cerr << "The document should have pivot table." << endl;
+                return false;
+            }
+
+            const ScDPCollection* pDPs = rDoc.GetDPCollection();
+            if (!pDPs)
+            {
+                cerr << "Pivot table container should exist." << endl;
+                return false;
+            }
+
+            ScRange aSrcRange(0,0,0,9,2,0); // A1:J3 on Sheet1.
+            const ScDPCache* pCache = pDPs->GetSheetCaches().getExistingCache(aSrcRange);
+            if (!pCache)
+            {
+                cerr << "The document should have a pivot cache for A1:J3 on Sheet1." << endl;
+                return false;
+            }
+
+            // Cache should have fields from F1 through F10.
+
+            const char* pNames[] = {
+                "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10"
+            };
+
+            size_t nCount = pCache->GetFieldCount();
+            if (nCount != SAL_N_ELEMENTS(pNames))
+            {
+                cout << "Incorrect number of fields in pivot cache." << endl;
+                return false;
+            }
+
+            for (size_t i = 0; i < nCount; ++i)
+            {
+                OUString aCacheName = pCache->GetDimensionName(i);
+                if (aCacheName != OUString::createFromAscii(pNames[i]))
+                {
+                    cerr << "Field " << i << " has label '" << aCacheName << "' but expected '" << pNames[i] << "'" << endl;
+                    return false;
+                }
+            }
+
+            const ScDPObject* pDPObj = rDoc.GetDPAtCursor(0,10,0); // A11
+            if (!pDPObj)
+            {
+                cerr << "A pivot table should exist over A11." << endl;
+                return false;
+            }
+
+            // Output range should be A8:D15.
+            ScRange aOutRange = pDPObj->GetOutRange();
+            if (ScRange(0,7,0,3,14,0) != aOutRange)
+            {
+                cerr << "Incorrect output range." << endl;
+                return false;
+            }
+
+            // Row field - F1
+            // Column field - F4
+            // Page fields - F7 and F6
+            // Data field - F10
+
+            const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+            if (!pSaveData)
+            {
+                cerr << "Save data should exist in each pivot table object." << endl;
+                return false;
+            }
+
+            std::vector<const ScDPSaveDimension*> aDims;
+            pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_ROW, aDims);
+            if (aDims.size() != 1 || aDims[0]->GetName() != "F1")
+            {
+                cerr << "Pivot table should have one row field labeld 'F1'" << endl;
+                return false;
+            }
+
+            pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_COLUMN, aDims);
+            if (aDims.size() != 1 || aDims[0]->GetName() != "F4")
+            {
+                cerr << "Pivot table should have one column field labeld 'F4'" << endl;
+                return false;
+            }
+
+            pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_PAGE, aDims);
+            if (aDims.size() != 2 || aDims[0]->GetName() != "F7" || aDims[1]->GetName() != "F6")
+            {
+                cerr << "Pivot table should have two page fields labeld 'F7' and 'F6' in this order." << endl;
+                return false;
+            }
+
+            pSaveData->GetAllDimensionsByOrientation(sheet::DataPilotFieldOrientation_DATA, aDims);
+            if (aDims.size() != 1 || aDims[0]->GetName() != "F10")
+            {
+                cerr << "Pivot table should have one data field labeld 'F10'" << endl;
+                return false;
+            }
+
+            const ScDPSaveDimension* pDim = aDims[0];
+            if (pDim->GetFunction() != sheet::GeneralFunction_SUM)
+            {
+                cerr << "Data field should have SUM function." << endl;
+                return false;
+            }
+
+            return true;
+        }
+
+    } aTest;
+
+    ScDocShellRef xDocSh = loadDoc("pivot-table/many-fields-in-cache.", XLSX);
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pDoc = &xDocSh->GetDocument();
+
+    // Initial check.
+    bool bCheck = aTest.check(*pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Initial check failed.", bCheck);
+
+    ScDocShellRef xDocSh2 = saveAndReload(xDocSh, XLSX);
+    xDocSh->DoClose();
+    CPPUNIT_ASSERT(xDocSh2.Is());
+    pDoc = &xDocSh2->GetDocument();
+
+    // Reload check.
+    bCheck = aTest.check(*pDoc);
+    CPPUNIT_ASSERT_MESSAGE("Reload check failed.", bCheck);
 
     xDocSh2->DoClose();
 }
