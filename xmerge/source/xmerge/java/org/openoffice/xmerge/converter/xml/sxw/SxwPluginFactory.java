@@ -26,44 +26,42 @@ import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.util.registry.ConverterInfo;
 
 /**
- *  General implementation of the <code>PluginFactory</code> interface
- *  for SXW documents.
+ * General implementation of the {@code PluginFactory} interface for SXW
+ * documents.
  *
- *  @see  org.openoffice.xmerge.DocumentDeserializer
- *  @see  org.openoffice.xmerge.DocumentMerger
- *  @see  org.openoffice.xmerge.DocumentSerializer
+ * @see  org.openoffice.xmerge.DocumentDeserializer
+ * @see  org.openoffice.xmerge.DocumentMerger
+ * @see  org.openoffice.xmerge.DocumentSerializer
  */
 public abstract class SxwPluginFactory extends PluginFactory {
 
    /**
-    *  Constructor that caches the <code>ConvertInfo</code> that
-    *  corresponds to the registry information for this plug-in.
+    * Constructor that caches the {@code ConvertInfo} that corresponds to the
+    * registry information for this plug-in.
     *
-    *  @param  ci  <code>ConvertInfo</code> object.
+    * @param  ci  {@code ConvertInfo} object.
     */
     public SxwPluginFactory (ConverterInfo ci) {
         super(ci);
     }
 
-
     @Override
     public Document createOfficeDocument(String name, InputStream is)
         throws IOException {
 
-        // read zipped XML stream
+        // Read zipped XML stream
         SxwDocument doc = new SxwDocument(name);
         doc.read(is);
         return doc;
     }
 
-     @Override
+    @Override
     public Document createOfficeDocument(String name, InputStream is,boolean isZip)
         throws IOException {
 
-        // read XML stream
+        // Read XML stream
         SxwDocument doc = new SxwDocument(name);
         doc.read(is,isZip);
         return doc;
     }
 }
-

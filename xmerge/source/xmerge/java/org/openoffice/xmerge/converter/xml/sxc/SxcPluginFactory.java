@@ -26,50 +26,44 @@ import org.openoffice.xmerge.PluginFactory;
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.DocumentMergerFactory;
 
-
 /**
- *  General implementation of the <code>PluginFactory</code> interface
- *  for SXC <code>Document</code> objects.
+ * General implementation of the {@code PluginFactory} interface for SXC
+ * {@code Document} objects.
  *
- *  @see  org.openoffice.xmerge.DocumentDeserializer
- *  @see  org.openoffice.xmerge.DocumentMerger
- *  @see  org.openoffice.xmerge.DocumentSerializer
+ * @see  org.openoffice.xmerge.DocumentDeserializer
+ * @see  org.openoffice.xmerge.DocumentMerger
+ * @see  org.openoffice.xmerge.DocumentSerializer
  */
 public abstract class SxcPluginFactory
     extends PluginFactory implements DocumentMergerFactory {
 
-
    /**
-    *  Constructor that caches the <code>ConvertInfo</code> that
-    *  corresponds to the registry information for this plug-in.
+    * Constructor that caches the {@code ConvertInfo} that corresponds to the
+    * registry information for this plug-in.
     *
-    *  @param  ci  <code>ConvertInfo</code> object.
+    * @param  ci  {@code ConvertInfo} object.
     */
     public SxcPluginFactory(ConverterInfo ci) {
         super(ci);
     }
 
-
     @Override
     public Document createOfficeDocument(String name, InputStream is)
         throws IOException {
 
-        // read zipped XML stream
-
+        // Read zipped XML stream
         SxcDocument doc = new SxcDocument(name);
         doc.read(is);
         return doc;
     }
 
-     @Override
+    @Override
     public Document createOfficeDocument(String name, InputStream is,boolean isZip)
         throws IOException {
 
-        // read zipped XML stream
-
+        // Read zipped XML stream
         SxcDocument doc = new SxcDocument(name);
         doc.read(is,isZip);
         return doc;
     }
 }
-

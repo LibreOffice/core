@@ -19,18 +19,16 @@
 package org.openoffice.xmerge;
 
 /**
- *  This <code>Exception</code> is thrown by convert algorithms.
+ * This {@code Exception} is thrown by convert algorithms.
  */
 public class ConvertException extends Exception {
 
     /**
-     *  Exception thrown by convert algorithms.
+     * Exception thrown by convert algorithms.
      *
-     *  @param  message  Message to be included in the
-     *                   <code>Exception</code>.
+     * @param  message  Message to be included in the {@code Exception}.
      */
     public ConvertException(String message) {
         super(message);
     }
 }
-

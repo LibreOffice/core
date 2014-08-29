@@ -26,27 +26,26 @@ import org.w3c.dom.NamedNodeMap;
 import org.openoffice.xmerge.ConverterCapabilities;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
-
 /**
- *  Utility methods to handle sheet XML tree.
+ * Utility methods to handle sheet XML tree.
  */
 public class SheetUtil {
 
     /**
-     *  Empty the content of a cell value.
+     * Empty the content of a cell value.
      *
-     *  <p>This includes the following:</p>
+     * <p>This includes the following:</p>
      *
-     *  <ul>
-     *    <li>
-     *      Remove all of the supported attributes.
-     *    </li><li>
-     *      Remove the first <i>text:p</i> <code>Node</code> for most of the cells.
-     *    </li>
-     *  </ul>
+     * <ul>
+     *   <li>
+     *     Remove all of the supported attributes.
+     *   </li><li>
+     *     Remove the first <i>text:p</i> {@code Node} for most of the cells.
+     *   </li>
+     * </ul>
      *
-     *  @param  cc    The <code>ConverterCapabilities</code>.
-     *  @param  node  The <code>Node</code>.
+     *  @param  cc    The {@code ConverterCapabilities}.
+     *  @param  node  The {@code Node}.
      */
     public static void emptyCell(ConverterCapabilities cc, Node node) {
 
@@ -98,4 +97,3 @@ public class SheetUtil {
         }
     }
 }
-

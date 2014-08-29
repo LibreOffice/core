@@ -26,21 +26,19 @@ import org.xml.sax.SAXParseException;
 import org.openoffice.xmerge.util.Resources;
 
 /**
- *  Used by OfficeDocument to encapsulate exceptions.  It will add
- *  more details to the message string if it is of type
- *  <code>SAXParseException</code>.
+ * Used by OfficeDocument to encapsulate exceptions.
+ *
+ * <p>It will add more details to the message string if it is of type
+ * {@code SAXParseException}</p>.
  */
-
 public final class OfficeDocumentException extends IOException {
 
     private StringBuffer message = null;
 
-
    /**
-    *  Constructor, capturing additional information from the
-    *  <code>SAXException</code>.
+    * Constructor, capturing additional information from the {@code SAXException}.
     *
-    *  @param  e  The <code>SAXException</code>.
+    * @param  e  The {@code SAXException}.
     */
     public OfficeDocumentException(SAXException e) {
         super(e.toString());
@@ -84,37 +82,32 @@ public final class OfficeDocumentException extends IOException {
         }
     }
 
-
    /**
-    *  Constructor, creates exception with provided message.
+    * Constructor, creates exception with provided message.
     *
-    *  @param  s  Message value for the exception.
+    * @param  s  Message value for the exception.
     */
     public OfficeDocumentException(String s) {
         super(s);
     }
 
-
    /**
-    *  Constructor, creates exception with the message
-    *  corresponding to the message value of the provided
-    *  exception.
+    * Constructor, creates exception with the message corresponding to the
+    * message value of the provided exception.
     *
-    *  @param  e  The Exception.
+    * @param  e  The {@code Exception}.
     */
     public OfficeDocumentException(Exception e) {
         super(e.getMessage());
     }
 
-
    /**
-    *  Returns the message value for the <code>Exception</code>.
+    * Returns the message value for the {@code Exception}.
     *
-    * @return  The message value for the <code>Exception</code>.
+    * @return  The message value for the {@code Exception}.
     */
     @Override
     public String getMessage() {
         return message.toString() + super.getMessage();
     }
 }
-

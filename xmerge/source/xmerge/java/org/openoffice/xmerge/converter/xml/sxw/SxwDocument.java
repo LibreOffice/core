@@ -22,52 +22,46 @@ import org.openoffice.xmerge.converter.xml.OfficeDocument;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 /**
- *  This class is an implementation of <code>OfficeDocument</code> for
- *  the SXW format.
+ * This class is an implementation of {@code OfficeDocument} for the SXW format.
  */
 public class SxwDocument extends OfficeDocument {
 
-
     /**
-     *  Constructor with arguments to set <code>name</code>.
+     * Constructor with arguments to set {@code name}.
      *
-     *  @param  name  The name of the <code>Document</code>
+     * @param  name  The name of the {@code Document}.
      */
     public SxwDocument(String name) {
         super(name);
     }
 
-
     /**
-     *  Constructor with arguments to set <code>name</code>, the
-     *  <code>namespaceAware</code> flag, and the <code>validating</code>
-     *  flag.
+     * Constructor with arguments to set {@code name}, the {@code namespaceAware}
+     * flag, and the {@code validating} flag.
      *
-     *  @param  name            The name of the <code>Document</code>.
-     *  @param  namespaceAware  The value of the namespaceAware flag.
-     *  @param  validating      The value of the validating flag.
+     * @param  name            The name of the {@code Document}.
+     * @param  namespaceAware  The value of the {@code namespaceAware} flag.
+     * @param  validating      The value of the {@code validating} flag.
      */
     public SxwDocument(String name, boolean namespaceAware, boolean validating) {
 
         super(name, namespaceAware, validating);
     }
 
-
     /**
-     *  Returns the Office file extension for the SXW format.
+     * Returns the Office file extension for the SXW format.
      *
-     *  @return  The Office file extension for the SXW format.
+     * @return  The Office file extension for the SXW format.
      */
     @Override
     protected String getFileExtension() {
         return OfficeConstants.SXW_FILE_EXTENSION;
     }
 
-
     /**
-     *  Returns the Office attribute for the SXW format.
+     * Returns the Office attribute for the SXW format.
      *
-     *  @return  The Office attribute for the SXW format.
+     * @return  The Office attribute for the SXW format.
      */
     @Override
     protected String getOfficeClassAttribute() {
@@ -77,12 +71,10 @@ public class SxwDocument extends OfficeDocument {
     /**
      * Method to return the MIME type of the document.
      *
-     * @return  String  The document's MIME type.
+     * @return  The document's MIME type.
      */
     @Override
     protected final String getDocumentMimeType() {
         return OfficeConstants.SXW_MIME_TYPE;
     }
-
 }
-

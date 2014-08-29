@@ -34,41 +34,39 @@ import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 import org.openoffice.xmerge.util.registry.ConverterInfoReader;
 
 /**
- *  This class is a command-line driver for the converter framework.
- *  It is expected that this code will be later called by the device
- *  server. It does some basic validation of the command-line
- *  parameters.
+ * This class is a command-line driver for the converter framework.
+ *
+ * <p>It is expected that this code will be later called by the device server.
+ * It does some basic validation of the command-line parameters.</p>
  */
 public final class Driver {
 
-    /**  Command-line parameter. */
+    /** Command-line parameter. */
     private String fromMime = null;
 
-    /**  Command-line parameter. */
+    /** Command-line parameter. */
     private String toMime = null;
 
-    /**  mergeFile name. */
+    /** {@code mergeFile} name. */
     private String mergeFile = null;
 
-    /**  Command-line parmeter. */
+    /** Command-line parmeter. */
     private ArrayList<String> deviceFiles = new ArrayList<String>();
 
-    /**  Command-line parmeter shortcuts. */
+    /** Command-line parmeter shortcuts. */
     private String mimeTypes[] = {
                                     "sxc", "staroffice/sxc",
                                     "sxw","staroffice/sxw"
     };
 
-
     /**
-     *  Main.
+     * Main.
      *
-     *  @param  args  The argument passed on the command line.
+     * @param  args  The argument passed on the command line.
      */
     public static void main(String args[]) {
 
         // Register jarfiles
-
         String propFile       = "ConverterInfoList.properties";
         ConverterInfoList cil = null;
         try {
@@ -113,13 +111,11 @@ public final class Driver {
         }
     }
 
-
     /**
-     *  Gets a <code>Convert</code> object using the
-     *  <code>ConverterFactory</code> and  does the conversion using
-     *  this object.
+     * Gets a {@code Convert} object using the {@code ConverterFactory} and does
+     * the conversion using this object.
      *
-     *  @throws  IllegalArgumentException  If an argument is invalid.
+     * @throws  IllegalArgumentException  If an argument is invalid.
      */
     private void doConversion() throws IllegalArgumentException {
 
@@ -203,25 +199,22 @@ public final class Driver {
         }
     }
 
-
     /**
-     *  Display usage.
+     * Display usage.
      */
     private static void showUsage() {
-
         System.out.println("\nUsage:");
         System.out.println("\n   java org.openoffice.xmerge.test.Driver <args>");
         System.out.println("\n   where <args> is as follows:");
         System.out.println("   -from <MIMETYPE> -to <MIMETYPE> [ -merge <OrigDoc ] <document>\n");
     }
 
-
     /**
-     *  Parse command-line arguments.
+     * Parse command-line arguments.
      *
-     *  @param  args  Array of command line arguments.
+     * @param   args  Array of command line arguments.
      *
-     *  @throws  IllegalArgumentException  If an argument is invalid.
+     * @throws  IllegalArgumentException  If an argument is invalid.
      */
     private void parseCommandLine(String args[])
         throws IllegalArgumentException {
@@ -265,18 +258,18 @@ public final class Driver {
                            ((mergeFile != null) ? " with merge " : " "));
     }
 
-
     /**
-     *  Extract the next argument from the array, while checking to see
-     *  that the array size is not exceeded.  Throw a friendly error
-     *  message in case the arg is missing.
+     * Extract the next argument from the array, while checking to see that the
+     * array size is not exceeded.
      *
-     *  @param  i     Argument index.
-     *  @param  args  Array of command line arguments.
+     * <p>Throw a friendly error message in case the arg is missing.</p>
      *
-     *  @return  The argument with the specified index.
+     * @param   i     Argument index.
+     * @param   args  Array of command line arguments.
      *
-     *  @throws  IllegalArgumentException  If an argument is invalid.
+     * @return  The argument with the specified index.
+     *
+     * @throws  IllegalArgumentException  If an argument is invalid.
      */
     private String extractArg(int i, String args[])
         throws IllegalArgumentException {
@@ -288,13 +281,12 @@ public final class Driver {
                                      ": expected arg for " + args[i]);
     }
 
-
     /**
-     *  Simple validation for Office ZIP files.
+     * Simple validation for Office ZIP files.
      *
-     *  @param  zipName  The name of the ZIP file.
+     * @param   zipName  The name of the ZIP file.
      *
-     *  @return  true if zipName is valid, false otherwise.
+     * @return  {@code true} if {@code zipName} is valid, {@code false} otherwise.
      */
     private boolean isZip(String zipName) {
 
@@ -306,4 +298,3 @@ public final class Driver {
         return false;
     }
 }
-

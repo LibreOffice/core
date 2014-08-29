@@ -25,22 +25,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 
 /**
- *  Class containing static util methods for handling XML trees.
+ * Class containing static util methods for handling XML trees.
  */
 public final class XmlUtil {
 
-
     /**
-     *  Perform a deep clone of certain <code>Node</code> which
-     *  will base on the document <code>Node</code> of the old
-     *  <code>Node</code>.
+     * Perform a deep clone of certain {@code Node} which will base on the
+     * document {@code Node} of the old {@code Node}.
      *
-     *  @param  oldNode  The <code>Document</code> of this
-     *                   <code>Node</code> is used to clone
-     *                   the <code>Node</code>
-     *  @param  newNode  The <code>Node</code> to clone.
+     * @param   oldNode  The {@code Document} of this {@code Node} is used to
+     *                   clone the {@code Node}.
+     * @param   newNode  The <code>Node</code> to clone.
      *
-     *  @return  The cloned <code>Node</code>.
+     * @return  The cloned {@code Node}.
      */
     public static Node deepClone(Node oldNode, Node newNode) {
         Document docNode = oldNode.getOwnerDocument();
@@ -54,14 +51,12 @@ public final class XmlUtil {
         return clonedNode;
     }
 
-
     /**
-     *  Clone the sub-tree under certain given <code>Node</code>
+     * Clone the sub-tree under certain given {@code Node}.
      *
-     *  @param  docNode  The <code>Document</code> used to clone
-     *                   the <code>Node</code>.
-     *  @param  oldNode  The <code>Node</code> to clone.
-     *  @param  newNode  The destination <code>Node</code>.
+     * @param  docNode  The {@code Document} used to clone the {@code Node}.
+     * @param  oldNode  The {@code Node} to clone.
+     * @param  newNode  The destination {@code Node}.
      */
     private static void cloneTree(Document docNode, Node oldNode, Node newNode) {
 
@@ -77,15 +72,13 @@ public final class XmlUtil {
         }
     }
 
-
     /**
-     * Clone a <code>Node</code> (either text or element).
+     * Clone a {@code Node} (either text or element).
      *
-     * @param  docNode  The <code>Document</code> used to
-     *                  clone the <code>Node</code>.
-     * @param  newNode  The <code>Node</code> to clone.
+     * @param   docNode  The {@code Document} used to clone the {@code Node}.
+     * @param   newNode  The {@code Node}to clone.
      *
-     * @return  The cloned <code>Node</code>.
+     * @return  The cloned {@code Node}.
      */
     private static Node cloneNode(Document docNode, Node newNode) {
 
@@ -115,13 +108,12 @@ public final class XmlUtil {
         return clonedNode;
     }
 
-
     /**
-     *  Returns the name and type of an XML DOM <code>Node</code>.
+     * Returns the name and type of an XML DOM {@code Node}.
      *
-     *  @param  node  <code>Node</code> to query.
+     * @param   node  {@code Node} to query.
      *
-     *  @return  Name and type of XML DOM <code>Node</code>.
+     * @return  Name and type of XML DOM {@code Node}.
      */
     public static String getNodeInfo(Node node) {
 
@@ -175,4 +167,3 @@ public final class XmlUtil {
         return buffer.toString();
     }
 }
-
