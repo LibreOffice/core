@@ -1,0 +1,60 @@
+See <https://sourceforge.net/p/libwpd/tickets/2/attachment/0001-Avoid-undefined-behavior-casts-from-potentially-nega.patch>:
+--- src/GraphicFunctions.cxx
++++ src/GraphicFunctions.cxx
+@@ -448,42 +448,42 @@
+ 		// 2540 is 2.54*1000, 2.54 in = 1 inch
+ 		if (path[i]["svg:x"] && action[0] == 'H')
+ 		{
+-			sElement.sprintf("H%i", (unsigned)((getInchValue(path[i]["svg:x"])-px)*2540));
++			sElement.sprintf("H%i", (int)((getInchValue(path[i]["svg:x"])-px)*2540));
+ 			sValue.append(sElement);
+ 		}
+ 		else if (path[i]["svg:y"] && action[0] == 'V')
+ 		{
+-			sElement.sprintf("V%i", (unsigned)((getInchValue(path[i]["svg:y"])-py)*2540));
++			sElement.sprintf("V%i", (int)((getInchValue(path[i]["svg:y"])-py)*2540));
+ 			sValue.append(sElement);
+ 		}
+ 		else if (coordOk && (action[0] == 'M' || action[0] == 'L' || action[0] == 'T'))
+ 		{
+-			sElement.sprintf("%c%i %i", action[0], (unsigned)((getInchValue(path[i]["svg:x"])-px)*2540),
+-			                 (unsigned)((getInchValue(path[i]["svg:y"])-py)*2540));
++			sElement.sprintf("%c%i %i", action[0], (int)((getInchValue(path[i]["svg:x"])-px)*2540),
++			                 (int)((getInchValue(path[i]["svg:y"])-py)*2540));
+ 			sValue.append(sElement);
+ 		}
+ 		else if (coord1Ok && (action[0] == 'Q' || action[0] == 'S'))
+ 		{
+-			sElement.sprintf("%c%i %i %i %i", action[0], (unsigned)((getInchValue(path[i]["svg:x1"])-px)*2540),
+-			                 (unsigned)((getInchValue(path[i]["svg:y1"])-py)*2540), (unsigned)((getInchValue(path[i]["svg:x"])-px)*2540),
+-			                 (unsigned)((getInchValue(path[i]["svg:y"])-py)*2540));
++			sElement.sprintf("%c%i %i %i %i", action[0], (int)((getInchValue(path[i]["svg:x1"])-px)*2540),
++			                 (int)((getInchValue(path[i]["svg:y1"])-py)*2540), (int)((getInchValue(path[i]["svg:x"])-px)*2540),
++			                 (int)((getInchValue(path[i]["svg:y"])-py)*2540));
+ 			sValue.append(sElement);
+ 		}
+ 		else if (coord2Ok && action[0] == 'C')
+ 		{
+-			sElement.sprintf("C%i %i %i %i %i %i", (unsigned)((getInchValue(path[i]["svg:x1"])-px)*2540),
+-			                 (unsigned)((getInchValue(path[i]["svg:y1"])-py)*2540), (unsigned)((getInchValue(path[i]["svg:x2"])-px)*2540),
+-			                 (unsigned)((getInchValue(path[i]["svg:y2"])-py)*2540), (unsigned)((getInchValue(path[i]["svg:x"])-px)*2540),
+-			                 (unsigned)((getInchValue(path[i]["svg:y"])-py)*2540));
++			sElement.sprintf("C%i %i %i %i %i %i", (int)((getInchValue(path[i]["svg:x1"])-px)*2540),
++			                 (int)((getInchValue(path[i]["svg:y1"])-py)*2540), (int)((getInchValue(path[i]["svg:x2"])-px)*2540),
++			                 (int)((getInchValue(path[i]["svg:y2"])-py)*2540), (int)((getInchValue(path[i]["svg:x"])-px)*2540),
++			                 (int)((getInchValue(path[i]["svg:y"])-py)*2540));
+ 			sValue.append(sElement);
+ 		}
+ 		else if (coordOk && path[i]["svg:rx"] && path[i]["svg:ry"] && action[0] == 'A')
+ 		{
+-			sElement.sprintf("A%i %i %i %i %i %i %i", (unsigned)((getInchValue(path[i]["svg:rx"]))*2540),
+-			                 (unsigned)((getInchValue(path[i]["svg:ry"]))*2540), (path[i]["librevenge:rotate"] ? path[i]["librevenge:rotate"]->getInt() : 0),
++			sElement.sprintf("A%i %i %i %i %i %i %i", (int)((getInchValue(path[i]["svg:rx"]))*2540),
++			                 (int)((getInchValue(path[i]["svg:ry"]))*2540), (path[i]["librevenge:rotate"] ? path[i]["librevenge:rotate"]->getInt() : 0),
+ 			                 (path[i]["librevenge:large-arc"] ? path[i]["librevenge:large-arc"]->getInt() : 1),
+ 			                 (path[i]["librevenge:sweep"] ? path[i]["librevenge:sweep"]->getInt() : 1),
+-			                 (unsigned)((getInchValue(path[i]["svg:x"])-px)*2540), (unsigned)((getInchValue(path[i]["svg:y"])-py)*2540));
++			                 (int)((getInchValue(path[i]["svg:x"])-px)*2540), (int)((getInchValue(path[i]["svg:y"])-py)*2540));
+ 			sValue.append(sElement);
+ 		}
+ 		else if (action[0] == 'Z')
