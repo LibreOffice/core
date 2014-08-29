@@ -21,21 +21,20 @@ package org.openoffice.xmerge.merger;
 import org.w3c.dom.Node;
 
 /**
- *  This is an interface for a {@link
- *  org.openoffice.xmerge.merger.MergeAlgorithm
- *  MergeAlgorithm} to merge two <code>Node</code> objects.  It is an
- *  interface so that  different merge algorithms may be plugged-in.
+ * This is an interface for a {@link org.openoffice.xmerge.merger.MergeAlgorithm
+ * MergeAlgorithm} to merge two {@code Node} objects.
+ *
+ * <p>It is an interface so that different merge algorithms may be plugged-in.</p>
  */
 public interface NodeMergeAlgorithm {
 
     /**
-     *  This method is used to merge two given <code>Node</code>
-     *  objects.  Note:  the original <code>Node</code> may be modified.
+     * This method is used to merge two given {@code Node} objects.
      *
-     *  @param  originalNode  The original <code>Node</code>.
-     *  @param  modifyNode    The <code>Node</code> to be merged.  It may
-     *                        be modified.
+     * <p>Note:  the original {@code Node} may be modified.</p>
+     *
+     * @param  originalNode  The original {@code Node}.
+     * @param  modifyNode    The {@code Node} to be merged.  It may be modified.
      */
     void merge(Node originalNode, Node modifyNode);
 }
-

@@ -29,18 +29,17 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 /**
- *  <p>This is an implementation of the <code>Iterator</code> interface.
- *  It will traverse the tree and find <code>Node</code> sequences.</p>
+ * This is an implementation of the {@code Iterator} interface.
  *
- *  <p>Note: Once the XML Tree is parsed, then the <code>Iterator</code> will
- *  be a snap shot of that tree. That means even the tree is modified later,
- *  than the cached paragraph <code>Node</code> list will not be updated
- *  accordingly.  For this reason and for performance reasons this
- *  <code>Iterator</code> does not support any operation methods such as
- *  insert, remove or replace.  The main purpose of this
- *  <code>Iterator</code> is to be used with difference, not with merge.</p>
+ * <p>It will traverse the tree and find {@code Node} sequences.</p>
+ *
+ * <p>Note: Once the XML Tree is parsed, then the {@code Iterator} will be a
+ * snap shot of that tree. That means even the tree is modified later, than the
+ * cached paragraph {@code Node} list will not be updated accordingly.  For this
+ * reason and for performance reasons this {@code Iterator} does not support any
+ * operation methods such as insert, remove or replace. The main purpose of this
+ * {@code Iterator} is to be used with difference, not with merge.</p>
  */
 public abstract class NodeIterator implements Iterator {
 
@@ -49,12 +48,11 @@ public abstract class NodeIterator implements Iterator {
     private Node root;
     private ConverterCapabilities cc_ = null;
 
-
     /**
-     *  Standard constructor.
+     * Standard constructor.
      *
-     *  @param  cc    The <code>ConverterCapabilities</code>.
-     *  @param  node  The initial root <code>Node</code>.
+     * @param  cc    The {@code ConverterCapabilities}.
+     * @param  node  The initial root {@code Node}.
      */
     public NodeIterator(ConverterCapabilities cc, Node node) {
         cc_ = cc;
@@ -62,7 +60,6 @@ public abstract class NodeIterator implements Iterator {
         root = node;
         markTree(node);
     }
-
 
     public Object next() {
         if (currentPosition < nodeList.size() - 1) {
@@ -73,7 +70,6 @@ public abstract class NodeIterator implements Iterator {
         }
     }
 
-
     public Object previous() {
         if (currentPosition > 0) {
             currentPosition--;
@@ -83,12 +79,10 @@ public abstract class NodeIterator implements Iterator {
         }
     }
 
-
     public Object start() {
         currentPosition = 0;
         return currentElement();
     }
-
 
     public Object end() {
         int size = nodeList.size();
@@ -101,21 +95,16 @@ public abstract class NodeIterator implements Iterator {
         }
     }
 
-
     public Object currentElement() {
-
         if (currentPosition < 0 || currentPosition >= nodeList.size()) {
             return null;
         }
-
         return nodeList.get(currentPosition);
     }
-
 
     public int elementCount() {
         return nodeList.size();
     }
-
 
     public boolean equivalent(Object obj1, Object obj2) {
         boolean equal = false;
@@ -131,22 +120,20 @@ public abstract class NodeIterator implements Iterator {
         return equal;
     }
 
-
     public void refresh() {
         nodeList = new ArrayList<Node>();
         markTree(root);
         currentPosition = 0;
     }
 
-
     /**
-     *  Used to compare two <code>Node</code> objects (type/name/value)
-     *  and all their children <code>Node</code> objects.
+     * Used to compare two {@code Node} objects (type/name/value) and all their
+     * children {@code Node} objects.
      *
-     *  @param  node1  The first <code>Node</code> to compare.
-     *  @param  node2  The second <code>Node</code> to compare.
+     * @param   node1  The first {@code Node} to compare.
+     * @param   node2  The second {@code Node} to compare.
      *
-     *  @return  true if <code>Node</code> is equal, false otherwise.
+     * @return  {@code true} if {@code Node} is equal, {@code false} otherwise.
      */
     protected boolean compareNode(Node node1, Node node2) {
         boolean equal = false;
@@ -201,17 +188,17 @@ public abstract class NodeIterator implements Iterator {
         return equal;
     }
 
-
     /**
-     *  Compare the children of two <code>Node</code> objects.  This
-     *  method can be intentionally overridden by any class that
-     *  extend from <code>NodeIterator</code> so that it can have
-     *  its own children comparison if necessary.
+     * Compare the children of two {@code Node} objects.
      *
-     *  @param  node1  The first <code>Node</code> to compare.
-     *  @param  node2  The second <code>Node</code> to compare.
+     * <p>This method can be intentionally overridden by any class that extend
+     * from {@code NodeIterator} so that it can have its own children comparison
+     * if necessary.</p>
      *
-     *  @return  true if children are equal, false otherwise.
+     * @param   node1  The first {@code Node} to compare.
+     * @param   node2  The second {@code Node} to compare.
+     *
+     * @return  {@code true} if children are equal, {@code false} otherwise.
      */
     protected boolean childrenEqual(Node node1, Node node2) {
 
@@ -244,17 +231,17 @@ public abstract class NodeIterator implements Iterator {
         return equal;
     }
 
-
     /**
-     *  Compare attributes of two <code>Node</code> objects.  This
-     *  method can be intentionally overridden by any class that
-     *  extends from <code>NodeIterator</code> so that it can have
-     *  its own attribute comparison.
+     * Compare attributes of two {@code Node} objects.
      *
-     *  @param  node1  The first <code>Node</code> to compare.
-     *  @param  node2  The second <code>Node</code> to compare.
+     * <p>This method can be intentionally overridden by any class that extends
+     * from {@code NodeIterator} so that it can have its own attribute comparison.
+     * </p>
      *
-     *  @return  true if attributes are equal, false otherwise.
+     *  @param   node1  The first {@code Node} to compare.
+     *  @param   node2  The second {@code Node} to compare.
+     *
+     *  @return  {@code true} if attributes are equal, {@code false} otherwise.
      */
     private boolean attributesEqual(Node node1, Node node2) {
 
@@ -264,7 +251,7 @@ public abstract class NodeIterator implements Iterator {
         attrNode[0] = node1.getAttributes();
         attrNode[1] = node2.getAttributes();
 
-        // attribute node will be null if node is not an element node
+        // Attribute node will be null if node is not an element node
         // and attribute nodes are equal if both are not element node
         if (attrNode[0] == null || attrNode[1] == null) {
             if (attrNode[0] == null && attrNode[1] == null) {
@@ -273,7 +260,7 @@ public abstract class NodeIterator implements Iterator {
             return equal;
         }
 
-        // compare the attributes from node1 vs node2 and node2 vs node1
+        // Compare the attributes from node1 vs node2 and node2 vs node1
         // though it's a little inefficient for the duplication of comparison
         // as the number of attributes is not so many, it should not be
         // a big problem.
@@ -331,16 +318,17 @@ public abstract class NodeIterator implements Iterator {
         return equal;
     }
 
-
     /**
-     *  Check whether a <code>Node</code> is supported.  This method
-     *  can be intentionally overridden by any class that extends from
-     *  <code>NodeIterator</code> so that it can specify which
-     *  <code>Node</code> to support.
+     * Check whether a {@code Node} is supported.
      *
-     *  @param  node  <code>Node</code> to check.
+     * <p>This method can be intentionally overridden by any class that extends
+     * from {@code NodeIterator} so that it can specify which {@code Node} to
+     * support.</p>
      *
-     *  @return  true if <code>Node</code> is supported, false otherwise.
+     * @param   node  {@code Node} to check.
+     *
+     * @return  {@code true} if <code>Node</code> is supported, {@code false}
+     *          otherwise.
      */
     protected abstract boolean nodeSupported(Node node);
 
@@ -368,4 +356,3 @@ public abstract class NodeIterator implements Iterator {
         }
     }
 }
-

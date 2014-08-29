@@ -19,22 +19,17 @@
 package org.openoffice.xmerge.converter.palm;
 
 /**
- *  Contains common static methods and constants for use within the package.
+ * Contains common static methods and constants for use within the package.
  */
 public final class PdbUtil {
 
-    /**  Difference in seconds from Jan 01, 1904 to Jan 01, 1970. */
+    /** Difference in seconds from Jan 01, 1904 to Jan 01, 1970. */
     final static long TIME_DIFF = 2082844800;
 
-    /**  Encoding scheme used. */
+    /** Encoding scheme used. */
     final static String ENCODING = "8859_1";
 
-    /**  Size of a PDB header in bytes. */
+    /** Size of a PDB header in bytes. */
     final static int HEADER_SIZE = 78;
 
-
-
-
-
 }
-
