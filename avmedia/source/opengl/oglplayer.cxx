@@ -262,6 +262,12 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
         return uno::Reference< media::XPlayerWindow >();
     }
 
+    if( !m_aContext.supportMultiSampling() )
+    {
+        SAL_WARN("avmedia.opengl", "Context does not support multisampling!");
+        return uno::Reference< media::XPlayerWindow >();
+    }
+
     if( !lcl_CheckOpenGLRequirements() )
     {
         SAL_WARN("avmedia.opengl", "Your platform does not have the minimal OpenGL requiremenets!");
@@ -280,7 +286,7 @@ uno::Reference< media::XPlayerWindow > SAL_CALL OGLPlayer::createPlayerWindow( c
     releaseInputFiles();
     if( nRet != 0 )
     {
-        SAL_WARN("avmedia.opengl", "Error occured while parsing *.json file! Error code: " << nRet);
+        SAL_WARN("avmedia.opengl", "Error occured while setting up the scene! Error code: " << nRet);
         return uno::Reference< media::XPlayerWindow >();
     }
     // The background color is white by default, but we need to separate the
@@ -302,6 +308,12 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
         return uno::Reference< media::XFrameGrabber >();
     }
 
+    if( !m_aContext.supportMultiSampling() )
+    {
+        SAL_WARN("avmedia.opengl", "Context does not support multisampling!");
+        return uno::Reference< media::XFrameGrabber >();
+    }
+
     if( !lcl_CheckOpenGLRequirements() )
     {
         SAL_WARN("avmedia.opengl", "Your platform does not have the minimal OpenGL requiremenets!");
@@ -317,7 +329,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL OGLPlayer::createFrameGrabber()
     releaseInputFiles();
     if( nRet != 0 )
     {
-        SAL_WARN("avmedia.opengl", "Error occured while parsing *.json file! Error code: " << nRet);
+        SAL_WARN("avmedia.opengl", "Error occured while setting up the scene! Error code: " << nRet);
         return uno::Reference< media::XFrameGrabber >();
     }
     glClearColor(0.5f, 0.5f, 0.5f, 0.5f);
