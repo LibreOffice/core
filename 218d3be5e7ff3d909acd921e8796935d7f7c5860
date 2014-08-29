@@ -70,6 +70,24 @@
       "revId": "218d3be5e7ff3d909acd921e8796935d7f7c5860",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_57f64ed8",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/converter/xml/OfficeDocument.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 889,
+      "author": {
+        "id": 1000730
+      },
+      "writtenOn": "2014-08-29T00:28:14Z",
+      "side": 1,
+      "message": "I\u0027m sorry, I wanted to say LibreOffice\u0027s nested exception, for the reason that java.io.IOException is really a Java SE\u0027s nested exception here.\n\n-There isn\u0027t any nested exception yet.\n\n+There isn\u0027t any LibreOffice\u0027s nested exception yet.",
+      "parentUuid": "3acd31a7_f75d5aed",
+      "revId": "218d3be5e7ff3d909acd921e8796935d7f7c5860",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
