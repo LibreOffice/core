@@ -22,32 +22,30 @@ import org.openoffice.xmerge.util.registry.ConverterInfo;
 import org.openoffice.xmerge.util.registry.ConverterInfoMgr;
 
 /**
- *  Factory that provides access to <code>Convert</code> objects, which
- *  are used to do a conversion.  The <code>ConvertFactory</code> does
- *  this via the <code>ConvertInfoMgr</code> which maintains a list of
- *  which <code>Convert</code> objects are available and their
- *  capabilities.
+ * Factory that provides access to {@code Convert} objects, which are used to do
+ * a conversion.
  *
- *  @see  Convert
- *  @see  org.openoffice.xmerge.util.registry.ConverterInfoMgr
+ * <p>The {@code ConvertFactory} does this via the {@code ConvertInfoMgr} which
+ * maintains a list of which {@code Convert} objects are available and their
+ * capabilities.</p>
  *
+ * @see  Convert
+ * @see  org.openoffice.xmerge.util.registry.ConverterInfoMgr
  */
 public class ConverterFactory {
 
-
-
-
    /**
-    *  Returns the <code>Convert</code> object that converts
-    *  the specified device/office mime type conversion.  If there
-    *  are multiple <code>Converter</code> objects registered
-    *  that support this conversion, only the first is returned.
+    * Returns the {@code Convert} object that converts the specified device/office
+    * mime type conversion.
     *
-    *  @param  mimeTypeIn   The mime input type.
-    *  @param  mimeTypeOut  The mime output type.
+    * <p>If there are multiple {@code Converter} objects registered that support
+    * this conversion, only the first is returned.</p>
     *
-    *  @return  The first <code>Convert</code> object that supports
-    *           the specified conversion.
+    * @param   mimeTypeIn   The mime input type.
+    * @param   mimeTypeOut  The mime output type.
+    *
+    * @return  The first {@code Convert} object that supports the specified
+    *          conversion.
     */
     public Convert getConverter(String mimeTypeIn, String mimeTypeOut) {
 
@@ -69,16 +67,15 @@ public class ConverterFactory {
             return null;
     }
 
-
    /**
-    *  Returns the <code>Convert</code> object that is described
-    *  by the <code>ConverterInfo</code> parameter.
+    * Returns the {@code Convert} object that is described by the
+    * {@code ConverterInfo} parameter.
     *
-    *  @param  ci  The <code>ConverterInfo</code> describing the converter.
+    * @param   ci        The {@code ConverterInfo} describing the converter.
+    * @param   toOffice  {@code true} to convert to office, {@code false} to
+    *                    convert to device.
     *
-    *  @param  toOffice  true to convert to office, false to convert to device.
-    *
-    *  @return  The <code>Convert</code> object
+    * @return  The {@code Convert} object
     */
     public Convert getConverter(ConverterInfo ci, boolean toOffice) {
 
@@ -86,4 +83,3 @@ public class ConverterFactory {
         return myConvert;
     }
 }
-

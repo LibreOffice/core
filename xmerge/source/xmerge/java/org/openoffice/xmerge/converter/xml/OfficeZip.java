@@ -33,11 +33,9 @@ import java.io.ByteArrayOutputStream;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- *  Class used by {@link
- *  org.openoffice.xmerge.converter.xml.OfficeDocument
- *  OfficeDocument} to handle reading and writing
- *  from a ZIP file, as well as storing ZIP entries.
- *
+ * Class used by {@link org.openoffice.xmerge.converter.xml.OfficeDocument
+ * OfficeDocument} to handle reading and writing from a ZIP file, as well as
+ * storing ZIP entries.
  */
 class OfficeZip {
 
@@ -65,20 +63,20 @@ class OfficeZip {
         entryList = new LinkedList<Entry>();
     }
 
-
     /**
-     *  <p>Read each zip entry in the <code>InputStream</code> object
-     *  and store in entryList both the <code>ZipEntry</code> object
-     *  as well as the bits of each entry.  Call this method before
-     *  calling the <code>getContentXMLBytes</code> method or the
-     *  <code>getStyleXMLBytes</code> method.</p>
+     * Read each zip entry in the {@code InputStream} object and store in
+     * entryList both the {@code ZipEntry} object as well as the bits of each
+     * entry.
      *
-     *  <p>Keep track of the CONTENTXML and STYLEXML using
-     *  contentIndex and styleIndex, respectively.</p>
+     * <p>Call this method before calling the {@code getContentXMLBytes} method
+     * or the {@code getStyleXMLBytes} method.</p>
      *
-     *  @param  is  <code>InputStream</code> object to read.
+     * <p>Keep track of the {@code CONTENTXML} and {@code STYLEXML} using
+     * {@code contentIndex} and {@code styleIndex}, respectively.</p>
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @param   is  {@code InputStream} object to read.
+     *
+     * @throws  IOException  If any I/O error occurs.
      */
     void read(InputStream is) throws IOException {
 
@@ -129,47 +127,48 @@ class OfficeZip {
         zis.close();
     }
 
-
     /**
-     *  This method returns the CONTENTXML file in a
-     *  <code>byte</code> array.  It returns null if there is no
-     *  CONTENTXML in this zip file.
+     * This method returns the CONTENTXML file in a {@code byte} array.
      *
-     *  @return  CONTENTXML in a <code>byte</code> array.
+     * <p>It returns null if there is no {@code CONTENTXML} in this zip file.</p>
+     *
+     * @return  CONTENTXML in a {@code byte} array.
      */
     byte[] getContentXMLBytes() {
 
         return getEntryBytes(contentIndex);
     }
 
-
     /**
-     *  This method returns the STYLEXML file in a
-     *  <code>byte</code> array.  It returns null if there is
-     *  no STYLEXML in this zip file.
+     * This method returns the {@code STYLEXML} file in a {@code byte} array.
      *
-     *  @return  STYLEXML in a <code>byte</code> array.
+     * <p>It returns {@code null} if there is no {@code STYLEXML} in this zip
+     * file.</p>
+     *
+     * @return  STYLEXML in a {@code byte} array.
      */
     byte[] getStyleXMLBytes() {
 
         return getEntryBytes(styleIndex);
     }
 
-     /**
-     *  This method returns the METAXML file in a
-     *  <code>byte</code> array.  It returns null if there is
-     *  no METAXML in this zip file.
+    /**
+     * This method returns the METAXML file in a {@code byte} array.
      *
-     *  @return  METAXML in a <code>byte</code> array.
+     * <p>It returns {@code null} if there is no {@code METAXML} in this zip
+     * file.</p>
+     *
+     * @return  METAXML in a {@code byte} array.
      */
     byte[] getMetaXMLBytes() {
         return getEntryBytes(metaIndex);
     }
 
-      /**
-     *  This method returns the SETTINGSXML file in a
-     *  <code>byte</code> array.  It returns null if there is
-     *  no SETTINGSXML in this zip file.
+    /**
+     * This method returns the {@code SETTINGSXML} file in a {@code byte} array.
+     *
+     * <p>It returns {@code null} if there is no {@code SETTINGSXML} in this zip
+     * file.</p>
      *
      *  @return  SETTINGSXML in a <code>byte</code> array.
      */
@@ -178,10 +177,12 @@ class OfficeZip {
     }
 
     /**
-     * This method returns the MANIFESTXML file in a <code>byte</code> array.
-     * It returns null if there is no MANIFESTXML in this zip file.
+     * This method returns the {@code MANIFESTXML} file in a {@code byte} array.
      *
-     * @return  MANIFESTXML in a <code>byte</code> array.
+     * <p>It returns {@code null} if there is no {@code MANIFESTXML} in this zip
+     * file.</p>
+     *
+     * @return  MANIFESTXML in a {@code byte} array.
      */
     byte[] getManifestXMLBytes() {
         return getEntryBytes(manifestIndex);
@@ -193,8 +194,8 @@ class OfficeZip {
      *
      * @param   name    The name of the entry in the Zip file to retrieve.
      *
-     * @return  The data for the named entry in a <code>byte</code> array or
-     *          <code>null</code> if no entry is found.
+     * @return  The data for the named entry in a {@code byte} array or
+     *          {@code null} if no entry is found.
      */
     byte[] getNamedBytes(String name) {
 
@@ -214,13 +215,13 @@ class OfficeZip {
         return null;
     }
 
-
     /**
-     * This method sets the bytes for the named entry.  It searches for a
-     * matching entry in the LinkedList.  If no entry is found, a new one is
-     * created.
+     * This method sets the bytes for the named entry.
      *
-     * Writing of data is defferred to setEntryBytes().
+     * <p>It searches for a matching entry in the LinkedList.  If no entry is
+     * found, a new one is created.</p>
+     *
+     * <p>Writing of data is defferred to {@code setEntryBytes()}.</p>
      *
      * @param   name    The name of the entry to search for.
      * @param   bytes   The new data to write.
@@ -241,17 +242,14 @@ class OfficeZip {
     }
 
     /**
-     *  Used by the <code>getContentXMLBytes</code> method and the
-     *  <code>getStyleXMLBytes</code> method to return the
-     *  <code>byte</code> array from the corresponding
-     *  <code>entry</code> in the <code>entryList</code>.
+     * Used by the {@code getContentXMLBytes} method and the
+     * {@code getStyleXMLBytes} method to return the {@code byte} array from the
+     * corresponding {@code Entry} in the {@code entryList}.
      *
-     *  @param  index  Index of <code>Entry</code> object in
-     *                 <code>entryList</code>.
+     *  @param   index  Index of {@code Entry} object in {@code entryList}.
      *
-     *  @return  <code>byte</code> array associated in that
-     *           <code>Entry</code> object or null, if there is
-     *           not such <code>Entry</code>.
+     *  @return  {@code byte} array associated in that {@code Entry} object or
+     *           {@code null}, if there is not such {@code Entry}.
      */
     private byte[] getEntryBytes(int index) {
 
@@ -264,90 +262,73 @@ class OfficeZip {
         return bytes;
     }
 
-
     /**
-     *  Set or replace the <code>byte</code> array for the
-     *  CONTENTXML file.
+     * Set or replace the <code>byte</code> array for the {@code CONTENTXML} file.
      *
-     *  @param  bytes  <code>byte</code> array for the
-     *                 CONTENTXML file.
+     * @param  bytes  {@code byte} array for the {@code CONTENTXML} file.
      */
     void setContentXMLBytes(byte bytes[]) {
 
         contentIndex = setEntryBytes(contentIndex, bytes, CONTENTXML);
     }
 
-
     /**
-     *  Set or replace the <code>byte</code> array for the
-     *  STYLEXML file.
+     * Set or replace the {@code byte} array for the {@code STYLEXML} file.
      *
-     *  @param  bytes  <code>byte</code> array for the
-     *                 STYLEXML file.
+     * @param  bytes  {@code byte} array for the {@code STYLEXML} file.
      */
     void setStyleXMLBytes(byte bytes[]) {
 
         styleIndex = setEntryBytes(styleIndex, bytes, STYLEXML);
     }
 
-
-      /**
-     *  Set or replace the <code>byte</code> array for the
-     *  METAXML file.
+    /**
+     * Set or replace the {@code byte} array for the {@code METAXML} file.
      *
-     *  @param  bytes  <code>byte</code> array for the
-     *                 METAXML file.
+     * @param  bytes  {@code byte} array for the {@code METAXML} file.
      */
     void setMetaXMLBytes(byte bytes[]) {
 
         metaIndex = setEntryBytes(metaIndex, bytes, METAXML);
     }
 
-
-      /**
-     *  Set or replace the <code>byte</code> array for the
-     *  SETTINGSXML file.
+    /**
+     * Set or replace the {@code byte} array for the {@code SETTINGSXML} file.
      *
-     *  @param  bytes  <code>byte</code> array for the
-     *                 SETTINGSXML file.
+     * @param  bytes  {@code byte} array for the {@code SETTINGSXML} file.
      */
     void setSettingsXMLBytes(byte bytes[]) {
 
         settingsIndex = setEntryBytes(settingsIndex, bytes, SETTINGSXML);
     }
 
-
     /**
-     * Set or replace the <code>byte</code> array for the MANIFESTXML file.
+     * Set or replace the {@code byte} array for the {@code MANIFESTXML} file.
      *
-     * @param   bytes   <code>byte</code> array for the MANIFESTXML file.
+     * @param   bytes   {@code byte} array for the {@code MANIFESTXML} file.
      */
     void setManifestXMLBytes(byte bytes[]) {
         manifestIndex = setEntryBytes(manifestIndex, bytes, MANIFESTXML);
     }
 
     /**
-     *  <p>Used by the <code>setContentXMLBytes</code> method and
-     *  the <code>setStyleXMLBytes</code> to either replace an
-     *  existing <code>Entry</code>, or create a new entry in
-     *  <code>entryList</code>.</p>
+     * Used by the {@code setContentXMLBytes} method and the
+     * {@code setStyleXMLBytes} to either replace an existing {@code Entry}, or
+     * create a new entry in {@code entryList}.
      *
-     *  <p>If there is an <code>Entry</code> object within
-     *  entryList that corresponds to the index, replace the
-     *  <code>ZipEntry</code> info.</p>
+     * <p>If there is an {@code Entry} object within {@code entryList} that
+     * corresponds to the index, replace the {@code ZipEntry} info.</p>
      *
-     *  @param  index  Index of <code>Entry</code> to modify.
-     *  @param  bytes  <code>Entry</code> value.
-     *  @param  name   Name of <code>Entry</code>.
+     * @param  index  Index of <code>Entry</code> to modify.
+     * @param  bytes  <code>Entry</code> value.
+     * @param  name   Name of <code>Entry</code>.
      *
-     *  @return Index of value added or modified in entryList
+     * @return Index of value added or modified in entryList
      */
     private int setEntryBytes(int index, byte bytes[], String name) {
 
         if (index > -1) {
-
             // replace existing entry in entryList
-
             Entry entry = entryList.get(index);
             name = entry.zipEntry.getName();
             int method = entry.zipEntry.getMethod();
@@ -358,7 +339,6 @@ class OfficeZip {
             entry.bytes= bytes;
 
         } else {
-
             // add a new entry into entryList
             ZipEntry ze = createZipEntry(name, bytes, ZipEntry.DEFLATED);
             Entry entry = new Entry(ze, bytes);
@@ -369,14 +349,12 @@ class OfficeZip {
         return index;
     }
 
-
     /**
-     *  Write out the ZIP entries into the <code>OutputStream</code>
-     *  object.
+     * Write out the ZIP entries into the {@code OutputStream} object.
      *
-     *  @param  os  <code>OutputStream</code> object to write ZIP.
+     * @param  os  <code>OutputStream</code> object to write ZIP.
      *
-     *  @throws  IOException  If any ZIP I/O error occurs.
+     * @throws  IOException  If any ZIP I/O error occurs.
      */
     void write(OutputStream os) throws IOException {
 
@@ -385,7 +363,6 @@ class OfficeZip {
         ZipOutputStream zos = new ZipOutputStream(os);
 
         ListIterator<Entry> iterator = entryList.listIterator();
-
         while (iterator.hasNext()) {
 
             Entry entry = iterator.next();
@@ -402,15 +379,14 @@ class OfficeZip {
         zos.close();
     }
 
-
     /**
-     *  Creates a <code>ZipEntry</code> object based on the given params.
+     * Creates a {@code ZipEntry} object based on the given params.
      *
-     *  @param  name    Name for the <code>ZipEntry</code>.
-     *  @param  bytes   <code>byte</code> array for <code>ZipEntry</code>.
-     *  @param  method  ZIP method to be used for <code>ZipEntry</code>.
+     * @param   name    Name for the {@code ZipEntry}.
+     * @param   bytes   {@code byte} array for {@code ZipEntry}.
+     * @param   method  ZIP method to be used for {@code ZipEntry}.
      *
-     *  @return  A <code>ZipEntry</code> object.
+     * @return  A {@code ZipEntry} object.
      */
     private ZipEntry createZipEntry(String name, byte bytes[], int method) {
 
@@ -430,9 +406,10 @@ class OfficeZip {
     }
 
     /**
-     *  This inner class is used as a data structure for holding
-     *  a <code>ZipEntry</code> info and its corresponding bytes.
-     *  These are stored in entryList.
+     * This inner class is used as a data structure for holding a {@code ZipEntry}
+     * info and its corresponding bytes.
+     *
+     * <p>These are stored in {@code entryList}.</p>
      */
     private class Entry {
 
@@ -445,4 +422,3 @@ class OfficeZip {
         }
     }
 }
-

@@ -30,11 +30,12 @@ import org.openoffice.xmerge.merger.Difference;
 import org.openoffice.xmerge.util.XmlUtil;
 
 /**
- * This is an implementation of the <code>MergeAlgorithm</code> interface.
- * This class will merge two <code>Document</code> classes.  It utilizes the
+ * This is an implementation of the {@code MergeAlgorithm} interface.
+ *
+ * <p>This class will merge two {@code Document} classes.  It utilizes the
  * appropriate class which implements {@link
- * org.openoffice.xmerge.merger.NodeMergeAlgorithm
- * NodeMergeAlgorithm} to perform the merge.
+ * org.openoffice.xmerge.merger.NodeMergeAlgorithm NodeMergeAlgorithm} to
+ * perform the merge.</p>
  */
 public class DocumentMerge implements MergeAlgorithm {
 
@@ -43,22 +44,19 @@ public class DocumentMerge implements MergeAlgorithm {
     /**  The capabilities of this converter. */
     protected ConverterCapabilities cc_;
 
-
     /**
-     *  Constructor
+     * Constructor.
      *
-     *  @param  cc     The <code>ConverterCapabilities</code>.
-     *  @param  merge  The <code>NodeMergeAlgorithm</code>.
+     * @param  cc     The {@code ConverterCapabilities}.
+     * @param  merge  The {@code NodeMergeAlgorithm}.
      */
     public DocumentMerge(ConverterCapabilities cc, NodeMergeAlgorithm merge) {
         cc_ = cc;
         subDocumentMerge = merge;
     }
 
-
     public void applyDifference(Iterator orgSeq, Iterator modSeq,
                             Difference[] differences) throws MergeException {
-
 
         // a quick test whether the differences array is in ascending order
         int currentPosition = -1;
@@ -170,11 +168,10 @@ public class DocumentMerge implements MergeAlgorithm {
         }
     }
 
-
     /**
-     *  Removes the specified <code>Node</code>.
+     * Removes the specified {@code Node}.
      *
-     *  @param  node  <code>Node</code> to remove.
+     * @param  node  {@code Node} to remove.
      */
     protected void removeNode(Node node) {
 
@@ -183,10 +180,10 @@ public class DocumentMerge implements MergeAlgorithm {
     }
 
     /**
-     *  Appends <code>Node</code> after the specified <code>Node</code>.
+     * Appends {@code Node} after the specified {@code Node}.
      *
-     *  @param  oldNode  <code>Node</code> to append after.
-     *  @param  newNode  <code>Node</code> to append.
+     * @param  oldNode  {@code Node} to append after.
+     * @param  newNode  {@code Node} to append.
      */
     private void appendNode(Node oldNode, Node newNode) {
         Node clonedNode = XmlUtil.deepClone(oldNode, newNode);
@@ -194,12 +191,11 @@ public class DocumentMerge implements MergeAlgorithm {
         parent.appendChild(clonedNode);
     }
 
-
     /**
-     *  Insert <code>Node</code> before the specified <code>Node</code>.
+     * Insert {@code Node} before the specified {@code Node}.
      *
-     *  @param  oldNode  <code>Node</code> to insert before.
-     *  @param  newNode  <code>Node</code> to insert.
+     * @param  oldNode  {@code Node} to insert before.
+     * @param  newNode  {@code Node} to insert.
      */
     private void insertNode(Node oldNode, Node newNode) {
         Node clonedNode = XmlUtil.deepClone(oldNode, newNode);
@@ -207,12 +203,11 @@ public class DocumentMerge implements MergeAlgorithm {
         parent.insertBefore(clonedNode, oldNode);
     }
 
-
     /**
-     *  Replace <code>Element</code>.
+     * Replace <code>Element</code>.
      *
-     *  @param  currElem  <code>Element</code> to be replaced.
-     *  @param  newElem   <code>Element</code> to replace.
+     * @param  currElem  {@code Element} to be replaced.
+     * @param  newElem   {@code Element} to replace.
      */
     private void replaceElement(Element currElem, Element newElem) {
 
@@ -221,4 +216,3 @@ public class DocumentMerge implements MergeAlgorithm {
         parent.replaceChild(clonedNode, currElem);
     }
 }
-

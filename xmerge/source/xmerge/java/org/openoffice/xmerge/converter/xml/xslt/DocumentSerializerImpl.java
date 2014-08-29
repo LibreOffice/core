@@ -49,48 +49,42 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
- *  <p>Xslt implementation of
- *  org.openoffice.xmerge.DocumentSerializer
- *  for the {@link
- *  org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl
- *  PluginFactoryImpl}.</p>
+ * Xslt implementation of {@code org.openoffice.xmerge.DocumentSerializer}
+ * for the {@link org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl
+ * PluginFactoryImpl}.
  *
- *  <p>The <code>serialize</code> method transforms the DOM
- *  document from the given <code>Document</code> object by
- *  means of a supplied Xsl Stylesheet.</p>
+ * <p>The {@code serialize} method transforms the DOM document from the given
+ * {@code Document} object by means of a supplied Xsl Stylesheet.</p>
  */
-
 
 public final class DocumentSerializerImpl
     implements DocumentSerializer,OfficeConstants,URIResolver {
 
-
-    /** SXW <code>Document</code> object that this converter processes. */
+    /** SXW {@code Document} object that this converter processes. */
     private GenericOfficeDocument sxwDoc = null;
 
     private PluginFactoryImpl pluginFactory = null;
 
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param  pf   A <code>PluginFactoryImpl</code>
-     *  @param  doc  A SXW <code>Document</code> to be converted.
+     * @param  pf   A {@code PluginFactoryImpl}.
+     * @param  doc  A SXW {@code Document} to be converted.
      */
     public DocumentSerializerImpl(PluginFactoryImpl pf,Document doc) {
     pluginFactory=pf;
         sxwDoc = (GenericOfficeDocument) doc;
     }
 
-
     /**
-     *  Method to convert a <code>Document</code> with an xsl stylesheet.
-     *  It creates a <code>Document</code> object, which is then transformed
-     *  with the Xslt processor. A <code>ConvertData </code> object is
-     *  constructed and returned.
+     * Method to convert a {@code Document} with an xsl stylesheet.
      *
-     *  @return cd     A <code>ConvertData</code> object.
-     *  @throws  ConvertException  If any I/O error occurs.
-     *  @throws  IOException       If any I/O error occurs.
+     * <p>It creates a {@code Document} object, which is then transformed with the
+     * Xslt processor. A {@code ConvertData} object is constructed and returned.</p>
+     *
+     * @return  cd  A {@code ConvertData} object.
+     * @throws  ConvertException  If any I/O error occurs.
+     * @throws  IOException       If any I/O error occurs.
      */
     public ConvertData serialize() throws ConvertException, IOException {
         String docName = sxwDoc.getName();
@@ -202,77 +196,70 @@ public final class DocumentSerializerImpl
         return cd;
     }
 
-    public Source resolve(String href,String base)
-    throws TransformerException{
-        if (href !=null){
-        if(href.equals("javax.xml.transform.dom.DOMSource")|| href.equals(""))
+    public Source resolve(String href, String base)
+            throws TransformerException {
+        if (href != null) {
+            if (href.equals("javax.xml.transform.dom.DOMSource") || href.equals("")) {
+                return null;
+            }
+            try {
+                ConverterInfo ci = pluginFactory.getConverterInfo();
+                String newhRef = "jar:" + ci.getJarName() + "!/" + href;
+                StreamSource sheetFile = new StreamSource(newhRef);
+                return sheetFile;
+            } catch (Exception e) {
+                System.out.println("\nException in Xslt Resolver " + e);
+                return null;
+            }
+        } else {
             return null;
-        try{
-            ConverterInfo ci = pluginFactory.getConverterInfo();
-            String newhRef ="jar:"+ci.getJarName()+"!/"+href;
-            StreamSource sheetFile= new StreamSource(newhRef);
-            return sheetFile;
         }
-        catch (Exception e){
-            System.out.println("\nException in Xslt Resolver " +e);
-            return null;
-        }
-        }
-        else
-        return null;
     }
 
-
     /**
-     * This method performs the sxl transformation on the supplied <code>
-     * Document</code> and returns a <code>DOMResult</code> object.
+     * This method performs the sxl transformation on the supplied
+     * {@code Document} and returns a {@code DOMResult} object.
      *
-     *  Xslt transformation code
+     * <p>Xslt transformation code.</p>
      *
-     * @return baos A <code>ByteArrayOutputStream</code> object containing
-     *               the result of the Xslt transformation.
+     * @return baos A {@code ByteArrayOutputStream} object containing the result
+     *         of the Xslt transformation.
      */
-    private ByteArrayOutputStream transform(org.w3c.dom.Document domDoc)
-    {
-       ConverterInfo ci = pluginFactory.getConverterInfo();
-       ByteArrayOutputStream baos= new ByteArrayOutputStream();
-       try{
+    private ByteArrayOutputStream transform(org.w3c.dom.Document domDoc) {
+        ConverterInfo ci = pluginFactory.getConverterInfo();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try {
 
-          DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
-          dFactory.setNamespaceAware(true);
+            DocumentBuilderFactory dFactory = DocumentBuilderFactory.newInstance();
+            dFactory.setNamespaceAware(true);
 
-          DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
-          String teststr = ci.getXsltSerial();
+            DocumentBuilder dBuilder = dFactory.newDocumentBuilder();
+            String teststr = ci.getXsltSerial();
 
-          teststr= teststr.substring(0,6);
-          org.w3c.dom.Document xslDoc=null;
-              if ((teststr.equals("http:/"))||(teststr.equals("file:/"))
-                                        ||(teststr.equals("jar://"))){
-              System.out.println(ci.getXsltSerial());
-              xslDoc= dBuilder.parse(ci.getXsltSerial());
+            teststr = teststr.substring(0, 6);
+            org.w3c.dom.Document xslDoc = null;
+            if ((teststr.equals("http:/")) || (teststr.equals("file:/"))
+                    || (teststr.equals("jar://"))) {
+                System.out.println(ci.getXsltSerial());
+                xslDoc = dBuilder.parse(ci.getXsltSerial());
 
-          }
-          else{
-              xslDoc = dBuilder.parse(
-                  "jar:"+ci.getJarName()+"!/"+ci.getXsltSerial());
-          }
+            } else {
+                xslDoc = dBuilder.parse(
+                        "jar:" + ci.getJarName() + "!/" + ci.getXsltSerial());
+            }
 
-          DOMSource xslDomSource = new DOMSource(xslDoc);
-          DOMSource xmlDomSource = new DOMSource(domDoc);
+            DOMSource xslDomSource = new DOMSource(xslDoc);
+            DOMSource xmlDomSource = new DOMSource(domDoc);
 
-          //call the tranformer using the XSL, Source and Result.
-          TransformerFactory tFactory = TransformerFactory.newInstance();
-          tFactory.setURIResolver(this);
-          Transformer transformer = tFactory.newTransformer(xslDomSource);
+            //call the tranformer using the XSL, Source and Result.
+            TransformerFactory tFactory = TransformerFactory.newInstance();
+            tFactory.setURIResolver(this);
+            Transformer transformer = tFactory.newTransformer(xslDomSource);
 
-          transformer.transform(xmlDomSource, new StreamResult(baos));
-       }
-       catch(Exception e){
-              System.out.println("An error occurred in the transformation : "+e);
-       }
-       return baos;
-     }
-
-
+            transformer.transform(xmlDomSource, new StreamResult(baos));
+        } catch (Exception e) {
+            System.out.println("An error occurred in the transformation : " + e);
+        }
+        return baos;
+    }
 }
-

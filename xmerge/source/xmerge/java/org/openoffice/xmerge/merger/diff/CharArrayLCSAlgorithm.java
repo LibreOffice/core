@@ -22,24 +22,25 @@ import java.util.ArrayList;
 import org.openoffice.xmerge.merger.Difference;
 
 /**
- *  <p>This is an implementations of <code>DiffAlgorithm</code> interface
- *  which will difference char arrays.</p>
+ * This is an implementations of {@code DiffAlgorithm} interface which will
+ * difference char arrays.
  *
- *  <p>It also use Longest Common Subsequence (LCS).  The algorithm is based
- *  on the book "Introduction to Algorithms" by Thomas H.Cormen,
- *  Charles E.Leiserson, and Ronald L.Riverst (MIT Press 1990) page 314.</p>
+ * <p>It also use Longest Common Subsequence (LCS).  The algorithm is based on
+ * the book "Introduction to Algorithms" by Thomas H.Cormen, Charles E.Leiserson,
+ * and Ronald L.Riverst (MIT Press 1990) page 314.</p>
  */
 public class CharArrayLCSAlgorithm {
 
     /**
-     *  Return an <code>Difference</code> array.  This method finds out
-     *  the difference between two sequences.
+     * Return an {@code Difference} array.
      *
-     *  @param  orgSeq  The original sequence.
-     *  @param  modSeq  The modified (or changed) sequence to
-     *                  compare against the origial.
+     * <p>This method finds out the difference between two sequences.</p>
      *
-     *  @return  A <code>Difference</code> array.
+     * @param   orgSeq  The original sequence.
+     * @param   modSeq  The modified (or changed) sequence to compare against
+     *                  the origial.
+     *
+     * @return  A {@code Difference} array.
      */
     public Difference[] computeDiffs(char[] orgSeq, char[] modSeq) {
 
@@ -72,15 +73,15 @@ public class CharArrayLCSAlgorithm {
     }
 
     /**
-     *  Create the difference table.
-     *  The difference table is used internal to keep track what
-     *  elements are common or different in the two sequences.
+     * Create the difference table.
      *
-     *  @param  orgSeq  The original sequence to be used as a base.
-     *  @param  modSeq  The modified sequence to compare.
+     * <p>The difference table is used internal to keep track what elements are
+     * common or different in the two sequences.</p>
      *
-     *  @return  A difference table as a two-dimensional array of
-     *           integers.
+     * @param   orgSeq  The original sequence to be used as a base.
+     * @param   modSeq  The modified sequence to compare.
+     *
+     * @return  A difference table as a two-dimensional array of integers.
      */
     private int[][] createDiffTable(char[] orgSeq, char[] modSeq) {
         int orgSeqlen = orgSeq.length + 1;
@@ -114,27 +115,25 @@ public class CharArrayLCSAlgorithm {
         return diffTable;
     }
 
-
     /**
-     *  Generate the <code>Difference</code> result vector.
-     *  This method will be called recursively to backtrack the difference
-     *  table to get the difference result (and also the LCS).
+     * Generate the {@code Difference} result vector.
      *
-     *  @param   diffTable   The difference table containing the
-     *                       <code>Difference</code> result.
-     *  @param   i           The nth element in original sequence to
-     *                       compare.  This method is called recursively
-     *                       with i and j decreased until 0.
-     *  @param   j           The nth element in modified sequence to
-     *                       compare.
-     *  @param   diffVector  A vector to output the <code>Difference</code>
-     *                       result. Can not use a return variable as it
-     *                       is a recursive method.  The vector will contain
-     *                       <code>Difference</code> objects with operation
-     *                       and positions filled in.
+     * <p>This method will be called recursively to backtrack the difference
+     * table to get the difference result (and also the LCS).</p>
+     *
+     * @param   diffTable   The difference table containing the {@code Difference}
+     *                      result.
+     * @param   i           The nth element in original sequence to compare. This
+     *                      method is called recursively with {@code i} and
+     *                      {@code j} decreased until {@code 0}.
+     * @param   j           The nth element in modified sequence to compare.
+     * @param   diffVector  A vector to output the {@code Difference} result.
+     *                      Can not use a return variable as it is a recursive
+     *                      method.  The vector will contain {@code Difference}
+     *                      objects with operation and positions filled in.
      */
-    private void generateResult(int[][] diffTable,
-                                int i, int j, ArrayList<Difference> diffVector) {
+    private void generateResult(int[][] diffTable, int i, int j,
+                                ArrayList<Difference> diffVector) {
 
         // handle the first element
         if (i == 0 || j == 0) {
@@ -196,4 +195,3 @@ public class CharArrayLCSAlgorithm {
         }
     }
 }
-

@@ -39,14 +39,12 @@ import org.openoffice.xmerge.merger.MergeAlgorithm;
 import org.openoffice.xmerge.util.XmlUtil;
 import org.openoffice.xmerge.util.Debug;
 
-
 /**
- *  Generic small device implementation of <code>DocumentMerger</code> for
- *  the {@link
- *  org.openoffice.xmerge.converter.xml.sxc.SxcPluginFactory
- *  SxcPluginFactory}.
+ * Generic small device implementation of {@code DocumentMerger} for
+ * the {@link org.openoffice.xmerge.converter.xml.sxc.SxcPluginFactory
+ * SxcPluginFactory}.
  *
- *  <p>Used with SXC <code>Document</code> objects.</p>
+ * <p>Used with SXC {@code Document} objects.</p>
  */
 public class DocumentMergerImpl implements DocumentMerger {
 
@@ -54,13 +52,13 @@ public class DocumentMergerImpl implements DocumentMerger {
     private org.openoffice.xmerge.Document orig = null;
 
     /**
-     *  Constructor
+     * Constructor.
      *
-     *  @param  doc  The original &quot;Office&quot; <code>Document</code>
-     *               to merge.
-     *  @param  cc   The <code>ConverterCapabilities</code>.
+     * @param  doc  The original &quot;Office&quot; {@code Document} to merge.
+     * @param  cc   The {@code ConverterCapabilities}.
      */
-    public DocumentMergerImpl(org.openoffice.xmerge.Document doc, ConverterCapabilities cc) {
+    public DocumentMergerImpl(org.openoffice.xmerge.Document doc,
+            ConverterCapabilities cc) {
         cc_ = cc;
         this.orig = doc;
     }
@@ -121,8 +119,8 @@ public class DocumentMergerImpl implements DocumentMerger {
 
         numOfWorkSheet = workSheetList2.getLength();
 
-        // for those workSheet from target don't have a matching one
-        // in the original workSheet list, we add it
+        // for those workSheet from target don't have a matching one in the
+        // original workSheet list, we add it
 
         // find out the office body node first
         NodeList officeBodyList =
@@ -135,12 +133,9 @@ public class DocumentMergerImpl implements DocumentMerger {
             Node workSheet= workSheetList2.item(j);
 
             // try to match the workSheet
-
             Node matchingWorkSheet = matchWorkSheet(workSheet, workSheetList1);
 
-            // add the new WorkSheet to the original document iff match not
-            // found
-
+            // add the new WorkSheet to the original document iff match not found
             if (matchingWorkSheet == null) {
                 Node cloneNode = XmlUtil.deepClone(officeBody, workSheet);
                 officeBody.appendChild(cloneNode);
@@ -149,13 +144,13 @@ public class DocumentMergerImpl implements DocumentMerger {
     }
 
     /**
-     *  Try to find a WorkSheet from the modified WorkSheetList that
-     *  has a matching table name from the original WorkSheet.
+     * Try to find a WorkSheet from the modified WorkSheetList that has a
+     * matching table name from the original WorkSheet.
      *
-     *  @param  orgSheet      The original WorkSheet.
-     *  @param  modSheetList  The modified WorkSheet.
+     * @param   orgSheet      The original WorkSheet.
+     * @param   modSheetList  The modified WorkSheet.
      *
-     *  @return  The Node in modSheetList that matches the orgSheet.
+     * @return  The {@code Node} in modSheetList that matches the {@code orgSheet}.
      */
     private Node matchWorkSheet(Node orgSheet, NodeList modSheetList) {
 
@@ -186,4 +181,3 @@ public class DocumentMergerImpl implements DocumentMerger {
         return matchSheet;
     }
 }
-

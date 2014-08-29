@@ -21,30 +21,27 @@ package org.openoffice.xmerge.converter.xml.xslt;
 import org.openoffice.xmerge.converter.xml.OfficeDocument;
 
 /**
- *  This class is an implementation of <code>OfficeDocument</code> for
- *  the generic office format.
+ * This class is an implementation of {@code OfficeDocument} for the generic
+ * office format.
  */
 public class GenericOfficeDocument extends OfficeDocument {
 
     /**
-     *  Constructor with arguments to set <code>name</code>.
+     * Constructor with arguments to set {@code name}.
      *
-     *  @param  name  The name of the <code>Document</code>
+     * @param  name  The name of the {@code Document}.
      */
     public GenericOfficeDocument(String name) {
         super(name);
     }
 
-
     /**
-     *  Constructor with arguments to set <code>name</code>, the
-     *  <code>namespaceAware</code> flag, and the <code>validating</code>
-     *  flag.
+     * Constructor with arguments to set {@code name}, the {@code namespaceAware}
+     * flag, and the {@code validating} flag.
      *
-     *  @param  name            The name of the <code>Document</code>.
-     *  @param  namespaceAware  The value of the <code>namespaceAware</code>
-     *                          flag.
-     *  @param  validating      The value of the <code>validating</code> flag.
+     * @param  name            The name of the {@code Document}.
+     * @param  namespaceAware  The value of the {@code namespaceAware} flag.
+     * @param  validating      The value of the {@code validating} flag.
      */
     public GenericOfficeDocument(String name, boolean namespaceAware, boolean validating) {
 
@@ -52,9 +49,9 @@ public class GenericOfficeDocument extends OfficeDocument {
     }
 
     /**
-     *  Returns the Office file extension for the  generic format.
+     * Returns the Office file extension for the  generic format.
      *
-     *  @return  The Office file extension for the generic format.
+     * @return  The Office file extension for the generic format.
      */
     @Override
     protected String getFileExtension() {
@@ -62,26 +59,24 @@ public class GenericOfficeDocument extends OfficeDocument {
     }
 
     /**
-     *  Returns the Office attribute for the generic format.
+     * Returns the Office attribute for the generic format.
      *
-     *  @return  The Office attribute for the generic format.
+     * @return  The Office attribute for the generic format.
      */
     @Override
     protected String getOfficeClassAttribute() {
-
-    return "";
+        return "";
     }
 
     /**
      * Method to return the MIME type of the document.
      *
-     * @return  String  The document's MIME type.
+     * @return  The document's MIME type.
      */
     @Override
     protected String getDocumentMimeType() {
         /* TODO: Determine the MIME-type from the input. */
         return "";
     }
-
 }
 

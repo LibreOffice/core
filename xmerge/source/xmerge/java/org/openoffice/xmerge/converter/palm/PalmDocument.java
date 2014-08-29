@@ -28,54 +28,44 @@ import java.io.UnsupportedEncodingException;
 import org.openoffice.xmerge.Document;
 
 /**
- *  <p> A <code>PalmDocument</code> is palm implementaion of the
- *  <code>Document</code> interface.</p>
+ * A {@code PalmDocument} is palm implementaion of the{@code Document} interface.
  *
- *  <p>This implementation allows the Palm device format to be
- *  read via an <code>InputStream</code> and written via an
- *  <code>OutputStream</code>.</p>
- *
+ * <p>This implementation allows the Palm device format to be read via an
+ * {@code InputStream} and written via an {@code OutputStream}.</p>
  */
-
 public class PalmDocument
     implements Document {
 
-    /**
-     *  The internal representation of a pdb.
-     */
+    /** The internal representation of a pdb. */
     private PalmDB pdb;
 
-    /**
-     *  The file name.
-     */
+    /** The file name. */
     private String fileName;
 
     /**
-     *  Constructor to create a <code>PalmDocument</code>
-     *  from an <code>InputStream</code>.
+     * Constructor to create a {@code PalmDocument} from an {@code InputStream}.
      *
-     *  @param  is  <code>InputStream</code> containing a PDB.
+     * @param   is  {@code InputStream} containing a PDB.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     public PalmDocument(InputStream is) throws IOException {
         read(is);
     }
 
-
     /**
-     *  Constructor to create a <code>PalmDocument</code> with
-     *  <code>Record</code> objects.  <code>recs.length</code>
-     *  can be zero for an empty PDB.
+     * Constructor to create a {@code PalmDocument} with {@code Record} objects.
      *
-     *  @param  name       Suggested PDB name in <code>String</code>.
-     *  @param  creatorID  The PDB Creator ID.
-     *  @param  typeID     The PDB Type ID.
-     *  @param  version    The PDB header version.
-     *  @param  attribute  The PDB header attribute.
-     *  @param  recs       Array of <code>Record</code> objects.
+     * <p>{@code recs.length} can be zero for an empty PDB.</p>
      *
-     *  @throws  NullPointerException  If <code>recs</code> is null.
+     * @param   name       Suggested PDB name in {@code String}.
+     * @param   creatorID  The PDB Creator ID.
+     * @param   typeID     The PDB Type ID.
+     * @param   version    The PDB header version.
+     * @param   attribute  The PDB header attribute.
+     * @param   recs       Array of {@code Record} objects.
+     *
+     * @throws  NullPointerException  If {@code recs} is {@code null}.
      */
     public PalmDocument(String name, int creatorID, int typeID, int version,
         short attribute, Record[] recs)
@@ -84,15 +74,13 @@ public class PalmDocument
         fileName = pdb.getPDBNameString();
     }
 
-
     /**
-     *  Reads in a file from the <code>InputStream</code>.
+     * Reads in a file from the {@code InputStream}.
      *
-     *  @param  is  <code>InputStream</code> to read in its content.
+     * @param   is  {@code InputStream} to read in its content.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
-
     public void read(InputStream is) throws IOException {
         PdbDecoder decoder = new PdbDecoder();
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -106,35 +94,31 @@ public class PalmDocument
         fileName = pdb.getPDBNameString();
     }
 
-
     /**
-     *  Writes the <code>PalmDocument</code> to an <code>OutputStream</code>.
+     * Writes the {@code PalmDocument} to an {@code OutputStream}.
      *
-     *  @param  os  The <code>OutputStream</code> to write the content.
+     * @param   os  The {@code OutputStream} to write the content.
      *
-     *  @throws  IOException  If any I/O error occurs.
+     * @throws  IOException  If any I/O error occurs.
      */
     public void write(OutputStream os) throws IOException {
         PdbEncoder encoder = new PdbEncoder(pdb);
         encoder.write(os);
     }
 
-
     /**
-     *  Returns the <code>PalmDB</code> contained in this object.
+     * Returns the {@code PalmDB} contained in this object.
      *
-     *  @return  The <code>PalmDB</code>.
+     * @return  The {@code PalmDB}.
      */
     public PalmDB getPdb() {
         return pdb;
     }
 
-
     /**
-     *  Sets the <code>PalmDocument</code> to a new <code>PalmDB</code>
-     *  value.
+     * Sets the {@code PalmDocument} to a new {@code PalmDB} value.
      *
-     *  @param  pdb  The new <code>PalmDB</code> value.
+     * @param  pdb  The new {@code PalmDB} value.
      */
     public void setPdb(PalmDB pdb) {
         this.pdb = pdb;
@@ -143,25 +127,21 @@ public class PalmDocument
         fileName = name;
     }
 
-
     /**
-     *  Returns the name of the file.
+     * Returns the name of the file.
      *
-     *  @return  The name of the file represented in the
-     *           <code>PalmDocument</code>.
+     * @return  The name of the file represented in the {@code PalmDocument}.
      */
     public String getFileName() {
         return fileName + ".pdb";
     }
 
-
     /**
-     *  Returns the <code>Document</code> name.
+     * Returns the {@code Document} name.
      *
-     *  @return  The <code>Document</code> name.
+     * @return  The {@code Document} name.
      */
     public String getName() {
         return fileName;
     }
 }
-

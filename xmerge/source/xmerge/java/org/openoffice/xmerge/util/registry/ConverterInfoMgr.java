@@ -22,32 +22,30 @@ import java.util.*;
 import java.io.*;
 
 /**
- *  Manages the converter plug-ins that are currently active.
- *  This class allows plug-ins to be added or removed dynamically.
- *  This class is a singleton (static) class, so that only one
- *  manager can exist at a time.  It is final, so it may not be
- *  subclassed.
+ * Manages the converter plug-ins that are currently active.
  *
+ * <p>This class allows plug-ins to be added or removed dynamically.</p>
+ *
+ * <p>This class is a singleton (static) class, so that only one manager can
+ * exist at a time.  It is final, so it may not be subclassed.</p>
  */
 public final class ConverterInfoMgr {
 
     private static final ArrayList<ConverterInfo> converterInfoList = new ArrayList<ConverterInfo>();
 
    /**
-    *  Adds a converter plug-in to the registry.  The
-    *  <code>ConverterInfo</code> must have a unique DisplayName
-    *  and must have non-null values for DisplayName, ClassImpl,
-    *  OfficeMime, and DeviceMime.
+    * Adds a converter plug-in to the registry.
     *
-    *  @param  ci  A <code>ConverterInfo</code> object describing a plug-in.
+    * <p>The {@code ConverterInfo} must have a unique DisplayName and must have
+    * non-null values for DisplayName, ClassImpl, OfficeMime, and DeviceMime.</p>
     *
-    *  @throws  RegistryException  If the <code>ConverterInfo</code>
-    *                              is not valid.
+    *  @param   ci  A {@code ConverterInfo} object describing a plug-in.
+    *
+    *  @throws  RegistryException  If the {@code ConverterInfo} is not valid.
     */
     private static void addPlugIn(ConverterInfo ci) throws RegistryException {
 
         // Validate
-
         if (ci.getDisplayName() == null) {
             RegistryException re = new RegistryException(
                 "Converter must have valid name.");
@@ -69,8 +67,8 @@ public final class ConverterInfoMgr {
             throw re;
         }
 
-        // Verify there is no converter with the same Display Name in
-        // the registry.
+        // Verify there is no converter with the same Display Name in the
+        // registry.
         for (ConverterInfo converterInfo : converterInfoList) {
             if (ci.getDisplayName().equals(converterInfo.getDisplayName())) {
                 RegistryException re = new RegistryException(
@@ -79,27 +77,28 @@ public final class ConverterInfoMgr {
             }
         }
 
-        // Since this is a adding to a static Vector, make sure this
-        // add method call is synchronized.
-
+        // Since this is a adding to a static Vector, make sure this add method
+        // call is synchronized.
         synchronized (converterInfoList) {
             converterInfoList.add(ci);
         }
     }
 
    /**
-    *  Adds a list of converter plug-ins to the registry.
-    *  Each <code>ConverterInfo</code> in the list must have
-    *  a unique DisplayName and must have non-null values for DisplayName,
-    *  ClassImpl, OfficeMime, and DeviceMime.
+    * Adds a list of converter plug-ins to the registry.
     *
-    *  @param  jarEnum  An <code>Enumeration</code> of <code>ConverterInfo</code>
-    *                     objects describing one or more plug-in(s).
+    * <p>Each {@code ConverterInfo} in the list must have a unique DisplayName
+    * and must have non-null values for DisplayName, ClassImpl, OfficeMime, and
+    * DeviceMime.</p>
     *
-    *  @throws  RegistryException  If a <code>ConverterInfo</code> in the
-    *                              <code>Vector</code> is not valid.
+    * @param   jarEnum  An {@code Enumeration} of {@code ConverterInfo} objects
+    *                   describing one or more plug-in(s).
+    *
+    * @throws  RegistryException  If a {@code ConverterInfo} in the
+    *                             {@code Vector} is not valid.
     */
-    public static void addPlugIn(Iterator<ConverterInfo> jarEnum) throws RegistryException {
+    public static void addPlugIn(Iterator<ConverterInfo> jarEnum)
+            throws RegistryException {
 
         while (jarEnum.hasNext()) {
             ConverterInfo converterInfo = jarEnum.next();
@@ -108,25 +107,24 @@ public final class ConverterInfoMgr {
     }
 
    /**
-    *  Returns an <code>Enumeration</code> of registered
-    *  <code>ConverterInfo</code> objects.
+    * Returns an {@code Enumeration} of registered {@code ConverterInfo} objects.
     *
-    *  @return  An <code>Enumeration</code> containing the currently registered
-    *           <code>ConverterInfo</code> objects, an empty
-    *           <code>Vector</code> if none exist.
+    * @return  An {@code Enumeration} containing the currently registered
+    *          {@code ConverterInfo} objects, an empty {@code Vector} if none
+    *          exist.
     */
    private static Iterator<ConverterInfo> getConverterInfoEnumeration() {
       return (converterInfoList.iterator());
    }
 
    /**
-    *  Removes any <code>ConverterInfo</code> object from the registry
-    *  that have the specified jar name value.
+    * Removes any {@code ConverterInfo} object from the registry that have the
+    * specified jar name value.
     *
-    *  @param  jar  The name of the jarfile.
+    * @param   jar  The name of the jarfile.
     *
-    *  @return  True if a <code>ConverterInfo</code> object was
-    *           removed, false otherwise.
+    * @return  {@code true} if a {@code ConverterInfo} object was removed,
+    *          {@code false} otherwise.
     */
    public static boolean removeByJar(String jar) {
 
@@ -143,13 +141,13 @@ public final class ConverterInfoMgr {
     }
 
    /**
-    *  Removes any <code>ConverterInfo</code> object from the registry
-    *  that have the specified display name value.
+    * Removes any {@code ConverterInfo} object from the registry that have the
+    * specified display name value.
     *
-    *  @param  name  The display name.
+    * @param   name  The display name.
     *
-    *  @return  True if a <code>ConverterInfo</code> object was
-    *           removed, false otherwise.
+    * @return  {@code true} if a {@code ConverterInfo} object was removed,
+    *          {@code false} otherwise.
     */
    private static boolean removeByName(String name) {
 
@@ -166,16 +164,16 @@ public final class ConverterInfoMgr {
     }
 
    /**
-    *  Returns the <code>ConverterInfo</code> object that supports
-    *  the specified device/office mime type conversion.  If there
-    *  are multiple <code>ConverterInfo</code> objects registered
-    *  that support this conversion, only the first is returned.
+    * Returns the {@code ConverterInfo} object that supports the specified
+    * device/office mime type conversion.
     *
-    *  @param  deviceMime  The device mime.
-    *  @param  officeMime  The office mime.
+    * <p>If there are multiple {@code ConverterInfo} objects registered that
+    * support this conversion, only the first is returned.</p>
     *
-    *  @return  The first plug-in that supports the specified
-    *           conversion.
+    * @param   deviceMime  The device mime.
+    * @param   officeMime  The office mime.
+    *
+    * @return  The first plug-in that supports the specified conversion.
     */
     public static ConverterInfo findConverterInfo(String deviceMime, String officeMime) {
 
@@ -190,7 +188,6 @@ public final class ConverterInfoMgr {
             Iterator<String> fromEnum = converterInfo.getDeviceMime();
 
             // Loop over the deviceMime types.
-
             while (fromEnum.hasNext()) {
                 String fromDeviceInfo = fromEnum.next();
                 if (deviceMime.trim().equals(fromDeviceInfo) &&
@@ -203,17 +200,17 @@ public final class ConverterInfoMgr {
     }
 
    /**
-    *  Returns an array of two <code>ConverterInfo</code> objects that
-    *  can be chained to perform the specified mime type conversion.
-    *  If there are multiple <code>ConverterInfo</code> objects that
-    *  support this conversion, only the first is returned.
+    * Returns an array of two {@code ConverterInfo} objects that can be chained
+    * to perform the specified mime type conversion.
     *
-    *  @param  deviceFromMime  The device from mime.
-    *  @param  deviceToMime    The device to mime.
+    * <p>If there are multiple {@code ConverterInfo} objects that support this
+    * conversion, only the first is returned.</p>
     *
-    *  @return  An array of two <code>ConverterInfo</code> objects
-    *           that can be chained to perform the specified
-    *           conversion.
+    * @param   deviceFromMime  The device from mime.
+    * @param   deviceToMime    The device to mime.
+    *
+    * @return  An array of two {@code ConverterInfo} objects that can be chained
+    *          to perform the specified conversion.
     */
     private static ConverterInfo[] findConverterInfoChain(String deviceFromMime, String deviceToMime) {
 
@@ -224,7 +221,6 @@ public final class ConverterInfoMgr {
         ConverterInfo[] converterInfo = new ConverterInfo[2];
 
         // Loop over elements comparing with deviceFromMime
-
         Iterator<ConverterInfo> cifEnum = converterInfoList.iterator();
         while (cifEnum.hasNext()) {
 
@@ -234,7 +230,6 @@ public final class ConverterInfoMgr {
 
             // Loop over the deviceMime types looking for a deviceFromMime
             // match.
-
             while (fromEnum.hasNext()) {
                 String fromDeviceInfo = fromEnum.next();
 
@@ -242,7 +237,6 @@ public final class ConverterInfoMgr {
 
                     // Found a a match for deviceFrom.  Now loop over the
                     // elements comparing with deviceToMime
-
                     Iterator<ConverterInfo> citEnum = converterInfoList.iterator();
                     while (citEnum.hasNext()) {
 
@@ -252,7 +246,6 @@ public final class ConverterInfoMgr {
 
                         // Loop over deviceMime types looking for a
                         // deviceToMime match.
-
                         while (toEnum.hasNext()) {
                             String toDeviceInfo = toEnum.next();
                             if (deviceToMime.trim().equals(toDeviceInfo) &&
@@ -270,10 +263,10 @@ public final class ConverterInfoMgr {
     }
 
     /**
-     *  main to let the user specify what plug-ins to register from
-     *  jarfiles and to display the currently registered plug-ins.
+     * Main to let the user specify what plug-ins to register from jarfiles and
+     * to display the currently registered plug-ins.
      *
-     *  @param  args  Not used.
+     * @param  args  Not used.
      */
     public static void main(String args[]) {
 
@@ -307,12 +300,10 @@ public final class ConverterInfoMgr {
             System.out.println("");
 
             // Quit
-
             if (c == 'Q') {
                 exitFlag = true;
 
             // Load by Jarfile
-
             } else if (c == 'L') {
 
                 System.out.println("Enter path to jarfile: ");
@@ -338,7 +329,6 @@ public final class ConverterInfoMgr {
                 }
 
             // Unload by Display Name or Jarfile
-
             } else if (c == 'T') {
                 if (validate){
                     System.out.println("Validation switched off");
@@ -355,8 +345,7 @@ public final class ConverterInfoMgr {
                    System.out.println("Enter path to jarfile: ");
                 }
 
-                try
-                {
+                try {
                     String name = br.readLine().trim();
                     boolean rc = false;
 
