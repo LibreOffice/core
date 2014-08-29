@@ -17,11 +17,12 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <com/sun/star/text/RelOrientation.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -50,8 +51,6 @@ public:
         return (OString(filename).endsWith(".rtf") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
 };
-
-#define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
 DECLARE_RTFEXPORT_TEST(testZoom, "zoom.rtf")
 {
@@ -657,6 +656,12 @@ DECLARE_RTFEXPORT_TEST(testFdo80167, "fdo80167.rtf")
 {
     // Problem was that after export, the page break was missing, so this was 1.
     CPPUNIT_ASSERT_EQUAL(2, getPages());
+}
+
+DECLARE_RTFEXPORT_TEST(testFdo32613, "fdo32613.odt")
+{
+    // This was AS_CHARACTER, RTF export did not support writing anchored pictures.
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
 #endif

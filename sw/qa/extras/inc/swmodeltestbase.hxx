@@ -83,6 +83,7 @@ using namespace css;
 #define DECLARE_OOXMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 #define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
+#define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
 // For testing during development of a test, you want to use
 // DECLARE_OOXMLEXPORT_TEST_ONLY, and change the above to #if 0
@@ -91,11 +92,13 @@ using namespace css;
 #define DECLARE_OOXMLIMPORT_TEST_ONLY(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
 #define DECLARE_OOXMLEXPORT_TEST_ONLY(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 #define DECLARE_RTFIMPORT_TEST_ONLY(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
+#define DECLARE_RTFEXPORT_TEST_ONLY(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
 
 #undef DECLARE_OOXMLEXPORT_TEST
 #define DECLARE_OOXMLIMPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
 #define DECLARE_OOXMLEXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
 #define DECLARE_RTFIMPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
+#define DECLARE_RTFEXPORT_TEST(TestName, filename) class disabled##TestName : public Test { void disabled(); }; void disabled##TestName::disabled()
 #endif
 
 #define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
