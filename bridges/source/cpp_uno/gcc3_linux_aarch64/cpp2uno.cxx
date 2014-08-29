@@ -357,6 +357,7 @@ extern "C" void vtableSlotCall(
         "ldp d2, d3, [%[fpr_], #16]\n\t"
         :: [gpr_]"r" (gpr), [fpr_]"r" (fpr)
         : "r0", "r1", "v0", "v1", "v2", "v3");
+    va_end(ap);
 }
 #pragma GCC diagnostic pop
 
