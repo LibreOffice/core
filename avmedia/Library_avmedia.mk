@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_exception_objects,avmedia,\
 ))
 endif
 
-ifneq (,$(filter COLLADA2GLTF,$(BUILD_TYPE)))
+ifeq ($(ENABLE_COLLADA),TRUE)
 $(eval $(call gb_Library_set_warnings_not_errors,avmedia))
 
 ifeq ($(OS),LINUX)
@@ -68,9 +68,6 @@ $(eval $(call gb_Library_use_externals,avmedia,\
 	png \
 ))
 
-$(eval $(call gb_Library_add_defs,avmedia,\
-	-DENABLE_COLLADA2GLTF \
-))
 endif
 
 $(eval $(call gb_Library_add_exception_objects,avmedia,\

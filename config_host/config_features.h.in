@@ -142,4 +142,9 @@
  */
 #define HAVE_FEATURE_GLTF 0
 
+/*
+ * Whether we have COLLADA support.
+ */
+#define HAVE_FEATURE_COLLADA 0
+
 #endif
