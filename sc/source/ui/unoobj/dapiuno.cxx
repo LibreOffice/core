@@ -38,6 +38,7 @@
 #include "dpgroup.hxx"
 #include "dpdimsave.hxx"
 #include "hints.hxx"
+#include <dputil.hxx>
 
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
@@ -1481,13 +1482,17 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
                 return pSaveData->GetDimensionByName( maFieldId.maFieldName );
 
             // find dimension with specified index (search in duplicated dimensions)
-            const boost::ptr_vector<ScDPSaveDimension>& rDimensions = pSaveData->GetDimensions();
+            const ScDPSaveData::DimsType& rDims = pSaveData->GetDimensions();
 
             sal_Int32 nFoundIdx = 0;
-            boost::ptr_vector<ScDPSaveDimension>::const_iterator it;
-            for(it = rDimensions.begin(); it != rDimensions.end(); ++it)
+            ScDPSaveData::DimsType::const_iterator it;
+            for (it = rDims.begin(); it != rDims.end(); ++it)
             {
-                if( !it->IsDataLayout() && (it->GetName() == maFieldId.maFieldName) )
+                if (it->IsDataLayout())
+                    continue;
+
+                OUString aSrcName = ScDPUtil::getSourceDimensionName(it->GetName());
+                if (aSrcName == maFieldId.maFieldName)
                 {
                     if( nFoundIdx == maFieldId.mnFieldIdx )
                         return const_cast<ScDPSaveDimension*>(&(*it));
