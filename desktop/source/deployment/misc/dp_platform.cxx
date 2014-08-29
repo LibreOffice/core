@@ -46,7 +46,7 @@
 #define PLATFORM_LINUX_S390x        "linux_s390x"
 #define PLATFORM_LINUX_HPPA         "linux_hppa"
 #define PLATFORM_LINUX_ALPHA        "linux_alpha"
-
+#define PLATFORM_LINUX_AARCH64      "linux_aarch64"
 
 
 #define PLATFORM_SOLARIS_SPARC      "solaris_sparc"
@@ -152,6 +152,8 @@ namespace
             ret = checkOSandCPU("Linux", "HPPA");
         else if (token == PLATFORM_LINUX_ALPHA)
             ret = checkOSandCPU("Linux", "ALPHA");
+        else if (token == PLATFORM_LINUX_AARCH64)
+            ret = checkOSandCPU("Linux", "AARCH64");
         else if (token == PLATFORM_SOLARIS_SPARC)
             ret = checkOSandCPU("Solaris", "SPARC");
         else if (token == PLATFORM_SOLARIS_SPARC64)
