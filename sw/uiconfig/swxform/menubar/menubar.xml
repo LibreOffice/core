@@ -420,7 +420,12 @@
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
-      <menu:menuitem menu:id=".uno:SpellingAndGrammarDialog"/>
+      <menu:menu menu:id=".uno:SpellingMenu">
+        <menu:menupopup>
+            <menu:menuitem menu:id=".uno:SpellOnline"/>
+            <menu:menuitem menu:id=".uno:SpellingAndGrammarDialog"/>
+        </menu:menupopup>
+      </menu:menu>
       <menu:menu menu:id=".uno:LanguageMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
