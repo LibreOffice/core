@@ -1866,14 +1866,14 @@ void ScInterpreter::ScEffektiv()
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fPeriodn = GetDouble();
+        double fPeriods = GetDouble();
         double fNominal = GetDouble();
-        if (fPeriodn < 1.0 || fNominal <= 0.0)
+        if (fPeriods < 1.0 || fNominal <= 0.0)
             PushIllegalArgument();
         else
         {
-            fPeriodn = ::rtl::math::approxFloor(fPeriodn);
-            PushDouble(pow(1.0 + fNominal/fPeriodn, fPeriodn) - 1.0);
+            fPeriods = ::rtl::math::approxFloor(fPeriods);
+            PushDouble(pow(1.0 + fNominal/fPeriods, fPeriods) - 1.0);
         }
     }
 }
@@ -1883,14 +1883,14 @@ void ScInterpreter::ScNominal()
     nFuncFmtType = NUMBERFORMAT_PERCENT;
     if ( MustHaveParamCount( GetByte(), 2 ) )
     {
-        double fPeriodn = GetDouble();
+        double fPeriods = GetDouble();
         double fEffective = GetDouble();
-        if (fPeriodn < 1.0 || fEffective <= 0.0)
+        if (fPeriods < 1.0 || fEffective <= 0.0)
             PushIllegalArgument();
         else
         {
-            fPeriodn = ::rtl::math::approxFloor(fPeriodn);
-            PushDouble( (pow(fEffective + 1.0, 1.0 / fPeriodn) - 1.0) * fPeriodn );
+            fPeriods = ::rtl::math::approxFloor(fPeriods);
+            PushDouble( (pow(fEffective + 1.0, 1.0 / fPeriods) - 1.0) * fPeriods );
         }
     }
 }
