@@ -77,12 +77,7 @@ def preprocess(model):
             if j.localName == "attribute" and not len(j.getAttribute("name")):
                 continue
 
-            if j.parentNode.localName == "resource":
-                # Outside grammar element, don't inherit namespaces defined there.
-                localNamespaceAliases = defaultNamespaceAliases()
-            else:
-                # Inside grammar element.
-                localNamespaceAliases = grammarNamespaceAliases.copy()
+            localNamespaceAliases = grammarNamespaceAliases.copy()
 
             parseNamespaceAliases(j.parentNode, localNamespaceAliases)
             parseNamespaceAliases(j, localNamespaceAliases)
