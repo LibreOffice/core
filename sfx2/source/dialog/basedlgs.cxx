@@ -480,7 +480,26 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
+SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
+                        SfxChildWindow *pCW,
+                        Window* pParent,
+                        const OString& rID, const OUString& rUIXMLDescription) :
+    FloatingWindow(pParent, rID, rUIXMLDescription),
+    pBindings(pBindinx),
+    pImp( new SfxFloatingWindow_Impl )
+{
+    pImp->pMgr = pCW;
+    pImp->bConstructed = false;
 
+    //do we really need this odd helpid/uniqueid dance ?
+    SetUniqueId( GetHelpId() );
+    SetHelpId("");
+
+    if ( pBindinx )
+        pImp->StartListening( *pBindinx );
+    pImp->aMoveTimer.SetTimeout(50);
+    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
+}
 
 bool SfxFloatingWindow::Close()
 

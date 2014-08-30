@@ -138,6 +138,10 @@ protected:
                                               SfxChildWindow *pCW,
                                               Window* pParent,
                                               const ResId& rResId);
+                            SfxFloatingWindow( SfxBindings *pBindings,
+                                              SfxChildWindow *pCW,
+                                              Window* pParent,
+                                              const OString& rID, const OUString& rUIXMLDescription);
                             virtual ~SfxFloatingWindow();
 
     virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
