@@ -78,7 +78,7 @@ void FuChar::DoExecute( SfxRequest& rReq )
         {
             if (rReq.GetSlot() == SID_CHAR_DLG_EFFECT)
             {
-                pDlg->SetCurPageId(RID_SVXPAGE_CHAR_EFFECTS);
+                pDlg->SetCurPageId("RID_SVXPAGE_CHAR_EFFECTS");
             }
 
             nResult = pDlg->Execute();
