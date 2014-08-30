@@ -22,16 +22,16 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
+#include <vcl/builder.hxx>
 #include <vcl/window.hxx>
 
 class ModalDialog;
 class MenuBar;
 class TaskPaneList;
-
+class VclContainer;
+class VclBox;
 
 // - Icon-Types -
-
-
 #define ICON_LO_DEFAULT                 1
 #define ICON_TEXT_DOCUMENT              2
 #define ICON_TEXT_TEMPLATE              3
@@ -128,12 +128,10 @@ public:
 #define TITLE_BUTTON_HIDE           ((sal_uInt16)2)
 #define TITLE_BUTTON_MENU           ((sal_uInt16)4)
 
-
 // - SystemWindow -
-
-
-
-class VCL_DLLPUBLIC SystemWindow : public Window
+class VCL_DLLPUBLIC SystemWindow
+    : public Window
+    , public VclBuilderContainer
 {
     friend class WorkWindow;
     class ImplData;
@@ -149,23 +147,34 @@ private:
     bool            mbDockBtn;
     bool            mbHideBtn;
     bool            mbSysChild;
-    sal_uInt16          mnMenuBarMode;
-    sal_uInt16          mnIcon;
+    bool            mbIsDefferedInit;
+    bool            mbIsCalculatingInitialLayoutSize;
+    bool            mbInitialLayoutDone;
+    sal_uInt16      mnMenuBarMode;
+    sal_uInt16      mnIcon;
     ImplData*       mpImplData;
+    Timer           maLayoutTimer;
 
 public:
     using Window::ImplIsInTaskPaneList;
     SAL_DLLPRIVATE bool ImplIsInTaskPaneList( Window* pWin );
 
 private:
+    SAL_DLLPRIVATE void Init();
     SAL_DLLPRIVATE void ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin );
+    SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, VclContainer &rBox);
+    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, void* );
 
 protected:
     // Single argument ctors shall be explicit.
-    explicit        SystemWindow( WindowType nType );
+    explicit SystemWindow(WindowType nType);
+    explicit SystemWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType);
 
-    void            SetWindowStateData( const WindowStateData& rData );
+    void     SetWindowStateData( const WindowStateData& rData );
 
+    virtual void settingOptimalLayoutSize(VclBox *pBox);
+
+    SAL_DLLPRIVATE void DoInitialLayout();
 public:
                     virtual ~SystemWindow();
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;
@@ -176,6 +185,13 @@ public:
     virtual void    Pin();
     virtual void    Roll();
     virtual void    Resizing( Size& rSize );
+    virtual void    Resize() SAL_OVERRIDE;
+    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
+    virtual void    StateChanged(StateChangedType nStateChange) SAL_OVERRIDE;
+    virtual void    queue_resize(StateChangedType eReason = STATE_CHANGE_LAYOUT) SAL_OVERRIDE;
+    bool            isLayoutEnabled() const;
+    void            setOptimalLayoutSize();
+    bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
 
     void            SetIcon( sal_uInt16 nIcon );
     sal_uInt16          GetIcon() const { return mnIcon; }
@@ -205,15 +221,18 @@ public:
     const Size&     GetMaxOutputSizePixel() const;
 
     void            SetWindowState(const OString& rStr);
-    OString    GetWindowState(sal_uLong nMask = WINDOWSTATE_MASK_ALL) const;
+    OString         GetWindowState(sal_uLong nMask = WINDOWSTATE_MASK_ALL) const;
 
     void            SetMenuBar( MenuBar* pMenuBar );
     MenuBar*        GetMenuBar() const { return mpMenuBar; }
     void            SetMenuBarMode( sal_uInt16 nMode );
-    sal_uInt16          GetMenuBarMode() const { return mnMenuBarMode; }
+    sal_uInt16      GetMenuBarMode() const { return mnMenuBarMode; }
 
     TaskPaneList*   GetTaskPaneList();
     void            GetWindowStateData( WindowStateData& rData ) const;
+
+    virtual void     SetText( const OUString& rStr ) SAL_OVERRIDE;
+    virtual OUString GetText() const SAL_OVERRIDE;
 
     /**
     Returns the screen number the window is on
@@ -253,6 +272,8 @@ public:
 
     void SetCloseHdl(const Link& rLink);
     const Link& GetCloseHdl() const;
+
+    SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
 };
 
 #endif // INCLUDED_VCL_SYSWIN_HXX

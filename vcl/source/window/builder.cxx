@@ -176,7 +176,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
     , m_pParserState(new ParserState)
     , m_xFrame(rFrame)
 {
-    m_bToplevelHasDeferredInit = pParent && pParent->IsDialog() && ((Dialog*)pParent)->isDeferredInit();
+    m_bToplevelHasDeferredInit = pParent && pParent->IsDialog() && static_cast<Dialog*>(pParent)->isDeferredInit();
     m_bToplevelHasDeferredProperties = m_bToplevelHasDeferredInit;
 
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
@@ -1663,7 +1663,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
         //toplevels default to resizable
         if (pCurrentChild->IsDialog())
         {
-            Dialog *pDialog = (Dialog*)pCurrentChild;
+            Dialog *pDialog = static_cast<Dialog*>(pCurrentChild);
             pDialog->doDeferredInit(extractResizable(rProps));
             m_bToplevelHasDeferredInit = false;
         }

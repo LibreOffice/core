@@ -23,6 +23,7 @@
 
 #include <tools/debug.hxx>
 
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/event.hxx>
@@ -60,12 +61,10 @@ SystemWindow::ImplData::ImplData()
 
 SystemWindow::ImplData::~ImplData()
 {
-    if( mpTaskPaneList )
-        delete mpTaskPaneList;
+    delete mpTaskPaneList;
 }
 
-SystemWindow::SystemWindow( WindowType nType ) :
-    Window( nType )
+void SystemWindow::Init()
 {
     mpImplData          = new ImplData;
     mpWindowImpl->mbSysWin            = true;
@@ -78,12 +77,32 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mbDockBtn           = false;
     mbHideBtn           = false;
     mbSysChild          = false;
+    mbIsCalculatingInitialLayoutSize = false;
+    mbInitialLayoutDone = false;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
     mnIcon              = 0;
+
+    //To-Do, reuse maResizeTimer
+    maLayoutTimer.SetTimeout(50);
+    maLayoutTimer.SetTimeoutHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
+}
+
+SystemWindow::SystemWindow(WindowType nType)
+    : Window(nType)
+{
+    Init();
+}
+
+SystemWindow::SystemWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType)
+    : Window(pParent, nType)
+{
+    Init();
+    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
 SystemWindow::~SystemWindow()
 {
+    maLayoutTimer.Stop();
     delete mpImplData;
     mpImplData = NULL;
 }
@@ -963,6 +982,134 @@ void SystemWindow::SetCloseHdl(const Link& rLink)
 const Link& SystemWindow::GetCloseHdl() const
 {
     return mpImplData->maCloseHdl;
+}
+
+void SystemWindow::queue_resize(StateChangedType /*eReason*/)
+{
+    if (hasPendingLayout() || isCalculatingInitialLayoutSize())
+        return;
+    if (!isLayoutEnabled())
+        return;
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mnOptimalWidthCache = -1;
+    pWindowImpl->mnOptimalHeightCache = -1;
+    maLayoutTimer.Start();
+}
+
+void SystemWindow::Resize()
+{
+    queue_resize();
+}
+
+bool SystemWindow::isLayoutEnabled() const
+{
+    //pre dtor called, and single child is a container => we're layout enabled
+    return mpImplData && ::isLayoutEnabled(this);
+}
+
+Size SystemWindow::GetOptimalSize() const
+{
+    if (!isLayoutEnabled())
+        return Window::GetOptimalSize();
+
+    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
+
+    sal_Int32 nBorderWidth = get_border_width();
+
+    aSize.Height() += mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2*nBorderWidth;
+    aSize.Width() += mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2*nBorderWidth;
+
+    return Window::CalcWindowSize(aSize);
+}
+
+void SystemWindow::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
+{
+    sal_Int32 nBorderWidth = get_border_width();
+
+    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
+        + 2 * nBorderWidth;
+    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
+        + 2 * nBorderWidth;
+
+    Point aPos(mpWindowImpl->mnLeftBorder + nBorderWidth,
+        mpWindowImpl->mnTopBorder + nBorderWidth);
+
+    VclContainer::setLayoutAllocation(rBox, aPos, aSize);
+}
+
+IMPL_LINK( SystemWindow, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
+{
+    if (!isLayoutEnabled())
+    {
+        SAL_WARN("vcl.layout", "SystemWindow has become non-layout because extra children have been added directly to it.");
+        return 0;
+    }
+
+    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+    assert(pBox);
+    setPosSizeOnContainee(GetSizePixel(), *pBox);
+    return 0;
+}
+
+void SystemWindow::SetText(const OUString& rStr)
+{
+    setDeferredProperties();
+    Window::SetText(rStr);
+}
+
+OUString SystemWindow::GetText() const
+{
+    const_cast<SystemWindow*>(this)->setDeferredProperties();
+    return Window::GetText();
+}
+
+void SystemWindow::settingOptimalLayoutSize(VclBox* /*pBox*/)
+{
+}
+
+void SystemWindow::setOptimalLayoutSize()
+{
+    maLayoutTimer.Stop();
+
+    //resize SystemWindow to fit requisition on initial show
+    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
+
+    settingOptimalLayoutSize(pBox);
+
+    Size aSize = get_preferred_size();
+
+    Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
+
+    aSize.Width() = std::min(aMax.Width(), aSize.Width());
+    aSize.Height() = std::min(aMax.Height(), aSize.Height());
+
+    SetMinOutputSizePixel(aSize);
+    SetSizePixel(aSize);
+    setPosSizeOnContainee(aSize, *pBox);
+}
+
+void SystemWindow::DoInitialLayout()
+{
+    if (isLayoutEnabled())
+    {
+        mbIsCalculatingInitialLayoutSize = true;
+        setDeferredProperties();
+        setOptimalLayoutSize();
+        mbIsCalculatingInitialLayoutSize = false;
+        mbInitialLayoutDone = true;
+    }
+}
+
+void SystemWindow::StateChanged( StateChangedType nType )
+{
+    Window::StateChanged(nType);
+
+    if (nType == STATE_CHANGE_INITSHOW && !mbInitialLayoutDone)
+    {
+        DoInitialLayout();
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

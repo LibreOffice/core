@@ -347,13 +347,8 @@ void Dialog::ImplInitDialogData()
     mbModalMode             = false;
     mpContentArea           = NULL;
     mpActionArea            = NULL;
-    mbIsCalculatingInitialLayoutSize = false;
     mnMousePositioned       = 0;
     mpDialogImpl            = new DialogImpl;
-
-    //To-Do, reuse maResizeTimer
-    maLayoutTimer.SetTimeout(50);
-    maLayoutTimer.SetTimeoutHdl( LINK( this, Dialog, ImplHandleLayoutTimerHdl ) );
 }
 
 void Dialog::ImplInit( Window* pParent, WinBits nStyle )
@@ -531,9 +526,24 @@ void Dialog::set_content_area(VclBox* pContentArea)
     mpContentArea = pContentArea;
 }
 
+void Dialog::settingOptimalLayoutSize(VclBox *pBox)
+{
+    const DialogStyle& rDialogStyle =
+        GetSettings().GetStyleSettings().GetDialogStyle();
+    pBox->set_border_width(rDialogStyle.content_area_border);
+    pBox->set_spacing(pBox->get_spacing() +
+        rDialogStyle.content_area_spacing);
+
+    VclButtonBox *pActionArea = getActionArea(this);
+    if (pActionArea)
+    {
+        pActionArea->set_border_width(rDialogStyle.action_area_border);
+        pActionArea->set_spacing(rDialogStyle.button_spacing);
+    }
+}
+
 Dialog::~Dialog()
 {
-    maLayoutTimer.Stop();
     delete mpDialogImpl;
     mpDialogImpl = NULL;
 }
@@ -614,54 +624,14 @@ Size bestmaxFrameSizeForScreenSize(const Size &rScreenSize)
     return Size(w, h);
 }
 
-void Dialog::setOptimalLayoutSize()
-{
-    maLayoutTimer.Stop();
-
-    //resize dialog to fit requisition on initial show
-    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
-
-    const DialogStyle& rDialogStyle =
-        GetSettings().GetStyleSettings().GetDialogStyle();
-    pBox->set_border_width(rDialogStyle.content_area_border);
-    pBox->set_spacing(pBox->get_spacing() +
-        rDialogStyle.content_area_spacing);
-
-    VclButtonBox *pActionArea = getActionArea(this);
-    if (pActionArea)
-    {
-        pActionArea->set_border_width(rDialogStyle.action_area_border);
-        pActionArea->set_spacing(rDialogStyle.button_spacing);
-    }
-
-    Size aSize = get_preferred_size();
-
-    Size aMax(bestmaxFrameSizeForScreenSize(GetDesktopRectPixel().GetSize()));
-
-    aSize.Width() = std::min(aMax.Width(), aSize.Width());
-    aSize.Height() = std::min(aMax.Height(), aSize.Height());
-
-    SetMinOutputSizePixel(aSize);
-    SetSizePixel(aSize);
-    setPosSizeOnContainee(aSize, *pBox);
-}
-
 void Dialog::StateChanged( StateChangedType nType )
 {
-    SystemWindow::StateChanged( nType );
-
-    if ( nType == STATE_CHANGE_INITSHOW )
+    if (nType == STATE_CHANGE_INITSHOW)
     {
         if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
             ImplWindowAutoMnemonic( this );
 
-        if (isLayoutEnabled())
-        {
-            mbIsCalculatingInitialLayoutSize = true;
-            setDeferredProperties();
-            setOptimalLayoutSize();
-            mbIsCalculatingInitialLayoutSize = false;
-        }
+        DoInitialLayout();
 
         if ( !HasChildPathFocus() || HasFocus() )
             GrabFocusToFirstControl();
@@ -676,7 +646,10 @@ void Dialog::StateChanged( StateChangedType nType )
 
         ImplMouseAutoPos( this );
     }
-    else if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
+
+    SystemWindow::StateChanged( nType );
+
+    if (nType == STATE_CHANGE_CONTROLBACKGROUND)
     {
         ImplInitSettings();
         Invalidate();
@@ -1166,75 +1139,11 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
     pDev->Pop();
 }
 
-bool Dialog::isLayoutEnabled() const
+void Dialog::queue_resize(StateChangedType eReason)
 {
-    //pre dtor called, and single child is a container => we're layout enabled
-    return mpDialogImpl && ::isLayoutEnabled(this);
-}
-
-Size Dialog::GetOptimalSize() const
-{
-    if (!isLayoutEnabled())
-        return SystemWindow::GetOptimalSize();
-
-    Size aSize = VclContainer::getLayoutRequisition(*GetWindow(WINDOW_FIRSTCHILD));
-
-    sal_Int32 nBorderWidth = get_border_width();
-
-    aSize.Height() += mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
-        + 2*nBorderWidth;
-    aSize.Width() += mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
-        + 2*nBorderWidth;
-
-    return Window::CalcWindowSize(aSize);
-}
-
-void Dialog::setPosSizeOnContainee(Size aSize, VclContainer &rBox)
-{
-    sal_Int32 nBorderWidth = get_border_width();
-
-    aSize.Width() -= mpWindowImpl->mnLeftBorder + mpWindowImpl->mnRightBorder
-        + 2 * nBorderWidth;
-    aSize.Height() -= mpWindowImpl->mnTopBorder + mpWindowImpl->mnBottomBorder
-        + 2 * nBorderWidth;
-
-    Point aPos(mpWindowImpl->mnLeftBorder + nBorderWidth,
-        mpWindowImpl->mnTopBorder + nBorderWidth);
-
-    VclContainer::setLayoutAllocation(rBox, aPos, aSize);
-}
-
-IMPL_LINK( Dialog, ImplHandleLayoutTimerHdl, void*, EMPTYARG )
-{
-    if (!isLayoutEnabled())
-    {
-        SAL_WARN("vcl.layout", "Dialog has become non-layout because extra children have been added directly to it.");
-        return 0;
-    }
-
-    VclBox *pBox = static_cast<VclBox*>(GetWindow(WINDOW_FIRSTCHILD));
-    assert(pBox);
-    setPosSizeOnContainee(GetSizePixel(), *pBox);
-    return 0;
-}
-
-void Dialog::queue_resize(StateChangedType /*eReason*/)
-{
-    if (hasPendingLayout() || isCalculatingInitialLayoutSize())
-        return;
     if (IsInClose())
         return;
-    if (!isLayoutEnabled())
-        return;
-    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
-    pWindowImpl->mnOptimalWidthCache = -1;
-    pWindowImpl->mnOptimalHeightCache = -1;
-    maLayoutTimer.Start();
-}
-
-void Dialog::Resize()
-{
-    queue_resize();
+    SystemWindow::queue_resize(eReason);
 }
 
 bool Dialog::set_property(const OString &rKey, const OString &rValue)
@@ -1244,18 +1153,6 @@ bool Dialog::set_property(const OString &rKey, const OString &rValue)
     else
         return SystemWindow::set_property(rKey, rValue);
     return true;
-}
-
-void Dialog::SetText(const OUString& rStr)
-{
-    setDeferredProperties();
-    SystemWindow::SetText(rStr);
-}
-
-OUString Dialog::GetText() const
-{
-    const_cast<Dialog*>(this)->setDeferredProperties();
-    return SystemWindow::GetText();
 }
 
 VclBuilderContainer::VclBuilderContainer()

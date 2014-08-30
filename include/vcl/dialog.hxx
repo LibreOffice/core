@@ -22,7 +22,6 @@
 
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
-#include <vcl/builder.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/timer.hxx>
 
@@ -36,11 +35,8 @@
 struct DialogImpl;
 class VclBox;
 class VclButtonBox;
-class VclContainer;
 
-class VCL_DLLPUBLIC Dialog
-    : public SystemWindow
-    , public VclBuilderContainer
+class VCL_DLLPUBLIC Dialog : public SystemWindow
 {
 private:
     Window*         mpDialogParent;
@@ -52,8 +48,7 @@ private:
     bool            mbInClose;
     bool            mbModalMode;
     bool            mbIsDefferedInit;
-    bool            mbIsCalculatingInitialLayoutSize;
-    Timer           maLayoutTimer;
+
     VclButtonBox*   mpActionArea;
     VclBox*         mpContentArea;
 
@@ -65,16 +60,13 @@ private:
     SAL_DLLPRIVATE         Dialog & operator= (const Dialog &);
 
     DECL_DLLPRIVATE_LINK( ImplAsyncCloseHdl, void* );
-    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, void* );
 
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
 
-    SAL_DLLPRIVATE void    setPosSizeOnContainee(Size aSize, VclContainer &rBox);
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
-    SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
     SAL_DLLPRIVATE void doDeferredInit(bool bResizable);
     SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDefferedInit; }
 
@@ -82,6 +74,7 @@ protected:
     explicit        Dialog( WindowType nType );
     explicit        Dialog( Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType );
     virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags ) SAL_OVERRIDE;
+    virtual void    settingOptimalLayoutSize(VclBox *pBox) SAL_OVERRIDE;
 
 protected:
     friend class VclBuilder;
@@ -97,11 +90,6 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 
-    virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-    virtual void    Resize() SAL_OVERRIDE;
-    bool            isLayoutEnabled() const;
-    void            setOptimalLayoutSize();
-    bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
     virtual void queue_resize(StateChangedType eReason = STATE_CHANGE_LAYOUT) SAL_OVERRIDE;
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     VclButtonBox* get_action_area() { return mpActionArea;}
@@ -111,10 +99,6 @@ public:
 
     virtual short   Execute();
     bool            IsInExecute() const { return mbInExecute; }
-
-    virtual void      SetText( const OUString& rStr ) SAL_OVERRIDE;
-    virtual OUString  GetText() const SAL_OVERRIDE;
-
 
     // Dialog::Execute replacement API
 public:

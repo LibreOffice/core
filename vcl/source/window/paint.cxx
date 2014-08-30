@@ -284,7 +284,7 @@ void Window::ImplPostPaint()
 IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
 {
     // save paint events until layout is done
-    if (!ImplDoTiledRendering() && IsDialog() && static_cast<const Dialog*>(this)->hasPendingLayout())
+    if (!ImplDoTiledRendering() && IsSystemWindow() && static_cast<const SystemWindow*>(this)->hasPendingLayout())
     {
         mpWindowImpl->mpFrameData->maPaintTimer.Start();
         return 0;
