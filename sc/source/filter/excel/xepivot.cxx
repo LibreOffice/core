@@ -1184,14 +1184,13 @@ void XclExpPTField::WriteSxvdex( XclExpStream& rStrm ) const
     rStrm.EndRecord();
 }
 
-XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t nId ) :
+XclExpPivotTable::XclExpPivotTable( const XclExpRoot& rRoot, const ScDPObject& rDPObj, const XclExpPivotCache& rPCache, size_t ) :
     XclExpRoot( rRoot ),
     mrPCache( rPCache ),
     maDataOrientField( *this, EXC_SXIVD_DATA ),
     mnOutScTab( 0 ),
     mbValid( false ),
-    mbFilterBtn( false ),
-    mnId( nId )
+    mbFilterBtn( false )
 {
     const ScRange& rOutScRange = rDPObj.GetOutRange();
     if( GetAddressConverter().ConvertRange( maPTInfo.maOutXclRange, rOutScRange, true ) )

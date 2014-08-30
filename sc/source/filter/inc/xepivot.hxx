@@ -406,7 +406,6 @@ private:
     SCTAB               mnOutScTab;         /// Sheet index of the output range.
     bool                mbValid;            /// true = The pivot table is valid for export.
     bool                mbFilterBtn;        /// true = DataPilot has filter button.
-    size_t              mnId;               /// Stream ID
 };
 
 /** The main class for pivot table export.
