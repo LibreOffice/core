@@ -1708,27 +1708,27 @@ void ScInterpreter::ScZins()
     PushDouble(fGuess);
 }
 
-double ScInterpreter::ScGetZinsZ(double fInterest, double fZr, double fZzr, double fBw,
+double ScInterpreter::ScGetCompoundInterest(double fInterest, double fZr, double fZzr, double fBw,
                                  double fZw, double fF, double& fRmz)
 {
     fRmz = ScGetRmz(fInterest, fZzr, fBw, fZw, fF);     // fuer kapz auch bei fZr == 1
-    double fInterestZ;
+    double fCompoundInterest;
     nFuncFmtType = NUMBERFORMAT_CURRENCY;
     if (fZr == 1.0)
     {
         if (fF > 0.0)
-            fInterestZ = 0.0;
+            fCompoundInterest = 0.0;
         else
-            fInterestZ = -fBw;
+            fCompoundInterest = -fBw;
     }
     else
     {
         if (fF > 0.0)
-            fInterestZ = ScGetZw(fInterest, fZr-2.0, fRmz, fBw, 1.0) - fRmz;
+            fCompoundInterest = ScGetZw(fInterest, fZr-2.0, fRmz, fBw, 1.0) - fRmz;
         else
-            fInterestZ = ScGetZw(fInterest, fZr-1.0, fRmz, fBw, 0.0);
+            fCompoundInterest = ScGetZw(fInterest, fZr-1.0, fRmz, fBw, 0.0);
     }
-    return fInterestZ * fInterest;
+    return fCompoundInterest * fInterest;
 }
 
 void ScInterpreter::ScZinsZ()
@@ -1751,7 +1751,7 @@ void ScInterpreter::ScZinsZ()
     else
     {
         double nRmz;
-        PushDouble(ScGetZinsZ(nInterest, nZr, nZzr, nBw, nZw, nFlag, nRmz));
+        PushDouble(ScGetCompoundInterest(nInterest, nZr, nZzr, nBw, nZw, nFlag, nRmz));
     }
 }
 
@@ -1775,7 +1775,7 @@ void ScInterpreter::ScKapz()
     else
     {
         double nRmz;
-        double nInterestz = ScGetZinsZ(nInterest, nZr, nZzr, nBw, nZw, nFlag, nRmz);
+        double nInterestz = ScGetCompoundInterest(nInterest, nZr, nZzr, nBw, nZw, nFlag, nRmz);
         PushDouble(nRmz - nInterestz);
     }
 }
@@ -1800,22 +1800,22 @@ void ScInterpreter::ScKumZinsZ()
             sal_uLong nStart = (sal_uLong) fStart;
             sal_uLong nEnd = (sal_uLong) fEnd ;
             double fRmz = ScGetRmz(fInterest, fZzr, fBw, 0.0, fF);
-            double fInterestZ = 0.0;
+            double fCompoundInterest = 0.0;
             if (nStart == 1)
             {
                 if (fF <= 0.0)
-                    fInterestZ = -fBw;
+                    fCompoundInterest = -fBw;
                 nStart++;
             }
             for (sal_uLong i = nStart; i <= nEnd; i++)
             {
                 if (fF > 0.0)
-                    fInterestZ += ScGetZw(fInterest, (double)(i-2), fRmz, fBw, 1.0) - fRmz;
+                    fCompoundInterest += ScGetZw(fInterest, (double)(i-2), fRmz, fBw, 1.0) - fRmz;
                 else
-                    fInterestZ += ScGetZw(fInterest, (double)(i-1), fRmz, fBw, 0.0);
+                    fCompoundInterest += ScGetZw(fInterest, (double)(i-1), fRmz, fBw, 0.0);
             }
-            fInterestZ *= fInterest;
-            PushDouble(fInterestZ);
+            fCompoundInterest *= fInterest;
+            PushDouble(fCompoundInterest);
         }
     }
 }

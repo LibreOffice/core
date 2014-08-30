@@ -682,7 +682,7 @@ void ScZZR();
 bool RateIteration(double fNper, double fPayment, double fPv,
                                 double fFv, double fPayType, double& fGuess);
 void ScZins();
-double ScGetZinsZ(double fZins, double fZr, double fZzr, double fBw,
+double ScGetCompoundInterest(double fZins, double fZr, double fZzr, double fBw,
                          double fZw, double fF, double& fRmz);
 void ScZinsZ();
 void ScKapz();
