@@ -21,7 +21,6 @@
 
 #include <com/sun/star/resource/XResourceBundle.hpp>
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
-#include <com/sun/star/lang/NullPointerException.hpp>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -36,7 +35,6 @@ namespace comphelper
     using com::sun::star::resource::XResourceBundleLoader;
     using com::sun::star::resource::MissingResourceException;
     using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
@@ -191,8 +189,6 @@ namespace comphelper
     OfficeResourceBundle::OfficeResourceBundle( const Reference< XComponentContext >& _context, const sal_Char* _bundleBaseAsciiName )
         :m_pImpl( new ResourceBundle_Impl( _context, OUString::createFromAscii( _bundleBaseAsciiName ) ) )
     {
-        if ( !_context.is() )
-            throw NullPointerException();
     }
 
 
