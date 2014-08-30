@@ -2589,6 +2589,10 @@ ifeq ($(OS),MACOSX)
 $(call gb_LinkTarget_add_libs,$(1),\
 	-lobjc \
 )
+else ifeq ($(OS),LINUX)
+$(call gb_LinkTarget_add_libs,$(1),\
+	-pthread \
+)
 else ifeq ($(OS),WNT)
 $(call gb_LinkTarget_use_system_win32_libs,$(1),\
 	advapi32 \
