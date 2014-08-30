@@ -421,6 +421,7 @@
   <menu:menu menu:id=".uno:ToolsMenu">
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:SpellingAndGrammarDialog"/>
+      <menu:menuitem menu:id=".uno:SpellOnline"/>
       <menu:menu menu:id=".uno:LanguageMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
