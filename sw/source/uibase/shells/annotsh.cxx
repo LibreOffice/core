@@ -466,9 +466,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         case SID_CHAR_DLG:
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
-            const SfxStringItem* pItem = 0;
-            if (pArgs && nSlot == SID_CHAR_DLG)
-                pItem = static_cast< const SfxStringItem* >(pArgs->GetItem(FN_PARAM_1, false, TYPE(SfxStringItem) ) );
+            SFX_REQUEST_ARG(rReq, pItem, SfxStringItem, FN_PARAM_1, false);
 
             if( !pArgs || pItem )
             {
