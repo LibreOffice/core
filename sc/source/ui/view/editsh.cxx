@@ -460,7 +460,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 if (nSlot == SID_CHAR_DLG_EFFECT)
                 {
-                    pDlg->SetCurPageId(RID_SVXPAGE_CHAR_EFFECTS);
+                    pDlg->SetCurPageId("fonteffects");
                 }
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
