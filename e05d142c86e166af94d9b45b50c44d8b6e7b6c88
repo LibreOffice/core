@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_7754aa53",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/converter/xml/ParaStyle.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-08-30T07:45:07Z",
+      "side": 1,
+      "message": "why the empty attribute? If you\u0027re not going to put something in it, why not just leave it out altogether?",
+      "revId": "e05d142c86e166af94d9b45b50c44d8b6e7b6c88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
