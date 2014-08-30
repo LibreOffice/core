@@ -120,6 +120,7 @@ public:
 
 public:
     explicit        FloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
+    explicit        FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     explicit        FloatingWindow( Window* pParent, const ResId& );
     virtual         ~FloatingWindow();
 

@@ -164,6 +164,11 @@ FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
+FloatingWindow::FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+    : SystemWindow(pParent, rID, rUIXMLDescription, WINDOW_FLOATINGWINDOW)
+{
+}
+
 void FloatingWindow::ImplLoadRes( const ResId& rResId )
 {
     SystemWindow::ImplLoadRes( rResId );
