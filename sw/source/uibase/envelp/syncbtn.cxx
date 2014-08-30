@@ -26,7 +26,6 @@
 #include "edtwin.hxx"
 #include "label.hrc"
 
-#define _SYNCDLG
 #include "syncbtn.hxx"
 #include "swtypes.hxx"
 
@@ -61,16 +60,13 @@ SwSyncChildWin::SwSyncChildWin( Window* _pParent,
 
 SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
                             SfxChildWindow* pChild,
-                            Window *pParent) :
-    SfxFloatingWindow(_pBindings, pChild, pParent, SW_RES(DLG_SYNC_BTN)),
-    aSyncBtn        (this, SW_RES(BTN_SYNC ))
+                            Window *pParent)
+    : SfxFloatingWindow(_pBindings, pChild, pParent, "FloatingSync", "modules/swriter/ui/floatingsync.ui")
 {
-    FreeResource();
-    aSyncBtn.SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));
-}
-
-SwSyncBtnDlg::~SwSyncBtnDlg()
-{
+    get(m_pSyncBtn, "sync");
+    m_pSyncBtn->SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));
+    fprintf(stderr, "SwSyncBtnDlg::SwSyncBtnDlg %p\n", this);
+    Show();
 }
 
 IMPL_LINK_NOARG(SwSyncBtnDlg, BtnHdl)

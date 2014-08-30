@@ -22,10 +22,6 @@
 
 #include "envelp.hrc"
 
-// local resources *********************************************************
-
-#define BTN_SYNC     20
-
 // global resources ********************************************************
 #define STR_CUSTOM              (RC_LABEL_BEGIN + 1)
 

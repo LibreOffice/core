@@ -26,8 +26,6 @@
 
 #define DLG_MAILMERGE (RC_ENVELP_BEGIN + 8)
 
-#define DLG_SYNC_BTN  (RC_ENVELP_BEGIN + 9)
-
 // Bereiche -------------------------------------------------------------------
 
 #define RC_ENVLOP_BEGIN  (RC_ENVELP_BEGIN     )

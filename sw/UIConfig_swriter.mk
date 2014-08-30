@@ -112,6 +112,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/fldfuncpage \
 	sw/uiconfig/swriter/ui/fldrefpage \
 	sw/uiconfig/swriter/ui/fldvarpage \
+	sw/uiconfig/swriter/ui/floatingsync \
 	sw/uiconfig/swriter/ui/formatsectiondialog \
 	sw/uiconfig/swriter/ui/formattablepage \
 	sw/uiconfig/swriter/ui/footendnotedialog \

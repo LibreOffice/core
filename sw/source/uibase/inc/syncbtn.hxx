@@ -18,24 +18,20 @@
  */
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_SYNCBTN_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_SYNCBTN_HXX
-#include <sfx2/childwin.hxx>
 
-#ifdef _SYNCDLG
 #include <sfx2/basedlgs.hxx>
-
+#include <sfx2/childwin.hxx>
 #include <vcl/button.hxx>
 
 class SwSyncBtnDlg : public SfxFloatingWindow
 {
-    PushButton              aSyncBtn;
+    PushButton* m_pSyncBtn;
 
     DECL_LINK( BtnHdl, void* );
 
 public:
     SwSyncBtnDlg(SfxBindings*, SfxChildWindow*, Window *pParent);
-    virtual ~SwSyncBtnDlg();
 };
-#endif
 
 class SwSyncChildWin : public SfxChildWindow
 {

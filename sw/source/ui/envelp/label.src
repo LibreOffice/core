@@ -21,27 +21,6 @@
 #include "globals.hrc"
 #include "helpid.h"
 
-#define WIDTH  100
-#define HEIGHT 16
-FloatingWindow DLG_SYNC_BTN
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    Sizeable = FALSE ;
-    Zoomable = TRUE ;
-    HelpID = HID_SYNC_BTN ;
-    Hide = TRUE ;
-    PushButton BTN_SYNC
-    {
-        HelpID = "sw:PushButton:DLG_SYNC_BTN:BTN_SYNC";
-        Pos = MAP_APPFONT ( 1 , 1 ) ;
-        Size = MAP_APPFONT ( WIDTH - 1 , HEIGHT - 1 ) ;
-        Text [ en-US ] = "Synchronize Labels" ;
-    };
-};
 String STR_CUSTOM
 {
     Text [ en-US ] = "[User]";
