@@ -250,7 +250,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
     const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
     if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
     {
-        sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
+        const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
         if( USHRT_MAX != nRedlPos )
         {
             SwAttrHandler aAttrHandler;
@@ -405,7 +405,7 @@ bool SwTxtFrm::FillRegister( SwTwips& rRegStart, sal_uInt16& rRegDiff )
                                 break;
                                 case SVX_LINE_SPACE_MIN:
                                 {
-                                    if( rRegDiff < sal_uInt16( rSpace.GetLineHeight() ) )
+                                    if( rRegDiff < rSpace.GetLineHeight() )
                                         rRegDiff = rSpace.GetLineHeight();
                                     break;
                                 }

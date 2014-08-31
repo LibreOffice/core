@@ -470,7 +470,7 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
     {
         // calculate number of blanks
         sal_Int32 nX = rInf.GetIdx() - 1;
-        sal_uInt16 nHoleLen = 1;
+        sal_Int32 nHoleLen = 1;
         while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
             nHoleLen++;
 

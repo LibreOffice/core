@@ -94,16 +94,15 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
         pFnt->SetActual( SwScriptInfo::WhichFont( 0, 0, pScriptInfo ) );
 
         sal_Int32 nChg = 0;
-        sal_uInt16 nCnt = 0;
+        size_t nCnt = 0;
 
         do
         {
             if ( nCnt >= pScriptInfo->CountScriptChg() )
                 break;
             nChg = pScriptInfo->GetScriptChg( nCnt );
-            sal_uInt16 nScript = pScriptInfo->GetScriptType( nCnt++ );
-            sal_uInt8 nTmp = 4;
-            switch ( nScript ) {
+            int nTmp = SW_SCRIPTS;
+            switch ( pScriptInfo->GetScriptType( nCnt++ ) ) {
                 case i18n::ScriptType::ASIAN :
                     if( !aMagicNo[SW_CJK] ) nTmp = SW_CJK; break;
                 case i18n::ScriptType::COMPLEX :
@@ -111,7 +110,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
                 default:
                     if( !aMagicNo[SW_LATIN ] ) nTmp = SW_LATIN;
             }
-            if( nTmp < 4 )
+            if( nTmp < SW_SCRIPTS )
             {
                 pFnt->ChkMagic( pShell, nTmp );
                 pFnt->GetMagic( aMagicNo[ nTmp ], aFntIdx[ nTmp ], nTmp );
@@ -133,7 +132,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
     const bool bShow = IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() );
     if( pExtInp || bShow )
     {
-        sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
+        const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
         if( pExtInp || USHRT_MAX != nRedlPos )
         {
             const std::vector<sal_uInt16> *pArr = 0;
@@ -364,7 +363,7 @@ bool SwRedlineItr::_ChkSpecialUnderline() const
     // below the base line
     for (size_t i = 0; i < m_Hints.size(); ++i)
     {
-        sal_uInt16 nWhich = m_Hints[i]->Which();
+        const sal_uInt16 nWhich = m_Hints[i]->Which();
         if( RES_CHRATR_UNDERLINE == nWhich ||
             RES_CHRATR_ESCAPEMENT == nWhich )
             return true;
@@ -442,11 +441,11 @@ short SwExtend::Enter(SwFont& rFnt, sal_Int32 nNew)
 bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
 {
     OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
-    sal_uInt16 nOldAttr = rArr[ nPos - nStart ];
+    const sal_uInt16 nOldAttr = rArr[ nPos - nStart ];
     nPos = nNew;
     if( Inside() )
     {   // We stayed within the ExtendText-section
-        sal_uInt16 nAttr = rArr[ nPos - nStart ];
+        const sal_uInt16 nAttr = rArr[ nPos - nStart ];
         if( nOldAttr != nAttr ) // Is there an (inner) change of attributes?
         {
             rFnt = *pFnt;
@@ -473,8 +472,8 @@ sal_Int32 SwExtend::Next( sal_Int32 nNext )
     else if( nPos < nEnd )
     {
         sal_Int32 nIdx = nPos - nStart;
-        sal_uInt16 nAttr = rArr[ nIdx ];
-        while( ++nIdx < (sal_Int32)rArr.size() && nAttr == rArr[ nIdx ] )
+        const sal_uInt16 nAttr = rArr[ nIdx ];
+        while( static_cast<size_t>(++nIdx) < rArr.size() && nAttr == rArr[ nIdx ] )
             ; //nothing
         nIdx = nIdx + nStart;
         if( nNext > nIdx )
