@@ -485,7 +485,13 @@ Dim oParent As Object
 			If Application._CurrentDb().Recordsets(_ParentName)._EditMode = dbEditNone Then Goto Trace_Error_Update
 			With com.sun.star.sdbc.DataType
 				If IsNull(pvValue) Then
-					If Column.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then Column.updateNull() Else Goto Trace_Null
+REM					If Column.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then Column.updateNull() Else Goto Trace_Null
+					If Column.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then
+						Column.updateNull()
+						Goto Exit_Function
+					Else
+						Goto Trace_Null
+					End If
 				End If
 				Select Case Column.Type
 					Case .BIT, .BOOLEAN
