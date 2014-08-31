@@ -153,7 +153,7 @@ std::string fastTokenToId(sal_uInt32 nToken)
 """)
 
 
-def getFastParser(model):
+def getFastParser():
     print("""uno::Reference <xml::sax::XFastParser> OOXMLStreamImpl::getFastParser()
 {
     if (!mxFastParser.is())
@@ -194,14 +194,14 @@ using namespace com::sun::star;
     getFactoryForNamespace(model)
     createFastChildContextFromStart(model)
     fastTokenToId(model)
-    getFastParser(model)
+    getFastParser()
 
 
 def parseNamespaces(fro):
     sock = open(fro)
     for i in sock.readlines():
         line = i.strip()
-        id, alias, url = line.split(' ')
+        alias, url = line.split(' ')[1:]  # first column is ID, not interesting for us
         ooxUrlAliases[url] = alias
     sock.close()
 
