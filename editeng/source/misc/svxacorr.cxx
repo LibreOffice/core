@@ -2788,7 +2788,12 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             if( (!left_wildcard && rCmp.isEqual( rChk, sWord )) || (left_wildcard && rCmp.isEqual( rChk.copy(left_wildcard), sWord) ))
             {
                 rStt = nCalcStt;
-                if (!left_wildcard) return pFnd;
+                if (!left_wildcard)
+                {
+                    // fdo#33899 avoid "1/2", "1/3".. to be replaced by fractions in dates, eg. 1/2/14
+                    if ( rTxt[nEndPos] == '/' && rChk.indexOf( '/' ) != -1 ) return NULL;
+                    return pFnd;
+                }
                 // get the first word delimiter position before the matching ".*word" pattern
                 while( rStt && !(bWasWordDelim = IsWordDelim( rTxt[ --rStt ])))
                     ;
