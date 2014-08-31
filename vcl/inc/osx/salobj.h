@@ -52,7 +52,7 @@ public:
 
     void setClippedPosSize();
 
-    AquaSalObject( AquaSalFrame* pFrame );
+    AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWinData );
     virtual ~AquaSalObject();
 
     virtual void                    ResetClipRegion() SAL_OVERRIDE;

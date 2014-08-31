@@ -757,13 +757,12 @@ void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
     delete pFrame;
 }
 
-SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* /* pWindowData */, bool /* bShow */ )
+SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool /* bShow */ )
 {
-    // SystemWindowData is meaningless on Mac OS X
     AquaSalObject *pObject = NULL;
 
     if ( pParent )
-        pObject = new AquaSalObject( static_cast<AquaSalFrame*>(pParent) );
+        pObject = new AquaSalObject( static_cast<AquaSalFrame*>(pParent), pWindowData );
 
     return pObject;
 }

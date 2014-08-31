@@ -22,8 +22,9 @@
 #include "osx/saldata.hxx"
 #include "osx/salobj.h"
 #include "osx/salframe.h"
+#include <AppKit/NSOpenGLView.h>
 
-AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
+AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowData ) :
     mpFrame( pFrame ),
     mnClipX( -1 ),
     mnClipY( -1 ),
@@ -37,6 +38,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
 {
     maSysData.nSize = sizeof( maSysData );
     maSysData.mpNSView = NULL;
+    maSysData.mbOpenGL = pWindowData->bOpenGL;
 
     NSRect aInitFrame = { NSZeroPoint, { 20, 20 } };
     mpClipView = [[NSClipView alloc] initWithFrame: aInitFrame ];
@@ -45,8 +47,25 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
         [mpFrame->getNSView() addSubview: mpClipView];
         [mpClipView setHidden: YES];
     }
-    maSysData.mpNSView = [[NSView alloc] initWithFrame: aInitFrame];
-    if( maSysData.mpNSView )
+    if (pWindowData->bOpenGL)
+    {
+        NSOpenGLPixelFormatAttribute aAttributes[] =
+        {
+            NSOpenGLPFADoubleBuffer,
+            NSOpenGLPFAAlphaSize, 8,
+            NSOpenGLPFAColorSize, 24,
+            0
+        };
+
+        NSOpenGLPixelFormat* pixFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:aAttributes];
+        maSysData.mpNSView = [[NSOpenGLView alloc] initWithFrame: aInitFrame pixelFormat:pixFormat];
+
+    }
+    else
+    {
+        maSysData.mpNSView = [[NSView alloc] initWithFrame: aInitFrame];
+    }
+        if( maSysData.mpNSView )
     {
         if( mpClipView )
             [mpClipView setDocumentView: maSysData.mpNSView];
