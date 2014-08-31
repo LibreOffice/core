@@ -217,8 +217,7 @@ void SwPostItsPortion::Paint( const SwTxtPaintInfo &rInf ) const
 sal_uInt16 SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
     // Nicht zu fassen: PostIts sind immer zu sehen.
-    return rInf.OnWin() ?
-                (sal_uInt16)rInf.GetOpt().GetPostItsWidth( rInf.GetOut() ) : 0;
+    return rInf.OnWin() ? rInf.GetOpt().GetPostItsWidth( rInf.GetOut() ) : 0;
 }
 
 bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
