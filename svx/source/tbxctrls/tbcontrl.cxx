@@ -2536,8 +2536,10 @@ SfxToolBoxControl* SvxColorToolBoxControl::CreateImpl( sal_uInt16 nSlotId, sal_u
 
 void SvxColorToolBoxControl::RegisterControl(sal_uInt16 nSlotId, SfxModule *pMod)
 {
-    SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(SvxColorItem), nSlotId ) );
-    SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XLineColorItem), nSlotId ) );
+    if ( nSlotId == SID_ATTR_LINE_COLOR )
+        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(XLineColorItem), nSlotId ) );
+    else
+        SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( SvxColorToolBoxControl::CreateImpl, TYPE(SvxColorItem), nSlotId ) );
 }
 
 // class SvxFrameToolBoxControl --------------------------------------------
