@@ -86,12 +86,19 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         if ( pInStrm->remainingSize() == 0 )
             return OUString();
 
-        SotStorageRef aStorage = new SotStorage ( pInStrm, false );
-        if ( !aStorage->GetError() )
+        try
         {
-            bIsDetected = aStorage->IsContained( "WordDocument" );
-            if ( bIsDetected && aTypeName.startsWith( "writer_MS_Word_97" ) )
-                bIsDetected = ( aStorage->IsContained("0Table") || aStorage->IsContained("1Table") );
+            SotStorageRef aStorage = new SotStorage ( pInStrm, false );
+            if ( !aStorage->GetError() )
+            {
+                bIsDetected = aStorage->IsContained( "WordDocument" );
+                if ( bIsDetected && aTypeName.startsWith( "writer_MS_Word_97" ) )
+                    bIsDetected = ( aStorage->IsContained("0Table") || aStorage->IsContained("1Table") );
+            }
+        }
+        catch (...)
+        {
+            bIsDetected = false;
         }
     }
 
