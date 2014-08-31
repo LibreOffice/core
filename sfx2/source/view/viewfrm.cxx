@@ -362,7 +362,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
                 return;
             }
-
             sal_uInt16 nOpenMode;
             bool bNeedsReload = false;
             if ( !pSh->IsReadOnly() )
@@ -403,6 +402,9 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     pSh->SetModifyPasswordEntered();
                 }
 
+                // Remove infobar if document was read-only (after password check)
+                RemoveInfoBar("readonly");
+
                 nOpenMode = pSh->IsOriginallyReadOnlyMedium() ? SFX_STREAM_READONLY : SFX_STREAM_READWRITE;
 
                 // if only the view was in the readonly mode then there is no need to do the reload
@@ -416,7 +418,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                     return;
                 }
 
-                RemoveInfoBar("readonly");
+
                 pSh->SetReadOnlyUI( false );
             }
 
