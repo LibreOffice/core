@@ -297,7 +297,7 @@ void SwDropPortion::PaintDrop( const SwTxtPaintInfo &rInf ) const
     const sal_uInt16 nOldWidth  = Width();
     const sal_uInt16 nOldAscent = GetAscent();
     const SwTwips nOldPosY  = rInf.Y();
-    const sal_uInt16 nOldPosX   = (sal_uInt16)rInf.X();
+    const SwTwips nOldPosX  = rInf.X();
     const SwParaPortion *pPara = rInf.GetParaPortion();
     const Point aOutPos( nOldPosX + nX, nOldPosY - pPara->GetAscent()
                          - pPara->GetRealHeight() + pPara->Height() );
@@ -609,7 +609,7 @@ void SwTxtPainter::PaintDropPortion()
 
     // MarginPortion und Adjustment!
     const SwLinePortion *pPor = pCurr->GetFirstPortion();
-    sal_uInt16 nX = 0;
+    long nX = 0;
     while( pPor && !pPor->IsDropPortion() )
     {
         nX = nX + pPor->Width();
@@ -759,8 +759,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
                 SwFont& rFnt = pCurrPart->GetFont();
 
                 // Get height including proportion
-                const sal_uInt16 nCurrHeight =
-                         (sal_uInt16)rFnt.GetHeight( rFnt.GetActual() );
+                const long nCurrHeight = rFnt.GetHeight( rFnt.GetActual() );
 
                 // Get without proportion
                 const sal_uInt8 nOldProp = rFnt.GetPropr();
