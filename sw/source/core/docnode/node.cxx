@@ -970,7 +970,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
 
 //FEATURE::CONDCOLL
     case RES_CONDCOLL_CONDCHG:
-        if( ((SwCondCollCondChg*)pNewValue)->pChangedFmt == GetRegisteredIn() &&
+        if( pNewValue && ((SwCondCollCondChg*)pNewValue)->pChangedFmt == GetRegisteredIn() &&
             &GetNodes() == &GetDoc()->GetNodes() )
         {
             ChkCondColl();
