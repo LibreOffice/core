@@ -376,9 +376,7 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     mpContext->setWinPosAndSize(Point(aCanvasArea.X, aCanvasArea.Y), Size(aCanvasArea.Width, aCanvasArea.Height));
     SAL_INFO("slideshow.opengl", "canvas area: " << aCanvasArea.X << "," << aCanvasArea.Y << " - " << aCanvasArea.Width << "x" << aCanvasArea.Height);
 
-    GLWindow& rGLWindow(mpContext->getOpenGLWindow());
-
-    mbGenerateMipmap = rGLWindow.HasGLExtension( "GL_SGIS_generate_mipmap" );
+    mbGenerateMipmap = GLEW_SGIS_generate_mipmap;
 
     CHECK_GL_ERROR();
     glEnable(GL_CULL_FACE);
