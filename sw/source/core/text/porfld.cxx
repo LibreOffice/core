@@ -192,25 +192,22 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
     if( GetExpTxt( rInf, aTxt ) && !aTxt.isEmpty() && g_pBreakIt->GetBreakIter().is() )
     {
         sal_uInt8 nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
-        sal_uInt16 nScript;
+        sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
+        sal_Int32 nChg = 0;
+        if( i18n::ScriptType::WEAK == nScript )
         {
-            nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
-            sal_Int32 nChg = 0;
-            if( i18n::ScriptType::WEAK == nScript )
-            {
-                nChg = g_pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
-                if (nChg < aTxt.getLength() && nChg >= 0)
-                    nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
-            }
-
-            // nNextScriptChg will be evaluated during SwFldPortion::Format()
-
+            nChg = g_pBreakIt->GetBreakIter()->endOfScript(aTxt,0,nScript);
             if (nChg < aTxt.getLength() && nChg >= 0)
-                nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
-            else
-                nNextScriptChg = aTxt.getLength();
-
+                nScript = g_pBreakIt->GetBreakIter()->getScriptType( aTxt, nChg );
         }
+
+        // nNextScriptChg will be evaluated during SwFldPortion::Format()
+
+        if (nChg < aTxt.getLength() && nChg >= 0)
+            nNextScriptChg = g_pBreakIt->GetBreakIter()->endOfScript( aTxt, nChg, nScript );
+        else
+            nNextScriptChg = aTxt.getLength();
+
         sal_uInt8 nTmp;
         switch ( nScript ) {
             case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
