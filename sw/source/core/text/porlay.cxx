@@ -286,7 +286,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         }
         else
         {
-            sal_uInt16 nLineHeight = Height();
+            const sal_uInt16 nLineHeight = Height();
             Init( GetPortion() );
             SwLinePortion *pPos = pPortion;
             SwLinePortion *pLast = this;
@@ -602,14 +602,9 @@ SwScriptInfo::~SwScriptInfo()
 sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pTxt, const SwScriptInfo* pSI )
 {
     assert((pSI || pTxt) && "How should I determine the script type?");
-    sal_uInt16 nScript;
-
-    // First we try to use our SwScriptInfo
-    if ( pSI )
-        nScript = pSI->ScriptType( nIdx );
-    else
-        // Ok, we have to ask the break iterator
-        nScript = g_pBreakIt->GetRealScriptOfText( *pTxt, nIdx );
+    const sal_uInt16 nScript = pSI
+        ? pSI->ScriptType( nIdx )                         // use our SwScriptInfo if available
+        : g_pBreakIt->GetRealScriptOfText( *pTxt, nIdx ); // else  ask the break iterator
 
     switch ( nScript ) {
         case i18n::ScriptType::LATIN : return SW_LATIN;
@@ -662,11 +657,11 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     nDefaultDir = static_cast<sal_uInt8>(bRTL ? UBIDI_RTL : UBIDI_LTR);
 
     // counter for script info arrays
-    sal_uInt16 nCnt = 0;
+    size_t nCnt = 0;
     // counter for compression information arrays
-    sal_uInt16 nCntComp = 0;
+    size_t nCntComp = 0;
     // counter for kashida array
-    sal_uInt16 nCntKash = 0;
+    size_t nCntKash = 0;
 
     sal_uInt8 nScript = i18n::ScriptType::LATIN;
 
@@ -938,7 +933,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                 sal_Unicode cCh;
                 sal_Unicode cPrevCh = 0;
 
-                sal_uInt16 nPriorityLevel = 7; // 0..6 = level found
+                int nPriorityLevel = 7;    // 0..6 = level found
                                            // 7 not found
 
                 sal_Int32 nWordLen = rWord.getLength();
@@ -1134,7 +1129,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         // 1. All text in RTL runs will use the CTL font
         // #i89825# change the script type also to CTL (hennerdrewes)
         // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
-        for ( sal_uInt32 nDirIdx = 0; nDirIdx < aDirectionChanges.size(); ++nDirIdx )
+        for ( size_t nDirIdx = 0; nDirIdx < aDirectionChanges.size(); ++nDirIdx )
         {
             const sal_uInt8 nCurrDirType = GetDirType( nDirIdx );
                 // nStart ist start of RTL run:
@@ -1237,8 +1232,8 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
 //         and Complex ( Hebrew, Arabian )
 sal_Int32 SwScriptInfo::NextScriptChg(const sal_Int32 nPos)  const
 {
-    sal_uInt16 nEnd = CountScriptChg();
-    for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
+    const size_t nEnd = CountScriptChg();
+    for( size_t nX = 0; nX < nEnd; ++nX )
     {
         if( nPos < GetScriptChg( nX ) )
             return GetScriptChg( nX );
@@ -1250,8 +1245,8 @@ sal_Int32 SwScriptInfo::NextScriptChg(const sal_Int32 nPos)  const
 // returns the script of the character at the input position
 sal_uInt8 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
 {
-    sal_uInt16 nEnd = CountScriptChg();
-    for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
+    const size_t nEnd = CountScriptChg();
+    for( size_t nX = 0; nX < nEnd; ++nX )
     {
         if( nPos < GetScriptChg( nX ) )
             return GetScriptType( nX );
@@ -1264,9 +1259,9 @@ sal_uInt8 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
 sal_Int32 SwScriptInfo::NextDirChg( const sal_Int32 nPos,
                                      const sal_uInt8* pLevel )  const
 {
-    sal_uInt8 nCurrDir = pLevel ? *pLevel : 62;
-    sal_uInt16 nEnd = CountDirChg();
-    for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
+    const sal_uInt8 nCurrDir = pLevel ? *pLevel : 62;
+    const size_t nEnd = CountDirChg();
+    for( size_t nX = 0; nX < nEnd; ++nX )
     {
         if( nPos < GetDirChg( nX ) &&
             ( nX + 1 == nEnd || GetDirType( nX + 1 ) <= nCurrDir ) )
@@ -1278,8 +1273,8 @@ sal_Int32 SwScriptInfo::NextDirChg( const sal_Int32 nPos,
 
 sal_uInt8 SwScriptInfo::DirType(const sal_Int32 nPos) const
 {
-    sal_uInt16 nEnd = CountDirChg();
-    for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
+    const size_t nEnd = CountDirChg();
+    for( size_t nX = 0; nX < nEnd; ++nX )
     {
         if( nPos < GetDirChg( nX ) )
             return GetDirType( nX );
@@ -1298,7 +1293,7 @@ sal_Int32 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, OUStringBuffer
     PositionList aList;
     sal_Int32 nHiddenStart;
     sal_Int32 nHiddenEnd;
-    sal_uInt16 nNumOfHiddenChars = 0;
+    sal_Int32 nNumOfHiddenChars = 0;
     GetBoundsOfHiddenRange( rNode, 0, nHiddenStart, nHiddenEnd, &aList );
     PositionList::const_reverse_iterator rFirst( aList.end() );
     PositionList::const_reverse_iterator rLast( aList.begin() );
@@ -1435,8 +1430,8 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( sal_Int32 nPos, sal_Int32& rnStartPos
     rnStartPos = COMPLETE_STRING;
     rnEndPos = 0;
 
-    sal_uInt16 nEnd = CountHiddenChg();
-    for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
+    const size_t nEnd = CountHiddenChg();
+    for( size_t nX = 0; nX < nEnd; ++nX )
     {
         const sal_Int32 nHiddenStart = GetHiddenChg( nX++ );
         const sal_Int32 nHiddenEnd = GetHiddenChg( nX );
@@ -1453,7 +1448,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( sal_Int32 nPos, sal_Int32& rnStartPos
 
     if ( pList )
     {
-        for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
+        for( size_t nX = 0; nX < nEnd; ++nX )
         {
             pList->push_back( GetHiddenChg( nX++ ) );
             pList->push_back( GetHiddenChg( nX ) );
@@ -1475,10 +1470,10 @@ bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos )
 // returns the type of the compressed character
 sal_uInt8 SwScriptInfo::CompType( const sal_Int32 nPos ) const
 {
-    sal_uInt16 nEnd = CountCompChg();
-    for( sal_uInt16 nX = 0; nX < nEnd; ++nX )
+    const size_t nEnd = CountCompChg();
+    for( size_t nX = 0; nX < nEnd; ++nX )
     {
-        sal_Int32 nChg = GetCompStart( nX );
+        const sal_Int32 nChg = GetCompStart( nX );
 
         if ( nPos < nChg )
             return NONE;
@@ -1492,24 +1487,24 @@ sal_uInt8 SwScriptInfo::CompType( const sal_Int32 nPos ) const
 
 // returns, if there are compressable kanas or specials
 // between nStart and nEnd
-sal_uInt16 SwScriptInfo::HasKana( sal_Int32 nStart, const sal_Int32 nLen ) const
+size_t SwScriptInfo::HasKana( sal_Int32 nStart, const sal_Int32 nLen ) const
 {
-    sal_uInt16 nCnt = CountCompChg();
+    const size_t nCnt = CountCompChg();
     sal_Int32 nEnd = nStart + nLen;
 
-    for( sal_uInt16 nX = 0; nX < nCnt; ++nX )
+    for( size_t nX = 0; nX < nCnt; ++nX )
     {
         sal_Int32 nKanaStart  = GetCompStart( nX );
         sal_Int32 nKanaEnd = nKanaStart + GetCompLen( nX );
 
         if ( nKanaStart >= nEnd )
-            return USHRT_MAX;
+            return SAL_MAX_SIZE;
 
         if ( nStart < nKanaEnd )
             return nX;
     }
 
-    return USHRT_MAX;
+    return SAL_MAX_SIZE;
 }
 
 long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
@@ -1518,21 +1513,21 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
 {
     SAL_WARN_IF( !nCompress, "sw.core", "Compression without compression?!" );
     SAL_WARN_IF( !nLen, "sw.core", "Compression without text?!" );
-    sal_uInt16 nCompCount = CountCompChg();
+    const size_t nCompCount = CountCompChg();
 
     // In asian typography, there are full width and half width characters.
     // Full width punctuation characters can be compressed by 50%
     // to determine this, we compare the font width with 75% of its height
-    sal_uInt16 nMinWidth = ( 3 * nFontHeight ) / 4;
+    const long nMinWidth = ( 3 * nFontHeight ) / 4;
 
-    sal_uInt16 nCompIdx = HasKana( nIdx, nLen );
+    size_t nCompIdx = HasKana( nIdx, nLen );
 
-    if ( USHRT_MAX == nCompIdx )
+    if ( SAL_MAX_SIZE == nCompIdx )
         return 0;
 
     sal_Int32 nChg = GetCompStart( nCompIdx );
     sal_Int32 nCompLen = GetCompLen( nCompIdx );
-    sal_uInt16 nI = 0;
+    sal_Int32 nI = 0;
     nLen += nIdx;
 
     if( nChg > nIdx )
@@ -1550,7 +1545,7 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
     long nLast = nI ? pKernArray[ nI - 1 ] : 0;
     do
     {
-        sal_uInt16 nType = GetCompType( nCompIdx );
+        const sal_uInt8 nType = GetCompType( nCompIdx );
 #ifdef DBG_UTIL
         SAL_WARN_IF( nType != CompType( nIdx ), "sw.core", "Gimme the right type!" );
 #endif

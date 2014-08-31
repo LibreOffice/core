@@ -247,8 +247,8 @@ public:
     // HIDDEN TEXT STUFF END
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
-    // returns start index of kana entry in array, otherwise USHRT_MAX
-    sal_uInt16 HasKana( sal_Int32 nStart, const sal_Int32 nEnd ) const;
+    // returns start index of kana entry in array, otherwise SAL_MAX_SIZE
+    size_t HasKana( sal_Int32 nStart, const sal_Int32 nEnd ) const;
 
     // modifies the kerning array according to a given compress value
     long Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
