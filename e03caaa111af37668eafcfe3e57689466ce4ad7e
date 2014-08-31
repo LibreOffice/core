@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_3a905995",
+        "filename": "sfx2/source/view/viewfrm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-08-31T21:21:33Z",
+      "side": 1,
+      "message": "The problem was that documents with the read-only property set returned here and the infobar wasn\u0027t removed for them.",
+      "revId": "e03caaa111af37668eafcfe3e57689466ce4ad7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
