@@ -20,8 +20,8 @@
 #define __ooo_vba_word_XParagraphFormat_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/script/BasicErrorException.idl>
 #include <ooo/vba/XHelperInterface.idl>
-
 
 module ooo {  module vba {  module word {
 
@@ -29,7 +29,10 @@ interface XParagraphFormat
 {
     interface ooo::vba::XHelperInterface;
 
-    [attribute] long Alignment;
+    [attribute] long Alignment
+    {
+        get raises ( com::sun::star::script::BasicErrorException );
+    };
     [attribute] float FirstLineIndent;
     [attribute] any KeepTogether;
     [attribute] any KeepWithNext;

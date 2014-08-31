@@ -47,7 +47,7 @@ public:
     virtual ~SwVbaParagraphFormat();
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getAlignment() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual ::sal_Int32 SAL_CALL getAlignment() throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual float SAL_CALL getFirstLineIndent() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setFirstLineIndent( float _firstlineindent ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;

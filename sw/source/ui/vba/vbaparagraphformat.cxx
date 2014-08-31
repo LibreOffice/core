@@ -44,7 +44,7 @@ SwVbaParagraphFormat::~SwVbaParagraphFormat()
 {
 }
 
-sal_Int32 SAL_CALL SwVbaParagraphFormat::getAlignment() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL SwVbaParagraphFormat::getAlignment() throw (uno::RuntimeException, css::script::BasicErrorException, std::exception)
 {
     style::ParagraphAdjust aParaAdjust = style::ParagraphAdjust_LEFT;
     mxParaProps->getPropertyValue("ParaAdjust") >>= aParaAdjust;
