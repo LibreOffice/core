@@ -249,8 +249,8 @@ public:
         sal_Int32 nameClashAction,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         throw (css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException,
-               css::ucb::CommandAbortedException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+               css::ucb::CommandFailedException, css::ucb::CommandAbortedException,
+               css::ucb::ContentCreationException, css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual OUString SAL_CALL getRepositoryName()
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL()

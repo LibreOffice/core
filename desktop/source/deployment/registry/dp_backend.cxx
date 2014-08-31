@@ -562,12 +562,12 @@ Reference<deployment::XPackageTypeInfo> Package::getPackageType()
     return m_xPackageType;
 }
 
-
 void Package::exportTo(
     OUString const & destFolderURL, OUString const & newTitle,
     sal_Int32 nameClashAction, Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::ExtensionRemovedException,
-           CommandFailedException, CommandAbortedException, RuntimeException, std::exception)
+           CommandFailedException, CommandAbortedException, ContentCreationException,
+           RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -579,7 +579,6 @@ void Package::exportTo(
             newTitle, nameClashAction ))
         throw RuntimeException( "UCB transferContent() failed!", 0 );
 }
-
 
 void Package::fireModified()
 {

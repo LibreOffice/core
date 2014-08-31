@@ -315,7 +315,8 @@ interface XPackage
         raises (
             ExtensionRemovedException,
             com::sun::star::ucb::CommandFailedException,
-            com::sun::star::ucb::CommandAbortedException);
+            com::sun::star::ucb::CommandAbortedException,
+            com::sun::star::ucb::ContentCreationException);
 
     /** returns an icon for a package.
 

@@ -193,6 +193,7 @@ class BackendImpl : public ImplBaseT
             throw (deployment::ExtensionRemovedException,
                    ucb::CommandFailedException,
                    ucb::CommandAbortedException,
+                   ucb::ContentCreationException,
                    RuntimeException, std::exception) SAL_OVERRIDE;
 
         virtual ::sal_Int32 SAL_CALL checkPrerequisites(
@@ -1030,9 +1031,9 @@ OUString BackendImpl::PackageImpl::getLicenseText()
 void BackendImpl::PackageImpl::exportTo(
     OUString const & destFolderURL, OUString const & newTitle,
     sal_Int32 nameClashAction, Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (ucb::CommandFailedException,
-           deployment::ExtensionRemovedException,
-           ucb::CommandAbortedException, RuntimeException, std::exception)
+    throw (deployment::ExtensionRemovedException,
+           ucb::CommandFailedException, ucb::CommandAbortedException,
+           ucb::ContentCreationException, RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
