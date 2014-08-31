@@ -307,6 +307,7 @@ interface XDatabaseDocumentUI
                     [in] sequence< ::com::sun::star::beans::PropertyValue > Arguments,
                     [out] ::com::sun::star::lang::XComponent DocumentDefinition )
         raises ( ::com::sun::star::lang::IllegalArgumentException,
+                 ::com::sun::star::container::NoSuchElementException,
                  ::com::sun::star::sdbc::SQLException );
 };
 

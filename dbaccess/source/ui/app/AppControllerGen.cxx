@@ -472,7 +472,7 @@ Reference< XComponent > SAL_CALL OApplicationController::createComponent( ::sal_
     return createComponentWithArguments( i_nObjectType, Sequence< PropertyValue >(), o_DocumentDefinition );
 }
 
-Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
+Reference< XComponent > SAL_CALL OApplicationController::createComponentWithArguments( ::sal_Int32 i_nObjectType, const Sequence< PropertyValue >& i_rArguments, Reference< XComponent >& o_DocumentDefinition ) throw (IllegalArgumentException, NoSuchElementException, SQLException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
