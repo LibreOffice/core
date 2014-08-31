@@ -236,8 +236,8 @@ class SwTxtCursorSave
 {
     SwTxtCursor* pTxtCrsr;
     SwLineLayout* pCurr;
-    SwTwips nWidth;
     sal_Int32 nStart;
+    sal_uInt16 nWidth;
     sal_uInt8 nOldProp;
     bool bSpaceChg;
 public:
