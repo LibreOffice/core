@@ -249,7 +249,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
     sal_Int32 nLoopStart = nStartPos;
     while ( nLoopStart <= nEndPos )
     {
-        // Determine the stard and end positions of a text segment.  Note that
+        // Determine the start and end positions of a text segment.  Note that
         // the end position returned from FindEndPos may be one position after
         // the last character position in case of the last segment.
         sal_Int32 nEStart = FindStartPos(pSource, nLoopStart, nEndPos);
@@ -263,11 +263,25 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
 
         // Check the validity of the expression, and toggle the relative flag.
         ScAddress::Details aDetails(meConv, maPos.Row(), maPos.Col());
-        sal_uInt16 nResult = aAddr.Parse(aExpr, mpDoc, aDetails);
+        ScAddress::ExternalInfo aExtInfo;
+        sal_uInt16 nResult = aAddr.Parse(aExpr, mpDoc, aDetails, &aExtInfo);
         if ( nResult & SCA_VALID )
         {
             sal_uInt16 nFlags = lcl_NextFlags( nResult );
-            aExpr = aAddr.Format(nFlags, mpDoc, aDetails);
+            if( aExtInfo.mbExternal )
+            {    // retain external doc name and tab name before toggle relative flag
+                sal_Int32 nSep = aExpr.lastIndexOf('.');
+                OUString aRef = aExpr.copy(nSep+1);
+                OUString aExtDocNameTabName = aExpr.copy(0, nSep+1);
+                nResult = aAddr.Parse(aRef, mpDoc, aDetails);
+                aAddr.SetTab(0); // force to first tab to avoid error on checking
+                nFlags = lcl_NextFlags( nResult );
+                aExpr = aExtDocNameTabName + aAddr.Format(nFlags, mpDoc, aDetails);
+            }
+            else
+            {
+                aExpr = aAddr.Format(nFlags, mpDoc, aDetails);
+            }
 
             sal_Int32 nAbsStart = nStartPos+aResult.getLength()+aSep.getLength();
 
