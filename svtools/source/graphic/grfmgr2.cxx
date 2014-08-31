@@ -34,6 +34,7 @@
 #include "grfcache.hxx"
 #include <svtools/grfmgr.hxx>
 #include <boost/scoped_array.hpp>
+#include <boost/unordered_map.hpp>
 
 // - defines -
 
@@ -199,6 +200,7 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
     sal_uLong nUsedSize(0);
     GraphicObject* pObj = 0;
     std::vector< GraphicObject* > aCandidates;
+    boost::unordered_map<GraphicObject *, size_t> sizes;
 
     for (size_t i = 0, n = maObjList.size(); i < n; ++i)
     {
@@ -206,7 +208,9 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
         if (pObj->meType == GRAPHIC_BITMAP && !pObj->IsSwappedOut() && pObj->GetSizeBytes())
         {
             aCandidates.push_back(pObj);
-            nUsedSize += pObj->GetSizeBytes();
+            size_t const nSize = pObj->GetSizeBytes();
+            nUsedSize += nSize;
+            sizes.insert(std::make_pair(pObj, nSize));
         }
     }
 
@@ -236,6 +240,12 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
             // swap out until we have no more or the goal to use less than nMaxCacheSize
             // is reached
             pObj = aCandidates[a];
+            if (std::find(maObjList.begin(), maObjList.end(), pObj) == maObjList.end())
+            {
+                // object has been deleted when swapping out another one
+                nUsedSize = (sizes[pObj] < nUsedSize) ? nUsedSize - sizes[pObj] : 0;
+                continue;
+            }
             const sal_uLong nSizeBytes(pObj->GetSizeBytes());
 
             // do not swap out when we have less than 16KB data objects
