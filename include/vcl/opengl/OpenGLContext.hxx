@@ -31,6 +31,7 @@
 #include <GL/wglext.h>
 #elif defined( MACOSX )
 #include <OpenGL/OpenGL.h>
+@class NSOpenGLView;
 #elif defined( IOS )
 #elif defined( ANDROID )
 #elif defined( UNX )
@@ -181,6 +182,10 @@ public:
 private:
     SAL_DLLPRIVATE bool initWindow();
     SAL_DLLPRIVATE bool ImplInit();
+
+#if defined(MACOSX)
+    NSOpenGLView* getOpenGLView();
+#endif
 
     GLWindow m_aGLWin;
     boost::scoped_ptr<Window> m_pWindow;

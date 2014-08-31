@@ -488,6 +488,8 @@ bool OpenGLContext::ImplInit()
 
 #elif defined( MACOSX )
 
+    NSOpenGLView* pView = getOpenGLView();
+    OpenGLWrapper::makeCurrent(pView);
 
 #elif defined( IOS )
 
@@ -837,6 +839,8 @@ void OpenGLContext::makeCurrent()
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
     }
 #elif defined( MACOSX )
+    NSOpenGLView* pView = getOpenGLView();
+    OpenGLWrapper::makeCurrent(pView);
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
@@ -849,6 +853,7 @@ void OpenGLContext::resetCurrent()
 #if defined( WNT )
     wglMakeCurrent( m_aGLWin.hDC, 0 );
 #elif defined( MACOSX )
+    OpenGLWrapper::resetCurrent();
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
@@ -861,6 +866,8 @@ void OpenGLContext::swapBuffers()
 #if defined( WNT )
     SwapBuffers(m_aGLWin.hDC);
 #elif defined( MACOSX )
+    NSOpenGLView* pView = getOpenGLView();
+    OpenGLWrapper::swapBuffers(pView);
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
@@ -903,5 +910,11 @@ bool OpenGLContext::supportMultiSampling() const
     return m_aGLWin.bMultiSampleSupported;
 }
 
+#if defined(MACOSX)
+NSOpenGLView* OpenGLContext::getOpenGLView()
+{
+    return reinterpret_cast<NSOpenGLView*>(m_pChildWindow->GetSystemData()->mpNSView);
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
