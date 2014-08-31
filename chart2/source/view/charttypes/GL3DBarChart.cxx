@@ -486,6 +486,11 @@ GL3DBarChart::GL3DBarChart(
     mbBenchMarkMode(false),
     maHistoryCounter(0)
 {
+    maFPSRenderStartTime.Seconds = maFPSRenderStartTime.Nanosec = 0;
+    maFPSRenderEndTime.Seconds = maFPSRenderEndTime.Nanosec = 0;
+    maDataUpdateStartTime.Seconds = maDataUpdateStartTime.Nanosec = 0;
+    maDataUpdateEndTime.Seconds = maDataUpdateEndTime.Nanosec = 0;
+
     static const char *aBenchMark = getenv("BENCHMARK_MODE");
     if (aBenchMark)
     {
