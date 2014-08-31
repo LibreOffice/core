@@ -32,7 +32,8 @@ public:
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE;
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE;
-    css::uno::Any SAL_CALL Item( const css::uno::Any& aIndex, const css::uno::Any& aIndex2 ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
+    // XCollection
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& aIndex, const css::uno::Any& aIndex2 ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE;
     virtual css::uno::Any createCollectionObject(const css::uno::Any&) SAL_OVERRIDE;
     // XHelperInterface
     virtual OUString getServiceImplName() SAL_OVERRIDE;

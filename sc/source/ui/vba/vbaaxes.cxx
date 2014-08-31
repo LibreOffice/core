@@ -159,7 +159,7 @@ ScVbaAxes::createEnumeration() throw (css::uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) throw (css::uno::RuntimeException)
+ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) throw (css::script::BasicErrorException, css::uno::RuntimeException)
 {
     // #TODO map the possible index combinations to a container::XIndexAccess wrapper impl
     // using a vector of valid std::pair maybe?
