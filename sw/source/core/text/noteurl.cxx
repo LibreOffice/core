@@ -34,12 +34,10 @@ void SwNoteURL::InsertURLNote( const OUString& rURL, const OUString& rTarget,
     sal_uInt16 nCount = aList.size();
     for( i = 0; i < nCount; i++ )
         if( rRect == aList[i].GetRect() )
-            break;
-    if( i == nCount )
-    {
-        SwURLNote *pNew = new SwURLNote( rURL, rTarget, rRect );
-        aList.push_back( pNew );
-    }
+            return;
+
+    SwURLNote *pNew = new SwURLNote( rURL, rTarget, rRect );
+    aList.push_back( pNew );
 }
 
 void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
