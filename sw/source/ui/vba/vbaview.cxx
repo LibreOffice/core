@@ -115,7 +115,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException, std::exception)
+SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception)
 {
     // FIXME: save the current cursor position, if the cursor is in the main
     // document, so we can jump back to this position, if the macro sets
