@@ -141,7 +141,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses ) throw (script::BasicErrorExceptio
         }
         mxPropertySet->setPropertyValue(AUTOORIGIN, uno::makeAny(false) );
     }
-    catch (uno::Exception& )
+    catch (const uno::Exception&)
     {
         DebugHelper::basicexception(SbERR_METHOD_FAILED, OUString());
     }
