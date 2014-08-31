@@ -65,7 +65,7 @@ SvxPixelCtlAccessible::~SvxPixelCtlAccessible()
     if( IsAlive() )
     {
         osl_atomic_increment( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all childs
+        dispose();      // set mpRepr = NULL & release all children
     }
 }
 uno::Reference< XAccessibleContext > SvxPixelCtlAccessible::getAccessibleContext(  )
@@ -579,7 +579,7 @@ SvxPixelCtlAccessibleChild::~SvxPixelCtlAccessibleChild()
     if( IsAlive() )
     {
         osl_atomic_increment( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all childs
+        dispose();      // set mpRepr = NULL & release all children
     }
 }
 

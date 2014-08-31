@@ -97,7 +97,7 @@ namespace svgio
             }
             else
             {
-                // #i125258# for SVGTokenG decompose childs
+                // #i125258# for SVGTokenG decompose children
                 const SvgStyleAttributes* pStyle = getSvgStyleAttributes();
 
                 if(pStyle)

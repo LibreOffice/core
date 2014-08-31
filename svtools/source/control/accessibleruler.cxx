@@ -63,7 +63,7 @@ SvtRulerAccessible::~SvtRulerAccessible()
     if( IsAlive() )
     {
         osl_atomic_increment( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all childs
+        dispose();      // set mpRepr = NULL & release all children
     }
 }
 
