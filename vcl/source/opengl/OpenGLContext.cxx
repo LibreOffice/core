@@ -724,6 +724,9 @@ bool OpenGLContext::initWindow()
 SystemWindowData OpenGLContext::generateWinData(Window* /*pParent*/)
 {
     SystemWindowData aWinData;
+#if defined(MACOSX)
+    aWinData.bOpenGL = true;
+#endif
     aWinData.nSize = sizeof(aWinData);
     return aWinData;
 }
