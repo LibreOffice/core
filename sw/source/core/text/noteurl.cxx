@@ -30,9 +30,8 @@ SwNoteURL *pNoteURL = NULL;
 void SwNoteURL::InsertURLNote( const OUString& rURL, const OUString& rTarget,
     const SwRect& rRect )
 {
-    sal_uInt16 i;
-    sal_uInt16 nCount = aList.size();
-    for( i = 0; i < nCount; i++ )
+    const size_t nCount = aList.size();
+    for( size_t i = 0; i < nCount; ++i )
         if( rRect == aList[i].GetRect() )
             return;
 
@@ -44,13 +43,13 @@ void SwNoteURL::FillImageMap( ImageMap *pMap, const Point &rPos,
     const MapMode& rMap )
 {
     OSL_ENSURE( pMap, "FillImageMap: No ImageMap, no cookies!" );
-    sal_uInt16 nCount = Count();
+    const size_t nCount = aList.size();
     if( nCount )
     {
         MapMode aMap( MAP_100TH_MM );
-        for( sal_uInt16 i = 0; i < nCount; ++i )
+        for( size_t i = 0; i < nCount; ++i )
         {
-            const SwURLNote &rNote = GetURLNote( i );
+            const SwURLNote &rNote = aList[i];
             SwRect aSwRect( rNote.GetRect() );
             aSwRect -= rPos;
             Rectangle aRect( OutputDevice::LogicToLogic( aSwRect.SVRect(),

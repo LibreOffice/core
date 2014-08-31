@@ -49,11 +49,8 @@ class SwNoteURL
     SwURLNoteList aList;
 public:
     SwNoteURL() {}
-    sal_uInt16 Count() const { return aList.size(); }
     void InsertURLNote( const OUString& rURL, const OUString& rTarget,
                  const SwRect& rRect );
-    const SwURLNote& GetURLNote( sal_uInt16 nPos ) const
-        { return aList[ nPos ]; }
     void FillImageMap( ImageMap* pMap, const Point& rPos, const MapMode& rMap );
 };
 
