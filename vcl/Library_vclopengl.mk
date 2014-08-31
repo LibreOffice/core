@@ -10,6 +10,7 @@
 $(eval $(call gb_Library_Library,vclopengl))
 
 $(eval $(call gb_Library_set_include,vclopengl,\
+    -I$(SRCDIR)/vcl/inc/ \
     $$(INCLUDE) \
 ))
 
@@ -37,11 +38,27 @@ $(eval $(call gb_Library_use_libraries,vclopengl,\
     $(gb_UWINAPI) \
 ))
 
+ifeq ($(OS),MACOSX)
+
+$(eval $(call gb_Library_add_cxxflags,vclopengl,\
+    $(gb_OBJCXXFLAGS) \
+))
+
+$(eval $(call gb_Library_add_libs,vcl,\
+    -framework IOKit \
+    -F/System/Library/PrivateFrameworks \
+    -framework CoreUI \
+    -lobjc \
+))
+
 $(eval $(call gb_Library_add_exception_objects,vclopengl,\
+    vcl/osx/OpenGLWrapper \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     vcl/source/window/openglwin \
 ))
+
+endif
 
 ifeq ($(strip $(OS)),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,vclopengl,\
@@ -52,6 +69,9 @@ $(eval $(call gb_Library_use_system_win32_libs,vclopengl,\
 else ifeq ($(OS),MACOSX)
 $(eval $(call gb_Library_use_system_darwin_frameworks,vclopengl,\
 	OpenGL \
+    Cocoa \
+    Carbon \
+    CoreFoundation \
 ))
 else ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,vclopengl,\
