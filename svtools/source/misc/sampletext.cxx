@@ -13,6 +13,20 @@
 #include <vcl/metric.hxx>
 #include <i18nutil/unicode.hxx>
 
+// This should only be used when a commonly used font incorrectly declares its
+// coverage. If you add a font here, please leave a note explaining the issue
+// that caused it to be added
+static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevice)
+{
+    // As of OSX 10.9, the system font "GB18030 Bitmap" incorrectly declares
+    // that it only covers "Phoenician" when in fact it's a Chinese font.
+    if (rDevice.GetFont().GetName().equalsIgnoreAsciiCase("GB18030 Bitmap")) {
+        return USCRIPT_HAN;
+    }
+
+    return USCRIPT_INVALID_CODE;
+}
+
 bool isOpenSymbolFont(const Font &rFont)
 {
     return rFont.GetName().equalsIgnoreAsciiCase("starsymbol") ||
@@ -1191,14 +1205,20 @@ OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
 
     aFontCapabilities.maUnicodeRange &= getCommonLatnSubsetMask();
 
-    //If this font is probably tuned to display a single non-Latin
-    //script and the font name is itself in Latin, then show a small
-    //chunk of representative text for that script
-    UScriptCode eScript = getScript(aFontCapabilities);
-    if (eScript == USCRIPT_COMMON)
-        return OUString();
+    UScriptCode eScript = lcl_getHardCodedScriptNameForFont (rDevice);
 
-    eScript = attemptToDisambiguateHan(eScript, rDevice);
+    if (eScript == USCRIPT_INVALID_CODE) {
+
+        //If this font is probably tuned to display a single non-Latin
+        //script and the font name is itself in Latin, then show a small
+        //chunk of representative text for that script
+        eScript = getScript(aFontCapabilities);
+        if (eScript == USCRIPT_COMMON)
+            return OUString();
+
+        eScript = attemptToDisambiguateHan(eScript, rDevice);
+
+    }
 
     OUString sSampleText = makeShortRepresentativeTextForScript(eScript);
     bool bHasSampleTextGlyphs = (-1 == rDevice.HasGlyphs(rDevice.GetFont(), sSampleText));
