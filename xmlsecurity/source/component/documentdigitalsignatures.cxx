@@ -189,7 +189,7 @@ OUString DocumentDigitalSignatures::getPackageSignatureDefaultStreamName(  )
 bool DocumentDigitalSignatures::ImplViewSignatures(
     const Reference< css::embed::XStorage >& rxStorage,
     const Reference< css::io::XInputStream >& xSignStream,
-    DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException)
+    DocumentSignatureMode eMode, bool bReadOnly ) throw (RuntimeException, std::exception)
 {
     Reference< io::XStream > xStream;
     if ( xSignStream.is() )
