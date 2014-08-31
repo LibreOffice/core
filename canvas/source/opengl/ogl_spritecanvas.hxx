@@ -86,7 +86,7 @@ namespace oglcanvas
 
         // XBufferController (partial)
         virtual sal_Bool SAL_CALL showBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL switchBuffer( sal_Bool bUpdateAll ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
         // XSpriteCanvas
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XAnimation >& animation ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
