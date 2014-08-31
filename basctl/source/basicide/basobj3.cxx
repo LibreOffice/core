@@ -161,7 +161,7 @@ bool RenameDialog (
     OUString const& rOldName,
     OUString const& rNewName
 )
-    throw (ElementExistException, NoSuchElementException, RuntimeException)
+    throw (ElementExistException, NoSuchElementException, RuntimeException, std::exception)
 {
     if ( !rDocument.hasDialog( rLibName, rOldName ) )
     {

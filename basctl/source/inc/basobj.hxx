@@ -92,7 +92,7 @@ namespace basctl
     */
     bool            RenameDialog(
         Window* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName )
-        throw (css::container::ElementExistException, css::container::NoSuchElementException, css::uno::RuntimeException);
+        throw (css::container::ElementExistException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
 
     bool            RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 
