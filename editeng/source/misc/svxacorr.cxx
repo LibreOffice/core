@@ -2833,6 +2833,10 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
                         ;
                     if (bWasWordDelim) nFndPos++;
                 }
+                if (nEndPos + extra_repl <= nFndPos)
+                {
+                    return 0;
+                }
                 // store matching pattern and its replacement as a new list item, eg. "i18ns" -> "internationalizations"
                 OUString aShort = rTxt.copy(nFndPos, nEndPos - nFndPos + extra_repl);
 
