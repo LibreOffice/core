@@ -16,7 +16,10 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
-<model xmlns:rng="http://relaxng.org/ns/structure/1.0">
+<model
+  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+  xmlns:rng="http://relaxng.org/ns/structure/1.0"
+  xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
   <token tokenid="ooxml:inputstream"/>
@@ -49,7 +52,7 @@
     <start name="themeOverride"/>
     <start name="themeManager"/>
     <start name="hlinkClick"/>
-    <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-baseStylesheet.rng"/>
       <!-- start = theme | themeOverride | themeManager | hlinkClick -->
@@ -185,7 +188,7 @@
       </define>
     </grammar>
     <resource name="CT_OfficeStyleSheet" resource="Table" tokenid="ooxml:THEMETABLE"/>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Hyperlink" resource="Properties">
+    <resource name="CT_Hyperlink" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_Hyperlink_r_id"/>
     </resource>
     <resource name="theme" resource="Stream">
@@ -2597,7 +2600,7 @@
     </resource>
   </namespace>
   <namespace name="dml-baseTypes" file="dml-baseTypes">
-    <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="shared-relationshipReference.rng"/>
       <define name="CT_OfficeArtExtension">
@@ -3745,7 +3748,7 @@
       <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_white">white</value>
       <value tokenid="ooxml:Value_drawingml_ST_BlackWhiteMode_hidden">hidden</value>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="AG_Blob" resource="Properties">
+    <resource name="AG_Blob" resource="Properties">
       <attribute name="r:embed" tokenid="ooxml:AG_Blob_r_embed"/>
       <attribute name="r:link" tokenid="ooxml:AG_Blob_r_link"/>
     </resource>
@@ -8235,7 +8238,7 @@
     </resource>
   </namespace>
   <namespace name="shared-relationshipReference" file="shared-relationshipReference.rng">
-    <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
       <!-- ISO RELAX NG Schema -->
       <define name="id">
         <attribute name="id">
@@ -8306,7 +8309,7 @@
           <ref name="CT_Picture"/>
         </element>
       </define>
-      <define xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_RelIds">
+      <define name="CT_RelIds">
         <attribute name="r:dm">
           <text/>
         </attribute>
@@ -8325,7 +8328,7 @@
           <ref name="CT_RelIds"/>
         </element>
       </define>
-      <define xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_GvmlGroupShape">
+      <define name="CT_GvmlGroupShape">
         <element name="nvGrpSpPr">
           <ref name="CT_NonVisualGroupDrawingShapeProps"/>
         </element>
@@ -8338,7 +8341,7 @@
           <ref name="CT_GvmlGroupShape"/>
         </element>
       </define>
-      <define xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Chart">
+      <define name="CT_Chart">
         <attribute name="r:id">
           <text/>
         </attribute>
@@ -8387,7 +8390,7 @@
     <resource name="pic" resource="Properties">
       <element name="pic" tokenid="ooxml:pic_pic"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_RelIds" resource="Shape">
+    <resource name="CT_RelIds" resource="Shape">
       <attribute name="r:dm" tokenid="ooxml:CT_RelIds_dm"/>
       <attribute name="r:lo" tokenid="ooxml:CT_RelIds_lo"/>
       <attribute name="r:qs" tokenid="ooxml:CT_RelIds_qs"/>
@@ -8403,7 +8406,7 @@
     <resource name="lockedCanvas" resource="Shape">
       <element xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" name="lc:lockedCanvas" tokenid="ooxml:lc_lockedCanvas"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Chart" resource="Shape">
+    <resource name="CT_Chart" resource="Shape">
       <attribute name="r:id" tokenid="ooxml:CT_RelId_chart"/>
     </resource>
     <resource name="chart" resource="Shape">
@@ -8447,7 +8450,7 @@
     <start name="polyline"/>
     <start name="rect"/>
     <start name="roundrect"/>
-    <grammar xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wvml="urn:schemas-microsoft-com:office:word" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:vml">
+    <grammar xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wvml="urn:schemas-microsoft-com:office:word" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:vml">
       <!-- ISO RELAX NG Schema -->
       <include href="vml-officeDrawing.rng"/>
       <!--  External schema: http://schemas.openxmlformats.org/wordprocessingml/2006/main -->
@@ -9463,7 +9466,7 @@
     <start name="column"/>
     <start name="clippath"/>
     <start name="fill"/>
-    <grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns:v="urn:schemas-microsoft-com:vml" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:office" >
+    <grammar xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns:v="urn:schemas-microsoft-com:vml" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:office" >
       <!-- ISO RELAX NG Schema -->
       <include href="vml-main.rng"/>
       <!--  External schema: http://schemas.openxmlformats.org/officeDocument/2006/relationships -->
@@ -10387,7 +10390,7 @@
     <resource name="OLEObject" resource="Properties">
       <element name="OLEObject" tokenid="ooxml:OLEObject_OLEObject"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_OLEObject" resource="Properties">
+    <resource name="CT_OLEObject" resource="Properties">
       <element name="LinkType" tokenid="ooxml:CT_OLEObject_LinkType"/>
       <element name="LockedField" tokenid="ooxml:CT_OLEObject_LockedField"/>
       <element name="FieldCodes" tokenid="ooxml:CT_OLEObject_FieldCodes"/>
@@ -10600,7 +10603,7 @@
     <start name="styles"/>
     <start name="document"/>
     <start name="glossaryDocument"/>
-    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:v="urn:schemas-microsoft-com:vml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
+    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:v="urn:schemas-microsoft-com:vml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
       <include href="shared-math.rng"/>
       <include href="dml-wordprocessingDrawing.rng"/>
       <include href="shared-relationshipReference.rng"/>
@@ -17425,7 +17428,7 @@
       <element name="sectPr" tokenid="ooxml:CT_PPr_sectPr"/>
       <element name="pPrChange" tokenid="ooxml:CT_PPr_pPrChange"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Control" resource="Properties">
+    <resource name="CT_Control" resource="Properties">
       <attribute name="name" tokenid="ooxml:CT_Control_name"/>
       <attribute name="shapeid" tokenid="ooxml:CT_Control_shapeid"/>
       <attribute name="r:id" tokenid="ooxml:CT_Control_r_id"/>
@@ -17437,7 +17440,7 @@
       <attribute name="themeShade" tokenid="ooxml:CT_Background_themeShade"/>
       <element name="v:background" tokenid="ooxml:CT_Background_v_background"/>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Rel" resource="Properties">
+    <resource name="CT_Rel" resource="Properties">
       <attribute name="r:id" tokenid="ooxml:CT_Rel_id"/>
     </resource>
     <resource name="CT_PictureBase" resource="Properties"/>
@@ -17504,7 +17507,7 @@
         <cond tokenid="ooxml:CT_FldChar_fldCharType" value="ooxml:Value_ST_FldCharType_end"/>
       </action>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_Hyperlink" resource="Stream">
+    <resource name="CT_Hyperlink" resource="Stream">
       <attribute name="tgtFrame" tokenid="ooxml:CT_Hyperlink_tgtFrame"/>
       <attribute name="tooltip" tokenid="ooxml:CT_Hyperlink_tooltip"/>
       <attribute name="docLocation" tokenid="ooxml:CT_Hyperlink_docLocation"/>
@@ -17737,7 +17740,7 @@
       <value tokenid="ooxml:Value_doc_ST_FtnEdn_continuationSeparator">continuationSeparator</value>
       <value tokenid="ooxml:Value_doc_ST_FtnEdn_continuationNotice">continuationNotice</value>
     </resource>
-    <resource xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="CT_HdrFtrRef" resource="Properties">
+    <resource name="CT_HdrFtrRef" resource="Properties">
       <attribute name="type" tokenid="ooxml:CT_HdrFtrRef_type"/>
       <attribute name="r:id" tokenid="ooxml:CT_HdrFtrRef_id"/>
       <action name="end" action="handleHdrFtr"/>

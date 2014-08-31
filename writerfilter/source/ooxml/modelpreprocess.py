@@ -48,12 +48,6 @@ def parseNamespaces(fro):
     sock.close()
 
 
-def defaultNamespaceAliases():
-    return {
-        'xml': 'http://www.w3.org/XML/1998/namespace',
-    }
-
-
 def check(model):
     defines = [i.getAttribute("name") for i in model.getElementsByTagName("define")]
     for reference in [i.getAttribute("name") for i in model.getElementsByTagName("ref")]:
@@ -65,10 +59,12 @@ def check(model):
 
 
 def preprocess(model):
-    for i in model.getElementsByTagName("namespace"):
+    modelNode = [i for i in model.childNodes if i.localName == "model"][0]
+    for i in modelNode.getElementsByTagName("namespace"):
         grammarprefix = prefixForGrammar(i)
 
-        grammarNamespaceAliases = defaultNamespaceAliases()
+        grammarNamespaceAliases = {}
+        parseNamespaceAliases(modelNode, grammarNamespaceAliases)
         grammar = i.getElementsByTagName("grammar")[0]
 
         parseNamespaceAliases(grammar, grammarNamespaceAliases)
