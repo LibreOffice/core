@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Thu Jan  2 20:55:45 2014 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkDialog" id="ManageBreakpointsDialog">
     <property name="can_focus">False</property>
@@ -199,6 +199,20 @@
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="help">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
               </packing>
             </child>
           </object>
