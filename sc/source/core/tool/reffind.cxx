@@ -129,7 +129,8 @@ sal_Int32 FindEndPos(const sal_Unicode* p, sal_Int32 nStartPos, sal_Int32 nEndPo
 
 void ExpandToTextA1(const sal_Unicode* p, sal_Int32 nLen, sal_Int32& rStartPos, sal_Int32& rEndPos)
 {
-    while (rStartPos > 0 && IsText(p[rStartPos - 1]) )
+    bool bQuote = false;  // skip quoted text
+    while (rStartPos > 0 && IsText(bQuote, p[rStartPos - 1]) )
         --rStartPos;
     if (rEndPos)
         --rEndPos;
@@ -249,7 +250,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
     sal_Int32 nLoopStart = nStartPos;
     while ( nLoopStart <= nEndPos )
     {
-        // Determine the stard and end positions of a text segment.  Note that
+        // Determine the start and end positions of a text segment.  Note that
         // the end position returned from FindEndPos may be one position after
         // the last character position in case of the last segment.
         sal_Int32 nEStart = FindStartPos(pSource, nLoopStart, nEndPos);
@@ -263,11 +264,39 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
 
         // Check the validity of the expression, and toggle the relative flag.
         ScAddress::Details aDetails(meConv, maPos.Row(), maPos.Col());
-        sal_uInt16 nResult = aAddr.Parse(aExpr, mpDoc, aDetails);
+        ScAddress::ExternalInfo aExtInfo;
+        sal_uInt16 nResult = aAddr.Parse(aExpr, mpDoc, aDetails, &aExtInfo);
         if ( nResult & SCA_VALID )
         {
             sal_uInt16 nFlags = lcl_NextFlags( nResult );
-            aExpr = aAddr.Format(nFlags, mpDoc, aDetails);
+            if( aExtInfo.mbExternal )
+            {    // retain external doc name and tab name before toggle relative flag
+                sal_Int32 nSep;
+                switch(meConv)
+                {
+                  case formula::FormulaGrammar::CONV_XL_A1 :
+                  case formula::FormulaGrammar::CONV_XL_OOX :
+                  case formula::FormulaGrammar::CONV_XL_R1C1 :
+                         nSep = aExpr.lastIndexOf('!');
+                         break;
+                  case formula::FormulaGrammar::CONV_OOO :
+                  default:
+                         nSep = aExpr.lastIndexOf('.');
+                         break;
+                }
+                if( nSep < 0 )
+                  OSL_FAIL( "Invalid syntax according to address convention." );
+                OUString aRef = aExpr.copy(nSep+1);
+                OUString aExtDocNameTabName = aExpr.copy(0, nSep+1);
+                nResult = aAddr.Parse(aRef, mpDoc, aDetails);
+                aAddr.SetTab(0); // force to first tab to avoid error on checking
+                nFlags = lcl_NextFlags( nResult );
+                aExpr = aExtDocNameTabName + aAddr.Format(nFlags, mpDoc, aDetails);
+            }
+            else
+            {
+                aExpr = aAddr.Format(nFlags, mpDoc, aDetails);
+            }
 
             sal_Int32 nAbsStart = nStartPos+aResult.getLength()+aSep.getLength();
 
