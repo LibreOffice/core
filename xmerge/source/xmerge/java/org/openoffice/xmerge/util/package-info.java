@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<!--
+/*
  * This file is part of the LibreOffice project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
@@ -15,18 +14,9 @@
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
--->
-<html>
-<head>
-<title>org.openoffice.xmerge.merger.diff package</title>
-</head>
+ */
 
-<body bgcolor="white">
-<p>Provides implementations for the {@link
-org.openoffice.xmerge.merger.Iterator Iterator}
-interface and related support classes.  These are used by the {@link
-org.openoffice.xmerge.merger.DiffAlgorithm
-DiffAlgorithm} interface.</p>
-
-</body>
-</html>
+/**
+ * Provides general purpose utilities.
+ */
+package org.openoffice.xmerge.util;
