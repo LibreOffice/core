@@ -150,6 +150,9 @@ bool GraphicManager::DrawObj( OutputDevice* pOut, const Point& rPt, const Size& 
 void GraphicManager::ImplRegisterObj( const GraphicObject& rObj, Graphic& rSubstitute,
                                       const OString* pID, const GraphicObject* pCopyObj )
 {
+    assert(std::find(maObjList.begin(), maObjList.end(),
+               const_cast<GraphicObject*>(&rObj)) == maObjList.end());
+
     maObjList.push_back( (GraphicObject*)&rObj );
     mpCache->AddGraphicObject( rObj, rSubstitute, pID, pCopyObj );
 }
@@ -161,9 +164,10 @@ void GraphicManager::ImplUnregisterObj( const GraphicObject& rObj )
     {
         if ( *it == &rObj ) {
             maObjList.erase( it );
-            break;
+            return;
         }
     }
+    assert(false); // surely it should have been registered?
 }
 
 void GraphicManager::ImplGraphicObjectWasSwappedOut( const GraphicObject& rObj )
