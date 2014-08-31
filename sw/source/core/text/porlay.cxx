@@ -856,8 +856,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         if ( CHARCOMPRESS_NONE != aCompEnum &&
              i18n::ScriptType::ASIAN == nScript )
         {
-            sal_uInt8 ePrevState = NONE;
-            sal_uInt8 eState;
+            CompType ePrevState = NONE;
+            CompType eState = NONE;
             sal_Int32 nPrevChg = nLastCompression;
 
             while ( nLastCompression < nChg )
@@ -881,7 +881,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                     eState = SPECIAL_RIGHT;
                     break;
                 default:
-                    eState = static_cast<sal_uInt8>( ( 0x3040 <= cChar && 0x3100 > cChar ) ? KANA : NONE );
+                    eState = ( 0x3040 <= cChar && 0x3100 > cChar ) ? KANA : NONE;
                 }
 
                 // insert range of compressable characters
@@ -1468,7 +1468,7 @@ bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, sal_Int32 nPos )
 
 #ifdef DBG_UTIL
 // returns the type of the compressed character
-sal_uInt8 SwScriptInfo::CompType( const sal_Int32 nPos ) const
+SwScriptInfo::CompType SwScriptInfo::DbgCompType( const sal_Int32 nPos ) const
 {
     const size_t nEnd = CountCompChg();
     for( size_t nX = 0; nX < nEnd; ++nX )
@@ -1545,9 +1545,9 @@ long SwScriptInfo::Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
     long nLast = nI ? pKernArray[ nI - 1 ] : 0;
     do
     {
-        const sal_uInt8 nType = GetCompType( nCompIdx );
+        const CompType nType = GetCompType( nCompIdx );
 #ifdef DBG_UTIL
-        SAL_WARN_IF( nType != CompType( nIdx ), "sw.core", "Gimme the right type!" );
+        SAL_WARN_IF( nType != DbgCompType( nIdx ), "sw.core", "Gimme the right type!" );
 #endif
         nCompLen += nIdx;
         if( nCompLen > nLen )

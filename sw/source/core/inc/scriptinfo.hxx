@@ -35,6 +35,9 @@ typedef std::list< sal_Int32 > PositionList;
 // encapsultes information about script changes
 class SwScriptInfo
 {
+public:
+    enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
+
 private:
     //! Records a single change in script type.
     struct ScriptChangeInfo
@@ -64,10 +67,14 @@ private:
     {
         sal_Int32 position; //!< Character position where the change occurs.
         sal_Int32 length;   //!< Length of the segment.
-        sal_uInt8       type;     //!< Type of compression that we change to.
-        inline CompressionChangeInfo(sal_Int32 pos, sal_Int32 len, sal_uInt8 typ) : position(pos), length(len), type(typ) {};
+        CompType  type;     //!< Type of compression that we change to.
+        inline CompressionChangeInfo(sal_Int32 pos, sal_Int32 len, CompType typ) : position(pos), length(len), type(typ) {};
     };
     std::vector<CompressionChangeInfo> aCompressionChanges;
+#ifdef DBG_UTIL
+    CompType DbgCompType( const sal_Int32 nPos ) const;
+#endif
+
     sal_Int32 nInvalidityPos;
     sal_uInt8 nDefaultDir;
 
@@ -83,7 +90,6 @@ private:
     size_t HasKana( sal_Int32 nStart, const sal_Int32 nEnd ) const;
 
 public:
-    enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
 
     SwScriptInfo();
     ~SwScriptInfo();
@@ -153,7 +159,7 @@ public:
         OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionLen today!");
         return aCompressionChanges[ nCnt ].length;
     }
-    sal_uInt8 GetCompType( const size_t nCnt ) const
+    CompType GetCompType( const size_t nCnt ) const
     {
         OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionType today!");
         return aCompressionChanges[ nCnt ].type;
@@ -180,10 +186,6 @@ public:
     sal_Int32 NextDirChg( const sal_Int32 nPos,
                            const sal_uInt8* pLevel = 0 ) const;
     sal_uInt8 DirType( const sal_Int32 nPos ) const;
-
-#ifdef DBG_UTIL
-    sal_uInt8 CompType( const sal_Int32 nPos ) const;
-#endif
 
     // HIDDEN TEXT STUFF START
 
