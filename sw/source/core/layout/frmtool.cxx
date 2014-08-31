@@ -2539,7 +2539,8 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
         pSibling->mpNext = pSav;
         pSibling->_InvalidatePrt();
         pSibling->InvalidatePage( pPage );
-        if ( dynamic_cast<SwFlowFrm*>(pSibling)->GetFollow() )
+        SwFlowFrm *pFlowFrm = dynamic_cast<SwFlowFrm*>(pSibling);
+        if (pFlowFrm && pFlowFrm->GetFollow())
             pSibling->Prepare( PREP_CLEAR, 0, false );
     }
     else
