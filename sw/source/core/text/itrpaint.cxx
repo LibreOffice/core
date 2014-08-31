@@ -558,7 +558,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
         sal_uLong nSumHeight = 0;
         sal_uLong nBold = 0;
         sal_uInt16 nMaxBaseLineOfst = 0;
-        sal_uInt16 nNumberOfPortions = 0;
+        int nNumberOfPortions = 0;
 
         while( nTmpIdx <= nUnderEnd && pPor )
         {
@@ -583,7 +583,7 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
                 // and the font of the lowest portion.
                 if ( nAdjustBaseLine )
                 {
-                    sal_uInt16 nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
+                    const sal_uInt16 nTmpBaseLineOfst = AdjustBaseLine( *pCurr, pPor );
                     if ( nMaxBaseLineOfst < nTmpBaseLineOfst )
                     {
                         nMaxBaseLineOfst = nTmpBaseLineOfst;

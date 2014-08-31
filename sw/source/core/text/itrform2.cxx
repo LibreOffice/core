@@ -277,7 +277,7 @@ SwLinePortion *SwTxtFormatter::Underflow( SwTxtFormatInfo &rInf )
     {
         if( pPor->InTxtGrp() && !pPor->InExpGrp() )
         {
-            sal_uInt16 nOldWhich = pCurr->GetWhichPor();
+            const sal_uInt16 nOldWhich = pCurr->GetWhichPor();
             *(SwLinePortion*)pCurr = *pPor;
             pCurr->SetPortion( pPor->GetPortion() );
             pCurr->SetWhichPor( nOldWhich );
@@ -600,7 +600,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
                 if( nTmp == pScriptInfo->NextScriptChg( nTmp - 1 ) &&
                     nTmp != rInf.GetTxt().getLength() )
                 {
-                    sal_uInt16 nDist = (sal_uInt16)(rInf.GetFont()->GetHeight()/5);
+                    const sal_uInt16 nDist = (sal_uInt16)(rInf.GetFont()->GetHeight()/5);
 
                     if( nDist )
                     {
@@ -1699,12 +1699,12 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
         const bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         nLineHeight = nGridWidth + nRubyHeight;
-        sal_uInt16 nLineDist = nLineHeight;
+        const sal_uInt16 nLineDist = nLineHeight;
 
         while ( pCurr->Height() > nLineHeight )
             nLineHeight = nLineHeight + nLineDist;
 
-        sal_uInt16 nAsc = pCurr->GetAscent() +
+        const sal_uInt16 nAsc = pCurr->GetAscent() +
                       ( bRubyTop ?
                        ( nLineHeight - pCurr->Height() + nRubyHeight ) / 2 :
                        ( nLineHeight - pCurr->Height() - nRubyHeight ) / 2 );
@@ -1776,7 +1776,7 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
                 case SVX_LINE_SPACE_FIX:
                 {
                     nLineHeight = pSpace->GetLineHeight();
-                    sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
+                    const sal_uInt16 nAsc = ( 4 * nLineHeight ) / 5;  // 80%
                     if( nAsc < pCurr->GetAscent() ||
                         nLineHeight - nAsc < pCurr->Height() - pCurr->GetAscent() )
                         pCurr->SetClipping( true );
@@ -1827,7 +1827,7 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
             if ( bVert )
                 nTmpY = pFrm->SwitchHorizontalToVertical( nTmpY );
             nTmpY = (*fnRect->fnYDiff)( nTmpY, RegStart() );
-            sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
+            const sal_uInt16 nDiff = sal_uInt16( nTmpY % RegDiff() );
             if( nDiff )
                 nLineHeight += RegDiff() - nDiff;
         }
@@ -1866,7 +1866,7 @@ void SwTxtFormatter::FeedInf( SwTxtFormatInfo &rInf ) const
     rInf.Right( nTmpRight );
     rInf.First( nTmpFirst );
 
-    rInf.RealWidth( sal_uInt16(rInf.Right()) - sal_uInt16(GetLeftMargin()) );
+    rInf.RealWidth( sal_uInt16(rInf.Right() - GetLeftMargin()) );
     rInf.Width( rInf.RealWidth() );
     if( ((SwTxtFormatter*)this)->GetRedln() )
     {
@@ -2023,7 +2023,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
-    sal_uInt16 nTmpHeight = pCurrent->GetRealHeight();
+    const sal_uInt16 nTmpHeight = pCurrent->GetRealHeight();
     sal_uInt16 nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
     objectpositioning::AsCharFlags nFlags = AS_CHAR_ULSPACE;
     if( GetMulti() )
@@ -2176,7 +2176,7 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
     {
         // First we check, whether a fly overlaps with the line.
         // = GetLineHeight()
-        const long nHeight = GetCurr()->GetRealHeight();
+        const sal_uInt16 nHeight = GetCurr()->GetRealHeight();
         SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
 
         SwRect aLineVert( aLine );
@@ -2216,9 +2216,9 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                     {
                         // To be evaluated during reformat of this line:
                         // RealHeight including spacing
-                        rInf.SetLineHeight( sal_uInt16(nHeight) );
+                        rInf.SetLineHeight( nHeight );
                         // Height without extra spacing
-                        rInf.SetLineNettoHeight( sal_uInt16( pCurr->Height() ) );
+                        rInf.SetLineNettoHeight( pCurr->Height() );
                         return true;
                     }
                 }
@@ -2228,8 +2228,8 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                 // The fly portion is not intersected by a fly anymore
                 if ( ! aInter.IsOver( aLine ) )
                 {
-                    rInf.SetLineHeight( sal_uInt16(nHeight) );
-                    rInf.SetLineNettoHeight( sal_uInt16( pCurr->Height() ) );
+                    rInf.SetLineHeight( nHeight );
+                    rInf.SetLineNettoHeight( pCurr->Height() );
                     return true;
                 }
                 else
@@ -2243,8 +2243,8 @@ bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                     if( ! aInter.HasArea() ||
                         ((SwFlyPortion*)pPos)->GetFixWidth() != aInter.Width() )
                     {
-                        rInf.SetLineHeight( sal_uInt16(nHeight) );
-                        rInf.SetLineNettoHeight( sal_uInt16( pCurr->Height() ) );
+                        rInf.SetLineHeight( nHeight );
+                        rInf.SetLineNettoHeight( pCurr->Height() );
                         return true;
                     }
                 }
@@ -2754,9 +2754,9 @@ namespace {
             // if anything has changed, we carefully have to adjust the right
             // repaint position
             long nPOfst = 0;
-            sal_uInt16 nCnt = 0;
-            sal_uInt16 nX = 0;
-            sal_uInt16 nIdx = rThis.GetInfo().GetLineStart();
+            size_t nCnt = 0;
+            long nX = 0;
+            sal_Int32 nIdx = rThis.GetInfo().GetLineStart();
             SwLinePortion* pPor = rCurr.GetFirstPortion();
 
             while ( pPor )
