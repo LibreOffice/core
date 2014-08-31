@@ -1187,8 +1187,8 @@ void HwpReader::makeMasterStyles()
             padd(ascii("text:style-name"), sXML_CDATA, ascii("Standard"));
             rstartEl(ascii("text:p"), rList);
             pList->clear();
-            if( pPage->pagenumber && pPage->pagenumber->where < 4
-                && pPage->pagenumber->where == 7 )
+            if( pPage->pagenumber && (pPage->pagenumber->where < 4 ||
+                pPage->pagenumber->where == 7 ) )
             {
                 d->pPn = pPage->pagenumber;
                 makeShowPageNum();
