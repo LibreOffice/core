@@ -105,7 +105,7 @@ ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
         return msp;
     }
 
-    createNonDocMSPs();
+    ensureNonDocMSPs();
     return m_hMsps[ shareDirString ];
 }
 
@@ -264,9 +264,31 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
     }
 }
 
-
 void
 ActiveMSPList::createNonDocMSPs()
+{
+    // do creation of user and share MSPs here
+    OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
+    Sequence< Any > args(1);
+
+    args[ 0 ] <<= userDirString;
+    Reference< provider::XScriptProvider > userMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
+    // should check if provider reference is valid
+    m_hMsps[ userDirString ] = userMsp;
+
+    args[ 0 ] <<= shareDirString;
+    Reference< provider::XScriptProvider > shareMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
+    // should check if provider reference is valid
+    m_hMsps[ shareDirString ] = shareMsp;
+
+    args[ 0 ] <<= bundledDirString;
+    Reference< provider::XScriptProvider > bundledMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
+    // should check if provider reference is valid
+    m_hMsps[ bundledDirString ] = bundledMsp;
+}
+
+void
+ActiveMSPList::ensureNonDocMSPs()
 {
     static bool created = false;
     if ( created )
@@ -280,28 +302,9 @@ ActiveMSPList::createNonDocMSPs()
         {
             return;
         }
-        // do creation of user and share MSPs here
-        OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
-        Sequence< Any > args(1);
-
-        args[ 0 ] <<= userDirString;
-        Reference< provider::XScriptProvider > userMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-        // should check if provider reference is valid
-        m_hMsps[ userDirString ] = userMsp;
-
-        args[ 0 ] <<= shareDirString;
-        Reference< provider::XScriptProvider > shareMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-        // should check if provider reference is valid
-        m_hMsps[ shareDirString ] = shareMsp;
-
-        args[ 0 ] <<= bundledDirString;
-        Reference< provider::XScriptProvider > bundledMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-        // should check if provider reference is valid
-        m_hMsps[ bundledDirString ] = bundledMsp;
-
+        createNonDocMSPs();
         created = true;
     }
-
 }
 
 

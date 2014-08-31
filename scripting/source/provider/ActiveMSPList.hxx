@@ -88,6 +88,7 @@ private:
         return createNewMSP( css::uno::makeAny( context ) );
     }
 
+    void ensureNonDocMSPs();
     void createNonDocMSPs();
     Msp_hash m_hMsps;
     ScriptComponent_map m_mScriptComponents;
