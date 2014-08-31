@@ -13,7 +13,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of Pages:</property>
+        <property name="label" translatable="yes">Pages:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nopages</property>
       </object>
@@ -29,7 +29,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of Tables:</property>
+        <property name="label" translatable="yes">Tables:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">notables</property>
       </object>
@@ -45,7 +45,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of Images:</property>
+        <property name="label" translatable="yes">Images:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nogrfs</property>
       </object>
@@ -61,7 +61,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of OLE Objects:</property>
+        <property name="label" translatable="yes">OLE Objects:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nooles</property>
       </object>
@@ -77,7 +77,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of Paragraphs:</property>
+        <property name="label" translatable="yes">Paragraphs:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">noparas</property>
       </object>
@@ -93,7 +93,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of Words:</property>
+        <property name="label" translatable="yes">Words:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nowords</property>
       </object>
@@ -109,7 +109,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of Characters:</property>
+        <property name="label" translatable="yes">Characters:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nochars</property>
       </object>
@@ -127,7 +127,7 @@
         <property name="halign">start</property>
         <property name="valign">center</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of Characters excluding spaces:</property>
+        <property name="label" translatable="yes">Characters excluding spaces:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nocharsexspaces</property>
       </object>
@@ -143,7 +143,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="xalign">0</property>
-        <property name="label" translatable="yes">Number of Lines:</property>
+        <property name="label" translatable="yes">Lines:</property>
         <property name="use_underline">True</property>
         <property name="mnemonic_widget">nolines</property>
       </object>
@@ -283,21 +283,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="update">
-        <property name="label" translatable="yes">Update</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="halign">end</property>
-      </object>
-      <packing>
-        <property name="left_attach">2</property>
-        <property name="top_attach">8</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkLabel" id="nolines">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -315,25 +300,19 @@
       </packing>
     </child>
     <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
+      <object class="GtkButton" id="update">
+        <property name="label" translatable="yes">Update</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="halign">end</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">9</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
     </child>
     <child>
       <placeholder/>
