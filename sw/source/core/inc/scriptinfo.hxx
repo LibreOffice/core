@@ -78,6 +78,9 @@ private:
     void ClearKashidaInvalid(sal_Int32 nKashPos);
     bool MarkOrClearKashidaInvalid(sal_Int32 nStt, sal_Int32 nLen, bool bMark, sal_Int32 nMarkCount);
     bool IsKashidaLine(sal_Int32 nCharIdx) const;
+    // examines the range [ nStart, nStart + nEnd ] if there are kanas
+    // returns start index of kana entry in array, otherwise SAL_MAX_SIZE
+    size_t HasKana( sal_Int32 nStart, const sal_Int32 nEnd ) const;
 
 public:
     enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
@@ -245,10 +248,6 @@ public:
     static void DeleteHiddenRanges( SwTxtNode& rNode );
 
     // HIDDEN TEXT STUFF END
-
-    // examines the range [ nStart, nStart + nEnd ] if there are kanas
-    // returns start index of kana entry in array, otherwise SAL_MAX_SIZE
-    size_t HasKana( sal_Int32 nStart, const sal_Int32 nEnd ) const;
 
     // modifies the kerning array according to a given compress value
     long Compress( long* pKernArray, sal_Int32 nIdx, sal_Int32 nLen,
