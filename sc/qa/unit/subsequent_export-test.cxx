@@ -1959,8 +1959,8 @@ namespace {
 void testSheetProtection_Impl(ScDocument& rDoc)
 {
     CPPUNIT_ASSERT(rDoc.IsTabProtected(0));
-
     ScTableProtection* pTabProtection = rDoc.GetTabProtection(0);
+    CPPUNIT_ASSERT(pTabProtection);
     CPPUNIT_ASSERT(pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS));
     CPPUNIT_ASSERT(!pTabProtection->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS));
 }
