@@ -1699,10 +1699,8 @@ void SwTxtFormatter::CalcRealHeight( bool bNewLine )
         const bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         nLineHeight = nGridWidth + nRubyHeight;
-        const sal_uInt16 nLineDist = nLineHeight;
-
-        while ( pCurr->Height() > nLineHeight )
-            nLineHeight = nLineHeight + nLineDist;
+        const sal_uInt16 nAmpRatio = (pCurr->Height() + nLineHeight - 1)/nLineHeight;
+        nLineHeight *= nAmpRatio;
 
         const sal_uInt16 nAsc = pCurr->GetAscent() +
                       ( bRubyTop ?
