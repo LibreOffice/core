@@ -17,6 +17,10 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
 
+#include <premac.h>
+#include "OpenGLWrapper.hxx"
+#include <postmac.h>
+
 using namespace com::sun::star;
 
 GLWindow::~GLWindow()
@@ -44,8 +48,7 @@ OpenGLContext::~OpenGLContext()
         ReleaseDC( m_aGLWin.hWnd, m_aGLWin.hDC );
     }
 #elif defined( MACOSX )
-    CGLSetCurrentContext(NULL);
-    CGLDestroyContext(m_aGLWin.context);
+    OpenGLWrapper::resetCurrent();
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
@@ -485,29 +488,6 @@ bool OpenGLContext::ImplInit()
 
 #elif defined( MACOSX )
 
-    CGLPixelFormatAttribute pixelFormatAttributes[] = {
-#if MACOSX_SDK_VERSION > 1060
-        kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute) kCGLOGLPVersion_3_2_Core,
-#endif
-        kCGLPFAColorSize, (CGLPixelFormatAttribute) 24,
-        kCGLPFAAlphaSize, (CGLPixelFormatAttribute) 8,
-        kCGLPFADoubleBuffer,
-        kCGLPFASampleBuffers, (CGLPixelFormatAttribute) 1,
-        kCGLPFASampleBuffers, (CGLPixelFormatAttribute) 4,
-        (CGLPixelFormatAttribute) 0
-        };
-
-    if (mbRequestLegacyContext)
-        pixelFormatAttributes[1] = (CGLPixelFormatAttribute) kCGLOGLPVersion_Legacy;
-
-    CGLPixelFormatObj pixelFormat;
-    GLint numberOfPixels;
-    CGLChoosePixelFormat(pixelFormatAttributes, &pixelFormat, &numberOfPixels);
-
-    CGLCreateContext(pixelFormat, 0, &m_aGLWin.context);
-    CGLDestroyPixelFormat(pixelFormat);
-
-    CGLSetCurrentContext(m_aGLWin.context);
 
 #elif defined( IOS )
 
@@ -854,8 +834,6 @@ void OpenGLContext::makeCurrent()
         SAL_WARN("vcl.opengl", "OpenGLContext::makeCurrent(): wglMakeCurrent failed: " << GetLastError());
     }
 #elif defined( MACOSX )
-    CGLError nError = CGLSetCurrentContext(m_aGLWin.context);
-    SAL_WARN_IF(nError != kCGLNoError, "vcl.opengl", "error in makeCurrent");
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
@@ -868,8 +846,6 @@ void OpenGLContext::resetCurrent()
 #if defined( WNT )
     wglMakeCurrent( m_aGLWin.hDC, 0 );
 #elif defined( MACOSX )
-    CGLError nError = CGLSetCurrentContext(NULL);
-    SAL_WARN_IF(nError != kCGLNoError, "vcl.opengl", "error in makeCurrent");
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
@@ -882,7 +858,6 @@ void OpenGLContext::swapBuffers()
 #if defined( WNT )
     SwapBuffers(m_aGLWin.hDC);
 #elif defined( MACOSX )
-    CGLFlushDrawable(m_aGLWin.context);
 #elif defined( IOS ) || defined( ANDROID )
     // nothing
 #elif defined( UNX )
