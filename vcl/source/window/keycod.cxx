@@ -49,14 +49,23 @@ static const sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
     0, 0, 0, 0                                                     // KEYFUNC_FRONT
 };
 
-void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 )
+bool ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 )
 {
-    sal_uInt16 nIndex = (sal_uInt16)eFunc;
+    size_t nIndex = static_cast<size_t>(eFunc);
     nIndex *= 4;
+
+    assert(nIndex + 3 < SAL_N_ELEMENTS(aImplKeyFuncTab) && "bad key code index");
+    if (nIndex + 3  >= SAL_N_ELEMENTS(aImplKeyFuncTab))
+    {
+        rCode1 = rCode2 = rCode3 = rCode4 = 0;
+        return false;
+    }
+
     rCode1 = aImplKeyFuncTab[nIndex];
     rCode2 = aImplKeyFuncTab[nIndex+1];
     rCode3 = aImplKeyFuncTab[nIndex+2];
-        rCode4 = aImplKeyFuncTab[nIndex+3];
+    rCode4 = aImplKeyFuncTab[nIndex+3];
+    return true;
 }
 
 vcl::KeyCode::KeyCode( KeyFuncType eFunction )
@@ -112,7 +121,7 @@ KeyFuncType vcl::KeyCode::GetFunction() const
             sal_uInt16 nKeyCode1;
             sal_uInt16 nKeyCode2;
             sal_uInt16 nKeyCode3;
-                        sal_uInt16 nKeyCode4;
+            sal_uInt16 nKeyCode4;
             ImplGetKeyCode( (KeyFuncType)i, nKeyCode1, nKeyCode2, nKeyCode3, nKeyCode4 );
             if ( (nCompCode == nKeyCode1) || (nCompCode == nKeyCode2) || (nCompCode == nKeyCode3) || (nCompCode == nKeyCode4) )
                 return (KeyFuncType)i;
