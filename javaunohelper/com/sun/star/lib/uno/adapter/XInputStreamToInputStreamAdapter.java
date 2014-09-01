@@ -184,7 +184,7 @@ public class XInputStreamToInputStreamAdapter extends InputStream {
     *  The markSupported method of
     *  <code>XInputStreamToInputStreamAdapter</code> returns false.
     *
-    *  @returns  false
+    *  @return  false
     */
     @Override
     public boolean markSupported() {
