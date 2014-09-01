@@ -38,6 +38,12 @@ $(eval $(call gb_Library_use_libraries,vclopengl,\
     $(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_Library_add_exception_objects,vclopengl,\
+    vcl/source/opengl/OpenGLContext \
+    vcl/source/opengl/OpenGLHelper \
+    vcl/source/window/openglwin \
+))
+
 ifeq ($(OS),MACOSX)
 
 $(eval $(call gb_Library_add_cxxflags,vclopengl,\
@@ -53,9 +59,6 @@ $(eval $(call gb_Library_add_libs,vcl,\
 
 $(eval $(call gb_Library_add_exception_objects,vclopengl,\
     vcl/osx/OpenGLWrapper \
-    vcl/source/opengl/OpenGLContext \
-    vcl/source/opengl/OpenGLHelper \
-    vcl/source/window/openglwin \
 ))
 
 endif
