@@ -351,42 +351,42 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl)
 
     pInfo->aLightSource.nDiffuseColor = ((const SvxColorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue().GetColor();
     pInfo->aLightSource.bIsEnabled = ((const SfxBoolItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection1Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const SvxB3DVectorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
 
     pInfo = &m_pLightSourceInfoList[1];
     pInfo->aLightSource.nDiffuseColor = ((const SvxColorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue().GetColor();
     pInfo->aLightSource.bIsEnabled = ((const SfxBoolItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection2Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const SvxB3DVectorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
 
     pInfo = &m_pLightSourceInfoList[2];
     pInfo->aLightSource.nDiffuseColor = ((const SvxColorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue().GetColor();
     pInfo->aLightSource.bIsEnabled = ((const SfxBoolItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection3Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const SvxB3DVectorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
 
     pInfo = &m_pLightSourceInfoList[3];
     pInfo->aLightSource.nDiffuseColor = ((const SvxColorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue().GetColor();
     pInfo->aLightSource.bIsEnabled = ((const SfxBoolItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection4Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const SvxB3DVectorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
 
     pInfo = &m_pLightSourceInfoList[4];
     pInfo->aLightSource.nDiffuseColor = ((const SvxColorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue().GetColor();
     pInfo->aLightSource.bIsEnabled = ((const SfxBoolItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection5Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const SvxB3DVectorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
 
     pInfo = &m_pLightSourceInfoList[5];
     pInfo->aLightSource.nDiffuseColor = ((const SvxColorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue().GetColor();
     pInfo->aLightSource.bIsEnabled = ((const SfxBoolItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection6Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const SvxB3DVectorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
 
     pInfo = &m_pLightSourceInfoList[6];
     pInfo->aLightSource.nDiffuseColor = ((const SvxColorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue().GetColor();
     pInfo->aLightSource.bIsEnabled = ((const SfxBoolItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection7Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const SvxB3DVectorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
 
     pInfo = &m_pLightSourceInfoList[7];
     pInfo->aLightSource.nDiffuseColor = ((const SvxColorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue().GetColor();
     pInfo->aLightSource.bIsEnabled = ((const SfxBoolItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
-    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const Svx3DLightDirection8Item&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
+    pInfo->aLightSource.aDirection = B3DVectorToDirection3D(((const SvxB3DVectorItem&)a3DLightAttributes.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());
 
     applyLightSourcesToModel();
 
@@ -530,42 +530,42 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
 
     aItemSet.Put(makeSvx3DLightcolor1Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff1Item(pInfo->aLightSource.bIsEnabled));
-    aItemSet.Put(Svx3DLightDirection1Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+    aItemSet.Put(makeSvx3DLightDirection1Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[1];
     aItemSet.Put(makeSvx3DLightcolor2Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff2Item(pInfo->aLightSource.bIsEnabled));
-    aItemSet.Put(Svx3DLightDirection2Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+    aItemSet.Put(makeSvx3DLightDirection2Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[2];
     aItemSet.Put(makeSvx3DLightcolor3Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff3Item(pInfo->aLightSource.bIsEnabled));
-    aItemSet.Put(Svx3DLightDirection3Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+    aItemSet.Put(makeSvx3DLightDirection3Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[3];
     aItemSet.Put(makeSvx3DLightcolor4Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff4Item(pInfo->aLightSource.bIsEnabled));
-    aItemSet.Put(Svx3DLightDirection4Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+    aItemSet.Put(makeSvx3DLightDirection4Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[4];
     aItemSet.Put(makeSvx3DLightcolor5Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff5Item(pInfo->aLightSource.bIsEnabled));
-    aItemSet.Put(Svx3DLightDirection5Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+    aItemSet.Put(makeSvx3DLightDirection5Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[5];
     aItemSet.Put(makeSvx3DLightcolor6Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff6Item(pInfo->aLightSource.bIsEnabled));
-    aItemSet.Put(Svx3DLightDirection6Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+    aItemSet.Put(makeSvx3DLightDirection6Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[6];
     aItemSet.Put(makeSvx3DLightcolor7Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff7Item(pInfo->aLightSource.bIsEnabled));
-    aItemSet.Put(Svx3DLightDirection7Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+    aItemSet.Put(makeSvx3DLightDirection7Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     pInfo = &m_pLightSourceInfoList[7];
     aItemSet.Put(makeSvx3DLightcolor8Item(pInfo->aLightSource.nDiffuseColor));
     aItemSet.Put(makeSvx3DLightOnOff8Item(pInfo->aLightSource.bIsEnabled));
-    aItemSet.Put(Svx3DLightDirection8Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
+    aItemSet.Put(makeSvx3DLightDirection8Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
     // set lights and ambient light
     m_pCtl_Preview->GetSvx3DLightControl().Set3DAttributes(aItemSet);

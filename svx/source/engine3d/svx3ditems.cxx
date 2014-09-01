@@ -85,38 +85,6 @@ Svx3DPerspectiveItem::Svx3DPerspectiveItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, nVal)
 {}
 
-Svx3DLightDirection1Item::Svx3DLightDirection1Item(const basegfx::B3DVector& rVec)
-:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, rVec)
-{}
-
-Svx3DLightDirection2Item::Svx3DLightDirection2Item(const basegfx::B3DVector& rVec)
-:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, rVec)
-{}
-
-Svx3DLightDirection3Item::Svx3DLightDirection3Item(const basegfx::B3DVector& rVec)
-:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, rVec)
-{}
-
-Svx3DLightDirection4Item::Svx3DLightDirection4Item(const basegfx::B3DVector& rVec)
-:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, rVec)
-{}
-
-Svx3DLightDirection5Item::Svx3DLightDirection5Item(const basegfx::B3DVector& rVec)
-:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, rVec)
-{}
-
-Svx3DLightDirection6Item::Svx3DLightDirection6Item(const basegfx::B3DVector& rVec)
-:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, rVec)
-{}
-
-Svx3DLightDirection7Item::Svx3DLightDirection7Item(const basegfx::B3DVector& rVec)
-:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, rVec)
-{}
-
-Svx3DLightDirection8Item::Svx3DLightDirection8Item(const basegfx::B3DVector& rVec)
-:   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, rVec)
-{}
-
 Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DSCENE_SHADE_MODE, nVal)
 {}

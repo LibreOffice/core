@@ -160,21 +160,21 @@ public:
 
     // Light direction:
     basegfx::B3DVector GetLightDirection1() const
-        { return ((const Svx3DLightDirection1Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue(); }
     basegfx::B3DVector GetLightDirection2() const
-        { return ((const Svx3DLightDirection2Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue(); }
     basegfx::B3DVector GetLightDirection3() const
-        { return ((const Svx3DLightDirection3Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue(); }
     basegfx::B3DVector GetLightDirection4() const
-        { return ((const Svx3DLightDirection4Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue(); }
     basegfx::B3DVector GetLightDirection5() const
-        { return ((const Svx3DLightDirection5Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue(); }
     basegfx::B3DVector GetLightDirection6() const
-        { return ((const Svx3DLightDirection6Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue(); }
     basegfx::B3DVector GetLightDirection7() const
-        { return ((const Svx3DLightDirection7Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue(); }
     basegfx::B3DVector GetLightDirection8() const
-        { return ((const Svx3DLightDirection8Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue(); }
+        { return ((const SvxB3DVectorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue(); }
 
     // ShadowSlant:
     sal_uInt16 GetShadowSlant() const

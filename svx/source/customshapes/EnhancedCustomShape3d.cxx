@@ -687,7 +687,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff1Item( true ) );
             Color aAmbientSpot1Color( nSpotLight1, nSpotLight1, nSpotLight1 );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor1Item( aAmbientSpot1Color ) );
-            pScene->GetProperties().SetObjectItem( Svx3DLightDirection1Item( aSpotLight1 ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection1Item( aSpotLight1 ) );
 
             sal_uInt8 nSpotLight2 = (sal_uInt8)( fLight2Intensity * 255.0 );
             basegfx::B3DVector aSpotLight2( aSecondLightDirection.DirectionX, -aSecondLightDirection.DirectionY, -aSecondLightDirection.DirectionZ );
@@ -695,14 +695,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff2Item( true ) );
             Color aAmbientSpot2Color( nSpotLight2, nSpotLight2, nSpotLight2 );
             pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor2Item( aAmbientSpot2Color ) );
-            pScene->GetProperties().SetObjectItem( Svx3DLightDirection2Item( aSpotLight2 ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection2Item( aSpotLight2 ) );
 
                 sal_uInt8 nSpotLight3 = 70;
                 basegfx::B3DVector aSpotLight3( 0.0, 0.0, 1.0 );
                 pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff3Item( true ) );
                 Color aAmbientSpot3Color( nSpotLight3, nSpotLight3, nSpotLight3 );
                 pScene->GetProperties().SetObjectItem( makeSvx3DLightcolor3Item( aAmbientSpot3Color ) );
-                pScene->GetProperties().SetObjectItem( Svx3DLightDirection3Item( aSpotLight3 ) );
+                pScene->GetProperties().SetObjectItem( makeSvx3DLightDirection3Item( aSpotLight3 ) );
 
             double fSpecular = GetDouble( rGeometryItem, "Specularity", 0, NULL ) / 100;
             bool bMetal = GetBool( rGeometryItem, "Metal", false );

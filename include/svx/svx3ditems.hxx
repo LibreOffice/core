@@ -233,45 +233,37 @@ inline SfxBoolItem makeSvx3DLightOnOff8Item(bool bVal) {
     return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, bVal);
 }
 
-class SVX_DLLPUBLIC Svx3DLightDirection1Item : public SvxB3DVectorItem {
-public:
-    Svx3DLightDirection1Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.57735026918963, 0.57735026918963, 0.57735026918963));
-};
+inline SvxB3DVectorItem makeSvx3DLightDirection1Item(const basegfx::B3DVector& rVec) {
+    return SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_1, rVec);
+}
 
-class SVX_DLLPUBLIC Svx3DLightDirection2Item : public SvxB3DVectorItem {
-public:
-    Svx3DLightDirection2Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
-};
+inline SvxB3DVectorItem makeSvx3DLightDirection2Item(const basegfx::B3DVector& rVec) {
+    return SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_2, rVec);
+}
 
-class SVX_DLLPUBLIC Svx3DLightDirection3Item : public SvxB3DVectorItem {
-public:
-    Svx3DLightDirection3Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
-};
+inline SvxB3DVectorItem makeSvx3DLightDirection3Item(const basegfx::B3DVector& rVec) {
+    return SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_3, rVec);
+}
 
-class SVX_DLLPUBLIC Svx3DLightDirection4Item : public SvxB3DVectorItem {
-public:
-    Svx3DLightDirection4Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
-};
+inline SvxB3DVectorItem makeSvx3DLightDirection4Item(const basegfx::B3DVector& rVec) {
+    return SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_4, rVec);
+}
 
-class SVX_DLLPUBLIC Svx3DLightDirection5Item : public SvxB3DVectorItem {
-public:
-    Svx3DLightDirection5Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
-};
+inline SvxB3DVectorItem makeSvx3DLightDirection5Item(const basegfx::B3DVector& rVec) {
+    return SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_5, rVec);
+}
 
-class SVX_DLLPUBLIC Svx3DLightDirection6Item : public SvxB3DVectorItem {
-public:
-    Svx3DLightDirection6Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
-};
+inline SvxB3DVectorItem makeSvx3DLightDirection6Item(const basegfx::B3DVector& rVec) {
+    return SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_6, rVec);
+}
 
-class SVX_DLLPUBLIC Svx3DLightDirection7Item : public SvxB3DVectorItem {
-public:
-    Svx3DLightDirection7Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
-};
+inline SvxB3DVectorItem makeSvx3DLightDirection7Item(const basegfx::B3DVector& rVec) {
+    return SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_7, rVec);
+}
 
-class SVX_DLLPUBLIC Svx3DLightDirection8Item : public SvxB3DVectorItem {
-public:
-    Svx3DLightDirection8Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
-};
+inline SvxB3DVectorItem makeSvx3DLightDirection8Item(const basegfx::B3DVector& rVec) {
+    return SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, rVec);
+}
 
 inline SfxUInt16Item makeSvx3DShadowSlantItem(sal_uInt16 nVal) {
     return SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, nVal);

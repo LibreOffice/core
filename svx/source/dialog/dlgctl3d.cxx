@@ -778,15 +778,15 @@ void Svx3DLightControl::SetPosition(double fHor, double fVer)
 
             switch(maSelectedLight)
             {
-                case 0: aSet.Put(Svx3DLightDirection1Item(aDirection)); break;
-                case 1: aSet.Put(Svx3DLightDirection2Item(aDirection)); break;
-                case 2: aSet.Put(Svx3DLightDirection3Item(aDirection)); break;
-                case 3: aSet.Put(Svx3DLightDirection4Item(aDirection)); break;
-                case 4: aSet.Put(Svx3DLightDirection5Item(aDirection)); break;
-                case 5: aSet.Put(Svx3DLightDirection6Item(aDirection)); break;
-                case 6: aSet.Put(Svx3DLightDirection7Item(aDirection)); break;
+                case 0: aSet.Put(makeSvx3DLightDirection1Item(aDirection)); break;
+                case 1: aSet.Put(makeSvx3DLightDirection2Item(aDirection)); break;
+                case 2: aSet.Put(makeSvx3DLightDirection3Item(aDirection)); break;
+                case 3: aSet.Put(makeSvx3DLightDirection4Item(aDirection)); break;
+                case 4: aSet.Put(makeSvx3DLightDirection5Item(aDirection)); break;
+                case 5: aSet.Put(makeSvx3DLightDirection6Item(aDirection)); break;
+                case 6: aSet.Put(makeSvx3DLightDirection7Item(aDirection)); break;
                 default:
-                case 7: aSet.Put(Svx3DLightDirection8Item(aDirection)); break;
+                case 7: aSet.Put(makeSvx3DLightDirection8Item(aDirection)); break;
             }
 
             mpScene->SetMergedItemSet(aSet);
@@ -938,14 +938,14 @@ basegfx::B3DVector Svx3DLightControl::GetLightDirection(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return ((const Svx3DLightDirection1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
-            case 1 : return ((const Svx3DLightDirection2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
-            case 2 : return ((const Svx3DLightDirection3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
-            case 3 : return ((const Svx3DLightDirection4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
-            case 4 : return ((const Svx3DLightDirection5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
-            case 5 : return ((const Svx3DLightDirection6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
-            case 6 : return ((const Svx3DLightDirection7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
-            case 7 : return ((const Svx3DLightDirection8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
+            case 0 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue();
+            case 1 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue();
+            case 2 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue();
+            case 3 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue();
+            case 4 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue();
+            case 5 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue();
+            case 6 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue();
+            case 7 : return ((const SvxB3DVectorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue();
         }
     }
 
