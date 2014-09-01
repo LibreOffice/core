@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sdr/overlay/overlaytriangle.hxx>
+#include <svx/sdr/overlay/overlaytriangle.hxx>
 #include <tools/poly.hxx>
 #include <vcl/outdev.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -64,6 +64,31 @@ namespace sdr
         OverlayTriangle::~OverlayTriangle()
         {
         }
+
+        void OverlayTriangle::setSecondPosition(const basegfx::B2DPoint& rNew)
+        {
+            if(rNew != maSecondPosition)
+            {
+                // remember new value
+                maSecondPosition = rNew;
+
+                // register change (after change)
+                objectChange();
+            }
+        }
+
+        void OverlayTriangle::setThirdPosition(const basegfx::B2DPoint& rNew)
+        {
+            if(rNew != maThirdPosition)
+            {
+                // remember new value
+                maThirdPosition = rNew;
+
+                // register change (after change)
+                objectChange();
+            }
+        }
+
     } // end of namespace overlay
 } // end of namespace sdr
 

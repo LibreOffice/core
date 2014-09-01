@@ -17,18 +17,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTRIANGLE_HXX
-#define INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTRIANGLE_HXX
+#ifndef INCLUDED_SVX_SDR_OVERLAY_OVERLAYTRIANGLE_HXX
+#define INCLUDED_SVX_SDR_OVERLAY_OVERLAYTRIANGLE_HXX
 
 #include <svx/sdr/overlay/overlayobject.hxx>
-
-
 
 namespace sdr
 {
     namespace overlay
     {
-        class OverlayTriangle : public OverlayObjectWithBasePosition
+        class SVX_DLLPUBLIC OverlayTriangle : public OverlayObjectWithBasePosition
         {
         protected:
             // second and third position in pixel
@@ -48,15 +46,15 @@ namespace sdr
 
             // change second position
             const basegfx::B2DPoint& getSecondPosition() const { return maSecondPosition; }
+            void setSecondPosition(const basegfx::B2DPoint& rNew);
 
             // change third position
             const basegfx::B2DPoint& getThirdPosition() const { return maThirdPosition; }
+            void setThirdPosition(const basegfx::B2DPoint& rNew);
         };
     } // end of namespace overlay
 } // end of namespace sdr
 
-
-
-#endif // INCLUDED_SVX_INC_SDR_OVERLAY_OVERLAYTRIANGLE_HXX
+#endif // INCLUDED_SVX_SDR_OVERLAY_OVERLAYTRIANGLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
