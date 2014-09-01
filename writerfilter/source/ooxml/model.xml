@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <model
+  xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
   xmlns:rng="http://relaxng.org/ns/structure/1.0"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
@@ -3755,7 +3756,7 @@
     <resource name="ST_DrawingElementId" resource="Integer"/>
   </namespace>
   <namespace name="dml-documentProperties" file="dml-documentProperties.rng">
-    <grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeGeometry.rng"/>
       <define name="AG_Locking">
@@ -3951,7 +3952,7 @@
       <attribute name="noMove" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noMove"/>
       <attribute name="noResize" tokenid="ooxml:CT_GraphicalObjectFrameLocking_noResize"/>
     </resource>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_NonVisualDrawingProps" resource="Properties">
+    <resource name="CT_NonVisualDrawingProps" resource="Properties">
       <element name="a:hlinkClick" tokenid="ooxml:CT_NonVisualDrawingProps_a_hlinkClick"/>
       <element name="hlinkHover" tokenid="ooxml:CT_NonVisualDrawingProps_hlinkHover"/>
       <element name="extLst" tokenid="ooxml:CT_NonVisualDrawingProps_extLst"/>
@@ -6668,7 +6669,7 @@
   <namespace name="dml-wordprocessingDrawing" file="dml-wordprocessingDrawing.rng">
     <start name="inline"/>
     <start name="anchor"/>
-    <grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+    <grammar xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-graphicalObject.rng"/>
       <include href="dml-documentProperties.rng"/>
@@ -7018,7 +7019,7 @@
       <attribute name="b" tokenid="ooxml:CT_EffectExtent_b"/>
     </resource>
     <resource name="ST_WrapDistance" resource="Integer"/>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Inline" resource="Properties">
+    <resource xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Inline" resource="Properties">
       <element name="extent" tokenid="ooxml:CT_Inline_extent"/>
       <element name="effectExtent" tokenid="ooxml:CT_Inline_effectExtent"/>
       <element name="docPr" tokenid="ooxml:CT_Inline_docPr"/>
@@ -7116,7 +7117,7 @@
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosV_relativeFrom"/>
     </resource>
     <resource name="ST_EditId" resource="Hex"/>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Anchor" resource="Properties">
+    <resource xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Anchor" resource="Properties">
       <element name="simplePos" tokenid="ooxml:CT_Anchor_simplePos_elem"/>
       <element name="positionH" tokenid="ooxml:CT_Anchor_positionH"/>
       <element name="positionV" tokenid="ooxml:CT_Anchor_positionV"/>
@@ -8399,7 +8400,7 @@
     <resource name="relIds" resource="Shape">
       <element xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" name="dgm:relIds" tokenid="ooxml:dgm_relIds"/>
     </resource>
-    <resource xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="CT_GvmlGroupShape" resource="Shape">
+    <resource name="CT_GvmlGroupShape" resource="Shape">
       <element name="a:nvGrpSpPr" tokenid="ooxml:CT_GvmlGroupShape_nvGrpSpPr"/>
       <element name="a:grpSpPr" tokenid="ooxml:CT_GvmlGroupShape_grpSpPr"/>
     </resource>
