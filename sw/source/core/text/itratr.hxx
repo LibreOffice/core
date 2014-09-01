@@ -48,7 +48,7 @@ protected:
 
 private:
     OutputDevice *pLastOut;
-    sal_uInt16 nChgCnt;
+    short nChgCnt;
     SwRedlineItr *pRedln;
     size_t nStartIndex;
     size_t nEndIndex;

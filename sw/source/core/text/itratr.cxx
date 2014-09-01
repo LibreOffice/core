@@ -143,7 +143,8 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
 
     nStartIndex = 0;
     nEndIndex = 0;
-    nPos = nChgCnt = 0;
+    nPos = 0;
+    nChgCnt = 0;
     if( nPropFont )
         pFnt->SetProportion( nPropFont );
     if( pRedln )
@@ -439,8 +440,8 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
     {
         long nMin, nMax;
         SwHTMLTableLayout *pLayout = 0;
-        sal_uInt16 nWhich = pNd->Which();
-        if( RES_DRAWFRMFMT != nWhich )
+        const bool bIsDrawFrmFmt = pNd->Which()==RES_DRAWFRMFMT;
+        if( !bIsDrawFrmFmt )
         {
             // Does the frame contain a table at the start or the end?
             const SwNodes& rNodes = pNd->GetDoc()->GetNodes();
@@ -471,7 +472,7 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
         }
         else
         {
-            if( RES_DRAWFRMFMT == nWhich )
+            if( bIsDrawFrmFmt )
             {
                 const SdrObject* pSObj = pNd->FindSdrObject();
                 if( pSObj )
@@ -608,7 +609,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     aIter.SeekAndChgAttrIter( nIdx, pOut );
     sal_Int32 nLen = m_Text.getLength();
     long nAktWidth = 0;
-    sal_uInt16 nAdd = 0;
+    long nAdd = 0;
     SwMinMaxArgs aArg( pOut, pSh, rMin, rMax, rAbsMin );
     while( nIdx < nLen )
     {
