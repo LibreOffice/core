@@ -29,11 +29,11 @@ import com.sun.star.wizards.ui.event.*;
 
 /**
  * This class contains convenience methods for inserting components to a dialog.
- * It was created for use with the automatic conversion of Basic XML Dialog
- * description files to a Java class which builds the same dialog through the UNO API.<br/>
- * It uses an Event-Listener method, which calls a method through reflection
- * wenn an event on a component is trigered.
- * see the classes AbstractListener, CommonListener, MethodInvocation for details.
+ * <p>It was created for use with the automatic conversion of Basic XML Dialog
+ * description files to a Java class which builds the same dialog through the UNO API.</p>
+ * <p>It uses an Event-Listener method, which calls a method through reflection
+ * when an event on a component is triggered.
+ * see the classes AbstractListener, CommonListener, MethodInvocation for details.</p>
  */
 public class UnoDialog2 extends UnoDialog
 {

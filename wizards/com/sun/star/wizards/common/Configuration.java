@@ -28,15 +28,15 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.Locale;
 
 /**
- * This class gives access to the OO configuration api.
- * It contains 4 get and 4 set convenience methods for getting and settings properties
- * in the configuration. <br/>
- * For the get methods, two parameters must be given: name and parent, where name is the
- * name of the property, parent is a HierarchyElement (::com::sun::star::configuration::HierarchyElement)<br/>
- * The get and set methods support hieryrchical property names like "options/gridX". <br/>
- * NOTE: not yet supported, but sometime later,
+ * This class gives access to the OO configuration API.
+ * <p>It contains 4 get and 4 set convenience methods for getting and settings properties
+ * in the configuration.</p>
+ * <p>For the get methods, two parameters must be given: name and parent, where name is the
+ * name of the property, parent is a HierarchyElement (::com::sun::star::configuration::HierarchyElement)</p>
+ * <p>The get and set methods support hierarchical property names like "options/gridX". </p>
+ * <p>NOTE: not yet supported, but sometime later,
  * If you will omit the "parent" parameter, then the "name" parameter must be in hierarchy form from
- * the root of the registry.
+ * the root of the registry.</p>
  */
 public abstract class Configuration
 {
