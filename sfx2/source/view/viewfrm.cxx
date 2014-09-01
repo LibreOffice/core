@@ -133,6 +133,7 @@ using ::com::sun::star::container::XIndexContainer;
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/progress.hxx>
+#include <sfx2/sidebar/Sidebar.hxx>
 #include "workwin.hxx"
 #include "helper.hxx"
 #include <sfx2/minfitem.hxx>
@@ -3116,6 +3117,16 @@ void SfxViewFrame::ChildWindowExecute( SfxRequest &rReq )
             }
         }
 
+        rReq.Done();
+        return;
+    }
+    if (nSID == SID_STYLE_DESIGNER)
+    {
+        // First make sure that the sidebar is visible
+        ShowChildWindow(SID_SIDEBAR);
+
+        ::sfx2::sidebar::Sidebar::ShowPanel("StyleListPanel",
+                                            GetFrame().GetFrameInterface());
         rReq.Done();
         return;
     }

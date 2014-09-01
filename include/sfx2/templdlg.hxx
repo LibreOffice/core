@@ -34,7 +34,6 @@ class SfxTemplateDialog_Impl;
 class SfxTemplateDialog : public SfxDockingWindow
 {
 private:
-friend class SfxTemplateDialogWrapper;
 friend class SfxTemplateDialog_Impl;
 
     SfxTemplateDialog_Impl*     pImpl;
@@ -54,16 +53,6 @@ public:
     static sal_uInt16 SFX2_DLLPUBLIC SfxFamilyIdToNId(SfxStyleFamily nFamily);
     // converts from 1-5 to SFX_STYLE_FAMILY Ids
     static SfxStyleFamily SFX2_DLLPUBLIC NIdToSfxFamilyId(sal_uInt16 nId);
-};
-
-// class SfxTemplateDialogWrapper ----------------------------------------
-
-class SFX2_DLLPUBLIC SfxTemplateDialogWrapper : public SfxChildWindow
-{
-public:
-                SfxTemplateDialogWrapper
-                    (Window*,sal_uInt16,SfxBindings*,SfxChildWinInfo*);
-                SFX_DECL_CHILDWINDOW_WITHID(SfxTemplateDialogWrapper);
 };
 
 // class SfxTemplatePanelControl -----------------------------------------

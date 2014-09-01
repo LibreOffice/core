@@ -90,9 +90,6 @@ static sal_uInt16 nLastItemId = USHRT_MAX;
 TYPEINIT0(SfxCommonTemplateDialog_Impl);
 TYPEINIT1(SfxTemplateDialog_Impl,SfxCommonTemplateDialog_Impl);
 
-SFX_IMPL_DOCKINGWINDOW_WITHID(SfxTemplateDialogWrapper, SID_STYLE_DESIGNER)
-
-
 
 class SfxCommonTemplateDialog_Impl::DeletionWatcher : private boost::noncopyable
 {
@@ -347,19 +344,6 @@ PopupMenu* SfxActionListBox::CreateContextMenu( void )
     return pDialog->CreateContextMenu();
 }
 
-
-
-SfxTemplateDialogWrapper::SfxTemplateDialogWrapper(Window *pParentWnd,
-        sal_uInt16 nId,  SfxBindings *p, SfxChildWinInfo *pInfo) :
-    SfxChildWindow(pParentWnd, nId)
-{
-    SfxTemplateDialog *pWin = new SfxTemplateDialog(p, this, pParentWnd);
-    pWindow = pWin;
-    eChildAlignment = SFX_ALIGN_NOALIGNMENT;
-
-    pWin->Initialize( pInfo );
-    pWin->SetMinOutputSizePixel(pWin->pImpl->GetMinOutputSizePixel());
-}
 
 //===== SfxTemplatePanelControl ===============================================
 SfxTemplatePanelControl::SfxTemplatePanelControl (
