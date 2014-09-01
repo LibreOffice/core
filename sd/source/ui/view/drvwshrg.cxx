@@ -67,7 +67,6 @@ void DrawViewShell::InitInterface_Impl()
 
     GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
-    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxColorChildWindow::GetChildWindowId());
@@ -94,7 +93,6 @@ void GraphicViewShell::InitInterface_Impl()
 
     GetStaticInterface()->RegisterChildWindow(SID_NAVIGATOR, true);
 
-    GetStaticInterface()->RegisterChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SvxColorChildWindow::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(Svx3DChildWindow::GetChildWindowId());
