@@ -339,7 +339,6 @@ struct DialogImpl
 void Dialog::ImplInitDialogData()
 {
     mpWindowImpl->mbDialog  = true;
-    mpDialogParent          = NULL;
     mpPrevExecuteDlg        = NULL;
     mbInExecute             = false;
     mbOldSaveBack           = false;
@@ -450,7 +449,6 @@ void Dialog::ImplInitSettings()
 
 Dialog::Dialog( WindowType nType )
     : SystemWindow( nType )
-    , mbIsDefferedInit(false)
 {
     ImplInitDialogData();
 }
@@ -491,26 +489,21 @@ void Dialog::doDeferredInit(bool bResizable)
 }
 
 Dialog::Dialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : SystemWindow( WINDOW_DIALOG )
-    , mbIsDefferedInit(true)
+    : SystemWindow(WINDOW_DIALOG)
 {
     ImplInitDialogData();
-    mpDialogParent = pParent; //will be unset in doDeferredInit
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+    loadUI(pParent, rID, rUIXMLDescription);
 }
 
 Dialog::Dialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType)
-    : SystemWindow( nType )
-    , mbIsDefferedInit(true)
+    : SystemWindow(nType)
 {
     ImplInitDialogData();
-    mpDialogParent = pParent; //will be unset in doDeferredInit
-    m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+    loadUI(pParent, rID, rUIXMLDescription);
 }
 
-Dialog::Dialog( Window* pParent, WinBits nStyle )
-    : SystemWindow( WINDOW_DIALOG )
-    , mbIsDefferedInit(false)
+Dialog::Dialog(Window* pParent, WinBits nStyle)
+    : SystemWindow(WINDOW_DIALOG)
 {
     ImplInitDialogData();
     ImplInit( pParent, nStyle );

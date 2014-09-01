@@ -39,7 +39,6 @@ class VclButtonBox;
 class VCL_DLLPUBLIC Dialog : public SystemWindow
 {
 private:
-    Window*         mpDialogParent;
     Dialog*         mpPrevExecuteDlg;
     DialogImpl*     mpDialogImpl;
     long            mnMousePositioned;
@@ -47,7 +46,6 @@ private:
     bool            mbOldSaveBack;
     bool            mbInClose;
     bool            mbModalMode;
-    bool            mbIsDefferedInit;
 
     VclButtonBox*   mpActionArea;
     VclBox*         mpContentArea;
@@ -67,8 +65,7 @@ protected:
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
-    SAL_DLLPRIVATE void doDeferredInit(bool bResizable);
-    SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDefferedInit; }
+    virtual        void    doDeferredInit(bool bResizable) SAL_OVERRIDE;
 
 protected:
     explicit        Dialog( WindowType nType );

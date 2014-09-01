@@ -165,8 +165,21 @@ FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
 }
 
 FloatingWindow::FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : SystemWindow(pParent, rID, rUIXMLDescription, WINDOW_FLOATINGWINDOW)
+    : SystemWindow(WINDOW_FLOATINGWINDOW)
 {
+    loadUI(pParent, rID, rUIXMLDescription);
+}
+
+//Find the real parent stashed in mpDialogParent.
+void FloatingWindow::doDeferredInit(bool bResizable)
+{
+    WinBits nBits = WB_MOVEABLE|WB_3DLOOK;
+    if (bResizable)
+        nBits |= WB_SIZEABLE;
+    Window *pParent = mpDialogParent;
+    mpDialogParent = NULL;
+    ImplInit(pParent, nBits);
+    mbIsDefferedInit = false;
 }
 
 void FloatingWindow::ImplLoadRes( const ResId& rResId )
@@ -554,6 +567,11 @@ bool FloatingWindow::Notify( NotifyEvent& rNEvt )
 
 void FloatingWindow::StateChanged( StateChangedType nType )
 {
+    if (nType == STATE_CHANGE_INITSHOW)
+    {
+        DoInitialLayout();
+    }
+
     SystemWindow::StateChanged( nType );
 
     if ( nType == STATE_CHANGE_CONTROLBACKGROUND )

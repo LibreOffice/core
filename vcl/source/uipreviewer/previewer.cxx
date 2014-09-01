@@ -70,17 +70,22 @@ int UIPreviewApp::Main()
 
         {
             VclBuilder aBuilder(pDialog, OUString(), uifiles[0]);
-            Dialog *pRealDialog = dynamic_cast<Dialog*>(aBuilder.get_widget_root());
+            Window *pRoot = aBuilder.get_widget_root();
+            Dialog *pRealDialog = dynamic_cast<Dialog*>(pRoot);
 
             if (!pRealDialog)
                 pRealDialog = pDialog;
 
-            if (pRealDialog)
-            {
-                pRealDialog->SetText(OUString("LibreOffice ui-previewer"));
-                pRealDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
-                pRealDialog->Execute();
-            }
+            pRealDialog->SetText(OUString("LibreOffice ui-previewer"));
+            pRealDialog->SetStyle(pDialog->GetStyle()|WB_CLOSEABLE);
+            /*
+               Force a new STATE_CHANGE_INITSHOW for the edge case where pRoot
+               is not a dialog or contents of a dialog, but instead a visible floating window
+               which may have had initshow already done before it was given children
+            */
+            pRoot->Hide();
+            pRoot->Show();
+            pRealDialog->Execute();
         }
 
         delete pDialog;

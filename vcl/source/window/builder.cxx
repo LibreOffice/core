@@ -176,7 +176,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
     , m_pParserState(new ParserState)
     , m_xFrame(rFrame)
 {
-    m_bToplevelHasDeferredInit = pParent && pParent->IsDialog() && static_cast<Dialog*>(pParent)->isDeferredInit();
+    m_bToplevelHasDeferredInit = pParent && pParent->IsSystemWindow() && static_cast<SystemWindow*>(pParent)->isDeferredInit();
     m_bToplevelHasDeferredProperties = m_bToplevelHasDeferredInit;
 
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
@@ -571,6 +571,18 @@ OString VclBuilder::extractCustomProperty(VclBuilder::stringmap &rMap)
 
 namespace
 {
+    OString extractTypeHint(VclBuilder::stringmap &rMap)
+    {
+        OString sRet("normal");
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("type-hint"));
+        if (aFind != rMap.end())
+        {
+            sRet = aFind->second;
+            rMap.erase(aFind);
+        }
+        return sRet;
+    }
+
     bool extractResizable(VclBuilder::stringmap &rMap)
     {
         bool bResizable = true;
@@ -1571,6 +1583,21 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             return NULL; // no widget to be created
         }
     }
+    else if (name == "GtkWindow")
+    {
+        WinBits nBits = WB_SYSTEMWINDOW|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE|WB_HIDE;
+        if (extractResizable(rMap))
+            nBits |= WB_SIZEABLE;
+        OString sType(extractTypeHint(rMap));
+        if (sType == "utility")
+        {
+            pWindow = new FloatingWindow(pParent, nBits);
+        }
+        else
+        {
+            SAL_WARN("vcl.layout", "no mapping yet for GtkWindow of type " << sType.getStr() << " yet");
+        }
+    }
     else
     {
         sal_Int32 nDelim = name.indexOf('-');
@@ -1660,13 +1687,17 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
     if (m_pParent && !isConsideredGtkPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
     {
         pCurrentChild = m_pParent;
-        //toplevels default to resizable
-        if (pCurrentChild->IsDialog())
+
+        //toplevels default to resizable and apparently you can't change them
+        //afterwards, so we need to wait until now before we can truly
+        //initialize the dialog.
+        if (pParent->IsSystemWindow())
         {
-            Dialog *pDialog = static_cast<Dialog*>(pCurrentChild);
-            pDialog->doDeferredInit(extractResizable(rProps));
+            SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild);
+            pSysWin->doDeferredInit(extractResizable(rProps));
             m_bToplevelHasDeferredInit = false;
         }
+
         if (pCurrentChild->GetHelpId().isEmpty())
         {
             pCurrentChild->SetHelpId(m_sHelpRoot + m_sID);

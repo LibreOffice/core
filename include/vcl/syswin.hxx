@@ -147,17 +147,19 @@ private:
     bool            mbDockBtn;
     bool            mbHideBtn;
     bool            mbSysChild;
-    bool            mbIsDefferedInit;
     bool            mbIsCalculatingInitialLayoutSize;
     bool            mbInitialLayoutDone;
     sal_uInt16      mnMenuBarMode;
     sal_uInt16      mnIcon;
     ImplData*       mpImplData;
     Timer           maLayoutTimer;
-
+protected:
+    bool            mbIsDefferedInit;
+    Window*         mpDialogParent;
 public:
     using Window::ImplIsInTaskPaneList;
     SAL_DLLPRIVATE bool ImplIsInTaskPaneList( Window* pWin );
+    SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDefferedInit; }
 
 private:
     SAL_DLLPRIVATE void Init();
@@ -168,7 +170,7 @@ private:
 protected:
     // Single argument ctors shall be explicit.
     explicit SystemWindow(WindowType nType);
-    explicit SystemWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType);
+    void loadUI(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
 
     void     SetWindowStateData( const WindowStateData& rData );
 
@@ -187,7 +189,6 @@ public:
     virtual void    Resizing( Size& rSize );
     virtual void    Resize() SAL_OVERRIDE;
     virtual Size    GetOptimalSize() const SAL_OVERRIDE;
-    virtual void    StateChanged(StateChangedType nStateChange) SAL_OVERRIDE;
     virtual void    queue_resize(StateChangedType eReason = STATE_CHANGE_LAYOUT) SAL_OVERRIDE;
     bool            isLayoutEnabled() const;
     void            setOptimalLayoutSize();
@@ -274,6 +275,8 @@ public:
     const Link& GetCloseHdl() const;
 
     SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
+
+    virtual        void    doDeferredInit(bool bResizable);
 };
 
 #endif // INCLUDED_VCL_SYSWIN_HXX

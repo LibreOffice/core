@@ -117,9 +117,10 @@ public:
     SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uLong nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
+    virtual        void             doDeferredInit(bool bResizable) SAL_OVERRIDE;
 
 public:
-    explicit        FloatingWindow( Window* pParent, WinBits nStyle = WB_STDFLOATWIN );
+    explicit        FloatingWindow(Window* pParent, WinBits nStyle = WB_STDFLOATWIN);
     explicit        FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     explicit        FloatingWindow( Window* pParent, const ResId& );
     virtual         ~FloatingWindow();
@@ -131,7 +132,7 @@ public:
     virtual void    PopupModeEnd();
 
     void            SetTitleType( sal_uInt16 nTitle );
-    sal_uInt16          GetTitleType() const { return mnTitle; }
+    sal_uInt16      GetTitleType() const { return mnTitle; }
 
     void            StartPopupMode( const Rectangle& rRect, sal_uLong nFlags = 0 );
     void            StartPopupMode( ToolBox* pBox, sal_uLong nFlags = 0  );

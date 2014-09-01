@@ -81,6 +81,7 @@ void SystemWindow::Init()
     mbInitialLayoutDone = false;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
     mnIcon              = 0;
+    mpDialogParent      = NULL;
 
     //To-Do, reuse maResizeTimer
     maLayoutTimer.SetTimeout(50);
@@ -89,14 +90,15 @@ void SystemWindow::Init()
 
 SystemWindow::SystemWindow(WindowType nType)
     : Window(nType)
+    , mbIsDefferedInit(false)
 {
     Init();
 }
 
-SystemWindow::SystemWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, WindowType nType)
-    : Window(pParent, nType)
+void SystemWindow::loadUI(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
 {
-    Init();
+    mbIsDefferedInit = true;
+    mpDialogParent = pParent; //should be unset in doDeferredInit
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
@@ -1102,14 +1104,9 @@ void SystemWindow::DoInitialLayout()
     }
 }
 
-void SystemWindow::StateChanged( StateChangedType nType )
+void SystemWindow::doDeferredInit(bool /*bResizable*/)
 {
-    Window::StateChanged(nType);
-
-    if (nType == STATE_CHANGE_INITSHOW && !mbInitialLayoutDone)
-    {
-        DoInitialLayout();
-    }
+    SAL_WARN("vcl.layout", "SystemWindow in layout without doDeferredInit impl");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
