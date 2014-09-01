@@ -1116,7 +1116,7 @@ void ChartExport::exportPlotArea( )
                     }
                 case chart::TYPEID_SURFACE:
                     {
-                        exportSuffaceChart( xChartType );
+                        exportSurfaceChart( xChartType );
                         break;
                     }
                 default:
@@ -1612,7 +1612,7 @@ void ChartExport::exportUpDownBars( Reference< chart2::XChartType > xChartType)
     }
 }
 
-void ChartExport::exportSuffaceChart( Reference< chart2::XChartType > xChartType )
+void ChartExport::exportSurfaceChart( Reference< chart2::XChartType > xChartType )
 {
     FSHelperPtr pFS = GetFS();
     sal_Int32 nTypeId = XML_surfaceChart;
