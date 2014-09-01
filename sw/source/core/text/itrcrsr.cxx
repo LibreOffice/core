@@ -62,7 +62,7 @@ static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
 
     if ( rPor.InFldGrp() && !((SwFldPortion&)rPor).GetExp().isEmpty() )
     {
-        const sal_uInt16 nCharOfst = rCMS.pSpecialPos->nCharOfst;
+        const sal_Int32 nCharOfst = rCMS.pSpecialPos->nCharOfst;
         sal_Int32 nFldIdx = 0;
         sal_Int32 nFldLen = 0;
 
@@ -256,7 +256,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                     break;
                     case SVX_LINE_SPACE_MIN:
                     {
-                        if( nFirstLineOfs < sal_uInt16( pSpace->GetLineHeight() ) )
+                        if( nFirstLineOfs < pSpace->GetLineHeight() )
                             nFirstLineOfs = pSpace->GetLineHeight();
                         break;
                     }
@@ -281,7 +281,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                         nTmp /= 100;
                         if( !nTmp )
                             ++nTmp;
-                        nFirstLineOfs = (sal_uInt16)nTmp;
+                        nFirstLineOfs = nTmp;
                         break;
                     }
                     case SVX_INTER_LINE_SPACE_FIX:
@@ -416,8 +416,8 @@ bool SwTxtCursor::GetEndCharRect( SwRect* pOrig, const sal_Int32 nOfst,
     // If necessary, as catch up, do the adjustment
     GetAdjusted();
 
-    sal_uInt16 nX = 0;
-    sal_uInt16 nLast = 0;
+    long nX = 0;
+    long nLast = 0;
     SwLinePortion *pPor = pCurr->GetFirstPortion();
 
     sal_uInt16 nTmpHeight, nTmpAscent;
@@ -1572,7 +1572,7 @@ sal_Int32 SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
             if( ((SwMultiPortion*)pPor)->HasBrackets() )
             {
-                sal_uInt16 nPreWidth = ((SwDoubleLinePortion*)pPor)->PreWidth();
+                const sal_uInt16 nPreWidth = ((SwDoubleLinePortion*)pPor)->PreWidth();
                 if ( nX > nPreWidth )
                     nX = nX - nPreWidth;
                 else
