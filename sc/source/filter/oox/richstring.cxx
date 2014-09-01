@@ -165,20 +165,20 @@ void FontPortionModel::read( SequenceInputStream& rStrm )
 void FontPortionModelList::appendPortion( const FontPortionModel& rPortion )
 {
     // #i33341# real life -- same character index may occur several times
-    OSL_ENSURE( empty() || (back().mnPos <= rPortion.mnPos), "FontPortionModelList::appendPortion - wrong char order" );
-    if( empty() || (back().mnPos < rPortion.mnPos) )
-        push_back( rPortion );
+    OSL_ENSURE( mvModels.empty() || (mvModels.back().mnPos <= rPortion.mnPos), "FontPortionModelList::appendPortion - wrong char order" );
+    if( mvModels.empty() || (mvModels.back().mnPos < rPortion.mnPos) )
+        mvModels.push_back( rPortion );
     else
-        back().mnFontId = rPortion.mnFontId;
+        mvModels.back().mnFontId = rPortion.mnFontId;
 }
 
 void FontPortionModelList::importPortions( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
-    clear();
+    mvModels.clear();
     if( nCount > 0 )
     {
-        reserve( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 4 ) );
+        mvModels.reserve( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 4 ) );
         /*  #i33341# real life -- same character index may occur several times
             -> use appendPortion() to validate string position. */
         FontPortionModel aPortion;
@@ -443,7 +443,7 @@ void RichString::createTextPortions( const OUString& rText, FontPortionModelList
             rPortions.push_back( FontPortionModel( nStrLen, -1 ) );
 
         // create all string portions according to the font id vector
-        for( FontPortionModelList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
+        for( ::std::vector< FontPortionModel >::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
         {
             sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
             if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
