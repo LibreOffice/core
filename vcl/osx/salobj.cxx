@@ -47,7 +47,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
         [mpFrame->getNSView() addSubview: mpClipView];
         [mpClipView setHidden: YES];
     }
-    if (pWindowData->bOpenGL)
+    if (pWindowData && pWindowData->bOpenGL)
     {
         NSOpenGLPixelFormat* pixFormat = NULL;
 
