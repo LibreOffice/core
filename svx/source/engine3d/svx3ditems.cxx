@@ -73,18 +73,6 @@ Svx3DTextureProjectionYItem::Svx3DTextureProjectionYItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nVal)
 {}
 
-Svx3DMaterialColorItem::Svx3DMaterialColorItem(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DOBJ_MAT_COLOR)
-{}
-
-Svx3DMaterialEmissionItem::Svx3DMaterialEmissionItem(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DOBJ_MAT_EMISSION)
-{}
-
-Svx3DMaterialSpecularItem::Svx3DMaterialSpecularItem(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DOBJ_MAT_SPECULAR)
-{}
-
 Svx3DTextureKindItem::Svx3DTextureKindItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_KIND, nVal)
 {}
@@ -95,42 +83,6 @@ Svx3DTextureModeItem::Svx3DTextureModeItem(sal_uInt16 nVal)
 
 Svx3DPerspectiveItem::Svx3DPerspectiveItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, nVal)
-{}
-
-Svx3DLightcolor1Item::Svx3DLightcolor1Item(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_1)
-{}
-
-Svx3DLightcolor2Item::Svx3DLightcolor2Item(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_2)
-{}
-
-Svx3DLightcolor3Item::Svx3DLightcolor3Item(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_3)
-{}
-
-Svx3DLightcolor4Item::Svx3DLightcolor4Item(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_4)
-{}
-
-Svx3DLightcolor5Item::Svx3DLightcolor5Item(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_5)
-{}
-
-Svx3DLightcolor6Item::Svx3DLightcolor6Item(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_6)
-{}
-
-Svx3DLightcolor7Item::Svx3DLightcolor7Item(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_7)
-{}
-
-Svx3DLightcolor8Item::Svx3DLightcolor8Item(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_8)
-{}
-
-Svx3DAmbientcolorItem::Svx3DAmbientcolorItem(const Color& rCol)
-:   SvxColorItem(rCol, SDRATTR_3DSCENE_AMBIENTCOLOR)
 {}
 
 Svx3DLightDirection1Item::Svx3DLightDirection1Item(const basegfx::B3DVector& rVec)

@@ -916,14 +916,14 @@ Color Svx3DLightControl::GetLightColor(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return ((const Svx3DLightcolor1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
-            case 1 : return ((const Svx3DLightcolor2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
-            case 2 : return ((const Svx3DLightcolor3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
-            case 3 : return ((const Svx3DLightcolor4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
-            case 4 : return ((const Svx3DLightcolor5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
-            case 5 : return ((const Svx3DLightcolor6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
-            case 6 : return ((const Svx3DLightcolor7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
-            case 7 : return ((const Svx3DLightcolor8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
+            case 0 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue();
+            case 1 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue();
+            case 2 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue();
+            case 3 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue();
+            case 4 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue();
+            case 5 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue();
+            case 6 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue();
+            case 7 : return ((const SvxColorItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue();
         }
     }
 

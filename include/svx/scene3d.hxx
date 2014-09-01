@@ -120,25 +120,25 @@ public:
 
     // Lightcolor:
     Color GetLightColor1() const
-        { return ((const Svx3DLightcolor1Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue(); }
     Color GetLightColor2() const
-        { return ((const Svx3DLightcolor2Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue(); }
     Color GetLightColor3() const
-        { return ((const Svx3DLightcolor3Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue(); }
     Color GetLightColor4() const
-        { return ((const Svx3DLightcolor4Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue(); }
     Color GetLightColor5() const
-        { return ((const Svx3DLightcolor5Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue(); }
     Color GetLightColor6() const
-        { return ((const Svx3DLightcolor6Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue(); }
     Color GetLightColor7() const
-        { return ((const Svx3DLightcolor7Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue(); }
     Color GetLightColor8() const
-        { return ((const Svx3DLightcolor8Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue(); }
 
     // Ambient color:
     Color GetGlobalAmbientColor() const
-        { return ((const Svx3DAmbientcolorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue(); }
 
     // Light on/off:
     bool GetLightOnOff1() const

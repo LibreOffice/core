@@ -275,15 +275,15 @@ public :
 
     // MaterialColor: Color
     Color GetMaterialColor() const
-        { return ((const Svx3DMaterialColorItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_COLOR)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_COLOR)).GetValue(); }
 
     // MaterialEmission: Color
     Color GetMaterialEmission() const
-        { return ((const Svx3DMaterialEmissionItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue(); }
 
     // MaterialSpecular: Color
     Color GetMaterialSpecular() const
-        { return ((const Svx3DMaterialSpecularItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue(); }
+        { return ((const SvxColorItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue(); }
 
     // MaterialSpecularIntensity:
     sal_uInt16 GetMaterialSpecularIntensity() const

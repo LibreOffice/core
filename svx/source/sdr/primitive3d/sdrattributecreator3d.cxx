@@ -119,10 +119,10 @@ namespace drawinglayer
             const ::basegfx::BColor aObjectColor(((const XFillColorItem&)rSet.Get(XATTR_FILLCOLOR)).GetColorValue().getBColor());
 
             // get specular color
-            const ::basegfx::BColor aSpecular(((const Svx3DMaterialSpecularItem&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue().getBColor());
+            const ::basegfx::BColor aSpecular(((const SvxColorItem&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR)).GetValue().getBColor());
 
             // get emissive color
-            const ::basegfx::BColor aEmission(((const Svx3DMaterialEmissionItem&)rSet.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue().getBColor());
+            const ::basegfx::BColor aEmission(((const SvxColorItem&)rSet.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue().getBColor());
 
             // get specular intensity
             sal_uInt16 nSpecularIntensity(((const SfxUInt16Item&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue());

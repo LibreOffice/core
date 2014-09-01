@@ -106,20 +106,13 @@ inline SfxBoolItem makeSvx3DShadow3DItem(bool bVal) {
     return SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, bVal);
 }
 
-class Svx3DMaterialColorItem : public SvxColorItem {
-public:
-    Svx3DMaterialColorItem(const Color& rCol = Color(0x0000b8ff));
-};
+inline SvxColorItem makeSvx3DMaterialEmissionItem(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DOBJ_MAT_EMISSION);
+}
 
-class Svx3DMaterialEmissionItem : public SvxColorItem {
-public:
-    SVX_DLLPUBLIC Svx3DMaterialEmissionItem(const Color& rCol = Color(0x00000000));
-};
-
-class Svx3DMaterialSpecularItem : public SvxColorItem {
-public:
-    SVX_DLLPUBLIC Svx3DMaterialSpecularItem(const Color& rCol = Color(0x00ffffff));
-};
+inline SvxColorItem makeSvx3DMaterialSpecularItem(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DOBJ_MAT_SPECULAR);
+}
 
 inline SfxUInt16Item makeSvx3DMaterialSpecularIntensityItem(sal_uInt16 nVal) {
     return SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nVal);
@@ -172,50 +165,41 @@ inline SfxBoolItem makeSvx3DTwoSidedLightingItem(bool bVal) {
     return SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, bVal);
 }
 
-class SVX_DLLPUBLIC Svx3DLightcolor1Item : public SvxColorItem {
-public:
-    Svx3DLightcolor1Item(const Color& rCol = Color(0xffcccccc));
-};
+inline SvxColorItem makeSvx3DLightcolor1Item(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_1);
+}
 
-class SVX_DLLPUBLIC Svx3DLightcolor2Item : public SvxColorItem {
-public:
-    Svx3DLightcolor2Item(const Color& rCol = Color(0x00000000));
-};
+inline SvxColorItem makeSvx3DLightcolor2Item(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_2);
+}
 
-class SVX_DLLPUBLIC Svx3DLightcolor3Item : public SvxColorItem {
-public:
-    Svx3DLightcolor3Item(const Color& rCol = Color(0x00000000));
-};
+inline SvxColorItem makeSvx3DLightcolor3Item(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_3);
+}
 
-class SVX_DLLPUBLIC Svx3DLightcolor4Item : public SvxColorItem {
-public:
-    Svx3DLightcolor4Item(const Color& rCol = Color(0x00000000));
-};
+inline SvxColorItem makeSvx3DLightcolor4Item(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_4);
+}
 
-class SVX_DLLPUBLIC Svx3DLightcolor5Item : public SvxColorItem {
-public:
-    Svx3DLightcolor5Item(const Color& rCol = Color(0x00000000));
-};
+inline SvxColorItem makeSvx3DLightcolor5Item(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_5);
+}
 
-class SVX_DLLPUBLIC Svx3DLightcolor6Item : public SvxColorItem {
-public:
-    Svx3DLightcolor6Item(const Color& rCol = Color(0x00000000));
-};
+inline SvxColorItem makeSvx3DLightcolor6Item(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_6);
+}
 
-class SVX_DLLPUBLIC Svx3DLightcolor7Item : public SvxColorItem {
-public:
-    Svx3DLightcolor7Item(const Color& rCol = Color(0x00000000));
-};
+inline SvxColorItem makeSvx3DLightcolor7Item(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_7);
+}
 
-class SVX_DLLPUBLIC Svx3DLightcolor8Item : public SvxColorItem {
-public:
-    Svx3DLightcolor8Item(const Color& rCol = Color(0x00000000));
-};
+inline SvxColorItem makeSvx3DLightcolor8Item(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_LIGHTCOLOR_8);
+}
 
-class SVX_DLLPUBLIC Svx3DAmbientcolorItem : public SvxColorItem {
-public:
-    Svx3DAmbientcolorItem(const Color& rCol = Color(0x00666666));
-};
+inline SvxColorItem makeSvx3DAmbientcolorItem(const Color& rCol) {
+    return SvxColorItem(rCol, SDRATTR_3DSCENE_AMBIENTCOLOR);
+}
 
 inline SfxBoolItem makeSvx3DLightOnOff1Item(bool bVal) {
     return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_1, bVal);
