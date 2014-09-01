@@ -416,9 +416,9 @@ public class SQLQueryComposer
      * retrieves a normalized structured filter
      *
      * <p>XSingleSelectQueryComposer.getStructuredFilter has a strange habit of returning the predicate (equal, not equal, etc)
-     * effectively twice: Once as SQLFilterOperator, and once in the value. That is, if you have a term "column <> 3", then
+     * effectively twice: Once as SQLFilterOperator, and once in the value. That is, if you have a term {@literal "column <> 3"}, then
      * you'll get an SQLFilterOperator.NOT_EQUAL (which is fine), <strong>and</strong> the textual value of the condition
-     * will read "<> 3". The latter is strange enough, but even more strange is that this behavior is not even consistent:
+     * will read {@literal "<> 3"}. The latter is strange enough, but even more strange is that this behavior is not even consistent:
      * for SQLFilterOperator.EQUAL, the "=" sign is not include in the textual value.</p>
      *
      * <p>To abstract from this weirdness, use this function here, which strips the unwanted tokens from the textual value
