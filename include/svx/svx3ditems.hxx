@@ -30,15 +30,13 @@
 #include <svx/svxdllapi.h>
 
 // Svx3D _3DOBJ_ Items
-class SVX_DLLPUBLIC Svx3DPercentDiagonalItem : public SfxUInt16Item {
-public:
-    Svx3DPercentDiagonalItem(sal_uInt16 nVal = 10);
-};
+inline SfxUInt16Item makeSvx3DPercentDiagonalItem(sal_uInt16 nVal) {
+    return SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, nVal);
+}
 
-class Svx3DBackscaleItem : public SfxUInt16Item {
-public:
-    SVX_DLLPUBLIC Svx3DBackscaleItem(sal_uInt16 nVal = 100);
-};
+inline SfxUInt16Item makeSvx3DBackscaleItem(sal_uInt16 nVal) {
+    return SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, nVal);
+}
 
 inline SfxUInt32Item makeSvx3DDepthItem(sal_uInt32 nVal) {
     return SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, nVal);
@@ -122,10 +120,9 @@ public:
     SVX_DLLPUBLIC Svx3DMaterialSpecularItem(const Color& rCol = Color(0x00ffffff));
 };
 
-class Svx3DMaterialSpecularIntensityItem : public SfxUInt16Item {
-public:
-    SVX_DLLPUBLIC Svx3DMaterialSpecularIntensityItem(sal_uInt16 nVal = 15);
-};
+inline SfxUInt16Item makeSvx3DMaterialSpecularIntensityItem(sal_uInt16 nVal) {
+    return SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nVal);
+}
 
 class SVX_DLLPUBLIC Svx3DTextureKindItem : public SfxUInt16Item {
 public:
@@ -291,10 +288,9 @@ public:
     Svx3DLightDirection8Item(const basegfx::B3DVector& rVec = basegfx::B3DVector(0.0,0.0,1.0));
 };
 
-class Svx3DShadowSlantItem : public SfxUInt16Item {
-public:
-    SVX_DLLPUBLIC Svx3DShadowSlantItem(sal_uInt16 nVal = 0);
-};
+inline SfxUInt16Item makeSvx3DShadowSlantItem(sal_uInt16 nVal) {
+    return SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, nVal);
+}
 
 class SVX_DLLPUBLIC Svx3DShadeModeItem : public SfxUInt16Item {
 public:

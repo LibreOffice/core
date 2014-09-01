@@ -31,15 +31,6 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-
-Svx3DPercentDiagonalItem::Svx3DPercentDiagonalItem(sal_uInt16 nVal)
-:   SfxUInt16Item(SDRATTR_3DOBJ_PERCENT_DIAGONAL, nVal)
-{}
-
-Svx3DBackscaleItem::Svx3DBackscaleItem(sal_uInt16 nVal)
-:   SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, nVal)
-{}
-
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
 
@@ -89,10 +80,6 @@ Svx3DMaterialEmissionItem::Svx3DMaterialEmissionItem(const Color& rCol)
 
 Svx3DMaterialSpecularItem::Svx3DMaterialSpecularItem(const Color& rCol)
 :   SvxColorItem(rCol, SDRATTR_3DOBJ_MAT_SPECULAR)
-{}
-
-Svx3DMaterialSpecularIntensityItem::Svx3DMaterialSpecularIntensityItem(sal_uInt16 nVal)
-:   SfxUInt16Item(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY, nVal)
 {}
 
 Svx3DTextureKindItem::Svx3DTextureKindItem(sal_uInt16 nVal)
@@ -173,10 +160,6 @@ Svx3DLightDirection7Item::Svx3DLightDirection7Item(const basegfx::B3DVector& rVe
 
 Svx3DLightDirection8Item::Svx3DLightDirection8Item(const basegfx::B3DVector& rVec)
 :   SvxB3DVectorItem(SDRATTR_3DSCENE_LIGHTDIRECTION_8, rVec)
-{}
-
-Svx3DShadowSlantItem::Svx3DShadowSlantItem(sal_uInt16 nVal)
-:   SfxUInt16Item(SDRATTR_3DSCENE_SHADOW_SLANT, nVal)
 {}
 
 Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)

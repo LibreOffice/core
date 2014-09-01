@@ -336,7 +336,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
         drawing::FillStyle eFillStyle( ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem ) );
         pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem( 0 ) );
-        aSet.Put( Svx3DPercentDiagonalItem( 0 ) );
+        aSet.Put( makeSvx3DPercentDiagonalItem( 0 ) );
         aSet.Put( Svx3DTextureModeItem( 1 ) );
         aSet.Put( Svx3DNormalsKindItem( 1 ) );
 
@@ -720,7 +720,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 nIntensity = 0;
             nIntensity = 100 - nIntensity;
             pScene->GetProperties().SetObjectItem( Svx3DMaterialSpecularItem( aSpecularCol ) );
-            pScene->GetProperties().SetObjectItem( Svx3DMaterialSpecularIntensityItem( (sal_uInt16)nIntensity ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DMaterialSpecularIntensityItem( (sal_uInt16)nIntensity ) );
 
             pScene->SetLogicRect( CalculateNewSnapRect( pCustomShape, aSnapRect, aBoundRect2d, pMap ) );
 

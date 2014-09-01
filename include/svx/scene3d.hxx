@@ -178,7 +178,7 @@ public:
 
     // ShadowSlant:
     sal_uInt16 GetShadowSlant() const
-        { return ((const Svx3DShadowSlantItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue(); }
+        { return ((const SfxUInt16Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue(); }
 
     // ShadeMode: 0 == FLAT, 1 == PHONG, 2 == SMOOTH, 3 == ForceDraft
     sal_uInt16 GetShadeMode() const

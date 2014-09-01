@@ -60,11 +60,11 @@ private:
 
     // PercentDiagonal: 0..100, before 0.0..0.5
     sal_uInt16 GetPercentDiagonal() const
-        { return ((const Svx3DPercentDiagonalItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue(); }
+        { return ((const SfxUInt16Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue(); }
 
     // BackScale: 0..100, before 0.0..1.0
     sal_uInt16 GetBackScale() const
-        { return ((const Svx3DBackscaleItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue(); }
+        { return ((const SfxUInt16Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue(); }
 
     // EndAngle: 0..10000
     sal_uInt32 GetEndAngle() const

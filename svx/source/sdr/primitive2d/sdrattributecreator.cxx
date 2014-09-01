@@ -891,7 +891,7 @@ namespace drawinglayer
             const double fDistance(((const SfxUInt32Item&)rSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue());
 
             // get shadow slant
-            const double fShadowSlant(F_PI180 * ((const Svx3DShadowSlantItem&)rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue());
+            const double fShadowSlant(F_PI180 * ((const SfxUInt16Item&)rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue());
 
             // get shade mode
             ::com::sun::star::drawing::ShadeMode aShadeMode(::com::sun::star::drawing::ShadeMode_FLAT);

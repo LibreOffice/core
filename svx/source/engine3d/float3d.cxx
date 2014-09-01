@@ -733,7 +733,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_PERCENT_DIAGONAL);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            sal_uInt16 nValue = ((const Svx3DPercentDiagonalItem&)rAttrs.Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue();
+            sal_uInt16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_PERCENT_DIAGONAL)).GetValue();
             if( nValue != aMtrPercentDiagonal.GetValue() )
             {
                 aMtrPercentDiagonal.SetValue( nValue );
@@ -758,7 +758,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_BACKSCALE);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            sal_uInt16 nValue = ((const Svx3DBackscaleItem&)rAttrs.Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue();
+            sal_uInt16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_BACKSCALE)).GetValue();
             if( nValue != aMtrBackscale.GetValue() )
             {
                 aMtrBackscale.SetValue( nValue );
@@ -922,7 +922,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_SHADOW_SLANT);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        sal_uInt16 nValue = ((const Svx3DShadowSlantItem&)rAttrs.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue();
+        sal_uInt16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue();
         if( nValue != aMtrSlant.GetValue() )
         {
             aMtrSlant.SetValue( nValue );
@@ -1608,7 +1608,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        sal_uInt16 nValue = ((const Svx3DMaterialSpecularIntensityItem&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue();
+        sal_uInt16 nValue = ((const SfxUInt16Item&)rAttrs.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue();
         if( nValue != aMtrMatSpecularIntensity.GetValue() )
         {
             aMtrMatSpecularIntensity.SetValue( nValue );
@@ -1793,7 +1793,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aMtrPercentDiagonal.IsEmptyFieldValue() )
     {
         sal_uInt16 nValue = (sal_uInt16) aMtrPercentDiagonal.GetValue();
-        rAttrs.Put(Svx3DPercentDiagonalItem(nValue));
+        rAttrs.Put(makeSvx3DPercentDiagonalItem(nValue));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_PERCENT_DIAGONAL);
@@ -1802,7 +1802,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aMtrBackscale.IsEmptyFieldValue() )
     {
         sal_uInt16 nValue = (sal_uInt16)aMtrBackscale.GetValue();
-        rAttrs.Put(Svx3DBackscaleItem(nValue));
+        rAttrs.Put(makeSvx3DBackscaleItem(nValue));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_BACKSCALE);
@@ -1878,7 +1878,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aMtrSlant.IsEmptyFieldValue() )
     {
         sal_uInt16 nValue2 = (sal_uInt16) aMtrSlant.GetValue();
-        rAttrs.Put(Svx3DShadowSlantItem(nValue2));
+        rAttrs.Put(makeSvx3DShadowSlantItem(nValue2));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_SHADOW_SLANT);
@@ -2209,7 +2209,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aMtrMatSpecularIntensity.IsEmptyFieldValue() )
     {
         sal_uInt16 nValue2 = (sal_uInt16) aMtrMatSpecularIntensity.GetValue();
-        rAttrs.Put(Svx3DMaterialSpecularIntensityItem(nValue2));
+        rAttrs.Put(makeSvx3DMaterialSpecularIntensityItem(nValue2));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY);

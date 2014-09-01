@@ -287,7 +287,7 @@ public :
 
     // MaterialSpecularIntensity:
     sal_uInt16 GetMaterialSpecularIntensity() const
-        { return ((const Svx3DMaterialSpecularIntensityItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue(); }
+        { return ((const SfxUInt16Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue(); }
 
     // TextureFilter: sal_True/FALSE
     bool GetTextureFilter() const

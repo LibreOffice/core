@@ -125,7 +125,7 @@ namespace drawinglayer
             const ::basegfx::BColor aEmission(((const Svx3DMaterialEmissionItem&)rSet.Get(SDRATTR_3DOBJ_MAT_EMISSION)).GetValue().getBColor());
 
             // get specular intensity
-            sal_uInt16 nSpecularIntensity(((const Svx3DMaterialSpecularIntensityItem&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue());
+            sal_uInt16 nSpecularIntensity(((const SfxUInt16Item&)rSet.Get(SDRATTR_3DOBJ_MAT_SPECULAR_INTENSITY)).GetValue());
 
             if(nSpecularIntensity > 128)
             {
