@@ -34,7 +34,7 @@ public interface ImageService
 
     /**
      * @param image
-     * @returns the dimension in 100th mm.
+     * @return  the dimension in 100th mm.
      *
      * @throws ReportExecutionException
      **/
