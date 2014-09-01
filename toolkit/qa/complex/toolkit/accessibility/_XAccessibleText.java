@@ -50,8 +50,8 @@ import com.sun.star.uno.UnoRuntime;
  *  <li><code> getTextBeforeIndex()</code></li>
  *  <li><code> getTextBehindIndex()</code></li>
  *  <li><code> copyText()</code></li>
- * </ul> <p>
- * This test needs the following object relations :
+ * </ul>
+ * <p>This test needs the following object relations :</p>
  * <ul>
  *  <li> <code>'XAccessibleText.Text'</code> (of type <code>String</code>)
  *   <b> optional </b> :
@@ -59,7 +59,7 @@ import com.sun.star.uno.UnoRuntime;
  *   is not specified, then text from method <code>getText()</code>
  *   is used.
  *  </li>
- *  </ul> <p>
+ *  </ul>
  * @see com.sun.star.accessibility.XAccessibleText
  */
 public class _XAccessibleText {

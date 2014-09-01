@@ -37,15 +37,15 @@ import com.sun.star.uno.UnoRuntime;
  * <ul>
  *  <li><code> addAccessibleEventListener()</code></li>
  *  <li><code> removeAccessibleEventListener()</code></li>
- * </ul> <p>
+ * </ul>
  *
- * This test needs the following object relations :
+ * <p>This test needs the following object relations :</p>
  * <ul>
  *  <li> <code>'EventProducer'</code> (of type
  *  <code>ifc.accessibility._XAccessibleEventBroadcaster.EventProducer</code>):
  *   this must be an implementation of the interface which could perform
  *   some actions for generating any kind of <code>AccessibleEvent</code></li>
- * <ul> <p>
+ * </ul>
  *
  * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
  */
