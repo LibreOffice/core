@@ -161,7 +161,7 @@ class ScriptImpl implements XScript
          *                      sequence, i.e., the value has to be ignored by the callee
          * @param aOutParamIndex    Out indices
          * @param aOutParam         Out parameters
-         * @returns                 The value returned from the function being invoked
+         * @return                  The value returned from the function being invoked
          * @throws IllegalArgumentException If there is no matching script name
          * @throws CannotConvertException   If args do not match or cannot be converted
          *                              the those of the invokee

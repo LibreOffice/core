@@ -161,7 +161,7 @@ class ScriptImpl implements XScript
          *
          * @param aOutParam         Out parameters
          *
-         * @returns                 The value returned from the function
+         * @return                  The value returned from the function
          *                          being invoked
          *
          * @throws IllegalArgumentException If there is no matching script name

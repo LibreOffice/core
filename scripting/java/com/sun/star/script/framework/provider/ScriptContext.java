@@ -102,8 +102,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
     /**
         Obtain the document reference on which the script can operate
 
-        @returns
-          XModel interface
+        @return  XModel interface
     */
     public XModel getDocument()
     {
@@ -118,8 +117,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
     /**
         Obtain the desktop reference on which the script can operate
 
-        @returns
-          XDesktop interface
+        @return  XDesktop interface
     */
     public XDesktop getDesktop()
     {
@@ -129,8 +127,7 @@ public class ScriptContext extends PropertySet implements XScriptContext
     /**
         Obtain the component context which the script can use to create other uno components
 
-        @returns
-          XComponentContext interface
+        @return  XComponentContext interface
     */
     public XComponentContext getComponentContext()
     {
