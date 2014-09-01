@@ -59,6 +59,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::accessibility;
 
+namespace DatabaseObject = css::sdb::application::DatabaseObject;
+
 #define TABWIN_SIZING_AREA      4
 #define TABWIN_WIDTH_MIN    90
 #define TABWIN_HEIGHT_MIN   80

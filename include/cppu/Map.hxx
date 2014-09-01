@@ -23,8 +23,6 @@
 #include <uno/mapping.hxx>
 
 
-namespace cssu = com::sun::star::uno;
-
 namespace cppu
 {
     /** Helpers for mapping objects relative to the current environment.
@@ -38,11 +36,11 @@ namespace cppu
         @return           the mapped object
         @since UDK 3.2.7
      */
-    template<class T> inline T * mapOut(T * pT, cssu::Environment const & outerEnv)
+    template<class T> inline T * mapOut(T * pT, css::uno::Environment const & outerEnv)
     {
-        cssu::Mapping curr2outer(cssu::Environment::getCurrent(), outerEnv);
+        css::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
 
-        return reinterpret_cast<T *>(curr2outer.mapInterface(pT, getCppuType((cssu::Reference<T> *)NULL)));
+        return reinterpret_cast<T *>(curr2outer.mapInterface(pT, getCppuType((css::uno::Reference<T> *)NULL)));
     }
 
 
@@ -53,11 +51,11 @@ namespace cppu
         @return           the mapped object
         @since UDK 3.2.7
      */
-    template<class T> inline T * mapIn(T * pT, cssu::Environment const & outerEnv)
+    template<class T> inline T * mapIn(T * pT, css::uno::Environment const & outerEnv)
     {
-        cssu::Mapping outer2curr(outerEnv, cssu::Environment::getCurrent());
+        css::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
 
-        return reinterpret_cast<T *>(outer2curr.mapInterface(pT, getCppuType((cssu::Reference<T> *)NULL)));
+        return reinterpret_cast<T *>(outer2curr.mapInterface(pT, getCppuType((css::uno::Reference<T> *)NULL)));
     }
 
 
@@ -69,11 +67,11 @@ namespace cppu
         @since UDK 3.2.7
      */
     // Problem: any gets assigned to something, acquire/releases may be called in wrong env.
-    inline void mapOutAny(cssu::Any const & any, cssu::Any * res, cssu::Environment const & outerEnv)
+    inline void mapOutAny(css::uno::Any const & any, css::uno::Any * res, css::uno::Environment const & outerEnv)
     {
-        cssu::Mapping curr2outer(cssu::Environment::getCurrent(), outerEnv);
+        css::uno::Mapping curr2outer(css::uno::Environment::getCurrent(), outerEnv);
 
-        uno_any_destruct(res, (uno_ReleaseFunc)cssu::cpp_release);
+        uno_any_destruct(res, (uno_ReleaseFunc)css::uno::cpp_release);
         uno_type_any_constructAndConvert(
             res,
             const_cast<void *>(any.getValue()),
@@ -89,11 +87,11 @@ namespace cppu
         @param  outerEnv  the source environment
         @since UDK 3.2.7
      */
-    inline void mapInAny(cssu::Any const & any, cssu::Any * res, cssu::Environment const & outerEnv)
+    inline void mapInAny(css::uno::Any const & any, css::uno::Any * res, css::uno::Environment const & outerEnv)
     {
-        cssu::Mapping outer2curr(outerEnv, cssu::Environment::getCurrent());
+        css::uno::Mapping outer2curr(outerEnv, css::uno::Environment::getCurrent());
 
-        uno_any_destruct(res, (uno_ReleaseFunc)cssu::cpp_release);
+        uno_any_destruct(res, (uno_ReleaseFunc)css::uno::cpp_release);
         uno_type_any_constructAndConvert(
             res,
             const_cast<void *>(any.getValue()),

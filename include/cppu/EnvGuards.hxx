@@ -24,9 +24,6 @@
 #include <uno/mapping.hxx>
 
 
-namespace cssuno = com::sun::star::uno;
-
-
 namespace cppu
 {
     /** Environment Guard
@@ -38,14 +35,14 @@ namespace cppu
     */
     class EnvGuard
     {
-        cssuno::Environment m_env;
+        css::uno::Environment m_env;
 
     public:
-        explicit EnvGuard(cssuno::Environment const & env)
+        explicit EnvGuard(css::uno::Environment const & env)
         {
             if (env.is())
             {
-                m_env = cssuno::Environment::getCurrent();
+                m_env = css::uno::Environment::getCurrent();
                 env.enter();
             }
         }
@@ -86,11 +83,11 @@ namespace cppu
     */
     class AntiEnvGuard
     {
-        cssuno::Environment m_env;
+        css::uno::Environment m_env;
 
     public:
         explicit AntiEnvGuard()
-            : m_env(cssuno::Environment::getCurrent())
+            : m_env(css::uno::Environment::getCurrent())
         {
             uno_Environment_enter(NULL);
         }
