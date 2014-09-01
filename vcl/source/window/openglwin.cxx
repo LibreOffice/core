@@ -10,6 +10,7 @@
 #include <vcl/openglwin.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/event.hxx>
+#include <vcl/sysdata.hxx>
 
 class OpenGLWindowImpl
 {
@@ -21,9 +22,10 @@ private:
     boost::scoped_ptr<SystemChildWindow> mpChildWindow;
 };
 
-OpenGLWindowImpl::OpenGLWindowImpl(Window* pWindow):
-    mpChildWindow(new SystemChildWindow(pWindow))
+OpenGLWindowImpl::OpenGLWindowImpl(Window* pWindow)
 {
+    SystemWindowData aData = OpenGLContext::generateWinData(pWindow, false);
+    mpChildWindow.reset(new SystemChildWindow(pWindow, 0, &aData));
     mpChildWindow->Show();
     maContext.init(mpChildWindow.get());
     pWindow->SetMouseTransparent(false);
