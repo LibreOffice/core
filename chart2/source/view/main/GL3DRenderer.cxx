@@ -218,9 +218,7 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_3DModelID = glGetUniformLocation(m_3DProID, "M");
         m_3DNormalMatrixID = glGetUniformLocation(m_3DProID, "normalMatrix");
         m_3DVertexID = glGetAttribLocation(m_3DProID, "vertexPositionModelspace");
-        SAL_DEBUG("first " << m_3DVertexID);
         m_3DNormalID = glGetAttribLocation(m_3DProID, "vertexNormalModelspace");
-        SAL_DEBUG("second " << m_3DNormalID);
         CHECK_GL_ERROR();
         if (m_bScrollFlag)
         {
@@ -289,30 +287,22 @@ void OpenGL3DRenderer::ShaderResources::LoadShaders()
         m_TextProID = OpenGLHelper::LoadShaders("textVertexShader", "textFragmentShader");
         m_TextMatrixID = glGetUniformLocation(m_TextProID, "MVP");
         m_TextVertexID = glGetAttribLocation(m_TextProID, "vPosition");
-        SAL_DEBUG(m_TextVertexID);
         m_TextTexCoordID = glGetAttribLocation(m_TextProID, "texCoord");
-        SAL_DEBUG(m_TextTexCoordID);
         m_TextTexID = glGetUniformLocation(m_TextProID, "TextTex");
     }
     CHECK_GL_ERROR();
 
     m_ScreenTextProID = OpenGLHelper::LoadShaders("screenTextVertexShader", "screenTextFragmentShader");
     m_ScreenTextVertexID = glGetAttribLocation(m_ScreenTextProID, "vPosition");
-    SAL_DEBUG(m_ScreenTextVertexID);
     m_ScreenTextTexCoordID = glGetAttribLocation(m_ScreenTextProID, "texCoord");
-    SAL_DEBUG(m_ScreenTextTexCoordID);
     m_ScreenTextTexID = glGetUniformLocation(m_ScreenTextProID, "TextTex");
     m_ScreenTextColorID = glGetUniformLocation(m_ScreenTextProID, "textColor");
     CHECK_GL_ERROR();
 
     m_CommonProID = OpenGLHelper::LoadShaders("commonVertexShader", "commonFragmentShader");
-    SAL_DEBUG(m_CommonProID);
     m_MatrixID = glGetUniformLocation(m_CommonProID, "MVP");
-    SAL_DEBUG(m_MatrixID);
     m_2DColorID = glGetUniformLocation(m_CommonProID, "vColor");
-    SAL_DEBUG(m_2DColorID);
     m_2DVertexID = glGetAttribLocation(m_CommonProID, "vPosition");
-    SAL_DEBUG(m_2DVertexID);
 
     CHECK_GL_ERROR();
 }
@@ -878,7 +868,6 @@ void OpenGL3DRenderer::RenderLine3D(const Polygon3DInfo& polygon)
 
         // 1rst attribute buffer : vertices
         glEnableVertexAttribArray(maResources.m_2DVertexID);
-        SAL_DEBUG(maResources.m_2DVertexID);
         CHECK_GL_ERROR();
         glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
         CHECK_GL_ERROR();
