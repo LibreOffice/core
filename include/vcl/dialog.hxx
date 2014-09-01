@@ -65,7 +65,7 @@ protected:
 
 public:
     SAL_DLLPRIVATE bool    IsInClose() const { return mbInClose; }
-    virtual        void    doDeferredInit(bool bResizable) SAL_OVERRIDE;
+    virtual        void    doDeferredInit(bool bResizable, bool bCloseable) SAL_OVERRIDE;
 
 protected:
     explicit        Dialog( WindowType nType );

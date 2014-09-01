@@ -117,7 +117,7 @@ public:
     SAL_DLLPRIVATE void             ImplEndPopupMode( sal_uInt16 nFlags = 0, sal_uLong nFocusId = 0 );
     SAL_DLLPRIVATE Rectangle&       ImplGetItemEdgeClipRect();
     SAL_DLLPRIVATE bool             ImplIsInPrivatePopupMode() const { return mbInPopupMode; }
-    virtual        void             doDeferredInit(bool bResizable) SAL_OVERRIDE;
+    virtual        void             doDeferredInit(bool bResizable, bool bCloseable) SAL_OVERRIDE;
 
 public:
     explicit        FloatingWindow(Window* pParent, WinBits nStyle = WB_STDFLOATWIN);

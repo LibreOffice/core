@@ -595,6 +595,18 @@ namespace
         return bResizable;
     }
 
+    bool extractCloseable(VclBuilder::stringmap &rMap)
+    {
+        bool bCloseable = true;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("deletable"));
+        if (aFind != rMap.end())
+        {
+            bCloseable = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bCloseable;
+    }
+
     bool extractEntry(VclBuilder::stringmap &rMap)
     {
         bool bHasEntry = false;
@@ -1694,7 +1706,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
         if (pParent->IsSystemWindow())
         {
             SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild);
-            pSysWin->doDeferredInit(extractResizable(rProps));
+            pSysWin->doDeferredInit(extractResizable(rProps), extractCloseable(rProps));
             m_bToplevelHasDeferredInit = false;
         }
 

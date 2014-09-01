@@ -477,11 +477,13 @@ OUString VclBuilderContainer::getUIRootDir()
 
 //we can't change sizeable after the fact, so need to defer until we know and then
 //do the init. Find the real parent stashed in mpDialogParent.
-void Dialog::doDeferredInit(bool bResizable)
+void Dialog::doDeferredInit(bool bResizable, bool bCloseable)
 {
     WinBits nBits = WB_3DLOOK|WB_CLOSEABLE|WB_MOVEABLE;
     if (bResizable)
         nBits |= WB_SIZEABLE;
+    if (bCloseable)
+        nBits |= WB_CLOSEABLE;
     Window *pParent = mpDialogParent;
     mpDialogParent = NULL;
     ImplInit(pParent, nBits);

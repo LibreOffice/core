@@ -1104,7 +1104,7 @@ void SystemWindow::DoInitialLayout()
     }
 }
 
-void SystemWindow::doDeferredInit(bool /*bResizable*/)
+void SystemWindow::doDeferredInit(bool /*bResizable*/, bool /*bCloseable*/)
 {
     SAL_WARN("vcl.layout", "SystemWindow in layout without doDeferredInit impl");
 }
