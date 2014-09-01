@@ -22,13 +22,13 @@ import java.lang.reflect.Method;
 
 /**
  * Encapsulate a Method invocation.
- * In the constructor one defines a method, a target object and an optional
- * Parameter.
- * Then one calls "invoke", with or without a parameter. <br/>
- * Limitations: I do not check anything myself. If the param is not ok, from the
- * wrong type, or the mothod doesnot exist on the given object.
- * You can trick this class howmuch you want: it will all throw exceptions
- * on the java level. i throw no error warnings or my own excceptions...
+ * <p>In the constructor one defines a method, a target object and an optional
+ * Parameter.</p>
+ * <p>Then one calls "invoke", with or without a parameter.</p>
+ * <p>Limitations: I do not check anything myself. If the param is not ok, from the
+ * wrong type, or the method does not exist on the given object.
+ * You can trick this class how much you want: it will all throw exceptions
+ * on the java level. i throw no error warnings or my own exceptions...</p>
  */
 public class MethodInvocation
 {

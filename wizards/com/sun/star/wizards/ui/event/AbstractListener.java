@@ -28,8 +28,8 @@ import java.util.HashMap;
 
 /**
  * This class is a base class for listener classes.
- * It uses a hashtable to map between a ComponentName, EventName and a MethodInvokation Object.
- * To use this class do the following:<br/>
+ * <p>It uses a hashtable to map between a ComponentName, EventName and a MethodInvokation Object.
+ * To use this class do the following:</p>
  * <ul>
  * <li>Write a subclass which implements the needed Listener(s).</li>
  * <li>In the even methods, use invoke(...).</li>

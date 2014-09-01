@@ -82,8 +82,8 @@ public class NumberFormatter
 
 
     /**
-     * gives a key to pass to a NumberFormat object. <br/>
-     * example: <br/>
+     * gives a key to pass to a NumberFormat object.
+     * <p>example:</p>
      * <pre>
      * XNumberFormatsSupplier nsf = (XNumberFormatsSupplier)UnoRuntime.queryInterface(...,document);
      * int key = Desktop.getNumberFormatterKey( nsf, ...star.i18n.NumberFormatIndex.DATE...);

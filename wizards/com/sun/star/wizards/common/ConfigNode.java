@@ -20,9 +20,9 @@ package com.sun.star.wizards.common;
 /**
  * This Interface specifies a method of an object which is
  * capable of reading and writing its data out of the
- * OO Configuration. <br/>
- * There are 2 direct implementations: ConfigGroup and ConfigSet.
- * The root is the first Java Object in the configuration hirarchie.
+ * OO Configuration.
+ * <p>There are 2 direct implementations: ConfigGroup and ConfigSet.
+ * The root is the first Java Object in the configuration hierarchies.</p>
  */
 public interface ConfigNode
 {
