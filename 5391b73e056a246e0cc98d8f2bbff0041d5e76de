@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_7a4b712c",
+        "filename": "sw/uiconfig/swriter/ui/statisticsinfopage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 318,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-09-01T08:22:08Z",
+      "side": 0,
+      "message": "I am pretty sure the placeholders are there intentionally... Have you checked how the dialog looks like (and works) before and after this change?",
+      "revId": "5391b73e056a246e0cc98d8f2bbff0041d5e76de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
