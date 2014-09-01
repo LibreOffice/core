@@ -138,7 +138,7 @@ private:
     void exportRadarChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportScatterChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportStockChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
-    void exportSuffaceChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
+    void exportSurfaceChart( com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
     void exportHiLowLines();
     void exportUpDownBars(com::sun::star::uno::Reference< com::sun::star::chart2::XChartType > xChartType );
 
