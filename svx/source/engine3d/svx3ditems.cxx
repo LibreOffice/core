@@ -56,7 +56,10 @@ SfxPoolItem* Svx3DReducedLineGeometryItem::Create(SvStream& rIn, sal_uInt16 nIte
     return pRetval;
 }
 
-
+SfxPoolItem * Svx3DReducedLineGeometryItem::Clone(SfxItemPool *) const
+{
+    return new Svx3DReducedLineGeometryItem(*this);
+}
 
 Svx3DNormalsKindItem::Svx3DNormalsKindItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal)
@@ -191,6 +194,10 @@ SfxPoolItem* Svx3DSmoothNormalsItem::Create(SvStream& rIn, sal_uInt16 nItemVersi
     return pRetval;
 }
 
+SfxPoolItem * Svx3DSmoothNormalsItem::Clone(SfxItemPool *) const
+{
+    return new Svx3DSmoothNormalsItem(*this);
+}
 
 // #107245#
 
@@ -216,6 +223,10 @@ SfxPoolItem* Svx3DSmoothLidsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion)
     return pRetval;
 }
 
+SfxPoolItem * Svx3DSmoothLidsItem::Clone(SfxItemPool *) const
+{
+    return new Svx3DSmoothLidsItem(*this);
+}
 
 // #107245#
 
@@ -241,6 +252,10 @@ SfxPoolItem* Svx3DCharacterModeItem::Create(SvStream& rIn, sal_uInt16 nItemVersi
     return pRetval;
 }
 
+SfxPoolItem * Svx3DCharacterModeItem::Clone(SfxItemPool *) const
+{
+    return new Svx3DCharacterModeItem(*this);
+}
 
 // #107245#
 
@@ -266,6 +281,10 @@ SfxPoolItem* Svx3DCloseFrontItem::Create(SvStream& rIn, sal_uInt16 nItemVersion)
     return pRetval;
 }
 
+SfxPoolItem * Svx3DCloseFrontItem::Clone(SfxItemPool *) const
+{
+    return new Svx3DCloseFrontItem(*this);
+}
 
 // #107245#
 
@@ -291,7 +310,10 @@ SfxPoolItem* Svx3DCloseBackItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) 
     return pRetval;
 }
 
-
+SfxPoolItem * Svx3DCloseBackItem::Clone(SfxItemPool *) const
+{
+    return new Svx3DCloseBackItem(*this);
+}
 
 // Svx3DNormalsKindItem: use drawing::NormalsKind
 bool Svx3DNormalsKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
