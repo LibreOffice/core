@@ -53,7 +53,7 @@
 
 using namespace formula;
 
-//  Eintrag fuer Gueltigkeit (es gibt nur eine Bedingung)
+//  Entries for validation (with only one condition)
 
 ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
                                     const OUString& rExpr1, const OUString& rExpr2,
@@ -98,7 +98,7 @@ ScValidationData::ScValidationData( const ScValidationData& r )
     , aErrorTitle( r.aErrorTitle )
     , aErrorMessage( r.aErrorMessage )
 {
-    //  Formeln per RefCount kopiert
+    //  Formulae copied by RefCount
 }
 
 ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationData& r )
@@ -114,7 +114,7 @@ ScValidationData::ScValidationData( ScDocument* pDocument, const ScValidationDat
     , aErrorTitle( r.aErrorTitle )
     , aErrorMessage( r.aErrorMessage )
 {
-    //  Formeln wirklich kopiert
+    //  Formulae really copied
 }
 
 ScValidationData::~ScValidationData()
@@ -130,7 +130,7 @@ bool ScValidationData::IsEmpty() const
 
 bool ScValidationData::EqualEntries( const ScValidationData& r ) const
 {
-        //  gleiche Parameter eingestellt (ohne Key)
+        //  test same parameters (excluding Key)
 
     return ScConditionEntry::operator==(r) &&
             eDataMode       == r.eDataMode &&
@@ -187,16 +187,16 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     if ( !pDocSh || !pDocument->CheckMacroWarn() )
         return false;
 
-    bool bScriptReturnedFalse = false;  // Standard: kein Abbruch
+    bool bScriptReturnedFalse = false;  // default: do not abort
 
     // Set up parameters
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aParams(2);
 
-    //  1) eingegebener / berechneter Wert
+    //  1) entered or calculated value
     OUString aValStr = rInput;
     double nValue;
     bool bIsValue = false;
-    if ( pCell )                // wenn Zelle gesetzt, aus Interpret gerufen
+    if ( pCell )                // if cell exists, call interpret
     {
         bIsValue = pCell->IsValue();
         if ( bIsValue )
@@ -209,7 +209,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     else
         aParams[0] = ::com::sun::star::uno::makeAny( OUString( aValStr ) );
 
-    //  2) Position der Zelle
+    //  2) Position of the cell
     OUString aPosStr(rPos.Format(SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention()));
     aParams[1] = ::com::sun::star::uno::makeAny(aPosStr);
 
@@ -247,9 +247,9 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     }
 
     if ( eRet == ERRCODE_BASIC_METHOD_NOT_FOUND && !pCell )
-    // Makro nicht gefunden (nur bei Eingabe)
+    // Macro not found (only with input)
     {
-        //! andere Fehlermeldung, wenn gefunden, aber nicht bAllowed ??
+        //! different error message, if found, but not bAllowed ??
 
         MessageDialog aBox( pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
         aBox.Execute();
@@ -258,7 +258,7 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
     return bScriptReturnedFalse;
 }
 
-    // true -> Abbruch
+    // true -> abort
 
 bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const
@@ -274,17 +274,17 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
         return false;
 
     bool bDone = false;
-    bool bRet = false;                      // Standard: kein Abbruch
+    bool bRet = false;                      // default: do not abort
 
-    //  Wenn das Dok waehrend eines Basic-Calls geladen wurde,
-    //  ist das Sbx-Objekt evtl. nicht angelegt (?)
+    //  If the Doc was loaded during a Basic-Calls,
+    //  the Sbx-Objekt may not be created (?)
 //  pDocSh->GetSbxObject();
 
 #ifndef DISABLE_SCRIPTING
-    //  keine Sicherheitsabfrage mehr vorneweg (nur CheckMacroWarn), das passiert im CallBasic
+    //  no security check ahead (only CheckMacroWarn), that happens in CallBasic
 
-    //  Funktion ueber den einfachen Namen suchen,
-    //  dann aBasicStr, aMacroStr fuer SfxObjectShell::CallBasic zusammenbauen
+    //  Function search by their simple name,
+    //  then assemble aBasicStr, aMacroStr for SfxObjectShell::CallBasic
 
     StarBASIC* pRoot = pDocSh->GetBasic();
     SbxVariable* pVar = pRoot->Find( aErrorTitle, SbxCLASS_METHOD );
@@ -303,18 +303,18 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
         //  when SfxObjectShell::GetFirst/GetNext won't find the document.
 
         if ( pObject->GetParent() )
-            aBasicStr = pObject->GetParent()->GetName();    // Dokumentenbasic
+            aBasicStr = pObject->GetParent()->GetName();    // Basic of document
         else
-            aBasicStr = SfxGetpApp()->GetName();               // Applikationsbasic
+            aBasicStr = SfxGetpApp()->GetName();            // Basic of application
 
-        //  Parameter fuer Makro
+        //  Parameter for Macro
         SbxArrayRef refPar = new SbxArray;
 
-        //  1) eingegebener / berechneter Wert
+        //  1) entered or calculated value
         OUString aValStr = rInput;
         double nValue = 0.0;
         bool bIsValue = false;
-        if ( pCell )                // wenn Zelle gesetzt, aus Interpret gerufen
+        if ( pCell )                // if cell exists, call interpret
         {
             bIsValue = pCell->IsValue();
             if ( bIsValue )
@@ -327,7 +327,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
         else
             refPar->Get(1)->PutString( aValStr );
 
-        //  2) Position der Zelle
+        //  2) Position of the cell
         OUString aPosStr(rPos.Format(SCA_VALID | SCA_TAB_3D, pDocument, pDocument->GetAddressConvention()));
         refPar->Get(2)->PutString( aPosStr );
 
@@ -347,15 +347,15 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
         if ( !bWasInLinkUpdate )
             pDocument->SetInLinkUpdate( false );
 
-        //  Eingabe abbrechen, wenn Basic-Makro sal_False zurueckgibt
+        //  Interrupt input if Basic macro returns false
         if ( eRet == ERRCODE_NONE && refRes->GetType() == SbxBOOL && !refRes->GetBool() )
             bRet = true;
         bDone = true;
     }
 #endif
-    if ( !bDone && !pCell )         // Makro nicht gefunden (nur bei Eingabe)
+    if ( !bDone && !pCell )         // Macro not found (only with input)
     {
-        //! andere Fehlermeldung, wenn gefunden, aber nicht bAllowed ??
+        //! different error message, if found, but not bAllowed ??
 
         MessageDialog aBox(pParent, ScGlobal::GetRscString(STR_VALID_MACRONOTFOUND));
         aBox.Execute();
@@ -370,7 +370,7 @@ void ScValidationData::DoCalcError( ScFormulaCell* pCell ) const
         DoMacro( pCell->aPos, EMPTY_OUSTRING, pCell, NULL );
 }
 
-    // true -> Abbruch
+    // true -> abort
 
 bool ScValidationData::DoError( Window* pParent, const OUString& rInput,
                                 const ScAddress& rPos ) const
@@ -378,7 +378,7 @@ bool ScValidationData::DoError( Window* pParent, const OUString& rInput,
     if ( eErrorStyle == SC_VALERR_MACRO )
         return DoMacro( rPos, rInput, NULL, pParent );
 
-    //  Fehlermeldung ausgeben
+    //  Output error message
 
     OUString aTitle = aErrorTitle;
     if (aTitle.isEmpty())
@@ -388,7 +388,7 @@ bool ScValidationData::DoError( Window* pParent, const OUString& rInput,
         aMessage = ScGlobal::GetRscString( STR_VALID_DEFERROR );
 
     //! ErrorBox / WarningBox / InfoBox ?
-    //! (bei InfoBox immer nur OK-Button)
+    //! (with InfoBox always OK-Button only)
 
     WinBits nStyle = 0;
     switch (eErrorStyle)
@@ -503,8 +503,8 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
                 aString = pFCell->GetString().getString();
         }
         break;
-        default:                        // Notizen, Broadcaster
-            return IsIgnoreBlank();     // wie eingestellt
+        default:                        // Notes, Broadcaster
+            return IsIgnoreBlank();     // as set
     }
 
     bool bOk = true;
@@ -514,23 +514,23 @@ bool ScValidationData::IsDataValid( ScRefCellValue& rCell, const ScAddress& rPos
 
         case SC_VALID_WHOLE:
         case SC_VALID_DECIMAL:
-        case SC_VALID_DATE:         // Date/Time ist nur Formatierung
+        case SC_VALID_DATE:         // Date/Time is only formatting
         case SC_VALID_TIME:
             bOk = bIsVal;
             if ( bOk && eDataMode == SC_VALID_WHOLE )
-                bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // ganze Zahlen
+                bOk = ::rtl::math::approxEqual( nVal, floor(nVal+0.5) );        // integers
             if ( bOk )
                 bOk = IsCellValid(rCell, rPos);
             break;
 
         case SC_VALID_CUSTOM:
-            //  fuer Custom muss eOp == SC_COND_DIRECT sein
-            //! der Wert muss im Dokument stehen !!!!!!!!!!!!!!!!!!!!
+            //  for Custom, it must be eOp == SC_COND_DIRECT
+            //! the value must be in the document !!!
             bOk = IsCellValid(rCell, rPos);
             break;
 
         case SC_VALID_TEXTLEN:
-            bOk = !bIsVal;          // nur Text
+            bOk = !bIsVal;          // only Text
             if ( bOk )
             {
                 double nLenVal = (double) aString.getLength();
@@ -907,32 +907,32 @@ bool ScValidationData::IsListValid( ScRefCellValue& rCell, const ScAddress& rPos
 
 ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
 {
-    //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
+    //  for Ref-Undo - real copy with new tokens!
 
     for (const_iterator it = rList.begin(); it != rList.end(); ++it)
     {
         InsertNew( (*it)->Clone() );
     }
 
-    //!     sortierte Eintraege aus rList schneller einfuegen ???
+    //!      sorted entries from rList faster paste ???
 }
 
 ScValidationDataList::ScValidationDataList(ScDocument* pNewDoc,
                                             const ScValidationDataList& rList)
 {
-    //  fuer neues Dokument - echte Kopie mit neuen Tokens!
+    //  for Ref-Undo - real copy with new tokens!
 
     for (const_iterator it = rList.begin(); it != rList.end(); ++it)
     {
         InsertNew( (*it)->Clone(pNewDoc) );
     }
 
-    //!     sortierte Eintraege aus rList schneller einfuegen ???
+    //!      sorted entries from rList faster paste ???
 }
 
 ScValidationData* ScValidationDataList::GetData( sal_uInt32 nKey )
 {
-    //! binaer suchen
+    //! binary search
 
     for( iterator it = begin(); it != end(); ++it )
         if( (*it)->GetKey() == nKey )
@@ -974,12 +974,12 @@ void ScValidationDataList::UpdateMoveTab( sc::RefUpdateMoveTabContext& rCxt )
 
 bool ScValidationDataList::operator==( const ScValidationDataList& r ) const
 {
-    // fuer Ref-Undo - interne Variablen werden nicht verglichen
+    // for Ref-Undo - internal variables can not be compared
 
     size_t nCount = maData.size();
     bool bEqual = ( nCount == r.maData.size() );
-    for( const_iterator it1 = begin(), it2 = r.begin(); it1 != end() && bEqual; ++it1, ++it2 ) // Eintraege sind sortiert
-        if ( !(*it1)->EqualEntries(**it2) )         // Eintraege unterschiedlich ?
+    for( const_iterator it1 = begin(), it2 = r.begin(); it1 != end() && bEqual; ++it1, ++it2 ) // Entries are sorted
+        if ( !(*it1)->EqualEntries(**it2) )         // different entries ?
             bEqual = false;
 
     return bEqual;
