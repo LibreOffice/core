@@ -477,14 +477,8 @@ void SwDocShell::ExecStyleSheet( SfxRequest& rReq )
                         nRet = UpdateStyle(aParam, nFamily, pActShell);
                         break;
                     case SID_STYLE_NEW_BY_EXAMPLE:
-                    {
                         nRet = MakeByExample(aParam, nFamily, nMask, pActShell );
-                        SfxTemplateDialog* pDlg = SfxGetpApp()->GetTemplateDialog();
-
-                        if(pDlg && pDlg->IsVisible())
-                            pDlg->Update();
-                    }
-                    break;
+                        break;
 
                     default:
                         OSL_FAIL("Invalid SlotId");
