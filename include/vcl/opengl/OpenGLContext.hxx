@@ -31,7 +31,11 @@
 #include <GL/wglext.h>
 #elif defined( MACOSX )
 #include <OpenGL/OpenGL.h>
+#ifdef __OBJC__
 @class NSOpenGLView;
+#else
+class NSOpenGLView;
+#endif
 #elif defined( IOS )
 #elif defined( ANDROID )
 #elif defined( UNX )
