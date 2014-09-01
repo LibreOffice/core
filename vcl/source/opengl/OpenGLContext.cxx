@@ -17,9 +17,11 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/graph.hxx>
 
+#if defined(MACOSX)
 #include <premac.h>
 #include "OpenGLWrapper.hxx"
 #include <postmac.h>
+#endif
 
 using namespace com::sun::star;
 
