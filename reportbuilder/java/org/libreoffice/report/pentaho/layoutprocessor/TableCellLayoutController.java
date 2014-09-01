@@ -46,7 +46,6 @@ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
  * has a one ore more paragraphs inside. The paragraph contains a single report element, but may contain additional
  * other content.
  *
- * @noinspection CloneableClassWithoutClone
  * @since 05.03.2007
  */
 public class TableCellLayoutController extends SectionLayoutController

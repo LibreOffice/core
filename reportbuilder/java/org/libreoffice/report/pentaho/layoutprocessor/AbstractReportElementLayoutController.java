@@ -32,7 +32,6 @@ import org.jfree.report.flow.layoutprocessor.LayoutController;
  * Todo: Document me!
  *
  * @since 05.03.2007
- * @noinspection CloneableClassWithoutClone
  */
 public abstract class AbstractReportElementLayoutController
         extends AbstractLayoutController
