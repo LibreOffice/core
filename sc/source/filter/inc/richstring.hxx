@@ -111,10 +111,25 @@ struct FontPortionModel
 };
 
 /** A vector with all font portions in a rich-string. */
-class FontPortionModelList : public ::std::vector< FontPortionModel >
-{
+class FontPortionModelList {
+    ::std::vector< FontPortionModel > mvModels;
+
 public:
-    inline explicit     FontPortionModelList() {}
+    inline explicit     FontPortionModelList() : mvModels() {}
+
+    bool empty() const { return mvModels.empty(); }
+
+    const FontPortionModel& back() const { return mvModels.back(); }
+    const FontPortionModel& front() const { return mvModels.front(); }
+
+    void push_back(const FontPortionModel& rModel) { mvModels.push_back(rModel); }
+
+    void insert(::std::vector< FontPortionModel >::iterator it,
+                const FontPortionModel& rModel)
+    { mvModels.insert(it, rModel); }
+
+    ::std::vector< FontPortionModel >::const_iterator begin() const { return mvModels.begin(); }
+    ::std::vector< FontPortionModel >::iterator begin() { return mvModels.begin(); }
 
     /** Appends a rich-string font identifier. */
     void                appendPortion( const FontPortionModel& rPortion );
