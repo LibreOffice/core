@@ -366,8 +366,7 @@ public:
     inline void     SetScSbxObject( SbxObject* pOb )
                     { pScSbxObject = pOb; }
 
-    virtual const FmFormShell* GetFormShell() const SAL_OVERRIDE { return pFormShell; }
-    virtual       FmFormShell* GetFormShell()       SAL_OVERRIDE { return pFormShell; }
+    FmFormShell*    GetFormShell() const    { return pFormShell; }
 
     void    InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                             sal_uInt16 nMode );
