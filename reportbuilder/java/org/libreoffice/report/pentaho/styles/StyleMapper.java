@@ -31,10 +31,10 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
  * has a style-family assigned. The style family is determined by the element
  * referencing the style, and there is no easily accessible information
  * available on that.
- * <p/>
- * Therefore this mapper acts as gatekeeper for this information. The style
+ *
+ * <p>Therefore this mapper acts as gatekeeper for this information. The style
  * mapping information is read from an external definition file and can be
- * maintained externally.
+ * maintained externally.</p>
  *
  * @since 11.03.2007
  */

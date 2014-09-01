@@ -54,11 +54,11 @@ public class StyleUtilities
     }
 
     /**
-     * Copies the specififed style (keyed by its family and name) into the current styles collection. This copies the
+     * Copies the specified style (keyed by its family and name) into the current styles collection. This copies the
      * style and all inherited styles into the target collection. Inherited common styles will be always be added to the
      * common collection (which will be written into the 'styles.xml' later).
-     * <p/>
-     * This method does nothing if the specified style already exists in the styles collection.
+     *
+     * <p>This method does nothing if the specified style already exists in the styles collection.</p>
      *
      * @param styleFamily      the family of the style to copy
      * @param styleName        the unique name of the style.
@@ -79,11 +79,11 @@ public class StyleUtilities
     }
 
     /**
-     * Copies the specififed style (keyed by its family and name) into the current styles collection. This copies the
+     * Copies the specified style (keyed by its family and name) into the current styles collection. This copies the
      * style and all inherited styles into the target collection. Inherited common styles will be always be added to the
      * common collection (which will be written into the 'styles.xml' later).
-     * <p/>
-     * This method does nothing if the specified style already exists in the styles collection.
+     *
+     * <p>This method does nothing if the specified style already exists in the styles collection.</p>
      *
      * @param styleFamily        the family of the style to copy
      * @param styleName          the unique name of the style.
@@ -327,10 +327,10 @@ public class StyleUtilities
      * Derives the named style. If the style is a common style, a new automatic style is generated and inserted into the
      * given stylesCollection. If the named style is an automatic style, the style is copied and inserted as new automatic
      * style.
-     * <p/>
-     * After the style has been created, the style's inheritance hierarchy will be copied as well.
-     * <p/>
-     * If there is no style with the given name and family, a new empty automatic style will be created.
+     *
+     * <p>After the style has been created, the style's inheritance hierarchy will be copied as well.</p>
+     *
+     * <p>If there is no style with the given name and family, a new empty automatic style will be created.</p>
      *
      * @param styleFamily      the family of the style to copy
      * @param styleName        the unique name of the style.
