@@ -30,13 +30,13 @@ import java.util.HashMap;
  * This class is a base class for listener classes.
  * It uses a hashtable to map between a ComponentName, EventName and a MethodInvokation Object.
  * To use this class do the following:<br/>
- * <list>
+ * <ul>
  * <li>Write a subclass which implements the needed Listener(s).</li>
  * in the even methods, use invoke(...).
  * <li>When instanciating the component, register the subclass as the event listener.</li>
  * <li>Write the methods which should be performed when the event occurs.</li>
  * <li>call the "add" method, to define a component-event-action mapping.</li>
- * </list>
+ * </ul>
  */
 public class AbstractListener
 {
