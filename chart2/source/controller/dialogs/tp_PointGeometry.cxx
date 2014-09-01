@@ -60,7 +60,7 @@ bool SchLayoutTabPage::FillItemSet(SfxItemSet* rOutAttrs)
             nSegs=4;
 
         rOutAttrs->Put(SfxInt32Item(SCHATTR_STYLE_SHAPE,nShape));
-        rOutAttrs->Put(Svx3DHorizontalSegmentsItem(nSegs));
+        rOutAttrs->Put(makeSvx3DHorizontalSegmentsItem(nSegs));
     }
     return true;
 }

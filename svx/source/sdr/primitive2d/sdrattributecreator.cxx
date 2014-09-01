@@ -888,7 +888,7 @@ namespace drawinglayer
             }
 
             // get distance
-            const double fDistance(((const Svx3DDistanceItem&)rSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue());
+            const double fDistance(((const SfxUInt32Item&)rSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue());
 
             // get shadow slant
             const double fShadowSlant(F_PI180 * ((const Svx3DShadowSlantItem&)rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue());

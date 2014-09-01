@@ -40,25 +40,21 @@ public:
     SVX_DLLPUBLIC Svx3DBackscaleItem(sal_uInt16 nVal = 100);
 };
 
-class Svx3DDepthItem : public SfxUInt32Item {
-public:
-    SVX_DLLPUBLIC Svx3DDepthItem(sal_uInt32 nVal = 1000);
-};
+inline SfxUInt32Item makeSvx3DDepthItem(sal_uInt32 nVal) {
+    return SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, nVal);
+}
 
-class SVX_DLLPUBLIC Svx3DHorizontalSegmentsItem : public SfxUInt32Item {
-public:
-    Svx3DHorizontalSegmentsItem(sal_uInt32 nVal = 24);
-};
+inline SfxUInt32Item makeSvx3DHorizontalSegmentsItem(sal_uInt32 nVal) {
+    return SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nVal);
+}
 
-class Svx3DVerticalSegmentsItem : public SfxUInt32Item {
-public:
-    SVX_DLLPUBLIC Svx3DVerticalSegmentsItem(sal_uInt32 nVal = 24);
-};
+inline SfxUInt32Item makeSvx3DVerticalSegmentsItem(sal_uInt32 nVal) {
+    return SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nVal);
+}
 
-class Svx3DEndAngleItem : public SfxUInt32Item {
-public:
-    SVX_DLLPUBLIC Svx3DEndAngleItem(sal_uInt32 nVal = 3600);
-};
+inline SfxUInt32Item makeSvx3DEndAngleItem(sal_uInt32 nVal) {
+    return SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, nVal);
+}
 
 class SVX_DLLPUBLIC Svx3DDoubleSidedItem : public SfxBoolItem {
 public:
@@ -170,14 +166,12 @@ public:
     SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const SAL_OVERRIDE;
 };
 
-class Svx3DDistanceItem : public SfxUInt32Item {
-public:
-    SVX_DLLPUBLIC Svx3DDistanceItem(sal_uInt32 nVal = 100);
-};
+inline SfxUInt32Item makeSvx3DDistanceItem(sal_uInt32 nVal) {
+    return SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, nVal);
+}
 
-class Svx3DFocalLengthItem : public SfxUInt32Item {
-public:
-    SVX_DLLPUBLIC Svx3DFocalLengthItem(sal_uInt32 nVal = 100);
+inline SfxUInt32Item makeSvx3DFocalLengthItem(sal_uInt32 nVal) {
+    return SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, nVal);
 };
 
 class Svx3DTwoSidedLightingItem : public SfxBoolItem {

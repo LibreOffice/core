@@ -82,7 +82,7 @@ E3dLatheObj::E3dLatheObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyP
             nSegCnt -= 1;
         }
 
-        GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
+        GetProperties().SetObjectItemDirect(makeSvx3DVerticalSegmentsItem(nSegCnt));
     }
 }
 
@@ -139,7 +139,7 @@ void E3dLatheObj::SetPolyPoly2D(const basegfx::B2DPolyPolygon& rNew)
                 nSegCnt -= 1;
             }
 
-            GetProperties().SetObjectItemDirect(Svx3DVerticalSegmentsItem(nSegCnt));
+            GetProperties().SetObjectItemDirect(makeSvx3DVerticalSegmentsItem(nSegCnt));
         }
 
         ActionChanged();

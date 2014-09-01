@@ -52,11 +52,11 @@ private:
 
     // HorizontalSegments:
     sal_uInt32 GetHorizontalSegments() const
-        { return ((const Svx3DHorizontalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
+        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue(); }
 
     // VerticalSegments:
     sal_uInt32 GetVerticalSegments() const
-        { return ((const Svx3DVerticalSegmentsItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
+        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue(); }
 
     // PercentDiagonal: 0..100, before 0.0..0.5
     sal_uInt16 GetPercentDiagonal() const
@@ -68,7 +68,7 @@ private:
 
     // EndAngle: 0..10000
     sal_uInt32 GetEndAngle() const
-        { return ((const Svx3DEndAngleItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue(); }
+        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue(); }
 
     // #107245# GetSmoothNormals() for bLatheSmoothed
     bool GetSmoothNormals() const

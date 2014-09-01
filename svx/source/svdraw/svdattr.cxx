@@ -249,10 +249,10 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[ SDRATTR_GRAFCROP          - SDRATTR_START] = new SdrGrafCropItem;
     mppLocalPoolDefaults[ SDRATTR_3DOBJ_PERCENT_DIAGONAL - SDRATTR_START ] = new Svx3DPercentDiagonalItem;
     mppLocalPoolDefaults[ SDRATTR_3DOBJ_BACKSCALE - SDRATTR_START ] = new Svx3DBackscaleItem;
-    mppLocalPoolDefaults[ SDRATTR_3DOBJ_DEPTH - SDRATTR_START ] = new Svx3DDepthItem;
-    mppLocalPoolDefaults[ SDRATTR_3DOBJ_HORZ_SEGS - SDRATTR_START ] = new Svx3DHorizontalSegmentsItem;
-    mppLocalPoolDefaults[ SDRATTR_3DOBJ_VERT_SEGS - SDRATTR_START ] = new Svx3DVerticalSegmentsItem;
-    mppLocalPoolDefaults[ SDRATTR_3DOBJ_END_ANGLE - SDRATTR_START ] = new Svx3DEndAngleItem;
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_DEPTH - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, 1000);
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_HORZ_SEGS - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, 24);
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_VERT_SEGS - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, 24);
+    mppLocalPoolDefaults[ SDRATTR_3DOBJ_END_ANGLE - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, 3600);
     mppLocalPoolDefaults[ SDRATTR_3DOBJ_DOUBLE_SIDED - SDRATTR_START ] = new Svx3DDoubleSidedItem;
     mppLocalPoolDefaults[ SDRATTR_3DOBJ_NORMALS_KIND - SDRATTR_START ] = new Svx3DNormalsKindItem;
     mppLocalPoolDefaults[ SDRATTR_3DOBJ_NORMALS_INVERT - SDRATTR_START ] = new Svx3DNormalsInvertItem;
@@ -273,8 +273,8 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[ SDRATTR_3DOBJ_CLOSE_BACK - SDRATTR_START ] = new Svx3DCloseBackItem;
     mppLocalPoolDefaults[ SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY - SDRATTR_START ] = new Svx3DReducedLineGeometryItem;
     mppLocalPoolDefaults[ SDRATTR_3DSCENE_PERSPECTIVE - SDRATTR_START ] = new Svx3DPerspectiveItem;
-    mppLocalPoolDefaults[ SDRATTR_3DSCENE_DISTANCE - SDRATTR_START ] = new Svx3DDistanceItem;
-    mppLocalPoolDefaults[ SDRATTR_3DSCENE_FOCAL_LENGTH - SDRATTR_START ] = new Svx3DFocalLengthItem;
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_DISTANCE - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, 100);
+    mppLocalPoolDefaults[ SDRATTR_3DSCENE_FOCAL_LENGTH - SDRATTR_START ] = new SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, 100);
     mppLocalPoolDefaults[ SDRATTR_3DSCENE_TWO_SIDED_LIGHTING - SDRATTR_START ] = new Svx3DTwoSidedLightingItem;
     mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_1 - SDRATTR_START ] = new Svx3DLightcolor1Item;
     mppLocalPoolDefaults[ SDRATTR_3DSCENE_LIGHTCOLOR_2 - SDRATTR_START ] = new Svx3DLightcolor2Item;

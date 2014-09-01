@@ -632,7 +632,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_HORZ_SEGS);
         if(eState != SFX_ITEM_DONTCARE)
         {
-            sal_uInt32 nValue = ((const Svx3DHorizontalSegmentsItem&)rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue();
+            sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_HORZ_SEGS)).GetValue();
             if(nValue != (sal_uInt32 )aNumHorizontal.GetValue())
             {
                 aNumHorizontal.SetValue( nValue );
@@ -657,7 +657,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_VERT_SEGS);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            sal_uInt32 nValue = ((const Svx3DVerticalSegmentsItem&)rAttrs.Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue();
+            sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_VERT_SEGS)).GetValue();
             if( nValue != (sal_uInt32) aNumVertical.GetValue() )
             {
                 aNumVertical.SetValue( nValue );
@@ -682,7 +682,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_DEPTH);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            sal_uInt32 nValue = ((const Svx3DDepthItem&)rAttrs.Get(SDRATTR_3DOBJ_DEPTH)).GetValue();
+            sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_DEPTH)).GetValue();
             sal_uInt32 nValue2 = GetCoreValue( aMtrDepth, ePoolUnit );
             if( nValue != nValue2 )
             {
@@ -783,7 +783,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
         eState = rAttrs.GetItemState(SDRATTR_3DOBJ_END_ANGLE);
         if( eState != SFX_ITEM_DONTCARE )
         {
-            sal_Int32 nValue = ((const Svx3DEndAngleItem&)rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue();
+            sal_Int32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DOBJ_END_ANGLE)).GetValue();
             if( nValue != aMtrEndAngle.GetValue() )
             {
                 aMtrEndAngle.SetValue( nValue );
@@ -942,7 +942,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_DISTANCE);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        sal_uInt32 nValue = ((const Svx3DDistanceItem&)rAttrs.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
+        sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue();
         sal_uInt32 nValue2 = GetCoreValue( aMtrDistance, ePoolUnit );
         if( nValue != nValue2 )
         {
@@ -966,7 +966,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_FOCAL_LENGTH);
     if( eState != SFX_ITEM_DONTCARE )
     {
-        sal_uInt32 nValue = ((const Svx3DFocalLengthItem&)rAttrs.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
+        sal_uInt32 nValue = ((const SfxUInt32Item&)rAttrs.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
         sal_uInt32 nValue2 = GetCoreValue( aMtrFocalLength, ePoolUnit );
         if( nValue != nValue2 )
         {
@@ -1756,7 +1756,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aNumHorizontal.IsEmptyFieldValue() )
     {
         sal_uInt32 nValue = static_cast<sal_uInt32>(aNumHorizontal.GetValue());
-        rAttrs.Put(Svx3DHorizontalSegmentsItem(nValue));
+        rAttrs.Put(makeSvx3DHorizontalSegmentsItem(nValue));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_HORZ_SEGS);
@@ -1765,7 +1765,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aNumVertical.IsEmptyFieldValue() )
     {
         sal_uInt32 nValue = static_cast<sal_uInt32>(aNumVertical.GetValue());
-        rAttrs.Put(Svx3DVerticalSegmentsItem(nValue));
+        rAttrs.Put(makeSvx3DVerticalSegmentsItem(nValue));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_VERT_SEGS);
@@ -1774,7 +1774,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aMtrDepth.IsEmptyFieldValue() )
     {
         sal_uInt32 nValue = GetCoreValue( aMtrDepth, ePoolUnit );
-        rAttrs.Put(Svx3DDepthItem(nValue));
+        rAttrs.Put(makeSvx3DDepthItem(nValue));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_DEPTH);
@@ -1811,7 +1811,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aMtrEndAngle.IsEmptyFieldValue() )
     {
         sal_uInt16 nValue = (sal_uInt16)aMtrEndAngle.GetValue();
-        rAttrs.Put(Svx3DEndAngleItem(nValue));
+        rAttrs.Put(makeSvx3DEndAngleItem(nValue));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DOBJ_END_ANGLE);
@@ -1887,7 +1887,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aMtrDistance.IsEmptyFieldValue() )
     {
         sal_uInt32 nValue2 = GetCoreValue( aMtrDistance, ePoolUnit );
-        rAttrs.Put(Svx3DDistanceItem(nValue2));
+        rAttrs.Put(makeSvx3DDistanceItem(nValue2));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_DISTANCE);
@@ -1896,7 +1896,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     if( !aMtrFocalLength.IsEmptyFieldValue() )
     {
         sal_uInt32 nValue2 = GetCoreValue( aMtrFocalLength, ePoolUnit );
-        rAttrs.Put(Svx3DFocalLengthItem(nValue2));
+        rAttrs.Put(makeSvx3DFocalLengthItem(nValue2));
     }
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_FOCAL_LENGTH);

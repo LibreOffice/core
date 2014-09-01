@@ -227,7 +227,7 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
             aInnerPoly.setClosed(true);
 
             p3DObj = new E3dLatheObj(mpView->Get3DDefaultAttributes(), ::basegfx::B2DPolyPolygon(aInnerPoly));
-            p3DObj->SetMergedItem(Svx3DHorizontalSegmentsItem(4));
+            p3DObj->SetMergedItem(makeSvx3DHorizontalSegmentsItem(4));
             break;
         }
     }

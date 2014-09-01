@@ -108,11 +108,11 @@ public:
 
     // Distance:
     double GetDistance() const
-        { return (double)((const Svx3DDistanceItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE)).GetValue(); }
+        { return (double)((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_DISTANCE)).GetValue(); }
 
     // Focal length: before cm, now 1/10th mm (*100)
     double GetFocalLength() const
-        { return ((const Svx3DFocalLengthItem&)GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
+        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue(); }
 
     // Two sided lighting:
     bool GetTwoSidedLighting() const

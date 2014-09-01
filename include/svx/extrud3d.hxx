@@ -59,7 +59,7 @@ public:
 
     // BackScale: 0..100, before 0.0..1.0
     sal_uInt32 GetExtrudeDepth() const
-        { return ((const Svx3DDepthItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DEPTH)).GetValue(); }
+        { return ((const SfxUInt32Item&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DEPTH)).GetValue(); }
 
     // #107245# GetSmoothNormals() for bExtrudeSmoothed
     bool GetSmoothNormals() const

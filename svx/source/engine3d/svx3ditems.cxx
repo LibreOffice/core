@@ -40,22 +40,6 @@ Svx3DBackscaleItem::Svx3DBackscaleItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, nVal)
 {}
 
-Svx3DDepthItem::Svx3DDepthItem(sal_uInt32 nVal)
-:   SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, nVal)
-{}
-
-Svx3DHorizontalSegmentsItem::Svx3DHorizontalSegmentsItem(sal_uInt32 nVal)
-:   SfxUInt32Item(SDRATTR_3DOBJ_HORZ_SEGS, nVal)
-{}
-
-Svx3DVerticalSegmentsItem::Svx3DVerticalSegmentsItem(sal_uInt32 nVal)
-:   SfxUInt32Item(SDRATTR_3DOBJ_VERT_SEGS, nVal)
-{}
-
-Svx3DEndAngleItem::Svx3DEndAngleItem(sal_uInt32 nVal)
-:   SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, nVal)
-{}
-
 Svx3DDoubleSidedItem::Svx3DDoubleSidedItem(bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bVal)
 {}
@@ -138,14 +122,6 @@ Svx3DTextureFilterItem::Svx3DTextureFilterItem(bool bVal)
 
 Svx3DPerspectiveItem::Svx3DPerspectiveItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, nVal)
-{}
-
-Svx3DDistanceItem::Svx3DDistanceItem(sal_uInt32 nVal)
-:   SfxUInt32Item(SDRATTR_3DSCENE_DISTANCE, nVal)
-{}
-
-Svx3DFocalLengthItem::Svx3DFocalLengthItem(sal_uInt32 nVal)
-:   SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, nVal)
 {}
 
 Svx3DTwoSidedLightingItem::Svx3DTwoSidedLightingItem(bool bVal)

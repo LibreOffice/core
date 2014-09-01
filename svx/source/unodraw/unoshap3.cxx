@@ -840,7 +840,7 @@ bool Svx3DLatheObject::setPropertyValueImpl( const OUString& rName, const SfxIte
             if(nPrevVerticalSegs != nPostVerticalSegs)
             {
                 // restore the vertical segment count
-                static_cast<E3dLatheObj*>(mpObj.get())->SetMergedItem(Svx3DVerticalSegmentsItem(nPrevVerticalSegs));
+                static_cast<E3dLatheObj*>(mpObj.get())->SetMergedItem(makeSvx3DVerticalSegmentsItem(nPrevVerticalSegs));
             }
             return true;
         }

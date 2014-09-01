@@ -142,8 +142,8 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, bool /*bOnly3DAttr*/) co
         aSet.Put(XLineStyleItem (XLINE_NONE));
 
         // new defaults for distance and focal length
-        aSet.Put(Svx3DDistanceItem(100));
-        aSet.Put(Svx3DFocalLengthItem(10000));
+        aSet.Put(makeSvx3DDistanceItem(100));
+        aSet.Put(makeSvx3DFocalLengthItem(10000));
     }
 
     // return ItemSet

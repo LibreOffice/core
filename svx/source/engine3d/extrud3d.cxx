@@ -72,7 +72,7 @@ E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DP
     SetDefaultAttributes(rDefault);
 
     // set extrude depth
-    GetProperties().SetObjectItemDirect(Svx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
+    GetProperties().SetObjectItemDirect(makeSvx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
 }
 
 E3dExtrudeObj::E3dExtrudeObj()
