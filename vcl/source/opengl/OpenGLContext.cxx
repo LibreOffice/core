@@ -615,7 +615,7 @@ bool OpenGLContext::initWindow()
 {
     if( !m_pChildWindow )
     {
-        SystemWindowData winData = generateWinData(mpWindow);
+        SystemWindowData winData = generateWinData(mpWindow, false);
         m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
         m_pChildWindowGC.reset(m_pChildWindow);
     }
@@ -642,7 +642,7 @@ bool OpenGLContext::initWindow()
 {
     if( !m_pChildWindow )
     {
-        SystemWindowData winData = generateWinData(mpWindow);
+        SystemWindowData winData = generateWinData(mpWindow, mbRequestLegacyContext);
         m_pChildWindow = new SystemChildWindow(mpWindow, 0, &winData, false);
         m_pChildWindowGC.reset(m_pChildWindow);
     }
@@ -673,7 +673,7 @@ bool OpenGLContext::initWindow()
 bool OpenGLContext::initWindow()
 {
     const SystemEnvData* pChildSysData = 0;
-    SystemWindowData winData = generateWinData(mpWindow);
+    SystemWindowData winData = generateWinData(mpWindow, false);
     if( winData.pVisual )
     {
         if( !m_pChildWindow )
@@ -725,11 +725,13 @@ bool OpenGLContext::initWindow()
 
 #if defined( WNT ) || defined( MACOSX ) || defined( IOS ) || defined( ANDROID )
 
-SystemWindowData OpenGLContext::generateWinData(Window* /*pParent*/)
+SystemWindowData OpenGLContext::generateWinData(Window* /*pParent*/, bool bRequestLegacyContext)
 {
+    (void) bRequestLegacyContext;
     SystemWindowData aWinData;
 #if defined(MACOSX)
     aWinData.bOpenGL = true;
+    aWinData.bLegacy = bRequestLegacyContext;
 #endif
     aWinData.nSize = sizeof(aWinData);
     return aWinData;
@@ -750,7 +752,7 @@ void initOpenGLFunctionPointers()
 
 }
 
-SystemWindowData OpenGLContext::generateWinData(Window* pParent)
+SystemWindowData OpenGLContext::generateWinData(Window* pParent, bool)
 {
     SystemWindowData aWinData;
     aWinData.nSize = sizeof(aWinData);
