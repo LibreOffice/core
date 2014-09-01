@@ -200,6 +200,6 @@ public:
 
 }}
 
-#endif /* ndef INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX */
+#endif // INCLUDED_OOX_EXPORT_CHARTEXPORT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
