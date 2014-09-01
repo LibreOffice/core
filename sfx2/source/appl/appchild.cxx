@@ -135,11 +135,11 @@ SfxChildWinFactArr_Impl& SfxApplication::GetChildWinFactories_Impl() const
 
 SfxTemplateDialog* SfxApplication::GetTemplateDialog()
 {
-    if ( pAppData_Impl->pViewFrame )
+    /*if ( pAppData_Impl->pViewFrame )
     {
         SfxChildWindow *pChild = pAppData_Impl->pViewFrame->GetChildWindow(SfxTemplateDialogWrapper::GetChildWindowId());
         return pChild ? (SfxTemplateDialog*) pChild->GetWindow() : 0;
-    }
+    }*/
 
     return NULL;
 }

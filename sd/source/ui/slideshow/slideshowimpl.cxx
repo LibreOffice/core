@@ -2482,7 +2482,6 @@ FncGetChildWindowId aShowChildren[] =
     &SvxBmpMaskChildWindow::GetChildWindowId,
     &SvxIMapDlgChildWindow::GetChildWindowId,
     &SvxHlinkDlgWrapper::GetChildWindowId,
-    &SfxTemplateDialogWrapper::GetChildWindowId,
     &SfxInfoBarContainerChild::GetChildWindowId
 };
 

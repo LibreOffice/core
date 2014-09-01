@@ -44,7 +44,6 @@ class SvTreeListBox ;
 class StyleTreeListBox_Impl;
 class SfxTemplateDialog_Impl;
 class SfxCommonTemplateDialog_Impl;
-class SfxTemplateDialogWrapper;
 class SfxDockingWindow;
 
 namespace com { namespace sun { namespace star { namespace frame { class XModuleManager2; } } } }
@@ -154,7 +153,6 @@ protected:
 
     friend class DropListBox_Impl;
     friend class SfxTemplateControllerItem;
-    friend class SfxTemplateDialogWrapper;
 
     SfxBindings*                pBindings;
     SfxTemplateControllerItem*  pBoundItems[COUNT_BOUND_FUNC];
@@ -313,7 +311,6 @@ class SfxTemplateDialog_Impl :  public SfxCommonTemplateDialog_Impl
 {
 private:
     friend class SfxTemplateControllerItem;
-    friend class SfxTemplateDialogWrapper;
     friend class DropToolBox_Impl;
     friend class SfxTemplatePanelControl;
 
