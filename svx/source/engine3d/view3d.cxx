@@ -729,7 +729,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, boo
             aDefault.SetDefaultExtrudeCloseFront(false);
             aDefault.SetDefaultExtrudeCloseBack(false);
 
-            aSet.Put(Svx3DDoubleSidedItem(true));
+            aSet.Put(makeSvx3DDoubleSidedItem(true));
 
             // Set fill attribute
             aSet.Put(XFillStyleItem(drawing::FillStyle_SOLID));

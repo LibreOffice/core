@@ -50,7 +50,7 @@ namespace drawinglayer
             }
 
             // get NoermalsInvert flag
-            const bool bInvertNormals(((const Svx3DNormalsInvertItem&)rSet.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue());
+            const bool bInvertNormals(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue());
 
             // get TextureProjectionX
             ::com::sun::star::drawing::TextureProjectionMode aTextureProjectionX(::com::sun::star::drawing::TextureProjectionMode_OBJECTSPECIFIC);
@@ -79,13 +79,13 @@ namespace drawinglayer
             }
 
             // get DoubleSided flag
-            const bool bDoubleSided(((const Svx3DDoubleSidedItem&)rSet.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue());
+            const bool bDoubleSided(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue());
 
             // get Shadow3D flag
-            const bool bShadow3D(((const Svx3DShadow3DItem&)rSet.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue());
+            const bool bShadow3D(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue());
 
             // get TextureFilter flag
-            const bool bTextureFilter(((const Svx3DTextureFilterItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue());
+            const bool bTextureFilter(((const SfxBoolItem&)rSet.Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue());
 
             // get texture kind
             // TextureKind: 1 == Base3DTextureLuminance, 2 == Base3DTextureIntensity, 3 == Base3DTextureColor

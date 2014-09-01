@@ -40,11 +40,6 @@ Svx3DBackscaleItem::Svx3DBackscaleItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_BACKSCALE, nVal)
 {}
 
-Svx3DDoubleSidedItem::Svx3DDoubleSidedItem(bool bVal)
-:   SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bVal)
-{}
-
-
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
 
@@ -76,20 +71,12 @@ Svx3DNormalsKindItem::Svx3DNormalsKindItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_NORMALS_KIND, nVal)
 {}
 
-Svx3DNormalsInvertItem::Svx3DNormalsInvertItem(bool bVal)
-:   SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, bVal)
-{}
-
 Svx3DTextureProjectionXItem::Svx3DTextureProjectionXItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_X, nVal)
 {}
 
 Svx3DTextureProjectionYItem::Svx3DTextureProjectionYItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_PROJ_Y, nVal)
-{}
-
-Svx3DShadow3DItem::Svx3DShadow3DItem(bool bVal)
-:   SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, bVal)
 {}
 
 Svx3DMaterialColorItem::Svx3DMaterialColorItem(const Color& rCol)
@@ -116,16 +103,8 @@ Svx3DTextureModeItem::Svx3DTextureModeItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DOBJ_TEXTURE_MODE, nVal)
 {}
 
-Svx3DTextureFilterItem::Svx3DTextureFilterItem(bool bVal)
-:   SfxBoolItem(SDRATTR_3DOBJ_TEXTURE_FILTER, bVal)
-{}
-
 Svx3DPerspectiveItem::Svx3DPerspectiveItem(sal_uInt16 nVal)
 :   SfxUInt16Item(SDRATTR_3DSCENE_PERSPECTIVE, nVal)
-{}
-
-Svx3DTwoSidedLightingItem::Svx3DTwoSidedLightingItem(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, bVal)
 {}
 
 Svx3DLightcolor1Item::Svx3DLightcolor1Item(const Color& rCol)
@@ -162,38 +141,6 @@ Svx3DLightcolor8Item::Svx3DLightcolor8Item(const Color& rCol)
 
 Svx3DAmbientcolorItem::Svx3DAmbientcolorItem(const Color& rCol)
 :   SvxColorItem(rCol, SDRATTR_3DSCENE_AMBIENTCOLOR)
-{}
-
-Svx3DLightOnOff1Item::Svx3DLightOnOff1Item(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_1, bVal)
-{}
-
-Svx3DLightOnOff2Item::Svx3DLightOnOff2Item(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_2, bVal)
-{}
-
-Svx3DLightOnOff3Item::Svx3DLightOnOff3Item(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_3, bVal)
-{}
-
-Svx3DLightOnOff4Item::Svx3DLightOnOff4Item(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_4, bVal)
-{}
-
-Svx3DLightOnOff5Item::Svx3DLightOnOff5Item(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_5, bVal)
-{}
-
-Svx3DLightOnOff6Item::Svx3DLightOnOff6Item(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_6, bVal)
-{}
-
-Svx3DLightOnOff7Item::Svx3DLightOnOff7Item(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_7, bVal)
-{}
-
-Svx3DLightOnOff8Item::Svx3DLightOnOff8Item(bool bVal)
-:   SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, bVal)
 {}
 
 Svx3DLightDirection1Item::Svx3DLightDirection1Item(const basegfx::B3DVector& rVec)

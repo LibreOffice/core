@@ -56,10 +56,9 @@ inline SfxUInt32Item makeSvx3DEndAngleItem(sal_uInt32 nVal) {
     return SfxUInt32Item(SDRATTR_3DOBJ_END_ANGLE, nVal);
 }
 
-class SVX_DLLPUBLIC Svx3DDoubleSidedItem : public SfxBoolItem {
-public:
-    Svx3DDoubleSidedItem(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DDoubleSidedItem(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DOBJ_DOUBLE_SIDED, bVal);
+}
 
 // #i28528#
 // Added extra Item (Bool) for chart2 to be able to show reduced line geometry
@@ -80,10 +79,9 @@ public:
     SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const SAL_OVERRIDE;
 };
 
-class Svx3DNormalsInvertItem : public SfxBoolItem {
-public:
-    SVX_DLLPUBLIC Svx3DNormalsInvertItem(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DNormalsInvertItem(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DOBJ_NORMALS_INVERT, bVal);
+}
 
 class SVX_DLLPUBLIC Svx3DTextureProjectionXItem : public SfxUInt16Item {
 public:
@@ -105,10 +103,9 @@ public:
     virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const SAL_OVERRIDE;
 };
 
-class Svx3DShadow3DItem : public SfxBoolItem {
-public:
-    SVX_DLLPUBLIC Svx3DShadow3DItem(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DShadow3DItem(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DOBJ_SHADOW_3D, bVal);
+}
 
 class Svx3DMaterialColorItem : public SvxColorItem {
 public:
@@ -150,10 +147,9 @@ public:
     SVX_DLLPRIVATE virtual SfxPoolItem* Clone(SfxItemPool* pPool = NULL) const SAL_OVERRIDE;
 };
 
-class Svx3DTextureFilterItem : public SfxBoolItem {
-public:
-    SVX_DLLPUBLIC Svx3DTextureFilterItem(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DTextureFilterItem(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DOBJ_TEXTURE_FILTER, bVal);
+}
 
 // Svx3D _3DSCENE_ Items
 class SVX_DLLPUBLIC Svx3DPerspectiveItem : public SfxUInt16Item {
@@ -172,12 +168,11 @@ inline SfxUInt32Item makeSvx3DDistanceItem(sal_uInt32 nVal) {
 
 inline SfxUInt32Item makeSvx3DFocalLengthItem(sal_uInt32 nVal) {
     return SfxUInt32Item(SDRATTR_3DSCENE_FOCAL_LENGTH, nVal);
-};
+}
 
-class Svx3DTwoSidedLightingItem : public SfxBoolItem {
-public:
-    SVX_DLLPUBLIC Svx3DTwoSidedLightingItem(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DTwoSidedLightingItem(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING, bVal);
+}
 
 class SVX_DLLPUBLIC Svx3DLightcolor1Item : public SvxColorItem {
 public:
@@ -224,45 +219,37 @@ public:
     Svx3DAmbientcolorItem(const Color& rCol = Color(0x00666666));
 };
 
-class SVX_DLLPUBLIC Svx3DLightOnOff1Item : public SfxBoolItem {
-public:
-    Svx3DLightOnOff1Item(bool bVal = true);
-};
+inline SfxBoolItem makeSvx3DLightOnOff1Item(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_1, bVal);
+}
 
-class SVX_DLLPUBLIC Svx3DLightOnOff2Item : public SfxBoolItem {
-public:
-    Svx3DLightOnOff2Item(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DLightOnOff2Item(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_2, bVal);
+}
 
-class SVX_DLLPUBLIC Svx3DLightOnOff3Item : public SfxBoolItem {
-public:
-    Svx3DLightOnOff3Item(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DLightOnOff3Item(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_3, bVal);
+}
 
-class SVX_DLLPUBLIC Svx3DLightOnOff4Item : public SfxBoolItem {
-public:
-    Svx3DLightOnOff4Item(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DLightOnOff4Item(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_4, bVal);
+}
 
-class SVX_DLLPUBLIC Svx3DLightOnOff5Item : public SfxBoolItem {
-public:
-    Svx3DLightOnOff5Item(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DLightOnOff5Item(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_5, bVal);
+}
 
-class SVX_DLLPUBLIC Svx3DLightOnOff6Item : public SfxBoolItem {
-public:
-    Svx3DLightOnOff6Item(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DLightOnOff6Item(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_6, bVal);
+}
 
-class SVX_DLLPUBLIC Svx3DLightOnOff7Item : public SfxBoolItem {
-public:
-    Svx3DLightOnOff7Item(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DLightOnOff7Item(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_7, bVal);
+}
 
-class SVX_DLLPUBLIC Svx3DLightOnOff8Item : public SfxBoolItem {
-public:
-    Svx3DLightOnOff8Item(bool bVal = false);
-};
+inline SfxBoolItem makeSvx3DLightOnOff8Item(bool bVal) {
+    return SfxBoolItem(SDRATTR_3DSCENE_LIGHTON_8, bVal);
+}
 
 class SVX_DLLPUBLIC Svx3DLightDirection1Item : public SvxB3DVectorItem {
 public:

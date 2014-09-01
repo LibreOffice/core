@@ -911,7 +911,7 @@ namespace drawinglayer
             }
 
             // get two sided lighting
-            const bool bTwoSidedLighting(((const Svx3DTwoSidedLightingItem&)rSet.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue());
+            const bool bTwoSidedLighting(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue());
 
             return attribute::SdrSceneAttribute(fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting);
         }
@@ -921,56 +921,56 @@ namespace drawinglayer
             // extract lights from given SfxItemSet (from scene)
             ::std::vector< attribute::Sdr3DLightAttribute > aLightVector;
 
-            if(((const Svx3DLightOnOff1Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue())
+            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor1Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_1)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection1Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_1)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, true));
             }
 
-            if(((const Svx3DLightOnOff2Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue())
+            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor2Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_2)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection2Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_2)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const Svx3DLightOnOff3Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue())
+            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor3Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_3)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection3Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_3)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const Svx3DLightOnOff4Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue())
+            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor4Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_4)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection4Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_4)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const Svx3DLightOnOff5Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue())
+            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor5Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_5)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection5Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_5)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const Svx3DLightOnOff6Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue())
+            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor6Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_6)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection6Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_6)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const Svx3DLightOnOff7Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue())
+            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor7Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_7)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection7Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_7)).GetValue());
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            if(((const Svx3DLightOnOff8Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue())
+            if(((const SfxBoolItem&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue())
             {
                 const basegfx::BColor aColor(((const Svx3DLightcolor8Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTCOLOR_8)).GetValue().getBColor());
                 const basegfx::B3DVector aDirection(((const Svx3DLightDirection8Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTDIRECTION_8)).GetValue());

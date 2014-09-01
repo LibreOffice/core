@@ -344,7 +344,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         {
             aSet.Put( XLineStyleItem( XLINE_SOLID ) );
             aSet.Put( XFillStyleItem ( drawing::FillStyle_NONE ) );
-            aSet.Put( Svx3DDoubleSidedItem( true ) );
+            aSet.Put( makeSvx3DDoubleSidedItem( true ) );
         }
         else
         {
@@ -363,8 +363,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             // get visible
             if(bUseTwoFillStyles || (bIsMirroredX && !bIsMirroredY) || (!bIsMirroredX && bIsMirroredY))
             {
-                aSet.Put( Svx3DDoubleSidedItem( true ) );
-                pScene->GetProperties().SetObjectItem( Svx3DTwoSidedLightingItem( true ) );
+                aSet.Put( makeSvx3DDoubleSidedItem( true ) );
+                pScene->GetProperties().SetObjectItem( makeSvx3DTwoSidedLightingItem( true ) );
             }
         }
 
@@ -560,7 +560,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
                 {
                     XLineColorItem& rLineColor = (XLineColorItem&)p3DObj->GetMergedItem( XATTR_LINECOLOR );
                     p3DObj->SetMergedItem( XFillColorItem( "", rLineColor.GetColorValue() ) );
-                    p3DObj->SetMergedItem( Svx3DDoubleSidedItem( true ) );
+                    p3DObj->SetMergedItem( makeSvx3DDoubleSidedItem( true ) );
                     p3DObj->SetMergedItem( Svx3DCloseFrontItem( false ) );
                     p3DObj->SetMergedItem( Svx3DCloseBackItem( false ) );
                 }
@@ -684,7 +684,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             sal_uInt8 nSpotLight1 = (sal_uInt8)( fLightIntensity * 255.0 );
             basegfx::B3DVector aSpotLight1( aFirstLightDirection.DirectionX, - ( aFirstLightDirection.DirectionY ), -( aFirstLightDirection.DirectionZ ) );
             aSpotLight1.normalize();
-            pScene->GetProperties().SetObjectItem( Svx3DLightOnOff1Item( true ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff1Item( true ) );
             Color aAmbientSpot1Color( nSpotLight1, nSpotLight1, nSpotLight1 );
             pScene->GetProperties().SetObjectItem( Svx3DLightcolor1Item( aAmbientSpot1Color ) );
             pScene->GetProperties().SetObjectItem( Svx3DLightDirection1Item( aSpotLight1 ) );
@@ -692,14 +692,14 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             sal_uInt8 nSpotLight2 = (sal_uInt8)( fLight2Intensity * 255.0 );
             basegfx::B3DVector aSpotLight2( aSecondLightDirection.DirectionX, -aSecondLightDirection.DirectionY, -aSecondLightDirection.DirectionZ );
             aSpotLight2.normalize();
-            pScene->GetProperties().SetObjectItem( Svx3DLightOnOff2Item( true ) );
+            pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff2Item( true ) );
             Color aAmbientSpot2Color( nSpotLight2, nSpotLight2, nSpotLight2 );
             pScene->GetProperties().SetObjectItem( Svx3DLightcolor2Item( aAmbientSpot2Color ) );
             pScene->GetProperties().SetObjectItem( Svx3DLightDirection2Item( aSpotLight2 ) );
 
                 sal_uInt8 nSpotLight3 = 70;
                 basegfx::B3DVector aSpotLight3( 0.0, 0.0, 1.0 );
-                pScene->GetProperties().SetObjectItem( Svx3DLightOnOff3Item( true ) );
+                pScene->GetProperties().SetObjectItem( makeSvx3DLightOnOff3Item( true ) );
                 Color aAmbientSpot3Color( nSpotLight3, nSpotLight3, nSpotLight3 );
                 pScene->GetProperties().SetObjectItem( Svx3DLightcolor3Item( aAmbientSpot3Color ) );
                 pScene->GetProperties().SetObjectItem( Svx3DLightDirection3Item( aSpotLight3 ) );

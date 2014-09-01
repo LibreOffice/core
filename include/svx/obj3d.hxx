@@ -251,7 +251,7 @@ public :
 
     // DoubleSided: sal_True/FALSE
     bool GetDoubleSided() const
-        { return ((const Svx3DDoubleSidedItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_DOUBLE_SIDED)).GetValue(); }
 
     // NormalsKind: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetNormalsKind() const
@@ -259,7 +259,7 @@ public :
 
     // NormalsInvert: sal_True/FALSE
     bool GetNormalsInvert() const
-        { return ((const Svx3DNormalsInvertItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue(); }
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_NORMALS_INVERT)).GetValue(); }
 
     // TextureProjX: 0 == sal_False/sal_False, 1 == sal_True/sal_False, else == sal_True/TRUE
     sal_uInt16 GetTextureProjectionX() const
@@ -271,7 +271,7 @@ public :
 
     // Shadow3D: sal_True/FALSE
     bool GetShadow3D() const
-        { return ((const Svx3DShadow3DItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue(); }
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_SHADOW_3D)).GetValue(); }
 
     // MaterialColor: Color
     Color GetMaterialColor() const
@@ -291,7 +291,7 @@ public :
 
     // TextureFilter: sal_True/FALSE
     bool GetTextureFilter() const
-        { return ((const Svx3DTextureFilterItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue(); }
+        { return ((const SfxBoolItem&)GetObjectItemSet().Get(SDRATTR_3DOBJ_TEXTURE_FILTER)).GetValue(); }
 
     // #i28528#
     // Added extra Item (Bool) for chart2 to be able to show reduced line geometry

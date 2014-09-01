@@ -894,14 +894,14 @@ bool Svx3DLightControl::GetLightOnOff(sal_uInt32 nNum) const
 
         switch(nNum)
         {
-            case 0 : return ((const Svx3DLightOnOff1Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
-            case 1 : return ((const Svx3DLightOnOff2Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
-            case 2 : return ((const Svx3DLightOnOff3Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
-            case 3 : return ((const Svx3DLightOnOff4Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
-            case 4 : return ((const Svx3DLightOnOff5Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
-            case 5 : return ((const Svx3DLightOnOff6Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
-            case 6 : return ((const Svx3DLightOnOff7Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
-            case 7 : return ((const Svx3DLightOnOff8Item&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
+            case 0 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue();
+            case 1 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_2)).GetValue();
+            case 2 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_3)).GetValue();
+            case 3 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_4)).GetValue();
+            case 4 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_5)).GetValue();
+            case 5 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_6)).GetValue();
+            case 6 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_7)).GetValue();
+            case 7 : return ((const SfxBoolItem&)aLightItemSet.Get(SDRATTR_3DSCENE_LIGHTON_8)).GetValue();
         }
     }
 
