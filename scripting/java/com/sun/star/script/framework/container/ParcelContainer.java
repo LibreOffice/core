@@ -118,7 +118,7 @@ public class ParcelContainer implements XNameAccess
      * @param    key the <tt>location</tt> which is to
      *           be matched.
      *
-     * @return    child <tt>ParcelContainer</tt> or <null> if none
+     * @return    child <tt>ParcelContainer</tt> or {@code null} if none
      * found.
      */
 
@@ -148,7 +148,7 @@ public class ParcelContainer implements XNameAccess
      * @param    containerUrl the <tt>containerUrl</tt> which is to
      *           be matched.
      *
-     * @return    child <tt>ParcelContainer</tt> or <null> if none
+     * @return    child <tt>ParcelContainer</tt> or {@code null} if none
      * found.
      */
 
