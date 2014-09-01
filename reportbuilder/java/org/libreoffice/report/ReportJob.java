@@ -24,7 +24,7 @@ import java.io.IOException;
  * not yet been started, canceled), and the job status can be queried (scheduled,
  * running, finished).
  *
- * <table border="1">
+ * <table summary="Job status values" border="1">
  * <tr>
  * <th>JobStatus</th><th>running</th><th>finished</th>
  * </tr>
