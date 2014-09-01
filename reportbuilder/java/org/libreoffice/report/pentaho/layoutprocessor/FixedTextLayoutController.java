@@ -38,9 +38,9 @@ import org.jfree.report.structure.Section;
  * After checking, whether this element should be printed, this layout
  * controller simply delegates the dirty work to a suitable handler.
  *
- * @noinspection CloneableClassWithoutClone
  * @since 05.03.2007
  */
+@SuppressWarnings({"CloneableClassWithoutClone"})
 public class FixedTextLayoutController
         extends AbstractReportElementLayoutController
 {
