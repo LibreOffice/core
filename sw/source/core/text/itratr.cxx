@@ -421,125 +421,116 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
 {
     const SwFmtAnchor& rFmtA = pNd->GetAnchor();
 
-    bool bCalculate = false;
     if ((FLY_AT_PARA == rFmtA.GetAnchorId()) ||
         (FLY_AT_CHAR == rFmtA.GetAnchorId()))
-    {
-        bCalculate = true;
-    }
-
-    if (bCalculate)
     {
         const SwPosition *pPos = rFmtA.GetCntntAnchor();
         OSL_ENSURE(pPos && pIn, "Unexpected NULL arguments");
         if (!pPos || !pIn || pIn->nIndx != pPos->nNode.GetIndex())
-            bCalculate = false;
+            return;
     }
 
-    if (bCalculate)
+    long nMin, nMax;
+    SwHTMLTableLayout *pLayout = 0;
+    const bool bIsDrawFrmFmt = pNd->Which()==RES_DRAWFRMFMT;
+    if( !bIsDrawFrmFmt )
     {
-        long nMin, nMax;
-        SwHTMLTableLayout *pLayout = 0;
-        const bool bIsDrawFrmFmt = pNd->Which()==RES_DRAWFRMFMT;
-        if( !bIsDrawFrmFmt )
+        // Does the frame contain a table at the start or the end?
+        const SwNodes& rNodes = pNd->GetDoc()->GetNodes();
+        const SwFmtCntnt& rFlyCntnt = pNd->GetCntnt();
+        sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
+        SwTableNode* pTblNd = rNodes[nStt+1]->GetTableNode();
+        if( !pTblNd )
         {
-            // Does the frame contain a table at the start or the end?
-            const SwNodes& rNodes = pNd->GetDoc()->GetNodes();
-            const SwFmtCntnt& rFlyCntnt = pNd->GetCntnt();
-            sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
-            SwTableNode* pTblNd = rNodes[nStt+1]->GetTableNode();
-            if( !pTblNd )
-            {
-                SwNode *pNd2 = rNodes[nStt];
-                pNd2 = rNodes[pNd2->EndOfSectionIndex()-1];
-                if( pNd2->IsEndNode() )
-                    pTblNd = pNd2->StartOfSectionNode()->GetTableNode();
-            }
-
-            if( pTblNd )
-                pLayout = pTblNd->GetTable().GetHTMLTableLayout();
+            SwNode *pNd2 = rNodes[nStt];
+            pNd2 = rNodes[pNd2->EndOfSectionIndex()-1];
+            if( pNd2->IsEndNode() )
+                pTblNd = pNd2->StartOfSectionNode()->GetTableNode();
         }
 
-        const SwFmtHoriOrient& rOrient = pNd->GetHoriOrient();
-        sal_Int16 eHoriOri = rOrient.GetHoriOrient();
+        if( pTblNd )
+            pLayout = pTblNd->GetTable().GetHTMLTableLayout();
+    }
 
-        long nDiff;
-        if( pLayout )
+    const SwFmtHoriOrient& rOrient = pNd->GetHoriOrient();
+    sal_Int16 eHoriOri = rOrient.GetHoriOrient();
+
+    long nDiff;
+    if( pLayout )
+    {
+        nMin = pLayout->GetMin();
+        nMax = pLayout->GetMax();
+        nDiff = nMax - nMin;
+    }
+    else
+    {
+        if( bIsDrawFrmFmt )
         {
-            nMin = pLayout->GetMin();
-            nMax = pLayout->GetMax();
-            nDiff = nMax - nMin;
+            const SdrObject* pSObj = pNd->FindSdrObject();
+            if( pSObj )
+                nMin = pSObj->GetCurrentBoundRect().GetWidth();
+            else
+                nMin = 0;
+
         }
         else
         {
-            if( bIsDrawFrmFmt )
-            {
-                const SdrObject* pSObj = pNd->FindSdrObject();
-                if( pSObj )
-                    nMin = pSObj->GetCurrentBoundRect().GetWidth();
-                else
-                nMin = 0;
-
-            }
-            else
-            {
-                const SwFmtFrmSize &rSz = pNd->GetFrmSize();
-                nMin = rSz.GetWidth();
-            }
-            nMax = nMin;
-            nDiff = 0;
+            const SwFmtFrmSize &rSz = pNd->GetFrmSize();
+            nMin = rSz.GetWidth();
         }
+        nMax = nMin;
+        nDiff = 0;
+    }
 
-        const SvxLRSpaceItem &rLR = pNd->GetLRSpace();
-        nMin += rLR.GetLeft();
-        nMin += rLR.GetRight();
-        nMax += rLR.GetLeft();
-        nMax += rLR.GetRight();
+    const SvxLRSpaceItem &rLR = pNd->GetLRSpace();
+    nMin += rLR.GetLeft();
+    nMin += rLR.GetRight();
+    nMax += rLR.GetLeft();
+    nMax += rLR.GetRight();
 
-        if( SURROUND_THROUGHT == pNd->GetSurround().GetSurround() )
+    if( SURROUND_THROUGHT == pNd->GetSurround().GetSurround() )
+    {
+        pIn->Minimum( nMin );
+        return;
+    }
+
+    // Frames, which are left- or right-aligned are only party considered
+    // when calculating the maximum, since the border is already being considered.
+    // Only if the frame extends into the text body, this part is being added
+    switch( eHoriOri )
+    {
+        case text::HoriOrientation::RIGHT:
         {
+            if( nDiff )
+            {
+                pIn->nRightRest -= pIn->nRightDiff;
+                pIn->nRightDiff = nDiff;
+            }
+            if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() )
+            {
+                if( pIn->nRightRest > 0 )
+                    pIn->nRightRest = 0;
+            }
+            pIn->nRightRest -= nMin;
+            break;
+        }
+        case text::HoriOrientation::LEFT:
+        {
+            if( nDiff )
+            {
+                pIn->nLeftRest -= pIn->nLeftDiff;
+                pIn->nLeftDiff = nDiff;
+            }
+            if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() &&
+                pIn->nLeftRest < 0 )
+                pIn->nLeftRest = 0;
+            pIn->nLeftRest -= nMin;
+            break;
+        }
+        default:
+        {
+            pIn->nMaxWidth += nMax;
             pIn->Minimum( nMin );
-            return;
-        }
-
-        // Frames, which are left- or right-aligned are only party considered
-        // when calculating the maximum, since the border is already being considered.
-        // Only if the frame extends into the text body, this part is being added
-        switch( eHoriOri )
-        {
-            case text::HoriOrientation::RIGHT:
-            {
-                if( nDiff )
-                {
-                    pIn->nRightRest -= pIn->nRightDiff;
-                    pIn->nRightDiff = nDiff;
-                }
-                if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() )
-                {
-                    if( pIn->nRightRest > 0 )
-                        pIn->nRightRest = 0;
-                }
-                pIn->nRightRest -= nMin;
-                break;
-            }
-            case text::HoriOrientation::LEFT:
-            {
-                if( nDiff )
-                {
-                    pIn->nLeftRest -= pIn->nLeftDiff;
-                    pIn->nLeftDiff = nDiff;
-                }
-                if( text::RelOrientation::FRAME != rOrient.GetRelationOrient() &&
-                    pIn->nLeftRest < 0 )
-                    pIn->nLeftRest = 0;
-                pIn->nLeftRest -= nMin;
-                break;
-            }
-            default:
-            {
-                pIn->nMaxWidth += nMax;
-                pIn->Minimum( nMin );
-            }
         }
     }
 }
