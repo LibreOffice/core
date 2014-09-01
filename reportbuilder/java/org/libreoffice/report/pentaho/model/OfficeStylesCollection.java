@@ -24,17 +24,17 @@ import org.jfree.report.structure.Element;
 /**
  * Holds all style-definitions and provides some simplified lookup methods to
  * grab them by their type and name.
- * <p/>
- * For now, we are only interested in 'style:style' nodes. Each of these nodes
+ *
+ * <p>For now, we are only interested in 'style:style' nodes. Each of these nodes
  * has a style-name and a style-family. Each style declaration can have a parent
- * style, from which properties are inherited.
- * <p/>
- * Style names are unique within the family, no matter whether the style is an
- * automatic style, an common style or a master style.
- * <p/>
- * The contents of this element are the union of the 'styles.xml' file (if it
+ * style, from which properties are inherited.</p>
+ *
+ * <p>Style names are unique within the family, no matter whether the style is an
+ * automatic style, an common style or a master style.</p>
+ *
+ * <p>The contents of this element are the union of the 'styles.xml' file (if it
  * exists), the font-declarations and auto-styles of the document-content.xml
- * and the styles declared in the main document.
+ * and the styles declared in the main document.</p>
  *
  * @since 06.03.2007
  */

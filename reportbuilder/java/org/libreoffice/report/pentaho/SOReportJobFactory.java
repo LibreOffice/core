@@ -384,8 +384,7 @@ public class SOReportJobFactory
     }
 
     /**
-     * Gives a factory for creating the service. This method is called by the <code>JavaLoader</code>
-     * <p/>
+     * Gives a factory for creating the service. This method is called by the <code>JavaLoader</code>.
      *
      * @param sImplName the name of the implementation for which a service is desired
      * @return returns a <code>XSingleComponentFactory</code> for creating the component

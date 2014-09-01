@@ -41,8 +41,8 @@ public class StarReportDataFactory implements ReportDataFactory, Cloneable
     /**
      * Queries a datasource. The string 'query' defines the name of the query. The
      * Parameterset given here may contain more data than actually needed.
-     * <p/>
-     * The dataset may change between two calls, do not assume anything!
+     *
+     * <p>The dataset may change between two calls, do not assume anything!</p>
      */
     public ReportData queryData(final String query, final DataSet parameters)
             throws ReportDataFactoryException
