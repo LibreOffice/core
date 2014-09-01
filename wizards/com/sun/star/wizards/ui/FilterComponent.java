@@ -691,7 +691,7 @@ public class FilterComponent
         }
 
         /**
-         * @returns true if the current condition is complete, all needed fields are filled with values.
+         * @return true if the current condition is complete, all needed fields are filled with values.
          * So we can enable the next.
          */
         private boolean isConditionComplete()
