@@ -59,7 +59,6 @@ class SfxFrameItem;
 class Dialog;
 class Menu;
 class NotifyEvent;
-class FmFormShell;
 
 #define SFX_PRINTER_PRINTER               1  // without JOB SETUP => Temporary
 #define SFX_PRINTER_JOBSETUP         2
@@ -207,9 +206,6 @@ public:
     void                        AddSubShell( SfxShell& rShell );
     void                        RemoveSubShell( SfxShell *pShell=NULL );
     SfxShell*                   GetSubShell( sal_uInt16 );
-
-    virtual       FmFormShell*  GetFormShell()       { return 0; };
-    virtual const FmFormShell*  GetFormShell() const { return 0; };
 
     // Focus, KeyInput, Cursor
     void                        GotFocus() const;

@@ -1084,7 +1084,6 @@ SfxStyleSheetBasePool*  SwDocShell::GetStyleSheetPool()
 
 void SwDocShell::SetView(SwView* pVw)
 {
-    SetViewShell_Impl(pVw);
     if ( 0 != (mpView = pVw) )
         mpWrtShell = &mpView->GetWrtShell();
     else

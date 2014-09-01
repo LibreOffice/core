@@ -588,8 +588,8 @@ public:
                  SfxShell       *GetCurShell()  { return m_pShell; }
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
-    inline virtual       FmFormShell    *GetFormShell()       SAL_OVERRIDE { return m_pFormShell; }
-    inline virtual const FmFormShell    *GetFormShell() const SAL_OVERRIDE { return m_pFormShell; }
+    inline       FmFormShell    *GetFormShell() { return m_pFormShell; }
+    inline const FmFormShell    *GetFormShell() const { return m_pFormShell; }
 
     // so that in the SubShells' DTors m_pShell can be reset if applicable
     void ResetSubShell()    { m_pShell = 0; }
