@@ -76,11 +76,11 @@ void ScRefTokenHelper::compileRangeRepresentation(
             break;
         }
 
-        const ScToken* pT = static_cast<const ScToken*>(p);
-        switch (pT->GetType())
+        switch (p->GetType())
         {
             case svSingleRef:
                 {
+                    const ScToken* pT = static_cast<const ScToken*>(p);
                     const ScSingleRefData& rRef = pT->GetSingleRef();
                     if (!rRef.Valid())
                         bFailure = true;
@@ -90,6 +90,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 break;
             case svDoubleRef:
                 {
+                    const ScToken* pT = static_cast<const ScToken*>(p);
                     const ScComplexRefData& rRef = pT->GetDoubleRef();
                     if (!rRef.Valid())
                         bFailure = true;
@@ -98,15 +99,21 @@ void ScRefTokenHelper::compileRangeRepresentation(
                 }
                 break;
             case svExternalSingleRef:
-                if (!pT->GetSingleRef().ValidExternal())
-                    bFailure = true;
+                {
+                    const ScToken* pT = static_cast<const ScToken*>(p);
+                    if (!pT->GetSingleRef().ValidExternal())
+                        bFailure = true;
+                }
                 break;
             case svExternalDoubleRef:
-                if (!pT->GetDoubleRef().ValidExternal())
-                    bFailure = true;
+                {
+                    const ScToken* pT = static_cast<const ScToken*>(p);
+                    if (!pT->GetDoubleRef().ValidExternal())
+                        bFailure = true;
+                }
                 break;
             case svString:
-                if (pT->GetString().isEmpty())
+                if (p->GetString().isEmpty())
                     bFailure = true;
                 break;
             default:
