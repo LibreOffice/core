@@ -1346,13 +1346,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 SfxBindings& rBind = GetBindings();
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
-                SfxViewShell *pVSh;
-                FmFormShell *pFSh;
-                if ( !xObjSh->IsReadOnly() ||
-                     ( xObjSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED &&
-                       (pVSh = xObjSh->GetViewShell()) &&
-                       (pFSh = pVSh->GetFormShell()) &&
-                       !pFSh->IsDesignMode()))
+                if ( !xObjSh->IsReadOnly() )
                 {
                     // In contrast to above (TITLE_CHANGED) does the UI not
                     // have to be updated because it was not obstructed
