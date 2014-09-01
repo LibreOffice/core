@@ -35,8 +35,6 @@ namespace svx {
     class SecurityOptionsDialog;
 }
 
-namespace lang = ::com::sun::star::lang;
-namespace uno = ::com::sun::star::uno;
 
 // class SvxNoSpaceEdit --------------------------------------------------
 
@@ -90,7 +88,7 @@ private:
     const OUString aFtpPortPN;
     const OUString aNoProxyDescPN;
 
-    uno::Reference< uno::XInterface > m_xConfigurationUpdateAccess;
+    css::uno::Reference< css::uno::XInterface > m_xConfigurationUpdateAccess;
 
     void EnableControls_Impl(bool bEnable);
     void ReadConfigData_Impl();
