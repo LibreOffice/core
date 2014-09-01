@@ -176,15 +176,15 @@ sal_Int32 SbaTableQueryBrowser::getDatabaseObjectType( EntryType _eType )
     {
     case etQuery:
     case etQueryContainer:
-        return DatabaseObject::QUERY;
+        return css::sdb::application::DatabaseObject::QUERY;
     case etTableOrView:
     case etTableContainer:
-        return DatabaseObject::TABLE;
+        return css::sdb::application::DatabaseObject::TABLE;
     default:
         break;
     }
     OSL_FAIL( "SbaTableQueryBrowser::getDatabaseObjectType: folder types and 'Unknown' not allowed here!" );
-    return DatabaseObject::TABLE;
+    return css::sdb::application::DatabaseObject::TABLE;
 }
 
 void SbaTableQueryBrowser::notifyHiContrastChanged()

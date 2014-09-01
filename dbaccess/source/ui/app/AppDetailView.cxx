@@ -355,7 +355,7 @@ OTasksWindow::OTasksWindow(Window* _pParent,OApplicationDetailView* _pDetailView
     m_aDescription.SetText(ModuleRes(STR_DESCRIPTION));
 
     ImageProvider aImageProvider;
-    Image aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM );
+    Image aFolderImage = aImageProvider.getFolderImage( css::sdb::application::DatabaseObject::FORM );
     m_aCreation.SetDefaultCollapsedEntryBmp( aFolderImage );
     m_aCreation.SetDefaultExpandedEntryBmp( aFolderImage );
 
