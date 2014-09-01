@@ -181,7 +181,7 @@ public:
 
     bool supportMultiSampling() const;
 
-    static SystemWindowData generateWinData(Window* pParent);
+    static SystemWindowData generateWinData(Window* pParent, bool bRequestLegacyContext);
 
 private:
     SAL_DLLPRIVATE bool initWindow();

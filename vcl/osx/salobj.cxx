@@ -49,17 +49,39 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
     }
     if (pWindowData->bOpenGL)
     {
-        NSOpenGLPixelFormatAttribute aAttributes[] =
+        NSOpenGLPixelFormat* pixFormat = NULL;
+
+        if (pWindowData->bLegacy)
         {
-            NSOpenGLPFADoubleBuffer,
-            NSOpenGLPFAAlphaSize, 8,
-            NSOpenGLPFAColorSize, 24,
-            0
-        };
+            NSOpenGLPixelFormatAttribute aAttributes[] =
+            {
+                NSOpenGLPFADoubleBuffer,
+                NSOpenGLPFAAlphaSize, 8,
+                NSOpenGLPFAColorSize, 24,
+                NSOpenGLPFAMultisample,
+                NSOpenGLPFASampleBuffers, (NSOpenGLPixelFormatAttribute)1,
+                NSOpenGLPFASamples, (NSOpenGLPixelFormatAttribute)4,
+                0
+            };
+            pixFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:aAttributes];
+        }
+        else
+        {
+            NSOpenGLPixelFormatAttribute aAttributes[] =
+            {
+                NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
+                NSOpenGLPFADoubleBuffer,
+                NSOpenGLPFAAlphaSize, 8,
+                NSOpenGLPFAColorSize, 24,
+                NSOpenGLPFAMultisample,
+                NSOpenGLPFASampleBuffers, (NSOpenGLPixelFormatAttribute)1,
+                NSOpenGLPFASamples, (NSOpenGLPixelFormatAttribute)4,
+                0
+            };
+            pixFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:aAttributes];
+        }
 
-        NSOpenGLPixelFormat* pixFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:aAttributes];
         maSysData.mpNSView = [[NSOpenGLView alloc] initWithFrame: aInitFrame pixelFormat:pixFormat];
-
     }
     else
     {

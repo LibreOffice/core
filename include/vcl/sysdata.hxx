@@ -178,6 +178,7 @@ struct SystemWindowData
 #if defined( WNT )                  // meaningless on Windows
 #elif defined( MACOSX )
     bool            bOpenGL;        // create a OpenGL providing NSView
+    bool            bLegacy;        // create a 2.1 legacy context, only valid if bOpenGL == true
     // Nothing
 #elif defined( ANDROID )
     // Nothing
