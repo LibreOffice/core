@@ -515,7 +515,7 @@ void MediaWindowImpl::onURLChanged()
 #if HAVE_FEATURE_GLTF
     else if ( m_sMimeType == AVMEDIA_MIMETYPE_JSON )
     {
-        SystemWindowData aWinData = OpenGLContext::generateWinData(this);
+        SystemWindowData aWinData = OpenGLContext::generateWinData(this, false);
         mpChildWindow.reset(new MediaChildWindow(this,&aWinData));
         mbEventTransparent = false;
     }
