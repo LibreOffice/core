@@ -168,12 +168,6 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
         Reference<container::XHierarchicalNameAccess> xHierarchicalNameAccess(
             xNameAccess, UNO_QUERY_THROW);
 
-        Sequence<OUString> serviceNames = xNameAccess->getElementNames();
-        for (sal_Int32 i = 0; i < serviceNames.getLength(); ++i)
-        {
-            SAL_DEBUG(serviceNames[i]);
-        }
-
         const OUString* pCurr = serviceNames.getConstArray();
         const OUString* const pEnd = pCurr + serviceNames.getLength();
         while( pCurr != pEnd )
@@ -188,25 +182,13 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                 if( (xEntryNameAccess->getByName("PreferredImplementations") >>= implementationList) )
                 {
                     m_aAvailableImplementations.push_back( std::make_pair(*pCurr,implementationList) );
-                    for (sal_Int32 i = 0; i < implementationList.getLength(); ++i)
-                    {
-                        SAL_DEBUG("available :" << implementationList[i]);
-                    }
                 }
                 if( (xEntryNameAccess->getByName("AcceleratedImplementations") >>= implementationList) )
                 {
-                    for (sal_Int32 i = 0; i < implementationList.getLength(); ++i)
-                    {
-                        SAL_DEBUG("accelerated: " <<implementationList[i]);
-                    }
                     m_aAcceleratedImplementations.push_back( std::make_pair(*pCurr,implementationList) );
                 }
                 if( (xEntryNameAccess->getByName("AntialiasingImplementations") >>= implementationList) )
                 {
-                    for (sal_Int32 i = 0; i < implementationList.getLength(); ++i)
-                    {
-                        SAL_DEBUG("aa implemented: " << implementationList[i]);
-                    }
                     m_aAAImplementations.push_back( std::make_pair(*pCurr,implementationList) );
                 }
 
@@ -294,7 +276,6 @@ Reference<XInterface> CanvasFactory::use(
     Reference<XComponentContext> const & xContext ) const
 {
     try {
-        SAL_DEBUG("use: " << serviceName);
         return m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
             serviceName, args, xContext);
     }
@@ -337,7 +318,6 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     Reference<XComponentContext> const & xContext ) const
 {
     ::osl::MutexGuard guard(m_mutex);
-    SAL_DEBUG(serviceName);
 
     // forcing last entry from impl list, if config flag set
     bool bForceLastEntry(false);

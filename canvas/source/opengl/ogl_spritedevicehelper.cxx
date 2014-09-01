@@ -389,7 +389,6 @@ namespace oglcanvas
 
     uno::Reference<rendering::XColorSpace> SpriteDeviceHelper::getColorSpace() const
     {
-        SAL_DEBUG("called SpriteDeviceHelper::getColorSpace()");
         // always the same
         return uno::Reference<rendering::XColorSpace>(
             ::canvas::tools::getStdColorSpace(),
