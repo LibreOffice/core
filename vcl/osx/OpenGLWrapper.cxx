@@ -24,8 +24,4 @@ void OpenGLWrapper::resetCurrent()
     [NSOpenGLContext clearCurrentContext];
 }
 
-void OpenGLWrapper::init(NSOpenGLView* pView)
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

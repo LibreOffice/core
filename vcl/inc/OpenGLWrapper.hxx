@@ -23,8 +23,6 @@ public:
     static void swapBuffers(NSOpenGLView* pView);
     static void makeCurrent(NSOpenGLView* pView);
     static void resetCurrent();
-
-    static void init(NSOpenGLView* pView);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
