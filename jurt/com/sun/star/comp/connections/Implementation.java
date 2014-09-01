@@ -40,7 +40,7 @@ final class Implementation {
      *         --></code>
      *     (with <code><var>type</var></code> in lower case, and
      *     <code><var>service</var></code> either <code>Acceptor</code> or
-     *     <code>Connector</code>).</p>
+     *     <code>Connector</code>).
      * @param serviceClass the IDL interface type for which to query the
      *     requested service.
      * @param serviceType must be either <code>Acceptor</code> or
