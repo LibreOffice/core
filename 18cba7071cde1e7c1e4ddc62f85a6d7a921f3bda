@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_1aaa3d71",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-09-01T20:44:22Z",
+      "side": 1,
+      "message": "This translation is wrong and inverses the meaning.",
+      "revId": "18cba7071cde1e7c1e4ddc62f85a6d7a921f3bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_fab541d0",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 917,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-09-01T20:44:22Z",
+      "side": 1,
+      "message": "That should be faster paste for sorted entries. You can\u0027t transfer the german structure in this case.",
+      "revId": "18cba7071cde1e7c1e4ddc62f85a6d7a921f3bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_daba85c0",
+        "filename": "sc/source/core/data/validat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 930,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2014-09-01T20:44:22Z",
+      "side": 1,
+      "message": "Same again.",
+      "revId": "18cba7071cde1e7c1e4ddc62f85a6d7a921f3bda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
