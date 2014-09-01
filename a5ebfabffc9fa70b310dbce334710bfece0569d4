@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_7aca5151",
+        "filename": "sfx2/source/appl/appchild.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-01T22:24:47Z",
+      "side": 1,
+      "message": "This piece of code needs to be updated so that it calls SfxTemplatePanelControl::Update - but I don\u0027t know how to access that method from here.",
+      "revId": "a5ebfabffc9fa70b310dbce334710bfece0569d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
