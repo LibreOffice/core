@@ -358,8 +358,33 @@ void GraphicManager::ImplCheckSizeOfSwappedInGraphics()
                 // do not swap out when we have less than 16KB data objects
                 if(nSizeBytes >= (16 * 1024))
                 {
-                    pObj->FireSwapOutRequest();
-                    nUsedSize = (nSizeBytes < nUsedSize) ? nUsedSize - nSizeBytes : 0;
+                    // #125519# need to check if GraphicObject is still alive
+                    GraphicObject* pObj2 = 0;
+                    bool bExists(false);
+
+                    for(pObj2 = (GraphicObject*)maObjList.First(); !bExists && pObj2; pObj2 = (GraphicObject*)maObjList.Next())
+                    {
+                        if(pObj2 && pObj2 == pObj)
+                        {
+                            bExists = true;
+                        }
+                    }
+
+                    if(bExists)
+                    {
+                        // #125519# okay, swap it out
+                        pObj->FireSwapOutRequest();
+                        nUsedSize = (nSizeBytes < nUsedSize) ? nUsedSize - nSizeBytes : 0;
+                    }
+                    else
+                    {
+                        // #125519# error: object was deleted while still a member in aCandidates. This means that
+                        // an earlier call to pObj->FireSwapOutRequest() on an other GraphicObject has as
+                        // a side effect *deleted* and thus removed another GraphicObject from the local
+                        // list (maObjList). This must of course be avoided.
+                        // To check without need to run in debugger, optionally temporarily reactivate the beep below
+                        // Sound::Beep();
+                    }
                 }
             }
         }
