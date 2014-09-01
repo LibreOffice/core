@@ -87,7 +87,8 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame, SystemWindowData* pWindowDat
     {
         maSysData.mpNSView = [[NSView alloc] initWithFrame: aInitFrame];
     }
-        if( maSysData.mpNSView )
+
+    if( maSysData.mpNSView )
     {
         if( mpClipView )
             [mpClipView setDocumentView: maSysData.mpNSView];
