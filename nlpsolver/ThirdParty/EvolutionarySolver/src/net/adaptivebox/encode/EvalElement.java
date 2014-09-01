@@ -29,16 +29,17 @@ public class EvalElement {
   /**
    * The expected range of the response value, forms the following objective:
    *
+   * <pre>
    * NO minValue   maxValue : THE ELEMENT OF BasicBound
    * 1  MINDOUBLE, MINDOUBLE: the minimize objective
    * 2  MAXDOUBLE, MAXDOUBLE: the maximize objective
-   * 3  MINDOUBLE, v        : the lessthan constraint  (<v)
-   * 4  v        , MAXDOUBLE: the largethan constraint (>v)
+   * 3  MINDOUBLE, v        : the lessthan constraint  {@literal (<v)}
+   * 4  v        , MAXDOUBLE: the largethan constraint {@literal (>v)}
    * 5  v1       , v2       : the region constraint, i.e. belongs to [v1, v2]
    *
    * OPTIM type: the No.1 and No.2
    * CONS  type: the last three
-   *
+   * </pre>
    */
   public BasicBound targetBound = new BasicBound();
 
