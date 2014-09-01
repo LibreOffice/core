@@ -163,8 +163,8 @@ extern "C" void SAL_CALL createRegistryInfo_OBrowser()
 namespace dbaui
 {
 
-namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
-namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
+namespace DatabaseObject = css::sdb::application::DatabaseObject;
+namespace DatabaseObjectContainer = css::sdb::application::DatabaseObjectContainer;
 
 void SafeAddPropertyListener(const Reference< XPropertySet > & xSet, const OUString& rPropName, XPropertyChangeListener* pListener)
 {

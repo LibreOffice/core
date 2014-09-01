@@ -85,8 +85,8 @@ using ::com::sun::star::awt::XTabController;
 
 namespace dbaui
 {
-    namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
-    namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
+    namespace DatabaseObject = css::sdb::application::DatabaseObject;
+    namespace DatabaseObjectContainer = css::sdb::application::DatabaseObjectContainer;
 }
 
 namespace

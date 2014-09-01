@@ -45,7 +45,8 @@ namespace dbaui
     using ::com::sun::star::sdbcx::XViewsSupplier;
     using ::com::sun::star::uno::UNO_SET_THROW;
 
-    namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
+    namespace GraphicColorMode = css::graphic::GraphicColorMode;
+    namespace DatabaseObject = css::sdb::application::DatabaseObject;
 
     // ImageProvider_Data
     struct ImageProvider_Data

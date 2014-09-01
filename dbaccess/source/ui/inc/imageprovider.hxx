@@ -29,10 +29,6 @@
 
 namespace dbaui
 {
-
-    // for convenience of our clients
-    namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
-
     // ImageProvider
     struct ImageProvider_Data;
     /** provides images for database objects such as tables, queries, forms, reports ...
