@@ -322,8 +322,7 @@ static ImplLocalizedFontName aImplLocalizedNamesList[] =
 
 OUString GetEnglishSearchFontName( const OUString& rInName )
 {
-    OUString rName( rInName );
-
+    OUStringBuffer rName( rInName.getStr());
     bool        bNeedTranslation = false;
     sal_Int32  nLen = rName.getLength();
 
@@ -332,7 +331,7 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
     while ( i && (rName[ i-1 ] < 32) )
         i--;
     if ( i != nLen )
-        rName = rName.copy( 0, i );
+         rName.truncate(i);
 
     // Remove Script at the end
     // Scriptname must be the last part of the fontname and
@@ -352,7 +351,7 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
                     // Remove Space at the end
                     if ( nTempLen && (rName[ nTempLen-1 ] == ' ') )
                         nTempLen--;
-                    rName = rName.copy( 0, nTempLen );
+                    rName.truncate(nTempLen);
                     nLen = nTempLen;
                     break;
                 }
@@ -379,11 +378,8 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
                 // Upper to Lower
                 if ( (c >= 'A') && (c <= 'Z') )
                     c += 'a' - 'A';
-                //rName[ i ] = c;
 
-                OUStringBuffer aTmpStr( rName.getStr() );
-                aTmpStr[ i ] = c;
-                rName = aTmpStr.makeStringAndClear();
+                rName[ i ] = c;
 
            }
             else
@@ -399,21 +395,13 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
             if ( (c >= 'A') && (c <= 'Z') )
             {
                 c += 'a' - 'A';
-                //rName[ i ] = c;
-
-                OUStringBuffer aTmpStr( rName.getStr() );
-                aTmpStr[ i ] = c;
-                rName = aTmpStr.makeStringAndClear();
-
+                rName[ i ] = c;
             }
             else if( ((c < '0') || (c > '9')) && (c != ';') ) // not 0-9 or semicolon
             {
                 // Remove white spaces and special characters
 
-                OUStringBuffer aTmpStr( rName.getStr() );
-                aTmpStr.remove(i,1);
-                rName = aTmpStr.makeStringAndClear();
-
+                rName.remove(i,1);
                 nLen--;
                 continue;
             }
@@ -421,7 +409,7 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
 
         i++;
     }
-
+    OUString rNameStr = rName.makeStringAndClear();
     // translate normalized localized name to its normalized English ASCII name
     if( bNeedTranslation )
     {
@@ -436,12 +424,12 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
                 aDictionary[ pList->mpLocalizedNames ] = pList->mpEnglishName;
         }
 
-        FontNameDictionary::const_iterator it = aDictionary.find( rName );
+        FontNameDictionary::const_iterator it = aDictionary.find( rNameStr );
         if( it != aDictionary.end() )
             rName = OUString::createFromAscii ( it->second );
     }
 
-    return rName;
+    return rNameStr;
 }
 
 OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
