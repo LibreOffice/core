@@ -404,7 +404,7 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     pCurrent->SetKanaComp( pNewKana );
 
     const sal_uInt16 nNull = 0;
-    sal_uInt16 nKanaIdx = 0;
+    size_t nKanaIdx = 0;
     long nKanaDiffSum = 0;
     SwTwips nRepaintOfst = 0;
     SwTwips nX = 0;
@@ -725,8 +725,8 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
             aLocal.Left( nCurrWidth );
 
         // If the rect is wider than the line, we adjust it to the right size
-        sal_uInt16 nLocalWidth = sal_uInt16( aLocal.Left() + aLocal.Width() );
-        if( nRealWidth < long( nLocalWidth ) )
+        const long nLocalWidth = aLocal.Left() + aLocal.Width();
+        if( nRealWidth < nLocalWidth )
             aLocal.Width( nRealWidth - aLocal.Left() );
         GetInfo().GetParaPortion()->SetFly( true );
         pFlyPortion = new SwFlyPortion( aLocal );
