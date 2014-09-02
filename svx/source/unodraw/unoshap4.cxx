@@ -940,7 +940,17 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 break;
 
             case OWN_ATTR_MEDIA_STREAM:
-                rValue <<= pMedia->GetInputStream();
+                try
+                {
+                    rValue <<= pMedia->GetInputStream();
+                }
+                catch (const css::ucb::ContentCreationException& e)
+                {
+                    throw css::lang::WrappedTargetException(
+                            "Error Getting InputStream!",
+                            static_cast < OWeakObject * > ( this ),
+                            makeAny( e ) );
+                }
                 break;
 
             case OWN_ATTR_MEDIA_TEMPFILEURL:
