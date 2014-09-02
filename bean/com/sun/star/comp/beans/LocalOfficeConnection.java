@@ -731,6 +731,8 @@ public class LocalOfficeConnection
 
         private StreamProcessor(final java.io.InputStream in, final java.io.PrintStream out)
         {
+            super("StreamProcessor");
+
             m_in = in;
             m_print = out;
             start();

@@ -269,7 +269,7 @@ public class OOoBean
             // avoid concurrent access from multiple threads
             final OfficeConnection iConn = getOOoConnection();
 
-            Thread aConnectorThread = new Thread() {
+            Thread aConnectorThread = new Thread("getServiceManager") {
                 @Override
                 public void run()
                 {

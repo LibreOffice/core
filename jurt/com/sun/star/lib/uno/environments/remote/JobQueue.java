@@ -69,6 +69,8 @@ public class JobQueue {
         Object _disposeId;
 
         JobDispatcher(Object disposeId) {
+            super("JobDispatcher");
+
             if(DEBUG) System.err.println("JobQueue$JobDispatcher.<init>:" + _threadId);
 
             _disposeId = disposeId;

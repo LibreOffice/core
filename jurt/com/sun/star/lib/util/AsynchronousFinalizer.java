@@ -68,7 +68,7 @@ public final class AsynchronousFinalizer {
     private static final LinkedList<Job> queue = new LinkedList<Job>();
 
     static {
-        Thread t = new Thread() {
+        Thread t = new Thread("AsynchronousFinalizer") {
                 @Override
                 public void run() {
                     for (;;) {

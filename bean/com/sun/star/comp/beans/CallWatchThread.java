@@ -36,7 +36,7 @@ public class CallWatchThread extends Thread
 
     public CallWatchThread(long nTimeout)
     {
-        this(nTimeout, "");
+        this(nTimeout, "CallWatchThread");
     }
 
     public CallWatchThread( long nTimeout, String aTag )

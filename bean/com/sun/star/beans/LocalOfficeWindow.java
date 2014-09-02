@@ -264,6 +264,8 @@ public class LocalOfficeWindow
 
                 private CallWatchThread( long nTimeout )
                 {
+                        super("CallWatchThread deprecated");
+
                         this.aWatchedThread = Thread.currentThread();
                         this.nTimeout = nTimeout;
                         start();
