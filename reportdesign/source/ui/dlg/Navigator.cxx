@@ -128,6 +128,7 @@ class NavigatorTree :   public ::cppu::BaseMutex
 
         inline uno::Reference< uno::XInterface > getContent() const { return m_xContent; }
         inline void setContent(const uno::Reference< uno::XInterface >& _xContent) { m_xContent = _xContent; }
+
     protected:
         // OPropertyChangeListener
         virtual void _propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException) SAL_OVERRIDE;
@@ -205,6 +206,8 @@ public:
 
     SvTreeListEntry* find(const uno::Reference< uno::XInterface >& _xContent);
     void removeEntry(SvTreeListEntry* _pEntry,bool _bRemove = true);
+
+    virtual Size GetOptimalSize() const SAL_OVERRIDE;
 private:
     using SvTreeListBox::ExecuteDrop;
 };
@@ -220,6 +223,9 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
         ,m_pDragedEntry(NULL)
         ,m_nTimerCounter( DROP_ACTION_TIMER_INITIAL_TICKS )
 {
+    set_hexpand(true);
+    set_vexpand(true);
+
     m_pReportListener = new OPropertyChangeMultiplexer(this,m_rController.getReportDefinition().get());
     m_pReportListener->addProperty(PROPERTY_PAGEHEADERON);
     m_pReportListener->addProperty(PROPERTY_PAGEFOOTERON);
@@ -861,13 +867,16 @@ void NavigatorTree::UserData::_disposing(const lang::EventObject& _rSource)
     m_pTree->_disposing( _rSource );
 }
 
-// class ONavigatorImpl
+Size NavigatorTree::GetOptimalSize() const
+{
+    return LogicToPixel(Size(100, 70), MAP_APPFONT);
+}
 
+// class ONavigatorImpl
 class ONavigatorImpl: private boost::noncopyable
 {
 public:
     ONavigatorImpl(OReportController& _rController,ONavigator* _pParent);
-    virtual ~ONavigatorImpl();
 
     uno::Reference< report::XReportDefinition>  m_xReport;
     ::rptui::OReportController&                 m_rController;
@@ -877,7 +886,7 @@ public:
 ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pParent)
     :m_xReport(_rController.getReportDefinition())
     ,m_rController(_rController)
-    ,m_pNavigatorTree(new NavigatorTree(_pParent,_rController))
+    ,m_pNavigatorTree(new NavigatorTree(_pParent->get<Window>("box"),_rController))
 {
     reportdesign::OReportVisitor aVisitor(m_pNavigatorTree.get());
     aVisitor.start(m_xReport);
@@ -886,54 +895,16 @@ ONavigatorImpl::ONavigatorImpl(OReportController& _rController,ONavigator* _pPar
     m_pNavigatorTree->_selectionChanged(aEvent);
 }
 
-ONavigatorImpl::~ONavigatorImpl()
-{
-}
-
-const long STD_WIN_SIZE_X = 210;
-const long STD_WIN_SIZE_Y = 280;
-const long LISTBOX_BORDER = 2;
-
 // class ONavigator
-
-ONavigator::ONavigator( Window* _pParent
-                        ,OReportController& _rController)
-    : FloatingWindow( _pParent, ModuleRes(RID_NAVIGATOR) )
+ONavigator::ONavigator(Window* _pParent ,OReportController& _rController)
+    : FloatingWindow( _pParent, "FloatingNavigator", "modules/dbreport/ui/floatingnavigator.ui")
 {
-
     m_pImpl.reset(new ONavigatorImpl(_rController,this));
 
-    FreeResource();
     m_pImpl->m_pNavigatorTree->Show();
     m_pImpl->m_pNavigatorTree->GrabFocus();
-    SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
     Show();
-
 }
-
-
-
-ONavigator::~ONavigator()
-{
-}
-
-void ONavigator::Resize()
-{
-    FloatingWindow::Resize();
-
-    Size aSize( GetOutputSizePixel() );
-
-
-
-    // Groesse der form::ListBox anpassen
-    Point aLBPos( LISTBOX_BORDER, LISTBOX_BORDER );
-    Size aLBSize( aSize );
-    aLBSize.Width() -= (2*LISTBOX_BORDER);
-    aLBSize.Height() -= (2*LISTBOX_BORDER);
-
-    m_pImpl->m_pNavigatorTree->SetPosSizePixel( aLBPos, aLBSize );
-}
-
 
 void ONavigator::GetFocus()
 {

@@ -41,7 +41,6 @@
 #define RID_GROUPS_SORTING              ( RID_DIALOG_START + 0 )
 #define RID_DATETIME_DLG                ( RID_DIALOG_START + 2 )
 #define WIN_CONDITION                   ( RID_DIALOG_START + 4 )
-#define RID_NAVIGATOR                   ( RID_DIALOG_START + 5 )
 
 // strings
 #define RID_STR_CLASS_FORMATTEDFIELD        ( RID_STRING_START +   1 )

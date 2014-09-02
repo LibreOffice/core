@@ -35,10 +35,8 @@ namespace rptui
     public:
            ONavigator( Window* pParent
                     ,OReportController& _rController);
-        virtual ~ONavigator();
 
         // window
-        virtual void    Resize() SAL_OVERRIDE;
         virtual void GetFocus() SAL_OVERRIDE;
     };
 
