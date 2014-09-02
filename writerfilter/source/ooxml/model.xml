@@ -19,6 +19,7 @@
 <model
   xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
   xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
+  xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
   xmlns:rng="http://relaxng.org/ns/structure/1.0"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
@@ -8326,7 +8327,7 @@
         </attribute>
       </define>
       <define name="relIds">
-        <element xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" name="dgm:relIds">
+        <element name="dgm:relIds">
           <ref name="CT_RelIds"/>
         </element>
       </define>
@@ -8399,7 +8400,7 @@
       <attribute name="r:cs" tokenid="ooxml:CT_RelIds_cs"/>
     </resource>
     <resource name="relIds" resource="Shape">
-      <element xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram" name="dgm:relIds" tokenid="ooxml:dgm_relIds"/>
+      <element name="dgm:relIds" tokenid="ooxml:dgm_relIds"/>
     </resource>
     <resource name="CT_GvmlGroupShape" resource="Shape">
       <element name="a:nvGrpSpPr" tokenid="ooxml:CT_GvmlGroupShape_nvGrpSpPr"/>
