@@ -2864,7 +2864,9 @@ void StringResourceWithLocationImpl::storeAsURL( const OUString& URL )
 }
 
 void StringResourceWithLocationImpl::setURL( const OUString& URL )
-    throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+    throw (css::lang::IllegalArgumentException,
+           css::lang::NoSupportException,
+           css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     implCheckReadOnly( "StringResourceWithLocationImpl::setURL(): Read only" );

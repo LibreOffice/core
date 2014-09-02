@@ -22,7 +22,6 @@
 #include <com/sun/star/resource/XStringResourcePersistence.idl>
 
 
-
 module com { module sun { module star { module resource {
 
 /**
@@ -65,9 +64,13 @@ interface XStringResourceWithLocation: com::sun::star::resource::XStringResource
 
         @throws com::sun::star::lang::IllegalArgumentException
             if an empty string is passed as URL
+
+        @throws com::sun::star::lang::NoSupportException
+            if the location is readonly
     */
     void setURL( [in] string URL )
-        raises( ::com::sun::star::lang::IllegalArgumentException );
+        raises( ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::lang::NoSupportException );
 };
 
 

@@ -668,7 +668,8 @@ public:
     virtual void SAL_CALL storeAsURL( const OUString& URL )
         throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setURL( const OUString& URL )
-        throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::lang::IllegalArgumentException, css::lang::NoSupportException,
+               css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 
