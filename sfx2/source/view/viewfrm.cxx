@@ -3356,6 +3356,14 @@ void SfxViewFrame::AppendInfoBar( const OUString& sId, const OUString& sMessage,
         pInfoBars->appendInfoBar( sId, sMessage, aButtons );
         ShowChildWindow( nId );
     }
+    else
+    {
+        SAL_WARN( "sfx.view", "No consumer for InfoBar buttons, so deleting them instead" );
+        for (std::vector< PushButton* >::iterator it = aButtons.begin(); it != aButtons.end(); ++it)
+        {
+            delete *it;
+        }
+    }
 }
 
 void SfxViewFrame::RemoveInfoBar( const OUString& sId )
