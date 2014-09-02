@@ -25,8 +25,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -119,7 +119,7 @@ public:
 
 
 class UpdateCheckUI : public ::cppu::WeakImplHelper3
-                        < lang::XServiceInfo, document::XEventListener, beans::XPropertySet >
+                        < lang::XServiceInfo, document::XDocumentEventListener, beans::XPropertySet >
 {
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XJob > mrJob;
@@ -168,8 +168,8 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // XEventListener
-    virtual void SAL_CALL notifyEvent(const document::EventObject& Event)
+    // XDocumentEventListener
+    virtual void SAL_CALL documentEventOccured(const document::DocumentEvent& Event)
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL disposing(const lang::EventObject& Event)
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -218,8 +218,8 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     maTimeoutTimer.SetTimeout( 10000 );
     maTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateCheckUI, TimeOutHdl ) );
 
-    uno::Reference< document::XEventBroadcaster > xBroadcaster( frame::theGlobalEventBroadcaster::get(m_xContext) );
-    xBroadcaster->addEventListener( this );
+    uno::Reference< document::XDocumentEventBroadcaster > xBroadcaster( frame::theGlobalEventBroadcaster::get(m_xContext) );
+    xBroadcaster->addDocumentEventListener( this );
 
     maWindowEventHdl = LINK( this, UpdateCheckUI, WindowEventHdl );
     maApplicationEventHdl = LINK( this, UpdateCheckUI, ApplicationEventHdl );
@@ -365,7 +365,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
 }
 
 
-void SAL_CALL UpdateCheckUI::notifyEvent(const document::EventObject& rEvent)
+void SAL_CALL UpdateCheckUI::documentEventOccured(const document::DocumentEvent& rEvent)
     throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
