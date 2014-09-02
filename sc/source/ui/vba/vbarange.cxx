@@ -5257,7 +5257,7 @@ ScVbaRange::UnMerge(  ) throw (script::BasicErrorException, uno::RuntimeExceptio
 }
 
 uno::Any SAL_CALL
-ScVbaRange::getStyle() throw (uno::RuntimeException, std::exception)
+ScVbaRange::getStyle() throw (css::script::BasicErrorException, uno::RuntimeException, std::exception)
 {
     if ( m_Areas->getCount() > 1 )
     {

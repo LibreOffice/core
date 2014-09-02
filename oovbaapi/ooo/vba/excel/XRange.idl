@@ -78,7 +78,10 @@ interface XRange
     [attribute] any PageBreak;
     [attribute, readonly] XValidation Validation;
     [attribute, readonly] any PrefixCharacter;
-    [attribute] any Style;
+    [attribute] any Style
+    {
+        get raises ( com::sun::star::script::BasicErrorException );
+    };
     [attribute] any AddIndent;
     [attribute] any ShowDetail;
 
