@@ -96,7 +96,6 @@ struct GLWindow
     HDC                     hDC;
     HGLRC                   hRC;
 #elif defined( MACOSX )
-    CGLContextObj context;
 #elif defined( IOS )
 #elif defined( ANDROID )
 #elif defined( UNX )
