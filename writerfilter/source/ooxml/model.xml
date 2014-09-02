@@ -18,6 +18,7 @@
 -->
 <model
   xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+  xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
   xmlns:rng="http://relaxng.org/ns/structure/1.0"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
@@ -8348,7 +8349,7 @@
         </attribute>
       </define>
       <define name="chart">
-        <element xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" name="c:chart">
+        <element name="c:chart">
           <ref name="CT_Chart"/>
         </element>
       </define>
@@ -8411,7 +8412,7 @@
       <attribute name="r:id" tokenid="ooxml:CT_RelId_chart"/>
     </resource>
     <resource name="chart" resource="Shape">
-      <element xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart" name="c:chart" tokenid="ooxml:c_chart"/>
+      <element name="c:chart" tokenid="ooxml:c_chart"/>
     </resource>
     <resource xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" name="CT_WordprocessingShape" resource="Shape">
       <element name="wps:cNvSpPr" tokenid="ooxml:CT_WordprocessingShape_cNvSpPr"/>
