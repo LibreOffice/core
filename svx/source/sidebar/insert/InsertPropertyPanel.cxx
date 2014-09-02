@@ -38,7 +38,7 @@
 #include <com/sun/star/frame/XStatusListener.hpp>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::rtl::OUString;
 using ::sfx2::sidebar::SidebarToolBox;
 
@@ -47,7 +47,7 @@ namespace svx { namespace sidebar {
 
 InsertPropertyPanel::InsertPropertyPanel (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
     :   PanelLayout(pParent, "InsertPropertyPanel", "svx/ui/sidebarinsert.ui", rxFrame),
         mxFrame(rxFrame)
 {

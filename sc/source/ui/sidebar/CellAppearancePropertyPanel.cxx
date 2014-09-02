@@ -45,7 +45,7 @@
 #include "CellBorderStylePopup.hxx"
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 const char UNO_BACKGROUNDCOLOR[] = ".uno:BackgroundColor";
 const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
@@ -140,7 +140,7 @@ void CellAppearancePropertyPanel::EndCellBorderStylePopupMode(void)
 
 CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "CellAppearancePropertyPanel", "modules/scalc/ui/sidebarcellappearance.ui", rxFrame),
 
@@ -340,7 +340,7 @@ IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
 
 CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)

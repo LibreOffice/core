@@ -36,7 +36,7 @@
 #include <boost/bind.hpp>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 const char UNO_SPACING[] = ".uno:Spacing";
 const char UNO_UNDERLINE[] = ".uno:Underline";
@@ -64,7 +64,7 @@ long TextPropertyPanel::GetSelFontSize()
 
 TextPropertyPanel* TextPropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
     const ::sfx2::sidebar::EnumContext& rContext)
 {
@@ -83,7 +83,7 @@ TextPropertyPanel* TextPropertyPanel::Create (
 }
 
 
-TextPropertyPanel::TextPropertyPanel ( Window* pParent, const cssu::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& /*rContext*/ )
+TextPropertyPanel::TextPropertyPanel ( Window* pParent, const css::uno::Reference<css::frame::XFrame>& rxFrame, SfxBindings* pBindings, const ::sfx2::sidebar::EnumContext& /*rContext*/ )
     : PanelLayout(pParent, "SidebarTextPanel", "svx/ui/sidebartextpanel.ui", rxFrame),
         maFontSizeControl   (SID_ATTR_CHAR_FONTHEIGHT,  *pBindings, *this, OUString("FontHeight"),   rxFrame),
         maUnderlineControl  (SID_ATTR_CHAR_UNDERLINE,   *pBindings, *this, OUString("Underline"),    rxFrame),

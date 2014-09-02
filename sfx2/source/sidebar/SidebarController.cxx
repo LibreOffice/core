@@ -57,7 +57,7 @@
 
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::rtl::OUString;
 
 
@@ -95,7 +95,7 @@ namespace {
 
 SidebarController::SidebarController (
     SidebarDockingWindow* pParentWindow,
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
     : SidebarControllerInterfaceBase(m_aMutex),
       mpCurrentDeck(),
       mpParentWindow(pParentWindow),
@@ -131,7 +131,7 @@ SidebarController::SidebarController (
     }
 
     // Listen for context change events.
-    cssu::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     if (xMultiplexer.is())
@@ -174,13 +174,13 @@ SidebarController::~SidebarController (void)
 
 
 SidebarController* SidebarController::GetSidebarControllerForFrame (
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     SidebarControllerContainer::iterator iEntry (maSidebarControllerContainer.find(rxFrame));
     if (iEntry == maSidebarControllerContainer.end())
         return NULL;
 
-    cssu::Reference<XInterface> xController (iEntry->second.get());
+    css::uno::Reference<XInterface> xController (iEntry->second.get());
     if ( ! xController.is())
         return NULL;
 
@@ -198,7 +198,7 @@ void SAL_CALL SidebarController::disposing (void)
 
     maFocusManager.Clear();
 
-    cssu::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     if (xMultiplexer.is())
@@ -240,7 +240,7 @@ void SAL_CALL SidebarController::disposing (void)
 
 
 void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     // Update to the requested new context asynchronously to avoid
     // subtle errors caused by SFX2 which in rare cases can not
@@ -259,7 +259,7 @@ void SAL_CALL SidebarController::notifyContextChangeEvent (const css::ui::Contex
 
 
 void SAL_CALL SidebarController::disposing (const css::lang::EventObject& rEventObject)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEventObject;
 
@@ -270,7 +270,7 @@ void SAL_CALL SidebarController::disposing (const css::lang::EventObject& rEvent
 
 
 void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChangeEvent& rEvent)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 
@@ -281,7 +281,7 @@ void SAL_CALL SidebarController::propertyChange (const css::beans::PropertyChang
 
 
 void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEvent& rEvent)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     bool bIsReadWrite (true);
     if (rEvent.IsEnabled)
@@ -304,7 +304,7 @@ void SAL_CALL SidebarController::statusChanged (const css::frame::FeatureStateEv
 
 
 void SAL_CALL SidebarController::requestLayout (void)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nMinimalWidth = 0;
     if (mpCurrentDeck)

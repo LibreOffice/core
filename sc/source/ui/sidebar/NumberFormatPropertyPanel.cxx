@@ -34,7 +34,7 @@
 #include <svl/stritem.hxx>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
 const char UNO_NUMERICFIELD[]         = ".uno:NumericField";
@@ -47,7 +47,7 @@ namespace sc { namespace sidebar {
 
 NumberFormatPropertyPanel::NumberFormatPropertyPanel(
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
   : PanelLayout(pParent,"NumberFormatPropertyPanel", "modules/scalc/ui/sidebarnumberformat.ui", rxFrame),
     maNumFormatControl(SID_NUMBER_TYPE_FORMAT, *pBindings, *this),
@@ -168,7 +168,7 @@ IMPL_LINK( NumberFormatPropertyPanel, NumFormatValueHdl, void*, EMPTYARG )
 
 NumberFormatPropertyPanel* NumberFormatPropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)

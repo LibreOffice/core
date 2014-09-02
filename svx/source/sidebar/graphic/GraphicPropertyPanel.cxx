@@ -29,7 +29,7 @@
 #include <sfx2/dispatch.hxx>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
 
@@ -41,7 +41,7 @@ namespace svx { namespace sidebar {
 
 GraphicPropertyPanel::GraphicPropertyPanel(
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "GraphicPropertyPanel", "svx/ui/sidebargraphic.ui", rxFrame),
     maBrightControl(SID_ATTR_GRAF_LUMINANCE, *pBindings, *this),
@@ -223,7 +223,7 @@ void GraphicPropertyPanel::SetupIcons(void)
 
 GraphicPropertyPanel* GraphicPropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)

@@ -48,7 +48,7 @@ class TextPropertyPanel
 public:
     static TextPropertyPanel* Create (
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const ::sfx2::sidebar::EnumContext& rContext);
 
@@ -99,7 +99,7 @@ private:
 
     TextPropertyPanel (
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
         const ::sfx2::sidebar::EnumContext& rContext);
     virtual ~TextPropertyPanel (void);

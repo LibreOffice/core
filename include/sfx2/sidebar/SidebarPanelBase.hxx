@@ -34,8 +34,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/function.hpp>
 
-namespace cssu = ::com::sun::star::uno;
-
 
 class Window;
 
@@ -60,57 +58,57 @@ class SFX2_DLLPUBLIC SidebarPanelBase
       public SidebarPanelBaseInterfaceBase
 {
 public:
-    static cssu::Reference<css::ui::XUIElement> Create (
+    static css::uno::Reference<css::ui::XUIElement> Create (
         const ::rtl::OUString& rsResourceURL,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         Window* pControl,
         const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent (
         const css::ui::ContextChangeEventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL disposing (
         const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XUIElement
-    virtual cssu::Reference<css::frame::XFrame> SAL_CALL getFrame (void)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame (void)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::rtl::OUString SAL_CALL getResourceURL (void)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int16 SAL_CALL getType (void)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual cssu::Reference<cssu::XInterface> SAL_CALL getRealInterface (void)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getRealInterface (void)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XToolPanel
-    virtual cssu::Reference<css::accessibility::XAccessible> SAL_CALL createAccessible (
-        const cssu::Reference<css::accessibility::XAccessible>& rxParentAccessible)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual cssu::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL createAccessible (
+        const css::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XSidebarPanel
     virtual css::ui::LayoutSize SAL_CALL getHeightForWidth (sal_Int32 nWidth)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Int32 SAL_CALL getMinimalWidth ()
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 protected:
-    cssu::Reference<css::frame::XFrame> mxFrame;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 
     SidebarPanelBase (
         const ::rtl::OUString& rsResourceURL,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         Window* pWindow,
         const css::ui::LayoutSize& rLayoutSize);
     virtual ~SidebarPanelBase (void);
 
     virtual void SAL_CALL disposing (void)
-        throw (cssu::RuntimeException) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
 private:
     Window* mpControl;

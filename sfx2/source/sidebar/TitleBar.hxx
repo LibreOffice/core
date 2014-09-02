@@ -62,7 +62,7 @@ protected:
     virtual sidebar::Paint GetBackgroundPaint (void) = 0;
     virtual Color GetTextColor (void) = 0;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex);
-    virtual cssu::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
 
 private:
     Image maIcon;

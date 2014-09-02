@@ -46,7 +46,7 @@
 #include <svtools/unitconv.hxx>
 #include <boost/bind.hpp>
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 const char UNO_DEFAULTBULLET[]    = ".uno:DefaultBullet";
 const char UNO_DEFAULTNUMBERING[] = ".uno:DefaultNumbering";
@@ -80,9 +80,9 @@ namespace svx {namespace sidebar {
 
 ParaPropertyPanel* ParaPropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     if (pParent == NULL)
         throw lang::IllegalArgumentException("no parent Window given to ParaPropertyPanel::Create", NULL, 0);
@@ -1091,9 +1091,9 @@ PopupControl* ParaPropertyPanel::CreateBGColorPopupControl (PopupContainer* pPar
 
 
 ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : PanelLayout(pParent, "ParaPropertyPanel", "svx/ui/sidebarparagraph.ui", rxFrame),
 
       mpColorUpdater (),

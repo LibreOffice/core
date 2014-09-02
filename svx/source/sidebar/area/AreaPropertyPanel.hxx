@@ -58,7 +58,7 @@ class AreaPropertyPanel
 public:
     static AreaPropertyPanel* Create(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
     virtual void DataChanged(
@@ -146,7 +146,7 @@ private:
     ::boost::scoped_ptr< XFillFloatTransparenceItem >   mpFloatTransparenceItem;
     ::boost::scoped_ptr< SfxUInt16Item >                mpTransparanceItem;
 
-    cssu::Reference<css::frame::XFrame>                 mxFrame;
+    css::uno::Reference<css::frame::XFrame>                 mxFrame;
     SfxBindings*                                        mpBindings;
 
     /// bitfield
@@ -168,7 +168,7 @@ private:
     // constructor/destuctor
     AreaPropertyPanel(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~AreaPropertyPanel(void);
 

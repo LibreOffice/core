@@ -48,8 +48,6 @@
 class FloatingWindow;
 class ToolBox;
 
-namespace cssu = ::com::sun::star::uno;
-
 
 namespace svx { namespace sidebar {
 
@@ -64,9 +62,9 @@ class ParaPropertyPanel
 public:
     static ParaPropertyPanel* Create (
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     SfxBindings* GetBindings() { return mpBindings;}
@@ -148,21 +146,21 @@ private:
     ::sfx2::sidebar::ControllerItem  maBulletNumRuleIndex;
     ::sfx2::sidebar::ControllerItem  maNumNumRuleIndex;
 
-    cssu::Reference<css::frame::XFrame> mxFrame;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
     ::sfx2::sidebar::EnumContext maContext;
     SfxBindings* mpBindings;
     ParaLineSpacingPopup maLineSpacePopup;
     ParaBulletsPopup maBulletsPopup;
     ParaNumberingPopup maNumberingPopup;
     ColorPopup maBGColorPopup;
-    cssu::Reference<css::ui::XSidebar> mxSidebar;
+    css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
 
     ParaPropertyPanel (
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~ParaPropertyPanel (void);
 
     DECL_LINK(NumBTbxSelectHandler, ToolBox*);

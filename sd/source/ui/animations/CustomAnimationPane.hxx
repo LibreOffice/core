@@ -62,7 +62,7 @@ class CustomAnimationPane : public PanelLayout, public ICustomAnimationListContr
 {
     friend class MotionPathTag;
 public:
-    CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame, const Size& rMinSize );
+    CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame, const Size& rMinSize );
     virtual ~CustomAnimationPane();
 
     // callbacks

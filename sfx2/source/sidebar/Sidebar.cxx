@@ -22,14 +22,13 @@
 #include "ResourceManager.hxx"
 
 using namespace css;
-using namespace cssu;
 
 namespace sfx2 { namespace sidebar {
 
 
 void Sidebar::ShowPanel (
     const ::rtl::OUString& rsPanelId,
-    const Reference<frame::XFrame>& rxFrame)
+    const css::uno::Reference<frame::XFrame>& rxFrame)
 {
     SidebarController* pController = SidebarController::GetSidebarControllerForFrame(rxFrame);
     const PanelDescriptor* pPanelDescriptor = ResourceManager::Instance().GetPanelDescriptor(rsPanelId);

@@ -30,8 +30,8 @@
 #include <com/sun/star/frame/XSubToolbarController.hpp>
 
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css;
+using namespace css::uno;
 using ::rtl::OUString;
 
 
@@ -138,7 +138,7 @@ bool SidebarToolBox::Notify (NotifyEvent& rEvent)
 
 void SidebarToolBox::CreateController (
     const sal_uInt16 nItemId,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     const sal_Int32 nItemWidth)
 {
     ItemDescriptor aDescriptor;
@@ -178,7 +178,7 @@ Reference<frame::XToolbarController> SidebarToolBox::GetControllerForItemId (con
 
 void SidebarToolBox::SetController(
     const sal_uInt16 nItemId,
-    const cssu::Reference<css::frame::XToolbarController>& rxController,
+    const css::uno::Reference<css::frame::XToolbarController>& rxController,
     const ::rtl::OUString& rsCommandName)
 {
     ItemDescriptor aDescriptor;

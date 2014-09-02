@@ -56,7 +56,7 @@ public:
         ViewShellBase & rBase,
         const Size& rMinSize,
         SdDrawDocument* pDoc,
-        const cssu::Reference<css::frame::XFrame>& rxFrame );
+        const css::uno::Reference<css::frame::XFrame>& rxFrame );
     virtual ~SlideTransitionPane();
 
     // Window

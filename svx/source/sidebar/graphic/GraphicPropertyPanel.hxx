@@ -41,7 +41,7 @@ class GraphicPropertyPanel
 public:
     static GraphicPropertyPanel* Create(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
     virtual void DataChanged(
@@ -80,7 +80,7 @@ private:
     OUString                                            msGray;
     OUString                                            msWater;
 
-    cssu::Reference<css::frame::XFrame>                 mxFrame;
+    css::uno::Reference<css::frame::XFrame>                 mxFrame;
     SfxBindings*                                        mpBindings;
 
     DECL_LINK( ModifyBrightnessHdl, void * );
@@ -96,7 +96,7 @@ private:
     // constructor/destuctor
     GraphicPropertyPanel(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~GraphicPropertyPanel();
 

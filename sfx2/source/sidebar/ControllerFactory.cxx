@@ -33,7 +33,7 @@
 
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::rtl::OUString;
 
 

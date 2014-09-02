@@ -31,9 +31,8 @@
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::rtl::OUString;
-
 
 
 namespace
@@ -63,7 +62,7 @@ namespace
                 mxFrame->removeEventListener(this);
         }
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)rEvent;
             mrInfoProvider.SetFrame(NULL);

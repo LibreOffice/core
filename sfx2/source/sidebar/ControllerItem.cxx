@@ -33,7 +33,7 @@
 
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 
 namespace
@@ -66,14 +66,14 @@ namespace
                 mxFrame->removeFrameActionListener(this);
         }
         virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             (void)rEvent;
             mrControllerItem.ResetFrame();
             mxFrame = NULL;
         }
         virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
-            throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE
+            throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
         {
             if (rEvent.Action == frame::FrameAction_CONTEXT_CHANGED)
                 mrControllerItem.NotifyFrameContextChange();

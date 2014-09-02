@@ -32,7 +32,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 

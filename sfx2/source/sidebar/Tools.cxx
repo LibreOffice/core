@@ -34,7 +34,7 @@
 #include <cstring>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 
 namespace sfx2 { namespace sidebar {
@@ -153,7 +153,7 @@ util::URL Tools::GetURL (const ::rtl::OUString& rsCommand)
 
 
 Reference<frame::XDispatch> Tools::GetDispatch (
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     const util::URL& rURL)
 {
     Reference<frame::XDispatchProvider> xProvider (rxFrame, UNO_QUERY_THROW);
@@ -165,7 +165,7 @@ Reference<frame::XDispatch> Tools::GetDispatch (
 
 
 ::rtl::OUString Tools::GetModuleName (
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if ( ! rxFrame.is() || ! rxFrame->getController().is())
         return ::rtl::OUString();
