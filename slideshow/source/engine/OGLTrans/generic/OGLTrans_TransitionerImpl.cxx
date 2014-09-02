@@ -253,11 +253,15 @@ private:
     GLXPixmap maLeavingPixmapGL;
     GLXPixmap maEnteringPixmapGL;
 #endif
+#if defined( UNX ) && !defined( MACOSX )
     bool mbRestoreSync;
+#endif
     bool mbUseLeavingPixmap;
     bool mbUseEnteringPixmap;
+#if defined( GLX_EXT_texture_from_pixmap )
     bool mbFreeLeavingPixmap;
     bool mbFreeEnteringPixmap;
+#endif
 #if defined( UNX ) && !defined( MACOSX )
     Pixmap maLeavingPixmap;
     Pixmap maEnteringPixmap;
@@ -1354,11 +1358,15 @@ OGLTransitionerImpl::OGLTransitionerImpl()
     , maLeavingPixmapGL(0)
     , maEnteringPixmapGL(0)
 #endif
+#if defined( UNX ) && !defined( MACOSX )
     , mbRestoreSync(false)
+#endif
     , mbUseLeavingPixmap(false)
     , mbUseEnteringPixmap(false)
+#if defined( GLX_EXT_texture_from_pixmap )
     , mbFreeLeavingPixmap(false)
     , mbFreeEnteringPixmap(false)
+#endif
 #if defined( UNX ) && !defined( MACOSX )
     , maLeavingPixmap(0)
     , maEnteringPixmap(0)
