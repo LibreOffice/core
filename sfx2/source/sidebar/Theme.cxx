@@ -28,7 +28,7 @@
 #include <vcl/settings.hxx>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 
 namespace sfx2 { namespace sidebar {
@@ -468,14 +468,14 @@ Reference<beans::XPropertySet> Theme::GetPropertySet (void)
 
 
 Reference<beans::XPropertySetInfo> SAL_CALL Theme::getPropertySetInfo (void)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return Reference<beans::XPropertySetInfo>(this);
 }
 
 void SAL_CALL Theme::setPropertyValue (
     const ::rtl::OUString& rsPropertyName,
-    const cssu::Any& rValue)
+    const css::uno::Any& rValue)
     throw (css::beans::UnknownPropertyException,
            css::uno::RuntimeException,
            std::exception)
@@ -523,7 +523,7 @@ Any SAL_CALL Theme::getPropertyValue (
     const ::rtl::OUString& rsPropertyName)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
-        cssu::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
@@ -543,10 +543,10 @@ Any SAL_CALL Theme::getPropertyValue (
 
 void SAL_CALL Theme::addPropertyChangeListener(
     const ::rtl::OUString& rsPropertyName,
-    const cssu::Reference<css::beans::XPropertyChangeListener>& rxListener)
+    const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
-        cssu::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)
 {
     ThemeItem eItem (__AnyItem);
     if (rsPropertyName.getLength() > 0)
@@ -571,10 +571,10 @@ void SAL_CALL Theme::addPropertyChangeListener(
 
 void SAL_CALL Theme::removePropertyChangeListener(
     const ::rtl::OUString& rsPropertyName,
-    const cssu::Reference<css::beans::XPropertyChangeListener>& rxListener)
+    const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
-        cssu::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)
 {
     ThemeItem eItem (__AnyItem);
     if (rsPropertyName.getLength() > 0)
@@ -609,10 +609,10 @@ void SAL_CALL Theme::removePropertyChangeListener(
 
 void SAL_CALL Theme::addVetoableChangeListener(
     const ::rtl::OUString& rsPropertyName,
-    const cssu::Reference<css::beans::XVetoableChangeListener>& rxListener)
+    const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
-        cssu::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)
 {
     ThemeItem eItem (__AnyItem);
     if (rsPropertyName.getLength() > 0)
@@ -637,10 +637,10 @@ void SAL_CALL Theme::addVetoableChangeListener(
 
 void SAL_CALL Theme::removeVetoableChangeListener(
     const ::rtl::OUString& rsPropertyName,
-    const cssu::Reference<css::beans::XVetoableChangeListener>& rxListener)
+    const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
     throw(css::beans::UnknownPropertyException,
         css::lang::WrappedTargetException,
-        cssu::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)
 {
     ThemeItem eItem (__AnyItem);
     if (rsPropertyName.getLength() > 0)
@@ -672,8 +672,8 @@ void SAL_CALL Theme::removeVetoableChangeListener(
 
 
 
-cssu::Sequence<css::beans::Property> SAL_CALL Theme::getProperties (void)
-    throw(cssu::RuntimeException, std::exception)
+css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties (void)
+    throw(css::uno::RuntimeException, std::exception)
 {
     ::std::vector<beans::Property> aProperties;
 
@@ -692,7 +692,7 @@ cssu::Sequence<css::beans::Property> SAL_CALL Theme::getProperties (void)
         aProperties.push_back(aProperty);
     }
 
-    return cssu::Sequence<css::beans::Property>(
+    return css::uno::Sequence<css::beans::Property>(
         &aProperties.front(),
         aProperties.size());
 }
@@ -702,7 +702,7 @@ cssu::Sequence<css::beans::Property> SAL_CALL Theme::getProperties (void)
 
 beans::Property SAL_CALL Theme::getPropertyByName (const ::rtl::OUString& rsPropertyName)
     throw(css::beans::UnknownPropertyException,
-        cssu::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
@@ -725,7 +725,7 @@ beans::Property SAL_CALL Theme::getPropertyByName (const ::rtl::OUString& rsProp
 
 
 sal_Bool SAL_CALL Theme::hasPropertyByName (const ::rtl::OUString& rsPropertyName)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     PropertyNameToIdMap::const_iterator iId (maPropertyNameToIdMap.find(rsPropertyName));
     if (iId == maPropertyNameToIdMap.end())
@@ -895,7 +895,7 @@ Theme::PropertyType Theme::GetPropertyType (const ThemeItem eItem)
 
 
 
-cssu::Type Theme::GetCppuType (const PropertyType eType)
+css::uno::Type Theme::GetCppuType (const PropertyType eType)
 {
     switch(eType)
     {

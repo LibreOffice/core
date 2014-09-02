@@ -29,7 +29,7 @@
 #include <svx/sidebar/SidebarDialControl.hxx>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 // namespace open
 
@@ -37,7 +37,7 @@ namespace sc { namespace sidebar {
 
 AlignmentPropertyPanel::AlignmentPropertyPanel(
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent, "AlignmentPropertyPanel", "modules/scalc/ui/sidebaralignment.ui", rxFrame),
       maAlignHorControl(SID_H_ALIGNCELL, *pBindings, *this),
@@ -187,7 +187,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
 
 AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)

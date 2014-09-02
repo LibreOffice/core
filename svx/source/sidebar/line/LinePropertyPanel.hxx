@@ -62,7 +62,7 @@ class LinePropertyPanel
 public:
     static LinePropertyPanel* Create(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
     virtual void DataChanged(
@@ -136,7 +136,7 @@ private:
     // multi-images
     ::boost::scoped_array<Image>                            mpIMGWidthIcon;
 
-    cssu::Reference< css::frame::XFrame >                   mxFrame;
+    css::uno::Reference< css::frame::XFrame >                   mxFrame;
     SfxBindings*                                            mpBindings;
 
     /// bitfield
@@ -163,7 +163,7 @@ private:
     // constructor/destuctor
     LinePropertyPanel(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~LinePropertyPanel(void);
 

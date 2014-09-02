@@ -30,7 +30,6 @@
 
 #include <boost/function.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 class SfxViewFrame;
 class ToolBox;
@@ -70,7 +69,7 @@ public:
         SfxBindings &rBindings,
         ItemUpdateReceiverInterface& rItemUpdateReceiver,
         const ::rtl::OUString& rsCommandName,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** This is the simpler constructor variant that still exists for
         compatibility resons.  Note that GetLabel() and GetIcon() will
@@ -129,8 +128,8 @@ protected:
 
 private:
     ItemUpdateReceiverInterface& mrItemUpdateReceiver;
-    cssu::Reference<css::frame::XFrame> mxFrame;
-    cssu::Reference<css::lang::XComponent> mxFrameActionListener;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
+    css::uno::Reference<css::lang::XComponent> mxFrameActionListener;
     const ::rtl::OUString msCommandName;
 
     void SetupCommandURL (const sal_Char* sCommandName);

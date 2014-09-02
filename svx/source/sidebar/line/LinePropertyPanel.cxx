@@ -56,7 +56,7 @@
 #include <boost/scoped_ptr.hpp>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
 const char UNO_SELECTWIDTH[] = ".uno:SelectWidth";
@@ -155,7 +155,7 @@ namespace svx { namespace sidebar {
 
 LinePropertyPanel::LinePropertyPanel(
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 :   PanelLayout(pParent, "LinePropertyPanel", "svx/ui/sidebarline.ui", rxFrame),
     maStyleControl(SID_ATTR_LINE_STYLE, *pBindings, *this),
@@ -301,7 +301,7 @@ void LinePropertyPanel::SetupIcons(void)
 
 LinePropertyPanel* LinePropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)

@@ -41,7 +41,7 @@ class AlignmentPropertyPanel
 public:
     static AlignmentPropertyPanel* Create(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
     virtual void DataChanged(
@@ -79,7 +79,7 @@ private:
     /// bitfield
     bool                                        mbMultiDisable : 1;
 
-    cssu::Reference<css::frame::XFrame>         mxFrame;
+    css::uno::Reference<css::frame::XFrame>         mxFrame;
     ::sfx2::sidebar::EnumContext                maContext;
     SfxBindings*                                mpBindings;
 
@@ -93,7 +93,7 @@ private:
     // constructor/destuctor
     AlignmentPropertyPanel(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~AlignmentPropertyPanel();
 

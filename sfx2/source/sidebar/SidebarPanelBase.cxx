@@ -29,14 +29,14 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 
 namespace sfx2 { namespace sidebar {
 
 Reference<ui::XUIElement> SidebarPanelBase::Create (
     const ::rtl::OUString& rsResourceURL,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     Window* pWindow,
     const css::ui::LayoutSize& rLayoutSize)
 {
@@ -54,7 +54,7 @@ Reference<ui::XUIElement> SidebarPanelBase::Create (
 
 SidebarPanelBase::SidebarPanelBase (
     const ::rtl::OUString& rsResourceURL,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     Window* pWindow,
     const css::ui::LayoutSize& rLayoutSize)
     : SidebarPanelBaseInterfaceBase(m_aMutex),
@@ -65,7 +65,7 @@ SidebarPanelBase::SidebarPanelBase (
 {
     if (mxFrame.is())
     {
-        cssu::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+        css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
             css::ui::ContextChangeEventMultiplexer::get(
                 ::comphelper::getProcessComponentContext()));
         if (xMultiplexer.is())
@@ -89,7 +89,7 @@ SidebarPanelBase::~SidebarPanelBase (void)
 
 
 void SAL_CALL SidebarPanelBase::disposing (void)
-    throw (cssu::RuntimeException)
+    throw (css::uno::RuntimeException)
 {
     if (mpControl != NULL)
     {
@@ -99,7 +99,7 @@ void SAL_CALL SidebarPanelBase::disposing (void)
 
     if (mxFrame.is())
     {
-        cssu::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+        css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
             css::ui::ContextChangeEventMultiplexer::get(
                 ::comphelper::getProcessComponentContext()));
         if (xMultiplexer.is())
@@ -114,7 +114,7 @@ void SAL_CALL SidebarPanelBase::disposing (void)
 // XContextChangeEventListener
 void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
     const ui::ContextChangeEventObject& rEvent)
-    throw (cssu::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     IContextChangeReceiver* pContextChangeReceiver
         = dynamic_cast<IContextChangeReceiver*>(mpControl);
@@ -132,7 +132,7 @@ void SAL_CALL SidebarPanelBase::notifyContextChangeEvent (
 
 void SAL_CALL SidebarPanelBase::disposing (
     const css::lang::EventObject& rEvent)
-    throw (cssu::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 
@@ -143,8 +143,8 @@ void SAL_CALL SidebarPanelBase::disposing (
 
 
 
-cssu::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (void)
-    throw(cssu::RuntimeException, std::exception)
+css::uno::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (void)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return mxFrame;
 }
@@ -153,7 +153,7 @@ cssu::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (void)
 
 
 ::rtl::OUString SAL_CALL SidebarPanelBase::getResourceURL (void)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return msResourceURL;
 }
@@ -162,7 +162,7 @@ cssu::Reference<css::frame::XFrame> SAL_CALL SidebarPanelBase::getFrame (void)
 
 
 sal_Int16 SAL_CALL SidebarPanelBase::getType (void)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return ui::UIElementType::TOOLPANEL;
 }
@@ -171,7 +171,7 @@ sal_Int16 SAL_CALL SidebarPanelBase::getType (void)
 
 
 Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface (void)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     return Reference<XInterface>(static_cast<XWeak*>(this));
 }
@@ -181,7 +181,7 @@ Reference<XInterface> SAL_CALL SidebarPanelBase::getRealInterface (void)
 
 Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessible (
     const Reference<accessibility::XAccessible>& rxParentAccessible)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rxParentAccessible;
 
@@ -193,7 +193,7 @@ Reference<accessibility::XAccessible> SAL_CALL SidebarPanelBase::createAccessibl
 
 
 Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow (void)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (mpControl != NULL)
         return Reference<awt::XWindow>(
@@ -207,7 +207,7 @@ Reference<awt::XWindow> SAL_CALL SidebarPanelBase::getWindow (void)
 
 
 ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWidth)
-    throw(cssu::RuntimeException, std::exception)
+    throw(css::uno::RuntimeException, std::exception)
 {
     if (maLayoutSize.Minimum >= 0)
         return maLayoutSize;
@@ -233,7 +233,7 @@ ui::LayoutSize SAL_CALL SidebarPanelBase::getHeightForWidth (const sal_Int32 nWi
     return ui::LayoutSize(0,0,0);
 }
 
-sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth () throw(cssu::RuntimeException, std::exception)
+sal_Int32 SAL_CALL SidebarPanelBase::getMinimalWidth () throw(css::uno::RuntimeException, std::exception)
 {
     if (isLayoutEnabled(mpControl))
     {

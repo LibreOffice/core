@@ -39,7 +39,7 @@
 #include <svx/svdview.hxx>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
 const char UNO_FLIPHORIZONTAL[] = ".uno:FlipHorizontal";
@@ -53,9 +53,9 @@ namespace svx { namespace sidebar {
 
 PosSizePropertyPanel::PosSizePropertyPanel(
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 :   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui", rxFrame),
     maRect(),
     mpView(0),
@@ -229,9 +229,9 @@ void PosSizePropertyPanel::SetupIcons(void)
 
 PosSizePropertyPanel* PosSizePropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     if (pParent == NULL)
         throw lang::IllegalArgumentException("no parent Window given to PosSizePropertyPanel::Create", NULL, 0);

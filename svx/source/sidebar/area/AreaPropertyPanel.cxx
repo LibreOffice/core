@@ -43,7 +43,7 @@
 #include <boost/bind.hpp>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::sfx2::sidebar::Theme;
 
 const char UNO_SIDEBARCOLOR[]    = ".uno:sidebarcolor";
@@ -61,7 +61,7 @@ const sal_Int32 AreaPropertyPanel::DEFAULT_BORDER = 0;
 
 AreaPropertyPanel::AreaPropertyPanel(
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
     : PanelLayout(pParent, "AreaPropertyPanel", "svx/ui/sidebararea.ui", rxFrame),
       meLastXFS(static_cast<sal_uInt16>(-1)),
@@ -579,7 +579,7 @@ void AreaPropertyPanel::SetupIcons(void)
 
 AreaPropertyPanel* AreaPropertyPanel::Create (
     Window* pParent,
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     SfxBindings* pBindings)
 {
     if (pParent == NULL)

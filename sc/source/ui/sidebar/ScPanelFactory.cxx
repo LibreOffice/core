@@ -37,7 +37,7 @@
 #include <boost/bind.hpp>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using ::rtl::OUString;
 
 namespace sc { namespace sidebar {
@@ -50,17 +50,17 @@ namespace sc { namespace sidebar {
     return OUString(IMPLEMENTATION_NAME);
 }
 
-cssu::Reference<cssu::XInterface> SAL_CALL ScPanelFactory::createInstance(
+css::uno::Reference<css::uno::XInterface> SAL_CALL ScPanelFactory::createInstance(
     const uno::Reference<lang::XMultiServiceFactory>& )
 {
     ::rtl::Reference<ScPanelFactory> pPanelFactory (new ScPanelFactory());
-    cssu::Reference<cssu::XInterface> xService (static_cast<XWeak*>(pPanelFactory.get()), cssu::UNO_QUERY);
+    css::uno::Reference<css::uno::XInterface> xService (static_cast<XWeak*>(pPanelFactory.get()), css::uno::UNO_QUERY);
     return xService;
 }
 
-cssu::Sequence<OUString> SAL_CALL ScPanelFactory::getSupportedServiceNames (void)
+css::uno::Sequence<OUString> SAL_CALL ScPanelFactory::getSupportedServiceNames (void)
 {
-    cssu::Sequence<OUString> aServiceNames (1);
+    css::uno::Sequence<OUString> aServiceNames (1);
     aServiceNames[0] = SERVICE_NAME;
     return aServiceNames;
 
@@ -77,7 +77,7 @@ ScPanelFactory::~ScPanelFactory (void)
 
 Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,
-    const ::cssu::Sequence<css::beans::PropertyValue>& rArguments)
+    const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
     throw(
         container::NoSuchElementException,
         lang::IllegalArgumentException,

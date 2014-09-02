@@ -135,7 +135,7 @@ void DeckTitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 
 
 
-cssu::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible (void)
+css::uno::Reference<css::accessibility::XAccessible> DeckTitleBar::CreateAccessible (void)
 {
     const ::rtl::OUString sAccessibleName(msTitle);
     SetAccessibleName(sAccessibleName);

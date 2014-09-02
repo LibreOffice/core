@@ -50,9 +50,9 @@ class PosSizePropertyPanel
 public:
     static PosSizePropertyPanel* Create(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
     virtual void DataChanged(
         const DataChangedEvent& rEvent) SAL_OVERRIDE;
@@ -121,7 +121,7 @@ private:
     ::sfx2::sidebar::ControllerItem         maAutoHeightControl;
     ::sfx2::sidebar::ControllerItem         m_aMetricCtl;
 
-    cssu::Reference< css::frame::XFrame >   mxFrame;
+    css::uno::Reference< css::frame::XFrame >   mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
@@ -146,7 +146,7 @@ private:
     bool                                    mbAdjustEnabled : 1;
     bool                                    mbIsFlip : 1;
 
-    cssu::Reference<css::ui::XSidebar> mxSidebar;
+    css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     DECL_LINK( ChangePosXHdl, void * );
     DECL_LINK( ChangePosYHdl, void * );
@@ -166,9 +166,9 @@ private:
     // constructor/destuctor
     PosSizePropertyPanel(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~PosSizePropertyPanel();
 
     void MetricState( SfxItemState eState, const SfxPoolItem* pState );

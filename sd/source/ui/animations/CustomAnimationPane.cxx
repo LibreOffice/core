@@ -147,7 +147,7 @@ void fillRepeatComboBox( ListBox* pBox )
 }
 
 CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase,
-                                          const cssu::Reference<css::frame::XFrame>& rxFrame,
+                                          const css::uno::Reference<css::frame::XFrame>& rxFrame,
                                           const Size& rMinSize )
 :   PanelLayout( pParent, "CustomAnimationsPanel", "modules/simpress/ui/customanimationspanel.ui", rxFrame ),
     mrBase( rBase ),
@@ -2256,7 +2256,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     }
 }
 
-::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )
+::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
 {
     ::Window* pWindow = 0;
 

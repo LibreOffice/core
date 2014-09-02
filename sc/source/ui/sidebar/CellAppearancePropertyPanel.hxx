@@ -50,7 +50,7 @@ private:
 public:
     static CellAppearancePropertyPanel* Create(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
 
     virtual void DataChanged(
@@ -144,7 +144,7 @@ private:
     ::boost::scoped_ptr< CellLineStylePopup > mpCellLineStylePopup;
     ::boost::scoped_ptr< CellBorderStylePopup > mpCellBorderStylePopup;
 
-    cssu::Reference<css::frame::XFrame>     mxFrame;
+    css::uno::Reference<css::frame::XFrame>     mxFrame;
     ::sfx2::sidebar::EnumContext            maContext;
     SfxBindings*                            mpBindings;
 
@@ -173,7 +173,7 @@ private:
     // constructor/destuctor
     CellAppearancePropertyPanel(
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         SfxBindings* pBindings);
     virtual ~CellAppearancePropertyPanel();
 

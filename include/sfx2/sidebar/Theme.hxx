@@ -37,8 +37,6 @@
 
 class SvBorder;
 
-namespace cssu = ::com::sun::star::uno;
-
 
 namespace sfx2 { namespace sidebar {
 
@@ -159,55 +157,55 @@ public:
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
-    static cssu::Reference<css::beans::XPropertySet> GetPropertySet (void);
+    static css::uno::Reference<css::beans::XPropertySet> GetPropertySet (void);
 
     // beans::XPropertySet
-    virtual cssu::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo (void)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo (void)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPropertyValue (
         const ::rtl::OUString& rsPropertyName,
-        const cssu::Any& rValue)
+        const css::uno::Any& rValue)
         throw (css::beans::UnknownPropertyException,
                css::uno::RuntimeException,
                std::exception) SAL_OVERRIDE;
-    virtual cssu::Any SAL_CALL getPropertyValue (
+    virtual css::uno::Any SAL_CALL getPropertyValue (
         const ::rtl::OUString& rsPropertyName)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
-            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addPropertyChangeListener(
         const ::rtl::OUString& rsPropertyName,
-        const cssu::Reference<css::beans::XPropertyChangeListener>& rxListener)
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
-            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removePropertyChangeListener(
         const ::rtl::OUString& rsPropertyName,
-        const cssu::Reference<css::beans::XPropertyChangeListener>& rxListener)
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& rxListener)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
-            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL addVetoableChangeListener(
         const ::rtl::OUString& rsPropertyName,
-        const cssu::Reference<css::beans::XVetoableChangeListener>& rxListener)
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
-            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL removeVetoableChangeListener(
         const ::rtl::OUString& rsPropertyName,
-        const cssu::Reference<css::beans::XVetoableChangeListener>& rxListener)
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& rxListener)
         throw(css::beans::UnknownPropertyException,
             css::lang::WrappedTargetException,
-            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // beans::XPropertySetInfo
-    virtual cssu::Sequence<css::beans::Property> SAL_CALL getProperties (void)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence<css::beans::Property> SAL_CALL getProperties (void)
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual css::beans::Property SAL_CALL getPropertyByName (const ::rtl::OUString& rsName)
         throw(css::beans::UnknownPropertyException,
-            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL hasPropertyByName (const ::rtl::OUString& rsName)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
     static Theme& GetCurrentTheme();
@@ -225,13 +223,13 @@ private:
     PropertyNameToIdMap maPropertyNameToIdMap;
     typedef ::std::vector<rtl::OUString> PropertyIdToNameMap;
     PropertyIdToNameMap maPropertyIdToNameMap;
-    typedef ::std::vector<cssu::Any> RawValueContainer;
+    typedef ::std::vector<css::uno::Any> RawValueContainer;
     RawValueContainer maRawValues;
 
-    typedef ::std::vector<cssu::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
+    typedef ::std::vector<css::uno::Reference<css::beans::XPropertyChangeListener> > ChangeListenerContainer;
     typedef ::std::map<ThemeItem,ChangeListenerContainer> ChangeListeners;
     ChangeListeners maChangeListeners;
-    typedef ::std::vector<cssu::Reference<css::beans::XVetoableChangeListener> > VetoableListenerContainer;
+    typedef ::std::vector<css::uno::Reference<css::beans::XVetoableChangeListener> > VetoableListenerContainer;
     typedef ::std::map<ThemeItem,VetoableListenerContainer> VetoableListeners;
     VetoableListeners maVetoableListeners;
 
@@ -249,7 +247,7 @@ private:
     void SetupPropertyMaps (void);
     void UpdateTheme (void);
     static PropertyType GetPropertyType (const ThemeItem eItem);
-    static cssu::Type GetCppuType (const PropertyType eType);
+    static css::uno::Type GetCppuType (const PropertyType eType);
     static sal_Int32 GetIndex (
         const ThemeItem eItem,
         const PropertyType eType);
@@ -267,7 +265,7 @@ private:
         const ChangeListenerContainer* pListeners,
         const css::beans::PropertyChangeEvent& rEvent) const;
     void ProcessNewValue (
-        const cssu::Any& rValue,
+        const css::uno::Any& rValue,
         const ThemeItem eItem,
         const PropertyType eType);
 };

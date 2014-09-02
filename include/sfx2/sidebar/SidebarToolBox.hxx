@@ -27,7 +27,6 @@
 #include <com/sun/star/util/URL.hpp>
 #include <map>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
@@ -54,14 +53,14 @@ public:
 
     virtual bool Notify (NotifyEvent& rEvent) SAL_OVERRIDE;
 
-    cssu::Reference<css::frame::XToolbarController> GetControllerForItemId (
+    css::uno::Reference<css::frame::XToolbarController> GetControllerForItemId (
         const sal_uInt16 nItemId) const;
     sal_uInt16 GetItemIdForSubToolbarName (
         const ::rtl::OUString& rsCOmmandName) const;
 
     void SetController (
         const sal_uInt16 nItemId,
-        const cssu::Reference<css::frame::XToolbarController>& rxController,
+        const css::uno::Reference<css::frame::XToolbarController>& rxController,
         const ::rtl::OUString& rsCommandName);
 
 private:
@@ -69,7 +68,7 @@ private:
     class ItemDescriptor
     {
     public:
-        cssu::Reference<css::frame::XToolbarController> mxController;
+        css::uno::Reference<css::frame::XToolbarController> mxController;
         css::util::URL maURL;
         rtl::OUString msCurrentCommand;
     };
@@ -86,7 +85,7 @@ private:
 
     void CreateController (
         const sal_uInt16 nItemId,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const sal_Int32 nItemWidth = 0);
     void RegisterHandlers (void);
 };

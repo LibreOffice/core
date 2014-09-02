@@ -38,7 +38,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using namespace ::sd::framework;
 using ::rtl::OUString;
 
@@ -105,7 +105,7 @@ Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     throw(
         css::container::NoSuchElementException,
         css::lang::IllegalArgumentException,
-        cssu::RuntimeException, std::exception)
+        css::uno::RuntimeException, std::exception)
 {
     // Process arguments.
     const ::comphelper::NamedValueCollection aArguments (rArguments);

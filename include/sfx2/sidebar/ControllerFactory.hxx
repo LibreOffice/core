@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 class ToolBox;
 
@@ -35,19 +34,19 @@ namespace sfx2 { namespace sidebar {
 class SFX2_DLLPUBLIC ControllerFactory
 {
 public:
-    static cssu::Reference<css::frame::XToolbarController> CreateToolBoxController(
+    static css::uno::Reference<css::frame::XToolbarController> CreateToolBoxController(
         ToolBox* pToolBox,
         const sal_uInt16 nItemId,
         const ::rtl::OUString& rsCommandName,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
-        const cssu::Reference<css::awt::XWindow>& rxParentWindow,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const sal_Int32 nItemWidth);
 
 private:
-    static cssu::Reference<css::frame::XToolbarController> CreateToolBarController(
+    static css::uno::Reference<css::frame::XToolbarController> CreateToolBarController(
         ToolBox* pToolBox,
         const ::rtl::OUString& rsCommandName,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const sal_Int32 nWidth);
 };
 

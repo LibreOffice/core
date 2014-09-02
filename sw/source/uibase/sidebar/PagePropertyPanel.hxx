@@ -47,7 +47,6 @@ namespace svx { namespace sidebar {
 
 #include <boost/scoped_ptr.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sw { namespace sidebar {
 
@@ -195,7 +194,7 @@ namespace sw { namespace sidebar {
         ::svx::sidebar::Popup maSizePopup;
         ::svx::sidebar::Popup maColumnPopup;
 
-        const cssu::Reference< css::document::XUndoManager > mxUndoManager;
+        const css::uno::Reference< css::document::XUndoManager > mxUndoManager;
 
         bool mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify;
 

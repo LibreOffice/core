@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
@@ -57,34 +56,34 @@ public:
     */
     ::rtl::OUString GetLabelForCommand (
         const ::rtl::OUString& rsCommandName,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Do not call.  Should be part of a local and hidden interface.
     */
-    void SetFrame (const cssu::Reference<css::frame::XFrame>& rxFrame);
+    void SetFrame (const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
   private:
-    cssu::Reference<css::uno::XComponentContext> mxContext;
-    cssu::Reference<css::frame::XFrame> mxCachedDataFrame;
-    cssu::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
-    cssu::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;
-    cssu::Reference<css::ui::XAcceleratorConfiguration> mxCachedGlobalAcceleratorConfiguration;
+    css::uno::Reference<css::uno::XComponentContext> mxContext;
+    css::uno::Reference<css::frame::XFrame> mxCachedDataFrame;
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedDocumentAcceleratorConfiguration;
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedModuleAcceleratorConfiguration;
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> mxCachedGlobalAcceleratorConfiguration;
     ::rtl::OUString msCachedModuleIdentifier;
-    cssu::Reference<css::lang::XComponent> mxFrameListener;
+    css::uno::Reference<css::lang::XComponent> mxFrameListener;
 
     CommandInfoProvider (void);
     ~CommandInfoProvider (void);
 
-    cssu::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration (void);
-    cssu::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration (void);
-    cssu::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration(void);
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetDocumentAcceleratorConfiguration (void);
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetModuleAcceleratorConfiguration (void);
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> GetGlobalAcceleratorConfiguration(void);
     ::rtl::OUString GetModuleIdentifier (void);
     ::rtl::OUString GetCommandShortcut (const ::rtl::OUString& rCommandName);
-    cssu::Sequence<css::beans::PropertyValue> GetCommandProperties (
+    css::uno::Sequence<css::beans::PropertyValue> GetCommandProperties (
         const ::rtl::OUString& rsCommandName);
     ::rtl::OUString GetCommandLabel (const ::rtl::OUString& rsCommandName);
     rtl::OUString RetrieveShortcutsFromConfiguration(
-        const cssu::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
+        const css::uno::Reference<css::ui::XAcceleratorConfiguration>& rxConfiguration,
         const rtl::OUString& rsCommandName);
 };
 

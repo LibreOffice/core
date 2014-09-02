@@ -23,8 +23,6 @@
 #include <sfx2/dllapi.h>
 #include <com/sun/star/frame/XFrame.hpp>
 
-namespace cssu = ::com::sun::star::uno;
-
 
 namespace sfx2 { namespace sidebar {
 
@@ -41,7 +39,7 @@ public:
     */
     static void ShowPanel (
         const ::rtl::OUString& rsPanelId,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
 } } // end of namespace sfx2::sidebar

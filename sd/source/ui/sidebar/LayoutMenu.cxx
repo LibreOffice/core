@@ -123,7 +123,7 @@ static const snewfoil_value_info standard[] =
 LayoutMenu::LayoutMenu (
     ::Window* pParent,
     ViewShellBase& rViewShellBase,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : ValueSet (pParent, WB_ITEMBORDER),
       DragSourceHelper(this),
       DropTargetHelper(this),

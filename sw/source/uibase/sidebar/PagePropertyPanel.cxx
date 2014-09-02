@@ -60,24 +60,24 @@ const char UNO_SIZE[]        = ".uno:Size";
 const char UNO_COLUMN[]      = ".uno:Column";
 
 namespace {
-    const cssu::Reference< css::document::XUndoManager > getUndoManager( const cssu::Reference< css::frame::XFrame >& rxFrame )
+    const css::uno::Reference< css::document::XUndoManager > getUndoManager( const css::uno::Reference< css::frame::XFrame >& rxFrame )
     {
-        const cssu::Reference< css::frame::XController >& xController = rxFrame->getController();
+        const css::uno::Reference< css::frame::XController >& xController = rxFrame->getController();
         if ( xController.is() )
         {
-            const cssu::Reference< css::frame::XModel >& xModel = xController->getModel();
+            const css::uno::Reference< css::frame::XModel >& xModel = xController->getModel();
             if ( xModel.is() )
             {
-                const cssu::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, cssu::UNO_QUERY_THROW );
+                const css::uno::Reference< css::document::XUndoManagerSupplier > xSuppUndo( xModel, css::uno::UNO_QUERY_THROW );
                 if ( xSuppUndo.is() )
                 {
-                    const cssu::Reference< css::document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), cssu::UNO_QUERY_THROW );
+                    const css::uno::Reference< css::document::XUndoManager > xUndoManager( xSuppUndo->getUndoManager(), css::uno::UNO_QUERY_THROW );
                     return xUndoManager;
                 }
             }
         }
 
-        return cssu::Reference< css::document::XUndoManager > ();
+        return css::uno::Reference< css::document::XUndoManager > ();
     }
 }
 

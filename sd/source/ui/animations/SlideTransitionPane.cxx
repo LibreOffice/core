@@ -414,7 +414,7 @@ SlideTransitionPane::SlideTransitionPane(
     ViewShellBase & rBase,
     const Size& rMinSize,
     SdDrawDocument* pDoc,
-    const cssu::Reference<css::frame::XFrame>& rxFrame ) :
+    const css::uno::Reference<css::frame::XFrame>& rxFrame ) :
         PanelLayout( pParent, "SlideTransitionsPanel", "modules/simpress/ui/slidetransitionspanel.ui", rxFrame ),
 
         mrBase( rBase ),
@@ -1069,7 +1069,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
     return 0;
 }
 
-::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )
+::Window * createSlideTransitionPanel( ::Window* pParent, ViewShellBase& rBase, const css::uno::Reference<css::frame::XFrame>& rxFrame )
 {
     ::Window* pWindow = 0;
 

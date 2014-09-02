@@ -65,7 +65,7 @@ MasterPagesSelector::MasterPagesSelector (
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : PreviewValueSet(pParent),
       maMutex(),
       mpContainer(rpContainer),
