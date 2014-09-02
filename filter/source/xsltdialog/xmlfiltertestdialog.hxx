@@ -21,7 +21,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -58,8 +58,8 @@ private:
 
 private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > mxContext;
-    com::sun::star::uno::Reference< com::sun::star::document::XEventBroadcaster > mxGlobalBroadcaster;
-    com::sun::star::uno::Reference< com::sun::star::document::XEventListener > mxGlobalEventListener;
+    com::sun::star::uno::Reference< com::sun::star::document::XDocumentEventBroadcaster > mxGlobalBroadcaster;
+    com::sun::star::uno::Reference< com::sun::star::document::XDocumentEventListener > mxGlobalEventListener;
     com::sun::star::uno::WeakReference< com::sun::star::lang::XComponent > mxLastFocusModel;
 
     OUString m_sImportRecentFile;
