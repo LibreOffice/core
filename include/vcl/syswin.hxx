@@ -276,7 +276,7 @@ public:
 
     SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
 
-    virtual        void    doDeferredInit(bool bResizable, bool bCloseable);
+    virtual        void    doDeferredInit(WinBits nBits);
 };
 
 #endif // INCLUDED_VCL_SYSWIN_HXX

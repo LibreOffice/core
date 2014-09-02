@@ -1125,8 +1125,6 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
     }
 }
 
-
-
 SfxPopupWindow::SfxPopupWindow(
     sal_uInt16 nId,
     const Reference< XFrame >& rFrame,
@@ -1143,13 +1141,9 @@ SfxPopupWindow::SfxPopupWindow(
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
 
-
-
-SfxPopupWindow::SfxPopupWindow(
-    sal_uInt16 nId,
-    const Reference< XFrame >& rFrame,
-    const ResId &rId ) :
-    FloatingWindow( SfxGetpApp()->GetTopWindow(), rId )
+SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUString& rUIXMLDescription,
+                               const css::uno::Reference<css::frame::XFrame> &rFrame)
+    : FloatingWindow(SfxGetpApp()->GetTopWindow(), rID, rUIXMLDescription, rFrame)
     , m_bFloating( false )
     , m_bCascading( false )
     , m_nId( nId )
@@ -1160,8 +1154,6 @@ SfxPopupWindow::SfxPopupWindow(
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
-
-
 
 SfxPopupWindow::SfxPopupWindow(
     sal_uInt16 nId,
@@ -1196,8 +1188,6 @@ SfxPopupWindow::SfxPopupWindow(
     if ( pWindow )
         ((SystemWindow *)pWindow)->GetTaskPaneList()->AddWindow( this );
 }
-
-
 
 SfxPopupWindow::~SfxPopupWindow()
 {

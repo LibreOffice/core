@@ -30,6 +30,7 @@ $(eval $(call gb_UIConfig_add_uifiles,svx,\
 	svx/uiconfig/ui/docrecoverysavedialog \
 	svx/uiconfig/ui/extrustiondepthdialog \
 	svx/uiconfig/ui/findreplacedialog \
+	svx/uiconfig/ui/floatingundoredo \
 	svx/uiconfig/ui/fontworkgallerydialog \
 	svx/uiconfig/ui/fontworkspacingdialog \
 	svx/uiconfig/ui/formlinkwarndialog \

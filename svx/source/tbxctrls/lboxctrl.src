@@ -19,27 +19,6 @@
 
 #include <svx/dialogs.hrc>
 #include <helpid.hrc>
-#include "lboxctrl.hrc"
-
-FloatingWindow RID_SVXTBX_UNDO_REDO_CTRL
-{
-    Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 102 , 87 ) ;
-    HelpID = HID_SVXTBX_UNDO_REDO_CTRL ;
-    StdPopup = TRUE;
-    Hide = TRUE ;
-    OutputSize = TRUE ;
-
-    ListBox LB_SVXTBX_UNDO_REDO_CTRL
-    {
-        HelpID = "svx:ListBox:RID_SVXTBX_UNDO_REDO_CTRL:LB_SVXTBX_UNDO_REDO_CTRL";
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 100 , 85 ) ;
-        Border = TRUE ;
-        DropDown = FALSE ;
-        OutputSize = TRUE ;
-    };
-};
 
 String RID_SVXSTR_NUM_UNDO_ACTIONS
 {

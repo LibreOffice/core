@@ -930,6 +930,26 @@ namespace
 
         return eUnit;
     }
+
+    WinBits extractDeferredBits(VclBuilder::stringmap &rMap)
+    {
+        WinBits nBits = WB_3DLOOK|WB_HIDE;
+        if (extractResizable(rMap))
+            nBits |= WB_SIZEABLE;
+        if (extractCloseable(rMap))
+            nBits |= WB_CLOSEABLE;
+        OString sBorder = VclBuilder::extractCustomProperty(rMap);
+        if (!sBorder.isEmpty())
+            nBits |= WB_BORDER;
+        OString sType(extractTypeHint(rMap));
+        if (sType == "utility")
+            nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_MOVEABLE;
+        else if (sType == "popup-menu")
+            nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_POPUP;
+        else
+            nBits |= WB_MOVEABLE;
+        return nBits;
+    }
 }
 
 FieldUnit VclBuilder::detectUnit(OString const& rString)
@@ -1597,18 +1617,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkWindow")
     {
-        WinBits nBits = WB_SYSTEMWINDOW|WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE|WB_HIDE;
-        if (extractResizable(rMap))
-            nBits |= WB_SIZEABLE;
-        OString sType(extractTypeHint(rMap));
-        if (sType == "utility")
-        {
-            pWindow = new FloatingWindow(pParent, nBits);
-        }
-        else
-        {
-            SAL_WARN("vcl.layout", "no mapping yet for GtkWindow of type " << sType.getStr() << " yet");
-        }
+        WinBits nBits = extractDeferredBits(rMap);
+        pWindow = new FloatingWindow(pParent, nBits|WB_MOVEABLE);
     }
     else
     {
@@ -1706,7 +1716,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
         if (pParent->IsSystemWindow())
         {
             SystemWindow *pSysWin = static_cast<SystemWindow*>(pCurrentChild);
-            pSysWin->doDeferredInit(extractResizable(rProps), extractCloseable(rProps));
+            pSysWin->doDeferredInit(extractDeferredBits(rProps));
             m_bToplevelHasDeferredInit = false;
         }
 

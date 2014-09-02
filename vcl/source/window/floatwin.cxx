@@ -171,13 +171,8 @@ FloatingWindow::FloatingWindow(Window* pParent, const OString& rID, const OUStri
 }
 
 //Find the real parent stashed in mpDialogParent.
-void FloatingWindow::doDeferredInit(bool bResizable, bool bCloseable)
+void FloatingWindow::doDeferredInit(WinBits nBits)
 {
-    WinBits nBits = WB_MOVEABLE|WB_3DLOOK;
-    if (bResizable)
-        nBits |= WB_SIZEABLE;
-    if (bCloseable)
-        nBits |= WB_CLOSEABLE;
     Window *pParent = mpDialogParent;
     mpDialogParent = NULL;
     ImplInit(pParent, nBits);

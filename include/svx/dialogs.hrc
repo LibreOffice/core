@@ -803,12 +803,11 @@
 #define RID_SVXSTR_UNDO_GRAFTRANSPARENCY    (RID_SVX_START + 828)
 #define RID_SVXSTR_UNDO_GRAFCROP            (RID_SVXSTR_GRAFCROP)
 
-// listbox control for UNDO and REDO
-#define RID_SVXTBX_UNDO_REDO_CTRL           (RID_SVX_START +  845)
+// strings for UNDO and REDO
 #define RID_SVXSTR_NUM_UNDO_ACTIONS         (RID_SVX_START +  846)
 #define RID_SVXSTR_NUM_REDO_ACTIONS         (RID_SVX_START +  847)
-#define RID_SVXSTR_NUM_UNDO_ACTION         (RID_SVX_START +  848)
-#define RID_SVXSTR_NUM_REDO_ACTION         (RID_SVX_START +  849)
+#define RID_SVXSTR_NUM_UNDO_ACTION          (RID_SVX_START +  848)
+#define RID_SVXSTR_NUM_REDO_ACTION          (RID_SVX_START +  849)
 
 // Default-transparence-gradient-names
 #define RID_SVXSTR_TRASNGR0_DEF             (RID_SVX_START + 850)

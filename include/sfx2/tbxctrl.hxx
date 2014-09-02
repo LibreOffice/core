@@ -138,9 +138,10 @@ public:
                             SfxPopupWindow( sal_uInt16 nId,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                             WinBits nBits );
-                            SfxPopupWindow( sal_uInt16 nId,
-                                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                            const ResId &rId );
+                            SfxPopupWindow(sal_uInt16 nId,
+                                           const OString& rID, const OUString& rUIXMLDescription,
+                                           const css::uno::Reference<css::frame::XFrame> &rFrame =
+                                               css::uno::Reference<css::frame::XFrame>());
                             SfxPopupWindow( sal_uInt16 nId,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
                                             Window* pParentWindow,

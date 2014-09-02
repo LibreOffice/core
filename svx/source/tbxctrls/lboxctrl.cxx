@@ -44,33 +44,24 @@
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 
-#include "lboxctrl.hrc"
-
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 
 class SvxPopupWindowListBox;
 
-
-
 class SvxPopupWindowListBox: public SfxPopupWindow
 {
     using FloatingWindow::StateChanged;
 
-    ListBox *       pListBox;
+    ListBox *       m_pListBox;
     ToolBox &       rToolBox;
     bool            bUserSel;
     sal_uInt16          nTbxId;
     OUString   maCommandURL;
-    // disallow copy-constructor and assignment-operator
-
-//  SvxPopupWindowListBox( sal_uInt16 nSlotId, ToolBox& rTbx, sal_uInt16 nTbxItemId );
 
 public:
     SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nTbxId, ToolBox& rTbx );
-    virtual ~SvxPopupWindowListBox();
 
     // SfxPopupWindow
     virtual SfxPopupWindow *    Clone() const SAL_OVERRIDE;
@@ -78,42 +69,37 @@ public:
     virtual void                StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pState ) SAL_OVERRIDE;
 
-    inline ListBox &            GetListBox()    { return *pListBox; }
+    inline ListBox &            GetListBox()    { return *m_pListBox; }
 
     bool                        IsUserSelected() const          { return bUserSel; }
     void                        SetUserSelected( bool bVal )    { bUserSel = bVal; }
-    /*virtual*/Window*                     GetPreferredKeyInputWindow() SAL_OVERRIDE;
+    virtual Window*             GetPreferredKeyInputWindow() SAL_OVERRIDE;
 };
 
-
-
-SvxPopupWindowListBox::SvxPopupWindowListBox( sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx ) :
-    SfxPopupWindow( nSlotId, Reference< XFrame >(), SVX_RES( RID_SVXTBX_UNDO_REDO_CTRL ) ),
-    rToolBox    ( rTbx ),
-    bUserSel    ( false ),
-    nTbxId      ( nId ),
-    maCommandURL( rCommandURL )
+SvxPopupWindowListBox::SvxPopupWindowListBox(sal_uInt16 nSlotId, const OUString& rCommandURL, sal_uInt16 nId, ToolBox& rTbx)
+    : SfxPopupWindow(nSlotId, "FloatingUndoRedo", "svx/ui/floatingundoredo.ui")
+    , rToolBox(rTbx)
+    , bUserSel(false)
+    , nTbxId(nId)
+    , maCommandURL(rCommandURL)
 {
     DBG_ASSERT( nSlotId == GetId(), "id mismatch" );
-    pListBox = new ListBox( this, SVX_RES( LB_SVXTBX_UNDO_REDO_CTRL ) );
-    FreeResource();
-    pListBox->EnableMultiSelection( true, true );
+    get(m_pListBox, "treeview");
+    WinBits nBits(m_pListBox->GetStyle());
+    nBits &= ~(WB_SIMPLEMODE);
+    m_pListBox->SetStyle(nBits);
+    Size aSize(LogicToPixel(Size(100, 85), MAP_APPFONT));
+    m_pListBox->set_width_request(aSize.Width());
+    m_pListBox->set_height_request(aSize.Height());
+    m_pListBox->EnableMultiSelection( true, true );
     SetBackground( GetSettings().GetStyleSettings().GetDialogColor() );
     AddStatusListener( rCommandURL );
 }
-
-
-SvxPopupWindowListBox::~SvxPopupWindowListBox()
-{
-    delete pListBox;
-}
-
 
 SfxPopupWindow* SvxPopupWindowListBox::Clone() const
 {
     return new SvxPopupWindowListBox( GetId(), maCommandURL, nTbxId, rToolBox );
 }
-
 
 void SvxPopupWindowListBox::PopupModeEnd()
 {
@@ -141,10 +127,8 @@ Window* SvxPopupWindowListBox::GetPreferredKeyInputWindow()
 {
     // allows forwarding key events in the correct window
     // without setting the focus
-    return pListBox->GetPreferredKeyInputWindow();
+    return m_pListBox->GetPreferredKeyInputWindow();
 }
-
-
 
 SvxListBoxControl::SvxListBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     :SfxToolBoxControl( nSlotId, nId, rTbx ),
