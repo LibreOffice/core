@@ -16,59 +16,9 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#include "mailmergechildwindow.hrc"
 #include "dbui.hrc"
 #include "helpid.h"
 #include <cmdid.h>
-
-#define WIDTH  100
-#define HEIGHT 16
-
-#define WORKAROUND \
-    Text [ en-US ] = "Return to Mail Merge Wizard" ; \
-
-FloatingWindow DLG_MAILMERGECHILD\
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ;
-    Moveable = TRUE ;
-    Closeable = FALSE ;
-    Sizeable = FALSE ;
-    Zoomable = TRUE ;
-    HelpID = HID_MAILMERGECHILD ;
-    Hide = TRUE ;
-    Text [ en-US ] = "Mail Merge Wizard";\
-    ToolBox TB_BACK\
-    {
-        MenuStrings = TRUE ;
-        SVLook = TRUE ;
-        ItemList =
-        {
-            ToolBoxItem\
-            {
-                Identifier = 1;
-                HelpID = HID_RETURN_TO_MAILMERGE ;
-                Left = TRUE;
-                WORKAROUND
-            };
-        };
-    };
-    #define IMGLIST1_IDS\
-        IdList = \
-        { \
-            FN_SHOW_ROOT; \
-        }; \
-        IdCount = 1
-
-    ImageList ILIST_TBX
-    {
-        Prefix = "sc";
-        MaskColor = IMAGE_MASK_COLOR;
-        IMGLIST1_IDS;
-    };
-};
-
 
 String ST_SEND
 {

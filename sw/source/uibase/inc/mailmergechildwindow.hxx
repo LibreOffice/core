@@ -25,15 +25,13 @@
 
 class SwMailMergeChildWin : public SfxFloatingWindow
 {
-    ToolBox                 m_aBackTB;
-
+    ToolBox* m_pBackTB;
     DECL_LINK( BackHdl, void* );
 
 public:
     SwMailMergeChildWin(SfxBindings*, SfxChildWindow*, Window *pParent);
-    virtual ~SwMailMergeChildWin();
 
-    virtual void    FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
+    virtual void FillInfo(SfxChildWinInfo&) const SAL_OVERRIDE;
 };
 
 class SwMailMergeChildWindow : public SfxChildWindow

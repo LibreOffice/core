@@ -30,7 +30,6 @@
 #include <svtools/svmedit.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/image.hxx>
-#include <mailmergechildwindow.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
 
@@ -64,28 +63,14 @@ SwMailMergeChildWindow::SwMailMergeChildWindow( Window* _pParent,
     pWindow->Show();
 }
 
-SwMailMergeChildWin::SwMailMergeChildWin( SfxBindings* _pBindings,
-                            SfxChildWindow* pChild,
-                            Window *pParent) :
-    SfxFloatingWindow(_pBindings, pChild, pParent, SW_RES(DLG_MAILMERGECHILD)),
-    m_aBackTB(this, SW_RES( TB_BACK ))
+SwMailMergeChildWin::SwMailMergeChildWin(SfxBindings* _pBindings,
+    SfxChildWindow* pChild, Window *pParent)
+    : SfxFloatingWindow(_pBindings, pChild, pParent, "FloatingMMChild",
+                        "modules/swriter/ui/floatingmmchild.ui")
 {
-    m_aBackTB.SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
-    sal_uInt16 nIResId = ILIST_TBX;
-    ResId aResId( nIResId, *pSwResMgr );
-    ImageList aIList(aResId);
-    FreeResource();
-
-    m_aBackTB.SetItemImage( 1, aIList.GetImage(FN_SHOW_ROOT) );
-    m_aBackTB.SetButtonType( BUTTON_SYMBOLTEXT );
-    Size aSz = m_aBackTB.CalcWindowSizePixel(1);
-    m_aBackTB.SetPosSizePixel( Point(), aSz );
-    SetOutputSizePixel(aSz);
-    m_aBackTB.Show();
-}
-
-SwMailMergeChildWin::~SwMailMergeChildWin()
-{
+    get(m_pBackTB, "back");
+    m_pBackTB->SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
+    m_pBackTB->SetButtonType( BUTTON_SYMBOLTEXT );
 }
 
 IMPL_LINK_NOARG(SwMailMergeChildWin, BackHdl)

@@ -67,7 +67,6 @@ IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl)
 
 #include <helpid.h>
 #include <cmdid.h>
-#include <../../uibase/dbui/mailmergechildwindow.hrc>
 #include <swunohelper.hxx>
 #include <mmoutputpage.hxx>
 #include <maildispatcher.hxx>
