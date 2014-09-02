@@ -178,20 +178,42 @@ void CTLayout::ApplyDXArray(ImplLayoutArgs& rArgs)
 
         if(!(status & kCTRunStatusNonMonotonic))
         {
-            /* simple 1 to 1 */
-            for(int i = 0 ; i < iter->m_nGlyphs; i++)
+            if(mnLayoutFlags & SAL_LAYOUT_VERTICAL)
             {
-                if(iter->m_pStringIndices[i] == 0)
+                /* simple 1 to 1 */
+                for(int i = 0 ; i < iter->m_nGlyphs; i++)
                 {
-                    iter->m_pAdjPositions[i].x = 0;
-                    SAL_INFO( "vcl.ct", "Apply DXArray["<< i << "]: 0.0 pos: " << iter->m_pPositions[i].x);
+                    if(iter->m_pStringIndices[i] == 0)
+                    {
+                        iter->m_pAdjPositions[i].x = 0;
+                        SAL_INFO( "vcl.ct", "Apply DXArray["<< i << "]: 0.0 pos: " << iter->m_pPositions[i].x);
+                    }
+                    else
+                    {
+                        iter->m_pAdjPositions[i].x = rArgs.mpDXArray[iter->m_pStringIndices[i-1]];
+                        SAL_INFO( "vcl.ct", "Apply to i DXArray["<< iter->m_pStringIndices[i-1] << "]: " <<
+                                  rArgs.mpDXArray[iter->m_pStringIndices[i-1]] << " pos:( " << iter->m_pPositions[i].x << ", " << iter->m_pPositions[i].y);
+                    }
+                    iter->m_pAdjPositions[i].y = iter->m_pPositions[i].y;
                 }
-                else
+            }
+            else
+            {
+                /* simple 1 to 1 */
+                for(int i = 0 ; i < iter->m_nGlyphs; i++)
                 {
-                    iter->m_pAdjPositions[i].x = rArgs.mpDXArray[iter->m_pStringIndices[i-1]];
-                    SAL_INFO( "vcl.ct", "Apply to i DXArray["<< iter->m_pStringIndices[i-1] << "]: " << rArgs.mpDXArray[iter->m_pStringIndices[i-1]] << " pos: " << iter->m_pPositions[i].x);
+                    if(iter->m_pStringIndices[i] == 0)
+                    {
+                        iter->m_pAdjPositions[i].x = 0;
+                        SAL_INFO( "vcl.ct", "Apply DXArray["<< i << "]: 0.0 pos: " << iter->m_pPositions[i].x);
+                    }
+                    else
+                    {
+                        iter->m_pAdjPositions[i].x = rArgs.mpDXArray[iter->m_pStringIndices[i-1]];
+                        SAL_INFO( "vcl.ct", "Apply to i DXArray["<< iter->m_pStringIndices[i-1] << "]: " << rArgs.mpDXArray[iter->m_pStringIndices[i-1]] << " pos: " << iter->m_pPositions[i].x);
+                    }
+                    iter->m_pAdjPositions[i].y = iter->m_pPositions[i].y;
                 }
-                iter->m_pAdjPositions[i].y = iter->m_pPositions[i].y;
             }
         }
         else
@@ -434,130 +456,152 @@ void CTLayout::drawCTLine(AquaSalGraphics& rAquaGraphics, CTLineRef ctline, cons
      * iow that we want to use DXArray to align glyphs
      * Otherwise we just use CoreText to display the whole line
      */
-    boost::ptr_vector<CTRunData>::const_iterator iter = m_vRunData.begin();
-    if(iter != m_vRunData.end())
+
+    if(!(mnLayoutFlags & SAL_LAYOUT_VERTICAL))
     {
-        for(; iter != m_vRunData.end(); ++iter)
+        boost::ptr_vector<CTRunData>::const_iterator iter = m_vRunData.begin();
+        if(iter != m_vRunData.end())
         {
-            CTRunRef run = iter->m_pRun;
-            /* if we do not have Ajusted Poistions for a run, just use CoreText to draw it */
-            if(iter->m_pAdjPositions)
+            for(; iter != m_vRunData.end(); ++iter)
             {
-                CTFontRef runFont = iter->m_pFont;
-                CGFloat baseSize = CTFontGetSize(runFont);
-                for (CFIndex runGlyphIndex = 0;
-                     runGlyphIndex < CTRunGetGlyphCount(run);
-                     runGlyphIndex++)
+                CTRunRef run = iter->m_pRun;
+                /* if we do not have Ajusted Poistions for a run, just use CoreText to draw it */
+                if(iter->m_pAdjPositions)
                 {
-                    CGFontRef cgFont = CTFontCopyGraphicsFont(runFont, NULL);
-                    CGContextSaveGState(context);
-
-                    CGContextSetFont(context, cgFont);
-                    CGContextSetFontSize(context, CTFontGetSize(runFont));
-                    CGContextSetFillColor( context, rAquaGraphics.maTextColor.AsArray() );
-                    CGContextSetTextPosition( context, aTextPos.x, aTextPos.y );
-                    CGContextShowGlyphsAtPositions(context, iter->m_pGlyphs + runGlyphIndex,
-                                                   iter->m_pAdjPositions + runGlyphIndex, 1);
-                    CGContextRestoreGState(context);
-                    CFRelease(cgFont);
-                }
-                /* Do we want to show 'space' as 'bullet' */
-                if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
-                {
-                    for(int i = 0 ; i < iter->m_nGlyphs; i++)
+                    CTFontRef runFont = iter->m_pFont;
+                    CGFloat baseSize = CTFontGetSize(runFont);
+                    for (CFIndex runGlyphIndex = 0;
+                         runGlyphIndex < CTRunGetGlyphCount(run);
+                         runGlyphIndex++)
                     {
-                        UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString),
-                                                                   iter->m_pStringIndices[i]);
-                        /* is the character associated with the current glyph a space ? */
-                        if(curChar == ' ')
-                        {
-                            /* make a rect that will enclose the bullet we want to draw */
-                            CFRange glyphRange = CFRangeMake(i, 1);
-                            CGFloat ascent;
-                            CGFloat descent;
-                            CGFloat leading;
-                            CTRunGetTypographicBounds ( run, glyphRange,
-                                                        &ascent, &descent, &leading);
-                            CGRect bulletRect = CGRectMake(aTextPos.x + iter->m_pAdjPositions[i].x + iter->m_pAdvances[i].width / 4,
-                                                           aTextPos.y + iter->m_pAdjPositions[i].y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
+                        CGFontRef cgFont = CTFontCopyGraphicsFont(runFont, NULL);
+                        CGContextSaveGState(context);
 
-                            /* Draw a bullet filled with the 'special' color for non-displayable characters */
-                            CGContextSaveGState(context);
-                            RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
-                            CGContextSetFillColor( context, bulletColor.AsArray() );
-                            CGContextSetStrokeColor(context, bulletColor.AsArray());
-                            CGContextBeginPath(context);
-                            CGContextAddEllipseInRect(context, bulletRect);
-                            CGContextDrawPath(context, kCGPathFillStroke); // Or kCGPathFill
-                            CGContextRestoreGState(context);
+                        CGContextSetFont(context, cgFont);
+                        CGContextSetFontSize(context, CTFontGetSize(runFont));
+                        CGContextSetFillColor( context, rAquaGraphics.maTextColor.AsArray() );
+                        if(mnLayoutFlags & SAL_LAYOUT_VERTICAL)
+                        {
+                            CGContextRotateCTM( context,  -F_PI/2 );
+                        }
+                        CGContextSetTextPosition( context, aTextPos.x, aTextPos.y );
+                        SAL_INFO( "vcl.ct", "CGContextSetTextPosition(" << aTextPos.x << ", " << aTextPos.y << ")");
+                        SAL_INFO( "vcl.ct", "CGContextShowGlyphAt(" << iter->m_pAdjPositions[runGlyphIndex].x << ", " << iter->m_pAdjPositions[runGlyphIndex].y << ")");
+
+                        CGContextShowGlyphsAtPositions(context, iter->m_pGlyphs + runGlyphIndex,
+                                                       iter->m_pAdjPositions + runGlyphIndex, 1);
+                        CGContextRestoreGState(context);
+                        CFRelease(cgFont);
+                    }
+                    /* Do we want to show 'space' as 'bullet' */
+                    if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
+                    {
+                        for(int i = 0 ; i < iter->m_nGlyphs; i++)
+                        {
+                            UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString),
+                                                                           iter->m_pStringIndices[i]);
+                            /* is the character associated with the current glyph a space ? */
+                            if(curChar == ' ')
+                            {
+                                /* make a rect that will enclose the bullet we want to draw */
+                                CFRange glyphRange = CFRangeMake(i, 1);
+                                CGFloat ascent;
+                                CGFloat descent;
+                                CGFloat leading;
+                                CTRunGetTypographicBounds ( run, glyphRange,
+                                                            &ascent, &descent, &leading);
+                                CGRect bulletRect;
+                                bulletRect = CGRectMake(aTextPos.x + iter->m_pAdjPositions[i].x + iter->m_pAdvances[i].width / 4,
+                                                        aTextPos.y + iter->m_pAdjPositions[i].y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
+
+                                /* Draw a bullet filled with the 'special' color for non-displayable characters */
+                                CGContextSaveGState(context);
+                                RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
+                                CGContextSetFillColor( context, bulletColor.AsArray() );
+                                CGContextSetStrokeColor(context, bulletColor.AsArray());
+                                CGContextBeginPath(context);
+                                CGContextAddEllipseInRect(context, bulletRect);
+                                CGContextDrawPath(context, kCGPathFillStroke); // Or kCGPathFill
+                                CGContextRestoreGState(context);
+                            }
                         }
                     }
                 }
+                else
+                {
+                    CTRunDraw(run, context, CFRangeMake( 0, 0 ));
+                    /* Fixme draw bullet */
+                }
             }
-            else
-            {
-                CTRunDraw(run, context, CFRangeMake( 0, 0 ));
-                /* Fixme draw bullet */
-            }
+            CGContextRestoreGState( context );
+            return;
         }
     }
-    else
+
+    SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << context << ")" );
+    // draw the text
+    CTLineDraw( ctline, context );
+
+    if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
     {
-        SAL_INFO( "vcl.ct", "CTLineDraw(" << ctline << "," << context << ")" );
-        // draw the text
-        CTLineDraw( ctline, context );
+        CFArrayRef runArray = CTLineGetGlyphRuns(ctline);
+        CFIndex runCount = CFArrayGetCount(runArray);
 
-        if(mnLayoutFlags & SAL_LAYOUT_DRAW_BULLET)
+        for (CFIndex runIndex = 0; runIndex < runCount; runIndex++)
         {
-            CFArrayRef runArray = CTLineGetGlyphRuns(ctline);
-            CFIndex runCount = CFArrayGetCount(runArray);
+            CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
+            CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+            CGPoint position;
+            CGSize advance;
+            CFIndex runGlyphIndex = 0;
+            CFIndex stringIndice = 0;
 
-            for (CFIndex runIndex = 0; runIndex < runCount; runIndex++)
+            for (; runGlyphIndex < runGlyphCount; runGlyphIndex++)
             {
-
-                CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArray, runIndex);
-                CFIndex runGlyphCount = CTRunGetGlyphCount(run);
-
-                CGPoint position;
-                CGSize advance;
-                CFIndex runGlyphIndex = 0;
-                CFIndex stringIndice = 0;
-
-                for (; runGlyphIndex < runGlyphCount; runGlyphIndex++)
+                CFRange glyphRange = CFRangeMake(runGlyphIndex, 1);
+                CTRunGetStringIndices( run, glyphRange, &stringIndice );
+                UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString), stringIndice);
+                if(curChar == ' ')
                 {
-                    CFRange glyphRange = CFRangeMake(runGlyphIndex, 1);
-
-                    CTRunGetStringIndices( run, glyphRange, &stringIndice );
-                    UniChar curChar = CFStringGetCharacterAtIndex (CFAttributedStringGetString(mpAttrString), stringIndice);
-                    if(curChar == ' ')
+                    CGFloat ascent;
+                    CGFloat descent;
+                    CGFloat leading;
+                    CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(CTRunGetAttributes(run),
+                                                                        kCTFontAttributeName);
+                    CGFloat baseSize = CTFontGetSize(runFont);
+                    CTRunGetTypographicBounds ( run, glyphRange,
+                                                &ascent, &descent, &leading);
+                    CTRunGetPositions(run, glyphRange, &position);
+                    CTRunGetAdvances(run, glyphRange, &advance);
+                    CGRect bulletRect;
+                    if(mnLayoutFlags & SAL_LAYOUT_VERTICAL)
                     {
-                        CGFloat ascent;
-                        CGFloat descent;
-                        CGFloat leading;
-                        CTFontRef runFont = (CTFontRef)CFDictionaryGetValue(CTRunGetAttributes(run),
-                                                                            kCTFontAttributeName);
-                        CGFloat baseSize = CTFontGetSize(runFont);
-                        CTRunGetTypographicBounds ( run, glyphRange,
-                                                    &ascent, &descent, &leading);
-
-                        CTRunGetPositions(run, glyphRange, &position);
-                        CTRunGetAdvances(run, glyphRange, &advance);
-                        CGRect bulletRect = CGRectMake(aTextPos.x + position.x + advance.width / 4,
-                                                   aTextPos.y + position.y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
-                        CGContextSaveGState(context);
-                        RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
-                        CGContextSetFillColor( context, bulletColor.AsArray() );
-                        CGContextSetStrokeColor(context, bulletColor.AsArray());
-
-                        CGContextBeginPath(context);
-                        CGContextAddEllipseInRect(context, bulletRect);
-                        CGContextDrawPath(context, kCGPathFillStroke); // Or kCGPathFill
-                        CGContextRestoreGState(context);
+                        bulletRect = CGRectMake(position.x - advance.width / 4,
+                                                -position.y,  baseSize / 5, baseSize / 5 );
                     }
+                    else
+                    {
+                        bulletRect = CGRectMake(position.x + advance.width / 4,
+                                                position.y + ascent / 3 - baseSize / 5,  baseSize / 5, baseSize / 5 );
+                    }
+
+                    CGContextSaveGState(context);
+                    CGContextTranslateCTM(context, aTextPos.x, aTextPos.y);
+                    RGBAColor bulletColor(MAKE_SALCOLOR(0x26, 0x8b, 0xd2 )); // NON_PRINTING_CHARACTER_COLOR
+                    CGContextSetFillColor( context, bulletColor.AsArray() );
+                    CGContextSetStrokeColor(context, bulletColor.AsArray());
+                    if(mnLayoutFlags & SAL_LAYOUT_VERTICAL)
+                    {
+                        CGContextRotateCTM( context,  -F_PI/2 );
+                    }
+
+                    CGContextBeginPath(context);
+                    CGContextAddEllipseInRect(context, bulletRect);
+                    CGContextDrawPath(context, kCGPathFillStroke); // Or kCGPathFill
+                    CGContextRestoreGState(context);
                 }
             }
         }
-
     }
     // restore the original graphic context transformations
     SAL_INFO( "vcl.ct", "CGContextRestoreGState(" << context << ")" );
