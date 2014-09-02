@@ -67,7 +67,7 @@
 #include <com/sun/star/task/theJobExecutor.hpp>
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/theUIElementFactoryManager.hpp>
 #include <com/sun/star/ui/theWindowStateConfiguration.hpp>
@@ -1323,7 +1323,7 @@ void Desktop::AppEvent( const ApplicationEvent& rAppEvent )
 
 struct ExecuteGlobals
 {
-    Reference < css::document::XEventListener > xGlobalBroadcaster;
+    Reference < css::document::XDocumentEventListener > xGlobalBroadcaster;
     bool bRestartRequested;
     bool bUseSystemFileDialog;
     std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
@@ -1485,7 +1485,7 @@ int Desktop::Main()
         xDesktop = css::frame::Desktop::create( xContext );
 
         // create service for loadin SFX (still needed in startup)
-        pExecGlobals->xGlobalBroadcaster = Reference < css::document::XEventListener >
+        pExecGlobals->xGlobalBroadcaster = Reference < css::document::XDocumentEventListener >
             ( css::frame::theGlobalEventBroadcaster::get(xContext), UNO_QUERY_THROW );
 
         /* ensure existence of a default window that messages can be dispatched to
@@ -1513,9 +1513,9 @@ int Desktop::Main()
         // keep a language options instance...
         pExecGlobals->pLanguageOptions.reset( new SvtLanguageOptions(true));
 
-        css::document::EventObject aEvent;
+        css::document::DocumentEvent aEvent;
         aEvent.EventName = "OnStartApp";
-        pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
+        pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
 
         SetSplashScreenProgress(50);
 
@@ -1731,9 +1731,9 @@ int Desktop::doShutdown()
 
     if (pExecGlobals->xGlobalBroadcaster.is())
     {
-        css::document::EventObject aEvent;
+        css::document::DocumentEvent aEvent;
         aEvent.EventName = "OnCloseApp";
-        pExecGlobals->xGlobalBroadcaster->notifyEvent(aEvent);
+        pExecGlobals->xGlobalBroadcaster->documentEventOccured(aEvent);
     }
 
     delete pResMgr, pResMgr = NULL;

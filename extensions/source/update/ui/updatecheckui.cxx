@@ -25,8 +25,8 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/document/XEventListener.hpp>
-#include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
+#include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/theGlobalEventBroadcaster.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
@@ -119,7 +119,7 @@ public:
 
 
 class UpdateCheckUI : public ::cppu::WeakImplHelper3
-                        < lang::XServiceInfo, document::XEventListener, beans::XPropertySet >
+                        < lang::XServiceInfo, document::XDocumentEventListener, beans::XPropertySet >
 {
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XJob > mrJob;
@@ -168,7 +168,7 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // XEventListener
+    // XDocumentEventListener
     virtual void SAL_CALL notifyEvent(const document::EventObject& Event)
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL disposing(const lang::EventObject& Event)
@@ -218,7 +218,7 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     maTimeoutTimer.SetTimeout( 10000 );
     maTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateCheckUI, TimeOutHdl ) );
 
-    uno::Reference< document::XEventBroadcaster > xBroadcaster( frame::theGlobalEventBroadcaster::get(m_xContext) );
+    uno::Reference< document::XDocumentEventBroadcaster > xBroadcaster( frame::theGlobalEventBroadcaster::get(m_xContext) );
     xBroadcaster->addEventListener( this );
 
     maWindowEventHdl = LINK( this, UpdateCheckUI, WindowEventHdl );

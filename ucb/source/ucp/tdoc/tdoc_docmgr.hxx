@@ -26,7 +26,7 @@
 
 #include "cppuhelper/implbase1.hxx"
 
-#include "com/sun/star/document/XEventListener.hpp"
+#include "com/sun/star/document/XDocumentEventListener.hpp"
 #include "com/sun/star/embed/XStorage.hpp"
 #include "com/sun/star/frame/XModel.hpp"
 #include "com/sun/star/frame/XModuleManager2.hpp"
@@ -82,7 +82,7 @@ namespace tdoc_ucp {
 
 
     class OfficeDocumentsManager :
-        public cppu::WeakImplHelper1< com::sun::star::document::XEventListener >
+        public cppu::WeakImplHelper1< com::sun::star::document::XDocumentEventListener >
     {
         class OfficeDocumentsCloseListener :
            public cppu::WeakImplHelper1< com::sun::star::util::XCloseListener >
@@ -120,12 +120,12 @@ namespace tdoc_ucp {
 
         void destroy();
 
-        // document::XEventListener
-        virtual void SAL_CALL notifyEvent(
-                const com::sun::star::document::EventObject & Event )
+        // document::XDocumentEventListener
+        virtual void SAL_CALL documentEventOccured(
+                const com::sun::star::document::DocumentEvent & Event )
             throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        // lang::XEventListener (base of document::XEventListener)
+        // lang::XEventListener (base of document::XDocumentEventListener)
         virtual void SAL_CALL disposing(
                 const com::sun::star::lang::EventObject & Source )
             throw ( com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;

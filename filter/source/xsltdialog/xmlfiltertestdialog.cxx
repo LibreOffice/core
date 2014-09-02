@@ -68,13 +68,13 @@ using namespace com::sun::star::xml;
 using namespace com::sun::star::xml::sax;
 
 
-class GlobalEventListenerImpl : public ::cppu::WeakImplHelper1< com::sun::star::document::XEventListener >
+class GlobalEventListenerImpl : public ::cppu::WeakImplHelper1< com::sun::star::document::XDocumentEventListener >
 {
 public:
     GlobalEventListenerImpl( XMLFilterTestDialog* pDialog );
 
-    // XEventListener
-    virtual void SAL_CALL notifyEvent( const com::sun::star::document::EventObject& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
+    // XDocumentEventListener
+    virtual void SAL_CALL documentEventOccured( const com::sun::star::document::DocumentEvent& Event ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
 
     // lang::XEventListener
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw (RuntimeException, std::exception) SAL_OVERRIDE;
@@ -87,7 +87,7 @@ GlobalEventListenerImpl::GlobalEventListenerImpl( XMLFilterTestDialog* pDialog )
 {
 }
 
-void SAL_CALL GlobalEventListenerImpl::notifyEvent( const com::sun::star::document::EventObject& Event ) throw (RuntimeException, std::exception)
+void SAL_CALL GlobalEventListenerImpl::documentEventOccured( const com::sun::star::document::DocumentEvent& Event ) throw (RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     if( Event.EventName == "OnFocus" || Event.EventName == "OnUnload" )
@@ -168,7 +168,7 @@ XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
     {
         mxGlobalBroadcaster = theGlobalEventBroadcaster::get(mxContext);
         mxGlobalEventListener = new GlobalEventListenerImpl( this );
-        mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
+        mxGlobalBroadcaster->addDocumentEventListener( mxGlobalEventListener );
     }
     catch( const Exception& )
     {
@@ -181,7 +181,7 @@ XMLFilterTestDialog::~XMLFilterTestDialog()
     try
     {
         if( mxGlobalBroadcaster.is() )
-            mxGlobalBroadcaster->removeEventListener( mxGlobalEventListener );
+            mxGlobalBroadcaster->removeDocumentEventListener( mxGlobalEventListener );
     }
     catch( const Exception& )
     {

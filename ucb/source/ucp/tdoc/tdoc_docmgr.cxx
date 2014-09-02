@@ -33,7 +33,7 @@
 
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
-#include "com/sun/star/document/XEventBroadcaster.hpp"
+#include "com/sun/star/document/XDocumentEventBroadcaster.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
 #include "com/sun/star/frame/theGlobalEventBroadcaster.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
@@ -74,15 +74,15 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
          const lang::EventObject& Source )
     throw ( uno::RuntimeException, std::exception )
 {
-    document::EventObject aDocEvent;
+    document::DocumentEvent aDocEvent;
     aDocEvent.Source = Source.Source;
     aDocEvent.EventName = "OfficeDocumentsListener::notifyClosing";
-    m_pManager->notifyEvent( aDocEvent );
+    m_pManager->documentEventOccured( aDocEvent );
 }
 
 
 
-// lang::XEventListener (base of util::XCloseListener)
+// lang::XDocumentEventListener (base of util::XCloseListener)
 
 
 
@@ -110,8 +110,8 @@ OfficeDocumentsManager::OfficeDocumentsManager(
   m_xDocCloseListener( new OfficeDocumentsCloseListener( this ) )
 {
     // Order is important (multithreaded environment)
-    uno::Reference< document::XEventBroadcaster >(
-        m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->addEventListener( this );
+    uno::Reference< document::XDocumentEventBroadcaster >(
+        m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->addDocumentEventListener( this );
     buildDocumentsList();
 }
 
@@ -129,8 +129,8 @@ OfficeDocumentsManager::~OfficeDocumentsManager()
 
 void OfficeDocumentsManager::destroy()
 {
-    uno::Reference< document::XEventBroadcaster >(
-        m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->removeEventListener( this );
+    uno::Reference< document::XDocumentEventBroadcaster >(
+        m_xDocEvtNotifier, uno::UNO_QUERY_THROW )->removeDocumentEventListener( this );
 }
 
 
@@ -176,13 +176,13 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
 
 
 
-// document::XEventListener
+// document::XDocumentEventListener
 
 
 
 // virtual
-void SAL_CALL OfficeDocumentsManager::notifyEvent(
-        const document::EventObject & Event )
+void SAL_CALL OfficeDocumentsManager::documentEventOccured(
+        const document::DocumentEvent & Event )
     throw ( uno::RuntimeException, std::exception )
 {
 /*
@@ -427,7 +427,7 @@ void SAL_CALL OfficeDocumentsManager::notifyEvent(
 
 
 
-// lang::XEventListener (base of document::XEventListener)
+// lang::XDocumentEventListener (base of document::XDocumentEventListener)
 
 
 
