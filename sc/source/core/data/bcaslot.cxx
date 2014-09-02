@@ -1043,7 +1043,8 @@ std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners(
         while ( nOff <= nEnd )
         {
             ScBroadcastAreaSlot* p = *pp;
-            p->GetAllListeners(rRange, aRet, eType);
+            if (p)
+                p->GetAllListeners(rRange, aRet, eType);
             ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak);
         }
     }
