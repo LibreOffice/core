@@ -361,7 +361,6 @@ public class WikiEditSettingDialog extends WikiDialog
             {
                 final XDialog xDialogForThread = xDialog;
                 final XComponentContext xContext = m_xContext;
-                final WikiEditSettingDialog aThis = this;
 
                 // the thread name is used to allow the error dialogs
                 m_bThreadFinished = false;
@@ -376,9 +375,9 @@ public class WikiEditSettingDialog extends WikiDialog
                         } catch( java.lang.Exception e ){}
 
                         DoLogin();
-                        aThis.EnableControls( true );
-                        aThis.SetThrobberActive( false );
-                        aThis.SetThrobberVisible( false );
+                        WikiEditSettingDialog.this.EnableControls( true );
+                        WikiEditSettingDialog.this.SetThrobberActive( false );
+                        WikiEditSettingDialog.this.SetThrobberVisible( false );
 
                         ThreadStop( true );
 

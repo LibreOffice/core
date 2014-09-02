@@ -275,7 +275,6 @@ public class WikiPropDialog extends WikiDialog{
                 ex.printStackTrace();
             }
 
-            final WikiPropDialog aThisDialog = this;
             final XDialog xDialogToClose = xDialog;
             final XComponentContext xContext = m_xContext;
 
@@ -297,7 +296,8 @@ public class WikiPropDialog extends WikiDialog{
                             if ( m_aWikiEditor != null )
                             {
                                 Thread.yield();
-                                m_bAction = m_aWikiEditor.SendArticleImpl( aThisDialog, aWikiSettings );
+                                m_bAction = m_aWikiEditor.SendArticleImpl(
+                                        WikiPropDialog.this, aWikiSettings);
                             }
                         }
                         finally
@@ -321,7 +321,8 @@ public class WikiPropDialog extends WikiDialog{
                 {
                     if ( m_aWikiEditor != null )
                     {
-                        m_bAction = m_aWikiEditor.SendArticleImpl( aThisDialog, aWikiSettings );
+                        m_bAction = m_aWikiEditor.SendArticleImpl(
+                                WikiPropDialog.this, aWikiSettings);
                     }
                 } catch( java.lang.Exception e )
                 {}
