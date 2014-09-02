@@ -1145,7 +1145,14 @@ Menu MN_ANNOTATION_BUTTON
 String MN_GRF_POPUPMENU
 {
     Text [ en-US ] = "Graphic" ;
+    Text [ en-US ] = "Change Graphic" ;
 };
+
+/*Menu MN_GRF_POPUPMENU
+*{
+*    MenuItem { ITEM_SAVE_GRAPHIC };
+*};
+*/
 
 #define MN_ALIGN_FRAME \
     MenuItem\
@@ -1239,6 +1246,7 @@ Menu MN_GRF_POPUPMENU
         MN_FRM_CAPTION_ITEM
         SEPARATOR;
         MenuItem { ITEM_SAVE_GRAPHIC };
+        MenuItem { ITEM_CHANGE_PICTURE };
         MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_EXTERNAL_EDIT };
 

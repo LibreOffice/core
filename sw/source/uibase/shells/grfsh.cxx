@@ -178,7 +178,50 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+       /* case SID_CHANGE_PICTURE:
+        {
+            const Graphic* pGraphic = rSh.GetGraphic();
+            if( pGraphic )
+            {
+                Size aSize (
+                    convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width()),
+                    convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height()));
 
+                SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_CROPGRF, RES_GRFATR_CROPGRF );
+                rSh.GetCurAttr( aSet );
+                SwCropGrf aCrop( (const SwCropGrf&) aSet.Get(RES_GRFATR_CROPGRF) );
+
+                Rectangle aCropRectangle(
+                    convertTwipToMm100(aCrop.GetLeft()),
+                    convertTwipToMm100(aCrop.GetTop()),
+                    convertTwipToMm100(aCrop.GetRight()),
+                    convertTwipToMm100(aCrop.GetBottom()) );
+
+                Graphic aGraphic = Graphic( *pGraphic );
+
+                CompressGraphicsDialog aDialog( GetView().GetWindow(), aGraphic, aSize, aCropRectangle, GetView().GetViewFrame()->GetBindings() );
+                if( aDialog.Execute() == RET_OK )
+                {
+                    rSh.StartAllAction();
+                    rSh.StartUndo(UNDO_START);
+                    Rectangle aScaledCropedRectangle = aDialog.GetScaledCropRectangle();
+
+                    aCrop.SetLeft(   convertMm100ToTwip( aScaledCropedRectangle.Left() ));
+                    aCrop.SetTop(    convertMm100ToTwip( aScaledCropedRectangle.Top() ));
+                    aCrop.SetRight(  convertMm100ToTwip( aScaledCropedRectangle.Right() ));
+                    aCrop.SetBottom( convertMm100ToTwip( aScaledCropedRectangle.Bottom() ));
+
+                    Graphic aCompressedGraphic( aDialog.GetCompressedGraphic() );
+                    rSh.ReRead(OUString(), OUString(), (const Graphic*) &aCompressedGraphic);
+
+                    rSh.SetAttrItem(aCrop);
+
+                    rSh.EndUndo(UNDO_END);
+                    rSh.EndAllAction();
+                }
+            }
+        }
+        break;*/
         case SID_EXTERNAL_EDIT:
         {
             // When the graphic is selected to be opened via some external tool
@@ -191,7 +234,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-
+        case SID_CHANGE_PICTURE:
         case SID_INSERT_GRAPHIC:
         {
             // #i123922# implement slot independent from the two below to

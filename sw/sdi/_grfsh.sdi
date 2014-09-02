@@ -62,6 +62,13 @@ interface BaseTextGraphic
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    SID_CHANGE_PICTURE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_EXTERNAL_EDIT
     [
         ExecMethod = Execute ;
@@ -223,6 +230,11 @@ interface BaseTextGraphic
         ExecMethod = ExecAttr ;
         StateMethod = GetAttrState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_CHANGE_PICTURE
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
     ]
     SID_GRFFILTER_SOLARIZE  // status(final|play|rec)
     [
