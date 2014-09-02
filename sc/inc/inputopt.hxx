@@ -31,6 +31,7 @@ private:
     bool        bExtendFormat;
     bool        bRangeFinder;
     bool        bExpandRefs;
+    bool        mbSortRefUpdate;
     bool        bMarkHeader;
     bool        bUseTabCol;
     bool        bTextWysiwyg;
@@ -56,6 +57,8 @@ public:
     bool        GetRangeFinder() const          { return bRangeFinder;   }
     void        SetExpandRefs(bool bSet)        { bExpandRefs = bSet;    }
     bool        GetExpandRefs() const           { return bExpandRefs;    }
+    void        SetSortRefUpdate(bool bSet)     { mbSortRefUpdate = bSet; }
+    bool        GetSortRefUpdate() const        { return mbSortRefUpdate; }
     void        SetMarkHeader(bool bSet)        { bMarkHeader = bSet;    }
     bool        GetMarkHeader() const           { return bMarkHeader;    }
     void        SetUseTabCol(bool bSet)         { bUseTabCol = bSet;     }

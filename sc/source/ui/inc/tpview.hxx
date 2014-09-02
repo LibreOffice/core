@@ -95,6 +95,7 @@ class ScTpLayoutOptions : public SfxTabPage
     CheckBox*       m_pEditModeCB;
     CheckBox*       m_pFormatCB;
     CheckBox*       m_pExpRefCB;
+    CheckBox*       m_pSortRefUpdateCB;
     CheckBox*       m_pMarkHdrCB;
     CheckBox*       m_pTextFmtCB;
     CheckBox*       m_pReplWarnCB;

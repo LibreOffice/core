@@ -365,6 +365,7 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     get( m_pEditModeCB, "editmodecb");
     get( m_pFormatCB, "formatcb");
     get( m_pExpRefCB, "exprefcb");
+    get( m_pSortRefUpdateCB, "sortrefupdatecb");
     get( m_pMarkHdrCB, "markhdrcb");
     get( m_pTextFmtCB, "textfmtcb");
     get( m_pReplWarnCB, "replwarncb");
@@ -488,6 +489,12 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
         bRet = true;
     }
 
+    if (m_pSortRefUpdateCB->IsValueChangedFromSaved())
+    {
+        rCoreSet->Put(SfxBoolItem(SID_SC_OPT_SORT_REF_UPDATE, m_pSortRefUpdateCB->IsChecked()));
+        bRet = true;
+    }
+
     if(m_pMarkHdrCB->IsValueChangedFromSaved())
     {
         rCoreSet->Put(SfxBoolItem(SID_SC_INPUT_MARK_HEADER, m_pMarkHdrCB->IsChecked()));
@@ -581,6 +588,9 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     if(SFX_ITEM_SET == rCoreSet->GetItemState(SID_SC_INPUT_REF_EXPAND, false, &pItem))
         m_pExpRefCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
+    if (rCoreSet->HasItem(SID_SC_OPT_SORT_REF_UPDATE, &pItem))
+        m_pSortRefUpdateCB->Check(static_cast<const SfxBoolItem*>(pItem)->GetValue());
+
     if(SFX_ITEM_SET == rCoreSet->GetItemState(SID_SC_INPUT_MARK_HEADER, false, &pItem))
         m_pMarkHdrCB->Check(((const SfxBoolItem*)pItem)->GetValue());
 
@@ -599,6 +609,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
     m_pFormatCB   ->SaveValue();
 
     m_pExpRefCB   ->SaveValue();
+    m_pSortRefUpdateCB->SaveValue();
     m_pMarkHdrCB  ->SaveValue();
     m_pTextFmtCB  ->SaveValue();
     m_pReplWarnCB ->SaveValue();
