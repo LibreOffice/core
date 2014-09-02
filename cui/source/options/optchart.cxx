@@ -58,7 +58,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(Window* pParent, const SfxItemSet
     m_pValSetColorBox->SetStyle( m_pValSetColorBox->GetStyle()
                                     | WB_ITEMBORDER | WB_NAMEFIELD );
     m_pValSetColorBox->SetColCount( 8 );
-    m_pValSetColorBox->SetLineCount( 13 );
+    m_pValSetColorBox->SetLineCount( 14 );
     m_pValSetColorBox->SetExtraSpacing( 0 );
     m_pValSetColorBox->Show();
 

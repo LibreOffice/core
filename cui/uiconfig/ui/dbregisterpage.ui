@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Fri Jan 10 20:45:20 2014 -->
+<!-- Generated with glade 3.16.1 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <!-- interface-requires LibreOffice 1.0 -->
   <object class="GtkGrid" id="DbRegisterPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
+    <property name="hexpand">True</property>
+    <property name="vexpand">True</property>
     <property name="border_width">6</property>
     <property name="row_spacing">12</property>
     <child>
@@ -13,6 +15,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
         <property name="label_xalign">0</property>
         <property name="shadow_type">none</property>
         <child>
@@ -21,18 +24,22 @@
             <property name="can_focus">False</property>
             <property name="margin_top">6</property>
             <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
             <property name="top_padding">6</property>
             <property name="left_padding">12</property>
             <child>
               <object class="GtkBox" id="box1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="svtlo-SvSimpleTableContainer" id="pathctrl">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection" id="Simple Table Container-selection1"/>

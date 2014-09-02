@@ -80,6 +80,9 @@ TabPage::TabPage(Window *pParent, const OString& rID, const OUString& rUIXMLDesc
 {
     ImplInit(pParent, 0);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
+    set_hexpand(true);
+    set_vexpand(true);
+    set_expand(true);
 }
 
 void TabPage::StateChanged( StateChangedType nType )
