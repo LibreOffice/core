@@ -121,7 +121,8 @@ public:
 
 public:
     explicit        FloatingWindow(Window* pParent, WinBits nStyle = WB_STDFLOATWIN);
-    explicit        FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    explicit        FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
+                                   const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     explicit        FloatingWindow( Window* pParent, const ResId& );
     virtual         ~FloatingWindow();
 

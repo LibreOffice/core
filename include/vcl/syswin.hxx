@@ -170,7 +170,7 @@ private:
 protected:
     // Single argument ctors shall be explicit.
     explicit SystemWindow(WindowType nType);
-    void loadUI(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
+    void loadUI(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
 
     void     SetWindowStateData( const WindowStateData& rData );
 

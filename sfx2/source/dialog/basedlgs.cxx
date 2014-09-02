@@ -483,8 +483,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
                         Window* pParent,
-                        const OString& rID, const OUString& rUIXMLDescription) :
-    FloatingWindow(pParent, rID, rUIXMLDescription),
+                        const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame) :
+    FloatingWindow(pParent, rID, rUIXMLDescription, rFrame),
     pBindings(pBindinx),
     pImp( new SfxFloatingWindow_Impl )
 {

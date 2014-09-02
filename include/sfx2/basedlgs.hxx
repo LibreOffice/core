@@ -141,7 +141,8 @@ protected:
                             SfxFloatingWindow( SfxBindings *pBindings,
                                               SfxChildWindow *pCW,
                                               Window* pParent,
-                                              const OString& rID, const OUString& rUIXMLDescription);
+                                              const OString& rID, const OUString& rUIXMLDescription,
+                                              const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
                             virtual ~SfxFloatingWindow();
 
     virtual void            StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;

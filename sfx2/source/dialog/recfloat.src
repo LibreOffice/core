@@ -22,30 +22,6 @@
 
 #define STD_MASKCOLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
 
-FloatingWindow SID_RECORDING_FLOATWINDOW
-{
-    HelpID = "sfx2:FloatingWindow:SID_RECORDING_FLOATWINDOW";
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    Text [ en-US ] = "Record Macro";
-};
-
-ToolBox SID_RECORDING_FLOATWINDOW
-{
-    SVLook = TRUE ;
-    ButtonType = BUTTON_TEXT;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_STOP_RECORDING;
-            Command = ".uno:StopRecording";
-        };
-    };
-};
-
 String STR_MACRO_LOSS
 {
     Text [ en-US ] = "Do you really want to cancel the recording? Any steps recorded up to this point will be lost.";

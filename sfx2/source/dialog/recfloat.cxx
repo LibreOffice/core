@@ -167,25 +167,22 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
     : SfxFloatingWindow( pBind,
                          pChildWin,
                          pParent,
-                         SfxResId( SID_RECORDING_FLOATWINDOW ) )
-    , aTbx( this, SfxResId(SID_RECORDING_FLOATWINDOW) )
+                         "FloatingRecord", "sfx/ui/floatingrecord.ui", pBind->GetActiveFrame() )
 {
-    // Retrieve label from helper function
-    uno::Reference< frame::XFrame > xFrame = GetBindings().GetActiveFrame();
-    OUString aCommandStr( ".uno:StopRecording" );
-    aTbx.SetItemText( SID_STOP_RECORDING, GetLabelFromCommandURL( aCommandStr, xFrame ));
+    get(m_pTbx, "toolbar");
 
-    // Determine size of toolbar
-    Size aTbxSize = aTbx.CalcWindowSizePixel();
-    aTbx.SetPosSizePixel( Point(), aTbxSize );
-    SetOutputSizePixel( aTbxSize );
+    // Retrieve label from helper function
+    uno::Reference< frame::XFrame > xFrame = getFrame();
+    OUString aCommandStr( ".uno:StopRecording" );
+    sal_uInt16 nItemId = m_pTbx->GetItemId(aCommandStr);
+    m_pTbx->SetItemText( nItemId, GetLabelFromCommandURL( aCommandStr, xFrame ));
 
     // create a generic toolbox controller for our internal toolbox
     svt::GenericToolboxController* pController = new svt::GenericToolboxController(
                                                     ::comphelper::getProcessComponentContext(),
                                                     xFrame,
-                                                    &aTbx,
-                                                    SID_STOP_RECORDING,
+                                                    m_pTbx,
+                                                    nItemId,
                                                     aCommandStr );
     xStopRecTbxCtrl = uno::Reference< frame::XToolbarController >(
                             static_cast< cppu::OWeakObject* >( pController ),
@@ -194,7 +191,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
     if ( xUpdate.is() )
         xUpdate->update();
 
-    aTbx.SetSelectHdl( LINK( this, SfxRecordingFloat_Impl, Select ) );
+    m_pTbx->SetSelectHdl( LINK( this, SfxRecordingFloat_Impl, Select ) );
 
     // start recording
     SfxBoolItem aItem( SID_RECORDMACRO, true );
@@ -248,7 +245,7 @@ void SfxRecordingFloat_Impl::StateChanged( StateChangedType nStateChange )
 IMPL_LINK( SfxRecordingFloat_Impl, Select, ToolBox*, pToolBar )
 {
     (void)pToolBar;
-    sal_Int16   nKeyModifier( (sal_Int16)aTbx.GetModifier() );
+    sal_Int16   nKeyModifier( (sal_Int16)m_pTbx->GetModifier() );
     if ( xStopRecTbxCtrl.is() )
         xStopRecTbxCtrl->execute( nKeyModifier );
 

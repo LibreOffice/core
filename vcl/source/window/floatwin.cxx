@@ -164,10 +164,10 @@ FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-FloatingWindow::FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
+FloatingWindow::FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : SystemWindow(WINDOW_FLOATINGWINDOW)
 {
-    loadUI(pParent, rID, rUIXMLDescription);
+    loadUI(pParent, rID, rUIXMLDescription, rFrame);
 }
 
 //Find the real parent stashed in mpDialogParent.
