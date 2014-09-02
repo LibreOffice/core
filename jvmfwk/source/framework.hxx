@@ -105,7 +105,7 @@ public:
     sal_uInt64 getFeatures() const;
 };
 
-class FrameworkException
+class FrameworkException : public std::exception
 {
 public:
 
