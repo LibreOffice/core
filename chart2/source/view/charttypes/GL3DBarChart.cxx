@@ -1072,12 +1072,14 @@ void GL3DBarChart::updateRenderFPS()
         osl_getSystemTime(&maFPSRenderEndTime);
         nDeltaMs = calcTimeInterval(maFPSRenderStartTime, maFPSRenderEndTime);
         int iFPS = miFrameCount * 1000 / nDeltaMs;
-        maFPS = OUString("Render FPS: ") + OUString::number(iFPS);
+        maFPS =  OUString::number(iFPS);
         miFrameCount = 0;
         osl_getSystemTime(&maFPSRenderStartTime);
     }
     osl_getSystemTime(&maFPSRenderEndTime);
-    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.07f, true,
+    OUString aFPS = OUString("Render FPS: ");
+    addScreenTextShape(aFPS, glm::vec2(-0.77f, 0.99f), 0.07f, false, glm::vec4(0.0f, 1.0f, 1.0f, 0.0f));
+    addScreenTextShape(maFPS, glm::vec2(-0.77f, 0.99f), 0.07f, true,
                        glm::vec4(1.0f, 0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 }
 
@@ -1112,18 +1114,20 @@ void GL3DBarChart::updateDataUpdateFPS()
         int iFPS = miDataUpdateCounter * 1000 / nDeltaMs;
         if (iFPS)
         {
-            maDataUpdateFPS = OUString("Data Update Rate: ") + OUString::number(iFPS);
+            maDataUpdateFPS = OUString::number(iFPS);
         }
         else
         {
             float fFPS = (float)miDataUpdateCounter * 1000 / (float)nDeltaMs;
-            maDataUpdateFPS = OUString("Data Update Rate: ") + OUString::number(fFPS);
+            maDataUpdateFPS = OUString::number(fFPS);
         }
         miDataUpdateCounter = 0;
         osl_getSystemTime(&maDataUpdateStartTime);
     }
     osl_getSystemTime(&maDataUpdateEndTime);
-    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.99f, 0.92f), 0.07f);
+    OUString aDataUpdateFPS = OUString("Data Update Rate: ");
+    addScreenTextShape(aDataUpdateFPS, glm::vec2(-0.77, 0.92f), 0.07f, false, glm::vec4(0.0f, 1.0f, 1.0f, 0.0f));
+    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.77f, 0.92f), 0.07f, true, glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
 }
 
 void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
