@@ -368,12 +368,12 @@ bool OGLTransitionerImpl::initWindowFromSlideShowView( const Reference< presenta
     sal_Int64 aVal = 0;
     aDeviceParams[1] >>= aVal;
 
-    SAL_WARN("slideshow", "created the context");
     mpContext = boost::make_shared<OpenGLContext>();
     mpContext->requestLegacyContext();
 
     if( !mpContext->init( reinterpret_cast< Window* >( aVal ) ) )
         return false;
+    SAL_INFO("slideshow", "created the context");
 
     CHECK_GL_ERROR();
     awt::Rectangle aCanvasArea = mxView->getCanvasArea();
