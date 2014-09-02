@@ -54,7 +54,7 @@
     <start name="themeOverride"/>
     <start name="themeManager"/>
     <start name="hlinkClick"/>
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-baseStylesheet.rng"/>
       <!-- start = theme | themeOverride | themeManager | hlinkClick -->
@@ -231,7 +231,7 @@
     </grammar>
   </namespace>
   <namespace name="dml-shape3DLighting" file="dml-shape3DLighting.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <define name="ST_LightRigDirection">
         <choice>
           <!-- Top Left -->
@@ -381,7 +381,7 @@
     </grammar>
   </namespace>
   <namespace name="dml-shape3DStyles" file="dml-shape3DStyles.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeGeometry.rng"/>
       <define name="ST_BevelPresetType">
@@ -535,7 +535,7 @@
     </resource>
   </namespace>
   <namespace name="dml-shape3DCamera" file="dml-shape3DCamera.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <define name="ST_PresetCameraType">
         <choice>
           <!-- Legacy Oblique Top Left -->
@@ -747,7 +747,7 @@
     </resource>
   </namespace>
   <namespace name="dml-baseStylesheet" file="dml-baseStylesheet.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <define name="ST_ColorSchemeIndex">
         <choice>
@@ -1003,7 +1003,7 @@
     </resource>
   </namespace>
   <namespace name="dml-textCharacter" file="dml-textCharacter.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeEffects.rng"/>
       <include href="dml-shapeLineProperties.rng"/>
@@ -1261,7 +1261,7 @@
     </resource>
   </namespace>
   <namespace name="dml-shapeEffects" file="dml-shapeEffects.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- start = blip -->
       <define name="CT_AlphaBiLevelEffect">
         <attribute name="thresh">
@@ -2273,7 +2273,7 @@
     </resource>
   </namespace>
   <namespace name="dml-shapeLineProperties" file="dml-shapeLineProperties.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeEffects.rng"/>
       <define name="ST_LineEndType">
@@ -2602,7 +2602,7 @@
     </resource>
   </namespace>
   <namespace name="dml-baseTypes" file="dml-baseTypes">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="shared-relationshipReference.rng"/>
       <define name="CT_OfficeArtExtension">
@@ -3757,7 +3757,7 @@
     <resource name="ST_DrawingElementId" resource="Integer"/>
   </namespace>
   <namespace name="dml-documentProperties" file="dml-documentProperties.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeGeometry.rng"/>
       <define name="AG_Locking">
@@ -3975,7 +3975,7 @@
   </namespace>
   <namespace name="dml-graphicalObject" file="dml-graphicalObject.rng">
     <start name="graphic"/>
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <!-- start = graphic -->
       <define name="CT_GraphicalObjectData">
@@ -5336,7 +5336,7 @@
     </resource>
   </namespace>
   <namespace name="a14" file="a14.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawingml/2010/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawingml/2010/main">
       <!-- Simple types -->
       <define name="ST_ArtisticEffectParam10">
         <data type="integer"/>
@@ -5657,7 +5657,7 @@
     </grammar>
   </namespace>
   <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <define name="ST_ShapeType">
         <choice>
           <!-- Line Shape -->
@@ -6670,7 +6670,7 @@
   <namespace name="dml-wordprocessingDrawing" file="dml-wordprocessingDrawing.rng">
     <start name="inline"/>
     <start name="anchor"/>
-    <grammar xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+    <grammar xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-graphicalObject.rng"/>
       <include href="dml-documentProperties.rng"/>
@@ -7150,7 +7150,7 @@
   </namespace>
   <namespace name="sml-customXmlMappings" file="sml-customXmlMappings-rng">
     <start name="schemaLibrary"/>
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/schemaLibrary/2006/main">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/schemaLibrary/2006/main">
       <!-- ISO RELAX NG Schema -->
       <!-- start = schemaLibrary -->
       <define name="CT_Schema">
@@ -7179,7 +7179,7 @@
   <namespace name="shared-math" file="shared-math.rng">
     <start name="oMathPara"/>
     <start name="oMath"/>
-    <grammar xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" attributeFormDefault="qualified">
+    <grammar xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" attributeFormDefault="qualified">
       <!-- ISO RELAX NG Schema -->
       <include href="wml.rng"/>
       <!-- start = mathPr | oMathPara | oMath -->
@@ -8240,7 +8240,7 @@
     </resource>
   </namespace>
   <namespace name="shared-relationshipReference" file="shared-relationshipReference.rng">
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
       <!-- ISO RELAX NG Schema -->
       <define name="id">
         <attribute name="id">
@@ -8452,7 +8452,7 @@
     <start name="polyline"/>
     <start name="rect"/>
     <start name="roundrect"/>
-    <grammar xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wvml="urn:schemas-microsoft-com:office:word" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:vml">
+    <grammar xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wvml="urn:schemas-microsoft-com:office:word" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:vml">
       <!-- ISO RELAX NG Schema -->
       <include href="vml-officeDrawing.rng"/>
       <!--  External schema: http://schemas.openxmlformats.org/wordprocessingml/2006/main -->
@@ -9468,7 +9468,7 @@
     <start name="column"/>
     <start name="clippath"/>
     <start name="fill"/>
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns:v="urn:schemas-microsoft-com:vml" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:office" >
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:v="urn:schemas-microsoft-com:vml" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:office" >
       <!-- ISO RELAX NG Schema -->
       <include href="vml-main.rng"/>
       <!--  External schema: http://schemas.openxmlformats.org/officeDocument/2006/relationships -->
@@ -10444,7 +10444,7 @@
     <start name="borderbottom"/>
     <start name="wrap"/>
     <start name="anchorlock"/>
-    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:word">
+    <grammar xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:word">
       <!-- ISO RELAX NG Schema -->
       <!-- start = bordertop | borderleft | borderright | borderbottom | wrap | anchorlock -->
       <define name="bordertop">
@@ -10605,7 +10605,7 @@
     <start name="styles"/>
     <start name="document"/>
     <start name="glossaryDocument"/>
-    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:v="urn:schemas-microsoft-com:vml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
+    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:v="urn:schemas-microsoft-com:vml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
       <include href="shared-math.rng"/>
       <include href="dml-wordprocessingDrawing.rng"/>
       <include href="shared-relationshipReference.rng"/>
