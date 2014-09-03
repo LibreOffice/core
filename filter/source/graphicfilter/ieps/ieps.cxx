@@ -379,7 +379,7 @@ static bool RenderAsBMPThroughGS(const sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     OUString arg6("-dTextAlphaBits=4");
     OUString arg7("-dGraphicsAlphaBits=4");
     OUString arg8("-r300x300");
-    OUString arg9("-sDEVICE=bmp256");
+    OUString arg9("-sDEVICE=bmp16m");
     OUString arg10("-sOutputFile=-");
     OUString arg11("-");
     rtl_uString *args[] =
