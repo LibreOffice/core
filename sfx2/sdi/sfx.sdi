@@ -6167,15 +6167,15 @@ SfxVoidItem StyleEndPreview SID_STYLE_END_PREVIEW
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_TEMPLATE;
+    ToolBoxConfig = FALSE,
+    GroupId = ;
 ]
 
 SfxVoidItem StylePreview SID_STYLE_PREVIEW
@@ -6191,15 +6191,15 @@ SfxVoidItem StylePreview SID_STYLE_PREVIEW
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
-    RecordPerSet;
+    NoRecord;
     Synchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_TEMPLATE;
+    ToolBoxConfig = FALSE,
+    GroupId = ;
 ]
 
 
