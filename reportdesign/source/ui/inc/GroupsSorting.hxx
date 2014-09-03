@@ -21,6 +21,7 @@
 
 #include <vcl/floatwin.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
@@ -58,30 +59,22 @@ class OReportController;
 class OGroupsSortingDialog :    public FloatingWindow
                            ,    public ::cppu::BaseMutex
                            ,    public ::comphelper::OPropertyChangeListener
-                           ,    public dbaui::OToolBoxHelper
-                           ,    public vcl::IImageListProvider
 {
     friend class OFieldExpressionControl;
 
-    FixedLine                               m_aFL2;
-    FixedText                               m_aMove;
-    ToolBox                                 m_aToolBox;
+    ToolBox*                                m_pToolBox;
+    sal_uInt16                              m_nMoveUpId;
+    sal_uInt16                              m_nMoveDownId;
+    sal_uInt16                              m_nDeleteId;
 
-    FixedLine                               m_aFL3;
-    FixedText                               m_aOrder;
-    ListBox                                 m_aOrderLst;
-    FixedText                               m_aHeader;
-    ListBox                                 m_aHeaderLst;
-    FixedText                               m_aFooter;
-    ListBox                                 m_aFooterLst;
-    FixedText                               m_aGroupOn;
-    ListBox                                 m_aGroupOnLst;
-    FixedText                               m_aGroupInterval;
-    NumericField                            m_aGroupIntervalEd;
-    FixedText                               m_aKeepTogether;
-    ListBox                                 m_aKeepTogetherLst;
-    FixedLine                               m_aFL;
-    FixedText                               m_aHelpWindow;
+    VclContainer*                           m_pProperties;
+    ListBox*                                m_pOrderLst;
+    ListBox*                                m_pHeaderLst;
+    ListBox*                                m_pFooterLst;
+    ListBox*                                m_pGroupOnLst;
+    NumericField*                           m_pGroupIntervalEd;
+    ListBox*                                m_pKeepTogetherLst;
+    FixedText*                              m_pHelpWindow;
 
     OFieldExpressionControl*                m_pFieldExpression;
     ::rptui::OReportController*             m_pController;
@@ -147,8 +140,6 @@ private:
     OGroupsSortingDialog(OGroupsSortingDialog&);
     void operator =(OGroupsSortingDialog&);
 protected:
-    // window
-    virtual void    Resize() SAL_OVERRIDE;
     // OPropertyChangeListener
     virtual void    _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 public:
@@ -165,22 +156,6 @@ public:
     /* updates the current view
     */
     void UpdateData( );
-
-        /** will be called when the controls need to be resized.
-            @param  _rDiff
-                Contains the difference of the old and new toolbox size.
-        */
-        virtual void resizeControls(const Size& _rDiff) SAL_OVERRIDE;
-
-        /** will be called when the image list needs to change
-            @param  _eSymbolsSize
-                <svtools/imgdef.hxx>
-        */
-    virtual void setImageList(sal_Int16 _eSymbolsSize) SAL_OVERRIDE;
-
-    // ImageListProvider interface
-    virtual ImageList getImageList(vcl::ImageListType) SAL_OVERRIDE;
-
 };
 
 } // namespace rptui

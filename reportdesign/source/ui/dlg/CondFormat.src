@@ -47,41 +47,12 @@ String STR_TRANSPARENT
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; }
 
-ImageList IMG_CONDFORMAT_DLG_SC
-{
-    MASKCOLOR;
-    FileList =
-    {
-        < "cmd/sc_bold.png" ;              SID_ATTR_CHAR_WEIGHT ; > ;
-        < "cmd/sc_italic.png" ;            SID_ATTR_CHAR_POSTURE ; > ;
-        < "cmd/sc_underline.png" ;         SID_ATTR_CHAR_UNDERLINE ; > ;
-        < "cmd/sc_backgroundcolor.png" ;   SID_BACKGROUND_COLOR ; > ;
-        < "cmd/sc_fontcolor.png" ;         SID_ATTR_CHAR_COLOR2 ; > ;
-        < "cmd/sc_fontdialog.png" ;        SID_CHAR_DLG ; > ;
-    };
-};
-
-ImageList IMG_CONDFORMAT_DLG_LC
-{
-    MASKCOLOR;
-    FileList =
-    {
-        < "cmd/lc_bold.png" ;              SID_ATTR_CHAR_WEIGHT ; > ;
-        < "cmd/lc_italic.png" ;            SID_ATTR_CHAR_POSTURE ; > ;
-        < "cmd/lc_underline.png" ;         SID_ATTR_CHAR_UNDERLINE ; > ;
-        < "cmd/lc_backgroundcolor.png" ;   SID_BACKGROUND_COLOR ; > ;
-        < "cmd/lc_fontcolor.png" ;         SID_ATTR_CHAR_COLOR2 ; > ;
-        < "cmd/lc_fontdialog.png" ;        SID_CHAR_DLG ; > ;
-    };
-};
-
 ImageList 31000
 {
     MASKCOLOR;
     prefix = "sc";
     IdList = {05500;};
     IdCount = 1;
-
 };
 
 ToolBox RID_TB_SORTING

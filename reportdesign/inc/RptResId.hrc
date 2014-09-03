@@ -38,7 +38,6 @@
 #define RID_MISC_START                  RID_RPT_START
 
 // Dialog Control Id's -----------------------------------------------------------
-#define RID_GROUPS_SORTING              ( RID_DIALOG_START + 0 )
 #define RID_DATETIME_DLG                ( RID_DIALOG_START + 2 )
 #define WIN_CONDITION                   ( RID_DIALOG_START + 4 )
 
@@ -225,13 +224,8 @@
 #define RID_MENU_NAVIGATOR                  ( RID_MENU_START + 2 )
 #define RID_TB_SORTING                      ( RID_MENU_START + 3 )
 
-// image lists -----------------------------------------------------------------------
-#define IMG_CONDFORMAT_DLG_SC               (RID_IMAGELIST_START + 0)
-// free
-#define IMG_CONDFORMAT_DLG_LC               (RID_IMAGELIST_START + 2)
 // free
 #define RID_SVXIMGLIST_RPTEXPL              (RID_IMAGELIST_START + 4)
-#define IMGLST_GROUPSORT_DLG_SC             (RID_IMAGELIST_START + 6)
 // free
 #define IMG_ADDFIELD_DLG_SC                 (RID_IMAGELIST_START + 8)
 // free
@@ -251,12 +245,6 @@
 #define RID_STR_TYPE_CONST                  (RID_UNTYPED_START +  6)
 #define RID_STR_VERTICAL_ALIGN_CONST        (RID_UNTYPED_START +  7)
 #define RID_STR_PARAADJUST_CONST            (RID_UNTYPED_START +  8)
-
-// toolbox lists ---------------------------------------------------------------------
-
-#define SID_RPT_GROUPSORT_MOVE_UP                    ( RID_TOOLBOX_START + 0 )
-#define SID_RPT_GROUPSORT_MOVE_DOWN                  ( RID_TOOLBOX_START + 1 )
-#define SID_RPT_GROUPSORT_DELETE                     ( RID_TOOLBOX_START + 2 )
 
 #endif          // _RPTUI_DLGRESID_HRC
 

@@ -361,23 +361,10 @@ void Condition::ApplyCommand( sal_uInt16 _nCommandId, const ::Color& _rColor)
 
 void Condition::setImageList(sal_Int16 /*_eBitmapSet*/)
 {
-#if 0
-    sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
-    if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
-        nN = IMG_CONDFORMAT_DLG_LC;
-    m_pActions->SetImageList(ImageList(ModuleRes(nN)));
-#endif
 }
 
 void Condition::resizeControls(const Size& /*_rDiff*/)
 {
-#if 0
-    // we use large images so we must change them
-    if ( _rDiff.Width() || _rDiff.Height() )
-    {
-        Invalidate();
-    }
-#endif
 }
 
 void Condition::GetFocus()
