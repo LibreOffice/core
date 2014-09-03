@@ -26,6 +26,8 @@
   xmlns:v="urn:schemas-microsoft-com:vml"
   xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
   xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
+  xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
+  xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
@@ -8367,7 +8369,7 @@
         </element>
       </define>
       <define name="wsp">
-        <element xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" name="wps:wsp">
+        <element name="wps:wsp">
           <ref name="CT_WordprocessingShape"/>
         </element>
       </define>
@@ -8380,7 +8382,7 @@
         </element>
       </define>
       <define name="wgp">
-        <element xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="wpg:wgp">
+        <element name="wpg:wgp">
           <ref name="CT_WordprocessingGroup"/>
         </element>
       </define>
@@ -8419,19 +8421,19 @@
     <resource name="chart" resource="Shape">
       <element name="c:chart" tokenid="ooxml:c_chart"/>
     </resource>
-    <resource xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" name="CT_WordprocessingShape" resource="Shape">
+    <resource name="CT_WordprocessingShape" resource="Shape">
       <element name="wps:cNvSpPr" tokenid="ooxml:CT_WordprocessingShape_cNvSpPr"/>
       <element name="wps:spPr" tokenid="ooxml:CT_WordprocessingShape_spPr"/>
     </resource>
     <resource name="wsp" resource="Shape">
-      <element xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" name="wps:wsp" tokenid="ooxml:wps_wsp"/>
+      <element name="wps:wsp" tokenid="ooxml:wps_wsp"/>
     </resource>
-    <resource xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="CT_WordprocessingGroup" resource="Shape">
+    <resource name="CT_WordprocessingGroup" resource="Shape">
       <element name="wpg:cNvGrpSpPr" tokenid="ooxml:CT_WordprocessingGroup_cNvGrpSpPr"/>
       <element name="wpg:grpSpPr" tokenid="ooxml:CT_WordprocessingGroup_grpSpPr"/>
     </resource>
     <resource name="wgp" resource="Shape">
-      <element xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" name="wpg:wgp" tokenid="ooxml:wpg_wgp"/>
+      <element name="wpg:wgp" tokenid="ooxml:wpg_wgp"/>
     </resource>
 
   </namespace>
