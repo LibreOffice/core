@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#ifndef INCLUDED_SAL_OSL_UNX_READWRITE_HELPER_H
+#define INCLUDED_SAL_OSL_UNX_READWRITE_HELPER_H
+
 #include <sal/types.h>
 
 #ifdef __cplusplus
@@ -23,6 +26,8 @@ sal_Bool safeRead( int fd, void* buffer, sal_uInt32 count );
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
