@@ -11045,9 +11045,12 @@ AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
 
+# This is only used in KDE3/KDE4/TDE checks to determine if /usr/lib64
+# paths should be added to library search path. So lets put all 64-bit
+# platforms there.
 supports_multilib=
 case "$host_cpu" in
-x86_64 | powerpc64 | s390x)
+x86_64 | powerpc64 | powerpc64le | s390x | aarch64)
     if test "$SAL_TYPES_SIZEOFLONG" = "8"; then
         supports_multilib="yes"
     fi
