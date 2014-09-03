@@ -53,6 +53,10 @@
 #include <comphelper/storagehelper.hxx>
 
 #include <oox/crypto/DocumentEncryption.hxx>
+#include <tools/date.hxx>
+#include <tools/datetime.hxx>
+#include <com/sun/star/util/Duration.hpp>
+#include <sax/tools/converter.hxx>
 
 using ::com::sun::star::xml::dom::DocumentBuilder;
 using ::com::sun::star::xml::dom::XDocument;
@@ -689,12 +693,99 @@ writeAppProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProp
     pAppProps->endElement( XML_Properties );
 }
 
+static void
+writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xProperties )
+{
+    rSelf.addRelation(
+            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
+            "docProps/custom.xml" );
+    FSHelperPtr pAppProps = rSelf.openFragmentStreamWithSerializer(
+            "docProps/custom.xml",
+            "application/vnd.openxmlformats-officedocument.custom-properties+xml" );
+    pAppProps->startElement( XML_Properties,
+            XML_xmlns,                  "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties",
+            FSNS( XML_xmlns, XML_vt ),  "http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes",
+            FSEND );
+
+    uno::Reference<beans::XPropertyAccess> xUserDefinedProperties( xProperties->getUserDefinedProperties(), uno::UNO_QUERY );
+    Sequence< PropertyValue > aprop( xUserDefinedProperties->getPropertyValues() );
+    for ( sal_Int32 n = 0; n < aprop.getLength(); ++n )
+    {
+        if ( !aprop[n].Name.isEmpty() )
+        {
+            OString aName = OUStringToOString( aprop[n].Name, RTL_TEXTENCODING_ASCII_US );
+            OUString valueTypeName = ( aprop[n].Value ).getValueType().getTypeName();
+            // pid starts from 2 not from 1 as MS supports pid from 2
+            OString pid =  OUStringToOString( OUString::number(n + 2), RTL_TEXTENCODING_ASCII_US );
+            pAppProps->startElement( XML_property ,
+                XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
+                XML_pid,    pid,
+                XML_name,   aName,
+                FSEND);
+
+            switch ( ( aprop[n].Value ).getValueTypeClass() )
+            {
+                case TypeClass_STRING:
+                {
+                    OUString aValue;
+                    aprop[n].Value >>= aValue;
+                     writeElement( pAppProps, FSNS( XML_vt, XML_lpwstr ), aValue );
+                }
+                break;
+                case TypeClass_DOUBLE:
+                {
+                    double val;
+                    val = * reinterpret_cast< const double * >( ( aprop[n].Value ).getValue() );
+                    writeElement( pAppProps, FSNS( XML_vt, XML_i4 ), val );
+                }
+                break;
+                case TypeClass_BOOLEAN:
+                {
+                    bool val ;
+                    val = *( sal_Bool * )( aprop[n].Value ).getValue();
+                    writeElement( pAppProps, FSNS( XML_vt, XML_bool ), val);
+                }
+                break;
+                default:
+                {
+                    util::Date aDate;
+                    util::Duration aDuration;
+                    util::DateTime aDateTime;
+                    if ( ( aprop[n].Value ) >>= aDate )
+                    {
+                        Time aTime( Time::EMPTY );
+                        aDateTime = util::DateTime( 0, 0 , 0, 0, aDate.Year, aDate.Month, aDate.Day, true );
+                        writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime);
+                    }
+                    else if ( ( aprop[n].Value ) >>= aDuration )
+                    {
+                        OUStringBuffer buf;
+                        ::sax::Converter::convertDuration( buf, aDuration );
+                        OUString pDuration = buf.makeStringAndClear();
+                        writeElement( pAppProps, FSNS( XML_vt, XML_lpwstr ), pDuration );
+                    }
+                    else if ( ( aprop[n].Value ) >>= aDateTime )
+                            writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime );
+                    else
+                        //no other options
+                        OSL_FAIL( "XMLFilterBase::writeCustomProperties unsupported value type!" );
+                 }
+                 break;
+            }
+            pAppProps->endElement( XML_property );
+        }
+    }
+    pAppProps->endElement( XML_Properties );
+}
+
+
 XmlFilterBase& XmlFilterBase::exportDocumentProperties( Reference< XDocumentProperties > xProperties )
 {
     if( xProperties.is() )
     {
         writeCoreProperties( *this, xProperties );
         writeAppProperties( *this, xProperties );
+        writeCustomProperties( *this, xProperties );
     }
     return *this;
 }
