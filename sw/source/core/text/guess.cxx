@@ -136,7 +136,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
-                rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
+                rInf.SetMaxWidthDiff( &rPor, nMaxSizeDiff );
 
             nBreakWidth += nLeftRightBorderSpace;
 
@@ -188,7 +188,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
             // save maximum width for later use
             if ( nMaxSizeDiff )
-                rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
+                rInf.SetMaxWidthDiff( &rPor, nMaxSizeDiff );
 
             nBreakWidth += nLeftRightBorderSpace;
 
@@ -508,7 +508,7 @@ bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // save maximum width for later use
         if ( nMaxSizeDiff )
-            rInf.SetMaxWidthDiff( (sal_uLong)&rPor, nMaxSizeDiff );
+            rInf.SetMaxWidthDiff( &rPor, nMaxSizeDiff );
 
         nBreakWidth += nItalic + nLeftRightBorderSpace;
     }

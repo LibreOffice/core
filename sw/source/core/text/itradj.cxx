@@ -421,11 +421,11 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
         {
             // get maximum portion width from info structure, calculated
             // during text formatting
-            sal_uInt16 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (sal_uLong)pPos );
+            sal_uInt16 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( pPos );
 
             // check, if information is stored under other key
             if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
-                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (sal_uLong)pCurrent );
+                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( pCurrent );
 
             // calculate difference between portion width and max. width
             nKanaDiffSum += nMaxWidthDiff;
@@ -501,11 +501,11 @@ SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 
             // get maximum portion width from info structure, calculated
             // during text formatting
-            sal_uInt16 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (sal_uLong)pPos );
+            sal_uInt16 nMaxWidthDiff = GetInfo().GetMaxWidthDiff( pPos );
 
             // check, if information is stored under other key
             if ( !nMaxWidthDiff && pPos == pCurrent->GetFirstPortion() )
-                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( (sal_uLong)pCurrent );
+                nMaxWidthDiff = GetInfo().GetMaxWidthDiff( pCurrent );
             nKanaDiffSum += nMaxWidthDiff;
             pPos->Width( nMinWidth +
                        ( ( 10000 - nCompress ) * nMaxWidthDiff ) / 10000 );

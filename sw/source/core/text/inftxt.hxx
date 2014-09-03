@@ -140,10 +140,11 @@ public:
     friend SvStream & WriteSwTxtInfo( SvStream &rOS, const SwTxtInfo &rInf );
 };
 
-typedef ::std::map< sal_uLong, sal_IntPtr > SwTxtPortionMap;
-
 class SwTxtSizeInfo : public SwTxtInfo
 {
+private:
+    typedef ::std::map< sal_uIntPtr, sal_uInt16 > SwTxtPortionMap;
+
 protected:
     // during formatting, a small database is built, mapping portion pointers
     // to their maximum size (used for kana compression)
@@ -337,13 +338,13 @@ public:
     // space among compressed kanas.
     // During formatting, the maximum values of compressable portions are
     // stored in m_aMaxWidth and discarded after a line has been formatted.
-    inline void SetMaxWidthDiff( sal_uLong nKey, sal_uInt16 nVal )
+    inline void SetMaxWidthDiff( const void *nKey, sal_uInt16 nVal )
     {
-        m_aMaxWidth.insert( ::std::make_pair( nKey, nVal ) );
+        m_aMaxWidth.insert( ::std::make_pair( reinterpret_cast<sal_uIntPtr>(nKey), nVal ) );
     };
-    inline sal_uInt16 GetMaxWidthDiff( sal_uLong nKey )
+    inline sal_uInt16 GetMaxWidthDiff( const void *nKey )
     {
-        SwTxtPortionMap::iterator it = m_aMaxWidth.find( nKey );
+        SwTxtPortionMap::iterator it = m_aMaxWidth.find( reinterpret_cast<sal_uIntPtr>(nKey) );
 
         if( it != m_aMaxWidth.end() )
             return it->second;
