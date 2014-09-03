@@ -25,6 +25,7 @@
   xmlns:rng="http://relaxng.org/ns/structure/1.0"
   xmlns:v="urn:schemas-microsoft-com:vml"
   xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+  xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
@@ -6674,7 +6675,7 @@
   <namespace name="dml-wordprocessingDrawing" file="dml-wordprocessingDrawing.rng">
     <start name="inline"/>
     <start name="anchor"/>
-    <grammar xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-graphicalObject.rng"/>
       <include href="dml-documentProperties.rng"/>
@@ -7024,7 +7025,7 @@
       <attribute name="b" tokenid="ooxml:CT_EffectExtent_b"/>
     </resource>
     <resource name="ST_WrapDistance" resource="Integer"/>
-    <resource xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Inline" resource="Properties">
+    <resource name="CT_Inline" resource="Properties">
       <element name="extent" tokenid="ooxml:CT_Inline_extent"/>
       <element name="effectExtent" tokenid="ooxml:CT_Inline_effectExtent"/>
       <element name="docPr" tokenid="ooxml:CT_Inline_docPr"/>
@@ -7122,7 +7123,7 @@
       <attribute name="relativeFrom" tokenid="ooxml:CT_PosV_relativeFrom"/>
     </resource>
     <resource name="ST_EditId" resource="Hex"/>
-    <resource xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" name="CT_Anchor" resource="Properties">
+    <resource name="CT_Anchor" resource="Properties">
       <element name="simplePos" tokenid="ooxml:CT_Anchor_simplePos_elem"/>
       <element name="positionH" tokenid="ooxml:CT_Anchor_positionH"/>
       <element name="positionV" tokenid="ooxml:CT_Anchor_positionV"/>
