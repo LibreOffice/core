@@ -23,6 +23,7 @@
   xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas"
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
   xmlns:rng="http://relaxng.org/ns/structure/1.0"
+  xmlns:v="urn:schemas-microsoft-com:vml"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
@@ -9470,7 +9471,7 @@
     <start name="column"/>
     <start name="clippath"/>
     <start name="fill"/>
-    <grammar xmlns:v="urn:schemas-microsoft-com:vml" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:office" >
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:office" >
       <!-- ISO RELAX NG Schema -->
       <include href="vml-main.rng"/>
       <!--  External schema: http://schemas.openxmlformats.org/officeDocument/2006/relationships -->
@@ -10607,7 +10608,7 @@
     <start name="styles"/>
     <start name="document"/>
     <start name="glossaryDocument"/>
-    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:v="urn:schemas-microsoft-com:vml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
+    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
       <include href="shared-math.rng"/>
       <include href="dml-wordprocessingDrawing.rng"/>
       <include href="shared-relationshipReference.rng"/>
@@ -17437,7 +17438,7 @@
       <attribute name="shapeid" tokenid="ooxml:CT_Control_shapeid"/>
       <attribute name="r:id" tokenid="ooxml:CT_Control_r_id"/>
     </resource>
-    <resource xmlns:v="urn:schemas-microsoft-com:vml" name="CT_Background" resource="Properties">
+    <resource name="CT_Background" resource="Properties">
       <attribute name="color" tokenid="ooxml:CT_Background_color"/>
       <attribute name="themeColor" tokenid="ooxml:CT_Background_themeColor"/>
       <attribute name="themeTint" tokenid="ooxml:CT_Background_themeTint"/>
@@ -18865,7 +18866,7 @@
       <action name="end" action="setLastSectionGroup"/>
       <action name="end" action="endSectionGroup"/>
     </resource>
-    <resource xmlns:v="urn:schemas-microsoft-com:vml" name="CT_ShapeDefaults" resource="Properties">
+    <resource name="CT_ShapeDefaults" resource="Properties">
       <element name="v:fill" tokenid="ooxml:CT_ShapeDefaults_v_fill"/>
       <element name="v:stroke" tokenid="ooxml:CT_ShapeDefaults_v_stroke"/>
       <element name="v:textbox" tokenid="ooxml:CT_ShapeDefaults_v_textbox"/>
