@@ -20,6 +20,7 @@
   xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
   xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
   xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
+  xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas"
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
   xmlns:rng="http://relaxng.org/ns/structure/1.0"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
@@ -8340,7 +8341,7 @@
         </element>
       </define>
       <define name="lockedCanvas">
-        <element xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" name="lc:lockedCanvas">
+        <element name="lc:lockedCanvas">
           <ref name="CT_GvmlGroupShape"/>
         </element>
       </define>
@@ -8407,7 +8408,7 @@
       <element name="a:grpSpPr" tokenid="ooxml:CT_GvmlGroupShape_grpSpPr"/>
     </resource>
     <resource name="lockedCanvas" resource="Shape">
-      <element xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas" name="lc:lockedCanvas" tokenid="ooxml:lc_lockedCanvas"/>
+      <element name="lc:lockedCanvas" tokenid="ooxml:lc_lockedCanvas"/>
     </resource>
     <resource name="CT_Chart" resource="Shape">
       <attribute name="r:id" tokenid="ooxml:CT_RelId_chart"/>
