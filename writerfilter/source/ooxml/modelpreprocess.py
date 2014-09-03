@@ -31,10 +31,12 @@ def prefixForGrammar(namespace):
         return prefixFromUrl(ns)
 
 
-def parseNamespaceAliases(node, ret):
+def parseNamespaceAliases(node):
+    ret = {}
     for k, v in list(node.attributes.items()):
         if k.startswith("xmlns:"):
             ret[k.replace('xmlns:', '')] = v
+    return ret
 
 
 def parseNamespaces(fro):
@@ -60,30 +62,22 @@ def check(model):
 
 def preprocess(model):
     modelNode = [i for i in model.childNodes if i.localName == "model"][0]
+    # Alias -> URL, based on "xmlns:" attributes.
+    modelNamespaceAliases = parseNamespaceAliases(modelNode)
     for i in modelNode.getElementsByTagName("namespace"):
         grammarprefix = prefixForGrammar(i)
 
-        grammarNamespaceAliases = {}
-        parseNamespaceAliases(modelNode, grammarNamespaceAliases)
         grammar = i.getElementsByTagName("grammar")[0]
-
-        parseNamespaceAliases(grammar, grammarNamespaceAliases)
 
         for j in i.getElementsByTagName("element") + i.getElementsByTagName("attribute"):
             if j.localName == "attribute" and not len(j.getAttribute("name")):
                 continue
 
-            localNamespaceAliases = grammarNamespaceAliases.copy()
-
-            parseNamespaceAliases(j.parentNode, localNamespaceAliases)
-            parseNamespaceAliases(j, localNamespaceAliases)
-
             # prefix
             prefix = ""
             if ":" in j.getAttribute("name"):
                 nameprefix = j.getAttribute("name").split(':')[0]
-                if nameprefix in list(localNamespaceAliases.keys()):
-                    prefix = prefixFromUrl(localNamespaceAliases[nameprefix])
+                prefix = prefixFromUrl(modelNamespaceAliases[nameprefix])
             elif j.localName == "attribute":
                 if grammar.getAttribute("attributeFormDefault") == "qualified":
                     prefix = grammarprefix

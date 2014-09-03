@@ -21,13 +21,17 @@
   xmlns:c="http://schemas.openxmlformats.org/drawingml/2006/chart"
   xmlns:dgm="http://schemas.openxmlformats.org/drawingml/2006/diagram"
   xmlns:lc="http://schemas.openxmlformats.org/drawingml/2006/lockedCanvas"
+  xmlns:o="urn:schemas-microsoft-com:office:office"
+  xmlns:p="urn:schemas-microsoft-com:office:powerpoint"
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-  xmlns:rng="http://relaxng.org/ns/structure/1.0"
   xmlns:v="urn:schemas-microsoft-com:vml"
   xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
   xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
   xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"
   xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"
+  xmlns:wvml="urn:schemas-microsoft-com:office:word"
+  xmlns:x="urn:schemas-microsoft-com:office:excel"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
@@ -7186,7 +7190,7 @@
   <namespace name="shared-math" file="shared-math.rng">
     <start name="oMathPara"/>
     <start name="oMath"/>
-    <grammar xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" attributeFormDefault="qualified">
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" attributeFormDefault="qualified">
       <!-- ISO RELAX NG Schema -->
       <include href="wml.rng"/>
       <!-- start = mathPr | oMathPara | oMath -->
@@ -8459,7 +8463,7 @@
     <start name="polyline"/>
     <start name="rect"/>
     <start name="roundrect"/>
-    <grammar xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wvml="urn:schemas-microsoft-com:office:word" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:vml">
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:vml">
       <!-- ISO RELAX NG Schema -->
       <include href="vml-officeDrawing.rng"/>
       <!--  External schema: http://schemas.openxmlformats.org/wordprocessingml/2006/main -->
@@ -10612,7 +10616,7 @@
     <start name="styles"/>
     <start name="document"/>
     <start name="glossaryDocument"/>
-    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
+    <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
       <include href="shared-math.rng"/>
       <include href="dml-wordprocessingDrawing.rng"/>
       <include href="shared-relationshipReference.rng"/>
