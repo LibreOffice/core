@@ -51,7 +51,6 @@ class SC_DLLPUBLIC ScPatternAttr: public SfxSetItem
     OUString*       pName;
     ScStyleSheet*   pStyle;
 public:
-    static ScDocument* pDoc;
                             ScPatternAttr(SfxItemSet* pItemSet, const OUString& rStyleName);
                             ScPatternAttr(SfxItemSet* pItemSet, ScStyleSheet* pStyleSheet = NULL);
                             ScPatternAttr(SfxItemPool* pItemPool);
@@ -113,7 +112,7 @@ public:
     void                    SetStyleSheet(ScStyleSheet* pNewStyle, bool bClearDirectFormat = true);
     const ScStyleSheet*     GetStyleSheet() const  { return pStyle; }
     const OUString*         GetStyleName() const;
-    void                    UpdateStyleSheet();
+    void                    UpdateStyleSheet(ScDocument* pDoc);
     void                    StyleToName();
 
     bool                    IsVisible() const;

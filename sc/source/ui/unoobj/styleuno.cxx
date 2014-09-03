@@ -696,7 +696,7 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const OUString& aName, const uno::
                 (void)pStylePool->Make( aNameStr, eFamily, SFXSTYLEBIT_USERDEF );
 
                 if ( eFamily == SFX_STYLE_FAMILY_PARA && !rDoc.IsImportingXML() )
-                    rDoc.GetPool()->CellStyleCreated( aNameStr );
+                    rDoc.GetPool()->CellStyleCreated( aNameStr, &rDoc );
 
                 pStyleObj->InitDoc( pDocShell, aNameStr );  // Objekt kann benutzt werden
 
@@ -1143,7 +1143,7 @@ void SAL_CALL ScStyleObj::setName( const OUString& aNewName )
 
             ScDocument& rDoc = pDocShell->GetDocument();
             if ( eFamily == SFX_STYLE_FAMILY_PARA && !rDoc.IsImportingXML() )
-                rDoc.GetPool()->CellStyleCreated( aString );
+                rDoc.GetPool()->CellStyleCreated( aString, &rDoc );
 
             //  Zellvorlagen = 2, Seitenvorlagen = 4
             sal_uInt16 nId = ( eFamily == SFX_STYLE_FAMILY_PARA ) ?

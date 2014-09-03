@@ -67,6 +67,7 @@
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "globstr.hrc"
+#include "document.hxx"
 #include "sc.hrc"
 
 #define SC_MAX_POOLREF      (SFX_ITEMS_OLD_MAXREF - 39)
@@ -662,7 +663,7 @@ void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
     }
 }
 
-void ScDocumentPool::CellStyleCreated( const OUString& rName )
+void ScDocumentPool::CellStyleCreated( const OUString& rName, ScDocument* pDoc )
 {
     // If a style was created, don't keep any pattern with its name string in the pool,
     // because it would compare equal to a pattern with a pointer to the new style.
@@ -679,7 +680,7 @@ void ScDocumentPool::CellStyleCreated( const OUString& rName )
         {
             const OUString* pStyleName = pPattern->GetStyleName();
             if ( pStyleName && *pStyleName == rName )
-                pPattern->UpdateStyleSheet(); // find and store style pointer
+                pPattern->UpdateStyleSheet(pDoc); // find and store style pointer
         }
     }
 }

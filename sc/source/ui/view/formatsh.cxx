@@ -608,7 +608,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 // Namen zu Style-Pointer
                                 rDoc.UpdStlShtPtrsFrmNms();
                             else
-                                rDoc.GetPool()->CellStyleCreated( aStyleName );
+                                rDoc.GetPool()->CellStyleCreated( aStyleName, &rDoc );
 
                             // Attribute uebernehmen und Style anwenden
                             pStyleSheet->GetItemSet().Put( aAttrSet );
@@ -905,7 +905,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                                     pNew->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
                             }
 
-                            rDoc.GetPool()->CellStyleCreated( pStyleSheet->GetName() );
+                            rDoc.GetPool()->CellStyleCreated( pStyleSheet->GetName(), &rDoc );
                         }
                         else
                         {

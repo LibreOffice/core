@@ -63,8 +63,6 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-ScDocument* ScPatternAttr::pDoc = NULL;
-
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
@@ -1141,7 +1139,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
     }
 }
 
-void ScPatternAttr::UpdateStyleSheet()
+void ScPatternAttr::UpdateStyleSheet(ScDocument* pDoc)
 {
     if (pName)
     {

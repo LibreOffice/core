@@ -5536,8 +5536,6 @@ void ScDocument::GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX,
 
 void ScDocument::UpdStlShtPtrsFrmNms()
 {
-    ScPatternAttr::pDoc = this;
-
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
     sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);
@@ -5546,15 +5544,13 @@ void ScDocument::UpdStlShtPtrsFrmNms()
     {
         pPattern = (ScPatternAttr*)pPool->GetItem2(ATTR_PATTERN, i);
         if (pPattern)
-            pPattern->UpdateStyleSheet();
+            pPattern->UpdateStyleSheet(this);
     }
-    ((ScPatternAttr&)pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet();
+    ((ScPatternAttr&)pPool->GetDefaultItem(ATTR_PATTERN)).UpdateStyleSheet(this);
 }
 
 void ScDocument::StylesToNames()
 {
-    ScPatternAttr::pDoc = this;
-
     ScDocumentPool* pPool = xPoolHelper->GetDocPool();
 
     sal_uInt32 nCount = pPool->GetItemCount2(ATTR_PATTERN);

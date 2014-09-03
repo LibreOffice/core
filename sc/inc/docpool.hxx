@@ -25,6 +25,7 @@
 #include "scdllapi.h"
 
 class ScStyleSheet;
+class ScDocument;
 
 class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 {
@@ -57,7 +58,7 @@ public:
     static void                 CheckRef( const SfxPoolItem& );
 
     void StyleDeleted( ScStyleSheet* pStyle );      // delete templates(?) in organizer
-    void CellStyleCreated( const OUString& rName );
+    void CellStyleCreated( const OUString& rName, ScDocument* pDoc );
     virtual bool GetPresentation(
                                         const SfxPoolItem&  rItem,
                                         SfxMapUnit          ePresentationMetric,
