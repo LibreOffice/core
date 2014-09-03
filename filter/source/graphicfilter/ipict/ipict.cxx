@@ -884,7 +884,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                     }
                     else
                     {
-                        nCount = ( 1 - ( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
+                        nCount = static_cast<sal_uInt16>( 1 - ( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
                         pPict->ReadUChar( nDat );
                         for ( i = 0; i < nCount; i++ )
                         {
