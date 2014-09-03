@@ -837,7 +837,7 @@ void ScTable::CopyColFiltered(ScTable& rTable, SCCOL nStartCol, SCCOL nEndCol)
     SCCOL nCol = nStartCol;
     while (nCol <= nEndCol)
     {
-        SCCOL nLastCol;
+        SCCOL nLastCol = -1;
         bool bFiltered = rTable.ColFiltered(nCol, NULL, &nLastCol);
         if (nLastCol > nEndCol)
             nLastCol = nEndCol;
