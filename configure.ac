@@ -12311,50 +12311,6 @@ EOF
         AC_MSG_ERROR([no, you need at least Ant >= $ant_minver])
     fi
 
-    if test "$ENABLE_MEDIAWIKI" = "TRUE"; then
-        AC_MSG_CHECKING([whether Ant supports mapper type="regexp"])
-        rm -rf confdir
-        mkdir confdir
-        cat > conftest.java << EOF
-            public class conftest {
-                int testmethod(int a, int b) {
-                    return a + b;
-                }
-            }
-EOF
-
-        cat > conftest.xml << EOF
-            <project name="conftest" default="conftest">
-            <target name="conftest" depends="copytest">
-                <javac srcdir="." includes="conftest.java">
-                </javac>
-            </target>
-            <target name="copytest">
-                 <copy todir="confdir">
-                 <fileset dir="confdir" includes="**/*.abc" casesensitive="yes"/>
-                 <filterset/>
-                 <mapper type="regexp" from="^(.*[/\\])foo([/\\].*)" to="\1baa\2"/>
-                 </copy>
-            </target>
-            </project>
-EOF
-
-        if test "$JAVACISGCJ" = "yes"; then
-            JAVA_HOME=; export JAVA_HOME
-            ant_gcj="-Dbuild.compiler=gcj"
-        fi
-        AC_TRY_COMMAND("$ANT" $ant_gcj -buildfile conftest.xml 1>&2)
-        if test $? = 0 -a -f ./conftest.class; then
-            AC_MSG_RESULT([yes])
-            rm -rf confdir
-        else
-            echo "configure: Ant test failed" >&5
-            cat conftest.java >&5
-            cat conftest.xml >&5
-            rm -rf confdir
-            AC_MSG_ERROR([no. Did you install ant-apache-regexp?])
-        fi
-    fi
     rm -f conftest* core core.* *.core
 fi
 
