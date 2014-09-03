@@ -369,6 +369,69 @@ int oglErrorHandler( Display* /*dpy*/, XErrorEvent* /*evnt*/ )
     return 0;
 }
 
+GLXFBConfig* getFBConfig(const SystemEnvData* sysData, int& nBestFBC)
+{
+    Display *dpy = reinterpret_cast<Display*>(sysData->pDisplay);
+
+    if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
+        return NULL;
+
+    XLIB_Window win = sysData->aWindow;
+
+    SAL_INFO("vcl.opengl", "parent window: " << win);
+
+    XWindowAttributes xattr;
+    XGetWindowAttributes( dpy, win, &xattr );
+
+    int screen = XScreenNumberOfScreen( xattr.screen );
+
+    static int visual_attribs[] =
+    {
+        GLX_DOUBLEBUFFER,       True,
+        GLX_X_RENDERABLE,       True,
+        GLX_RED_SIZE,           8,
+        GLX_GREEN_SIZE,         8,
+        GLX_BLUE_SIZE,          8,
+        GLX_ALPHA_SIZE,         8,
+        GLX_DEPTH_SIZE,         24,
+        GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
+        None
+    };
+    int fbCount = 0;
+    GLXFBConfig* pFBC = glXChooseFBConfig( dpy,
+            screen,
+            visual_attribs, &fbCount );
+
+    if(!pFBC)
+    {
+        SAL_WARN("vcl.opengl", "no suitable fb format found");
+        return NULL;
+    }
+
+    int best_num_samp = -1;
+    for(int i = 0; i < fbCount; ++i)
+    {
+        XVisualInfo* pVi = glXGetVisualFromFBConfig( dpy, pFBC[i] );
+        if(pVi)
+        {
+            // pick the one with the most samples per pixel
+            int nSampleBuf = 0;
+            int nSamples = 0;
+            glXGetFBConfigAttrib( dpy, pFBC[i], GLX_SAMPLE_BUFFERS, &nSampleBuf );
+            glXGetFBConfigAttrib( dpy, pFBC[i], GLX_SAMPLES       , &nSamples  );
+
+            if ( nBestFBC < 0 || (nSampleBuf && ( nSamples > best_num_samp )) )
+            {
+                nBestFBC = i;
+                best_num_samp = nSamples;
+            }
+        }
+        XFree( pVi );
+    }
+
+    return pFBC;
+}
+
 }
 
 #endif
@@ -422,10 +485,26 @@ bool OpenGLContext::ImplInit()
     return false;
 
 #elif defined( UNX )
-    m_aGLWin.ctx = m_aGLWin.dpy == 0 ? 0 : glXCreateContext(m_aGLWin.dpy,
-                                 m_aGLWin.vi,
-                                 0,
-                                 GL_TRUE);
+#if DBG_UTIL
+
+    int best_fbc = -1;
+    const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
+    GLXFBConfig* pFBC = getFBConfig(sysData, best_fbc);
+    int nContextAttribs[] =
+    {
+        GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+        GLX_CONTEXT_MINOR_VERSION_ARB, 2,
+        None
+    };
+    m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], 0, GL_TRUE, nContextAttribs);
+#endif
+    if (!m_aGLWin.ctx)
+    {
+        m_aGLWin.ctx = m_aGLWin.dpy == 0 ? 0 : glXCreateContext(m_aGLWin.dpy,
+                m_aGLWin.vi,
+                0,
+                GL_TRUE);
+    }
     if( m_aGLWin.ctx == NULL )
     {
         SAL_WARN("vcl.opengl", "unable to create GLX context");
@@ -748,6 +827,7 @@ void initOpenGLFunctionPointers()
     glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
     glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
     glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
+    glXCreateContextAttribsARB = (GLXContext(*) (Display*, GLXFBConfig, GLXContext, Bool, const int*)) glXGetProcAddressARB((const GLubyte *) "glXCreateContextAttribsARB");;
 }
 
 }
@@ -765,61 +845,10 @@ SystemWindowData OpenGLContext::generateWinData(Window* pParent, bool)
     if( dpy == 0 || !glXQueryExtension( dpy, NULL, NULL ) )
         return aWinData;
 
-    XLIB_Window win = sysData->aWindow;
-
-    SAL_INFO("vcl.opengl", "parent window: " << win);
-
-    XWindowAttributes xattr;
-    XGetWindowAttributes( dpy, win, &xattr );
-
-    int screen = XScreenNumberOfScreen( xattr.screen );
-
-    static int visual_attribs[] =
-    {
-        GLX_DOUBLEBUFFER,       True,
-        GLX_X_RENDERABLE,       True,
-        GLX_RED_SIZE,           8,
-        GLX_GREEN_SIZE,         8,
-        GLX_BLUE_SIZE,          8,
-        GLX_ALPHA_SIZE,         8,
-        GLX_DEPTH_SIZE,         24,
-        GLX_X_VISUAL_TYPE,      GLX_TRUE_COLOR,
-        None
-    };
-
     initOpenGLFunctionPointers();
 
-    int fbCount = 0;
-    GLXFBConfig* pFBC = glXChooseFBConfig( dpy,
-            screen,
-            visual_attribs, &fbCount );
-
-    if(!pFBC)
-    {
-        SAL_WARN("vcl.opengl", "no suitable fb format found");
-        return aWinData;
-    }
-
-    int best_fbc = -1, best_num_samp = -1;
-    for(int i = 0; i < fbCount; ++i)
-    {
-        XVisualInfo* pVi = glXGetVisualFromFBConfig( dpy, pFBC[i] );
-        if(pVi)
-        {
-            // pick the one with the most samples per pixel
-            int nSampleBuf = 0;
-            int nSamples = 0;
-            glXGetFBConfigAttrib( dpy, pFBC[i], GLX_SAMPLE_BUFFERS, &nSampleBuf );
-            glXGetFBConfigAttrib( dpy, pFBC[i], GLX_SAMPLES       , &nSamples  );
-
-            if ( best_fbc < 0 || (nSampleBuf && ( nSamples > best_num_samp )) )
-            {
-                best_fbc = i;
-                best_num_samp = nSamples;
-            }
-        }
-        XFree( pVi );
-    }
+    int best_fbc = -1;
+    GLXFBConfig* pFBC = getFBConfig(sysData, best_fbc);
 
     XVisualInfo* vi = glXGetVisualFromFBConfig( dpy, pFBC[best_fbc] );
     if( vi )
