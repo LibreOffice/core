@@ -651,16 +651,8 @@ bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
 bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
                                SwCrsrMoveState* pCMS, bool ) const
 {
-    sal_uInt16 nChgFrm = 2;
-    if( pCMS )
-    {
-        if( MV_UPDOWN == pCMS->eState )
-            nChgFrm = 0;
-        else if( MV_SETONLYTEXT == pCMS->eState ||
-                 MV_TBLSEL == pCMS->eState )
-            nChgFrm = 1;
-    }
-    return _GetCrsrOfst( pPos, rPoint, nChgFrm != 0, pCMS );
+    const bool bChgFrm = !(pCMS && MV_UPDOWN == pCMS->eState);
+    return _GetCrsrOfst( pPos, rPoint, bChgFrm, pCMS );
 }
 
 /*
