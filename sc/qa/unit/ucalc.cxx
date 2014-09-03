@@ -5519,6 +5519,43 @@ void Test::testSortRefUpdate()
     if (!checkFormula(*m_pDoc, ScAddress(2,1,0), "R[2]C[-2]"))
         CPPUNIT_FAIL("Wrong formula in C2!");
 
+    // Undo again.
+    pUndoMgr->Undo();
+
+    // Formulas in column C should all be "RC[-2]" again.
+    for (size_t i = 0; i < nCount; ++i)
+        m_pDoc->SetString(ScAddress(2,1+i,0), "=RC[-2]");
+
+    // Turn off reference update on sort.
+    ScInputOptions aInputOption = SC_MOD()->GetInputOptions();
+    aInputOption.SetSortRefUpdate(false);
+
+    bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Check the sort result again.
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(0,0,0)));
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aSorted[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(0,i+1,0)));
+    }
+
+    // Formulas in column C should all remain "RC[-2]".
+    for (size_t i = 0; i < nCount; ++i)
+        m_pDoc->SetString(ScAddress(2,1+i,0), "=RC[-2]");
+
+    // The values in column C should now be the same as sorted values in column A.
+    m_pDoc->CalcAll(); // just in case...
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        double fCheck = aSorted[i];
+        CPPUNIT_ASSERT_EQUAL(fCheck, m_pDoc->GetValue(ScAddress(2,i+1,0))); // column C
+    }
+
+    // Turn it back on.
+    aInputOption.SetSortRefUpdate(true);
+
     m_pDoc->DeleteTab(0);
 }
 
