@@ -618,9 +618,6 @@ void Dialog::StateChanged( StateChangedType nType )
 {
     if (nType == STATE_CHANGE_INITSHOW)
     {
-        if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
-            ImplWindowAutoMnemonic( this );
-
         DoInitialLayout();
 
         if ( !HasChildPathFocus() || HasFocus() )

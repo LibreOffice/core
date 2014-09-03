@@ -24,6 +24,7 @@
 #include <tools/debug.hxx>
 
 #include <vcl/layout.hxx>
+#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/event.hxx>
@@ -1089,8 +1090,13 @@ void SystemWindow::setOptimalLayoutSize()
     setPosSizeOnContainee(aSize, *pBox);
 }
 
+extern void ImplWindowAutoMnemonic(Window* pWindow);
+
 void SystemWindow::DoInitialLayout()
 {
+    if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
+       ImplWindowAutoMnemonic( this );
+
     if (isLayoutEnabled())
     {
         mbIsCalculatingInitialLayoutSize = true;
