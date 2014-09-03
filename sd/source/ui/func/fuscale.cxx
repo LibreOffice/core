@@ -131,9 +131,6 @@ void FuScale::DoExecute( SfxRequest& rReq )
                 default:
                 {
                     rReq.Ignore ();
-        /*
-                        rReq.Done( *( pDlg->GetOutputItemSet() ) );
-                        pArgs = rReq.GetArgs();*/
                 }
                 break;
             }
@@ -141,6 +138,9 @@ void FuScale::DoExecute( SfxRequest& rReq )
             const SfxItemSet aArgs (*(pDlg->GetOutputItemSet ()));
 
             pDlg.reset();
+
+            if (!mpViewShell)
+                return;
 
             switch (((const SvxZoomItem &) aArgs.Get (SID_ATTR_ZOOM)).GetType ())
             {
