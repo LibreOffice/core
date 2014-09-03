@@ -1,6 +1,6 @@
 --- include/orcus/env.hpp
 +++ include/orcus/env.hpp
-@@ -35,14 +35,8 @@
+@@ -35,19 +35,13 @@
      #else
        #define ORCUS_DLLPUBLIC __declspec(dllexport)
      #endif
@@ -16,3 +16,9 @@
    #endif
    #define ORCUS_DLLLOCAL
  #else
+   #if __GNUC__ >= 4
+-    #define ORCUS_DLLPUBLIC __attribute__ ((visibility ("default")))
++    #define ORCUS_DLLPUBLIC
+     #define ORCUS_DLLLOCAL  __attribute__ ((visibility ("hidden")))
+   #else
+     #define ORCUS_DLLPUBLIC
