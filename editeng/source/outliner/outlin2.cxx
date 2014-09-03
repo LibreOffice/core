@@ -334,9 +334,9 @@ sal_uLong Outliner::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
     return pEditEngine->GetLineHeight( nParagraph, nLine );
 }
 
-void Outliner::QuickRemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
+void Outliner::RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
 {
-    pEditEngine->QuickRemoveCharAttribs( nPara, nWhich );
+    pEditEngine->RemoveCharAttribs( nPara, nWhich );
 }
 
 EESpellState Outliner::HasSpellErrors()

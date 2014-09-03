@@ -2048,7 +2048,7 @@ void SdrObjEditView::ApplyFormatPaintBrushToText( SfxItemSet& rFormatSet, SdrTex
             for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
             {
                 if( !bNoCharacterFormats )
-                    rOutliner.QuickRemoveCharAttribs( nPara, /* remove all */0 );
+                    rOutliner.RemoveCharAttribs( nPara, /* remove all */0 );
 
                 SfxItemSet aSet(rOutliner.GetParaAttribs(nPara));
                 aSet.Put(CreatePaintSet( GetFormatRangeImpl(true), *aSet.GetPool(), rFormatSet, aSet, bNoCharacterFormats, bNoParagraphFormats ) );

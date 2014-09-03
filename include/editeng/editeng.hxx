@@ -374,7 +374,6 @@ public:
     sal_uInt32      GetControlWord() const;
 
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
-    void            QuickRemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich = 0 );
     void            QuickMarkInvalid( const ESelection& rSel );
     void            QuickFormatDoc( bool bFull = false );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );

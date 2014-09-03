@@ -2070,11 +2070,6 @@ void EditEngine::QuickFormatDoc( bool bFull )
     pImpEditEngine->UpdateViews( NULL );
 }
 
-void EditEngine::QuickRemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich )
-{
-    pImpEditEngine->RemoveCharAttribs( nPara, nWhich );
-}
-
 void EditEngine::SetStyleSheet(const EditSelection& aSel, SfxStyleSheet* pStyle)
 {
     pImpEditEngine->SetStyleSheet(aSel, pStyle);

@@ -1612,7 +1612,7 @@ void ScInputHandler::UpdateParenthesis()
                             // Remove old highlighting
                             sal_Int32 nCount = pEngine->GetParagraphCount();
                             for (sal_Int32 i=0; i<nCount; i++)
-                                pEngine->QuickRemoveCharAttribs( i, EE_CHAR_WEIGHT );
+                                pEngine->RemoveCharAttribs( i, EE_CHAR_WEIGHT );
                         }
 
                         ESelection aSelThis( 0,nPos, 0,nPos+1 );
@@ -1807,7 +1807,7 @@ void ScInputHandler::RemoveRangeFinder()
     pEngine->SetUpdateMode(false);
     sal_Int32 nCount = pEngine->GetParagraphCount(); // Could just have been inserted
     for (sal_Int32 i=0; i<nCount; i++)
-        pEngine->QuickRemoveCharAttribs( i, EE_CHAR_COLOR );
+        pEngine->RemoveCharAttribs( i, EE_CHAR_COLOR );
     pEngine->SetUpdateMode(true);
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
@@ -3662,7 +3662,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
 
             // Delete attributes
             for (sal_Int32 i=0; i<nParCnt; i++)
-                rDestEngine.QuickRemoveCharAttribs( i );
+                rDestEngine.RemoveCharAttribs( i );
 
             // Combine paragraphs
             while ( nParCnt > 1 )

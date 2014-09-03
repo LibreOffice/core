@@ -200,7 +200,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
     for (sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
     {
         pOutl->SetStyleSheet( nPara, pStyle );
-        pOutl->QuickRemoveCharAttribs(nPara);
+        pOutl->RemoveCharAttribs(nPara);
         pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
         pOutl->SetDepth(pOutl->GetParagraph(nPara), 0);
     }

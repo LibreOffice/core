@@ -328,7 +328,7 @@ namespace sdr
 
                                             if(nW >= EE_ITEMS_START && nW <= EE_ITEMS_END)
                                             {
-                                                rOutliner.QuickRemoveCharAttribs(nPara, nW);
+                                                rOutliner.RemoveCharAttribs(nPara, nW);
                                             }
                                         }
                                         pItem = aIter.NextItem();

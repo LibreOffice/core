@@ -121,7 +121,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
             for (sal_Int32 nPara = 0; nPara < nParaCount1; nPara++)
             {
-                pOutl->QuickRemoveCharAttribs(nPara);
+                pOutl->RemoveCharAttribs(nPara);
                 pOutl->SetParaAttribs(nPara, aEmptyEEAttr);
             }
 

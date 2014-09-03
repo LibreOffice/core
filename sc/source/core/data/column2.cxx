@@ -1064,7 +1064,7 @@ public:
         sal_Int32 nParCount = mpEngine->GetParagraphCount();
         for (sal_Int32 nPar=0; nPar<nParCount; nPar++)
         {
-            mpEngine->QuickRemoveCharAttribs(nPar);
+            mpEngine->RemoveCharAttribs(nPar);
             const SfxItemSet& rOld = mpEngine->GetParaAttribs(nPar);
             if ( rOld.Count() )
             {
