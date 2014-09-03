@@ -111,7 +111,17 @@ void ColorValueContext::onStartElement( const AttributeList& rAttribs )
         case A_TOKEN( satOff ):
         case A_TOKEN( shade ):
         case A_TOKEN( tint ):
-            mrColor.addTransformation( nElement, rAttribs.getInteger( XML_val, 0 ) );
+        {
+            OUString aValue = rAttribs.getString( XML_val, OUString() );
+            sal_Int32 nVal = 0;
+            if (aValue.endsWith("%"))
+            {
+                nVal = aValue.toDouble() * PER_PERCENT;
+            }
+            else
+                nVal = rAttribs.getInteger(XML_val, 0);
+            mrColor.addTransformation( nElement, nVal );
+        }
         break;
         case A_TOKEN( comp ):
         case A_TOKEN( gamma ):
