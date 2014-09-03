@@ -14,6 +14,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
@@ -662,6 +663,21 @@ DECLARE_RTFEXPORT_TEST(testFdo32613, "fdo32613.odt")
 {
     // This was AS_CHARACTER, RTF export did not support writing anchored pictures.
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
+
+DECLARE_RTFEXPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.rtf")
+{
+    // The problem was that the wrap polygon was ignored during import.
+    drawing::PointSequenceSequence aSeqSeq = getProperty<drawing::PointSequenceSequence>(getShape(1), "ContourPolyPolygon");
+    // This was 0: the polygon list was empty.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeqSeq.getLength());
+
+    drawing::PointSequence aSeq = aSeqSeq[0];
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSeq.getLength());
+
+    // The shape also didn't have negative top / left coordinates.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-1177)), getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-67)), getProperty<sal_Int32>(getShape(1), "VertOrientPosition"));
 }
 
 #endif

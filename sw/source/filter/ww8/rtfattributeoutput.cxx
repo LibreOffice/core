@@ -65,6 +65,7 @@
 #include <editeng/blinkitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <editeng/opaqitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
@@ -2866,6 +2867,10 @@ void RtfAttributeOutput::FormatSurround(const SwFmtSurround& rSurround)
             oWrk = 3; // largest
             break;
         }
+
+        if (rSurround.IsContour())
+            nWr = 4; // tight
+
         m_rExport.Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_SHPWR);
         m_rExport.OutLong(nWr);
         if (oWrk)
@@ -3721,6 +3726,28 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         aFlyProperties.push_back(std::make_pair<OString, OString>("shapeType", OString::number(ESCHER_ShpInst_PictureFrame)));
         aFlyProperties.push_back(std::make_pair<OString, OString>("wzDescription", msfilter::rtfutil::OutString(pFlyFrmFmt->GetObjDescription(), m_rExport.eCurrentEncoding)));
         aFlyProperties.push_back(std::make_pair<OString, OString>("wzName", msfilter::rtfutil::OutString(pFlyFrmFmt->GetObjTitle(), m_rExport.eCurrentEncoding)));
+
+        // If we have a wrap polygon, then handle that here.
+        if (pFlyFrmFmt->GetSurround().IsContour())
+        {
+            if (const SwNoTxtNode* pNd = sw::util::GetNoTxtNodeFromSwFrmFmt(*pFlyFrmFmt))
+            {
+                const PolyPolygon* pPolyPoly = pNd->HasContour();
+                if (pPolyPoly && pPolyPoly->Count())
+                {
+                    Polygon aPoly = sw::util::CorrectWordWrapPolygonForExport(*pPolyPoly, pNd);
+                    OStringBuffer aVerticies;
+                    for (sal_uInt16 i = 0; i < aPoly.GetSize(); ++i)
+                        aVerticies.append(";(").append(aPoly[i].X()).append(",").append(aPoly[i].Y()).append(")");
+                    aFlyProperties.push_back(std::make_pair<OString, OString>("pWrapPolygonVertices", "8;" + OString::number(aPoly.GetSize()) + aVerticies.makeStringAndClear()));
+                }
+            }
+        }
+
+        // Below text, behind document, opaque: they all refer to the same thing.
+        if (!pFlyFrmFmt->GetOpaque().GetValue())
+            aFlyProperties.push_back(std::make_pair<OString, OString>("fBehindDocument", "1"));
+
         for (size_t i = 0; i < aFlyProperties.size(); ++i)
         {
             m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{");

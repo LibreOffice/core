@@ -1903,21 +1903,6 @@ DECLARE_RTFIMPORT_TEST(testBehindDoc, "behind-doc.rtf")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xShape, "Opaque"));
 }
 
-DECLARE_RTFIMPORT_TEST(testPictureWrapPolygon, "picture-wrap-polygon.rtf")
-{
-    // The problem was that the wrap polygon was ignored during import.
-    drawing::PointSequenceSequence aSeqSeq = getProperty<drawing::PointSequenceSequence>(getShape(1), "ContourPolyPolygon");
-    // This was 0: the polygon list was empty.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aSeqSeq.getLength());
-
-    drawing::PointSequence aSeq = aSeqSeq[0];
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(11), aSeq.getLength());
-
-    // The shape also didn't have negative top / left coordinates.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-1177)), getProperty<sal_Int32>(getShape(1), "HoriOrientPosition"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(-67)), getProperty<sal_Int32>(getShape(1), "VertOrientPosition"));
-}
-
 DECLARE_RTFIMPORT_TEST(testFdo74229, "fdo74229.rtf")
 {
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
