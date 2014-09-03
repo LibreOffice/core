@@ -65,7 +65,6 @@ SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
 {
     get(m_pSyncBtn, "sync");
     m_pSyncBtn->SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));
-    fprintf(stderr, "SwSyncBtnDlg::SwSyncBtnDlg %p\n", this);
     Show();
 }
 
