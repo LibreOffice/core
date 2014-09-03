@@ -299,6 +299,8 @@ public:
     EditTextObject* CreateTextObject( const ESelection& rESelection );
     void            SetText( const EditTextObject& rTextObject );
 
+    EditTextObject* GetEmptyTextObject() const;
+
     void            RemoveParagraph(sal_Int32 nPara);
     void            InsertParagraph(sal_Int32 nPara, const EditTextObject& rTxtObj);
     void            InsertParagraph(sal_Int32 nPara, const OUString& rText);

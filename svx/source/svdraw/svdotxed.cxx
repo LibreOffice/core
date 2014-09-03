@@ -277,7 +277,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         if ( IsToBeChained() && GetNextLinkInChain() != this) // XXX: defensive check
         {
             // set non overflow part of text to current box
-            pNewText = rOutl.GetNonOverflowingParaObject();
+            pNewText = rOutl.GetNonOverflowingParaObject(); // empty text obj. if 1st para is overflowing
             // set overflowing text for SdrChainedTextPrimitive2D
             pNextText = rOutl.GetOverflowingParaObject();
             mpOverflowingText = pNextText;
