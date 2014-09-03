@@ -108,7 +108,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, SwViewShell *pVwSh,
         if( aRect.Bottom() > nBottom )
             aRect.Bottom( nBottom );
     }
-    sal_uInt16 nVirtPageNum = 0;
+    int nVirtPageNum = 0;
     if( bLineNum )
     {
         /* Initializes the Members necessary for line numbering:
@@ -483,7 +483,7 @@ bool SwTxtFrm::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             const IDocumentRedlineAccess* pIDRA = rTxtNode.getIDocumentRedlineAccess();
             if( IDocumentRedlineAccess::IsShowChanges( pIDRA->GetRedlineMode() ) )
             {
-                sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
+                const sal_uInt16 nRedlPos = pIDRA->GetRedlinePos( rTxtNode, USHRT_MAX );
                 if( USHRT_MAX != nRedlPos )
                 {
                     SwAttrHandler aAttrHandler;

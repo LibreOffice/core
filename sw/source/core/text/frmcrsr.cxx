@@ -1348,7 +1348,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
     }
     SwFont *pFnt;
     SwTxtFmtColl* pColl = GetTxtNode()->GetTxtColl();
-    sal_uInt16 nFirst = GetTxtNode()->GetSwAttrSet().GetULSpace().GetLower();
+    SwTwips nFirst = GetTxtNode()->GetSwAttrSet().GetULSpace().GetLower();
     SwTwips nDiff = rFill.Y() - Frm().Bottom();
     if( nDiff < nFirst )
         nDiff = -1;
@@ -1392,7 +1392,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
             nFirst = 0;
         }
         else if( nDist < nFirst )
-            nFirst = nFirst - (sal_uInt16)nDist;
+            nFirst = nFirst - nDist;
         else
             nFirst = 0;
         nDist = std::max( nDist, long( GetLineSpace() ) );
@@ -1522,7 +1522,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                             const SvxTabStopItem& rTab =
                                 (const SvxTabStopItem &)pSet->
                                 GetPool()->GetDefaultItem( RES_PARATR_TABSTOP );
-                            sal_uInt16 nDefTabDist = (sal_uInt16)rTab[0].GetTabPos();
+                            const SwTwips nDefTabDist = rTab[0].GetTabPos();
                             nRightTab = nLeftTab - nTxtLeft;
                             nRightTab /= nDefTabDist;
                             nRightTab = nRightTab * nDefTabDist + nTxtLeft;
