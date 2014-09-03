@@ -366,7 +366,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
             aSelPoint = Point( aCharRect.Left(), aCharRect.Top() );
         }
     }
-    else
+    else if (pFirstCrsr)
     {
        aSelPoint = pFirstCrsr->GetSttPos();
     }
@@ -405,7 +405,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         else
         {
             pCNd->SetAttr( SwFmtPageDesc( pPageDesc ) );
-            if( pFirstCrsr->HasMark() )
+            if( pFirstCrsr && pFirstCrsr->HasMark() )
             {
                 SwTxtNode *pTxtNd = pCNd->GetTxtNode();
                 if( pTxtNd )
