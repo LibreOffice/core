@@ -1849,6 +1849,62 @@ void Test::testFormulaRefUpdateMoveUndo()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaRefUpdateMoveToSheet()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+
+    // Set values to A1:A2 on Sheet1, and B1:B2 to reference them.
+    m_pDoc->SetValue(ScAddress(0,0,0), 11);
+    m_pDoc->SetValue(ScAddress(0,1,0), 12);
+    m_pDoc->SetString(ScAddress(1,0,0), "=A1");
+    m_pDoc->SetString(ScAddress(1,1,0), "=A2");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A1"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "A2"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(1,0,0)));
+    CPPUNIT_ASSERT_EQUAL(12.0, m_pDoc->GetValue(ScAddress(1,1,0)));
+
+    // Move A1:A2 on Sheet1 to B3:B4 on Sheet2.
+    ScDocFunc& rFunc = getDocShell().GetDocFunc();
+    bool bMoved = rFunc.MoveBlock(ScRange(0,0,0,0,1,0), ScAddress(1,2,1), true, true, false, true);
+    CPPUNIT_ASSERT(bMoved);
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "Sheet2.B3"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "Sheet2.B4"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // Undo and check again.
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    pUndoMgr->Undo();
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "A1"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "A2"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    // Redo and check.
+    pUndoMgr->Redo();
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,0,0), "Sheet2.B3"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "Sheet2.B4"))
+        CPPUNIT_FAIL("Wrong formula");
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFormulaRefUpdateDeleteContent()
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
