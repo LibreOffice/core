@@ -56,7 +56,7 @@ void SdrOutliner::SetTextObj( const SdrTextObj* pObj )
         SetControlWord(nStat);
 
         Size aNullSize;
-        Size aMaxSize( 100000,2418 ); // FIXME(matteocam)
+        Size aMaxSize( 100000, 100000 );
         SetMinAutoPaperSize( aNullSize );
         SetMaxAutoPaperSize( aMaxSize );
         SetPaperSize( aMaxSize );

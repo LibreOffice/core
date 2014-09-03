@@ -1245,7 +1245,7 @@ void SdrTextObj::ImpInitDrawOutliner( SdrOutliner& rOutl ) const
     nStat &= ~EEControlBits(EEControlBits::STRETCHING|EEControlBits::AUTOPAGESIZE);
     rOutl.SetControlWord(nStat);
     Size aNullSize;
-    Size aMaxSize(100000,100000);
+    Size aMaxSize(100000,2418);
     rOutl.SetMinAutoPaperSize(aNullSize);
     rOutl.SetMaxAutoPaperSize(aMaxSize);
     rOutl.SetPaperSize(aMaxSize);
