@@ -740,7 +740,7 @@ static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                         const SwSectionFrm* pNxtSect = pLay ?
                             pLay->FindSctFrm() : NULL;
                         bSct = false;
-                        if( pSect->IsAnFollow( pNxtSect ) )
+                        if (pLay && pSect->IsAnFollow(pNxtSect))
                         {
                             pSect = pNxtSect;
                             if( pLay->IsVertical() )
