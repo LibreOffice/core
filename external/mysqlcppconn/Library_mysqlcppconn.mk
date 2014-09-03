@@ -24,6 +24,12 @@ $(eval $(call gb_Library_add_libs,mysqlcppconn,\
 
 endif
 
+ifeq ($(SYSTEM_MARIADB),)
+$(eval $(call gb_Library_use_externals,mysqlcppconn,\
+	    iconv \
+))
+endif
+
 $(eval $(call gb_Library_set_warnings_not_errors,mysqlcppconn))
 
 $(eval $(call gb_Library_set_generated_cxx_suffix,mysqlcppconn,cpp))
