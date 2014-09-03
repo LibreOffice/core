@@ -2812,7 +2812,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
     ScRange aOldRange = rCxt.maRange;
     aOldRange.Move(-rCxt.mnColDelta, -rCxt.mnRowDelta, -rCxt.mnTabDelta);
 
-    bool b3DFlag = rOldPos.Tab() != rNewPos.Tab();
+    bool b3DFlag = rOldPos.Tab() != rNewPos.Tab() || rCxt.mnTabDelta;
 
     FormulaToken** p = pCode;
     FormulaToken** pEnd = p + static_cast<size_t>(nLen);
@@ -2888,6 +2888,8 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
                 {
                     aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
                     rRef.SetAddress(aAbs, rPos);
+                    if (rCxt.mnTabDelta)
+                        rRef.SetFlag3D(aAbs.Tab()!=rPos.Tab());
                 }
             }
             break;
@@ -2900,6 +2902,8 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
                 {
                     aAbs.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta);
                     rRef.SetRange(aAbs, rPos);
+                    if (rCxt.mnTabDelta)
+                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab()!=rPos.Tab());
                 }
             }
             break;
