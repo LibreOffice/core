@@ -74,13 +74,4 @@ $(eval $(call gb_Library_add_generated_exception_objects,mysqlcppconn,\
 	UnpackedTarball/mysqlcppconn/driver/nativeapi/mysql_native_statement_wrapper \
 ))
 
-$(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn/driver/mysql_metadata.o $(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn/driver/mysql_driver.o: $(WORKDIR)/UnpackedTarball/mysqlcppconn/driver/version_info.h
-
-ifeq ($(SYSTEM_BOOST),)
-MYSQLCPPCONN_BOOST:=-DBOOST_ROOT:STRING=$(call gb_UnpackedTarball_get_dir,boost)
-endif
-
-$(WORKDIR)/UnpackedTarball/mysqlcppconn/driver/version_info.h: $(call gb_UnpackedTarball_get_target,mysqlcppconn) $(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn/driver/mysql_util.o
-	cd $(WORKDIR)/GenCxxObject/UnpackedTarball/mysqlcppconn && cmake $(MYSQLCPPCONN_BOOST) ../../../UnpackedTarball/mysqlcppconn/
-
 # vim: set noet sw=4 ts=4:
