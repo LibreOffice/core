@@ -428,7 +428,7 @@ bool OpenGLContext::ImplInit()
                                  GL_TRUE);
     if( m_aGLWin.ctx == NULL )
     {
-        SAL_INFO("vcl.opengl", "unable to create GLX context");
+        SAL_WARN("vcl.opengl", "unable to create GLX context");
         return false;
     }
 #endif
