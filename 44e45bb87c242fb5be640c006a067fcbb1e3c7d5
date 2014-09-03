@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_7a25b1c0",
+        "filename": "sc/source/core/tool/reffind.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-09-03T13:06:00Z",
+      "side": 1,
+      "message": "Looking for a hardcoded \u0027.\u0027 sheet name separator works only in CalcA1 address mode, but not in the Excel A1 or R1C1 address modes you can switch to in Tools-\u003eOptions-\u003eCalc-\u003eFormula \"Formula syntax\", for which nSep would be -1 unless there\u0027s a \u0027.\u0027 dot in the sheet name..\n\nTo obtain the current address mode you need to ask ScDocument::GetAddressConvention() that returns ScAddress::Details where for formula::FormulaGrammar::CONV_XL_A1, formula::FormulaGrammar::CONV_XL_OOX and formula::FormulaGrammar::CONV_XL_R1C1 the sheet name separator is \u0027!\u0027",
+      "revId": "44e45bb87c242fb5be640c006a067fcbb1e3c7d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
