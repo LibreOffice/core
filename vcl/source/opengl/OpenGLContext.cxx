@@ -533,7 +533,7 @@ bool OpenGLContext::ImplInit()
         XSync(m_aGLWin.dpy, false);
 
         if( errorTriggered )
-            SAL_INFO("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
+            SAL_WARN("vcl.opengl", "error when trying to set swap interval, NVIDIA or Mesa bug?");
         else
             SAL_INFO("vcl.opengl", "set swap interval to 1 (enable vsync)");
 
