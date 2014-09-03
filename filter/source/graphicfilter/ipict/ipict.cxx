@@ -718,7 +718,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         nPixelSize, nCmpCount, nCmpSize;
     sal_uInt32          nPackSize, nPlaneBytes, nHRes, nVRes;
     sal_uInt8               nDat, nRed, nGreen, nBlue, nDummy;
-    sal_uLong               i, nDataSize = 0;
+    size_t              i, nDataSize = 0;
 
     // The calculation of nDataSize is considering the size of the whole data.
     nDataSize = 0;
@@ -830,7 +830,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     if ( nPixelSize == 1 || nPixelSize == 2 || nPixelSize == 4 || nPixelSize == 8 )
     {
         sal_uInt8   nByteCountAsByte, nFlagCounterByte;
-        sal_uInt16  nByteCount, nCount, nSrcBPL, nDestBPL;
+        sal_uInt16  nByteCount, nSrcBPL, nDestBPL;
+        size_t nCount;
 
         if      ( nPixelSize == 1 ) nSrcBPL = ( nWidth + 7 ) >> 3;
         else if ( nPixelSize == 2 ) nSrcBPL = ( nWidth + 3 ) >> 2;
@@ -974,7 +975,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     else if (nPixelSize==32)
     {
         sal_uInt8               nByteCountAsByte, nFlagCounterByte;
-        sal_uInt16              nByteCount, nCount;
+        sal_uInt16              nByteCount;
+        size_t                  nCount;
         sal_uLong               nSrcBitsPos;
         BitmapColor         aBitmapColor;
         if ( ( pReadAcc = aBitmap.AcquireReadAccess() ) == NULL )
@@ -1013,7 +1015,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         {
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
-                boost::scoped_array<sal_uInt8> pScanline(new sal_uInt8[ nWidth * nCmpCount ]);
+                boost::scoped_array<sal_uInt8> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
                 for ( ny = 0; ny < nHeight; ny++ )
                 {
                     nSrcBitsPos = pPict->Tell();
@@ -1035,8 +1037,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         if ( ( nFlagCounterByte & 0x80 ) == 0)
                         {
                             nCount = ( (sal_uInt16)nFlagCounterByte ) + 1;
-                            if ( ( i + nCount ) > (sal_uInt32)( nWidth * nCmpCount ) )
-                                nCount = (sal_uInt16)( nWidth * nCmpCount - i );
+                            if ( ( i + nCount ) > static_cast<size_t>(nWidth) * nCmpCount )
+                                nCount = static_cast<size_t>(nWidth) * nCmpCount - i;
                             while( nCount-- )
                             {
                                 pPict->ReadUChar( nDat );
@@ -1046,8 +1048,8 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
                         else
                         {
                             nCount = ( 1 - ( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
-                            if ( ( i + nCount ) > (sal_uInt32)( nWidth * nCmpCount ) )
-                                nCount = (sal_uInt16)( nWidth * nCmpCount - i );
+                            if ( ( i + nCount ) > static_cast<size_t>(nWidth) * nCmpCount)
+                                nCount = static_cast<size_t>(nWidth) * nCmpCount - i;
                             pPict->ReadUChar( nDat );
                             while( nCount-- )
                                 pScanline[ i++ ] = nDat;
