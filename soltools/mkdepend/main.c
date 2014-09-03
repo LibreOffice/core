@@ -115,7 +115,7 @@ char    *directives[] = {
 
 /*******   function declarations ********/
 /*******   added by -Wall project *******/
-void redirect(char * line, char * makefile );
+void redirect(char * makefile);
 
 struct  inclist inclist[ MAXFILES ],
                 *inclistp = inclist;
@@ -375,7 +375,7 @@ int main(int argc, char    **argv)
         *incp++ = defincdir;
     }
 
-    redirect(startat, makefile);
+    redirect(makefile);
 
     /*
      * catch signals.
@@ -650,81 +650,12 @@ int rename (char *from, char *to)
 }
 #endif /* USGISH */
 
-void redirect(char *line, char *makefile)
+void redirect(char *makefile)
 {
     FILE    *fdout;
-    fdout = freopen(makefile, "wb", stdout); // binary mode please
+    fdout = makefile ? freopen(makefile, "wb", stdout) : NULL; // binary mode please
     if (fdout == NULL)
-        fatalerr("cannot open \"%s\"\n", makefile);
-    (void) line;
-
-    // don't need any of that nonsense
-#if 0
-    struct stat st;
-    FILE    *fdin, *fdout;
-    char    backup[ BUFSIZ ],
-        buf[ BUFSIZ ];
-    boolean found = FALSE;
-    int len;
-
-    /*
-     * if makefile is "-" then let it pour onto stdout.
-     */
-    if (makefile && *makefile == '-' && *(makefile+1) == '\0')
-        return;
-
-    /*
-     * use a default makefile is not specified.
-     */
-    if (!makefile) {
-        if (stat("Makefile", &st) == 0)
-            makefile = "Makefile";
-        else if (stat("makefile", &st) == 0)
-            makefile = "makefile";
-        else
-            fatalerr("[mM]akefile is not present\n");
-    }
-    else
-        stat(makefile, &st);
-    if ((fdin = fopen(makefile, "r")) == NULL)
-        fatalerr("cannot open \"%s\"\n", makefile);
-    sprintf(backup, "%s.bak", makefile);
-    unlink(backup);
-#if defined(WIN32)
-    fclose(fdin);
-#endif
-    if (rename(makefile, backup) < 0)
-        fatalerr("cannot rename %s to %s\n", makefile, backup);
-#if defined(WIN32)
-    if ((fdin = fopen(backup, "r")) == NULL)
-        fatalerr("cannot open \"%s\"\n", backup);
-#endif
-    if ((fdout = freopen(makefile, "w", stdout)) == NULL)
-        fatalerr("cannot open \"%s\"\n", backup);
-    len = strlen(line);
-    while (!found && fgets(buf, BUFSIZ, fdin)) {
-        if (*buf == '#' && strncmp(line, buf, len) == 0)
-            found = TRUE;
-        fputs(buf, fdout);
-    }
-    if (!found) {
-        if (verbose)
-            warning("Adding new delimiting line \"%s\" and dependencies...\n",
-                line);
-        puts(line); /* same as fputs(fdout); but with newline */
-    } else if (append) {
-        while (fgets(buf, BUFSIZ, fdin)) {
-        fputs(buf, fdout);
-        }
-    }
-    fflush(fdout);
-#if defined(USGISH) || defined(USE_CHMOD)
-    chmod(makefile, st.st_mode);
-#else
-    fchmod(fileno(fdout), st.st_mode);
-#endif /* USGISH */
-    fclose(fdin);
-#endif
+        fatalerr("cannot open \"%s\"\n", makefile ? makefile : "<NULL>");
 }
 
 void fatalerr(char *msg, ...)
