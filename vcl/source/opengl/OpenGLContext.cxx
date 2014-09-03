@@ -487,7 +487,7 @@ bool OpenGLContext::ImplInit()
 #elif defined( UNX )
 #if DBG_UTIL
 
-    if (!mbRequestLegacyContext)
+    if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
         int best_fbc = -1;
         const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
