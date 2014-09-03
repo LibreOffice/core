@@ -41,7 +41,7 @@ public:
 
     void SetMoreOptionsCommand (
         const ::rtl::OUString& rsCommandName,
-        const ::cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     virtual void DataChanged (const DataChangedEvent& rEvent) SAL_OVERRIDE;
     virtual void MouseButtonDown (const MouseEvent& rMouseEvent) SAL_OVERRIDE;
@@ -53,13 +53,13 @@ protected:
     virtual sidebar::Paint GetBackgroundPaint (void) SAL_OVERRIDE;
     virtual Color GetTextColor (void) SAL_OVERRIDE;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) SAL_OVERRIDE;
-    virtual cssu::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
 
 private:
     bool mbIsLeftButtonDown;
     Panel* mpPanel;
     const sal_uInt16 mnMenuItemIndex;
-    cssu::Reference<css::frame::XFrame> mxFrame;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
     ::rtl::OUString msMoreOptionsCommand;
     ::rtl::OUString msAccessibleNamePrefix;
 };

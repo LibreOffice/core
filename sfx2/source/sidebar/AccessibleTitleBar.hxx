@@ -22,7 +22,6 @@
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
@@ -32,7 +31,7 @@ class AccessibleTitleBar
     : public VCLXAccessibleComponent
 {
 public:
-    static cssu::Reference<css::accessibility::XAccessible> Create (TitleBar& rTitleBar);
+    static css::uno::Reference<css::accessibility::XAccessible> Create (TitleBar& rTitleBar);
 
 protected:
     virtual void FillAccessibleStateSet (utl::AccessibleStateSetHelper& rStateSet) SAL_OVERRIDE;

@@ -30,7 +30,6 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
@@ -55,9 +54,9 @@ public:
 
     PanelTitleBar* GetTitleBar (void) const;
     bool IsTitleBarOptional (void) const { return mbIsTitleBarOptional;}
-    void SetUIElement (const cssu::Reference<css::ui::XUIElement>& rxElement);
-    cssu::Reference<css::ui::XSidebarPanel> GetPanelComponent (void) const { return mxPanelComponent;}
-    cssu::Reference<css::awt::XWindow> GetElementWindow (void);
+    void SetUIElement (const css::uno::Reference<css::ui::XUIElement>& rxElement);
+    css::uno::Reference<css::ui::XSidebarPanel> GetPanelComponent (void) const { return mxPanelComponent;}
+    css::uno::Reference<css::awt::XWindow> GetElementWindow (void);
     void SetExpanded (const bool bIsExpanded);
     bool IsExpanded (void) const { return mbIsExpanded;}
     bool HasIdPredicate (const ::rtl::OUString& rsId) const;
@@ -72,8 +71,8 @@ private:
     const ::rtl::OUString msPanelId;
     ::boost::scoped_ptr<PanelTitleBar> mpTitleBar;
     const bool mbIsTitleBarOptional;
-    cssu::Reference<css::ui::XUIElement> mxElement;
-    cssu::Reference<css::ui::XSidebarPanel> mxPanelComponent;
+    css::uno::Reference<css::ui::XUIElement> mxElement;
+    css::uno::Reference<css::ui::XSidebarPanel> mxPanelComponent;
     bool mbIsExpanded;
     const ::boost::function<void(void)> maDeckLayoutTrigger;
     const ::boost::function<Context(void)> maContextAccess;

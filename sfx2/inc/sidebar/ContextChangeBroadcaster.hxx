@@ -21,7 +21,6 @@
 
 #include <com/sun/star/frame/XFrame.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
@@ -37,8 +36,8 @@ public:
 
     void Initialize (const ::rtl::OUString& rsContextName);
 
-    void Activate (const cssu::Reference<css::frame::XFrame>& rxFrame);
-    void Deactivate (const cssu::Reference<css::frame::XFrame>& rxFrame);
+    void Activate (const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    void Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Enable or disable the broadcaster.
         @param bIsEnabled
@@ -53,11 +52,11 @@ private:
     bool mbIsBroadcasterEnabled;
 
     void BroadcastContextChange (
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const ::rtl::OUString& rsModuleName,
         const ::rtl::OUString& rsContextName);
     ::rtl::OUString GetModuleName (
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
 

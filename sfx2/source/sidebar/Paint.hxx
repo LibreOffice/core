@@ -26,7 +26,6 @@
 
 #include <boost/variant.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
@@ -48,7 +47,7 @@ public:
 
     // Create a Paint object for an Any that may contain a color, a
     // awt::Gradient, or nothing.
-    static Paint Create (const cssu::Any& rValue);
+    static Paint Create (const css::uno::Any& rValue);
 
     // Create paint with type NoPaint.
     explicit Paint (void);

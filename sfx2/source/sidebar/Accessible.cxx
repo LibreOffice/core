@@ -21,7 +21,7 @@
 
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 
 namespace sfx2 { namespace sidebar {
@@ -55,7 +55,7 @@ void SAL_CALL Accessible::disposing (void)
 
 
 Reference<accessibility::XAccessibleContext> SAL_CALL Accessible::getAccessibleContext (void)
-    throw (cssu::RuntimeException, std::exception)
+    throw (css::uno::RuntimeException, std::exception)
 {
     return mxContext;
 }

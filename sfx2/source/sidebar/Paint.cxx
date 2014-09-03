@@ -21,7 +21,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 
 
-using namespace ::com::sun::star;
+using namespace css;
 
 namespace sfx2 { namespace sidebar {
 
@@ -51,7 +51,7 @@ Paint::Paint (const Gradient& rGradient)
 
 
 
-Paint Paint::Create (const cssu::Any& rValue)
+Paint Paint::Create (const css::uno::Any& rValue)
 {
     ColorData aColor (0);
     if (rValue >>= aColor)

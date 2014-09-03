@@ -45,7 +45,6 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/weakref.hxx>
 
-namespace cssu = ::com::sun::star::uno;
 
 
 namespace
@@ -78,7 +77,7 @@ class SidebarController
 public:
     SidebarController(
         SidebarDockingWindow* pParentWindow,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~SidebarController (void);
 
     /** Return the SidebarController object that is associated with
@@ -88,27 +87,27 @@ public:
             XFrame then <NULL/> is returned.
     */
     static SidebarController* GetSidebarControllerForFrame (
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     // ui::XContextChangeEventListener
     virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // XEventListener
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEventObject)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // beans::XPropertyChangeListener
     virtual void SAL_CALL propertyChange (const css::beans::PropertyChangeEvent& rEvent)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // frame::XStatusListener
     virtual void SAL_CALL statusChanged (const css::frame::FeatureStateEvent& rEvent)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // ui::XSidebar
     virtual void SAL_CALL requestLayout (void)
-        throw(cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     void NotifyResize (void);
 
@@ -138,15 +137,15 @@ public:
 
 private:
     typedef ::std::map<
-        const cssu::Reference<css::frame::XFrame>,
-        cssu::WeakReference<SidebarController>
+        const css::uno::Reference<css::frame::XFrame>,
+        css::uno::WeakReference<SidebarController>
     > SidebarControllerContainer;
     static SidebarControllerContainer maSidebarControllerContainer;
 
     ::boost::scoped_ptr<Deck> mpCurrentDeck;
     SidebarDockingWindow* mpParentWindow;
     ::boost::scoped_ptr<TabBar> mpTabBar;
-    cssu::Reference<css::frame::XFrame> mxFrame;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
     Context maCurrentContext;
     Context maRequestedContext;
     /// Use a combination of SwitchFlag_* as value.
@@ -174,7 +173,7 @@ private:
     */
     sal_Int32 mnSavedSidebarWidth;
     FocusManager maFocusManager;
-    cssu::Reference<css::frame::XDispatch> mxReadOnlyModeDispatch;
+    css::uno::Reference<css::frame::XDispatch> mxReadOnlyModeDispatch;
     bool mbIsDocumentReadOnly;
     SfxSplitWindow* mpSplitWindow;
     /** When the user moves the splitter then we remember the
@@ -192,8 +191,8 @@ private:
     */
     void UpdateConfigurations (void);
 
-    cssu::Reference<css::ui::XUIElement> CreateUIElement (
-        const cssu::Reference<css::awt::XWindowPeer>& rxWindow,
+    css::uno::Reference<css::ui::XUIElement> CreateUIElement (
+        const css::uno::Reference<css::awt::XWindowPeer>& rxWindow,
         const ::rtl::OUString& rsImplementationURL,
         const bool bWantsCanvas,
         const Context& rContext);

@@ -27,7 +27,6 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace
 {
@@ -50,18 +49,18 @@ class Accessible
 {
 public:
     Accessible (
-        const cssu::Reference<css::accessibility::XAccessibleContext>& rxContext);
+        const css::uno::Reference<css::accessibility::XAccessibleContext>& rxContext);
     virtual ~Accessible (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
 
     // XAccessible
-    virtual cssu::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext (void)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext (void)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    cssu::Reference<css::accessibility::XAccessibleContext> mxContext;
+    css::uno::Reference<css::accessibility::XAccessibleContext> mxContext;
 };
 
 

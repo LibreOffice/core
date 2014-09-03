@@ -25,9 +25,9 @@
 
 #include <set>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
+using namespace css;
+using namespace css::uno;
+using namespace css::drawing::framework;
 
 using ::sd::framework::FrameworkHelper;
 

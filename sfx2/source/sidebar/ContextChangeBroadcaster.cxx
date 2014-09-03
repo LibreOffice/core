@@ -26,7 +26,7 @@
 
 using ::rtl::OUString;
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 namespace sfx2 { namespace sidebar {
 
@@ -54,7 +54,7 @@ void ContextChangeBroadcaster::Initialize (const ::rtl::OUString& rsContextName)
 
 
 
-void ContextChangeBroadcaster::Activate (const cssu::Reference<css::frame::XFrame>& rxFrame)
+void ContextChangeBroadcaster::Activate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (msContextName.getLength() > 0)
         BroadcastContextChange(rxFrame, GetModuleName(rxFrame), msContextName);
@@ -63,7 +63,7 @@ void ContextChangeBroadcaster::Activate (const cssu::Reference<css::frame::XFram
 
 
 
-void ContextChangeBroadcaster::Deactivate (const cssu::Reference<css::frame::XFrame>& rxFrame)
+void ContextChangeBroadcaster::Deactivate (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if (msContextName.getLength() > 0)
     {
@@ -88,7 +88,7 @@ bool ContextChangeBroadcaster::SetBroadcasterEnabled (const bool bIsEnabled)
 
 
 void ContextChangeBroadcaster::BroadcastContextChange (
-    const cssu::Reference<css::frame::XFrame>& rxFrame,
+    const css::uno::Reference<css::frame::XFrame>& rxFrame,
     const ::rtl::OUString& rsModuleName,
     const ::rtl::OUString& rsContextName)
 {
@@ -110,7 +110,7 @@ void ContextChangeBroadcaster::BroadcastContextChange (
         rsModuleName,
         rsContextName);
 
-    cssu::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+    css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
         css::ui::ContextChangeEventMultiplexer::get(
             ::comphelper::getProcessComponentContext()));
     if (xMultiplexer.is())
@@ -120,7 +120,7 @@ void ContextChangeBroadcaster::BroadcastContextChange (
 
 
 
-OUString ContextChangeBroadcaster::GetModuleName (const cssu::Reference<css::frame::XFrame>& rxFrame)
+OUString ContextChangeBroadcaster::GetModuleName (const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if ( ! rxFrame.is() || ! rxFrame->getController().is())
         return OUString();

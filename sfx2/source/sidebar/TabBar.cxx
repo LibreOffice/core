@@ -35,8 +35,8 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css;
+using namespace css::uno;
 
 
 

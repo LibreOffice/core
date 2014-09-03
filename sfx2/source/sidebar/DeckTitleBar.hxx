@@ -46,7 +46,7 @@ protected:
     virtual sidebar::Paint GetBackgroundPaint (void) SAL_OVERRIDE;
     virtual Color GetTextColor (void) SAL_OVERRIDE;
     virtual void HandleToolBoxItemClick (const sal_uInt16 nItemIndex) SAL_OVERRIDE;
-    virtual cssu::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> CreateAccessible (void) SAL_OVERRIDE;
 
 private:
     const sal_uInt16 mnCloserItemIndex;
