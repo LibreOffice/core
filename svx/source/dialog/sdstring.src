@@ -893,6 +893,114 @@ String RID_SVXSTR_GRDT69_DEF
     Text = "Green Gradient";
 };
 
+/* do not translate */
+String RID_SVXSTR_GRDT70_DEF
+{
+    Text = "Tango Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT71_DEF
+{
+    Text = "Subtle Tango Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT72_DEF
+{
+    Text = "Tango Purple";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT73_DEF
+{
+    Text = "Tango Red";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT74_DEF
+{
+    Text = "Tango Blue";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT75_DEF
+{
+    Text = "Tango Yellow";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT76_DEF
+{
+    Text = "Tango Orange";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT77_DEF
+{
+    Text = "Tango Gray";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT78_DEF
+{
+    Text = "Argile";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT79_DEF
+{
+    Text = "Olive Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT80_DEF
+{
+    Text = "Grison";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT81_DEF
+{
+    Text = "Sunburst";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT82_DEF
+{
+    Text = "Brownie";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT83_DEF
+{
+    Text = "Sun-Set";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT84_DEF
+{
+    Text = "Deep Green";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT85_DEF
+{
+    Text = "Deep Orange";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT86_DEF
+{
+    Text = "Deep Blue";
+};
+
+/* do not translate */
+String RID_SVXSTR_GRDT87_DEF
+{
+    Text = "Purple Haze";
+};
+
 String RID_SVXSTR_GRDT0
 {
     Text [ en-US ] = "Gradient";
@@ -1240,6 +1348,96 @@ String RID_SVXSTR_GRDT68
 String RID_SVXSTR_GRDT69
 {
     Text [ en-US ] = "Green Gradient";
+};
+
+String RID_SVXSTR_GRDT70
+{
+    Text [ en-US ] = "Tango Green";
+};
+
+String RID_SVXSTR_GRDT71
+{
+    Text [ en-US ] = "Subtle Tango Green";
+};
+
+String RID_SVXSTR_GRDT72
+{
+    Text [ en-US ] = "Tango Purple";
+};
+
+String RID_SVXSTR_GRDT73
+{
+    Text [ en-US ] = "Tango Red";
+};
+
+String RID_SVXSTR_GRDT74
+{
+    Text [ en-US ] = "Tango Blue";
+};
+
+String RID_SVXSTR_GRDT75
+{
+    Text [ en-US ] = "Tango Yellow";
+};
+
+String RID_SVXSTR_GRDT76
+{
+    Text [ en-US ] = "Tango Orange";
+};
+
+String RID_SVXSTR_GRDT77
+{
+    Text [ en-US ] = "Tango Gray";
+};
+
+String RID_SVXSTR_GRDT78
+{
+    Text [ en-US ] = "Clay";
+};
+
+String RID_SVXSTR_GRDT79
+{
+    Text [ en-US ] = "Olive Green";
+};
+
+String RID_SVXSTR_GRDT80
+{
+    Text [ en-US ] = "Silver";
+};
+
+String RID_SVXSTR_GRDT81
+{
+    Text [ en-US ] = "Sunburst";
+};
+
+String RID_SVXSTR_GRDT82
+{
+    Text [ en-US ] = "Brownie";
+};
+
+String RID_SVXSTR_GRDT83
+{
+    Text [ en-US ] = "Sunset";
+};
+
+String RID_SVXSTR_GRDT84
+{
+    Text [ en-US ] = "Deep Green";
+};
+
+String RID_SVXSTR_GRDT85
+{
+    Text [ en-US ] = "Deep Orange";
+};
+
+String RID_SVXSTR_GRDT86
+{
+    Text [ en-US ] = "Deep Blue";
+};
+
+String RID_SVXSTR_GRDT87
+{
+    Text [ en-US ] = "Purple Haze";
 };
 
 // Reference-strings for standard-hatch-table
