@@ -546,14 +546,14 @@ bool AquaSalGraphics::drawNativeControl(ControlType nType,
 #else
             if (rControlRegion.Top() == 0 && nPart == PART_DRAW_BACKGROUND_HORZ)
             {
-                BOOL isMain = [mpFrame->getNSWindow() isMainWindow];
+                const bool bDrawActive = mpFrame ? ([mpFrame->getNSWindow() isKeyWindow] ? true : false) : true;
                 CGFloat unifiedHeight = rControlRegion.GetHeight();
                 CGRect drawRect = CGRectMake(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
                 CUIDraw([NSWindow coreUIRenderer], drawRect, mrContext,
                         (CFDictionaryRef)[NSDictionary dictionaryWithObjectsAndKeys:
                         @"kCUIWidgetWindowFrame", @"widget",
                         @"regularwin", @"windowtype",
-                        (isMain ? @"normal" : @"inactive"), @"state",
+                        (bDrawActive ? @"normal" : @"inactive"), @"state",
                         [NSNumber numberWithDouble:unifiedHeight], @"kCUIWindowFrameUnifiedTitleBarHeightKey",
                         [NSNumber numberWithBool:NO], @"kCUIWindowFrameDrawTitleSeparatorKey",
                         [NSNumber numberWithBool:YES], @"is.flipped",
