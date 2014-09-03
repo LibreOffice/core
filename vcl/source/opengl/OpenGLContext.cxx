@@ -487,16 +487,20 @@ bool OpenGLContext::ImplInit()
 #elif defined( UNX )
 #if DBG_UTIL
 
-    int best_fbc = -1;
-    const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
-    GLXFBConfig* pFBC = getFBConfig(sysData, best_fbc);
-    int nContextAttribs[] =
+    if (!mbRequestLegacyContext)
     {
-        GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-        GLX_CONTEXT_MINOR_VERSION_ARB, 2,
-        None
-    };
-    m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], 0, GL_TRUE, nContextAttribs);
+        int best_fbc = -1;
+        const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
+        GLXFBConfig* pFBC = getFBConfig(sysData, best_fbc);
+        int nContextAttribs[] =
+        {
+            GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+            GLX_CONTEXT_MINOR_VERSION_ARB, 2,
+            None
+        };
+        m_aGLWin.ctx = glXCreateContextAttribsARB(m_aGLWin.dpy, pFBC[best_fbc], 0, GL_TRUE, nContextAttribs);
+
+    }
 #endif
     if (!m_aGLWin.ctx)
     {
