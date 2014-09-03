@@ -498,8 +498,8 @@ bool SwMailMergeDlg::ExecQryShell()
         nMergeType = DBMGR_MERGE_MAILMERGE;
     else
     {
-        nMergeType = static_cast< sal_uInt16 >( m_pSaveSingleDocRB->IsChecked() ?
-                    DBMGR_MERGE_SINGLE_FILE : DBMGR_MERGE_MAILFILES );
+        nMergeType = m_pSaveSingleDocRB->IsChecked() ?
+            DBMGR_MERGE_SINGLE_FILE : DBMGR_MERGE_MAILFILES;
         SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
         INetURLObject aAbs;
         if( pMedium )

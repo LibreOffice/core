@@ -35,6 +35,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include "itabenum.hxx"
 #include <boost/optional.hpp>
+#include "dbmgr.hxx"
 
 class SfxViewFrame;
 class SfxBindings;
@@ -140,7 +141,7 @@ public:
 class AbstractMailMergeDlg : public VclAbstractDialog
 {
 public:
-    virtual sal_uInt16  GetMergeType() = 0;
+    virtual DBManagerOptions GetMergeType() = 0;
     virtual const OUString& GetSaveFilter() const = 0;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const = 0;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const = 0;

@@ -282,7 +282,7 @@ class SwMailMergeDlg;
 class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
 {
     DECL_ABSTDLG_BASE(AbstractMailMergeDlg_Impl,SwMailMergeDlg)
-    virtual sal_uInt16  GetMergeType() SAL_OVERRIDE ;
+    virtual DBManagerOptions GetMergeType() SAL_OVERRIDE ;
     virtual const OUString& GetSaveFilter() const SAL_OVERRIDE;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const SAL_OVERRIDE ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const SAL_OVERRIDE;

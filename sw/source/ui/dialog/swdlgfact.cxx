@@ -477,7 +477,7 @@ bool AbstractJavaEditDialog_Impl::IsUpdate() const
     return pDlg->IsUpdate();
 }
 
-sal_uInt16 AbstractMailMergeDlg_Impl::GetMergeType()
+DBManagerOptions AbstractMailMergeDlg_Impl::GetMergeType()
 {
     return pDlg->GetMergeType();
 }

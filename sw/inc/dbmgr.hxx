@@ -75,11 +75,9 @@ class SwMailMergeConfigItem;
 enum DBManagerOptions
 {
     DBMGR_MERGE,             ///< Data records in fields.
-    DBMGR_INSERT,            ///< Data records in text.
     DBMGR_MERGE_MAILMERGE,   ///< Print mail merge.
     DBMGR_MERGE_MAILING,     ///< Send mail merge as email.
     DBMGR_MERGE_MAILFILES,   ///< Save mail merg as files.
-    DBMGR_MERGE_DOCUMENTS,   ///< Print merged documents.
     DBMGR_MERGE_SINGLE_FILE  ///< Save merge as single file.
 };
 
@@ -132,7 +130,7 @@ typedef boost::ptr_vector<SwDSParam> SwDSParamArr;
 
 struct SwMergeDescriptor
 {
-    sal_uInt16                                              nMergeType;
+    DBManagerOptions                                    nMergeType;
     SwWrtShell&                                         rSh;
     const ::svx::ODataAccessDescriptor&                 rDescriptor;
     OUString                                            sSaveToFilter; ///< export filter to save resulting files
@@ -158,7 +156,7 @@ struct SwMergeDescriptor
 
     ::com::sun::star::uno::Sequence<  ::com::sun::star::beans::PropertyValue >  aPrintOptions;
 
-    SwMergeDescriptor( sal_uInt16 nType, SwWrtShell& rShell, ::svx::ODataAccessDescriptor& rDesc ) :
+    SwMergeDescriptor( DBManagerOptions nType, SwWrtShell& rShell, ::svx::ODataAccessDescriptor& rDesc ) :
         nMergeType(nType),
         rSh(rShell),
         rDescriptor(rDesc),

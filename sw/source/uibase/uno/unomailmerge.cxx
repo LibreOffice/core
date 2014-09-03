@@ -658,7 +658,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     // aDescriptor[ svx::daColumnObject ]    not used
     aDescriptor[ svx::daSelection ]          <<= aCurSelection;
 
-    sal_uInt16 nMergeType;
+    DBManagerOptions nMergeType;
     switch (nCurOutputType)
     {
         case MailMergeType::PRINTER : nMergeType = DBMGR_MERGE_MAILMERGE; break;

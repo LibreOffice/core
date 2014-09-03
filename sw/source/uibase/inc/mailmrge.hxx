@@ -97,7 +97,7 @@ class SwMailMergeDlg : public SvxStandardDialog
     SwWrtShell&     rSh;
     SwModuleOptions* pModOpt;
 
-    sal_uInt16          nMergeType;
+    DBManagerOptions nMergeType;
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >       m_aSelection;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame2 > m_xFrame;
 
@@ -123,7 +123,7 @@ public:
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0);
     virtual ~SwMailMergeDlg();
 
-    inline sal_uInt16   GetMergeType() { return nMergeType; }
+    inline DBManagerOptions GetMergeType() { return nMergeType; }
 
     bool IsSaveIndividualDocs() const { return m_pSaveIndividualRB->IsChecked(); }
     bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }
