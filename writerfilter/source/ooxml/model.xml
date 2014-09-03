@@ -24,6 +24,7 @@
   xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
   xmlns:rng="http://relaxng.org/ns/structure/1.0"
   xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
   xmlns:xml="http://www.w3.org/XML/1998/namespace">
   <token tokenid="ooxml:shape"/>
   <token tokenid="ooxml:token"/>
@@ -10608,7 +10609,7 @@
     <start name="styles"/>
     <start name="document"/>
     <start name="glossaryDocument"/>
-    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns="http://relaxng.org/ns/structure/1.0" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
+    <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
       <include href="shared-math.rng"/>
       <include href="dml-wordprocessingDrawing.rng"/>
       <include href="shared-relationshipReference.rng"/>
@@ -17910,7 +17911,7 @@
       <attribute name="eastAsiaTheme" tokenid="ooxml:CT_Fonts_eastAsiaTheme"/>
       <attribute name="cstheme" tokenid="ooxml:CT_Fonts_cstheme"/>
     </resource>
-    <resource name="EG_RPrBase" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" resource="Properties">
+    <resource name="EG_RPrBase" resource="Properties">
       <element name="rStyle" tokenid="ooxml:EG_RPrBase_rStyle"/>
       <element name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
       <element name="b" tokenid="ooxml:EG_RPrBase_b"/>
@@ -18001,7 +18002,7 @@
       <attribute name="xpath" tokenid="ooxml:CT_DataBinding_xpath"/>
       <attribute name="storeItemID" tokenid="ooxml:CT_DataBinding_storeItemID"/>
     </resource>
-    <resource xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" name="CT_SdtPr" resource="Properties">
+    <resource name="CT_SdtPr" resource="Properties">
       <element name="rPr" tokenid="ooxml:CT_SdtPr_rPr"/>
       <element name="alias" tokenid="ooxml:CT_SdtPr_alias"/>
       <element name="lock" tokenid="ooxml:CT_SdtPr_lock"/>
