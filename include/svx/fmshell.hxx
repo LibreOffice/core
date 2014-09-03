@@ -166,7 +166,7 @@ public:
                 const OutputDevice& i_rDevice
             ) const;
 
-    virtual bool IsDesignMode() const { return m_bDesignMode; }
+    virtual bool IsDesignMode() const SAL_OVERRIDE { return m_bDesignMode; }
     void         SetDesignMode( bool _bDesignMode );
 
 protected:
