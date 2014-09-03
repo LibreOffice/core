@@ -5760,75 +5760,128 @@ void Test::testSortRefUpdate4()
 
     ScDBDocFunc aFunc(getDocShell());
 
-    // Sort A1:D6.
-    m_pDoc->SetAnonymousDBData( 0, new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
-                aSortRange.aStart.Col(), aSortRange.aStart.Row(), aSortRange.aEnd.Col(), aSortRange.aEnd.Row()));
-
     // Sort A1:D6 by column D (Average, with a row header).
-    ScSortParam aSortData;
-    aSortData.nCol1 = aSortRange.aStart.Col();
-    aSortData.nCol2 = aSortRange.aEnd.Col();
-    aSortData.nRow1 = aSortRange.aStart.Row();
-    aSortData.nRow2 = aSortRange.aEnd.Row();
-    aSortData.bHasHeader = true;
-    aSortData.maKeyState[0].bDoSort = true;         // sort on
-    aSortData.maKeyState[0].nField = 3;             // Average
-    aSortData.maKeyState[0].bAscending = false;     // descending
-    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
-    CPPUNIT_ASSERT(bSorted);
-
-    // Check the sorted values.
-    m_pDoc->CalcAll();
-    CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Student3"), m_pDoc->GetString(ScAddress(0,1,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Student4"), m_pDoc->GetString(ScAddress(0,2,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Student5"), m_pDoc->GetString(ScAddress(0,3,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Student2"), m_pDoc->GetString(ScAddress(0,4,0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("Student1"), m_pDoc->GetString(ScAddress(0,5,0)));
-    CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,1,0)));
-    CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,3,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,4,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,5,0)));
-
-    // Make sure the formula cells have been adjusted correctly.
-    const char* aCheck[][4] = {
-        // Name          Lesson1       Lesson2       Average
-        { "Lesson1.A4", "Lesson1.B4", "Lesson2.B4", "AVERAGE(B2:C2)" },
-        { "Lesson1.A5", "Lesson1.B5", "Lesson2.B5", "AVERAGE(B3:C3)" },
-        { "Lesson1.A6", "Lesson1.B6", "Lesson2.B6", "AVERAGE(B4:C4)" },
-        { "Lesson1.A3", "Lesson1.B3", "Lesson2.B3", "AVERAGE(B5:C5)" },
-        { "Lesson1.A2", "Lesson1.B2", "Lesson2.B2", "AVERAGE(B6:C6)" },
-    };
-    for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
     {
-        for (SCCOL nCol=0; nCol < 4; ++nCol)
+        ScSortParam aSortData;
+        aSortData.nCol1 = aSortRange.aStart.Col();
+        aSortData.nCol2 = aSortRange.aEnd.Col();
+        aSortData.nRow1 = aSortRange.aStart.Row();
+        aSortData.nRow2 = aSortRange.aEnd.Row();
+        aSortData.bHasHeader = true;
+        aSortData.maKeyState[0].bDoSort = true;         // sort on
+        aSortData.maKeyState[0].nField = 3;             // Average
+        aSortData.maKeyState[0].bAscending = false;     // descending
+
+        m_pDoc->SetAnonymousDBData( 0, new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                    aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2));
+
+        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        CPPUNIT_ASSERT(bSorted);
+
+        // Check the sorted values.
+        m_pDoc->CalcAll();
+        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student3"), m_pDoc->GetString(ScAddress(0,1,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student4"), m_pDoc->GetString(ScAddress(0,2,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student5"), m_pDoc->GetString(ScAddress(0,3,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student2"), m_pDoc->GetString(ScAddress(0,4,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student1"), m_pDoc->GetString(ScAddress(0,5,0)));
+        CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,1,0)));
+        CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,2,0)));
+        CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,3,0)));
+        CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,4,0)));
+        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+
+        // Make sure the formula cells have been adjusted correctly.
+        const char* aCheck[][4] = {
+            // Name          Lesson1       Lesson2       Average
+            { "Lesson1.A4", "Lesson1.B4", "Lesson2.B4", "AVERAGE(B2:C2)" },
+            { "Lesson1.A5", "Lesson1.B5", "Lesson2.B5", "AVERAGE(B3:C3)" },
+            { "Lesson1.A6", "Lesson1.B6", "Lesson2.B6", "AVERAGE(B4:C4)" },
+            { "Lesson1.A3", "Lesson1.B3", "Lesson2.B3", "AVERAGE(B5:C5)" },
+            { "Lesson1.A2", "Lesson1.B2", "Lesson2.B2", "AVERAGE(B6:C6)" },
+        };
+        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
         {
-            if (!checkFormula(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol]))
-                CPPUNIT_FAIL(OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
+            for (SCCOL nCol=0; nCol < 4; ++nCol)
+            {
+                if (!checkFormula(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol]))
+                    CPPUNIT_FAIL(OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
+            }
         }
+
+        // Undo and check the result.
+        SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+        pUndoMgr->Undo();
+        m_pDoc->CalcAll();
+        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
+        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,1,0)));
+        CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,2,0)));
+        CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,3,0)));
+        CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,4,0)));
+        CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+
+        // Redo and check the result.
+        pUndoMgr->Redo();
+        m_pDoc->CalcAll();
+        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
+        CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,1,0)));
+        CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,2,0)));
+        CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,3,0)));
+        CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,4,0)));
+        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,5,0)));
     }
 
-    // Undo and check the result.
-    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
-    pUndoMgr->Undo();
-    m_pDoc->CalcAll();
-    CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,1,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,3,0)));
-    CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,4,0)));
-    CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+    // Sort A2:AMJ6 by column A (Name, without header).
+    {
+        ScSortParam aSortData;
+        aSortData.nCol1 = 0;
+        aSortData.nCol2 = MAXCOL;
+        aSortData.nRow1 = aSortRange.aStart.Row()+1;
+        aSortData.nRow2 = aSortRange.aEnd.Row();
+        aSortData.bHasHeader = false;
+        aSortData.maKeyState[0].bDoSort = true;         // sort on
+        aSortData.maKeyState[0].nField = 0;             // Name
+        aSortData.maKeyState[0].bAscending = false;     // descending
 
-    // Redo and check the result.
-    pUndoMgr->Redo();
-    m_pDoc->CalcAll();
-    CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
-    CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,1,0)));
-    CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,3,0)));
-    CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,4,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+        m_pDoc->SetAnonymousDBData( 0, new ScDBData( STR_DB_LOCAL_NONAME, aSortRange.aStart.Tab(),
+                    aSortData.nCol1, aSortData.nRow1, aSortData.nCol2, aSortData.nRow2));
+
+        bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+        CPPUNIT_ASSERT(bSorted);
+
+        // Check the sorted values.
+        m_pDoc->CalcAll();
+        CPPUNIT_ASSERT_EQUAL(OUString("Name"), m_pDoc->GetString(ScAddress(0,0,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student5"), m_pDoc->GetString(ScAddress(0,1,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student4"), m_pDoc->GetString(ScAddress(0,2,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student3"), m_pDoc->GetString(ScAddress(0,3,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student2"), m_pDoc->GetString(ScAddress(0,4,0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("Student1"), m_pDoc->GetString(ScAddress(0,5,0)));
+        CPPUNIT_ASSERT_EQUAL( 4.0, m_pDoc->GetValue(ScAddress(3,1,0)));
+        CPPUNIT_ASSERT_EQUAL( 5.0, m_pDoc->GetValue(ScAddress(3,2,0)));
+        CPPUNIT_ASSERT_EQUAL( 6.0, m_pDoc->GetValue(ScAddress(3,3,0)));
+        CPPUNIT_ASSERT_EQUAL( 3.0, m_pDoc->GetValue(ScAddress(3,4,0)));
+        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(3,5,0)));
+
+        // Make sure the formula cells have been adjusted correctly.
+        const char* aCheck[][4] = {
+            // Name          Lesson1       Lesson2       Average
+            { "Lesson1.A6", "Lesson1.B6", "Lesson2.B6", "AVERAGE(B2:C2)" },
+            { "Lesson1.A5", "Lesson1.B5", "Lesson2.B5", "AVERAGE(B3:C3)" },
+            { "Lesson1.A4", "Lesson1.B4", "Lesson2.B4", "AVERAGE(B4:C4)" },
+            { "Lesson1.A3", "Lesson1.B3", "Lesson2.B3", "AVERAGE(B5:C5)" },
+            { "Lesson1.A2", "Lesson1.B2", "Lesson2.B2", "AVERAGE(B6:C6)" },
+        };
+        for (SCROW nRow=0; nRow < static_cast<SCROW>(SAL_N_ELEMENTS(aCheck)); ++nRow)
+        {
+            for (SCCOL nCol=0; nCol < 4; ++nCol)
+            {
+                if (!checkFormula(*m_pDoc, ScAddress(nCol,nRow+1,0), aCheck[nRow][nCol]))
+                    CPPUNIT_FAIL(OString("Wrong formula in " + OString('A'+nCol) + OString::number(nRow+2) + ".").getStr());
+            }
+        }
+    }
 
     m_pDoc->DeleteTab(2);
     m_pDoc->DeleteTab(1);
