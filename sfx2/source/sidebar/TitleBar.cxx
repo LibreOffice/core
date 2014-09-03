@@ -146,7 +146,7 @@ void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 
 
 
-cssu::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible (void)
+css::uno::Reference<css::accessibility::XAccessible> TitleBar::CreateAccessible (void)
 {
     SetAccessibleRole(css::accessibility::AccessibleRole::PANEL);
     return AccessibleTitleBar::Create(*this);

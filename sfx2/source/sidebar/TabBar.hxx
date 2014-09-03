@@ -34,7 +34,6 @@ class Button;
 class CheckBox;
 class RadioButton;
 
-namespace cssu = ::com::sun::star::uno;
 
 
 namespace sfx2 { namespace sidebar {
@@ -67,7 +66,7 @@ public:
             const ::std::vector<DeckMenuData>& rMenuData)> PopupMenuProvider;
     TabBar (
         Window* pParentWindow,
-        const cssu::Reference<css::frame::XFrame>& rxFrame,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
         const ::boost::function<void(const ::rtl::OUString&rsDeckId)>& rDeckActivationFunctor,
         const PopupMenuProvider& rPopupMenuProvider);
     virtual ~TabBar (void);
@@ -95,7 +94,7 @@ public:
     void UpdateFocusManager (FocusManager& rFocusManager);
 
 private:
-    cssu::Reference<css::frame::XFrame> mxFrame;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
     ::boost::scoped_ptr<CheckBox> mpMenuButton;
     class Item
     {

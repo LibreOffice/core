@@ -34,8 +34,8 @@
 
 #include <boost/bind.hpp>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css;
+using namespace css::uno;
 
 
 namespace sfx2 { namespace sidebar {

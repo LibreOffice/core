@@ -72,7 +72,7 @@ PanelTitleBar::~PanelTitleBar (void)
 
 void PanelTitleBar::SetMoreOptionsCommand (
     const ::rtl::OUString& rsCommandName,
-    const ::cssu::Reference<css::frame::XFrame>& rxFrame)
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     if ( ! rsCommandName.equals(msMoreOptionsCommand))
     {

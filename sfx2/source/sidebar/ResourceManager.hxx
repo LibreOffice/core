@@ -27,7 +27,6 @@
 #include <set>
 #include <boost/shared_ptr.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sfx2 { namespace sidebar {
 
@@ -81,13 +80,13 @@ public:
         DeckContextDescriptorContainer& rDeckDescriptors,
         const Context& rContext,
         const bool bIsDocumentReadOnly,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     const PanelContextDescriptorContainer& GetMatchingPanels (
         PanelContextDescriptorContainer& rPanelDescriptors,
         const Context& rContext,
         const ::rtl::OUString& rsDeckId,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     /** Remember the expansions state per panel and context.
         This is not persistent past application end.
@@ -114,7 +113,7 @@ private:
         ContextList& rContextList,
         const ::rtl::OUString& rsDefaultMenuCommand) const;
     void ReadLegacyAddons (
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
     ::utl::OConfigurationTreeRoot GetLegacyAddonRootNode (
         const ::rtl::OUString& rsModuleName) const;
     void GetToolPanelNodeNames (
@@ -123,7 +122,7 @@ private:
     bool IsDeckEnabled (
         const ::rtl::OUString& rsDeckId,
         const Context& rContext,
-        const cssu::Reference<css::frame::XFrame>& rxFrame) const;
+        const css::uno::Reference<css::frame::XFrame>& rxFrame) const;
 };
 
 
