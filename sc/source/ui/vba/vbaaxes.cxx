@@ -120,8 +120,18 @@ public:
     virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE { return mCoordinates.size(); }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, ::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
+        try
+        {
             AxesCoordinate dIndexes = mCoordinates[ Index ];
             return uno::makeAny( ScVbaAxes::createAxis( mxChart, mxContext, dIndexes.second, dIndexes.first ) );
+        }
+        catch (const css::script::BasicErrorException& e)
+        {
+            throw css::lang::WrappedTargetException(
+                   "Error Getting Index!",
+                   static_cast < OWeakObject * > ( this ),
+                   makeAny( e ) );
+        }
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
