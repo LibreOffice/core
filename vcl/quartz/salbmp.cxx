@@ -303,7 +303,7 @@ bool QuartzSalBitmap::AllocateUserData()
 
     bool alloc = false;
     if (mnBytesPerRow != 0
-        && mnBytesPerRow <= std::numeric_limits<std::size_t>::max() / mnHeight)
+        && mnBytesPerRow <= std::numeric_limits<sal_uInt32>::max() / mnHeight)
     {
         try
         {
