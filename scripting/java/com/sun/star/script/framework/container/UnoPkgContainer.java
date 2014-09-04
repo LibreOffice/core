@@ -68,14 +68,8 @@ public class UnoPkgContainer extends ParcelContainer
         return result;
     }
 
-    public boolean hasRegisteredUnoPkgContainer( String url )
-    {
-        boolean result = false;
-        if ( getRegisteredUnoPkgContainer( url ) != null )
-        {
-            result = true;
-        }
-        return result;
+    public boolean hasRegisteredUnoPkgContainer( String url ) {
+        return getRegisteredUnoPkgContainer( url ) != null;
     }
 
     private void registerPackageContainer( String url, ParcelContainer c )

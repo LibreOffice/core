@@ -76,13 +76,11 @@ public class ScriptEntry implements Cloneable {
     }
 
     public boolean equals(ScriptEntry other) {
-        if (language.equals(other.getLanguage()) &&
-            languagename.equals(other.getLanguageName()) &&
-            logicalname.equals(other.getLogicalName()) &&
-            languagedepprops.equals(other.getLanguageProperties()) &&
-            location.equals(other.getLocation()))
-            return true;
-        return false;
+        return language.equals(other.getLanguage()) &&
+                languagename.equals(other.getLanguageName()) &&
+                logicalname.equals(other.getLogicalName()) &&
+                languagedepprops.equals(other.getLanguageProperties()) &&
+                location.equals(other.getLocation());
     }
 
     public Map<String,String> getLanguageProperties()

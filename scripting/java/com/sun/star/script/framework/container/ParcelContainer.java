@@ -362,11 +362,7 @@ public class ParcelContainer implements XNameAccess
     }
     public boolean hasElements()
     {
-        if ( parcels == null || parcels.isEmpty() )
-        {
-            return false;
-        }
-        return true;
+        return !(parcels == null || parcels.isEmpty());
     }
 
     private void loadParcels() throws com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException

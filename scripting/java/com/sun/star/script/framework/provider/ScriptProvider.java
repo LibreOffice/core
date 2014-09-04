@@ -557,14 +557,8 @@ public abstract class ScriptProvider
 
 
     // Performs the getRegStatus functionality for the PkgMgr
-    public boolean hasByName( String aName )
-    {
-        boolean result = false;
-        if ( ((UnoPkgContainer)m_container).hasRegisteredUnoPkgContainer( aName ) )
-        {
-            result = true;
-        }
-        return result;
+    public boolean hasByName( String aName ) {
+        return ((UnoPkgContainer)m_container).hasRegisteredUnoPkgContainer( aName );
     }
 
     public com.sun.star.uno.Type getElementType()
