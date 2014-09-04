@@ -38,7 +38,7 @@ public class XInputStreamImpl implements XInputStream
 
         try
         {
-            int bytesRead = 0;
+            int bytesRead;
             while ( ( bytesRead = is.read( aData[ 0 ], totalBytesRead, nBytesToRead ) ) > 0 && ( totalBytesRead < nBytesToRead ) )
             {
                 totalBytesRead += bytesRead;

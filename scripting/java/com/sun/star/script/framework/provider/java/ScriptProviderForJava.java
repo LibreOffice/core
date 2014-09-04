@@ -57,12 +57,10 @@ public class ScriptProviderForJava
             throws com.sun.star.uno.RuntimeException,
                    ScriptFrameworkErrorException
         {
-            ScriptMetaData scriptData = null;
-            scriptData = getScriptData( scriptURI );
-            ScriptImpl script = null;
+            ScriptMetaData scriptData = getScriptData( scriptURI );
             try
             {
-                script = new ScriptImpl( m_xContext, m_resolutionPolicy, scriptData, m_xModel, m_xInvocContext );
+                ScriptImpl script = new ScriptImpl( m_xContext, m_resolutionPolicy, scriptData, m_xModel, m_xInvocContext );
                 return script;
             }
             catch ( com.sun.star.uno.RuntimeException re )

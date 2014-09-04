@@ -140,10 +140,9 @@ public class UnoPkgContainer extends ParcelContainer
     private void init() throws com.sun.star.lang.IllegalArgumentException
     {
         LogUtils.DEBUG("getting container for  " + containerUrl );
-        DeployedUnoPackagesDB db =  null;
         try
         {
-            db = getUnoPackagesDB();
+            DeployedUnoPackagesDB db = getUnoPackagesDB();
             if ( db != null )
             {
                 String[] packages = db.getDeployedPackages( language );
@@ -201,9 +200,7 @@ public class UnoPkgContainer extends ParcelContainer
             throw new com.sun.star.lang.WrappedTargetException( "Failed to resolve script " , null, new com.sun.star.lang.IllegalArgumentException( "Cannot resolve script location for script = " + functionName ) );
         }
 
-        scriptData = pc.findScript( psu );
-        return scriptData;
-
+        return pc.findScript( psu );
     }
 
     private DeployedUnoPackagesDB getUnoPackagesDB() throws com.sun.star.lang.WrappedTargetException
@@ -317,9 +314,7 @@ public class UnoPkgContainer extends ParcelContainer
     public  void processUnoPackage( XPackage dPackage, String language ) throws com.sun.star.lang.IllegalArgumentException,  com.sun.star.lang.WrappedTargetException, com.sun.star.container.ElementExistException
     {
         LogUtils.DEBUG("** in processUnoPackage " );
-        String uri = null;
-        DeployedUnoPackagesDB db = null;
-        uri =  dPackage.getURL();
+        String uri =  dPackage.getURL();
 
         if ( !uri.endsWith( "/" ) )
         {
@@ -340,7 +335,7 @@ public class UnoPkgContainer extends ParcelContainer
 
         processUnoPackage( uri, language );
 
-        db = getUnoPackagesDB();
+        DeployedUnoPackagesDB db = getUnoPackagesDB();
         if ( db == null )
         {
             try

@@ -58,12 +58,11 @@ public class XMLParserFactory {
 
         public Document parse(InputStream inputStream) throws IOException {
             Document result = null;
-            InputSource is = null;
 
             try {
                 DocumentBuilder builder = factory.newDocumentBuilder();
 
-                is = new InputSource(inputStream);
+                InputSource is = new InputSource(inputStream);
 
                 if (officedtdurl != null) {
                     is.setSystemId(officedtdurl);
@@ -126,8 +125,7 @@ public class XMLParserFactory {
                     Object formatterObject = formatterClass.newInstance();
 
                     // improve output readability using the OutputFormat class
-                    Method method = null;
-                    method = formatterClass.getMethod("setMethod",
+                    Method method = formatterClass.getMethod("setMethod",
                         new Class[] {String.class});
                     method.invoke(formatterObject, new Object[] {"xml"});
                     method = formatterClass.getMethod("setIndenting",
