@@ -1448,6 +1448,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::character_string_type, "character_string_type" },
             { OSQLParseNode::other_like_predicate_part_2, "other_like_predicate_part_2" },
             { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" },
+            { OSQLParseNode::null_predicate_part_2, "null_predicate_part_2" },
             { OSQLParseNode::cast_spec, "cast_spec" },
             { OSQLParseNode::window_function, "window_function" }
         };

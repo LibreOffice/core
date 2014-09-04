@@ -645,6 +645,7 @@ manipulative_statement_list:
 ***/
 
 sql_not:
+/* vide */
 	{$$ = SQL_NEW_RULE;}
 	|	SQL_TOKEN_NOT
 	;
@@ -1091,28 +1092,49 @@ boolean_primary:
 		}
 	|	row_value_constructor_elem  /*[^')' ',']*/
 		{
-    		if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())// boolean_primary: rule 3
-			{
-			    $$ = SQL_NEW_RULE;
-			    sal_Int16 nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$1);
-			    if(nErg == 1)
-			    {
-				    OSQLParseNode* pTemp = $$;
-				    $$ = pTemp->removeAt((sal_uInt32)0);
-				    delete pTemp;
-			    }
-			    else
-			    {
-				    delete $$;
-				    if(nErg)
-					    YYERROR;
-				    else
-					    YYABORT;
-			    }
-			}
-			else
-				YYERROR;
-		}
+                    if(xxx_pGLOBAL_SQLPARSER->inPredicateCheck())// boolean_primary: rule 3
+                    {
+                        $$ = SQL_NEW_RULE;
+                        sal_Int16 nErg = 0;
+                        if ( SQL_ISTOKEN( $1, NULL))
+                        {
+                            OSQLParseNode* pColumnRef = newNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+                            pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
+                            OSQLParseNode* pTFN = new OSQLInternalNode("", SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::test_for_null));
+                            pTFN->append(pColumnRef);
+
+                            OSQLParseNode* pNPP2 = new OSQLInternalNode("", SQL_NODE_RULE, OSQLParser::RuleID(OSQLParseNode::null_predicate_part_2));
+                            pNPP2->append(new OSQLInternalNode("", SQL_NODE_KEYWORD, SQL_TOKEN_IS));
+                            pNPP2->append(new OSQLInternalNode("", SQL_NODE_RULE, OSQLParser::RuleID(OSQLParseNode::sql_not)));
+                            pNPP2->append(new OSQLInternalNode("", SQL_NODE_KEYWORD, SQL_TOKEN_NULL));
+                            pTFN->append(pNPP2);
+
+                            $$->append(pTFN);
+
+                            nErg = 1;
+                        }
+                        else
+                        {
+                            nErg = xxx_pGLOBAL_SQLPARSER->buildComparsionRule($$,$1);
+                        }
+                        if(nErg == 1)
+                        {
+                            OSQLParseNode* pTemp = $$;
+                            $$ = pTemp->removeAt((sal_uInt32)0);
+                            delete pTemp;
+                        }
+                        else
+                        {
+                            delete $$;
+                            if(nErg)
+                                YYERROR;
+                            else
+                                YYABORT;
+                        }
+                    }
+                    else
+                        YYERROR;
+                }
 	;
 parenthesized_boolean_value_expression:
    '(' search_condition ')'
@@ -4746,8 +4768,8 @@ sal_Int16 OSQLParser::buildStringNodes(OSQLParseNode*& pLiteral)
 
 sal_Int16 OSQLParser::buildComparsionRule(OSQLParseNode*& pAppend,OSQLParseNode* pLiteral)
 {
-	OSQLParseNode* pComp = new OSQLInternalNode("=", SQL_NODE_EQUAL);
-	return buildPredicateRule(pAppend,pLiteral,pComp);
+    OSQLParseNode* pComp = new OSQLInternalNode("=", SQL_NODE_EQUAL);
+    return buildPredicateRule(pAppend,pLiteral,pComp);
 }
 
 

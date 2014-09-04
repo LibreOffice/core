@@ -229,6 +229,7 @@ namespace connectivity
             character_string_type,
             other_like_predicate_part_2,
             between_predicate_part_2,
+            null_predicate_part_2,
             cast_spec,
             window_function,
             rule_count             // last value
