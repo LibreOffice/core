@@ -811,10 +811,9 @@ void SAL_CALL rtl_bootstrap_set (
     r_rtl_bootstrap_set_list.push_back( rtl_bootstrap_NameValue( name, value ) );
 }
 
-void SAL_CALL rtl_bootstrap_expandMacros_from_handle (
+void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
     rtlBootstrapHandle handle,
-    rtl_uString     ** macro
-) SAL_THROW_EXTERN_C()
+    rtl_uString     ** macro)
 {
     if (handle == NULL) {
         handle = get_static_bootstrap_handle();
@@ -825,9 +824,7 @@ void SAL_CALL rtl_bootstrap_expandMacros_from_handle (
     rtl_uString_assign( macro, expanded.pData );
 }
 
-void SAL_CALL rtl_bootstrap_expandMacros(
-    rtl_uString ** macro )
-    SAL_THROW_EXTERN_C()
+void SAL_CALL rtl_bootstrap_expandMacros(rtl_uString ** macro)
 {
     rtl_bootstrap_expandMacros_from_handle(NULL, macro);
 }

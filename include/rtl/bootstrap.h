@@ -200,15 +200,14 @@ SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_get_iniName_from_handle(
     @param macro    [inout]  The macro to be expanded
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros_from_handle(
-    rtlBootstrapHandle handle, rtl_uString ** macro )
-    SAL_THROW_EXTERN_C();
+    rtlBootstrapHandle handle, rtl_uString ** macro );
+
 /** Expands a macro using default bootstrap variables.
 
     @param macro    [inout]  The macro to be expanded
 */
 SAL_DLLPUBLIC void SAL_CALL rtl_bootstrap_expandMacros(
-    rtl_uString ** macro )
-    SAL_THROW_EXTERN_C();
+    rtl_uString ** macro);
 
 /** Escapes special characters ("$" and "\").
 
