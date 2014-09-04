@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 
 #include <vcl/virdev.hxx>
 #include <svx/svdoole2.hxx>
@@ -947,10 +948,18 @@ bool SvxMediaShape::getPropertyValueImpl( const OUString& rName, const SfxItemPr
                 catch (const css::ucb::ContentCreationException& e)
                 {
                     throw css::lang::WrappedTargetException(
-                            "Error Getting InputStream!",
+                            "ContentCreationException Getting InputStream!",
                             static_cast < OWeakObject * > ( this ),
                             makeAny( e ) );
                 }
+                catch (const css::ucb::CommandFailedException& e)
+                {
+                    throw css::lang::WrappedTargetException(
+                            "CommandFailedException Getting InputStream!",
+                            static_cast < OWeakObject * > ( this ),
+                            makeAny( e ) );
+                }
+
                 break;
 
             case OWN_ATTR_MEDIA_TEMPFILEURL:
