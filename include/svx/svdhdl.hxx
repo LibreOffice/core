@@ -45,8 +45,8 @@ class MouseEvent;
 
 
 
-// Jedes Objekt muss in der Lage seine Handles zu erzeugen. Diese werden dann
-// bei einer Selektion abgeholt, bei der View angemeldet und sichtbar gemacht.
+// Every object must be able to create its handles. They will be fetched on
+// selection, registered at the View and made visible.
 // Wird ein Handle von der Maus beruehrt (IsHit()), so wird von der View der
 // entsprechende Mauszeiger vom Handle abgeholt und der App auf Anfrage zum
 // reinschalten uebergeben.
