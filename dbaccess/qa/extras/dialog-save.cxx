@@ -67,8 +67,8 @@ void DialogSaveTest::test()
     // be locked anyway:
     SolarMutexReleaser rel;
 
-    OUString aFileName;
-    aFileName = getURLFromWorkdir("CppunitTest/testDialogSave.odb");
+    const OUString sStandard("Standard");
+    const OUString aFileName(getURLFromWorkdir("CppunitTest/testDialogSave.odb"));
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);
         CPPUNIT_ASSERT(xComponent.is());
@@ -84,11 +84,11 @@ void DialogSaveTest::test()
         CPPUNIT_ASSERT(xStorDlgLib.is());
         uno::Reference< script::XLibraryContainer > xDlgLib(xStorDlgLib, UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xDlgLib.is());
-        xBasLib->loadLibrary("Standard");
-        CPPUNIT_ASSERT(xBasLib->isLibraryLoaded("Standard"));
+        xBasLib->loadLibrary(sStandard);
+        CPPUNIT_ASSERT(xBasLib->isLibraryLoaded(sStandard));
         // the whole point of this test is to test the "save" operation
         // when the Basic library is loaded, but not the Dialog library
-        CPPUNIT_ASSERT(!xDlgLib->isLibraryLoaded("Standard"));
+        CPPUNIT_ASSERT(!xDlgLib->isLibraryLoaded(sStandard));
 
         // make some change to enable a save
         // uno::Reference< document::XDocumentPropertiesSupplier > xDocPropSuppl(xComponent, UNO_QUERY_THROW);
