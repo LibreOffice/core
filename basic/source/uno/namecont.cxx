@@ -1817,18 +1817,22 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
             nLibsToSave--;
         }
     }
-    if( !nLibsToSave )
-    {
-        return;
-    }
-    boost::scoped_ptr< ::xmlscript::LibDescriptorArray > pLibArray(new ::xmlscript::LibDescriptorArray(nLibsToSave));
-
     // Write to storage?
     bool bStorage = i_rStorage.is();
     uno::Reference< embed::XStorage > xSourceLibrariesStor;
     uno::Reference< embed::XStorage > xTargetLibrariesStor;
     OUString sTempTargetStorName;
     const bool bInplaceStorage = bStorage && ( i_rStorage == mxStorage );
+
+    if( nLibsToSave == 0 )
+    {
+        if ( bInplaceStorage && mxStorage->hasByName(maLibrariesDir) )
+        {
+            mxStorage->removeElement(maLibrariesDir);
+        }
+        return;
+    }
+
     if ( bStorage )
     {
         // Don't write if only empty standard lib exists
@@ -1906,6 +1910,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     int iArray = 0;
     pName = aNames.getConstArray();
     ::xmlscript::LibDescriptor aLibDescriptorForExtensionLibs;
+    boost::scoped_ptr< ::xmlscript::LibDescriptorArray > pLibArray(new ::xmlscript::LibDescriptorArray(nLibsToSave));
     for( ; pName != pNamesEnd; ++pName )
     {
         SfxLibrary* pImplLib = getImplLib( *pName );
