@@ -2121,7 +2121,7 @@ OUString OSelectionBrowseBox::GetCellText(long nRow, sal_uInt16 nColId) const
         case BROW_FIELD_ROW:
         {
             OUString aField = pEntry->GetField();
-            if (aField[0] == '*')                   // * durch alias.* ersetzen
+            if (!aField.isEmpty() && aField[0] == '*')                   // * durch alias.* ersetzen
             {
                 aField = pEntry->GetAlias();
                 if(!aField.isEmpty())
