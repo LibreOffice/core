@@ -1832,7 +1832,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     if ( bStorage )
     {
         // Don't write if only empty standard lib exists
-        if ( ( nNameCount == 1 ) && ( aNames[0] == "Standard" ) )
+        if ( ( nLibsToSave == 1 ) && ( aNames[0] == "Standard" ) )
         {
             Any aLibAny = maNameContainer.getByName( aNames[0] );
             Reference< XNameAccess > xNameAccess;
