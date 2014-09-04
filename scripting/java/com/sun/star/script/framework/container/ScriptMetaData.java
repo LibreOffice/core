@@ -20,21 +20,15 @@ package com.sun.star.script.framework.container;
 
 import java.net.URL;
 
+import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import java.io.InputStream;
 import com.sun.star.script.framework.log.LogUtils;
-
 import com.sun.star.script.framework.provider.PathUtils;
-
 import com.sun.star.script.framework.io.XInputStreamImpl;
-
-import com.sun.star.script.framework.container.ScriptEntry;
-import com.sun.star.script.framework.container.Parcel;
-
 import com.sun.star.script.framework.io.UCBStreamHandler;
 
 import com.sun.star.ucb.XSimpleFileAccess2;
