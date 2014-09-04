@@ -383,8 +383,8 @@ class HTMLTable
     sal_uInt16 nCurRow;                 // current Row
     sal_uInt16 nCurCol;                 // current Column
 
-    sal_uInt16 nLeftMargin;             // Space to the left margin (from passage)
-    sal_uInt16 nRightMargin;            // Space to the right margin (from passage)
+    sal_uInt16 nLeftMargin;             // Space to the left margin (from paragraph edge)
+    sal_uInt16 nRightMargin;            // Space to the right margin (from paragraph edge)
 
     sal_uInt16 nCellPadding;            // Space from border to Text
     sal_uInt16 nCellSpacing;            // Space between two cells
