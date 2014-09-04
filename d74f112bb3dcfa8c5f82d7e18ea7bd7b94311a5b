@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_fdcf7bb1",
+        "filename": "sw/qa/core/uwriter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2014-09-04T14:15:00Z",
+      "side": 1,
+      "message": "Did you disable quite some existing tests by mistake?",
+      "revId": "d74f112bb3dcfa8c5f82d7e18ea7bd7b94311a5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
