@@ -263,10 +263,27 @@ typedef ::com::sun::star::uno::Sequence< ApiToken > ApiTokenSequence;
 typedef ::com::sun::star::beans::Pair< ::com::sun::star::table::CellAddress, sal_Bool > ApiSpecialTokenInfo;
 
 /** A vector of formula tokens with additional convenience functions. */
-class ApiTokenVector : public ::std::vector< ApiToken >
+class ApiTokenVector
 {
 public:
     explicit            ApiTokenVector();
+
+    ApiToken& operator[]( size_t i ) { return mvTokens[i]; }
+
+    size_t size() const { return mvTokens.size(); }
+
+    ApiToken& back() { return mvTokens.back(); }
+    const ApiToken& back() const { return mvTokens.back(); }
+
+    void clear() { mvTokens.clear(); }
+
+    void pop_back() { mvTokens.pop_back(); }
+
+    void push_back( const ApiToken& rToken ) { mvTokens.push_back( rToken ); }
+
+    void reserve( size_t n ) { mvTokens.reserve( n ); }
+
+    void resize( size_t n ) { mvTokens.resize( n ); }
 
     /** Appends a new token with the passed op-code, returns its data field. */
     ::com::sun::star::uno::Any&
@@ -275,6 +292,12 @@ public:
     /** Appends a new token with the passed op-code and data. */
     template< typename Type >
     inline void         append( sal_Int32 nOpCode, const Type& rData ) { append( nOpCode ) <<= rData; }
+
+    /** Converts to a sequence. */
+    ApiTokenSequence toSequence() const;
+
+private:
+    ::std::vector< ApiToken > mvTokens;
 };
 
 // Token sequence iterator ====================================================

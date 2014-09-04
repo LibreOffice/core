@@ -69,7 +69,7 @@ ApiTokenSequence FormulaFinalizer::finalizeTokenArray( const ApiTokenSequence& r
         const ApiToken* pToken = rTokens.getConstArray();
         processTokens( pToken, pToken + rTokens.getLength() );
     }
-    return ContainerHelper::vectorToSequence( maTokens );
+    return maTokens.toSequence();
 }
 
 const FunctionInfo* FormulaFinalizer::resolveBadFuncName( const OUString& ) const
