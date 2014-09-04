@@ -140,11 +140,7 @@ public class Parcel implements XNameContainer
 
     public boolean hasElements()
     {
-        if ( m_descriptor != null && m_descriptor.getScriptEntries().length > 0 )
-        {
-            return true;
-        }
-        return false;
+        return m_descriptor != null && m_descriptor.getScriptEntries().length > 0;
     }
 
     public void replaceByName( String aName, java.lang.Object aElement ) throws com.sun.star.lang.IllegalArgumentException, com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException

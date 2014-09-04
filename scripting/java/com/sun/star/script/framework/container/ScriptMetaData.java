@@ -65,39 +65,17 @@ public class ScriptMetaData extends ScriptEntry {
     {
         return hasSource;
     }
-    public String getSource()
-    {
 
-        if ( source !=null && hasSource )
-        {
-            return source;
-        }
-        else
-        {
-            return null;
-        }
+    public String getSource() {
+        return ( source !=null && hasSource ) ? source : null;
     }
 
-    public byte[] getSourceBytes()
-    {
-        if ( source !=null && hasSource )
-        {
-            return source.getBytes();
-        }
-        else
-        {
-            return null;
-        }
-
+    public byte[] getSourceBytes() {
+        return ( source !=null && hasSource ) ? source.getBytes() : null;
     }
 
     public boolean equals(ScriptMetaData other) {
-        if (super.equals(other) &&
-            hasSource == other.hasSource() )
-        {
-            return true;
-        }
-        return false;
+        return super.equals(other) && hasSource == other.hasSource();
     }
 
     public String getScriptFullURL()
