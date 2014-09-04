@@ -273,6 +273,21 @@ bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
     sal_Int32 indexUtf16;
     segBoundary.endPos = segBoundary.startPos = pos;
 
+    // Cache of the last OUString and Boundary
+    static const OUString *cachedrText = NULL;
+    static Boundary cachedBoundary;
+
+    if (cachedrText != &rText) {
+        cachedrText = &rText;
+    } else {
+        // If pos is within the previous boundary, use that boundary
+        if (pos >= cachedBoundary.startPos && pos <= cachedBoundary.endPos) {
+            indexUtf16 = cachedBoundary.startPos;
+            rText.iterateCodePoints(&indexUtf16, 1);
+            return cachedBoundary.endPos > indexUtf16;
+        }
+    }
+
     indexUtf16 = pos;
     while (indexUtf16 > 0)
     {
@@ -292,6 +307,10 @@ bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
         else
             break;
     }
+
+    // Cache the calculated boundary
+    cachedBoundary.startPos = segBoundary.startPos;
+    cachedBoundary.endPos = segBoundary.endPos;
 
     indexUtf16 = segBoundary.startPos;
     rText.iterateCodePoints(&indexUtf16, 1);

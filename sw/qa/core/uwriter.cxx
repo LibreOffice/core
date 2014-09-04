@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <sys/time.h>
+
 #include <sal/config.h>
 #include <test/bootstrapfixture.hxx>
 
@@ -14,6 +16,7 @@
 #include <osl/file.hxx>
 
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
@@ -84,9 +87,13 @@ public:
     void testGraphicAnchorDeletion();
     void testTransliterate();
     void testMarkMove();
+    void testTempBenchmarkLongEnglishParagraph();
+    void testTempBenchmarkLongChineseParagraph();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
-    CPPUNIT_TEST(testTransliterate);
+    CPPUNIT_TEST(testTempBenchmarkLongEnglishParagraph);
+    CPPUNIT_TEST(testTempBenchmarkLongChineseParagraph);
+/*    CPPUNIT_TEST(testTransliterate);
     CPPUNIT_TEST(randomTest);
     CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST(testFileNameFields);
@@ -95,7 +102,7 @@ public:
     CPPUNIT_TEST(testSwScanner);
     CPPUNIT_TEST(testUserPerceivedCharCount);
     CPPUNIT_TEST(testGraphicAnchorDeletion);
-    CPPUNIT_TEST(testMarkMove);
+    CPPUNIT_TEST(testMarkMove);*/
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -223,6 +230,79 @@ void SwDocTest::testUserPerceivedCharCount()
     OUString sGCLEF(GCLEF, SAL_N_ELEMENTS(GCLEF));
     sal_Int32 nCount = pBreakIter->getGraphemeCount(sGCLEF);
     CPPUNIT_ASSERT_MESSAGE("Surrogate Pair should be counted as single character", nCount == 1);
+}
+
+
+void SwDocTest::testTempBenchmarkLongEnglishParagraph()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    for (int i = 0; i < 10000; i++) {
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString("English "));
+    }
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+
+    sal_Int32 nBegin = 0;
+    sal_Int32 nEnd = pTxtNode->GetTxt().getLength();
+
+    timeval time;
+    gettimeofday(&time, NULL);
+    long microsec = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec;
+
+    for (int j = 0; j < 10; j++) {
+        SwScanner aScanner( *pTxtNode, pTxtNode->GetTxt(), 0, ModelToViewHelper(),
+                            com::sun::star::i18n::WordType::DICTIONARY_WORD, nBegin, nEnd);
+
+        int count = 0;
+        while (aScanner.NextWord()) {
+            count++;
+        }
+    }
+
+    timeval time2;
+    gettimeofday(&time2, NULL);
+    long microsec2 = ((unsigned long long)time2.tv_sec * 1000000) + time2.tv_usec;
+
+    long delta = microsec2 - microsec;
+    std::cerr << "English paragraph time (µs): " << delta << "\n";
+
+}
+
+void SwDocTest::testTempBenchmarkLongChineseParagraph()
+{
+    SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
+    SwPaM aPaM(aIdx);
+
+    for (int i = 0; i < 10000; i++) {
+        m_pDoc->getIDocumentContentOperations().InsertString(aPaM, OUString(sal_Unicode(0x4E2D)));
+    }
+    SwTxtNode* pTxtNode = aPaM.GetNode().GetTxtNode();
+
+    sal_Int32 nBegin = 0;
+    sal_Int32 nEnd = pTxtNode->GetTxt().getLength();
+
+    timeval time;
+    gettimeofday(&time, NULL);
+    long microsec = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec;
+
+    for (int j = 0; j < 10; j++) {
+        SwScanner aScanner( *pTxtNode, pTxtNode->GetTxt(), 0, ModelToViewHelper(),
+                            com::sun::star::i18n::WordType::DICTIONARY_WORD, nBegin, nEnd);
+
+        int count = 0;
+        while (aScanner.NextWord()) {
+            count++;
+        }
+    }
+
+    timeval time2;
+    gettimeofday(&time2, NULL);
+    long microsec2 = ((unsigned long long)time2.tv_sec * 1000000) + time2.tv_usec;
+
+    long delta = microsec2 - microsec;
+    std::cerr << "Chinese paragraph time (µs): " << delta << "\n";
+
 }
 
 void SwDocTest::testModelToViewHelper()
