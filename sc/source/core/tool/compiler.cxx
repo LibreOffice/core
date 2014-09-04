@@ -1241,6 +1241,8 @@ struct ConventionXL_A1 : public Convention_A1, public ConventionXL
                                        sal_Int32 nSrcPos,
                                        const CharClass* pCharClass) const SAL_OVERRIDE
     {
+        ConventionXL::parseExternalDocName(rFormula, nSrcPos);
+
         ParseResult aRet;
         if ( lcl_isValidQuotedText(rFormula, nSrcPos, aRet) )
             return aRet;
