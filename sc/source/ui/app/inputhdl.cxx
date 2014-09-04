@@ -2861,9 +2861,22 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
         // #i75893# convert escaped URL of the document to something user friendly
         OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
-        aRefStr = "\'";
-        aRefStr += aFileName;
-        aRefStr += "'#";
+        switch(aAddrDetails.eConv)
+        {
+             case formula::FormulaGrammar::CONV_XL_A1 :
+             case formula::FormulaGrammar::CONV_XL_OOX :
+             case formula::FormulaGrammar::CONV_XL_R1C1 :
+                         aRefStr = "[\'";
+                         aRefStr += aFileName;
+                         aRefStr += "']";
+                         break;
+             case formula::FormulaGrammar::CONV_OOO :
+             default:
+                         aRefStr = "\'";
+                         aRefStr += aFileName;
+                         aRefStr += "'#";
+                         break;
+        }
         aRefStr += aTmp;
     }
     else
