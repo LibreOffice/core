@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
@@ -427,11 +428,31 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
         pGlossaries->PutGroupDoc( pGlosGroup );
     }
 
-    uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries ?
-        pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true ) :
-        uno::Reference< text::XAutoTextEntry >();
-    OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::insertNewByName: no UNO object created? How this?" );
-        // we just inserted the entry into the group, so why doesn't it exist?
+    uno::Reference< text::XAutoTextEntry > xEntry;
+
+    try
+    {
+        xEntry = pGlossaries ?
+            pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true ) :
+            uno::Reference< text::XAutoTextEntry >();
+        OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::insertNewByName: no UNO object created? How this?" );
+            // we just inserted the entry into the group, so why doesn't it exist?
+    }
+    catch (const container::ElementExistException&)
+    {
+        throw;
+    }
+    catch (const uno::RuntimeException&)
+    {
+        throw;
+    }
+    catch (const uno::Exception& e)
+    {
+        throw css::lang::WrappedTargetRuntimeException(
+               "Error Getting AutoText!",
+               static_cast < OWeakObject * > ( this ),
+               makeAny( e ) );
+    }
 
     return xEntry;
 }
