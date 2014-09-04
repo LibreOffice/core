@@ -203,15 +203,26 @@ struct PhoneticPortionModel
 };
 
 /** A vector with all phonetic portions in a rich-string. */
-class PhoneticPortionModelList : public ::std::vector< PhoneticPortionModel >
+class PhoneticPortionModelList
 {
 public:
-    inline explicit     PhoneticPortionModelList() {}
+    inline explicit     PhoneticPortionModelList() : mvModels() {}
+
+    bool empty() const { return mvModels.empty(); }
+
+    const PhoneticPortionModel& back() const { return mvModels.back(); }
+
+    void push_back(const PhoneticPortionModel& rModel) { mvModels.push_back(rModel); }
+
+    ::std::vector< PhoneticPortionModel >::const_iterator begin() const { return mvModels.begin(); }
 
     /** Appends a rich-string phonetic portion. */
     void                appendPortion( const PhoneticPortionModel& rPortion );
     /** Reads all phonetic portions from the passed stream. */
     void                importPortions( SequenceInputStream& rStrm );
+
+private:
+    ::std::vector< PhoneticPortionModel > mvModels;
 };
 
 /** Contains string data and a list of formatting runs for a rich formatted string. */

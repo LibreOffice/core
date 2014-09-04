@@ -269,27 +269,27 @@ void PhoneticPortionModel::read( SequenceInputStream& rStrm )
 void PhoneticPortionModelList::appendPortion( const PhoneticPortionModel& rPortion )
 {
     // same character index may occur several times
-    OSL_ENSURE( empty() || ((back().mnPos <= rPortion.mnPos) &&
-        (back().mnBasePos + back().mnBaseLen <= rPortion.mnBasePos)),
+    OSL_ENSURE( mvModels.empty() || ((mvModels.back().mnPos <= rPortion.mnPos) &&
+        (mvModels.back().mnBasePos + mvModels.back().mnBaseLen <= rPortion.mnBasePos)),
         "PhoneticPortionModelList::appendPortion - wrong char order" );
-    if( empty() || (back().mnPos < rPortion.mnPos) )
+    if( mvModels.empty() || (mvModels.back().mnPos < rPortion.mnPos) )
     {
-        push_back( rPortion );
+        mvModels.push_back( rPortion );
     }
-    else if( back().mnPos == rPortion.mnPos )
+    else if( mvModels.back().mnPos == rPortion.mnPos )
     {
-        back().mnBasePos = rPortion.mnBasePos;
-        back().mnBaseLen = rPortion.mnBaseLen;
+        mvModels.back().mnBasePos = rPortion.mnBasePos;
+        mvModels.back().mnBaseLen = rPortion.mnBaseLen;
     }
 }
 
 void PhoneticPortionModelList::importPortions( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
-    clear();
+    mvModels.clear();
     if( nCount > 0 )
     {
-        reserve( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 6 ) );
+        mvModels.reserve( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 6 ) );
         PhoneticPortionModel aPortion;
         for( sal_Int32 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
         {
@@ -470,7 +470,7 @@ void RichString::createPhoneticPortions( const OUString& rText, PhoneticPortionM
             rPortions.push_back( PhoneticPortionModel( nStrLen, nBaseLen, 0 ) );
 
         // create all phonetic portions according to the portions vector
-        for( PhoneticPortionModelList::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
+        for( ::std::vector< PhoneticPortionModel >::const_iterator aIt = rPortions.begin(); aIt->mnPos < nStrLen; ++aIt )
         {
             sal_Int32 nPortionLen = (aIt + 1)->mnPos - aIt->mnPos;
             if( (0 < nPortionLen) && (aIt->mnPos + nPortionLen <= nStrLen) )
