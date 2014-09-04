@@ -29,26 +29,24 @@ import java.io.Writer;
 import java.util.Properties;
 
 /**
- *  This class is used for logging debug messages.
- *  Currently, there are three types of logging:  {@link #INFO},
- *  {@link #TRACE} &amp; {@link #ERROR}.  Use the Debug.properties
- *  file to set or unset each type.  Also use Debug.properties
- *  to set the writer to either <code>System.out</code>,
- *  <code>System.err</code>, or to a file.
+ * This class is used for logging debug messages.
  *
+ * <p>Currently, there are three types of logging: {@link #INFO}, {@link #TRACE}
+ * {@literal &} {@link #ERROR}.  Use the {@code Debug.properties} file to set or
+ * unset each type.  Also use {@code Debug.properties} to set the writer to
+ * either {@code System.out}, {@code System.err}, or to a file.</p>
  */
 public final class Debug {
 
-    /**  Informational messages. */
+    /** Informational messages. */
     public final static int INFO = 0x0001;
-    /**  Error messages. */
+    /** Error messages. */
     public final static int ERROR = 0x0002;
-    /**  Trace messages. */
+    /** Trace messages. */
     public final static int TRACE = 0x0004;
 
-    /**  To set a flag. */
+    /** To set a flag. */
     private final static boolean SET = true;
-
 
     private static int flags = 0;
     private static PrintWriter writer = null;
@@ -91,95 +89,74 @@ public final class Debug {
         }
     }
 
-
     /**
-     *  Private constructor so as not to allow any instances
-     *  of this class.  This serves as a singleton class.
+     * Private constructor so as not to allow any instances  of this class.
+     *
+     * <p>This serves as a singleton class.</p>
      */
     private Debug() {
     }
 
-
     /**
-     *  Set the output to the specified argument.
-     *  This method is only used internally to prevent
-     *  invalid string parameters.
+     * Set the output to the specified argument.
+     *
+     * <p>This method is only used internally to prevent invalid string
+     * parameters.</p>
      *
      *  @param  str  Output specifier.
      */
     private static void setOutput(String str) {
-
         if (writer == null) {
-
             if (str.equals("System.out")) {
-
                 setOutput(System.out);
-
             } else if (str.equals("System.err")) {
-
                 setOutput(System.err);
-
             } else {
-
                 try {
-
                     setOutput(new FileWriter(str));
-
                 } catch (IOException e) {
-
                     e.printStackTrace(System.err);
                 }
             }
         }
     }
 
-
     /**
-     *  Set the output to an <code>OutputStream</code> object.
+     * Set the output to an {@code OutputStream} object.
      *
-     *  @param  stream  OutputStream object.
+     * @param  stream  {@code OutputStream} object.
      */
     private static void setOutput(OutputStream stream) {
-
         setOutput(new OutputStreamWriter(stream));
     }
 
-
     /**
-     *  Set the <code>Writer</code> object to manage the output.
+     * Set the {@code Writer} object to manage the output.
      *
-     *  @param  w  <code>Writer</code> object to write out.
+     * @param  w  {@code Writer} object to write out.
      */
     private static void setOutput(Writer w) {
-
         if (writer != null) {
-
             writer.close();
         }
-
         writer = new PrintWriter(new BufferedWriter(w), true);
     }
 
-
     /**
-     *  <p>
-     *  This method sets the levels for debugging logs.
-     *  Example calls:
-     *  </p>
+     * This method sets the levels for debugging logs.
      *
-     *  <blockquote><pre><code>
-     *  Debug.setFlags( Debug.INFO, Debug.SET )
-     *  Debug.setFlags( Debug.TRACE, Debug.SET )
-     *  Debug.setFlags( Debug.INFO | Debug.TRACE, Debug.SET )
-     *  Debug.setFlags( Debug.ERROR, Debug.UNSET )
-     *  </code></pre></blockquote>
+     * <p>Example calls:</p>
      *
-     *  @param   f     Debug flag
-     *  @param   set   Use Debug.SET to set, and Debug.UNSET to unset
-     *                 the given flag.
+     * <blockquote><pre>{@code Debug.setFlags( Debug.INFO, Debug.SET )
+     * Debug.setFlags( Debug.TRACE, Debug.SET )
+     * Debug.setFlags( Debug.INFO | Debug.TRACE, Debug.SET )
+     * Debug.setFlags( Debug.ERROR, Debug.UNSET )}</pre></blockquote>
+     *
+     * @param   f     Debug flag
+     * @param   set   Use {@code Debug.SET} to set, and {@code Debug.UNSET} to
+     *                unset the given flag.
      */
     private static void setFlags(int f, boolean set) {
-
         if (set) {
             flags |= f;
         } else {
@@ -187,88 +164,67 @@ public final class Debug {
         }
     }
 
-
-
-
-
-
-
-
     /**
-     *  Checks if flag is set.
+     * Checks if flag is set.
      *
-     *  @return  true if info logging is on, otherwise false
+     * @return  {@code true} if info logging is on, otherwise {@code false}.
      */
     public static boolean isFlagSet(int f) {
-
         return ((flags & f) != 0);
     }
 
-
     /**
-     *  <p>Log message based on the flag type.</p>
+     * Log message based on the flag type.
      *
-     *  <p>Example 1:</p>
+     * <p>Example 1:</p>
      *
-     *  <blockquote><pre><code>
-     *  Debug.log(Debug.INFO, "info string here");
-     *  </code></pre></blockquote>
+     * <blockquote><pre>{@code Debug.log(Debug.INFO, "info string here");}</pre>
+     * </blockquote>
      *
-     *  <p>This logs the message during runtime if
-     *  <code>debug.info</code> in the properties file is
-     *  set to true.</p>
+     * <p>This logs the message during runtime if {@code debug.info} in the
+     * properties file is set to true.</p>
      *
-     *  <p>Example 2:</p>
+     * <p>Example 2:</p>
      *
-     *  <blockquote><pre><code>
-     *  Debug.log(Debug.INFO | Debug.TRACE, "info string here");
-     *  </code></pre></blockquote>
+     * <blockquote>
+     * <pre>{@code Debug.log(Debug.INFO | Debug.TRACE, "info string here");}</pre>
+     * </blockquote>
      *
-     *  <p>This logs the message during runtime if debug.info or debug.trace
-     *  in the properties file is set to true.</p>
+     * <p>This logs the message during runtime if debug.info or debug.trace in
+     * the properties file is set to true.</p>
      *
-     *  @param   flag  Log type, one of the Debug constants
-     *                 {@link #INFO}, {@link #TRACE}, {@link #ERROR}
-     *                 or a combination of which or'ed together.
-     *  @param   msg   The message.
+     * @param  flag  Log type, one of the Debug constants {@link #INFO},
+     *               {@link #TRACE}, {@link #ERROR} or a combination of which
+     *               or'ed together.
+     * @param  msg   The message.
      */
     public static void log(int flag, String msg) {
-
         if (isFlagSet(flag)) {
-
             if (writer != null) {
-
                 writer.println(msg);
             }
         }
     }
 
-
     /**
-     *  Log message based on flag type plus print out stack trace
-     *  of the exception passed in.  Refer to the other log method
-     *  for description.
+     * Log message based on flag type plus print out stack trace of the
+     * exception passed in.
      *
-     *  @param   flag  Log type, one of the Debug constants
-     *                 {@link #INFO}, {@link #TRACE}, {@link #ERROR}
-     *                 or a combination of which or'ed together.
-     *  @param   msg   The message.
-     *  @param   e     Throwable object.
+     * <p>Refer to the other log method for description.</p>
+     *
+     * @param   flag  Log type, one of the Debug constants {@link #INFO},
+     *                {@link #TRACE}, {@link #ERROR} or a combination of which
+     *                or'ed together.
+     * @param   msg   The message.
+     * @param   e     Throwable object.
      */
     public static void log(int flag, String msg, Throwable e) {
-
         if (isFlagSet(flag)) {
-
             if (writer != null) {
-
                 writer.println(msg);
                 if (e != null)
                     e.printStackTrace(writer);
             }
         }
     }
-
-
-
 }
-

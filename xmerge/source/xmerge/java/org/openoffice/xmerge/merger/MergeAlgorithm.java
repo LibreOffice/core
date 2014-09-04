@@ -23,25 +23,26 @@ import org.openoffice.xmerge.merger.Iterator;
 import org.openoffice.xmerge.merger.Difference;
 
 /**
- *  This is the <code>MergeAlgorithm</code> interface. It is an
- *  interface so that different merge algorithms may be plugged-in
- *  to actually merge the diffs back to an original document.
+ * This is the {@code MergeAlgorithm} interface.
+ *
+ * <p>It is an interface so that different merge algorithms may be plugged-in
+ * to actually merge the diffs back to an original document.</p>
  */
 public interface MergeAlgorithm {
 
     /**
-     *  This method is to merge the difference to an <code>Iterator</code>.
-     *  The original <code>Iterator</code> will be modified after the call.
+     * This method is to merge the difference to an {@code Iterator}.
      *
-     *  @param  orgSeq       The original sequence which the difference
-     *                       will be applied.  It will be modified.
-     *  @param  modSeq       The modified sequence where the difference
-     *                       content will be extracted.
-     *  @param  differences  The <code>Difference</code> array.
+     * <p>The original {@code Iterator} will be modified after the call.</p>
      *
-     *  @throws  MergeException  If an error occurs during the merge.
+     * @param   orgSeq       The original sequence which the difference will be
+     *                       applied.  It will be modified.
+     * @param   modSeq       The modified sequence where the difference content
+     *                       will be extracted.
+     * @param   differences  The {@code Difference} array.
+     *
+     * @throws  MergeException  If an error occurs during the merge.
      */
     void applyDifference(Iterator orgSeq, Iterator modSeq,
-                                Difference[] differences) throws MergeException;
+                         Difference[] differences) throws MergeException;
 }
-

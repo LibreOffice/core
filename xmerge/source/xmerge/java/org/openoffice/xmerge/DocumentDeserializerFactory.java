@@ -19,38 +19,33 @@
 package org.openoffice.xmerge;
 
 /**
- *  <p>A <code>DocumentDeserializer</code> object is used to convert
- *  from the &quot;Device&quot; <code>Document</code> format to the
- *  &quot;Office&quot; <code>Document</code> format.</p>
+ * A {@code DocumentDeserializer} object is used to convert from the
+ * &quot;Device&quot; {@code Document} format to the &quot;Office&quot;
+ * {@code Document} format.
  *
- *  <p>All plug-in implementations of the <code>PluginFactory</code>
- *  interface that also support deserialization must also
- *  implement this interface.</p>
+ * <p>All plug-in implementations of the {@code PluginFactory} interface that
+ * also support deserialization must also implement this interface.</p>
  *
- *  @see  PluginFactory
- *  @see  DocumentDeserializer
+ * @see  PluginFactory
+ * @see  DocumentDeserializer
  */
 public interface DocumentDeserializerFactory {
 
     /**
-     *  <p>The <code>DocumentDeserializer</code> is used to convert
-     *  from the &quot;Device&quot; <code>Document</code> format to
-     *  the &quot;Office&quot; <code>Document</code> format.</p>
+     * The {@code DocumentDeserializer} is used to convert from the
+     * &quot;Device&quot; {@code Document} format to the &quot;Office&quot;
+     * {@code Document} format.
      *
-     *  <p>The <code>ConvertData</code> object is passed along to the
-     *  created <code>DocumentDeserializer</code> via its constructor.
-     *  The <code>ConvertData</code> is read and converted when the
-     *  the <code>DocumentDeserializer</code> object's
-     *  <code>deserialize</code> method is called.
-     *  </p>
+     * <p>The {@code ConvertData} object is passed along to the created
+     * {@code DocumentDeserializer} via its constructor. The {@code ConvertData}
+     * is read and converted when the {@code DocumentDeserializer} object's
+     * {@code deserialize} method is called.</p>
      *
-     *  @param  cd  <code>ConvertData</code> object that the created
-     *              <code>DocumentDeserializer</code> object uses as
-     *              input.
+     * @param  cd  {@code ConvertData} object that the created
+     *             {@code DocumentDeserializer} object uses as input.
      *
-     *  @return  A <code>DocumentDeserializer</code> object.
+     * @return  A {@code DocumentDeserializer} object.
      */
 
     DocumentDeserializer createDocumentDeserializer(ConvertData cd);
 }
-

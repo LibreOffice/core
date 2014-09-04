@@ -18,10 +18,8 @@
 
 package org.openoffice.xmerge.converter.xml.sxc;
 
-
 /**
  * Interface defining constants for Sxc attributes.
- *
  */
 public interface SxcConstants {
 

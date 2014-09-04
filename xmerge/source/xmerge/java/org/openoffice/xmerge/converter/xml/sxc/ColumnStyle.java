@@ -29,19 +29,19 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.TwipsConverter;
 
 /**
- *  Represents a text <code>Style</code> in an OpenOffice document.
+ * Represents a text {@code Style} in an OpenOffice document.
  */
 public class ColumnStyle extends Style implements Cloneable {
 
     private int colWidth = 0;
     /**
-     *  Constructor for use when going from DOM to client device format.
+     * Constructor for use when going from DOM to client device format.
      *
-     *  @param  node  The <i>style:style</i> <code>Node</code> containing
-     *                the <code>Style</code>.  (This <code>Node</code> is
-     *                assumed have a <i>family</i> attribute of <i>text</i>).
-     *  @param  sc    The <code>StyleCatalog</code>, which is used for
-     *                looking up ancestor <code>Style</code> objects.
+     * @param  node  The <i>style:style</i> {@code Node} containing the
+     *               {@code Style}.  (This {@code Node} is assumed have a
+     *               <i>family</i> attribute of <i>text</i>).
+     * @param  sc    The {@code StyleCatalog}, which is used for looking up
+     *               ancestor {@code Style} objects.
      */
     public ColumnStyle(Node node, StyleCatalog sc) {
         super(node, sc);
@@ -82,16 +82,16 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     *  Constructor for use when going from client device format to DOM
+     * Constructor for use when going from client device format to DOM.
      *
-     *  @param  name     Name of text <code>Style</code>.  Can be null.
-     *  @param  family   Family of text <code>Style</code> (usually
-     *                   <i>text</i>).  Can be null.
-     *  @param  parent   Name of parent text <code>Style</code>, or null
-     *                   for none.
-     *  @param  colWidth the width of this column
-     *  @param  sc       The <code>StyleCatalog</code>, which is used for
-     *                   looking up ancestor <code>Style</code> objects.
+     * @param  name      Name of text {@code Style}.  Can be {@code null}.
+     * @param  family    Family of text {@code Style} (usually <i>text</i>).
+     *                   Can be {@code null}.
+     * @param  parent    Name of parent text {@code Style}, or {@code null} for
+     *                   none.
+     * @param  colWidth  the width of this column.
+     * @param  sc        The {@code StyleCatalog}, which is used for looking up
+     *                   ancestor {@code Style} objects.
      */
     public ColumnStyle(String name, String family, String parent, int colWidth, StyleCatalog sc) {
         super(name, family, parent, sc);
@@ -99,7 +99,7 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     * Returns the width of this column
+     * Returns the width of this column.
      *
      * @return The width of this column.
      */
@@ -108,7 +108,7 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     * Sets the width of this column
+     * Sets the width of this column.
      *
      * @param colWidth The width of this column.
      */
@@ -118,11 +118,11 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     *  Parse a colwidth in the form "1.234cm" to twips
+     * Parse a colwidth in the form {@literal "1.234cm"} to twips.
      *
-     *  @param  value  <code>String</code> specification to parse.
+     * @param   value  {@code String} specification to parse.
      *
-     *  @return  The twips equivalent.
+     * @return  The twips equivalent.
      */
     private int parseColWidth(String value) {
 
@@ -140,10 +140,10 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     *  Set an attribute.
+     * Set an attribute.
      *
-     *  @param  attr   The attribute to set.
-     *  @param  value  The attribute value to set.
+     * @param  attr   The attribute to set.
+     * @param  value  The attribute value to set.
      */
     private void handleAttribute(String attr, String value) {
 
@@ -156,14 +156,13 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     *  Return a <code>Style</code> object corresponding to this one,
-     *  but with all of the inherited information from parent
-     *  <code>Style</code> objects filled in.  The object returned will
-     *  be a new object, not a reference to this object, even if it does
-     *  not need any information added.
+     * Return a {@code Style} object corresponding to this one, but with all of
+     * the inherited information from parent {@code Style} objects filled in.
      *
-     *  @return  The <code>Style</code> in which to look up
-     *           ancestors.
+     * <p>The object returned will be a new object, not a reference to this
+     * object, even if it does not need any information added.</p>
+     *
+     * @return  The {@code Style} in which to look up ancestors.
      */
     @Override
     public Style getResolved() {
@@ -206,15 +205,14 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     *  Create a new <code>Node</code> in the <code>Document</code>, and
-     *  write this <code>Style</code> to it.
+     * Create a new {@code Node} in the <code>Document</code>, and write this
+     * {@code Style} to it.
      *
-     *  @param  parentDoc  Parent <code>Document</code> of the
-     *                    <code>Node</code> to create.
-     *  @param  name       Name to use for the new <code>Node</code> (e.g.
-     *                    <i>style:style</i>)
+     * @param   parentDoc  Parent {@code Document} of the {@code Node} to create.
+     * @param   name       Name to use for the new {@code Node} (e.g.
+     *                     <i>style:style</i>)
      *
-     *  @return  Created <code>Node</code>.
+     * @return  Created {@code Node}.
      */
     @Override
     public Node createNode(org.w3c.dom.Document parentDoc, String name) {
@@ -224,14 +222,13 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     *  Return true if <code>style</code> specifies as much or less
-     *  than this <code>Style</code>, and nothing it specifies
-     *  contradicts this <code>Style</code>.
+     * Return {@code true} if {@code style} specifies as much or less than this
+     * {@code Style}, and nothing it specifies contradicts this {@code Style}.
      *
-     *  @param  style  The <code>Style</code> to check.
+     * @param   style  The {@code Style} to check.
      *
-     *  @return  true if <code>style</code> is a subset, false
-     *           otherwise.
+     * @return  {@code true} if <code>style</code> is a subset, {@code false}
+     *          otherwise.
      */
     @Override
     public boolean isSubset(Style style) {
@@ -246,11 +243,10 @@ public class ColumnStyle extends Style implements Cloneable {
     }
 
     /**
-     *  Write this <code>Style</code> object's attributes to a
-     *  <code>Node</code> in the <code>Document</code>.
+     * Write this {@code Style} object's attributes to a {@code Node} in the
+     * {@code Document}.
      *
-     *  @param  node  The <code>Node</code> to add <code>Style</code>
-     *                attributes.
+     * @param  node  The {@code Node} to add {@code Style} attributes.
      */
     private void writeAttributes(Element node) {
 
@@ -259,5 +255,4 @@ public class ColumnStyle extends Style implements Cloneable {
             node.setAttribute("style:column-width", width);
         }
     }
-
 }

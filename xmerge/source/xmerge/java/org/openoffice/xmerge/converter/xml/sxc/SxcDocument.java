@@ -22,30 +22,26 @@ import org.openoffice.xmerge.converter.xml.OfficeDocument;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 /**
- *  This class is an implementation of <code>OfficeDocument</code> for
- *  the SXC format.
+ * This class is an implementation of {@code OfficeDocument} for the SXC format.
  */
 public class SxcDocument extends OfficeDocument {
 
     /**
-     *  Constructor with arguments to set <code>name</code>.
+     * Constructor with arguments to set {@code name}.
      *
-     *  @param  name  The name of the <code>Document</code>
+     * @param  name  The name of the {@code Document}.
      */
     public SxcDocument(String name) {
         super(name);
     }
 
-
     /**
-     *  Constructor with arguments to set <code>name</code>, the
-     *  <code>namespaceAware</code> flag, and the <code>validating</code>
-     *  flag.
+     * Constructor with arguments to set {@code name}, the {@code namespaceAware}
+     * flag, and the {@code validating} flag.
      *
-     *  @param  name            The name of the <code>Document</code>.
-     *  @param  namespaceAware  The value of the <code>namespaceAware</code>
-     *                          flag.
-     *  @param  validating      The value of the <code>validating</code> flag.
+     * @param  name            The name of the {@code Document}.
+     * @param  namespaceAware  The value of the {@code namespaceAware} flag.
+     * @param  validating      The value of the {@code validating} flag.
      */
     public SxcDocument(String name, boolean namespaceAware, boolean validating) {
 
@@ -53,9 +49,9 @@ public class SxcDocument extends OfficeDocument {
     }
 
     /**
-     *  Returns the Office file extension for the SXC format.
+     * Returns the Office file extension for the SXC format.
      *
-     *  @return  The Office file extension for the SXC format.
+     * @return  The Office file extension for the SXC format.
      */
     @Override
     protected String getFileExtension() {
@@ -63,9 +59,9 @@ public class SxcDocument extends OfficeDocument {
     }
 
     /**
-     *  Returns the Office attribute for the SXC format.
+     * Returns the Office attribute for the SXC format.
      *
-     *  @return  The Office attribute for the SXC format.
+     * @return  The Office attribute for the SXC format.
      */
     @Override
     protected String getOfficeClassAttribute() {
@@ -81,6 +77,4 @@ public class SxcDocument extends OfficeDocument {
     protected final String getDocumentMimeType() {
         return OfficeConstants.SXC_MIME_TYPE;
     }
-
 }
-

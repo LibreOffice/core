@@ -25,10 +25,11 @@ import org.openoffice.xmerge.merger.Iterator;
 import org.openoffice.xmerge.util.Debug;
 
 /**
- *  This is one of the implementations of <code>DiffAlgorithm</code> interface.
- *  Using Longest Common Subsequence (LCS). The algorithm here is based
- *  on the book "Introduction to Algorithms" by Thomas H.Cormen,
- *  Charles E.Leiserson and Ronald L.Riverst (MIT Press 1990) page 314.
+ * This is one of the implementations of {@code DiffAlgorithm} interface.
+ *
+ * <p>Using Longest Common Subsequence (LCS). The algorithm here is based on the
+ * book "Introduction to Algorithms" by Thomas H.Cormen, Charles E.Leiserson and
+ * Ronald L.Riverst (MIT Press 1990) page 314.</p>
  */
 public class IteratorLCSAlgorithm implements DiffAlgorithm {
 
@@ -67,12 +68,10 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
         return diffArray;
     }
 
-
     /**
-     *  Debug function used to print out the nicely formatted
-     *  difference table.
+     * Debug function used to print out the nicely formatted difference table.
      *
-     *  @param  diffTable  The difference table to display.
+     * @param  diffTable  The difference table to display.
      */
     private void printDiffTable(int[][] diffTable) {
 
@@ -88,15 +87,15 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
     }
 
     /**
-     *  Create the difference table.
-     *  The difference table is used internal to keep track what
-     *  elements are common or different in the two sequences.
+     * Create the difference table.
      *
-     *  @param  orgSeq  The original sequence to be used as a base.
-     *  @param  modSeq  The modified sequence to compare.
+     * <p>The difference table is used internal to keep track what elements are
+     * common or different in the two sequences.</p>
      *
-     *  @return  A difference table as a two-dimensional array of
-     *           integers.
+     * @param   orgSeq  The original sequence to be used as a base.
+     * @param   modSeq  The modified sequence to compare.
+     *
+     * @return  A difference table as a two-dimensional array of integers.
      */
     private int[][] createDiffTable(Iterator orgSeq, Iterator modSeq) {
         int orgSeqlen = orgSeq.elementCount() + 1;
@@ -139,24 +138,22 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
         return diffTable;
     }
 
-
     /**
-     *  Generate the <code>Difference</code> object result vector.
-     *  This method will be called recursively to backtrack the difference
-     *  table to get the difference result (and also the LCS).
+     * Generate the {@code Difference} object result vector.
      *
-     *  @param   diffTable   The difference table containing the
-     *                       <code>Difference</code> result.
-     *  @param   i           The nth element in original sequence to
-     *                       compare.    This method is called recursively
-     *                       with i and j decreased until 0.
-     *  @param   j           The nth element in modified sequence to
-     *                       compare.
-     *  @param   diffVector  A vector to output the <code>Difference</code>
-     *                       result. Can not use a return variable as it
-     *                       is a recursive method.  The vector will contain
-     *                       <code>Difference</code> objects with operation
-     *                       and positions fill in.
+     * <p>This method will be called recursively to backtrack the difference
+     * table to get the difference result (and also the LCS).</p>
+     *
+     * @param   diffTable   The difference table containing the {@code Difference}
+     *                      result.
+     * @param   i           The nth element in original sequence to compare. This
+     *                      method is called recursively with {@code i} and
+     *                      {@code j} decreased until {@code 0}.
+     * @param   j           The nth element in modified sequence to compare.
+     * @param   diffVector  A vector to output the {@code Difference} result.
+     *                      Can not use a return variable as it is a recursive
+     *                      method.  The vector will contain {@code Difference}
+     *                      objects with operation and positions fill in.
      */
     private void generateResult(int[][] diffTable,
                                 int i, int j, ArrayList<Difference> diffVector) {
@@ -222,4 +219,3 @@ public class IteratorLCSAlgorithm implements DiffAlgorithm {
         }
     }
 }
-

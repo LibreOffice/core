@@ -19,20 +19,16 @@
 package org.openoffice.xmerge.util.registry;
 
 /**
- *  This <code>Exception</code> is thrown by converter registry
- *  algorithms.
+ * This {@code Exception} is thrown by converter registry algorithms.
  */
 public class RegistryException extends Exception {
 
-
     /**
-     *  Exception thrown by merge algorithms.
+     * Exception thrown by merge algorithms.
      *
-     *  @param message Message to be included in the
-     *                 <code>Exception</code>.
+     * @param message Message to be included in the {@code Exception}.
      */
     public RegistryException(String message) {
         super(message);
     }
 }
-

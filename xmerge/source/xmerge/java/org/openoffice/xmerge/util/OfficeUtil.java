@@ -27,22 +27,21 @@ import org.openoffice.xmerge.converter.xml.OfficeConstants;
 
 import java.util.ArrayList;
 
-
 /**
- * Class providing utility methods for OpenOffice plugins.
+ * Class providing utility methods for OpenOffice plug-ins.
  *
  * @version 1.1
  */
 public class OfficeUtil implements OfficeConstants {
 
     /**
-     * <p>Method to replace whitespace character within text with appropriate
-     *    OpenOffice tags.</p>
+     * Method to replace whitespace character within text with appropriate
+     * OpenOffice tags.
      *
-     * @param   text      The text to parse for whitespace.
+     * @param   text  The text to parse for whitespace.
      *
-     * @return  <code>Node</code> array containing OpenOffice XML nodes
-     *          representing the text.
+     * @return  {@code Node} array containing OpenOffice XML nodes representing
+     *          the text.
      */
     public static Node[] parseText(String text, Document parentDoc) {
         ArrayList<Node> nodeVec = new ArrayList<Node>();
