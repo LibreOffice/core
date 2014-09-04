@@ -81,11 +81,12 @@
 
 #define STR_READONLY_PATH           (RC_GLOBALS_BEGIN + 47)
 #define IL_SECTION_BITMAPS          (RC_GLOBALS_BEGIN + 48)
+#define IL_VALUES                   (RC_GLOBALS_BEGIN + 49)
 
 // INFOBOX ------------------------------------------------------------
 
-#define STR_ERROR_CLPBRD_READ       (RC_GLOBALS_BEGIN + 49)
-#define STR_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 50)
+#define STR_ERROR_CLPBRD_READ       (RC_GLOBALS_BEGIN + 50)
+#define STR_ERROR_PASSWD            (RC_GLOBALS_BEGIN + 51)
 
 // ACC ---------------------------------------------------------------
 

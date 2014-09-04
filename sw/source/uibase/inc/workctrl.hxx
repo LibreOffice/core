@@ -127,9 +127,8 @@ class SwScrollNaviToolBox : public ToolBox
 
 class SwScrollNaviPopup : public SfxPopupWindow
 {
-    SwScrollNaviToolBox    aToolBox;
-    FixedLine       aSeparator;
-    FixedInfo       aInfoField;
+    SwScrollNaviToolBox* m_pToolBox;
+    FixedText*           m_pInfoField;
     ImageList       aIList;
 
     OUString        sQuickHelp[2 * NID_COUNT];
@@ -149,7 +148,7 @@ public:
     static OUString         GetQuickHelpText(bool bNext);
 
     virtual SfxPopupWindow* Clone() const SAL_OVERRIDE;
-    void                GrabFocus(){aToolBox.GrabFocus();}
+    void                GrabFocus() { m_pToolBox->GrabFocus(); }
 };
 
 //  ImageButtons have to set the HelpText themselves if needed

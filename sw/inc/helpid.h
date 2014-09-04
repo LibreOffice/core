@@ -33,7 +33,6 @@
 
 #define HID_EDIT_WIN                                            "SW_HID_EDIT_WIN"
 
-#define HID_INSERT_CTRL                                         "SW_HID_INSERT_CTRL" // TbxControl Einfuegen
 #define HID_INSERT_FIELD_CTRL                                   "SW_HID_INSERT_FIELD_CTRL"
 
 #define HID_SOURCEVIEW                                          "SW_HID_SOURCEVIEW"

@@ -20,29 +20,6 @@
 #define _WORKCTRL_HRC
 #include "ribbar.hrc"
 
-#define IL_VALUES           5
-#define FI_INFO             8
-#define FL_SEP              9
-
-#define ST_TBL          12
-#define ST_FRM          13
-#define ST_PGE          14
-#define ST_DRW          15
-#define ST_CTRL         16
-#define ST_REG          17
-#define ST_BKM          18
-#define ST_GRF          19
-#define ST_OLE          20
-#define ST_OUTL         21
-#define ST_SEL          22
-#define ST_FTN          23
-#define ST_MARK         24
-#define ST_POSTIT       25
-#define ST_SRCH_REP     26
-#define ST_INDEX_ENTRY  27
-#define ST_TABLE_FORMULA  28
-#define ST_TABLE_FORMULA_ERROR  29
-
 // duplicate entry! hrc and hxx
 // these Ids specifiy the action of the buttons below the scroll bar
 #define NID_START   20000

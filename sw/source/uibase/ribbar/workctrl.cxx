@@ -451,17 +451,18 @@ static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
 };
 
 SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& rFrame, Window *pParent)
-    : SfxPopupWindow(nId, rFrame, pParent, SW_RES(RID_SCROLL_NAVIGATION_WIN)),
-    aToolBox(this, 0),
-    aSeparator(this, SW_RES(FL_SEP)),
-    aInfoField(this, SW_RES(FI_INFO)),
+    : SfxPopupWindow(nId, pParent, "FloatingNavigation",
+        "modules/swriter/ui/floatingnavigation.ui", rFrame),
     aIList(SW_RES(IL_VALUES))
 {
+    m_pToolBox = new SwScrollNaviToolBox(get<Window>("box"), 0);
+    get(m_pInfoField, "label");
+
     sal_uInt16 i;
 
-    aToolBox.SetHelpId(HID_NAVI_VS);
-    aToolBox.SetLineCount( 2 );
-    aToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
+    m_pToolBox->SetHelpId(HID_NAVI_VS);
+    m_pToolBox->SetLineCount( 2 );
+    m_pToolBox->SetOutStyle(TOOLBOX_STYLE_FLAT);
     for( i = 0; i < NID_COUNT; i++)
     {
         sal_uInt16 nNaviId = aNavigationInsertIds[i];
@@ -481,13 +482,11 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
             else if (nNaviId == NID_NEXT)
                 sText = SW_RESSTR(STR_IMGBTN_PGE_DOWN);
         }
-        aToolBox.InsertItem(nNaviId, sText, nTbxBits);
-        aToolBox.SetHelpId( nNaviId, aNavigationHelpIds[i] );
+        m_pToolBox->InsertItem(nNaviId, sText, nTbxBits);
+        m_pToolBox->SetHelpId( nNaviId, aNavigationHelpIds[i] );
     }
     ApplyImageList();
-    aToolBox.InsertBreak(NID_COUNT/2);
-    // don't call it before!
-    FreeResource();
+    m_pToolBox->InsertBreak(NID_COUNT/2);
 
     // these are global strings
     for( i = 0; i < 2 * NID_COUNT; i++)
@@ -495,33 +494,18 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
         sQuickHelp[i] = SW_RESSTR(STR_IMGBTN_START + i);
     }
 
-    Size aImgSize = aIList.GetImageSize();
-    aImgSize.Width() += 5;
-    aImgSize.Height() += 5;
-    Size aSz = aToolBox.CalcWindowSizePixel(2);
-    aToolBox.SetPosSizePixel( Point(), aSz );
     sal_uInt16 nItemId = SwView::GetMoveType();
-    aInfoField.SetText(aToolBox.GetItemText(nItemId));
-    aToolBox.CheckItem( nItemId, true );
-    Size aFTSize(aInfoField.GetSizePixel());
-    Size aSepSize(aSeparator.GetSizePixel());
-    aSepSize.Width() = aSz.Width();
+    m_pInfoField->SetText(m_pToolBox->GetItemText(nItemId));
+    m_pToolBox->CheckItem( nItemId, true );
 
-    aSz.Height() += aFTSize.Height() + aSepSize.Height();
-    aInfoField.SetPosSizePixel(
-        Point(0, aSz.Height() - aFTSize.Height()), Size(aSz.Width(), aFTSize.Height()));
-
-    aSeparator.SetSizePixel(aSepSize);
-    aSeparator.SetPosPixel(Point(0, aSz.Height() - aFTSize.Height() - aSepSize.Height()));
-
-    SetOutputSizePixel(aSz);
-    aToolBox.SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
-    aToolBox.StartSelection();
-    aToolBox.Show();
+    m_pToolBox->SetSelectHdl(LINK(this, SwScrollNaviPopup, SelectHdl));
+    m_pToolBox->StartSelection();
+    m_pToolBox->Show();
 }
 
 SwScrollNaviPopup::~SwScrollNaviPopup()
 {
+    delete m_pToolBox;
 }
 
 void SwScrollNaviPopup::DataChanged( const DataChangedEvent& rDCEvt )
@@ -539,7 +523,7 @@ void SwScrollNaviPopup::ApplyImageList()
     for(sal_uInt16 i = 0; i < NID_COUNT; i++)
     {
         sal_uInt16 nNaviId = aNavigationInsertIds[i];
-        aToolBox.SetItemImage(nNaviId, rImgLst.GetImage(nNaviId));
+        m_pToolBox->SetItemImage(nNaviId, rImgLst.GetImage(nNaviId));
     }
 }
 
@@ -554,14 +538,14 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
     if( nSet != NID_PREV && nSet != NID_NEXT )
     {
         SwView::SetMoveType(nSet);
-        aToolBox.SetItemText(NID_NEXT, sQuickHelp[nSet - NID_START]);
-        aToolBox.SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
-        aInfoField.SetText(aToolBox.GetItemText(nSet));
+        m_pToolBox->SetItemText(NID_NEXT, sQuickHelp[nSet - NID_START]);
+        m_pToolBox->SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
+        m_pInfoField->SetText(m_pToolBox->GetItemText(nSet));
         // check the current button only
         for(sal_uInt16 i = 0; i < NID_COUNT; i++)
         {
-            sal_uInt16 nItemId = aToolBox.GetItemId( i );
-            aToolBox.CheckItem( nItemId, nItemId == nSet );
+            sal_uInt16 nItemId = m_pToolBox->GetItemId( i );
+            m_pToolBox->CheckItem( nItemId, nItemId == nSet );
         }
     }
     else

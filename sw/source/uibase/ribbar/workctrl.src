@@ -19,6 +19,7 @@
 
 #include <svx/svxids.hrc>
 #include <svx/globlmn.hrc>
+#include "globals.hrc"
 #include "workctrl.hrc"
 #include "helpid.h"
 #include "cmdid.h"
@@ -107,103 +108,83 @@ Menu RID_INSERT_FIELD_CTRL
         };                              \
         IdCount = { 20 ; };
 
-FloatingWindow RID_SCROLL_NAVIGATION_WIN
+ImageList IL_VALUES
 {
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Hide = TRUE ;
-    SVLook = TRUE ;
-    HelpID = HID_INSERT_CTRL ;
-    ImageList IL_VALUES
-    {
-        Prefix = "sr";
-        MaskColor = IMAGE_MASK_COLOR ;
-        SCROLL_IMAGE_IDLIST
-    };
-    FixedLine FL_SEP
-    {
-        //no position, no text
-        Size = MAP_APPFONT ( 20 , 4 ) ;
-    };
-    FixedText FI_INFO
-    {
-        //no position, no text
-        Size = MAP_APPFONT ( 20 , 8 ) ;
-        Center = TRUE;
-    };
-    String ST_TBL
-    {
-        Text [ en-US ] = "Table" ;
-    };
-    String ST_FRM
-    {
-        Text [ en-US ] = "Text Frame" ;
-    };
-    String ST_PGE
-    {
-        Text [ en-US ] = "Page" ;
-    };
-    String ST_DRW
-    {
-        Text [ en-US ] = "Drawing" ;
-    };
-    String ST_CTRL
-    {
-        Text [ en-US ] = "Control" ;
-    };
-    String ST_REG
-    {
-        Text [ en-US ] = "Section" ;
-    };
-    String ST_BKM
-    {
-        Text [ en-US ] = "Bookmark" ;
-    };
-    String ST_GRF
-    {
-        Text [ en-US ] = "Graphics" ;
-    };
-    String ST_OLE
-    {
-        Text [ en-US ] = "OLE object" ;
-    };
-    String ST_OUTL
-    {
-        Text [ en-US ] = "Headings" ;
-    };
-    String ST_SEL
-    {
-        Text [ en-US ] = "Selection" ;
-    };
-    String ST_FTN
-    {
-        Text [ en-US ] = "Footnote" ;
-    };
-    String ST_MARK
-    {
-        Text [ en-US ] = "Reminder" ;
-    };
-    String ST_POSTIT
-    {
-        Text [ en-US ] = "Comment" ;
-    };
-    String ST_SRCH_REP
-    {
-        Text [ en-US ] = "Repeat search" ;
-    };
-    String ST_INDEX_ENTRY
-    {
-        Text [ en-US ] = "Index entry";
-    };
-    String ST_TABLE_FORMULA
-    {
-        Text [ en-US ] = "Table formula";
-    };
-    String ST_TABLE_FORMULA_ERROR
-    {
-        Text [ en-US ] = "Wrong table formula";
-    };
-    Text [ en-US ] = "Navigation" ;
+    Prefix = "sr";
+    MaskColor = IMAGE_MASK_COLOR ;
+    SCROLL_IMAGE_IDLIST
+};
+String ST_TBL
+{
+    Text [ en-US ] = "Table" ;
+};
+String ST_FRM
+{
+    Text [ en-US ] = "Text Frame" ;
+};
+String ST_PGE
+{
+    Text [ en-US ] = "Page" ;
+};
+String ST_DRW
+{
+    Text [ en-US ] = "Drawing" ;
+};
+String ST_CTRL
+{
+    Text [ en-US ] = "Control" ;
+};
+String ST_REG
+{
+    Text [ en-US ] = "Section" ;
+};
+String ST_BKM
+{
+    Text [ en-US ] = "Bookmark" ;
+};
+String ST_GRF
+{
+    Text [ en-US ] = "Graphics" ;
+};
+String ST_OLE
+{
+    Text [ en-US ] = "OLE object" ;
+};
+String ST_OUTL
+{
+    Text [ en-US ] = "Headings" ;
+};
+String ST_SEL
+{
+    Text [ en-US ] = "Selection" ;
+};
+String ST_FTN
+{
+    Text [ en-US ] = "Footnote" ;
+};
+String ST_MARK
+{
+    Text [ en-US ] = "Reminder" ;
+};
+String ST_POSTIT
+{
+    Text [ en-US ] = "Comment" ;
+};
+String ST_SRCH_REP
+{
+    Text [ en-US ] = "Repeat search" ;
+};
+String ST_INDEX_ENTRY
+{
+    Text [ en-US ] = "Index entry";
+};
+String ST_TABLE_FORMULA
+{
+    Text [ en-US ] = "Table formula";
+};
+String ST_TABLE_FORMULA_ERROR
+{
+    Text [ en-US ] = "Wrong table formula";
 };
 
 // Strings for the quickhelp of the View-PgUp/Down-Buttons
