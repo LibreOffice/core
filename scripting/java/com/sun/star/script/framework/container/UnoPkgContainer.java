@@ -28,7 +28,6 @@ import java.io.OutputStream;
 import java.io.InputStream;
 
 import com.sun.star.uno.XComponentContext;
-
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.io.XOutputStream;

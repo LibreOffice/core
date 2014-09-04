@@ -45,7 +45,6 @@ import com.sun.star.script.framework.container.ScriptMetaData;
 import com.sun.star.script.framework.container.ScriptEntry;
 import com.sun.star.script.framework.container.Parcel;
 import com.sun.star.script.framework.container.ParcelContainer;
-import com.sun.star.script.framework.browse.DialogFactory;
 
 import java.util.*;
 import javax.swing.JOptionPane;

@@ -38,7 +38,6 @@ import com.sun.star.script.browse.BrowseNodeTypes;
 import com.sun.star.script.framework.provider.ScriptProvider;
 import com.sun.star.script.framework.log.*;
 import com.sun.star.script.framework.container.*;
-import com.sun.star.script.framework.browse.DialogFactory;
 
 import java.util.*;
 import javax.swing.JOptionPane;
