@@ -1363,6 +1363,7 @@ SwXText::insertTextPortion(
             rCharacterAndParagraphProperties,
         const uno::Reference<text::XTextRange>& xInsertPosition)
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException,
+           beans::PropertyVetoException,
            uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
@@ -1443,7 +1444,8 @@ SwXText::appendTextPortion(
         const OUString& rText,
         const uno::Sequence< beans::PropertyValue > &
             rCharacterAndParagraphProperties)
-throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+throw (lang::IllegalArgumentException, beans::UnknownPropertyException,
+       beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     // Right now this doesn't need a guard, as it's just calling the insert
     // version, that has it already.

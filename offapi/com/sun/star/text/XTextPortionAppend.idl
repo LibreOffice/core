@@ -22,8 +22,8 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-
 #include <com/sun/star/beans/UnknownPropertyException.idl>
+#include <com/sun/star/beans/PropertyVetoException,idl>
 #include <com/sun/star/text/XTextRange.idl>
 
 
@@ -51,7 +51,8 @@ interface XTextPortionAppend : com::sun::star::uno::XInterface
                                 [in] string Text,
                                 [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties )
                         raises( com::sun::star::lang::IllegalArgumentException,
-                                        com::sun::star::beans::UnknownPropertyException );
+                                com::sun::star::beans::UnknownPropertyException,
+                                com::sun::star::beans::PropertyVetoException );
 
         /** inserts a new text portion to the paragraph at a given position.
 
@@ -76,7 +77,8 @@ interface XTextPortionAppend : com::sun::star::uno::XInterface
                                 [in] com::sun::star::beans::PropertyValues CharacterAndParagraphProperties,
                                 [in] com::sun::star::text::XTextRange TextRange)
                         raises( com::sun::star::lang::IllegalArgumentException,
-                                        com::sun::star::beans::UnknownPropertyException );
+                                com::sun::star::beans::UnknownPropertyException,
+                                com::sun::star::beans::PropertyVetoException );
 
 };
 
