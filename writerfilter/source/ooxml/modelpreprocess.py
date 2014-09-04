@@ -12,23 +12,9 @@ from xml.dom import minidom
 import sys
 
 
-def prefixFromUrl(url):
-    if url in list(ooxUrlAliases.keys()):
-        return ooxUrlAliases[url]
-    else:
-        if url.startswith("http://"):
-            return url.replace('http://', '').replace('/', '_').replace('.', '_')
-        else:
-            return ""
-
-
 def prefixForGrammar(namespace):
     ns = namespace.getElementsByTagName("grammar")[0].getAttribute("ns")
-    if ns in list(ooxUrlAliases.keys()):
-        prefix = ooxUrlAliases[ns]
-        return prefix
-    else:
-        return prefixFromUrl(ns)
+    return ooxUrlAliases[ns]
 
 
 def parseNamespaceAliases(node):
@@ -43,9 +29,7 @@ def parseNamespaces(fro):
     sock = open(fro)
     for i in sock.readlines():
         line = i.strip()
-        id, alias, url = line.split(' ')
-        ooxUrlIds[url] = id
-        ooxAliasIds[alias] = id
+        alias, url = line.split(' ')[1:]
         ooxUrlAliases[url] = alias
     sock.close()
 
@@ -70,14 +54,11 @@ def preprocess(model):
         grammar = i.getElementsByTagName("grammar")[0]
 
         for j in i.getElementsByTagName("element") + i.getElementsByTagName("attribute"):
-            if j.localName == "attribute" and not len(j.getAttribute("name")):
-                continue
-
             # prefix
             prefix = ""
             if ":" in j.getAttribute("name"):
                 nameprefix = j.getAttribute("name").split(':')[0]
-                prefix = prefixFromUrl(modelNamespaceAliases[nameprefix])
+                prefix = ooxUrlAliases[modelNamespaceAliases[nameprefix]]
             elif j.localName == "attribute":
                 if grammar.getAttribute("attributeFormDefault") == "qualified":
                     prefix = grammarprefix
@@ -98,10 +79,6 @@ def preprocess(model):
 namespacesPath = sys.argv[1]
 modelPath = sys.argv[2]
 
-# URL -> ID, from oox
-ooxUrlIds = {}
-# Alias -> ID, from oox
-ooxAliasIds = {}
 # URL -> alias, from oox
 ooxUrlAliases = {}
 parseNamespaces(namespacesPath)
