@@ -187,10 +187,9 @@ public class UCBStreamHandler extends URLStreamHandler {
     private InputStream getFileStreamFromJarStream(String file, InputStream is)
         throws IOException
     {
-        ZipInputStream zis = null;
         ZipEntry entry = null;
 
-        zis = new ZipInputStream(is);
+        ZipInputStream zis = new ZipInputStream(is);
 
         while (zis.available() != 0) {
             entry = zis.getNextEntry();
@@ -214,7 +213,6 @@ public class UCBStreamHandler extends URLStreamHandler {
             LogUtils.DEBUG("sfa appeared to read file " );
             byte[][] inputBytes = new byte[1][];
 
-            int ln = 0;
             int sz = m_xSimpleFileAccess.getSize(path);
             // TODO don't depend on result of available() or size()
             // just read stream 'till complete
@@ -229,7 +227,7 @@ public class UCBStreamHandler extends URLStreamHandler {
             LogUtils.DEBUG("available = " + xInputStream.available() );
             inputBytes[0] = new byte[sz];
 
-            ln = xInputStream.readBytes(inputBytes, sz);
+            int ln = xInputStream.readBytes(inputBytes, sz);
 
             if (ln != sz) {
                 throw new IOException(

@@ -51,7 +51,6 @@ public class StrictResolver implements Resolver
     throws NoSuchMethodException
     {
         Method m = null;
-        ScriptProxy sp = null;
 
         LogUtils.DEBUG( "StrictResolver.getProxy() for: " + sd.toString() );
 
@@ -70,7 +69,7 @@ public class StrictResolver implements Resolver
                 + sd.getMethodName() + ":" + e.getMessage() );
         }
 
-        sp = new ScriptProxy( m );
+        ScriptProxy sp = new ScriptProxy( m );
 
         int modifiers = m.getModifiers();
         if ( !Modifier.isStatic( modifiers ) )

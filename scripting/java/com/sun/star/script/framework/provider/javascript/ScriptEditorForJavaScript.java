@@ -61,8 +61,7 @@ public class ScriptEditorForJavaScript implements ScriptEditor
             InputStream in = url.openStream();
             StringBuffer buf = new StringBuffer();
             byte[] b = new byte[1024];
-            int len = 0;
-
+            int len;
             while ((len = in.read(b)) != -1) {
                 buf.append(new String(b, 0, len));
             }

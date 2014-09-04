@@ -228,8 +228,7 @@ class ScriptImpl implements XScript
             }
 
             try {
-                String source = null;
-                Object result = null;
+                Object result;
 
                 ScriptEditorForBeanShell editor =
                     ScriptEditorForBeanShell.getEditor(
@@ -247,7 +246,7 @@ class ScriptImpl implements XScript
                 }
 
                 metaData.loadSource();
-                source = metaData.getSource();
+                String source = metaData.getSource();
 
                 if ( source == null || source.length() == 0 )
                 {
@@ -286,11 +285,10 @@ class ScriptImpl implements XScript
         }
         private void raiseEditor( int lineNum )
         {
-            ScriptEditorForBeanShell editor = null;
             try
             {
                 URL sourceUrl = metaData.getSourceURL();
-                editor = ScriptEditorForBeanShell.getEditor( sourceUrl );
+                ScriptEditorForBeanShell editor = ScriptEditorForBeanShell.getEditor( sourceUrl );
                 if ( editor == null )
                 {
                     editor = ScriptEditorForBeanShell.getEditor();

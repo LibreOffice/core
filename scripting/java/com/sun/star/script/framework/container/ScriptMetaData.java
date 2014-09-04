@@ -288,14 +288,12 @@ public class ScriptMetaData extends ScriptEntry {
     }
     private URL createURL( String path ) throws java.net.MalformedURLException
     {
-        URL url = null;
         int indexOfColon = path.indexOf(":");
         String scheme = path.substring( 0, indexOfColon );
         UCBStreamHandler handler = new UCBStreamHandler( scheme, parent.m_xSFA);
 
         path += UCBStreamHandler.separator;
-        url = new URL(null, path, handler);
-        return url;
+        return new URL(null, path, handler);
     }
 
     // TODO should decide whether this should throw or not
@@ -313,8 +311,7 @@ public class ScriptMetaData extends ScriptEntry {
                     InputStream in = sourceUrl.openStream();
 
                     byte[] contents = new byte[1024];
-                    int len = 0;
-
+                    int len;
                     while ((len = in.read(contents, 0, 1024)) != -1) {
                         buf.append(new String(contents, 0, len));
                     }
@@ -379,13 +376,9 @@ public class ScriptMetaData extends ScriptEntry {
 
     public URL getSourceURL() throws java.net.MalformedURLException
     {
-        String sUrl = null;
-        URL scriptURL = null;
-
-        sUrl = getParcelLocation();
+        String sUrl = getParcelLocation();
         sUrl = PathUtils.make_url( sUrl, getLanguageName() );
         LogUtils.DEBUG("Creating script url for " + sUrl );
-        scriptURL = createURL( sUrl );
-        return scriptURL;
+        return createURL( sUrl );
     }
 }

@@ -39,8 +39,7 @@ public class ScriptSourceModel {
         InputStream in = file.openStream();
 
         byte[] contents = new byte[1024];
-        int len = 0;
-
+        int len;
         while ((len = in.read(contents, 0, 1024)) != -1) {
             buf.append(new String(contents, 0, len));
         }
@@ -78,7 +77,6 @@ public class ScriptSourceModel {
     public Object execute(final XScriptContext context, ClassLoader cl )
         throws Exception
     {
-        Object result = null;
                 if ( cl != null )
                 {
                     // sets this threads class loader
@@ -110,6 +108,7 @@ public class ScriptSourceModel {
                 interpreter.set("XSCRIPTCONTEXT", context);
                 interpreter.set("ARGUMENTS", new Object[0]);
 
+                Object result;
                 if (view.isModified()) {
                     result = interpreter.eval(view.getText());
                 }

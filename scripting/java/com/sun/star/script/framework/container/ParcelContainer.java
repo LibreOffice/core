@@ -459,8 +459,6 @@ public class ParcelContainer implements XNameAccess
     public Parcel loadParcel( String parcelUrl ) throws com.sun.star.lang.WrappedTargetException, com.sun.star.lang.IllegalArgumentException
     {
 
-        String name = null;
-
         String parcelDescUrl =  PathUtils.make_url( parcelUrl,  ParcelDescriptor.PARCEL_DESCRIPTOR_NAME );
         Parcel parcel = null;
 
@@ -494,7 +492,7 @@ public class ParcelContainer implements XNameAccess
                 LogUtils.DEBUG("Processing " + parcelDescUrl + " closed " );
 
                 int indexOfSlash = parcelUrl.lastIndexOf("/");
-                name = parcelUrl.substring( indexOfSlash + 1 );
+                String name = parcelUrl.substring( indexOfSlash + 1 );
 
                 parcel = new Parcel( m_xSFA, this, pd, name );
 
@@ -588,20 +586,17 @@ public class ParcelContainer implements XNameAccess
     // removes but doesn't physically delele parcel from container
     public boolean removeParcel(String name) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
     {
-        boolean result = false;
         Parcel p = (Parcel)getByName( name );
         if ( p == null )
         {
             throw new com.sun.star.container.NoSuchElementException("No parcel named " + name );
         }
 
-        result =  parcels.remove( p );
-        return result;
+        return  parcels.remove( p );
     }
     public boolean deleteParcel(String name) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
     {
         LogUtils.DEBUG( "deleteParcel for containerURL " + containerUrl + " name = " + name  + " Langueg = " + language );
-        boolean result = false;
 
         Parcel p = (Parcel)getByName( name );
         if ( p == null )
@@ -620,18 +615,15 @@ public class ParcelContainer implements XNameAccess
             throw new com.sun.star.lang.WrappedTargetException( e.toString() );
         }
 
-        result =  parcels.remove( p );
-        return result;
+        return  parcels.remove( p );
     }
 
     public String getLanguage() { return language; }
 
     public ScriptMetaData findScript( ParsedScriptUri  parsedUri ) throws  com.sun.star.container.NoSuchElementException,  com.sun.star.lang.WrappedTargetException
     {
-        ScriptMetaData scriptData = null;
-        Parcel p = null;
-        p = (Parcel)getByName( parsedUri.parcel);
-        scriptData = (ScriptMetaData)p.getByName( parsedUri.function);
+        Parcel p = (Parcel)getByName( parsedUri.parcel);
+        ScriptMetaData scriptData = (ScriptMetaData)p.getByName( parsedUri.function);
         LogUtils.DEBUG("** found script data for " +  parsedUri.function + " script is " + scriptData );
         return scriptData;
 

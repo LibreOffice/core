@@ -205,7 +205,6 @@ class ScriptImpl implements XScript
             {
                 String editorURL = sourceUrl.toString();
                 Object result = null;
-                String source = null;
                 ScriptEditorForJavaScript editor =
                     ScriptEditorForJavaScript.getEditor(
                         metaData.getSourceURL() );
@@ -224,6 +223,7 @@ class ScriptImpl implements XScript
 
                 }
 
+                String source;
                 if (editor != null && editor.isModified())
                 {
                     LogUtils.DEBUG("GOT A MODIFIED SOURCE");
@@ -316,11 +316,10 @@ class ScriptImpl implements XScript
 
         private void raiseEditor( int lineNum )
         {
-            ScriptEditorForJavaScript editor = null;
             try
             {
                 URL sourceUrl = metaData.getSourceURL();
-                editor = ScriptEditorForJavaScript.getEditor( sourceUrl );
+                ScriptEditorForJavaScript editor = ScriptEditorForJavaScript.getEditor( sourceUrl );
                 if ( editor == null )
                 {
                     editor = ScriptEditorForJavaScript.getEditor();
