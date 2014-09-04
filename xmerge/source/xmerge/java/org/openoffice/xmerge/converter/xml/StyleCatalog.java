@@ -27,67 +27,61 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-
 /**
- *  A <code>StyleCatalog</code> holds a collection of <code>Style</code>
- *  objects.  It is intended for use when parsing or building a DOM
- *  document.
+ * A {@code StyleCatalog} holds a collection of {@code Style} objects.
  *
- *  Each entry in the <code>StyleCatalog</code> represents a
- *  <code>Style</code>, and is an object which is a subclass of
- *  <code>Style</code>.
+ * <p>It is intended for use when parsing or building a DOM document.</p>
  *
- *  @see <a href="Style.html">Style</a>
+ * <p>Each entry in the {@code StyleCatalog} represents a {@code Style}, and is
+ * an object which is a subclass of {@code Style}.</p>
+ *
+ * @see <a href="Style.html">Style</a>
  */
 public class StyleCatalog {
 
     private ArrayList<Style> styles;  // The actual styles
 
     /**
-     *  Constructor
+     * Constructor.
      *
-     *  @param  initialEntries  Expected number of entries to set
-     *                          for efficiency purposes.
+     * @param  initialEntries  Expected number of entries to set for efficiency
+     *                         purposes.
      */
     public StyleCatalog(int initialEntries) {
         styles = new ArrayList<Style>(initialEntries);
     }
 
-
     /**
-     *  <p>Parse the <code>Document</code> starting from <code>node</code>
-     *  and working downward, and add all styles found, so long as their
-     *  family name is listed in <code>families</code>.  For each
-     *  family name in <code>families</code> there must be a corresponding
-     *  element in <code>classes</code>, which specifies the class type
-     *  to use for that family.  All of these classes must be
-     *  subclasses of <code>Style</code>.  There can be multiple
-     *  classes specified for a particular family.</p>
+     * Parse the {@code Document} starting from {@code node} and working downward,
+     * and add all styles found, so long as their family name is listed in
+     * {@code families}.
      *
-     *  <p>If <code>defaultClass</code> is non-null, then all styles that
-     *  are found will be added.  Any <code>Style</code> whose family is
-     *  not listed in <code>families</code> will be added using defaultClass,
-     *  which, of course, must be a subclass of <code>Style</code>.
-     *  If <code>alwaysCreateDefault</code> is true, then a class
-     *  of type <code>defaultClass</code> will always be created,
-     *  regardless of whether there was also a match in
-     *  <code>families</code>.</p>
+     * <p>For each family name in {@code families} there must be a corresponding
+     * element in {@code classes}, which specifies the class type to use for that
+     * family.  All of these classes must be subclasses of {@code Style}.  There
+     * can be multiple classes specified for a particular family.</p>
      *
-     *  <p>DJP Todo: make it recursive so that <code>node</code> can be
-     *  higher up in the <code>Document</code> tree.</p>
+     * <p>If {@code defaultClass} is non-null, then all styles that are found
+     * will be added.  Any {@code Style} whose family is not listed in
+     * {@code families} will be added using defaultClass, which, of course, must
+     * be a subclass of {@code Style}. If {@code alwaysCreateDefault} is
+     * {@code true}, then a class of type {@code defaultClass} will always be
+     * created, regardless of whether there was also a match in {@code families}.
+     * </p>
      *
-     *  @param  node                 The node to be searched for
-     *                               <code>Style</code> objects.
-     *  @param  families             An array of <code>Style</code> families
-     *                               to add.
-     *  @param  classes              An array of class types corresponding
-     *                               to the families array.
-     *  @param  defaultClass         All <code>Style</code> objects that are
-     *                               found are added to this class.
-     *  @param  alwaysCreateDefault  A class of type <code>defaultClass</code>
-     *                               will always be created, regardless of
-     *                               whether there is a match in the
-     *                               families array.
+     * <p>DJP ToDo: make it recursive so that {@code node} can be higher up in
+     * the {@code Document} tree.</p>
+     *
+     * @param  node                 The node to be searched for {@code Style}
+     *                              objects.
+     * @param  families             An array of {@code Style} families to add.
+     * @param  classes              An array of class types corresponding to the
+     *                              families array.
+     * @param  defaultClass         All {@code Style} objects that are found are
+     *                              added to this class.
+     * @param  alwaysCreateDefault  A class of type {@code defaultClass} will
+     *                              always be created, regardless of whether
+     *                              there is a match in the families array.
      */
     public void add(Node node, String families[], Class<?> classes[],
     Class<?> defaultClass, boolean alwaysCreateDefault) {
@@ -127,14 +121,12 @@ public class StyleCatalog {
         }
     }
 
-
     /**
-     *  Call the constructor of class <code>cls</code> with parameters
-     *  <code>node</code>, and add the resulting <code>Style</code> to
-     *  the catalog.
+     * Call the constructor of class {@code cls} with parameters {@code node},
+     * and add the resulting {@code Style} to the catalog.
      *
-     *  @param  cls   The class whose constructor will be called.
-     *  @param  node  The constructed class will be added to this node.
+     * @param  cls   The class whose constructor will be called.
+     * @param  node  The constructed class will be added to this node.
      */
     private void callConstructor(Class<?> cls, Node node) {
         Class<?> params[] = new Class[2];
@@ -151,31 +143,29 @@ public class StyleCatalog {
         }
     }
 
-
     /**
-     *  Add a <code>Style</code> to the catalog.
+     * Add a {@code Style} to the catalog.
      *
-     *  @param  s  The <code>Style</code> to add.
+     * @param  s  The {@code Style} to add.
      */
     public void add(Style s) {
         styles.add(s);
     }
 
-
     /**
-     *  Return the first <code>Style</code> matching the specified names.
+     * Return the first {@code Style} matching the specified names.
      *
-     *  @param  name        Name to match, null is considered
+     * @param   name        Name to match, {@code null} is considered
      *                      <i>always match</i>.
-     *  @param  family      Family to match, null is considered
+     * @param   family      Family to match, {@code null} is considered
      *                      <i>always match</i>.
-     *  @param  parent      Parent to match, null is considered
+     * @param   parent      Parent to match, {@code null} is considered
      *                      <i>always match</i>.
-     *  @param  styleClass  styleClass to match, null is considered
+     * @param   styleClass  styleClass to match, {@code null} is considered
      *                      <i>always match</i>.
      *
-     *  @return  <code>Style</code> value if all parameters match,
-     *           null otherwise
+     * @return  {@code Style} value if all parameters match, {@code null}
+     *          otherwise.
      */
     public Style lookup(String name, String family, String parent,
                         Class<?> styleClass) {
@@ -199,15 +189,13 @@ public class StyleCatalog {
         return null;  // none found
     }
 
-
     /**
-     *  Given a <code>Style</code> <code>s</code> return all
-     *  <code>Style</code> objects that match.
+     * Given a {@code Style s} return all {@code Style} objects that match.
      *
-     *  @param  s  <code>Style</code> to match.
+     * @param   s  {@code Style} to match.
      *
-     *  @return  An array of <code>Style</code> objects that match, an
-     *           empty array if none match.
+     * @return  An array of {@code Style} objects that match, an empty array if
+     *          none match.
      */
     public Style[] getMatching(Style s) {
 
@@ -230,24 +218,18 @@ public class StyleCatalog {
         return matchArray;
     }
 
-
-
-
-
     /**
-     *  <p>Create a <code>Node</code> named <code>name</code> in
-     *  <code>Document</code> <code>parentDoc</code>, and write the
-     *  entire <code>StyleCatalog</code> to it.</p>
+     * Create a {@code Node} named {@code name} in {@code Document parentDoc},
+     * and write the entire {@code StyleCatalog} to it.
      *
-     *  <p>Note that the resulting node is returned, but is not connected
-     *  into the document.  Placing the output node in the document is
-     *  left to the caller.</p>
+     * <p>Note that the resulting node is returned, but is not connected into the
+     * document.  Placing the output node in the document is left to the caller.
+     * </p>
      *
-     *  @param  parentDoc  The <code>Document</code> to add the
-     *                     <code>Node</code>.
-     *  @param  name       The name of the <code>Node</code> to add.
+     * @param   parentDoc  The {@code Document} to add the {@code Node}.
+     * @param   name       The name of the {@code Node} to add.
      *
-     *  @return  The <code>Element</code> that was created.
+     * @return  The {@code Element} that was created.
      */
     public Element writeNode(org.w3c.dom.Document parentDoc, String name) {
         Element rootNode = parentDoc.createElement(name);
@@ -276,17 +258,12 @@ public class StyleCatalog {
         return rootNode;
     }
 
-
-
-
-
     /**
-     *  Find the family attribute of a <code>Style</code> <code>Node</code>.
+     * Find the family attribute of a {@code Style Node}.
      *
-     *  @param  node  The <code>Node</code> to check.
+     * @param   node  The {@code Node} to check.
      *
-     *  @return  The family attribute, or null if one does not
-     *           exist.
+     * @return  The family attribute, or {@code null} if one does not exist.
      */
     private String getFamilyName(Node node) {
         NamedNodeMap attributes = node.getAttributes();
@@ -302,4 +279,3 @@ public class StyleCatalog {
         return null;
     }
 }
-

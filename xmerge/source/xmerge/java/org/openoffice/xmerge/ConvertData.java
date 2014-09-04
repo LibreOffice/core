@@ -22,29 +22,29 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- *  <p><code>ConvertData</code> is used as a container for passing
- *  <code>Document</code> objects in and out of the <code>Convert</code>
- *  class.  The <code>ConvertData</code> contains a <code>String</code>
- *  name and a <code>Vector</code> of <code>Document</code> objects.</p>
+ * {@code ConvertData} is used as a container for passing {@code Document}
+ * objects in and out of the {@code Convert} class.
  *
+ * <p>The {@code ConvertData} contains a {@code String} name and a
+ * {@code Vector} of {@code Document} objects.</p>
  */
 public class ConvertData {
 
     /**
-     *  Vector of <code>Document</code> objects.
+     * Vector of {@code Document} objects.
      */
     private ArrayList<Object> v = new ArrayList<Object>();
 
     /**
-     *  Name of the <code>ConvertData</code> object.
+     * Name of the {@code ConvertData} object.
      */
     private String name;
 
-
     /**
-     *  Resets ConvertData.  This empties all <code>Document</code>
-     *  objects from this class.  This allows reuse of a
-     *  <code>ConvertData</code>.
+     * Resets ConvertData.
+     *
+     * <p>This empties all {@code Document} objects from this class. This allows
+     * reuse of a {@code ConvertData}.</p>
      */
     public void reset() {
         name = null;
@@ -52,56 +52,50 @@ public class ConvertData {
     }
 
     /**
-     *  Returns the <code>Document</code> name.
+     * Returns the {@code Document} name.
      *
-     *  @return  The <code>Document</code> name.
+     * @return  The {@code Document} name.
      */
     public String getName() {
         return name;
     }
 
-
     /**
-     *  Sets the <code>Document</code> name.
+     * Sets the {@code Document} name.
      *
-     *  @param  docName  The name of the <code>Document</code>.
+     * @param  docName  The name of the {@code Document}.
      */
     public void setName(String docName) {
         name = docName;
     }
 
-
     /**
-     *  Adds a <code>Document</code> to the vector.
+     * Adds a {@code Document} to the vector.
      *
-     *  @param  doc  The <code>Document</code> to add.
+     * @param  doc  The {@code Document} to add.
      */
     public void addDocument(Document doc) {
         v.add(doc);
     }
 
-
     /**
-     *  Gets an <code>Enumeration</code> to access the <code>Vector</code>
-     *  of <code>Document</code> objects.
+     * Gets an {@code Enumeration} to access the {@code Vector} of
+     * {@code Document} objects.
      *
-     *  @return  The <code>Enumeration</code> to access the
-     *           <code>Vector</code> of <code>Document</code> objects.
+     * @return  The {@code Enumeration} to access the {@code Vector} of
+     *          {@code Document} objects.
      */
     public Iterator<Object> getDocumentEnumeration() {
         Iterator<Object> enumerate = v.iterator();
         return (enumerate);
     }
 
-
     /**
-     *  Gets the number of <code>Document</code> objects currently stored
+     * Gets the number of {@code Document} objects currently stored.
      *
-     *  @return  The number of <code>Document</code> objects currently
-     *           stored.
+     * @return  The number of {@code Document} objects currently stored.
      */
     public int getNumDocuments() {
         return (v.size());
     }
 }
-

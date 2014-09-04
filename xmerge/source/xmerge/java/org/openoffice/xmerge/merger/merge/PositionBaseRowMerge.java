@@ -30,27 +30,25 @@ import org.openoffice.xmerge.merger.diff.CellNodeIterator;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.util.XmlUtil;
 
-
 /**
- *  This is an implementation of the <code>NodeMergeAlgorithm</code>
- *  interface.  It is used to merge two rows using a positional
- *  comparison base method.
+ * This is an implementation of the {@code NodeMergeAlgorithm} interface.
+ *
+ * <p>It is used to merge two rows using a positional comparison base method.
+ * </p>
  */
 public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
 
-    /**  The capabilities of this converter. */
+    /** The capabilities of this converter. */
     private ConverterCapabilities cc_;
 
-
     /**
-     *  Constructor.
+     * Constructor.
      *
-     *  @param  cc  The <code>ConverterCapabilities</code>.
+     * @param  cc  The {@code ConverterCapabilities}.
      */
     public PositionBaseRowMerge(ConverterCapabilities cc) {
         cc_ = cc;
     }
-
 
     public void merge(Node orgRow, Node modRow) {
 
@@ -59,7 +57,6 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
 
         mergeCellSequences(orgCells, modCells);
     }
-
 
     // used to compare the cell 1 by 1
     private void mergeCellSequences(Iterator orgSeq, Iterator modSeq) {
@@ -71,7 +68,6 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
         Object modSeqObject = modSeq.start();
 
         while (orgSeqObject != null) {
-
 
             needMerge = true;
 
@@ -163,9 +159,8 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
         }
     }
 
-
-    private Element splitColRepeatedCell(Element orgCell,
-                                         int splitNum, int orgNum) {
+    private Element splitColRepeatedCell(Element orgCell, int splitNum,
+                                         int orgNum) {
         // NOTE: should we really want to do deep clone?
         // in most the case, it is an empty cell, but the
         // specification didn't forbid any node to use multiple
@@ -195,7 +190,6 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
 
         return splitCell;
     }
-
 
     private void mergeCells(Element orgCell, Element modCell) {
 
@@ -248,4 +242,3 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
         }
     }
 }
-

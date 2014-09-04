@@ -23,7 +23,6 @@ import java.io.IOException;
 import org.w3c.dom.Document;
 import org.w3c.dom.DOMException;
 
-
 public abstract class EmbeddedObject {
     protected String objName;
     protected String objType;
@@ -47,7 +46,6 @@ public abstract class EmbeddedObject {
         hasChanged = true;
     }
 
-
     /**
      * Package private constructor for use when reading an object from a
      * compressed SX? file.
@@ -62,13 +60,12 @@ public abstract class EmbeddedObject {
         zipFile = source;
     }
 
-
     /**
      * Retrieves the name of the embedded object represented by an instance of
      * this class.
      *
      * <b>N.B.</b>The name refers to the name as found in the
-     * <code>META-INF/manifest.xml</code> file.
+     * {@code META-INF/manifest.xml} file.
      *
      * @return  The name of the object.
      */
@@ -76,13 +73,12 @@ public abstract class EmbeddedObject {
         return objName;
     }
 
-
     /**
      * Retrieves the type of the embedded object represented by an instance of
      * this class.
      *
-     * The <code>META-INF/manifest.xml</code> file currently represents the
-     * type of an object using MIME types.
+     * The {@code META-INF/manifest.xml} file currently represents the type of
+     * an object using MIME types.
      */
     public final String getType() {
         return objType;
@@ -92,8 +88,8 @@ public abstract class EmbeddedObject {
      * Package private method for writing the data of the EmbeddedObject to a
      * SX? file.
      *
-     * @param   zip     An <code>OfficeZip</code> instance representing the file
-     *                  the data is to be written to.
+     * @param   zip     An {@code OfficeZip} instance representing the file the
+     *                  data is to be written to.
      */
     abstract void write(OfficeZip zip) throws IOException;
 

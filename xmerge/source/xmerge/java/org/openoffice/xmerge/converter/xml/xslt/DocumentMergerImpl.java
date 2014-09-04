@@ -33,12 +33,9 @@ import org.openoffice.xmerge.merger.merge.DocumentMerge;
 import org.openoffice.xmerge.merger.merge.CharacterBaseParagraphMerge;
 import org.openoffice.xmerge.util.Debug;
 
-
 /**
- *  Xslt implementation of <code>DocumentMerger</code>
- *  for the {@link
- *  org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl
- *  PluginFactoryImpl}.
+ * Xslt implementation of {@code DocumentMerger} for the {@link
+ * org.openoffice.xmerge.converter.xml.xslt.PluginFactoryImpl PluginFactoryImpl}.
  */
 public class DocumentMergerImpl implements DocumentMerger {
 
@@ -81,5 +78,3 @@ public class DocumentMergerImpl implements DocumentMerger {
         docMerge.applyDifference(i1, i2, diffTable);
     }
 }
-
-

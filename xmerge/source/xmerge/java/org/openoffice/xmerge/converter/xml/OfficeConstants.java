@@ -19,9 +19,8 @@
 package org.openoffice.xmerge.converter.xml;
 
 /**
- *  This interface contains constants for StarOffice XML tags,
- *  attributes (StarCalc cell types, etc.).
- *
+ * This interface contains constants for StarOffice XML tags, attributes
+ * (StarCalc cell types, etc.).
  */
 public interface OfficeConstants {
 
@@ -29,30 +28,28 @@ public interface OfficeConstants {
     String TAG_OFFICE_DOCUMENT = "office:document";
 
     /**
-     *  Element tag for <i>office:document-content</i>, this is the root
-     *  tag in content.xml.
+     * Element tag for <i>office:document-content</i>, this is the root tag in
+     * content.xml.
      */
     String TAG_OFFICE_DOCUMENT_CONTENT = "office:document-content";
 
     /**
-     *  Element tag for <i>office:document-settings</i>, this is the root
-     *  tag in content.xml.
+     * Element tag for <i>office:document-settings</i>, this is the root tag in
+     * content.xml.
      */
     String TAG_OFFICE_DOCUMENT_SETTINGS= "office:document-settings";
 
-     /**
-     *  Element tag for <i>office:document-meta</i>, this is the root
-     *  tag in content.xml.
+    /**
+     * Element tag for <i>office:document-meta</i>, this is the root tag in
+     * content.xml.
      */
     String TAG_OFFICE_DOCUMENT_META= "office:document-meta";
 
     /**
-     *  Element tag for <i>office:document-styles</i>, this is the root tag
-     *  in styles.xml.
+     * Element tag for <i>office:document-styles</i>, this is the root tag in
+     * styles.xml.
      */
     String TAG_OFFICE_DOCUMENT_STYLES = "office:document-styles";
-
-
 
     /** Element tag for <i>office:styles</i>. */
     String TAG_OFFICE_STYLES = "office:styles";
@@ -82,20 +79,20 @@ public interface OfficeConstants {
     String ATTRIBUTE_STYLE_NAME = "style:name";
 
     /**
-     *  Attribute tag for <i>style:font-pitch</i> of element
-     *  <i>style:font-pitch</i>.
+     * Attribute tag for <i>style:font-pitch</i> of element
+     * <i>style:font-pitch</i>.
      */
     String ATTRIBUTE_STYLE_FONT_PITCH = "style:font-pitch";
 
     /**
-     *  Attribute tag for <i>fo:font-family</i> of element
-     *  <i>fo:font-family</i>.
+     * Attribute tag for <i>fo:font-family</i> of element
+     * <i>fo:font-family</i>.
      */
     String ATTRIBUTE_FO_FONT_FAMILY = "fo:font-family";
 
     /**
-     *  Attribute tag for <i>fo:font-family</i> of element
-     *  <i>fo:font-family</i>.
+     * Attribute tag for <i>fo:font-family</i> of element
+     * <i>fo:font-family</i>.
      */
     String ATTRIBUTE_FO_FONT_FAMILY_GENERIC = "fo:font-family-generic";
 
@@ -147,27 +144,24 @@ public interface OfficeConstants {
     /** Element tag for <i>table:named-expression</i>. */
     String TAG_TABLE_NAMED_EXPRESSION= "table:named-expression";
 
-    /**
-     *  Attribute tag for <i>table:name</i> of element
-     *  <i>table:table</i>.
-     */
+    /** Attribute tag for <i>table:name</i> of element <i>table:table</i>. */
     String ATTRIBUTE_TABLE_NAME = "table:name";
 
     /**
-     *  Attribute tag for <i>table:expression</i> of element
-     *  <i>table:named-range</i>.
+     * Attribute tag for <i>table:expression</i> of element
+     * <i>table:named-range</i>.
      */
     String ATTRIBUTE_TABLE_EXPRESSION = "table:expression";
 
     /**
-     *  Attribute tag for <i>table:base-cell-address</i> of element
-     *  <i>table:named-range</i>.
+     * Attribute tag for <i>table:base-cell-address</i> of element
+     * <i>table:named-range</i>.
      */
     String ATTRIBUTE_TABLE_BASE_CELL_ADDRESS = "table:base-cell-address";
 
     /**
-     *  Attribute tag for <i>table:cell-range-address</i> of element
-     *  <i>table:named-range</i>.
+     * Attribute tag for <i>table:cell-range-address</i> of element
+     * <i>table:named-range</i>.
      */
     String ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS = "table:cell-range-address";
 
@@ -177,9 +171,9 @@ public interface OfficeConstants {
     /** Element tag for <i>table:table-column</i>. */
     String TAG_TABLE_COLUMN = "table:table-column";
 
-    /**
-    *  Attribute tag for <i>table:default-cell-style-name</i>
-    *  of element <i>table:table-column</i>.
+   /**
+    * Attribute tag for <i>table:default-cell-style-name</i> of element
+    * <i>table:table-column</i>.
     */
     String ATTRIBUTE_DEFAULT_CELL_STYLE = "table:default-cell-style-name";
 
@@ -190,69 +184,65 @@ public interface OfficeConstants {
     String TAG_TABLE_CELL = "table:table-cell";
 
     /**
-     *  Attribute tag for <i>table:value-type</i> of element
-     *  <i>table:table-cell</i>.
+     * Attribute tag for <i>table:value-type</i> of element
+     * <i>table:table-cell</i>.
      */
     String ATTRIBUTE_TABLE_VALUE_TYPE = "table:value-type";
 
     /**
-     *  Attribute tag for <i>table:number-columns-repeated</i>
-     *  of element <i>table:table-cell</i>.
+     * Attribute tag for <i>table:number-columns-repeated</i> of element
+     * <i>table:table-cell</i>.
      */
     String ATTRIBUTE_TABLE_NUM_COLUMNS_REPEATED =
         "table:number-columns-repeated";
 
     /**
-     *  Attribute tag for <i>table:number-rows-repeated</i>
-     *  of element <i>table:table-row</i>.
+     * Attribute tag for <i>table:number-rows-repeated</i> of element
+     * <i>table:table-row</i>.
      */
-    String ATTRIBUTE_TABLE_NUM_ROWS_REPEATED =
-        "table:number-rows-repeated";
+    String ATTRIBUTE_TABLE_NUM_ROWS_REPEATED = "table:number-rows-repeated";
 
     /**
-     *  Attribute tag for <i>table:formula</i> of element
-     *  <i>table:table-cell</i>.
+     * Attribute tag for <i>table:formula</i> of element
+     * <i>table:table-cell</i>.
      */
     String ATTRIBUTE_TABLE_FORMULA = "table:formula";
 
     /**
-     *  Attribute tag for <i>table:value</i> of element
-     *  <i>table:table-cell</i>.
+     * Attribute tag for <i>table:value</i> of element <i>table:table-cell</i>.
      */
     String ATTRIBUTE_TABLE_VALUE = "table:value";
 
     /**
-     *  Attribute tag for <i>table:date-value</i> of element
-     *  <i>table:table-cell</i>.
+     * Attribute tag for <i>table:date-value</i> of element
+     * <i>table:table-cell</i>.
      */
     String ATTRIBUTE_TABLE_DATE_VALUE = "table:date-value";
 
     /**
-     *  Attribute tag for <i>table:time-value</i> of element
-     *  <i>table:table-cell</i>.
+     * Attribute tag for <i>table:time-value</i> of element
+     * <i>table:table-cell</i>.
      */
     String ATTRIBUTE_TABLE_TIME_VALUE = "table:time-value";
 
     /**
-     *  Attribute tag for <i>table:string-value</i> of element
-     *  <i>table:table-cell</i>.
+     * Attribute tag for <i>table:string-value</i> of element
+     * <i>table:table-cell</i>.
      */
-    String ATTRIBUTE_TABLE_STRING_VALUE =
-        "table:string-value";
+    String ATTRIBUTE_TABLE_STRING_VALUE = "table:string-value";
 
     /**
-     *  Attribute tag for <i>table:time-boolean-value</i> of element
-     *  <i>table:table-cell</i>.
+     * Attribute tag for <i>table:time-boolean-value</i> of element
+     * <i>table:table-cell</i>.
      */
-    String ATTRIBUTE_TABLE_BOOLEAN_VALUE =
-        "table:boolean-value";
+    String ATTRIBUTE_TABLE_BOOLEAN_VALUE = "table:boolean-value";
 
     /** Attribute tag for <i>table:style-name</i> of table elements. */
     String ATTRIBUTE_TABLE_STYLE_NAME = "table:style-name";
 
     /**
-     *  Attribute tag for <i>table:currency</i> of element
-     *  <i>table:table-cell</i>.
+     * Attribute tag for <i>table:currency</i> of element
+     * <i>table:table-cell</i>.
      */
     String ATTRIBUTE_TABLE_CURRENCY = "table:currency";
 
@@ -325,17 +315,14 @@ public interface OfficeConstants {
     String TAG_CONFIG_ITEM_MAP_ENTRY= "config:config-item-map-entry";
 
     /**
-     *  Attribute tag for <i>config:name</i> of element
-     *  <i>config:config-item</i>.
+     * Attribute tag for <i>config:name</i> of element <i>config:config-item</i>.
      */
     String ATTRIBUTE_CONFIG_NAME = "config:name";
 
     /**
-     *  Attribute tag for <i>config:type</i> of element
-     *  <i>config:config-item</i>.
+     * Attribute tag for <i>config:type</i> of element <i>config:config-item</i>.
      */
     String ATTRIBUTE_CONFIG_TYPE = "config:type";
-
 
     /** StarWriter XML MIME type. */
     String SXW_MIME_TYPE = "application/vnd.sun.xml.writer";

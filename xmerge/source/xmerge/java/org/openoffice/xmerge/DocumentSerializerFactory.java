@@ -19,36 +19,32 @@
 package org.openoffice.xmerge;
 
 /**
- *  <p>A <code>DocumentSerializer</code> object is used to convert
- *  from the &quot;Office&quot; <code>Document</code> format to the
- *  &quot;Device&quot; <code>Document</code> format.</p>
+ * A {@code DocumentSerializer} object is used to convert from the
+ * &quot;Office&quot; {@code Document} format to the &quot;Device&quot;
+ * {@code Document} format.
  *
- *  <p>All plug-in implementations of the <code>PluginFactory</code>
- *  interface that also support serialization must also
- *  implement this interface.</p>
+ * <p>All plug-in implementations of the {@code PluginFactory} interface that
+ * also support serialization must also implement this interface.</p>
  *
- *  @see  PluginFactory
- *  @see  DocumentSerializer
+ * @see  PluginFactory
+ * @see  DocumentSerializer
  */
 public interface DocumentSerializerFactory {
 
     /**
-     *  <p>The <code>DocumentSerializer</code> is used to convert
-     *  from the &quot;Office&quot; <code>Document</code> format
-     *  to the &quot;Device&quot; <code>Document</code> format.</p>
+     * The {@code DocumentSerializer} is used to convert from the
+     * &quot;Office&quot; {@code Document} format to the &quot;Device&quot;
+     * {@code Document} format.
      *
-     *  The <code>ConvertData</code> object is passed along to the
-     *  created <code>DocumentSerializer</code> via its constructor.
-     *  The <code>ConvertData</code> is read and converted when the
-     *  the <code>DocumentSerializer</code> object's
-     *  <code>serialize</code> method is called.
+     * <p>The {@code ConvertData} object is passed along to the created
+     * {@code DocumentSerializer} via its constructor.  The {@code ConvertData}
+     * is read and converted when the the {@code DocumentSerializer} object's
+     * {@code serialize} method is called.</p>
      *
-     *  @param  doc  <code>Document</code> object that the created
-     *               <code>DocumentSerializer</code> object uses
-     *               as input.
+     * @param   doc  {@code Document} object that the created
+     *               {@code DocumentSerializer} object uses as input.
      *
-     *  @return  A <code>DocumentSerializer</code> object.
+     * @return  A <code>DocumentSerializer</code> object.
      */
     DocumentSerializer createDocumentSerializer(Document doc);
 }
-
