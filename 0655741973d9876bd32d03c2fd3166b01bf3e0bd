@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_dd2a7f7e",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/converter/xml/sxc/SxcDocumentDeserializer.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-04T07:30:00Z",
+      "side": 1,
+      "message": "this change is wrong",
+      "revId": "0655741973d9876bd32d03c2fd3166b01bf3e0bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_bd1fc35a",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/converter/xml/sxc/SxcDocumentDeserializer.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 723,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-04T07:30:00Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "0655741973d9876bd32d03c2fd3166b01bf3e0bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_7d3a4bcf",
+        "filename": "xmerge/source/xmerge/java/org/openoffice/xmerge/test/ConverterInfoList.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-04T07:30:00Z",
+      "side": 1,
+      "message": "should be \"{@code Iterator} of {@code String}\"",
+      "revId": "0655741973d9876bd32d03c2fd3166b01bf3e0bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
