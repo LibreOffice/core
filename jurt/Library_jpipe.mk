@@ -21,7 +21,15 @@ $(eval $(call gb_Library_add_cobjects,jpipe,\
     jurt/source/pipe/wrapper/wrapper \
 ))
 
-else ifeq ($(COM_GCC_IS_CLANG)$(filter -fsanitize=%,%(gb_CC)),)
+else
+
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(gb_CC)),)
+Library_jpipe__staticsalhack = TRUE
+endif
+endif
+
+ifeq ($(Library_jpipe__staticsalhack),)
 
 $(eval $(call gb_Library_use_libraries,jpipe,\
     sal \
@@ -74,6 +82,7 @@ $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,jpipe)): \
 $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktarget,jpipe)): \
     gb_CXX := $(filter-out -fsanitize=%,$(gb_CXX))
 
+endif
 endif
 
 # vim:set noet sw=4 ts=4:
