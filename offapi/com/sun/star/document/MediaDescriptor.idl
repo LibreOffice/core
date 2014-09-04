@@ -460,9 +460,8 @@ service MediaDescriptor
     /** name of the template instead of the URL
 
         <p>
-        The logical name of a template to load. Together with the MediaDescriptor::TemplateRegion
-        property it can be used instead of the URL of the template. Use always in conjunction with
-        MediaDescriptor::TemplateRegionName.
+        See MediaDescriptor::TemplateName. The template region names are the folder names you see
+        in the templates dialog.
         </p>
      */
     [optional,property] string TemplateRegionName;
