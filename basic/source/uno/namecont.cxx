@@ -1803,7 +1803,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                                                bool bComplete )
 {
     const Sequence< OUString > aNames = maNameContainer.getElementNames();
-    sal_Int32 nNameCount = aNames.getLength();
+    const sal_Int32 nNameCount = aNames.getLength();
     const OUString* pName = aNames.getConstArray();
     const OUString* pNamesEnd = aNames.getConstArray() + nNameCount;
 
