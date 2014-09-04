@@ -1744,9 +1744,7 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
         if( nFlags & SCA_TAB_3D )
         {
             OUString aTabName, aDocName;
-            OUString aTmp;
-            pDoc->GetName(nTab, aTmp);
-            aTabName = aTmp; // TODO: remove use of String here.
+            pDoc->GetName(nTab, aTabName);
             // External Reference, same as in ScCompiler::MakeTabStr()
             if( aTabName[0] == '\'' )
             {   // "'Doc'#Tab"
