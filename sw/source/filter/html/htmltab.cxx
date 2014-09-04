@@ -380,89 +380,83 @@ class HTMLTable
     sal_uInt16 nCols;                   // number of columns
     sal_uInt16 nFilledCols;             // number of filled columns
 
-    sal_uInt16 nCurRow;                 // aktuelle Zeile
-    sal_uInt16 nCurCol;                 // aktuelle Spalte
+    sal_uInt16 nCurRow;                 // current Row
+    sal_uInt16 nCurCol;                 // current Column
 
-    sal_uInt16 nLeftMargin;             // Abstand zum linken Rand (aus Absatz)
-    sal_uInt16 nRightMargin;            // Abstand zum rechten Rand (aus Absatz)
+    sal_uInt16 nLeftMargin;             // Space to the left margin (from passage)
+    sal_uInt16 nRightMargin;            // Space to the right margin (from passage)
 
-    sal_uInt16 nCellPadding;            // Abstand Umrandung zum Text
-    sal_uInt16 nCellSpacing;            // Abstand zwischen zwei Zellen
+    sal_uInt16 nCellPadding;            // Space from border to Text
+    sal_uInt16 nCellSpacing;            // Space between two cells
     sal_uInt16 nHSpace;
     sal_uInt16 nVSpace;
 
-    sal_uInt16 nBoxes;                  // Wievele Boxen enthaelt die Tabelle
+    sal_uInt16 nBoxes;                  // number of boxes in the table
 
-    const SwStartNode *pPrevStNd;   // der Table-Node oder der Start-Node
-                                    // der vorhergehenden Section
-    const SwTable *pSwTable;        // die SW-Tabelle (nur auf dem Top-Level)
-    SwTableBox *pBox1;              // die TableBox, die beim Erstellen
-                                    // der Top-Level-Tabelle angelegt wird
-
-    SwTableBoxFmt *pBoxFmt;         // das frame::Frame-Format einer SwTableBox
-    SwTableLineFmt *pLineFmt;       // das frame::Frame-Format einer SwTableLine
+    const SwStartNode *pPrevStNd;   // the Table-Node or the Start-Node of the section before
+    const SwTable *pSwTable;        // SW-Table (only on Top-Level)
+    SwTableBox *pBox1;              // TableBox, generated when the Top-Level-Table was build
+    SwTableBoxFmt *pBoxFmt;         // frame::Frame-Format from SwTableBox
+    SwTableLineFmt *pLineFmt;       // frame::Frame-Format from SwTableLine
     SwTableLineFmt *pLineFrmFmtNoHeight;
-    SvxBrushItem *pBGBrush;         // Hintergrund der Tabelle
-    SvxBrushItem *pInhBGBrush;      // "geerbter" Hintergrund der Tabelle
-    const SwStartNode *pCaptionStartNode;   // Start-Node der Tabellen-Ueberschrift
-
-    SvxBorderLine aTopBorderLine;   // die Linie fuer die Umrandung
-    SvxBorderLine aBottomBorderLine;// die Linie fuer die Umrandung
-    SvxBorderLine aLeftBorderLine;  // die Linie fuer die Umrandung
-    SvxBorderLine aRightBorderLine; // die Linie fuer die Umrandung
-    SvxBorderLine aBorderLine;      // die Linie fuer die Umrandung
-    SvxBorderLine aInhLeftBorderLine;   // die Linie fuer die Umrandung
-    SvxBorderLine aInhRightBorderLine;  // die Linie fuer die Umrandung
-    bool bTopBorder;                // besitzt die Tabelle oben eine Linie
-    bool bRightBorder;              // besitzt die Tabelle rechts eine Linie
-    bool bTopAlwd;                  // duerfen die Raender gesetzt werden?
+    SvxBrushItem *pBGBrush;         // background of the table
+    SvxBrushItem *pInhBGBrush;      // "inherited" background of the table
+    const SwStartNode *pCaptionStartNode;   // Start-Node of the table-caption
+    //lines for the border
+    SvxBorderLine aTopBorderLine;
+    SvxBorderLine aBottomBorderLine;
+    SvxBorderLine aLeftBorderLine;
+    SvxBorderLine aRightBorderLine;
+    SvxBorderLine aBorderLine;
+    SvxBorderLine aInhLeftBorderLine;
+    SvxBorderLine aInhRightBorderLine;
+    bool bTopBorder;                // is there a line on the top of the table
+    bool bRightBorder;              // is there a line on the top right of the table
+    bool bTopAlwd;                  // is it allowed to set the border?
     bool bRightAlwd;
-    bool bFillerTopBorder;          // bekommt eine linke/rechter Filler-
-    bool bFillerBottomBorder;       // Zelle eine obere/untere Umrandung?
+    bool bFillerTopBorder;          // gets the left/right filler-cell a border on the
+    bool bFillerBottomBorder;       // top or in the bottom
     bool bInhLeftBorder;
     bool bInhRightBorder;
-    bool bBordersSet;               // die Umrandung wurde bereits gesetzt
+    bool bBordersSet;               // the border is setted already
     bool bForceFrame;
-    bool bTableAdjustOfTag;         // stammt nTableAdjust aus <TABLE>?
+    bool bTableAdjustOfTag;         // comes nTableAdjust from <TABLE>?
     sal_uInt32 nHeadlineRepeat;         // repeating rows
     bool bIsParentHead;
     bool bHasParentSection;
     bool bHasToFly;
     bool bFixedCols;
-    bool bColSpec;                  // Gab es COL(GROUP)-Elemente?
-    bool bPrcWidth;                 // Breite ist eine %-Angabe
+    bool bColSpec;                  // where there COL(GROUP)-elements?
+    bool bPrcWidth;                 // width is declarated in %
 
-    SwHTMLParser *pParser;          // der aktuelle Parser
-    HTMLTable *pTopTable;           // die Tabelle auf dem Top-Level
+    SwHTMLParser *pParser;          // the current parser
+    HTMLTable *pTopTable;           // the table on the Top-Level
     HTMLTableCnts *pParentContents;
 
-    _HTMLTableContext *pContext;    // der Kontext der Tabelle
+    _HTMLTableContext *pContext;    // the context of the table
 
     SwHTMLTableLayout *pLayoutInfo;
 
-    // die folgenden Parameter stammen aus der dem <TABLE>-Tag
-    sal_uInt16 nWidth;                  // die Breite der Tabelle
-    sal_uInt16 nHeight;                 // absolute Hoehe der Tabelle
-    SvxAdjust eTableAdjust;         // drawing::Alignment der Tabelle
-    sal_Int16 eVertOri;         // Default vertikale Ausr. der Zellen
-    sal_uInt16 nBorder;                 // Breite der auesseren Umrandung
-    HTMLTableFrame eFrame;          // Rahmen um die Tabelle
-    HTMLTableRules eRules;          // Ramhen in der Tabelle
-    bool bTopCaption;               // Ueberschrift ueber der Tabelle
+    // the following parameters are from the <TABLE>-Tag
+    sal_uInt16 nWidth;                  // width of the table
+    sal_uInt16 nHeight;                 // absolute height of the table
+    SvxAdjust eTableAdjust;         // drawing::Alignment of the table
+    sal_Int16 eVertOri;         // Default vertical direction of the cells
+    sal_uInt16 nBorder;                 // width of the external border
+    HTMLTableFrame eFrame;          // frame around the table
+    HTMLTableRules eRules;          // frame in the table
+    bool bTopCaption;               // Caption of the table
 
     void InitCtor( const HTMLTableOptions *pOptions );
 
-    // Korigieren des Row-Spans fuer alle Zellen oberhalb der
-    // angegeben Zelle und der Zelle selbst, fuer die den anegebenen
-    // Inhalt besitzen. Die angegeben Zelle bekommt den Row-Span 1
+    // Correction of the Row-Spans for all cells above the chosen cell and the cell itself for the indicated content. The chosen cell gets the Row-Span 1
     void FixRowSpan( sal_uInt16 nRow, sal_uInt16 nCol, const HTMLTableCnts *pCnts );
 
-    // Schuetzen der angegeben Zelle und den darunterliegenden
+    // Protects the chosen cell and the cells among
     void ProtectRowSpan( sal_uInt16 nRow, sal_uInt16 nCol, sal_uInt16 nRowSpan );
 
-    // Suchen des SwStartNodes der logisch vorhergehenden Box
-    // bei nRow==nCell==USHRT_MAX wird der allerletzte Start-Node
-    // der Tabelle zurueckgegeben
+    // Looking for the SwStartNodes of the box ahead
+    // If nRow==nCell==USHRT_MAX, return the last Start-Node of the table.
     const SwStartNode* GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 nCell ) const;
 
     sal_uInt16 GetTopCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan,
@@ -470,47 +464,47 @@ class HTMLTable
     sal_uInt16 GetBottomCellSpace( sal_uInt16 nRow, sal_uInt16 nRowSpan,
                                bool bSwBorders=true ) const;
 
-    // Anpassen des frame::Frame-Formates einer Box
+    // Conforming of the frame::Frame-Format of the box
     void FixFrameFmt( SwTableBox *pBox, sal_uInt16 nRow, sal_uInt16 nCol,
                       sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                       bool bFirstPara=true, bool bLastPara=true ) const;
     void FixFillerFrameFmt( SwTableBox *pBox, bool bRight ) const;
 
-    // den Inhalt (Lines/Boxen) eine Tabelle erstellen
+    // Create a table with the content (lines/boxes)
     void _MakeTable( SwTableBox *pUpper=0 );
 
-    // Anlegen einer neuen SwTableBox, die einen SwStartNode enthaelt
+    // Gernerate a new SwTableBox, which contains a SwStartNode
     SwTableBox *NewTableBox( const SwStartNode *pStNd,
                              SwTableLine *pUpper ) const;
 
-    // Erstellen einer SwTableLine aus den Zellen des Rechtecks
-    // (nTopRow/nLeftCol) inklusive bis (nBottomRow/nRightRow) exklusive
+    // Generate a SwTableLine from the cells of the rectangle
+    // (nTopRow/nLeftCol) inclusive to (nBottomRow/nRightRow) exclusive
     SwTableLine *MakeTableLine( SwTableBox *pUpper,
                                 sal_uInt16 nTopRow, sal_uInt16 nLeftCol,
                                 sal_uInt16 nBottomRow, sal_uInt16 nRightCol );
 
-    // Erstellen einer SwTableBox aus dem Inhalt einer Zelle
+    // Generate a SwTableBox from the content of the cell
     SwTableBox *MakeTableBox( SwTableLine *pUpper,
                               HTMLTableCnts *pCnts,
                               sal_uInt16 nTopRow, sal_uInt16 nLeftCol,
                               sal_uInt16 nBootomRow, sal_uInt16 nRightCol );
 
-    // der Autolayout-Algorithmus
+    // Autolayout-Algorithm
 
-    // Setzen der Umrandung anhand der Vorgaben der Parent-Tabelle
+    // Setting the border with the help of guidelines of the Parent-Table
     void InheritBorders( const HTMLTable *pParent,
                          sal_uInt16 nRow, sal_uInt16 nCol,
                          sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                          bool bFirstPara, bool bLastPara );
 
-    // Linke und rechte Umrandung der umgebenen Tabelle erben
+    // Inherit the left and the right border of the surrounding table
     void InheritVertBorders( const HTMLTable *pParent,
                              sal_uInt16 nCol, sal_uInt16 nColSpan );
 
-    // Setzen der Umrandung anhand der Benutzervorgaben
+    // Set the border with the help of the information from the user
     void SetBorders();
 
-    // wurde die Umrandung der Tabelle schon gesetzt
+    // is the border already setted?
     bool BordersSet() const { return bBordersSet; }
 
     const SvxBrushItem *GetBGBrush() const { return pBGBrush; }
@@ -530,10 +524,10 @@ public:
 
     ~HTMLTable();
 
-    // Ermitteln einer Zelle
+    // Identifying of a cell
     inline HTMLTableCell *GetCell( sal_uInt16 nRow, sal_uInt16 nCell ) const;
 
-    // Ueberschrift setzen/ermitteln
+    // set/determine caption
     inline void SetCaption( const SwStartNode *pStNd, bool bTop );
     const SwStartNode *GetCaptionStartNode() const { return pCaptionStartNode; }
     bool IsTopCaption() const { return bTopCaption; }
@@ -546,11 +540,11 @@ public:
     sal_uInt16 GetHSpace() const { return nHSpace; }
     sal_uInt16 GetVSpace() const { return nVSpace; }
 
-    // von Zeilen oder Spalten geerbtes drawing::Alignment holen
+    // get inherited drawing::Alignment of rows and column
     SvxAdjust GetInheritedAdjust() const;
     sal_Int16 GetInheritedVertOri() const;
 
-    // Einfuegen einer Zelle an der aktuellen Position
+    // Insert a cell on the current position
     void InsertCell( HTMLTableCnts *pCnts, sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                      sal_uInt16 nWidth, bool bRelWidth, sal_uInt16 nHeight,
                      sal_Int16 eVertOri, SvxBrushItem *pBGBrush,
@@ -558,19 +552,19 @@ public:
                      bool bHasNumFmt, sal_uInt32 nNumFmt,
                      bool bHasValue, double nValue, bool bNoWrap );
 
-    // Start/Ende einer neuen Zeile bekanntgeben
+    // announce the start/end of a new row
     void OpenRow( SvxAdjust eAdjust, sal_Int16 eVertOri,
                   SvxBrushItem *pBGBrush );
     void CloseRow( bool bEmpty );
 
-    // Ende einer neuen Section bekanntgeben
+    // announce the end of a new section
     inline void CloseSection( bool bHead );
 
-    // Ende einer Spalten-Gruppe bekanntgeben
+    // announce the end of a column-group
     inline void CloseColGroup( sal_uInt16 nSpan, sal_uInt16 nWidth, bool bRelWidth,
                                SvxAdjust eAdjust, sal_Int16 eVertOri );
 
-    // Einfuegen einer Spalte
+    // insert a new column
     void InsertCol( sal_uInt16 nSpan, sal_uInt16 nWidth, bool bRelWidth,
                     SvxAdjust eAdjust, sal_Int16 eVertOri );
 
