@@ -355,11 +355,11 @@ public class UnoPkgContainer extends ParcelContainer
         LogUtils.DEBUG("processUnoPackage - script library package");
         String parentUrl = uri;
 
-        if ( uri.indexOf( "%2Funo_packages%2F" ) > -1 ||
-             uri.indexOf( "/uno_packages/" ) > -1 ||
-             uri.indexOf("$UNO_USER_PACKAGES_CACHE/") > -1 ||
-             uri.indexOf("$UNO_SHARED_PACKAGES_CACHE/") > -1 ||
-             uri.indexOf("$BUNDLED_EXTENSIONS/") > -1 )
+        if ( uri.contains("%2Funo_packages%2F") ||
+             uri.contains("/uno_packages/") ||
+             uri.contains("$UNO_USER_PACKAGES_CACHE/") ||
+             uri.contains("$UNO_SHARED_PACKAGES_CACHE/") ||
+             uri.contains("$BUNDLED_EXTENSIONS/") )
         {
             //its in a bundle need to determine the uno-package file its in
             LogUtils.DEBUG("processUnoPackage - is part of a uno bundle");

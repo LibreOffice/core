@@ -121,13 +121,13 @@ public class ScriptMetaData extends ScriptEntry {
     {
         String result = "Unknown";
 
-        if ( url.indexOf(UNO_USER_PACKAGES1) > -1 ||
-             url.indexOf(UNO_USER_PACKAGES2) > -1 )
+        if ( url.contains(UNO_USER_PACKAGES1) ||
+             url.contains(UNO_USER_PACKAGES2) )
         {
             result = PathUtils.make_url( "user:uno_packages", pkgname );
         }
-        else if ( url.indexOf(UNO_SHARED_PACKAGES1) > -1 ||
-                  url.indexOf(UNO_SHARED_PACKAGES2) > -1 )
+        else if ( url.contains(UNO_SHARED_PACKAGES1) ||
+                  url.contains(UNO_SHARED_PACKAGES2) )
         {
             result = PathUtils.make_url( "share:uno_packages", pkgname );
         }
@@ -151,8 +151,8 @@ public class ScriptMetaData extends ScriptEntry {
         String placeHolder = "Unknown";
         String pathToParcel = parent.getPathToParcel();
 
-        if ( pathToParcel.indexOf(UNO_USER_PACKAGES1) > -1 ||
-             pathToParcel.indexOf(UNO_USER_PACKAGES2) > -1 )
+        if ( pathToParcel.contains(UNO_USER_PACKAGES1) ||
+             pathToParcel.contains(UNO_USER_PACKAGES2) )
         {
             // it's a package
             placeHolder = "user:uno_packages";
@@ -162,8 +162,8 @@ public class ScriptMetaData extends ScriptEntry {
                 placeHolder = PathUtils.make_url( placeHolder, unoPkg );
             }
         }
-        else if ( pathToParcel.indexOf(UNO_SHARED_PACKAGES1) > -1 ||
-                  pathToParcel.indexOf(UNO_SHARED_PACKAGES2) > -1 )
+        else if ( pathToParcel.contains(UNO_SHARED_PACKAGES1) ||
+                  pathToParcel.contains(UNO_SHARED_PACKAGES2) )
         {
             //its a package
             placeHolder = "share:uno_packages";
