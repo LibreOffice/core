@@ -89,6 +89,7 @@ void ClientModify(SwClient* pClient, const SfxPoolItem *pOld, const SfxPoolItem 
 
 namespace sw {
 
+    /// Smart pointer class ensuring that the pointed object is deleted with a locked SolarMutex.
     template<typename T> class UnoImplPtr
         : private ::boost::noncopyable
     {
