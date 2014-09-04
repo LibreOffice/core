@@ -191,7 +191,7 @@ DECLARE_OOXMLEXPORT_TEST(testDmlRectangleRelsize, "dml-rectangle-relsize.docx")
     // This was around 19560, as we did not read wp14:pctHeight for
     // drawinglayer shapes and the fallback data was invalid.
     OString aMessage("Height is only " + OString::number(getShape(1)->getSize().Height));
-    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), getShape(1)->getSize().Height >= 20973);
+    CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), getShape(1)->getSize().Height >= 20967);
 
     // This was around 0: relative size of 0% was imported as 0, not "fall back to absolute size".
     CPPUNIT_ASSERT(getShape(2)->getSize().Height > 300);
