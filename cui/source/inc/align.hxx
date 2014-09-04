@@ -39,13 +39,13 @@
 #include <svx/orienthelper.hxx>
 #include <vcl/field.hxx>
 #include <vcl/button.hxx>
+#include <vcl/field.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svtools/valueset.hxx>
 #include <svx/dialcontrol.hxx>
-#include <svx/wrapfield.hxx>
 #include <svx/frmdirlbox.hxx>
 
 namespace svx {

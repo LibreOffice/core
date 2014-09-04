@@ -690,7 +690,19 @@ public:
     void                    SetExtFormat( ExtTimeFieldFormat eFormat );
 };
 
+/** A numeric spin field that wraps around the value on limits.
+    @descr  Note: Use type "NumericField" in resources. */
+class VCL_DLLPUBLIC WrapField : public NumericField
+{
+public:
+    explicit            WrapField( Window* pParent, WinBits nBits );
 
+protected:
+    /** Up event with wrap-around functionality. */
+    virtual void        Up() SAL_OVERRIDE;
+    /** Down event with wrap-around functionality. */
+    virtual void        Down() SAL_OVERRIDE;
+};
 
 // - PatternBox -
 

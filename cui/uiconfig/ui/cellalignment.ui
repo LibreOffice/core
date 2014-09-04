@@ -79,7 +79,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-WrapField" id="spinDegrees">
+                      <object class="VclWrapField" id="spinDegrees">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">•</property>

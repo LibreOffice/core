@@ -387,7 +387,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="svxlo-WrapField" id="NF_LABEL_DEGREES">
+                      <object class="VclWrapField" id="NF_LABEL_DEGREES">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>

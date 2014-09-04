@@ -43,7 +43,7 @@ private:
     CheckBox*         m_pCB_Clockwise;
     VclFrame*         m_pFL_StartingAngle;
     svx::DialControl* m_pAngleDial;
-    NumericField*     m_pNF_StartingAngle;
+    WrapField*        m_pNF_StartingAngle;
     VclFrame*         m_pFL_PlotOptions;
     CheckBox*         m_pCB_IncludeHiddenCells;
 };
