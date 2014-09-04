@@ -38,7 +38,14 @@ endif
 else ifneq (,$(filter ANDROID-AARCH64 LINUX-AARCH64,$(OS)-$(CPUNAME)))
 
 bridges_SELECTED_BRIDGE := gcc3_linux_aarch64
-bridge_exception_objects := abi callvirtualfunction cpp2uno uno2cpp
+bridge_exception_objects := abi callvirtualfunction uno2cpp
+
+$(eval $(call gb_Library_add_cxxobjects,$(gb_CPPU_ENV)_uno, \
+    bridges/source/cpp_uno/$(bridges_SELECTED_BRIDGE)/cpp2uno, \
+    $(subst -fstack-protector-strong,-fstack-protector, \
+        $(gb_LinkTarget_EXCEPTIONFLAGS) \
+        $(call gb_LinkTarget__get_cxxflags,$(gb_CPPU_ENV)_uno)) \
+))
 
 else ifeq ($(OS)-$(CPUNAME),LINUX-AXP)
 
