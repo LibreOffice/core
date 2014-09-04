@@ -22,7 +22,7 @@
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/PropertyValues.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-
+#include <com/sun/star/beans/PropertyVetoException,idl>
 #include <com/sun/star/beans/UnknownPropertyException.idl>
 #include <com/sun/star/text/XTextRange.idl>
 #include <com/sun/star/text/XTextContent.idl>
@@ -57,7 +57,8 @@ interface XTextConvert : com::sun::star::uno::XInterface
                         [in] com::sun::star::text::XTextRange End,
                         [in] com::sun::star::beans::PropertyValues FrameProperties )
                         raises( com::sun::star::lang::IllegalArgumentException,
-                                       com::sun::star::beans::UnknownPropertyException );
+                                com::sun::star::beans::UnknownPropertyException,
+                                com::sun::star::beans::PropertyVetoException );
 
         /** converts the paragraphs marked in TableRanges into a table.
 

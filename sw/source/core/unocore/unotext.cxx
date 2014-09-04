@@ -1525,7 +1525,7 @@ SwXText::convertToTextFrame(
     const uno::Reference< text::XTextRange >& xEnd,
     const uno::Sequence< beans::PropertyValue >& rFrameProperties)
     throw (lang::IllegalArgumentException, beans::UnknownPropertyException,
-           uno::RuntimeException, std::exception)
+           beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
