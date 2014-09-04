@@ -1727,6 +1727,23 @@ void MetricField::CustomConvert()
     maCustomConvertLink.Call( this );
 }
 
+WrapField::WrapField( Window* pParent, WinBits nBits ) :
+    NumericField( pParent, nBits )
+{
+}
+
+void WrapField::Up()
+{
+    SetValue( ((GetValue() + GetSpinSize() - GetMin()) % (GetMax() + 1)) + GetMin() );
+    GetUpHdl().Call( this );
+}
+
+void WrapField::Down()
+{
+    SetValue( ((GetValue() - GetSpinSize() + GetMax() + 1 - GetMin()) % (GetMax() + 1)) + GetMin() );
+    GetDownHdl().Call( this );
+}
+
 MetricBox::MetricBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {

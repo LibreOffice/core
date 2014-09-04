@@ -22,11 +22,11 @@
 #define NUMBER_SEPARATORS 4
 
 #include <vcl/button.hxx>
+#include <vcl/field.hxx>
 #include <vcl/layout.hxx>
 #include <svl/itemset.hxx>
 #include "TextDirectionListBox.hxx"
 #include <svx/dialcontrol.hxx>
-#include <svx/wrapfield.hxx>
 #include <sfx2/tabdlg.hxx>
 
 class SvNumberFormatter;
@@ -64,7 +64,7 @@ private:
     VclHBox*             m_pBxOrientation;
     svx::DialControl*    m_pDC_Dial;
     FixedText*           m_pFT_Dial;
-    svx::WrapField*      m_pNF_Degrees;
+    WrapField*           m_pNF_Degrees;
 
     VclHBox*             m_pBxTextDirection;
     TextDirectionListBox*    m_pLB_TextDirection;
