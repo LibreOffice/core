@@ -145,14 +145,20 @@ void BinComplexRef2d::readBiff8Data( BiffInputStream& rStrm, bool bRelativeAsOff
 // token vector, sequence =====================================================
 
 ApiTokenVector::ApiTokenVector()
+    : mvTokens()
 {
 }
 
 Any& ApiTokenVector::append( sal_Int32 nOpCode )
 {
-    resize( size() + 1 );
-    back().OpCode = nOpCode;
-    return back().Data;
+    mvTokens.resize( mvTokens.size() + 1 );
+    mvTokens.back().OpCode = nOpCode;
+    return mvTokens.back().Data;
+}
+
+ApiTokenSequence ApiTokenVector::toSequence() const
+{
+    return ContainerHelper::vectorToSequence( mvTokens );
 }
 
 // token sequence iterator ====================================================
