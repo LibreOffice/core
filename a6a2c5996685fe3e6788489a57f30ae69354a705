@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_9d9d275c",
+        "filename": "scripting/java/com/sun/star/script/framework/container/ParcelContainer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-09-05T18:52:23Z",
+      "side": 1,
+      "message": "Please do not combine code reformatting with other changes. It makes the review harder. Also, in this case, you are making the formatting inconsistent, as the rest of the code in this file still puts the opening brace to a separate line.",
+      "revId": "a6a2c5996685fe3e6788489a57f30ae69354a705",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
