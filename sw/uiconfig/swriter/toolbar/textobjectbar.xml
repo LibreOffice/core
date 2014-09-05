@@ -27,8 +27,9 @@
  <toolbar:toolbaritem xlink:href=".uno:Bold"/>
  <toolbar:toolbaritem xlink:href=".uno:Italic"/>
  <toolbar:toolbaritem xlink:href=".uno:Underline"/>
- <toolbar:toolbaritem xlink:href=".uno:SuperScript" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:SuperScript"/>
  <toolbar:toolbaritem xlink:href=".uno:SubScript" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:Shadowed"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeftPara" toolbar:style="radio"/>
  <toolbar:toolbaritem xlink:href=".uno:CenterPara" toolbar:style="radio"/>
