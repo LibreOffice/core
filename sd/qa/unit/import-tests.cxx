@@ -610,6 +610,7 @@ void SdFiltersTest::testCreationDate()
     sax::Converter::convertDateTime(aBuffer, aDate, 0);
     // Metadata wasn't imported, this was 0000-00-00.
     CPPUNIT_ASSERT_EQUAL(OUString("2013-11-09T10:37:56"), aBuffer.makeStringAndClear());
+    xDocShRef->DoClose();
 }
 
 void SdFiltersTest::testBnc887225()
