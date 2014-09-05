@@ -1090,8 +1090,6 @@ void SystemWindow::setOptimalLayoutSize()
     setPosSizeOnContainee(aSize, *pBox);
 }
 
-extern void ImplWindowAutoMnemonic(Window* pWindow);
-
 void SystemWindow::DoInitialLayout()
 {
     if ( GetSettings().GetStyleSettings().GetAutoMnemonic() )
