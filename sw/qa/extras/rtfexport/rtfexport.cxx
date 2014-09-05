@@ -679,6 +679,12 @@ DECLARE_RTFEXPORT_TEST(testFdo32613, "fdo32613.odt")
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER, getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_RTFEXPORT_TEST(testAbi10039, "abi10039.odt")
+{
+    // Make sure we don't just crash on export, and additionally the shape should not be inline (as it's at-page anchored originally).
+    CPPUNIT_ASSERT(text::TextContentAnchorType_AS_CHARACTER != getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();

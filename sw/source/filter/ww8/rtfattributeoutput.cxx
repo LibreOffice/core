@@ -3698,8 +3698,16 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         aRendered.Height() = rS.GetHeight();
     }
 
-    const SwPosition* pAnchor = pFlyFrmFmt->GetAnchor().GetCntntAnchor();
-    sw::Frame aFrame(*pFlyFrmFmt, *pAnchor);
+    sw::Frame* pFrame = 0;
+    for (sw::FrameIter it = m_rExport.maFrames.begin(); it != m_rExport.maFrames.end(); ++it)
+    {
+        if (pFlyFrmFmt == &it->GetFrmFmt())
+        {
+            pFrame = &(*it);
+            break;
+        }
+    }
+    assert(pFrame);
 
     /*
        If the graphic is not of type WMF then we will have to store two
@@ -3708,7 +3716,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
        a wmf already then we don't need any such wrapping
        */
     bool bIsWMF = pBLIPType && std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
-    if (aFrame.IsInline())
+    if (pFrame->IsInline())
     {
         if (!bIsWMF)
             m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
@@ -3717,9 +3725,9 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     {
         m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SHP "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPINST);
         m_pFlyFrameSize = &aRendered;
-        m_rExport.mpParentFrame = &aFrame;
+        m_rExport.mpParentFrame = pFrame;
         m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = true;
-        m_rExport.OutputFormat(aFrame.GetFrmFmt(), false, false, true);
+        m_rExport.OutputFormat(pFrame->GetFrmFmt(), false, false, true);
         m_rExport.bOutFlyFrmAttrs = m_rExport.bRTFFlySyntax = false;
         m_rExport.mpParentFrame = NULL;
         m_pFlyFrameSize = 0;
@@ -3740,7 +3748,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         m_rExport.Strm().WriteCharPtr("{" OOO_STRING_SVTOOLS_RTF_SP "{" OOO_STRING_SVTOOLS_RTF_SN " pib" "}{" OOO_STRING_SVTOOLS_RTF_SV " ");
     }
 
-    bool bWritePicProp = aFrame.IsInline();
+    bool bWritePicProp = pFrame->IsInline();
     if (pBLIPType)
         ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm(), bWritePicProp);
     else
@@ -3755,7 +3763,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
         ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm(), bWritePicProp);
     }
 
-    if (aFrame.IsInline())
+    if (pFrame->IsInline())
     {
         if (!bIsWMF)
         {
