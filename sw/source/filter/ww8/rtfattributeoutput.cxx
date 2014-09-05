@@ -3689,12 +3689,10 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrmFmt* pFlyFrmFmt, const Sw
     //Get original size in twips
     Size aSize(sw::util::GetSwappedInSize(*pGrfNode));
     Size aRendered(aSize);
-    if (pFlyFrmFmt)
-    {
-        const SwFmtFrmSize& rS = pFlyFrmFmt->GetFrmSize();
-        aRendered.Width() = rS.GetWidth();
-        aRendered.Height() = rS.GetHeight();
-    }
+
+    const SwFmtFrmSize& rS = pFlyFrmFmt->GetFrmSize();
+    aRendered.Width() = rS.GetWidth();
+    aRendered.Height() = rS.GetHeight();
 
     sw::Frame* pFrame = 0;
     for (sw::FrameIter it = m_rExport.maFrames.begin(); it != m_rExport.maFrames.end(); ++it)
