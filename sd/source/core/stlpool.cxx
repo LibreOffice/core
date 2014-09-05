@@ -943,7 +943,7 @@ struct StyleSheetIsUserDefinedPredicate : svl::StyleSheetPredicate
 
     bool Check(const SfxStyleSheetBase& sheet) SAL_OVERRIDE
     {
-        return !sheet.IsUserDefined();
+        return sheet.IsUserDefined();
     }
 };
 }
