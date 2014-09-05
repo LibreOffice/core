@@ -3264,7 +3264,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::bo
     OUString aStringValue = "left";
     switch(nIntValue)
     {
-    case 1:
+    case NS_ooxml::LN_Value_ST_Jc_center:
         nAdjust = style::ParagraphAdjust_CENTER;
         aStringValue = "center";
         break;
@@ -3276,7 +3276,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::bo
     case 4:
         nLastLineAdjust = style::ParagraphAdjust_BLOCK;
         //no break;
-    case 3:
+    case NS_ooxml::LN_Value_ST_Jc_both:
         nAdjust = style::ParagraphAdjust_BLOCK;
         aStringValue = "both";
         break;

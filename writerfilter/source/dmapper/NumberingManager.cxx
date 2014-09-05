@@ -1011,7 +1011,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 case NS_ooxml::LN_Value_ST_Jc_start:
                     nValue = text::HoriOrientation::LEFT;
                     break;
-                case 1:
+                case NS_ooxml::LN_Value_ST_Jc_center:
                     nValue = text::HoriOrientation::CENTER;
                     break;
                 case NS_ooxml::LN_Value_ST_Jc_right:

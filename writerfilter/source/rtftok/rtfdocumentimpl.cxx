@@ -2420,19 +2420,19 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
     case RTF_QC:
-        nParam = 1;
+        nParam = NS_ooxml::LN_Value_ST_Jc_center;
         break;
     case RTF_QJ:
-        nParam = 3;
+        nParam = NS_ooxml::LN_Value_ST_Jc_both;
         break;
     case RTF_QL:
         nParam = NS_ooxml::LN_Value_ST_Jc_left;
         break;
     case RTF_QR:
-        nParam = 2;
+        nParam = NS_ooxml::LN_Value_ST_Jc_right;
         break;
     case RTF_QD:
-        nParam = 4;
+        nParam = NS_ooxml::LN_Value_ST_Jc_both;
         break;
     default:
         break;
@@ -3394,7 +3394,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             nValue = NS_ooxml::LN_Value_ST_Jc_left;
             break;
         case 1:
-            nValue = 1; // center
+            nValue = NS_ooxml::LN_Value_ST_Jc_center;
             break;
         case 2:
             nValue = NS_ooxml::LN_Value_ST_Jc_right;
