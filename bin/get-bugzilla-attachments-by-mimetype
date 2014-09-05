@@ -243,13 +243,16 @@ def get_through_rss_query(queryurl, mimetype, prefix, suffix):
 #we're iterating over all bugs of the most interesting source packages
 launchpad_pkgs = (
     "abiword",
+    "calibre",
     "calligra",
     "gnumeric",
     "inkscape",
     "koffice",
     "libreoffice",
     "openoffice.org",
+    "scribus",
     "sk1",
+    "unoconv",
 )
 
 def get_launchpad_bugs(prefix):
