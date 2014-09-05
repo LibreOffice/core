@@ -284,14 +284,19 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
                          nSep = aExpr.lastIndexOf('.');
                          break;
                 }
-                if( nSep < 0 )
-                  OSL_FAIL( "Invalid syntax according to address convention." );
-                OUString aRef = aExpr.copy(nSep+1);
-                OUString aExtDocNameTabName = aExpr.copy(0, nSep+1);
-                nResult = aAddr.Parse(aRef, mpDoc, aDetails);
-                aAddr.SetTab(0); // force to first tab to avoid error on checking
-                nFlags = lcl_NextFlags( nResult );
-                aExpr = aExtDocNameTabName + aAddr.Format(nFlags, mpDoc, aDetails);
+                if (nSep < 0)
+                {
+                    assert(!"Invalid syntax according to address convention.");
+                }
+                else
+                {
+                    OUString aRef = aExpr.copy(nSep+1);
+                    OUString aExtDocNameTabName = aExpr.copy(0, nSep+1);
+                    nResult = aAddr.Parse(aRef, mpDoc, aDetails);
+                    aAddr.SetTab(0); // force to first tab to avoid error on checking
+                    nFlags = lcl_NextFlags( nResult );
+                    aExpr = aExtDocNameTabName + aAddr.Format(nFlags, mpDoc, aDetails);
+                }
             }
             else
             {
