@@ -873,7 +873,7 @@ lcl_ExportHints(
                             break; // Robust #i81708 content in covered cells
 
                         // Do not expose inline anchored textboxes.
-                        if (std::find(rTextBoxes.begin(), rTextBoxes.end(), pAttr->GetFlyCnt().GetFrmFmt()) != rTextBoxes.end())
+                        if (rTextBoxes.find(pAttr->GetFlyCnt().GetFrmFmt()) != rTextBoxes.end())
                             break;
 
                         pUnoCrsr->Exchange();

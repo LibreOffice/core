@@ -1713,7 +1713,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 
             // Don't set an explicit ZOrder on TextBoxes.
             std::set<const SwFrmFmt*> aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
-            if( nZOrder >= 0 && std::find(aTextBoxes.begin(), aTextBoxes.end(), pFmt) == aTextBoxes.end())
+            if( nZOrder >= 0 && aTextBoxes.find(pFmt) == aTextBoxes.end())
             {
                 SdrObject* pObject =
                     GetOrCreateSdrObject( (SwFlyFrmFmt&)*pFmt );

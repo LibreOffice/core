@@ -191,7 +191,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
 
                 // Filter out textboxes, which are not interesting at an UNO level.
-                if (std::find(aTextBoxes.begin(), aTextBoxes.end(), &rFmt) != aTextBoxes.end())
+                if (aTextBoxes.find(&rFmt) != aTextBoxes.end())
                     continue;
 
                 if ( rFmt.GetAnchor().GetAnchorId() == nChkType )

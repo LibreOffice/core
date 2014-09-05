@@ -1693,7 +1693,7 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
 
 bool DocxSdrExport::isTextBox(const SwFrmFmt& rFrmFmt)
 {
-    return std::find(m_pImpl->m_aTextBoxes.begin(), m_pImpl->m_aTextBoxes.end(), &rFrmFmt) != m_pImpl->m_aTextBoxes.end();
+    return m_pImpl->m_aTextBoxes.find(&rFrmFmt) != m_pImpl->m_aTextBoxes.end();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

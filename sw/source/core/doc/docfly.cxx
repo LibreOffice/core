@@ -87,7 +87,7 @@ sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType, bool bIgnoreTextBoxes ) const
     {
         const SwFrmFmt* pFlyFmt = rFmts[ i ];
 
-        if (bIgnoreTextBoxes && std::find(aTextBoxes.begin(), aTextBoxes.end(), pFlyFmt) != aTextBoxes.end())
+        if (bIgnoreTextBoxes && aTextBoxes.find(pFlyFmt) != aTextBoxes.end())
             continue;
 
         if( RES_FLYFRMFMT == pFlyFmt->Which()
@@ -139,7 +139,7 @@ SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType, bool bIgnoreTextB
     {
         SwFrmFmt* pFlyFmt = rFmts[ i ];
 
-        if (bIgnoreTextBoxes && std::find(aTextBoxes.begin(), aTextBoxes.end(), pFlyFmt) != aTextBoxes.end())
+        if (bIgnoreTextBoxes && aTextBoxes.find(pFlyFmt) != aTextBoxes.end())
             continue;
 
         if( RES_FLYFRMFMT == pFlyFmt->Which()

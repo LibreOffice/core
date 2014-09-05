@@ -1094,7 +1094,7 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
     {
         // #i104937#
         pFmt = (*pFmts)[i];
-        if(pFmt->Which() != RES_FLYFRMFMT || std::find(aTextBoxes.begin(), aTextBoxes.end(), pFmt) != aTextBoxes.end())
+        if(pFmt->Which() != RES_FLYFRMFMT || aTextBoxes.find(pFmt) != aTextBoxes.end())
             continue;
         const SwNodeIndex* pIdx =  pFmt->GetCntnt().GetCntntIdx();
         if(!pIdx || !pIdx->GetNodes().IsDocNodes())
