@@ -49,7 +49,7 @@
 
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 
-using namespace ::com::sun::star;
+using namespace css;
 
 void Main();
 

@@ -1530,7 +1530,7 @@ bool ScDocument::GetDataEntries(
             const ScValidationData* pData = GetValidationEntry( nValidation );
             if( pData && pData->FillSelectionList( rStrings, ScAddress( nCol, nRow, nTab ) ) )
             {
-                if (pData->GetListType() == ValidListType::SORTEDASCENDING)
+                if (pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING)
                     sortAndRemoveDuplicates(rStrings, bCaseSens);
 
                 return true;

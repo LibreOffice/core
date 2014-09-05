@@ -1530,7 +1530,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
             default:                    OSL_FAIL( "XclExpDV::XclExpDV - unknown error style" );
         }
         ::set_flag( mnFlags, EXC_DV_IGNOREBLANK, pValData->IsIgnoreBlank() );
-        ::set_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN, pValData->GetListType() == ValidListType::INVISIBLE );
+        ::set_flag( mnFlags, EXC_DV_SUPPRESSDROPDOWN, pValData->GetListType() == css::sheet::TableValidationVisibility::INVISIBLE );
         ::set_flag( mnFlags, EXC_DV_SHOWPROMPT, bShowPrompt );
         ::set_flag( mnFlags, EXC_DV_SHOWERROR, bShowError );
 

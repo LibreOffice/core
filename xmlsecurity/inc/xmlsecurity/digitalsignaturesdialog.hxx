@@ -45,14 +45,13 @@ namespace xml { namespace dom {
     class XDocumentBuilder; } }
 }}}
 
-namespace cssu = com::sun::star::uno;
 
 class HeaderBar;
 
 class DigitalSignaturesDialog : public ModalDialog
 {
 private:
-    cssu::Reference< cssu::XComponentContext >& mxCtx;
+    css::uno::Reference< css::uno::XComponentContext >& mxCtx;
     XMLSignatureHelper      maSignatureHelper;
 
     css::uno::Reference < css::embed::XStorage > mxStore;
@@ -114,8 +113,8 @@ private:
     bool canAddRemove();
 
 public:
-    DigitalSignaturesDialog( Window* pParent, cssu::Reference<
-        cssu::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
+    DigitalSignaturesDialog( Window* pParent, css::uno::Reference<
+        css::uno::XComponentContext >& rxCtx, DocumentSignatureMode eMode,
         bool bReadOnly, const OUString& sODFVersion, bool bHasDocumentSignature);
     virtual ~DigitalSignaturesDialog();
 
@@ -123,8 +122,8 @@ public:
     bool    Init();
 
             // Set the storage which should be signed or verified
-    void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore );
-    void    SetSignatureStream( const cssu::Reference < css::io::XStream >& rxStream );
+    void    SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore );
+    void    SetSignatureStream( const css::uno::Reference < css::io::XStream >& rxStream );
 
                 // Execute the dialog...
     short       Execute() SAL_OVERRIDE;

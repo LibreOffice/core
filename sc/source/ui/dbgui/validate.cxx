@@ -71,6 +71,8 @@
 #define SC_VALIDDLG_DATA_VALIDRANGE   6
 #define SC_VALIDDLG_DATA_INVALIDRANGE 7
 
+namespace ValidListType = css::sheet::TableValidationVisibility;
+
 static const sal_uInt16 pValueRanges[] =
 {
     FID_VALID_MODE, FID_VALID_ERRTEXT,

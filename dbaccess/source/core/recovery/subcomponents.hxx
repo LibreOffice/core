@@ -32,14 +32,12 @@
 namespace dbaccess
 {
 
-    namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
-
     enum SubComponentType
     {
-        TABLE = DatabaseObject::TABLE,
-        QUERY = DatabaseObject::QUERY,
-        FORM = DatabaseObject::FORM,
-        REPORT = DatabaseObject::REPORT,
+        TABLE = css::sdb::application::DatabaseObject::TABLE,
+        QUERY = css::sdb::application::DatabaseObject::QUERY,
+        FORM = css::sdb::application::DatabaseObject::FORM,
+        REPORT = css::sdb::application::DatabaseObject::REPORT,
 
         RELATION_DESIGN = 1000,
 

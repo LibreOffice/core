@@ -35,16 +35,14 @@ namespace security {
 #include <com/sun/star/uno/Sequence.hxx>
 
 
-namespace cssu = com::sun::star::uno;
-
 class MacroWarning : public ModalDialog
 {
 private:
 
-    cssu::Reference< css::security::XCertificate >  mxCert;
-    cssu::Reference< css::embed::XStorage >         mxStore;
+    css::uno::Reference< css::security::XCertificate >  mxCert;
+    css::uno::Reference< css::embed::XStorage >         mxStore;
     OUString                                 maODFVersion;
-    const cssu::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
+    const css::uno::Sequence< css::security::DocumentSignatureInformation >*    mpInfos;
 
     FixedImage*         mpSymbolImg;
     FixedText*          mpDocNameFI;
@@ -73,10 +71,10 @@ public:
 
     void    SetDocumentURL( const OUString& rDocURL );
 
-    void    SetStorage( const cssu::Reference < css::embed::XStorage >& rxStore,
+    void    SetStorage( const css::uno::Reference < css::embed::XStorage >& rxStore,
                         const OUString& aODFVersion,
-                        const cssu::Sequence< css::security::DocumentSignatureInformation >& _rInfos );
-    void    SetCertificate( const cssu::Reference< css::security::XCertificate >& _rxCert );
+                        const css::uno::Sequence< css::security::DocumentSignatureInformation >& _rInfos );
+    void    SetCertificate( const css::uno::Reference< css::security::XCertificate >& _rxCert );
 };
 
 #endif

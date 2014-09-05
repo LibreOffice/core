@@ -857,7 +857,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     DVItem& rItem = maDVItems.back();
 
     rItem.maValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
-    rItem.maValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, ValidListType::INVISIBLE, ValidListType::UNSORTED ) );
+    rItem.maValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, css::sheet::TableValidationVisibility::INVISIBLE, css::sheet::TableValidationVisibility::UNSORTED ) );
 
     // *** prompt box ***
     if( !aPromptTitle.isEmpty() || !aPromptMessage.isEmpty() )

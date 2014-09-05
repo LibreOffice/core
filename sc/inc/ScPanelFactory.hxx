@@ -24,7 +24,6 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sc { namespace sidebar {
 
@@ -42,21 +41,21 @@ class ScPanelFactory
 {
 public:
     static ::rtl::OUString SAL_CALL getImplementationName(void);
-    static cssu::Reference<cssu::XInterface> SAL_CALL createInstance(
-        const cssu::Reference<css::lang::XMultiServiceFactory>& rxFactory);
-    static cssu::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames(void);
+    static css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance(
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& rxFactory);
+    static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames(void);
 
     ScPanelFactory(void);
     virtual ~ScPanelFactory(void);
 
     // XUIElementFactory
-    cssu::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
+    css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement(
         const ::rtl::OUString& rsResourceURL,
-        const ::cssu::Sequence<css::beans::PropertyValue>& rArguments)
+        const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            cssu::RuntimeException, std::exception ) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 };
 
 } } // end of namespace sc::sidebar

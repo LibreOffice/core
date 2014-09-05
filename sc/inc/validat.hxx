@@ -24,7 +24,6 @@
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>
 #include "scdllapi.h"
 
-namespace ValidListType = ::com::sun::star::sheet::TableValidationVisibility;
 
 namespace sc {
 

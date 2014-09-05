@@ -68,7 +68,7 @@ ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOpe
     , bShowInput(false)
     , bShowError(false)
     , eErrorStyle( SC_VALERR_STOP )
-    , mnListType( ValidListType::UNSORTED )
+    , mnListType( css::sheet::TableValidationVisibility::UNSORTED )
 {
 }
 
@@ -81,7 +81,7 @@ ScValidationData::ScValidationData( ScValidationMode eMode, ScConditionMode eOpe
     , bShowInput(false)
     , bShowError(false)
     , eErrorStyle( SC_VALERR_STOP )
-    , mnListType( ValidListType::UNSORTED )
+    , mnListType( css::sheet::TableValidationVisibility::UNSORTED )
 {
 }
 
@@ -613,7 +613,7 @@ sal_uLong lclGetCellFormat( ScDocument& rDoc, const ScAddress& rPos )
 
 bool ScValidationData::HasSelectionList() const
 {
-    return (eDataMode == SC_VALID_LIST) && (mnListType != ValidListType::INVISIBLE);
+    return (eDataMode == SC_VALID_LIST) && (mnListType != css::sheet::TableValidationVisibility::INVISIBLE);
 }
 
 bool ScValidationData::GetSelectionFromFormula(

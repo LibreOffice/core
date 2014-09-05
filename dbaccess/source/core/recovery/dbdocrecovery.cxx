@@ -43,35 +43,35 @@
 namespace dbaccess
 {
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::embed::XStorage;
-    using ::com::sun::star::frame::XController;
-    using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
-    using ::com::sun::star::lang::XComponent;
-    using ::com::sun::star::document::XStorageBasedDocument;
-    using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::io::XStream;
-    using ::com::sun::star::io::XTextOutputStream;
-    using ::com::sun::star::io::XActiveDataSource;
-    using ::com::sun::star::io::TextInputStream;
-    using ::com::sun::star::io::XTextInputStream2;
-    using ::com::sun::star::io::XActiveDataSink;
-    using ::com::sun::star::frame::XModel;
-    using ::com::sun::star::util::XModifiable;
-    using ::com::sun::star::beans::XPropertySet;
+    using css::uno::Reference;
+    using css::uno::XInterface;
+    using css::uno::UNO_QUERY;
+    using css::uno::UNO_QUERY_THROW;
+    using css::uno::UNO_SET_THROW;
+    using css::uno::Exception;
+    using css::uno::RuntimeException;
+    using css::uno::Any;
+    using css::uno::makeAny;
+    using css::uno::Sequence;
+    using css::uno::Type;
+    using css::uno::XComponentContext;
+    using css::embed::XStorage;
+    using css::frame::XController;
+    using css::sdb::application::XDatabaseDocumentUI;
+    using css::lang::XComponent;
+    using css::document::XStorageBasedDocument;
+    using css::beans::PropertyValue;
+    using css::io::XStream;
+    using css::io::XTextOutputStream;
+    using css::io::XActiveDataSource;
+    using css::io::TextInputStream;
+    using css::io::XTextInputStream2;
+    using css::io::XActiveDataSink;
+    using css::frame::XModel;
+    using css::util::XModifiable;
+    using css::beans::XPropertySet;
 
-    namespace ElementModes = ::com::sun::star::embed::ElementModes;
+    namespace ElementModes = css::embed::ElementModes;
 
     // helpers
     namespace
