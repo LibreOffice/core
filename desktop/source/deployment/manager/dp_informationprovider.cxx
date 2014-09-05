@@ -149,13 +149,20 @@ PackageInformationProvider::getPackageLocation( const OUString& _sExtensionId )
     }
     if ( !aLocationURL.isEmpty() )
     {
-        ::ucbhelper::Content aContent( aLocationURL, NULL, mxContext );
-        aLocationURL = aContent.getURL();
+        try
+        {
+            ::ucbhelper::Content aContent( aLocationURL, NULL, mxContext );
+            aLocationURL = aContent.getURL();
+        }
+        catch (const css::ucb::ContentCreationException& e)
+        {
+           SAL_WARN(
+            "desktop.deployment",
+            "ignoring ContentCreationException \"" << e.Message << "\"");
+        }
     }
     return aLocationURL;
 }
-
-
 
 uno::Sequence< uno::Sequence< OUString > > SAL_CALL
 PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
@@ -221,7 +228,7 @@ PackageInformationProvider::isUpdateAvailable( const OUString& _sExtensionId )
             extensions = extMgr->getExtensionsWithSameIdentifier(
                 dp_misc::getIdentifier(info.extension), info.extension->getName(),
                 uno::Reference<css_ucb::XCommandEnvironment>());
-        } catch (lang::IllegalArgumentException& e) {
+        } catch (const lang::IllegalArgumentException& e) {
             SAL_WARN(
                 "desktop.deployment",
                 "ignoring IllegalArgumentException \"" << e.Message << "\"");
