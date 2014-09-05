@@ -1674,14 +1674,14 @@ SwXText::convertToTextFrame(
 
     const uno::Reference<text::XTextFrame> xNewFrame(
             SwXTextFrame::CreateXTextFrame(*m_pImpl->m_pDoc, 0));
-    SwXTextFrame *const pNewFrame = dynamic_cast<SwXTextFrame*>(xNewFrame.get());
-    pNewFrame->SetSelection( aStartPam );
+    SwXTextFrame& rNewFrame = dynamic_cast<SwXTextFrame&>(*xNewFrame.get());
+    rNewFrame.SetSelection( aStartPam );
     try
     {
         const beans::PropertyValue* pValues = rFrameProperties.getConstArray();
         for (sal_Int32 nProp = 0; nProp < rFrameProperties.getLength(); ++nProp)
         {
-            pNewFrame->SwXFrame::setPropertyValue(
+            rNewFrame.SwXFrame::setPropertyValue(
                     pValues[nProp].Name, pValues[nProp].Value);
         }
 
@@ -1690,8 +1690,8 @@ SwXText::convertToTextFrame(
             const uno::Reference< text::XTextRange> xInsertTextRange =
                 new SwXTextRange(aStartPam, this);
             aStartPam.DeleteMark(); // mark position node may be deleted!
-            pNewFrame->attach( xInsertTextRange );
-            pNewFrame->setName(m_pImpl->m_pDoc->GetUniqueFrameName());
+            rNewFrame.attach( xInsertTextRange );
+            rNewFrame.setName(m_pImpl->m_pDoc->GetUniqueFrameName());
         }
 
         SwTxtNode *const pTxtNode(aStartPam.GetNode().GetTxtNode());
@@ -1704,10 +1704,10 @@ SwXText::convertToTextFrame(
                 if (aMovePam.Move( fnMoveForward, fnGoCntnt ))
                 {
                     // move the anchor to the next paragraph
-                    SwFmtAnchor aNewAnchor(pNewFrame->GetFrmFmt()->GetAnchor());
+                    SwFmtAnchor aNewAnchor(rNewFrame.GetFrmFmt()->GetAnchor());
                     aNewAnchor.SetAnchor( aMovePam.Start() );
                     m_pImpl->m_pDoc->SetAttr(
-                        aNewAnchor, *pNewFrame->GetFrmFmt() );
+                        aNewAnchor, *rNewFrame.GetFrmFmt() );
 
                     // also move frames anchored to us
                     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
@@ -1736,11 +1736,11 @@ SwXText::convertToTextFrame(
         sMessage = rRuntime.Message;
         bRuntimeException = true;
     }
-    xRet = pNewFrame;
+    xRet = &rNewFrame;
     if (bParaBeforeInserted || bParaAfterInserted)
     {
         const uno::Reference<text::XTextCursor> xFrameTextCursor =
-            pNewFrame->createTextCursor();
+            rNewFrame.createTextCursor();
         const uno::Reference<XUnoTunnel> xTunnel(xFrameTextCursor,
                 uno::UNO_QUERY);
         SwXTextCursor *const pFrameCursor =
