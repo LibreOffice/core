@@ -20,6 +20,6 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     prefix="sdbc2" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.sdbc.OSDBCDriverManager">
-    <service name="com.sun.star.sdbc.DriverManager"/>
+    <singleton name="com.sun.star.sdbc.DriverManager"/>
   </implementation>
 </component>

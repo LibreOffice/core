@@ -459,7 +459,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
 
             if (sizeof (SQLWCHAR) == 2)
             {
-                aData.append(waCharArry, nReadChars);
+                aData.append(waCharArray, nReadChars);
             }
             else
             {
