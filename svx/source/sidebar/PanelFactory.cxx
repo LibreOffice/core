@@ -45,9 +45,8 @@
 #include <boost/bind.hpp>
 #include <boost/noncopyable.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 using namespace svx::sidebar;
 
 
@@ -71,13 +70,13 @@ public:
     virtual ~PanelFactory (void);
 
     // XUIElementFactory
-    cssu::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
+    css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
         const ::rtl::OUString& rsResourceURL,
-        const ::cssu::Sequence<css::beans::PropertyValue>& rArguments)
+        const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 PanelFactory::PanelFactory (void)
@@ -97,7 +96,7 @@ PanelFactory::~PanelFactory (void)
 
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,
-    const ::cssu::Sequence<css::beans::PropertyValue>& rArguments)
+    const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
     throw(
         container::NoSuchElementException,
         lang::IllegalArgumentException,

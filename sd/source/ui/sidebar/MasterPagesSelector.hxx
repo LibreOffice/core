@@ -35,7 +35,6 @@
 
 #include <queue>
 
-namespace cssu = ::com::sun::star::uno;
 
 class MouseEvent;
 class SdDrawDocument;
@@ -62,7 +61,7 @@ public:
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~MasterPagesSelector (void);
 
     virtual void LateInit (void);
@@ -205,7 +204,7 @@ protected:
     virtual void ExecuteCommand (const sal_Int32 nCommandId);
 
 private:
-    cssu::Reference<css::ui::XSidebar> mxSidebar;
+    css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
     /** The offset between ValueSet index and MasterPageContainer::Token
         last seen.  This value is used heuristically to speed up the lookup

@@ -32,7 +32,6 @@
 
 class Window;
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace {
 
@@ -94,28 +93,28 @@ public:
         important method of this class because the view is only interested
         in the window of the pane.
     */
-    virtual cssu::Reference<css::awt::XWindow>
+    virtual css::uno::Reference<css::awt::XWindow>
         SAL_CALL getWindow (void)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual cssu::Reference<css::rendering::XCanvas>
+    virtual css::uno::Reference<css::rendering::XCanvas>
         SAL_CALL getCanvas (void)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XPane2 -------------------------------------------------------------
 
     virtual sal_Bool SAL_CALL isVisible (void)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setVisible (sal_Bool bIsVisible)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    virtual cssu::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible (void)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL getAccessible (void)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL setAccessible (
-        const cssu::Reference<css::accessibility::XAccessible>& rxAccessible)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Reference<css::accessibility::XAccessible>& rxAccessible)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XResource ---------------------------------------------------------
 

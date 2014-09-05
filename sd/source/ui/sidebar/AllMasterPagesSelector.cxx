@@ -80,7 +80,7 @@ public:
 MasterPagesSelector* AllMasterPagesSelector::Create (
     ::Window* pParent,
     ViewShellBase& rViewShellBase,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     SdDrawDocument* pDocument = rViewShellBase.GetDocument();
     if (pDocument == NULL)
@@ -106,7 +106,7 @@ AllMasterPagesSelector::AllMasterPagesSelector (
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector(pParent, rDocument, rBase, rpContainer, rxSidebar),
       mpSortedMasterPages(new SortedMasterPageDescriptorList())
 {

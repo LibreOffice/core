@@ -27,7 +27,7 @@ namespace sd { namespace sidebar {
 SlideTransitionPanel::SlideTransitionPanel (
     ::Window* pParentWindow,
     ViewShellBase& rViewShellBase,
-    const cssu::Reference<css::frame::XFrame>& rxFrame
+    const css::uno::Reference<css::frame::XFrame>& rxFrame
     )
     : PanelBase(pParentWindow, rViewShellBase),
       mxFrame( rxFrame )
