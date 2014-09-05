@@ -134,7 +134,6 @@
 #define HID_SMA_ATTRIBUTES_TBX                            "STARMATH_HID_SMA_ATTRIBUTES_TBX"
 #define HID_SMA_BRACKETS_TBX                              "STARMATH_HID_SMA_BRACKETS_TBX"
 #define HID_SMA_FORMAT_TBX                                "STARMATH_HID_SMA_FORMAT_TBX"
-#define HID_SMA_SELECTION_TBX                             "STARMATH_HID_SMA_SELECTION_TBX"
 #define HID_SMA_COMMAND_WIN                               "STARMATH_HID_SMA_COMMAND_WIN"
 #define HID_SMA_MISC_MENU                                 "STARMATH_HID_SMA_MISC_MENU"
 #define HID_SMA_FUNCTIONSOTHER1_MENU                      "STARMATH_HID_SMA_FUNCTIONSOTHER1_MENU"

@@ -150,12 +150,6 @@ typedef short RSWND_STYLE;
 #define RSC_TOOLBOX_ITEMIMAGELIST       0x40
 #define RSC_TOOLBOX_ITEMLIST            0x80
 
-// For "FloatingWindow" resources:
-#define RSC_FLOATINGWINDOW_WHMAPMODE    0x01
-#define RSC_FLOATINGWINDOW_WIDTH        0x02
-#define RSC_FLOATINGWINDOW_HEIGHT       0x04
-#define RSC_FLOATINGWINDOW_ZOOMIN       0x08
-
 // For "DockingWindow" resources:
 #define RSC_DOCKINGWINDOW_XYMAPMODE     0x01
 #define RSC_DOCKINGWINDOW_X             0x02

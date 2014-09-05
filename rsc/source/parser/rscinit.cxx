@@ -100,7 +100,6 @@ void RscTypCont::Init()
     RscTop   *  pClassDockingWindow;
     RscTop   *  pClassToolBoxItem;
     RscTop   *  pClassToolBox;
-    RscTop   *  pClassFloatingWindow;
     RscTop   *  pClassFixedLine;
     RscTop *    pClassSfxStyleFamilyItem;
     RscTop *    pClassSfxTemplateDialog;
@@ -510,10 +509,6 @@ void RscTypCont::Init()
     pClassToolBox = InitClassToolBox( pClassDockingWindow, pClassToolBoxItem,
                                       pClassImageList );
     pRoot->Insert( pClassToolBox );
-
-    pClassFloatingWindow = InitClassFloatingWindow( pClassSystemWindow,
-                                                    pMapUnit );
-    pRoot->Insert( pClassFloatingWindow );
 
     // Klasse anlegen
     nId = pHS->getID( "FixedLine" );

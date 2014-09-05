@@ -213,8 +213,6 @@ class RscTypCont
                                       RscEnum * pTriState );
     RscTop *    InitClassToolBox( RscTop * pSuper, RscTop * pClassToolBoxItem,
                                   RscTop * pClassImageList );
-    RscTop *    InitClassFloatingWindow( RscTop * pSuper,
-                                         RscEnum * pMapUnit );
     RscTop *    InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                              RscTop * pClassBitmap,
                                              RscTop * pClassImage,

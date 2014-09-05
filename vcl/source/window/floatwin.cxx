@@ -152,18 +152,6 @@ FloatingWindow::FloatingWindow( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-FloatingWindow::FloatingWindow( Window* pParent, const ResId& rResId ) :
-    SystemWindow( WINDOW_FLOATINGWINDOW )
-{
-    rResId.SetRT( RSC_FLOATINGWINDOW );
-    WinBits nStyle = ImplInitRes( rResId );
-    ImplInit( pParent, nStyle );
-    ImplLoadRes( rResId );
-
-    if ( !(nStyle & WB_HIDE) )
-        Show();
-}
-
 FloatingWindow::FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
     : SystemWindow(WINDOW_FLOATINGWINDOW)
 {
@@ -177,36 +165,6 @@ void FloatingWindow::doDeferredInit(WinBits nBits)
     mpDialogParent = NULL;
     ImplInit(pParent, nBits);
     mbIsDefferedInit = false;
-}
-
-void FloatingWindow::ImplLoadRes( const ResId& rResId )
-{
-    SystemWindow::ImplLoadRes( rResId );
-
-    sal_uLong nObjMask = ReadLongRes();
-
-    if ( (RSC_FLOATINGWINDOW_WHMAPMODE | RSC_FLOATINGWINDOW_WIDTH |
-          RSC_FLOATINGWINDOW_HEIGHT) & nObjMask )
-    {
-        // use Sizes from the Resource
-        Size    aSize;
-        MapUnit eSizeMap = MAP_PIXEL;
-
-        if ( RSC_FLOATINGWINDOW_WHMAPMODE & nObjMask )
-            eSizeMap = (MapUnit) ReadShortRes();
-        if ( RSC_FLOATINGWINDOW_WIDTH & nObjMask )
-            aSize.Width() = ReadShortRes();
-        if ( RSC_FLOATINGWINDOW_HEIGHT & nObjMask )
-            aSize.Height() = ReadShortRes();
-
-        SetRollUpOutputSizePixel( LogicToPixel( aSize, eSizeMap ) );
-    }
-
-    if (nObjMask & RSC_FLOATINGWINDOW_ZOOMIN )
-    {
-        if ( ReadShortRes() )
-            RollUp();
-    }
 }
 
 FloatingWindow::~FloatingWindow()

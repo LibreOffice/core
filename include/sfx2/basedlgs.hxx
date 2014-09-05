@@ -137,10 +137,6 @@ protected:
                             SfxFloatingWindow( SfxBindings *pBindings,
                                               SfxChildWindow *pCW,
                                               Window* pParent,
-                                              const ResId& rResId);
-                            SfxFloatingWindow( SfxBindings *pBindings,
-                                              SfxChildWindow *pCW,
-                                              Window* pParent,
                                               const OString& rID, const OUString& rUIXMLDescription,
                                               const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
                             virtual ~SfxFloatingWindow();

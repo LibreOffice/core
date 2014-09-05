@@ -51,8 +51,6 @@
 #define RSC_SYSWINDOW           (RSC_NOTYPE + 0x36)
 #define RSC_WORKWIN             (RSC_NOTYPE + 0x37)
 
-#define RSC_FLOATINGWINDOW      (RSC_NOTYPE + 0x39)
-
 #define RSC_CONTROL             (RSC_NOTYPE + 0x44)
 #define RSC_BUTTON              (RSC_NOTYPE + 0x45)
 #define RSC_PUSHBUTTON          (RSC_NOTYPE + 0x46)

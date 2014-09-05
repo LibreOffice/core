@@ -103,7 +103,6 @@ protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
-    SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:
     SAL_DLLPRIVATE FloatingWindow*  ImplFloatHitTest( Window* pReference, const Point& rPos, HitTest& rHitTest );
@@ -123,7 +122,6 @@ public:
     explicit        FloatingWindow(Window* pParent, WinBits nStyle = WB_STDFLOATWIN);
     explicit        FloatingWindow(Window* pParent, const OString& rID, const OUString& rUIXMLDescription,
                                    const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
-    explicit        FloatingWindow( Window* pParent, const ResId& );
     virtual         ~FloatingWindow();
 
     virtual bool    Notify( NotifyEvent& rNEvt ) SAL_OVERRIDE;

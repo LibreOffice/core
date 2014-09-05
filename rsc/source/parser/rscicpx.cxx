@@ -1480,40 +1480,6 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
     return pClassToolBox;
 }
 
-RscTop * RscTypCont::InitClassFloatingWindow( RscTop * pSuper,
-                                              RscEnum * pMapUnit )
-{
-    Atom        nId;
-    RscTop *    pClassFloatingWindow;
-
-    // Klasse anlegen
-    nId = pHS->getID( "FloatingWindow" );
-    pClassFloatingWindow = new RscClass( nId, RSC_FLOATINGWINDOW, pSuper );
-    pClassFloatingWindow->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
-    aNmTb.Put( nId, CLASSNAME, pClassFloatingWindow );
-
-    // Variablen anlegen
-    nId = aNmTb.Put( "_ZoomInMapMode", VARNAME );
-    pClassFloatingWindow->SetVariable( nId, pMapUnit, NULL, 0,
-                                       RSC_FLOATINGWINDOW_WHMAPMODE  );
-    nId = aNmTb.Put( "_ZoomInWidth", VARNAME );
-    pClassFloatingWindow->SetVariable( nId, &aShort, NULL, 0,
-                                       RSC_FLOATINGWINDOW_WIDTH  );
-    nId = aNmTb.Put( "_ZoomInHeight", VARNAME );
-    pClassFloatingWindow->SetVariable( nId, &aShort, NULL, 0,
-                                       RSC_FLOATINGWINDOW_HEIGHT  );
-    nId = aNmTb.Put( "ZoomIn", VARNAME );
-    pClassFloatingWindow->SetVariable( nId, &aBool, NULL, 0,
-                                       RSC_FLOATINGWINDOW_ZOOMIN );
-
-    INS_WINBIT(pClassFloatingWindow,Zoomable)
-    INS_WINBIT(pClassFloatingWindow,HideWhenDeactivate)
-    INS_WINBIT(pClassFloatingWindow,EnableResizing)
-    INS_WINBIT(pClassFloatingWindow,StdPopup)
-
-    return pClassFloatingWindow;
-}
-
 RscTop * RscTypCont::InitClassSfxStyleFamilyItem( RscTop * pSuper,
                                                   RscTop * pClassBitmap,
                                                   RscTop * pClassImage,

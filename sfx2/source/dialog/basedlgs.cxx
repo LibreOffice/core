@@ -460,26 +460,6 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
-
-
-SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
-                        SfxChildWindow *pCW,
-                        Window* pParent,
-                        const ResId& rResId) :
-    FloatingWindow(pParent, rResId),
-    pBindings(pBindinx),
-    pImp( new SfxFloatingWindow_Impl )
-{
-    pImp->pMgr = pCW;
-    pImp->bConstructed = false;
-    SetUniqueId( GetHelpId() );
-    SetHelpId("");
-    if ( pBindinx )
-        pImp->StartListening( *pBindinx );
-    pImp->aMoveTimer.SetTimeout(50);
-    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
-}
-
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
                         SfxChildWindow *pCW,
                         Window* pParent,
