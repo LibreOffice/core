@@ -464,9 +464,20 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     if (mediaType.isEmpty())
     {
         ::ucbhelper::Content ucbContent;
-        if (create_ucb_content(
-                &ucbContent, url, xCmdEnv, false /* no throw */ )
-                && !ucbContent.isFolder())
+        bool bOk;
+
+        try
+        {
+            bOk = create_ucb_content(
+                    &ucbContent, url, xCmdEnv, false /* no throw */ )
+                    && !ucbContent.isFolder();
+        }
+        catch (const css::ucb::ContentCreationException&)
+        {
+            bOk = false;
+        }
+
+        if (bOk)
         {
             OUString title( StrTitle::getTitle( ucbContent ) );
             for (;;)
