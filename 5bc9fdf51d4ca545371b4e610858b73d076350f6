@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_bddc6347",
+        "filename": "sc/source/core/tool/reffind.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2014-09-05T12:57:21Z",
+      "side": 1,
+      "message": "Please don\u0027t use OSL_FAIL() in new code anymore. Instead, use assert() if in dbg-util build the program should stop, or SAL_WARN() if the code should continue in any case.\n\nI committed 02969a1446fa107813cd138ef4053bed1bedb16b with an assert().",
+      "revId": "5bc9fdf51d4ca545371b4e610858b73d076350f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
