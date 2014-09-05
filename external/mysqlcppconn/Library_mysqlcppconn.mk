@@ -24,10 +24,12 @@ $(eval $(call gb_Library_add_libs,mysqlcppconn,\
 
 endif
 
+ifeq ($(OS),MACOSX)
 ifeq ($(SYSTEM_MARIADB),)
 $(eval $(call gb_Library_use_externals,mysqlcppconn,\
 	    iconv \
 ))
+endif
 endif
 
 $(eval $(call gb_Library_set_warnings_not_errors,mysqlcppconn))
