@@ -42,40 +42,41 @@
 namespace dbaccess
 {
 
-    using ::com::sun::star::uno::Reference;
-    using ::com::sun::star::uno::XInterface;
-    using ::com::sun::star::uno::UNO_QUERY;
-    using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::uno::UNO_SET_THROW;
-    using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
-    using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::XComponentContext;
-    using ::com::sun::star::lang::XMultiServiceFactory;
-    using ::com::sun::star::embed::XStorage;
-    using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
-    using ::com::sun::star::beans::Pair;
-    using ::com::sun::star::frame::ModuleManager;
-    using ::com::sun::star::frame::XModuleManager2;
-    using ::com::sun::star::lang::XComponent;
-    using ::com::sun::star::frame::XModel;
-    using ::com::sun::star::frame::XController;
-    using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::beans::PropertyValue;
-    using ::com::sun::star::document::XStorageBasedDocument;
-    using ::com::sun::star::ucb::XCommandProcessor;
-    using ::com::sun::star::container::XHierarchicalNameAccess;
-    using ::com::sun::star::sdb::XFormDocumentsSupplier;
-    using ::com::sun::star::sdb::XReportDocumentsSupplier;
-    using ::com::sun::star::xml::sax::SAXException;
-    using ::com::sun::star::xml::sax::XLocator;
-    using ::com::sun::star::xml::sax::XDocumentHandler;
-    using ::com::sun::star::xml::sax::XAttributeList;
+    using css::uno::Reference;
+    using css::uno::XInterface;
+    using css::uno::UNO_QUERY;
+    using css::uno::UNO_QUERY_THROW;
+    using css::uno::UNO_SET_THROW;
+    using css::uno::Exception;
+    using css::uno::RuntimeException;
+    using css::uno::Any;
+    using css::uno::makeAny;
+    using css::uno::Sequence;
+    using css::uno::Type;
+    using css::uno::XComponentContext;
+    using css::lang::XMultiServiceFactory;
+    using css::embed::XStorage;
+    using css::sdb::application::XDatabaseDocumentUI;
+    using css::beans::Pair;
+    using css::frame::ModuleManager;
+    using css::frame::XModuleManager2;
+    using css::lang::XComponent;
+    using css::frame::XModel;
+    using css::frame::XController;
+    using css::beans::XPropertySet;
+    using css::beans::PropertyValue;
+    using css::document::XStorageBasedDocument;
+    using css::ucb::XCommandProcessor;
+    using css::container::XHierarchicalNameAccess;
+    using css::sdb::XFormDocumentsSupplier;
+    using css::sdb::XReportDocumentsSupplier;
+    using css::xml::sax::SAXException;
+    using css::xml::sax::XLocator;
+    using css::xml::sax::XDocumentHandler;
+    using css::xml::sax::XAttributeList;
 
-    namespace ElementModes = ::com::sun::star::embed::ElementModes;
+    namespace ElementModes = css::embed::ElementModes;
+    namespace DatabaseObject = css::sdb::application::DatabaseObject;
 
     // helper
     namespace
@@ -200,7 +201,7 @@ namespace dbaccess
         virtual void    EndElement  ( const bool i_bIgnoreWhitespace ) SAL_OVERRIDE;
         virtual void    Characters( const OUString& i_rCharacters ) SAL_OVERRIDE;
 
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        virtual css::uno::Reference< css::uno::XComponentContext >
                         GetComponentContext() const SAL_OVERRIDE;
 
     private:

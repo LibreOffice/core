@@ -34,11 +34,11 @@ namespace dbaccess
     {
     public:
         SubComponentRecovery(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rController,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& i_rComponent )
+                const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+                const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
+                const css::uno::Reference< css::lang::XComponent >& i_rComponent )
             :m_rContext( i_rContext )
-            ,m_xDocumentUI( i_rController, ::com::sun::star::uno::UNO_SET_THROW )
+            ,m_xDocumentUI( i_rController, css::uno::UNO_SET_THROW )
             ,m_xComponent( i_rComponent )
             ,m_eType( UNKNOWN )
             ,m_aCompDesc()
@@ -47,11 +47,11 @@ namespace dbaccess
         }
 
         SubComponentRecovery(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& i_rContext,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& i_rController,
+                const css::uno::Reference< css::uno::XComponentContext >& i_rContext,
+                const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& i_rController,
                 const SubComponentType i_eType )
             :m_rContext( i_rContext )
-            ,m_xDocumentUI( i_rController, ::com::sun::star::uno::UNO_SET_THROW )
+            ,m_xDocumentUI( i_rController, css::uno::UNO_SET_THROW )
             ,m_xComponent()
             ,m_eType( i_eType )
             ,m_aCompDesc()
@@ -60,14 +60,14 @@ namespace dbaccess
 
         // only to be used after being constructed with a component
         void    saveToRecoveryStorage(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rRecoveryStorage,
+                    const css::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
                     MapCompTypeToCompDescs& io_mapCompDescs
                 );
 
         // only to be used after being constructed with a type
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
                 recoverFromStorage(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rRecoveryStorage,
+                    const css::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
                     const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
@@ -76,23 +76,23 @@ namespace dbaccess
 
     private:
         void    impl_saveSubDocument_throw(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rObjectStorage
+                    const css::uno::Reference< css::embed::XStorage >& i_rObjectStorage
                 );
 
         void    impl_saveQueryDesign_throw(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rObjectStorage
+                    const css::uno::Reference< css::embed::XStorage >& i_rObjectStorage
                 );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
                 impl_recoverSubDocument_throw(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rRecoveryStorage,
+                    const css::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
                     const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        css::uno::Reference< css::lang::XComponent >
                 impl_recoverQueryDesign_throw(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& i_rRecoveryStorage,
+                    const css::uno::Reference< css::embed::XStorage >& i_rRecoveryStorage,
                     const OUString& i_rComponentName,
                     const bool i_bForEditing
                 );
@@ -100,11 +100,11 @@ namespace dbaccess
         void    impl_identifyComponent_throw();
 
     private:
-        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+        const css::uno::Reference< css::uno::XComponentContext >&
                                                 m_rContext;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
+        css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >
                                                 m_xDocumentUI;
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >
+        const css::uno::Reference< css::lang::XComponent >
                                                 m_xComponent;
         SubComponentType                        m_eType;
         SubComponentDescriptor                  m_aCompDesc;

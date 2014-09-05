@@ -47,8 +47,8 @@
 #include <stdio.h>
 
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
+using namespace css;
+using namespace css::uno;
 
 DocumentDigitalSignatures::DocumentDigitalSignatures( const Reference< XComponentContext >& rxCtx ):
     mxCtx(rxCtx),

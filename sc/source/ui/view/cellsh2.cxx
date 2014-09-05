@@ -789,7 +789,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScConditionMode eOper = SC_COND_EQUAL;
                     OUString aExpr1, aExpr2;
                     bool bBlank = true;
-                    sal_Int16 nListType = ValidListType::UNSORTED;
+                    sal_Int16 nListType = css::sheet::TableValidationVisibility::UNSORTED;
                     bool bShowHelp = false;
                     OUString aHelpTitle, aHelpText;
                     bool bShowError = false;

@@ -27,7 +27,6 @@
 #include <map>
 #include <svx/sidebar/PanelLayout.hxx>
 
-namespace cssu = ::com::sun::star::uno;
 
 class ToolBox;
 
@@ -41,13 +40,13 @@ class InsertPropertyPanel
 public:
     InsertPropertyPanel (
         Window* pParent,
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
     virtual ~InsertPropertyPanel (void);
 
 private:
     ToolBox*        mpStandardShapesToolBox;
     ToolBox*        mpCustomShapesToolBox;
-    const cssu::Reference<css::frame::XFrame> mxFrame;
+    const css::uno::Reference<css::frame::XFrame> mxFrame;
 
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
 };

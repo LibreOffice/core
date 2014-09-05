@@ -1271,7 +1271,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
                 else
                     pNew.reset(new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard));
 
-                bool bSortList = ( pData->GetListType() == ValidListType::SORTEDASCENDING);
+                bool bSortList = ( pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING);
                 if ( bSortList )
                 {
                     std::vector<ScTypedStrData>::const_iterator itBeg = aStrings.begin(), itEnd = aStrings.end();

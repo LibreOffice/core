@@ -57,9 +57,9 @@
 #include <vcl/layout.hxx>
 #include <unotools/configitem.hxx>
 
-using namespace ::com::sun::star::security;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star;
+using namespace css::security;
+using namespace css::uno;
+using namespace css;
 
 namespace
 {
