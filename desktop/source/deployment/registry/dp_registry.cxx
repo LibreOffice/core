@@ -464,7 +464,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     if (mediaType.isEmpty())
     {
         ::ucbhelper::Content ucbContent;
-        bool bOk;
+        bool bOk=true;
 
         try
         {

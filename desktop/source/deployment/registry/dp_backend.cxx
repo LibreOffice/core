@@ -574,7 +574,7 @@ void Package::exportTo(
 
     ::ucbhelper::Content destFolder( destFolderURL, xCmdEnv, getMyBackend()->getComponentContext() );
     ::ucbhelper::Content sourceContent( getURL(), xCmdEnv, getMyBackend()->getComponentContext() );
-    bool bOk;
+    bool bOk=true;
     try
     {
         bOk = destFolder.transferContent(
