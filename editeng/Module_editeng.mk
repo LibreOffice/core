@@ -34,4 +34,8 @@ $(eval $(call gb_Module_add_check_targets,editeng,\
 	CppunitTest_editeng_lookuptree \
 ))
 
+$(eval $(call gb_Module_add_perfcheck_targets,editeng,\
+	CppunitTest_editeng_perf_autocorrect \
+))
+
 # vim: set noet sw=4 ts=4:
