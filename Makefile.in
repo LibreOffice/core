@@ -7,13 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip subsequentcheck tags debugrun help slowcheck translations unitcheck packageinfo internal.clean
+gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck
+
+.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip tags debugrun help translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 MAKECMDGOALS?=all
 build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
  $(if $(filter build-nocheck,$(MAKECMDGOALS)),build)\
  $(if $(filter check,$(MAKECMDGOALS)),subsequentcheck)\
- $(filter all build-l10n-only build-non-l10n-only debugrun help slowcheck translations unitcheck subsequentcheck check packageinfo,$(MAKECMDGOALS))
+ $(filter all build-l10n-only build-non-l10n-only debugrun help translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo,$(MAKECMDGOALS))
 
 SHELL := @SHELL_BASH@
 SRCDIR := @SRC_ROOT@
@@ -61,12 +63,12 @@ PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
 # Partial Build
 #
 define gb_Top_GbuildModuleRules
-.PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck $(1).slowcheck
+.PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).showdeliverables $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target))
 
 $(1): bootstrap fetch
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
 
-$(1).build $(1).check $(1).clean $(1).showdeliverables $(1).subsequentcheck $(1).slowcheck:
+$(1).build $(1).check $(1).clean $(1).showdeliverables $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target)):
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).all: bootstrap fetch
@@ -233,7 +235,7 @@ ifeq ($(OS),IOS)
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
 
-build-non-l10n-only build-l10n-only build-nocheck check debugrun help slowcheck translations unitcheck subsequentcheck packageinfo: build
+build-non-l10n-only build-l10n-only build-nocheck check debugrun help translations packageinfo $(gb_Top_MODULE_CHECK_TARGETS): build
 
 cross-toolset: bootstrap fetch
 	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools

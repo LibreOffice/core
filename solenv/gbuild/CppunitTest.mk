@@ -94,7 +94,10 @@ $(call gb_CppunitTest_get_target,%) :| $(gb_CppunitTest_CPPTESTDEPS)
 			|| ($(if $(value gb_CppunitTest_postprocess), \
 					RET=$$?; \
 					$(call gb_CppunitTest_postprocess,$(gb_CppunitTest_CPPTESTCOMMAND),$@.core,$$RET) >> $@.log 2>&1;) \
-				cat $@.log; $(SRCDIR)/solenv/bin/unittest-failed.sh Cppunit $*))))
+				cat $@.log; $(SRCDIR)/solenv/bin/unittest-failed.sh Cppunit $*))) \
+		$(if $(PERFTEST), && VAL=$$(grep '^==.*== Collected : ' $@.log | sed "s/==.*== Collected : //") && \
+			$(if $(filter 0,$(PERFTEST)), expr "$$VAL" "*" "101" "/" "100", test $$VAL -le $(PERFTEST) || (echo "Unit test is slow! $$VAL instructions detected." && false))) \
+	)
 
 define gb_CppunitTest_CppunitTest
 $(call gb_CppunitTest__CppunitTest_impl,$(1),$(call gb_CppunitTest_get_linktarget,$(1)))
@@ -141,6 +144,21 @@ endef
 # functions for adding many commonly used arguments.
 define gb_CppunitTest_add_arguments
 $(call gb_CppunitTest_get_target,$(1)) : ARGS += $(2)
+
+endef
+
+# Run this unit test with callgrind tool to measure performance. If you are
+# creating a new test, first set the number to 0, run the test, and it will
+# print an number for you to use as a second parameter here. The test will
+# fail if reported number of instructions will be bigger than this parameter.
+#
+# call gb_CppunitTest_set_performance_test,name,instructions_number
+define gb_CppunitTest_set_performance_test
+$(if $(ENABLE_VALGRIND),,$(call gb_Output_error,gb_CppunitTest_set_performance_test used with empty $$(ENABLE_VALGRIND)))
+
+$(call gb_CppunitTest_get_target,$(1)) : PERFTEST := $(2)
+$(call gb_CppunitTest_get_target,$(1)) : gb_CppunitTest_VALGRINDTOOL := valgrind --tool=callgrind --dump-instr=yes --instr-atstart=no
+$(call gb_CppunitTest_use_external,$(1),valgrind)
 
 endef
 

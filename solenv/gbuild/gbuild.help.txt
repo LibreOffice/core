@@ -32,6 +32,7 @@ AVAILABLE TARGETS
        unitcheck        run unit tests
        slowcheck        run slow unit tests
        subsequentcheck  run system tests (requires full installation)
+       perfcheck        run performance/callgrind unit tests
        check            run unit tests and if in toplevel subsequentcheck
        clean            remove all generated files
        debugrun         starts the INSTDIR instance and allows tests to be run

@@ -20,6 +20,10 @@ ifeq ($(MAKECMDGOALS),build)
 gb_Module_SKIPTARGETS := check slowcheck subsequentcheck
 endif
 
+ifeq (,$(filter perfcheck,$(MAKECMDGOALS)))
+gb_Module_SKIPTARGETS += perfcheck
+endif
+
 ifneq ($(strip $(MAKECMDGOALS)),)
 # speed up depending on the target
 gb_SpeedUpTargets_LEVEL_4 := debugrun help translations install-package-% packageinfo
@@ -61,6 +65,10 @@ endif
 
 ifneq (,$(filter subsequentcheck,$(gb_Module_SKIPTARGETS)))
 gb_Module_add_subsequentcheck_target =
+endif
+
+ifneq (,$(filter perfcheck,$(gb_Module_SKIPTARGETS)))
+gb_Module_add_perfcheck_target =
 endif
 
 ifneq (,$(filter module,$(gb_Module_SKIPTARGETS)))
