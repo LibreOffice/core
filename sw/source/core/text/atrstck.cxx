@@ -68,8 +68,7 @@
  * NUM_DEFAULT_VALUES.
  * Also adjust NUM_ATTRIBUTE_STACKS in atrhndl.hxx.
  */
-const sal_uInt8 StackPos[ static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
-                     static_cast<sal_uInt16>(RES_CHRATR_BEGIN) + 1 ] =
+const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
 {
      0, //                                       //  0
      1, // RES_CHRATR_CASEMAP = RES_CHRATR_BEGIN //  1
@@ -508,7 +507,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
             if ( bRet )
             {
                 // we remove rAttr from the appropriate stack
-                sal_uInt16 nStackPos = StackPos[ i ];
+                const sal_uInt16 nStackPos = StackPos[ i ];
                 aAttrStack[ nStackPos ].Remove( rAttr );
                 // reset font according to attribute on top of stack
                 // or default value
@@ -590,7 +589,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
     {
         // ruby stack has no more attributes
         // check, if an rotation attribute has to be applied
-        sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
+        const sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
         bool bTwoLineAct = false;
         const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
 
@@ -607,7 +606,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
             return;
 
         // eventually, an rotate attribute has to be activated
-        sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
+        const sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
         const SwTxtAttr* pRotateAttr = aAttrStack[ nRotateStack ].Top();
 
         if ( pRotateAttr )
@@ -809,7 +808,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             if ( bRuby )
                 break;
 
-            sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
+            const sal_uInt16 nTwoLineStack = StackPos[ RES_CHRATR_TWO_LINES ];
             bool bTwoLineAct = false;
             const SwTxtAttr* pTwoLineAttr = aAttrStack[ nTwoLineStack ].Top();
 
@@ -847,7 +846,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
             if ( bRuby )
                 break;
 
-            sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
+            const sal_uInt16 nRotateStack = StackPos[ RES_CHRATR_ROTATE ];
             const SwTxtAttr* pRotateAttr = aAttrStack[ nRotateStack ].Top();
 
             if ( pRotateAttr )

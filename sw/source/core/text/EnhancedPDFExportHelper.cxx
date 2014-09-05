@@ -1076,14 +1076,14 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 // This is the default. If the paragraph could not be mapped to
                 // any of the standard pdf tags, we write a user defined tag
                 // <stylename> with role = P
-                nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Paragraph);
+                nPDFType = vcl::PDFWriter::Paragraph;
                 aPDFType = sStyleName;
 
                 // Quotations: BlockQuote
 
                 if (sStyleName.equalsAscii(aQuotations))
                 {
-                    nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::BlockQuote);
+                    nPDFType = vcl::PDFWriter::BlockQuote;
                     aPDFType = OUString(aBlockQuoteString);
                 }
 
@@ -1091,7 +1091,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 else if (sStyleName.equalsAscii(aCaption))
                 {
-                    nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
+                    nPDFType = vcl::PDFWriter::Caption;
                     aPDFType = OUString(aCaptionString);
                 }
 
@@ -1099,7 +1099,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 else if (sParentStyleName.equalsAscii(aCaption))
                 {
-                    nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Caption);
+                    nPDFType = vcl::PDFWriter::Caption;
                     aPDFType = sStyleName + aCaptionString;
                 }
 
@@ -1107,7 +1107,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                 else if (sStyleName.equalsAscii(aHeading))
                 {
-                    nPDFType = static_cast<sal_uInt16>(vcl::PDFWriter::Heading);
+                    nPDFType = vcl::PDFWriter::Heading;
                     aPDFType = OUString(aHString);
                 }
 
@@ -1116,7 +1116,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 if ( pTxtNd->IsOutline() )
                 {
                     int nRealLevel = pTxtNd->GetAttrOutlineLevel()-1;
-                   nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
+                    nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
 
                     nPDFType =  static_cast<sal_uInt16>(vcl::PDFWriter::H1 + nRealLevel);
                     switch(nRealLevel)
@@ -1375,7 +1375,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                 else
                 {
                     const LanguageType nCurrentLanguage = rInf.GetFont()->GetLanguage();
-                    const sal_uInt16 nFont = rInf.GetFont()->GetActual();
+                    const sal_uInt8 nFont = rInf.GetFont()->GetActual();
                     const LanguageType nDefaultLang = SwEnhancedPDFExportHelper::GetDefaultLanguage();
 
                     if ( UNDERLINE_NONE    != rInf.GetFont()->GetUnderline() ||
@@ -1699,8 +1699,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
 
                         // Create links for all selected rectangles:
-                        const sal_uInt16 nNumOfRects = aTmp.size();
-                        for ( sal_uInt16 i = 0; i < nNumOfRects; ++i )
+                        const size_t nNumOfRects = aTmp.size();
+                        for ( size_t i = 0; i < nNumOfRects; ++i )
                         {
                             // Link Rectangle
                             const SwRect& rLinkRect( aTmp[ i ] );
@@ -1739,8 +1739,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         // HYPERLINKS (Graphics, Frames, OLEs )
 
         const SwFrmFmts* pTbl = pDoc->GetSpzFrmFmts();
-        const sal_uInt16 nSpzFrmFmtsCount = pTbl->size();
-        for( sal_uInt16 n = 0; n < nSpzFrmFmtsCount; ++n )
+        const size_t nSpzFrmFmtsCount = pTbl->size();
+        for( size_t n = 0; n < nSpzFrmFmtsCount; ++n )
         {
             const SwFrmFmt* pFrmFmt = (*pTbl)[n];
             const SfxPoolItem* pItem;
@@ -1868,8 +1868,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                         const bool bHeaderFooter = pDoc->IsInHeaderFooter( aPos.nNode );
 
                         // Create links for all selected rectangles:
-                        const sal_uInt16 nNumOfRects = aTmp.size();
-                        for ( sal_uInt16 i = 0; i < nNumOfRects; ++i )
+                        const size_t nNumOfRects = aTmp.size();
+                        for ( size_t i = 0; i < nNumOfRects; ++i )
                         {
                             // Link rectangle
                             const SwRect& rLinkRect( aTmp[ i ] );
@@ -1908,8 +1908,8 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
         // FOOTNOTES
 
-        const sal_uInt16 nFtnCount = pDoc->GetFtnIdxs().size();
-        for ( sal_uInt16 nIdx = 0; nIdx < nFtnCount; ++nIdx )
+        const size_t nFtnCount = pDoc->GetFtnIdxs().size();
+        for ( size_t nIdx = 0; nIdx < nFtnCount; ++nIdx )
         {
             // Set cursor to text node that contains the footnote:
             const SwTxtFtn* pTxtFtn = pDoc->GetFtnIdxs()[ nIdx ];
