@@ -1004,14 +1004,22 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
             break;
             case NS_ooxml::LN_CT_Lvl_lvlJc:
             {
-                static const sal_Int16 aWWAlignments[ ] =
+                sal_Int16 nValue = 0;
+                switch (nIntValue)
                 {
-                    text::HoriOrientation::LEFT,
-                    text::HoriOrientation::CENTER,
-                    text::HoriOrientation::RIGHT
-                };
+                case NS_ooxml::LN_Value_ST_Jc_left:
+                case NS_ooxml::LN_Value_ST_Jc_start:
+                    nValue = text::HoriOrientation::LEFT;
+                    break;
+                case 1:
+                    nValue = text::HoriOrientation::CENTER;
+                    break;
+                case 2:
+                    nValue = text::HoriOrientation::RIGHT;
+                    break;
+                }
                 m_pCurrentDefinition->GetCurrentLevel( )->Insert(
-                    PROP_ADJUST, uno::makeAny( aWWAlignments[ nIntValue ] ) );
+                    PROP_ADJUST, uno::makeAny( nValue ) );
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             }
             break;

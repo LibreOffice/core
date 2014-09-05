@@ -17130,9 +17130,9 @@
       <attribute name="rightChars" tokenid="ooxml:CT_Ind_rightChars"/>
     </resource>
     <resource name="ST_Jc" resource="List">
-      <value tokenid="0">left</value>
+      <value tokenid="ooxml:Value_ST_Jc_left">left</value>
       <value tokenid="2">right</value>
-      <value tokenid="0">start</value>
+      <value tokenid="ooxml:Value_ST_Jc_start">start</value>
       <value tokenid="1">center</value>
       <value tokenid="2">end</value>
       <value tokenid="3">both</value>

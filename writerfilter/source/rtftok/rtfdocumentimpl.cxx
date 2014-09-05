@@ -2426,7 +2426,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         nParam = 3;
         break;
     case RTF_QL:
-        nParam = 0;
+        nParam = NS_ooxml::LN_Value_ST_Jc_left;
         break;
     case RTF_QR:
         nParam = 2;
@@ -3385,8 +3385,24 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     switch (nKeyword)
     {
     case RTF_LEVELJC:
+    {
         nSprm = NS_ooxml::LN_CT_Lvl_lvlJc;
+        int nValue = 0;
+        switch (nParam)
+        {
+        case 0:
+            nValue = NS_ooxml::LN_Value_ST_Jc_left;
+            break;
+        case 1:
+            nValue = 1; // center
+            break;
+        case 2:
+            nValue = 2; // right
+            break;
+        }
+        pIntValue.reset(new RTFValue(nValue));
         break;
+    }
     case RTF_LEVELNFC:
         nSprm = NS_ooxml::LN_CT_Lvl_numFmt;
         break;

@@ -3279,7 +3279,8 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::bo
         nAdjust = style::ParagraphAdjust_BLOCK;
         aStringValue = "both";
         break;
-    case 0:
+    case NS_ooxml::LN_Value_ST_Jc_left:
+    case NS_ooxml::LN_Value_ST_Jc_start:
     default:
         nAdjust = static_cast< sal_Int16 > (bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT);
         break;
