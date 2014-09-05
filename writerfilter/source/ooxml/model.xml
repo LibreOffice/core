@@ -17131,10 +17131,10 @@
     </resource>
     <resource name="ST_Jc" resource="List">
       <value tokenid="ooxml:Value_ST_Jc_left">left</value>
-      <value tokenid="2">right</value>
+      <value tokenid="ooxml:Value_ST_Jc_right">right</value>
       <value tokenid="ooxml:Value_ST_Jc_start">start</value>
       <value tokenid="1">center</value>
-      <value tokenid="2">end</value>
+      <value tokenid="ooxml:Value_ST_Jc_end">end</value>
       <value tokenid="3">both</value>
       <value tokenid="ooxml:Value_ST_Jc_mediumKashida">mediumKashida</value>
       <value tokenid="ooxml:Value_ST_Jc_distribute">distribute</value>

@@ -3397,7 +3397,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             nValue = 1; // center
             break;
         case 2:
-            nValue = 2; // right
+            nValue = NS_ooxml::LN_Value_ST_Jc_right;
             break;
         }
         pIntValue.reset(new RTFValue(nValue));
