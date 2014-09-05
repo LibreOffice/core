@@ -118,9 +118,8 @@ public class ParcelBrowseNode extends PropertySet
                 String[] names = parcel.getElementNames();
                 browsenodes = new ArrayList<XBrowseNode>( names.length );
 
-                for ( int index = 0; index < names.length; index++ )
-                {
-                    browsenodes.add( new ScriptBrowseNode( provider, parcel, names[ index ] ));
+                for (String name : names) {
+                    browsenodes.add(new ScriptBrowseNode(provider, parcel, name));
                 }
             }
             else

@@ -282,12 +282,11 @@ public class ScriptEditorForBeanShell
         JPanel p = new JPanel();
         p.setLayout(new FlowLayout());
 
-        for (int i = 0; i < labels.length; i++) {
-            JButton b = new JButton(labels[i]);
+        for (String label : labels) {
+            JButton b = new JButton(label);
             b.addActionListener(this);
             p.add(b);
-
-            if (labels[i].equals("Save") && filename == null) {
+            if (label.equals("Save") && filename == null) {
                 b.setEnabled(false);
             }
         }

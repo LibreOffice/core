@@ -221,8 +221,9 @@ public class ParcelDescriptor {
 
     public void setScriptEntries(ScriptEntry[] scripts) {
         clearEntries();
-        for (int i = 0; i < scripts.length; i++)
-            addScriptEntry(scripts[i]);
+        for (ScriptEntry script : scripts) {
+            addScriptEntry(script);
+        }
     }
 
     public void setScriptEntries(Iterator<ScriptEntry> scripts) {
