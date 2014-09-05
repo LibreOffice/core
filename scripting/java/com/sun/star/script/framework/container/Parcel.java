@@ -62,7 +62,7 @@ public class Parcel implements XNameContainer
     public java.lang.Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException, com.sun.star.lang.WrappedTargetException
     {
         LogUtils.DEBUG("** Parcel.getByName for " + aName  );
-        ScriptEntry script = null;
+        ScriptEntry thescript = null;
         try
         {
             if ( m_descriptor != null && hasElements() )
@@ -70,11 +70,9 @@ public class Parcel implements XNameContainer
                 ScriptEntry[] scripts = m_descriptor.getScriptEntries();
                 if ( scripts.length != 0 )
                 {
-                    for ( int index = 0; index < scripts.length; index++ )
-                    {
-                        if ( scripts[ index ].getLanguageName().equals( aName ) )
-                        {
-                            script = scripts[ index ];
+                    for (ScriptEntry script : scripts) {
+                        if (script.getLanguageName().equals(aName)) {
+                            thescript = script;
                             break;
                         }
                     }
@@ -86,12 +84,12 @@ public class Parcel implements XNameContainer
         {
             throw new com.sun.star.lang.WrappedTargetException( e.toString() );
         }
-        if ( script == null )
+        if ( thescript == null )
         {
             LogUtils.DEBUG("No script for " + aName );
             throw new com.sun.star.container.NoSuchElementException("No script named " + aName );
         }
-        ScriptMetaData data = new ScriptMetaData( this, script, null );
+        ScriptMetaData data = new ScriptMetaData( this, thescript, null );
 
         LogUtils.DEBUG("returning date  for " + aName );
         return data;

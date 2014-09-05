@@ -99,25 +99,20 @@ public class ProviderBrowseNode extends PropertySet
             LogUtils.DEBUG("** ProviderBrowseNode.getChildNodes(), container is " + container );
             String[] parcels = container.getElementNames();
             browsenodes = new ArrayList<XBrowseNode>( parcels.length );
-            for ( int index = 0; index < parcels.length; index++ )
-            {
-                try
-                {
-                    XBrowseNode node  = new ParcelBrowseNode( provider, container, parcels[ index ] );
+            for (String parcel : parcels) {
+                try {
+                    XBrowseNode node = new ParcelBrowseNode(provider, container, parcel);
                     browsenodes.add( node );
-                }
-                catch ( Exception e )
-                {
-                    LogUtils.DEBUG("*** Failed to create parcel node for " + parcels[ index ] );
+                } catch (Exception e) {
+                    LogUtils.DEBUG("*** Failed to create parcel node for " + parcel);
                     LogUtils.DEBUG( e.toString() );
                 }
             }
             ParcelContainer[] packageContainers = container.getChildContainers();
             LogUtils.DEBUG("**** For container named " + container.getName() + " with root path " + container.getParcelContainerDir() + " has " + packageContainers.length + " child containers " );
 
-            for ( int i = 0; i < packageContainers.length; i++ )
-            {
-                XBrowseNode node = new PkgProviderBrowseNode( provider, packageContainers[ i ], m_xCtx );
+            for (ParcelContainer packageContainer : packageContainers) {
+                XBrowseNode node = new PkgProviderBrowseNode(provider, packageContainer, m_xCtx);
                 browsenodes.add( node );
             }
         }

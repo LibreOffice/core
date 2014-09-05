@@ -121,17 +121,13 @@ public class ParcelContainer implements XNameAccess
      * @return    child <tt>ParcelContainer</tt> or {@code null} if none
      * found.
      */
-
-    public ParcelContainer getChildContainer( String key )
+    public ParcelContainer getChildContainer(String key)
     {
         ParcelContainer result = null;
-        Iterator<ParcelContainer> iter = childContainers.iterator();
-        while ( iter.hasNext() )
+        for (ParcelContainer c : childContainers)
         {
-            ParcelContainer c = iter.next();
             String location = ScriptMetaData.getLocationPlaceHolder(
                 c.containerUrl, c.getName());
-
             if ( key.equals( location ) )
             {
                 result = c;
@@ -151,14 +147,11 @@ public class ParcelContainer implements XNameAccess
      * @return    child <tt>ParcelContainer</tt> or {@code null} if none
      * found.
      */
-
     public ParcelContainer getChildContainerForURL( String containerUrl )
     {
         ParcelContainer result = null;
-        Iterator<ParcelContainer> iter = childContainers.iterator();
-        while ( iter.hasNext() )
+        for (ParcelContainer c : childContainers)
         {
-            ParcelContainer c = iter.next();
             if ( containerUrl.equals( c.containerUrl ) )
             {
                 result = c;
@@ -294,6 +287,7 @@ public class ParcelContainer implements XNameAccess
         }
         return containerUrl;
     }
+
     public Object getByName( String aName ) throws com.sun.star.container.NoSuchElementException, WrappedTargetException
     {
         Parcel parcel = null;
@@ -301,11 +295,8 @@ public class ParcelContainer implements XNameAccess
         {
             if ( hasElements() )
             {
-                Iterator<Parcel> iter = parcels.iterator();
-                while ( iter.hasNext() )
+                for (Parcel parcelToCheck : parcels)
                 {
-                    Parcel parcelToCheck = iter.next();
-
                     if ( parcelToCheck.getName().equals( aName ) )
                     {
                        parcel = parcelToCheck;
@@ -324,6 +315,7 @@ public class ParcelContainer implements XNameAccess
         }
         return parcel;
     }
+
     public String[] getElementNames()
     {
         if ( hasElements() )
@@ -375,18 +367,18 @@ public class ParcelContainer implements XNameAccess
                 LogUtils.DEBUG( getParcelContainerDir() + " is a folder " );
                 String[] children = m_xSFA.getFolderContents( getParcelContainerDir(), true );
                 parcels  = new ArrayList<Parcel>(children.length);
-                for ( int  i = 0; i < children.length; i++)
+                for (String child : children)
                 {
-                    LogUtils.DEBUG("Processing " + children[ i ] );
+                    LogUtils.DEBUG("Processing " + child);
                     try
                     {
-                        loadParcel( children[ i ] );
+                        loadParcel(child);
                     }
                     catch (java.lang.Exception e)
                     {
                         // print an error message and move on to
                         // the next parcel
-                        LogUtils.DEBUG("ParcelContainer.loadParcels caught " + e.getClass().getName() + " exception loading parcel " + children[i] + ": " + e.getMessage() );
+                        LogUtils.DEBUG("ParcelContainer.loadParcels caught " + e.getClass().getName() + " exception loading parcel " + child + ": " + e.getMessage());
                     }
                 }
             }
