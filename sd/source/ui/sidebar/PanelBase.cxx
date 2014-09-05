@@ -77,7 +77,7 @@ void PanelBase::Resize (void)
         return NULL;
 }
 
-void PanelBase::SetSidebar (const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+void PanelBase::SetSidebar (const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     mxSidebar = rxSidebar;
     if (mxSidebar.is() && mpWrappedControl!=0)

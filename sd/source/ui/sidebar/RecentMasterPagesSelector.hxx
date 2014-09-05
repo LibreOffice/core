@@ -33,7 +33,7 @@ public:
     static MasterPagesSelector* Create (
         ::Window* pParent,
         ViewShellBase& rViewShellBase,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
 protected:
     DECL_LINK(MasterPageListListener, void*);
@@ -63,7 +63,7 @@ private:
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~RecentMasterPagesSelector (void);
 
     virtual void LateInit (void) SAL_OVERRIDE;

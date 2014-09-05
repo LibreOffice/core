@@ -38,7 +38,6 @@
 
 class SfxModule;
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sd {
 class DrawDocShell;
@@ -72,7 +71,7 @@ public:
     LayoutMenu (
         ::Window* pParent,
         ViewShellBase& rViewShellBase,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~LayoutMenu (void);
 
     virtual void Dispose (void);
@@ -130,10 +129,10 @@ private:
         many columns for the calculation.
     */
     const int mnPreferredColumnCount;
-    cssu::Reference<css::frame::XStatusListener> mxListener;
+    css::uno::Reference<css::frame::XStatusListener> mxListener;
     bool mbSelectionUpdatePending;
     bool mbIsMainViewChangePending;
-    cssu::Reference<css::ui::XSidebar> mxSidebar;
+    css::uno::Reference<css::ui::XSidebar> mxSidebar;
     bool mbIsDisposed;
 
     /** Calculate the number of displayed rows.  This depends on the given

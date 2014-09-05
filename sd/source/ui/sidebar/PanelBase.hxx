@@ -27,7 +27,6 @@
 
 #include <boost/scoped_ptr.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sd {
     class ViewShellBase;
@@ -56,7 +55,7 @@ public:
     virtual css::ui::LayoutSize GetHeightForWidth (const sal_Int32 nWidth) SAL_OVERRIDE;
 
     // ISidebarReceiver
-    virtual void SetSidebar (const cssu::Reference<css::ui::XSidebar>& rxSidebar) SAL_OVERRIDE;
+    virtual void SetSidebar (const css::uno::Reference<css::ui::XSidebar>& rxSidebar) SAL_OVERRIDE;
 
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible > CreateAccessibleObject (
@@ -70,7 +69,7 @@ protected:
         ViewShellBase& rViewShellBase) = 0;
 
 private:
-    cssu::Reference<css::ui::XSidebar> mxSidebar;
+    css::uno::Reference<css::ui::XSidebar> mxSidebar;
     ViewShellBase& mrViewShellBase;
 
     bool ProvideWrappedControl (void);

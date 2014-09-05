@@ -35,7 +35,7 @@ namespace sd { namespace sidebar {
 MasterPagesSelector* RecentMasterPagesSelector::Create (
     ::Window* pParent,
     ViewShellBase& rViewShellBase,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     SdDrawDocument* pDocument = rViewShellBase.GetDocument();
     if (pDocument == NULL)
@@ -61,7 +61,7 @@ RecentMasterPagesSelector::RecentMasterPagesSelector (
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
 {
 }

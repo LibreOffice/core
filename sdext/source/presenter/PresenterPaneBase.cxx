@@ -32,9 +32,9 @@
 #include <com/sun/star/rendering/TexturingMode.hpp>
 #include <osl/mutex.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::drawing::framework;
+using namespace css;
+using namespace css::uno;
+using namespace css::drawing::framework;
 
 namespace sdext { namespace presenter {
 

@@ -34,8 +34,6 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-namespace cssu = ::com::sun::star::uno;
-namespace cssa = ::com::sun::star::accessibility;
 
 namespace sdext { namespace presenter {
 
@@ -91,13 +89,13 @@ class PresenterTextParagraph
 public:
     PresenterTextParagraph (
         const sal_Int32 nParagraphIndex,
-        const cssu::Reference<css::i18n::XBreakIterator>& rxBreakIterator,
-        const cssu::Reference<css::i18n::XScriptTypeDetector>& rxScriptTypeDetector,
-        const cssu::Reference<css::text::XTextRange>& rxTextRange,
+        const css::uno::Reference<css::i18n::XBreakIterator>& rxBreakIterator,
+        const css::uno::Reference<css::i18n::XScriptTypeDetector>& rxScriptTypeDetector,
+        const css::uno::Reference<css::text::XTextRange>& rxTextRange,
         const SharedPresenterTextCaret& rpCaret);
 
     void Paint (
-        const cssu::Reference<css::rendering::XCanvas>& rxCanvas,
+        const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
         const css::geometry::RealSize2D& rSize,
         const PresenterTheme::SharedFontDescriptor& rpFont,
         const css::rendering::ViewState& rViewState,
@@ -112,14 +110,14 @@ public:
     sal_Int32 GetCharacterCount (void) const;
     sal_Unicode GetCharacter (const sal_Int32 nGlobalCharacterIndex) const;
     OUString GetText (void) const;
-    cssa::TextSegment GetTextSegment (
+    css::accessibility::TextSegment GetTextSegment (
         const sal_Int32 nOffset,
         const sal_Int32 nGlobalCharacterIndex,
         const sal_Int16 nTextType) const;
-    cssa::TextSegment GetWordTextSegment (
+    css::accessibility::TextSegment GetWordTextSegment (
         const sal_Int32 nOffset,
         const sal_Int32 nIndex) const;
-    cssa::TextSegment CreateTextSegment (
+    css::accessibility::TextSegment CreateTextSegment (
         sal_Int32 nStartIndex,
         sal_Int32 nEndIndex) const;
     css::awt::Rectangle GetCharacterBounds (
@@ -168,10 +166,10 @@ private:
         sal_Int32 mnLineEndCharacterIndex;
         sal_Int32 mnLineStartCellIndex;
         sal_Int32 mnLineEndCellIndex;
-        cssu::Reference<css::rendering::XTextLayout> mxLayoutedLine;
+        css::uno::Reference<css::rendering::XTextLayout> mxLayoutedLine;
         double mnBaseLine;
         double mnWidth;
-        cssu::Sequence<css::geometry::RealRectangle2D> maCellBoxes;
+        css::uno::Sequence<css::geometry::RealRectangle2D> maCellBoxes;
 
         void ProvideLayoutedLine (
             const OUString& rsParagraphText,
@@ -181,8 +179,8 @@ private:
         bool IsEmpty (void) const;
     };
 
-    cssu::Reference<css::i18n::XBreakIterator> mxBreakIterator;
-    cssu::Reference<css::i18n::XScriptTypeDetector> mxScriptTypeDetector;
+    css::uno::Reference<css::i18n::XBreakIterator> mxBreakIterator;
+    css::uno::Reference<css::i18n::XScriptTypeDetector> mxScriptTypeDetector;
     ::std::vector<Line> maLines;
     ::std::vector<sal_Int32> maWordBoundaries;
     // Offset of the top of the paragraph with respect to the origin of the

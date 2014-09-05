@@ -161,19 +161,19 @@ namespace {
     class FrameworkHelperAllPassFilter
     {
     public:
-        bool operator() (const cssdf::ConfigurationChangeEvent&) { return true; }
+        bool operator() (const css::drawing::framework::ConfigurationChangeEvent&) { return true; }
     };
 
     class FrameworkHelperResourceIdFilter
     {
     public:
         FrameworkHelperResourceIdFilter (
-            const cssu::Reference<cssdf::XResourceId>& rxResourceId);
-        bool operator() (const cssdf::ConfigurationChangeEvent& rEvent)
+            const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId);
+        bool operator() (const css::drawing::framework::ConfigurationChangeEvent& rEvent)
         { return mxResourceId.is() && rEvent.ResourceId.is()
                 && mxResourceId->compareTo(rEvent.ResourceId) == 0; }
     private:
-        cssu::Reference<cssdf::XResourceId> mxResourceId;
+        css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;
     };
 
 } // end of anonymous namespace

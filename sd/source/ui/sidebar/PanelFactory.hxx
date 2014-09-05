@@ -32,7 +32,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sd {
     class ViewShellBase;
@@ -54,24 +53,24 @@ class PanelFactory
 {
 public:
     static ::rtl::OUString SAL_CALL getImplementationName (void);
-    static cssu::Reference<cssu::XInterface> SAL_CALL createInstance (
-        const cssu::Reference<css::lang::XMultiServiceFactory>& rxFactory);
-    static cssu::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames (void);
+    static css::uno::Reference<css::uno::XInterface> SAL_CALL createInstance (
+        const css::uno::Reference<css::lang::XMultiServiceFactory>& rxFactory);
+    static css::uno::Sequence<rtl::OUString> SAL_CALL getSupportedServiceNames (void);
 
-    PanelFactory (const cssu::Reference<cssu::XComponentContext>& rxContext);
+    PanelFactory (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     virtual ~PanelFactory (void);
 
     virtual void SAL_CALL disposing (void) SAL_OVERRIDE;
 
     // XUIElementFactory
 
-    cssu::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
+    css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
         const ::rtl::OUString& rsResourceURL,
-        const ::cssu::Sequence<css::beans::PropertyValue>& rArguments)
+        const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
         throw(
             css::container::NoSuchElementException,
             css::lang::IllegalArgumentException,
-            cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 };
 
 } } // end of namespace sd::sidebar
