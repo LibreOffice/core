@@ -127,7 +127,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
         {
             m_bInHead = true;
         }
-        if ( t == HTML.Tag.TEXTAREA )
+        else if ( t == HTML.Tag.TEXTAREA )
         {
             String sName = ( String ) a.getAttribute( HTML.Attribute.NAME );
             if ( sName != null )
