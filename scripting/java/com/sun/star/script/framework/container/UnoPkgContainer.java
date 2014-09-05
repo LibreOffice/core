@@ -140,24 +140,17 @@ public class UnoPkgContainer extends ParcelContainer
             if ( db != null )
             {
                 String[] packages = db.getDeployedPackages( language );
-
-                for ( int i=0; i<packages.length;i++)
-                {
-                    try
-                    {
-                        processUnoPackage( packages[i], language );
-                    }
-                    catch ( com.sun.star.lang.IllegalArgumentException ila)
-                    {
-                        LogUtils.DEBUG("Failed to process " +  packages[i] + " for " + language);
+                for (String thepackage : packages) {
+                    try {
+                        processUnoPackage(thepackage, language);
+                    } catch (com.sun.star.lang.IllegalArgumentException ila) {
+                        LogUtils.DEBUG("Failed to process " + thepackage + " for " + language);
                         LogUtils.DEBUG("   Reason: " + ila );
-                    }
-                    catch( Exception e )
-                    {
+                    } catch (Exception e) {
                         // TODO proper exception or do we wish
                         // to ignore errors here
                         LogUtils.DEBUG("Something very wrong!!!!!");
-                        LogUtils.DEBUG("Failed to process " +  packages[i] + " for " + language);
+                        LogUtils.DEBUG("Failed to process " + thepackage + " for " + language);
                         LogUtils.DEBUG("   Reason: " + e );
                     }
                 }
