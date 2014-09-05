@@ -126,17 +126,6 @@
 #define HID_SMA_NOTPRECEDES                               "STARMATH_HID_SMA_NOTPRECEDES"
 #define HID_SMA_NOTSUCCEEDS                               "STARMATH_HID_SMA_NOTSUCCEEDS"
 
-#define HID_SMA_MISC_CAT                                  "STARMATH_HID_SMA_MISC_CAT"
-#define HID_SMA_UNBINOPS_CAT                              "STARMATH_HID_SMA_UNBINOPS_CAT"
-#define HID_SMA_RELATIONS_CAT                             "STARMATH_HID_SMA_RELATIONS_CAT"
-#define HID_SMA_SETOPERATIONS_CAT                         "STARMATH_HID_SMA_SETOPERATIONS_CAT"
-#define HID_SMA_FUNCTIONS_CAT                             "STARMATH_HID_SMA_FUNCTIONS_CAT"
-#define HID_SMA_OPERATORS_CAT                             "STARMATH_HID_SMA_OPERATORS_CAT"
-#define HID_SMA_ATTRIBUTES_CAT                            "STARMATH_HID_SMA_ATTRIBUTES_CAT"
-#define HID_SMA_BRACKETS_CAT                              "STARMATH_HID_SMA_BRACKETS_CAT"
-#define HID_SMA_FORMAT_CAT                                "STARMATH_HID_SMA_FORMAT_CAT"
-
-#define HID_SMA_OPERATOR_WIN                              "STARMATH_HID_SMA_OPERATOR_WIN"
 #define HID_SMA_UNBINOPS_TBX                              "STARMATH_HID_SMA_UNBINOPS_TBX"
 #define HID_SMA_RELATIONS_TBX                             "STARMATH_HID_SMA_RELATIONS_TBX"
 #define HID_SMA_SETOPERATIONS_TBX                         "STARMATH_HID_SMA_SETOPERATIONS_TBX"

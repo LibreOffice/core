@@ -32,8 +32,16 @@ class SmToolBoxWindow : public SfxFloatingWindow
 {
 
 protected:
-    ToolBox     aToolBoxCat;
-    FixedLine   aToolBoxCat_Delim;  // to visually separate the catalog part
+    ToolBox*    m_pToolBoxCat;
+    sal_uInt16  m_nUnbinopsId;
+    sal_uInt16  m_nRelationsId;
+    sal_uInt16  m_nSetoperationsId;
+    sal_uInt16  m_nFunctionsId;
+    sal_uInt16  m_nOperatorsId;
+    sal_uInt16  m_nAttributesId;
+    sal_uInt16  m_nBracketsId;
+    sal_uInt16  m_nFormatId;
+    sal_uInt16  m_nMiscId;
     ToolBox    *pToolBoxCmd;
     ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
@@ -50,6 +58,8 @@ protected:
     SmViewShell * GetView();
     const ImageList * GetImageList( sal_uInt16 nResId );
 
+    sal_uInt16 MapToolbarIdToCategory(sal_uInt16 nId) const;
+
 public:
     SmToolBoxWindow(SfxBindings    *pBindings,
                     SfxChildWindow *pChildWindow,
@@ -60,7 +70,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    DataChanged( const DataChangedEvent &rEvt ) SAL_OVERRIDE;
 
-    void        AdjustPosSize( bool bSetPos );
+    void        AdjustPos();
     void        SetCategory(sal_uInt16 nCategory);
 };
 

@@ -680,6 +680,16 @@
 #define RID_ALIGNCX_HELP                  (RID_APP_START + 4276)
 #define RID_ALIGNRX_HELP                  (RID_APP_START + 4277)
 
+#define TOOLBOX_CAT_A               (RID_APP_START + 4278)
+#define TOOLBOX_CAT_B               (RID_APP_START + 4279)
+#define TOOLBOX_CAT_C               (RID_APP_START + 4280)
+#define TOOLBOX_CAT_D               (RID_APP_START + 4281)
+#define TOOLBOX_CAT_E               (RID_APP_START + 4282)
+#define TOOLBOX_CAT_F               (RID_APP_START + 4283)
+#define TOOLBOX_CAT_G               (RID_APP_START + 4284)
+#define TOOLBOX_CAT_H               (RID_APP_START + 4285)
+#define TOOLBOX_CAT_I               (RID_APP_START + 4286)
+
 // 342 == SCH_IF_SMAVIEWSHELL, because SFX_INTERFACE_LIB is no
 // Define but latterly an Enum
 #define HID_SMA_VIEWSHELL_DOCUMENT      (342)
