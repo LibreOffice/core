@@ -156,6 +156,14 @@ namespace dbaxml
 
                             ::comphelper::MimeConfigurationHelper aHelper( m_xContext );
                             SvtModuleOptions aModuleOptions;
+                            // This looks like it makes no sense,
+                            // but is probably used to lower latency
+                            // of the user interface for the user:
+                            // when the user will do anything that requires
+                            // the data connection to be established,
+                            // calc will already have been loaded, initialised, etc
+                            // so establishing the data connection (to a Calc sheet)
+                            // will be "faster".
                             uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
                                 aModuleOptions.GetFactoryEmptyDocumentURL( SvtModuleOptions::ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
                                 OUString(), // empty frame name
