@@ -39,8 +39,6 @@
 #include <rtl/ref.hxx>
 #include <boost/shared_ptr.hpp>
 
-namespace cssu = ::com::sun::star::uno;
-namespace cssa = ::com::sun::star::accessibility;
 
 namespace sdext { namespace presenter {
 
@@ -66,7 +64,7 @@ public:
         const css::uno::Reference<css::drawing::framework::XPane>& rxMainPane);
     virtual ~PresenterAccessible (void);
 
-    void SetAccessibleParent (const cssu::Reference<cssa::XAccessible>& rxAccessibleParent);
+    void SetAccessibleParent (const css::uno::Reference<css::accessibility::XAccessible>& rxAccessibleParent);
 
     void UpdateAccessibilityHierarchy (void);
 
@@ -78,27 +76,27 @@ public:
 
     //----- XAccessible -------------------------------------------------------
 
-    virtual cssu::Reference<cssa::XAccessibleContext> SAL_CALL
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XFocusListener ----------------------------------------------------
 
     virtual void SAL_CALL focusGained (const css::awt::FocusEvent& rEvent)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL focusLost (const css::awt::FocusEvent& rEvent)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     //----- XInitialization ---------------------------------------------------
 
-    virtual void SAL_CALL initialize (const cssu::Sequence<cssu::Any>& rArguments)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     class AccessibleObject;
     class AccessibleParagraph;

@@ -28,11 +28,11 @@
 #include <tools/diagnose_ex.h>
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 
 void ContextChangeEventMultiplexer::NotifyContextChange (
-    const cssu::Reference<css::frame::XController>& rxController,
+    const css::uno::Reference<css::frame::XController>& rxController,
     const ::sfx2::sidebar::EnumContext::Context eContext)
 {
     if (rxController.is() && rxController->getFrame().is())
@@ -42,7 +42,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
             GetModuleName(rxController->getFrame()),
             ::sfx2::sidebar::EnumContext::GetContextName(eContext));
 
-        cssu::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
+        css::uno::Reference<css::ui::XContextChangeEventMultiplexer> xMultiplexer (
             css::ui::ContextChangeEventMultiplexer::get(
                 ::comphelper::getProcessComponentContext()));
         if (xMultiplexer.is())
@@ -65,7 +65,7 @@ void ContextChangeEventMultiplexer::NotifyContextChange (
 
 
 ::rtl::OUString ContextChangeEventMultiplexer::GetModuleName (
-    const cssu::Reference<css::frame::XFrame>& rxFrame)
+    const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
     try
     {

@@ -23,7 +23,6 @@
 #include "MasterPagesSelector.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 namespace sd { namespace tools { class EventMultiplexerEvent; } }
 
@@ -39,7 +38,7 @@ public:
     static MasterPagesSelector* Create (
         ::Window* pParent,
         ViewShellBase& rViewShellBase,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
 
     /** Set the selection so that the master page is selected that is
         used by the currently selected page of the document in the
@@ -60,14 +59,14 @@ protected:
     virtual void ExecuteCommand (const sal_Int32 nCommandId) SAL_OVERRIDE;
 
 private:
-    cssu::Reference<css::lang::XComponent> mxListener;
+    css::uno::Reference<css::lang::XComponent> mxListener;
 
     CurrentMasterPagesSelector (
         ::Window* pParent,
         SdDrawDocument& rDocument,
         ViewShellBase& rBase,
         const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
-        const cssu::Reference<css::ui::XSidebar>& rxSidebar);
+        const css::uno::Reference<css::ui::XSidebar>& rxSidebar);
     virtual ~CurrentMasterPagesSelector (void);
 
     virtual void LateInit (void) SAL_OVERRIDE;

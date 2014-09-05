@@ -45,7 +45,7 @@ namespace sd { namespace sidebar {
 MasterPagesSelector* CurrentMasterPagesSelector::Create (
     ::Window* pParent,
     ViewShellBase& rViewShellBase,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 {
     SdDrawDocument* pDocument = rViewShellBase.GetDocument();
     if (pDocument == NULL)
@@ -71,7 +71,7 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     SdDrawDocument& rDocument,
     ViewShellBase& rBase,
     const ::boost::shared_ptr<MasterPageContainer>& rpContainer,
-    const cssu::Reference<css::ui::XSidebar>& rxSidebar)
+    const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
     : MasterPagesSelector (pParent, rDocument, rBase, rpContainer, rxSidebar)
 {
     // For this master page selector only we change the default action for

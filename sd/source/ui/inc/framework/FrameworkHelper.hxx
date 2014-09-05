@@ -39,8 +39,6 @@ class ViewShell;
 class ViewShellBase;
 }
 
-namespace cssu = ::com::sun::star::uno;
-namespace cssdf = ::com::sun::star::drawing::framework;
 
 namespace sd { namespace framework {
 
@@ -112,7 +110,7 @@ public:
     static ::boost::shared_ptr<FrameworkHelper> Instance (ViewShellBase& rBase);
 
     static ::boost::shared_ptr<FrameworkHelper> Instance (
-        const cssu::Reference<css::frame::XController>& rxController);
+        const css::uno::Reference<css::frame::XController>& rxController);
 
     /** Mark the FrameworkHelper object for the given ViewShellBase as
         disposed.  A following ReleaseInstance() call will destroy the
@@ -149,15 +147,15 @@ public:
             reference then an empty pointer is returned.
     */
     static ::boost::shared_ptr<ViewShell> GetViewShell (
-        const cssu::Reference<cssdf::XView>& rxView);
+        const css::uno::Reference<css::drawing::framework::XView>& rxView);
 
-    typedef ::boost::function<bool(const cssdf::ConfigurationChangeEvent&)>
+    typedef ::boost::function<bool(const css::drawing::framework::ConfigurationChangeEvent&)>
         ConfigurationChangeEventFilter;
     typedef ::boost::function<void(bool bEventSeen)> Callback;
     typedef ::boost::function<
         void(
-            const cssu::Reference<
-                cssdf::XResourceId>&)
+            const css::uno::Reference<
+                css::drawing::framework::XResourceId>&)
         > ResourceFunctor;
 
     /** Test whether the called FrameworkHelper object is valid.
@@ -190,8 +188,8 @@ public:
             of the involved objects does not support XTunnel (where
             necessary).
     */
-    cssu::Reference<cssdf::XView> GetView (
-        const cssu::Reference<cssdf::XResourceId>& rxPaneOrViewId);
+    css::uno::Reference<css::drawing::framework::XView> GetView (
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxPaneOrViewId);
 
     /** Request the specified view to be displayed in the specified pane.
         When the pane is not visible its creation is also requested.  The
@@ -205,7 +203,7 @@ public:
             the caller can, for example, call RunOnResourceActivation() to
             do some initialization after the requested view becomes active.
     */
-    cssu::Reference<cssdf::XResourceId> RequestView (
+    css::uno::Reference<css::drawing::framework::XResourceId> RequestView (
         const OUString& rsResourceURL,
         const OUString& rsAnchorURL);
 
@@ -237,7 +235,7 @@ public:
 
     */
     void RunOnResourceActivation(
-        const cssu::Reference<cssdf::XResourceId>& rxResourceId,
+        const css::uno::Reference<css::drawing::framework::XResourceId>& rxResourceId,
         const Callback& rCallback);
 
     /** Normally the requested changes of the configuration are executed
@@ -273,35 +271,35 @@ public:
     /** Return a string representation of the given XResourceId object.
     */
     static OUString ResourceIdToString (
-        const cssu::Reference<
-            cssdf::XResourceId>& rxResourceId);
+        const css::uno::Reference<
+            css::drawing::framework::XResourceId>& rxResourceId);
 
     /** Create a new XResourceId object for the given resource URL.
     */
-    static cssu::Reference<
-        cssdf::XResourceId>
+    static css::uno::Reference<
+        css::drawing::framework::XResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL);
 
     /** Create a new XResourceId object for the given resource URL and a
         single anchor URL.
     */
-    static cssu::Reference<
-        cssdf::XResourceId>
+    static css::uno::Reference<
+        css::drawing::framework::XResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL,
                 const OUString& rsAnchorURL);
 
     /** Create a new XResourceId object for the given resource URL.
     */
-    static cssu::Reference<
-        cssdf::XResourceId>
+    static css::uno::Reference<
+        css::drawing::framework::XResourceId>
             CreateResourceId (
                 const OUString& rsResourceURL,
-                const cssu::Reference<
-                    cssdf::XResourceId>& rxAnchor);
+                const css::uno::Reference<
+                    css::drawing::framework::XResourceId>& rxAnchor);
 
-    cssu::Reference<cssdf::XConfigurationController>
+    css::uno::Reference<css::drawing::framework::XConfigurationController>
         GetConfigurationController (void) const { return mxConfigurationController;}
 
 private:
@@ -316,12 +314,12 @@ private:
     static ::boost::scoped_ptr<ViewURLMap> mpViewURLMap;
 
     ViewShellBase& mrBase;
-    cssu::Reference<cssdf::XConfigurationController>
+    css::uno::Reference<css::drawing::framework::XConfigurationController>
         mxConfigurationController;
 
     class DisposeListener;
     friend class DisposeListener;
-    cssu::Reference<css::lang::XComponent>
+    css::uno::Reference<css::lang::XComponent>
         mxDisposeListener;
 
     FrameworkHelper (ViewShellBase& rBase);

@@ -31,7 +31,7 @@ public:
     SlideTransitionPanel (
         ::Window* pParentWindow,
         ViewShellBase& rViewShellBase,
-        const cssu::Reference<css::frame::XFrame>& rxFrame );
+        const css::uno::Reference<css::frame::XFrame>& rxFrame );
     virtual ~SlideTransitionPanel (void);
 
     // ILayoutableWindow
@@ -43,7 +43,7 @@ protected:
         ViewShellBase& rViewShellBase) SAL_OVERRIDE;
 
 private:
-    cssu::Reference<css::frame::XFrame> mxFrame;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 };
 
 } } // end of namespace sd::sidebar

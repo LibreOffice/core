@@ -399,8 +399,8 @@ void SAL_CALL PresenterNotesView::keyPressed (const awt::KeyEvent& rEvent)
                 mpTextView->MoveCaret(
                     -1,
                     (rEvent.Modifiers == awt::KeyModifier::SHIFT)
-                        ? cssa::AccessibleTextType::CHARACTER
-                        : cssa::AccessibleTextType::WORD);
+                        ? css::accessibility::AccessibleTextType::CHARACTER
+                        : css::accessibility::AccessibleTextType::WORD);
             break;
 
         case awt::Key::L:
@@ -408,8 +408,8 @@ void SAL_CALL PresenterNotesView::keyPressed (const awt::KeyEvent& rEvent)
                 mpTextView->MoveCaret(
                     +1,
                     (rEvent.Modifiers == awt::KeyModifier::SHIFT)
-                        ? cssa::AccessibleTextType::CHARACTER
-                        : cssa::AccessibleTextType::WORD);
+                        ? css::accessibility::AccessibleTextType::CHARACTER
+                        : css::accessibility::AccessibleTextType::WORD);
             break;
     }
 }

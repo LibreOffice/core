@@ -24,7 +24,6 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
-namespace cssu = ::com::sun::star::uno;
 
 class SfxViewShell;
 
@@ -41,7 +40,7 @@ public:
             The activated context.
     */
     static void NotifyContextChange (
-        const cssu::Reference<css::frame::XController>& rxController,
+        const css::uno::Reference<css::frame::XController>& rxController,
         const ::sfx2::sidebar::EnumContext::Context eContext);
 
     /** Notify the activation of a context.
@@ -58,7 +57,7 @@ public:
 
 private:
     static ::rtl::OUString GetModuleName (
-        const cssu::Reference<css::frame::XFrame>& rxFrame);
+        const css::uno::Reference<css::frame::XFrame>& rxFrame);
 };
 
 #endif

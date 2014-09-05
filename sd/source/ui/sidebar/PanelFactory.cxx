@@ -101,7 +101,7 @@ void SAL_CALL PanelFactory::disposing (void)
 
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const ::rtl::OUString& rsUIElementResourceURL,
-    const ::cssu::Sequence<css::beans::PropertyValue>& rArguments)
+    const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
     throw(
         css::container::NoSuchElementException,
         css::lang::IllegalArgumentException,

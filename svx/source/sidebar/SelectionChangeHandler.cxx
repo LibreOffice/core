@@ -26,7 +26,7 @@
 
 
 using namespace css;
-using namespace cssu;
+using namespace css::uno;
 
 using namespace sfx2::sidebar;
 

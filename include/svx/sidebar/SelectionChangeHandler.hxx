@@ -31,8 +31,6 @@
 #include <boost/noncopyable.hpp>
 #include <boost/function.hpp>
 
-namespace cssu = ::com::sun::star::uno;
-
 
 class SdrMarkView;
 
@@ -54,25 +52,25 @@ class SVX_DLLPUBLIC SelectionChangeHandler
 public:
     SelectionChangeHandler (
         const boost::function<rtl::OUString(void)>& rSelectionChangeCallback,
-        const cssu::Reference<css::frame::XController>& rxController,
+        const css::uno::Reference<css::frame::XController>& rxController,
         const sfx2::sidebar::EnumContext::Context eDefaultContext);
     virtual ~SelectionChangeHandler (void);
 
     virtual void SAL_CALL selectionChanged (const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (cssu::RuntimeException, std::exception) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual void SAL_CALL disposing (void)
-        throw (cssu::RuntimeException) SAL_OVERRIDE;
+        throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     void Connect (void);
     void Disconnect (void);
 
 private:
     const boost::function<rtl::OUString(void)> maSelectionChangeCallback;
-    cssu::Reference<css::frame::XController> mxController;
+    css::uno::Reference<css::frame::XController> mxController;
     const sfx2::sidebar::EnumContext::Context meDefaultContext;
     bool mbIsConnected;
 };
