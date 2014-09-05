@@ -574,9 +574,19 @@ void Package::exportTo(
 
     ::ucbhelper::Content destFolder( destFolderURL, xCmdEnv, getMyBackend()->getComponentContext() );
     ::ucbhelper::Content sourceContent( getURL(), xCmdEnv, getMyBackend()->getComponentContext() );
-    if (! destFolder.transferContent(
+    bool bOk;
+    try
+    {
+        bOk = destFolder.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
-            newTitle, nameClashAction ))
+            newTitle, nameClashAction);
+    }
+    catch (const css::ucb::ContentCreationException&)
+    {
+        bOk = false;
+    }
+
+    if (!bOk)
         throw RuntimeException( "UCB transferContent() failed!", 0 );
 }
 
