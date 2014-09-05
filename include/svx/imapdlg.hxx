@@ -90,7 +90,6 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     FixedText           *m_pFtTarget;
     ComboBox            *m_pCbbTarget;
     StatusBar           *m_pStbStatus;
-    ImageList           maImageList;
 
     sal_uInt16          mnApplyId;
     sal_uInt16          mnOpenId;
@@ -109,24 +108,6 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     sal_uInt16          mnActiveId;
     sal_uInt16          mnMacroId;
     sal_uInt16          mnPropertyId;
-
-    Image               maApplyImg;
-    Image               maOpenImg;
-    Image               maSaveAsImg;
-    Image               maSelectImg;
-    Image               maRectImg;
-    Image               maCircleImg;
-    Image               maPolyImg;
-    Image               maFreePolyImg;
-    Image               maPolyEditImg;
-    Image               maPolyMoveImg;
-    Image               maPolyInsertImg;
-    Image               maPolyDeleteImg;
-    Image               maUndoImg;
-    Image               maRedoImg;
-    Image               maActiveImg;
-    Image               maMacroImg;
-    Image               maPropertyImg;
 
     Size                aLastSize;
     IMapWindow*         pIMapWnd;
@@ -172,9 +153,6 @@ public:
                                 const TargetList* pTargetList = NULL, void* pEditingObj = NULL );
 
     virtual void        KeyInput( const KeyEvent& rKEvt ) SAL_OVERRIDE;
-
-    virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-    void ApplyImageList();
 };
 
 

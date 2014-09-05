@@ -80,9 +80,8 @@ protected:
 
 public:
 
-                        GraphCtrl( Window* pParent, const ResId& rResId );
-                        GraphCtrl( Window* pParent, WinBits nStyle );
-                        virtual ~GraphCtrl();
+   GraphCtrl( Window* pParent, WinBits nStyle );
+   virtual ~GraphCtrl();
 
     void                SetWinStyle( WinBits nWinBits );
     WinBits             GetWinStyle() const { return nWinStyle; }

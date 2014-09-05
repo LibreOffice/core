@@ -34,7 +34,6 @@
 #include <svx/svxids.hrc>
 #include <svx/contdlg.hxx>
 #include "contimp.hxx"
-#include "contdlg.hrc"
 #include "contwnd.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
@@ -68,7 +67,7 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* _pParent, sal_uInt16
                                                     SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
             SfxChildWindow( _pParent, nId )
 {
-    SvxSuperContourDlg* pDlg = new SvxSuperContourDlg( pBindings, this, _pParent, CONT_RESID( RID_SVXDLG_CONTOUR ) );
+    SvxSuperContourDlg* pDlg = new SvxSuperContourDlg(pBindings, this, _pParent);
     pWindow = pDlg;
 
     if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
@@ -79,9 +78,10 @@ SvxContourDlgChildWindow::SvxContourDlgChildWindow( Window* _pParent, sal_uInt16
     pDlg->Initialize( pInfo );
 }
 
-SvxContourDlg::SvxContourDlg( SfxBindings* _pBindings, SfxChildWindow* pCW,
-                              Window* _pParent, const ResId& rResId )
-    : SfxFloatingWindow(_pBindings, pCW, _pParent, rResId)
+SvxContourDlg::SvxContourDlg(SfxBindings* _pBindings, SfxChildWindow* pCW,
+                             Window* _pParent)
+    : SfxFloatingWindow(_pBindings, pCW, _pParent , "FloatingContour",
+        "svx/ui/floatingcontour.ui")
     , pSuperClass(NULL)
 {
 }
@@ -198,55 +198,69 @@ void SvxContourDlg::Update( const Graphic& rGraphic, bool bGraphicLinked,
     pSuperClass->UpdateGraphic( rGraphic, bGraphicLinked, pPolyPoly, pEditingObj );
 }
 
-SvxSuperContourDlg::SvxSuperContourDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
-                                        Window* _pParent, const ResId& rResId ) :
-        SvxContourDlg       ( _pBindings, pCW, _pParent, rResId ),
+SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *pCW,
+                                       Window* _pParent) :
+        SvxContourDlg       ( _pBindings, pCW, _pParent ),
         pUpdateEditingObject( NULL ),
         pCheckObj           ( NULL ),
         aContourItem        ( SID_CONTOUR_EXEC, *this, *_pBindings ),
-        aTbx1               ( this, ResId( TBX1, *rResId.GetResMgr() ) ),
-        aMtfTolerance       ( this, ResId( MTF_TOLERANCE, *rResId.GetResMgr() ) ),
-        aContourWnd         ( this, ResId( CTL_CONTOUR, *rResId.GetResMgr() ) ),
-        aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         nGrfChanged         ( 0UL ),
         bExecState          ( false ),
         bUpdateGraphicLinked( false ),
-        bGraphicLinked      ( false ),
-        maImageList         ( SVX_RES( CD_IMAPDLG ) )
+        bGraphicLinked      ( false )
 {
-    ApplyImageList();
+    get(m_pTbx1, "toolbar");
+    get(m_pMtfTolerance, "spinbutton");
+    m_pContourWnd = new ContourWindow(get<Window>("container"), WB_BORDER);
+    m_pContourWnd->set_hexpand(true);
+    m_pContourWnd->set_vexpand(true);
+    m_pContourWnd->Show();
+    get(m_pStbStatus, "statusbar");
 
-    FreeResource();
+    mnApplyId = m_pTbx1->GetItemId("TBI_APPLY");
+    mnWorkSpaceId = m_pTbx1->GetItemId("TBI_WORKPLACE");
+    mnSelectId = m_pTbx1->GetItemId("TBI_SELECT");
+    mnRectId = m_pTbx1->GetItemId("TBI_RECT");
+    mnCircleId = m_pTbx1->GetItemId("TBI_CIRCLE");
+    mnPolyId = m_pTbx1->GetItemId("TBI_POLY");
+    mnPolyEditId = m_pTbx1->GetItemId("TBI_POLYEDIT");
+    mnPolyMoveId = m_pTbx1->GetItemId("TBI_POLYMOVE");
+    mnPolyInsertId = m_pTbx1->GetItemId("TBI_POLYINSERT");
+    mnPolyDeleteId = m_pTbx1->GetItemId("TBI_POLYDELETE");
+    mnAutoContourId = m_pTbx1->GetItemId("TBI_AUTOCONTOUR");
+    mnUndoId = m_pTbx1->GetItemId("TBI_UNDO");
+    mnRedoId = m_pTbx1->GetItemId("TBI_REDO");
+    mnPipetteId = m_pTbx1->GetItemId("TBI_PIPETTE");
 
     SvxContourDlg::SetSuperClass( *this );
 
-    aContourWnd.SetMousePosLink( LINK( this, SvxSuperContourDlg, MousePosHdl ) );
-    aContourWnd.SetGraphSizeLink( LINK( this, SvxSuperContourDlg, GraphSizeHdl ) );
-    aContourWnd.SetUpdateLink( LINK( this, SvxSuperContourDlg, StateHdl ) );
-    aContourWnd.SetPipetteHdl( LINK( this, SvxSuperContourDlg, PipetteHdl ) );
-    aContourWnd.SetPipetteClickHdl( LINK( this, SvxSuperContourDlg, PipetteClickHdl ) );
-    aContourWnd.SetWorkplaceClickHdl( LINK( this, SvxSuperContourDlg, WorkplaceClickHdl ) );
+    m_pContourWnd->SetMousePosLink( LINK( this, SvxSuperContourDlg, MousePosHdl ) );
+    m_pContourWnd->SetGraphSizeLink( LINK( this, SvxSuperContourDlg, GraphSizeHdl ) );
+    m_pContourWnd->SetUpdateLink( LINK( this, SvxSuperContourDlg, StateHdl ) );
+    m_pContourWnd->SetPipetteHdl( LINK( this, SvxSuperContourDlg, PipetteHdl ) );
+    m_pContourWnd->SetPipetteClickHdl( LINK( this, SvxSuperContourDlg, PipetteClickHdl ) );
+    m_pContourWnd->SetWorkplaceClickHdl( LINK( this, SvxSuperContourDlg, WorkplaceClickHdl ) );
 
-    const Size      aTbxSize( aTbx1.CalcWindowSizePixel() );
-    Point           aPos( aTbx1.GetPosPixel() );
+    const Size      aTbxSize( m_pTbx1->CalcWindowSizePixel() );
+    Point           aPos( m_pTbx1->GetPosPixel() );
       SvtMiscOptions  aMiscOptions;
 
     aMiscOptions.AddListenerLink( LINK( this, SvxSuperContourDlg, MiscHdl ) );
 
-    aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
-    aTbx1.SetSizePixel( aTbxSize );
-    aTbx1.SetSelectHdl( LINK( this, SvxSuperContourDlg, Tbx1ClickHdl ) );
+    m_pTbx1->SetOutStyle( aMiscOptions.GetToolboxStyle() );
+    m_pTbx1->SetSizePixel( aTbxSize );
+    m_pTbx1->SetSelectHdl( LINK( this, SvxSuperContourDlg, Tbx1ClickHdl ) );
 
     aPos.X() += aTbxSize.Width() + LogicToPixel( Size( 3, 0 ), MapMode( MAP_APPFONT ) ).Width();
-    aMtfTolerance.SetPosPixel( aPos );
-    aMtfTolerance.SetValue( 10L );
+    m_pMtfTolerance->SetPosPixel( aPos );
+    m_pMtfTolerance->SetValue( 10L );
 
     SetMinOutputSizePixel( aLastSize = GetOutputSizePixel() );
 
-    aStbStatus.InsertItem( 1, 130, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
-    aStbStatus.InsertItem( 2, 10 + GetTextWidth( OUString(" 9999,99 cm / 9999,99 cm ") ), SIB_CENTER | SIB_IN );
-    aStbStatus.InsertItem( 3, 10 + GetTextWidth( OUString(" 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
-    aStbStatus.InsertItem( 4, 20, SIB_CENTER | SIB_IN );
+    m_pStbStatus->InsertItem( 1, 130, SIB_LEFT | SIB_IN | SIB_AUTOSIZE );
+    m_pStbStatus->InsertItem( 2, 10 + GetTextWidth( OUString(" 9999,99 cm / 9999,99 cm ") ), SIB_CENTER | SIB_IN );
+    m_pStbStatus->InsertItem( 3, 10 + GetTextWidth( OUString(" 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
+    m_pStbStatus->InsertItem( 4, 20, SIB_CENTER | SIB_IN );
 
     Resize();
 
@@ -261,38 +275,14 @@ SvxSuperContourDlg::~SvxSuperContourDlg()
 {
     SvtMiscOptions aMiscOptions;
     aMiscOptions.RemoveListenerLink( LINK(this, SvxSuperContourDlg, MiscHdl) );
-}
-
-void SvxSuperContourDlg::Resize()
-{
-    SfxFloatingWindow::Resize();
-
-    Size aMinSize( GetMinOutputSizePixel() );
-    Size aNewSize( GetOutputSizePixel() );
-
-    if ( aNewSize.Height() >= aMinSize.Height() )
-    {
-        Size    _aSize( aStbStatus.GetSizePixel() );
-        Point   aPoint( 0, aNewSize.Height() - _aSize.Height() );
-
-        // Position the StatusBar
-        aStbStatus.SetPosSizePixel( aPoint, Size( aNewSize.Width(), _aSize.Height() ) );
-        aStbStatus.Show();
-
-        // Position the EditWindow
-        _aSize.Width() = aNewSize.Width() - 18;
-        _aSize.Height() = aPoint.Y() - aContourWnd.GetPosPixel().Y() - 6;
-        aContourWnd.SetSizePixel( _aSize );
-
-        aLastSize = aNewSize;
-    }
+    delete m_pContourWnd;
 }
 
 bool SvxSuperContourDlg::Close()
 {
     bool bRet = true;
 
-    if ( aTbx1.IsItemEnabled( TBI_APPLY ) )
+    if (m_pTbx1->IsItemEnabled(mnApplyId))
     {
         MessageDialog aQBox( this,"QuerySaveContourChangesDialog","svx/ui/querysavecontchangesdialog.ui");
         const long  nRet = aQBox.Execute();
@@ -322,12 +312,12 @@ void SvxSuperContourDlg::SetGraphic( const Graphic& rGraphic )
     aUndoGraphic = aRedoGraphic = Graphic();
     aGraphic = rGraphic;
     nGrfChanged = 0UL;
-    aContourWnd.SetGraphic( aGraphic );
+    m_pContourWnd->SetGraphic( aGraphic );
 }
 
 void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    DBG_ASSERT(  aContourWnd.GetGraphic().GetType() != GRAPHIC_NONE, "Graphic must've been set first!" );
+    DBG_ASSERT(  m_pContourWnd->GetGraphic().GetType() != GRAPHIC_NONE, "Graphic must've been set first!" );
 
     PolyPolygon     aPolyPoly( rPolyPoly );
     const MapMode   aMap100( MAP_100TH_MM );
@@ -350,13 +340,13 @@ void SvxSuperContourDlg::SetPolyPolygon( const PolyPolygon& rPolyPoly )
         }
     }
 
-    aContourWnd.SetPolyPolygon( aPolyPoly );
-    aContourWnd.GetSdrModel()->SetChanged( true );
+    m_pContourWnd->SetPolyPolygon( aPolyPoly );
+    m_pContourWnd->GetSdrModel()->SetChanged( true );
 }
 
 PolyPolygon SvxSuperContourDlg::GetPolyPolygon( bool bRescaleToGraphic )
 {
-    PolyPolygon aRetPolyPoly( aContourWnd.GetPolyPolygon() );
+    PolyPolygon aRetPolyPoly( m_pContourWnd->GetPolyPolygon() );
 
     if ( bRescaleToGraphic )
     {
@@ -415,133 +405,103 @@ IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 {
     sal_uInt16 nNewItemId = pTbx->GetCurItemId();
 
-    switch( pTbx->GetCurItemId() )
+    sal_uInt16 nId = pTbx->GetCurItemId();
+    if (nId == mnApplyId)
     {
-        case( TBI_APPLY ):
+        SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, true );
+        GetBindings().GetDispatcher()->Execute(
+            SID_CONTOUR_EXEC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
+    }
+    else if (nId == mnWorkSpaceId)
+    {
+        if (m_pTbx1->IsItemChecked(mnWorkSpaceId))
         {
-            SfxBoolItem aBoolItem( SID_CONTOUR_EXEC, true );
-            GetBindings().GetDispatcher()->Execute(
-                SID_CONTOUR_EXEC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aBoolItem, 0L );
-        }
-        break;
+            MessageDialog aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui");
 
-        case( TBI_WORKPLACE ):
-        {
-            if ( aTbx1.IsItemChecked( TBI_WORKPLACE ) )
-            {
-                MessageDialog aQBox( this,"QueryDeleteContourDialog","svx/ui/querydeletecontourdialog.ui");
-
-                if ( !aContourWnd.IsContourChanged() || ( aQBox.Execute() == RET_YES ) )
-                    aContourWnd.SetWorkplaceMode( true );
-                else
-                    aTbx1.CheckItem( TBI_WORKPLACE, false );
-            }
+            if ( !m_pContourWnd->IsContourChanged() || ( aQBox.Execute() == RET_YES ) )
+                m_pContourWnd->SetWorkplaceMode( true );
             else
-                aContourWnd.SetWorkplaceMode( false );
+                m_pTbx1->CheckItem(mnWorkSpaceId, false);
         }
-        break;
+        else
+            m_pContourWnd->SetWorkplaceMode( false );
+    }
+    else if (nId == mnSelectId)
+    {
+        pTbx->CheckItem( nNewItemId, true );
+        m_pContourWnd->SetEditMode( true );
+    }
+    else if (nId == mnRectId)
+    {
+        pTbx->CheckItem( nNewItemId, true );
+        m_pContourWnd->SetObjKind( OBJ_RECT );
+    }
+    else if (nId == mnCircleId)
+    {
+        pTbx->CheckItem( nNewItemId, true );
+        m_pContourWnd->SetObjKind( OBJ_CIRC );
+    }
+    else if (nId == mnPolyId)
+    {
+        pTbx->CheckItem( nNewItemId, true );
+        m_pContourWnd->SetObjKind( OBJ_POLY );
+    }
+    else if (nId == mnPolyEditId)
+    {
+        m_pContourWnd->SetPolyEditMode(pTbx->IsItemChecked(mnPolyEditId) ? SID_BEZIER_MOVE : 0);
+    }
+    else if (nId == mnPolyMoveId)
+    {
+        m_pContourWnd->SetPolyEditMode( SID_BEZIER_MOVE );
+    }
+    else if (nId == mnPolyInsertId)
+    {
+        m_pContourWnd->SetPolyEditMode( SID_BEZIER_INSERT );
+    }
+    else if (nId == mnPolyDeleteId)
+    {
+        m_pContourWnd->GetSdrView()->DeleteMarkedPoints();
+    }
+    else if (nId == mnUndoId)
+    {
+        nGrfChanged = nGrfChanged ? nGrfChanged - 1 : 0UL;
+        aRedoGraphic = aGraphic;
+        aGraphic = aUndoGraphic;
+        aUndoGraphic = Graphic();
+        m_pContourWnd->SetGraphic( aGraphic, false );
+    }
+    else if (nId == mnRedoId)
+    {
+        nGrfChanged++;
+        aUndoGraphic = aGraphic;
+        aGraphic = aRedoGraphic;
+        aRedoGraphic = Graphic();
+        m_pContourWnd->SetGraphic( aGraphic, false );
+    }
+    else if (nId == mnAutoContourId)
+    {
+        aCreateTimer.Start();
+    }
+    else if (nId == mnPipetteId)
+    {
+        bool bPipette = m_pTbx1->IsItemChecked(mnPipetteId);
 
-        case( TBI_SELECT ):
+        if ( !bPipette )
+            m_pStbStatus->Invalidate();
+        else if ( bGraphicLinked )
         {
-            pTbx->CheckItem( nNewItemId, true );
-            aContourWnd.SetEditMode( true );
-        }
-        break;
+            MessageDialog aQBox(this, "QueryUnlinkGraphicsDialog",
+                "svx/ui/queryunlinkgraphicsdialog.ui");
 
-        case( TBI_RECT ):
-        {
-            pTbx->CheckItem( nNewItemId, true );
-            aContourWnd.SetObjKind( OBJ_RECT );
-        }
-        break;
-
-        case( TBI_CIRCLE ):
-        {
-            pTbx->CheckItem( nNewItemId, true );
-            aContourWnd.SetObjKind( OBJ_CIRC );
-
-        }
-        break;
-
-        case( TBI_POLY ):
-        {
-            pTbx->CheckItem( nNewItemId, true );
-            aContourWnd.SetObjKind( OBJ_POLY );
-        }
-        break;
-
-        case( TBI_FREEPOLY ):
-        {
-            pTbx->CheckItem( nNewItemId, true );
-            aContourWnd.SetObjKind( OBJ_FREEFILL );
-        }
-        break;
-
-        case( TBI_POLYEDIT ):
-            aContourWnd.SetPolyEditMode( pTbx->IsItemChecked( TBI_POLYEDIT ) ? SID_BEZIER_MOVE : 0 );
-        break;
-
-        case( TBI_POLYMOVE ):
-            aContourWnd.SetPolyEditMode( SID_BEZIER_MOVE );
-        break;
-
-        case( TBI_POLYINSERT ):
-            aContourWnd.SetPolyEditMode( SID_BEZIER_INSERT );
-        break;
-
-        case( TBI_POLYDELETE ):
-            aContourWnd.GetSdrView()->DeleteMarkedPoints();
-        break;
-
-        case( TBI_UNDO ):
-        {
-            nGrfChanged = nGrfChanged ? nGrfChanged - 1 : 0UL;
-            aRedoGraphic = aGraphic;
-            aGraphic = aUndoGraphic;
-            aUndoGraphic = Graphic();
-            aContourWnd.SetGraphic( aGraphic, false );
-        }
-        break;
-
-        case( TBI_REDO ):
-        {
-            nGrfChanged++;
-            aUndoGraphic = aGraphic;
-            aGraphic = aRedoGraphic;
-            aRedoGraphic = Graphic();
-            aContourWnd.SetGraphic( aGraphic, false );
-        }
-        break;
-
-        case( TBI_AUTOCONTOUR ):
-            aCreateTimer.Start();
-        break;
-
-        case( TBI_PIPETTE ):
-        {
-            bool bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
-
-            if ( !bPipette )
-                aStbStatus.Invalidate();
-            else if ( bGraphicLinked )
+            if (aQBox.Execute() != RET_YES)
             {
-                MessageDialog aQBox(this, "QueryUnlinkGraphicsDialog",
-                    "svx/ui/queryunlinkgraphicsdialog.ui");
-
-                if (aQBox.Execute() != RET_YES)
-                {
-                    bPipette = false;
-                    aTbx1.CheckItem(TBI_PIPETTE, bPipette);
-                    aStbStatus.Invalidate();
-                }
+                bPipette = false;
+                m_pTbx1->CheckItem(mnPipetteId, bPipette);
+                m_pStbStatus->Invalidate();
             }
-
-            aContourWnd.SetPipetteMode( bPipette );
         }
-        break;
 
-        default:
-        break;
+        m_pContourWnd->SetPipetteMode( bPipette );
     }
 
     return 0L;
@@ -559,7 +519,7 @@ IMPL_LINK( SvxSuperContourDlg, MousePosHdl, ContourWindow*, pWnd )
     aStr += " / ";
     aStr += GetUnitString( rMousePos.Y(), eFieldUnit, cSep );
 
-    aStbStatus.SetItemText( 2, aStr );
+    m_pStbStatus->SetItemText( 2, aStr );
 
     return 0L;
 }
@@ -576,7 +536,7 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     aStr += " x ";
     aStr += GetUnitString( rSize.Height(), eFieldUnit, cSep );
 
-    aStbStatus.SetItemText( 3, aStr );
+    m_pStbStatus->SetItemText( 3, aStr );
 
     return 0L;
 }
@@ -588,7 +548,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
     if ( pUpdateEditingObject != pCheckObj )
     {
         if( !GetEditingObject() )
-            aContourWnd.GrabFocus();
+            m_pContourWnd->GrabFocus();
 
         SetGraphic( aUpdateGraphic );
         SetPolyPolygon( aUpdatePolyPoly );
@@ -599,7 +559,7 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
         aUpdatePolyPoly = PolyPolygon();
         bUpdateGraphicLinked = false;
 
-        aContourWnd.GetSdrModel()->SetChanged( false );
+        m_pContourWnd->GetSdrModel()->SetChanged( false );
     }
 
     GetBindings().Invalidate( SID_CONTOUR_EXEC );
@@ -611,8 +571,8 @@ IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl)
 {
     aCreateTimer.Stop();
 
-    const Rectangle aWorkRect = aContourWnd.LogicToPixel( aContourWnd.GetWorkRect(), MapMode( MAP_100TH_MM ) );
-    const Graphic&  rGraphic = aContourWnd.GetGraphic();
+    const Rectangle aWorkRect = m_pContourWnd->LogicToPixel( m_pContourWnd->GetWorkRect(), MapMode( MAP_100TH_MM ) );
+    const Graphic&  rGraphic = m_pContourWnd->GetGraphic();
     const bool      bValid = aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom();
 
     EnterWait();
@@ -627,32 +587,31 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
     const SdrObject*    pObj = pWnd->GetSelectedSdrObject();
     const SdrView*      pView = pWnd->GetSdrView();
     const bool          bPolyEdit = ( pObj != NULL ) && pObj->ISA( SdrPathObj );
-    const bool          bDrawEnabled = !( bPolyEdit && aTbx1.IsItemChecked( TBI_POLYEDIT ) );
-    const bool          bPipette = aTbx1.IsItemChecked( TBI_PIPETTE );
-    const bool          bWorkplace = aTbx1.IsItemChecked( TBI_WORKPLACE );
+    const bool          bDrawEnabled = !(bPolyEdit && m_pTbx1->IsItemChecked(mnPolyEditId));
+    const bool          bPipette = m_pTbx1->IsItemChecked(mnPipetteId);
+    const bool          bWorkplace = m_pTbx1->IsItemChecked(mnWorkSpaceId);
     const bool          bDontHide = !( bPipette || bWorkplace );
     const bool          bBitmap = pWnd->GetGraphic().GetType() == GRAPHIC_BITMAP;
 
-    aTbx1.EnableItem( TBI_APPLY, bDontHide && bExecState && pWnd->IsChanged() );
+    m_pTbx1->EnableItem(mnApplyId, bDontHide && bExecState && pWnd->IsChanged());
 
-    aTbx1.EnableItem( TBI_WORKPLACE, !bPipette && bDrawEnabled );
+    m_pTbx1->EnableItem(mnWorkSpaceId, !bPipette && bDrawEnabled);
 
-    aTbx1.EnableItem( TBI_SELECT, bDontHide && bDrawEnabled );
-    aTbx1.EnableItem( TBI_RECT, bDontHide && bDrawEnabled );
-    aTbx1.EnableItem( TBI_CIRCLE, bDontHide && bDrawEnabled );
-    aTbx1.EnableItem( TBI_POLY, bDontHide && bDrawEnabled );
-    aTbx1.EnableItem( TBI_FREEPOLY, bDontHide && bDrawEnabled );
+    m_pTbx1->EnableItem(mnSelectId, bDontHide && bDrawEnabled);
+    m_pTbx1->EnableItem(mnRectId, bDontHide && bDrawEnabled);
+    m_pTbx1->EnableItem(mnCircleId, bDontHide && bDrawEnabled);
+    m_pTbx1->EnableItem(mnPolyId, bDontHide && bDrawEnabled);
 
-    aTbx1.EnableItem( TBI_POLYEDIT, bDontHide && bPolyEdit );
-    aTbx1.EnableItem( TBI_POLYMOVE, bDontHide && !bDrawEnabled );
-    aTbx1.EnableItem( TBI_POLYINSERT, bDontHide && !bDrawEnabled );
-    aTbx1.EnableItem( TBI_POLYDELETE, bDontHide && !bDrawEnabled && pView->IsDeleteMarkedPointsPossible() );
+    m_pTbx1->EnableItem(mnPolyEditId, bDontHide && bPolyEdit);
+    m_pTbx1->EnableItem(mnPolyMoveId, bDontHide && !bDrawEnabled);
+    m_pTbx1->EnableItem(mnPolyInsertId, bDontHide && !bDrawEnabled);
+    m_pTbx1->EnableItem(mnPolyDeleteId, bDontHide && !bDrawEnabled && pView->IsDeleteMarkedPointsPossible());
 
-    aTbx1.EnableItem( TBI_AUTOCONTOUR, bDontHide && bDrawEnabled );
-    aTbx1.EnableItem( TBI_PIPETTE, !bWorkplace && bDrawEnabled && bBitmap );
+    m_pTbx1->EnableItem(mnAutoContourId, bDontHide && bDrawEnabled);
+    m_pTbx1->EnableItem(mnPipetteId, !bWorkplace && bDrawEnabled && bBitmap);
 
-    aTbx1.EnableItem( TBI_UNDO, bDontHide && IsUndoPossible() );
-    aTbx1.EnableItem( TBI_REDO, bDontHide && IsRedoPossible() );
+    m_pTbx1->EnableItem(mnUndoId, bDontHide && IsUndoPossible());
+    m_pTbx1->EnableItem(mnRedoId, bDontHide && IsRedoPossible());
 
     if ( bPolyEdit )
     {
@@ -660,20 +619,20 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
 
         switch( pWnd->GetPolyEditMode() )
         {
-            case( SID_BEZIER_MOVE ): nId = TBI_POLYMOVE; break;
-            case( SID_BEZIER_INSERT ): nId = TBI_POLYINSERT; break;
+            case( SID_BEZIER_MOVE ): nId = mnPolyMoveId; break;
+            case( SID_BEZIER_INSERT ): nId = mnPolyInsertId; break;
 
             default:
             break;
         }
 
-        aTbx1.CheckItem( nId, true );
+        m_pTbx1->CheckItem( nId, true );
     }
     else
     {
-        aTbx1.CheckItem( TBI_POLYEDIT, false );
-        aTbx1.CheckItem( TBI_POLYMOVE, true );
-        aTbx1.CheckItem( TBI_POLYINSERT, false );
+        m_pTbx1->CheckItem(mnPolyEditId, false);
+        m_pTbx1->CheckItem(mnPolyMoveId, true);
+        m_pTbx1->CheckItem(mnPolyInsertId, false);
         pWnd->SetPolyEditMode( 0 );
     }
 
@@ -682,24 +641,24 @@ IMPL_LINK( SvxSuperContourDlg, StateHdl, ContourWindow*, pWnd )
 
 IMPL_LINK( SvxSuperContourDlg, PipetteHdl, ContourWindow*, pWnd )
 {
-    const Color& rOldLineColor = aStbStatus.GetLineColor();
-    const Color& rOldFillColor = aStbStatus.GetFillColor();
+    const Color& rOldLineColor = m_pStbStatus->GetLineColor();
+    const Color& rOldFillColor = m_pStbStatus->GetFillColor();
 
-    Rectangle       aRect( aStbStatus.GetItemRect( 4 ) );
+    Rectangle       aRect( m_pStbStatus->GetItemRect( 4 ) );
     const Color&    rColor = pWnd->GetPipetteColor();
 
-    aStbStatus.SetLineColor( rColor );
-    aStbStatus.SetFillColor( rColor );
+    m_pStbStatus->SetLineColor( rColor );
+    m_pStbStatus->SetFillColor( rColor );
 
     aRect.Left() += 4;
     aRect.Top() += 4;
     aRect.Right() -= 4;
     aRect.Bottom() -= 4;
 
-    aStbStatus.DrawRect( aRect );
+    m_pStbStatus->DrawRect( aRect );
 
-    aStbStatus.SetLineColor( rOldLineColor );
-    aStbStatus.SetFillColor( rOldFillColor );
+    m_pStbStatus->SetLineColor( rOldLineColor );
+    m_pStbStatus->SetFillColor( rOldFillColor );
 
     return 0L;
 }
@@ -716,7 +675,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
         if( aGraphic.GetType() == GRAPHIC_BITMAP )
         {
             Bitmap      aBmp( aGraphic.GetBitmap() );
-            const long  nTol = static_cast<long>(aMtfTolerance.GetValue() * 255L / 100L);
+            const long  nTol = static_cast<long>(m_pMtfTolerance->GetValue() * 255L / 100L);
 
             aMask = aBmp.CreateMask( rColor, nTol );
 
@@ -744,41 +703,26 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow*, pWnd )
         LeaveWait();
     }
 
-    aTbx1.CheckItem( TBI_PIPETTE, false );
+    m_pTbx1->CheckItem(mnPipetteId, false);
     pWnd->SetPipetteMode( false );
-    aStbStatus.Invalidate();
+    m_pStbStatus->Invalidate();
 
     return 0L;
 }
 
 IMPL_LINK( SvxSuperContourDlg, WorkplaceClickHdl, ContourWindow*, pWnd )
 {
-    aTbx1.CheckItem( TBI_WORKPLACE, false );
-    aTbx1.CheckItem( TBI_SELECT, true );
+    m_pTbx1->CheckItem(mnWorkSpaceId, false);
+    m_pTbx1->CheckItem(mnSelectId, true);
     pWnd->SetWorkplaceMode( false );
 
     return 0L;
 }
 
-void SvxSuperContourDlg::ApplyImageList()
-{
-    ImageList& rImgLst = maImageList;
-
-    aTbx1.SetImageList( rImgLst );
-}
-
-void SvxSuperContourDlg::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxFloatingWindow::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            ApplyImageList();
-}
-
 IMPL_LINK_NOARG(SvxSuperContourDlg, MiscHdl)
 {
        SvtMiscOptions aMiscOptions;
-    aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );
+    m_pTbx1->SetOutStyle( aMiscOptions.GetToolboxStyle() );
 
     return 0L;
 }

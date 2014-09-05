@@ -20,7 +20,6 @@
 #include <svx/xoutbmp.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
-#include <contdlg.hrc>
 #include <contwnd.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
@@ -34,8 +33,8 @@ using namespace com::sun::star;
 
 #define TRANSCOL Color( COL_WHITE )
 
-ContourWindow::ContourWindow( Window* pParent, const ResId& rResId ) :
-            GraphCtrl       ( pParent, rResId ),
+ContourWindow::ContourWindow( Window* pParent, WinBits nBits ) :
+            GraphCtrl       ( pParent, nBits ),
             aWorkRect       ( 0, 0, 0, 0 ),
             bPipetteMode    ( false ),
             bWorkplaceMode  ( false ),
@@ -265,6 +264,11 @@ void ContourWindow::Paint( const Rectangle& rRect )
     const Region aRepaintRegion(rRect);
     pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
     pView->EndCompleteRedraw(*pPaintWindow, true);
+}
+
+Size ContourWindow::GetOptimalSize() const
+{
+    return LogicToPixel(Size(270, 170), MAP_APPFONT);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -124,7 +124,6 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeStatusBar(Window *pParent, 
 
 SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, Window* _pParent)
     : SfxModelessDialog(_pBindings, pCW, _pParent, "ImapDialog", "svx/ui/imapdialog.ui")
-    , maImageList(SVX_RES(IL_IMAPDLG))
     , pCheckObj(NULL)
     , aIMapItem(SID_IMAP_EXEC, *this, *_pBindings)
 {
@@ -152,24 +151,6 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, Window* _pP
     mnMacroId = m_pTbxIMapDlg1->GetItemId("TBI_MACRO");
     mnPropertyId = m_pTbxIMapDlg1->GetItemId("TBI_PROPERTY");
 
-    maApplyImg = maImageList.GetImage(TBI_APPLY);
-    maOpenImg = maImageList.GetImage(TBI_OPEN);
-    maSaveAsImg = maImageList.GetImage(TBI_SAVEAS);
-    maSelectImg = maImageList.GetImage(TBI_SELECT);
-    maRectImg = maImageList.GetImage(TBI_RECT);
-    maCircleImg = maImageList.GetImage(TBI_CIRCLE);
-    maPolyImg = maImageList.GetImage(TBI_POLY);
-    maFreePolyImg = maImageList.GetImage(TBI_FREEPOLY);
-    maPolyEditImg = maImageList.GetImage(TBI_POLYEDIT);
-    maPolyMoveImg = maImageList.GetImage(TBI_POLYMOVE);
-    maPolyInsertImg = maImageList.GetImage(TBI_POLYINSERT);
-    maPolyDeleteImg = maImageList.GetImage(TBI_POLYDELETE);
-    maUndoImg = maImageList.GetImage(TBI_UNDO);
-    maRedoImg = maImageList.GetImage(TBI_REDO);
-    maActiveImg = maImageList.GetImage(TBI_ACTIVE);
-    maMacroImg = maImageList.GetImage(TBI_MACRO);
-    maPropertyImg = maImageList.GetImage(TBI_PROPERTY);
-
     get(m_pFtURL, "urlft");
     get(m_pURLBox, "url");
     get(m_pFtText, "textft");
@@ -194,8 +175,6 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, Window* _pP
     pIMapWnd->set_hexpand(true);
     pIMapWnd->set_vexpand(true);
     pIMapWnd->Show();
-
-    ApplyImageList();
 
     pOwnData = new IMapOwnData;
 
@@ -795,35 +774,6 @@ IMPL_LINK_NOARG(SvxIMapDlg, MiscHdl)
     m_pTbxIMapDlg1->SetOutStyle( aMiscOptions.GetToolboxStyle() );
 
     return 0L;
-}
-
-void SvxIMapDlg::ApplyImageList()
-{
-    m_pTbxIMapDlg1->SetItemImage(mnApplyId, maApplyImg);
-    m_pTbxIMapDlg1->SetItemImage(mnOpenId, maOpenImg);
-    m_pTbxIMapDlg1->SetItemImage(mnSaveAsId, maSaveAsImg);
-    m_pTbxIMapDlg1->SetItemImage(mnSelectId, maSelectImg);
-    m_pTbxIMapDlg1->SetItemImage(mnRectId, maRectImg);
-    m_pTbxIMapDlg1->SetItemImage(mnCircleId, maCircleImg);
-    m_pTbxIMapDlg1->SetItemImage(mnPolyId, maPolyImg);
-    m_pTbxIMapDlg1->SetItemImage(mnFreePolyId, maFreePolyImg);
-    m_pTbxIMapDlg1->SetItemImage(mnPolyEditId, maPolyEditImg);
-    m_pTbxIMapDlg1->SetItemImage(mnPolyMoveId, maPolyMoveImg);
-    m_pTbxIMapDlg1->SetItemImage(mnPolyInsertId, maPolyInsertImg);
-    m_pTbxIMapDlg1->SetItemImage(mnPolyDeleteId, maPolyDeleteImg);
-    m_pTbxIMapDlg1->SetItemImage(mnUndoId, maUndoImg);
-    m_pTbxIMapDlg1->SetItemImage(mnRedoId, maRedoImg);
-    m_pTbxIMapDlg1->SetItemImage(mnActiveId, maActiveImg);
-    m_pTbxIMapDlg1->SetItemImage(mnMacroId, maMacroImg);
-    m_pTbxIMapDlg1->SetItemImage(mnPropertyId, maPropertyImg);
-}
-
-void SvxIMapDlg::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxModelessDialog::DataChanged( rDCEvt );
-
-    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
-            ApplyImageList();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -39,7 +39,6 @@ $(eval $(call gb_SrsTarget_add_files,svx/res,\
     svx/source/accessibility/accessibility.src \
     svx/source/core/graphichelper.src \
     svx/source/dialog/bmpmask.src \
-    svx/source/dialog/contdlg.src \
     svx/source/dialog/compressgraphicdialog.src \
     svx/source/dialog/dlgctrl.src \
     svx/source/dialog/docrecovery.src \

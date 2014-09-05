@@ -43,13 +43,14 @@ protected:
     virtual void        SdrObjCreated( const SdrObject& rObj ) SAL_OVERRIDE;
     virtual void        InitSdrModel() SAL_OVERRIDE;
     virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;
+    virtual Size        GetOptimalSize() const SAL_OVERRIDE;
 
     void                CreatePolyPolygon();
 
 public:
 
-                        ContourWindow( Window* pParent, const ResId& rResId );
-                        virtual ~ContourWindow();
+    ContourWindow(Window* pParent, WinBits nBits);
+    virtual ~ContourWindow();
 
     void                SetPolyPolygon( const PolyPolygon& rPolyPoly );
     const PolyPolygon&  GetPolyPolygon();

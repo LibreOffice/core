@@ -41,17 +41,30 @@ class SvxSuperContourDlg : public SvxContourDlg
     void*               pUpdateEditingObject;
     void*               pCheckObj;
     SvxContourDlgItem   aContourItem;
-    ToolBox             aTbx1;
-    MetricField         aMtfTolerance;
-    ContourWindow       aContourWnd;
-    StatusBar           aStbStatus;
-    sal_uIntPtr             nGrfChanged;
+    ToolBox*            m_pTbx1;
+    MetricField*        m_pMtfTolerance;
+    ContourWindow*      m_pContourWnd;
+    StatusBar*          m_pStbStatus;
+    sal_uIntPtr         nGrfChanged;
     bool                bExecState;
     bool                bUpdateGraphicLinked;
     bool                bGraphicLinked;
-    ImageList           maImageList;
 
-    virtual void        Resize() SAL_OVERRIDE;
+    sal_uInt16          mnApplyId;
+    sal_uInt16          mnWorkSpaceId;
+    sal_uInt16          mnSelectId;
+    sal_uInt16          mnRectId;
+    sal_uInt16          mnCircleId;
+    sal_uInt16          mnPolyId;
+    sal_uInt16          mnPolyEditId;
+    sal_uInt16          mnPolyMoveId;
+    sal_uInt16          mnPolyInsertId;
+    sal_uInt16          mnPolyDeleteId;
+    sal_uInt16          mnAutoContourId;
+    sal_uInt16          mnUndoId;
+    sal_uInt16          mnRedoId;
+    sal_uInt16          mnPipetteId;
+
     virtual bool        Close() SAL_OVERRIDE;
 
                         DECL_LINK( Tbx1ClickHdl, ToolBox* );
@@ -67,8 +80,8 @@ class SvxSuperContourDlg : public SvxContourDlg
 
 public:
 
-                        SvxSuperContourDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
-                                            Window* pParent, const ResId& rResId );
+                        SvxSuperContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
+                                           Window* pParent);
                         virtual ~SvxSuperContourDlg();
 
     void                SetExecState( bool bEnable );
@@ -90,14 +103,6 @@ public:
     void                UpdateGraphic( const Graphic& rGraphic, bool bGraphicLinked,
                                 const PolyPolygon* pPolyPoly = NULL,
                                 void* pEditingObj = NULL );
-
-    /** switches the toolbox images depending on the actuall high contrast display mode state */
-    void                ApplyImageList();
-
-    /** virtual method from Window is used to detect change in high contrast display mode
-        to switch the toolbox images */
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
-
 };
 
 

@@ -73,8 +73,8 @@ protected:
 
 public:
 
-                        SvxContourDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
-                                       Window* pParent, const ResId& rResId );
+                        SvxContourDlg(SfxBindings *pBindings, SfxChildWindow *pCW,
+                                      Window* pParent);
                         virtual ~SvxContourDlg();
 
     const Graphic&      GetGraphic() const;

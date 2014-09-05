@@ -53,26 +53,6 @@ void GraphCtrlUserCall::Changed( const SdrObject& rObj, SdrUserCallType eType, c
     }
 }
 
-GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
-            Control         ( pParent, rResId ),
-            aMap100         ( MAP_100TH_MM ),
-            nWinStyle       ( 0 ),
-            eObjKind        ( OBJ_NONE ),
-            nPolyEdit       ( 0 ),
-            bEditMode       ( false ),
-            bSdrMode        ( false ),
-            bAnim           ( false ),
-            mpAccContext    ( NULL ),
-            pModel          ( NULL ),
-            pView           ( NULL )
-{
-    pUserCall = new GraphCtrlUserCall( *this );
-    aUpdateTimer.SetTimeout( 500 );
-    aUpdateTimer.SetTimeoutHdl( LINK( this, GraphCtrl, UpdateHdl ) );
-    aUpdateTimer.Start();
-    EnableRTL( false );
-}
-
 GraphCtrl::GraphCtrl( Window* pParent, WinBits nStyle ) :
             Control         ( pParent, nStyle ),
             aMap100         ( MAP_100TH_MM ),
