@@ -121,9 +121,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
     public void handleStartTag( HTML.Tag t, MutableAttributeSet a,int pos )
     {
         // insert code to handle starting tags
-        String sName = "";
-        String sId = "";
-        String sClass = "";
+        String sClass;
 
         if ( t == HTML.Tag.HEAD )
         {
@@ -131,7 +129,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
         }
         if ( t == HTML.Tag.TEXTAREA )
         {
-            sName = ( String ) a.getAttribute( HTML.Attribute.NAME );
+            String sName = ( String ) a.getAttribute( HTML.Attribute.NAME );
             if ( sName != null )
             {
                 if ( sName.equalsIgnoreCase( "wpTextbox1" ) )
@@ -142,7 +140,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
         }
         else if ( t == HTML.Tag.DIV )
         {
-            sId = ( String ) a.getAttribute( HTML.Attribute.ID );
+            String sId = ( String ) a.getAttribute( HTML.Attribute.ID );
             sClass = ( String ) a.getAttribute( HTML.Attribute.CLASS );
             if ( sId != null )
             {
