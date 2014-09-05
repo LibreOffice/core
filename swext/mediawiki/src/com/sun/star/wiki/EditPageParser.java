@@ -107,7 +107,7 @@ public class EditPageParser extends HTMLEditorKit.ParserCallback
                     // get the main URL from the first header-link with index.php
                     // the link with "action=edit" inside is preferable
                     if ( nIndexStart>= 0
-                      && ( m_sMainURL.length() == 0 || sName.indexOf( "action=edit" ) >= 0 ) )
+                      && ( m_sMainURL.length() == 0 || sName.contains("action=edit") ) )
                     {
                         m_sMainURL = sName.substring( 0, nIndexStart );
                     }
