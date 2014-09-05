@@ -6,18 +6,35 @@ this is where a lot of wht work would happen to move to the canvas. (what does t
 svdraw
 transparent gradient stuff.
 
-Drawing Layer Object diagram:
+== Drawing Layer / SdrObject(s) ==
 
-.------- Model ------------.     .------- View -----------------------------------------.
-| SdrObject - ViewContact  | 1.* | ViewObjectContact        1.*                         |
-|              getChild()  |-----|    getPrimitiveList()  -----> Object(s) ---> SdrView |
-|              getVOC()    |     |    getRecPrimitiveList()      Contact                |
-|              getViewIn...|     |___________|__________________________________________|
-| dependentPrimitiveList() |                 |
-|_________________________ |              generates      ______
-                                             |          /      |
+See drawinglayer/README for general information about drawinglayer.
+
+Below is the class diagram that comes from
+http://www.openoffice.org/marketing/ooocon2006/presentations/wednesday_g11.odp,
+slide number 6.
+
+.------- Model --------------.      .------- View -----------------------------------------.
+| SdrObject - ViewContact    | 1..* | ViewObjectContact       1..*                         |
+|              getChild()    |------|    getPrimitiveList()  -----> Object(s) ---> SdrView |
+|              getVOC()      |      |    getRecPrimitiveList()      Contact                |
+|              getViewInd... |      |________|_____________________________________________|
+| ...ependentPrimitiveList() |               |
+|____________________________|            generates
+                                             |           ______
+                                             V          /      |
                                    .----------------------.    |
                                    | basePrimitive        |    |
-                                   |   getRange()         |----`
+                                   |   getRange()         |<---'
                                    |   getDecomposition() |
                                    |______________________|
+
+For SdrObjects, there are own DrawingLayer primitives in
+svx/source/sdr/primitive2d
+
+The ViewContact / ViewObject / ViewObjectContact are in svx/source/sdr/contact
+Decomposes the SdrObjects, and does all sort of operations on them.
+
+[So far I haven't found a definition / concept what are supposed to be the
+ViewContact / ViewObject / ViewObjectContact.  If you find that out, please
+fix this README :-)]
