@@ -413,6 +413,7 @@
             <menu:menu menu:id=".uno:CellContentsMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Calculate"/>
+                    <menu:menuitem menu:id=".uno:CalculateHard"/>
                     <menu:menuitem menu:id=".uno:AutomaticCalculation"/>
                     <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:AutoComplete"/>

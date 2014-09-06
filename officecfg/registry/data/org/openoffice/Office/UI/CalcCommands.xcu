@@ -1251,7 +1251,7 @@
       </node>
       <node oor:name=".uno:Calculate" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Recalculate</value>
+          <value xml:lang="en-US">~Recalculate Modified Cells</value>
         </prop>
       </node>
       <node oor:name=".uno:Protect" oor:op="replace">
@@ -1301,7 +1301,7 @@
       </node>
       <node oor:name=".uno:CalculateHard" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Recalculate Hard</value>
+          <value xml:lang="en-US">Recalculate ~All Cells</value>
         </prop>
       </node>
       <node oor:name=".uno:AutoComplete" oor:op="replace">
