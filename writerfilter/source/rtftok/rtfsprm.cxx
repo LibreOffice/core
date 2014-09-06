@@ -143,6 +143,7 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id)
     {
     case NS_ooxml::LN_CT_Spacing_before:
     case NS_ooxml::LN_CT_Spacing_after:
+    case NS_ooxml::LN_EG_RPrBase_b:
         return RTFValue::Pointer_t(new RTFValue(0));
 
     default:

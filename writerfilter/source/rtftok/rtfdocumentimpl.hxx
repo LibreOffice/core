@@ -279,6 +279,8 @@ public:
 
     /// Index of the current style.
     int nCurrentStyleIndex;
+    /// Index of the current character style.
+    int nCurrentCharacterStyleIndex;
 
     /// Points to the active buffer, if there is one.
     RTFBuffer_t* pCurrentBuffer;

@@ -9,6 +9,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -1917,6 +1918,12 @@ DECLARE_RTFIMPORT_TEST(testFdo79959, "fdo79959.rtf")
 {
     // This was false, as the style was imported as " Test", i.e. no whitespace stripping.
     CPPUNIT_ASSERT_EQUAL(true, static_cast<bool>(getStyles("ParagraphStyles")->hasByName("Test")));
+}
+
+DECLARE_RTFIMPORT_TEST(testFdo82078, "fdo82078.rtf")
+{
+    // This was awt::FontWeight::BOLD, i.e. the second run was bold, when it should be normal.
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 2), "CharWeight"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

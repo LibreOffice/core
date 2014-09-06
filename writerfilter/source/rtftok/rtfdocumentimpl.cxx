@@ -445,9 +445,29 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
     if (it != m_aStyleTableEntries.end())
     {
         RTFReferenceProperties& rProps = *(RTFReferenceProperties*)it->second.get();
+
+        // cloneAndDeduplicate() wants to know about only a single "style", so
+        // let's merge paragraph and character style properties here.
+        int nCharStyle = m_aStates.top().nCurrentCharacterStyleIndex;
+        RTFReferenceTable::Entries_t::iterator itChar = m_aStyleTableEntries.find(nCharStyle);
+        RTFSprms aStyleSprms = rProps.getSprms();
+        RTFSprms aStyleAttributes = rProps.getAttributes();
+        if (itChar != m_aStyleTableEntries.end())
+        {
+            // Found active character style, then update aStyleSprms/Attributes.
+            RTFReferenceProperties& rCharProps = *(RTFReferenceProperties*)itChar->second.get();
+            RTFSprms& rCharStyleSprms = rCharProps.getSprms();
+            for (RTFSprms::Iterator_t itSprm = rCharStyleSprms.begin(); itSprm != rCharStyleSprms.end(); ++itSprm)
+                aStyleSprms.set(itSprm->first, itSprm->second);
+
+            RTFSprms& rCharStyleAttributes = rCharProps.getAttributes();
+            for (RTFSprms::Iterator_t itAttr = rCharStyleAttributes.begin(); itAttr != rCharStyleAttributes.end(); ++itAttr)
+                aStyleAttributes.set(itAttr->first, itAttr->second);
+        }
+
         // Get rid of direct formatting what is already in the style.
-        RTFSprms const sprms(rSprms.cloneAndDeduplicate(rProps.getSprms()));
-        RTFSprms const attributes(rAttributes.cloneAndDeduplicate(rProps.getAttributes()));
+        RTFSprms const sprms(rSprms.cloneAndDeduplicate(aStyleSprms));
+        RTFSprms const attributes(rAttributes.cloneAndDeduplicate(aStyleAttributes));
         return writerfilter::Reference<Properties>::Pointer_t(new RTFReferenceProperties(attributes, sprms));
     }
     writerfilter::Reference<Properties>::Pointer_t pRet(new RTFReferenceProperties(rAttributes, rSprms));
@@ -2807,6 +2827,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         m_aStates.top().aCharacterSprms = getDefaultState().aCharacterSprms;
         m_aStates.top().nCurrentEncoding = getEncoding(getFontIndex(m_nDefaultFontIndex));
         m_aStates.top().aCharacterAttributes = getDefaultState().aCharacterAttributes;
+        m_aStates.top().nCurrentCharacterStyleIndex = -1;
     }
     break;
     case RTF_PARD:
@@ -3692,6 +3713,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     }
     break;
     case RTF_CS:
+        m_aStates.top().nCurrentCharacterStyleIndex = nParam;
         if (m_aStates.top().nDestinationState == DESTINATION_STYLESHEET || m_aStates.top().nDestinationState == DESTINATION_STYLEENTRY)
         {
             m_nCurrentStyleIndex = nParam;
@@ -5937,6 +5959,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
       nMinute(0),
       pDestinationText(0),
       nCurrentStyleIndex(-1),
+      nCurrentCharacterStyleIndex(-1),
       pCurrentBuffer(0),
       bInListpicture(false),
       bInBackground(false),
