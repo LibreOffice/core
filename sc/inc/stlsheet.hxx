@@ -59,10 +59,8 @@ public:
 
     virtual bool SetName( const OUString& );
 
-            void                SetUsage( ScStyleSheet::Usage eUse ) const
-                                    { eUsage = eUse; }
-            ScStyleSheet::Usage GetUsage() const
-                                    { return eUsage; }
+    void                SetUsage( ScStyleSheet::Usage eUse ) const { eUsage = eUse; }
+    ScStyleSheet::Usage GetUsage() const { return eUsage; }
 
 protected:
     virtual             ~ScStyleSheet();
