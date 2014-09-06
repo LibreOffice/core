@@ -135,6 +135,23 @@
       "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_5d230f06",
+        "filename": "sw/uiconfig/swriter/toolbar/standardbar.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:22:31Z",
+      "side": 1,
+      "message": "\"New\" should be capitalized as well.",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
