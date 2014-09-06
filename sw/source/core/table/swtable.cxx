@@ -540,7 +540,8 @@ static void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
     {
         const SwTableLines &rLines = pBox->GetTabLines();
         for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
-        {   const SwTableBoxes &rBoxes = rLines[i]->GetTabBoxes();
+        {
+            const SwTableBoxes &rBoxes = rLines[i]->GetTabBoxes();
             for ( sal_uInt16 j = 0; j < rBoxes.size(); ++j )
                 ::lcl_ProcessBoxGet( rBoxes[j], rToFill, pTabFmt, bRefreshHidden);
         }
@@ -673,7 +674,8 @@ static void lcl_ProcessLine( SwTableLine *pLine, Parm &rParm )
 static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
 {
     if ( !pBox->GetTabLines().empty() )
-    {   SwTableLines &rLines = pBox->GetTabLines();
+    {
+        SwTableLines &rLines = pBox->GetTabLines();
         for ( int i = rLines.size()-1; i >= 0; --i )
             lcl_ProcessLine( rLines[ static_cast< sal_uInt16 >(i) ], rParm );
     }
@@ -694,7 +696,8 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
         const  SwTableLine *pLine = pBox->GetUpper();
 
         while ( pLine )
-        {   const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
+        {
+            const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
             for ( sal_uInt16 i = 0; (i < rBoxes.size()) && (rBoxes[i] != pCur); ++i)
             {
                 sal_uInt64 nWidth = rBoxes[i]->GetFrmFmt()->
@@ -801,7 +804,7 @@ static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
                 if ( pBox->GetUpper()->GetUpper() &&
                      pBox->GetUpper() != pBox->GetUpper()->GetUpper()->GetTabLines().back())
                 {
-                   pBox = 0;
+                    pBox = 0;
                 }
                 else
                 {
@@ -1894,35 +1897,33 @@ bool SwTable::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
     {
-    case RES_AUTOFMT_DOCNODE:
-    {
-        const SwTableNode* pTblNode = GetTableNode();
-        if( pTblNode && &pTblNode->GetNodes() == ((SwAutoFmtGetDocNode&)rInfo).pNodes )
+        case RES_AUTOFMT_DOCNODE:
         {
-            if (!m_TabSortContentBoxes.empty())
+            const SwTableNode* pTblNode = GetTableNode();
+            if( pTblNode && &pTblNode->GetNodes() == ((SwAutoFmtGetDocNode&)rInfo).pNodes )
             {
-                SwNodeIndex aIdx( *m_TabSortContentBoxes[0]->GetSttNd() );
-                ((SwAutoFmtGetDocNode&)rInfo).pCntntNode =
-                                GetFrmFmt()->GetDoc()->GetNodes().GoNext( &aIdx );
+                if (!m_TabSortContentBoxes.empty())
+                {
+                    SwNodeIndex aIdx( *m_TabSortContentBoxes[0]->GetSttNd() );
+                    ((SwAutoFmtGetDocNode&)rInfo).pCntntNode =
+                                    GetFrmFmt()->GetDoc()->GetNodes().GoNext( &aIdx );
+                }
+                return false;
             }
-            return false;
+            break;
         }
-        break;
-    }
-    case RES_FINDNEARESTNODE:
-        if( GetFrmFmt() && ((SwFmtPageDesc&)GetFrmFmt()->GetFmtAttr(
-            RES_PAGEDESC )).GetPageDesc() &&
-            !m_TabSortContentBoxes.empty() &&
-            m_TabSortContentBoxes[0]->GetSttNd()->GetNodes().IsDocNodes() )
-            static_cast<SwFindNearestNode&>(rInfo).CheckNode( *
-                m_TabSortContentBoxes[0]->GetSttNd()->FindTableNode() );
-        break;
+        case RES_FINDNEARESTNODE:
+            if( GetFrmFmt() && ((SwFmtPageDesc&)GetFrmFmt()->GetFmtAttr(
+                RES_PAGEDESC )).GetPageDesc() &&
+                !m_TabSortContentBoxes.empty() &&
+                m_TabSortContentBoxes[0]->GetSttNd()->GetNodes().IsDocNodes() )
+                static_cast<SwFindNearestNode&>(rInfo).CheckNode( *
+                    m_TabSortContentBoxes[0]->GetSttNd()->FindTableNode() );
+            break;
 
-    case RES_CONTENT_VISIBLE:
-        {
+        case RES_CONTENT_VISIBLE:
             ((SwPtrMsgPoolItem&)rInfo).pObject = SwIterator<SwFrm,SwFmt>::FirstElement( *GetFrmFmt() );
-        }
-        return false;
+            return false;
     }
     return true;
 }
@@ -2172,7 +2173,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
         switch( pNew ? pNew->Which() : 0 )
         {
-        case RES_ATTRSET_CHG:
+            case RES_ATTRSET_CHG:
             {
                 const SfxItemSet& rSet = *((SwAttrSetChg*)pNew)->GetChgSet();
                 if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT,
@@ -2183,19 +2184,18 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                                     (const SfxPoolItem**)&pNewFml );
                 rSet.GetItemState( RES_BOXATR_VALUE, false,
                                     (const SfxPoolItem**)&pNewVal );
+                break;
             }
-            break;
-
-        case RES_BOXATR_FORMAT:
-            pNewFmt = (SwTblBoxNumFormat*)pNew;
-            nOldFmt = ((SwTblBoxNumFormat*)pOld)->GetValue();
-            break;
-        case RES_BOXATR_FORMULA:
-            pNewFml = (SwTblBoxFormula*)pNew;
-            break;
-        case RES_BOXATR_VALUE:
-            pNewVal = (SwTblBoxValue*)pNew;
-            break;
+            case RES_BOXATR_FORMAT:
+                pNewFmt = (SwTblBoxNumFormat*)pNew;
+                nOldFmt = ((SwTblBoxNumFormat*)pOld)->GetValue();
+                break;
+            case RES_BOXATR_FORMULA:
+                pNewFml = (SwTblBoxFormula*)pNew;
+                break;
+            case RES_BOXATR_VALUE:
+                pNewVal = (SwTblBoxValue*)pNew;
+                break;
         }
 
         // something changed and some BoxAttribut remained in the set!
@@ -2237,8 +2237,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     {
                         if( NUMBERFORMAT_TEXT != nNewFmt )
                         {
-                            if( SfxItemState::SET == GetItemState(
-                                                RES_BOXATR_VALUE, false ))
+                            if( SfxItemState::SET == GetItemState( RES_BOXATR_VALUE, false ))
                                 nOldFmt = NUMBERFORMAT_TEXT;
                             else
                                 nNewFmt = NUMBERFORMAT_TEXT;
@@ -2383,13 +2382,11 @@ bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
         SvNumberFormatter* pNumFmtr = GetFrmFmt()->GetDoc()->GetNumberFormatter();
 
         const SfxPoolItem* pItem;
-        if( SfxItemState::SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT,
-                false, &pItem ))
+        if( SfxItemState::SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT, false, &pItem ))
         {
             rFmtIndex = ((SwTblBoxNumFormat*)pItem)->GetValue();
             // Special casing for percent
-            if( !rIsEmptyTxtNd &&
-                NUMBERFORMAT_PERCENT == pNumFmtr->GetType( rFmtIndex ))
+            if( !rIsEmptyTxtNd && NUMBERFORMAT_PERCENT == pNumFmtr->GetType( rFmtIndex ))
             {
                 sal_uInt32 nTmpFmt = 0;
                 if( pNumFmtr->IsNumberFormat( aTxt, nTmpFmt, rNum ) &&
@@ -2424,8 +2421,7 @@ bool SwTableBox::IsNumberChanged() const
             pNumFmt = 0;
 
         sal_uLong nNdPos;
-        if( pNumFmt && pValue &&
-            ULONG_MAX != ( nNdPos = IsValidNumTxtNd( true ) ) )
+        if( pNumFmt && pValue && ULONG_MAX != ( nNdPos = IsValidNumTxtNd( true ) ) )
         {
             OUString sNewTxt, sOldTxt( pSttNd->GetNodes()[ nNdPos ]->
                                     GetTxtNode()->GetRedlineTxt() );
