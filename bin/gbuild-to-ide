@@ -258,7 +258,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
             command += cxxflag
         command += ' -c '
         command += file
-        return command
+        return command.replace('-std=gnu++11', '-std=c++11')
 
 class KdevelopIntegrationGenerator(IdeIntegrationGenerator):
     def encode_int(self, i):
