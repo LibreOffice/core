@@ -244,20 +244,17 @@ public class Parcel implements XNameContainer
     {
         try
         {
-            ScriptMetaData script = null;
-            if ( ( script = (ScriptMetaData)getByName( Name ) ) != null )
+            ScriptMetaData script = (ScriptMetaData)getByName( Name );
+            if ( script != null )
             {
+                if ( !script.removeSourceFile() )
                 {
-                   if ( !script.removeSourceFile() )
-                   {
-                       LogUtils.DEBUG("** Parcel.removeByName Failed to remove script " + Name  );
-                       throw new com.sun.star.lang.WrappedTargetException("Failed to remove script " + Name );
-                   }
-                   LogUtils.DEBUG("** Parcel.removeByName have removed script source file " + Name );
+                    LogUtils.DEBUG("** Parcel.removeByName Failed to remove script " + Name);
+                    throw new com.sun.star.lang.WrappedTargetException("Failed to remove script " + Name);
                 }
+                LogUtils.DEBUG("** Parcel.removeByName have removed script source file " + Name);
                 m_descriptor.removeScriptEntry( script );
                 writeParcelDescriptor();
-
             }
             else
             {
