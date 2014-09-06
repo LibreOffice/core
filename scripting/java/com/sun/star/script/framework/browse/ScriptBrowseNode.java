@@ -65,44 +65,42 @@ public class ScriptBrowseNode extends PropertySet
         this.name = name;
         this.parent = parent;
         ScriptMetaData data = null;
-        XSimpleFileAccess xSFA = null;
         XComponentContext xCtx = provider.getScriptingContext().getComponentContext();
         XMultiComponentFactory xFac = xCtx.getServiceManager();
         try
         {
             data = (ScriptMetaData)parent.getByName( name );
-            xSFA = UnoRuntime.queryInterface( XSimpleFileAccess.class,
+            XSimpleFileAccess xSFA = UnoRuntime.queryInterface( XSimpleFileAccess.class,
                 xFac.createInstanceWithContext(
                     "com.sun.star.ucb.SimpleFileAccess",
                     xCtx ) );
-        }
 
+            if (provider.hasScriptEditor())
+            {
+                this.editable = true;
+                try
+                {
+                    if (!parent.isUnoPkg()
+                            && !xSFA.isReadOnly(parent.getPathToParcel()))
+                    {
+                        this.deletable = true;
+                        this.renamable = true;
+                    }
+                }
+                // TODO propagate errors
+                catch (Exception e)
+                {
+                    LogUtils.DEBUG("Caught exception in creation of ScriptBrowseNode");
+                    LogUtils.DEBUG(LogUtils.getTrace(e));
+                }
+
+            }
+
+        }
         // TODO fix exception types to be caught here, should we rethrow?
         catch (  Exception e )
         {
             LogUtils.DEBUG("** caught exception getting script data for " + name + " ->" + e.toString() );
-        }
-
-        if (provider.hasScriptEditor())
-        {
-
-            this.editable  = true;
-            try
-            {
-                if ( !parent.isUnoPkg() &&
-                    !xSFA.isReadOnly( parent.getPathToParcel() ) )
-                {
-                    this.deletable = true;
-                    this.renamable = true;
-                }
-            }
-            // TODO propagate errors
-            catch ( Exception e )
-            {
-                LogUtils.DEBUG("Caught exception in creation of ScriptBrowseNode");
-                LogUtils.DEBUG( LogUtils.getTrace(e));
-            }
-
         }
 
         registerProperty("Deletable", new Type(boolean.class),
