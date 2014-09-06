@@ -1154,9 +1154,9 @@ throw (uno::RuntimeException)
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
             if ( pSysWindow )
-                            pSysWindow->SetMenuBar( pMenuBar );
+                pSysWindow->SetMenuBar(pMenuBar);
 
-                m_bInplaceMenuSet = true;
+            m_bInplaceMenuSet = true;
             m_xInplaceMenuBar = Reference< XComponent >( (OWeakObject *)m_pInplaceMenuBar, UNO_QUERY );
         }
 
@@ -1181,9 +1181,9 @@ throw (uno::RuntimeException)
         if ( pSysWindow )
         {
             if ( pMenuBarWrapper )
-                                pSysWindow->SetMenuBar( (MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar() );
-                        else
-                                pSysWindow->SetMenuBar( 0 );
+                pSysWindow->SetMenuBar((MenuBar *)pMenuBarWrapper->GetMenuBarManager()->GetMenuBar());
+            else
+                pSysWindow->SetMenuBar(0);
         }
     }
 
