@@ -161,8 +161,6 @@ class ScriptImpl implements XScript
          * @param aOutParam         Out parameters
          * @return                  The value returned from the function being invoked
          * @throws IllegalArgumentException If there is no matching script name
-         * @throws CannotConvertException   If args do not match or cannot be converted
-         *                              the those of the invokee
          * @throws com.sun.star.reflection.InvocationTargetException If the running script throws an exception
          *              this information is captured and rethrown as this exception type.
          */
