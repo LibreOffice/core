@@ -49,7 +49,6 @@ $(eval $(call gb_SrsTarget_add_files,sd/res,\
 
 $(eval $(call gb_SrsTarget_add_nonlocalizable_files,sd/res,\
     sd/source/ui/slidesorter/view/SlsResource.src \
-    sd/source/ui/dlg/LayerDialog.src \
 ))
 
 $(eval $(call gb_SrsTarget_add_templates,sd/res,\

@@ -173,11 +173,6 @@ interface ImpressEditView : DrawView
         ExecMethod = Execute ;
         StateMethod = GetState ;
     ]
-    SID_LAYER_DIALOG_WIN // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_SHOW_POSTIT
     [
         ExecMethod = ExecuteAnnotation;

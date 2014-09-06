@@ -61,7 +61,6 @@
 #include "SdUnoDrawView.hxx"
 #include "ViewShellBase.hxx"
 #include "FormShellManager.hxx"
-#include "LayerDialogContent.hxx"
 #include "DrawController.hxx"
 #include <boost/scoped_ptr.hpp>
 

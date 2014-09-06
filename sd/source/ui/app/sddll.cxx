@@ -44,7 +44,6 @@
 #include "ImpressViewShellBase.hxx"
 #include "PresentationViewShell.hxx"
 #include "PresentationViewShellBase.hxx"
-#include "LayerDialogChildWindow.hxx"
 #include "MediaObjectBar.hxx"
 #include "NavigatorChildWindow.hxx"
 #include "OutlineViewShell.hxx"
@@ -191,7 +190,6 @@ void SdDLL::RegisterControllers()
     ::sd::AnimationChildWindow::RegisterChildWindow(false, pMod);
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::DrawViewShell::GetInterfaceId(), pMod );
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::GraphicViewShell::GetInterfaceId(), pMod );
-    ::sd::LayerDialogChildWindow::RegisterChildWindow(false, pMod);
 
     Svx3DChildWindow::RegisterChildWindow(false, pMod);
     SvxFontWorkChildWindow::RegisterChildWindow(false, pMod);

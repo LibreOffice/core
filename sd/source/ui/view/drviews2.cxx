@@ -118,7 +118,6 @@
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"
 #include "GraphicViewShell.hxx"
-#include "LayerDialogChildWindow.hxx"
 #include "LayerTabBar.hxx"
 #include "Outliner.hxx"
 #include "ViewShellHint.hxx"
@@ -2877,27 +2876,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             Cancel();
             rReq.Ignore();
-        }
-        break;
-
-        case SID_LAYER_DIALOG_WIN:
-        {
-            if ( rReq.GetArgs() )
-            {
-                GetViewFrame()->SetChildWindow(
-                    LayerDialogChildWindow::GetChildWindowId(),
-                    ((const SfxBoolItem&) (rReq.GetArgs()->
-                        Get(SID_LAYER_DIALOG_WIN))).GetValue());
-            }
-            else
-            {
-                GetViewFrame()->ToggleChildWindow(
-                    LayerDialogChildWindow::GetChildWindowId());
-            }
-
-            GetViewFrame()->GetBindings().Invalidate(SID_LAYER_DIALOG_WIN);
-            Cancel();
-            rReq.Ignore ();
         }
         break;
 

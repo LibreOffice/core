@@ -46,7 +46,6 @@
 #include "GraphicViewShell.hxx"
 #include "AnimationChildWindow.hxx"
 #include "NavigatorChildWindow.hxx"
-#include "LayerDialogChildWindow.hxx"
 
 using namespace sd;
 #define DrawViewShell

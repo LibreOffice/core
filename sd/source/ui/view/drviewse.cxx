@@ -1650,11 +1650,6 @@ void DrawViewShell::InsertURLButton(const OUString& rURL, const OUString& rText,
 void DrawViewShell::ShowUIControls (bool bVisible)
 {
     ViewShell::ShowUIControls (bVisible);
-
-    //AF: The LayerDialogChildWindow is not used anymore (I hope).
-    //    GetViewFrame()->SetChildWindow(
-    //        LayerDialogChildWindow::GetChildWindowId(),
-    //        IsLayerModeActive() && bVisible);
     maTabControl.Show (bVisible);
 }
 

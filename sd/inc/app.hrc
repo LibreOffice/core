@@ -417,7 +417,6 @@
     // FREE
 #define SID_NOTES_WINDOW                    (SID_SD_START+417)
 #define SID_SWITCH_SHELL_PANE               (SID_SD_START+418)
-#define SID_LAYER_DIALOG_WIN                (SID_SD_START+419)
 #define SID_NORMAL_MULTI_PANE_GUI           (SID_SD_START+420)
 #define SID_SLIDE_SORTER_MULTI_PANE_GUI     (SID_SD_START+421)
 

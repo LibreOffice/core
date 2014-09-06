@@ -75,7 +75,6 @@
 #include "ToolBarManager.hxx"
 #include "FormShellManager.hxx"
 #include "ViewShellBase.hxx"
-#include "LayerDialogChildWindow.hxx"
 #include "LayerTabBar.hxx"
 #include "ViewShellManager.hxx"
 #include "ViewShellHint.hxx"

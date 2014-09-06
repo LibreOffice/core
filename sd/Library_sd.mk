@@ -196,8 +196,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/app/tmplctrl \
 	sd/source/ui/controller/slidelayoutcontroller \
 	sd/source/ui/dlg/AnimationChildWindow \
-	sd/source/ui/dlg/LayerDialogChildWindow \
-	sd/source/ui/dlg/LayerDialogContent \
 	sd/source/ui/dlg/LayerTabBar \
 	sd/source/ui/dlg/NavigatorChildWindow \
 	sd/source/ui/dlg/PaneChildWindows \
