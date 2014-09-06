@@ -29,8 +29,9 @@ import com.sun.star.uno.UnoRuntime;
 /** Factory helper class supporting com.sun.star.lang.XServiceInfo and
     com.sun.star.lang.XSingleComponentFactory.
 
-    @attention
-    This factory implementation does not support lang.XSingleServiceFactory.
+    <p>
+    Note: This factory implementation does not support lang.XSingleServiceFactory.
+    </p>
 */
 public class Factory
     extends ComponentBase
