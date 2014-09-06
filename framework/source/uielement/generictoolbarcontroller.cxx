@@ -243,9 +243,7 @@ throw ( RuntimeException, std::exception )
                     aTmp += aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
-                OUString aText( MnemonicGenerator::EraseAllMnemonicChars( aStrValue ) );
-                m_pToolbar->SetItemText( m_nID, aText );
-                m_pToolbar->SetQuickHelpText( m_nID, aText );
+                m_pToolbar->SetItemText( m_nID, aStrValue );
             }
 
             if ( m_bMadeInvisible )
