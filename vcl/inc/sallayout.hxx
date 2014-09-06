@@ -174,7 +174,7 @@ public:
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const = 0;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const = 0;
     virtual DeviceCoordinate GetTextWidth() const { return FillDXArray( NULL ); }
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const = 0;
+    virtual void    GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const = 0;
     virtual bool    IsKashidaPosValid ( int /*nCharPos*/ ) const { return true; } // i60594
 
     // methods using glyph indexing
@@ -231,7 +231,7 @@ public:
     virtual void    DrawText( SalGraphics& ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
+    virtual void    GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const SAL_OVERRIDE;
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos,
                                    int&, DeviceCoordinate* pGlyphAdvAry, int* pCharPosAry,
                                    const PhysicalFontFace** pFallbackFonts ) const SAL_OVERRIDE;
@@ -332,7 +332,7 @@ public:
     virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
+    virtual void    GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const SAL_OVERRIDE;
 
     // used by display layers
     virtual int     GetNextGlyphs( int nLen, sal_GlyphId* pGlyphIdxAry, Point& rPos, int&,

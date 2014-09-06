@@ -1090,14 +1090,14 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
 
 }
 
-void GraphiteLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) const
+void GraphiteLayout::GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const
 {
     // For each character except the last discover the caret positions
     // immediately before and after that character.
     // This is used for underlines in the GUI amongst other things.
     // It may be used from MultiSalLayout, in which case it must take into account
     // glyphs that have been moved.
-    std::fill(pCaretXArray, pCaretXArray + nArraySize, -1);
+    std::fill(pCaretXArray, pCaretXArray + nArraySize, (DeviceCoordinate)-1);
     // the layout method doesn't modify the layout even though it isn't
     // const in the interface
     bool bRtl = (mnLayoutFlags & SAL_LAYOUT_BIDI_RTL);//const_cast<GraphiteLayout*>(this)->maLayout.rightToLeft();

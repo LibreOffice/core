@@ -127,7 +127,7 @@ public:
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual void  ApplyDXArray(ImplLayoutArgs &rArgs, std::vector<int> & rDeltaWidth);
 
-    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
+    virtual void  GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const SAL_OVERRIDE;
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,

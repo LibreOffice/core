@@ -45,7 +45,7 @@ public:
     virtual DeviceCoordinate GetTextWidth() const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const SAL_OVERRIDE;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const SAL_OVERRIDE;
+    virtual void    GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const SAL_OVERRIDE;
     virtual bool    GetBoundRect( SalGraphics&, Rectangle& ) const SAL_OVERRIDE;
 
     virtual void    InitFont( void) const SAL_OVERRIDE;
@@ -840,7 +840,7 @@ sal_Int32 CTLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoordinate n
     return nIndex;
 }
 
-void CTLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void CTLayout::GetCaretPositions( int nMaxIndex, DeviceCoordinate* pCaretXArray ) const
 {
     DBG_ASSERT( ((nMaxIndex>0)&&!(nMaxIndex&1)),
         "CTLayout::GetCaretPositions() : invalid number of caret pairs requested");
@@ -848,7 +848,7 @@ void CTLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
     // initialize the caret positions
     for( int i = 0; i < nMaxIndex; ++i )
     {
-        pCaretXArray[ i ] = -1;
+        pCaretXArray[ i ] = (DeviceCoordinate)-1;
     }
     for( int n = 0; n <= mnCharCount; ++n )
     {
@@ -859,12 +859,12 @@ void CTLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
 
         // update previous trailing position
         if( n > 0 )
-            pCaretXArray[ 2*n-1 ] = lrint( fPos1 );
+            pCaretXArray[ 2*n-1 ] = (DeviceCoordinate) fPos1;
 
         // update current leading position
         if( 2*n >= nMaxIndex )
             break;
-        pCaretXArray[ 2*n+0 ] = lrint( fPos1 );
+        pCaretXArray[ 2*n+0 ] = (DeviceCoordinate) fPos1;
     }
 }
 

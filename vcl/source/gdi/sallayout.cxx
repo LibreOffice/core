@@ -1247,7 +1247,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
     }
 }
 
-void GenericSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void GenericSalLayout::GetCaretPositions( int nMaxIndex, DeviceCoordinate* pCaretXArray ) const
 {
     // initialize result array
     long nXPos = -1;
@@ -1990,26 +1990,28 @@ DeviceCoordinate MultiSalLayout::FillDXArray( DeviceCoordinate* pCharWidths ) co
     return nMaxWidth;
 }
 
-void MultiSalLayout::GetCaretPositions( int nMaxIndex, long* pCaretXArray ) const
+void MultiSalLayout::GetCaretPositions( int nMaxIndex, DeviceCoordinate* pCaretXArray ) const
 {
     SalLayout& rLayout = *mpLayouts[ 0 ];
     rLayout.GetCaretPositions( nMaxIndex, pCaretXArray );
 
     if( mnLevel > 1 )
     {
-        long* pTempPos = (long*)alloca( nMaxIndex * sizeof(long) );
+        DeviceCoordinate* pTempPos = (DeviceCoordinate*)alloca( nMaxIndex * sizeof(DeviceCoordinate) );
         for( int n = 1; n < mnLevel; ++n )
         {
             mpLayouts[ n ]->GetCaretPositions( nMaxIndex, pTempPos );
             double fUnitMul = mnUnitsPerPixel;
             fUnitMul /= mpLayouts[n]->GetUnitsPerPixel();
             for( int i = 0; i < nMaxIndex; ++i )
+            {
                 if( pTempPos[i] >= 0 )
                 {
-                    long w = pTempPos[i];
-                    w = static_cast<long>(w*fUnitMul + 0.5);
+                    DeviceCoordinate w = pTempPos[i];
+                    w = (DeviceCoordinate)(w * fUnitMul + 0.5);
                     pCaretXArray[i] = w;
                 }
+            }
         }
     }
 }
