@@ -1264,7 +1264,7 @@
       </node>
       <node oor:name=".uno:UndoAction" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Undo</value>
+          <value xml:lang="en-US">Undo Last Action</value>
         </prop>
       </node>
       <node oor:name=".uno:ToggleControlFocus" oor:op="replace">
@@ -2019,7 +2019,7 @@
       </node>
       <node oor:name=".uno:PrintDefault" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Print File Directly</value>
+          <value xml:lang="en-US">Print Document Directly</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2246,7 +2246,7 @@
       </node>
       <node oor:name=".uno:InsertDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~File...</value>
+          <value xml:lang="en-US">~Document...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3077,7 +3077,7 @@
       </node>
       <node oor:name=".uno:SpellingDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Spelling...</value>
+          <value xml:lang="en-US">Check ~Spelling...</value>
         </prop>
       </node>
       <node oor:name=".uno:RecheckDocument" oor:op="replace">
@@ -3087,7 +3087,7 @@
       </node>
       <node oor:name=".uno:SpellingAndGrammarDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Spelling and Grammar...</value>
+          <value xml:lang="en-US">Check ~Spelling...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3103,7 +3103,7 @@
       </node>
       <node oor:name=".uno:SpellDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Spelling...</value>
+          <value xml:lang="en-US">Check ~Spelling...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3366,7 +3366,7 @@
       </node>
       <node oor:name=".uno:Redo" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Redo</value>
+          <value xml:lang="en-US">Redo Last Action</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3382,7 +3382,7 @@
       </node>
       <node oor:name=".uno:FormatPaintbrush" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Format Paintbrush (double click for multi-selection)</value>
+          <value xml:lang="en-US">Clone Formatting (double click for multi-selection)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -3403,7 +3403,7 @@
       </node>
       <node oor:name=".uno:Cut" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Cu~t</value>
+          <value xml:lang="en-US">Cu~t Selection</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3411,7 +3411,7 @@
       </node>
       <node oor:name=".uno:Copy" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Copy</value>
+          <value xml:lang="en-US">~Copy Selection</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3419,7 +3419,7 @@
       </node>
       <node oor:name=".uno:Paste" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Paste</value>
+          <value xml:lang="en-US">~Paste from Clipboard</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4798,7 +4798,7 @@
       </node>
       <node oor:name=".uno:PrintPreview" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Pa~ge Preview</value>
+          <value xml:lang="en-US">Pre~view Print Output</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
@@ -5445,7 +5445,7 @@
       </node>
       <node oor:name=".uno:SpellingMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Spellcheck</value>
+          <value xml:lang="en-US">Toggle Auto ~Spellcheck</value>
         </prop>
       </node>
       <node oor:name=".uno:LanguageMenu" oor:op="replace">
