@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_7d3feb25",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 1267,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:17:02Z",
+      "side": 1,
+      "message": "This should be \"Undo Last Action\".",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_5d3c2f2f",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 2022,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:17:02Z",
+      "side": 1,
+      "message": "The word \"Directly\" should be capitalized.",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_3d4973d1",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3080,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:17:02Z",
+      "side": 1,
+      "message": "Most languages don\u0027t have grammar checking tools, so I suggest that you drop this change.",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_1d46b7bf",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3090,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:17:02Z",
+      "side": 1,
+      "message": "The previous comment also applies here.",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_fd11bbb0",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3369,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:17:02Z",
+      "side": 1,
+      "message": "Change this to \"Redo Last Action\".",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_dd16ffa6",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3406,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:17:02Z",
+      "side": 1,
+      "message": "The word \"Selected\" should be capitalized. I\u0027m unsure of the use of \"Area\" here, BTW. Maybe \"Cut Selection\"?",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_bd0b437d",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 3414,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:17:02Z",
+      "side": 1,
+      "message": "The previous comment applies here as well.",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3acd31a7_9d1087aa",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 4219,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-06T16:17:02Z",
+      "side": 1,
+      "message": "Please capitalize \"Directly\".",
+      "revId": "5007fcf131811cbe43099f54bbad47692320d6c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
