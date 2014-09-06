@@ -70,7 +70,7 @@ static void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
         AUTH_FIELD_AUTHOR,
         AUTH_FIELD_TITLE,
         AUTH_FIELD_YEAR,
-        nTypeId == AUTH_TYPE_WWW ? AUTH_FIELD_URL : USHRT_MAX
+        static_cast<sal_uInt16>(nTypeId == AUTH_TYPE_WWW ? AUTH_FIELD_URL : USHRT_MAX)
     };
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(nVals); ++i)
