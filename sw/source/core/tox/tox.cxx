@@ -70,12 +70,12 @@ static void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
         AUTH_FIELD_AUTHOR,
         AUTH_FIELD_TITLE,
         AUTH_FIELD_YEAR,
-        nTypeId == AUTH_TYPE_WWW ? static_cast<sal_uInt16>(AUTH_FIELD_URL) : SAL_MAX_UINT16
+        nTypeId == AUTH_TYPE_WWW ? AUTH_FIELD_URL : AUTH_FIELD_END
     };
 
     for(size_t i = 0; i < SAL_N_ELEMENTS(nVals); ++i)
     {
-        if(nVals[i] == SAL_MAX_UINT16)
+        if(nVals[i] == AUTH_FIELD_END)
             break;
         if( i > 0 )
             rAuthTokens.push_back( aTextToken );
