@@ -21,8 +21,6 @@ package convwatch;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
-import java.lang.Double;
-
 
 public class PerformanceContainer /* extends *//* implements */ {
     /*
