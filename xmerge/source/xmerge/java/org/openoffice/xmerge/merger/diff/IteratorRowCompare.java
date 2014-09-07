@@ -119,11 +119,11 @@ public class IteratorRowCompare implements DiffAlgorithm {
 
                     if (orgRowRepeated.length() > 0) {
                         orgRowNum =
-                            Integer.valueOf(orgRowRepeated).intValue();
+                            Integer.parseInt(orgRowRepeated);
                     }
                     if (modRowRepeated.length() > 0) {
                         modRowNum =
-                            Integer.valueOf(modRowRepeated).intValue();
+                            Integer.parseInt(modRowRepeated);
                     }
 
                     // try to find out the common number of repeated Rows

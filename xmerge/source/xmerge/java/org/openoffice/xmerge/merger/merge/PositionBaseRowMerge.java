@@ -96,11 +96,11 @@ public final class PositionBaseRowMerge implements NodeMergeAlgorithm {
 
                     if (orgColRepeated.length() > 0) {
                         orgColNum =
-                            Integer.valueOf(orgColRepeated).intValue();
+                            Integer.parseInt(orgColRepeated);
                     }
                     if (modColRepeated.length() > 0) {
                         modColNum =
-                            Integer.valueOf(modColRepeated).intValue();
+                            Integer.parseInt(modColRepeated);
                     }
 
                     // try to find out the common number of repeated cols
