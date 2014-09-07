@@ -714,7 +714,6 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
         if ( !aprop[n].Name.isEmpty() )
         {
             OString aName = OUStringToOString( aprop[n].Name, RTL_TEXTENCODING_ASCII_US );
-            OUString valueTypeName = ( aprop[n].Value ).getValueType().getTypeName();
             // pid starts from 2 not from 1 as MS supports pid from 2
             OString pid =  OUStringToOString( OUString::number(n + 2), RTL_TEXTENCODING_ASCII_US );
             pAppProps->startElement( XML_property ,
@@ -753,7 +752,6 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
                     util::DateTime aDateTime;
                     if ( ( aprop[n].Value ) >>= aDate )
                     {
-                        Time aTime( Time::EMPTY );
                         aDateTime = util::DateTime( 0, 0 , 0, 0, aDate.Year, aDate.Month, aDate.Day, true );
                         writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime);
                     }
