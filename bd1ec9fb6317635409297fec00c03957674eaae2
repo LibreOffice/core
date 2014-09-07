@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_1d55971c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 3090,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2014-09-07T20:01:17Z",
+      "side": 1,
+      "message": "You know, Samuel? You’re going to hate me, but on a second thought I believe that if we drop the “and Grammar” part from these strings, English-speaking users will believe we’ve regressed in functionality, which is not the case of course as it’s just a rename. So maybe it wasn’t a bad idea to add that after all.\n\nThe rest of the changes look good to me.\n\nSorry for giving you a headache! :-(",
+      "revId": "bd1ec9fb6317635409297fec00c03957674eaae2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
