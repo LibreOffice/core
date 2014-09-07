@@ -4968,6 +4968,39 @@ void Test::testCondCopyPasteSheetBetweenDoc()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCondCopyPasteSheet()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->AddRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    m_pDoc->CopyTab(0, SC_TAB_APPEND);
+
+    ScConditionalFormatList* pList = m_pDoc->GetCondFormList(1);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
+
+    ScConditionalFormat& rFormat = *pList->begin();
+    const ScRangeList& rRange = rFormat.GetRange();
+    CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,1,3,3,1)), rRange);
+    sal_uInt32 nKey = rFormat.GetKey();
+    const SfxPoolItem* pItem = m_pDoc->GetAttr( 2, 2, 1, ATTR_CONDITIONAL );
+    const ScCondFormatItem* pCondFormatItem = static_cast<const ScCondFormatItem*>(pItem);
+
+    CPPUNIT_ASSERT(pCondFormatItem);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pCondFormatItem->GetCondFormatData().size());
+    CPPUNIT_ASSERT( nKey == pCondFormatItem->GetCondFormatData().at(0) );
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMixData()
 {
     m_pDoc->InsertTab(0, "Test");

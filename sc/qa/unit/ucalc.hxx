@@ -302,6 +302,7 @@ public:
     void testCondFormatInsertRow();
     void testCondFormatInsertCol();
     void testCondCopyPasteSheetBetweenDoc();
+    void testCondCopyPasteSheet();
 
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
@@ -414,6 +415,7 @@ public:
     CPPUNIT_TEST(testEditTextIterator);
     CPPUNIT_TEST(testCondFormatINSDEL);
     CPPUNIT_TEST(testCondCopyPasteSheetBetweenDoc);
+    CPPUNIT_TEST(testCondCopyPasteSheet);
     CPPUNIT_TEST_SUITE_END();
 
 private:
