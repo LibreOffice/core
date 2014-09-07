@@ -187,7 +187,7 @@ public class UCBStreamHandler extends URLStreamHandler {
     private InputStream getFileStreamFromJarStream(String file, InputStream is)
         throws IOException
     {
-        ZipEntry entry = null;
+        ZipEntry entry;
 
         ZipInputStream zis = new ZipInputStream(is);
 
