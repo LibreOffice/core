@@ -108,16 +108,16 @@ int Parse( int nTyp, const char *pTokenText ){
     global::exporter->Execute( nTyp , pTokenText );
     return 1;
 }
+
 void Close(){
-    global::exporter->pParseQueue->Close();
+    global::exporter->GetParseQueue()->Close();
     global::exporter.reset();
         // avoid nontrivial Export dtor being executed during exit
 }
 
 int WorkOnTokenSet( int nTyp, char *pTokenText )
 {
-
-    global::exporter->pParseQueue->Push( QueueEntry( nTyp , OString(pTokenText) ) );
+    global::exporter->GetParseQueue()->Push( QueueEntry( nTyp , OString(pTokenText) ) );
     return 1;
 }
 
