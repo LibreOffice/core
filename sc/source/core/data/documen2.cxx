@@ -898,10 +898,6 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nOldPos]->StartAllListeners();
         maTabs[nNewPos]->StartAllListeners();
 
-        ScConditionalFormatList* pNewList = new ScConditionalFormatList(*maTabs[nOldPos]->GetCondFormList());
-        pNewList->UpdateReference(aRefCxt);
-        maTabs[nNewPos]->SetCondFormList( pNewList );
-
         sc::SetFormulaDirtyContext aFormulaDirtyCxt;
         SetAllFormulasDirty(aFormulaDirtyCxt);
 
