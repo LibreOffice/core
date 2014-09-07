@@ -301,6 +301,7 @@ public:
     void testCondFormatINSDEL();
     void testCondFormatInsertRow();
     void testCondFormatInsertCol();
+    void testCopySheetCondFormat();
 
     CPPUNIT_TEST_SUITE(Test);
 #if CALC_TEST_PERF
@@ -412,6 +413,7 @@ public:
     CPPUNIT_TEST(testCellTextWidth);
     CPPUNIT_TEST(testEditTextIterator);
     CPPUNIT_TEST(testCondFormatINSDEL);
+    CPPUNIT_TEST(testCopySheetCondFormat);
     CPPUNIT_TEST_SUITE_END();
 
 private:

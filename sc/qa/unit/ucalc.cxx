@@ -4946,6 +4946,28 @@ void Test::testCondFormatInsertRow()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testCopySheetCondFormat()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    ScConditionalFormat* pFormat = new ScConditionalFormat(1, m_pDoc);
+    ScRange aCondFormatRange(0,0,0,3,3,0);
+    ScRangeList aRangeList(aCondFormatRange);
+    pFormat->AddRange(aRangeList);
+
+    ScCondFormatEntry* pEntry = new ScCondFormatEntry(SC_COND_DIRECT,"=B2","",m_pDoc,ScAddress(0,0,0),ScGlobal::GetRscString(STR_STYLENAME_RESULT));
+    pFormat->AddEntry(pEntry);
+    m_pDoc->AddCondFormat(pFormat, 0);
+
+    ScDocument aDoc;
+    aDoc.TransferTab(m_pDoc, 0, 0, true);
+
+    ScConditionalFormatList* pList = aDoc.GetCondFormList(0);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testMixData()
 {
     m_pDoc->InsertTab(0, "Test");
