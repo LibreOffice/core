@@ -26,8 +26,8 @@
 #include "srclex.hxx"
 
 #include "boost/scoped_ptr.hpp"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "common.hxx"
 #include "export.hxx"
 #include "tokens.h"
@@ -207,9 +207,10 @@ Export::Export(const OString &rOutput)
                 pParseQueue( new ParserQueue( *this ) )
 {
     aOutput.mPo = new PoOfstream( rOutput, PoOfstream::APP );
-    if (!aOutput.mPo->isOpen()) {
-        fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
-        exit ( -1 );
+    if (!aOutput.mPo->isOpen())
+    {
+        std::fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
+        std::exit(EXIT_FAILURE);
     }
 }
 
@@ -652,8 +653,8 @@ int Export::Execute( int nToken, const char * pToken )
         }
         break;
         case PRAGMA : {
-            fprintf(stderr, "ERROR: archaic PRAGMA %s\n", sToken.getStr());
-            exit(-1);
+            std::fprintf(stderr, "ERROR: archaic PRAGMA %s\n", sToken.getStr());
+            std::exit(EXIT_FAILURE);
         }
         break;
         }
