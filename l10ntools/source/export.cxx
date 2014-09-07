@@ -233,6 +233,11 @@ Export::Export(
 {
     aOutput.mSimple = new std::ofstream();
     aOutput.mSimple->open(rOutput.getStr(), std::ios_base::out | std::ios_base::trunc);
+    if (!aOutput.mSimple->is_open())
+    {
+        std::fprintf(stderr, "ERROR : Can't open file %s\n", rOutput.getStr());
+        std::exit(EXIT_FAILURE);
+    }
 
     if ( bUTF8BOM ) WriteUTF8ByteOrderMarkToOutput();
 }
