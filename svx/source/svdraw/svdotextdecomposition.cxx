@@ -1234,13 +1234,10 @@ void impCreateScrollTiming(const SfxItemSet& rSet, drawinglayer::animation::Anim
     }
 
     // loop. In loop, move through
-    if(nRepeat || 0L == nRepeat)
-    {
-        drawinglayer::animation::AnimationEntryLoop aLoop(nRepeat ? nRepeat : ENDLESS_LOOP);
-        drawinglayer::animation::AnimationEntryLinear aThrough(fTimeFullPath, fFrequency, bForward ? 0.0 : 1.0, bForward ? 1.0 : 0.0);
-        aLoop.append(aThrough);
-        rAnimList.append(aLoop);
-    }
+    drawinglayer::animation::AnimationEntryLoop aLoop(nRepeat ? nRepeat : ENDLESS_LOOP);
+    drawinglayer::animation::AnimationEntryLinear aThrough(fTimeFullPath, fFrequency, bForward ? 0.0 : 1.0, bForward ? 1.0 : 0.0);
+    aLoop.append(aThrough);
+    rAnimList.append(aLoop);
 
     if(0L != nRepeat && bVisisbleWhenStopped)
     {
