@@ -18,9 +18,6 @@
 
 package convwatch;
 
-import convwatch.ImageHelper;
-
-
 abstract class CountPixel
 {
     int m_nCount = 0;

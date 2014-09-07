@@ -18,10 +18,6 @@
 
 package convwatch;
 
-import convwatch.GraphicalTestArguments;
-import convwatch.OfficePrint;
-import convwatch.ConvWatchCancelException;
-import convwatch.FileHelper;
 import java.io.File;
 
 import helper.URLHelper;

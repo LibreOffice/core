@@ -20,7 +20,6 @@ package convwatch;
 
 import java.io.File;
 import helper.OSHelper;
-import convwatch.IniFile;
 
 public class BuildID
 {
