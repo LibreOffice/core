@@ -361,54 +361,55 @@ public abstract class ScriptProvider
     public ScriptMetaData  getScriptData( /*IN*/String scriptURI ) throws ScriptFrameworkErrorException
 
     {
-        ParsedScriptUri details = null;
         try
         {
-            details = m_container.parseScriptUri( scriptURI );
-            ScriptMetaData scriptData = m_container.findScript( details );
-            if ( scriptData == null )
+            ParsedScriptUri details = m_container.parseScriptUri( scriptURI );
+            try
             {
-                throw new ScriptFrameworkErrorException( details.function + " does not exist",
-                    null, details.function, language, ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
+                ScriptMetaData scriptData = m_container.findScript(details);
+                if (scriptData == null)
+                {
+                    throw new ScriptFrameworkErrorException(details.function + " does not exist",
+                            null, details.function, language, ScriptFrameworkErrorType.NO_SUCH_SCRIPT);
+                }
+                return scriptData;
             }
-            return scriptData;
+            catch (com.sun.star.container.NoSuchElementException nse)
+            {
+                ScriptFrameworkErrorException e2
+                        = new ScriptFrameworkErrorException(
+                                nse.getMessage(), null, details.function, language,
+                                ScriptFrameworkErrorType.NO_SUCH_SCRIPT);
+                e2.initCause(nse);
+                throw e2;
+            }
+            catch (com.sun.star.lang.WrappedTargetException wta)
+            {
+                // TODO specify the correct error Type
+                Exception wrapped = (Exception) wta.TargetException;
+                String message = wta.getMessage();
+                if (wrapped != null)
+                {
+                    message = wrapped.getMessage();
+                }
+                ScriptFrameworkErrorException e2
+                        = new ScriptFrameworkErrorException(
+                                message, null, details.function, language,
+                                ScriptFrameworkErrorType.UNKNOWN);
+                e2.initCause(wta);
+                throw e2;
+            }
         }
-        catch (  com.sun.star.lang.IllegalArgumentException ila )
+        catch (com.sun.star.lang.IllegalArgumentException ila)
         {
             // TODO specify the correct error Type
-            ScriptFrameworkErrorException e2 =
-                new ScriptFrameworkErrorException(
-                    ila.getMessage(), null, scriptURI, language,
-                    ScriptFrameworkErrorType.UNKNOWN );
-            e2.initCause( ila );
+            ScriptFrameworkErrorException e2
+                    = new ScriptFrameworkErrorException(
+                            ila.getMessage(), null, scriptURI, language,
+                            ScriptFrameworkErrorType.UNKNOWN);
+            e2.initCause(ila);
             throw e2;
         }
-        catch ( com.sun.star.container.NoSuchElementException nse )
-        {
-            ScriptFrameworkErrorException e2 =
-                new ScriptFrameworkErrorException(
-                    nse.getMessage(), null, details.function, language,
-                    ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
-            e2.initCause( nse );
-            throw e2;
-        }
-        catch ( com.sun.star.lang.WrappedTargetException wta )
-        {
-            // TODO specify the correct error Type
-            Exception wrapped = (Exception)wta.TargetException;
-            String message = wta.getMessage();
-            if ( wrapped != null )
-            {
-                message = wrapped.getMessage();
-            }
-            ScriptFrameworkErrorException e2 =
-                new ScriptFrameworkErrorException(
-                    message, null, details.function, language,
-                    ScriptFrameworkErrorType.UNKNOWN );
-            e2.initCause( wta );
-            throw e2;
-        }
-
     }
 
 
