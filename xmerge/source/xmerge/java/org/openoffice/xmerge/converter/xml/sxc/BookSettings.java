@@ -148,8 +148,7 @@ public class BookSettings implements OfficeConstants {
         if(name.equals("ActiveTable")) {
             activeSheet = value;
         } else if(name.equals("HasColumnRowHeaders")) {
-            Boolean b = Boolean.valueOf(value);
-            hasColumnRowHeaders = b.booleanValue();
+            hasColumnRowHeaders = Boolean.parseBoolean(value);
         }
     }
 
