@@ -378,6 +378,7 @@ public:
     void testCondCopyPaste();
     void testCondCopyPasteSingleCell(); //e.g. fdo#82503
     void testCondCopyPasteSheetBetweenDoc();
+    void testCondCopyPasteSheet();
     void testIconSet();
 
     void testImportStream();
@@ -560,6 +561,7 @@ public:
     CPPUNIT_TEST(testCondCopyPaste);
     CPPUNIT_TEST(testCondCopyPasteSingleCell);
     CPPUNIT_TEST(testCondCopyPasteSheetBetweenDoc);
+    CPPUNIT_TEST(testCondCopyPasteSheet);
     CPPUNIT_TEST(testIconSet);
     CPPUNIT_TEST(testImportStream);
     CPPUNIT_TEST(testDeleteContents);
