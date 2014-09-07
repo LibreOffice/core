@@ -385,7 +385,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">RGB</property>
                         <attributes>
-                          <attribute name="weight" value="semibold"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                     </child>
@@ -530,7 +530,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">HSB</property>
                         <attributes>
-                          <attribute name="weight" value="semibold"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                     </child>
@@ -697,7 +697,7 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">CMYK</property>
                         <attributes>
-                          <attribute name="weight" value="semibold"/>
+                          <attribute name="weight" value="bold"/>
                         </attributes>
                       </object>
                     </child>
