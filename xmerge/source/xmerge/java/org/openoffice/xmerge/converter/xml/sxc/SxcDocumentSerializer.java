@@ -386,16 +386,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
             // There is a number of rows repeated attribute:
             if (rowsRepeatedNode != null) {
-
                 // Get the number of times the row is repeated
                 String rowsRepeatedString = rowsRepeatedNode.getNodeValue();
-
-                Integer rowsRepeatedInt = Integer.valueOf(rowsRepeatedString);
-
-                rowsRepeated = rowsRepeatedInt.intValue();
-
+                rowsRepeated = Integer.parseInt(rowsRepeatedString);
             } else {
-
                 // The row is not repeated
                 rowsRepeated = 1;
             }
@@ -575,14 +569,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         // There is a number of cols repeated attribute
         if (colsRepeatedNode != null) {
-
             // Get the number of times the cell is repeated
             String colsRepeatedString = colsRepeatedNode.getNodeValue();
-
-            Integer colsRepeatedInt = Integer.valueOf(colsRepeatedString);
-            colsRepeated = colsRepeatedInt.intValue();
+            colsRepeated = Integer.parseInt(colsRepeatedString);
         } else {
-
             // The cell is not repeated
             colsRepeated = 1;
         }
