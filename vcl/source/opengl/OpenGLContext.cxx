@@ -492,6 +492,9 @@ bool OpenGLContext::ImplInit()
         int best_fbc = -1;
         const SystemEnvData* sysData(m_pChildWindow->GetSystemData());
         GLXFBConfig* pFBC = getFBConfig(sysData, best_fbc);
+        if (!pFBC)
+            return false;
+
         int nContextAttribs[] =
         {
             GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
@@ -504,6 +507,9 @@ bool OpenGLContext::ImplInit()
 #endif
     if (!m_aGLWin.ctx)
     {
+        if (!m_aGLWin.dpy || !m_aGLWin.vi)
+           return false;
+
         m_aGLWin.ctx = m_aGLWin.dpy == 0 ? 0 : glXCreateContext(m_aGLWin.dpy,
                 m_aGLWin.vi,
                 0,
