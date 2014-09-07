@@ -26,7 +26,6 @@
 package convwatch;
 
 import helper.URLHelper;
-import convwatch.FileHelper;
 import helper.StringHelper;
 
 interface Filenamer

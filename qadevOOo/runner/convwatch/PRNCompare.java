@@ -21,8 +21,6 @@ package convwatch;
 
 import helper.ProcessHandler;
 import java.io.File;
-import convwatch.PixelCounter;
-import convwatch.StatusHelper;
 import helper.OSHelper;
 import helper.StringHelper;
 import java.util.ArrayList;

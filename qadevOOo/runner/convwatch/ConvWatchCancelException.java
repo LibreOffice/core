@@ -18,8 +18,6 @@
 
 package convwatch;
 
-import convwatch.ConvWatchException;
-
 public class ConvWatchCancelException extends ConvWatchException
 {
     public ConvWatchCancelException(String _aMessage)

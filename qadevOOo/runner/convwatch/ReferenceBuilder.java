@@ -23,12 +23,7 @@ import java.io.File;
 import java.io.FileFilter;
 import com.sun.star.lang.XMultiServiceFactory;
 
-import convwatch.DirectoryHelper;
-import convwatch.ConvWatchException;
-import convwatch.EnhancedComplexTestCase;
-import convwatch.PropertyName;
 import helper.OfficeProvider;
-import convwatch.PerformanceContainer;
 
 /**
  * The following Complex Test will test

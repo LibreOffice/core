@@ -23,17 +23,11 @@ import java.util.ArrayList;
 import java.io.File;
 import java.io.FileFilter;
 
-import convwatch.EnhancedComplexTestCase;
 import com.sun.star.lang.XMultiServiceFactory;
 
-import convwatch.ConvWatchException;
-import convwatch.DirectoryHelper;
-import convwatch.GraphicalTestArguments;
-import convwatch.HTMLOutputter;
 import helper.OfficeProvider;
 import helper.OfficeWatcher;
 import helper.OSHelper;
-import convwatch.PerformanceContainer;
 
 /**
  * The following Complex Test will test

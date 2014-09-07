@@ -25,10 +25,6 @@ import java.util.ArrayList;
 
 import com.sun.star.lang.XMultiServiceFactory;
 
-import convwatch.DirectoryHelper;
-import convwatch.OfficePrint;
-import convwatch.EnhancedComplexTestCase;
-import convwatch.PropertyName;
 import helper.OfficeProvider;
 
 /**

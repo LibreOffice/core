@@ -18,7 +18,6 @@
 
 package convwatch;
 
-import convwatch.ImageHelper;
 import java.io.File;
 import java.awt.image.RenderedImage;
 import java.awt.image.BufferedImage;

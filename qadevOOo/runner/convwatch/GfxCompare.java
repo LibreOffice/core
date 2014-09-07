@@ -19,11 +19,7 @@
 package convwatch;
 
 import java.util.ArrayList;
-import convwatch.EnhancedComplexTestCase;
-import convwatch.PRNCompare;
-import convwatch.GraphicalTestArguments;
 import helper.URLHelper;
-import convwatch.OfficePrint;
 import java.io.File;
 
 public class GfxCompare extends EnhancedComplexTestCase

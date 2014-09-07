@@ -18,11 +18,9 @@
 
 package convwatch;
 
-import convwatch.FileHelper;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
-import convwatch.GraphicalTestArguments;
 import helper.ProcessHandler;
 import java.util.ArrayList;
 import helper.OSHelper;

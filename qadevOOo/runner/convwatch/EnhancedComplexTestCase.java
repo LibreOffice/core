@@ -20,7 +20,6 @@ package convwatch;
 
 import complexlib.ComplexTestCase;
 import helper.ProcessHandler;
-import convwatch.GraphicalTestArguments;
 
 /**
  * Some Helperfunctions which are nice in ReferenceBuilder and ConvWatchTest
