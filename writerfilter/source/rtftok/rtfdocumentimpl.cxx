@@ -458,7 +458,17 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::getProperties(RT
             RTFReferenceProperties& rCharProps = *(RTFReferenceProperties*)itChar->second.get();
             RTFSprms& rCharStyleSprms = rCharProps.getSprms();
             for (RTFSprms::Iterator_t itSprm = rCharStyleSprms.begin(); itSprm != rCharStyleSprms.end(); ++itSprm)
-                aStyleSprms.set(itSprm->first, itSprm->second);
+            {
+                // createStyleProperties() puts properties to rPr, but here we need a flat list.
+                if (itSprm->first == NS_ooxml::LN_CT_Style_rPr)
+                {
+                    RTFSprms& rRPrSprms = itSprm->second->getSprms();
+                    for (RTFSprms::Iterator_t itRPrSprm = rRPrSprms.begin(); itRPrSprm != rRPrSprms.end(); ++itRPrSprm)
+                        aStyleSprms.set(itRPrSprm->first, itRPrSprm->second);
+                }
+                else
+                    aStyleSprms.set(itSprm->first, itSprm->second);
+            }
 
             RTFSprms& rCharStyleAttributes = rCharProps.getAttributes();
             for (RTFSprms::Iterator_t itAttr = rCharStyleAttributes.begin(); itAttr != rCharStyleAttributes.end(); ++itAttr)

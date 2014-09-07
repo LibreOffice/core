@@ -1926,6 +1926,12 @@ DECLARE_RTFIMPORT_TEST(testFdo82078, "fdo82078.rtf")
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 2), "CharWeight"));
 }
 
+DECLARE_RTFIMPORT_TEST(testCsBold, "cs-bold.rtf")
+{
+    // This was awt::FontWeight::NORMAL, i.e. the first run was bold, when it should be bold (applied character style without direct formatting).
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 1), "CharWeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
