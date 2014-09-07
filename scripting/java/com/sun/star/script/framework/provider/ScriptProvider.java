@@ -214,8 +214,7 @@ public abstract class ScriptProvider
                         extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/$BRAND_BIN_SUBDIR/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
                         extensionRepository = "bundled";
                     }
-
-                    if ( originalContextURL.startsWith( "share" ) )
+                    else if ( originalContextURL.startsWith( "share" ) )
                     {
                         contextUrl = "vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR";
                         extensionDb = "vnd.sun.star.expand:${$BRAND_BASE_DIR/$BRAND_BIN_SUBDIR/" + PathUtils.BOOTSTRAP_NAME + "::UserInstallation}/user";
@@ -231,12 +230,13 @@ public abstract class ScriptProvider
                     if ( originalContextURL.endsWith( "uno_packages") )
                     {
                         isPkgProvider = true;
+                        if (!originalContextURL.equals(contextUrl)
+                                && !extensionRepository.equals("bundled"))
+                        {
+                            contextUrl = PathUtils.make_url(contextUrl, "uno_packages");
+                        }
                     }
-                    if ( originalContextURL.endsWith( "uno_packages") &&  !originalContextURL.equals( contextUrl  )
-                            && !extensionRepository.equals("bundled"))
-                    {
-                        contextUrl = PathUtils.make_url( contextUrl, "uno_packages"  );
-                    }
+
                     if ( isPkgProvider )
                     {
                         m_container = new UnoPkgContainer( m_xContext, contextUrl, extensionDb, extensionRepository, language  );
