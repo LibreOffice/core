@@ -145,6 +145,8 @@ private:
 
     std::vector<OString> aLanguages;
 
+    ParserQueue* pParseQueue;
+
     bool WriteData( ResData *pResData, bool bCreateNew = false ); ///< called before dest. cur ResData
     bool WriteExportList( ResData *pResData, ExportList& rExportList, const sal_uInt16 nTyp );
 
@@ -179,11 +181,11 @@ public:
 
     void Init();
     int Execute( int nToken, const char * pToken ); ///< called from lexer
+
     void SetError() { bError = true; }
     bool GetError() { return bError; }
-    ParserQueue* pParseQueue; // public!!
+    ParserQueue* GetParseQueue() { return pParseQueue; }
 };
-
 
 
 // class MergeEntrys
