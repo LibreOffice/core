@@ -61,10 +61,9 @@ public class ScriptProviderForBeanShell
             throws com.sun.star.uno.RuntimeException,
                    ScriptFrameworkErrorException
         {
-            ScriptMetaData scriptData = null;
+            ScriptMetaData scriptData = getScriptData( scriptURI );
             try
             {
-                scriptData = getScriptData( scriptURI );
                 ScriptImpl script = new ScriptImpl( m_xContext, scriptData, m_xModel, m_xInvocContext );
                 return script;
             }
