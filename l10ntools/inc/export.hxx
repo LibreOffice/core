@@ -180,7 +180,7 @@ public:
     ~Export();
 
     void Init();
-    int Execute( int nToken, const char * pToken ); ///< called from lexer
+    bool Execute( int nToken, const char * pToken );
 
     void SetError() { bError = true; }
     bool GetError() { return bError; }
