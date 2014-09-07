@@ -66,7 +66,7 @@ static void lcl_FillAuthPattern(SwFormTokens &rAuthTokens, sal_uInt16 nTypeId)
     SwFormToken aTextToken( TOKEN_TEXT );
     aTextToken.sText = ", ";
 
-    const sal_uInt16 nVals[4] = {
+    const ToxAuthorityField nVals[4] = {
         AUTH_FIELD_AUTHOR,
         AUTH_FIELD_TITLE,
         AUTH_FIELD_YEAR,
