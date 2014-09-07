@@ -2008,6 +2008,8 @@ short MessageDialog::get_response(const Window *pWindow) const
     std::map<const Window*, short>::const_iterator aFind = m_aResponses.find(pWindow);
     if (aFind != m_aResponses.end())
         return aFind->second;
+    if (!m_pUIBuilder)
+        return RET_CANCEL;
     return m_pUIBuilder->get_response(pWindow);
 }
 
