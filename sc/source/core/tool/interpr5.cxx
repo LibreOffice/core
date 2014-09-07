@@ -1282,16 +1282,17 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
                         pResMat->PutDouble( _bSub ? ::rtl::math::approxSub( fVal, pMat->GetDouble(i)) : ::rtl::math::approxAdd( pMat->GetDouble(i), fVal), i);
                     else
                         pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
-                } // for ( SCSIZE i = 0; i < nCount; i++ )
-            } // if (bFlag || !_bSub )
+                }
+            }
             else
             {
                 for ( SCSIZE i = 0; i < nCount; i++ )
-                {   if (pMat->IsValue(i))
+                {
+                    if (pMat->IsValue(i))
                         pResMat->PutDouble( ::rtl::math::approxSub( pMat->GetDouble(i), fVal), i);
                     else
                         pResMat->PutString(mrStrPool.intern(ScGlobal::GetRscString(STR_NO_VALUE)), i);
-                } // for ( SCSIZE i = 0; i < nCount; i++ )
+                }
             }
             PushMatrix(pResMat);
         }
