@@ -4946,7 +4946,7 @@ void Test::testCondFormatInsertRow()
     m_pDoc->DeleteTab(0);
 }
 
-void Test::testCopySheetCondFormat()
+void Test::testCondCopyPasteSheetBetweenDoc()
 {
     m_pDoc->InsertTab(0, "Test");
 
