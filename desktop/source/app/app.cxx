@@ -1981,7 +1981,7 @@ IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
         EnableOleAutomation();
 
         const char *pExitPostStartup = getenv ("OOO_EXIT_POST_STARTUP");
-        if (pExitPostStartup && strlen (pExitPostStartup) > 0)
+        if (pExitPostStartup && *pExitPostStartup)
             new ExitTimer();
     } catch (const ::com::sun::star::uno::Exception &e) {
         OUString a( "UNO exception during client open:\n"  );
