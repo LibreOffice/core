@@ -1,0 +1,280 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include "menuitemlist.hxx"
+
+#include <salframe.hxx>
+#include <salinst.hxx>
+#include <salmenu.hxx>
+#include <svdata.hxx>
+#include <vcl/i18nhelp.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/window.hxx>
+
+using namespace css;
+using namespace vcl;
+
+MenuItemData::~MenuItemData()
+{
+    if( pAutoSubMenu )
+    {
+        ((PopupMenu*)pAutoSubMenu)->pRefAutoSubMenu = NULL;
+        delete pAutoSubMenu;
+        pAutoSubMenu = NULL;
+    }
+    if( pSalMenuItem )
+        ImplGetSVData()->mpDefInst->DestroyMenuItem( pSalMenuItem );
+}
+
+MenuItemList::~MenuItemList()
+{
+    for( size_t i = 0, n = maItemList.size(); i < n; ++i )
+        delete maItemList[ i ];
+}
+
+MenuItemData* MenuItemList::Insert(
+    sal_uInt16 nId,
+    MenuItemType eType,
+    MenuItemBits nBits,
+    const OUString& rStr,
+    const Image& rImage,
+    Menu* pMenu,
+    size_t nPos,
+    const OString &rIdent
+)
+{
+    MenuItemData* pData     = new MenuItemData( rStr, rImage );
+    pData->nId              = nId;
+    pData->sIdent           = rIdent;
+    pData->eType            = eType;
+    pData->nBits            = nBits;
+    pData->pSubMenu         = NULL;
+    pData->pAutoSubMenu     = NULL;
+    pData->nUserValue       = 0;
+    pData->bChecked         = false;
+    pData->bEnabled         = true;
+    pData->bVisible         = true;
+    pData->bIsTemporary     = false;
+    pData->bMirrorMode      = false;
+    pData->nItemImageAngle  = 0;
+
+    SalItemParams aSalMIData;
+    aSalMIData.nId = nId;
+    aSalMIData.eType = eType;
+    aSalMIData.nBits = nBits;
+    aSalMIData.pMenu = pMenu;
+    aSalMIData.aText = rStr;
+    aSalMIData.aImage = rImage;
+
+    // Native-support: returns NULL if not supported
+    pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
+
+    if( nPos < maItemList.size() ) {
+        maItemList.insert( maItemList.begin() + nPos, pData );
+    } else {
+        maItemList.push_back( pData );
+    }
+    return pData;
+}
+
+void MenuItemList::InsertSeparator(const OString &rIdent, size_t nPos)
+{
+    MenuItemData* pData     = new MenuItemData;
+    pData->nId              = 0;
+    pData->sIdent           = rIdent;
+    pData->eType            = MENUITEM_SEPARATOR;
+    pData->nBits            = 0;
+    pData->pSubMenu         = NULL;
+    pData->pAutoSubMenu     = NULL;
+    pData->nUserValue       = 0;
+    pData->bChecked         = false;
+    pData->bEnabled         = true;
+    pData->bVisible         = true;
+    pData->bIsTemporary     = false;
+    pData->bMirrorMode      = false;
+    pData->nItemImageAngle  = 0;
+
+    SalItemParams aSalMIData;
+    aSalMIData.nId = 0;
+    aSalMIData.eType = MENUITEM_SEPARATOR;
+    aSalMIData.nBits = 0;
+    aSalMIData.pMenu = NULL;
+    aSalMIData.aText = OUString();
+    aSalMIData.aImage = Image();
+
+    // Native-support: returns NULL if not supported
+    pData->pSalMenuItem = ImplGetSVData()->mpDefInst->CreateMenuItem( &aSalMIData );
+
+    if( nPos < maItemList.size() ) {
+        maItemList.insert( maItemList.begin() + nPos, pData );
+    } else {
+        maItemList.push_back( pData );
+    }
+}
+
+void MenuItemList::Remove( size_t nPos )
+{
+    if( nPos < maItemList.size() )
+    {
+        delete maItemList[ nPos ];
+        maItemList.erase( maItemList.begin() + nPos );
+    }
+}
+
+MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
+{
+    for( size_t i = 0, n = maItemList.size(); i < n; ++i )
+    {
+        if ( maItemList[ i ]->nId == nSVId )
+        {
+            rPos = i;
+            return maItemList[ i ];
+        }
+    }
+    return NULL;
+}
+
+MenuItemData* MenuItemList::SearchItem(
+    sal_Unicode cSelectChar,
+    KeyCode aKeyCode,
+    sal_uInt16& rPos,
+    sal_uInt16& nDuplicates,
+    sal_uInt16 nCurrentPos
+) const
+{
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+
+    size_t nListCount = maItemList.size();
+
+    // try character code first
+    nDuplicates = GetItemCount( cSelectChar );  // return number of duplicates
+    if( nDuplicates )
+    {
+        for ( rPos = 0; rPos < nListCount; rPos++)
+        {
+            MenuItemData* pData = maItemList[ rPos ];
+            if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
+            {
+                if( nDuplicates > 1 && rPos == nCurrentPos )
+                    continue;   // select next entry with the same mnemonic
+                else
+                    return pData;
+            }
+        }
+    }
+
+    // nothing found, try keycode instead
+    nDuplicates = GetItemCount( aKeyCode ); // return number of duplicates
+
+    if( nDuplicates )
+    {
+        char ascii = 0;
+        if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
+            ascii = sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
+
+        for ( rPos = 0; rPos < nListCount; rPos++)
+        {
+            MenuItemData* pData = maItemList[ rPos ];
+            if ( pData->bEnabled )
+            {
+                sal_Int32 n = pData->aText.indexOf('~');
+                if ( n != -1 )
+                {
+                    KeyCode mnKeyCode;
+                    sal_Unicode mnUnicode = pData->aText[n+1];
+                    Window* pDefWindow = ImplGetDefaultWindow();
+                    if(  (  pDefWindow
+                         && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( mnUnicode,
+                             Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )
+                         && aKeyCode.GetCode() == mnKeyCode.GetCode()
+                         )
+                      || (  ascii
+                         && rI18nHelper.MatchMnemonic( pData->aText, ascii )
+                         )
+                      )
+                    {
+                        if( nDuplicates > 1 && rPos == nCurrentPos )
+                            continue;   // select next entry with the same mnemonic
+                        else
+                            return pData;
+                    }
+                }
+            }
+        }
+    }
+
+    return NULL;
+}
+
+size_t MenuItemList::GetItemCount( sal_Unicode cSelectChar ) const
+{
+    // returns number of entries with same mnemonic
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+
+    size_t nItems = 0;
+    for ( size_t nPos = maItemList.size(); nPos; )
+    {
+        MenuItemData* pData = maItemList[ --nPos ];
+        if ( pData->bEnabled && rI18nHelper.MatchMnemonic( pData->aText, cSelectChar ) )
+            nItems++;
+    }
+
+    return nItems;
+}
+
+size_t MenuItemList::GetItemCount( KeyCode aKeyCode ) const
+{
+    // returns number of entries with same mnemonic
+    // uses key codes instead of character codes
+    const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
+    char ascii = 0;
+    if( aKeyCode.GetCode() >= KEY_A && aKeyCode.GetCode() <= KEY_Z )
+        ascii = sal::static_int_cast<char>('A' + (aKeyCode.GetCode() - KEY_A));
+
+    size_t nItems = 0;
+    for ( size_t nPos = maItemList.size(); nPos; )
+    {
+        MenuItemData* pData = maItemList[ --nPos ];
+        if ( pData->bEnabled )
+        {
+            sal_Int32 n = pData->aText.indexOf('~');
+            if (n != -1)
+            {
+                KeyCode mnKeyCode;
+                // if MapUnicodeToKeyCode fails or is unsupported we try the pure ascii mapping of the keycodes
+                // so we have working shortcuts when ascii mnemonics are used
+                Window* pDefWindow = ImplGetDefaultWindow();
+                if(  (  pDefWindow
+                     && pDefWindow->ImplGetFrame()->MapUnicodeToKeyCode( pData->aText[n+1],
+                         Application::GetSettings().GetUILanguageTag().getLanguageType(), mnKeyCode )
+                     && aKeyCode.GetCode() == mnKeyCode.GetCode()
+                     )
+                  || (  ascii
+                     && rI18nHelper.MatchMnemonic( pData->aText, ascii )
+                     )
+                  )
+                    nItems++;
+            }
+        }
+    }
+
+    return nItems;
+}
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

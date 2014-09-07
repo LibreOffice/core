@@ -138,6 +138,9 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/keyevent \
     vcl/source/window/layout \
     vcl/source/window/menu \
+    vcl/source/window/menufloatingwindow \
+    vcl/source/window/menuitemlist \
+    vcl/source/window/menuwindow \
     vcl/source/window/mnemonic \
     vcl/source/window/mnemonicengine \
     vcl/source/window/mouse \

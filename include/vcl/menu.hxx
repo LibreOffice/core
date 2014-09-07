@@ -81,6 +81,9 @@ namespace vcl { struct MenuLayoutData; }
 // overrides default hiding of disabled entries in popup menus
 #define MENU_FLAG_ALWAYSSHOWDISABLEDENTRIES 0x0004
 
+/// Invalid menu item id
+#define ITEMPOS_INVALID     0xFFFF
+
 struct ImplMenuDelData
 {
     ImplMenuDelData* mpNext;
@@ -184,6 +187,16 @@ protected:
 
     SAL_DLLPRIVATE void                ImplAddDel( ImplMenuDelData &rDel );
     SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
+
+    /// Close the 'pStartedFrom' menu window.
+    SAL_DLLPRIVATE void CloseStartedFrom();
+
+    /// Deactivate the MenuBarWindow.
+    SAL_DLLPRIVATE sal_uLong DeactivateMenuBar(sal_uLong nFocusId);
+
+    /// Forward the KeyInput call to the MenuBar.
+    SAL_DLLPRIVATE void MenuBarKeyInput(const KeyEvent& rEvent);
+
 public:
     SAL_DLLPRIVATE void             ImplKillLayoutData() const;
     SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const { return pStartedFrom; }
