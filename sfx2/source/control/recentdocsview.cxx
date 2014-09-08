@@ -71,7 +71,7 @@ bool RecentDocsView::typeMatchesExtension(ApplicationType type, const OUString &
     bool bRet = false;
 
     if (rExt == "odt" || rExt == "doc" || rExt == "docx" ||
-        rExt == "rtf" || rExt == "txt")
+        rExt == "rtf" || rExt == "txt" || rExt == "odm" || rExt == "otm")
     {
         bRet = type & TYPE_WRITER;
     }

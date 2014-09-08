@@ -358,6 +358,30 @@
 			</dict>
 		</dict>
 
+		<!-- Writer master document templates -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.text-master-template</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Text Master Template</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>otm</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.text-master-template</string>
+				</array>
+			</dict>
+		</dict>
+
 		<!-- Spreadsheet template documents -->
 		<dict>
 			<key>UTTypeIdentifier</key>
@@ -1118,6 +1142,24 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>otm</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/vnd.oasis.opendocument.text-master-template</string>
+			</array>
+            <key>CFBundleTypeIconFile</key>
+            <string>oasis-master-template.icns</string>
+            <key>CFBundleTypeName</key>
+            <string>OpenDocument Master Template</string>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>LSIsAppleDefaultForType</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>stc</string>
 			</array>
 			<key>CFBundleTypeMIMETypes</key>
@@ -1343,6 +1385,7 @@
 				<string>org.oasis-open.opendocument.formula</string>
 				<string>org.openoffice.text-template</string>
 				<string>org.oasis-open.opendocument.text-template</string>
+				<string>org.oasis-open.opendocument.text-master-template</string>
 				<string>org.openoffice.spreadsheet-template</string>
 				<string>org.oasis-open.opendocument.spreadsheet-template</string>
 				<string>org.openoffice.presentation-template</string>

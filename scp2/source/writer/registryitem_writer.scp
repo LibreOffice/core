@@ -1063,6 +1063,14 @@ RegistryItem gid_Regitem_Ott_Contenttype
     Value = "application/vnd.oasis.opendocument.text-template";
 End
 
+RegistryItem gid_Regitem_Otm_Contenttype
+    ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
+    ModuleID = gid_Module_Prg_Wrt_Bin;
+    Subkey = ".otm";
+    Name = "Content Type";
+    Value = "application/vnd.oasis.opendocument.text-master-template";
+End
+
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "LibreOffice.WriterTemplate.1";

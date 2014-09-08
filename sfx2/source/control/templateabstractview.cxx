@@ -40,7 +40,7 @@ bool ViewFilter_Application::isFilteredExtension(FILTER_APPLICATION filter, cons
 
     if (filter == FILTER_APP_WRITER)
     {
-        bRet = rExt == "ott" || rExt == "stw" || rExt == "oth" || rExt == "dot" || rExt == "dotx";
+        bRet = rExt == "ott" || rExt == "stw" || rExt == "oth" || rExt == "dot" || rExt == "dotx" || rExt == "otm";
     }
     else if (filter == FILTER_APP_CALC)
     {
