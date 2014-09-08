@@ -2152,6 +2152,7 @@ void ScExportTest::testPivotTableTwoDataFieldsXLSX()
             }
 
             const char* pNames[] = { "Name", "Value" };
+            (void) pNames;
 
             size_t nCount = pCache->GetFieldCount();
             if (nCount != SAL_N_ELEMENTS(pNames))
