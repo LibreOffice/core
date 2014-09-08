@@ -64,6 +64,8 @@ int UIPreviewApp::Main()
     // turn on tooltips
     Help::EnableQuickHelp();
 
+    int nRet = EXIT_SUCCESS;
+
     try
     {
         Dialog *pDialog = new Dialog(DIALOG_NO_PARENT, WB_STDDIALOG | WB_SIZEABLE);
@@ -93,9 +95,15 @@ int UIPreviewApp::Main()
     catch (const uno::Exception &e)
     {
         fprintf(stderr, "fatal error: %s\n", OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
+        nRet = EXIT_FAILURE;
+    }
+    catch (const std::exception &e)
+    {
+        fprintf(stderr, "fatal error: %s\n", e.what());
+        nRet = EXIT_FAILURE;
     }
 
-    return EXIT_SUCCESS;
+    return nRet;
 }
 
 void vclmain::createApplication()
