@@ -20,7 +20,6 @@ package com.sun.star.wiki;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -214,58 +213,56 @@ public class Settings
     {
         try
         {
-            // remove stored connection information
-            XNameContainer xContainer = Helper.GetConfigNameContainer( m_xContext, "org.openoffice.Office.Custom.WikiExtension/ConnectionList" );
-            String[] pNames = xContainer.getElementNames();
-            for( int i=0; i<pNames.length; i++ )
             {
-                xContainer.removeByName( pNames[i] );
-            }
-
-            // store all connections
-            XSingleServiceFactory xConnectionFactory = UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer );
-            for ( int i=0; i< m_WikiConnections.size(); i++ )
-            {
-                Object oNewConnection = xConnectionFactory.createInstance();
-                Map<String,String> ht = m_WikiConnections.get( i );
-                XNameReplace xNewConn = UnoRuntime.queryInterface( XNameReplace.class, oNewConnection );
-
-                if ( xNewConn != null )
-                    xNewConn.replaceByName( "UserName", ht.get( "Username" ) );
-
-                xContainer.insertByName( ht.get( "Url" ), xNewConn );
-            }
-            // commit changes
-            XChangesBatch xBatch = UnoRuntime.queryInterface( XChangesBatch.class, xContainer );
-            xBatch.commitChanges();
-
-            // remove stored connection information
-            XNameContainer xContainer2 = Helper.GetConfigNameContainer( m_xContext, "org.openoffice.Office.Custom.WikiExtension/RecentDocs" );
-            String[] pNames2 = xContainer2.getElementNames();
-            for( int i=0; i<pNames2.length; i++ )
-            {
-                xContainer2.removeByName( pNames2[i] );
-            }
-            // store all Docs
-            XSingleServiceFactory xDocListFactory = UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer2 );
-            for ( int i=0; i< m_aWikiDocs.size(); i++ )
-            {
-                Map<String,Object> ht = m_aWikiDocs.get( i );
-
-                Object oNewDoc = xDocListFactory.createInstance();
-                XNameReplace xNewDoc = UnoRuntime.queryInterface( XNameReplace.class, oNewDoc );
-
-                for ( Iterator<String> iter = ht.keySet().iterator(); iter.hasNext(); )
+                // remove stored connection information
+                XNameContainer xContainer = Helper.GetConfigNameContainer(m_xContext, "org.openoffice.Office.Custom.WikiExtension/ConnectionList");
+                String[] pNames = xContainer.getElementNames();
+                for (String pName : pNames)
                 {
-                    String key = iter.next();
-                    xNewDoc.replaceByName( key, ht.get( key ) );
+                    xContainer.removeByName(pName);
                 }
-
-                xContainer2.insertByName( "d" + i, xNewDoc );
+                // store all connections
+                XSingleServiceFactory xConnectionFactory = UnoRuntime.queryInterface(XSingleServiceFactory.class, xContainer);
+                for (Map<String, String> ht : m_WikiConnections)
+                {
+                    Object oNewConnection = xConnectionFactory.createInstance();
+                    XNameReplace xNewConn = UnoRuntime.queryInterface(XNameReplace.class, oNewConnection);
+                    if (xNewConn != null)
+                    {
+                        xNewConn.replaceByName("UserName", ht.get("Username"));
+                    }
+                    xContainer.insertByName(ht.get("Url"), xNewConn);
+                }
+                // commit changes
+                XChangesBatch xBatch = UnoRuntime.queryInterface(XChangesBatch.class, xContainer);
+                xBatch.commitChanges();
             }
-            // commit changes
-            XChangesBatch xBatch2 = UnoRuntime.queryInterface( XChangesBatch.class, xContainer2 );
-            xBatch2.commitChanges();
+
+            {
+                // remove stored connection information
+                XNameContainer xContainer = Helper.GetConfigNameContainer(m_xContext, "org.openoffice.Office.Custom.WikiExtension/RecentDocs");
+                String[] pNames = xContainer.getElementNames();
+                for (String pName : pNames)
+                {
+                    xContainer.removeByName(pName);
+                }
+                // store all Docs
+                XSingleServiceFactory xDocListFactory = UnoRuntime.queryInterface(XSingleServiceFactory.class, xContainer);
+                int i = 0;
+                for (Map<String, Object> ht : m_aWikiDocs)
+                {
+                    Object oNewDoc = xDocListFactory.createInstance();
+                    XNameReplace xNewDoc = UnoRuntime.queryInterface(XNameReplace.class, oNewDoc);
+                    for (Map.Entry<String, Object> entry : ht.entrySet())
+                    {
+                        xNewDoc.replaceByName(entry.getKey(), entry.getValue());
+                    }
+                    xContainer.insertByName("d" + i++, xNewDoc);
+                }
+                // commit changes
+                XChangesBatch xBatch = UnoRuntime.queryInterface(XChangesBatch.class, xContainer);
+                xBatch.commitChanges();
+            }
 
         }
         catch ( Exception ex )
@@ -288,16 +285,15 @@ public class Settings
                 Object oList = xAccess.getByName( "ConnectionList" );
                 XNameAccess xConnectionList = UnoRuntime.queryInterface( XNameAccess.class, oList );
                 String [] allCons = xConnectionList.getElementNames();
-                for ( int i=0; i<allCons.length; i++ )
+                for (String aConnection : allCons)
                 {
                     Map<String, String> ht = new HashMap<String, String>();
-                    ht.put( "Url", allCons[i] );
+                    ht.put("Url", aConnection);
                     ht.put( "Username", "" );
                     ht.put( "Password", "" );
-
                     try
                     {
-                        XPropertySet xProps = UnoRuntime.queryInterface( XPropertySet.class, xConnectionList.getByName( allCons[i] ) );
+                        XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class, xConnectionList.getByName(aConnection));
                         if ( xProps != null )
                         {
                             String aUsername = AnyConverter.toString( xProps.getPropertyValue( "UserName" ) );
@@ -309,16 +305,15 @@ public class Settings
                     {
                         e.printStackTrace();
                     }
-
                     addWikiCon( ht );
                 }
 
                 Object oDocs = xAccess.getByName( "RecentDocs" );
                 XNameAccess xRecentDocs = UnoRuntime.queryInterface( XNameAccess.class, oDocs );
                 String [] allDocs = xRecentDocs.getElementNames();
-                for ( int i=0; i<allDocs.length; i++ )
+                for (String aDocument : allDocs)
                 {
-                    Object oDoc = xRecentDocs.getByName( allDocs[i] );
+                    Object oDoc = xRecentDocs.getByName(aDocument);
                     XNameAccess xDoc = UnoRuntime.queryInterface( XNameAccess.class, oDoc );
                     Map<String, Object> ht = new HashMap<String, Object>();
                     ht.put( "Url", xDoc.getByName( "Url" ) );
