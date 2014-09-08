@@ -68,7 +68,18 @@ public final class WikiEditorImpl extends WeakBase
         m_aSettings = Settings.getSettings( m_xContext );
     }
 
+    public static XSingleComponentFactory __getComponentFactory( String sImplementationName )
+    {
+        XSingleComponentFactory xFactory = null;
 
+        if ( sImplementationName.equals( m_implementationName ) )
+            xFactory = Factory.createComponentFactory( WikiEditorImpl.class, m_serviceNames );
+        else if ( sImplementationName.equals( WikiOptionsEventHandlerImpl.m_sImplementationName ) )
+            xFactory = Factory.createComponentFactory( WikiOptionsEventHandlerImpl.class,
+                                                       WikiOptionsEventHandlerImpl.m_pServiceNames );
+
+        return xFactory;
+    }
 
     // com.sun.star.lang.XServiceInfo:
     public String getImplementationName()
