@@ -50,8 +50,6 @@ struct DataFlavorRepresentation
     const ::com::sun::star::uno::Type*  pType;
 };
 
-
-
 namespace
 {
     struct ImplFormatArray_Impl
@@ -202,6 +200,7 @@ namespace
             /*139 SOT_FORMATSTR_ID_STARBASE_8*/             { MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII, "StarBase 8", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*140 SOT_FORMAT_GDIMETAFILE*/                  { "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"", "High Contrast GDIMetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             /*141 SOT_FORMATSTR_ID_PNG*/                    { "image/png", "PNG Bitmap", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+            /*142 SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE*/      { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII, "Writer/Global 8 Template", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
             };
         return &aInstance[0];
         }
@@ -211,8 +210,6 @@ namespace
         : public rtl::StaticAggregate<
             const DataFlavorRepresentation, ImplFormatArray_Impl > {};
 }
-
-
 
 static tDataFlavorList& InitFormats_Impl()
 {

@@ -32,6 +32,7 @@ application/vnd.oasis.opendocument.text-flat-xml fodt
 application/vnd.oasis.opendocument.text-template ott
 application/vnd.oasis.opendocument.text-web oth
 application/vnd.oasis.opendocument.text-master odm
+application/vnd.oasis.opendocument.text-master-template otm
 application/vnd.oasis.opendocument.graphics odg
 application/vnd.oasis.opendocument.graphics-flat-xml fodg
 application/vnd.oasis.opendocument.graphics-template otg
