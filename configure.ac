@@ -2346,31 +2346,13 @@ AC_ARG_WITH(macosx-version-max-allowed,
 
 dnl ===================================================================
 dnl options for stuff used during cross-compilation build
-dnl These are superseded by --with-build-platform-configure-options.
-dnl Or are they? Look for the complicated tests for "$cross_compiling" = "yes" -a \(
-dnl "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" \)
-dnl far below. Could whoever understands MinGW cross-compilation clean up this please.
+dnl Not quite superseded by --with-build-platform-configure-options.
+dnl TODO: check, if the "force" option is still needed anywhere.
 dnl ===================================================================
-
-AC_ARG_WITH(system-boost-for-build,
-    AS_HELP_STRING([--with-system-boost-for-build],
-        [Use boost already on system for build tools (cross-compilation only).]))
-
-AC_ARG_WITH(system-cppunit-for-build,
-    AS_HELP_STRING([--with-system-cppunit-for-build],
-        [Use cppunit already on system for build tools (cross-compilation only).]))
-
-AC_ARG_WITH(system-expat-for-build,
-    AS_HELP_STRING([--with-system-expat-for-build],
-        [Use expat already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-icu-for-build,
     AS_HELP_STRING([--with-system-icu-for-build=yes/no/force],
         [Use icu already on system for build tools (cross-compilation only).]))
-
-AC_ARG_WITH(system-libxml-for-build,
-    AS_HELP_STRING([--with-system-libxml-for-build],
-        [Use libxml/libxslt already on system for build tools (cross-compilation only).]))
 
 
 dnl ===================================================================
@@ -4705,11 +4687,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
-    test -n "$with_system_boost_for_build" && sub_conf_opts="$sub_conf_opts --with-system-boost=$with_system_boost_for_build"
-    test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit=$with_system_cppunit_for_build"
-    test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat=$with_system_expat_for_build"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
-    test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml=$with_system_libxml_for_build"
     # we need the msi build tools on mingw if we are creating the
     # installation set
     if test "$WITH_MINGW" = "yes"; then
