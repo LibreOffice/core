@@ -150,6 +150,7 @@ do
   icon=${link_target_dir}%iconprefix-oasis-drawing-template.png;      test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.graphics-template.png
   icon=${link_target_dir}%iconprefix-oasis-formula.png;               test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.formula.png
   icon=${link_target_dir}%iconprefix-oasis-master-document.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master.png
+  icon=${link_target_dir}%iconprefix-oasis-master-document-template.png;       test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.text-master-template.png
   icon=${link_target_dir}%iconprefix-oasis-presentation.png;          test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation.png
   icon=${link_target_dir}%iconprefix-oasis-presentation-template.png; test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.presentation-template.png
   icon=${link_target_dir}%iconprefix-oasis-spreadsheet.png;           test -f ${link_dir}/$icon && ln -sf ${icon} ${link_dir}/gnome-mime-application-vnd.oasis.opendocument.spreadsheet.png

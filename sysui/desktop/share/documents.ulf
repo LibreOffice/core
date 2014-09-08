@@ -40,6 +40,9 @@ en-US = "OpenDocument Text Template"
 [oasis-master-document]
 en-US = "OpenDocument Master Document"
 
+[oasis-master-document-template]
+en-US = "OpenDocument Master Document Template"
+
 [oasis-formula]
 en-US = "OpenDocument Formula"
 

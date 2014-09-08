@@ -233,7 +233,9 @@
         <prop oor:name="ooSetupFactoryActualFilter" oor:finalized="true">
           <value>writerglobal8</value>
         </prop>
-        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true"/>
+        <prop oor:name="ooSetupFactoryActualTemplateFilter" oor:finalized="true">
+          <value>writerglobal8_template</value>
+        </prop>
         <prop oor:name="ooSetupFactoryDefaultFilter">
           <value>writerglobal8</value>
         </prop>

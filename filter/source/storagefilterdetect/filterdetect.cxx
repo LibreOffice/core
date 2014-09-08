@@ -45,6 +45,7 @@ OUString getInternalFromMediaType(const OUString& aMediaType)
     else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII )         return OUString("writer8_template");
     else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB_ASCII )              return OUString("writerweb8_writer_template");
     else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII )           return OUString("writerglobal8");
+    else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII )  return OUString("writerglobal8_template");
     else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII )               return OUString("draw8");
     else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII )      return OUString("draw8_template");
     else if ( aMediaType == MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII )          return OUString("impress8");

@@ -58,6 +58,7 @@ MIMELIST := \
     oasis-presentation-flat-xml \
     oasis-formula \
     oasis-master-document \
+    oasis-master-document-template \
     oasis-database \
     oasis-web-template \
     ms-excel-sheet-12 \
@@ -90,6 +91,7 @@ MIMEICONLIST := \
     oasis-presentation-template \
     oasis-formula \
     oasis-master-document \
+    oasis-master-document-template \
     oasis-database \
     oasis-web-template \
     text \

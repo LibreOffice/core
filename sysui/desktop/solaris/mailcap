@@ -40,6 +40,7 @@ cat << END
 application/vnd.oasis.opendocument.text; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-flat-xml; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-template; %PREFIX -view %s
+application/vnd.oasis.opendocument.text-master-template; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-web; %PREFIX -view %s
 application/vnd.oasis.opendocument.text-master; %PREFIX -view %s
 application/vnd.sun.xml.writer; %PREFIX -view %s
