@@ -12386,7 +12386,7 @@ if test "$MD5SUM" = "md5"; then
 fi
 
 if test -z "$MD5SUM"; then
-    AC_MSG_ERROR([no md5sum: found!])
+    AC_MSG_ERROR([no md5sum found!])
 fi
 
 AC_SUBST(MD5SUM)
