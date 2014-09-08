@@ -488,6 +488,7 @@ $(call filter_Configuration_add_types,fcfg_langpack,fcfg_global_types.xcu,filter
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
 	pdf_Portable_Document_Format \
 	writerglobal8 \
+	writerglobal8_template \
 )
 
 $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters.xcu,filter/source/config/fragments/filters,\
@@ -496,6 +497,7 @@ $(call filter_Configuration_add_filters,fcfg_langpack,fcfg_global_filters.xcu,fi
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument \
 	writer_globaldocument_pdf_Export \
 	writerglobal8 \
+	writerglobal8_template \
 	writerglobal8_writer \
 	writerglobal8_HTML \
 )
@@ -505,6 +507,7 @@ $(call filter_Configuration_add_ui_filters,fcfg_langpack,filter/source/config/fr
 	writer_globaldocument_StarOffice_XML_Writer_ui \
 	writer_globaldocument_StarOffice_XML_Writer_GlobalDocument_ui \
 	writerglobal8_ui \
+	writerglobal8_template_ui \
 	writerglobal8_writer_ui \
 )
 

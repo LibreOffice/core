@@ -329,6 +329,7 @@ mimetypes = {
     'application/vnd.oasis.opendocument.text-flat-xml': 'fodt',
     'application/vnd.oasis.opendocument.text-master': 'odm',
     'application/vnd.oasis.opendocument.text-template': 'ott',
+    'application/vnd.oasis.opendocument.text-master-template': 'otm',
     'application/vnd.oasis.opendocument.text-web': 'oth',
 # OOo XML
     'application/vnd.sun.xml.base': 'odb',

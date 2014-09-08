@@ -51,19 +51,18 @@ void SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
                                    sal_Int32 nVersion,
                                    bool bTemplate /* = false */) const
 {
-    (void)bTemplate;
-    OSL_ENSURE( !bTemplate, "No template for Writer Global" );
-
     if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
         *pClipFormat = SOT_FORMATSTR_ID_STARWRITERGLOB_60;
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
+        OSL_ENSURE( !bTemplate, "No template for Writer Global" );
     }
     else if (nVersion == SOFFICE_FILEFORMAT_8)
     {
         *pClassName     = SvGlobalName( SO3_SWGLOB_CLASSID_60 );
         *pClipFormat    = SOT_FORMATSTR_ID_STARWRITERGLOB_8;
+        *pClipFormat    = bTemplate ? SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE : SOT_FORMATSTR_ID_STARWRITERGLOB_8;
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
     }
 

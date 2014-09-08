@@ -20,6 +20,7 @@ $(eval $(call gb_Package_add_files_with_dir,sysui_osxicons,Resources,\
     oasis-drawing.icns \
     master-document.icns \
     oasis-master-document.icns \
+    oasis-master-document-template.icns \
     formula.icns \
     oasis-formula.icns \
     text-template.icns \

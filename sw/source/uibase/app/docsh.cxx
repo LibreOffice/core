@@ -642,6 +642,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
             SOT_FORMATSTR_ID_STARWRITERWEB_40 == nSaveClipId )
             nSaveType = 1;
         else if( SOT_FORMATSTR_ID_STARWRITERGLOB_8 == nSaveClipId ||
+                 SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE == nSaveClipId ||
                  SOT_FORMATSTR_ID_STARWRITERGLOB_60 == nSaveClipId ||
                  SOT_FORMATSTR_ID_STARWRITERGLOB_50 == nSaveClipId ||
                  SOT_FORMATSTR_ID_STARWRITERGLOB_40 == nSaveClipId )

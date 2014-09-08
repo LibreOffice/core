@@ -355,6 +355,7 @@ SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
         case SOT_FORMATSTR_ID_STARWRITERWEB_8 :
             return SvGlobalName( SO3_SWWEB_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARWRITERGLOB_8 :
+        case SOT_FORMATSTR_ID_STARWRITERGLOB_8_TEMPLATE :
             return SvGlobalName( SO3_SWGLOB_CLASSID_60 );
         case SOT_FORMATSTR_ID_STARDRAW_8 :
         case SOT_FORMATSTR_ID_STARDRAW_8_TEMPLATE :

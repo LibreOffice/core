@@ -1,0 +1,19 @@
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+-->
+    <node oor:name="writerglobal8_template" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.filters.StorageFilterDetect</value></prop>
+        <prop oor:name="URLPattern"><value>private:factory/swriter/GlobalDocument*</value></prop>
+        <prop oor:name="Extensions"><value>otm</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.oasis.opendocument.text-master-template</value></prop>
+        <prop oor:name="Preferred"><value>true</value></prop>
+        <prop oor:name="PreferredFilter"><value>writerglobal8_template</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Writer 8 Master Document Template</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Writer/Global 8 Template</value></prop>
+    </node>

@@ -117,6 +117,7 @@ VS_VERSION_INFO VERSIONINFO
                                           "application/vnd.oasis.opendocument.text|"
                                           "application/vnd.oasis.opendocument.text-template|"
                                           "application/vnd.oasis.opendocument.text-master|"
+                                          "application/vnd.oasis.opendocument.text-master-template|"
                                           "application/vnd.oasis.opendocument.text-web|"
                                           "application/vnd.oasis.opendocument.spreadsheet|"
                                           "application/vnd.oasis.opendocument.spreadsheet-template|"
