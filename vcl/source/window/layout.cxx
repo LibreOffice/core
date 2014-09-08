@@ -1946,7 +1946,6 @@ MessageDialog::MessageDialog(Window* pParent, WinBits nStyle)
     , m_pSecondaryMessage(NULL)
 {
     SetType(WINDOW_MESSBOX);
-    create_owned_areas();
 }
 
 MessageDialog::MessageDialog(Window* pParent,

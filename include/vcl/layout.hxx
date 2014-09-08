@@ -719,6 +719,9 @@ private:
     void setButtonHandlers(VclButtonBox *pButtonBox);
     short get_response(const Window *pWindow) const;
     void create_owned_areas();
+
+    friend class VclBuilder;
+    MessageDialog(Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
 public:
 
     MessageDialog(Window* pParent,
@@ -726,7 +729,6 @@ public:
         VclMessageType eMessageType = VCL_MESSAGE_ERROR,
         VclButtonsType eButtonsType = VCL_BUTTONS_OK,
         WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
-    MessageDialog(Window* pParent, WinBits nStyle = WB_MOVEABLE | WB_3DLOOK | WB_CLOSEABLE);
     MessageDialog(Window* pParent, const OString& rID, const OUString& rUIXMLDescription);
     virtual bool set_property(const OString &rKey, const OString &rValue) SAL_OVERRIDE;
     virtual short Execute() SAL_OVERRIDE;
