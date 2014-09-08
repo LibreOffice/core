@@ -731,13 +731,6 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
                      writeElement( pAppProps, FSNS( XML_vt, XML_lpwstr ), aValue );
                 }
                 break;
-                case TypeClass_DOUBLE:
-                {
-                    double val;
-                    val = * reinterpret_cast< const double * >( ( aprop[n].Value ).getValue() );
-                    writeElement( pAppProps, FSNS( XML_vt, XML_i4 ), val );
-                }
-                break;
                 case TypeClass_BOOLEAN:
                 {
                     bool val ;
@@ -747,10 +740,15 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
                 break;
                 default:
                 {
+                    double num;
                     util::Date aDate;
                     util::Duration aDuration;
                     util::DateTime aDateTime;
-                    if ( ( aprop[n].Value ) >>= aDate )
+                    if ( ( aprop[n].Value ) >>= num )
+                    {
+                        writeElement( pAppProps, FSNS( XML_vt, XML_i4 ), num );
+                    }
+                    else if ( ( aprop[n].Value ) >>= aDate )
                     {
                         aDateTime = util::DateTime( 0, 0 , 0, 0, aDate.Year, aDate.Month, aDate.Day, true );
                         writeElement( pAppProps, FSNS( XML_vt, XML_filetime ), aDateTime);
