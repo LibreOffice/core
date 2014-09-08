@@ -376,7 +376,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( pEventHint )
     {
         // only ObjectShell-related events with media interest
-        SfxObjectShell* pDocSh = pEventHint ? pEventHint->GetObjShell() : NULL;
+        SfxObjectShell* pDocSh = pEventHint->GetObjShell();
         if( !pDocSh )
             return;
 
