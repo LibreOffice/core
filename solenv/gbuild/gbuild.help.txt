@@ -39,6 +39,7 @@ AVAILABLE TARGETS
                         against it
        dump-deps-png    creates dependency diagrams in PNG format
                         NOTE: needs graphviz to work
+       showmodules      shows all registered modules
        <module>         build the named module
        <module>.check   run unittests of the named module
        <module>.clean   clean the named module

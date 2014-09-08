@@ -9,13 +9,13 @@
 
 gb_Top_MODULE_CHECK_TARGETS := slowcheck unitcheck subsequentcheck perfcheck
 
-.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip tags debugrun help translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
+.PHONY : all bootstrap gbuild build build-non-l10n-only build-l10n-only check clean clean-build clean-host test-install distclean distro-pack-install docs download fetch findunusedcode get-submodules id install install-strip tags debugrun help showmodules translations packageinfo internal.clean $(gb_Top_MODULE_CHECK_TARGETS)
 
 MAKECMDGOALS?=all
 build_goal:=$(if $(filter build check,$(MAKECMDGOALS)),all)\
  $(if $(filter build-nocheck,$(MAKECMDGOALS)),build)\
  $(if $(filter check,$(MAKECMDGOALS)),subsequentcheck)\
- $(filter all build-l10n-only build-non-l10n-only debugrun help translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo,$(MAKECMDGOALS))
+ $(filter all build-l10n-only build-non-l10n-only debugrun help showmodules translations $(gb_Top_MODULE_CHECK_TARGETS) check packageinfo,$(MAKECMDGOALS))
 
 SHELL := @SHELL_BASH@
 SRCDIR := @SRC_ROOT@
@@ -29,7 +29,7 @@ GIT_BUILD := $(if $(wildcard $(SRCDIR)/.git),T)
 #    think packagers would ever want that. I certainly do not.)
 # 2. if we are making help, clean or distclean, because they do not
 #    need updated configuration
-ifeq (,$(MAKE_RESTARTS)$(if $(GIT_BUILD),,T)$(if $(filter-out help clean distclean,$(MAKECMDGOALS)),,T))
+ifeq (,$(MAKE_RESTARTS)$(if $(GIT_BUILD),,T)$(if $(filter-out help showmodules clean distclean,$(MAKECMDGOALS)),,T))
 
 .PHONY : force-restart
 Makefile: $(BUILDDIR)/config_host.mk force-restart
@@ -235,7 +235,10 @@ ifeq ($(OS),IOS)
 	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) ios
 endif
 
-build-non-l10n-only build-l10n-only build-nocheck check debugrun help translations packageinfo $(gb_Top_MODULE_CHECK_TARGETS): build
+build-non-l10n-only build-l10n-only build-nocheck check debugrun translations packageinfo $(gb_Top_MODULE_CHECK_TARGETS): build
+
+help showmodules:
+	$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $@
 
 cross-toolset: bootstrap fetch
 	$(MAKE) gb_Side=build $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild build-tools
