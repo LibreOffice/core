@@ -1474,10 +1474,13 @@ void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         Point aMousePos( PixelToLogic( rMEvt.GetPosPixel() ) );
         long nLineHeight = GetTextHeight();
-        long nYPos = aMousePos.Y() + nCurYOffset;
-        long nLine = nYPos / nLineHeight + 1;
-        rModulWindow.ToggleBreakPoint( (sal_uLong)nLine );
-        Invalidate();
+        if(nLineHeight)
+        {
+            long nYPos = aMousePos.Y() + nCurYOffset;
+            long nLine = nYPos / nLineHeight + 1;
+            rModulWindow.ToggleBreakPoint( (sal_uLong)nLine );
+            Invalidate();
+        }
     }
 }
 
