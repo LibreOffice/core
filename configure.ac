@@ -4705,11 +4705,11 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
-    test -n "$with_system_boost_for_build" && sub_conf_opts="$sub_conf_opts --with-system-boost"
-    test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit"
-    test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat"
+    test -n "$with_system_boost_for_build" && sub_conf_opts="$sub_conf_opts --with-system-boost=$with_system_boost_for_build"
+    test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit=$with_system_cppunit_for_build"
+    test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat=$with_system_expat_for_build"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
-    test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
+    test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml=$with_system_libxml_for_build"
     # we need the msi build tools on mingw if we are creating the
     # installation set
     if test "$WITH_MINGW" = "yes"; then
