@@ -483,7 +483,7 @@ void PresenterClockTimer::CheckCurrentTime (const TimeValue& rCurrentTime)
             }
         }
     }
-    if (mxRequestCallback.is() && xCallback.is())
+    if (xRequestCallback.is() && xCallback.is())
         xRequestCallback->addCallback(xCallback, Any());
 }
 
