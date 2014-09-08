@@ -22,6 +22,10 @@ $(eval $(call gb_StaticLibrary_add_defs,collada2gltf,\
 	-DUSE_OPEN3DGC \
 ))
 
+# collada2gltf has a lot of warnings, suppress them.
+$(eval $(call gb_StaticLibrary_add_cxxflags,collada2gltf,\
+	-w \
+))
 ifeq ($(COM),MSC)
 $(eval $(call gb_StaticLibrary_add_defs,collada2gltf,\
 	-D_CRT_SECURE_NO_WARNINGS \
