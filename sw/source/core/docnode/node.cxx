@@ -990,7 +990,7 @@ void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewV
         break;
 
     case RES_UPDATE_ATTR:
-        if( GetNodes().IsDocNodes() && IsTxtNode() )
+        if (GetNodes().IsDocNodes() && IsTxtNode() && pNewValue)
         {
             const sal_uInt16 nTmp = ((SwUpdateAttr*)pNewValue)->getWhichAttr();
             if ( RES_ATTRSET_CHG == nTmp )
