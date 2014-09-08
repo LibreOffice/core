@@ -609,7 +609,6 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
 {
 
     utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
     SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
     sal_uInt32 nExportFormat = 0;
     if (nFormatType == ODS_FORMAT_TYPE)
@@ -634,6 +633,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
         validate(aTempFile.GetFileName(), test::OOXML);
     else if (nFormatType == ODS_FORMAT_TYPE)
         validate(aTempFile.GetFileName(), test::ODF);
+    aTempFile.EnableKillingFile();
     return xDocSh;
 }
 
