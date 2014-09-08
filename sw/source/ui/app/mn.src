@@ -1148,12 +1148,6 @@ String MN_GRF_POPUPMENU
     Text [ en-US ] = "Change Graphic" ;
 };
 
-/*Menu MN_GRF_POPUPMENU
-*{
-*    MenuItem { ITEM_SAVE_GRAPHIC };
-*};
-*/
-
 #define MN_ALIGN_FRAME \
     MenuItem\
     {\
