@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acd31a7_a80d4339",
+        "filename": "l10ntools/source/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2014-09-08T07:19:16Z",
+      "side": 1,
+      "message": "no. this is cute, but EXIT_FAILURE is a system dependant constante\nwhich does not have to be -1. iow that create a risk of regression, just to be cute\n\nnot to mention the wtf factor of prefixing fprintf, for instance",
+      "revId": "7097044d1a31838b0a3d06ecccabff61d2828071",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
