@@ -22,6 +22,7 @@
 
 #include "fields.hxx"
 #include "WW8TableInfo.hxx"
+#include "wrtww8.hxx"
 
 #include <rtl/textenc.h>
 #include <editeng/svxenum.hxx>
@@ -310,7 +311,7 @@ public:
     virtual void SectionTitlePage() = 0;
 
     /// Set the state of the Fly at current position
-    virtual void SetStateOfFlyFrame( sal_Int16 /*nStateOfFlyFrame*/ ){};
+    virtual void SetStateOfFlyFrame( FlyProcessingState /*nStateOfFlyFrame*/ ){};
     /// If the node has an anchor linked.
     virtual void SetAnchorIsLinkedToNode( bool /*bAnchorLinkedToNode*/){};
 

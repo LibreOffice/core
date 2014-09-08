@@ -560,7 +560,7 @@ bool SwWW8AttrIter::IsAnchorLinkedToThisNode( sal_uLong nNodePos )
     return false ;
 }
 
-sal_Int16 SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
+FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 {
     /*
      #i2916#
@@ -2051,7 +2051,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     do {
         const SwRedlineData* pRedlineData = aAttrIter.GetRunLevelRedline( nAktPos );
-        sal_Int16 nStateOfFlyFrame   = 0;
+        FlyProcessingState nStateOfFlyFrame = FLY_PROCESSED;
         bool bPostponeWritingText    = false ;
         OUString aSavedSnippet ;
 

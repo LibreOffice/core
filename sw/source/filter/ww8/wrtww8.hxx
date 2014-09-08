@@ -1548,7 +1548,7 @@ public:
     int OutAttrWithRange(sal_Int32 nPos);
     const SwRedlineData* GetParagraphLevelRedline( );
     const SwRedlineData* GetRunLevelRedline( sal_Int32 nPos );
-    sal_Int16 OutFlys(sal_Int32 nSwPos);
+    FlyProcessingState OutFlys(sal_Int32 nSwPos);
 
     sal_Int32 WhereNext() const { return nAktSwPos; }
     sal_uInt16 GetScript() const { return mnScript; }

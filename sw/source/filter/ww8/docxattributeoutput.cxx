@@ -969,7 +969,7 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
     m_pSerializer->mergeTopMarks( sax_fastparser::MERGE_MARKS_PREPEND );
 }
 
-void DocxAttributeOutput::SetStateOfFlyFrame( sal_Int16 nStateOfFlyFrame )
+void DocxAttributeOutput::SetStateOfFlyFrame( FlyProcessingState nStateOfFlyFrame )
 {
     m_nStateOfFlyFrame = nStateOfFlyFrame;
 }
