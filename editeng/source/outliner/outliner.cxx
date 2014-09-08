@@ -1273,7 +1273,7 @@ bool Outliner::ImpCanIndentSelectedPages( OutlinerView* pCurView )
         if ( nDepthChangedHdlPrevDepth == 1 )   // is the only page
             return false;
         else
-            pCurView->ImpCalcSelectedPages( false );  // without the first
+            (void)pCurView->ImpCalcSelectedPages( false );  // without the first
     }
     return IndentingPagesHdl( pCurView );
 }
