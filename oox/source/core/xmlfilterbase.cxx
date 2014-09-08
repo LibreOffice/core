@@ -742,7 +742,7 @@ writeCustomProperties( XmlFilterBase& rSelf, Reference< XDocumentProperties > xP
                 {
                     bool val ;
                     val = *( sal_Bool * )( aprop[n].Value ).getValue();
-                    writeElement( pAppProps, FSNS( XML_vt, XML_bool ), val);
+                    writeElement( pAppProps, FSNS( XML_vt, XML_bool ), val ? 1 : 0);
                 }
                 break;
                 default:
