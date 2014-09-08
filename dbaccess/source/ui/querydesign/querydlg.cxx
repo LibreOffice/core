@@ -55,6 +55,11 @@ DlgQryJoin::DlgQryJoin( OQueryTableView * pParent,
     , m_xConnection(_xConnection)
 {
     get(m_pML_HelpText, "helptext");
+    Size aSize(LogicToPixel(Size(179, 49), MAP_APPFONT));
+    //alternatively loop through the STR_QUERY_* strings with their STR_JOIN_TYPE_HINT
+    //suffix to find the longest entry at runtime
+    m_pML_HelpText->set_height_request(aSize.Height());
+    m_pML_HelpText->set_width_request(aSize.Width());
     get(m_pLB_JoinType, "type");
     get(m_pCBNatural, "natural");
     get(m_pPB_OK, "ok");
