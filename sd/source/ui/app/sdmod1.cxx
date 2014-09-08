@@ -652,19 +652,17 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                         }
 
                         ::sd::DrawDocShell* pDocShell(NULL);
+                        ::sd::ViewShellBase* pBase(NULL);
+                        SdDrawDocument* pDoc(NULL);
                         if (pShell && pViewFrame)
                         {
                             pDocShell = PTR_CAST(::sd::DrawDocShell, pShell);
+                            pDoc = pDocShell ? pDocShell->GetDoc() : NULL;
+                            pBase = ::sd::ViewShellBase::GetViewShellBase(pViewFrame);
                         }
 
-                        if (pDocShell)
+                        if (pDoc && pBase)
                         {
-                           SdDrawDocument* pDoc = pDocShell->GetDoc();
-
-                            ::sd::ViewShellBase* pBase =
-                                  ::sd::ViewShellBase::GetViewShellBase (
-                                      pViewFrame);
-                            assert(pBase!=NULL);
                             ::boost::shared_ptr<sd::ViewShell> pViewSh = pBase->GetMainViewShell();
                             SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
 
