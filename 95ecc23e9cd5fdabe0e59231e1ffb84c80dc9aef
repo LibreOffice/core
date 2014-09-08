@@ -16,6 +16,24 @@
       "revId": "95ecc23e9cd5fdabe0e59231e1ffb84c80dc9aef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_72417839",
+        "filename": "l10ntools/inc/srclex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000567
+      },
+      "writtenOn": "2014-09-08T14:23:07Z",
+      "side": 1,
+      "message": "Hah, GetField() - IsField() java dilemma, okay. Will return to it lately.",
+      "parentUuid": "3acd31a7_1d035711",
+      "revId": "95ecc23e9cd5fdabe0e59231e1ffb84c80dc9aef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
