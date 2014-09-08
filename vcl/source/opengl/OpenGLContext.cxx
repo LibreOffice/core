@@ -485,7 +485,7 @@ bool OpenGLContext::ImplInit()
     return false;
 
 #elif defined( UNX )
-#if DBG_UTIL
+#ifdef DBG_UTIL
 
     if (glXCreateContextAttribsARB && !mbRequestLegacyContext)
     {
