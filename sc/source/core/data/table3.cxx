@@ -269,7 +269,8 @@ public:
         nCount( nInd2 - nInd1 + 1 ), nStart( nInd1 ),
         mnLastIndex(nInd2),
         nUsedSorts(nSorts),
-        mbKeepQuery(false)
+        mbKeepQuery(false),
+        mbUpdateRefs(false)
     {
         if (nUsedSorts)
         {
