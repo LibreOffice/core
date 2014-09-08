@@ -132,8 +132,8 @@ class WLevDistance
     inline int Min3( int x, int y, int z );     // inline wegen Schleife
     int Mid3( int x, int y, int z );
     int Max3( int x, int y, int z );
-    int GGT( int a, int b );    // Groesster Gemeinsamer Teiler
-    int KGV( int a, int b );    // Kleinstes Gemeinsames Vielfaches
+    int GGT( int a, int b );     // Groesster Gemeinsamer Teiler
+    int KGV( int a, int b );     // Kleinstes Gemeinsames Vielfaches
 
 public:
     // CToren mit Userangaben, danach mit GetLimit() Limit holen
