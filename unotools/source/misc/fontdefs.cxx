@@ -400,7 +400,6 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
             else if( ((c < '0') || (c > '9')) && (c != ';') ) // not 0-9 or semicolon
             {
                 // Remove white spaces and special characters
-
                 rName.remove(i,1);
                 nLen--;
                 continue;
@@ -426,7 +425,7 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
 
         FontNameDictionary::const_iterator it = aDictionary.find( rNameStr );
         if( it != aDictionary.end() )
-            rName = OUString::createFromAscii ( it->second );
+            rNameStr = OUString::createFromAscii ( it->second );
     }
 
     return rNameStr;

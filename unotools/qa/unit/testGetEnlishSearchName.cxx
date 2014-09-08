@@ -15,10 +15,8 @@
 #include "cppunit/plugin/TestPlugIn.h"
 #include <unotools/fontdefs.hxx>
 
-
 class Test: public CppUnit::TestFixture
 {
-
 public:
     virtual void setUp() SAL_OVERRIDE;
     void testSingleElement();
@@ -34,34 +32,21 @@ void Test::setUp()
 
 void Test::testSingleElement()
 {
-    {   //lowercase
-        printf("GetEnglishSearchFontName( \"SYMBOL\" )");
+    {   // lowercase
         OUString test1 = GetEnglishSearchFontName( "SYMBOL" );
         CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
-        printf("return %s",test1.getStr());
-        //trailingWhitespaces
-        printf("GetEnglishSearchFontName( \"SYMBOL    \" )");
+        // trailingWhitespaces
         test1 = GetEnglishSearchFontName( "Symbol    " );
         CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
-        printf("return %s",test1.getStr());
-        //removing Skripts
-        printf("GetEnglishSearchFontName( \"SYMBOL(skript)\" )");
+        // removing Skripts
         test1 = GetEnglishSearchFontName( "Symbol(skript)" );
         CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
-        printf("return %s",test1.getStr());
-        //remove Whitespaces between
-        printf("GetEnglishSearchFontName( \"SYMBOL (skript)\" )");
+        // remove Whitespaces between
         test1 = GetEnglishSearchFontName( "Symbol (skript)" );
         CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
-        printf("return %s",test1.getStr());
-        //trailingWhitespaces
-
+        // trailingWhitespaces
     }
-
-
 }
-
-
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
