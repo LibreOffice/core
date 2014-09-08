@@ -68,7 +68,7 @@ void MenuFloatingWindow::doShutdown()
         if( nHighlightedItem != ITEMPOS_INVALID )
             pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, nHighlightedItem );
         pMenu->SetHighlightItem(ITEMPOS_INVALID);
-        if( !bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
+        if (!bKeyInput && pMenu && pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
         {
             // #102461# remove highlight in parent
             MenuItemData* pData;
@@ -443,8 +443,8 @@ void MenuFloatingWindow::EndExecute()
     // if started elsewhere, cleanup there as well
     MenuFloatingWindow* pCleanUpFrom = this;
     MenuFloatingWindow* pWin = this;
-    while ( pWin && !pWin->bInExecute &&
-        pWin->pMenu->pStartedFrom && !pWin->pMenu->pStartedFrom->bIsMenuBar )
+    while (pWin && !pWin->bInExecute &&
+        pWin->pMenu->pStartedFrom && !pWin->pMenu->pStartedFrom->IsMenuBar())
     {
         pWin = ((PopupMenu*)pWin->pMenu->pStartedFrom)->ImplGetFloatingWindow();
     }
@@ -670,7 +670,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
     DBG_ASSERT( pMenu->ImplIsVisible( nHighlightedItem ) || nHighlightedItem == ITEMPOS_INVALID, "ChangeHighlightItem: Not visible!" );
     if( nHighlightedItem != ITEMPOS_INVALID )
     {
-        if( pMenu->pStartedFrom && !pMenu->pStartedFrom->bIsMenuBar )
+        if (pMenu->pStartedFrom && !pMenu->pStartedFrom->IsMenuBar())
         {
             // #102461# make sure parent entry is highlighted as well
             MenuItemData* pData;
@@ -960,7 +960,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                     StopExecute();
                     KillActivePopup();
                 }
-                else if ( pMenu->pStartedFrom->bIsMenuBar )
+                else if (pMenu->pStartedFrom->IsMenuBar())
                 {
                     pMenu->pStartedFrom->MenuBarKeyInput(rKEvent);
                 }
@@ -981,7 +981,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             if ( pMenu && pMenu->pStartedFrom )
             {
                 StopExecute();
-                if ( pMenu->pStartedFrom->bIsMenuBar )
+                if (pMenu->pStartedFrom->IsMenuBar())
                 {
                     pMenu->pStartedFrom->MenuBarKeyInput(rKEvent);
                 }
@@ -1013,7 +1013,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 if ( !bDone )
                 {
                     Menu* pStart = pMenu->ImplGetStartMenu();
-                    if ( pStart && pStart->bIsMenuBar )
+                    if (pStart && pStart->IsMenuBar())
                     {
                         // Forward...
                         pStart->ImplGetWindow()->KeyInput( rKEvent );
@@ -1044,7 +1044,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             if( pMenu )
             {
                 Menu* pStart = pMenu->ImplGetStartMenu();
-                if ( pStart && pStart->bIsMenuBar )
+                if (pStart && pStart->IsMenuBar())
                 {
                     // Forward...
                     pStart->ImplGetWindow()->KeyInput( rKEvent );

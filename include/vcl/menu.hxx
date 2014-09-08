@@ -144,10 +144,9 @@ private:
     sal_uInt16          nImgOrChkPos;
     sal_uInt16          nTextPos;
 
-    bool            bIsMenuBar  : 1,        // Is this a menubar?
-                        bCanceled   : 1,        // Terminated during a callback
-                        bInCallback : 1,        // In Activate/Deactivate
-                        bKilled     : 1;        // Killed...
+    bool                bCanceled   : 1,        ///< Terminated during a callback
+                        bInCallback : 1,        ///< In Activate/Deactivate
+                        bKilled     : 1;        ///< Killed
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > mxAccessible;
     mutable vcl::MenuLayoutData* mpLayoutData;
@@ -201,12 +200,11 @@ public:
     SAL_DLLPRIVATE void             ImplKillLayoutData() const;
     SAL_DLLPRIVATE Menu*            ImplGetStartedFrom() const { return pStartedFrom; }
 
-                            Menu();
-    explicit                Menu( bool bMenuBar );
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
     void ImplSelectWithStart( Menu* pStartMenu = NULL );
 
-    public:
+public:
+                        Menu();
     virtual             ~Menu();
 
     virtual void        Activate();
@@ -285,7 +283,7 @@ public:
 
     bool            IsItemPosVisible( sal_uInt16 nItemPos ) const;
     bool            IsMenuVisible() const;
-    bool            IsMenuBar() const { return bIsMenuBar; }
+    virtual bool        IsMenuBar() const { return false; }
 
     void                RemoveDisabledEntries( bool bCheckPopups = true, bool bRemoveEmptyPopups = false );
     bool            HasValidEntries( bool bCheckPopups = true );
@@ -412,6 +410,8 @@ public:
                         virtual ~MenuBar();
 
     MenuBar&            operator =( const MenuBar& rMenu );
+
+    virtual bool        IsMenuBar() const SAL_OVERRIDE { return true; }
 
     void                ShowCloser( bool bShow = true );
     bool            HasCloser() const { return mbCloserVisible; }
