@@ -101,8 +101,8 @@ void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
 void BinRangeList::read( SequenceInputStream& rStrm )
 {
     sal_Int32 nCount = rStrm.readInt32();
-    resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 16 ) );
-    for( iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
+    mvRanges.resize( getLimitedValue< size_t, sal_Int64 >( nCount, 0, rStrm.getRemaining() / 16 ) );
+    for( ::std::vector< BinRange >::iterator aIt = mvRanges.begin(), aEnd = mvRanges.end(); aIt != aEnd; ++aIt )
         aIt->read( rStrm );
 }
 
@@ -478,7 +478,7 @@ void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
         const BinRangeList& rBinRanges, sal_Int16 nSheet, bool bTrackOverflow )
 {
     CellRangeAddress aRange;
-    for( BinRangeList::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
+    for( ::std::vector< BinRange >::const_iterator aIt = rBinRanges.begin(), aEnd = rBinRanges.end(); aIt != aEnd; ++aIt )
         if( convertToCellRange( aRange, *aIt, nSheet, true, bTrackOverflow ) )
             orRanges.push_back( aRange );
 }
