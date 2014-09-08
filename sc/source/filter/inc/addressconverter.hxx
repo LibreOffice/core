@@ -135,12 +135,18 @@ inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinRange& orRange )
 }
 
 /** A 2D cell range address list for binary filters. */
-class BinRangeList : public ::std::vector< BinRange >
+class BinRangeList
 {
 public:
-    inline explicit     BinRangeList() {}
+    inline explicit     BinRangeList() : mvRanges() {}
+
+    ::std::vector< BinRange >::const_iterator begin() const { return mvRanges.begin(); }
+    ::std::vector< BinRange >::const_iterator end() const { return mvRanges.end(); }
 
     void                read( SequenceInputStream& rStrm );
+
+private:
+    ::std::vector< BinRange > mvRanges;
 };
 
 inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRangeList& orRanges )
