@@ -74,8 +74,8 @@ static OString lcl_GetListTyp( const sal_uInt16 nTyp, const bool bUpperCamelCase
 
 extern "C" {
 
-FILE * init(int argc, char ** argv) {
-
+FILE * init(int argc, char ** argv)
+{
     common::HandledArgs aArgs;
     if ( !common::handleArguments(argc, argv, aArgs) )
     {
@@ -109,7 +109,8 @@ int Parse( int nTyp, const char *pTokenText ){
     return 1;
 }
 
-void Close(){
+void Close()
+{
     global::exporter->GetParseQueue()->Close();
     global::exporter.reset();
         // avoid nontrivial Export dtor being executed during exit
@@ -121,19 +122,12 @@ int WorkOnTokenSet( int nTyp, char *pTokenText )
     return 1;
 }
 
-} // extern
-
-extern "C" {
-
 int SetError()
 {
     // set error at global instance of class Export
     global::exporter->SetError();
     return 1;
 }
-}
-
-extern "C" {
 
 int GetError()
 {
@@ -142,7 +136,8 @@ int GetError()
         return 1;
     return sal_False;
 }
-}
+
+} // extern "C"
 
 
 // class ResData
