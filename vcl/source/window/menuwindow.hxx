@@ -32,6 +32,16 @@ class Window;
 The menu can be a floating window, or a menu bar.  Even though this has
 'Window' in the name, it is not derived from the VCL's Window class, as the
 MenuFloatingWindow's or MenuBarWindow's already are VCL Windows.
+
+TODO: move here stuff that was a mentioned previously when there was no
+common class for MenuFloatingWindow and MenuBarWindow:
+
+// a basic class for both (due to pActivePopup, Timer,...) would be nice,
+// but a container class should have been created then, as they
+// would be derived from different windows
+// In most functions we would have to create exceptions for
+// menubar, popupmenu, hence we made two classes
+
 */
 class MenuWindow
 {
