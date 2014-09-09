@@ -101,11 +101,7 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
                         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                         nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-// Erstmal ausgebaut als Hack fuer Bug 53378
-//                        if ( nPopupFlags & FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK )
-//                            return false;
-//                        else
-                            return true;
+                        return true;
                     }
                     else if ( nHitTest == HITTEST_RECT )
                     {
@@ -550,7 +546,6 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                 if ( !ImplCallPreNotify( aNLeaveEvt ) )
                 {
                     pMouseMoveWin->MouseMove( aMLeaveEvt );
-                    // #82968#
                     if( !aDelData.IsDead() )
                         aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNLeaveEvt );
                 }
@@ -747,7 +742,6 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             }
         }
 
-        // #82968#
         if ( !aDelData.IsDead() )
             aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
@@ -1038,7 +1032,6 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
             pChild->ImplGetWindowImpl()->mbKeyUp = false;
             pChild->KeyUp( aKeyEvt );
         }
-        // #82968#
         if( !aDelData.IsDead() )
             aNotifyEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNotifyEvt );
     }
@@ -1152,7 +1145,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                 pChild->ImplGetWindowImpl()->mbKeyUp = false;
                 pChild->KeyUp( aKEvt );
             }
-            // #82968#
+
             if( !aChildDelData.IsDead() )
                 aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
             if ( aChildDelData.IsDead() )
