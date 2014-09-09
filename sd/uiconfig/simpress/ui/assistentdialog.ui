@@ -400,7 +400,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Type</property>
                                 <attributes>
-                                  <attribute name="weight" value="semibold"/>
+                                  <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
                             </child>
@@ -490,7 +490,7 @@
                                 <property name="use_underline">True</property>
                                 <property name="mnemonic_widget">page2RegionCombobox</property>
                                 <attributes>
-                                  <attribute name="weight" value="semibold"/>
+                                  <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
                             </child>
@@ -646,7 +646,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Select an output medium</property>
                                 <attributes>
-                                  <attribute name="weight" value="semibold"/>
+                                  <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
                             </child>
@@ -763,7 +763,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Select a slide transition</property>
                                 <attributes>
-                                  <attribute name="weight" value="semibold"/>
+                                  <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
                             </child>
@@ -934,7 +934,7 @@
                                 <property name="can_focus">False</property>
                                 <property name="label" translatable="yes">Select the presentation type</property>
                                 <attributes>
-                                  <attribute name="weight" value="semibold"/>
+                                  <attribute name="weight" value="bold"/>
                                 </attributes>
                               </object>
                             </child>
@@ -1216,7 +1216,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Describe your basic ideas</property>
                     <attributes>
-                      <attribute name="weight" value="semibold"/>
+                      <attribute name="weight" value="bold"/>
                     </attributes>
                   </object>
                 </child>

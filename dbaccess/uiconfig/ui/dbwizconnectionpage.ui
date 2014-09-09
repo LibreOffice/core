@@ -17,7 +17,7 @@
         <property name="halign">start</property>
         <property name="margin_bottom">12</property>
         <attributes>
-          <attribute name="weight" value="semibold"/>
+          <attribute name="weight" value="bold"/>
         </attributes>
       </object>
       <packing>

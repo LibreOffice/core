@@ -103,7 +103,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">General</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -197,7 +197,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">User authentication</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>
@@ -282,7 +282,7 @@
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">JDBC properties</property>
             <attributes>
-              <attribute name="weight" value="semibold"/>
+              <attribute name="weight" value="bold"/>
             </attributes>
           </object>
         </child>

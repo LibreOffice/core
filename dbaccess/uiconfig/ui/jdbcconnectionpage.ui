@@ -18,7 +18,7 @@
         <property name="margin_bottom">12</property>
         <property name="label" translatable="yes">Set up a connection to a JDBC database</property>
         <attributes>
-          <attribute name="weight" value="semibold"/>
+          <attribute name="weight" value="bold"/>
         </attributes>
       </object>
       <packing>

@@ -180,7 +180,7 @@
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">allParamTreeview</property>
                 <attributes>
-                  <attribute name="weight" value="semibold"/>
+                  <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
             </child>
