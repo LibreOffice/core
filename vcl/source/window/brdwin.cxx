@@ -736,21 +736,6 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
         }
         else
         {
-            /*
-            // adjusting mousepos not required, we allow the whole screen (no desktop anymore...)
-            Point   aFrameMousePos = pBorderWindow->ImplOutputToFrame( aMousePos );
-            Size    aFrameSize = pBorderWindow->ImplGetFrameWindow()->GetOutputSizePixel();
-            if ( aFrameMousePos.X() < 0 )
-                aFrameMousePos.X() = 0;
-            if ( aFrameMousePos.Y() < 0 )
-                aFrameMousePos.Y() = 0;
-            if ( aFrameMousePos.X() > aFrameSize.Width()-1 )
-                aFrameMousePos.X() = aFrameSize.Width()-1;
-            if ( aFrameMousePos.Y() > aFrameSize.Height()-1 )
-                aFrameMousePos.Y() = aFrameSize.Height()-1;
-            aMousePos = pBorderWindow->ImplFrameToOutput( aFrameMousePos );
-            */
-
             aMousePos.X()    -= pData->maMouseOff.X();
             aMousePos.Y()    -= pData->maMouseOff.Y();
 
@@ -918,12 +903,6 @@ OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData* pData,
             nHelpId     = SV_HELPTEXT_MAXIMIZE;
             rHelpRect   = pData->maDockRect;
         }
-        /* no help string available
-        else if ( nHitTest & BORDERWINDOW_HITTEST_MENU )
-        {
-            nHelpId     = SV_HELPTEXT_MENU;
-            rHelpRect   = pData->maMenuRect;
-        }*/
         else if ( nHitTest & BORDERWINDOW_HITTEST_HIDE )
         {
             nHelpId     = SV_HELPTEXT_MINIMIZE;
