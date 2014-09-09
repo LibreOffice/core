@@ -71,10 +71,7 @@ public class XOutputStreamWrapper extends OutputStream {
                 throw new java.io.IOException( "Stream is null" );
             }
             byte[] bytes = new byte[len];
-            for ( int i=off; i< off+len; i++ )
-            {
-                bytes[i] = b[i];
-            }
+            System.arraycopy(b, off, bytes, 0, len);
             try
             {
                 m_xOutputStream.writeBytes(bytes);
