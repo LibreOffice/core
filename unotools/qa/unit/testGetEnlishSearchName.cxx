@@ -28,26 +28,35 @@ public:
 };
 
 void Test::setUp()
-{};
+{
+}
 
 void Test::testSingleElement()
 {
     {   // lowercase
         OUString test1 = GetEnglishSearchFontName( "SYMBOL" );
-        CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
-        // trailingWhitespaces
+        CPPUNIT_ASSERT_EQUAL( OUString("symbol"),test1);
+        //trailingWhitespaces
         test1 = GetEnglishSearchFontName( "Symbol    " );
-        CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
-        // removing Skripts
+        CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
+        //removing Skripts
         test1 = GetEnglishSearchFontName( "Symbol(skript)" );
-        CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
-        // remove Whitespaces between
+        CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
+        //remove Whitespaces between
         test1 = GetEnglishSearchFontName( "Symbol (skript)" );
-        CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
-        // trailingWhitespaces
+        CPPUNIT_ASSERT_EQUAL( OUString("symbol"),test1);
+        //remove special characters; leave semicolon, numbers
+        test1 = GetEnglishSearchFontName( "sy;mb?=ol129" );
+        CPPUNIT_ASSERT_EQUAL( OUString("sy;mbol129"),test1);
+
+        //transformation
+
+        sal_Unicode const transfor[] ={ 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
+
+        test1 = GetEnglishSearchFontName(transfor );
+        CPPUNIT_ASSERT_EQUAL( OUString("hiraginomarugothicpron"),test1);
     }
 }
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 CPPUNIT_PLUGIN_IMPLEMENT();
