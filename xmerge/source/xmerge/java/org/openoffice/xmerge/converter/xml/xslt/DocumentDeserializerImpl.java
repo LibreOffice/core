@@ -105,7 +105,7 @@ public final class DocumentDeserializerImpl
 
     public Source resolve(String href, String base) throws TransformerException {
         if (href != null) {
-            if (href.equals("javax.xml.transform.dom.DOMSource") || href.equals("")) {
+            if (href.equals("javax.xml.transform.dom.DOMSource") || href.length() == 0) {
                 return null;
             }
             try {
