@@ -341,7 +341,7 @@ public class Helper
                 int nURL = sWebPage.indexOf( "URL=", nContent );
                 if ( nURL > 0 )
                 {
-                    int nEndURL = sWebPage.indexOf( "\"", nURL );
+                    int nEndURL = sWebPage.indexOf('"', nURL );
                     if ( nEndURL > 0 )
                         sResultURL = sWebPage.substring( nURL + 4, nEndURL );
                 }

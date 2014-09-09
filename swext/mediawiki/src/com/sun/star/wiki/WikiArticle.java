@@ -146,7 +146,7 @@ public class WikiArticle
                 if ( iPosStart >= 0 && iPosEnd > 0 )
                 {
                     String sArticle = sWebPage.substring(iPosStart, iPosEnd);
-                    iPosStart = sArticle.indexOf(">") + 1;
+                    iPosStart = sArticle.indexOf('>') + 1;
                     sWikiCode = sArticle.substring( iPosStart, sArticle.length() );
                 }
             }
