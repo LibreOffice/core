@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_72ca9851",
+        "filename": "desktop/source/app/app.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1489,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-09-09T20:50:09Z",
+      "side": 1,
+      "message": "UNO_QUERY_THROW could be unnecessary now, is UNO_SET_THROW enough (which doesn\u0027t do a queryInterface call)?",
+      "revId": "2d9ecea2125aa1bdcea248f7a0f4e479cd89a058",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_92b4dcd1",
+        "filename": "extensions/source/update/ui/updatecheckui.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-09-09T20:50:09Z",
+      "side": 1,
+      "message": "shouldn\u0027t this override documentEventOccured() here?\n\ndo you have this part of the code disabled perhaps?\n\nif you don\u0027t have ENABLE_ONLINE_UPDATE\u003d then try --enable-online-update",
+      "revId": "2d9ecea2125aa1bdcea248f7a0f4e479cd89a058",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
