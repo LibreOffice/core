@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_32909095",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000058
+      },
+      "writtenOn": "2014-09-09T07:57:59Z",
+      "side": 1,
+      "message": "This should be Which Ranges (see variable name).",
+      "revId": "25eb38dfd8a8a9101697e27aa1b2f62296eac91d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_128d8c7b",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000058
+      },
+      "writtenOn": "2014-09-09T07:57:59Z",
+      "side": 1,
+      "message": "\"Understands/handles all Ranges\" part is missing from the original comment",
+      "revId": "25eb38dfd8a8a9101697e27aa1b2f62296eac91d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
