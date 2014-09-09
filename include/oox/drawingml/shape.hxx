@@ -50,6 +50,7 @@ struct ShapeStyleRef
 {
     Color               maPhClr;
     sal_Int32           mnThemedIdx;
+    ShapeStyleRef() : mnThemedIdx(0) {}
 };
 
 typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
