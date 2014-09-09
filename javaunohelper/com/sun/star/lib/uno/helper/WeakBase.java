@@ -38,7 +38,7 @@ public class WeakBase implements XWeak, XTypeProvider
 
     protected static Map<Class<?>,Type[]> _mapTypes = new HashMap<Class<?>,Type[]>();
 
-    /** Method of XWeak. The returned XAdapter implementation can be used to keap
+    /** Method of XWeak. The returned XAdapter implementation can be used to keep
      * a weak reference to this object.
      * @return a com.sun.star.uno.XAdapter implementation.
      */

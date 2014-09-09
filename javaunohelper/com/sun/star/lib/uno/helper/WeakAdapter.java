@@ -48,11 +48,11 @@ public class WeakAdapter implements XAdapter
 
     /** Called by the XWeak implementation (WeakBase) when it is being finalized.
      *  It is only being called once.
-     *  The registererd XReference listeners are notified. On notification they are
+     *  The registered XReference listeners are notified. On notification they are
      *  to unregister themselves. The notification is thread-safe. However, it is possible
      *  to add a listener during the notification process, which will never receive a
      *  notification. To prevent this, one would have to synchronize this method with
-     *  the addReference method. But this can result in deadlocks in a multithreaded
+     *  the addReference method. But this can result in deadlocks in a multi-threaded
      *  environment.
      */
     void referentDying()
