@@ -698,7 +698,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     {
         if (_sName.startsWith("field:["))
         {
-            int nCloseBrace = _sName.lastIndexOf("]");
+            int nCloseBrace = _sName.lastIndexOf(']');
             return _sName.substring(7, nCloseBrace).trim();
         }
         return _sName;

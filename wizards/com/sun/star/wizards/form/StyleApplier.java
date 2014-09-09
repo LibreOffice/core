@@ -210,17 +210,17 @@ public class StyleApplier
         if (index > -1)
         {
             String sPropName = PropertyNames.EMPTY_STRING;
-            while (((sPropName.indexOf("}") < 0) && (index < _sDataList.length - 1)))
+            while (((sPropName.indexOf('}') < 0) && (index < _sDataList.length - 1)))
             {
                 String scurline = _sDataList[index++];
                 if ((scurline.indexOf(_sPropertyDescription)) > 0)
                 {
-                    if (scurline.indexOf(":") > 0)
+                    if (scurline.indexOf(':') > 0)
                     {
                         String[] sPropList = JavaTools.ArrayoutofString(scurline, ":");
                         String sPropValue = sPropList[1];
                         sPropValue = sPropValue.trim();
-                        if (sPropValue.indexOf("#") > -1)
+                        if (sPropValue.indexOf('#') > -1)
                         {
                             sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SEMI_COLON);
                             sPropValue = JavaTools.replaceSubString(sPropValue, PropertyNames.EMPTY_STRING, PropertyNames.SPACE);

@@ -515,7 +515,7 @@ public class FileAccess
      */
     private static String getExtension(String filename)
     {
-        int p = filename.indexOf(".");
+        int p = filename.indexOf('.');
         if (p == -1)
         {
             return PropertyNames.EMPTY_STRING;
@@ -526,7 +526,7 @@ public class FileAccess
             {
                 filename = filename.substring(p + 1);
             }
-            while ((p = filename.indexOf(".")) > -1);
+            while ((p = filename.indexOf('.')) > -1);
         }
         return filename;
     }
@@ -588,7 +588,7 @@ public class FileAccess
         }
         int pos = -1;
         int lastPos = 0;
-        while ((pos = url.indexOf("/", pos + 1)) > -1)
+        while ((pos = url.indexOf('/', pos + 1)) > -1)
         {
             lastPos = pos;
         }
