@@ -240,7 +240,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 }
                 getRecordParser().setRecordFieldNames(sNewList);
                 getRecordParser().GroupFieldNames = JavaTools.ArrayoutofString(sGroupFieldNames, PropertyNames.SEMI_COLON);
-                int nOrigCommandType = Integer.valueOf(sCommandType).intValue();
+                int nOrigCommandType = Integer.parseInt(sCommandType);
                 getRecordParser().setCommandType(nOrigCommandType);
 
                 sMsgQueryCreationImpossible = JavaTools.replaceSubString(sMsgQueryCreationImpossible, getRecordParser().Command, "<STATEMENT>");

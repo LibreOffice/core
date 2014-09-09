@@ -763,7 +763,7 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     {
         Object image = ((EventObject) event).Source;
         String controlName = (String) Helper.getUnoPropertyValue(getModel(image), PropertyNames.PROPERTY_NAME);
-        return Integer.valueOf(controlName.substring(6 + name.length())).intValue();
+        return Integer.parseInt(controlName.substring(6 + name.length()));
 
     }
 
