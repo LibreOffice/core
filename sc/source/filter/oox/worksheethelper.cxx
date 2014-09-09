@@ -500,7 +500,7 @@ Reference< XSheetCellRanges > WorksheetGlobals::getCellRangeList( const ApiCellR
     {
         xRanges.set( getBaseFilter().getModelFactory()->createInstance( maSheetCellRanges ), UNO_QUERY_THROW );
         Reference< XSheetCellRangeContainer > xRangeCont( xRanges, UNO_QUERY_THROW );
-        xRangeCont->addRangeAddresses( ContainerHelper::vectorToSequence( rRanges ), sal_False );
+        xRangeCont->addRangeAddresses( rRanges.toSequence(), sal_False );
     }
     catch( Exception& )
     {

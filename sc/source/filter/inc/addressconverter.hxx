@@ -32,14 +32,55 @@ class BiffInputStream;
 
 /** A vector of com.sun.star.table.CellRangeAddress elements and additional
     functionality. */
-class ApiCellRangeList : public ::std::vector< ::com::sun::star::table::CellRangeAddress >
+class ApiCellRangeList
 {
 public:
-    inline explicit     ApiCellRangeList() {}
+    inline explicit     ApiCellRangeList() : mvAddresses() {}
+
+    size_t size() const { return mvAddresses.size(); }
+
+    bool empty() const { return mvAddresses.empty(); }
+
+    const ::com::sun::star::table::CellRangeAddress& front() const
+    { return mvAddresses.front(); }
+
+    ::com::sun::star::table::CellRangeAddress& operator[]( size_t i )
+    { return mvAddresses[ i ]; }
+
+    ::std::vector< ::com::sun::star::table::CellRangeAddress >::const_iterator begin() const
+    { return mvAddresses.begin(); }
+    ::std::vector< ::com::sun::star::table::CellRangeAddress >::iterator begin()
+    { return mvAddresses.begin(); }
+
+    ::std::vector< ::com::sun::star::table::CellRangeAddress >::const_iterator end() const
+    { return mvAddresses.end(); }
+
+    ::std::vector< ::com::sun::star::table::CellRangeAddress >::reverse_iterator rbegin()
+    { return mvAddresses.rbegin(); }
+
+    ::std::vector< ::com::sun::star::table::CellRangeAddress >::reverse_iterator rend()
+    { return mvAddresses.rend(); }
+
+    void clear() { mvAddresses.clear(); }
+
+    void erase( ::std::vector< ::com::sun::star::table::CellRangeAddress >::iterator it )
+    { mvAddresses.erase( it ); }
+
+    void pop_back() { mvAddresses.pop_back(); }
+
+    void push_back( const ::com::sun::star::table::CellRangeAddress& rAddress )
+    { mvAddresses.push_back( rAddress ); }
 
     /** Returns the base address of this range list (top-left cell of first range). */
     ::com::sun::star::table::CellAddress
                         getBaseAddress() const;
+
+    /** Converts to a sequence. */
+    com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress >
+    toSequence() const;
+
+private:
+    ::std::vector< ::com::sun::star::table::CellRangeAddress > mvAddresses;
 };
 
 /** A 2D cell address struct for binary filters. */

@@ -342,7 +342,7 @@ void addIfNotInMyMap( StylesBuffer& rStyles, std::map< std::pair< sal_Int32, sal
                 {
                     // add ranges from the rangelist to the existing rangelist for the
                     // matching style ( should we check if they overlap ? )
-                    for ( ApiCellRangeList::const_iterator iter = rRangeList.begin(), iter_end =  rRangeList.end(); iter != iter_end; ++iter )
+                    for ( ::std::vector< CellRangeAddress >::const_iterator iter = rRangeList.begin(), iter_end =  rRangeList.end(); iter != iter_end; ++iter )
                        it->second.push_back( *iter );
                     return;
                 }
@@ -437,7 +437,7 @@ void SheetDataBuffer::finalizeImport()
     for (  std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
     {
         const ApiCellRangeList& rRanges( it->second );
-        for ( ApiCellRangeList::const_iterator it_range = rRanges.begin(), it_rangeend = rRanges.end(); it_range!=it_rangeend; ++it_range )
+        for ( ::std::vector< CellRangeAddress >::const_iterator it_range = rRanges.begin(), it_rangeend = rRanges.end(); it_range!=it_rangeend; ++it_range )
             addColXfStyle( it->first.first, it->first.second, *it_range );
     }
 
@@ -652,8 +652,8 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
 {
     if( (rModel.mnXfId >= 0) || (nNumFmtId >= 0) )
     {
-        ApiCellRangeList::reverse_iterator aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rbegin();
-        ApiCellRangeList::reverse_iterator aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rend();
+        ::std::vector< CellRangeAddress >::reverse_iterator aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rbegin();
+        ::std::vector< CellRangeAddress >::reverse_iterator aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rend();
         /* The xlsx sheet data contains row wise information.
          * It is sufficient to check if the row range size is one
          */
@@ -674,7 +674,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
 
         aIt = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rbegin();
         aItEnd = maXfIdRangeLists[ XfIdNumFmtKey( rModel.mnXfId, nNumFmtId ) ].rend();
-        ApiCellRangeList::reverse_iterator aItM = aIt+1;
+        ::std::vector< CellRangeAddress >::reverse_iterator aItM = aIt+1;
         while( aItM != aItEnd )
         {
             if( aIt->Sheet == aItM->Sheet )

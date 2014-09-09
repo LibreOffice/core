@@ -28,7 +28,6 @@
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <oox/helper/attributelist.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include "addressconverter.hxx"
 #include "biffinputstream.hxx"
@@ -406,7 +405,7 @@ void DefinedName::convertFormula()
             ApiCellRangeList aPrintRanges;
             getFormulaParser().extractCellRangeList( aPrintRanges, aFTokenSeq, false, mnCalcSheet );
             if( xPrintAreas.is() && !aPrintRanges.empty() )
-                xPrintAreas->setPrintAreas( ContainerHelper::vectorToSequence( aPrintRanges ) );
+                xPrintAreas->setPrintAreas( aPrintRanges.toSequence() );
         }
         break;
         case BIFF_DEFNAME_PRINTTITLES:
@@ -419,7 +418,7 @@ void DefinedName::convertFormula()
                 bool bHasRowTitles = false;
                 bool bHasColTitles = false;
                 const CellAddress& rMaxPos = getAddressConverter().getMaxAddress();
-                for( ApiCellRangeList::const_iterator aIt = aTitleRanges.begin(), aEnd = aTitleRanges.end(); (aIt != aEnd) && (!bHasRowTitles || !bHasColTitles); ++aIt )
+                for( ::std::vector< CellRangeAddress >::const_iterator aIt = aTitleRanges.begin(), aEnd = aTitleRanges.end(); (aIt != aEnd) && (!bHasRowTitles || !bHasColTitles); ++aIt )
                 {
                     bool bFullRow = (aIt->StartColumn == 0) && (aIt->EndColumn >= rMaxPos.Column);
                     bool bFullCol = (aIt->StartRow == 0) && (aIt->EndRow >= rMaxPos.Row);
