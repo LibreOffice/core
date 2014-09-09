@@ -120,6 +120,12 @@ static int sal_significantBits( Pixel nMask )
     return nBits;
 }
 
+// check if the resolution is sane
+static bool sal_ValidDPI(long nDPI)
+{
+    return (nDPI >= 50) && (nDPI <= 500);
+}
+
 static bool sal_GetVisualInfo( Display *pDisplay, XID nVID, XVisualInfo &rVI )
 {
     int         nInfos;
@@ -555,7 +561,7 @@ void SalDisplay::Init()
         const OString aValStr( pValStr );
         const long nDPI = (long) aValStr.toDouble();
         // guard against insane resolution
-        if( (nDPI >= 50) && (nDPI <= 500) )
+        if( sal_ValidDPI(nDPI) )
         {
             aResolution_ = Pair( nDPI, nDPI );
             bExactResolution = true;
