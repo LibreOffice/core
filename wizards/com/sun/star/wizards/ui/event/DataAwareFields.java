@@ -420,7 +420,7 @@ public class DataAwareFields
         }
         else if (value instanceof String)
         {
-            return Double.valueOf((String) value).doubleValue();
+            return Double.parseDouble((String) value);
         }
         else if (value instanceof short[])
         {

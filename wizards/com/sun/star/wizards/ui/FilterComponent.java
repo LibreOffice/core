@@ -189,7 +189,7 @@ public class FilterComponent
      */
     private void togglefollowingControlRow(String _scurName)
     {
-        int Index = Integer.valueOf(getIndexNumber(_scurName)).intValue();
+        int Index = Integer.parseInt(getIndexNumber(_scurName));
         if (Index < oControlRows.length)
         {
             boolean bValue = oControlRows[Index - 1].isConditionComplete();
