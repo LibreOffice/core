@@ -967,4 +967,19 @@ String STR_SUM
     Text [ en-US ] = "Total" ;
 };
 
+String STR_SHEET
+{
+    Text [ en-US ] = "Sheet" ;
+};
+
+String STR_CELL
+{
+    Text [ en-US ] = "Cell" ;
+};
+
+String STR_CONTENT
+{
+    Text [ en-US ] = "Content" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -915,6 +915,12 @@
 #define SCSTR_PRINT_OPTIONS             (STR_START + 216)
 #define SCSTR_WARN_ME_IN_FUTURE_CHECK   (STR_START + 217)
 
+// header of search result dialog
+
+#define STR_SHEET   (STR_START + 218)
+#define STR_CELL    (STR_START + 219)
+#define STR_CONTENT (STR_START + 220)
+
 // navigator - in the same order as SC_CONTENT_...
 #define SCSTR_CONTENT_ROOT      (STR_START + 250)
 #define SCSTR_CONTENT_TABLE     (STR_START + 251)

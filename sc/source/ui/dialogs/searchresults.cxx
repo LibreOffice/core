@@ -18,6 +18,7 @@
 #include "rangeutl.hxx"
 #include "tabvwsh.hxx"
 #include <sc.hrc>
+#include "scresid.hxx"
 
 namespace sc {
 
@@ -34,7 +35,7 @@ SearchResultsDlg::SearchResultsDlg( SfxBindings* _pBindings, Window* pParent, sa
     mpList = new SvSimpleTable(*pContainer);
     long nTabs[] = {3, 0, 40, 60};
     mpList->SetTabs(&nTabs[0]);
-    mpList->InsertHeaderEntry("Sheet\tCell\tContent");
+    mpList->InsertHeaderEntry(SC_RESSTR(STR_SHEET) + "\t" + SC_RESSTR(STR_CELL) + "\t" + SC_RESSTR(STR_CONTENT));
     mpList->SetSelectHdl( LINK(this, SearchResultsDlg, ListSelectHdl) );
 }
 
