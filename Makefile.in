@@ -141,8 +141,6 @@ clean-host:
 	rm -fr $(TESTINSTALLDIR)
 	rm -fr $(INSTDIR)
 	rm -fr $(WORKDIR)
-	rm -fr solver
-	rm -fr install
 
 clean-build:
 ifneq ($(CROSS_COMPILING),)
