@@ -108,10 +108,10 @@ extern "C"
         gdk_threads_init();
 
         GtkInstance* pInstance = new GtkInstance( pYieldMutex );
-        SAL_INFO("vcl.gtk", "creating GtkSalInstance " << pInstance);
+        SAL_INFO("vcl.gtk", "creating GtkInstance " << pInstance);
 
-        //Create SalData, this does not leak
-        /*GtkData *pSalData =*/ new GtkData( pInstance );
+        // Create SalData, this does not leak
+        new GtkData( pInstance );
 
         return pInstance;
     }
