@@ -407,7 +407,7 @@ public class FileAccess
             throws NoValidPathException
     {
         String[][] LocLayoutFiles = new String[2][];
-        if (FolderName.size() == 0)
+        if (FolderName.isEmpty())
         {
             throw new NoValidPathException(null, "Path not given.");
         }
