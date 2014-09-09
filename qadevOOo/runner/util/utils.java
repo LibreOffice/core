@@ -331,7 +331,7 @@ public class utils {
 
         dir = dir.substring("file:///".length());
 
-        idx = dir.indexOf(":");
+        idx = dir.indexOf(':');
 
         // is the last character a '/' or a '\'?
         boolean lastCharSet = dir.endsWith("/") || dir.endsWith("\\");
@@ -370,7 +370,7 @@ public class utils {
         }
 
         // remove leading '/' and replace others with '\' on windows machines
-        if (sysDir.indexOf(":") != -1) {
+        if (sysDir.indexOf(':') != -1) {
             sysDir = sysDir.substring(1);
             sysDir = sysDir.replace('/', '\\');
         }
@@ -395,7 +395,7 @@ public class utils {
         }
 
         // remove leading '/' and replace others with '\' on windows machines
-        if (sysDir.indexOf(":") != -1) {
+        if (sysDir.indexOf(':') != -1) {
             sysDir = sysDir.substring(1);
             sysDir = sysDir.replace('/', '\\');
         }

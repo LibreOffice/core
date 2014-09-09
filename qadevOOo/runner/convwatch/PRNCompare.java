@@ -391,7 +391,7 @@ public class PRNCompare
             // try to interpret the result, which we get as a String
             try
             {
-                int nIdx = sBack.indexOf("\n");
+                int nIdx = sBack.indexOf('\n');
                 if (nIdx > 0)
                 {
                     sBack = sBack.substring(0, nIdx);

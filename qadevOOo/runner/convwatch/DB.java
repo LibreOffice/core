@@ -353,8 +353,8 @@ public class DB extends DBHelper
                 {
                     String sToken = aTokenizer.nextToken();
                     int nIndex = sToken.indexOf("uuid()=");
-                    int nIndexTuettel = sToken.indexOf("'", nIndex);
-                    int nIndexTuettel2 = sToken.lastIndexOf("'");
+                    int nIndexTuettel = sToken.indexOf('\'', nIndex);
+                    int nIndexTuettel2 = sToken.lastIndexOf('\'');
                     String sUuid = sToken.substring(nIndexTuettel + 1, nIndexTuettel2);
                     return sUuid;
                 }

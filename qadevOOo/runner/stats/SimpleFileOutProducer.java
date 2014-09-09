@@ -51,7 +51,7 @@ public class SimpleFileOutProducer implements LogWriter {
             String FileName = entry.longName + ".out";
             if (!entry.EntryType.equals("component")) {
                 FileName = entry.longName.substring(0,
-                                entry.longName.indexOf(":")) + ".out";
+                                entry.longName.indexOf(':')) + ".out";
             }
             util.utils.make_Directories("",outpath);
             File outputFile = new File(outpath, FileName);

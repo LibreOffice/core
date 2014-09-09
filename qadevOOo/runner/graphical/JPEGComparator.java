@@ -52,7 +52,7 @@ class NameDPIPage
         if (sDPICheck.equals("DPI_"))
         {
             // seems to be a generated filename by us.
-            int nDPIStart = sNameNoSuffix.lastIndexOf("_", sNameNoSuffix.length() - 8);
+            int nDPIStart = sNameNoSuffix.lastIndexOf('_', sNameNoSuffix.length() - 8);
             sName = sNameNoSuffix.substring(0, nDPIStart);
             if (nDPIStart > 0)
             {
@@ -635,7 +635,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
         // try to interpret the result, which we get as a String
         try
         {
-            int nIdx = sBack.indexOf("\n");
+            int nIdx = sBack.indexOf('\n');
             if (nIdx > 0)
             {
                 sBack = sBack.substring(0, nIdx);

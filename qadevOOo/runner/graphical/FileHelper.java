@@ -69,10 +69,10 @@ public class FileHelper
                 return "";
             }
 
-            int nIdx = _sFilename.lastIndexOf("\\");
+            int nIdx = _sFilename.lastIndexOf('\\');
             if (nIdx == -1)
             {
-                nIdx = _sFilename.lastIndexOf("/");
+                nIdx = _sFilename.lastIndexOf('/');
             }
             if (nIdx > 0)
             {
@@ -87,7 +87,7 @@ public class FileHelper
             {
                 return "";
             }
-            int nIdx = _sFilename.lastIndexOf(".");
+            int nIdx = _sFilename.lastIndexOf('.');
             if (nIdx > 0)
             {
                 return _sFilename.substring(0, nIdx);
@@ -101,7 +101,7 @@ public class FileHelper
             {
                 return "";
             }
-            int nIdx = _sFilename.lastIndexOf(".");
+            int nIdx = _sFilename.lastIndexOf('.');
             if (nIdx > 0)
             {
                 return _sFilename.substring(nIdx );
@@ -116,10 +116,10 @@ public class FileHelper
                 return "";
             }
 
-            int nIdx = _sFilename.lastIndexOf("\\");
+            int nIdx = _sFilename.lastIndexOf('\\');
             if (nIdx == -1)
             {
-                nIdx = _sFilename.lastIndexOf("/");
+                nIdx = _sFilename.lastIndexOf('/');
             }
             if (nIdx > 0)
             {
