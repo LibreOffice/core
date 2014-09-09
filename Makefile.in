@@ -328,6 +328,7 @@ endif
 
 mac-app-store-package: test-install
 ifneq ($(MACOSX_PACKAGE_SIGNING_IDENTITY),)
+	rm -rf "$(MACOSX_APP_NAME).app"
 	mv "$(TESTINSTALLDIR)/$(PRODUCTNAME).app" "$(MACOSX_APP_NAME).app"
 	productbuild --component "$(MACOSX_APP_NAME).app" /Applications --sign $(MACOSX_PACKAGE_SIGNING_IDENTITY) $(shell echo "$(MACOSX_APP_NAME)" | tr ' ' '-').pkg
 else
