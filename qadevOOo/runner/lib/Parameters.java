@@ -91,10 +91,7 @@ public class Parameters implements XPropertySet {
         parameters.put(name, value);
         int size = props.length;
         Property[] addProps = new Property[size+1];
-        for (int i=0; i<size; i++)
-        {
-            addProps[i] = props[i];
-        }
+        System.arraycopy(props, 0, addProps, 0, size);
         addProps[size] = new Property(name, size, new Type(value.getClass()), (short)0);
         props = addProps;
     }
