@@ -326,6 +326,8 @@ UDMLIB=-ludm
 ULINGULIB=-lulingu
 .IF "$(SYSTEM_HUNSPELL)" == "YES"
 HUNSPELLLIB=$(HUNSPELL_LIBS)
+.ELIF "$(GUI)" == "OS2"
+HUNSPELLLIB=-lhunspell
 .ELSE
 HUNSPELLLIB=-lhunspell-1.3
 .ENDIF
@@ -333,11 +335,12 @@ HUNSPELLLIB=-lhunspell-1.3
 MYTHESLIB=$(MYTHES_LIBS)
 .ELIF "$(GUI)" == "OS2"
 MYTHESLIB=-lmythes
+COINMPLIBS=-lCoinMP
 .ELSE
 MYTHESLIB=-lmythes-1.2
+COINMPLIBS=-lCoinMP -lCoinUtils -lClp -lCbc -lOsi -lOsiClp -lCgl -lCbcSolver
 .ENDIF
 PYUNOLIB=-lpyuno
-COINMPLIBS=-lCoinMP -lCoinUtils -lClp -lCbc -lOsi -lOsiClp -lCgl -lCbcSolver
 INTERNAL_APR_LIBS=-lapr-1
 INTERNAL_APR_UTIL_LIBS=-laprutil-1
 INTERNAL_SERF_LIBS=-lserf-1
