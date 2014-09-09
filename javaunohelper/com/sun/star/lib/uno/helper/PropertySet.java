@@ -99,7 +99,7 @@ XMultiPropertySet
      *  These methods expect <em>id</em> to be a String which represents the name of a member variable
      *  which holds the property value.
      *  Only properties which are registered can be accessed. Registration has to occur during
-     *  initialization of the inheriting class (i.e. within the contructor).
+     *  initialization of the inheriting class (i.e. within the constructor).
      *  @param prop The property to be registered.
      *  @param id Identifies the properties storage.
      *  @see #getPropertyId
@@ -114,7 +114,7 @@ XMultiPropertySet
      *  It does the same as {@link #registerProperty(Property, Object)}. The first four
      *  arguments are used to construct a Property object.
      *  Registration has to occur during
-     *  initialization of the inheriting class (i.e. within the contructor)
+     *  initialization of the inheriting class (i.e. within the constructor)
      *  @param name The property's name (Property.Name).
      *  @param handle The property's handle (Property.Handle).
      *  @param type The property's type (Property.Type).
@@ -133,7 +133,7 @@ XMultiPropertySet
      *  is generated and does not have to be specified here. Use this method for registering
      *  a property if you do not care about the Property's handles.
      *  Registration has to occur during
-     *  initialization of the inheriting class (i.e. within the contructor).
+     *  initialization of the inheriting class (i.e. within the constructor).
      *  @param name The property's name (Property.Name).
      *  @param type The property's type (Property.Type).
      *  @param attributes The property's attributes (Property.Attributes).
@@ -249,8 +249,8 @@ XMultiPropertySet
             _handleToPropertyMap.put(Integer.valueOf(prop.Handle), prop);
     }
 
-    /** Assigns an identifyer object to a Property object so that the identifyer
-     *  can be obtained by {@link #getPropertyId getPropertyId} later on. The identifyer
+    /** Assigns an identifier object to a Property object so that the identifier
+     *  can be obtained by {@link #getPropertyId getPropertyId} later on. The identifier
      *  is used to specify a certain storage for the property's value. If you do not
      *  override {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast} or {@link #getPropertyValue(Property)}
      *  then the argument <em>id</em> has to be a String that equals the name of
@@ -268,7 +268,7 @@ XMultiPropertySet
             _propertyToIdMap.put(prop, id);
     }
 
-    /** Returns the identifyer object for a certain Property. The object must have been
+    /** Returns the identifier object for a certain Property. The object must have been
      *  previously assigned to the Property object by {@link #assignPropertyId assignPropertyId}.
      *  Override this method if you want to implement your own mapping from Property objects to ids.
      *  Then you also need to override {@link #initMappings initMappings} and {@link #assignPropertyId assignPropertyId}.
@@ -295,7 +295,7 @@ XMultiPropertySet
     }
 
     /** Makes sure that listeners which are kept in aBoundLC (XPropertyChangeListener) and aVetoableLC
-     *  (XVetoableChangeListener) receive a disposing call. Also those listeners are relesased.
+     *  (XVetoableChangeListener) receive a disposing call. Also those listeners are released.
      */
     @Override
     protected void postDisposing()
@@ -449,7 +449,7 @@ XMultiPropertySet
      *
      *  Properties can have the attribute com.sun.star.beans.PropertyAttribute.MAYBEVOID, which means that the value
      *  (not the type) can be void. In order to assign a void value to a property one can either pass an Any which
-     *  contains a null reference or pass null directly. In bothe cases the null reference is only accepted if
+     *  contains a null reference or pass null directly. In both cases the null reference is only accepted if
      *  the PropertyAttribute.MAYBEVOID attribute is set for the property.
      *
      *  Properties which have the attribute MAYBEVOID set (Property.Attributes) can have a void value. The following
@@ -541,7 +541,7 @@ XMultiPropertySet
      *  class A inherits this class then members of class A
      *  can hold property values. If there is a class B which inherits A then only members of B can hold
      *  property values. The variables must be public. A property must have been registered (e.g. by
-     *  {@link #registerProperty(Property, Object)} in order for this method to work. The identifyer argument (type Object)
+     *  {@link #registerProperty(Property, Object)} in order for this method to work. The identifier argument (type Object)
      *  used in the registerProperty methods must
      *  be a String, which is, the name of the member variable that holds the property value.
      *  If one opts to store values differently then one may override
@@ -559,7 +559,7 @@ XMultiPropertySet
      *  in the calling methods.
      *
      *  Only if this method returns successfully further processing, such
-     *  as listener notification and finally the modifiction of the property's value, will occur.
+     *  as listener notification and finally the modification of the property's value, will occur.
      *
      *  The actual modification of a property's value is done by {@link #setPropertyValueNoBroadcast setPropertyValueNoBroadcast}
      *  which is called subsequent to convertPropertyValue.
@@ -814,7 +814,7 @@ XMultiPropertySet
     /** Retrieves the value of a property. This implementation presumes that the values are stored in member variables
      *  of the furthest inheriting class (see {@link #convertPropertyValue convertPropertyValue}) and that the
      *  variables are public. The property must have
-     *  been registered, for example by {@link #registerProperty(Property, Object)}. The identifyer Object argument
+     *  been registered, for example by {@link #registerProperty(Property, Object)}. The identifier Object argument
      *  must have been a String which was the name of the member variable holding the property value.
      *  When properties are to be stored differently one has to override this method as well as
      *  {@link #convertPropertyValue} and {@link #setPropertyValueNoBroadcast}. <br>

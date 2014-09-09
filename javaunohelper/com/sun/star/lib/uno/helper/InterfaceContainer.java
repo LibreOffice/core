@@ -39,7 +39,7 @@ import com.sun.star.uno.UnoRuntime;
  * All methods are thread-safe. The same holds true for
  * iterators, issued by this class. Several iterators can exist at the same time and can also
  * be modified (java.util.ListIterator.add, java.util.ListIterator.remove etc.). To make this work,
- * the InterfaceContainer provides the iterators with copys of the list's data.
+ * the InterfaceContainer provides the iterators with copies of the list's data.
  * The add and remove calls on the iterator modify the data in the iterator's list as well as
  * in InterfaceContainer. Modification on InterfaceContainer, however, are not
  * synchronized with existing iterators. For example
@@ -460,7 +460,7 @@ public class InterfaceContainer implements Cloneable
     }
 
     /** The iterator keeps a copy of the list. Changes to InterfaceContainer do not
-     *  affect the data of the iterator. Conversly, changes to the iterator are effect
+     *  affect the data of the iterator. Conservatively, changes to the iterator are effect
      *  InterfaceContainer.
      */
     synchronized public ListIterator listIterator(int index)

@@ -44,7 +44,7 @@ public class ComponentContextEntry
         @param lateInit
                object factory or service string
         @param value
-               pass null (dummy separating from second ctor signature)
+               pass null (dummy separating from second constructor signature)
     */
     public ComponentContextEntry( Object lateInit, Object value )
     {
