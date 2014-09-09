@@ -75,6 +75,7 @@
 
 The documents listed below will be saved in the folder noted below if you click 'Save'. Click 'Cancel' to close the wizard without saving the documents.</property>
                 <property name="wrap">True</property>
+                <property name="max_width_chars">100</property>
               </object>
               <packing>
                 <property name="expand">False</property>
