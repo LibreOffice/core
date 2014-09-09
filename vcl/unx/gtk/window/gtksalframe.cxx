@@ -1505,14 +1505,13 @@ SalGraphics* GtkSalFrame::AcquireGraphics()
                 m_aGraphics[i].bInUse = true;
                 if( ! m_aGraphics[i].pGraphics )
                 {
-                    m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow );
 #if GTK_CHECK_VERSION(3,0,0)
+                    m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow );
                     if( !m_aFrame.get() )
                         AllocateFrame();
                     m_aGraphics[i].pGraphics->setDevice( m_aFrame );
 #else // common case:
-                    m_aGraphics[i].pGraphics->Init( this, widget_get_xid(m_pWindow),
-                                                    m_nXScreen );
+                    m_aGraphics[i].pGraphics = new GtkSalGraphics( this, m_pWindow, m_nXScreen );
 #endif
                 }
                 return m_aGraphics[i].pGraphics;

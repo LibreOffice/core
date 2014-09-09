@@ -57,6 +57,15 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
                                 gtk_widget_get_screen( pWindow ) ) ) );
 }
 
+GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow,
+                                SalX11Screen nXScreen )
+    : X11SalGraphics(),
+      m_pWindow( pWindow ),
+      m_aClipRegion(true)
+{
+    Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ), nXScreen );
+}
+
 GtkSalGraphics::~GtkSalGraphics()
 {
 }
