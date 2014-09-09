@@ -941,21 +941,25 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
                               int nTilePosX, int nTilePosY,
                               long nTileWidth, long nTileHeight )
 {
+    // Scaling. Must convert from pixels to TWIPs. We know
+    // that VirtualDevices use a DPI of 96. We might as well do this
+    // calculation now, rather than after another dimension conversion,
+    // to minimise errors.
+    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
+                                Fraction( nTileWidth);
+    Fraction scaleY =  Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
+                                 Fraction( nTileHeight);
+
     rDevice.SetOutputSizePixel( Size( nOutputWidth, nOutputHeight ) );
-    // setup the output device to draw the tile
     MapMode aMapMode( rDevice.GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     aMapMode.SetOrigin( Point( -nTilePosX, -nTilePosY ) );
 
-    // Scaling. Must convert from pixels to twips. We know
-    // that VirtualDevises use a DPI of 96.
-    Fraction scaleX = Fraction( nOutputWidth, 96 ) * Fraction(1440L) /
-                                Fraction( nTileWidth);
-    Fraction scaleY = Fraction( nOutputHeight, 96 ) * Fraction(1440L) /
-                                Fraction( nTileHeight);
     aMapMode.SetScaleX( scaleX );
     aMapMode.SetScaleY( scaleY );
-    rDevice.SetMapMode( aMapMode );
+
+    maPaintMapMode = aMapMode;
+//    rDevice.SetMapMode( aMapMode );
 
     ScTabViewShell* pTabViewSh = pViewData->GetViewShell();
     SdrView* pDrawView = pTabViewSh->GetScDrawView();
