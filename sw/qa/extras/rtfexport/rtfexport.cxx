@@ -685,6 +685,11 @@ DECLARE_RTFEXPORT_TEST(testAbi10039, "abi10039.odt")
     CPPUNIT_ASSERT(text::TextContentAnchorType_AS_CHARACTER != getProperty<text::TextContentAnchorType>(getShape(1), "AnchorType"));
 }
 
+DECLARE_RTFEXPORT_TEST(testAbi10076, "abi10076.odt")
+{
+    // Just make sure that we don't crash after exporting a fully calculated layout.
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
