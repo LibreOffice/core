@@ -34,7 +34,6 @@ TableBackgroundStyleContext::TableBackgroundStyleContext( ContextHandler2Helper&
 : ContextHandler2( rParent )
 , mrTableStyle( rTableStyle )
 {
-    mrTableStyle.getBackgroundFillStyleRef().mnThemedIdx = 0;
 }
 
 TableBackgroundStyleContext::~TableBackgroundStyleContext()
