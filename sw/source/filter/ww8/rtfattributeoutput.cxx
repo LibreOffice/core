@@ -3715,7 +3715,6 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
             break;
         }
     }
-    assert(pFrame);
 
     /*
        If the graphic is not of type WMF then we will have to store two
@@ -3724,7 +3723,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
        a wmf already then we don't need any such wrapping
        */
     bool bIsWMF = pBLIPType && std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
-    if (pFrame->IsInline())
+    if (!pFrame || pFrame->IsInline())
     {
     if (!bIsWMF)
         m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT;
@@ -3756,7 +3755,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
         m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_SP "{" OOO_STRING_SVTOOLS_RTF_SN " pib" "}{" OOO_STRING_SVTOOLS_RTF_SV " ";
     }
 
-    bool bWritePicProp = pFrame->IsInline();
+    bool bWritePicProp = !pFrame || pFrame->IsInline();
     if (pBLIPType)
         ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm(), bWritePicProp);
     else
@@ -3771,7 +3770,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
         ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm(), bWritePicProp);
     }
 
-    if (pFrame->IsInline())
+    if (!pFrame || pFrame->IsInline())
     {
     if (!bIsWMF)
     {
