@@ -266,7 +266,7 @@ public class LocalOfficeWindow
             String vendor = System.getProperty("java.vendor");
             if ((vendor.equals("Sun Microsystems Inc.")
 		 || vendor.equals("Oracle Corporation"))
-                && Boolean.valueOf(System.getProperty("sun.awt.xembedserver")).booleanValue())
+                && Boolean.parseBoolean(System.getProperty("sun.awt.xembedserver")))
             {
                 xembed = new NamedValue(
                     "XEMBED",
