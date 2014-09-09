@@ -48,7 +48,7 @@ public class CfgParser
     {
         debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
         Properties cfg = null;
-        if (iniFile.equals(""))
+        if (iniFile.length() == 0)
         {
             //no iniFile given, search one in the users home directory
             cfg = getProperties(getDefaultFileName(true));

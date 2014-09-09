@@ -183,7 +183,7 @@ public class OfficeProvider implements AppProvider
             Exception exConnectFailed = null;
             boolean isExecutable = false;
             boolean isAppKnown = ((cncstr.indexOf("host=localhost") > 0) || (cncstr.indexOf("pipe,name=") > 0));
-            isAppKnown &= !((String) param.get("AppExecutionCommand")).equals("");
+            isAppKnown &= ((String) param.get("AppExecutionCommand")).length() != 0;
 
             if (isAppKnown)
             {

@@ -320,7 +320,7 @@ public class GraphicalDifferenceCheck
 
     private static String ensureEndingFileSep(String s)
         {
-        if(s != null && !s.equals("") && !s.endsWith(File.separator))
+        if(s != null && s.length() != 0 && !s.endsWith(File.separator))
             {
                 s = s.trim() + File.separator;
             }
