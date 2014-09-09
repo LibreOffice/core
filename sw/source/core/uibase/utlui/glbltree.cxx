@@ -396,7 +396,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
         pMenu->EnableItem(CTX_INSERT_FILE,      0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->EnableItem(CTX_INSERT_NEW_FILE,  0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
-        pMenu->Execute( pBox, pBox->GetItemRect(nTbxId).BottomLeft());
+        pMenu->Execute(pBox, pBox->GetItemRect(nTbxId));
         delete pMenu;
         pBox->EndSelection();
         pBox->Invalidate();
@@ -411,7 +411,7 @@ void SwGlobalTree::TbxMenuHdl(sal_uInt16 nTbxId, ToolBox* pBox)
         }
         pMenu->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));
-        pMenu->Execute( pBox, pBox->GetItemRect(nTbxId).BottomLeft());
+        pMenu->Execute(pBox, pBox->GetItemRect(nTbxId));
         delete pMenu;
         pBox->EndSelection();
         pBox->Invalidate();
