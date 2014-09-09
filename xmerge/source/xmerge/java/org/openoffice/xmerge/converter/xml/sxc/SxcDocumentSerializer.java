@@ -879,7 +879,7 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 if (child.getNodeType() == Node.TEXT_NODE) {
 
                     String s = child.getNodeValue();
-                    int k = s.lastIndexOf(".");
+                    int k = s.lastIndexOf('.');
                     if (k > 0) {
                         s = s.substring(k+1);
                         decimals = s.length();

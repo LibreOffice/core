@@ -128,10 +128,10 @@ public class RowStyle extends Style implements Cloneable {
         int height = 255;   // Default value
 
         if(value.indexOf("cm")!=-1) {
-            float heightCM = Float.parseFloat(value.substring(0,value.indexOf("c")));
+            float heightCM = Float.parseFloat(value.substring(0,value.indexOf('c')));
             height = TwipsConverter.cm2twips(heightCM);
         } else if(value.indexOf("inch")!=-1) {
-            float heightInch = Float.parseFloat(value.substring(0,value.indexOf("i")));
+            float heightInch = Float.parseFloat(value.substring(0,value.indexOf('i')));
             height = TwipsConverter.inches2twips(heightInch);
         }
 

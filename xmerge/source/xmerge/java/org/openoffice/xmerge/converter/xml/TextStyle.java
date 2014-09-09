@@ -209,9 +209,9 @@ public class TextStyle extends Style implements Cloneable {
             else if (value.startsWith("0% "))
                 turnAttributesOff(SUPERSCRIPT | SUBSCRIPT);
             else {
-                String firstPart = value.substring(0, value.indexOf(" "));
+                String firstPart = value.substring(0, value.indexOf(' '));
                 if (firstPart.endsWith("%")) {
-                    firstPart = firstPart.substring(0, value.indexOf("%"));
+                    firstPart = firstPart.substring(0, value.indexOf('%'));
                     int amount;
                     try {
                         amount = Integer.parseInt(firstPart);
