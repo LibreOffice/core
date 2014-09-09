@@ -152,6 +152,15 @@ sub make_path_absolute
         }
     }
 
+    if ( $pre2par::globals::isos2 )
+    {
+        if (!($$pathref =~ /^\s*\w\:/)) # this is a relative os2 path
+        {
+            $$pathref = cwd() . $pre2par::globals::separator . $$pathref;
+            $$pathref =~ s/\\/\//g;
+        }
+    }
+
     $$pathref =~ s/\Q$pre2par::globals::separator\E\s*$//;  # removing ending slashes
 }
 
