@@ -232,7 +232,13 @@ Color FillProperties::getBestSolidColor() const
         break;
         case XML_gradFill:
             if( !maGradientProps.maGradientStops.empty() )
-                aSolidColor = maGradientProps.maGradientStops.begin()->second;
+            {
+                GradientFillProperties::GradientStopMap::const_iterator aGradientStop =
+                    maGradientProps.maGradientStops.begin();
+                if (maGradientProps.maGradientStops.size() > 2)
+                    ++aGradientStop;
+                aSolidColor = aGradientStop->second;
+            }
         break;
         case XML_pattFill:
             aSolidColor = maPatternProps.maPattBgColor.isUsed() ? maPatternProps.maPattBgColor : maPatternProps.maPattFgColor;
