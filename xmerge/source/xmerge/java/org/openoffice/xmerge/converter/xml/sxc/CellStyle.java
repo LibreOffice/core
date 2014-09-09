@@ -170,9 +170,9 @@ public class CellStyle extends Style implements Cloneable {
             else if (value.startsWith("0% "))
                 fmt.setAttribute(Format.SUPERSCRIPT | Format.SUBSCRIPT, false);
             else {
-                String firstPart = value.substring(0, value.indexOf(" "));
+                String firstPart = value.substring(0, value.indexOf(' '));
                 if (firstPart.endsWith("%")) {
-                    firstPart = firstPart.substring(0, value.indexOf("%"));
+                    firstPart = firstPart.substring(0, value.indexOf('%'));
                     int amount;
                     try {
                         amount = Integer.parseInt(firstPart);

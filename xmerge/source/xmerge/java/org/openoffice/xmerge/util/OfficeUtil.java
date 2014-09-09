@@ -51,14 +51,14 @@ public class OfficeUtil implements OfficeConstants {
          * Office text runs.  There may be more runs in OO because
          * runs of 2 or more spaces map to nodes.
          */
-        while ((text.indexOf("  ") != -1) || (text.indexOf("\t") != 1)) {
+        while ((text.indexOf("  ") != -1) || (text.indexOf('\t') != 1)) {
 
             /*
              * Find the indices of tabs and multiple spaces, and
              * figure out which of them occurs first in the string.
              */
             int spaceIndex = text.indexOf("  ");
-            int tabIndex = text.indexOf("\t");
+            int tabIndex = text.indexOf('\t');
             if ((spaceIndex == -1) && (tabIndex == -1))
                 break;  // DJP This should not be necessary.  What is wrong
             // with the while() stmt up above?
