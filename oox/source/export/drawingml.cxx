@@ -707,18 +707,18 @@ void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
                 }
             }
 
-            if ( nLineWidth <= 0 )
-                SAL_WARN("oox", "while writing outline - custom dash - line width was < 0  : " << nLineWidth);
-            if ( aLineDash.Dashes < 0 )
-                SAL_WARN("oox", "while writing outline - custom dash - number of dashes was < 0  : " << aLineDash.Dashes);
-            if ( aLineDash.Dashes > 0 && aLineDash.DashLen <= 0 )
-                SAL_WARN("oox", "while writing outline - custom dash - dash length was < 0  : " << aLineDash.DashLen);
-            if ( aLineDash.Dots < 0 )
-                SAL_WARN("oox", "while writing outline - custom dash - number of dots was < 0  : " << aLineDash.Dots);
-            if ( aLineDash.Dots > 0 && aLineDash.DotLen <= 0 )
-                SAL_WARN("oox", "while writing outline - custom dash - dot length was < 0  : " << aLineDash.DotLen);
-            if ( aLineDash.Distance <= 0 )
-                SAL_WARN("oox", "while writing outline - custom dash - distance was < 0  : " << aLineDash.Distance);
+            SAL_WARN_IF(nLineWidth <= 0,
+                        "oox", "while writing outline - custom dash - line width was < 0  : " << nLineWidth);
+            SAL_WARN_IF(aLineDash.Dashes < 0,
+                        "oox", "while writing outline - custom dash - number of dashes was < 0  : " << aLineDash.Dashes);
+            SAL_WARN_IF(aLineDash.Dashes > 0 && aLineDash.DashLen <= 0,
+                        "oox", "while writing outline - custom dash - dash length was < 0  : " << aLineDash.DashLen);
+            SAL_WARN_IF(aLineDash.Dots < 0,
+                        "oox", "while writing outline - custom dash - number of dots was < 0  : " << aLineDash.Dots);
+            SAL_WARN_IF(aLineDash.Dots > 0 && aLineDash.DotLen <= 0,
+                        "oox", "while writing outline - custom dash - dot length was < 0  : " << aLineDash.DotLen);
+            SAL_WARN_IF(aLineDash.Distance <= 0,
+                        "oox", "while writing outline - custom dash - distance was < 0  : " << aLineDash.Distance);
 
             mpFS->endElementNS( XML_a, XML_custDash );
         }
