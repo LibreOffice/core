@@ -111,8 +111,22 @@ static void ImplSetMenuItemData( MenuItemData* pData )
 }
 
 Menu::Menu()
+    : mpFirstDel(NULL),
+      pItemList(new MenuItemList),
+      pLogo(NULL),
+      pStartedFrom(NULL),
+      pWindow(NULL),
+      nEventId(0),
+      mnHighlightedItemPos(ITEMPOS_INVALID),
+      nMenuFlags(0),
+      nDefaultItem(0),
+      nSelectedId(0),
+      bCanceled(false),
+      bInCallback(false),
+      bKilled(false),
+      mpLayoutData(NULL),
+      mpSalMenu(NULL)
 {
-    ImplInit();
 }
 
 Menu::~Menu()
@@ -159,27 +173,6 @@ Menu::~Menu()
 
     // Native-support: destroy SalMenu
     ImplSetSalMenu( NULL );
-}
-
-void Menu::ImplInit()
-{
-    mnHighlightedItemPos = ITEMPOS_INVALID;
-    mpSalMenu       = NULL;
-    nMenuFlags      = 0;
-    nDefaultItem    = 0;
-    nSelectedId     = 0;
-    pItemList       = new MenuItemList;
-    pLogo           = NULL;
-    pStartedFrom    = NULL;
-    pWindow         = NULL;
-    nEventId        = 0;
-    bCanceled       = false;
-    bInCallback     = false;
-    bKilled         = false;
-    mpLayoutData    = NULL;
-    mpFirstDel      = NULL;         // Dtor notification list
-    // Native-support: returns NULL if not supported
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(IsMenuBar(), this);
 }
 
 void Menu::ImplLoadRes( const ResId& rResId )
@@ -2472,21 +2465,25 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
 
 // - MenuBar -
 
-MenuBar::MenuBar() : Menu()
+MenuBar::MenuBar()
+    : Menu(),
+      mbCloserVisible(false),
+      mbFloatBtnVisible(false),
+      mbHideBtnVisible(false),
+      mbDisplayable(true)
 {
-    mbDisplayable       = true;
-    mbCloserVisible     = false;
-    mbFloatBtnVisible   = false;
-    mbHideBtnVisible    = false;
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this);
 }
 
-MenuBar::MenuBar( const MenuBar& rMenu ) : Menu()
+MenuBar::MenuBar( const MenuBar& rMenu )
+    : Menu(),
+      mbCloserVisible(false),
+      mbFloatBtnVisible(false),
+      mbHideBtnVisible(false),
+      mbDisplayable(true)
 {
-    mbDisplayable       = true;
-    mbCloserVisible     = false;
-    mbFloatBtnVisible   = false;
-    mbHideBtnVisible    = false;
-    *this               = rMenu;
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(true, this);
+    *this = rMenu;
 }
 
 MenuBar::~MenuBar()
@@ -2694,19 +2691,23 @@ bool MenuBar::HandleMenuButtonEvent( Menu *, sal_uInt16 i_nButtonId ) const
 // bool PopupMenu::bAnyPopupInExecute = false;
 
 PopupMenu::PopupMenu()
+    : pRefAutoSubMenu(NULL)
 {
-    pRefAutoSubMenu = NULL;
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
 }
 
 PopupMenu::PopupMenu( const ResId& rResId )
+    : pRefAutoSubMenu(NULL)
 {
-    pRefAutoSubMenu = NULL;
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
     ImplLoadRes( rResId );
 }
 
-PopupMenu::PopupMenu( const PopupMenu& rMenu ) : Menu()
+PopupMenu::PopupMenu( const PopupMenu& rMenu )
+    : Menu(),
+      pRefAutoSubMenu(NULL)
 {
-    pRefAutoSubMenu = NULL;
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
     *this = rMenu;
 }
 

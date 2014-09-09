@@ -153,7 +153,6 @@ private:
     SalMenu*            mpSalMenu;
 
 protected:
-    SAL_DLLPRIVATE void             ImplInit();
     SAL_DLLPRIVATE void             ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE Menu*            ImplGetStartMenu();
     SAL_DLLPRIVATE Menu*            ImplFindSelectMenu();
@@ -203,8 +202,16 @@ public:
     SAL_DLLPRIVATE Window*  ImplGetWindow() const { return pWindow; }
     void ImplSelectWithStart( Menu* pStartMenu = NULL );
 
+protected:
+
+    /** The Menu constructor is protected.
+
+    The callers are supposed to instantiate either PopupMenu or MenuBar, but
+    not a Menu directly.
+    */
+    Menu();
+
 public:
-                        Menu();
     virtual             ~Menu();
 
     virtual void        Activate();
