@@ -16,6 +16,24 @@
       "revId": "7097044d1a31838b0a3d06ecccabff61d2828071",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_92805c48",
+        "filename": "l10ntools/source/export.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-09T07:04:07Z",
+      "side": 1,
+      "message": "but the behavior of exit(-1) is even more implementation-dependent than the behavior of exit(EXIT_FAILURE) (where the latter is at least defined to return a status of \"unsuccessful termination\"); I\u0027m pretty sure the original -1 was misguided cuteness (or pure ignorance)\n\n(and not relying on deprecated features of the C++ Standard IMO doesn\u0027t carry any \"wtf factor\")",
+      "parentUuid": "3acd31a7_a80d4339",
+      "revId": "7097044d1a31838b0a3d06ecccabff61d2828071",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
