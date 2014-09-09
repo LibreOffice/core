@@ -361,8 +361,13 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     else if (rBackgroundFillStyle.mnThemedIdx != 0)
         if (const Theme* pTheme = rFilterBase.getCurrentTheme())
         {
-            aBgColor = pTheme->getFillStyle(rBackgroundFillStyle.mnThemedIdx)->getBestSolidColor();
-            nPhClr = rBackgroundFillStyle.maPhClr.getColor(rFilterBase.getGraphicHelper());
+            FillProperties const*const pStyle(
+                    pTheme->getFillStyle(rBackgroundFillStyle.mnThemedIdx));
+            if (pStyle)
+            {
+                aBgColor = pStyle->getBestSolidColor();
+                nPhClr = rBackgroundFillStyle.maPhClr.getColor(rFilterBase.getGraphicHelper());
+            }
         }
     if (aBgColor.isUsed())
     {
