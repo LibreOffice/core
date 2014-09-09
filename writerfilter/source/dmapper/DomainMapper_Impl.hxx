@@ -771,7 +771,7 @@ public:
     /// If we're inside <w:rPr>, inside <w:style w:type="table">
     bool m_bInTableStyleRunProps;
 
-    SdtHelper* m_pSdtHelper;
+    boost::shared_ptr<SdtHelper> m_pSdtHelper;
 
     /// Document background color, applied to every page style.
     boost::optional<sal_Int32> m_oBackgroundColor;

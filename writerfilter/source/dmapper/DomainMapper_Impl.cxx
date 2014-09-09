@@ -207,7 +207,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xInsertTextRange(xInsertTextRange),
         m_bIsNewDoc(bIsNewDoc),
         m_bInTableStyleRunProps(false),
-        m_pSdtHelper(0),
         m_nTableDepth(0),
         m_bHasFtnSep(false),
         m_bIgnoreNextPara(false),
@@ -233,7 +232,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).startLevel();
     m_bUsingEnhancedFields = officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get(m_xComponentContext);
 
-    m_pSdtHelper = new SdtHelper(*this);
+    m_pSdtHelper.reset(new SdtHelper(*this));
 
     m_aRedlines.push(std::vector<RedlineParamsPtr>());
 }
@@ -245,7 +244,6 @@ DomainMapper_Impl::~DomainMapper_Impl()
     RemoveLastParagraph( );
     getTableManager( ).endLevel();
     popTableManager( );
-    delete m_pSdtHelper;
 }
 
 
