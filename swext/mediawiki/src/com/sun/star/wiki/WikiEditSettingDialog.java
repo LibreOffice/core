@@ -233,13 +233,13 @@ public class WikiEditSettingDialog extends WikiDialog
                         //the URL is valid
                         String sMainURL = Helper.GetMainURL( sWebPage, sURL );
 
-                        if ( sMainURL.equals( "" ) )
+                        if ( sMainURL.length() == 0 )
                         {
                             // TODO:
                             // it's not a Wiki Page, check first whether a redirect is requested
                             // happens usually in case of https
                             sRedirectURL = Helper.GetRedirectURL( sWebPage, sURL );
-                            if ( sRedirectURL.equals( "" ) )
+                            if ( sRedirectURL.length() == 0 )
                             {
                                 // show error
                                 Helper.ShowError( m_xContext,
