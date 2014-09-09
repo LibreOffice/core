@@ -177,27 +177,6 @@ public:
     virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
 };
 
-class MozPluginTabPage : public SfxTabPage
-{
-    CheckBox* m_pWBasicCodeCB;
-
-    bool isInstalled(void);
-    bool installPlugin(void);
-    bool uninstallPlugin(void);
-
-    MozPluginTabPage( Window* pParent, const SfxItemSet& rSet );
-    virtual ~MozPluginTabPage();
-
-public:
-
-    static SfxTabPage*  Create( Window* pParent,
-                                const SfxItemSet* rAttrSet );
-
-    virtual bool        FillItemSet( SfxItemSet* rSet ) SAL_OVERRIDE;
-    virtual void        Reset( const SfxItemSet* rSet ) SAL_OVERRIDE;
-
-};
-
 struct SvxEMailTabPage_Impl;
 class SvxEMailTabPage : public SfxTabPage
 {

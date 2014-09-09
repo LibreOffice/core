@@ -332,7 +332,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
             program/configimport.bin \
             program/javaldx \
             program/msfontextract \
-            program/nsplugin \
             program/oosplash.bin \
             program/pagein \
             program/pagein-calc \
@@ -495,7 +494,7 @@ else
       fi &&
       ( cd pkg/libreoffice-common/$d
         find -maxdepth 1 \
-           -regex '\./\(.*\.so.*\|.*\.bin\|pagein\|nsplugin\|tdefilepicker\|kdefilepicker\|msfontextract\|.*\.rdb\|javaldx\|uri-encode\)' \
+           -regex '\./\(.*\.so.*\|.*\.bin\|pagein\|tdefilepicker\|kdefilepicker\|msfontextract\|.*\.rdb\|javaldx\|uri-encode\)' \
            -exec mv {} $DESTDIR/pkg/libreoffice-core/$d \;
       ); \
     done

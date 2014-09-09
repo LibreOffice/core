@@ -116,7 +116,6 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/optappearancepage \
 	cui/uiconfig/ui/optasianpage \
 	cui/uiconfig/ui/optbasicidepage \
-	cui/uiconfig/ui/optbrowserpage \
 	cui/uiconfig/ui/optctlpage \
 	cui/uiconfig/ui/optchartcolorspage \
 	cui/uiconfig/ui/optemailpage \

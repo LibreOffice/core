@@ -88,7 +88,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Script_Gengal,
 	gid_File_Bin_Uri_Encode,
 	gid_File_Bin_UIPreviewer,
-	gid_File_Exe_Nsplugin,
 	gid_File_Txt_Pagein_Common,
 	gid_File_Txt_Pagein_Calc,
 	gid_File_Txt_Pagein_Draw,

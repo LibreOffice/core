@@ -199,10 +199,4 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/uno/services \
 ))
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_exception_objects,cui,\
-    cui/source/dialogs/winpluginlib \
-))
-endif
-
 # vim: set noet sw=4 ts=4:
