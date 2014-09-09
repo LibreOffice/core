@@ -100,7 +100,7 @@ public class OfficeUtil implements OfficeConstants {
 
                 Element spaceNode = parentDoc.createElement(TAG_SPACE);
                 spaceNode.setAttribute(ATTRIBUTE_SPACE_COUNT,
-                                       Integer.valueOf(nrSpaces).toString());
+                                       Integer.toString(nrSpaces));
                 nodeVec.add(spaceNode);
                 text = text.substring(nrSpaces);
             }
