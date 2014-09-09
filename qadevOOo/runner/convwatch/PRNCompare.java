@@ -59,7 +59,7 @@ public class PRNCompare
                         int nValue = 0;
                         try
                         {
-                            nValue = Integer.valueOf(sValue).intValue();
+                            nValue = Integer.parseInt(sValue);
                         }
                         catch(java.lang.NumberFormatException e)
                         {
@@ -397,7 +397,7 @@ public class PRNCompare
                     sBack = sBack.substring(0, nIdx);
                 }
 
-                nResult = Integer.valueOf(sBack).intValue();
+                nResult = Integer.parseInt(sBack);
             }
             catch(java.lang.NumberFormatException e)
             {
