@@ -41,11 +41,11 @@ class SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;
 
-    SfxItemPool*                _pPool;         // der verwendete Pool
-    const SfxItemSet*           _pParent;       // Ableitung
-    SfxItemArray                _aItems;        // Item-Feld
-    sal_uInt16*                     _pWhichRanges;  // Array von Which-Bereichen
-    sal_uInt16                      _nCount;        // Anzahl Items
+    SfxItemPool*                _pPool;         // pool, which is used
+    const SfxItemSet*           _pParent;       // derivation
+    SfxItemArray                _aItems;        // field of items
+    sal_uInt16*                     _pWhichRanges;  // array of Which-areas
+    sal_uInt16                      _nCount;        // number of items
 
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
@@ -66,7 +66,6 @@ protected:
     // Notification-Callback
     virtual void                Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew );
 
-    // direkte Put-Methode
     int                         PutDirect(const SfxPoolItem &rItem);
 
 public:
@@ -80,7 +79,7 @@ public:
 
     virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = 0) const;
 
-    // Items erfragen
+    // Get number of items
     sal_uInt16                      Count() const { return _nCount; }
     sal_uInt16                      TotalCount() const;
 
@@ -88,10 +87,10 @@ public:
     const SfxPoolItem*          GetItem( sal_uInt16 nWhich, bool bSrchInParent = true,
                                          TypeId aItemType = 0 ) const;
 
-    // Which-Wert des Items an der Position nPos erfragen
+    // Get Which-value of the item at position nPos
     sal_uInt16                      GetWhichByPos(sal_uInt16 nPos) const;
 
-    // Item-Status erfragen
+    // Get item-status
     SfxItemState                GetItemState(   sal_uInt16 nWhich,
                                                 bool bSrchInParent = true,
                                                 const SfxPoolItem **ppItem = 0 ) const;
@@ -107,7 +106,7 @@ public:
 
     inline void                 SetParent( const SfxItemSet* pNew );
 
-    // Items hinzufuegen, loeschen etc.
+    // add, delete items, work on items
     virtual const SfxPoolItem*  Put( const SfxPoolItem&, sal_uInt16 nWhich );
     const SfxPoolItem*          Put( const SfxPoolItem& rItem )
                                 { return Put(rItem, rItem.Which()); }
@@ -146,9 +145,7 @@ inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
 
 class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 
-/*  versteht alle Ranges; werden durch das Putten der Items
-    automatisch angepasst
-*/
+//  Ranges are automatically modified by puting items
 
 {
     SfxVoidItem                 aDefault;
