@@ -232,9 +232,6 @@ Window::~Window()
                 "Window::~Window(): Window is in TrackingMode" );
     DBG_ASSERT( pSVData->maWinData.mpCaptureWin != this,
                 "Window::~Window(): Window has the mouse captured" );
-    // #103442# DefModalDialogParent is now determined on-the-fly, so this pointer is unimportant now
-    //DBG_ASSERT( pSVData->maWinData.mpDefDialogParent != this,
-    //            "Window::~Window(): Window is DefModalDialogParent" );
 
     // due to old compatibility
     if ( pSVData->maWinData.mpTrackWin == this )
