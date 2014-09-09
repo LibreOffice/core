@@ -153,7 +153,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCbShowDescription->Check( bCheck );
 
-        if( aState != SFX_ITEM_DEFAULT )
+        if( aState != SFX_ITEM_DEFAULT && aState != SFX_ITEM_SET)
             m_pCbShowDescription->Hide();
     }
 
