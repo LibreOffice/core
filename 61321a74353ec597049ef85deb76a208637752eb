@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_5279d42e",
+        "filename": "javaunohelper/com/sun/star/lib/uno/helper/InterfaceContainer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-09T18:39:23Z",
+      "side": 1,
+      "message": "This was meant to be \"conversely\"",
+      "revId": "61321a74353ec597049ef85deb76a208637752eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
