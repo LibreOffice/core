@@ -81,7 +81,7 @@ End
 
 Directory gid_Dir_Wizards
     Styles = (CREATE);
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Brand_Dir_Share;
 #else
     ParentID = gid_Brand_Dir_Program;
@@ -96,7 +96,7 @@ Directory gid_Dir_Wizards_Ui
 End
 
 Directory gid_Dir_Resource
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Brand_Dir_Share;
 #else
     ParentID = gid_Brand_Dir_Program;
@@ -105,7 +105,7 @@ Directory gid_Dir_Resource
 End
 
 Directory gid_Dir_Classes
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Brand_Dir_Share;
     DosName = "java";
 #else
@@ -124,10 +124,8 @@ End
 #endif
 
 Directory gid_Dir_User
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents_Resources;
-#elif defined MACOSX
-    ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Brand_Root;
 #endif
@@ -368,10 +366,8 @@ Directory gid_Dir_Share_Fingerprint
 End
 
 Directory gid_Dir_Help
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents_Resources;
-#elif defined MACOSX
-    ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Brand_Root;
 #endif
@@ -609,7 +605,7 @@ Directory gid_Dir_Template_Common_Presnt
 End
 
 Directory gid_Brand_Dir_Program_Services
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Brand_Dir_Share;
 #else
     ParentID = gid_Brand_Dir_Program;
@@ -618,7 +614,7 @@ Directory gid_Brand_Dir_Program_Services
 End
 
 Directory gid_Brand_Dir_Program_Types
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Brand_Dir_Share;
 #else
     ParentID = gid_Brand_Dir_Program;

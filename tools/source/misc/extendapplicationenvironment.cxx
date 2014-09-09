@@ -73,7 +73,7 @@ void extendApplicationEnvironment() {
             uri = uri.copy(0, lastDirSeperatorPos + 1);
         }
         env.append(rtl::Bootstrap::encode(uri));
-#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
         env.append("../" LIBO_SHARE_FOLDER "/");
 #endif
         env.append(SAL_CONFIGFILE("fundamental"));

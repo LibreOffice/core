@@ -38,8 +38,6 @@
 # That latter case is useful for libraries from external modules, where the
 # external build process locates them in some sub-directory.
 
-my $OLD = $ENV{ENABLE_MACOSX_MACLIKE_APP_STRUCTURE} ne 'TRUE';
-
 sub action($$$)
 {
     # The @__VIA_LIBRARY_PATH__ thing has no magic meaning anywhere
@@ -48,17 +46,17 @@ sub action($$$)
     # by the dynamic linker already in DYLD_LIBRARY_PATH.
 
     my %action =
-        ('app/UREBIN/URELIB' => ($OLD ? '@executable_path/../lib' : '@executable_path/../Frameworks'),
-         'app/OOO/URELIB' => ($OLD ? '@executable_path/../ure-link/lib' : '@executable_path/../Frameworks'),
-         'app/OOO/OOO' => ($OLD ? '@executable_path' : '@executable_path/../Frameworks'),
-         'app/SDKBIN/URELIB' => ($OLD ? '@executable_path/../../ure-link/lib' : '@executable_path/../Frameworks'),
+        ('app/UREBIN/URELIB' => '@executable_path/../Frameworks',
+         'app/OOO/URELIB' => '@executable_path/../Frameworks',
+         'app/OOO/OOO' => '@executable_path/../Frameworks',
+         'app/SDKBIN/URELIB' => '@executable_path/../Frameworks',
          'app/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'app/NONE/NONE' => '@__VIA_LIBRARY_PATH__',
          'shl/URELIB/URELIB' => '@loader_path',
-         'shl/OOO/URELIB' => ($OLD ? '@loader_path/../ure-link/lib' : '@loader_path'),
+         'shl/OOO/URELIB' => '@loader_path',
          'shl/OOO/OOO' => '@loader_path',
-         'shl/OXT/URELIB' => ($OLD ? '@executable_path/urelibs' : '@executable_path/../Frameworks'),
+         'shl/OXT/URELIB' => '@executable_path/../Frameworks',
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/NONE' => '@loader_path');

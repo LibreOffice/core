@@ -1361,13 +1361,6 @@ AC_ARG_ENABLE(macosx-sandbox,
          adherence to App Store rules.]),
 ,)
 
-AC_ARG_ENABLE(canonical-installation-tree-structure,
-    AS_HELP_STRING([--enable-canonical-installation-tree-structure],
-        [Make the installation tree structure be more canonical for
-         the platform. Implemented only for OS X. Experimental.]),
-,)
-
-
 AC_ARG_WITH(macosx-bundle-identifier,
     AS_HELP_STRING([--with-macosx-bundle-identifier=tld.mumble.orifice.TheOffice],
         [Define the OS X bundle identifier. Default is the somewhat weird
@@ -3208,7 +3201,7 @@ dnl ===================================================================
 dnl Structure of install set
 dnl ===================================================================
 
-if test $_os = Darwin -a "$enable_canonical_installation_tree_structure" = yes; then
+if test $_os = Darwin; then
     LIBO_BIN_FOLDER=MacOS
     LIBO_ETC_FOLDER=Resources
     LIBO_LIBEXEC_FOLDER=MacOS
@@ -3225,25 +3218,6 @@ if test $_os = Darwin -a "$enable_canonical_installation_tree_structure" = yes; 
     LIBO_URE_LIB_FOLDER=Frameworks
     LIBO_URE_SHARE_FOLDER=Resources/ure/share
     LIBO_URE_SHARE_JAVA_FOLDER=Resources/java
-    ENABLE_MACOSX_MACLIKE_APP_STRUCTURE=TRUE
-    AC_DEFINE(HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE)
-elif test $_os = Darwin; then
-    LIBO_BIN_FOLDER=MacOS
-    LIBO_ETC_FOLDER=MacOS
-    LIBO_LIBEXEC_FOLDER=MacOS
-    LIBO_LIB_FOLDER=MacOS
-    LIBO_LIB_PYUNO_FOLDER=MacOS
-    LIBO_SHARE_FOLDER=share
-    LIBO_SHARE_HELP_FOLDER=help
-    LIBO_SHARE_JAVA_FOLDER=MacOS/classes
-    LIBO_SHARE_PRESETS_FOLDER=presets
-    LIBO_SHARE_RESOURCE_FOLDER=MacOS/resource
-    LIBO_SHARE_SHELL_FOLDER=MacOS/shell
-    LIBO_URE_BIN_FOLDER=ure-link/bin
-    LIBO_URE_ETC_FOLDER=ure-link/lib
-    LIBO_URE_LIB_FOLDER=ure-link/lib
-    LIBO_URE_SHARE_FOLDER=ure-link/share
-    LIBO_URE_SHARE_JAVA_FOLDER=ure-link/share/java
 elif test $_os = WINNT; then
     LIBO_BIN_FOLDER=program
     LIBO_ETC_FOLDER=program
@@ -3311,7 +3285,6 @@ AC_SUBST(LIBO_URE_ETC_FOLDER)
 AC_SUBST(LIBO_URE_LIB_FOLDER)
 AC_SUBST(LIBO_URE_SHARE_FOLDER)
 AC_SUBST(LIBO_URE_SHARE_JAVA_FOLDER)
-AC_SUBST(ENABLE_MACOSX_MACLIKE_APP_STRUCTURE)
 
 dnl ===================================================================
 dnl Windows specific tests and stuff

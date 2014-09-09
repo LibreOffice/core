@@ -149,6 +149,9 @@ static sal_Int32 readLogLevelFromConfiguration()
     osl_getModuleURLFromAddress(
         (void*) readLogLevelFromConfiguration, (rtl_uString **) &fileName );
     fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 );
+#ifdef MACOSX
+    fileName += "../Resources/";
+#endif
     fileName += "postgresql-sdbc.ini";
     rtl::Bootstrap bootstrapHandle( fileName );
 

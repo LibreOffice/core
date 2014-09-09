@@ -160,7 +160,7 @@ namespace
            static OUString sIni;
             OUStringBuffer buf( 255);
             buf.append( getLibraryLocation());
-#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
             buf.appendAscii( "/../" LIBO_ETC_FOLDER );
 #endif
             buf.appendAscii( SAL_CONFIGFILE("/sunjavaplugin") );
@@ -385,7 +385,8 @@ bool getJavaProps(const OUString & exePath,
     OUString usStartDir;
     //We need to set the CLASSPATH in case the office is started from
     //a different directory. The JREProperties.class is expected to reside
-    //next to the plugin.
+    //next to the plugin, except on OS X where it is in ../Resources/java relative
+    //to the plugin.
     OUString sThisLib;
     if (osl_getModuleURLFromAddress((void *) (sal_IntPtr)& getJavaProps,
                                     & sThisLib.pData) == sal_False)
@@ -395,6 +396,13 @@ bool getJavaProps(const OUString & exePath,
     if (osl_getSystemPathFromFileURL(sThisLib.pData, & sClassPath.pData)
         != osl_File_E_None)
         return false;
+
+#ifdef MACOSX
+    if (sClassPath.endsWith("/"))
+        sClassPath += "../Resources/java/";
+    else
+        sClassPath += "/../Resources/java";
+#endif
 
     //check if we shall examine a Java for accessibility support
     //If the bootstrap variable is "1" then we pass the argument

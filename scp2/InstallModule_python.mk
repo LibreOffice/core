@@ -31,7 +31,6 @@ endif
 else
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/python,\
-	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
 	ENABLE_MACOSX_SANDBOX \
 ))
 

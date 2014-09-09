@@ -106,8 +106,8 @@ public final class NativeLibraryLoader {
                             if (path.exists()) {
                                 return path;
                             }
-                            // In case of ENABLE_MACOSX_MACLIKE_APP_STRUCTURE,
-                            // dir is now the Resources dir, we want to look in Frameworks
+                            // On OS X, dir is now the Resources dir,
+                            // we want to look in Frameworks
                             if (System.getProperty("os.name").startsWith("Mac")
                                 && dir.getName().equals("Resources")) {
                                 dir = dir.getParentFile();

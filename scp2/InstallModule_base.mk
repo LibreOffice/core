@@ -15,7 +15,6 @@ $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/base,\
 ))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/base,\
-	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
 	ENABLE_MACOSX_SANDBOX \
 	ENABLE_FIREBIRD_SDBC \
 	SYSTEM_FIREBIRD \

@@ -43,7 +43,7 @@ End
 
 #ifndef SYSTEM_PYTHON
 
-#if !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if !defined MACOSX
 File gid_File_Py_Bin_Python
     BIN_FILE_BODY;
 #ifdef WNT

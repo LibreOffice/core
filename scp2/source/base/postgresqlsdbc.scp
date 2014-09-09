@@ -28,7 +28,7 @@ End
 
 File gid_File_PostgresqlSdbc_Ini
     TXT_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
+    Dir = GID_BRAND_DIR_ETC;
     Name = "postgresql-sdbc.ini";
     Styles = (PACKED);
 End

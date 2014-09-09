@@ -275,7 +275,7 @@ static OUString & getIniFileName_Impl()
             // append config file suffix
             fileName += OUString(SAL_CONFIGFILE(""));
 
-#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
             // We keep only executables in the MacOS folder, and all
             // rc files in LIBO_ETC_FOLDER (typically "Resources").
             sal_Int32 p = fileName.lastIndexOf( "/MacOS/" );

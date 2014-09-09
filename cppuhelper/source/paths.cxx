@@ -71,7 +71,7 @@ rtl::OUString cppu::getUnoIniUri() {
     rtl::OUString uri("file:///assets/program");
 #else
     rtl::OUString uri(get_this_libpath());
-#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
     // We keep both the LO and URE dylibs direcly in "Frameworks"
     // (that is, LIBO_LIB_FOLDER) and rc files in "Resources"
     // (LIBO_ETC_FOLDER). Except for unorc, of which there are two,

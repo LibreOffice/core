@@ -264,7 +264,7 @@ static PyObject* getComponentContext(
 
             OUStringBuffer iniFileName;
             iniFileName.append( path );
-#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
             iniFileName.appendAscii( "/../" LIBO_ETC_FOLDER );
 #endif
             iniFileName.appendAscii( "/" );

@@ -187,7 +187,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
         (rtl_uString **) &fileName );
     fileName = fileName.copy( fileName.lastIndexOf( '/' )+1 );
-#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
     fileName += "../" LIBO_ETC_FOLDER "/";
 #endif
     fileName += SAL_CONFIGFILE("pyuno" );

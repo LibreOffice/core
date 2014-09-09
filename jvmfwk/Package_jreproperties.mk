@@ -9,6 +9,6 @@
 
 $(eval $(call gb_Package_Package,jvmfwk_jreproperties,$(call gb_CustomTarget_get_workdir,jvmfwk/jreproperties)))
 
-$(eval $(call gb_Package_add_file,jvmfwk_jreproperties,$(LIBO_URE_LIB_FOLDER)/JREProperties.class,JREProperties.class))
+$(eval $(call gb_Package_add_file,jvmfwk_jreproperties,$(if $(filter MACOSX,$(OS)),$(LIBO_URE_SHARE_JAVA_FOLDER),$(LIBO_URE_LIB_FOLDER))/JREProperties.class,JREProperties.class))
 
 # vim:set noet sw=4 ts=4:

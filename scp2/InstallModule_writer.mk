@@ -12,7 +12,6 @@ $(eval $(call gb_InstallModule_InstallModule,scp2/writer))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/writer,writer))
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/writer,\
-	ENABLE_MACOSX_MACLIKE_APP_STRUCTURE \
 	ENABLE_MACOSX_SANDBOX \
 ))
 

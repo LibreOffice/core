@@ -50,7 +50,7 @@ struct Bootstrap :
         const rtl::Bootstrap * operator () () {
             OUStringBuffer buf(256);
             buf.append(getLibraryLocation());
-#if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
             // For some reason the jvmfwk3rc file is traditionally in
             // "ure/lib", i.e.  in LIBO_URE_ETC_FOLDER
             buf.appendAscii( "/../" LIBO_URE_ETC_FOLDER );

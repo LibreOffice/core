@@ -38,10 +38,8 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonhome
     Section = "Bootstrap";
     Order = 1;
     Key = "PYUNO_LOADER_PYTHONHOME";
-  #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+  #if defined MACOSX
     Value = "$ORIGIN/../Frameworks/LibreOfficePython.framework";
-  #elif defined MACOSX
-    Value = "$ORIGIN/LibreOfficePython.framework";
   #else
     Value = CONCAT2($ORIGIN/python-core-,PYVERSION);
   #endif
@@ -56,14 +54,8 @@ ProfileItem gid_Profileitem_Pythonloader_Pythonpath
     Key = "PYUNO_LOADER_PYTHONPATH";
   #if defined SYSTEM_PYTHON
     Value = "$ORIGIN";
-  #elif defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-    #define FRAMEWORKLIB CONCAT2($ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python,PYMAJMIN)
-    Value = CONCAT4(FRAMEWORKLIB FRAMEWORKLIB,
-		   /lib-dynload FRAMEWORKLIB,
-		   /lib-tk FRAMEWORKLIB,
-		   /site-packages $ORIGIN);
   #elif defined MACOSX
-    #define FRAMEWORKLIB CONCAT2($ORIGIN/LibreOfficePython.framework/Versions/Current/lib/python,PYMAJMIN)
+    #define FRAMEWORKLIB CONCAT2($ORIGIN/../Frameworks/LibreOfficePython.framework/Versions/Current/lib/python,PYMAJMIN)
     Value = CONCAT4(FRAMEWORKLIB FRAMEWORKLIB,
 		   /lib-dynload FRAMEWORKLIB,
 		   /lib-tk FRAMEWORKLIB,

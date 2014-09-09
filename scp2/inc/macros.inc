@@ -75,7 +75,7 @@
     #define SPECIAL_COMPONENT_LIB_NAME(name)  STRING(CONCAT2(name,.dll))
 #endif
 
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
     #define GID_BRAND_DIR_ETC gid_Brand_Dir_Share
     #define GID_DIR_PY gid_Brand_Dir_Share
     #define GID_DIR_URE gid_Dir_Bundle_Contents
@@ -102,7 +102,7 @@
 
 #define SCP2_OOO_BIN_DIR gid_Brand_Dir_Program
 
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#ifdef MACOSX
     #define SCP2_OOO_LIB_DIR gid_Dir_Frameworks
 #else
     #define SCP2_OOO_LIB_DIR SCP2_OOO_BIN_DIR

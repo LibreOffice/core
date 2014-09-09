@@ -8,8 +8,6 @@
         <false/>
         <key>^MacOS/pythonloader.unorc$</key>
         <false/>
-        <key>^MacOS/postgresql-sdbc.ini$</key>
-        <false/>
         <key>^MacOS/(senddoc|python|gengal|unoinfo)$</key>
         <false/>
         <key>.*\.(png|svg|py|res|rdb)$</key>

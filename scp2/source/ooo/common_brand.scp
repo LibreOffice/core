@@ -90,10 +90,6 @@ Module gid_Module_Root_Brand
 	     git_License_Odt,
 	     gid_Credits_Odt,
 	     gid_Apache_Notice);
-#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-    Unixlinks = (gid_Brand_Unixlink_Program,
-                 gid_Brand_Unixlink_Unopkg);
-#endif
 End
 
 // Language specific brand module
@@ -125,7 +121,7 @@ Directory gid_Brand_Dir_Program
 End
 
 Directory gid_Brand_Dir_Program_Shell
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Brand_Dir_Share;
 #else
     ParentID = gid_Brand_Dir_Program;
@@ -134,10 +130,8 @@ Directory gid_Brand_Dir_Program_Shell
 End
 
 Directory gid_Brand_Dir_Readme
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     ParentID = gid_Dir_Bundle_Contents_Resources;
-#elif defined MACOSX
-    ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Brand_Root;
 #endif
@@ -446,7 +440,7 @@ Directory gid_Brand_Dir_Share_Labels
     DosName = "labels";
 End
 
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
 
 Directory gid_Brand_Dir_Share_Ure
     ParentID = gid_Brand_Dir_Share;
@@ -472,26 +466,12 @@ Directory gid_Brand_Dir_Share_Xdg
 End
 #endif
 
-// UnixLinks
-
-#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-Unixlink gid_Brand_Unixlink_Program
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Bundle_Contents;
-    Name = "program";
-    Target = "MacOS";
-    Styles = ();
-End
-#endif
-
 // Files
 
 File gid_Brand_File_Html_Thirdpartylicensereadme
     Name = "LICENSE.html";
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     Dir = gid_Dir_Bundle_Contents_Resources;
-#elif defined MACOSX
-    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
@@ -560,7 +540,7 @@ File gid_Brand_File_Desktophelper_Txt
 End
 #endif
 
-#if !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if !defined MACOSX
 File gid_Brand_File_Bin_Unoinfo
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
@@ -593,16 +573,6 @@ File gid_Brand_File_Script_Unopkg
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "unopkg";
-End
-#endif
-
-#if defined MACOSX && !defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-Unixlink gid_Brand_Unixlink_Unopkg
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = "unopkg";
-    Target = "unopkg.bin";
-    Styles = ();
 End
 #endif
 
@@ -1386,10 +1356,8 @@ End
 
 File gid_License_Txt
   TXT_FILE_BODY;
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     Dir = gid_Dir_Bundle_Contents_Resources;
-#elif defined MACOSX
-    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
@@ -1404,10 +1372,8 @@ End
 
 File gid_License_Odt
     BIN_FILE_BODY;
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     Dir = gid_Dir_Bundle_Contents_Resources;
-#elif defined MACOSX
-    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
@@ -1417,10 +1383,8 @@ End
 
 File gid_Credits_Odt
     BIN_FILE_BODY;
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     Dir = gid_Dir_Bundle_Contents_Resources;
-#elif defined MACOSX
-    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
@@ -1430,10 +1394,8 @@ End
 
 File gid_Apache_Notice
     BIN_FILE_BODY;
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
+#if defined MACOSX
     Dir = gid_Dir_Bundle_Contents_Resources;
-#elif defined MACOSX
-    Dir = gid_Dir_Bundle_Contents;
 #else
     Dir = gid_Dir_Brand_Root;
 #endif
