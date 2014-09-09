@@ -569,7 +569,25 @@ void SalDisplay::Init()
     }
     if( bExactResolution == false )
     {
-        aResolution_ = Pair( 96, 96 );
+        /*  if Xft.dpi is not set, try and find the DPI from the
+         *  reported screen sizes and resolution. If there are multiple
+         *  screens, just fall back to the default 96x96
+         */
+        long xDPI = 96;
+        long yDPI = 96;
+        if (m_aScreens.size() == 1) {
+            xDPI = (long)round(DisplayWidth(pDisp_, 0)*25.4/DisplayWidthMM(pDisp_, 0));
+            yDPI = (long)round(DisplayHeight(pDisp_, 0)*25.4/DisplayHeightMM(pDisp_, 0));
+            // if either is invalid set it equal to the other
+            if (!sal_ValidDPI(xDPI) && sal_ValidDPI(yDPI))
+                xDPI = yDPI;
+            if (!sal_ValidDPI(yDPI) && sal_ValidDPI(xDPI))
+                yDPI = xDPI;
+            // if both are invalid, reset them to the default
+            if (!sal_ValidDPI(xDPI) && !sal_ValidDPI(yDPI))
+                xDPI = yDPI = 96;
+        }
+        aResolution_ = Pair( xDPI, yDPI );
     }
 
     nMaxRequestSize_    = XExtendedMaxRequestSize( pDisp_ ) * 4;
