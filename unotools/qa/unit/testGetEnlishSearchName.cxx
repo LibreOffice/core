@@ -37,25 +37,37 @@ void Test::testSingleElement()
     {   //lowercase
         printf("GetEnglishSearchFontName( \"SYMBOL\" )");
         OUString test1 = GetEnglishSearchFontName( "SYMBOL" );
-        CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
+        CPPUNIT_ASSERT_EQUAL( OUString("symbol"),test1);
         printf("return %s",test1.getStr());
         //trailingWhitespaces
         printf("GetEnglishSearchFontName( \"SYMBOL    \" )");
         test1 = GetEnglishSearchFontName( "Symbol    " );
-        CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
+        CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
         printf("return %s",test1.getStr());
         //removing Skripts
         printf("GetEnglishSearchFontName( \"SYMBOL(skript)\" )");
         test1 = GetEnglishSearchFontName( "Symbol(skript)" );
-        CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
+        CPPUNIT_ASSERT_EQUAL(OUString("symbol"),test1);
         printf("return %s",test1.getStr());
         //remove Whitespaces between
         printf("GetEnglishSearchFontName( \"SYMBOL (skript)\" )");
         test1 = GetEnglishSearchFontName( "Symbol (skript)" );
-        CPPUNIT_ASSERT_EQUAL(test1, OUString("symbol"));
+        CPPUNIT_ASSERT_EQUAL( OUString("symbol"),test1);
         printf("return %s",test1.getStr());
-        //trailingWhitespaces
+        //remove special characters; leave semicolon, numbers
+        printf("GetEnglishSearchFontName( \"sy;mb?=ol129\" )");
+        test1 = GetEnglishSearchFontName( "sy;mb?=ol129" );
+        CPPUNIT_ASSERT_EQUAL( OUString("sy;mbol129"),test1);
+        printf("return %s",test1.getStr());
 
+        //transformation
+
+        sal_Unicode const transfor[] ={ 0x30D2, 0x30E9, 0x30AE, 0x30CE, 0x4E38, 0x30B4, 'p','r','o','n',0};
+
+        printf("GetEnglishSearchFontName( { 0xBC14, 0xD0D5, 0, 0 } )");
+        test1 = GetEnglishSearchFontName(transfor );
+        CPPUNIT_ASSERT_EQUAL( OUString("hiraginomarugothicpron"),test1);
+        printf("return %s",test1.getStr());
     }
 
 

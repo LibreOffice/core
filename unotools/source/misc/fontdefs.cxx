@@ -426,7 +426,7 @@ OUString GetEnglishSearchFontName( const OUString& rInName )
 
         FontNameDictionary::const_iterator it = aDictionary.find( rNameStr );
         if( it != aDictionary.end() )
-            rName = OUString::createFromAscii ( it->second );
+            rNameStr = OUString::createFromAscii ( it->second );
     }
 
     return rNameStr;
