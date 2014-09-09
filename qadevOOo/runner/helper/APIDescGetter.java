@@ -75,13 +75,13 @@ public class APIDescGetter extends DescGetter
         {
             job = job.substring(3, job.length()).trim();
 
-            if (job.indexOf(".") < 0)
+            if (job.indexOf('.') < 0)
             {
                 return null;
             }
 
             // special in case several Interfaces are given comma separated
-            if (job.indexOf(",") < 0)
+            if (job.indexOf(',') < 0)
             {
                 DescEntry entry = getDescriptionForSingleJob(job, descPath,
                         debug);
@@ -101,7 +101,7 @@ public class APIDescGetter extends DescGetter
             else
             {
                 ArrayList<String> subs = getSubInterfaces(job);
-                String partjob = job.substring(0, job.indexOf(",")).trim();
+                String partjob = job.substring(0, job.indexOf(',')).trim();
                 DescEntry entry = getDescriptionForSingleJob(partjob, descPath,
                         debug);
 
@@ -345,7 +345,7 @@ public class APIDescGetter extends DescGetter
                     if (ifc_name.indexOf("#optional") > 0)
                     {
                         ifcDesc.isOptional = true;
-                        ifc_name = ifc_name.substring(0, ifc_name.indexOf("#"));
+                        ifc_name = ifc_name.substring(0, ifc_name.indexOf('#'));
                     }
 
                     String className = createClassName(ifc_name);
@@ -430,7 +430,7 @@ public class APIDescGetter extends DescGetter
         if (meth_name.indexOf("#optional") > 0)
         {
             methDesc.isOptional = true;
-            meth_name = meth_name.substring(0, meth_name.indexOf("#"));
+            meth_name = meth_name.substring(0, meth_name.indexOf('#'));
         }
 
         if (meth_name.endsWith("()"))
@@ -452,7 +452,7 @@ public class APIDescGetter extends DescGetter
 
         if (ifc_name.indexOf("#optional") > 0)
         {
-            withoutHash = ifc_name.substring(0, ifc_name.indexOf("#"));
+            withoutHash = ifc_name.substring(0, ifc_name.indexOf('#'));
         }
 
         methDesc.longName = parent.entryName + "::" + withoutHash + "::" + meth_name;
@@ -728,7 +728,7 @@ public class APIDescGetter extends DescGetter
         {
             String token = st.nextToken();
 
-            if (token.indexOf(".") < 0)
+            if (token.indexOf('.') < 0)
             {
                 namesList.add(token);
             }
@@ -870,8 +870,8 @@ public class APIDescGetter extends DescGetter
                             (entry.indexOf("CVS") < 0) &&
                             !entry.endsWith("/"))
                     {
-                        int startMod = entry.indexOf("/");
-                        int endMod = entry.lastIndexOf("/");
+                        int startMod = entry.indexOf('/');
+                        int endMod = entry.lastIndexOf('/');
                         String module = entry.substring(startMod + 1, endMod);
                         String component = getComponentForString(
                                 entry.substring(endMod + 1,
@@ -912,13 +912,13 @@ public class APIDescGetter extends DescGetter
         full = full.substring(0, full.length() - 4);
 
         //cutting component
-        int lastdot = full.lastIndexOf(".");
+        int lastdot = full.lastIndexOf('.');
         component = full.substring(lastdot + 1, full.length());
 
         if (module.equals("file") || module.equals("xmloff"))
         {
             String withoutComponent = full.substring(0, lastdot);
-            int preLastDot = withoutComponent.lastIndexOf(".");
+            int preLastDot = withoutComponent.lastIndexOf('.');
             component = withoutComponent.substring(preLastDot + 1,
                     withoutComponent.length()) +
                     "." + component;

@@ -86,7 +86,7 @@ public class FileHelper
     public static String getNameNoSuffix(String _sFilename)
         {
             if (_sFilename == null) return "";
-            int nIdx = _sFilename.lastIndexOf(".");
+            int nIdx = _sFilename.lastIndexOf('.');
             if (nIdx > 0)
             {
                 return _sFilename.substring(0, nIdx);
@@ -97,7 +97,7 @@ public class FileHelper
     public static String getSuffix(String _sFilename)
         {
             if (_sFilename == null) return "";
-            int nIdx = _sFilename.lastIndexOf(".");
+            int nIdx = _sFilename.lastIndexOf('.');
             if (nIdx > 0)
             {
                 return _sFilename.substring(nIdx );

@@ -119,10 +119,10 @@ public abstract class ComplexTestCase extends Assurance implements ComplexTest
                 String entryName = subEntry.entryName;
                 Object[] parameter = null;
 
-                int posLeftParenthesis = entryName.indexOf("(");
+                int posLeftParenthesis = entryName.indexOf('(');
                 if (posLeftParenthesis != -1)
                 {
-                    String sParameter = (entryName.substring(posLeftParenthesis + 1, entryName.indexOf(")")));
+                    String sParameter = (entryName.substring(posLeftParenthesis + 1, entryName.indexOf(')')));
                     mTestMethodName = entryName;
                     parameter = new String[] { sParameter };
                     entryName = entryName.substring(0, posLeftParenthesis);

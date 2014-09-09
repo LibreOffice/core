@@ -240,7 +240,7 @@ public class IniFile implements Enumeration<String>
                     break;
                 }
 
-                int nEqual = sLine.indexOf("=");
+                int nEqual = sLine.indexOf('=');
                 if (nEqual >= 0)
                 {
                     String sKey = toLowerIfNeed(sLine.substring(0, nEqual).trim());
@@ -273,7 +273,7 @@ public class IniFile implements Enumeration<String>
                     return j;
                 }
 
-                int nEqual = sLine.indexOf("=");
+                int nEqual = sLine.indexOf('=');
                 if (nEqual >= 0)
                 {
                     String sKey = toLowerIfNeed(sLine.substring(0, nEqual).trim());
@@ -293,7 +293,7 @@ public class IniFile implements Enumeration<String>
             {
                 return "";
             }
-            int nEqual = sLine.indexOf("=");
+            int nEqual = sLine.indexOf('=');
             if (nEqual >= 0)
             {
                 String sValue = sLine.substring(nEqual + 1).trim();

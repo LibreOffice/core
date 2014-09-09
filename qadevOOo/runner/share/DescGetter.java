@@ -69,7 +69,7 @@ public abstract class DescGetter
                     String job = line.substring(3, line.length()).trim();
                     DescEntry aEntry;
                     // special in case several Interfaces are given comma separated
-                    if (job.indexOf(",") < 0)
+                    if (job.indexOf(',') < 0)
                     {
                         aEntry = getDescriptionForSingleJob(job, descPath,
                                 debug);
@@ -77,7 +77,7 @@ public abstract class DescGetter
                     else
                     {
                         ArrayList<String> subs = getSubInterfaces(job);
-                        String partjob = job.substring(0, job.indexOf(",")).trim();
+                        String partjob = job.substring(0, job.indexOf(',')).trim();
                         aEntry = getDescriptionForSingleJob(partjob, descPath,
                                 debug);
 
@@ -172,7 +172,7 @@ public abstract class DescGetter
         {
             String token = st.nextToken();
 
-            if (token.indexOf(".") < 0)
+            if (token.indexOf('.') < 0)
             {
                 namesList.add(token);
             }

@@ -29,7 +29,7 @@ public class BuildID
         // TODO: StringHelper.removeQuote?
         if (_sApp.startsWith("\""))
         {
-            int nIdx = _sApp.indexOf("\"", 1);
+            int nIdx = _sApp.indexOf('"', 1);
             if (nIdx != -1)
             {
                 // leave double qoute out.
@@ -42,7 +42,7 @@ public class BuildID
             if (! (_sApp.endsWith("soffice.exe") || _sApp.endsWith("soffice")))
             {
                 // check if a space exist, so we get all until space
-                int nIdx = _sApp.indexOf(" ", 1);
+                int nIdx = _sApp.indexOf(' ', 1);
                 if (nIdx == -1)
                 {
                     sOfficePath = _sApp;

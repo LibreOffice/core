@@ -28,7 +28,7 @@ public class BuildID
             String sOfficePath = "";
             if (_sApp.startsWith("\""))
             {
-                int nIdx = _sApp.indexOf("\"", 1);
+                int nIdx = _sApp.indexOf('"', 1);
                 if (nIdx == -1)
                 {
                 }
@@ -41,7 +41,7 @@ public class BuildID
             else
             {
                 // check if a space exist, so we get all until space
-                int nIdx = _sApp.indexOf(" ", 1);
+                int nIdx = _sApp.indexOf(' ', 1);
                 if (nIdx == -1)
                 {
                     sOfficePath = _sApp;

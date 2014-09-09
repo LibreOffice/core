@@ -154,7 +154,7 @@ public class RegistryTools {
     */
     private static String getShortKeyName(String keyName) {
         if (keyName == null) return null ;
-        int idx = keyName.lastIndexOf("/") ;
+        int idx = keyName.lastIndexOf('/') ;
         if (idx < 0) return keyName ;
         else return keyName.substring(idx + 1) ;
     }

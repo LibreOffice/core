@@ -69,7 +69,7 @@ public class OutProducerFactory {
         String dataProducerName = (String)param.get("DataBaseOutProducer");
         if (dataProducerName == null) {
             String testBaseName = (String)param.get("TestBase");
-            dataProducerName = testBaseName.substring(testBaseName.indexOf("_")+1);
+            dataProducerName = testBaseName.substring(testBaseName.indexOf('_')+1);
             dataProducerName = "stats." + makeFirstCharUpperCase(dataProducerName)
                             + "DataBaseOutProducer";
         }
