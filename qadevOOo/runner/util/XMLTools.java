@@ -377,7 +377,7 @@ public class XMLTools {
             super.startElement(name, attrs) ;
             if (tags.containsKey(name)) {
                 String outerTag = tags.get(name);
-                if (!outerTag.equals("")) {
+                if (outerTag.length() != 0) {
                     boolean isInTag = false ;
                     for (int i = 0; i < tagStack.size(); i++) {
                         if (outerTag.equals(tagStack.get(i))) {
@@ -401,7 +401,7 @@ public class XMLTools {
 
             if (chars.containsKey(ch)) {
                 String outerTag = chars.get(ch);
-                if (!outerTag.equals("")) {
+                if (outerTag.length() != 0) {
                     boolean isInTag = false ;
                     for (int i = 0; i < tagStack.size(); i++) {
                         if (outerTag.equals(tagStack.get(i))) {
