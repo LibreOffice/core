@@ -203,7 +203,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                       "AIF Audio", "aif;aiff",
                                       "Advanced Systems", "asf",
                                       "AU Audio", "au",
-                                      "Audio Codec", "ac3",
+                                      "AC3 Audio", "ac3",
                                       "AVI", "avi",
                                       "CD Audio", "cda",
                                       "Digital Video", "dv",
