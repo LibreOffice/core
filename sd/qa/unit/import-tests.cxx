@@ -25,6 +25,7 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdotable.hxx>
 #include <svx/xflclit.hxx>
 #include <animations/animationnodehelper.hxx>
 #include <sax/tools/converter.hxx>
@@ -65,6 +66,7 @@ public:
     void testBnc870233_2();
     void testBnc880763();
     void testBnc862510_5();
+    void testBnc480256();
     void testCreationDate();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
@@ -82,6 +84,7 @@ public:
     CPPUNIT_TEST(testBnc870233_2);
     CPPUNIT_TEST(testBnc880763);
     CPPUNIT_TEST(testBnc862510_5);
+    CPPUNIT_TEST(testBnc480256);
     CPPUNIT_TEST(testCreationDate);
 
     CPPUNIT_TEST_SUITE_END();
@@ -627,6 +630,52 @@ void SdFiltersTest::testBnc862510_5()
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextLowerDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LOWERDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(7510), (static_cast< const SdrTextRightDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_RIGHTDIST))).GetValue());
     CPPUNIT_ASSERT_EQUAL( sal_Int32(0), (static_cast< const SdrTextLeftDistItem& >(pObj->GetMergedItem(SDRATTR_TEXT_LEFTDIST))).GetValue());
+
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testBnc480256()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc480256.pptx"));
+    // In the document, there are two tables with table background properties.
+    // Make sure colors are set properly for individual cells.
+
+    // TODO: If you are working on improving table background support, expect
+    // this unit test to fail. In that case, feel free to change the numbers.
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = pDoc->GetPage(1);
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+
+    sdr::table::SdrTableObj *pTableObj;
+    uno::Reference< table::XCellRange > xTable;
+    uno::Reference< beans::XPropertySet > xCell;
+    sal_Int32 nColor;
+
+    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT( pTableObj );
+    xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10208238), nColor);
+
+    xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(13032959), nColor);
+
+    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(1));
+    CPPUNIT_ASSERT( pTableObj );
+    xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7056614), nColor);
+
+    xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("FillColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4626400), nColor);
 
     xDocShRef->DoClose();
 }
