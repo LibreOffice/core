@@ -246,8 +246,15 @@ sub make_path_absolute
             if (!($$pathref =~ /^\s*\w\:/)) # this is a relative windows path (no dos drive)
             {
                 $$pathref = cwd() . $installer::globals::separator . $$pathref;
+                if ( $installer::globals::isos2 )
+                {
+                    $$pathref =~ s/\\/\//g;
+                }
+                else
+                {
+                    $$pathref =~ s/\//\\/g;
+                }
 
-                $$pathref =~ s/\//\\/g;
             }
         }
     }
@@ -376,6 +383,7 @@ sub setglobalvariables
     {
         $installer::globals::unpackpath = cwd();
         if ( $installer::globals::iswin ) { $installer::globals::unpackpath =~ s/\//\\/g; }
+        if ( $installer::globals::isos2 ) { $installer::globals::unpackpath =~ s/\\/\//g; }
     }
 
     if ( $installer::globals::localunpackdir ne "" ) { $installer::globals::unpackpath = $installer::globals::localunpackdir; }

@@ -499,7 +499,7 @@ BEGIN
         $checksumfile = "so_checksum";
         $unopkgfile = "unopkg.bin";
         $separator = "/";
-        $pathseparator = "\:";
+        $pathseparator = "\;";
         $libextension = "\.dll";
         $isunix = 0;
         $iswin = 0;
