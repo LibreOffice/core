@@ -26,6 +26,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <oox/core/filterbase.hxx>
+#include <oox/helper/containerhelper.hxx>
 #include "biffinputstream.hxx"
 
 namespace oox {
@@ -69,9 +70,14 @@ const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 
 CellAddress ApiCellRangeList::getBaseAddress() const
 {
-    if( empty() )
+    if( mvAddresses.empty() )
         return CellAddress();
-    return CellAddress( front().Sheet, front().StartColumn, front().StartRow );
+    return CellAddress( mvAddresses.front().Sheet, mvAddresses.front().StartColumn, mvAddresses.front().StartRow );
+}
+
+com::sun::star::uno::Sequence< CellRangeAddress > ApiCellRangeList::toSequence() const
+{
+    return ContainerHelper::vectorToSequence( mvAddresses );
 }
 
 void BinAddress::read( SequenceInputStream& rStrm )
