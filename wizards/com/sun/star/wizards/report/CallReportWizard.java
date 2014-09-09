@@ -27,142 +27,181 @@ import com.sun.star.wizards.common.PropertyNames;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/** This class implements the component. At least the interfaces XServiceInfo,
- * XTypeProvider, and XInitialization should be provided by the service.
+/** This class capsulates the class, that implements the minimal component, a
+ * factory for creating the service (<CODE>__getServiceFactory</CODE>).
  */
 public class CallReportWizard
-  extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
 {
 
-    private static boolean bWizardStartedAlready;
+    private static boolean bWizardstartedalready;
 
-    /** The service name, that must be used to get an instance of this service.
+    /** Gives a factory for creating the service.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     * @return Returns a <code>XSingleServiceFactory</code> for creating the component.
+     * @see com.sun.star.comp.loader.JavaLoader
+     * @param stringImplementationName The implementation name of the component.
+     * @param xMSF The service manager, who gives access to every known service.
+     * @param xregistrykey Makes structural information (except regarding treestructures) of a single
+     *    registry key accessible.
      */
-    private static final String __serviceName = "com.sun.star.wizards.report.CallReportWizard";
-
-    private PropertyValue[] m_wizardContext;
-
-    /** The constructor of the inner class has a XMultiServiceFactory parameter.
-     * @param xmultiservicefactoryInitialization A special service factory
-     * could be introduced while initializing.
-     */
-    public CallReportWizard(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
+    public static com.sun.star.lang.XSingleServiceFactory __getServiceFactory(String stringImplementationName, com.sun.star.lang.XMultiServiceFactory xMSF, com.sun.star.registry.XRegistryKey xregistrykey)
     {
-        super();
-        xmultiservicefactory = xmultiservicefactoryInitialization;
+        com.sun.star.lang.XSingleServiceFactory xsingleservicefactory = null;
+        if (stringImplementationName.equals(
+                ReportWizardImplementation.class.getName()))
+        {
+            xsingleservicefactory = com.sun.star.comp.loader.FactoryHelper.getServiceFactory(
+                    ReportWizardImplementation.class,
+                    ReportWizardImplementation.__serviceName,
+                    xMSF,
+                    xregistrykey);
+        }
+        return xsingleservicefactory;
     }
 
-    public void trigger(String sEvent)
+    /** This class implements the component. At least the interfaces XServiceInfo,
+     * XTypeProvider, and XInitialization should be provided by the service.
+     */
+    private static class ReportWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
     {
-        try
+
+        private PropertyValue[] m_wizardContext;
+
+        /** The constructor of the inner class has a XMultiServiceFactory parameter.
+         * @param xmultiservicefactoryInitialization A special service factory
+         * could be introduced while initializing.
+         */
+        public ReportWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization)
         {
-            if (sEvent.equals(PropertyNames.START))
+            super();
+            xmultiservicefactory = xmultiservicefactoryInitialization;
+        }
+
+        public void trigger(String sEvent)
+        {
+            try
             {
-                if (!bWizardStartedAlready)
+                if (sEvent.equals(PropertyNames.START))
                 {
-                    ReportWizard CurReportWizard = new ReportWizard( xmultiservicefactory, m_wizardContext );
-                    CurReportWizard.startReportWizard();
-                }
-                bWizardStartedAlready = false;
-            }
-            else if (sEvent.equals("fill"))
-            {
-                Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
-                if (m_wizardContext != null)
-                {
-                    NamedValueCollection context = new NamedValueCollection( m_wizardContext );
-                    XTextDocument textDocument = context.queryOrDefault( "TextDocument", null, XTextDocument.class );
-                    XDatabaseDocumentUI documentUI = context.queryOrDefault( "DocumentUI", null, XDatabaseDocumentUI.class );
-                    if ( textDocument != null )
+                    if (!bWizardstartedalready)
                     {
-                        CurDataimport.createReport(xmultiservicefactory, documentUI, textDocument, m_wizardContext);
+                        ReportWizard CurReportWizard = new ReportWizard( xmultiservicefactory, m_wizardContext );
+                        CurReportWizard.startReportWizard();
+                    }
+                    bWizardstartedalready = false;
+                }
+                else if (sEvent.equals("fill"))
+                {
+                    Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
+                    if (m_wizardContext != null)
+                    {
+                        NamedValueCollection context = new NamedValueCollection( m_wizardContext );
+                        XTextDocument textDocument = context.queryOrDefault( "TextDocument", null, XTextDocument.class );
+                        XDatabaseDocumentUI documentUI = context.queryOrDefault( "DocumentUI", null, XDatabaseDocumentUI.class );
+                        if ( textDocument != null )
+                        {
+                            CurDataimport.createReport(xmultiservicefactory, documentUI, textDocument, m_wizardContext);
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
+            }
+            System.gc();
         }
-        catch (Exception e)
+        /** The service name, that must be used to get an instance of this service.
+         */
+        private static final String __serviceName = "com.sun.star.wizards.report.CallReportWizard";
+        /** The service manager, that gives access to all registered services.
+         */
+        private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
+
+        /** This method is a member of the interface for initializing an object
+         * directly after its creation.
+         * @param object This array of arbitrary objects will be passed to the
+         * component after its creation.
+         * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
+         * passed to the caller.
+         */
+        public void initialize(Object[] object) throws com.sun.star.uno.Exception
         {
-            Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
+            this.m_wizardContext = Properties.convertToPropertyValueArray(object);
+
         }
-        System.gc();
-    }
 
-    /** The service manager, that gives access to all registered services.
-     */
-    private com.sun.star.lang.XMultiServiceFactory xmultiservicefactory;
-
-    /** This method is a member of the interface for initializing an object
-     * directly after its creation.
-     * @param object This array of arbitrary objects will be passed to the
-     * component after its creation.
-     * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
-     * passed to the caller.
-     */
-    public void initialize(Object[] object) throws com.sun.star.uno.Exception
-    {
-        this.m_wizardContext = Properties.convertToPropertyValueArray(object);
-
-    }
-
-    /** This method returns an array of all supported service names.
-     * @return Array of supported service names.
-     */
-    public String[] getSupportedServiceNames()
-    {
-        String[] stringSupportedServiceNames = new String[1];
-
-        stringSupportedServiceNames[ 0] = __serviceName;
-
-        return (stringSupportedServiceNames);
-    }
-
-    /** This method returns true, if the given service will be
-     * supported by the component.
-     * @param stringService Service name.
-     * @return True, if the given service name will be supported.
-     */
-    public boolean supportsService(String stringService)
-    {
-        boolean booleanSupportsService = false;
-
-        if (stringService.equals(__serviceName))
+        /** This method returns an array of all supported service names.
+         * @return Array of supported service names.
+         */
+        public java.lang.String[] getSupportedServiceNames()
         {
-            booleanSupportsService = true;
+            String[] stringSupportedServiceNames = new String[1];
+
+            stringSupportedServiceNames[ 0] = __serviceName;
+
+            return (stringSupportedServiceNames);
         }
-        return (booleanSupportsService);
-    }
 
-    @Override
-    public byte[] getImplementationId()
-    {
-        return new byte[0];
-    }
+        /** This method returns true, if the given service will be
+         * supported by the component.
+         * @param stringService Service name.
+         * @return True, if the given service name will be supported.
+         */
+        public boolean supportsService(String stringService)
+        {
+            boolean booleanSupportsService = false;
 
-    /** Return the class name of the component.
-     * @return Class name of the component.
-     */
-    public String getImplementationName()
-    {
-        return CallReportWizard.class.getName();
-    }
+            if (stringService.equals(__serviceName))
+            {
+                booleanSupportsService = true;
+            }
+            return (booleanSupportsService);
+        }
 
-    /** Provides a sequence of all types (usually interface types)
-     * provided by the object.
-     * @return Sequence of all types (usually interface types) provided by the
-     * service.
-     */
-    @Override
-    public Type[] getTypes()
-    {
-        Type[] typeReturn = new Type[]
-                    {
-                        new Type(com.sun.star.task.XJobExecutor.class),
-                        new Type(com.sun.star.lang.XTypeProvider.class),
-                        new Type(com.sun.star.lang.XServiceInfo.class),
-                        new Type(com.sun.star.lang.XInitialization.class)
-                    };
+        @Override
+        public byte[] getImplementationId()
+        {
+            return new byte[0];
+        }
 
-        return typeReturn;
+        /** Return the class name of the component.
+         * @return Class name of the component.
+         */
+        public java.lang.String getImplementationName()
+        {
+            return (ReportWizardImplementation.class.getName());
+        }
+
+        /** Provides a sequence of all types (usually interface types)
+         * provided by the object.
+         * @return Sequence of all types (usually interface types) provided by the
+         * service.
+         */
+        @Override
+        public Type[] getTypes()
+        {
+            Type[] typeReturn =
+            {
+            };
+
+            try
+            {
+                typeReturn = new Type[]
+                        {
+                            new Type(com.sun.star.task.XJobExecutor.class),
+                            new Type(com.sun.star.lang.XTypeProvider.class),
+                            new Type(com.sun.star.lang.XServiceInfo.class),
+                            new Type(com.sun.star.lang.XInitialization.class)
+                        };
+            }
+            catch (Exception e)
+            {
+                Logger.getLogger(CallReportWizard.class.getName()).log(Level.SEVERE, null, e);
+            }
+
+            return (typeReturn);
+        }
     }
 }
-
