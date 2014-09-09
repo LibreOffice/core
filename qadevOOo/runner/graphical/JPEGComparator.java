@@ -59,7 +59,7 @@ class NameDPIPage
                 String sDPI = sNameNoSuffix.substring(nDPIStart + 1, sNameNoSuffix.length() - 8);
                 try
                 {
-                    nDPI = Integer.valueOf(sDPI).intValue();
+                    nDPI = Integer.parseInt(sDPI);
                 }
                 catch (java.lang.NumberFormatException e)
                 {
@@ -68,7 +68,7 @@ class NameDPIPage
                 String sPage = sNameNoSuffix.substring(sNameNoSuffix.length() - 4);
                 try
                 {
-                    nPage = Integer.valueOf(sPage).intValue();
+                    nPage = Integer.parseInt(sPage);
                 }
                 catch (java.lang.NumberFormatException e)
                 {
@@ -641,7 +641,7 @@ public class JPEGComparator extends EnhancedComplexTestCase
                 sBack = sBack.substring(0, nIdx);
             }
 
-            nResult = Integer.valueOf(sBack).intValue();
+            nResult = Integer.parseInt(sBack);
         }
         catch (java.lang.NumberFormatException e)
         {

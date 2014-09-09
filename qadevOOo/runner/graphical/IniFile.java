@@ -336,7 +336,7 @@ public class IniFile implements Enumeration<String>
             {
                 try
                 {
-                    nValue = Integer.valueOf(sValue).intValue();
+                    nValue = Integer.parseInt(sValue);
                 }
                 catch (java.lang.NumberFormatException e)
                 {
