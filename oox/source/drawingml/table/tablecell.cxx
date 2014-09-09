@@ -19,10 +19,13 @@
 
 #include "drawingml/table/tablecell.hxx"
 #include "drawingml/table/tableproperties.hxx"
+#include <basegfx/color/bcolor.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/drawingml/textbody.hxx"
+#include "oox/drawingml/theme.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"
+#include <tools/color.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/table/XTable.hpp>
@@ -99,7 +102,7 @@ void applyTableStylePart( oox::drawingml::FillProperties& rFillProperties,
                           oox::drawingml::LineProperties& rBottomLeftToTopRightBorder,
                           TableStylePart& rTableStylePart )
 {
-    boost::shared_ptr< ::oox::drawingml::FillProperties >& rPartFillPropertiesPtr( rTableStylePart.getFillProperties() );
+    ::oox::drawingml::FillPropertiesPtr& rPartFillPropertiesPtr( rTableStylePart.getFillProperties() );
     if ( rPartFillPropertiesPtr.get() )
         rFillProperties.assignUsed( *rPartFillPropertiesPtr );
 
@@ -167,10 +170,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     oox::drawingml::LineProperties aLinePropertiesBottom;
     oox::drawingml::LineProperties aLinePropertiesTopLeftToBottomRight;
     oox::drawingml::LineProperties aLinePropertiesBottomLeftToTopRight;
-
-    boost::shared_ptr< ::oox::drawingml::FillProperties >& rBackgroundFillPropertiesPtr( rTable.getBackgroundFillProperties() );
-    if ( rBackgroundFillPropertiesPtr.get() )
-        aFillProperties.assignUsed( *rBackgroundFillPropertiesPtr );
 
     applyTableStylePart( aFillProperties, aTextStyleProps,
         aLinePropertiesLeft,
@@ -352,6 +351,31 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
 
     aFillProperties.assignUsed( maFillProperties );
     ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper() );
+
+    Color aBgColor;
+    sal_Int32 nPhClr = API_RGB_TRANSPARENT;
+    boost::shared_ptr< ::oox::drawingml::FillProperties >& rBackgroundFillPropertiesPtr( rTable.getBackgroundFillProperties() );
+    ::oox::drawingml::ShapeStyleRef& rBackgroundFillStyle( rTable.getBackgroundFillStyleRef() );
+    if (rBackgroundFillPropertiesPtr.get())
+        aBgColor = rBackgroundFillPropertiesPtr->getBestSolidColor();
+    else if (rBackgroundFillStyle.mnThemedIdx != 0)
+        if (const Theme* pTheme = rFilterBase.getCurrentTheme())
+        {
+            aBgColor = pTheme->getFillStyle(rBackgroundFillStyle.mnThemedIdx)->getBestSolidColor();
+            nPhClr = rBackgroundFillStyle.maPhClr.getColor(rFilterBase.getGraphicHelper());
+        }
+    if (aBgColor.isUsed())
+    {
+        const Color& rCellColor = aFillProperties.getBestSolidColor();
+        const double fTransparency = rCellColor.isUsed() ? 0.01 * rCellColor.getTransparency() : 1.0;
+        ::Color nBgColor( aBgColor.getColor(rFilterBase.getGraphicHelper(), nPhClr) );
+        ::Color nCellColor( rCellColor.getColor(rFilterBase.getGraphicHelper()) );
+        ::Color aResult( basegfx::interpolate(nBgColor.getBColor(), nCellColor.getBColor(), 1.0 - fTransparency) );
+        aFillProperties.maFillColor.clearTransformations();
+        aFillProperties.maFillColor.setSrgbClr(aResult.GetRGBColor());
+        aFillProperties.moFillType.set(XML_solidFill);
+    }
+
     // TODO: phClr?
     aFillProperties.pushToPropMap( aPropMap, rFilterBase.getGraphicHelper() );
     PropertySet( xPropSet ).setProperties( aPropMap );
