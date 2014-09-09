@@ -137,6 +137,7 @@ namespace dbaui
         get(m_pHostName, "server");
         get(m_pPortLabel, "portlabel");
         get(m_pPort, "port");
+        m_pPort->SetUseThousandSep(false);
         get(m_pDefaultPort, "defaultport");
         get(m_pSocket, "socket");
         get(m_pNamedPipe, "namedpipe");
