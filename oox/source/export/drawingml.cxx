@@ -542,7 +542,7 @@ void DrawingML::WriteLineArrow( Reference< XPropertySet > rXPropSet, bool bLineS
     }
 }
 
-void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
+void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
 {
     drawing::LineStyle aLineStyle( drawing::LineStyle_NONE );
 
@@ -558,15 +558,23 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     // get InteropGrabBag and search the relevant attributes
     OUString sColorFillScheme;
-    sal_uInt32 nOriginalColor( 0 ), nStyleColor( 0 ), nStyleLineWidth( 0 );
-    Sequence< PropertyValue > aStyleProperties, aTransformations;
-    drawing::LineStyle aStyleLineStyle( drawing::LineStyle_NONE );
-    drawing::LineJoint aStyleLineJoint( drawing::LineJoint_NONE );
-    if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
+
+    sal_uInt32 nOriginalColor = 0;
+    sal_uInt32 nStyleColor = 0;
+    sal_uInt32 nStyleLineWidth = 0;
+
+    Sequence<PropertyValue> aStyleProperties;
+    Sequence<PropertyValue> aTransformations;
+
+    drawing::LineStyle aStyleLineStyle(drawing::LineStyle_NONE);
+    drawing::LineJoint aStyleLineJoint(drawing::LineJoint_NONE);
+
+    if (GetProperty(rXPropSet, "InteropGrabBag"))
     {
-        Sequence< PropertyValue > aGrabBag;
+        Sequence<PropertyValue> aGrabBag;
         mAny >>= aGrabBag;
-        for( sal_Int32 i=0; i < aGrabBag.getLength(); ++i )
+
+        for (sal_Int32 i=0; i < aGrabBag.getLength(); ++i)
         {
             if( aGrabBag[i].Name == "SpPrLnSolidFillSchemeClr" )
                 aGrabBag[i].Value >>= sColorFillScheme;
@@ -577,9 +585,9 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
             else if( aGrabBag[i].Name == "SpPrLnSolidFillSchemeClrTransformations" )
                 aGrabBag[i].Value >>= aTransformations;
         }
-        if( aStyleProperties.hasElements() )
+        if (aStyleProperties.hasElements())
         {
-            for( sal_Int32 i=0; i < aStyleProperties.getLength(); ++i )
+            for (sal_Int32 i=0; i < aStyleProperties.getLength(); ++i)
             {
                 if( aStyleProperties[i].Name == "Color" )
                     aStyleProperties[i].Value >>= nStyleColor;
@@ -595,18 +603,20 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     GET( nLineWidth, LineWidth );
 
-    switch( aLineStyle )
+    switch (aLineStyle)
     {
         case drawing::LineStyle_NONE:
             bNoFill = true;
             break;
         case drawing::LineStyle_DASH:
-            if( GETA( LineDash ) )
+            if (GetProperty(rXPropSet, "LineDash"))
             {
-                aLineDash = *(drawing::LineDash*) mAny.getValue();
+                aLineDash = mAny.get<drawing::LineDash>();
                 bDashSet = true;
-                if( aLineDash.Style == DashStyle_ROUND || aLineDash.Style == DashStyle_ROUNDRELATIVE )
+                if (aLineDash.Style == DashStyle_ROUND || aLineDash.Style == DashStyle_ROUNDRELATIVE)
+                {
                     cap = "rnd";
+                }
 
                 DBG(fprintf(stderr, "dash dots: %d dashes: %d dotlen: %d dashlen: %d distance: %d\n",
                             int( aLineDash.Dots ), int( aLineDash.Dashes ), int( aLineDash.DotLen ), int( aLineDash.DashLen ), int( aLineDash.Distance )));
@@ -616,16 +626,17 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
         default:
             if ( GETA( LineColor ) )
             {
-                nColor = *((sal_uInt32*) mAny.getValue()) & 0xffffff;
+                nColor = mAny.get<sal_uInt32>() & 0xffffff;
                 bColorSet = true;
             }
             break;
     }
 
+    OString sWidth = (nLineWidth > 1 && nStyleLineWidth != nLineWidth) ? I64S(MM100toEMU(nLineWidth)) : NULL;
+
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
-                          XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
-                                  I64S( MM100toEMU( nLineWidth ) ) :NULL,
+                          XML_w, sWidth,
                           FSEND );
 
     if( bColorSet )
@@ -715,9 +726,8 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
     if( !bNoFill && nLineWidth > 1 && GETA( LineJoint ) )
     {
-        LineJoint eLineJoint;
+        LineJoint eLineJoint = mAny.get<LineJoint>();
 
-        mAny >>= eLineJoint;
         if( aStyleLineJoint == LineJoint_NONE || aStyleLineJoint != eLineJoint )
         {
             // style-defined line joint does not exist, or is different from the shape's joint
