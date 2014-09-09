@@ -118,32 +118,37 @@ void DrawingML::ResetCounters()
     maWdpCache.clear();
 }
 
-bool DrawingML::GetProperty( Reference< XPropertySet > rXPropSet, const OUString& aName )
+bool DrawingML::GetProperty( Reference< XPropertySet > rXPropertySet, const OUString& aName )
 {
-    bool bRetValue = false;
-
-    try {
-        mAny = rXPropSet->getPropertyValue( aName );
-        if ( mAny.hasValue() )
-            bRetValue = true;
-    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", USS(aName)); */ }
-
-    return bRetValue;
+    try
+    {
+        mAny = rXPropertySet->getPropertyValue(aName);
+        if (mAny.hasValue())
+            return true;
+    }
+    catch( const Exception& )
+    {
+        /* printf ("exception when trying to get value of property: %s\n", USS(aName)); */
+    }
+    return false;
 }
 
-bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropSet, Reference< XPropertyState > rXPropState, const OUString& aName, PropertyState& eState )
+bool DrawingML::GetPropertyAndState( Reference< XPropertySet > rXPropertySet, Reference< XPropertyState > rXPropertyState, const OUString& aName, PropertyState& eState )
 {
-    bool bRetValue = false;
-
-    try {
-        mAny = rXPropSet->getPropertyValue( aName );
-        if ( mAny.hasValue() ) {
-            bRetValue = true;
-            eState = rXPropState->getPropertyState( aName );
+    try
+    {
+        mAny = rXPropertySet->getPropertyValue(aName);
+        if (mAny.hasValue())
+        {
+            eState = rXPropertyState->getPropertyState(aName);
+            return true;
         }
-    } catch( const Exception& ) { /* printf ("exception when trying to get value of property: %s\n", USS(aName)); */ }
-
-    return bRetValue;
+    }
+    catch( const Exception& )
+    {
+        /* printf ("exception when trying to get value of property: %s\n", USS(aName)); */
+    }
+    return false;
 }
 
 void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
