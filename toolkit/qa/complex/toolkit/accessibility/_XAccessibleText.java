@@ -629,7 +629,7 @@ public class _XAccessibleText {
                 System.out.println("getTextRange(0, 0): ");
                 txtRange = oObj.getTextRange(0, 0);
                 System.out.println(txtRange);
-                locRes = txtRange.equals("");
+                locRes = txtRange.length() == 0;
                 res &= locRes;
                 if (!locRes) {
                     System.out.println("Empty string was expected");
