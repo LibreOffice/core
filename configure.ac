@@ -1288,9 +1288,10 @@ AC_ARG_ENABLE(ccache,
 
 AC_ARG_ENABLE(64-bit,
     AS_HELP_STRING([--enable-64-bit],
-        [Build a 64-bit LibreOffice on platforms where the normal build is 32-bit. Works fine for OS
-         X. In other cases this option is experimental and possibly quite broken, use only if you are
-         hacking on 64-bit support.]), ,)
+        [Build a 64-bit LibreOffice on platforms where the normal build is 32-bit.
+         At the moment meaningful only for iOS and Windows. On Windows this option is
+         experimental and possibly quite broken, and you should use it only if you are
+         hacking on 64-bitness support.]), ,)
 
 AC_ARG_ENABLE(extra-gallery,
     AS_HELP_STRING([--enable-extra-gallery],
@@ -2704,13 +2705,6 @@ dnl ===================================================================
 
 if test $_os = Darwin; then
 
-    if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
-        bitness=-m32
-    else
-        bitness=-m64
-        BITNESS_OVERRIDE=64
-    fi
-
     # If no --with-macosx-sdk option is given, look for 10.6,
     # 10.7, 10.8 and 10.9 SDKs, in that order. If not found
     # in some default locations, try the xcode-select tool.
@@ -2876,21 +2870,6 @@ if test $_os = Darwin; then
         ;;
     esac
 
-    if test "$BITNESS_OVERRIDE" = ""; then
-        case "$with_macosx_version_min_required" in
-        10.5)
-            case "$with_macosx_sdk" in
-            10.5)
-                ;;
-            *)
-                AC_MSG_WARN([Building with a SDK > 10.5 possibly breaks 10.5 compatibility.])
-                add_warning "Building with a SDK > 10.5 possibly breaks 10.5 compatibility."
-                ;;
-            esac
-            ;;
-        esac
-    fi
-
     # If no CC and CXX environment vars, try to guess where the compiler is
     LIBTOOL=libtool
     INSTALL_NAME_TOOL=install_name_tool
@@ -2912,11 +2891,11 @@ if test $_os = Darwin; then
         10.6)
             # did someone copy her 10.6 sdk into xcode 4 (needed on Mountain Lion)?
             if test "$(echo $MACOSX_SDK_PATH | cut -c1-23)" = "/Applications/Xcode.app"; then
-                CC="`xcrun -find gcc` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-                CXX="`xcrun -find g++` $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+                CC="`xcrun -find gcc` -m64 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+                CXX="`xcrun -find g++` -m64 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             else
-                CC="gcc-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-                CXX="g++-4.2 $bitness -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+                CC="gcc-4.2 -m64 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+                CXX="g++-4.2 -m64 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             fi
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             LIBTOOL=libtool
@@ -2929,8 +2908,8 @@ if test $_os = Darwin; then
             if test "$ENABLE_LTO" = TRUE; then
                 lto=-flto
             fi
-            CC="`xcrun -find clang` $bitness $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            CXX="`xcrun -find clang++` $bitness $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CC="`xcrun -find clang` -m64 $lto -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="`xcrun -find clang++` -m64 $lto $stdlib -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             INSTALL_NAME_TOOL=`xcrun -find install_name_tool`
             AR=`xcrun -find ar`
             NM=`xcrun -find nm`
@@ -4145,26 +4124,17 @@ darwin*)
         OUTPATH=unxmacxp
         ;;
     i*86)
-        if test "$BITNESS_OVERRIDE" = 64; then
-            AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
-        fi
+        AC_MSG_ERROR([Can't build 64-bit code in 32-bit OS])
         CPUNAME=INTEL
         RTL_ARCH=x86
         PLATFORMID=macosx_x86
         OUTPATH=unxmacxi
         ;;
     x86_64)
-        if test "$BITNESS_OVERRIDE" = 64; then
-            CPUNAME=X86_64
-            RTL_ARCH=X86_64
-            PLATFORMID=macosx_x86_64
-            OUTPATH=unxmacxx
-        else
-            CPUNAME=INTEL
-            RTL_ARCH=x86
-            PLATFORMID=macosx_x86
-            OUTPATH=unxmacxi
-        fi
+        CPUNAME=X86_64
+        RTL_ARCH=X86_64
+        PLATFORMID=macosx_x86_64
+        OUTPATH=unxmacxx
         ;;
     *)
         AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
@@ -6863,17 +6833,6 @@ if test "$ENABLE_JAVA" != ""; then
             JAVAINTERPRETER="${JAVAINTERPRETER}.exe"
         fi
         JAVAINTERPRETER=`win_short_path_for_make "$JAVAINTERPRETER"`
-    elif test $_os = Darwin -a "$BITNESS_OVERRIDE" = ""; then
-        dnl HACK:  There currently is only a 32 bit version of LibreOffice for Mac OS X,
-        dnl and Tiger Java complains about -d32 while Snow Leopard Java needs it
-        dnl to run in 32 bit mode and be able to load LibreOffice jnilibs:
-        AC_MSG_CHECKING([whether to pass -d32 to Java interpreter])
-        if "$JAVAINTERPRETER" -d32 >&5 2>&5; then
-            AC_MSG_RESULT([yes])
-            JAVAIFLAGS=-d32
-        else
-            AC_MSG_RESULT([no])
-        fi
     elif test "$cross_compiling" != "yes"; then
         # at least 2 reasons to check: officebean needs to link -ljawt,
         # and libjpipe.so needs to be loaded by java to run JunitTests.
@@ -9194,7 +9153,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to plug browser plugins into LibreOffice documents])
 # Obviously no such thing on iOS or Android. Also not possible when building
 # 64-bit OS X code as the plugin code uses QuickTime and Carbon.
-if test "$_os" != Android -a "$_os" != iOS -a \( $_os != Darwin -o "$BITNESS_OVERRIDE" = "" \) -a \
+if test "$_os" != Android -a "$_os" != iOS -a $_os != Darwin -a \
         "$enable_headless" != yes -a "$enable_mpl_subset" != yes
 then
     AC_MSG_RESULT([yes])
