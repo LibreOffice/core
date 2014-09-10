@@ -76,8 +76,6 @@ public:
 
 private:
     WordBreakCache cache[CACHE_MAX];
-    OUString segmentCachedString;
-    Boundary segmentCachedBoundary;
 
     bool        seekSegment(const OUString& rText, sal_Int32 pos, Boundary& boundary);
     WordBreakCache& getCache(const sal_Unicode *text, Boundary& boundary);
