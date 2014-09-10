@@ -648,7 +648,10 @@ PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
 
 ParagraphObj::ParagraphObj(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
     PPTExBulletProvider& rProv)
-    : maMapModeSrc(MAP_100TH_MM)
+    : PropStateValue()
+    , SOParagraph()
+    , mvPortions()
+    , maMapModeSrc(MAP_100TH_MM)
     , maMapModeDest(MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ))
     , mnTextSize(0)
     , mbFirstParagraph(false)
@@ -675,7 +678,10 @@ ParagraphObj::ParagraphObj(const ::com::sun::star::uno::Reference< ::com::sun::s
 
 ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContent,
     ParaFlags aParaFlags, FontCollection& rFontCollection, PPTExBulletProvider& rProv )
-    : maMapModeSrc(MAP_100TH_MM)
+    : PropStateValue()
+    , SOParagraph()
+    , mvPortions()
+    , maMapModeSrc(MAP_100TH_MM)
     , maMapModeDest(MAP_INCH, Point(), Fraction( 1, 576 ), Fraction( 1, 576 ))
     , mnTextSize(0)
     , mbIsBullet(false)
@@ -730,7 +736,7 @@ ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::t
                     {
                         PortionObj* pPortionObj = new PortionObj( aXCursorText, !aXTextPortionE->hasMoreElements(), rFontCollection );
                         if ( pPortionObj->Count() )
-                            push_back( pPortionObj );
+                            mvPortions.push_back( pPortionObj );
                         else
                             delete pPortionObj;
                     }
@@ -742,9 +748,9 @@ ParagraphObj::ParagraphObj(::com::sun::star::uno::Reference< ::com::sun::star::t
 }
 
 ParagraphObj::ParagraphObj( const ParagraphObj& rObj )
-: std::vector<PortionObj*>()
-, PropStateValue()
+: PropStateValue()
 , SOParagraph()
+, mvPortions()
 {
     ImplConstruct( rObj );
 }
@@ -756,14 +762,13 @@ ParagraphObj::~ParagraphObj()
 
 void ParagraphObj::Write( SvStream* pStrm )
 {
-    for ( const_iterator it = begin(); it != end(); ++it )
-        (*it)->Write( pStrm, mbLastParagraph );
+    for ( boost::ptr_vector<PortionObj>::iterator it = mvPortions.begin(); it != mvPortions.end(); ++it )
+        it->Write( pStrm, mbLastParagraph );
 }
 
 void ParagraphObj::ImplClear()
 {
-    for ( const_iterator it = begin(); it != end(); ++it )
-        delete *it;
+    mvPortions.clear();
 }
 
 void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
@@ -922,8 +927,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                     }
                 }
 
-                PortionObj* pPortion = front();
-                CalculateGraphicBulletSize( ( pPortion ) ? pPortion->mnCharHeight : 24 );
+                CalculateGraphicBulletSize( ( mvPortions.empty() ) ? 24 : mvPortions.front().mnCharHeight );
 
                 switch( nNumberingType )
                 {
@@ -1235,8 +1239,8 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
     mbForbiddenRules = rParagraphObj.mbForbiddenRules;
     mnBiDi = rParagraphObj.mnBiDi;
 
-    for ( ParagraphObj::const_iterator it = rParagraphObj.begin(); it != rParagraphObj.end(); ++it )
-        push_back( new PortionObj( **it ) );
+    for ( boost::ptr_vector<PortionObj>::const_iterator it = rParagraphObj.begin(); it != rParagraphObj.end(); ++it )
+        mvPortions.push_back( new PortionObj( *it ) );
 
     maTabStop = rParagraphObj.maTabStop;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
@@ -1264,8 +1268,8 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
 sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition )
 {
     mnTextSize = 0;
-    for ( const_iterator it = begin(); it != end(); ++it )
-        mnTextSize += (*it)->ImplCalculateTextPositions( nCurrentTextPosition + mnTextSize );
+    for ( boost::ptr_vector<PortionObj>::iterator it = mvPortions.begin(); it != mvPortions.end(); ++it )
+        mnTextSize += it->ImplCalculateTextPositions( nCurrentTextPosition + mnTextSize );
     return mnTextSize;
 }
 

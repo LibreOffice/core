@@ -659,7 +659,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
     for ( sal_uInt32 i = 0;  i < rTextObj.ParagraphCount(); ++i, bFirstParagraph = false )
     {
         ParagraphObj* pPara = rTextObj.GetParagraph(i);
-        PortionObj* pPortion = pPara->front();
+        const PortionObj& rPortion = pPara->front();
         nCharCount = pPara->CharacterCount();
 
         nDepth = pPara->nDepth;
@@ -671,7 +671,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             nPropertyFlags |= 0x00000800;
         nLineSpacing = pPara->mnLineSpacing;
 
-        const FontCollectionEntry* pDesc = maFontCollection.GetById( pPortion->mnFont );
+        const FontCollectionEntry* pDesc = maFontCollection.GetById( rPortion.mnFont );
         sal_Int16 nNormalSpacing = 100;
         if ( !mbFontIndependentLineSpacing && pDesc )
         {
@@ -693,7 +693,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj )
             }
             else
             {
-                if ( !pPara->mbFixedLineSpacing && pPortion->mnCharHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
+                if ( !pPara->mbFixedLineSpacing && rPortion.mnCharHeight > (sal_uInt16)( ((double)-nLineSpacing) * 0.001 * 72.0 / 2.54 ) ) // 1/100mm to point
                     nLineSpacing = nNormalSpacing;
                 else
                     nLineSpacing = (sal_Int16)( (double)nLineSpacing / 4.40972 );
@@ -799,12 +799,12 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
     for ( sal_uInt32 i = 0; i < rTextObj.ParagraphCount(); ++i )
     {
         ParagraphObj* pPara = rTextObj.GetParagraph(i);
-        for ( ParagraphObj::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
+        for ( boost::ptr_vector<PortionObj>::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
         {
-            PortionObj* pPortion = *it;
+            const PortionObj& rPortion = *it;
             nPropertyFlags = 0;
-            sal_uInt32 nCharAttr = pPortion->mnCharAttr;
-            sal_uInt32 nCharColor = pPortion->mnCharColor;
+            sal_uInt32 nCharAttr = rPortion.mnCharAttr;
+            sal_uInt32 nCharColor = rPortion.mnCharColor;
 
             if ( nCharColor == COL_AUTO )   // nCharColor depends to the background color
             {
@@ -917,19 +917,19 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 nPropertyFlags |= nCharAttr & 0x217;    // not all attributes ar inherited
             else
             {
-                if ( /* ( pPortion->mnCharAttrHard & 1 ) || */
+                if ( /* ( rPortion.mnCharAttrHard & 1 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Bold, nCharAttr ) ) )
                     nPropertyFlags |= 1;
-                if ( /* ( pPortion->mnCharAttrHard & 2 ) || */
+                if ( /* ( rPortion.mnCharAttrHard & 2 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Italic, nCharAttr ) ) )
                     nPropertyFlags |= 2;
-                if ( /* ( pPortion->mnCharAttrHard & 4 ) || */
+                if ( /* ( rPortion.mnCharAttrHard & 4 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Underline, nCharAttr ) ) )
                     nPropertyFlags |= 4;
-                if ( /* ( pPortion->mnCharAttrHard & 0x10 ) || */
+                if ( /* ( rPortion.mnCharAttrHard & 0x10 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Shadow, nCharAttr ) ) )
                     nPropertyFlags |= 0x10;
-                if ( /* ( pPortion->mnCharAttrHard & 0x200 ) || */
+                if ( /* ( rPortion.mnCharAttrHard & 0x200 ) || */
                     ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Embossed, nCharAttr ) ) )
                     nPropertyFlags |= 512;
             }
@@ -938,23 +938,23 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                 nPropertyFlags |= ( i & 0x3f ) << 10 ;
                 nCharAttr  |= ( i & 0x3f ) << 10;
             }
-            if ( ( pPortion->meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Font, pPortion->mnFont ) ) )
+            if ( ( rPortion.meFontName == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Font, rPortion.mnFont ) ) )
                 nPropertyFlags |= 0x00010000;
-            if ( ( pPortion->meAsianOrComplexFont == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_AsianOrComplexFont, pPortion->mnAsianOrComplexFont ) ) )
+            if ( ( rPortion.meAsianOrComplexFont == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_AsianOrComplexFont, rPortion.mnAsianOrComplexFont ) ) )
                 nPropertyFlags |= 0x00200000;
-            if ( ( pPortion->meCharHeight == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontHeight, pPortion->mnCharHeight ) ) )
+            if ( ( rPortion.meCharHeight == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontHeight, rPortion.mnCharHeight ) ) )
                 nPropertyFlags |= 0x00020000;
-            if ( ( pPortion->meCharColor == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+            if ( ( rPortion.meCharColor == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
                 ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_FontColor, nCharColor & 0xffffff ) ) )
                 nPropertyFlags |= 0x00040000;
-            if ( ( pPortion->meCharEscapement == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
-                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Escapement, pPortion->mnCharEscapement ) ) )
+            if ( ( rPortion.meCharEscapement == ::com::sun::star::beans::PropertyState_DIRECT_VALUE ) ||
+                ( mpStyleSheet->IsHardAttribute( nInstance, pPara->nDepth, CharAttr_Escapement, rPortion.mnCharEscapement ) ) )
                 nPropertyFlags |= 0x00080000;
 
-            sal_uInt32 nCharCount = pPortion->Count();
+            sal_uInt32 nCharCount = rPortion.Count();
 
             rOut.WriteUInt32( nCharCount )
                 .WriteUInt32( nPropertyFlags );          //PropertyFlags
@@ -962,15 +962,15 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
             if ( nPropertyFlags & 0xffff )
                 rOut.WriteUInt16( (sal_uInt16)( nCharAttr ) );
             if ( nPropertyFlags & 0x00010000 )
-                rOut.WriteUInt16( pPortion->mnFont );
+                rOut.WriteUInt16( rPortion.mnFont );
             if ( nPropertyFlags & 0x00200000 )
-                rOut.WriteUInt16( pPortion->mnAsianOrComplexFont );
+                rOut.WriteUInt16( rPortion.mnAsianOrComplexFont );
             if ( nPropertyFlags & 0x00020000 )
-                rOut.WriteUInt16( (sal_uInt16)( pPortion->mnCharHeight ) );
+                rOut.WriteUInt16( (sal_uInt16)( rPortion.mnCharHeight ) );
             if ( nPropertyFlags & 0x00040000 )
                 rOut.WriteUInt32( (sal_uInt32)nCharColor );
             if ( nPropertyFlags & 0x00080000 )
-                rOut.WriteInt16( pPortion->mnCharEscapement );
+                rOut.WriteInt16( rPortion.mnCharEscapement );
         }
     }
 }
@@ -1039,15 +1039,15 @@ void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropert
             ParagraphObj* pPara = rTextObj.GetParagraph(0);
             if ( !pPara->empty() )
             {
-                PortionObj* pPortion = pPara->front();
+                const PortionObj& rPortion = pPara->front();
                 sal_Int16 nLineSpacing = pPara->mnLineSpacing;
-                const FontCollectionEntry* pDesc = maFontCollection.GetById( pPortion->mnFont );
+                const FontCollectionEntry* pDesc = maFontCollection.GetById( rPortion.mnFont );
                 if ( pDesc )
                      nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
 
                 if ( ( nLineSpacing > 0 ) && ( nLineSpacing < 100 ) )
                 {
-                    double fCharHeight = pPortion->mnCharHeight;
+                    double fCharHeight = rPortion.mnCharHeight;
                     fCharHeight *= 2540 / 72;
                     fCharHeight *= 100 - nLineSpacing;
                     fCharHeight /= 100;
@@ -1098,12 +1098,12 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
         for ( sal_uInt32 i = 0; i < aTextObj.ParagraphCount(); ++i )
         {
             pPara = aTextObj.GetParagraph(i);
-            for ( ParagraphObj::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
+            for ( boost::ptr_vector<PortionObj>::const_iterator it = pPara->begin(); it != pPara->end(); ++it )
             {
-                PortionObj* pPortion = *it;
-                if ( pPortion->mpFieldEntry )
+                const PortionObj& rPortion = *it;
+                if ( rPortion.mpFieldEntry )
                 {
-                    const FieldEntry* pFieldEntry = pPortion->mpFieldEntry;
+                    const FieldEntry* pFieldEntry = rPortion.mpFieldEntry;
 
                     switch ( pFieldEntry->nFieldType >> 28 )
                     {
@@ -3859,16 +3859,16 @@ void TextObjBinary::WriteTextSpecInfo( SvStream* pStrm )
         for ( sal_uInt32 i = 0; nCharactersLeft && i < ParagraphCount(); ++i )
         {
             ParagraphObj* pPtr = GetParagraph(i);
-            for ( ParagraphObj::const_iterator it = pPtr->begin(); nCharactersLeft && it != pPtr->end(); ++it )
+            for ( boost::ptr_vector<PortionObj>::const_iterator it = pPtr->begin(); nCharactersLeft && it != pPtr->end(); ++it )
             {
-                PortionObj* pPortion = *it;
-                sal_Int32 nPortionSize = pPortion->mnTextSize >= nCharactersLeft ? nCharactersLeft : pPortion->mnTextSize;
+                const PortionObj& rPortion = *it;
+                sal_Int32 nPortionSize = rPortion.mnTextSize >= nCharactersLeft ? nCharactersLeft : rPortion.mnTextSize;
                 sal_Int32 nFlags = 7;
                 nCharactersLeft -= nPortionSize;
                 pStrm ->WriteUInt32( static_cast< sal_uInt32 >( nPortionSize ) )
                        .WriteInt32( nFlags )
                        .WriteInt16( static_cast< sal_Int16 >( 1 ) )    // spellinfo -> needs rechecking
-                       .WriteInt16( static_cast< sal_Int16 >( LanguageTag( pPortion->meCharLocale ).makeFallback().getLanguageType() ) )
+                       .WriteInt16( static_cast< sal_Int16 >( LanguageTag( rPortion.meCharLocale ).makeFallback().getLanguageType() ) )
                        .WriteInt16( static_cast< sal_Int16 >( 0 ) );   // alt language
             }
         }
