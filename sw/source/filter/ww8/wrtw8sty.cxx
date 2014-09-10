@@ -1071,7 +1071,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 
     // Hole evtl. Pagedesc des 1. Nodes
     if ( pSet &&
-         SFX_ITEM_ON == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
+         SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
          ( (SwFmtPageDesc*)pI )->GetPageDesc() )
     {
         AppendSection( *(SwFmtPageDesc*)pI, *pNd, pFmt, nRstLnNum );

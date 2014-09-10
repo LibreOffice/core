@@ -356,7 +356,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
-            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
+            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_SET )
             {
                 SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,true);
                 SvxNumRule* pLclRule = pBulletItem->GetNumRule();

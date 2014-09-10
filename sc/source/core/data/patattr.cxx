@@ -999,7 +999,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
     {
         const SfxPoolItem* pSrcItem;
         SfxItemState eItemState = pSrcSet->GetItemState( nAttrId, false, &pSrcItem );
-        if (eItemState==SFX_ITEM_ON)
+        if (eItemState==SFX_ITEM_SET)
         {
             SfxPoolItem* pNewItem = NULL;
 

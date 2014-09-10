@@ -771,7 +771,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 
             // restore the old bullet item but not if the style changed
             if ( pOutliner->GetPrevDepth() != -1 && nDepth != -1 &&
-                 aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+                 aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET )
             {
                 SfxItemSet aAttrs( pOutliner->GetParaAttribs( nPara ) );
                 aAttrs.Put( *aOldAttrs.GetItem( EE_PARA_NUMBULLET ) );

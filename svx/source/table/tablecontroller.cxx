@@ -891,7 +891,7 @@ void SvxTableController::SetTableStyle( const SfxItemSet* pArgs )
 
                         for ( sal_uInt16 nWhich = SDRATTR_START; nWhich <= SDRATTR_TABLE_LAST; nWhich++ )
                         {
-                            if( (rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON) && (aSet.GetItemState( nWhich ) == SFX_ITEM_ON) )
+                            if( (rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_SET) && (aSet.GetItemState( nWhich ) == SFX_ITEM_SET) )
                             {
                                 aSet.ClearItem( nWhich );
                                 bChanges = true;

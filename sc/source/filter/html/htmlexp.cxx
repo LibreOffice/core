@@ -1203,7 +1203,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                 {
                     const SfxPoolItem* pItem;
                     SfxItemSet aSet = rEngine.GetAttribs( aSel );
-                    if ( aSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_ON )
+                    if ( aSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET )
                     {
                         const SvxFieldData* pField = ((const SvxFieldItem*)pItem)->GetField();
                         if ( pField && pField->ISA(SvxURLField) )

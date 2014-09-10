@@ -207,7 +207,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                             aTempSet.Put( rSet );
                             aTempSet.ClearInvalidItems();
 
-                            if( nDepth > 0 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+                            if( nDepth > 0 && aTempSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET )
                             {
                                 // no SvxNumBulletItem in outline level 1 to 8!
                                 aTempSet.ClearItem( EE_PARA_NUMBULLET );
@@ -237,7 +237,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         pPara = iter != aSelList.rend() ? *iter : NULL;
 
                         bool bJumpToLevel1 = false;
-                        if( !pPara && nDepth > 0 && rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+                        if( !pPara && nDepth > 0 && rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET )
                             bJumpToLevel1 = true;
 
                         if (bJumpToLevel1)
@@ -318,7 +318,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                                 sal_uInt16 nWhich(aWhichIter.FirstWhich());
                                 while( nWhich )
                                 {
-                                    if( SFX_ITEM_ON == rSet.GetItemState( nWhich ) )
+                                    if( SFX_ITEM_SET == rSet.GetItemState( nWhich ) )
                                         aTempSet.ClearItem( nWhich );
                                     nWhich = aWhichIter.NextWhich();
                                 }
@@ -345,7 +345,7 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                         sal_uInt16 nWhich(aWhichIter.FirstWhich());
                         while( nWhich )
                         {
-                            if( SFX_ITEM_ON == rSet.GetItemState( nWhich ) )
+                            if( SFX_ITEM_SET == rSet.GetItemState( nWhich ) )
                                 pObject->ClearMergedItem( nWhich );
                             nWhich = aWhichIter.NextWhich();
                         }

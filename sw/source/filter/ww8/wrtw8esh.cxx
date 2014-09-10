@@ -1981,13 +1981,13 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
         rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
     const SwAttrSet& rAttrSet = rFmt.GetAttrSet();
-    if (SFX_ITEM_ON == rAttrSet.GetItemState(RES_BOX, false, &pItem))
+    if (SFX_ITEM_SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
     {
         const SvxBoxItem* pBox = (const SvxBoxItem*)pItem;
         if( pBox )
         {
             const SfxPoolItem* pShadItem;
-            if (SFX_ITEM_ON
+            if (SFX_ITEM_SET
                 == rAttrSet.GetItemState(RES_SHADOW, true, &pShadItem))
             {
                 const SvxShadowItem* pSI = (const SvxShadowItem*)pShadItem;

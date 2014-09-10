@@ -577,7 +577,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                         0 );
 
             sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
-            if( SFX_ITEM_ON == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
+            if( SFX_ITEM_SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
                 nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
             if( bLeftToRight )

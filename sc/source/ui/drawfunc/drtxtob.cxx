@@ -623,7 +623,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                 {
                     ESelection aFieldSel( nPar, nStart, nPar, nEnd );
                     SfxItemSet aSet = rEditEng.GetAttribs( aFieldSel );
-                    if ( aSet.GetItemState( EE_FEATURE_FIELD ) == SFX_ITEM_ON )
+                    if ( aSet.GetItemState( EE_FEATURE_FIELD ) == SFX_ITEM_SET )
                     {
                         if (!bChanged)
                         {

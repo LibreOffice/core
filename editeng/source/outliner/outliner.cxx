@@ -737,7 +737,7 @@ void Outliner::ImplSetLevelDependendStyleSheet( sal_Int32 nPara, SfxStyleSheet* 
         {
             SfxItemSet aOldAttrs( GetParaAttribs( nPara ) );
             SetStyleSheet( nPara, pNewStyle );
-            if ( aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
+            if ( aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET )
             {
                 SfxItemSet aAttrs( GetParaAttribs( nPara ) );
                 aAttrs.Put( aOldAttrs.Get( EE_PARA_NUMBULLET ) );
@@ -1235,7 +1235,7 @@ void Outliner::ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount )
         {
             sal_Int16 nDepth = -1;
             const SfxItemSet& rAttrs = pEditEngine->GetParaAttribs( nStartPara );
-            if ( rAttrs.GetItemState( EE_PARA_OUTLLEVEL ) == SFX_ITEM_ON )
+            if ( rAttrs.GetItemState( EE_PARA_OUTLLEVEL ) == SFX_ITEM_SET )
             {
                 const SfxInt16Item& rLevel = (const SfxInt16Item&) rAttrs.Get( EE_PARA_OUTLLEVEL );
                 nDepth = rLevel.GetValue();

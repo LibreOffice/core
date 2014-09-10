@@ -833,7 +833,7 @@ void HtmlExport::SetDocColors( SdPage* pPage )
     if(pSheet)
     {
         SfxItemSet& rSet = pSheet->GetItemSet();
-        if(rSet.GetItemState(EE_CHAR_COLOR,true) == SFX_ITEM_ON)
+        if(rSet.GetItemState(EE_CHAR_COLOR,true) == SFX_ITEM_SET)
             maTextColor = ((SvxColorItem*)rSet.GetItem(EE_CHAR_COLOR,true))->GetValue();
     }
 
@@ -1462,7 +1462,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
         return OUString();
 
     OUString aLink, aTarget;
-    if ( pSet->GetItemState( EE_FEATURE_FIELD ) == SFX_ITEM_ON )
+    if ( pSet->GetItemState( EE_FEATURE_FIELD ) == SFX_ITEM_SET )
     {
         SvxFieldItem* pItem = (SvxFieldItem*)pSet->GetItem( EE_FEATURE_FIELD );
         if(pItem)
@@ -1479,7 +1479,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
     bool bTemp;
     OUString aTemp;
 
-    if ( pSet->GetItemState( EE_CHAR_WEIGHT ) == SFX_ITEM_ON )
+    if ( pSet->GetItemState( EE_CHAR_WEIGHT ) == SFX_ITEM_SET )
     {
         bTemp = ((const SvxWeightItem&)pSet->Get( EE_CHAR_WEIGHT )).GetWeight() == WEIGHT_BOLD;
         aTemp = pState->SetWeight( bTemp );
@@ -1489,7 +1489,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
             aStr.append(aTemp);
     }
 
-    if ( pSet->GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON )
+    if ( pSet->GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_SET )
     {
         bTemp = ((const SvxUnderlineItem&)pSet->Get( EE_CHAR_UNDERLINE )).GetLineStyle() != UNDERLINE_NONE;
         aTemp = pState->SetUnderline( bTemp );
@@ -1499,7 +1499,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
             aStr.append(aTemp);
     }
 
-    if ( pSet->GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_ON )
+    if ( pSet->GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_SET )
     {
         bTemp = ((const SvxCrossedOutItem&)pSet->Get( EE_CHAR_STRIKEOUT )).GetStrikeout() != STRIKEOUT_NONE;
         aTemp = pState->SetStrikeout( bTemp );
@@ -1509,7 +1509,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
             aStr.append(aTemp);
     }
 
-    if ( pSet->GetItemState( EE_CHAR_ITALIC ) == SFX_ITEM_ON )
+    if ( pSet->GetItemState( EE_CHAR_ITALIC ) == SFX_ITEM_SET )
     {
         bTemp = ((const SvxPostureItem&)pSet->Get( EE_CHAR_ITALIC )).GetPosture() != ITALIC_NONE;
         aTemp = pState->SetItalic( bTemp );
@@ -1521,7 +1521,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
 
     if(mbDocColors)
     {
-        if ( pSet->GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON )
+        if ( pSet->GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_SET )
         {
             Color aTextColor = ((const SvxColorItem&) pSet->Get( EE_CHAR_COLOR )).GetValue();
             if( aTextColor == COL_AUTO )

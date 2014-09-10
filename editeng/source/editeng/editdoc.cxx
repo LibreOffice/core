@@ -947,7 +947,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
                 nSourceWhich = nW;
         }
 
-        if ( rSource.GetItemState( nSourceWhich, false ) == SFX_ITEM_ON )
+        if ( rSource.GetItemState( nSourceWhich, false ) == SFX_ITEM_SET )
         {
             MapUnit eSourceUnit = pSourceUnit ? *pSourceUnit : (MapUnit)pSourcePool->GetMetric( nSourceWhich );
             MapUnit eDestUnit = pDestUnit ? *pDestUnit : (MapUnit)pDestPool->GetMetric( nWhich );
@@ -1882,7 +1882,7 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
         for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
         {
             // Don't change bullet on/off
-            if ( ( nWhich != EE_PARA_BULLETSTATE ) && ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON ) )
+            if ( ( nWhich != EE_PARA_BULLETSTATE ) && ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_SET ) )
                 aAttribSet.ClearItem( nWhich );
         }
     }
@@ -1892,7 +1892,7 @@ const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich ) const
 {
     // Hard paragraph attributes take precedence!
     const SfxItemSet* pTakeFrom = &aAttribSet;
-    if ( pStyle && ( aAttribSet.GetItemState( nWhich, false ) != SFX_ITEM_ON  ) )
+    if ( pStyle && ( aAttribSet.GetItemState( nWhich, false ) != SFX_ITEM_SET  ) )
         pTakeFrom = &pStyle->GetItemSet();
 
     return pTakeFrom->Get( nWhich );
@@ -1901,9 +1901,9 @@ const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich ) const
 bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
 {
     bool bHasItem = false;
-    if ( aAttribSet.GetItemState( nWhich, false ) == SFX_ITEM_ON  )
+    if ( aAttribSet.GetItemState( nWhich, false ) == SFX_ITEM_SET  )
         bHasItem = true;
-    else if ( pStyle && pStyle->GetItemSet().GetItemState( nWhich ) == SFX_ITEM_ON )
+    else if ( pStyle && pStyle->GetItemSet().GetItemState( nWhich ) == SFX_ITEM_SET )
         bHasItem = true;
 
     return bHasItem;
@@ -2006,7 +2006,7 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
     sal_uInt16 nWhich_Weight = GetScriptItemId( EE_CHAR_WEIGHT, nScriptType );
     sal_uInt16 nWhich_Italic = GetScriptItemId( EE_CHAR_ITALIC, nScriptType );
 
-    if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontInfo ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontInfo ) == SFX_ITEM_SET ) )
     {
         const SvxFontItem& rFontItem = (const SvxFontItem&)rSet.Get( nWhich_FontInfo );
         rFont.SetName( rFontItem.GetFamilyName() );
@@ -2014,31 +2014,31 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
         rFont.SetPitch( rFontItem.GetPitch() );
         rFont.SetCharSet( rFontItem.GetCharSet() );
     }
-    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Language ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Language ) == SFX_ITEM_SET ) )
         rFont.SetLanguage( ((const SvxLanguageItem&)rSet.Get( nWhich_Language )).GetLanguage() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_COLOR ) == SFX_ITEM_SET ) )
         rFont.SetColor( ((const SvxColorItem&)rSet.Get( EE_CHAR_COLOR )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_BKGCOLOR ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_BKGCOLOR ) == SFX_ITEM_SET ) )
         rFont.SetFillColor( ((const SvxBackgroundColorItem&)rSet.Get( EE_CHAR_BKGCOLOR )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_FontHeight ) == SFX_ITEM_SET ) )
         rFont.SetSize( Size( rFont.GetSize().Width(), ((const SvxFontHeightItem&)rSet.Get( nWhich_FontHeight ) ).GetHeight() ) );
-    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Weight ) == SFX_ITEM_SET ) )
         rFont.SetWeight( ((const SvxWeightItem&)rSet.Get( nWhich_Weight )).GetWeight() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_SET ) )
         rFont.SetUnderline( ((const SvxUnderlineItem&)rSet.Get( EE_CHAR_UNDERLINE )).GetLineStyle() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OVERLINE ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OVERLINE ) == SFX_ITEM_SET ) )
         rFont.SetOverline( ((const SvxOverlineItem&)rSet.Get( EE_CHAR_OVERLINE )).GetLineStyle() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_SET ) )
         rFont.SetStrikeout( ((const SvxCrossedOutItem&)rSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_CASEMAP ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_CASEMAP ) == SFX_ITEM_SET ) )
         rFont.SetCaseMap( ((const SvxCaseMapItem&)rSet.Get( EE_CHAR_CASEMAP )).GetCaseMap() );
-    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Italic ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( nWhich_Italic ) == SFX_ITEM_SET ) )
         rFont.SetItalic( ((const SvxPostureItem&)rSet.Get( nWhich_Italic )).GetPosture() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_OUTLINE ) == SFX_ITEM_SET ) )
         rFont.SetOutline( ((const SvxContourItem&)rSet.Get( EE_CHAR_OUTLINE )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_SHADOW ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_SHADOW ) == SFX_ITEM_SET ) )
         rFont.SetShadow( ((const SvxShadowedItem&)rSet.Get( EE_CHAR_SHADOW )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ESCAPEMENT ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_ESCAPEMENT ) == SFX_ITEM_SET ) )
     {
         const SvxEscapementItem& rEsc = (const SvxEscapementItem&) rSet.Get( EE_CHAR_ESCAPEMENT );
 
@@ -2052,15 +2052,15 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
             nEsc = sal::static_int_cast< short >( -( 100 - nProp ) );
         rFont.SetEscapement( nEsc );
     }
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_PAIRKERNING ) == SFX_ITEM_SET ) )
         rFont.SetKerning( ((const SvxAutoKernItem&)rSet.Get( EE_CHAR_PAIRKERNING )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_KERNING ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_KERNING ) == SFX_ITEM_SET ) )
         rFont.SetFixKerning( ((const SvxKerningItem&)rSet.Get( EE_CHAR_KERNING )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WLM ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_WLM ) == SFX_ITEM_SET ) )
         rFont.SetWordLineMode( ((const SvxWordLineModeItem&)rSet.Get( EE_CHAR_WLM )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_EMPHASISMARK ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_EMPHASISMARK ) == SFX_ITEM_SET ) )
         rFont.SetEmphasisMark( ((const SvxEmphasisMarkItem&)rSet.Get( EE_CHAR_EMPHASISMARK )).GetValue() );
-    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SFX_ITEM_ON ) )
+    if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SFX_ITEM_SET ) )
         rFont.SetRelief( (FontRelief)((const SvxCharReliefItem&)rSet.Get( EE_CHAR_RELIEF )).GetValue() );
 
     // If comparing the entire font, or if checking before each alteration
@@ -2625,7 +2625,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
                 {
                     rCurSet.Put( *pItem );
                 }
-                else if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
+                else if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_SET )
                 {
                     const SfxPoolItem& rItem = rCurSet.Get( nWhich );
                     if ( rItem != *pItem )
@@ -2675,7 +2675,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
                 {
                     rCurSet.Put( *pItem );
                 }
-                else if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_ON )
+                else if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_SET )
                 {
                     const SfxPoolItem& rItem = rCurSet.Get( nWhich );
                     if ( rItem != *pItem )

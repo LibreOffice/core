@@ -2473,7 +2473,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
         const SfxPoolItem * pI = NULL;
         Color aColor;
 
-        if ( SFX_ITEM_ON == pFrmFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
+        if ( SFX_ITEM_SET == pFrmFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
         {
             aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
         }
@@ -2505,7 +2505,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
             const SfxPoolItem * pI = NULL;
             Color aColor;
 
-                if ( SFX_ITEM_ON ==
+                if ( SFX_ITEM_SET ==
                          pFrmFmt->GetAttrSet().
                          GetItemState( RES_BACKGROUND, false, &pI ) )
             {

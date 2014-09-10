@@ -109,7 +109,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         aInputSet.Put(*pItem, EE_PARA_NUMBULLET);
     }
 
-    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
+    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_SET )
     {
         SvxNumBulletItem* pItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pItem->GetNumRule();
@@ -178,7 +178,7 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
 // #i35937 - removed EE_PARA_BULLETSTATE setting
     }
 
-    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_ON )
+    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_SET )
     {
         SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pBulletItem->GetNumRule();

@@ -304,10 +304,10 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool
             fprintf( fp, "ITEM_OFF   " );
         else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_DONTCARE )
             fprintf( fp, "ITEM_DC    " );
-        else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_ON )
+        else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_SET )
             fprintf( fp, "ITEM_ON   *" );
 
-        if ( !bShowALL && ( rSet.GetItemState( nWhich, bSearchInParent ) != SFX_ITEM_ON ) )
+        if ( !bShowALL && ( rSet.GetItemState( nWhich, bSearchInParent ) != SFX_ITEM_SET ) )
             continue;
 
         const SfxPoolItem& rItem = rSet.Get( nWhich, bSearchInParent );

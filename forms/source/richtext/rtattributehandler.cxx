@@ -411,7 +411,7 @@ namespace frm
         // then we toggle the adjustment, too
         SvxAdjust eCurrentAdjustment = SVX_ADJUST_LEFT;
         const SfxPoolItem* pCurrentAdjustment = NULL;
-        if ( SFX_ITEM_ON == _rCurrentAttribs.GetItemState( EE_PARA_JUST, true, &pCurrentAdjustment ) )
+        if ( SFX_ITEM_SET == _rCurrentAttribs.GetItemState( EE_PARA_JUST, true, &pCurrentAdjustment ) )
             eCurrentAdjustment = static_cast< const SvxAdjustItem* >( pCurrentAdjustment )->GetAdjust();
 
         if ( eCurrentAdjustment == m_eOppositeDefaultAdjustment )

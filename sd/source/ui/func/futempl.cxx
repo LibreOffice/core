@@ -171,7 +171,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             }
             pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
 
-            if (pArgs && pArgs->GetItemState(SID_STYLE_REFERENCE) == SFX_ITEM_ON)
+            if (pArgs && pArgs->GetItemState(SID_STYLE_REFERENCE) == SFX_ITEM_SET)
             {
                 OUString aParentName(((const SfxStringItem&) pArgs->Get(SID_STYLE_REFERENCE)).GetValue());
                 pStyleSheet->SetParent(aParentName);

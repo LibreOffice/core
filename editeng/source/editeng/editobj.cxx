@@ -1099,7 +1099,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
 
         // Symbols?
         bool bSymbolPara = false;
-        if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON)
+        if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_SET)
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)rC.GetParaAttribs().Get(EE_CHAR_FONTINFO);
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
@@ -1148,7 +1148,7 @@ void EditTextObjectImpl::StoreData( SvStream& rOStream ) const
         // StarSymbol as paragraph attribute or in StyleSheet?
 
         FontToSubsFontConverter hConv = NULL;
-        if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON)
+        if (rC.GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_SET)
         {
             hConv = CreateFontToSubsFontConverter( ((const SvxFontItem&)rC.GetParaAttribs().Get( EE_CHAR_FONTINFO )).GetFamilyName(), FONTTOSUBSFONT_EXPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
         }
@@ -1334,7 +1334,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         // FinishLoad will not be called in OpenOffice Calc, no StyleSheets...
 
         bool bSymbolPara = false;
-        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
+        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_SET )
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             if ( rFontItem.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
@@ -1390,7 +1390,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
 
         // Convert StarMath and StarBats to StarSymbol
         // Maybe old symbol font as paragraph attribute?
-        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_ON )
+        if ( pC->GetParaAttribs().GetItemState( EE_CHAR_FONTINFO ) == SFX_ITEM_SET )
         {
             const SvxFontItem& rFontItem = (const SvxFontItem&)pC->GetParaAttribs().Get( EE_CHAR_FONTINFO );
             FontToSubsFontConverter hConv = CreateFontToSubsFontConverter( rFontItem.GetFamilyName(), FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS );
@@ -1493,7 +1493,7 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
         {
             ContentInfo& rC = aContents[i];
             const SvxLRSpaceItem& rLRSpace = static_cast<const SvxLRSpaceItem&>(rC.GetParaAttribs().Get(EE_PARA_LRSPACE));
-            if ( rLRSpace.GetTxtLeft() && ( rC.GetParaAttribs().GetItemState( EE_PARA_TABS ) == SFX_ITEM_ON ) )
+            if ( rLRSpace.GetTxtLeft() && ( rC.GetParaAttribs().GetItemState( EE_PARA_TABS ) == SFX_ITEM_SET ) )
             {
                 const SvxTabStopItem& rTabs = static_cast<const SvxTabStopItem&>(rC.GetParaAttribs().Get(EE_PARA_TABS));
                 SvxTabStopItem aNewTabs( 0, 0, SVX_TAB_ADJUST_LEFT, EE_PARA_TABS );
