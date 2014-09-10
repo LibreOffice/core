@@ -4024,8 +4024,8 @@ static void lcl_PushNumruleState( SfxItemState &aNumRuleState, SwNumRuleItem &aN
     }
 }
 
-static void lcl_PopNumruleState( int aNumRuleState, const SwNumRuleItem &aNumRuleItem,
-                                 int aListIdState, const SfxStringItem &aListIdItem,
+static void lcl_PopNumruleState( SfxItemState aNumRuleState, const SwNumRuleItem &aNumRuleItem,
+                                 SfxItemState aListIdState, const SfxStringItem &aListIdItem,
                                  SwTxtNode *pDestTxtNd, const SwPaM& rPam )
 {
     /* If only a part of one paragraph is copied

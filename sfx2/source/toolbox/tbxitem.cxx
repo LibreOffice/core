@@ -547,7 +547,13 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
-                    eState = (SfxItemState) aItemStatus.State;
+                    SfxItemState tmpState = (SfxItemState) aItemStatus.State;
+                    // make sure no-one tries to send us a combination of states
+                    if (eState != SfxItemState::UNKNOWN && eState != SFX_ITEM_DISABLED &&
+                        eState != SFX_ITEM_READONLY && eState != SFX_ITEM_DONTCARE &&
+                        eState != SFX_ITEM_DEFAULT && eState != SFX_ITEM_SET)
+                        throw ::com::sun::star::uno::RuntimeException("unknown status");
+                    eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
                 }
                 else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
@@ -1095,7 +1101,13 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                 {
                     ItemStatus aItemStatus;
                     rEvent.State >>= aItemStatus;
-                    eState = (SfxItemState) aItemStatus.State;
+                    SfxItemState tmpState = (SfxItemState) aItemStatus.State;
+                    // make sure no-one tries to send us a combination of states
+                    if (eState != SfxItemState::UNKNOWN && eState != SFX_ITEM_DISABLED &&
+                        eState != SFX_ITEM_READONLY && eState != SFX_ITEM_DONTCARE &&
+                        eState != SFX_ITEM_DEFAULT && eState != SFX_ITEM_SET)
+                        throw ::com::sun::star::uno::RuntimeException("unknown status");
+                    eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
                 }
                 else if ( pType == cppu::UnoType< ::com::sun::star::frame::status::Visibility>::get() )
