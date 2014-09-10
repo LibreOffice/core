@@ -164,6 +164,7 @@ void StatusBar::ImplInitSettings( bool bFont,
                                   bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+
     if ( bFont )
     {
         Font aFont = rStyleSettings.GetToolFont();
@@ -209,16 +210,14 @@ void StatusBar::ImplInitSettings( bool bFont,
             EnableChildTransparentMode( true );
         }
     }
-       const BitmapEx& rPersonaBitmap = rStyleSettings.GetPersonaFooter();
-        if(!rPersonaBitmap.IsEmpty())
-        {
-            Wallpaper aWallpaper(rPersonaBitmap);
-            aWallpaper.SetStyle(WALLPAPER_TOPRIGHT);
-            aWallpaper.SetColor(rStyleSettings.GetWorkspaceColor());
-            mpImplData->mpVirDev->SetBackground(aWallpaper);
-
-        }
-
+    const BitmapEx& rPersonaBitmap = rStyleSettings.GetPersonaFooter();
+    if(!rPersonaBitmap.IsEmpty())
+    {
+         Wallpaper aWallpaper(rPersonaBitmap);
+         aWallpaper.SetStyle(WALLPAPER_BOTTOM);
+         aWallpaper.SetColor(rStyleSettings.GetWorkspaceColor());
+         mpImplData->mpVirDev->SetBackground(aWallpaper);
+    }
 }
 
 void StatusBar::ImplFormat()
