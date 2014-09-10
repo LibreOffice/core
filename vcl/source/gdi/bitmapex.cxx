@@ -104,7 +104,8 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
 #ifdef DBG_UTIL
         OStringBuffer aErrorStr(
             "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <");
-        aErrorStr.append(OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US)).append('>');
+        aErrorStr.append(OUStringToOString(aFileName, RTL_TEXTENCODING_ASCII_US)).append("> via icon theme ");
+        aErrorStr.append(OUStringToOString(aIconTheme, RTL_TEXTENCODING_ASCII_US)).append('.');
         OSL_FAIL(aErrorStr.getStr());
 #endif
     }
