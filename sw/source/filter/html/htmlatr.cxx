@@ -377,7 +377,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         if( bOutStyles && bHardDrop && nDeep != 0 )
         {
             const SfxPoolItem *pItem;
-            if( SFX_ITEM_SET==pFmt->GetAttrSet().GetItemState(
+            if( SfxItemState::SET==pFmt->GetAttrSet().GetItemState(
                                     RES_PARATR_DROP, true, &pItem ) )
             {
                 bool bPut = true;
@@ -386,7 +386,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
                     pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, &pTemplate->getIDocumentStylePoolAccess() );
                     const SfxPoolItem *pRefItem;
                     bool bRefItemSet =
-                        SFX_ITEM_SET==pReferenceFmt->GetAttrSet().GetItemState(
+                        SfxItemState::SET==pReferenceFmt->GetAttrSet().GetItemState(
                                         RES_PARATR_DROP, true, &pRefItem );
                     bPut = !bRefItemSet || *pItem!=*pRefItem;
                 }
@@ -653,7 +653,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     const SfxPoolItem* pItem;
 
     if( rInfo.pItemSet &&
-        SFX_ITEM_SET == rInfo.pItemSet->GetItemState( RES_PARATR_ADJUST,
+        SfxItemState::SET == rInfo.pItemSet->GetItemState( RES_PARATR_ADJUST,
                                                       false, &pItem ) )
     {
         pAdjItem = pItem;
@@ -856,7 +856,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         {
             // export language if it differs from the default language only.
             const SfxPoolItem *pTmpItem;
-            if( SFX_ITEM_SET == rInfo.pItemSet->GetItemState( aWhichIds[i],
+            if( SfxItemState::SET == rInfo.pItemSet->GetItemState( aWhichIds[i],
                         true, &pTmpItem ) &&
                 ((const SvxLanguageItem *)pTmpItem)->GetLanguage() == eLang )
                 rInfo.pItemSet->ClearItem( aWhichIds[i] );
@@ -1878,7 +1878,7 @@ void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
     while( nWhich )
     {
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( nWhich, bDeep, &pItem ) )
+        if( SfxItemState::SET == rItemSet.GetItemState( nWhich, bDeep, &pItem ) )
         {
             Insert( *pItem, nStart, nEnd, rFmtInfos, bParaAttrs );
         }
@@ -2085,7 +2085,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             return rHTMLWrt;
         }
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_LR_SPACE, false, &pItem ))
+        if( SfxItemState::SET == pItemSet->GetItemState( RES_LR_SPACE, false, &pItem ))
         {
             sal_Int32 nLeft = ((SvxLRSpaceItem*)pItem)->GetLeft();
             sal_Int32 nRight = ((SvxLRSpaceItem*)pItem)->GetRight();
@@ -2124,7 +2124,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             }
         }
 
-        if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BOX, false, &pItem ))
+        if( SfxItemState::SET == pItemSet->GetItemState( RES_BOX, false, &pItem ))
         {
             const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
             const editeng::SvxBorderLine* pBorderLine = pBoxItem->GetBottom();
@@ -2162,7 +2162,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         const SfxPoolItem* pItem;
         const SfxItemSet* pItemSet = pNd->GetpSwAttrSet();
         if( pItemSet && pItemSet->Count() &&
-            SFX_ITEM_SET == pItemSet->GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) &&
+            SfxItemState::SET == pItemSet->GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) &&
             40 == ((const SvxFontHeightItem *)pItem)->GetHeight() )
         {
             // ... ausserdem ist die 2pt Schrift eingestellt ...
@@ -2201,12 +2201,12 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
         if( pItemSet )
         {
-            if( SFX_ITEM_SET == pItemSet->GetItemState( RES_PAGEDESC, true, &pItem ) &&
+            if( SfxItemState::SET == pItemSet->GetItemState( RES_PAGEDESC, true, &pItem ) &&
                 ((SwFmtPageDesc *)pItem)->GetPageDesc() )
             {
                 bPageBreakBefore = true;
             }
-            else if( SFX_ITEM_SET == pItemSet->GetItemState( RES_BREAK, true, &pItem ) )
+            else if( SfxItemState::SET == pItemSet->GetItemState( RES_BREAK, true, &pItem ) )
             {
                 switch( ((SvxFmtBreakItem *)pItem)->GetBreak() )
                 {

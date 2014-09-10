@@ -752,14 +752,14 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     {
 
         SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
-        SfxItemState eState = SFX_ITEM_UNKNOWN;
+        SfxItemState eState = SfxItemState::UNKNOWN;
         // ask the bindings of the current view frame (which should be the one we're residing in) for the state
         if (pCurrentFrame)
         {
             SfxPoolItem* pItem = NULL;
             eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
 
-            if (eState >= SFX_ITEM_DEFAULT && pItem )
+            if (eState >= SfxItemState::DEFAULT && pItem )
             {
                 bChecked = pItem->ISA(SfxBoolItem) && ((SfxBoolItem*)pItem)->GetValue();
                 rMenu.CheckItem(SID_FM_SHOW_PROPERTY_BROWSER,bChecked);

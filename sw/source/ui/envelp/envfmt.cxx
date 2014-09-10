@@ -305,7 +305,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             SfxItemSet* pOutputSet = (SfxItemSet*)pDlg->GetOutputItemSet();
             sal_uInt16 nNewDist;
 
-            if( SFX_ITEM_SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,
+            if( SfxItemState::SET == pOutputSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS,
                 false, &pItem ) &&
                 nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
             {

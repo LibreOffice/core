@@ -169,7 +169,7 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         return;
 
     const SfxPoolItem* pItem;
-    if (pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) != SFX_ITEM_SET)
+    if (pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) != SfxItemState::SET)
         return;
 
 
@@ -393,7 +393,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( !bWriteClipboardDoc && pDoc->GetDocShell() &&
          (!pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) &&
           !pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE)) &&
-        SFX_ITEM_SET == rPageItemSet.GetItemState( RES_HEADER, true, &pItem) )
+        SfxItemState::SET == rPageItemSet.GetItemState( RES_HEADER, true, &pItem) )
     {
         const SwFrmFmt *pHeaderFmt =
             ((const SwFmtHeader *)pItem)->GetHeaderFmt();
@@ -413,7 +413,7 @@ sal_uLong SwHTMLWriter::WriteStream()
 
     if( !bWriteClipboardDoc && pDoc->GetDocShell() &&
         (!pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::HTML_MODE) && !pDoc->getIDocumentSettingAccess().get(IDocumentSettingAccess::BROWSE_MODE))  &&
-        SFX_ITEM_SET == rPageItemSet.GetItemState( RES_FOOTER, true, &pItem) )
+        SfxItemState::SET == rPageItemSet.GetItemState( RES_FOOTER, true, &pItem) )
     {
         const SwFrmFmt *pFooterFmt =
             ((const SwFmtFooter *)pItem)->GetFooterFmt();
@@ -521,7 +521,7 @@ static const SwFmtCol *lcl_html_GetFmtCol( const SwSection& rSection,
 
     const SfxPoolItem* pItem;
     if( FILE_LINK_SECTION != rSection.GetType() &&
-        SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState(RES_COL,false,&pItem) &&
+        SfxItemState::SET == rFmt.GetAttrSet().GetItemState(RES_COL,false,&pItem) &&
         ((const SwFmtCol *)pItem)->GetNumCols() > 1 )
     {
         pCol = (const SwFmtCol *)pItem;
@@ -838,10 +838,10 @@ static void OutBodyColor( const sal_Char* pTag, const SwFmt *pFmt,
 
     const SfxItemSet& rItemSet = pFmt->GetAttrSet();
     const SfxPoolItem *pRefItem = 0, *pItem = 0;
-    bool bItemSet = SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_COLOR,
+    bool bItemSet = SfxItemState::SET == rItemSet.GetItemState( RES_CHRATR_COLOR,
                                                            true, &pItem);
     bool bRefItemSet = pRefFmt &&
-        SFX_ITEM_SET == pRefFmt->GetAttrSet().GetItemState( RES_CHRATR_COLOR,
+        SfxItemState::SET == pRefFmt->GetAttrSet().GetItemState( RES_CHRATR_COLOR,
                                                             true, &pRefItem);
     if( bItemSet )
     {
@@ -1233,7 +1233,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
 void SwHTMLWriter::OutBackground( const SfxItemSet& rItemSet, bool bGraphic )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false,
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
                                                &pItem ))
     {
         OutBackground( ((const SvxBrushItem*)pItem), bGraphic );

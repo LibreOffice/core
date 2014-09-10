@@ -559,13 +559,13 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
 
     if (eFamily == SD_STYLE_FAMILY_MASTERPAGE &&
         aStyleName.indexOf(OUString(SdResId(STR_LAYOUT_OUTLINE))) != -1 &&
-        rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SFX_ITEM_SET)
+        rSet.GetItemState(EE_CHAR_FONTHEIGHT) == SfxItemState::SET)
     {
         const SfxItemSet* pCurSet = &GetItemSet();
         sal_uInt32 nNewHeight = ((SvxFontHeightItem&)rSet.Get(EE_CHAR_FONTHEIGHT)).GetHeight();
         sal_uInt32 nOldHeight = ((SvxFontHeightItem&)pCurSet->Get(EE_CHAR_FONTHEIGHT)).GetHeight();
 
-        if (rSet.GetItemState(EE_PARA_BULLET) != SFX_ITEM_SET || !bOnlyMissingItems)
+        if (rSet.GetItemState(EE_PARA_BULLET) != SfxItemState::SET || !bOnlyMissingItems)
         {
             const SvxBulletItem& rBItem = (const SvxBulletItem&)pCurSet->Get(EE_PARA_BULLET);
             double fBulletFraction = double(rBItem.GetWidth()) / nOldHeight;
@@ -574,7 +574,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
             rSet.Put(aNewBItem);
         }
 
-        if (rSet.GetItemState(EE_PARA_LRSPACE) != SFX_ITEM_SET || !bOnlyMissingItems)
+        if (rSet.GetItemState(EE_PARA_LRSPACE) != SfxItemState::SET || !bOnlyMissingItems)
         {
             const SvxLRSpaceItem& rLRItem = (const SvxLRSpaceItem&)pCurSet->Get(EE_PARA_LRSPACE);
             double fIndentFraction = double(rLRItem.GetTxtLeft()) / nOldHeight;
@@ -585,7 +585,7 @@ void SdStyleSheet::AdjustToFontHeight(SfxItemSet& rSet, bool bOnlyMissingItems)
             rSet.Put(aNewLRItem);
         }
 
-        if (rSet.GetItemState(EE_PARA_ULSPACE) != SFX_ITEM_SET || !bOnlyMissingItems)
+        if (rSet.GetItemState(EE_PARA_ULSPACE) != SfxItemState::SET || !bOnlyMissingItems)
         {
             const SvxULSpaceItem& rULItem = (const SvxULSpaceItem&)pCurSet->Get(EE_PARA_ULSPACE);
             SvxULSpaceItem aNewULItem(rULItem);
@@ -1111,7 +1111,7 @@ Any SAL_CALL SdStyleSheet::getPropertyValue( const OUString& PropertyName ) thro
             const SfxPoolItem* pItem;
             SfxItemSet& rStyleSet = GetItemSet();
 
-            if( rStyleSet.GetItemState( pEntry->nWID, true, &pItem ) == SFX_ITEM_SET )
+            if( rStyleSet.GetItemState( pEntry->nWID, true, &pItem ) == SfxItemState::SET )
                 aSet.Put(  *pItem );
 
             if( !aSet.Count() )
@@ -1173,8 +1173,8 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
     {
         const SfxItemSet& rSet = GetItemSet();
 
-        if( rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET ||
-            rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET )
+        if( rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SfxItemState::SET ||
+            rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SfxItemState::SET )
         {
             return PropertyState_DIRECT_VALUE;
         }
@@ -1191,11 +1191,11 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
 
         switch( rStyleSet.GetItemState( pEntry->nWID, false ) )
         {
-        case SFX_ITEM_READONLY:
-        case SFX_ITEM_SET:
+        case SfxItemState::READONLY:
+        case SfxItemState::SET:
             eState = PropertyState_DIRECT_VALUE;
             break;
-        case SFX_ITEM_DEFAULT:
+        case SfxItemState::DEFAULT:
             eState = PropertyState_DEFAULT_VALUE;
             break;
         default:

@@ -275,7 +275,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     {
         case SID_ATTR_PARA_ADJUST:
         {
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_PARATR_ADJUST) )
+            if( pArgs && SfxItemState::SET == pArgs->GetItemState(RES_PARATR_ADJUST) )
             {
                 const SvxAdjustItem& rAdj = (const SvxAdjustItem&) pArgs->Get(RES_PARATR_ADJUST);
                 SvxAdjustItem aAdj( rAdj.GetAdjust(), RES_PARATR_ADJUST );
@@ -301,7 +301,7 @@ SET_ADJUST:
         break;
 
         case SID_ATTR_PARA_LINESPACE:
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState( GetPool().GetWhich(nSlot) ))
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState( GetPool().GetWhich(nSlot) ))
             {
                 SvxLineSpacingItem aLineSpace = (const SvxLineSpacingItem&)pArgs->Get(
                                                             GetPool().GetWhich(nSlot));
@@ -333,7 +333,7 @@ SET_LINESPACE:
             GetShell().GetCurAttr(aAdjustSet);
             bool bChgAdjust = false;
             SfxItemState eAdjustState = aAdjustSet.GetItemState(RES_PARATR_ADJUST, false);
-            if(eAdjustState  >= SFX_ITEM_DEFAULT)
+            if(eAdjustState  >= SfxItemState::DEFAULT)
             {
                 int eAdjust = (int)(( const SvxAdjustItem& )
                         aAdjustSet.Get(RES_PARATR_ADJUST)).GetAdjust();
@@ -447,7 +447,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 {
                     rSh.StartAction();
                     rSh.StartUndo( UNDO_START );
-                    if ( SFX_ITEM_SET == aSet.GetItemState(HINT_END,false,&pItem) )
+                    if ( SfxItemState::SET == aSet.GetItemState(HINT_END,false,&pItem) )
                     {
                         if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
                             rSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue());
@@ -505,23 +505,23 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     int eAdjust = -1;   // Illegal value to recognize DONTCARE.
     SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, false, &pItem);
 
-    if( SFX_ITEM_DEFAULT == eState )
+    if( SfxItemState::DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_PARATR_ADJUST);
-    if( SFX_ITEM_DEFAULT <= eState )
+    if( SfxItemState::DEFAULT <= eState )
         eAdjust = (int)(( SvxAdjustItem* ) pItem)->GetAdjust();
 
     short nEsc = 0;
     eState =  aCoreSet.GetItemState(RES_CHRATR_ESCAPEMENT, false, &pItem);
-    if( SFX_ITEM_DEFAULT == eState )
+    if( SfxItemState::DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_CHRATR_ESCAPEMENT);
-    if( eState >= SFX_ITEM_DEFAULT )
+    if( eState >= SfxItemState::DEFAULT )
         nEsc = ((SvxEscapementItem* )pItem)->GetEsc();
 
     sal_uInt16 nLineSpace = 0;
     eState =  aCoreSet.GetItemState(RES_PARATR_LINESPACING, false, &pItem);
-    if( SFX_ITEM_DEFAULT == eState )
+    if( SfxItemState::DEFAULT == eState )
         pItem = &rPool.GetDefaultItem(RES_PARATR_LINESPACING);
-    if( SFX_ITEM_DEFAULT <= eState &&
+    if( SfxItemState::DEFAULT <= eState &&
             ((SvxLineSpacingItem* )pItem)->GetLineSpaceRule() == SVX_LINE_SPACE_AUTO )
     {
         if(SVX_INTER_LINE_SPACE_OFF ==
@@ -621,7 +621,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case FN_UNDERLINE_DOUBLE:
             {
                 eState = aCoreSet.GetItemState(RES_CHRATR_UNDERLINE);
-                if( eState >= SFX_ITEM_DEFAULT )
+                if( eState >= SfxItemState::DEFAULT )
                 {
                     FontUnderline eUnderline =  ((const SvxUnderlineItem&)
                             aCoreSet.Get(RES_CHRATR_UNDERLINE)).GetLineStyle();
@@ -642,7 +642,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             case SID_ATTR_PARA_LRSPACE:
             {
                 eState = aCoreSet.GetItemState(RES_LR_SPACE);
-                if( eState >= SFX_ITEM_DEFAULT )
+                if( eState >= SfxItemState::DEFAULT )
                 {
                     SvxLRSpaceItem aLR = ( (const SvxLRSpaceItem&) aCoreSet.Get( RES_LR_SPACE ) );
                     aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
@@ -667,7 +667,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                     // is the item set?
                     sal_uInt16 nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
                     if((!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES))) &&
-                    aCoreSet.GetItemState( RES_FRAMEDIR, false ) >= SFX_ITEM_DEFAULT)
+                    aCoreSet.GetItemState( RES_FRAMEDIR, false ) >= SfxItemState::DEFAULT)
                     {
                         SvxFrameDirection eFrmDir = (SvxFrameDirection)
                                 ((const SvxFrameDirectionItem& )aCoreSet.Get(RES_FRAMEDIR)).GetValue();

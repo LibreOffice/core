@@ -523,9 +523,9 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, bool bDelNodes )
     {
         const SwNodeIndex* pIdx = pFmt->GetCntnt( false ).GetCntntIdx();
         const SfxPoolItem* pFtnEndAtTxtEnd;
-        if( SFX_ITEM_SET != pFmt->GetItemState(
+        if( SfxItemState::SET != pFmt->GetItemState(
                             RES_FTN_AT_TXTEND, true, &pFtnEndAtTxtEnd ) ||
-            SFX_ITEM_SET != pFmt->GetItemState(
+            SfxItemState::SET != pFmt->GetItemState(
                             RES_END_AT_TXTEND, true, &pFtnEndAtTxtEnd ))
             pFtnEndAtTxtEnd = 0;
 
@@ -864,8 +864,8 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             {
                 // Move PageDesc/Break to the first Node of the section
                 const SfxItemSet& rSet = *pCpyTNd->GetpSwAttrSet();
-                if( SFX_ITEM_SET == rSet.GetItemState( RES_BREAK ) ||
-                    SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC ))
+                if( SfxItemState::SET == rSet.GetItemState( RES_BREAK ) ||
+                    SfxItemState::SET == rSet.GetItemState( RES_PAGEDESC ))
                 {
                     SfxItemSet aSet( rSet );
                     if( bInsAtStart )

@@ -1000,7 +1000,7 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bRep
     // bReplaceAll has no effect here at all.
     bool bMeasure=ISA(SdrView) && ((SdrView*)this)->IsMeasureTool();
     const SfxPoolItem *pPoolItem=NULL;
-    if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SfxItemState::SET) {
         SdrLayerID nLayerId=((const SdrLayerIdItem*)pPoolItem)->GetValue();
         const SdrLayer* pLayer=pMod->GetLayerAdmin().GetLayerPerID(nLayerId);
         if (pLayer!=NULL) {
@@ -1008,7 +1008,7 @@ void SdrPaintView::SetNotPersistDefaultAttr(const SfxItemSet& rAttr, bool /*bRep
             else aAktLayer=pLayer->GetName();
         }
     }
-    if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SfxItemState::SET) {
         if (bMeasure) aMeasureLayer=((const SdrLayerNameItem*)pPoolItem)->GetValue();
         else aAktLayer=((const SdrLayerNameItem*)pPoolItem)->GetValue();
     }
@@ -1068,7 +1068,7 @@ void SdrPaintView::SetDefaultStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRe
         SfxWhichIter aIter(pStyleSheet->GetItemSet());
         sal_uInt16 nWhich=aIter.FirstWhich();
         while (nWhich!=0) {
-            if (pStyleSheet->GetItemSet().GetItemState(nWhich,true)==SFX_ITEM_SET) {
+            if (pStyleSheet->GetItemSet().GetItemState(nWhich,true)==SfxItemState::SET) {
                 aDefaultAttr.ClearItem(nWhich);
             }
             nWhich=aIter.NextWhich();

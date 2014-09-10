@@ -211,7 +211,7 @@ sal_uInt16 SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
 
             const SfxPoolItem* pItem;
             const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
-            if( SFX_ITEM_SET == rItemSet.GetItemState( RES_COL,
+            if( SfxItemState::SET == rItemSet.GetItemState( RES_COL,
                                                        true, &pItem ) &&
                 ((const SwFmtCol *)pItem)->GetNumCols() > 1 )
             {
@@ -580,7 +580,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     if( (nFrmOpts & HTML_FRMOPT_ALIGN) && !pStr &&
         ( (nFrmOpts & HTML_FRMOPT_S_ALIGN) == 0 ||
           (FLY_AS_CHAR == eAnchorId) ) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
+        SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
     {
         switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
@@ -605,7 +605,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     // HSPACE und VSPACE
     Size aTwipSpc( 0, 0 );
     if( (nFrmOpts & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, true, &pItem ))
+        SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, true, &pItem ))
     {
         aTwipSpc.Width() =
             ( ((SvxLRSpaceItem*)pItem)->GetLeft() +
@@ -613,7 +613,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
         nDfltLeftMargin = nDfltRightMargin = aTwipSpc.Width();
     }
     if( (nFrmOpts & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
+        SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
     {
         aTwipSpc.Height()  =
             ( ((SvxULSpaceItem*)pItem)->GetUpper() +
@@ -660,7 +660,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     }
 
     if( !(nFrmOpts & HTML_FRMOPT_ABSSIZE) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
+        SfxItemState::SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
     {
         const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
 
@@ -673,7 +673,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     // WIDTH und/oder HEIGHT
     // ATT_VAR_SIZE/ATT_MIN_SIZE nur ausgeben, wenn ANYSIZE gesezut ist
     if( (nFrmOpts & HTML_FRMOPT_SIZE) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
+        SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
         ( (nFrmOpts & HTML_FRMOPT_ANYSIZE) ||
           ATT_FIX_SIZE == ((const SwFmtFrmSize *)pItem)->GetHeightSizeType()) )
     {
@@ -740,7 +740,7 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     if( (nFrmOpts & HTML_FRMOPT_BRCLEAR) &&
         ((FLY_AT_PARA == rFrmFmt.GetAnchor().GetAnchorId()) ||
          (FLY_AT_CHAR == rFrmFmt.GetAnchor().GetAnchorId())) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
+        SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
     {
         const SwFmtSurround* pSurround = (const SwFmtSurround*)pItem;
         sal_Int16 eHoriOri =    rFrmFmt.GetHoriOrient().GetHoriOrient();
@@ -829,7 +829,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     // das URL-Attribut nur beruecksichtigen, wenn keine Image-Map
     // uebergeben wurde
     if( !pAltImgMap &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_URL, true, &pItem ))
+        SfxItemState::SET == rItemSet.GetItemState( RES_URL, true, &pItem ))
     {
         pURLItem = (const SwFmtURL *)pItem;
     }
@@ -966,7 +966,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
     // URL -> <A>...<IMG ... >...</A>
     const SvxMacroItem *pMacItem = 0;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, true, &pItem ))
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_FRMMACRO, true, &pItem ))
         pMacItem = (const SvxMacroItem *)pItem;
 
     if( pURLItem || pMacItem )
@@ -1041,7 +1041,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     // Umrandung -> <FONT COLOR = ...>...<IMG ... >...</FONT>
     sal_uInt16 nBorderWidth = 0;
     if( (nFrmOpts & HTML_FRMOPT_BORDER) &&
-        SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
+        SfxItemState::SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
     {
         Size aTwipBorder( 0, 0 );
         const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
@@ -1127,7 +1127,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
     HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
 
     // Events
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRMMACRO, true, &pItem ))
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_FRMMACRO, true, &pItem ))
     {
         const SvxMacroTableDtor& rMacTable =
             ((const SvxMacroItem *)pItem)->GetMacroTable();

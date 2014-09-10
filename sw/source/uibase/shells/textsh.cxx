@@ -489,9 +489,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if(pArgs)
         {
             if(FN_INSERT_FRAME_INTERACT_NOCOL != nSlot &&
-                pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem) == SFX_ITEM_SET)
+                pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem) == SfxItemState::SET)
                 nCols = ((SfxUInt16Item *)pItem)->GetValue();
-            if(pArgs->GetItemState(SID_MODIFIER, false, &pItem) == SFX_ITEM_SET)
+            if(pArgs->GetItemState(SID_MODIFIER, false, &pItem) == SfxItemState::SET)
                 bModifier1 |= KEY_MOD1 == ((SfxUInt16Item *)pItem)->GetValue();
         }
         if(bModifier1 )
@@ -543,13 +543,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aSize.Width() = GetShell().GetAnyCurRect(RECT_PAGE_PRT).Width();
             Point aPos = aMgr.GetPos();
             RndStdIds eAnchor = FLY_AT_PARA;
-            if(pArgs->GetItemState(nSlot, false, &pItem) == SFX_ITEM_SET)
+            if(pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
                 eAnchor = (RndStdIds)((SfxUInt16Item *)pItem)->GetValue();
-            if(pArgs->GetItemState(FN_PARAM_1, false, &pItem)  == SFX_ITEM_SET)
+            if(pArgs->GetItemState(FN_PARAM_1, false, &pItem)  == SfxItemState::SET)
                 aPos = ((SfxPointItem *)pItem)->GetValue();
-            if(pArgs->GetItemState(FN_PARAM_2, false, &pItem)  == SFX_ITEM_SET)
+            if(pArgs->GetItemState(FN_PARAM_2, false, &pItem)  == SfxItemState::SET)
                 aSize = ((SvxSizeItem *)pItem)->GetSize();
-            if(pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem)  == SFX_ITEM_SET)
+            if(pArgs->GetItemState(SID_ATTR_COLUMNS, false, &pItem)  == SfxItemState::SET)
             {
                 const sal_uInt16 nCols = ((SfxUInt16Item *)pItem)->GetValue();
                 if( !bSingleCol && 1 < nCols )
@@ -771,7 +771,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
                     SvxHyperlinkItem aHLinkItem;
                     const SfxPoolItem* pItem;
-                    if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
+                    if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
                     {
                         const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
                         aHLinkItem.SetURL(pINetFmt->GetValue());

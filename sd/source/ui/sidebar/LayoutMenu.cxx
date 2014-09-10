@@ -616,7 +616,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 const SfxPoolItem* pItem = NULL;
                 const SfxItemState aState (
                     mrBase.GetViewFrame()->GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
-                if (aState == SFX_ITEM_DISABLED)
+                if (aState == SfxItemState::DISABLED)
                     pMenu->EnableItem(SID_INSERTPAGE_LAYOUT_MENU, false);
 
                 // Show the menu.

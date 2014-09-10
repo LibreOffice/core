@@ -110,11 +110,11 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
                                                          &pItem );
 
                 // if its not set, try the pool
-                if(SFX_ITEM_SET != eState && SFX_WHICH_MAX > pEntry->nWhichId )
+                if(SfxItemState::SET != eState && SFX_WHICH_MAX > pEntry->nWhichId )
                     pItem = &rSet.GetPool()->GetDefaultItem(pEntry->nWhichId);
 
                 // do we have an item?
-                if(eState >= SFX_ITEM_DEFAULT && pItem)
+                if(eState >= SfxItemState::DEFAULT && pItem)
                 {
                     SfxPoolItem *pNewItem = pItem->Clone();
                     bool bPut = false;
@@ -154,7 +154,7 @@ void SvXMLImportItemMapper::importXML( SfxItemSet& rSet,
             if( !pUnknownItem )
             {
                 const SfxPoolItem* pItem = 0;
-                if( SFX_ITEM_SET == rSet.GetItemState( nUnknownWhich, true,
+                if( SfxItemState::SET == rSet.GetItemState( nUnknownWhich, true,
                                                        &pItem ) )
                 {
                     SfxPoolItem *pNew = pItem->Clone();

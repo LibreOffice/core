@@ -96,7 +96,7 @@ SwFormatTablePage::SwFormatTablePage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
+    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem))
         bHtmlMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
 
     bool bCTL = SW_MOD()->GetCTLOptions().IsCTLFontEnabled();
@@ -445,13 +445,13 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     SetMetric(*m_pBottomMF, aMetric);
 
     //Name
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
+    if(SfxItemState::SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
     {
         m_pNameED->SetText(((const SfxStringItem*)pItem)->GetValue());
         m_pNameED->SaveValue();
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
+    if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
         pTblData = (SwTableRep*)((const SwPtrItem*) pItem)->GetValue();
         nMinTableWidth = pTblData->GetColCount() * MINLAY;
@@ -542,7 +542,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     }
 
     //Margins
-    if(SFX_ITEM_SET == rSet.GetItemState( RES_UL_SPACE, false,&pItem ))
+    if(SfxItemState::SET == rSet.GetItemState( RES_UL_SPACE, false,&pItem ))
     {
         m_pTopMF->SetValue(m_pTopMF->Normalize(
                         ((const SvxULSpaceItem*)pItem)->GetUpper()), FUNIT_TWIP);
@@ -553,7 +553,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
     }
 
     //Text direction
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         sal_uIntPtr nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
         const sal_Int32 nPos = m_pTextDirectionLB->GetEntryPos( (void*) nVal );
@@ -571,7 +571,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet* )
 void    SwFormatTablePage::ActivatePage( const SfxItemSet& rSet )
 {
     OSL_ENSURE(pTblData, "table data not available?");
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP ))
+    if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP ))
     {
         SwTwips nCurWidth = text::HoriOrientation::FULL != pTblData->GetAlign() ?
                                         pTblData->GetWidth() :
@@ -745,7 +745,7 @@ SwTableColumnPage::SwTableColumnPage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
-    Init((SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
+    Init((SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
         && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON));
 }
 
@@ -765,7 +765,7 @@ void  SwTableColumnPage::Reset( const SfxItemSet* )
     const SfxItemSet& rSet = GetItemSet();
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
+    if(SfxItemState::SET == rSet.GetItemState( FN_TABLE_REP, false, &pItem ))
     {
         pTblData = (SwTableRep*)((const SwPtrItem*) pItem)->GetValue();
         nNoOfVisibleCols = pTblData->GetColCount();
@@ -1299,7 +1299,7 @@ SwTextFlowPage::SwTextFlowPage(Window* pParent, const SfxItemSet& rSet)
 
 #ifndef SW_FILEFORMAT_40
     const SfxPoolItem *pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
+    if(SfxItemState::SET == rSet.GetItemState( SID_HTML_MODE, false,&pItem )
         && ((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
 #endif
     {
@@ -1457,12 +1457,12 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                     aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName ) ))
                 m_pPageCollLB->InsertEntry( aFmtName );
 
-        if(SFX_ITEM_SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
+        if(SfxItemState::SET == rSet->GetItemState( RES_KEEP, false, &pItem ))
         {
             m_pKeepCB->Check( ((const SvxFmtKeepItem*)pItem)->GetValue() );
             m_pKeepCB->SaveValue();
         }
-        if(SFX_ITEM_SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
+        if(SfxItemState::SET == rSet->GetItemState( RES_LAYOUT_SPLIT, false, &pItem ))
         {
             m_pSplitCB->Check( ((const SwFmtLayoutSplit*)pItem)->GetValue() );
         }
@@ -1472,7 +1472,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         m_pSplitCB->SaveValue();
         SplitHdl_Impl(m_pSplitCB);
 
-        if(SFX_ITEM_SET == rSet->GetItemState( RES_ROW_SPLIT, false, &pItem ))
+        if(SfxItemState::SET == rSet->GetItemState( RES_ROW_SPLIT, false, &pItem ))
         {
             m_pSplitRowCB->Check( ((const SwFmtRowSplit*)pItem)->GetValue() );
         }
@@ -1482,7 +1482,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
 
         if(bPageBreak)
         {
-            if(SFX_ITEM_SET == rSet->GetItemState( RES_PAGEDESC, false, &pItem ))
+            if(SfxItemState::SET == rSet->GetItemState( RES_PAGEDESC, false, &pItem ))
             {
                 OUString sPageDesc;
                 const SwPageDesc* pDesc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
@@ -1522,7 +1522,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 }
             }
 
-            if(SFX_ITEM_SET == rSet->GetItemState( RES_BREAK, false, &pItem ))
+            if(SfxItemState::SET == rSet->GetItemState( RES_BREAK, false, &pItem ))
             {
                 const SvxFmtBreakItem* pPageBreak = (const SvxFmtBreakItem*)pItem;
                 SvxBreak eBreak = (SvxBreak)pPageBreak->GetValue();
@@ -1585,7 +1585,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         m_pPageCollLB->Enable(false);
     }
 
-    if(SFX_ITEM_SET == rSet->GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ))
+    if(SfxItemState::SET == rSet->GetItemState( FN_PARAM_TABLE_HEADLINE, false, &pItem ))
     {
         sal_uInt16 nRep = ((const SfxUInt16Item*)pItem)->GetValue();
         m_pHeadLineCB->Check( nRep > 0 );
@@ -1594,13 +1594,13 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         m_pRepeatHeaderNF->SetMin( 1 );
         m_pRepeatHeaderNF->SaveValue();
     }
-    if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT )
     {
         sal_uLong nDirection = ((const SvxFrameDirectionItem&)rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
         m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( (const void*)nDirection ));
     }
 
-    if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SfxItemState::DEFAULT )
     {
         sal_uInt16 nVert = ((const SfxUInt16Item&)rSet->Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
         sal_uInt16 nPos = 0;

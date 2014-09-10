@@ -430,7 +430,7 @@ IMPL_LINK(ParaPropertyPanel, ToolBoxBackColorDDHandler,ToolBox*, pToolBox)
 
 void ParaPropertyPanel::ParaBKGStateChanged(sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState)
 {
-    if( eState >= SFX_ITEM_DEFAULT && pState->ISA(SvxColorItem))
+    if( eState >= SfxItemState::DEFAULT && pState->ISA(SvxColorItem))
     {
         const SvxColorItem* pItem =  (const SvxColorItem*)pState;
         maColor = pItem->GetValue();
@@ -761,7 +761,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
 
     const sal_uInt16 nIdHangingIndent   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
     const sal_uInt16 nIdHangingIndent2  = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT2);
-    if( pState && eState >= SFX_ITEM_DEFAULT )
+    if( pState && eState >= SfxItemState::DEFAULT )
     {
         SvxLRSpaceItem* pSpace = ( SvxLRSpaceItem*)pState;
         maTxtLeft = pSpace->GetTxtLeft();
@@ -836,7 +836,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
 
         mpTbxProDemote->EnableItem(nIdHangingIndent2, true);
     }
-    else if( eState == SFX_ITEM_DISABLED )
+    else if( eState == SfxItemState::DISABLED )
     {
         mpLeftIndent-> Disable();
         mpRightIndent->Disable();
@@ -871,7 +871,7 @@ void ParaPropertyPanel::StateChangedLnSPImpl( sal_uInt16 /*nSID*/, SfxItemState 
 {
     meLnSpState = eState;
 
-    if( pState && eState >= SFX_ITEM_DEFAULT )
+    if( pState && eState >= SfxItemState::DEFAULT )
     {
         if(mpLnSPItem)
             delete mpLnSPItem;
@@ -884,7 +884,7 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
     mpTopDist->SetMax( mpTopDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
     mpBottomDist->SetMax( mpBottomDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
 
-    if( pState && eState >= SFX_ITEM_DEFAULT )
+    if( pState && eState >= SfxItemState::DEFAULT )
     {
         SvxULSpaceItem* pOldItem = (SvxULSpaceItem*)pState;
 
@@ -905,7 +905,7 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
         mpBottomDist->SetValue( nVal, FUNIT_100TH_MM );
         mpTbxUL_IncDec->Enable();
     }
-    else if(eState == SFX_ITEM_DISABLED )
+    else if(eState == SfxItemState::DISABLED )
     {
         mpTopDist->Disable();
         mpBottomDist->Disable();
@@ -923,14 +923,14 @@ void ParaPropertyPanel::StateChangeOutLineImpl( sal_uInt16 nSID, SfxItemState eS
 {
     if (nSID==SID_OUTLINE_LEFT)
     {
-        if( pState && eState == SFX_ITEM_UNKNOWN )
+        if( pState && eState == SfxItemState::UNKNOWN )
             mbOutLineLeft = true;
         else
             mbOutLineLeft = false;
     }
     if (nSID==SID_OUTLINE_RIGHT)
     {
-        if( pState && eState == SFX_ITEM_UNKNOWN )
+        if( pState && eState == SfxItemState::UNKNOWN )
             mbOutLineRight = true;
         else
             mbOutLineRight = false;
@@ -958,13 +958,13 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
          && ( nSID == SID_INC_INDENT || nSID == SID_DEC_INDENT ) )
     {
         // Writer's text shell is the only one which provides reasonable states for Slots SID_INC_INDENT and SID_DEC_INDENT
-        // - namely SFX_ITEM_UNKNOWN and SFX_ITEM_DISABLED
+        // - namely SfxItemState::UNKNOWN and SfxItemState::DISABLED
         const sal_uInt16 nIdIncrIndent = mpTbxIndent_IncDec->GetItemId(UNO_INCREMENTINDENT);
         const sal_uInt16 nIdDecrIndent = mpTbxIndent_IncDec->GetItemId(UNO_DECREMENTINDENT);
 
         mpTbxIndent_IncDec->EnableItem(
             nSID == SID_INC_INDENT ? nIdIncrIndent : nIdDecrIndent,
-            ( pState && eState == SFX_ITEM_UNKNOWN ) ? sal_True : sal_False );
+            ( pState && eState == SfxItemState::UNKNOWN ) ? sal_True : sal_False );
     }
 }
 
@@ -972,7 +972,7 @@ void ParaPropertyPanel::StateChangeIncDecImpl( sal_uInt16 nSID, SfxItemState eSt
 // Add toggle state for numbering and bullet icons
 void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( (eState >= SFX_ITEM_DEFAULT) && (pState->ISA(SfxBoolItem)) )
+    if ( (eState >= SfxItemState::DEFAULT) && (pState->ISA(SfxBoolItem)) )
     {
         const SfxBoolItem* pItem= (const SfxBoolItem*)pState;
         const bool aBool = pItem->GetValue();
@@ -998,7 +998,7 @@ void ParaPropertyPanel::StateChangeBulletNumImpl( sal_uInt16 nSID, SfxItemState 
 
 void ParaPropertyPanel::StateChangeBulletNumRuleImpl( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( eState >= SFX_ITEM_DEFAULT && pState->ISA(SfxUInt16Item) )
+    if ( eState >= SfxItemState::DEFAULT && pState->ISA(SfxUInt16Item) )
     {
         sal_uInt16 nValue = (sal_uInt16)0xFFFF;
         {
@@ -1023,7 +1023,7 @@ FieldUnit ParaPropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolI
 {
     FieldUnit eUnit = FUNIT_NONE;
 
-    if ( pState && eState >= SFX_ITEM_DEFAULT )
+    if ( pState && eState >= SfxItemState::DEFAULT )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pState )->GetValue();
     else
     {
@@ -1103,7 +1103,7 @@ ParaPropertyPanel::ParaPropertyPanel(Window* pParent,
       maNumBImageListRTL (SVX_RES(IL_NUM_BULLET_RTL)),
       maTxtLeft (0),
       mpLnSPItem (NULL),
-      meLnSpState (SFX_ITEM_DONTCARE),
+      meLnSpState (SfxItemState::DONTCARE),
       mbOutLineLeft (false),
       mbOutLineRight (false),
       maUpper (0),

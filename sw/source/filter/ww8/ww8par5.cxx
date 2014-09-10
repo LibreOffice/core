@@ -3266,9 +3266,9 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, OUString& rStr )
         const SfxItemSet* pSet = pNd->GetpSwAttrSet();
         if( pSet )
         {
-            if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false))
+            if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false))
                 aFltTOX.SetHadBreakItem(true);
-            if (SFX_ITEM_SET == pSet->GetItemState(RES_PAGEDESC, false))
+            if (SfxItemState::SET == pSet->GetItemState(RES_PAGEDESC, false))
                 aFltTOX.SetHadPageDescItem(true);
         }
     }

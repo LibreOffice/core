@@ -302,7 +302,7 @@ SwUnoCursorHelper::SetPageDesc(
     ::std::auto_ptr<SwFmtPageDesc> pNewDesc;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
+    if(SfxItemState::SET == rSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
     {
         pNewDesc.reset(new SwFmtPageDesc(
                     *static_cast<const SwFmtPageDesc*>(pItem)));
@@ -425,7 +425,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
     ::std::auto_ptr<SwFmtDrop> pDrop;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     SfxPoolItem const* pItem(0);
-    if (SFX_ITEM_SET ==
+    if (SfxItemState::SET ==
             rItemSet.GetItemState(RES_PARATR_DROP, true, &pItem))
     {
         pDrop.reset(new SwFmtDrop(*static_cast<const SwFmtDrop*>(pItem)));
@@ -452,7 +452,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     ::std::auto_ptr<SwFmtRuby> pRuby;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     const SfxPoolItem* pItem;
-    if (SFX_ITEM_SET ==
+    if (SfxItemState::SET ==
             rItemSet.GetItemState(RES_TXTATR_CJK_RUBY, true, &pItem))
     {
         pRuby.reset(new SwFmtRuby(*static_cast<const SwFmtRuby*>(pItem)));

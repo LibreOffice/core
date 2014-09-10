@@ -264,7 +264,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
     pActLineDistFld->SetText( "" );
     //bool bValueSetFocus = sal_False;        //wj
 
-    if( eState >= SFX_ITEM_DEFAULT )
+    if( eState >= SfxItemState::DEFAULT )
     {
     //  SfxMapUnit eUnit = maLNSpaceControl.GetCoreMetric();
         SfxMapUnit eUnit = SFX_MAPUNIT_100TH_MM;
@@ -450,7 +450,7 @@ void ParaLineSpacingControl::Rearrange(SfxItemState currSPState,FieldUnit currMe
             break;
         }
     }
-    else if( eState == SFX_ITEM_DISABLED )
+    else if( eState == SfxItemState::DISABLED )
     {
         aLineDist.Disable();
         pActLineDistFld->Enable(false);

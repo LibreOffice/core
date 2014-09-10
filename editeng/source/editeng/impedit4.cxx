@@ -487,7 +487,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
                 // Attribute, alos from Parent!
                 for ( sal_uInt16 nParAttr = EE_PARA_START; nParAttr <= EE_CHAR_END; nParAttr++ )
                 {
-                    if ( pStyle->GetItemSet().GetItemState( nParAttr ) == SFX_ITEM_SET )
+                    if ( pStyle->GetItemSet().GetItemState( nParAttr ) == SfxItemState::SET )
                     {
                         const SfxPoolItem& rItem = pStyle->GetItemSet().Get( nParAttr );
                         WriteItemAsRTF( rItem, rOutput, 0, 0, aFontTable, aColorList );
@@ -565,7 +565,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             // Attribute, also from Parent!
             for ( sal_uInt16 nParAttr = EE_PARA_START; nParAttr <= EE_CHAR_END; nParAttr++ )
             {
-                if ( pNode->GetStyleSheet()->GetItemSet().GetItemState( nParAttr ) == SFX_ITEM_SET )
+                if ( pNode->GetStyleSheet()->GetItemSet().GetItemState( nParAttr ) == SfxItemState::SET )
                 {
                     const SfxPoolItem& rItem = pNode->GetStyleSheet()->GetItemSet().Get( nParAttr );
                     WriteItemAsRTF( rItem, rOutput, nNode, 0, aFontTable, aColorList );
@@ -577,7 +577,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         for ( sal_uInt16 nParAttr = EE_PARA_START; nParAttr <= EE_CHAR_END; nParAttr++ )
         {
             // Now where stylesheet processing, only hard paragraph attributes!
-            if ( pNode->GetContentAttribs().GetItems().GetItemState( nParAttr ) == SFX_ITEM_SET )
+            if ( pNode->GetContentAttribs().GetItems().GetItemState( nParAttr ) == SfxItemState::SET )
             {
                 const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItems().Get( nParAttr );
                 WriteItemAsRTF( rItem, rOutput, nNode, 0, aFontTable, aColorList );

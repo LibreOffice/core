@@ -236,7 +236,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     case SID_H_ALIGNCELL:
         {
             SvxCellHorJustify meHorAlignState = SVX_HOR_JUSTIFY_STANDARD;
-            if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SvxHorJustifyItem) )
+            if(eState >= SfxItemState::DEFAULT && pState && pState->ISA(SvxHorJustifyItem) )
             {
                 const SvxHorJustifyItem* pItem = (const SvxHorJustifyItem*)pState;
                 meHorAlignState = (SvxCellHorJustify)pItem->GetValue();
@@ -261,7 +261,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_ALIGN_INDENT:
-        if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SfxUInt16Item) )
+        if(eState >= SfxItemState::DEFAULT && pState && pState->ISA(SfxUInt16Item) )
         {
                 const SfxUInt16Item* pItem = (const SfxUInt16Item*)pState;
                 sal_uInt16 nVal = pItem->GetValue();
@@ -274,7 +274,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         break;
     case FID_MERGE_TOGGLE:
-        if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SfxBoolItem) )
+        if(eState >= SfxItemState::DEFAULT && pState && pState->ISA(SfxBoolItem) )
         {
             mpCBXMergeCell->Enable();
             const SfxBoolItem* pItem = (const SfxBoolItem*)pState;
@@ -288,7 +288,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         break;
 
     case SID_ATTR_ALIGN_LINEBREAK:
-        if(eState == SFX_ITEM_DISABLED)
+        if(eState == SfxItemState::DISABLED)
         {
             mpCBXWrapText->EnableTriState(false);
             mpCBXWrapText->Check(false);
@@ -297,13 +297,13 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         else
         {
             mpCBXWrapText->Enable();
-            if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SfxBoolItem) )
+            if(eState >= SfxItemState::DEFAULT && pState && pState->ISA(SfxBoolItem) )
             {
                 mpCBXWrapText->EnableTriState(false);
                 const SfxBoolItem* pItem = (const SfxBoolItem*)pState;
                 mpCBXWrapText->Check(pItem->GetValue());
             }
-            else if(eState == SFX_ITEM_DONTCARE)
+            else if(eState == SfxItemState::DONTCARE)
             {
                 mpCBXWrapText->EnableTriState(true);
                 mpCBXWrapText->SetState(TRISTATE_INDET);
@@ -311,7 +311,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_ALIGN_DEGREES:
-        if (eState >= SFX_ITEM_DEFAULT)
+        if (eState >= SfxItemState::DEFAULT)
         {
             long nTmp = ((const SfxInt32Item*)pState)->GetValue();
             mpMtrAngle->SetValue( nTmp / 100);  //wj
@@ -350,7 +350,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_ALIGN_STACKED:
-        if (eState >= SFX_ITEM_DEFAULT)
+        if (eState >= SfxItemState::DEFAULT)
         {
             mpCbStacked->EnableTriState(false);
             const SfxBoolItem* aStackItem = (const SfxBoolItem*)pState;

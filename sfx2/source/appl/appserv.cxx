@@ -811,8 +811,8 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                         const SfxPoolItem *pItem;
                         SfxItemState aState = pCurrentShell ?
-                            pCurrentShell->GetDispatcher()->QueryState(SID_ATTR_ZOOM, pItem) : SFX_ITEM_DISABLED;
-                        if ( aState == SFX_ITEM_DISABLED )
+                            pCurrentShell->GetDispatcher()->QueryState(SID_ATTR_ZOOM, pItem) : SfxItemState::DISABLED;
+                        if ( aState == SfxItemState::DISABLED )
                             rSet.DisableItem( nWhich );
                     }
                     break;
@@ -975,7 +975,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
             const SfxPoolItem* pItem = NULL;
             Reference < XFrame > xFrame;
-            if ( pArgs && pArgs->GetItemState( SID_FILLFRAME, false, &pItem ) == SFX_ITEM_SET )
+            if ( pArgs && pArgs->GetItemState( SID_FILLFRAME, false, &pItem ) == SfxItemState::SET )
             {
                 OSL_ENSURE( pItem->ISA( SfxUnoFrameItem ), "SfxApplication::OfaExec_Impl: XFrames are to be transported via SfxUnoFrameItem by now!" );
                 xFrame = static_cast< const SfxUnoFrameItem*>( pItem )->GetFrame();
@@ -1106,7 +1106,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxPoolItem* pItem;
             bool bChooseOnly = false;
             Reference< XModel > xLimitToModel;
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_RECORDMACRO, false, &pItem) )
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_RECORDMACRO, false, &pItem) )
             {
                 bool bRecord = ((SfxBoolItem*)pItem)->GetValue();
                 if ( bRecord )
@@ -1131,7 +1131,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
             sal_Int16 nTabId = 0;
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_MACROORGANIZER, false, &pItem) )
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_MACROORGANIZER, false, &pItem) )
             {
                 nTabId = ((SfxUInt16Item*)pItem)->GetValue();
             }
@@ -1201,7 +1201,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
             OUString aLanguage;
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_SCRIPTORGANIZER, false, &pItem) )
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_SCRIPTORGANIZER, false, &pItem) )
             {
                 aLanguage = ((SfxScriptOrganizerItem*)pItem)->getLanguage();
             }
@@ -1250,7 +1250,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 const SfxPoolItem* pItem=NULL;
                 const SfxItemSet* pSet = rReq.GetArgs();
                 SfxItemPool* pSetPool = pSet ? pSet->GetPool() : NULL;
-                if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SFX_ITEM_SET )
+                if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), false, &pItem ) == SfxItemState::SET )
                     aSet.Put( *pItem );
 
                 boost::scoped_ptr<SfxAbstractTabDialog> pDlg(pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL ));

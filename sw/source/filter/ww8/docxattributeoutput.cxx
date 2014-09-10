@@ -911,7 +911,7 @@ void DocxAttributeOutput::EndParagraphProperties( const SfxItemSet* pParagraphMa
             const SfxPoolItem* pItem = 0;
             while( nWhichId )
             {
-                if( SFX_ITEM_SET == pParagraphMarkerProperties->GetItemState( nWhichId, true, &pItem ))
+                if( SfxItemState::SET == pParagraphMarkerProperties->GetItemState( nWhichId, true, &pItem ))
                 {
                     SAL_INFO( "sw.ww8", "nWhichId " << nWhichId);
                     if (isCHRATR( nWhichId ))

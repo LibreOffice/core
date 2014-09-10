@@ -2920,7 +2920,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         XclExpFont* pFont = NULL;
                         // check if non default font is set and only export then
-                        if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT )) == SFX_ITEM_SET )
+                        if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT )) == SfxItemState::SET )
                         {
                             Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
                             pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
@@ -2928,7 +2928,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 
                         XclExpNumFmt* pNumFormat = NULL;
                         const SfxPoolItem *pPoolItem = NULL;
-                        if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SFX_ITEM_SET )
+                        if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SfxItemState::SET )
                         {
                             sal_uLong nScNumFmt = static_cast< sal_uInt32 >( static_cast< const SfxInt32Item* >(pPoolItem)->GetValue());
                             sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);

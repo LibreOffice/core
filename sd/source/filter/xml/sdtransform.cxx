@@ -223,7 +223,7 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
                             // now set all none hard attributes from the style
                             while(nWhich)
                             {
-                                if(SFX_ITEM_SET != aParaSet.GetItemState(nWhich, true))
+                                if(SfxItemState::SET != aParaSet.GetItemState(nWhich, true))
                                 {
                                     aParaSet.Put(rStyleSet.Get(nWhich));
                                     bItemChange = true;
@@ -274,7 +274,7 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, SfxStyleS
 
 bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt16 nWhich, bool& rState )
 {
-    if( (rSet.GetItemState( nWhich ) == SFX_ITEM_SET) )
+    if( (rSet.GetItemState( nWhich ) == SfxItemState::SET) )
     {
         const SvXMLAttrContainerItem& rAttr = *static_cast< const SvXMLAttrContainerItem* >( rSet.GetItem( nWhich ) );
 
@@ -320,7 +320,7 @@ bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet )
 
 bool SdTransformOOo2xDocument::removeAlienAttributes( SfxItemSet& rSet, sal_uInt16 nWhich )
 {
-    if( (rSet.GetItemState( nWhich ) == SFX_ITEM_SET) )
+    if( (rSet.GetItemState( nWhich ) == SfxItemState::SET) )
     {
         const SvXMLAttrContainerItem& rAttr = *static_cast< const SvXMLAttrContainerItem* >( rSet.GetItem( nWhich ) );
 

@@ -98,7 +98,7 @@ void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
     bool bStacked = pItem && ((const SfxBoolItem*)pItem)->GetValue();
     m_pOrientHlp->SetStackedState( bStacked ? TRISTATE_TRUE : TRISTATE_FALSE );
 
-    if( rInAttrs->GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SFX_ITEM_SET)
+    if( rInAttrs->GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SfxItemState::SET)
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
 }
 

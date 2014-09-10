@@ -885,7 +885,7 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     ScPatternAttr aNewAttrs( new SfxItemSet(*pDialogSet) );
     aNewAttrs.DeleteUnchanged( &aOldAttrs );
 
-    if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SFX_ITEM_SET )
+    if ( pDialogSet->GetItemState( ATTR_VALUE_FORMAT ) == SfxItemState::SET )
     {   // don't reset to default SYSTEM GENERAL if not intended
         sal_uInt32 nOldFormat =
             ((const SfxUInt32Item&)pOldSet->Get( ATTR_VALUE_FORMAT )).GetValue();
@@ -934,8 +934,8 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
      *
      */
 
-    bool bFrame =    (pDialogSet->GetItemState( ATTR_BORDER ) != SFX_ITEM_DEFAULT)
-                  || (pDialogSet->GetItemState( ATTR_BORDER_INNER ) != SFX_ITEM_DEFAULT);
+    bool bFrame =    (pDialogSet->GetItemState( ATTR_BORDER ) != SfxItemState::DEFAULT)
+                  || (pDialogSet->GetItemState( ATTR_BORDER_INNER ) != SfxItemState::DEFAULT);
 
     if ( pNewOuter==pOldOuter && pNewInner==pOldInner )
         bFrame = false;
@@ -1096,13 +1096,13 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         bRecord = false;
 
     //  State from old ItemSet doesn't matter for paint flags, as any change will be
-    //  from SFX_ITEM_SET in the new ItemSet (default is ignored in ApplyPattern).
+    //  from SfxItemState::SET in the new ItemSet (default is ignored in ApplyPattern).
     //  New alignment is checked (check in PostPaint isn't enough) in case a right
     //  alignment is changed to left.
     const SfxItemSet& rNewSet = rAttr.GetItemSet();
-    bool bSetLines = rNewSet.GetItemState( ATTR_BORDER, true ) == SFX_ITEM_SET ||
-                     rNewSet.GetItemState( ATTR_SHADOW, true ) == SFX_ITEM_SET;
-    bool bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY, true ) == SFX_ITEM_SET;
+    bool bSetLines = rNewSet.GetItemState( ATTR_BORDER, true ) == SfxItemState::SET ||
+                     rNewSet.GetItemState( ATTR_SHADOW, true ) == SfxItemState::SET;
+    bool bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY, true ) == SfxItemState::SET;
 
     sal_uInt16 nExtFlags = 0;
     if ( bSetLines )
@@ -1231,7 +1231,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr,
         for ( sal_uInt16 nWhich = ATTR_PATTERN_START; nWhich <= ATTR_PATTERN_END; ++nWhich )
         {
             const SfxPoolItem* pItem = 0;
-            if ( rNewSet.GetItemState( nWhich, true, &pItem ) == SFX_ITEM_SET && pItem )
+            if ( rNewSet.GetItemState( nWhich, true, &pItem ) == SfxItemState::SET && pItem )
             {
                 PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
                 while ( aIt != aPropVector.end())
@@ -2888,9 +2888,9 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
     if ( pAttr )
     {
         const SfxItemSet& rNewSet = pAttr->GetItemSet();
-        bSetLines = rNewSet.GetItemState( ATTR_BORDER, true ) == SFX_ITEM_SET ||
-        rNewSet.GetItemState( ATTR_SHADOW, true ) == SFX_ITEM_SET;
-        bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY, true ) == SFX_ITEM_SET;
+        bSetLines = rNewSet.GetItemState( ATTR_BORDER, true ) == SfxItemState::SET ||
+        rNewSet.GetItemState( ATTR_SHADOW, true ) == SfxItemState::SET;
+        bSetAlign = rNewSet.GetItemState( ATTR_HOR_JUSTIFY, true ) == SfxItemState::SET;
     }
 
     sal_uInt16 nExtFlags = 0;

@@ -340,8 +340,8 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
     {
         if( pEntry->nWID == OWN_ATTR_FILLBMP_MODE )
         {
-            if( mpSet->GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET ||
-                mpSet->GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET )
+            if( mpSet->GetItemState( XATTR_FILLBMP_STRETCH, false ) == SfxItemState::SET ||
+                mpSet->GetItemState( XATTR_FILLBMP_TILE, false ) == SfxItemState::SET )
             {
                 return beans::PropertyState_DIRECT_VALUE;
             }
@@ -353,14 +353,14 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
 
         switch( mpSet->GetItemState( pEntry->nWID, false ) )
         {
-        case SFX_ITEM_READONLY:
-        case SFX_ITEM_SET:
+        case SfxItemState::READONLY:
+        case SfxItemState::SET:
             return beans::PropertyState_DIRECT_VALUE;
-        case SFX_ITEM_DEFAULT:
+        case SfxItemState::DEFAULT:
             return beans::PropertyState_DEFAULT_VALUE;
         default:
-//      case SFX_ITEM_DONTCARE:
-//      case SFX_ITEM_DISABLED:
+//      case SfxItemState::DONTCARE:
+//      case SfxItemState::DISABLED:
             return beans::PropertyState_AMBIGUOUS_VALUE;
         }
     }

@@ -1198,7 +1198,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
 
                 // miscellaneous - Year2000
-                if( SFX_ITEM_DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
+                if( SfxItemState::DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, ((const SfxUInt16Item*)pItem)->GetValue() ) );
                 else
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
@@ -1247,15 +1247,15 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             if ( pViewFrame )
             {
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-                if(SFX_ITEM_DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
+                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
                     pRet->Put(SfxUInt16Item(SID_ATTR_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
-                if(SFX_ITEM_DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pItem))
+                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pItem))
                     pRet->Put(SfxUInt16Item(SID_ATTR_CHAR_CJK_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
-                if(SFX_ITEM_DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pItem))
+                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pItem))
                     pRet->Put(SfxUInt16Item(SID_ATTR_CHAR_CTL_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
 
                 pRet->Put(aHyphen);
-                if(SFX_ITEM_DEFAULT <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
+                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
                 {
                     pClone = pItem->Clone();
                     pRet->Put(*pClone);
@@ -1335,7 +1335,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 //          evaluate Year2000
 
             sal_uInt16 nY2K = USHRT_MAX;
-            if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
+            if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
                 nY2K = ((const SfxUInt16Item*)pItem)->GetValue();
             if( USHRT_MAX != nY2K )
             {
@@ -1350,10 +1350,10 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
 
 //          evaluate print
 
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, false, &pItem))
+            if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, false, &pItem))
                 aMisc.SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
 
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_CHANGESTODOC, false, &pItem))
+            if(SfxItemState::SET == rSet.GetItemState(SID_PRINTER_CHANGESTODOC, false, &pItem))
             {
                 const SfxFlagItem* pFlag = (const SfxFlagItem*)pItem;
                 aMisc.SetPaperSizeWarning(0 != (pFlag->GetValue() &  SFX_PRINTER_CHG_SIZE ));
@@ -1400,13 +1400,13 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     bool bSaveSpellCheck = false;
     const SfxPoolItem* pItem;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_SPELL_MODIFIED, false, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemState( SID_SPELL_MODIFIED, false, &pItem ) )
     {
         bSaveSpellCheck = ( (const SfxBoolItem*)pItem )->GetValue();
     }
     Reference< XComponentContext >  xContext( ::comphelper::getProcessComponentContext() );
     Reference< XLinguProperties >  xProp = LinguProperties::create( xContext );
-    if ( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, false, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, false, &pItem ) )
     {
         const SfxHyphenRegionItem* pHyphenItem = (const SfxHyphenRegionItem*)pItem;
 
@@ -1420,23 +1420,23 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     {
         SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
         pItem = 0;
-        if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_LANGUAGE, false, &pItem ))
+        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_LANGUAGE, false, &pItem ))
         {
             pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
             bSaveSpellCheck = true;
         }
-        if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, false, &pItem ))
+        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE, false, &pItem ))
         {
             pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
             bSaveSpellCheck = true;
         }
-        if(SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, false, &pItem ))
+        if(SfxItemState::SET == rSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE, false, &pItem ))
         {
             pDispatch->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
             bSaveSpellCheck = true;
         }
 
-        if( SFX_ITEM_SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, false, &pItem ))
+        if( SfxItemState::SET == rSet.GetItemState(SID_AUTOSPELL_CHECK, false, &pItem ))
         {
             bool bOnlineSpelling = ((const SfxBoolItem*)pItem)->GetValue();
             pDispatch->Execute(SID_AUTOSPELL_CHECK,
@@ -1453,7 +1453,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
         }
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_OPT_LOCALE_CHANGED, false, &pItem ))
+    if( SfxItemState::SET == rSet.GetItemState(SID_OPT_LOCALE_CHANGED, false, &pItem ))
     {
         SfxViewFrame* _pViewFrame = SfxViewFrame::GetFirst();
         while ( _pViewFrame )

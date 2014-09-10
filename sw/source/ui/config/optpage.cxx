@@ -101,7 +101,7 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
 
     /* This part is visible only with Writer/Web->View dialogue. */
     const SfxPoolItem* pItem;
-    if (! (SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
+    if (! (SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
            && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON))
     {
         m_pSettingsFrame->Hide();
@@ -167,7 +167,7 @@ SfxTabPage* SwContentOptPage::Create( Window* pParent,
 static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
-    if( rSet.GetItemState( nSID, false, &pItem ) >= SFX_ITEM_DEFAULT )
+    if( rSet.GetItemState( nSID, false, &pItem ) >= SfxItemState::DEFAULT )
     {
         FieldUnit eFieldUnit = (FieldUnit)((SfxUInt16Item*)pItem)->GetValue();
         for ( sal_Int32 i = 0; i < rMetric->GetEntryCount(); ++i )
@@ -338,7 +338,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
     m_pFaxLB->SetSelectHdl( LINK( this, SwAddPrinterTabPage, SelectHdl ) );
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
+    if(SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
         m_pLeftPageCB->Hide();
@@ -413,7 +413,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet*  )
     const   SfxItemSet&         rSet = GetItemSet();
     const   SwAddPrinterItem*   pAddPrinterAttr = 0;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER , false,
+    if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_ADDPRINTER , false,
                                     (const SfxPoolItem**)&pAddPrinterAttr ))
     {
         m_pGrfCB->Check(pAddPrinterAttr->bPrintGraphic || pAddPrinterAttr->bPrintDraw);
@@ -751,7 +751,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
     const sal_uInt16 nLangSlot = nFontGroup == FONT_GROUP_DEFAULT  ? SID_ATTR_LANGUAGE :
         FONT_GROUP_CJK == nFontGroup ? SID_ATTR_CHAR_CJK_LANGUAGE : SID_ATTR_CHAR_CTL_LANGUAGE;
 
-    if( SFX_ITEM_SET == rSet->GetItemState(nLangSlot, false, &pLang))
+    if( SfxItemState::SET == rSet->GetItemState(nLangSlot, false, &pLang))
         eLanguage = ((const SvxLanguageItem*)pLang)->GetValue();
 
     OUString sToReplace = sScriptWestern;
@@ -768,7 +768,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         delete pPrt;
     }
 
-    if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_PRINTER, false, &pItem))
     {
         pPrt = (SfxPrinter*)((const SwPtrItem*)pItem)->GetValue();
     }
@@ -805,12 +805,12 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
             pIdxBox->InsertEntry( *it );
         }
     }
-    if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_STDFONTS, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_STDFONTS, false, &pItem))
     {
          pFontConfig = (SwStdFontConfig*)((const SwPtrItem*)pItem)->GetValue();
     }
 
-    if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
     {
         pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
     }
@@ -877,30 +877,30 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_NUMBUL_BASE);
         const SvxFontItem& rFontLS = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
-        bListDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        bListDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         sShellList = sListBackup = rFontLS.GetFamilyName();
 
         const SvxFontHeightItem& rFontHeightList = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
         nListHeight = (sal_Int32)rFontHeightList.GetHeight();
-        bListHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        bListHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_LABEL);
-        bLabelDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        bLabelDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         const SvxFontItem& rFontCP = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellLabel = sCapBackup = rFontCP.GetFamilyName();
         const SvxFontHeightItem& rFontHeightLabel = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
         nLabelHeight = (sal_Int32)rFontHeightLabel.GetHeight();
-        bLabelHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        bLabelHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
         pColl = pWrtShell->GetTxtCollFromPool(RES_POOLCOLL_REGISTER_BASE);
-        bIdxDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        bIdxDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
         const SvxFontItem& rFontIDX = !nFontGroup ? pColl->GetFont() :
                 FONT_GROUP_CJK == nFontGroup ? pColl->GetCJKFont() : pColl->GetCTLFont();
         sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
         const SvxFontHeightItem& rFontHeightIndex = (const SvxFontHeightItem&)pColl->GetFmtAttr(nFontHeightWhich, true);
         nIndexHeight = (sal_Int32)rFontHeightIndex.GetHeight();
-        bIndexHeightDefault = SFX_ITEM_DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
+        bIndexHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
     }
     pStandardBox->SetText(sStdBackup );
     pTitleBox->SetText(sOutBackup );
@@ -1187,7 +1187,7 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
 {
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
@@ -1209,7 +1209,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
         case TBLVAR_CHGABS:     pVarRB->Check(); break;
     }
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
     {
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }
@@ -1291,7 +1291,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     const SfxPoolItem* pItem = 0;
 
     SwShadowCursorItem aOpt;
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
+    if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
     m_pOnOffCB->Check( aOpt.IsOn() );
 
@@ -1301,7 +1301,7 @@ SwShdwCrsrOptionsTabPage::SwShdwCrsrOptionsTabPage( Window* pParent,
     m_pFillTabRB->Check( FILL_TAB == eMode );
     m_pFillSpaceRB->Check( FILL_SPACE == eMode );
 
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
+    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
         m_pTabCB->Hide();
@@ -1355,7 +1355,7 @@ bool SwShdwCrsrOptionsTabPage::FillItemSet( SfxItemSet* rSet )
 
     bool bRet = false;
     const SfxPoolItem* pItem = 0;
-    if( SFX_ITEM_SET != rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem )
+    if( SfxItemState::SET != rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem )
         ||  ((SwShadowCursorItem&)*pItem) != aOpt )
     {
         rSet->Put( aOpt );
@@ -1403,7 +1403,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
     const SfxPoolItem* pItem = 0;
 
     SwShadowCursorItem aOpt;
-    if( SFX_ITEM_SET == rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
+    if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_SHADOWCURSOR, false, &pItem ))
         aOpt = *(SwShadowCursorItem*)pItem;
     m_pOnOffCB->Check( aOpt.IsOn() );
 
@@ -1420,7 +1420,7 @@ void SwShdwCrsrOptionsTabPage::Reset( const SfxItemSet* rSet )
         m_pMathBaselineAlignmentCB->Hide();
     }
 
-    if( SFX_ITEM_SET == rSet->GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
+    if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_CRSR_IN_PROTECTED, false, &pItem ))
         m_pCrsrInProtCB->Check(((const SfxBoolItem*)pItem)->GetValue());
     m_pCrsrInProtCB->SaveValue();
 
@@ -2384,7 +2384,7 @@ void SwTestTabPage::Reset( const SfxItemSet* )
     const SfxItemSet& rSet = GetItemSet();
     const SwTestItem* pTestAttr = 0;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SWTEST , false,
+    if( SfxItemState::SET == rSet.GetItemState( FN_PARAM_SWTEST , false,
                                     (const SfxPoolItem**)&pTestAttr ))
     {
         m_pTest1CBox->Check(pTestAttr->bTest1);

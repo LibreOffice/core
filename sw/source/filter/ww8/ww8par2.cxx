@@ -2356,7 +2356,7 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
         {
             SfxPoolItem *pSetAttr = 0;
             const SfxPoolItem* pItem;
-            if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false, &pItem))
+            if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
             {
                 pSetAttr = new SvxFmtBreakItem( *(SvxFmtBreakItem*)pItem );
                 pNd->ResetAttr( RES_BREAK );
@@ -4413,7 +4413,7 @@ void WW8RStyle::Import()
     if (pIo->mbNewDoc && pIo->pStandardFmtColl)
     {
         if (pIo->pWDop->fAutoHyphen
-            && SFX_ITEM_SET != pIo->pStandardFmtColl->GetItemState(
+            && SfxItemState::SET != pIo->pStandardFmtColl->GetItemState(
                                             RES_PARATR_HYPHENZONE, false) )
         {
             SvxHyphenZoneItem aAttr(true, RES_PARATR_HYPHENZONE);
@@ -4429,7 +4429,7 @@ void WW8RStyle::Import()
         the page/sections rtl setting the standard style lack of rtl still
         means ltr
         */
-        if (SFX_ITEM_SET != pIo->pStandardFmtColl->GetItemState(RES_FRAMEDIR,
+        if (SfxItemState::SET != pIo->pStandardFmtColl->GetItemState(RES_FRAMEDIR,
             false))
         {
            pIo->pStandardFmtColl->SetFmtAttr(

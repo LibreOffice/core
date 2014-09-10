@@ -539,7 +539,7 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
         rSet.DisableItem( SID_PASTE_ONLY_FORMULA );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
     }
-    else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SFX_ITEM_UNKNOWN )
+    else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SfxItemState::UNKNOWN )
     {
         SvxClipboardFmtItem aFormats( SID_CLIPBOARD_FORMAT_ITEMS );
         GetPossibleClipboardFormats( aFormats );

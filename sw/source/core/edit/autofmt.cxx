@@ -978,7 +978,7 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
         aSet.Put( *m_pCurTxtNd->GetpSwAttrSet() );
         // take HeaderLine/TextBody only if centered or right aligned, otherwise only justification
         SvxAdjustItem* pAdj;
-        if( SFX_ITEM_SET == aSet.GetItemState( RES_PARATR_ADJUST,
+        if( SfxItemState::SET == aSet.GetItemState( RES_PARATR_ADJUST,
                         false, (const SfxPoolItem**)&pAdj ))
         {
             SvxAdjust eAdj = pAdj->GetAdjust();
@@ -1023,11 +1023,11 @@ bool SwAutoFormat::HasBreakAttr( const SwTxtNode& rTxtNd ) const
         return false;
 
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pItem )
+    if( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pItem )
         && SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak() )
         return true;
 
-    if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem )
+    if( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem )
         && ((SwFmtPageDesc*)pItem)->GetPageDesc()
         && nsUseOnPage::PD_NONE != ((SwFmtPageDesc*)pItem)->GetPageDesc()->GetUseOn() )
         return true;
@@ -2239,7 +2239,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 {
                     short nSz;
                     SvxLRSpaceItem* pLRSpace;
-                    if( SFX_ITEM_SET == m_pCurTxtNd->GetSwAttrSet().
+                    if( SfxItemState::SET == m_pCurTxtNd->GetSwAttrSet().
                         GetItemState( RES_LR_SPACE, true,
                                         (const SfxPoolItem**)&pLRSpace ) &&
                         ( 0 != (nSz = pLRSpace->GetTxtFirstLineOfst()) ||
@@ -2477,7 +2477,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                     short nSz;
                     SvxLRSpaceItem* pLRSpace;
                     if( bReplaceStyles &&
-                        SFX_ITEM_SET == m_pCurTxtNd->GetSwAttrSet().
+                        SfxItemState::SET == m_pCurTxtNd->GetSwAttrSet().
                         GetItemState( RES_LR_SPACE, false,
                                         (const SfxPoolItem**)&pLRSpace ) &&
                         ( 0 != (nSz = pLRSpace->GetTxtFirstLineOfst()) ||

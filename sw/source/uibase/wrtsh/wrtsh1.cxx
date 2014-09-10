@@ -1537,8 +1537,8 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
         if(!IsInvalidItem(pParaItem))
         {
             sal_uInt16 nWhich = pParaItem->Which();
-            if(SFX_ITEM_SET == aCoreSet.GetItemState(nWhich) &&
-               SFX_ITEM_SET == rStyleSet.GetItemState(nWhich))
+            if(SfxItemState::SET == aCoreSet.GetItemState(nWhich) &&
+               SfxItemState::SET == rStyleSet.GetItemState(nWhich))
             {
                 aCoreSet.ClearItem(nWhich);
                 bReset = true;

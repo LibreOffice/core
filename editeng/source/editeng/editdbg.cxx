@@ -300,14 +300,14 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool
     for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
         fprintf( fp, "\nWhich: %i\t", nWhich );
-        if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_DEFAULT )
+        if ( rSet.GetItemState( nWhich, bSearchInParent ) == SfxItemState::DEFAULT )
             fprintf( fp, "ITEM_OFF   " );
-        else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_DONTCARE )
+        else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SfxItemState::DONTCARE )
             fprintf( fp, "ITEM_DC    " );
-        else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_SET )
+        else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SfxItemState::SET )
             fprintf( fp, "ITEM_ON   *" );
 
-        if ( !bShowALL && ( rSet.GetItemState( nWhich, bSearchInParent ) != SFX_ITEM_SET ) )
+        if ( !bShowALL && ( rSet.GetItemState( nWhich, bSearchInParent ) != SfxItemState::SET ) )
             continue;
 
         const SfxPoolItem& rItem = rSet.Get( nWhich, bSearchInParent );

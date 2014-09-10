@@ -860,7 +860,7 @@ void OutlinerView::ToggleBullets()
             if( nNewDepth == -1 )
             {
                 const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
-                if ( rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SFX_ITEM_SET )
+                if ( rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SfxItemState::SET )
                 {
                     SfxItemSet aAttrs(rAttrs);
                     aAttrs.ClearItem( EE_PARA_BULLETSTATE );
@@ -1058,7 +1058,7 @@ void OutlinerView::ApplyBulletsNumbering(
                     {
                         const SfxPoolItem* pPoolItem=NULL;
                         SfxItemState eState = rAttrs.GetItemState(EE_PARA_NUMBULLET, false, &pPoolItem);
-                        if (eState != SFX_ITEM_SET)
+                        if (eState != SfxItemState::SET)
                         {
                             // Use default value when has not contain bullet item.
                             ESelection aSelection(nPara, 0);
@@ -1137,7 +1137,7 @@ void OutlinerView::SwitchOffBulletsNumbering(
             pOwner->SetDepth( pPara, -1 );
 
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs( nPara );
-            if (rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SFX_ITEM_SET)
+            if (rAttrs.GetItemState( EE_PARA_BULLETSTATE ) == SfxItemState::SET)
             {
                 SfxItemSet aAttrs(rAttrs);
                 aAttrs.ClearItem( EE_PARA_BULLETSTATE );

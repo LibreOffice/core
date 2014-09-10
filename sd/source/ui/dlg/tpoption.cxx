@@ -217,7 +217,7 @@ SdTpOptionsMisc::SdTpOptionsMisc(Window* pParent, const SfxItemSet& rInAttrs)
     FieldUnit eFUnit;
 
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
-    if ( rInAttrs.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    if ( rInAttrs.GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rInAttrs.Get( nWhich );
         eFUnit = (FieldUnit)rItem.GetValue();
@@ -286,7 +286,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     // change metric if necessary (since TabPage is in the Dialog where
     // the metric is set)
     const SfxPoolItem* pAttr = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , false,
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;
@@ -441,7 +441,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
     m_pLbMetric->SetNoSelection();
 
-    if ( rAttrs->GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    if ( rAttrs->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs->Get( nWhich );
         long nFieldUnit = (long)rItem.GetValue();
@@ -458,7 +458,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 
     // tabulator space
     nWhich = GetWhich( SID_ATTR_DEFTABSTOP );
-    if( rAttrs->GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    if( rAttrs->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
     {
         SfxMapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich );
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rAttrs->Get( nWhich );

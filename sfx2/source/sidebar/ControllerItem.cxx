@@ -141,7 +141,7 @@ void ControllerItem::StateChanged (
 
 bool ControllerItem::IsEnabled (SfxItemState eState) const
 {
-    if (eState == SFX_ITEM_DISABLED)
+    if (eState == SfxItemState::DISABLED)
         return false;
     else if ( ! SvtCommandOptions().HasEntries(SvtCommandOptions::CMDOPTION_DISABLED))
     {

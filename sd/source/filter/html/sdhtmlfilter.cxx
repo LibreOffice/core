@@ -61,10 +61,10 @@ bool SdHTMLFilter::Export()
 
     const SfxPoolItem* pItem;
 
-    if ( pSet->GetItemState( SID_FILTER_DATA, false, &pItem ) == SFX_ITEM_SET )
+    if ( pSet->GetItemState( SID_FILTER_DATA, false, &pItem ) == SfxItemState::SET )
         ((SfxUnoAnyItem*)pItem)->GetValue() >>= aParams;
 
-    if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SFX_ITEM_SET)
+    if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
         sFilterOptions = ((SfxStringItem*)pItem)->GetValue();
 
     HtmlExport aExport(mrMedium.GetName(), aParams, sFilterOptions, &mrDocument, &mrDocShell);

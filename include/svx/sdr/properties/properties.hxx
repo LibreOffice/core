@@ -101,11 +101,11 @@ namespace sdr
             // get merged ItemSet. Normappl, this maps directly to GetObjectItemSet(), but may
             // be overloaded e.g for group objects to return a merged ItemSet of the object.
             // When using this method the returned ItemSet may contain items in the state
-            // SFX_ITEM_DONTCARE which means there were several such items with different
+            // SfxItemState::DONTCARE which means there were several such items with different
             // values.
             virtual const SfxItemSet& GetMergedItemSet() const;
 
-            // Sets all items which are on state SFX_ITEM_SET in rSet at the local ItemSet.
+            // Sets all items which are on state SfxItemState::SET in rSet at the local ItemSet.
             // Uses AllowItemChange(), ItemChange(), PostItemChange() and ItemSetChanged() calls.
             virtual void SetObjectItemSet(const SfxItemSet& rSet) = 0;
 

@@ -54,7 +54,7 @@ static bool lcl_IsHiddenDocument( SfxObjectShell* pObjSh )
         {
             SfxItemSet* pSet = pMed->GetItemSet();
             const SfxPoolItem* pItem;
-            if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_HIDDEN, true, &pItem ) &&
+            if ( pSet && SfxItemState::SET == pSet->GetItemState( SID_HIDDEN, true, &pItem ) &&
                         ((const SfxBoolItem*)pItem)->GetValue() )
                 return true;
         }

@@ -373,7 +373,7 @@ void OutlineViewShell::Deactivate( bool bIsMDIActivate )
  */
 void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
 {
-    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_HYPERLINK_GETLINK))
+    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_HYPERLINK_GETLINK))
     {
         SvxHyperlinkItem aHLinkItem;
 
@@ -400,13 +400,13 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     }
     rSet.Put( SfxBoolItem( SID_READONLY_MODE, GetDocSh()->IsReadOnly() ) );
 
-    if ( SFX_ITEM_DEFAULT == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
+    if ( SfxItemState::DEFAULT == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
         rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true ) );
 
-    if ( SFX_ITEM_DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HALFWIDTH) ||
-         SFX_ITEM_DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_FULLWIDTH) ||
-         SFX_ITEM_DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HIRAGANA) ||
-         SFX_ITEM_DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_KATAGANA) )
+    if ( SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HALFWIDTH) ||
+         SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_FULLWIDTH) ||
+         SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_HIRAGANA) ||
+         SfxItemState::DEFAULT == rSet.GetItemState(SID_TRANSLITERATE_KATAGANA) )
     {
         SvtCJKOptions aCJKOptions;
         if( !aCJKOptions.IsChangeCaseMapEnabled() )
@@ -762,8 +762,8 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
        rSet.DisableItem(SID_ZOOM_PREV);
     }
 
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ZOOM_IN ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ZOOM_OUT ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ZOOM_IN ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_ZOOM_OUT ) )
     {
         if( GetActiveWindow()->GetZoom() <= GetActiveWindow()->GetMinZoom() || GetDocSh()->IsUIActive() )
             rSet.DisableItem( SID_ZOOM_IN );
@@ -774,7 +774,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     ::Outliner& rOutl = pOlView->GetOutliner();
 
     // allow 'Select All'?
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_SELECTALL ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_SELECTALL ) )
     {
         sal_Int32 nParaCount = rOutl.GetParagraphCount();
         bool bDisable = nParaCount == 0;
@@ -900,7 +900,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if (bDisableCollapseAll)
         rSet.DisableItem(SID_OUTLINE_COLLAPSE_ALL);
 
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_PASTE ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PASTE ) )
     {
         if ( !pClipEvtLstnr )
         {
@@ -957,7 +957,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // field commands
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_MODIFY_FIELD ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_MODIFY_FIELD ) )
     {
         const SvxFieldItem* pFldItem = pOutlinerView->GetFieldAtSelection();
 
@@ -970,7 +970,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_EXPAND_PAGE))
+    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_EXPAND_PAGE))
     {
         bool bDisable = true;
         sal_uInt16 i = 0;
@@ -1017,7 +1017,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_SUMMARY_PAGE))
+    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_SUMMARY_PAGE))
     {
         bool bDisable = true;
         sal_uInt16 i = 0;
@@ -1047,7 +1047,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_THESAURUS ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_THESAURUS ) )
     {
         if ( !pOlView->IsTextEdit() )
         {
@@ -1064,7 +1064,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // is starting the presentation possible?
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_PRESENTATION ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PRESENTATION ) )
     {
         bool bDisable = true;
         sal_uInt16 nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
@@ -1291,7 +1291,7 @@ void OutlineViewShell::ExecStatusBar(SfxRequest&)
 void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 {
     // Zoom-Item
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ATTR_ZOOM ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
         sal_uInt16 nZoom = (sal_uInt16) GetActiveWindow()->GetZoom();
 
@@ -1307,7 +1307,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
         rSet.Put( *pZoomItem );
     }
 
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
     {
         if (GetDocSh()->IsUIActive() || !GetActiveWindow() )
         {

@@ -400,7 +400,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         const SwAttrSet & aNdSet = pCntntNd->GetSwAttrSet();
         const SfxPoolItem *pItem = NULL;
 
-        if (SFX_ITEM_SET == aNdSet.GetItemState( RES_FRAMEDIR, true, &pItem )
+        if (SfxItemState::SET == aNdSet.GetItemState( RES_FRAMEDIR, true, &pItem )
             && pItem != NULL)
         {
             pTableFmt->SetFmtAttr( *pItem );
@@ -442,14 +442,14 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     {
         const SfxItemSet* pNdSet = pNextNd->GetpSwAttrSet();
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, false,
+        if( SfxItemState::SET == pNdSet->GetItemState( RES_PAGEDESC, false,
             &pItem ) )
         {
             pTableFmt->SetFmtAttr( *pItem );
             pNextNd->ResetAttr( RES_PAGEDESC );
             pNdSet = pNextNd->GetpSwAttrSet();
         }
-        if( pNdSet && SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, false,
+        if( pNdSet && SfxItemState::SET == pNdSet->GetItemState( RES_BREAK, false,
              &pItem ) )
         {
             pTableFmt->SetFmtAttr( *pItem );
@@ -602,8 +602,8 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
                 const sal_uInt16* pIdx = aPropagateItems;
                 while ( *pIdx != 0 )
                 {
-                    if ( SFX_ITEM_SET != pTmpNd->GetSwAttrSet().GetItemState( *pIdx ) &&
-                         SFX_ITEM_SET == pAttrSet->GetItemState( *pIdx, true, &pItem ) )
+                    if ( SfxItemState::SET != pTmpNd->GetSwAttrSet().GetItemState( *pIdx ) &&
+                         SfxItemState::SET == pAttrSet->GetItemState( *pIdx, true, &pItem ) )
                         static_cast<SwCntntNode *>(pTmpNd)->SetAttr(*pItem);
                     ++pIdx;
                 }
@@ -711,7 +711,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
         const SwAttrSet & aNdSet = pSttCntntNd->GetSwAttrSet();
         const SfxPoolItem *pItem = NULL;
 
-        if (SFX_ITEM_SET == aNdSet.GetItemState( RES_FRAMEDIR, true, &pItem )
+        if (SfxItemState::SET == aNdSet.GetItemState( RES_FRAMEDIR, true, &pItem )
             && pItem != NULL)
         {
             pTableFmt->SetFmtAttr( *pItem );
@@ -895,7 +895,7 @@ static void lcl_RemoveBreaks(SwCntntNode & rNode, SwTableFmt *const pTableFmt)
     if (pSet)
     {
         const SfxPoolItem* pItem;
-        if (SFX_ITEM_SET == pSet->GetItemState(RES_BREAK, false, &pItem))
+        if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
         {
             if (pTableFmt)
             {
@@ -906,7 +906,7 @@ static void lcl_RemoveBreaks(SwCntntNode & rNode, SwTableFmt *const pTableFmt)
         }
 
         if (pSet
-            && (SFX_ITEM_SET == pSet->GetItemState(RES_PAGEDESC, false, &pItem))
+            && (SfxItemState::SET == pSet->GetItemState(RES_PAGEDESC, false, &pItem))
             && static_cast<SwFmtPageDesc const*>(pItem)->GetPageDesc())
         {
             if (pTableFmt)
@@ -1202,7 +1202,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         const SwAttrSet & aNdSet = pSttCntntNd->GetSwAttrSet();
         const SfxPoolItem *pItem = NULL;
 
-        if (SFX_ITEM_SET == aNdSet.GetItemState( RES_FRAMEDIR, true, &pItem )
+        if (SfxItemState::SET == aNdSet.GetItemState( RES_FRAMEDIR, true, &pItem )
             && pItem != NULL)
         {
             pTableFmt->SetFmtAttr( *pItem );
@@ -1586,9 +1586,9 @@ bool SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
         // What about UNDO?
         const SfxItemSet& rTblSet = pTblNd->pTable->GetFrmFmt()->GetAttrSet();
         const SfxPoolItem *pBreak, *pDesc;
-        if( SFX_ITEM_SET != rTblSet.GetItemState( RES_PAGEDESC, false, &pDesc ))
+        if( SfxItemState::SET != rTblSet.GetItemState( RES_PAGEDESC, false, &pDesc ))
             pDesc = 0;
-        if( SFX_ITEM_SET != rTblSet.GetItemState( RES_BREAK, false, &pBreak ))
+        if( SfxItemState::SET != rTblSet.GetItemState( RES_BREAK, false, &pBreak ))
             pBreak = 0;
 
         if( pBreak || pDesc )
@@ -2018,14 +2018,14 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                 {
                     SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
                     const SfxPoolItem *pItem;
-                    if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_PAGEDESC,
+                    if( SfxItemState::SET == pTableFmt->GetItemState( RES_PAGEDESC,
                         false, &pItem ) )
                     {
                         pNextNd->SetAttr( *pItem );
                         bSavePageDesc = true;
                     }
 
-                    if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_BREAK,
+                    if( SfxItemState::SET == pTableFmt->GetItemState( RES_BREAK,
                         false, &pItem ) )
                     {
                         pNextNd->SetAttr( *pItem );
@@ -2067,11 +2067,11 @@ bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             {
                 SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
                 const SfxPoolItem *pItem;
-                if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_PAGEDESC,
+                if( SfxItemState::SET == pTableFmt->GetItemState( RES_PAGEDESC,
                     false, &pItem ) )
                     pNextNd->SetAttr( *pItem );
 
-                if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_BREAK,
+                if( SfxItemState::SET == pTableFmt->GetItemState( RES_BREAK,
                     false, &pItem ) )
                     pNextNd->SetAttr( *pItem );
             }
@@ -3673,7 +3673,7 @@ static bool lcl_SetAFmtBox( _FndBox & rBox, _SetAFmtTabPara *pSetPara )
         if( aBoxSet.Count() )
         {
             if( pSetPara->pUndo &&
-                SFX_ITEM_SET == aBoxSet.GetItemState( RES_BOXATR_FORMAT ))
+                SfxItemState::SET == aBoxSet.GetItemState( RES_BOXATR_FORMAT ))
                 pSetPara->pUndo->SaveBoxCntnt( *pSetBox );
 
             pSetBox->ClaimFrmFmt()->SetFmtAttr( aBoxSet );
@@ -3970,7 +3970,7 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
 {
     // Optimization: If the Box says it's Text, it remains Text
     const SfxPoolItem* pNumFmtItem = 0;
-    if( SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT,
+    if( SfxItemState::SET == rBox.GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT,
         false, &pNumFmtItem ) && GetNumberFormatter()->IsTextFormat(
             ((SwTblBoxNumFormat*)pNumFmtItem)->GetValue() ))
         return ;
@@ -4055,9 +4055,9 @@ void SwDoc::ChkBoxNumFmt( SwTableBox& rBox, bool bCallUpdate )
         // It's not a number
         const SfxPoolItem* pValueItem = 0, *pFmtItem = 0;
         SwTableBoxFmt* pBoxFmt = (SwTableBoxFmt*)rBox.GetFrmFmt();
-        if( SFX_ITEM_SET == pBoxFmt->GetItemState( RES_BOXATR_FORMAT,
+        if( SfxItemState::SET == pBoxFmt->GetItemState( RES_BOXATR_FORMAT,
                 false, &pFmtItem ) ||
-            SFX_ITEM_SET == pBoxFmt->GetItemState( RES_BOXATR_VALUE,
+            SfxItemState::SET == pBoxFmt->GetItemState( RES_BOXATR_VALUE,
                 false, &pValueItem ))
         {
             if (GetIDocumentUndoRedo().DoesUndo())
@@ -4116,13 +4116,13 @@ void SwDoc::SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
     }
 
     SwFrmFmt* pBoxFmt = rBox.ClaimFrmFmt();
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMULA ))
+    if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMULA ))
     {
         pBoxFmt->LockModify();
         pBoxFmt->ResetFmtAttr( RES_BOXATR_VALUE );
         pBoxFmt->UnlockModify();
     }
-    else if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_VALUE ))
+    else if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_VALUE ))
     {
         pBoxFmt->LockModify();
         pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMULA );
@@ -4150,7 +4150,7 @@ void SwDoc::ClearLineNumAttrs( SwPosition & rPos )
                         RES_PARATR_BEGIN, RES_PARATR_END - 1,
                         0);
             pTxtNode->SwCntntNode::GetAttr( rSet );
-            if ( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE , false , &pFmtItem ) )
+            if ( SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE , false , &pFmtItem ) )
             {
                 SwUndoDelNum * pUndo;
                 if( GetIDocumentUndoRedo().DoesUndo() )
@@ -4186,9 +4186,9 @@ void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
 
         const SfxPoolItem* pFmtItem = 0;
         const SfxItemSet& rSet = pBox->GetFrmFmt()->GetAttrSet();
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMAT, false, &pFmtItem ) ||
-            SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMULA, false ) ||
-            SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_VALUE, false ))
+        if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, false, &pFmtItem ) ||
+            SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMULA, false ) ||
+            SfxItemState::SET == rSet.GetItemState( RES_BOXATR_VALUE, false ))
         {
             if (GetIDocumentUndoRedo().DoesUndo())
             {

@@ -207,7 +207,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         {
             sal_uInt16 nActNumLvl = (sal_uInt16)0xFFFF;
             const SfxPoolItem* pNumLevelItem = NULL;
-            if(SFX_ITEM_SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pNumLevelItem))
+            if(SfxItemState::SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pNumLevelItem))
                 nActNumLvl = ((const SfxUInt16Item*)pNumLevelItem)->GetValue();
 
             pNumRuleMgr->SetItems(&aNewAttr);
@@ -301,7 +301,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
     //SvxNumBulletItem* pRetItem = NULL;
     const SfxPoolItem* pTmpItem = NULL;
 
-    if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SFX_ITEM_SET)
+    if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SfxItemState::SET)
     {
         return pTmpItem;
     }
@@ -309,7 +309,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
     {
         nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         SfxItemState eState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
-        if (eState == SFX_ITEM_SET)
+        if (eState == SfxItemState::SET)
             return pTmpItem;
         else
         {
@@ -356,7 +356,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
-            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_SET )
+            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
             {
                 SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,true);
                 SvxNumRule* pLclRule = pBulletItem->GetNumRule();
@@ -371,11 +371,11 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             }
 
             SfxItemState eItemState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
-            if (eItemState == SFX_ITEM_SET)
+            if (eItemState == SfxItemState::SET)
                 return pTmpItem;
 
         }
-        //DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!")
+        //DBG_ASSERT(eState == SfxItemState::SET, "kein Item gefunden!")
     }
     return pTmpItem;
 }

@@ -382,7 +382,7 @@ void SfxBindings::Update_Impl
                 sal_uInt16 nWhich = pFound->nWhichId;
                 const SfxPoolItem *pItem = 0;
                 SfxItemState eState = pSet->GetItemState(nWhich, true, &pItem);
-                if ( eState == SFX_ITEM_DEFAULT && SfxItemPool::IsWhich(nWhich) )
+                if ( eState == SfxItemState::DEFAULT && SfxItemPool::IsWhich(nWhich) )
                     pItem = &pSet->Get(nWhich);
                 UpdateControllers_Impl( pInterface, aFound[nPos], pItem, eState );
             }
@@ -400,7 +400,7 @@ void SfxBindings::Update_Impl
         SfxFoundCache_Impl aFoundCache(
                             pCache->GetId(), 0,
                             pRealSlot, pCache );
-        UpdateControllers_Impl( 0, &aFoundCache, 0, SFX_ITEM_DISABLED);
+        UpdateControllers_Impl( 0, &aFoundCache, 0, SfxItemState::DISABLED);
     }
 }
 
@@ -472,7 +472,7 @@ void SfxBindings::Update
                 }
                 if (!pMsgServer)
                 {
-                    pCache->SetState(SFX_ITEM_DISABLED, 0);
+                    pCache->SetState(SfxItemState::DISABLED, 0);
                     pImp->bInUpdate = false;
                     InvalidateSlotsInMap_Impl();
                     return;
@@ -549,7 +549,7 @@ void SfxBindings::SetState
                 // Update status
                 if ( !pCache->IsControllerDirty() )
                     pCache->Invalidate(false);
-                pCache->SetState( SFX_ITEM_DEFAULT, pItem );
+                pCache->SetState( SfxItemState::DEFAULT, pItem );
 
                 //! Not implemented: Updates from EnumSlots via master slots
             }
@@ -583,7 +583,7 @@ void SfxBindings::SetState
             // Update Status
             if ( !pCache->IsControllerDirty() )
                 pCache->Invalidate(false);
-            pCache->SetState( SFX_ITEM_DEFAULT, &rItem );
+            pCache->SetState( SfxItemState::DEFAULT, &rItem );
 
             //! Not implemented: Updates from EnumSlots via master slots
         }
@@ -1168,14 +1168,14 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             pShell->CallState( aFunc, aSet );
             const SfxPoolItem *pOldItem;
             SfxItemState eState = aSet.GetItemState(nWhich, true, &pOldItem);
-            if ( eState == SFX_ITEM_DISABLED )
+            if ( eState == SfxItemState::DISABLED )
                 return;
 
-            if ( SFX_ITEM_DEFAULT == eState && SfxItemPool::IsWhich(nWhich) )
+            if ( SfxItemState::DEFAULT == eState && SfxItemPool::IsWhich(nWhich) )
                 pOldItem = &aSet.Get(nWhich);
 
-            if ( SFX_ITEM_SET == eState ||
-                 ( SFX_ITEM_DEFAULT == eState &&
+            if ( SfxItemState::SET == eState ||
+                 ( SfxItemState::DEFAULT == eState &&
                    SfxItemPool::IsWhich(nWhich) &&
                    pOldItem ) )
             {
@@ -1202,7 +1202,7 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
                     OSL_FAIL( "Toggle only for Enums and Bools allowed" );
                 }
             }
-            else if ( SFX_ITEM_DONTCARE == eState )
+            else if ( SfxItemState::DONTCARE == eState )
             {
                 // Create one Status-Item for each Factory
                 SfxPoolItem *pNewItem = pSlot->GetType()->CreateItem();
@@ -1423,22 +1423,22 @@ void SfxBindings::UpdateControllers_Impl
     // bound until now, the Controller to update the Slot.
     if ( pCache && pCache->IsControllerDirty() )
     {
-        if ( SFX_ITEM_DONTCARE == eState )
+        if ( SfxItemState::DONTCARE == eState )
         {
             // ambiguous
-            pCache->SetState( SFX_ITEM_DONTCARE, (SfxPoolItem *)-1 );
+            pCache->SetState( SfxItemState::DONTCARE, (SfxPoolItem *)-1 );
         }
-        else if ( SFX_ITEM_DEFAULT == eState &&
+        else if ( SfxItemState::DEFAULT == eState &&
                     pFound->nWhichId > SFX_WHICH_MAX )
         {
             // no Status or Default but without Pool
             SfxVoidItem aVoid(0);
-            pCache->SetState( SFX_ITEM_UNKNOWN, &aVoid );
+            pCache->SetState( SfxItemState::UNKNOWN, &aVoid );
         }
-        else if ( SFX_ITEM_DISABLED == eState )
-            pCache->SetState(SFX_ITEM_DISABLED, 0);
+        else if ( SfxItemState::DISABLED == eState )
+            pCache->SetState(SfxItemState::DISABLED, 0);
         else
-            pCache->SetState(SFX_ITEM_DEFAULT, pItem);
+            pCache->SetState(SfxItemState::DEFAULT, pItem);
     }
 
     // Update the slots for so far available and bound Controllers for
@@ -1452,8 +1452,8 @@ void SfxBindings::UpdateControllers_Impl
         // Items cast on EnumItem
         const SfxEnumItemInterface *pEnumItem =
                 PTR_CAST(SfxEnumItemInterface,pItem);
-        if ( eState == SFX_ITEM_DEFAULT && !pEnumItem )
-            eState = SFX_ITEM_DONTCARE;
+        if ( eState == SfxItemState::DEFAULT && !pEnumItem )
+            eState = SfxItemState::DONTCARE;
         else
             eState = SfxControllerItem::GetItemState( pEnumItem );
 
@@ -1471,10 +1471,10 @@ void SfxBindings::UpdateControllers_Impl
                 pEnumCache->Invalidate(false);
 
                 // HACK(CONTROL/SELECT Kram) ???
-                if ( eState == SFX_ITEM_DONTCARE && pFound->nWhichId == 10144 )
+                if ( eState == SfxItemState::DONTCARE && pFound->nWhichId == 10144 )
                 {
                     SfxVoidItem aVoid(0);
-                    pEnumCache->SetState( SFX_ITEM_UNKNOWN, &aVoid );
+                    pEnumCache->SetState( SfxItemState::UNKNOWN, &aVoid );
 
                     if (pSlave->GetNextSlot() == pFirstSlave)
                         break;
@@ -1482,22 +1482,22 @@ void SfxBindings::UpdateControllers_Impl
                     continue;
                 }
 
-                if ( SFX_ITEM_DISABLED == eState || (pEnumItem && !pEnumItem->IsEnabled( pSlave->GetSlotId())) )
+                if ( SfxItemState::DISABLED == eState || (pEnumItem && !pEnumItem->IsEnabled( pSlave->GetSlotId())) )
                 {
                     // disabled
-                    pEnumCache->SetState(SFX_ITEM_DISABLED, 0);
+                    pEnumCache->SetState(SfxItemState::DISABLED, 0);
                 }
-                else if ( SFX_ITEM_DEFAULT == eState && pEnumItem )
+                else if ( SfxItemState::DEFAULT == eState && pEnumItem )
                 {
                     // Determine enum value
                     sal_uInt16 nValue = pEnumItem->GetEnumValue();
                     SfxBoolItem aBool( pFound->nWhichId, pSlave->GetValue() == nValue );
-                    pEnumCache->SetState(SFX_ITEM_DEFAULT, &aBool);
+                    pEnumCache->SetState(SfxItemState::DEFAULT, &aBool);
                 }
                 else
                 {
                     // ambiguous
-                    pEnumCache->SetState( SFX_ITEM_DONTCARE, (SfxPoolItem *)-1 );
+                    pEnumCache->SetState( SfxItemState::DONTCARE, (SfxPoolItem *)-1 );
                 }
             }
 
@@ -1848,7 +1848,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
     {
         const SfxSlot* pSlot = SfxSlotPool::GetSlotPool( pDispatcher->GetFrame() ).GetSlot( nSlot );
         if ( !pSlot || !pSlot->pUnoName )
-            return SFX_ITEM_DISABLED;
+            return SfxItemState::DISABLED;
 
         ::com::sun::star::util::URL aURL;
         OUString aCmd( ".uno:" );
@@ -1881,14 +1881,14 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
                     bDeleteCache = true;
                 }
 
-                SfxItemState eState = SFX_ITEM_SET;
+                SfxItemState eState = SfxItemState::SET;
                 SfxPoolItem *pItem=NULL;
                 BindDispatch_Impl *pBind = new BindDispatch_Impl( xDisp, aURL, pCache, pSlot );
                 pBind->acquire();
                 xDisp->addStatusListener( pBind, aURL );
                 if ( !pBind->GetStatus().IsEnabled )
                 {
-                    eState = SFX_ITEM_DISABLED;
+                    eState = SfxItemState::DISABLED;
                 }
                 else
                 {
@@ -1938,13 +1938,13 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
     // order to allow for transition of ownership.
     const SfxPoolItem *pItem = NULL;
     SfxItemState eState = pDispatcher->QueryState( nSlot, pItem );
-    if ( eState == SFX_ITEM_SET )
+    if ( eState == SfxItemState::SET )
     {
-        DBG_ASSERT( pItem, "SFX_ITEM_SET but no item!" );
+        DBG_ASSERT( pItem, "SfxItemState::SET but no item!" );
         if ( pItem )
             rpState = pItem->Clone();
     }
-    else if ( eState == SFX_ITEM_DEFAULT && pItem )
+    else if ( eState == SfxItemState::DEFAULT && pItem )
     {
         rpState = pItem->Clone();
     }

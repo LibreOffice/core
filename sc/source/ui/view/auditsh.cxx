@@ -92,8 +92,8 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pXItem;
                     const SfxPoolItem* pYItem;
-                    if ( pReqArgs->GetItemState( SID_RANGE_COL, true, &pXItem ) == SFX_ITEM_SET
-                      && pReqArgs->GetItemState( SID_RANGE_ROW, true, &pYItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( SID_RANGE_COL, true, &pXItem ) == SfxItemState::SET
+                      && pReqArgs->GetItemState( SID_RANGE_ROW, true, &pYItem ) == SfxItemState::SET )
                     {
                         OSL_ENSURE( pXItem->ISA(SfxInt16Item) && pYItem->ISA(SfxInt32Item),
                                         "wrong items" );

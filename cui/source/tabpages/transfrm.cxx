@@ -512,7 +512,7 @@ bool SvxSlantTabPage::FillItemSet(SfxItemSet* rAttrs)
 
 void SvxSlantTabPage::Reset(const SfxItemSet* rAttrs)
 {
-    // if the view has selected objects, items with SFX_ITEM_DEFAULT need to be disabled
+    // if the view has selected objects, items with SfxItemState::DEFAULT need to be disabled
     const SfxPoolItem* pItem;
 
     // corner radius
@@ -582,7 +582,7 @@ void SvxSlantTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     SfxRectangleItem* pRectItem = NULL;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, (const SfxPoolItem**) &pRectItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, (const SfxPoolItem**) &pRectItem ) )
     {
         const Rectangle aTempRect(pRectItem->GetValue());
         maRange = basegfx::B2DRange(aTempRect.Left(), aTempRect.Top(), aTempRect.Right(), aTempRect.Bottom());
@@ -1021,7 +1021,7 @@ void SvxPositionSizeTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     SfxRectangleItem* pRectItem = NULL;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, (const SfxPoolItem**) &pRectItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_TRANSFORM_INTERN ) , false, (const SfxPoolItem**) &pRectItem ) )
     {
         { // #i75273#
             const Rectangle aTempRect(pRectItem->GetValue());

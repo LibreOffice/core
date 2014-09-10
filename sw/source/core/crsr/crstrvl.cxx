@@ -1470,12 +1470,12 @@ bool SwCrsrShell::GetContentAtPos( const Point& rPt,
                     0 != ( pBox = pTblNd->GetTable().GetTblBox(
                     pSttNd->GetIndex() )) &&
 #ifdef DBG_UTIL
-                    ( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
+                    ( SfxItemState::SET == pBox->GetFrmFmt()->GetItemState(
                     RES_BOXATR_FORMULA, false, &pItem ) ||
-                    SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
+                    SfxItemState::SET == pBox->GetFrmFmt()->GetItemState(
                     RES_BOXATR_VALUE, false, &pItem ))
 #else
-                    SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
+                    SfxItemState::SET == pBox->GetFrmFmt()->GetItemState(
                     RES_BOXATR_FORMULA, false, &pItem )
 #endif
                     )

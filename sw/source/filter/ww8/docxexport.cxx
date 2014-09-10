@@ -214,7 +214,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 {
     bool bRet( false );
 
-    if (SFX_ITEM_SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
+    if (SfxItemState::SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
     {
         if (const SwFmt *pParent = rFmt.DerivedFrom())
         {
@@ -1287,7 +1287,7 @@ boost::optional<SvxBrushItem> DocxExport::getBackground()
     SvxBrushItem aBrush(RES_BACKGROUND);
     SfxItemState eState = rFmt.GetBackgroundState(aBrush);
 
-    if (SFX_ITEM_SET == eState)
+    if (SfxItemState::SET == eState)
     {
         // The 'color' is set for the first page style - take it and use it as the background color of the entire DOCX
         if (aBrush.GetColor().GetColor() != COL_AUTO)

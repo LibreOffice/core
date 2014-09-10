@@ -51,9 +51,9 @@ ScTbxInsertCtrl::~ScTbxInsertCtrl()
 void ScTbxInsertCtrl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
-    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
+    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
 
-    if( eState == SFX_ITEM_DEFAULT )
+    if( eState == SfxItemState::DEFAULT )
     {
 
         const SfxUInt16Item* pItem = PTR_CAST( SfxUInt16Item, pState );

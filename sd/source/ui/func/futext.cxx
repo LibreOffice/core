@@ -235,7 +235,7 @@ void FuText::DoExecute( SfxRequest& )
 
         // test for type before using
         && SID_TEXTEDIT == nSlotId
-        && SFX_ITEM_SET == pArgs->GetItemState(SID_TEXTEDIT)
+        && SfxItemState::SET == pArgs->GetItemState(SID_TEXTEDIT)
 
         && (sal_uInt16)((SfxUInt16Item&)pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
     {
@@ -1260,7 +1260,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
             // test for type before using
             && SID_TEXTEDIT == nSlotId
-            && SFX_ITEM_SET == pArgs->GetItemState(SID_TEXTEDIT)
+            && SfxItemState::SET == pArgs->GetItemState(SID_TEXTEDIT)
 
             && (sal_uInt16) ((SfxUInt16Item&) pArgs->Get(SID_TEXTEDIT)).GetValue() == 2)
         {

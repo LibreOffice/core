@@ -113,7 +113,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
     {
         OUString aInputString;
 
-        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_CHAR))
+        if(SfxItemState::SET == pSet->GetItemState(SID_ATTR_CHAR))
             aInputString = ((SfxStringItem&)pSet->Get(SID_ATTR_CHAR)).GetValue();
 
         if(!aInputString.isEmpty())

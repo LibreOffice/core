@@ -146,7 +146,7 @@ sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
     sal_uInt16 nHtmlMode = 0;
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
+    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
@@ -201,7 +201,7 @@ SfxTabPage* SvxStdParagraphTabPage::Create( Window* pParent, const SfxItemSet* r
 
 bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
 {
-    SfxItemState eState = SFX_ITEM_UNKNOWN;
+    SfxItemState eState = SfxItemState::UNKNOWN;
     const SfxPoolItem* pOld = 0;
     SfxItemPool* pPool = rOutSet->GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -249,7 +249,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_LINESPACE );
 
         if ( !pOld || !( *(const SvxLineSpacingItem*)pOld == aSpacing ) ||
-             SFX_ITEM_DONTCARE == eState )
+             SfxItemState::DONTCARE == eState )
         {
             rOutSet->Put( aSpacing );
             bModified = true;
@@ -293,7 +293,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         eState = GetItemSet().GetItemState( nWhich );
 
         if ( !pOld || !( *(const SvxULSpaceItem*)pOld == aMargin ) ||
-             SFX_ITEM_DONTCARE == eState )
+             SfxItemState::DONTCARE == eState )
         {
             rOutSet->Put( aMargin );
             bModified = true;
@@ -350,7 +350,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         eState = GetItemSet().GetItemState( nWhich );
 
         if ( !pOld || !( *(const SvxLRSpaceItem*)pOld == aMargin ) ||
-             SFX_ITEM_DONTCARE == eState )
+             SfxItemState::DONTCARE == eState )
         {
             rOutSet->Put( aMargin );
             bModified = true;
@@ -367,7 +367,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             sal_uInt16 _nWhich = GetWhich( SID_ATTR_TABSTOP );
             const SfxItemSet& rInSet = GetItemSet();
 
-            if ( rInSet.GetItemState( _nWhich ) >= SFX_ITEM_DEFAULT )
+            if ( rInSet.GetItemState( _nWhich ) >= SfxItemState::DEFAULT )
             {
                 const SvxTabStopItem& rTabItem =
                     (const SvxTabStopItem&)rInSet.Get( _nWhich );
@@ -394,7 +394,7 @@ bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
             rOutSet->Put(*pRegItem);
             bModified = true;
         }
-        else if ( SFX_ITEM_DEFAULT == GetItemSet().GetItemState( _nWhich, false ) )
+        else if ( SfxItemState::DEFAULT == GetItemSet().GetItemState( _nWhich, false ) )
             rOutSet->ClearItem(_nWhich);
     }
 
@@ -434,7 +434,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_LRSPACE );
     SfxItemState eItemState = rSet->GetItemState( _nWhich );
 
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
     {
         SfxMapUnit eUnit = pPool->GetMetric( _nWhich );
 
@@ -504,7 +504,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
     _nWhich = GetWhich( SID_ATTR_ULSPACE );
     eItemState = rSet->GetItemState( _nWhich );
 
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
     {
         SfxMapUnit eUnit = pPool->GetMetric( _nWhich );
 
@@ -559,7 +559,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
     _nWhich = GetWhich( SID_ATTR_PARA_LINESPACE );
     eItemState = rSet->GetItemState( _nWhich );
 
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
         SetLineSpacing_Impl( (const SvxLineSpacingItem &)rSet->Get( _nWhich ) );
     else
         m_pLineDist->SetNoSelection();
@@ -567,7 +567,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet* rSet )
     _nWhich = GetWhich( SID_ATTR_PARA_REGISTER );
     eItemState = rSet->GetItemState( _nWhich );
 
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
         m_pRegisterCB->Check( ((const SfxBoolItem &)rSet->Get( _nWhich )).GetValue());
     m_pRegisterCB->SaveValue();
     sal_uInt16 nHtmlMode = GetHtmlMode_Impl(*rSet);
@@ -1153,7 +1153,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     SfxItemState eItemState = rSet->GetItemState( _nWhich );
 
     sal_Int32 nLBSelect = 0;
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
     {
         const SvxAdjustItem& rAdj = (const SvxAdjustItem&)rSet->Get( _nWhich );
 
@@ -1205,7 +1205,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     }
     _nWhich = GetWhich(SID_ATTR_PARA_SNAPTOGRID);
     eItemState = rSet->GetItemState( _nWhich );
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
     {
         const SvxParaGridItem& rSnap = (const SvxParaGridItem&)rSet->Get( _nWhich );
         m_pSnapToGridCB->Check(rSnap.GetValue());
@@ -1214,7 +1214,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
     _nWhich = GetWhich( SID_PARA_VERTALIGN );
     eItemState = rSet->GetItemState( _nWhich );
 
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
     {
         m_pVertAlignFL->Show();
 
@@ -1225,7 +1225,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet* rSet )
 
     _nWhich = GetWhich( SID_ATTR_FRAMEDIRECTION );
     //text direction
-    if( SFX_ITEM_DEFAULT <= rSet->GetItemState( _nWhich ) )
+    if( SfxItemState::DEFAULT <= rSet->GetItemState( _nWhich ) )
     {
         const SvxFrameDirectionItem& rFrameDirItem = ( const SvxFrameDirectionItem& ) rSet->Get( _nWhich );
         m_pTextDirectionLB->SelectEntryValue( (SvxFrameDirection)rFrameDirItem.GetValue() );
@@ -1417,7 +1417,7 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         eState = m_pPageBreakBox->GetState();
         SfxItemState eModelState = GetItemSet().GetItemState(SID_ATTR_PARA_MODEL, false);
 
-        if ( (eModelState == SFX_ITEM_SET && TRISTATE_TRUE == m_pPageBreakBox->GetState()) ||
+        if ( (eModelState == SfxItemState::SET && TRISTATE_TRUE == m_pPageBreakBox->GetState()) ||
              m_pPageBreakBox->IsValueChangedFromSaved()                ||
              m_pBreakTypeLB->IsValueChangedFromSaved()   ||
              m_pBreakPositionLB->IsValueChangedFromSaved() )
@@ -1537,7 +1537,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 _nWhich = GetWhich( SID_ATTR_PARA_HYPHENZONE );
     SfxItemState eItemState = rSet->GetItemState( _nWhich );
 
-    bool bItemAvailable = eItemState >= SFX_ITEM_DEFAULT;
+    bool bItemAvailable = eItemState >= SfxItemState::DEFAULT;
     bool bIsHyphen = false;
     if( !bHtmlMode && bItemAvailable )
     {
@@ -1566,7 +1566,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     _nWhich = GetWhich( SID_ATTR_PARA_PAGENUM );
 
-    if ( rSet->GetItemState(_nWhich) >= SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState(_nWhich) >= SfxItemState::DEFAULT )
     {
         const sal_uInt16 nPageNum =
             ( (const SfxUInt16Item&)rSet->Get( _nWhich ) ).GetValue();
@@ -1580,7 +1580,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         bool bIsPageModel = false;
         eItemState = rSet->GetItemState( _nWhich );
 
-        if ( eItemState >= SFX_ITEM_SET )
+        if ( eItemState >= SfxItemState::SET )
         {
             m_pApplyCollBtn->EnableTriState( false );
 
@@ -1615,7 +1615,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_pApplyCollBtn->SetState( TRISTATE_FALSE );
             }
         }
-        else if ( SFX_ITEM_DONTCARE == eItemState )
+        else if ( SfxItemState::DONTCARE == eItemState )
         {
             m_pApplyCollBtn->EnableTriState( true );
             m_pApplyCollBtn->SetState( TRISTATE_INDET );
@@ -1634,7 +1634,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             _nWhich = GetWhich( SID_ATTR_PARA_PAGEBREAK );
             eItemState = rSet->GetItemState( _nWhich );
 
-            if ( eItemState >= SFX_ITEM_DEFAULT )
+            if ( eItemState >= SfxItemState::DEFAULT )
             {
                 const SvxFmtBreakItem& rPageBreak =
                     (const SvxFmtBreakItem&)rSet->Get( _nWhich );
@@ -1686,7 +1686,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_pBreakTypeLB->SelectEntryPos(nType);
                 m_pBreakPositionLB->SelectEntryPos(nPosition);
             }
-            else if ( SFX_ITEM_DONTCARE == eItemState )
+            else if ( SfxItemState::DONTCARE == eItemState )
                 m_pPageBreakBox->SetState( TRISTATE_INDET );
             else
             {
@@ -1705,7 +1705,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     _nWhich = GetWhich( SID_ATTR_PARA_KEEP );
     eItemState = rSet->GetItemState( _nWhich );
 
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
     {
         m_pKeepParaBox->EnableTriState( false );
         const SvxFmtKeepItem& rKeep =
@@ -1716,7 +1716,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         else
             m_pKeepParaBox->SetState( TRISTATE_FALSE );
     }
-    else if ( SFX_ITEM_DONTCARE == eItemState )
+    else if ( SfxItemState::DONTCARE == eItemState )
         m_pKeepParaBox->SetState( TRISTATE_INDET );
     else
         m_pKeepParaBox->Enable(false);
@@ -1724,7 +1724,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
     _nWhich = GetWhich( SID_ATTR_PARA_SPLIT );
     eItemState = rSet->GetItemState( _nWhich );
 
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
     {
         const SvxFmtSplitItem& rSplit =
             (const SvxFmtSplitItem&)rSet->Get( _nWhich );
@@ -1741,7 +1741,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             _nWhich = GetWhich( SID_ATTR_PARA_WIDOWS );
             SfxItemState eTmpState = rSet->GetItemState( _nWhich );
 
-            if ( eTmpState >= SFX_ITEM_DEFAULT )
+            if ( eTmpState >= SfxItemState::DEFAULT )
             {
                 const SvxWidowsItem& rWidow =
                     (const SvxWidowsItem&)rSet->Get( _nWhich );
@@ -1755,7 +1755,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                 //m_pWidowRowLabel->Enable(_bEnable);
 
             }
-            else if ( SFX_ITEM_DONTCARE == eTmpState )
+            else if ( SfxItemState::DONTCARE == eTmpState )
                 m_pWidowBox->SetState( TRISTATE_INDET );
             else
                 m_pWidowBox->Enable(false);
@@ -1764,7 +1764,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             _nWhich = GetWhich( SID_ATTR_PARA_ORPHANS );
             eTmpState = rSet->GetItemState( _nWhich );
 
-            if ( eTmpState >= SFX_ITEM_DEFAULT )
+            if ( eTmpState >= SfxItemState::DEFAULT )
             {
                 const SvxOrphansItem& rOrphan =
                     (const SvxOrphansItem&)rSet->Get( _nWhich );
@@ -1778,13 +1778,13 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                 m_pOrphanRowLabel->Enable(_bEnable);
 
             }
-            else if ( SFX_ITEM_DONTCARE == eTmpState )
+            else if ( SfxItemState::DONTCARE == eTmpState )
                 m_pOrphanBox->SetState( TRISTATE_INDET );
             else
                 m_pOrphanBox->Enable(false);
         }
     }
-    else if ( SFX_ITEM_DONTCARE == eItemState )
+    else if ( SfxItemState::DONTCARE == eItemState )
         m_pKeepTogetherBox->SetState( TRISTATE_INDET );
     else
         m_pKeepTogetherBox->Enable(false);
@@ -2188,9 +2188,9 @@ static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, CheckBox& rBo
 {
     sal_uInt16 _nWhich = rSet.GetPool()->GetWhich(nSlotId);
     SfxItemState eState = rSet.GetItemState(_nWhich, true);
-    if( eState == SFX_ITEM_UNKNOWN || eState == SFX_ITEM_DISABLED )
+    if( eState == SfxItemState::UNKNOWN || eState == SfxItemState::DISABLED )
         rBox.Enable(false);
-    else if(eState >= SFX_ITEM_DEFAULT)
+    else if(eState >= SfxItemState::DEFAULT)
     {
         rBox.EnableTriState( false );
         rBox.Check(((const SfxBoolItem&)rSet.Get(_nWhich)).GetValue());

@@ -345,8 +345,8 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
         SwSectionNode* pInsertedSectNd = rDoc.GetNodes().InsertTextSection(
                 aStt, *pFmt, *m_pSectionData, 0, & aEnd);
 
-        if( SFX_ITEM_SET == pFmt->GetItemState( RES_FTN_AT_TXTEND ) ||
-            SFX_ITEM_SET == pFmt->GetItemState( RES_END_AT_TXTEND ))
+        if( SfxItemState::SET == pFmt->GetItemState( RES_FTN_AT_TXTEND ) ||
+            SfxItemState::SET == pFmt->GetItemState( RES_END_AT_TXTEND ))
         {
             rDoc.GetFtnIdxs().UpdateFtn( aStt );
         }
@@ -444,7 +444,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
         // The Content and Protect items must persist
         const SfxPoolItem* pItem;
         m_pAttrSet->Put( pFmt->GetFmtAttr( RES_CNTNT ));
-        if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, true, &pItem ))
+        if( SfxItemState::SET == pFmt->GetItemState( RES_PROTECT, true, &pItem ))
         {
             m_pAttrSet->Put( *pItem );
         }

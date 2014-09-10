@@ -101,7 +101,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
 
     // linken/rechten Rand setzen
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
+    if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
         const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
@@ -128,7 +128,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
 
     // oberen/unteren Rand setzen
-    if( SFX_ITEM_SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true, &pItem ) )
+    if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true, &pItem ) )
     {
         // Ggf. den Erstzeilen-Einzug noch plaetten
         const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
@@ -426,7 +426,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         const SfxPoolItem *pItem;
         for( sal_uInt16 i=0; nWhichIds[i]; i++ )
         {
-            if( SFX_ITEM_SET == rItemSet.GetItemState( nWhichIds[i], true, &pItem ) )
+            if( SfxItemState::SET == rItemSet.GetItemState( nWhichIds[i], true, &pItem ) )
                 PutEEPoolItem( aItemSet, *pItem );
         }
     }

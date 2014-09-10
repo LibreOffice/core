@@ -457,7 +457,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             {
                 const SfxPoolItem* pItem;
                 if (rReq.GetArgs()->GetItemState(
-                    SID_ATTR_YEAR2000, true, &pItem) == SFX_ITEM_SET)
+                    SID_ATTR_YEAR2000, true, &pItem) == SfxItemState::SET)
                     pFormShell->SetY2KState (
                         static_cast<const SfxUInt16Item*>(pItem)->GetValue());
             }
@@ -904,7 +904,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
             {
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aEditAttr );
-                if( aEditAttr.GetItemState( EE_PARA_TABS ) >= SFX_ITEM_DEFAULT )
+                if( aEditAttr.GetItemState( EE_PARA_TABS ) >= SfxItemState::DEFAULT )
                 {
                     const SvxTabStopItem& rItem = (const SvxTabStopItem&) aEditAttr.Get( EE_PARA_TABS );
                     rSet.Put( rItem );
@@ -932,7 +932,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     Point aPos( aPagePos + maMarkRect.TopLeft() );
 
-                    if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SFX_ITEM_SET )
+                    if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SfxItemState::SET )
                     {
                         const SdrMetricItem& rTLDItem = (const SdrMetricItem&)
                                                               aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
@@ -944,7 +944,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
 
                     aLRSpace.SetLeft( aPagePos.X() + maMarkRect.Left() );
 
-                    if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SFX_ITEM_SET )
+                    if ( aEditAttr.GetItemState( SDRATTR_TEXT_LEFTDIST ) == SfxItemState::SET )
                     {
                         const SdrMetricItem& rTLDItem = (const SdrMetricItem&)
                                                               aEditAttr.Get( SDRATTR_TEXT_LEFTDIST );
@@ -963,7 +963,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     aProtect.SetPosProtect( true );
                 }
 
-                if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SFX_ITEM_DEFAULT )
+                if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SfxItemState::DEFAULT )
                 {
                     const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR );
                     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, rItem.GetValue() == ::com::sun::star::text::WritingMode_RL_TB));

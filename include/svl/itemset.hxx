@@ -113,8 +113,8 @@ public:
     bool                        Put( const SfxItemSet&,
                                      bool bInvalidAsDefault = true );
     void                        PutExtended( const SfxItemSet&,
-                                             SfxItemState eDontCareAs = SFX_ITEM_UNKNOWN,
-                                             SfxItemState eDefaultAs = SFX_ITEM_UNKNOWN );
+                                             SfxItemState eDontCareAs = SfxItemState::UNKNOWN,
+                                             SfxItemState eDefaultAs = SfxItemState::UNKNOWN );
 
     virtual bool                Set( const SfxItemSet&, bool bDeep = true );
 

@@ -525,7 +525,7 @@ void SwDrawTextShell::ExecUndo(SfxRequest &rReq)
             {
             case SID_UNDO:
             case SID_REDO:
-                if( SFX_ITEM_SET == pArgs->GetItemState( nId, false, &pItem ) &&
+                if( SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ) &&
                     1 < (nCnt = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
                     // then we make by ourself.
@@ -847,7 +847,7 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
             case SID_TABLE_VERT_BOTTOM:
                 bool bContour = false;
                 SfxItemState eConState = aAttrs.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
-                if( eConState != SFX_ITEM_DONTCARE )
+                if( eConState != SfxItemState::DONTCARE )
                 {
                     bContour = ( ( const SdrOnOffItem& )aAttrs.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
                 }
@@ -856,8 +856,8 @@ void SwDrawTextShell::GetStatePropPanelAttr(SfxItemSet &rSet)
                 SfxItemState eVState = aAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
                 //SfxItemState eHState = aAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
 
-                //if(SFX_ITEM_DONTCARE != eVState && SFX_ITEM_DONTCARE != eHState)
-                if(SFX_ITEM_DONTCARE != eVState)
+                //if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
+                if(SfxItemState::DONTCARE != eVState)
                 {
                     SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
                     bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||

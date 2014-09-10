@@ -196,7 +196,7 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
                                    RES_CHRATR_CTL_FONTSIZE };
        for( sal_uInt16 i=0; i<3; i++ )
     {
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], false,
+        if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,
                                                    &pItem ) &&
             ((const SvxFontHeightItem *)pItem)->GetProp() != 100)
         {
@@ -207,7 +207,7 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
 
     pCharFmt->SetFmtAttr( rItemSet );
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
     {
         // Ein Brush-Item mit RES_BACKGROUND muss noch in eines mit
         // RES_CHRATR_BACKGROUND gewandelt werden
@@ -217,7 +217,7 @@ static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
         pCharFmt->SetFmtAttr( aBrushItem );
     }
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BOX, false, &pItem ) )
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_BOX, false, &pItem ) )
     {
         SvxBoxItem aBoxItem( *(const SvxBoxItem *)pItem );
         aBoxItem.SetWhich( RES_CHRATR_BOX );
@@ -235,7 +235,7 @@ void SwCSS1Parser::SetLinkCharFmts()
     if( pStyleEntry )
     {
         SfxItemSet& rItemSet = pStyleEntry->GetItemSet();
-        bool bColorSet = (SFX_ITEM_SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
+        bool bColorSet = (SfxItemState::SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
                                                               false));
         pUnvisited = GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL );
         SetCharFmtAttrs( pUnvisited, rItemSet );
@@ -252,7 +252,7 @@ void SwCSS1Parser::SetLinkCharFmts()
     if( pStyleEntry )
     {
         SfxItemSet& rItemSet = pStyleEntry->GetItemSet();
-        bool bColorSet = (SFX_ITEM_SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
+        bool bColorSet = (SfxItemState::SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
                                                               false));
         if( !pUnvisited )
             pUnvisited = GetCharFmtFromPool( RES_POOLCHR_INET_NORMAL );
@@ -266,7 +266,7 @@ void SwCSS1Parser::SetLinkCharFmts()
     if( pStyleEntry )
     {
         SfxItemSet& rItemSet = pStyleEntry->GetItemSet();
-        bool bColorSet = (SFX_ITEM_SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
+        bool bColorSet = (SfxItemState::SET==rItemSet.GetItemState(RES_CHRATR_COLOR,
                                                               false));
         if( !pVisited )
             pVisited = GetCharFmtFromPool( RES_POOLCHR_INET_VISIT );
@@ -289,8 +289,8 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
          rPropInfo.bTextIndent) &&
         (!rPropInfo.bLeftMargin || !rPropInfo.bRightMargin ||
          !rPropInfo.bTextIndent) &&
-        SFX_ITEM_SET == rCollItemSet.GetItemState(RES_LR_SPACE,true,&pCollItem) &&
-        SFX_ITEM_SET == rItemSet.GetItemState(RES_LR_SPACE,false,&pItem) )
+        SfxItemState::SET == rCollItemSet.GetItemState(RES_LR_SPACE,true,&pCollItem) &&
+        SfxItemState::SET == rItemSet.GetItemState(RES_LR_SPACE,false,&pItem) )
     {
         const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
 
@@ -308,9 +308,9 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
     // oberer und unterer Rand
     if( (rPropInfo.bTopMargin || rPropInfo.bBottomMargin) &&
         (!rPropInfo.bTopMargin || !rPropInfo.bBottomMargin) &&
-        SFX_ITEM_SET == rCollItemSet.GetItemState(RES_UL_SPACE,true,
+        SfxItemState::SET == rCollItemSet.GetItemState(RES_UL_SPACE,true,
                                                   &pCollItem) &&
-        SFX_ITEM_SET == rItemSet.GetItemState(RES_UL_SPACE,false,&pItem) )
+        SfxItemState::SET == rItemSet.GetItemState(RES_UL_SPACE,false,&pItem) )
     {
         const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
 
@@ -327,7 +327,7 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
                                    RES_CHRATR_CTL_FONTSIZE };
        for( sal_uInt16 i=0; i<3; i++ )
     {
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], false,
+        if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,
                                                    &pItem ) &&
             ((const SvxFontHeightItem *)pItem)->GetProp() != 100)
         {
@@ -401,7 +401,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
     if( pItemSet2 )
     {
         const SfxPoolItem *pItem = 0;
-        if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_BACKGROUND, false,
+        if( SfxItemState::SET == pItemSet2->GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
             // ein Hintergrund wird gesetzt
@@ -410,7 +410,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
             bSetBrush = true;
         }
 
-        if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_BOX, false, &pItem ) )
+        if( SfxItemState::SET == pItemSet2->GetItemState( RES_BOX, false, &pItem ) )
         {
             // eine Umrandung wird gesetzt
             aBoxItem = *((const SvxBoxItem *)pItem);
@@ -418,7 +418,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SvxBrushItem *pBrush,
             bSetBox = true;
         }
 
-        if( SFX_ITEM_SET == pItemSet2->GetItemState( RES_FRAMEDIR, false, &pItem ) )
+        if( SfxItemState::SET == pItemSet2->GetItemState( RES_FRAMEDIR, false, &pItem ) )
         {
             // eine Umrandung wird gesetzt
             aFrmDirItem = *static_cast< const SvxFrameDirectionItem *>( pItem );
@@ -467,10 +467,10 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
 
     // linker, rechter Rand und Erstzeilen-Einzug
     if( (rPropInfo.bLeftMargin || rPropInfo.bRightMargin) &&
-        SFX_ITEM_SET == rItemSet.GetItemState(RES_LR_SPACE,false,&pItem) )
+        SfxItemState::SET == rItemSet.GetItemState(RES_LR_SPACE,false,&pItem) )
     {
         if( (!rPropInfo.bLeftMargin || !rPropInfo.bRightMargin) &&
-            SFX_ITEM_SET == rPageItemSet.GetItemState(RES_LR_SPACE,
+            SfxItemState::SET == rPageItemSet.GetItemState(RES_LR_SPACE,
                                                       true,&pPageItem) )
         {
             const SvxLRSpaceItem *pLRItem = (const SvxLRSpaceItem *)pItem;
@@ -492,10 +492,10 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
 
     // oberer und unterer Rand
     if( (rPropInfo.bTopMargin || rPropInfo.bBottomMargin) &&
-        SFX_ITEM_SET == rItemSet.GetItemState(RES_UL_SPACE,false,&pItem) )
+        SfxItemState::SET == rItemSet.GetItemState(RES_UL_SPACE,false,&pItem) )
     {
         if( (!rPropInfo.bTopMargin || !rPropInfo.bBottomMargin) &&
-            SFX_ITEM_SET == rPageItemSet.GetItemState(RES_UL_SPACE,
+            SfxItemState::SET == rPageItemSet.GetItemState(RES_UL_SPACE,
                                                       true,&pPageItem) )
         {
             const SvxULSpaceItem *pULItem = (const SvxULSpaceItem *)pItem;
@@ -548,7 +548,7 @@ void SwCSS1Parser::SetPageDescAttrs( const SwPageDesc *pPageDesc,
     }
 
     // Geht das wirklich?
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false, &pItem ) )
     {
         // eine Umrandung wird gesetzt
         rMaster.SetFmtAttr( *pItem );
@@ -688,7 +688,7 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
             const SfxPoolItem *pItem;
             if( aClearItems[j] ||
                 (pParentItemSet &&
-                 SFX_ITEM_SET == rItemSet.GetItemState( nWhich, false, &pItem ) &&
+                 SfxItemState::SET == rItemSet.GetItemState( nWhich, false, &pItem ) &&
                  (0==i ? swhtml_css1atr_equalFontItems( *pItem, pParentItemSet->Get(nWhich, true ) )
                         : *pItem == pParentItemSet->Get(nWhich, true ) ) ) )
             {
@@ -817,7 +817,7 @@ bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 // Den Hintergrund muessen wir vor dem Setzen abfragen,
                 // denn in SetPageDescAttrs wird er geloescht.
                 const SfxPoolItem *pItem;
-                if( SFX_ITEM_SET==rItemSet.GetItemState(RES_BACKGROUND,false,&pItem) )
+                if( SfxItemState::SET==rItemSet.GetItemState(RES_BACKGROUND,false,&pItem) )
                 {
                     const SvxBrushItem *pBrushItem =
                         (const SvxBrushItem *)pItem;
@@ -838,7 +838,7 @@ bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
 
                 // alle noch uebrigen Optionen koennen an der Standard-Vorlage
                 // gesetzt werden und gelten dann automatisch als defaults
-                if( SFX_ITEM_SET==rItemSet.GetItemState(RES_CHRATR_COLOR,false) )
+                if( SfxItemState::SET==rItemSet.GetItemState(RES_CHRATR_COLOR,false) )
                     bBodyTextSet = true;
                 SetTxtCollAttrs(
                     GetTxtCollFromPool( RES_POOLCOLL_STANDARD ),
@@ -1011,7 +1011,7 @@ bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 // nur die Attribute an der Vorlage setzen
                 const SfxPoolItem *pItem;
                 const SvxBoxItem *pBoxItem = 0;
-                if( SFX_ITEM_SET ==
+                if( SfxItemState::SET ==
                         pColl->GetAttrSet().GetItemState(RES_BOX,true,&pItem) )
                     pBoxItem = (const SvxBoxItem *)pItem;
                 rPropInfo.SetBoxItem( rItemSet, MIN_BORDER_DIST, pBoxItem );
@@ -1481,7 +1481,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
     // fuer die Hoehe (was passiert mit absoluten Hoehen???)
     sal_uInt8 nLines = rDrop.GetLines();
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) )
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) )
     {
         sal_uInt16 nProp = ((const SvxFontHeightItem *)pItem)->GetProp();
         nLines = (sal_uInt8)((nProp + 50) / 100);
@@ -1508,7 +1508,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
     rDrop.GetLines() = nLines;
 
     // ein rechter Rand wird der Abstand zum Text!
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_LR_SPACE, false, &pItem ) )
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, false, &pItem ) )
     {
         rDrop.GetDistance() = static_cast< sal_uInt16 >(
             ((const SvxLRSpaceItem *)pItem)->GetRight() );
@@ -2104,7 +2104,7 @@ void SwHTMLParser::SetFrmFmtAttrs( SfxItemSet &rItemSet,
 {
     const SfxPoolItem *pItem;
     if( (nFlags & HTML_FF_BOX) != 0 &&
-        SFX_ITEM_SET==rItemSet.GetItemState( RES_BOX, true, &pItem ) )
+        SfxItemState::SET==rItemSet.GetItemState( RES_BOX, true, &pItem ) )
     {
         if( (nFlags & HTML_FF_PADDING) == 0 )
         {
@@ -2121,14 +2121,14 @@ void SwHTMLParser::SetFrmFmtAttrs( SfxItemSet &rItemSet,
     }
 
     if( (nFlags & HTML_FF_BACKGROUND) != 0 &&
-        SFX_ITEM_SET==rItemSet.GetItemState( RES_BACKGROUND, true, &pItem ) )
+        SfxItemState::SET==rItemSet.GetItemState( RES_BACKGROUND, true, &pItem ) )
     {
         rFrmItemSet.Put( *pItem );
         rItemSet.ClearItem( RES_BACKGROUND );
     }
 
     if( (nFlags & HTML_FF_DIRECTION) != 0 &&
-        SFX_ITEM_SET==rItemSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
+        SfxItemState::SET==rItemSet.GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         rFrmItemSet.Put( *pItem );
         rItemSet.ClearItem( RES_FRAMEDIR );
@@ -2316,7 +2316,7 @@ static void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc )
     const SfxPoolItem *pItem;
     for( sal_uInt16 i=0; i<3; i++ )
     {
-        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], false,&pItem ) )
+        if( SfxItemState::SET == rItemSet.GetItemState( aWhichIds[i], false,&pItem ) )
         {
             const SvxFontItem& rFont = *(const SvxFontItem *)pItem;
             if( RTL_TEXTENCODING_SYMBOL != rFont.GetCharSet() )

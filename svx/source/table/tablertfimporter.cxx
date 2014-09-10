@@ -270,7 +270,7 @@ void SdrTableRTFParser::FillTable()
                 if( xCell.is() && xCellInfo.get() )
                 {
                     const SfxPoolItem *pPoolItem = 0;
-                    if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,false,&pPoolItem)==SFX_ITEM_SET)
+                    if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,false,&pPoolItem)==SfxItemState::SET)
                         xCell->SetMergedItem( *pPoolItem );
 
                     boost::scoped_ptr<OutlinerParaObject> pTextObject(mpOutliner->CreateParaObject( xCellInfo->mnStartPara, xCellInfo->mnParaCount ));

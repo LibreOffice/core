@@ -110,7 +110,7 @@ public:
      */
     SfxItemSet CreateEmptyItemSet() const;
 
-    /** Invalidates all items in rDestSet, that are set (state SFX_ITEM_SET) in
+    /** Invalidates all items in rDestSet, that are set (state SfxItemState::SET) in
         both item sets (rDestSet and rSourceSet) and have differing content.
      */
     static void InvalidateUnequalItems( SfxItemSet &rDestSet, const SfxItemSet &rSourceSet );

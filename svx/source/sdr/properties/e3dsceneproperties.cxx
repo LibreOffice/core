@@ -92,7 +92,7 @@ namespace sdr
                         // and always equal.
                         if(nWhich <= SDRATTR_3DSCENE_FIRST || nWhich >= SDRATTR_3DSCENE_LAST)
                         {
-                            if(SFX_ITEM_DONTCARE == rSet.GetItemState(nWhich, false))
+                            if(SfxItemState::DONTCARE == rSet.GetItemState(nWhich, false))
                             {
                                 mpItemSet->InvalidateItem(nWhich);
                             }

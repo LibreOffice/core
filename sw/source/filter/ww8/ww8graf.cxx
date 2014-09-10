@@ -502,7 +502,7 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
         {
             // If we are set in the source and not set in the destination
             // then add it in.
-            if ( SFX_ITEM_SET == pStyInf->pFmt->GetItemState(
+            if ( SfxItemState::SET == pStyInf->pFmt->GetItemState(
                 i, true, &pItem ) )
             {
                 SfxItemPool *pEditPool = rS.GetPool();
@@ -512,7 +512,7 @@ void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, sal_uInt16 nColl )
                     nSlotId && nWhich != nSlotId &&
                     0 != (nWhich = pEditPool->GetWhich(nSlotId)) &&
                     nWhich != nSlotId &&
-                    ( SFX_ITEM_SET != rS.GetItemState(nWhich, false) )
+                    ( SfxItemState::SET != rS.GetItemState(nWhich, false) )
                    )
                 {
                     SfxPoolItem* pCopy = pItem->Clone();
@@ -1583,7 +1583,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     };
     const SfxPoolItem* pPoolItem;
     for(sal_uInt16 nItem = 0; nItem < nDirectMatch; ++nItem)
-        if( SFX_ITEM_SET == rOldSet.GetItemState(
+        if( SfxItemState::SET == rOldSet.GetItemState(
                     static_cast< sal_uInt16 >(aDirectMatch[ nItem ]), false, &pPoolItem) )
         {
             rFlySet.Put( *pPoolItem );
@@ -1600,7 +1600,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
     const SfxPoolItem* pItem;
 
     SfxItemState eState = rOldSet.GetItemState(XATTR_LINESTYLE,true,&pItem);
-    if( eState == SFX_ITEM_SET )
+    if( eState == SfxItemState::SET )
     {
         // Now, that we know there is a line style we will make use the
         // parameter given to us when calling the method...  :-)
@@ -1655,7 +1655,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
         SdrOnOffItem));
 
     // Size: SwFmtFrmSize
-    if( SFX_ITEM_SET != rFlySet.GetItemState(RES_FRM_SIZE, false) )
+    if( SfxItemState::SET != rFlySet.GetItemState(RES_FRM_SIZE, false) )
     {
         const Rectangle& rSnapRect = pSdrObj->GetSnapRect();
         // if necessary adapt width and position of the framework: The
@@ -1736,7 +1736,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
     // Separate transparency
     eState = rOldSet.GetItemState(XATTR_FILLTRANSPARENCE, true, &pItem);
-    if (eState == SFX_ITEM_SET)
+    if (eState == SfxItemState::SET)
     {
         sal_uInt16 nRes = WW8ITEMVALUE(rOldSet, XATTR_FILLTRANSPARENCE,
             XFillTransparenceItem);
@@ -1747,7 +1747,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
     // Hintergrund: SvxBrushItem
     eState = rOldSet.GetItemState(XATTR_FILLSTYLE, true, &pItem);
-    if (eState == SFX_ITEM_SET)
+    if (eState == SfxItemState::SET)
     {
         const drawing::FillStyle eFill = ((const XFillStyleItem*)pItem)->GetValue();
 

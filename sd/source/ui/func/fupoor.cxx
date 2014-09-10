@@ -1048,7 +1048,7 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
 
     if (pSet)
     {
-        if( pSet->GetItemState( nSlotId ) == SFX_ITEM_SET )
+        if( pSet->GetItemState( nSlotId ) == SfxItemState::SET )
         {
             const SfxPoolItem& rItem = pSet->Get( nSlotId );
 

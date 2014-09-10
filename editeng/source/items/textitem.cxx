@@ -3302,8 +3302,8 @@ const SfxPoolItem* SvxScriptSetItem::GetItemOfScriptSet(
 {
     const SfxPoolItem* pI;
     SfxItemState eSt = rSet.GetItemState( nId, false, &pI );
-    if( SFX_ITEM_SET != eSt )
-        pI = SFX_ITEM_DEFAULT == eSt ? &rSet.Get( nId ) : 0;
+    if( SfxItemState::SET != eSt )
+        pI = SfxItemState::DEFAULT == eSt ? &rSet.Get( nId ) : 0;
     return pI;
 }
 

@@ -89,11 +89,11 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
             if( pNdSet )
             {
                 const SfxPoolItem *pItem;
-                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_PAGEDESC, false,
+                if( SfxItemState::SET == pNdSet->GetItemState( RES_PAGEDESC, false,
                     &pItem ) )
                     pTableFmt->SetFmtAttr( *pItem );
 
-                if( SFX_ITEM_SET == pNdSet->GetItemState( RES_BREAK, false,
+                if( SfxItemState::SET == pNdSet->GetItemState( RES_BREAK, false,
                      &pItem ) )
                     pTableFmt->SetFmtAttr( *pItem );
             }

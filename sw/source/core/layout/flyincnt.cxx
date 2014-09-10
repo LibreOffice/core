@@ -87,9 +87,9 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if (RES_ATTRSET_CHG == nWhich && pNew)
     {
         if(pOld &&
-            (SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
+            (SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
             GetItemState(RES_SURROUND, false) ||
-            SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
+            SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->
             GetItemState(RES_FRMMACRO, false)) )
         {
             SwAttrSetChg aOld( *(SwAttrSetChg*)pOld );
