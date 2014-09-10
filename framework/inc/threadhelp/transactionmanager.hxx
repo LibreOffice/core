@@ -89,7 +89,7 @@ enum ERejectReason
                                                             m_nA = nA;
                                                         }
 
-                                                Normaly (if E_HARDEXCEPTIONS was used!) creation of guard
+                                                Normally (if E_HARDEXCEPTIONS was used!) creation of guard
                                                 will throw an exception ... but using of E_SOFTEXCEPTIONS suppress it
                                                 and member "A" can be set.
 *//*-*************************************************************************************************************/

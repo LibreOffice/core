@@ -103,12 +103,12 @@ void OComponentEnumeration::impl_resetObject()
     // Attention:
     // Write this for multiple calls - NOT AT THE SAME TIME - but for more than one call again)!
     // It exist two ways to call this method. From destructor and from disposing().
-    // I can't say, which one is the first. Normaly the disposing-call - but other way ....
+    // I can't say, which one is the first. Normally the disposing-call - but other way ....
 
     // Delete list of components.
     m_seqComponents.realloc( 0 );
     // Reset position in list.
-    // The list has no elements anymore. m_nPosition is normaly the current position in list for nextElement!
+    // The list has no elements anymore. m_nPosition is normally the current position in list for nextElement!
     // But a position of 0 in a list of 0 items is an invalid state. This constellation can't work in future.
     // End of enumeration is arrived!
     // (see hasMoreElements() for more details...)

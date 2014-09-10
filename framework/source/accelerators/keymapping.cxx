@@ -197,7 +197,7 @@ bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdent
         return true;
     }
 
-    // 0 is normaly an error of the called method toInt32() ...
+    // 0 is normally an error of the called method toInt32() ...
     // But we must be aware, that the identifier is "0"!
     rCode = 0;
     return sIdentifier == "0";

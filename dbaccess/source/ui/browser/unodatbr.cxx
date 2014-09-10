@@ -659,7 +659,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::star
             Reference<XConnection> xConnection;
             Reference<XPropertySet> xRowSetProps(getRowSet(),UNO_QUERY);
             xRowSetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
-            OSL_ENSURE(xConnection.is(),"A ActiveConnection should normaly exists!");
+            OSL_ENSURE(xConnection.is(),"A ActiveConnection should normally exists!");
 
             Reference<XChild> xChild(xConnection,UNO_QUERY);
             Reference<XPropertySet> xDataSourceProp(xChild->getParent(),UNO_QUERY);

@@ -136,7 +136,7 @@ class SvtViewOptionsBase_Impl
     @short          ctor
     @descr          We use it to open right configuration file and let configuration objects fill her caches.
                     Then we read all existing entries from right list and cached it inside our object too.
-                    Normaly we should enable notifications for changes on these values too ... but these feature
+                    Normally we should enable notifications for changes on these values too ... but these feature
                     isn't full implemented in the moment.
 
     @seealso        baseclass ::utl::ConfigItem

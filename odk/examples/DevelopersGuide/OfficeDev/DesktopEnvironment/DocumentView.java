@@ -319,7 +319,7 @@ public class DocumentView extends    JFrame
 
 
     /**
-     * Here we can react for System.exit() normaly.
+     * Here we can react for System.exit() normally.
      * But we use it for disposing() or windowClosing() too.
      */
     public void shutdown()
@@ -348,7 +348,7 @@ public class DocumentView extends    JFrame
             FunctionHelper.closeFrame(mxFrame);
 
         // deregister this view in the global container
-        // Normaly we should die afterwards by garbage collection ...
+        // Normally we should die afterwards by garbage collection ...
         // In cease this was the last view - it force a system.exit().
         // But then we are no longer a member of the global container
         // of possible shutdown listener ... and this method should be

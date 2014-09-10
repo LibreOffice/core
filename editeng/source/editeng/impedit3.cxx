@@ -1533,7 +1533,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 }
                 else if ( nIndex && bLineBreak && GetTextRanger() )
                 {
-                    // normaly CreateAndInsertEmptyLine would be called, but I want to use
+                    // normally CreateAndInsertEmptyLine would be called, but I want to use
                     // CreateLines, so I need Polygon code only here...
                     TextPortion* pDummyPortion = new TextPortion( 0 );
                     pParaPortion->GetTextPortions().Append(pDummyPortion);

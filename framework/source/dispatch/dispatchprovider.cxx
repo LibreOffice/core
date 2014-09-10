@@ -181,7 +181,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     // I.I) "_blank"
     //  It's not the right place to create a new task here - because we are queried for a dispatch object
     //  only, which can handle such request. Such dispatcher should create the required task on demand.
-    //  Normaly the functionality for "_blank" is provided by findFrame() - but that would create it directly
+    //  Normally the functionality for "_blank" is provided by findFrame() - but that would create it directly
     //  here. Thats why we must "intercept" here.
 
     if (sTargetFrameName==SPECIALTARGET_BLANK)
@@ -204,7 +204,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
 
     // I.III) "_self", "", "_top"
     //  The desktop can't load any document - but he can handle some special protocols like "uno", "slot" ...
-    //  Why is "top" here handled too? Because the desktop is the topest frame. Normaly it's superflous
+    //  Why is "top" here handled too? Because the desktop is the topest frame. Normally it's superflous
     //  to use this target - but we can handle it in the same manner then "_self".
 
     else if (
@@ -258,7 +258,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     // I.I) "_blank", "_default"
     //  It's not the right place to create a new task here. Only the desktop can do that.
-    //  Normaly the functionality for "_blank" is provided by findFrame() - but that would create it directly
+    //  Normally the functionality for "_blank" is provided by findFrame() - but that would create it directly
     //  here. Thats why we must "intercept" here.
 
     if (
@@ -327,7 +327,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         else
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
-            // Normaly if isTop() returned sal_False ... the parent frame MUST(!) exist ...
+            // Normally if isTop() returned sal_False ... the parent frame MUST(!) exist ...
             // But it seems to be better to check that here to prevent us against an access violation.
             if (xParent.is())
                 xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_TOP, 0);

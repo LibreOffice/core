@@ -578,7 +578,7 @@ But; Don't forget - you will be the owner of returned object and must release it
                 It can be, that the desktop is dead - but not your tasksaccess-object! Then they will do nothing!
                 You can't create enumerations then.
 
-    @attention  Normaly we don't need any lock here. We don't work on internal member!
+    @attention  Normally we don't need any lock here. We don't work on internal member!
 
     @seealso    class TasksAccess
     @return     A reference to an accessobject, which can create enumerations of our childtasks.
@@ -963,7 +963,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
         }
 
         // II.II) TASKS
-        //  This is a special flag. Normaly it regulate search inside tasks and forbid access to parent trees.
+        //  This is a special flag. Normally it regulate search inside tasks and forbid access to parent trees.
         //  But the desktop exists outside such task trees. They are our sub trees. So the desktop implement
         //  a special feature: We use it to start search on our direct children only. That means we supress
         //  search on ALL child frames. May that can be useful to get access on opened document tasks
@@ -1054,7 +1054,7 @@ void SAL_CALL Desktop::disposing()
     m_aListenerContainer.disposeAndClear( aEvent );
 
     // Clear our child task container and forget all task references hardly.
-    // Normaly all open document was already closed by our terminate() function before ...
+    // Normally all open document was already closed by our terminate() function before ...
     // New opened frames will have a problem now .-)
     m_aChildTaskContainer.clear();
 
@@ -1157,7 +1157,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
 *//*-*************************************************************************************************************/
 void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
 {
-    SAL_WARN( "fwk", "Desktop::disposing(): Algorithm error! Normaly desktop is temp. listener ... not all the time. So this method shouldn't be called." );
+    SAL_WARN( "fwk", "Desktop::disposing(): Algorithm error! Normally desktop is temp. listener ... not all the time. So this method shouldn't be called." );
 }
 
 /*-************************************************************************************************************

@@ -794,7 +794,7 @@ void SAL_CALL Job::notifyClosing( const css::lang::EventObject& ) throw(css::uno
 }
 
 /**
-    @short      shouldn't be called normaly
+    @short      shouldn't be called normally
     @descr      But it doesn't matter, who called it. We have to kill our internal
                 running processes hardly.
 

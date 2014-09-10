@@ -32,7 +32,7 @@ namespace framework{
                     code user of interaction.
 
     @attention      This implementation could be used one times only. We don't support a resetable continuation yet!
-                    Why? Normaly interaction should show a filter selection dialog and ask user for his decision.
+                    Why? Normally interaction should show a filter selection dialog and ask user for his decision.
                     He can select any filter - then instances of these class will be called by handler ... or user
                     close dialog without any selection. Then another continuation should be slected by handler to
                     abort continuations ... Retrying isn't very useful here ... I think.

@@ -40,7 +40,7 @@ import com.sun.star.container.XEnumeration;
 *    <code>NameValue[]</code> which is a valid argument for
 *     <code>createSubSetEnumerationByProperties()</code>.</li>
 *  <li> <code>'XContainerQuery.createSubSetEnumerationByQuery'</code> : <b>(optional)</b>
-*     Normaly <code>createSubSetEnumerationByProperties()</code> covers all
+*     Normally <code>createSubSetEnumerationByProperties()</code> covers all
 *    possible queries. But for special cases, i.e. sorted output, the function
 *    <code>createSubSetEnumerationByQuery()</code> was made. The special cases was not
 *    implemented by default in the implementation object. So this function could be

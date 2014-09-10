@@ -291,7 +291,7 @@ public:
     inline bool         CanHide( void ) const    { return bCanHide; }
     inline bool         CanShow( void ) const    { return bCanShow; }
 
-    // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
+    // normally for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
     virtual PopupMenu*  CreateContextMenu( void );
 };
 

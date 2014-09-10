@@ -457,7 +457,7 @@ OUString SOfficeToWindowsLabel( const OUString& aSOLabel )
         // in the worst case the new string is
         // doubled in length, maybe some waste
         // of memory but how long is a label
-        // normaly(?)
+        // normally(?)
         OUStringBuffer aBuffer( nStrLen * 2 );
 
         Replace( aWinLabel, TILDE_SIGN, AMPERSAND_SIGN, aBuffer );
@@ -488,7 +488,7 @@ OUString WindowsToSOfficeLabel( const OUString& aWinLabel )
         // in the worst case the new string is
         // doubled in length, maybe some waste
         // of memory but how long is a label
-        // normaly(?)
+        // normally(?)
         OUStringBuffer aBuffer( nStrLen * 2 );
 
         Replace( aSOLabel, AMPERSAND_SIGN, TILDE_SIGN, aBuffer );

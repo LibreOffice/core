@@ -101,7 +101,7 @@ public class ViewContainer extends Thread
 
     /**
      * This deregister a view from this global container.
-     * Normaly it should be the last reference to the view
+     * Normally it should be the last reference to the view
      * and her finalize() method should be called.
      * If last view will be closed here - we terminate these
      * java application too. Because there is no further

@@ -143,7 +143,7 @@ uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::GetChildAc
     // checks if the data in the window event is our direct child
     // and returns its accessible
 
-    // MT: Change this later, normaly a show/hide event shouldn't have the Window* in pData.
+    // MT: Change this later, normally a show/hide event shouldn't have the Window* in pData.
     Window* pChildWindow = (Window *) rVclWindowEvent.GetData();
     if( pChildWindow && GetWindow() == pChildWindow->GetAccessibleParentWindow() )
         return pChildWindow->GetAccessible( rVclWindowEvent.GetId() == VCLEVENT_WINDOW_SHOW );

@@ -155,7 +155,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
         /** @short  convert this structure to a seq< PropertyValue >
                     and ignore all empty properties!
 
-            @descr  Normaly the converter routines of the base class
+            @descr  Normally the converter routines of the base class
                     SequenceAsHashMap do this job already.
                     But it doesn't provide a "pack" mechanism to
                     ignore properties with empty (means "void") values.

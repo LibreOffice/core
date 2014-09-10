@@ -92,7 +92,7 @@ void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Ref
 /**
     @short      provides access to the dispatch recorder of this supplier
     @descr      Such recorder can be used outside to record dispatches.
-                But normaly he is used internally only. Of course he must used
+                But normally he is used internally only. Of course he must used
                 from outside to get the recorded data e.g. for saving it as a
                 script.
 

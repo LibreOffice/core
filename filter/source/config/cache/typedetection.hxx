@@ -138,7 +138,7 @@ private:
 
         @descr      This is an optinal action to be more robust
                     in case any detect service doesn't make this seek ...
-                    Normaly it's part of any called detect service or filter ...
+                    Normally it's part of any called detect service or filter ...
                     but sometimes it's not done there.
 
         @param      rDescriptor
@@ -288,7 +288,7 @@ private:
     /** @short      search the best suitable filter for the given type
                     and add it into the media descriptor.
 
-        @descr      Normaly this is a type detection only ...
+        @descr      Normally this is a type detection only ...
                     but for some special features we must overwrite our detection
                     because a file must be loaded into a special (means preselected)
                     application.

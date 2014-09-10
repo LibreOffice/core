@@ -128,7 +128,7 @@ public:
     /** @short  can be set from outside and is provided to
                 our internal started operations.
 
-        @descr  Normaly we use the normal status indicator
+        @descr  Normally we use the normal status indicator
                 of the document windows to show a progress.
                 But in case we are used by any special UI,
                 it can provide its own status indicator object
@@ -1739,7 +1739,7 @@ void SAL_CALL AutoRecovery::disposing(const css::lang::EventObject& aEvent)
     }
 
     // dispose from one of our cached documents ?
-    // Normaly they should send a OnUnload message ...
+    // Normally they should send a OnUnload message ...
     // But some stacktraces shows another possible use case .-)
     css::uno::Reference< css::frame::XModel > xDocument(aEvent.Source, css::uno::UNO_QUERY);
     if (xDocument.is())
@@ -2341,7 +2341,7 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
 
         // The timer must be ignored if AutoSave/Recovery was disabled for this
         // office session. That can happen if e.g. the command line arguments "--norestore" or "--headless"
-        // was set. But normaly the timer was disabled if recovery was disabled ...
+        // was set. But normally the timer was disabled if recovery was disabled ...
         // But so we are more "safe" .-)
         /* SAFE */ {
         osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -2458,7 +2458,7 @@ void AutoRecovery::implts_registerDocument(const css::uno::Reference< css::frame
     AutoRecovery::TDocumentList::iterator pIt = AutoRecovery::impl_searchDocument(m_lDocCache, xDocument);
     if (pIt != m_lDocCache.end())
     {
-        // Normaly nothing must be done for this "late" notification.
+        // Normally nothing must be done for this "late" notification.
         // But may be the modified state was changed inbetween.
         // Check it ...
         implts_updateModifiedState(xDocument);
@@ -2871,7 +2871,7 @@ void AutoRecovery::implts_prepareSessionShutdown()
 
         #i64599#
 
-        Normaly the MediaDescriptor argument NoAutoSave indicates,
+        Normally the MediaDescriptor argument NoAutoSave indicates,
         that a document must be ignored for AutoSave and Recovery.
         But sometimes XModel->getArgs() does not contained this information
         if implts_registerDocument() was called.
@@ -2976,7 +2976,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
         //      save it after all other documents was saved successfully. That decrease
         //      the chance for a crash inside a crash.
         //      On the other side it's not necessary for documents, which are not modified.
-        //      They can be handled normaly - means we patch the corresponding configuration entry only.
+        //      They can be handled normally - means we patch the corresponding configuration entry only.
         // iii) For a SessionSave ... ignore it! There is no time to wait for this save operation.
         //      Because the WindowManager will kill the process if it doesn't react immediately.
         //      On the other side we can't risk a concurrent save request ... because we know
@@ -3383,7 +3383,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         implts_informListener(eJob,
             AutoRecovery::implst_createFeatureStateEvent(eJob, OPERATION_UPDATE, &rInfo));
 
-        /* Normaly we listen as XModifyListener on a document to know if a document was changed
+        /* Normally we listen as XModifyListener on a document to know if a document was changed
            since our last AutoSave. And we deregister us in case we know this state.
            But directly after one document as recovered ... we must start listening.
            Otherwhise the first "modify" doesn't reach us. Because we ourself called setModified()
@@ -3730,7 +3730,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // The called method for saving documents runs
     // during normal AutoSave more than once. Because
     // it postpone active documents and save it later.
-    // That is normaly done by recalling it from a timer.
+    // That is normally done by recalling it from a timer.
     // Here we must do it immediately!
     // Of course this method returns the right state -
     // because it knows, that we are running in ERMERGENCY SAVE mode .-)
@@ -3798,7 +3798,7 @@ void AutoRecovery::implts_doSessionSave(const DispatchParams& aParams)
     // The called method for saving documents runs
     // during normal AutoSave more than once. Because
     // it postpone active documents and save it later.
-    // That is normaly done by recalling it from a timer.
+    // That is normally done by recalling it from a timer.
     // Here we must do it immediately!
     // Of course this method returns the right state -
     // because it knows, that we are running in SESSION SAVE mode .-)
@@ -4239,7 +4239,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
                                                                                 utl::MediaDescriptor::PROP_STATUSINDICATOR(),
                                                                                 css::uno::Reference< css::task::XStatusIndicator >() );
 
-    // Normaly a progress is set from outside (e.g. by the CrashSave/Recovery dialog, which uses our dispatch API).
+    // Normally a progress is set from outside (e.g. by the CrashSave/Recovery dialog, which uses our dispatch API).
     // But for a normal auto save we dont have such "external progress"... because this function is triggered by our own timer then.
     // In such case we must create our own progress !
     if (

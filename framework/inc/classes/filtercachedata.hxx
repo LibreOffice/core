@@ -279,7 +279,7 @@ struct Loader
 };
 
 // Programmer can register his own services to handle a FileType and intercept dispatches.
-// Don't forget: It's not a FrameLoader - it's a ContentHandler! (normaly without any UI)
+// Don't forget: It's not a FrameLoader - it's a ContentHandler! (normally without any UI)
 
 struct ContentHandler
 {
@@ -375,7 +375,7 @@ class PerformanceHash   :   public  ::boost::unordered_map<    OUString         
             PerformanceHash().swap( *this ); // get rid of reserved capacity
         }
 
-        //  normaly a complete string must match our hash key values ...
+        //  normally a complete string must match our hash key values ...
         //  But sometimes we need a search by using these key values as pattern!
         //  The in/out parameter "pStepper" is used to return a pointer to found element in hash ...
         //  and could be used for further searches again, which should be started at next element!

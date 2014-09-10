@@ -486,7 +486,7 @@ bool CloseDispatcher::implts_closeFrame()
         return true;
 
     // dont deliver owner ship; our "UI user" will try it again if it failed.
-    // OK - he will get an empty frame then. But normaly an empty frame
+    // OK - he will get an empty frame then. But normally an empty frame
     // should be closeable always :-)
     if (!fpf::closeIt(xFrame, false))
         return false;

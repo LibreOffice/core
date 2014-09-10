@@ -163,7 +163,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
         /*-****************************************************************************************************
             @short      use it to set/get the window state of your view
             @descr      These value describe position/size and some other states of a window.
-                        Use it with right vcl methods directly. Normaly it's not necessary to
+                        Use it with right vcl methods directly. Normally it's not necessary to
                         parse given string!
 
             @seealso    vcl methods
@@ -212,7 +212,7 @@ class UNOTOOLS_DLLPUBLIC SAL_WARN_UNUSED SvtViewOptions : public utl::detail::Op
 
         /*-****************************************************************************************************
             @short      use it to set/get ONE special user data item directly
-            @descr      Normaly you can work on full user data list by using "Set/GetUserData()".
+            @descr      Normally you can work on full user data list by using "Set/GetUserData()".
                         With this function you have an access on special list entries directly without any
             @onerror    In the non-product version, an assertion is made. In a product version, errors are silently ignored.
         *//*-*****************************************************************************************************/

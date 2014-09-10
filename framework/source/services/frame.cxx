@@ -2021,7 +2021,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException, std::exception
     m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
 
     // Don't show any dialogs, errors or something else any more!
-    // If somewhere called dispose() whitout close() before - normaly no dialogs
+    // If somewhere called dispose() whitout close() before - normally no dialogs
     // should exist. Otherwhise it's the problem of the outside caller.
     // Note:
     //      (a) Do it after stopWindowListening(). May that force some active/deactive
@@ -2482,7 +2482,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
 
 /*-****************************************************************************************************
     @short      react for a show event for the internal container window
-    @descr      Normaly we don't need this information really. But we can use it to
+    @descr      Normally we don't need this information really. But we can use it to
                 implement the special feature "trigger first visible task".
 
                 Algorithm: - first we have to check if we are a top (task) frame

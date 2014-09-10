@@ -559,7 +559,7 @@ public class AsciiReplaceFilter
 
                 measure("get text from model");
 
-                // Normaly this function isn't really cancelable
+                // Normally this function isn't really cancelable
                 // But we following operation can be very expensive. So
                 // this place is the last one to stop it.
                 synchronized(this)
