@@ -1760,7 +1760,7 @@ void SwCompareData::SetRedlinesToDoc( bool bUseDocInfo )
     }
 }
 
-static bool lcl_MergePortions(SwNode *const& pNode, void *)
+bool lcl_MergePortions(SwNode *const& pNode, void *)
 {
     if (pNode->IsTxtNode())
     {

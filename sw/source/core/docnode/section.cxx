@@ -1270,6 +1270,11 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                     SwDoc* pSrcDoc = ((SwDocShell*)&xDocSh)->GetDoc();
                     eOldRedlineMode = pSrcDoc->getIDocumentRedlineAccess().GetRedlineMode();
                     pSrcDoc->getIDocumentRedlineAccess().SetRedlineMode( nsRedlineMode_t::REDLINE_SHOW_INSERT );
+                    if (2 == nRet)
+                    {
+                        bool lcl_MergePortions(SwNode *const& pNode, void *);
+                        pSrcDoc->GetNodes().ForEach(&lcl_MergePortions);
+                    }
                 }
             }
 
