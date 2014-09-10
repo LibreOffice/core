@@ -32,10 +32,6 @@ APP_BUNDLE="$1"
 #
 # The dylibs in the Python framework are called *.so. Go figure
 #
-# First sign all files that can use the default identifier in the hope
-# that codesign will contact the timestamp server just once for all
-# mentioned on the command line.
-#
 # On Mavericks also would like to have data files signed...
 # add some where it makes sense. Make a depth-first search to sign the contents
 # of e.g. the spotlight plugin before attempting to sign the plugin itself
