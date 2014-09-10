@@ -1080,7 +1080,7 @@ void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
                 SwFmt *pFmt = 0;
 
                 // find the first node allowed to contain a RES_PAGEDESC
-                while (1) {
+                while (true) {
                     aFixupIdx++;
 
                     SwNode &node = aFixupIdx.GetNode();
