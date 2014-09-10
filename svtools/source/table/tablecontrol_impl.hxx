@@ -144,16 +144,6 @@ namespace svt { namespace table
         AccessibleFactoryAccess     m_aFactoryAccess;
         IAccessibleTableControl*    m_pAccessibleTable;
 
-#ifdef DBG_UTIL
-    #define INV_SCROLL_POSITION     1
-        /** represents a bitmask of invariants to check
-
-            Actually, impl_checkInvariants checks more invariants than denoted in this
-            bit mask, but only those present here can be disabled temporarily.
-        */
-        sal_Int32           m_nRequiredInvariants;
-#endif
-
     public:
         void        setModel( PTableModel _pModel );
 
@@ -175,9 +165,6 @@ namespace svt { namespace table
         TableControl_Impl( TableControl& _rAntiImpl );
         virtual ~TableControl_Impl();
 
-#ifdef DBG_UTIL
-        const sal_Char* impl_checkInvariants() const;
-#endif
         /** to be called when the anti-impl instance has been resized
         */
         void    onResize();

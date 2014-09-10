@@ -661,41 +661,6 @@ uno::Reference< embed::XEmbeddedObject >
     return uno::Reference< embed::XEmbeddedObject >();
 }
 
-std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> > ScDocument::GetAllCharts()
-{
-    std::vector<std::pair<uno::Reference<chart2::XChartDocument>, Rectangle> > aRet;
-    if (!pDrawLayer)
-        return aRet;
-
-    for (SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++)
-    {
-        if (!maTabs[nTab])
-            continue;
-
-        SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-        OSL_ENSURE(pPage,"Page ?");
-
-        if (!pPage)
-            continue;
-
-        SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
-
-        for (SdrObject* pObject = aIter.Next(); pObject; pObject = aIter.Next())
-        {
-            if ( pObject->GetObjIdentifier() != OBJ_OLE2 )
-                continue;
-
-            uno::Reference< chart2::XChartDocument > xChartDoc( ScChartHelper::GetChartFromSdrObject( pObject ) );
-            if(!xChartDoc.is())
-                continue;
-
-            Rectangle aRect = pObject->GetLastBoundRect();
-            aRet.push_back(std::pair<uno::Reference<chart2::XChartDocument>, Rectangle>(xChartDoc, aRect));
-        }
-    }
-    return aRet;
-}
-
 void ScDocument::UpdateChartListenerCollection()
 {
     OSL_ASSERT(pChartListenerCollection);

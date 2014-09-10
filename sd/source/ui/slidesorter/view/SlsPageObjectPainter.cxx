@@ -101,18 +101,6 @@ bool PageObjectPainter::UpdatePageObjectLayouter (void)
     return true;
 }
 
-void PageObjectPainter::InvalidateBitmaps (void)
-{
-    maNormalBackground.SetEmpty();
-    maSelectionBackground.SetEmpty();
-    maFocusedSelectionBackground.SetEmpty();
-    maFocusedBackground.SetEmpty();
-    maMouseOverBackground.SetEmpty();
-    maMouseOverSelectedBackground.SetEmpty();
-    maMouseOverFocusedBackground.SetEmpty();
-    maMouseOverSelectedAndFocusedBackground.SetEmpty();
-}
-
 void PageObjectPainter::SetTheme (const ::boost::shared_ptr<view::Theme>& rpTheme)
 {
     mpTheme = rpTheme;

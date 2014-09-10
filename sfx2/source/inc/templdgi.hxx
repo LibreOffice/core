@@ -293,8 +293,6 @@ public:
 
     // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
     virtual PopupMenu*  CreateContextMenu( void );
-
-    void                SetAutomaticFilter();
 };
 
 class DropToolBox_Impl : public ToolBox, public DropTargetHelper

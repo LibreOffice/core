@@ -120,7 +120,6 @@ private:
         const Bitmap& rPreview,
         const BitmapEx& rOverlay,
         const OutputDevice* pReferenceDevice) const;
-    void InvalidateBitmaps (void);
 
     /** Update the local pointer to the page object layouter to the
         one owned by the general layouter.

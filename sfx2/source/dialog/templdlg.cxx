@@ -1014,24 +1014,6 @@ SfxStyleFamily SfxTemplateDialog::NIdToSfxFamilyId(sal_uInt16 nId)
     }
 }
 
-void SfxCommonTemplateDialog_Impl::SetAutomaticFilter()
-{
-    sal_uInt16 nCount = aFilterLb.GetEntryCount();
-    for ( sal_uInt16 i = 0; i < nCount; ++i )
-    {
-        sal_uIntPtr nFlags = (sal_uIntPtr)aFilterLb.GetEntryData(i);
-        if ( SFXSTYLEBIT_AUTO == nFlags )
-        {
-            // automatic entry found -> select it
-            aFilterLb.SelectEntryPos(i);
-            // then call the handler to filter the styles
-            FilterSelect( i - 1 );
-            break;
-        }
-    }
-}
-
-
 // Helper function: Access to the current family item
 const SfxStyleFamilyItem *SfxCommonTemplateDialog_Impl::GetFamilyItem_Impl() const
 {

@@ -55,17 +55,6 @@ LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, Window* pParent)
     SetHelpId( HID_SD_TABBAR_LAYERS );
 }
 
-LayerTabBar::LayerTabBar (
-    DrawViewShell* pViewSh,
-    Window* pParent,
-    const ResId& rResId)
-    : TabBar (pParent, rResId.GetWinBits()),
-    DropTargetHelper( this ),
-    pDrViewSh(pViewSh)
-{
-    EnableEditMode();
-}
-
 LayerTabBar::~LayerTabBar()
 {
 }

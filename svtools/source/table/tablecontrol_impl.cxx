@@ -232,195 +232,6 @@ namespace svt { namespace table
         }
     };
 
-
-
-    //= TableControl_Impl
-
-
-#ifdef DBG_UTIL
-
-    //= SuspendInvariants
-
-    class SuspendInvariants
-    {
-    private:
-        const TableControl_Impl&    m_rTable;
-        sal_Int32                   m_nSuspendFlags;
-
-    public:
-        SuspendInvariants( const TableControl_Impl& _rTable, sal_Int32 _nSuspendFlags )
-            :m_rTable( _rTable )
-            ,m_nSuspendFlags( _nSuspendFlags )
-        {
-            //DBG_ASSERT( ( m_rTable.m_nRequiredInvariants & m_nSuspendFlags ) == m_nSuspendFlags,
-            //    "SuspendInvariants: cannot suspend what is already suspended!" );
-            const_cast< TableControl_Impl& >( m_rTable ).m_nRequiredInvariants &= ~m_nSuspendFlags;
-        }
-        ~SuspendInvariants()
-        {
-            const_cast< TableControl_Impl& >( m_rTable ).m_nRequiredInvariants |= m_nSuspendFlags;
-        }
-    };
-    #define DBG_SUSPEND_INV( flags ) \
-        SuspendInvariants aSuspendInv( *this, flags );
-#else
-    #define DBG_SUSPEND_INV( flags )
-#endif
-
-#ifdef DBG_UTIL
-
-    namespace
-    {
-        template< typename SCALAR_TYPE >
-        bool lcl_checkLimitsExclusive( SCALAR_TYPE _nValue, SCALAR_TYPE _nMin, SCALAR_TYPE _nMax )
-        {
-            return ( _nValue > _nMin ) && ( _nValue < _nMax );
-        }
-
-        template< typename SCALAR_TYPE >
-        bool lcl_checkLimitsExclusive_OrDefault_OrFallback( SCALAR_TYPE _nValue, SCALAR_TYPE _nMin, SCALAR_TYPE _nMax,
-            PTableModel _pModel, SCALAR_TYPE _nDefaultOrFallback )
-        {
-            if ( !_pModel )
-                return _nValue == _nDefaultOrFallback;
-            if ( _nMax <= _nMin )
-                return _nDefaultOrFallback == _nValue;
-            return lcl_checkLimitsExclusive( _nValue, _nMin, _nMax );
-        }
-    }
-
-
-    const sal_Char* TableControl_Impl::impl_checkInvariants() const
-    {
-        if ( !m_pModel )
-            return "no model, not even an EmptyTableModel";
-
-        if ( !m_pDataWindow )
-            return "invalid data window!";
-
-        if ( m_pModel->getColumnCount() != m_nColumnCount )
-            return "column counts are inconsistent!";
-
-        if ( m_pModel->getRowCount() != m_nRowCount )
-            return "row counts are inconsistent!";
-
-        if ( ( ( m_nCurColumn != COL_INVALID ) && !m_aColumnWidths.empty() && ( m_nCurColumn < 0 ) ) || ( m_nCurColumn >= (ColPos)m_aColumnWidths.size() ) )
-            return "current column is invalid!";
-
-        if ( !lcl_checkLimitsExclusive_OrDefault_OrFallback( m_nTopRow, (RowPos)-1, m_nRowCount, getModel(), (RowPos)0 ) )
-            return "invalid top row value!";
-
-        if ( !lcl_checkLimitsExclusive_OrDefault_OrFallback( m_nCurRow, (RowPos)-1, m_nRowCount, getModel(), ROW_INVALID ) )
-            return "invalid current row value!";
-
-        if ( !lcl_checkLimitsExclusive_OrDefault_OrFallback( m_nLeftColumn, (ColPos)-1, m_nColumnCount, getModel(), (ColPos)0 ) )
-            return "invalid current column value!";
-
-        if ( !lcl_checkLimitsExclusive_OrDefault_OrFallback( m_nCurColumn, (ColPos)-1, m_nColumnCount, getModel(), COL_INVALID ) )
-            return "invalid current column value!";
-
-        if  ( m_pInputHandler != m_pModel->getInputHandler() )
-            return "input handler is not the model-provided one!";
-
-        // m_aSelectedRows should have reasonable content
-        {
-            if ( m_aSelectedRows.size() > size_t( m_pModel->getRowCount() ) )
-                return "there are more rows selected than actually exist";
-            for (   ::std::vector< RowPos >::const_iterator selRow = m_aSelectedRows.begin();
-                    selRow != m_aSelectedRows.end();
-                    ++selRow
-                )
-            {
-                if ( ( *selRow < 0 ) || ( *selRow >= m_pModel->getRowCount() ) )
-                    return "a non-existent row is selected";
-            }
-        }
-
-        // m_nColHeaderHeightPixel consistent with the model's value?
-        {
-            TableMetrics nHeaderHeight = m_pModel->hasColumnHeaders() ? m_pModel->getColumnHeaderHeight() : 0;
-            nHeaderHeight = m_rAntiImpl.LogicToPixel( Size( 0, nHeaderHeight ), MAP_APPFONT ).Height();
-            if ( nHeaderHeight != m_nColHeaderHeightPixel )
-                return "column header heights are inconsistent!";
-        }
-
-        bool isDummyModel = dynamic_cast< const EmptyTableModel* >( m_pModel.get() ) != NULL;
-        if ( !isDummyModel )
-        {
-            TableMetrics nRowHeight = m_pModel->getRowHeight();
-            nRowHeight = m_rAntiImpl.LogicToPixel( Size( 0, nRowHeight ), MAP_APPFONT).Height();
-            if ( nRowHeight != m_nRowHeightPixel )
-                return "row heights are inconsistent!";
-        }
-
-        // m_nRowHeaderWidthPixel consistent with the model's value?
-        {
-            TableMetrics nHeaderWidth = m_pModel->hasRowHeaders() ? m_pModel->getRowHeaderWidth() : 0;
-            nHeaderWidth = m_rAntiImpl.LogicToPixel( Size( nHeaderWidth, 0 ), MAP_APPFONT ).Width();
-            if ( nHeaderWidth != m_nRowHeaderWidthPixel )
-                return "row header widths are inconsistent!";
-        }
-
-        // m_aColumnWidths consistency
-        if ( size_t( m_nColumnCount ) != m_aColumnWidths.size() )
-            return "wrong number of cached column widths";
-
-        for (   ColumnPositions::const_iterator col = m_aColumnWidths.begin();
-                col != m_aColumnWidths.end();
-            )
-        {
-            if ( col->getEnd() < col->getStart() )
-                return "column widths: 'end' is expected to not be smaller than start";
-
-            ColumnPositions::const_iterator nextCol = col + 1;
-            if ( nextCol != m_aColumnWidths.end() )
-                if ( col->getEnd() != nextCol->getStart() )
-                    return "column widths: one column's end should be the next column's start";
-            col = nextCol;
-        }
-
-        if ( m_nLeftColumn < m_nColumnCount )
-            if ( m_aColumnWidths[ m_nLeftColumn ].getStart() != m_nRowHeaderWidthPixel )
-                return "the left-most column should start immediately after the row header";
-
-        if ( m_nCursorHidden < 0 )
-            return "invalid hidden count for the cursor!";
-
-        if ( ( m_nRequiredInvariants & INV_SCROLL_POSITION ) && m_pVScroll )
-        {
-            DBG_SUSPEND_INV( INV_SCROLL_POSITION );
-                // prevent infinite recursion
-
-            if ( m_nLeftColumn < 0 )
-                return "invalid left-most column index";
-            if ( m_pVScroll->GetThumbPos() != m_nTopRow )
-                return "vertical scroll bar |position| is incorrect!";
-            if ( m_pVScroll->GetRange().Max() != m_nRowCount )
-                return "vertical scroll bar |range| is incorrect!";
-            if ( m_pVScroll->GetVisibleSize() != impl_getVisibleRows( false ) )
-                return "vertical scroll bar |visible size| is incorrect!";
-        }
-
-        if ( ( m_nRequiredInvariants & INV_SCROLL_POSITION ) && m_pHScroll )
-        {
-            DBG_SUSPEND_INV( INV_SCROLL_POSITION );
-                // prevent infinite recursion
-
-            if ( m_pHScroll->GetThumbPos() != m_nLeftColumn )
-                return "horizontal scroll bar |position| is incorrect!";
-            if ( m_pHScroll->GetRange().Max() != m_nColumnCount )
-                return "horizontal scroll bar |range| is incorrect!";
-            if ( m_pHScroll->GetVisibleSize() != impl_getVisibleColumns( false ) )
-                return "horizontal scroll bar |visible size| is incorrect!";
-        }
-
-        return NULL;
-    }
-#endif
-
-#define DBG_CHECK_ME() \
-
-
     TableControl_Impl::TableControl_Impl( TableControl& _rAntiImpl )
         :m_rAntiImpl            ( _rAntiImpl                    )
         ,m_pModel               ( new EmptyTableModel           )
@@ -445,16 +256,12 @@ namespace svt { namespace table
         ,m_nAnchor              ( -1                            )
         ,m_bUpdatingColWidths   ( false                         )
         ,m_pAccessibleTable     ( NULL                          )
-#ifdef DBG_UTIL
-        ,m_nRequiredInvariants ( INV_SCROLL_POSITION )
-#endif
     {
         m_pSelEngine = new SelectionEngine( m_pDataWindow.get(), m_pTableFunctionSet );
         m_pSelEngine->SetSelectionMode(SINGLE_SELECTION);
         m_pDataWindow->SetPosPixel( Point( 0, 0 ) );
         m_pDataWindow->Show();
     }
-
 
     TableControl_Impl::~TableControl_Impl()
     {
@@ -466,11 +273,8 @@ namespace svt { namespace table
         DELETEZ( m_pSelEngine );
     }
 
-
     void TableControl_Impl::setModel( PTableModel _pModel )
     {
-        DBG_CHECK_ME();
-
         SuppressCursor aHideCursor( *this );
 
         if ( !!m_pModel )
@@ -520,7 +324,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::rowsInserted( RowPos i_first, RowPos i_last )
     {
-        DBG_CHECK_ME();
         OSL_PRECOND( i_last >= i_first, "TableControl_Impl::rowsInserted: invalid row indexes!" );
 
         TableSize const insertedRows = i_last - i_first + 1;
@@ -692,8 +495,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::impl_invalidateColumn( ColPos const i_column )
     {
-        DBG_CHECK_ME();
-
         Rectangle const aAllCellsArea( impl_getAllVisibleCellsArea() );
 
         const TableColumnGeometry aColumn( *this, aAllCellsArea, i_column );
@@ -729,8 +530,6 @@ namespace svt { namespace table
 
     Rectangle TableControl_Impl::impl_getAllVisibleCellsArea() const
     {
-        DBG_CHECK_ME();
-
         Rectangle aArea( Point( 0, 0 ), Size( 0, 0 ) );
 
         // determine the right-most border of the last column which is
@@ -767,8 +566,6 @@ namespace svt { namespace table
 
     Rectangle TableControl_Impl::impl_getAllVisibleDataCellArea() const
     {
-        DBG_CHECK_ME();
-
         Rectangle aArea( impl_getAllVisibleCellsArea() );
         aArea.Left() = m_nRowHeaderWidthPixel;
         aArea.Top() = m_nColHeaderHeightPixel;
@@ -1398,8 +1195,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::onResize()
     {
-        DBG_CHECK_ME();
-
         impl_ni_relayout();
         checkCursorPosition();
     }
@@ -1407,8 +1202,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::doPaintContent( const Rectangle& _rUpdateRect )
     {
-        DBG_CHECK_ME();
-
         if ( !getModel() )
             return;
         PTableRenderer pRenderer = getModel()->getRenderer();
@@ -1531,8 +1324,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::hideCursor()
     {
-        DBG_CHECK_ME();
-
         if ( ++m_nCursorHidden == 1 )
             impl_ni_doSwitchCursor( false );
     }
@@ -1540,8 +1331,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::showCursor()
     {
-        DBG_CHECK_ME();
-
         DBG_ASSERT( m_nCursorHidden > 0, "TableControl_Impl::showCursor: cursor not hidden!" );
         if ( --m_nCursorHidden == 0 )
             impl_ni_doSwitchCursor( true );
@@ -1550,8 +1339,6 @@ namespace svt { namespace table
 
     bool TableControl_Impl::dispatchAction( TableControlAction _eAction )
     {
-        DBG_CHECK_ME();
-
         bool bSuccess = false;
         bool selectionChanged = false;
 
@@ -1939,8 +1726,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::impl_getCellRect( ColPos _nColumn, RowPos _nRow, Rectangle& _rCellRect ) const
     {
-        DBG_CHECK_ME();
-
         if  (   !m_pModel
             ||  ( COL_INVALID == _nColumn )
             ||  ( ROW_INVALID == _nRow )
@@ -1957,14 +1742,12 @@ namespace svt { namespace table
 
     RowPos TableControl_Impl::getRowAtPoint( const Point& rPoint ) const
     {
-        DBG_CHECK_ME();
         return impl_getRowForAbscissa( rPoint.Y() );
     }
 
 
     ColPos TableControl_Impl::getColAtPoint( const Point& rPoint ) const
     {
-        DBG_CHECK_ME();
         return impl_getColumnForOrdinate( rPoint.X() );
     }
 
@@ -1990,8 +1773,6 @@ namespace svt { namespace table
 
     ColumnMetrics TableControl_Impl::getColumnMetrics( ColPos const i_column ) const
     {
-        DBG_CHECK_ME();
-
         ENSURE_OR_RETURN( ( i_column >= 0 ) && ( i_column < m_pModel->getColumnCount() ),
             "TableControl_Impl::getColumnMetrics: illegal column index!", ColumnMetrics() );
         return (ColumnMetrics const &)m_aColumnWidths[ i_column ];
@@ -2024,7 +1805,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::setPointer( Pointer const & i_pointer )
     {
-        DBG_CHECK_ME();
         m_pDataWindow->SetPointer( i_pointer );
     }
 
@@ -2091,14 +1871,12 @@ namespace svt { namespace table
 
     bool TableControl_Impl::activateCell( ColPos const i_col, RowPos const i_row )
     {
-        DBG_CHECK_ME();
         return goTo( i_col, i_row );
     }
 
 
     void TableControl_Impl::invalidateSelectedRegion( RowPos _nPrevRow, RowPos _nCurRow )
     {
-        DBG_CHECK_ME();
         // get the visible area of the table control and set the Left and right border of the region to be repainted
         Rectangle const aAllCells( impl_getAllVisibleCellsArea() );
 
@@ -2179,7 +1957,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::checkCursorPosition()
     {
-        DBG_CHECK_ME();
 
         TableSize nVisibleRows = impl_getVisibleRows(true);
         TableSize nVisibleCols = impl_getVisibleColumns(true);
@@ -2211,8 +1988,6 @@ namespace svt { namespace table
 
     TableSize TableControl_Impl::impl_getVisibleRows( bool _bAcceptPartialRow ) const
     {
-        DBG_CHECK_ME();
-
         DBG_ASSERT( m_pDataWindow, "TableControl_Impl::impl_getVisibleRows: no data window!" );
 
         return lcl_getRowsFittingInto(
@@ -2225,8 +2000,6 @@ namespace svt { namespace table
 
     TableSize TableControl_Impl::impl_getVisibleColumns( bool _bAcceptPartialCol ) const
     {
-        DBG_CHECK_ME();
-
         DBG_ASSERT( m_pDataWindow, "TableControl_Impl::impl_getVisibleColumns: no data window!" );
 
         return lcl_getColumnsVisibleWithin(
@@ -2240,8 +2013,6 @@ namespace svt { namespace table
 
     bool TableControl_Impl::goTo( ColPos _nColumn, RowPos _nRow )
     {
-        DBG_CHECK_ME();
-
         // TODO: give veto listeners a chance
 
         if  (  ( _nColumn < 0 ) || ( _nColumn >= m_nColumnCount )
@@ -2264,7 +2035,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility )
     {
-        DBG_CHECK_ME();
         DBG_ASSERT( ( _nColumn >= 0 ) && ( _nColumn < m_nColumnCount )
                  && ( _nRow >= 0 ) && ( _nRow < m_nRowCount ),
                  "TableControl_Impl::ensureVisible: invalid coordinates!" );
@@ -2322,7 +2092,6 @@ namespace svt { namespace table
         // if updates are enabled currently, scroll the viewport
         if ( m_nTopRow != nOldTopRow )
         {
-            DBG_SUSPEND_INV( INV_SCROLL_POSITION );
             SuppressCursor aHideCursor( *this );
             // TODO: call a onStartScroll at our listener (or better an own onStartScroll,
             // which hides the cursor and then calls the listener)
@@ -2368,7 +2137,6 @@ namespace svt { namespace table
 
     TableSize TableControl_Impl::impl_scrollRows( TableSize const i_rowDelta )
     {
-        DBG_CHECK_ME();
         return impl_ni_ScrollRows( i_rowDelta );
     }
 
@@ -2388,7 +2156,6 @@ namespace svt { namespace table
         // if updates are enabled currently, scroll the viewport
         if ( m_nLeftColumn != nOldLeftColumn )
         {
-            DBG_SUSPEND_INV( INV_SCROLL_POSITION );
             SuppressCursor aHideCursor( *this );
             // TODO: call a onStartScroll at our listener (or better an own onStartScroll,
             // which hides the cursor and then calls the listener)
@@ -2442,7 +2209,6 @@ namespace svt { namespace table
 
     TableSize TableControl_Impl::impl_scrollColumns( TableSize const i_columnDelta )
     {
-        DBG_CHECK_ME();
         return impl_ni_ScrollColumns( i_columnDelta );
     }
 
@@ -2451,11 +2217,6 @@ namespace svt { namespace table
     {
         return m_pSelEngine;
     }
-
-
-
-
-
 
     bool TableControl_Impl::isRowSelected( RowPos i_row ) const
     {
@@ -2484,8 +2245,6 @@ namespace svt { namespace table
 
     ColPos TableControl_Impl::impl_getColumnForOrdinate( long const i_ordinate ) const
     {
-        DBG_CHECK_ME();
-
         if ( ( m_aColumnWidths.empty() ) || ( i_ordinate < 0 ) )
             return COL_INVALID;
 
@@ -2512,8 +2271,6 @@ namespace svt { namespace table
 
     RowPos TableControl_Impl::impl_getRowForAbscissa( long const i_abscissa ) const
     {
-        DBG_CHECK_ME();
-
         if ( i_abscissa < 0 )
             return ROW_INVALID;
 
@@ -2528,8 +2285,6 @@ namespace svt { namespace table
 
     bool TableControl_Impl::markRowAsDeselected( RowPos const i_rowIndex )
     {
-        DBG_CHECK_ME();
-
         ::std::vector< RowPos >::iterator selPos = ::std::find( m_aSelectedRows.begin(), m_aSelectedRows.end(), i_rowIndex );
         if ( selPos == m_aSelectedRows.end() )
             return false;
@@ -2541,8 +2296,6 @@ namespace svt { namespace table
 
     bool TableControl_Impl::markRowAsSelected( RowPos const i_rowIndex )
     {
-        DBG_CHECK_ME();
-
         if ( isRowSelected( i_rowIndex ) )
             return false;
 
@@ -2583,8 +2336,6 @@ namespace svt { namespace table
 
     bool TableControl_Impl::markAllRowsAsSelected()
     {
-        DBG_CHECK_ME();
-
         SelectionMode const eSelMode = getSelEngine()->GetSelectionMode();
         ENSURE_OR_RETURN_FALSE( eSelMode == MULTIPLE_SELECTION, "TableControl_Impl::markAllRowsAsSelected: unsupported selection mode!" );
 
@@ -2616,7 +2367,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::commitCellEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
-        DBG_CHECK_ME();
         if ( impl_isAccessibleAlive() )
              m_pAccessibleTable->commitCellEvent( i_eventID, i_newValue, i_oldValue );
     }
@@ -2624,7 +2374,6 @@ namespace svt { namespace table
 
     void TableControl_Impl::commitTableEvent( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
-        DBG_CHECK_ME();
         if ( impl_isAccessibleAlive() )
              m_pAccessibleTable->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
@@ -2669,7 +2418,6 @@ namespace svt { namespace table
 
     IMPL_LINK( TableControl_Impl, OnUpdateScrollbars, void*, /**/ )
     {
-        DBG_CHECK_ME();
         // TODO: can't we simply use lcl_updateScrollbar here, so the scrollbars ranges are updated, instead of
         // doing a complete re-layout?
         impl_ni_relayout();
@@ -2722,14 +2470,12 @@ namespace svt { namespace table
 
     bool TableControl_Impl::impl_isAccessibleAlive() const
     {
-        DBG_CHECK_ME();
         return ( NULL != m_pAccessibleTable ) && m_pAccessibleTable->isAlive();
     }
 
 
     void TableControl_Impl::impl_commitAccessibleEvent( sal_Int16 const i_eventID, Any const & i_newValue, Any const & i_oldValue )
     {
-        DBG_CHECK_ME();
         if ( impl_isAccessibleAlive() )
              m_pAccessibleTable->commitEvent( i_eventID, i_newValue, i_oldValue );
     }

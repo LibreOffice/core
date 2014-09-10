@@ -130,7 +130,6 @@ class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHe
     VisibleRange maVisibleRange;
 
     boost::scoped_ptr<sc::SpellCheckContext> mpSpellCheckCxt;
-    boost::ptr_vector<Window> maChildWindows;
 
     ScViewData*             pViewData;
     ScSplitPos              eWhich;
@@ -415,12 +414,6 @@ public:
     void            DeleteShrinkOverlay();
     void            UpdateShrinkOverlay();
     void            UpdateAllOverlays();
-
-    /**
-     * Takes ownership of the window
-     */
-    void            AddChildWindow(Window* pChildWindow);
-    void            DeleteChildWindow(Window* pChildWindow);
 
 protected:
     // #114409#

@@ -2171,10 +2171,4 @@ void ToolBox::ImplUpdateImageList()
     }
 }
 
-void ToolBox::SetImageListProvider(vcl::IImageListProvider* _pProvider)
-{
-    mpData->mpImageListProvider = _pProvider;
-    ImplUpdateImageList();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

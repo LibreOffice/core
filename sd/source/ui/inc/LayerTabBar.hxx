@@ -38,10 +38,6 @@ public:
     LayerTabBar (
         DrawViewShell* pDrViewSh,
         ::Window* pParent);
-    LayerTabBar (
-        DrawViewShell* pDrViewSh,
-        ::Window* pParent,
-        const ResId& rResId);
     virtual ~LayerTabBar (void);
 
     /** Inform all listeners of this control that the current layer has been

@@ -572,7 +572,6 @@ public:
     Size                GetDefaultImageSize() const;
     void                ChangeHighlight( sal_uInt16 nPos );
 
-    void SetImageListProvider(vcl::IImageListProvider* _pProvider);
     void SetToolbarLayoutMode( ToolBoxLayoutMode eLayout );
 };
 
