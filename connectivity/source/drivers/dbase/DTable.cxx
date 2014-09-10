@@ -774,6 +774,9 @@ sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (R
 
 bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool _bUseTableDefs, bool bRetrieveData)
 {
+    if (!m_pBuffer)
+        return false;
+
     // Read the data
     bool bIsCurRecordDeleted = (char)m_pBuffer[0] == '*';
 
