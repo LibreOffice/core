@@ -1932,6 +1932,15 @@ AC_ARG_WITH(junit,
     ],
 ,with_junit=yes)
 
+AC_ARG_WITH(hamcrest,
+    AS_HELP_STRING([--with-hamcrest],
+        [Specifies the hamcrest jar file to use for JUnit-based tests.
+         --without-junit disables those tests. Not relevant in the --without-java case.])
+    [
+                          Usage:     --with-hamcrest=<absolute path to hamcrest jar>
+    ],
+,with_hamcrest=yes)
+
 AC_ARG_WITH(perl-home,
     AS_HELP_STRING([--with-perl-home],
         [If you have installed Perl 5 Distribution, on your system, please
@@ -12278,22 +12287,52 @@ if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
     if test "$_os" = "WINNT"; then
         OOO_JUNIT_JAR=`cygpath -m "$OOO_JUNIT_JAR"`
     fi
-    printf 'import org.junit.Before; import org.hamcrest.BaseDescription;' \
-        > conftest.java
+    printf 'import org.junit.Before;' > conftest.java
     if "$JAVACOMPILER" -classpath "$OOO_JUNIT_JAR" conftest.java >&5 2>&5; then
         AC_MSG_RESULT([$OOO_JUNIT_JAR])
     else
         AC_MSG_ERROR(
-[cannot find JUnit 4 jar, or JUnit 4 jar does not provide Hamcrest; please
-install one in the default location (/usr/share/java), specify its pathname via
---with-junit=..., or disable it via --without-junit])
+[cannot find JUnit 4 jar; please install one in the default location (/usr/share/java),
+ specify its pathname via --with-junit=..., or disable it via --without-junit])
     fi
-    rm -f conftestj.class conftestj.java
+    rm -f conftest.class conftest.java
     if test $OOO_JUNIT_JAR != ""; then
     BUILD_TYPE="$BUILD_TYPE QADEVOOO"
     fi
 fi
 AC_SUBST(OOO_JUNIT_JAR)
+
+HAMCREST_JAR=
+if test "$ENABLE_JAVA" != "" -a "$with_junit" != "no"; then
+    AC_MSG_CHECKING([for included Hamcrest])
+    printf 'import org.hamcrest.BaseDescription;' > conftest.java
+    if "$JAVACOMPILER" -classpath "$OOO_JUNIT_JAR" conftest.java >&5 2>&5; then
+        AC_MSG_RESULT([Included in $OOO_JUNIT_JAR])
+    else
+        AC_MSG_RESULT([Not included])
+        AC_MSG_CHECKING([for standalone hamcrest jar.])
+        if test "$with_hamcrest" = "yes"; then
+            if test -e /usr/share/lib/java/hamcrest.jar; then
+                HAMCREST_JAR=/usr/share/lib/java/hamcrest.jar
+            else
+                HAMCREST_JAR=/usr/share/java/hamcrest.jar
+            fi
+        else
+            HAMCREST_JAR=$with_hamcrest
+        fi
+        if test "$_os" = "WINNT"; then
+            HAMCREST_JAR=`cygpath -m "$HAMCREST_JAR"`
+        fi
+        if "$JAVACOMPILER" -classpath "$HAMCREST_JAR" conftest.java >&5 2>&5; then
+            AC_MSG_RESULT([$HAMCREST_JAR])
+        else
+            AC_MSG_ERROR([junit does not contain hamcrest; please use a junit jar that includes hamcrest, install a hamcrest jar in the default location (/usr/share/java),
+                          specify its path with --with-hamcrest=..., or disable junit with --without-junit])
+        fi
+    fi
+    rm -f conftest.class conftest.java
+fi
+AC_SUBST(HAMCREST_JAR)
 
 
 AC_SUBST(SCPDEFS)
