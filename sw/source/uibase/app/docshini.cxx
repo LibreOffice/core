@@ -270,7 +270,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
                 pColl = mpDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
                 if( !bHTMLTemplSet ||
-                    SFX_ITEM_SET != pColl->GetAttrSet().GetItemState(
+                    SfxItemState::SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, false ) )
                 {
                     pColl->SetFmtAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),

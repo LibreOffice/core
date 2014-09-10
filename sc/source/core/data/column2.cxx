@@ -130,7 +130,7 @@ long ScColumn::GetNeededSize(
     const SfxPoolItem* pCondItem;
     SvxCellHorJustify eHorJust;
     if (pCondSet &&
-            pCondSet->GetItemState(ATTR_HOR_JUSTIFY, true, &pCondItem) == SFX_ITEM_SET)
+            pCondSet->GetItemState(ATTR_HOR_JUSTIFY, true, &pCondItem) == SfxItemState::SET)
         eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem*)pCondItem)->GetValue();
     else
         eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
@@ -139,7 +139,7 @@ long ScColumn::GetNeededSize(
     if ( eHorJust == SVX_HOR_JUSTIFY_BLOCK )
         bBreak = true;
     else if ( pCondSet &&
-                pCondSet->GetItemState(ATTR_LINEBREAK, true, &pCondItem) == SFX_ITEM_SET)
+                pCondSet->GetItemState(ATTR_LINEBREAK, true, &pCondItem) == SfxItemState::SET)
         bBreak = ((const SfxBoolItem*)pCondItem)->GetValue();
     else
         bBreak = ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
@@ -191,14 +191,14 @@ long ScColumn::GetNeededSize(
     if ( eOrient == SVX_ORIENTATION_STANDARD )
     {
         if (pCondSet &&
-                pCondSet->GetItemState(ATTR_ROTATE_VALUE, true, &pCondItem) == SFX_ITEM_SET)
+                pCondSet->GetItemState(ATTR_ROTATE_VALUE, true, &pCondItem) == SfxItemState::SET)
             nRotate = ((const SfxInt32Item*)pCondItem)->GetValue();
         else
             nRotate = ((const SfxInt32Item&)pPattern->GetItem(ATTR_ROTATE_VALUE)).GetValue();
         if ( nRotate )
         {
             if (pCondSet &&
-                    pCondSet->GetItemState(ATTR_ROTATE_MODE, true, &pCondItem) == SFX_ITEM_SET)
+                    pCondSet->GetItemState(ATTR_ROTATE_MODE, true, &pCondItem) == SfxItemState::SET)
                 eRotMode = (SvxRotateMode)((const SvxRotateModeItem*)pCondItem)->GetValue();
             else
                 eRotMode = (SvxRotateMode)((const SvxRotateModeItem&)
@@ -219,7 +219,7 @@ long ScColumn::GetNeededSize(
 
     const SvxMarginItem* pMargin;
     if (pCondSet &&
-            pCondSet->GetItemState(ATTR_MARGIN, true, &pCondItem) == SFX_ITEM_SET)
+            pCondSet->GetItemState(ATTR_MARGIN, true, &pCondItem) == SfxItemState::SET)
         pMargin = (const SvxMarginItem*) pCondItem;
     else
         pMargin = (const SvxMarginItem*) &pPattern->GetItem(ATTR_MARGIN);
@@ -227,7 +227,7 @@ long ScColumn::GetNeededSize(
     if ( eHorJust == SVX_HOR_JUSTIFY_LEFT )
     {
         if (pCondSet &&
-                pCondSet->GetItemState(ATTR_INDENT, true, &pCondItem) == SFX_ITEM_SET)
+                pCondSet->GetItemState(ATTR_INDENT, true, &pCondItem) == SfxItemState::SET)
             nIndent = ((const SfxUInt16Item*)pCondItem)->GetValue();
         else
             nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();

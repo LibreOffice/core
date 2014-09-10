@@ -209,7 +209,7 @@ sal_uLong SwASCIIParser::CallParser()
                     while (*pWhichIds)
                     {
                         const SfxPoolItem *pItem;
-                        if (SFX_ITEM_SET == pItemSet->GetItemState(*pWhichIds,
+                        if (SfxItemState::SET == pItemSet->GetItemState(*pWhichIds,
                             false, &pItem))
                         {
                             pColl->SetFmtAttr( *pItem );

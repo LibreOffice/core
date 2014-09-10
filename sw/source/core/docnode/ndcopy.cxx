@@ -146,7 +146,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
     if( pBoxFmt == pBox->GetFrmFmt() ) // Create a new one?
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pBoxFmt->GetItemState( RES_BOXATR_FORMULA, false,
+        if( SfxItemState::SET == pBoxFmt->GetItemState( RES_BOXATR_FORMULA, false,
             &pItem ) && ((SwTblBoxFormula*)pItem)->IsIntrnlName() )
         {
             ((SwTblBoxFormula*)pItem)->PtrToBoxNm( pCT->pOldTable );
@@ -158,7 +158,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
         if( pBox->GetSttIdx() )
         {
             SvNumberFormatter* pN = pCT->pDoc->GetNumberFormatter( false );
-            if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == pBoxFmt->
+            if( pN && pN->HasMergeFmtTbl() && SfxItemState::SET == pBoxFmt->
                 GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
             {
                 sal_uLong nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
@@ -331,10 +331,10 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
     {
         // Special cases for Break-Attributes
         const SfxPoolItem* pAttr;
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pAttr ) )
+        if( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pAttr ) )
             aPgBrkSet.Put( *pAttr );
 
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pAttr ) )
+        if( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pAttr ) )
             aPgBrkSet.Put( *pAttr );
     }
 

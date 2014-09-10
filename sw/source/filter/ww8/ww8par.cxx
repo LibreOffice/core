@@ -1007,7 +1007,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             const SfxPoolItem* pPoolItem=NULL;
             SfxItemState eState = aSet.GetItemState( XATTR_FILLCOLOR,
                                                      false, &pPoolItem );
-            if( SFX_ITEM_DEFAULT == eState )
+            if( SfxItemState::DEFAULT == eState )
                 aSet.Put( XFillColorItem( OUString(),
                           Color( mnDefaultColor ) ) );
             pObj->SetMergedItemSet(aSet);
@@ -1513,10 +1513,10 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
             */
             if (nWhich == RES_LR_SPACE)
             {
-                SfxItemState eState = SFX_ITEM_DEFAULT;
+                SfxItemState eState = SfxItemState::DEFAULT;
                 if (const SfxItemSet *pSet = pNd->GetpSwAttrSet())
                     eState = pSet->GetItemState(RES_LR_SPACE, false);
-                if (eState != SFX_ITEM_SET && rReader.nAktColl < rReader.vColl.size())
+                if (eState != SfxItemState::SET && rReader.nAktColl < rReader.vColl.size())
                     pItem = &(rReader.vColl[rReader.nAktColl].maWordLR);
             }
 
@@ -1714,7 +1714,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
     {
         const SfxPoolItem* pTabs;
         bFound = pSty->GetAttrSet().GetItemState(RES_PARATR_TABSTOP, false,
-            &pTabs) == SFX_ITEM_SET;
+            &pTabs) == SfxItemState::SET;
         if( bFound )
             aAttr = *((const SvxTabStopItem*)pTabs);
         else
@@ -5496,7 +5496,7 @@ namespace
         const SfxItemSet* pSet = rMedium.GetItemSet();
         const SfxPoolItem *pPasswordItem;
 
-        if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, true, &pPasswordItem))
+        if(pSet && SfxItemState::SET == pSet->GetItemState(SID_PASSWORD, true, &pPasswordItem))
             aPassw = ((const SfxStringItem *)pPasswordItem)->GetValue();
         else
         {

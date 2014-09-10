@@ -204,7 +204,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
     if ( nSID == SID_OPENURL )
     {
         // Disable URL box if command is disabled
-        GetURLBox()->Enable( SFX_ITEM_DISABLED != eState );
+        GetURLBox()->Enable( SfxItemState::DISABLED != eState );
     }
 
     if ( GetURLBox()->IsEnabled() )
@@ -214,7 +214,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
             if ( GetURLBox()->IsVisible() )
                 GetURLBox()->GrabFocus();
         }
-        else if ( !GetURLBox()->IsModified() && SFX_ITEM_DEFAULT == eState )
+        else if ( !GetURLBox()->IsModified() && SfxItemState::DEFAULT == eState )
         {
             SvtURLBox* pURLBox = GetURLBox();
             pURLBox->Clear();

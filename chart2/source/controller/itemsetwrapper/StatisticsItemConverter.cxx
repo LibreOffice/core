@@ -120,7 +120,7 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     {
         SvxChartRegress eRegress = CHREGRESS_NONE;
         const SfxPoolItem *pPoolItem = NULL;
-        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem ) == SFX_ITEM_SET )
+        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem ) == SfxItemState::SET )
         {
             eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
             bEquationExists = ( eRegress != CHREGRESS_NONE );
@@ -151,7 +151,7 @@ uno::Reference< beans::XPropertySet > lcl_getCurveProperties(
     {
         SvxChartRegress eRegress = CHREGRESS_NONE;
         const SfxPoolItem *pPoolItem = NULL;
-        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem ) == SFX_ITEM_SET )
+        if( pItemSet->GetItemState( SCHATTR_REGRESSION_TYPE, true, &pPoolItem ) == SfxItemState::SET )
         {
             eRegress = static_cast< const SvxChartRegressItem * >( pPoolItem )->GetValue();
             bExists = ( eRegress != CHREGRESS_NONE );

@@ -276,11 +276,11 @@ void SwUndoInsTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
         const SfxPoolItem *pItem;
 
-        if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_PAGEDESC,
+        if( SfxItemState::SET == pTableFmt->GetItemState( RES_PAGEDESC,
             false, &pItem ) )
             pNextNd->SetAttr( *pItem );
 
-        if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_BREAK,
+        if( SfxItemState::SET == pTableFmt->GetItemState( RES_BREAK,
             false, &pItem ) )
             pNextNd->SetAttr( *pItem );
     }
@@ -903,7 +903,7 @@ sal_uInt16 _SaveTable::AddFmt( SwFrmFmt* pFmt, bool bIsLine )
         // recalculated.
         // Save formulas always in plain text.
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pSet->GetItemState( RES_BOXATR_FORMULA, true, &pItem ))
+        if( SfxItemState::SET == pSet->GetItemState( RES_BOXATR_FORMULA, true, &pItem ))
         {
             pSet->ClearItem( RES_BOXATR_VALUE );
             if( pSwTable && bSaveFormula )
@@ -2188,19 +2188,19 @@ SwUndoTblNumFmt::SwUndoTblNumFmt( const SwTableBox& rBox,
     if( pNewSet )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_FORMAT,
+        if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_FORMAT,
                 false, &pItem ))
         {
             bNewFmt = true;
             nNewFmtIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
         }
-        if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_FORMULA,
+        if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_FORMULA,
                 false, &pItem ))
         {
             bNewFml = true;
             aNewFml = ((SwTblBoxFormula*)pItem)->GetFormula();
         }
-        if( SFX_ITEM_SET == pNewSet->GetItemState( RES_BOXATR_VALUE,
+        if( SfxItemState::SET == pNewSet->GetItemState( RES_BOXATR_VALUE,
                 false, &pItem ))
         {
             bNewValue = true;
@@ -2838,11 +2838,11 @@ void SwUndoCpyTbl::UndoImpl(::sw::UndoRedoContext & rContext)
         SwFrmFmt* pTableFmt = pTNd->GetTable().GetFrmFmt();
         const SfxPoolItem *pItem;
 
-        if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_PAGEDESC,
+        if( SfxItemState::SET == pTableFmt->GetItemState( RES_PAGEDESC,
             false, &pItem ) )
             pNextNd->SetAttr( *pItem );
 
-        if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_BREAK,
+        if( SfxItemState::SET == pTableFmt->GetItemState( RES_BREAK,
             false, &pItem ) )
             pNextNd->SetAttr( *pItem );
     }

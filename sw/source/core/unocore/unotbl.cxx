@@ -272,7 +272,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimp
             const SfxItemSet& rSet = pFmt->GetAttrSet();
             const SfxPoolItem* pItem;
             OUString sPDesc;
-            if(SFX_ITEM_SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem))
+            if(SfxItemState::SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem))
             {
                 const SwPageDesc* pDsc = ((const SwFmtPageDesc*)pItem)->GetPageDesc();
                 if(pDsc)
@@ -756,7 +756,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
         // - there is no current number format
         // - the current number format is not a number format according to the number formatter, but rather a text format
         // - the current number format is not even a valid number formatter number format, but rather Writer's own 'special' text number format
-        if(SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
+        if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
             ||  pDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue())
             ||  ((SwTblBoxNumFormat*)pItem)->GetValue() == NUMBERFORMAT_TEXT)
         {
@@ -938,7 +938,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException,
         SfxItemSet aSet(pMyDoc->GetAttrPool(), RES_BOXATR_FORMAT, RES_BOXATR_FORMULA);
         const SfxPoolItem* pItem;
         SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-        if(SFX_ITEM_SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
+        if(SfxItemState::SET != pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
             ||  pMyDoc->GetNumberFormatter()->IsTextFormat(((SwTblBoxNumFormat*)pItem)->GetValue()))
         {
             aSet.Put(SwTblBoxNumFormat(0));
@@ -2644,7 +2644,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
                 {
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, false ) == SFX_ITEM_SET;
+                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, false ) == SfxItemState::SET;
                     if(!bIsNum)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
@@ -4200,7 +4200,7 @@ void SwXCellRange::GetDataSequence(
                     if (pAnyData)
                     {
                         // check if table box value item is set
-                        bool bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, false ) == SFX_ITEM_SET;
+                        bool bIsNum = pBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, false ) == SfxItemState::SET;
                         if (!bIsNum)
                             pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
                         else
@@ -4229,7 +4229,7 @@ void SwXCellRange::GetDataSequence(
                             SwFrmFmt *pBoxFmt = pXCell->GetTblBox()->GetFrmFmt();
                             SfxItemState eState = pBoxFmt->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem);
 
-                            if (eState == SFX_ITEM_SET)
+                            if (eState == SfxItemState::SET)
                             {
                                 // please note that the language of the numberformat
                                 // is implicitly coded into the below value as well
@@ -4317,7 +4317,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
                 {
                     // check if table box value item is set
                     SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, false ) == SFX_ITEM_SET;
+                    bool bIsNum = pBoxFmt->GetItemState( RES_BOXATR_VALUE, false ) == SfxItemState::SET;
                     if(!bIsNum)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else

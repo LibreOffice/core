@@ -217,42 +217,42 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
 void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
 {
     // State of SfxChild-Windows (Animator, Fontwork etc.)
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_FONTWORK ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_FONTWORK ) )
     {
         sal_uInt16 nId = SvxFontWorkChildWindow::GetChildWindowId();
         rSet.Put(SfxBoolItem(SID_FONTWORK, GetViewFrame()->HasChildWindow(nId)));
     }
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_COLOR_CONTROL ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_COLOR_CONTROL ) )
     {
         sal_uInt16 nId = SvxColorChildWindow::GetChildWindowId();
         rSet.Put(SfxBoolItem(SID_COLOR_CONTROL, GetViewFrame()->HasChildWindow(nId)));
     }
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ANIMATION_OBJECTS ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ANIMATION_OBJECTS ) )
     {
         sal_uInt16 nId = AnimationChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_ANIMATION_OBJECTS, GetViewFrame()->HasChildWindow( nId ) ) );
     }
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_NAVIGATOR ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_NAVIGATOR ) )
     {
         sal_uInt16 nId = SID_NAVIGATOR;
         rSet.Put( SfxBoolItem( SID_NAVIGATOR, GetViewFrame()->HasChildWindow( nId ) ) );
     }
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_BMPMASK ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_BMPMASK ) )
     {
         sal_uInt16 nId = SvxBmpMaskChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_BMPMASK, GetViewFrame()->HasChildWindow( nId ) ) );
     }
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_IMAP ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_IMAP ) )
     {
         sal_uInt16 nId = SvxIMapDlgChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_IMAP, GetViewFrame()->HasChildWindow( nId ) ) );
     }
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_3D_WIN ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_3D_WIN ) )
     {
         sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_3D_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_AVMEDIA_PLAYER ) )
     {
         sal_uInt16 nId = ::avmedia::MediaPlayer::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_AVMEDIA_PLAYER, GetViewFrame()->HasChildWindow( nId ) ) );

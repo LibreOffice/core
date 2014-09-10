@@ -318,26 +318,26 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
     {
         const SfxPoolItem* pItem;
 
-        if(SFX_ITEM_SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
+        if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
         {
             const SfxItemSet* _pSet = &(static_cast< const SvxSetItem* >(pItem)->GetItemSet());
 
-            if(_pSet->GetItemState(nWBrush) == SFX_ITEM_SET)
+            if(_pSet->GetItemState(nWBrush) == SfxItemState::SET)
             {
                 aSet.Put(_pSet->Get(nWBrush));
             }
 
-            if(_pSet->GetItemState(nWBoxInfo) == SFX_ITEM_SET)
+            if(_pSet->GetItemState(nWBoxInfo) == SfxItemState::SET)
             {
                 aSet.Put(_pSet->Get(nWBoxInfo));
             }
 
-            if(_pSet->GetItemState(nWBox) == SFX_ITEM_SET)
+            if(_pSet->GetItemState(nWBox) == SfxItemState::SET)
             {
                 aSet.Put(_pSet->Get(nWBox));
             }
 
-            if(_pSet->GetItemState(nWShadow) == SFX_ITEM_SET)
+            if(_pSet->GetItemState(nWShadow) == SfxItemState::SET)
             {
                 aSet.Put(_pSet->Get(nWShadow));
             }
@@ -345,7 +345,7 @@ bool SvxHFPage::FillItemSet( SfxItemSet* rSet )
             //UUUU take care of [XATTR_XATTR_FILL_FIRST .. XATTR_FILL_LAST]
             for(sal_uInt16 nFillStyleId(XATTR_FILL_FIRST); nFillStyleId <= XATTR_FILL_LAST; nFillStyleId++)
             {
-                if(_pSet->GetItemState(nFillStyleId) == SFX_ITEM_SET)
+                if(_pSet->GetItemState(nFillStyleId) == SfxItemState::SET)
                 {
                     aSet.Put(_pSet->Get(nFillStyleId));
                 }
@@ -381,7 +381,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
     // Evaluate header-/footer- attributes
     const SvxSetItem* pSetItem = 0;
 
-    if ( SFX_ITEM_SET == rSet->GetItemState( GetWhich(nId), false,
+    if ( SfxItemState::SET == rSet->GetItemState( GetWhich(nId), false,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
@@ -465,7 +465,7 @@ void SvxHFPage::Reset( const SfxItemSet* rSet )
 
     const SfxPoolItem* pItem = 0;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
+    if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
@@ -642,7 +642,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 
         const SfxPoolItem* pItem;
 
-        if(SFX_ITEM_SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
+        if(SfxItemState::SET == GetItemSet().GetItemState(GetWhich(nId), false, &pItem))
         {
             // If a SfxItemSet from the SetItem for SID_ATTR_PAGE_HEADERSET or
             // SID_ATTR_PAGE_FOOTERSET exists, use it's content
@@ -660,7 +660,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
             }
         }
 
-        if(SFX_ITEM_SET == GetItemSet().GetItemState(nInner, false, &pItem))
+        if(SfxItemState::SET == GetItemSet().GetItemState(nInner, false, &pItem))
         {
             // The set InfoItem is always required
             pBBSet->Put(*pItem);
@@ -706,7 +706,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
                 {
                     const sal_uInt16 nWhich = GetWhich(SID_ATTR_BRUSH);
 
-                    if(pBBSet->GetItemState(nWhich) == SFX_ITEM_SET)
+                    if(pBBSet->GetItemState(nWhich) == SfxItemState::SET)
                     {
                         //UUUU create FillAttributes from SvxBrushItem
                         const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(pBBSet->Get(nWhich));
@@ -732,7 +732,7 @@ IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
             {
                 const sal_uInt16 nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 
-                if(pBBSet->GetItemState(nWhich) == SFX_ITEM_SET)
+                if(pBBSet->GetItemState(nWhich) == SfxItemState::SET)
                 {
                     const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get(nWhich);
 
@@ -776,7 +776,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
     sal_uInt16 nWhich(GetWhich(SID_ATTR_PAGE_HEADERSET));
 
-    if (SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
+    if (SfxItemState::SET == rSet.GetItemState(nWhich, false))
     {
         const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
@@ -795,7 +795,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             {
                 nWhich = GetWhich(SID_ATTR_BRUSH);
 
-                if(SFX_ITEM_SET == rTmpSet.GetItemState(nWhich))
+                if(SfxItemState::SET == rTmpSet.GetItemState(nWhich))
                 {
                     //UUUU create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
@@ -809,7 +809,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             m_pBspWin->setHeaderFillAttributes(aHeaderFillAttributes);
             nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 
-            if(rTmpSet.GetItemState(nWhich) == SFX_ITEM_SET)
+            if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
             {
                 const SvxBoxItem& rItem =
                     (const SvxBoxItem&)rTmpSet.Get(nWhich);
@@ -820,7 +820,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
 
     nWhich = GetWhich(SID_ATTR_PAGE_FOOTERSET);
 
-    if (SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
+    if (SfxItemState::SET == rSet.GetItemState(nWhich, false))
     {
         const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
@@ -839,7 +839,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             {
                 nWhich = GetWhich(SID_ATTR_BRUSH);
 
-                if(SFX_ITEM_SET == rTmpSet.GetItemState(nWhich))
+                if(SfxItemState::SET == rTmpSet.GetItemState(nWhich))
                 {
                     //UUUU create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
@@ -853,7 +853,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
             m_pBspWin->setFooterFillAttributes(aFooterFillAttributes);
             nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 
-            if(rTmpSet.GetItemState(nWhich) == SFX_ITEM_SET)
+            if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
             {
                 const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rTmpSet.Get(nWhich));
                 m_pBspWin->SetFtBorder(rItem);
@@ -872,7 +872,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     {
         nWhich = GetWhich(SID_ATTR_BRUSH);
 
-        if(rSet.GetItemState(nWhich) >= SFX_ITEM_DEFAULT)
+        if(rSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
         {
             //UUUU create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rSet.Get(nWhich));
@@ -886,7 +886,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     m_pBspWin->setPageFillAttributes(aPageFillAttributes);
     nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 
-    if(rSet.GetItemState(nWhich) >= SFX_ITEM_DEFAULT)
+    if(rSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
     {
         const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rSet.Get(nWhich));
         m_pBspWin->SetBorder(rItem);
@@ -955,7 +955,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     // Evaluate Header attribute
     const SvxSetItem* pSetItem = 0;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
+    if ( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
                                             false,
                                             (const SfxPoolItem**)&pSetItem ) )
     {
@@ -995,7 +995,7 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     }
     pSetItem = 0;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
+    if ( SfxItemState::SET == rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
                                             false,
                                             (const SfxPoolItem**)&pSetItem ) )
     {

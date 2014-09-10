@@ -97,7 +97,7 @@ SfxItemSet SvxEditEngineForwarder::GetParaAttribs( sal_Int32 nPara ) const
     sal_uInt16 nWhich = EE_PARA_START;
     while( nWhich <= EE_PARA_END )
     {
-        if( aSet.GetItemState( nWhich, true ) != SFX_ITEM_SET )
+        if( aSet.GetItemState( nWhich, true ) != SfxItemState::SET )
         {
             if( rEditEngine.HasParaAttrib( nPara, nWhich ) )
                 aSet.Put( rEditEngine.GetParaAttrib( nPara, nWhich ) );
@@ -171,12 +171,12 @@ SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelectio
 
     const SfxPoolItem*  pLastItem = NULL;
 
-    SfxItemState eState = SFX_ITEM_DEFAULT;
+    SfxItemState eState = SfxItemState::DEFAULT;
 
     // check all paragraphs inside the selection
     for( sal_Int32 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
     {
-        SfxItemState eParaState = SFX_ITEM_DEFAULT;
+        SfxItemState eParaState = SfxItemState::DEFAULT;
 
         // calculate start and endpos for this paragraph
         sal_Int32 nPos = 0;
@@ -218,7 +218,7 @@ SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelectio
             {
                 // ... and its different to this one than the state is dont care
                 if(*pParaItem != *(i->pAttr))
-                    return SFX_ITEM_DONTCARE;
+                    return SfxItemState::DONTCARE;
             }
             else
                 pParaItem = i->pAttr;
@@ -236,17 +236,17 @@ SfxItemState GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelectio
             bGaps = true;
 
         if( bEmpty )
-            eParaState = SFX_ITEM_DEFAULT;
+            eParaState = SfxItemState::DEFAULT;
         else if( bGaps )
-            eParaState = SFX_ITEM_DONTCARE;
+            eParaState = SfxItemState::DONTCARE;
         else
-            eParaState = SFX_ITEM_SET;
+            eParaState = SfxItemState::SET;
 
         // if we already found an item check if we found the same
         if( pLastItem )
         {
             if( (pParaItem == NULL) || (*pLastItem != *pParaItem) )
-                return SFX_ITEM_DONTCARE;
+                return SfxItemState::DONTCARE;
         }
         else
         {

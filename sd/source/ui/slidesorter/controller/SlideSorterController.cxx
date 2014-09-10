@@ -611,7 +611,7 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
 
 void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
 {
-    if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_RELOAD) != SfxItemState::UNKNOWN)
     {
         // let SFx en-/disable "last version"
         SfxViewFrame* pSlideViewFrame = SfxViewFrame::Current();
@@ -628,10 +628,10 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
     }
 
     // Output quality.
-    if (rSet.GetItemState(SID_OUTPUT_QUALITY_COLOR)==SFX_ITEM_DEFAULT
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_GRAYSCALE)==SFX_ITEM_DEFAULT
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_BLACKWHITE)==SFX_ITEM_DEFAULT
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_CONTRAST)==SFX_ITEM_DEFAULT)
+    if (rSet.GetItemState(SID_OUTPUT_QUALITY_COLOR)==SfxItemState::DEFAULT
+        ||rSet.GetItemState(SID_OUTPUT_QUALITY_GRAYSCALE)==SfxItemState::DEFAULT
+        ||rSet.GetItemState(SID_OUTPUT_QUALITY_BLACKWHITE)==SfxItemState::DEFAULT
+        ||rSet.GetItemState(SID_OUTPUT_QUALITY_CONTRAST)==SfxItemState::DEFAULT)
     {
         if (mrSlideSorter.GetContentWindow())
         {
@@ -661,7 +661,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         }
     }
 
-    if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_DEFAULT)
+    if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SfxItemState::DEFAULT)
     {
         rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true));
     }

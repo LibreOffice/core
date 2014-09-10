@@ -755,14 +755,14 @@ void SvxTableToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, cons
         bEnabled = ( nValue != 0 );
     }
     else
-        bEnabled = SFX_ITEM_DISABLED != eState;
+        bEnabled = SfxItemState::DISABLED != eState;
 
     sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
 
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
     rTbx.SetItemState( nId,
-        ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
+        ( SfxItemState::DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 SvxColumnsToolBoxControl::SvxColumnsToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
@@ -817,7 +817,7 @@ void SvxColumnsToolBoxControl::StateChanged( sal_uInt16 nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
-    bEnabled = SFX_ITEM_DISABLED != eState;
+    bEnabled = SfxItemState::DISABLED != eState;
     SfxToolBoxControl::StateChanged(nSID,   eState, pState );
 }
 

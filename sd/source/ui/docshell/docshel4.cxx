@@ -272,12 +272,12 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
 
     if( pSet )
     {
-        if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
+        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
             mpDoc->SetStarDrawPreviewMode( true );
         }
 
-        if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
+        if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
             ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
         {
             bStartPresentation = true;
@@ -379,7 +379,7 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )
     {
-        if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
+        if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
             ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
         {
             mpDoc->SetStartWithPresentation( true );
@@ -413,12 +413,12 @@ bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )
     {
-        if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
+        if( (  SfxItemState::SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
             mpDoc->SetStarDrawPreviewMode( true );
         }
 
-        if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
+        if( SfxItemState::SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
             ( (SfxBoolItem&) ( pSet->Get( SID_DOC_STARTPRESENTATION ) ) ).GetValue() )
         {
             bStartPresentation = true;
@@ -1075,7 +1075,7 @@ bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
         OUString aLayoutName;
 
         SfxStringItem* pLayoutItem;
-        if( rMedium.GetItemSet()->GetItemState(SID_TEMPLATE_NAME, false, (const SfxPoolItem**) & pLayoutItem ) == SFX_ITEM_SET )
+        if( rMedium.GetItemSet()->GetItemState(SID_TEMPLATE_NAME, false, (const SfxPoolItem**) & pLayoutItem ) == SfxItemState::SET )
         {
             aLayoutName = pLayoutItem->GetValue();
         }

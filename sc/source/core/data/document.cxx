@@ -5418,7 +5418,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
     bool bSet = false;
     sal_uInt16 i;
     for (i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END && !bSet; i++)
-        if (pSet->GetItemState(i) == SFX_ITEM_SET)
+        if (pSet->GetItemState(i) == SfxItemState::SET)
             bSet = true;
 
     if (bSet)

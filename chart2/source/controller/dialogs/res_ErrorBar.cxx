@@ -492,14 +492,14 @@ IMPL_LINK( ErrorBarResources, RangeChanged, Edit *, pEdit )
 void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
-    SfxItemState aState = SFX_ITEM_UNKNOWN;
+    SfxItemState aState = SfxItemState::UNKNOWN;
 
     // category
      m_eErrorKind = CHERROR_NONE;
     aState = rInAttrs.GetItemState( SCHATTR_STAT_KIND_ERROR, true, &pPoolItem );
-    m_bErrorKindUnique = ( aState != SFX_ITEM_DONTCARE );
+    m_bErrorKindUnique = ( aState != SfxItemState::DONTCARE );
 
-    if( aState == SFX_ITEM_SET )
+    if( aState == SfxItemState::SET )
         m_eErrorKind = ((const SvxChartKindErrorItem*) pPoolItem)->GetValue();
 
     m_pLbFunction->SelectEntryPos( lcl_getLbEntryPosByErrorKind( m_eErrorKind ));
@@ -538,15 +538,15 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 
     // parameters
     aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTPLUS, true, &pPoolItem );
-    m_bPlusUnique = ( aState != SFX_ITEM_DONTCARE );
-    if( aState == SFX_ITEM_SET )
+    m_bPlusUnique = ( aState != SfxItemState::DONTCARE );
+    if( aState == SfxItemState::SET )
     {
         m_fPlusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
     }
 
     aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTMINUS, true, &pPoolItem );
-    m_bMinusUnique = ( aState != SFX_ITEM_DONTCARE );
-    if( aState == SFX_ITEM_SET )
+    m_bMinusUnique = ( aState != SfxItemState::DONTCARE );
+    if( aState == SfxItemState::SET )
     {
         m_fMinusValue = ((const SvxDoubleItem*) pPoolItem)->GetValue();
 
@@ -557,8 +557,8 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 
     // indicator
     aState = rInAttrs.GetItemState( SCHATTR_STAT_INDICATE, true, &pPoolItem );
-    m_bIndicatorUnique = ( aState != SFX_ITEM_DONTCARE );
-    if( aState == SFX_ITEM_SET)
+    m_bIndicatorUnique = ( aState != SfxItemState::DONTCARE );
+    if( aState == SfxItemState::SET)
         m_eIndicate = ((const SvxChartIndicateItem * ) pPoolItem)->GetValue();
 
     if( m_bIndicatorUnique )
@@ -586,16 +586,16 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
 
     // ranges
     aState = rInAttrs.GetItemState( SCHATTR_STAT_RANGE_POS, true, &pPoolItem );
-    m_bRangePosUnique = ( aState != SFX_ITEM_DONTCARE );
-    if( aState == SFX_ITEM_SET )
+    m_bRangePosUnique = ( aState != SfxItemState::DONTCARE );
+    if( aState == SfxItemState::SET )
     {
         OUString sRangePositive = (static_cast< const SfxStringItem * >( pPoolItem ))->GetValue();
         m_pEdRangePositive->SetText( sRangePositive );
     }
 
     aState = rInAttrs.GetItemState( SCHATTR_STAT_RANGE_NEG, true, &pPoolItem );
-    m_bRangeNegUnique = ( aState != SFX_ITEM_DONTCARE );
-    if( aState == SFX_ITEM_SET )
+    m_bRangeNegUnique = ( aState != SfxItemState::DONTCARE );
+    if( aState == SfxItemState::SET )
     {
         OUString sRangeNegative = (static_cast< const SfxStringItem * >( pPoolItem ))->GetValue();
         m_pEdRangeNegative->SetText( sRangeNegative );

@@ -1745,7 +1745,7 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
             const SwFrmFmt* pFrmFmt = (*pTbl)[n];
             const SfxPoolItem* pItem;
             if ( RES_DRAWFRMFMT != pFrmFmt->Which() &&
-                 SFX_ITEM_SET == pFrmFmt->GetAttrSet().GetItemState( RES_URL, true, &pItem ) )
+                 SfxItemState::SET == pFrmFmt->GetAttrSet().GetItemState( RES_URL, true, &pItem ) )
             {
                 const SwPageFrm* pCurrPage =
                     static_cast<const SwPageFrm*>( mrSh.GetLayout()->Lower() );

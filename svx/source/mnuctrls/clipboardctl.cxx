@@ -119,7 +119,7 @@ void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {
         DELETEZ( pClipboardFmtItem );
-        if ( eState >= SFX_ITEM_DEFAULT )
+        if ( eState >= SfxItemState::DEFAULT )
         {
             pClipboardFmtItem = pState->Clone();
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | TIB_DROPDOWN );
@@ -131,8 +131,8 @@ void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     else
     {
         // enable the item as a whole
-        bDisabled = (GetItemState(pState) == SFX_ITEM_DISABLED);
-        GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
+        bDisabled = (GetItemState(pState) == SfxItemState::DISABLED);
+        GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
     }
 }
 

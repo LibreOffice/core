@@ -1013,8 +1013,8 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
         {
             if(*ppSet)
             {
-                if(SFX_ITEM_SET == (*ppSet)->GetItemState(XATTR_FILLBMP_STRETCH, false)
-                    || SFX_ITEM_SET == (*ppSet)->GetItemState(XATTR_FILLBMP_TILE, false))
+                if(SfxItemState::SET == (*ppSet)->GetItemState(XATTR_FILLBMP_STRETCH, false)
+                    || SfxItemState::SET == (*ppSet)->GetItemState(XATTR_FILLBMP_TILE, false))
                 {
                     eRet = beans::PropertyState_DIRECT_VALUE;
                 }
@@ -1043,7 +1043,7 @@ static beans::PropertyState lcl_SwXParagraph_getPropertyState(
 
     if(!bDone)
     {
-        if((*ppSet) && SFX_ITEM_SET == (*ppSet)->GetItemState(rEntry.nWID, false))
+        if((*ppSet) && SfxItemState::SET == (*ppSet)->GetItemState(rEntry.nWID, false))
         {
             eRet = beans::PropertyState_DIRECT_VALUE;
         }

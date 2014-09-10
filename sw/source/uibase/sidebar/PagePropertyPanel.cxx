@@ -464,7 +464,7 @@ void PagePropertyPanel::NotifyItemUpdate(
     {
     case SID_ATTR_PAGE_COLUMN:
         {
-            if ( eState >= SFX_ITEM_DEFAULT &&
+            if ( eState >= SfxItemState::DEFAULT &&
                  pState && pState->ISA(SfxInt16Item) )
             {
                 mpPageColumnTypeItem.reset( static_cast<SfxInt16Item*>(pState->Clone()) );
@@ -473,7 +473,7 @@ void PagePropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_PAGE_LRSPACE:
-        if ( eState >= SFX_ITEM_DEFAULT &&
+        if ( eState >= SfxItemState::DEFAULT &&
              pState && pState->ISA(SvxLongLRSpaceItem) )
         {
             mpPageLRMarginItem.reset( static_cast<SvxLongLRSpaceItem*>(pState->Clone()) );
@@ -482,7 +482,7 @@ void PagePropertyPanel::NotifyItemUpdate(
         break;
 
     case SID_ATTR_PAGE_ULSPACE:
-        if ( eState >= SFX_ITEM_DEFAULT &&
+        if ( eState >= SfxItemState::DEFAULT &&
              pState && pState->ISA(SvxLongULSpaceItem) )
         {
             mpPageULMarginItem.reset( static_cast<SvxLongULSpaceItem*>(pState->Clone()) );
@@ -491,7 +491,7 @@ void PagePropertyPanel::NotifyItemUpdate(
         break;
 
     case SID_ATTR_PAGE:
-        if ( eState >= SFX_ITEM_DEFAULT &&
+        if ( eState >= SfxItemState::DEFAULT &&
              pState && pState->ISA(SvxPageItem) )
         {
             const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
@@ -515,7 +515,7 @@ void PagePropertyPanel::NotifyItemUpdate(
         {
             mpBindings->Invalidate( SID_ATTR_PAGE, true, false );
         }
-        if ( eState >= SFX_ITEM_DEFAULT &&
+        if ( eState >= SfxItemState::DEFAULT &&
              pState && pState->ISA(SvxSizeItem) )
         {
             mpPageSizeItem.reset( static_cast<SvxSizeItem*>(pState->Clone()) );
@@ -531,7 +531,7 @@ void PagePropertyPanel::NotifyItemUpdate(
 void PagePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* pState )
 {
     meFUnit = FUNIT_NONE;
-    if ( pState && eState >= SFX_ITEM_DEFAULT )
+    if ( pState && eState >= SfxItemState::DEFAULT )
     {
         meFUnit = (FieldUnit)( (const SfxUInt16Item*)pState )->GetValue();
     }

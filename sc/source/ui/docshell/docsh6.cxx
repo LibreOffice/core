@@ -232,14 +232,14 @@ static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
         SfxItemSet& rStyleSet = pStyle->GetItemSet();
 
         const SfxPoolItem* pItem;
-        if (rStyleSet.GetItemState(ATTR_PAGE_HEADERSET,false,&pItem) == SFX_ITEM_SET)
+        if (rStyleSet.GetItemState(ATTR_PAGE_HEADERSET,false,&pItem) == SfxItemState::SET)
         {
             SfxItemSet& rSrcSet = ((SvxSetItem*)pItem)->GetItemSet();
             SfxItemSet* pDestSet = new SfxItemSet(*rStyleSet.GetPool(),rSrcSet.GetRanges());
             pDestSet->Put(rSrcSet);
             rStyleSet.Put(SvxSetItem(ATTR_PAGE_HEADERSET,pDestSet));
         }
-        if (rStyleSet.GetItemState(ATTR_PAGE_FOOTERSET,false,&pItem) == SFX_ITEM_SET)
+        if (rStyleSet.GetItemState(ATTR_PAGE_FOOTERSET,false,&pItem) == SfxItemState::SET)
         {
             SfxItemSet& rSrcSet = ((SvxSetItem*)pItem)->GetItemSet();
             SfxItemSet* pDestSet = new SfxItemSet(*rStyleSet.GetPool(),rSrcSet.GetRanges());
@@ -320,7 +320,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, bool bReplace, bool bCellS
     for ( sal_uInt16 i = 0; i < nFound; ++i )
     {
         pStyles[i].pDest->GetItemSet().PutExtended(
-            pStyles[i].pSource->GetItemSet(), SFX_ITEM_DONTCARE, SFX_ITEM_DEFAULT);
+            pStyles[i].pSource->GetItemSet(), SfxItemState::DONTCARE, SfxItemState::DEFAULT);
         if(pStyles[i].pSource->HasParentSupport())
             pStyles[i].pDest->SetParent(pStyles[i].pSource->GetParent());
         // follow is never used

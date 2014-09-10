@@ -221,7 +221,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
             LINK( this, SfxManageStyleSheetPage, LoseFocusHdl ) );
     }
     // It is a style with auto update? (SW only)
-    if(SFX_ITEM_SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
+    if(SfxItemState::SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
         m_pAutoCB->Show();
 }
 
@@ -504,7 +504,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
     // It is a style with auto update? (SW only)
     const SfxPoolItem* pPoolItem;
 
-    if ( SFX_ITEM_SET ==
+    if ( SfxItemState::SET ==
          rSet.GetItemState( SID_ATTR_AUTO_STYLE_UPDATE, false, &pPoolItem ) )
         m_pAutoCB->Check( ( (const SfxBoolItem*)pPoolItem )->GetValue() );
     m_pAutoCB->SaveValue();

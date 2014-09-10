@@ -435,7 +435,7 @@ void SwWW8AttrIter::OutAttr( sal_Int32 nSwPos, bool bRuby )
                     sal_uInt16 nWhichId = aIter.FirstWhich();
                     while( nWhichId )
                     {
-                        if( SFX_ITEM_SET == pSet->GetItemState( nWhichId, false, &pItem ))
+                        if( SfxItemState::SET == pSet->GetItemState( nWhichId, false, &pItem ))
                         {
                             if (nWhichId == nFontId)
                                 pFont = &(item_cast<SvxFontItem>(*pItem));
@@ -690,7 +690,7 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
                     const SfxItemSet* pSet = CharFmt::GetItemSet( pHt->GetAttr() );
                     const SfxPoolItem* pCharItem;
                     if ( pSet &&
-                         SFX_ITEM_SET == pSet->GetItemState( nWhich, pHt->Which() != RES_TXTATR_AUTOFMT, &pCharItem ) )
+                         SfxItemState::SET == pSet->GetItemState( nWhich, pHt->Which() != RES_TXTATR_AUTOFMT, &pCharItem ) )
                     {
                         pRet = pCharItem;       // found it
                         break;
@@ -1470,7 +1470,7 @@ const SvxBrushItem* WW8Export::GetCurrentPageBgBrush() const
     SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true, &pItem);
 
     const SvxBrushItem* pRet = (const SvxBrushItem*)pItem;
-    if (SFX_ITEM_SET != eState || (!pRet->GetGraphic() &&
+    if (SfxItemState::SET != eState || (!pRet->GetGraphic() &&
         pRet->GetColor() == COL_TRANSPARENT))
     {
         pRet = &(DefaultItemGet<SvxBrushItem>(*pDoc,RES_BACKGROUND));
@@ -1490,7 +1490,7 @@ SvxBrushItem WW8Export::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
         SfxItemState eState =
             pFlyFmt->GetItemState(RES_BACKGROUND, true, &pItem);
         pRet = (const SvxBrushItem*)pItem;
-        if (SFX_ITEM_SET != eState || (!pRet->GetGraphic() &&
+        if (SfxItemState::SET != eState || (!pRet->GetGraphic() &&
             pRet->GetColor() == COL_TRANSPARENT))
         {
             pRet = 0;
@@ -2379,7 +2379,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if( (ND_HAS_PREV_LAYNODE|ND_HAS_NEXT_LAYNODE ) != nPrvNxtNd )
         {
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState(
+            if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState(
                     RES_UL_SPACE, true, &pItem ) &&
                 ( ( !( ND_HAS_PREV_LAYNODE & nPrvNxtNd ) &&
                    ((SvxULSpaceItem*)pItem)->GetUpper()) ||
@@ -2441,7 +2441,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 }
 
                 // correct fix for issue i94187
-                if (SFX_ITEM_SET !=
+                if (SfxItemState::SET !=
                     pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
                 {
                     // List style set via paragraph style - then put it into the itemset.
@@ -2551,7 +2551,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
 
             // assure that numbering rule is in <pTmpSet>
-            if (SFX_ITEM_SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
+            if (SfxItemState::SET != pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
             {
                 pTmpSet->Put( SwNumRuleItem( pRule->GetName() ));
             }
@@ -2562,7 +2562,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         // If page break attribute at the text node exist, an existing page
         // break after at the paragraph style hasn't got to be considered.
         if ( !rNode.GetpSwAttrSet() ||
-             SFX_ITEM_SET != rNode.GetpSwAttrSet()->GetItemState(RES_BREAK, false) )
+             SfxItemState::SET != rNode.GetpSwAttrSet()->GetItemState(RES_BREAK, false) )
         {
             const SvxFmtBreakItem* pBreakAtParaStyle =
                 &(ItemGet<SvxFmtBreakItem>(rNode.GetSwAttrSet(), RES_BREAK));
@@ -2740,7 +2740,7 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
     if( pSet)
     {
         bool bNoPageBreak = false;
-        if ( SFX_ITEM_SET != pSet->GetItemState(RES_PAGEDESC, true, &pI)
+        if ( SfxItemState::SET != pSet->GetItemState(RES_PAGEDESC, true, &pI)
             || 0 == ((SwFmtPageDesc*)pI)->GetPageDesc() )
         {
             bNoPageBreak = true;
@@ -2748,7 +2748,7 @@ bool MSWordExportBase::NoPageBreakSection( const SfxItemSet* pSet )
 
         if (bNoPageBreak)
         {
-            if (SFX_ITEM_SET != pSet->GetItemState(RES_BREAK, true, &pI))
+            if (SfxItemState::SET != pSet->GetItemState(RES_BREAK, true, &pI))
                 bNoPageBreak = true;
             else
             {

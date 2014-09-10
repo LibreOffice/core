@@ -85,7 +85,7 @@ SwViewLayoutControl::~SwViewLayoutControl()
 
 void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( SFX_ITEM_DEFAULT != eState || pState->ISA( SfxVoidItem ) )
+    if ( SfxItemState::DEFAULT != eState || pState->ISA( SfxVoidItem ) )
         GetStatusBar().SetItemText( GetId(), OUString() );
     else
     {

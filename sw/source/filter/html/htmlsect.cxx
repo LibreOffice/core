@@ -318,13 +318,13 @@ void SwHTMLParser::NewDivision( int nToken )
             Reader::ResetFrmFmtAttrs(aFrmItemSet );
 
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_BACKGROUND, false,
+        if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
             aFrmItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_BACKGROUND );
         }
-        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_FRAMEDIR, false,
+        if( SfxItemState::SET == aItemSet.GetItemState( RES_FRAMEDIR, false,
                                                    &pItem ) )
         {
             aFrmItemSet.Put( *pItem );
@@ -708,13 +708,13 @@ void SwHTMLParser::NewMultiCol( sal_uInt16 columnsFromCss )
         aFrmItemSet.Put( aFmtCol );
 
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_BACKGROUND, false,
+        if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
             aFrmItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_BACKGROUND );
         }
-        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_FRAMEDIR, false,
+        if( SfxItemState::SET == aItemSet.GetItemState( RES_FRAMEDIR, false,
                                                    &pItem ) )
         {
             aFrmItemSet.Put( *pItem );
@@ -802,14 +802,14 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         SwCntntNode* pSrcCntntNd = pSrcNd->GetCntntNode();
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pSrcCntntNd->GetSwAttrSet()
+        if( SfxItemState::SET == pSrcCntntNd->GetSwAttrSet()
                 .GetItemState( RES_PAGEDESC, false, &pItem ) &&
             ((SwFmtPageDesc *)pItem)->GetPageDesc() )
         {
             pDestCntntNd->SetAttr( *pItem );
             pSrcCntntNd->ResetAttr( RES_PAGEDESC );
         }
-        if( SFX_ITEM_SET == pSrcCntntNd->GetSwAttrSet()
+        if( SfxItemState::SET == pSrcCntntNd->GetSwAttrSet()
                 .GetItemState( RES_BREAK, false, &pItem ) )
         {
             switch( ((SvxFmtBreakItem *)pItem)->GetBreak() )
@@ -830,7 +830,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
         SwFrmFmt *pFrmFmt = pSrcNd->GetTableNode()->GetTable().GetFrmFmt();
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pFrmFmt->GetAttrSet().
+        if( SfxItemState::SET == pFrmFmt->GetAttrSet().
                 GetItemState( RES_PAGEDESC, false, &pItem ) )
         {
             pDestCntntNd->SetAttr( *pItem );

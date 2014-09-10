@@ -237,7 +237,7 @@ public:
 
         void SubViewShell::PrintState( SfxItemSet &rState )
         {
-        if ( rState.GetItemState( SID_PRINTDOCDIRECT ) != SFX_ITEM_UNKNOWN )
+        if ( rState.GetItemState( SID_PRINTDOCDIRECT ) != SfxItemState::UNKNOWN )
         GetSlotState( SID_PRINTDOCDIRECT, SfxViewShell::GetInterface(),
         &rState );
         ...

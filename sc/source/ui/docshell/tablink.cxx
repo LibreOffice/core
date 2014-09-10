@@ -434,7 +434,7 @@ OUString ScDocumentLoader::GetOptions( SfxMedium& rMedium )
 {
     SfxItemSet* pSet = rMedium.GetItemSet();
     const SfxPoolItem* pItem;
-    if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
+    if ( pSet && SfxItemState::SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
         return ((const SfxStringItem*)pItem)->GetValue();
 
     return EMPTY_OUSTRING;

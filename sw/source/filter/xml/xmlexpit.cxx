@@ -262,7 +262,7 @@ const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
                            ( nFlags & XML_EXPORT_FLAG_DEEP ) != 0,
                            &pItem );
 
-    if( SFX_ITEM_SET == eState )
+    if( SfxItemState::SET == eState )
     {
         return pItem;
     }

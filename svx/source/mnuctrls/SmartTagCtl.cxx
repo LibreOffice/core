@@ -138,9 +138,9 @@ void SvxSmartTagsControl::FillMenu()
 void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    mrParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
+    mrParent.EnableItem( GetId(), SfxItemState::DISABLED != eState );
 
-    if ( SFX_ITEM_DEFAULT == eState )
+    if ( SfxItemState::DEFAULT == eState )
     {
         const SvxSmartTagItem* pSmartTagItem = PTR_CAST( SvxSmartTagItem, pState );
         if ( 0 != pSmartTagItem )

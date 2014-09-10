@@ -191,7 +191,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // gets enabled, through it doesn't really work (see above)
                 SfxItemSet aEditAttr( mpView->GetDoc().GetPool() );
                 mpView->GetAttributes( aEditAttr );
-                if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SFX_ITEM_DEFAULT )
+                if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SfxItemState::DEFAULT )
                 {
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
                     const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aEditAttr.Get( EE_PARA_ULSPACE );
@@ -592,7 +592,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
                 sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
-                if( SFX_ITEM_SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
+                if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
                     nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
                 if( bLeftToRight )

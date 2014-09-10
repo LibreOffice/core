@@ -495,7 +495,7 @@ void SdPage::getAlienAttributes( com::sun::star::uno::Any& rAttributes )
 {
     const SfxPoolItem* pItem;
 
-    if( (mpItems == NULL) || ( SFX_ITEM_SET != mpItems->GetItemState( SDRATTR_XMLATTRIBUTES, false, &pItem ) ) )
+    if( (mpItems == NULL) || ( SfxItemState::SET != mpItems->GetItemState( SDRATTR_XMLATTRIBUTES, false, &pItem ) ) )
     {
         SvXMLAttrContainerItem aAlienAttributes;
         aAlienAttributes.QueryValue( rAttributes, 0 );

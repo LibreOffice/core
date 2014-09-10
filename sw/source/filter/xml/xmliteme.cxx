@@ -126,7 +126,7 @@ void SwXMLTableItemMapper_Impl::handleSpecialItem(
         {
             const SfxPoolItem *pItem;
             if( pSet &&
-                SFX_ITEM_SET == pSet->GetItemState( RES_HORI_ORIENT, true,
+                SfxItemState::SET == pSet->GetItemState( RES_HORI_ORIENT, true,
                                                     &pItem ) )
             {
                 sal_Int16 eHoriOrient =

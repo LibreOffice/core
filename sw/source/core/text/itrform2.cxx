@@ -1411,7 +1411,7 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 
                 const SfxPoolItem* pItem;
                 sal_uInt16 nDir = 0;
-                if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ROTATE,
+                if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
                     true, &pItem ))
                     nDir = ((SvxCharRotateItem*)pItem)->GetValue();
 

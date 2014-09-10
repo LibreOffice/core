@@ -191,7 +191,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     OUString sDocTitle;
     const SfxPoolItem* pItem = NULL;
     SfxObjectShell* pObjShell = NULL;
-    if ( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_WRTSHELL, false, &pItem ) )
+    if ( SfxItemState::SET == rSet.GetItemState( FN_PARAM_WRTSHELL, false, &pItem ) )
         m_pWrtShell = (SwWrtShell*)( (const SwPtrItem*)pItem )->GetValue();
     if ( m_pWrtShell )
     {

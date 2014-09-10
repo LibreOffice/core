@@ -736,7 +736,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
     const bool bIsEnabled)
 {
     (void)bIsEnabled;
-    const bool bDisabled(SFX_ITEM_DISABLED == eState);
+    const bool bDisabled(SfxItemState::DISABLED == eState);
 
     switch(nSID)
     {
@@ -749,7 +749,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
             {
                 bFillTransparenceChanged = true;
 
-                if(eState >= SFX_ITEM_DEFAULT)
+                if(eState >= SfxItemState::DEFAULT)
                 {
                     const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
 
@@ -771,7 +771,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
             {
                 bFillTransparenceChanged = true;
 
-                if(eState >= SFX_ITEM_DEFAULT)
+                if(eState >= SfxItemState::DEFAULT)
                 {
                     const XFillFloatTransparenceItem* pItem = dynamic_cast< const XFillFloatTransparenceItem* >(pState);
 
@@ -812,7 +812,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpStyleItem.reset();
             }
 
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 const XFillStyleItem* pItem = dynamic_cast< const XFillStyleItem* >(pState);
 
@@ -847,7 +847,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_FILL_COLOR:
         {
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 mpColorItem.reset(pState ? (XFillColorItem*)pState->Clone() : 0);
             }
@@ -857,14 +857,14 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpLbFillAttr->Hide();
                 mpToolBoxColor->Show();
 
-                if(SFX_ITEM_DEFAULT == eState)
+                if(SfxItemState::DEFAULT == eState)
                 {
                     mpToolBoxColor->Enable();
                     mbColorAvail = true;
                     // maLastColor = mpColorItem->GetColorValue();
                     Update();
                 }
-                else if(SFX_ITEM_DISABLED == eState)
+                else if(SfxItemState::DISABLED == eState)
                 {
                     mpToolBoxColor->Disable();
                     mbColorAvail = false;
@@ -880,7 +880,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_FILL_GRADIENT:
         {
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 mpFillGradientItem.reset(pState ? (XFillGradientItem*)pState->Clone() : 0);
             }
@@ -890,12 +890,12 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
 
-                if(SFX_ITEM_DEFAULT == eState)
+                if(SfxItemState::DEFAULT == eState)
                 {
                     mpLbFillAttr->Enable();
                     Update();
                 }
-                else if(SFX_ITEM_DISABLED == eState )
+                else if(SfxItemState::DISABLED == eState )
                 {
                     mpLbFillAttr->Disable();
                     mpLbFillAttr->SetNoSelection();
@@ -909,7 +909,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_FILL_HATCH:
         {
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 mpHatchItem.reset(pState ? (XFillHatchItem*)pState->Clone() : 0);
             }
@@ -919,12 +919,12 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
 
-                if(SFX_ITEM_DEFAULT == eState)
+                if(SfxItemState::DEFAULT == eState)
                 {
                     mpLbFillAttr->Enable();
                     Update();
                 }
-                else if(SFX_ITEM_DISABLED == eState )
+                else if(SfxItemState::DISABLED == eState )
                 {
                     mpLbFillAttr->Disable();
                     mpLbFillAttr->SetNoSelection();
@@ -938,7 +938,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_FILL_BITMAP:
         {
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 mpBitmapItem.reset(pState ? (XFillBitmapItem*)pState->Clone() : 0);
             }
@@ -948,12 +948,12 @@ void AreaPropertyPanel::NotifyItemUpdate(
                 mpLbFillAttr->Show();
                 mpToolBoxColor->Hide();
 
-                if(SFX_ITEM_DEFAULT == eState)
+                if(SfxItemState::DEFAULT == eState)
                 {
                     mpLbFillAttr->Enable();
                     Update();
                 }
-                else if(SFX_ITEM_DISABLED == eState )
+                else if(SfxItemState::DISABLED == eState )
                 {
                     mpLbFillAttr->Disable();
                     mpLbFillAttr->SetNoSelection();
@@ -967,7 +967,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
         case SID_COLOR_TABLE:
         {
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 if(mpStyleItem && drawing::FillStyle_SOLID == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
@@ -992,7 +992,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
         case SID_GRADIENT_LIST:
         {
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 if(mpStyleItem && drawing::FillStyle_GRADIENT == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
@@ -1017,7 +1017,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
         case SID_HATCH_LIST:
         {
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 if(mpStyleItem && drawing::FillStyle_HATCH == (drawing::FillStyle)mpStyleItem->GetValue())
                 {
@@ -1042,7 +1042,7 @@ void AreaPropertyPanel::NotifyItemUpdate(
         }
         case SID_BITMAP_LIST:
         {
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 if(mpStyleItem && drawing::FillStyle_BITMAP == (drawing::FillStyle)mpStyleItem->GetValue())
                 {

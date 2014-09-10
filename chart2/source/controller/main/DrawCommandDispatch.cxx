@@ -211,7 +211,7 @@ void DrawCommandDispatch::setLineEnds( SfxItemSet& rAttr )
             pDrawViewWrapper->GetAttributes( aSet );
 
             long nWidth = 300; // (1/100th mm)
-            if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SFX_ITEM_DONTCARE )
+            if ( aSet.GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
             {
                 long nValue = ( ( const XLineWidthItem& ) aSet.Get( XATTR_LINEWIDTH ) ).GetValue();
                 if ( nValue > 0 )

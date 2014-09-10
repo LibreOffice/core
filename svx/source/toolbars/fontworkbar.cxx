@@ -268,7 +268,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
         case SID_FONTWORK_ALIGNMENT:
         {
-            if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_FONTWORK_ALIGNMENT ) == SFX_ITEM_SET )
+            if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_FONTWORK_ALIGNMENT ) == SfxItemState::SET )
             {
                 sal_Int32 nValue = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_FONTWORK_ALIGNMENT))->GetValue();
                 if ( ( nValue >= 0 ) && ( nValue < 5 ) )
@@ -293,7 +293,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
         case SID_FONTWORK_CHARACTER_SPACING:
         {
-            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SFX_ITEM_SET ) )
+            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
             {
                 sal_Int32 nCharSpacing = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
                 pObj->SetMergedItem( SvxCharScaleWidthItem( (sal_uInt16)nCharSpacing, EE_CHAR_FONTWIDTH ) );
@@ -304,7 +304,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
         case SID_FONTWORK_KERN_CHARACTER_PAIRS:
         {
-            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_KERN_CHARACTER_PAIRS ) == SFX_ITEM_SET ) )
+            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_KERN_CHARACTER_PAIRS ) == SfxItemState::SET ) )
             {
                 // sal_Bool bKernCharacterPairs = ((const SfxBoolItem*)rReq.GetArgs()->GetItem(SID_FONTWORK_KERN_CHARACTER_PAIRS))->GetValue();
 //TODO:             pObj->SetMergedItem( SvxCharScaleWidthItem( (sal_uInt16)nCharSpacing, EE_CHAR_FONTWIDTH ) );
@@ -488,7 +488,7 @@ void FontworkBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rBi
 
         case SID_FONTWORK_CHARACTER_SPACING_DIALOG :
         {
-            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SFX_ITEM_SET ) )
+            if( rReq.GetArgs() && ( rReq.GetArgs()->GetItemState( SID_FONTWORK_CHARACTER_SPACING ) == SfxItemState::SET ) )
             {
                 sal_Int32 nCharSpacing = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_FONTWORK_CHARACTER_SPACING))->GetValue();
                 FontworkCharacterSpacingDialog aDlg( 0L, nCharSpacing );
@@ -555,43 +555,43 @@ void FontworkBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     sal_uInt32 nCheckStatus = 0;
 
-    if ( rSet.GetItemState( SID_FONTWORK_ALIGNMENT_FLOATER ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_FONTWORK_ALIGNMENT_FLOATER ) != SfxItemState::UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
             rSet.DisableItem( SID_FONTWORK_ALIGNMENT_FLOATER );
     }
-    if ( rSet.GetItemState( SID_FONTWORK_ALIGNMENT ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_FONTWORK_ALIGNMENT ) != SfxItemState::UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
             rSet.DisableItem( SID_FONTWORK_ALIGNMENT );
         else
             SetAlignmentState( pSdrView, rSet );
     }
-    if ( rSet.GetItemState( SID_FONTWORK_CHARACTER_SPACING_FLOATER ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_FONTWORK_CHARACTER_SPACING_FLOATER ) != SfxItemState::UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
             rSet.DisableItem( SID_FONTWORK_CHARACTER_SPACING_FLOATER );
     }
-    if ( rSet.GetItemState( SID_FONTWORK_CHARACTER_SPACING ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_FONTWORK_CHARACTER_SPACING ) != SfxItemState::UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
             rSet.DisableItem( SID_FONTWORK_CHARACTER_SPACING );
         else
             SetCharacterSpacingState( pSdrView, rSet );
     }
-    if ( rSet.GetItemState( SID_FONTWORK_KERN_CHARACTER_PAIRS ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_FONTWORK_KERN_CHARACTER_PAIRS ) != SfxItemState::UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
             rSet.DisableItem( SID_FONTWORK_KERN_CHARACTER_PAIRS );
         else
             SetKernCharacterPairsState( pSdrView, rSet );
     }
-    if ( rSet.GetItemState( SID_FONTWORK_SAME_LETTER_HEIGHTS ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_FONTWORK_SAME_LETTER_HEIGHTS ) != SfxItemState::UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus ) )
             rSet.DisableItem( SID_FONTWORK_SAME_LETTER_HEIGHTS );
     }
-    if ( rSet.GetItemState( SID_FONTWORK_SHAPE_TYPE ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_FONTWORK_SHAPE_TYPE ) != SfxItemState::UNKNOWN )
     {
         if ( !checkForSelectedFontWork( pSdrView, nCheckStatus  ) )
             rSet.DisableItem( SID_FONTWORK_SHAPE_TYPE );

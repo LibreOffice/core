@@ -496,7 +496,7 @@ IMPL_LINK_NOARG(SwView, AttrChangedNotify)
             m_aTimer.Start();
 
             const SfxPoolItem *pItem;
-            if ( SFX_ITEM_SET != GetObjectShell()->GetMedium()->GetItemSet()->
+            if ( SfxItemState::SET != GetObjectShell()->GetMedium()->GetItemSet()->
                                     GetItemState( SID_HIDDEN, false, &pItem ) ||
                  !((SfxBoolItem*)pItem)->GetValue() )
             {
@@ -603,7 +603,7 @@ void SwView::_CheckReadonlyState()
             qsort( (void*)aROIds, sizeof(aROIds)/sizeof(sal_uInt16), sizeof(sal_uInt16), lcl_CmpIds );
             bFirst = false;
         }
-        if ( SFX_ITEM_DISABLED == eStateRO )
+        if ( SfxItemState::DISABLED == eStateRO )
         {
             rDis.SetSlotFilter( SFX_SLOT_FILTER_ENABLED_READONLY, sizeof(aROIds)/sizeof(sal_uInt16), aROIds );
             bChgd = true;
@@ -611,7 +611,7 @@ void SwView::_CheckReadonlyState()
     }
     else if( m_pWrtShell->IsAllProtect() )
     {
-        if ( SFX_ITEM_DISABLED == eStateProtAll )
+        if ( SfxItemState::DISABLED == eStateProtAll )
         {
             static sal_uInt16 aAllProtIds[] = { SID_SAVEDOC, FN_EDIT_REGION };
             static bool bAllProtFirst = true;
@@ -626,8 +626,8 @@ void SwView::_CheckReadonlyState()
             bChgd = true;
         }
     }
-    else if ( SFX_ITEM_DISABLED != eStateRO ||
-                SFX_ITEM_DISABLED != eStateProtAll )
+    else if ( SfxItemState::DISABLED != eStateRO ||
+                SfxItemState::DISABLED != eStateProtAll )
     {
         bChgd = true;
         rDis.SetSlotFilter();

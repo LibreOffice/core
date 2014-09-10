@@ -66,7 +66,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         case SID_STYLE_FAMILY4:
         case SID_STYLE_FAMILY5:
         {
-            bool bAvailable = SFX_ITEM_DEFAULT == eState;
+            bool bAvailable = SfxItemState::DEFAULT == eState;
             if ( !bAvailable )
                 rTemplateDlg.SetFamilyState(GetId(), 0);
             else {
@@ -75,7 +75,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                 DBG_ASSERT(pStateItem != 0, "SfxTemplateItem expected");
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
-            bool bDisable = eState == SFX_ITEM_DISABLED;
+            bool bDisable = eState == SfxItemState::DISABLED;
             // Disable Familly
             sal_uInt16 nFamily = 0;
             switch( GetId())
@@ -98,9 +98,9 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         }
         case SID_STYLE_WATERCAN:
         {
-            if ( eState == SFX_ITEM_DISABLED )
+            if ( eState == SfxItemState::DISABLED )
                 nWaterCanState = 0xff;
-            else if( eState == SFX_ITEM_DEFAULT )
+            else if( eState == SfxItemState::DEFAULT )
             {
                 const SfxBoolItem *pStateItem = PTR_CAST(SfxBoolItem, pItem);
                 assert(pStateItem); //BoolItem expected
@@ -116,36 +116,36 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
             break;
         }
         case SID_STYLE_EDIT:
-            rTemplateDlg.EnableEdit( SFX_ITEM_DISABLED != eState );
+            rTemplateDlg.EnableEdit( SfxItemState::DISABLED != eState );
             break;
         case SID_STYLE_DELETE:
-            rTemplateDlg.EnableDel( SFX_ITEM_DISABLED != eState );
+            rTemplateDlg.EnableDel( SfxItemState::DISABLED != eState );
             break;
         case SID_STYLE_HIDE:
-            rTemplateDlg.EnableHide( SFX_ITEM_DISABLED != eState );
+            rTemplateDlg.EnableHide( SfxItemState::DISABLED != eState );
             break;
         case SID_STYLE_SHOW:
-            rTemplateDlg.EnableShow( SFX_ITEM_DISABLED != eState );
+            rTemplateDlg.EnableShow( SfxItemState::DISABLED != eState );
             break;
         case SID_STYLE_NEW_BY_EXAMPLE:
 
             rTemplateDlg.EnableExample_Impl(
-                GetId(), SFX_ITEM_DISABLED != eState );
+                GetId(), SfxItemState::DISABLED != eState );
             break;
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
             rTemplateDlg.EnableExample_Impl(
-                GetId(), eState != SFX_ITEM_DISABLED );
+                GetId(), eState != SfxItemState::DISABLED );
             break;
         }
         case SID_STYLE_NEW:
         {
-            rTemplateDlg.EnableNew( SFX_ITEM_DISABLED != eState );
+            rTemplateDlg.EnableNew( SfxItemState::DISABLED != eState );
             break;
         }
         case SID_STYLE_DRAGHIERARCHIE:
         {
-            rTemplateDlg.EnableTreeDrag( SFX_ITEM_DISABLED != eState );
+            rTemplateDlg.EnableTreeDrag( SfxItemState::DISABLED != eState );
             break;
         }
         case SID_STYLE_FAMILY :

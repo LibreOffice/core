@@ -202,7 +202,7 @@ SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const
 
 bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
 {
-    return rItemSet.GetItemState( nWhichId, bDeep ) == SFX_ITEM_SET;
+    return rItemSet.GetItemState( nWhichId, bDeep ) == SfxItemState::SET;
 }
 
 bool ScfTools::CheckItems( const SfxItemSet& rItemSet, const sal_uInt16* pnWhichIds, bool bDeep )

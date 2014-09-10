@@ -386,7 +386,7 @@ void SwTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
     if( RES_ATTRSET_CHG == nWhich )
     {
-        if (pOld && pNew && SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+        if (pOld && pNew && SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
             RES_FRM_SIZE, false, (const SfxPoolItem**)&pNewSize))
         {
             pOldSize = &((SwAttrSetChg*)pOld)->GetChgSet()->GetFrmSize();
@@ -1718,8 +1718,8 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
 {
     // We might need to create a new format here, because the box must be
     // added to the format solely if pFmt has a value or formular.
-    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, false ) ||
-        SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA, false ) )
+    if( SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_VALUE, false ) ||
+        SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_FORMULA, false ) )
     {
         SwTableBox* pOther = SwIterator<SwTableBox,SwFmt>::FirstElement( *pFmt );
         if( pOther )
@@ -1985,7 +1985,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
         }
 
         // assign color or save "user color"
-        if( !pTNd->GetpSwAttrSet() || SFX_ITEM_SET != pTNd->GetpSwAttrSet()->
+        if( !pTNd->GetpSwAttrSet() || SfxItemState::SET != pTNd->GetpSwAttrSet()->
             GetItemState( RES_CHRATR_COLOR, false, &pItem ))
             pItem = 0;
 
@@ -2062,7 +2062,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rTxt, const Color* pCol,
 
         // assign vertical orientation
         if( bChgAlign &&
-            ( SFX_ITEM_SET != rBox.GetFrmFmt()->GetItemState(
+            ( SfxItemState::SET != rBox.GetFrmFmt()->GetItemState(
                 RES_VERT_ORIENT, true, &pItem ) ||
                 text::VertOrientation::TOP == ((SwFmtVertOrient*)pItem)->GetVertOrient() ))
         {
@@ -2105,7 +2105,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         const SfxItemSet* pAttrSet = pTNd->GetpSwAttrSet();
 
         // assign adjustment
-        if( bChgAlign && pAttrSet && SFX_ITEM_SET == pAttrSet->GetItemState(
+        if( bChgAlign && pAttrSet && SfxItemState::SET == pAttrSet->GetItemState(
             RES_PARATR_ADJUST, false, &pItem ) &&
                 SVX_ADJUST_RIGHT == ((SvxAdjustItem*)pItem)->GetAdjust() )
         {
@@ -2113,7 +2113,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
         }
 
         // assign color or save "user color"
-        if( !pAttrSet || SFX_ITEM_SET != pAttrSet->
+        if( !pAttrSet || SfxItemState::SET != pAttrSet->
             GetItemState( RES_CHRATR_COLOR, false, &pItem ))
             pItem = 0;
 
@@ -2151,7 +2151,7 @@ void ChgNumToText( SwTableBox& rBox, sal_uLong nFmt )
 
         // assign vertical orientation
         if( bChgAlign &&
-            SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState(
+            SfxItemState::SET == rBox.GetFrmFmt()->GetItemState(
             RES_VERT_ORIENT, false, &pItem ) &&
             text::VertOrientation::BOTTOM == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
         {
@@ -2175,7 +2175,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         case RES_ATTRSET_CHG:
             {
                 const SfxItemSet& rSet = *((SwAttrSetChg*)pNew)->GetChgSet();
-                if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMAT,
+                if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT,
                                     false, (const SfxPoolItem**)&pNewFmt ) )
                     nOldFmt = ((SwTblBoxNumFormat&)((SwAttrSetChg*)pOld)->
                             GetChgSet()->Get( RES_BOXATR_FORMAT )).GetValue();
@@ -2203,9 +2203,9 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         {
             GetDoc()->getIDocumentFieldsAccess().SetFieldsDirty(true, NULL, 0);
 
-            if( SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMAT, false ) ||
-                SFX_ITEM_SET == GetItemState( RES_BOXATR_VALUE, false ) ||
-                SFX_ITEM_SET == GetItemState( RES_BOXATR_FORMULA, false ) )
+            if( SfxItemState::SET == GetItemState( RES_BOXATR_FORMAT, false ) ||
+                SfxItemState::SET == GetItemState( RES_BOXATR_VALUE, false ) ||
+                SfxItemState::SET == GetItemState( RES_BOXATR_FORMULA, false ) )
             {
                 // fetch the box
                 SwIterator<SwTableBox,SwFmt> aIter( *this );
@@ -2220,7 +2220,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                         nNewFmt = pNewFmt->GetValue();
                         // new formatting
                         // is it newer or has the current been removed?
-                        if( SFX_ITEM_SET != GetItemState( RES_BOXATR_VALUE, false ))
+                        if( SfxItemState::SET != GetItemState( RES_BOXATR_VALUE, false ))
                             pNewFmt = 0;
                     }
                     else
@@ -2237,7 +2237,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     {
                         if( NUMBERFORMAT_TEXT != nNewFmt )
                         {
-                            if( SFX_ITEM_SET == GetItemState(
+                            if( SfxItemState::SET == GetItemState(
                                                 RES_BOXATR_VALUE, false ))
                                 nOldFmt = NUMBERFORMAT_TEXT;
                             else
@@ -2265,7 +2265,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     {
                         bool bChgTxt = true;
                         double fVal = 0;
-                        if( !pNewVal && SFX_ITEM_SET != GetItemState(
+                        if( !pNewVal && SfxItemState::SET != GetItemState(
                             RES_BOXATR_VALUE, false, (const SfxPoolItem**)&pNewVal ))
                         {
                             // so far, no value has been set, so try to evaluate the content
@@ -2368,7 +2368,7 @@ bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
         SvNumberFormatter* pNumFmtr = GetFrmFmt()->GetDoc()->GetNumberFormatter();
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT,
+        if( SfxItemState::SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT,
                 false, &pItem ))
         {
             rFmtIndex = ((SwTblBoxNumFormat*)pItem)->GetValue();
@@ -2396,15 +2396,15 @@ bool SwTableBox::IsNumberChanged() const
 {
     bool bRet = true;
 
-    if( SFX_ITEM_SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMULA, false ))
+    if( SfxItemState::SET == GetFrmFmt()->GetItemState( RES_BOXATR_FORMULA, false ))
     {
         const SwTblBoxNumFormat *pNumFmt;
         const SwTblBoxValue *pValue;
 
-        if( SFX_ITEM_SET != GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, false,
+        if( SfxItemState::SET != GetFrmFmt()->GetItemState( RES_BOXATR_VALUE, false,
             (const SfxPoolItem**)&pValue ))
             pValue = 0;
-        if( SFX_ITEM_SET != GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT, false,
+        if( SfxItemState::SET != GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT, false,
             (const SfxPoolItem**)&pNumFmt ))
             pNumFmt = 0;
 
@@ -2512,9 +2512,9 @@ sal_uInt16 SwTableBox::IsFormulaOrValueBox() const
     sal_uInt16 nWhich = 0;
     const SwTxtNode* pTNd;
     SwFrmFmt* pFmt = GetFrmFmt();
-    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA, false ))
+    if( SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_FORMULA, false ))
         nWhich = RES_BOXATR_FORMULA;
-    else if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, false ) &&
+    else if( SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_VALUE, false ) &&
             !pFmt->GetDoc()->GetNumberFormatter()->IsTextFormat(
                 pFmt->GetTblBoxNumFmt().GetValue() ))
         nWhich = RES_BOXATR_VALUE;
@@ -2530,8 +2530,8 @@ void SwTableBox::ActualiseValueBox()
 {
     const SfxPoolItem *pFmtItem, *pValItem;
     SwFrmFmt* pFmt = GetFrmFmt();
-    if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMAT, true, &pFmtItem )
-        && SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE, true, &pValItem ))
+    if( SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_FORMAT, true, &pFmtItem )
+        && SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_VALUE, true, &pValItem ))
     {
         const sal_uLong nFmtId = ((SwTblBoxNumFormat*)pFmtItem)->GetValue();
         sal_uLong nNdPos = ULONG_MAX;

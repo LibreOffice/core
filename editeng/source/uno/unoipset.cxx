@@ -153,7 +153,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
     SfxItemPool* pPool = rSet.GetPool();
 
     // Put UnoAny in the item value
-    if(eState < SFX_ITEM_DEFAULT || pItem == NULL)
+    if(eState < SfxItemState::DEFAULT || pItem == NULL)
     {
         if( pPool == NULL )
         {
@@ -220,7 +220,7 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry*
     {
         const SfxPoolItem* pItem = NULL;
         SfxItemState eState = aSet.GetItemState( pMap->nWID, true, &pItem );
-        if(eState >= SFX_ITEM_DEFAULT && pItem)
+        if(eState >= SfxItemState::DEFAULT && pItem)
         {
             pItem->QueryValue( aVal, nMemberId );
             ((SvxItemPropertySet*)this)->AddUsrAnyForID(aVal, pMap->nWID);

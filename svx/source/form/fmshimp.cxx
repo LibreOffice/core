@@ -4083,11 +4083,11 @@ void ControlConversionMenuController::StateChanged(sal_uInt16 nSID, SfxItemState
         SfxMenuControl::StateChanged(nSID, eState, pState);
     else if (FmXFormShell::isControlConversionSlot(nSID))
     {
-        if ((m_pConversionMenu->GetItemPos(nSID) != MENU_ITEM_NOTFOUND) && (eState == SFX_ITEM_DISABLED))
+        if ((m_pConversionMenu->GetItemPos(nSID) != MENU_ITEM_NOTFOUND) && (eState == SfxItemState::DISABLED))
         {
             m_pConversionMenu->RemoveItem(m_pConversionMenu->GetItemPos(nSID));
         }
-        else if ((m_pConversionMenu->GetItemPos(nSID) == MENU_ITEM_NOTFOUND) && (eState != SFX_ITEM_DISABLED))
+        else if ((m_pConversionMenu->GetItemPos(nSID) == MENU_ITEM_NOTFOUND) && (eState != SfxItemState::DISABLED))
         {
             // We can't simply re-insert the item because we have a clear order for all the our items.
             // So first we have to determine the position of the item to insert.

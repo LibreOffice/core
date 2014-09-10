@@ -655,7 +655,7 @@ static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
     const SfxPoolItem *pItem = NULL;
     SfxItemState eState = rFmt.GetItemState( RES_PAPER_BIN, false, &pItem );
     const SvxPaperBinItem *pPaperBinItem = dynamic_cast< const SvxPaperBinItem * >(pItem);
-    if (eState > SFX_ITEM_DEFAULT && pPaperBinItem)
+    if (eState > SfxItemState::DEFAULT && pPaperBinItem)
         nRes = pPaperBinItem->GetValue();
 
     return nRes;

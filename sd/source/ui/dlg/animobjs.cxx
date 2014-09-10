@@ -1220,7 +1220,7 @@ AnimationControllerItem::AnimationControllerItem(
 void AnimationControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
-    if( eState >= SFX_ITEM_DEFAULT && nSId == SID_ANIMATOR_STATE )
+    if( eState >= SfxItemState::DEFAULT && nSId == SID_ANIMATOR_STATE )
     {
         const SfxUInt16Item* pStateItem = PTR_CAST( SfxUInt16Item, pItem );
         assert(pStateItem); //SfxUInt16Item expected

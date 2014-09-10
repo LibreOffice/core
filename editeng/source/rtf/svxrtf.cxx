@@ -865,7 +865,7 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
         for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
             if( SFX_WHICH_MAX > nWhich &&
-                SFX_ITEM_SET == rSet.GetItemState( nWhich, false, &pItem ) &&
+                SfxItemState::SET == rSet.GetItemState( nWhich, false, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete
         }
@@ -879,14 +879,14 @@ void SvxRTFParser::_ClearStyleAttr( SvxRTFItemStackType& rStkType )
         const SfxPoolItem* pSItem;
         for( sal_uInt16 nWhich = aIter.GetCurWhich(); nWhich; nWhich = aIter.NextWhich() )
         {
-            if( SFX_ITEM_SET == rStyleSet.GetItemState( nWhich, true, &pSItem ))
+            if( SfxItemState::SET == rStyleSet.GetItemState( nWhich, true, &pSItem ))
             {
-                if( SFX_ITEM_SET == rSet.GetItemState( nWhich, false, &pItem )
+                if( SfxItemState::SET == rSet.GetItemState( nWhich, false, &pItem )
                     && *pItem == *pSItem )
                     rSet.ClearItem( nWhich );       // delete
             }
             else if( SFX_WHICH_MAX > nWhich &&
-                    SFX_ITEM_SET == rSet.GetItemState( nWhich, false, &pItem ) &&
+                    SfxItemState::SET == rSet.GetItemState( nWhich, false, &pItem ) &&
                      rPool.GetDefaultItem( nWhich ) == *pItem )
                 rSet.ClearItem( nWhich );       // delete
         }
@@ -916,7 +916,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                 const SfxPoolItem* pItem = aIter.GetCurItem(), *pGet;
                 while( true )
                 {
-                    if( SFX_ITEM_SET == pAkt->aAttrSet.GetItemState(
+                    if( SfxItemState::SET == pAkt->aAttrSet.GetItemState(
                         pItem->Which(), false, &pGet ) &&
                         *pItem == *pGet )
                         pOld->aAttrSet.ClearItem( pItem->Which() );
@@ -1290,7 +1290,7 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
             const SfxPoolItem* pItem;
             do {
                 sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-                if( SFX_ITEM_SET != pTmp->aAttrSet.GetItemState( nWhich,
+                if( SfxItemState::SET != pTmp->aAttrSet.GetItemState( nWhich,
                       false, &pItem ) || *pItem != *aIter.GetCurItem() )
                     aMrgSet.ClearItem( nWhich );
 
@@ -1337,7 +1337,7 @@ void SvxRTFItemStackType::SetRTFDefaults( const SfxItemSet& rDefaults )
         SfxItemIter aIter( rDefaults );
         do {
             sal_uInt16 nWhich = aIter.GetCurItem()->Which();
-            if( SFX_ITEM_SET != aAttrSet.GetItemState( nWhich, false ))
+            if( SfxItemState::SET != aAttrSet.GetItemState( nWhich, false ))
                 aAttrSet.Put( *aIter.GetCurItem() );
 
             if( aIter.IsAtEnd() )

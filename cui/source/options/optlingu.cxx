@@ -1478,7 +1478,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet* rSet )
 
     const SfxHyphenRegionItem *pHyp = NULL;
     sal_uInt16 nWhich = GetWhich( SID_ATTR_HYPHENREGION );
-    if ( rSet->GetItemState( nWhich, false ) == SFX_ITEM_SET )
+    if ( rSet->GetItemState( nWhich, false ) == SfxItemState::SET )
         pHyp = &( (const SfxHyphenRegionItem &) rSet->Get( nWhich ) );
 
     pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );

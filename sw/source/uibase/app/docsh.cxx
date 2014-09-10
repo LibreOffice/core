@@ -157,7 +157,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
     bool bAPICall = false;
     const SfxPoolItem* pApiItem;
     const SfxItemSet* pMedSet;
-    if( 0 != ( pMedSet = rMedium.GetItemSet() ) && SFX_ITEM_SET ==
+    if( 0 != ( pMedSet = rMedium.GetItemSet() ) && SfxItemState::SET ==
             pMedSet->GetItemState( FN_API_CALL, true, &pApiItem ) )
             bAPICall = ((const SfxBoolItem*)pApiItem)->GetValue();
 
@@ -202,7 +202,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         {
             const SfxItemSet* pSet = rMedium.GetItemSet();
             const SfxPoolItem *pPassItem;
-            if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, true, &pPassItem))
+            if(pSet && SfxItemState::SET == pSet->GetItemState(SID_PASSWORD, true, &pPassItem))
                 aPasswd = ((const SfxStringItem *)pPassItem)->GetValue();
         }
 
@@ -227,7 +227,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
         SwAsciiOptions aOpt;
         const SfxItemSet* pSet;
         const SfxPoolItem* pItem;
-        if( 0 != ( pSet = rMedium.GetItemSet() ) && SFX_ITEM_SET ==
+        if( 0 != ( pSet = rMedium.GetItemSet() ) && SfxItemState::SET ==
             pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             aOpt.ReadUserData( ((const SfxStringItem*)pItem)->GetValue() );
 
@@ -698,7 +698,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         const SfxPoolItem* pItem;
         if( 0 != ( pSet = rMedium.GetItemSet() ) )
         {
-            if( SFX_ITEM_SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS,
+            if( SfxItemState::SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS,
                                                     true, &pItem ) )
                 sItemOpt = ((const SfxStringItem*)pItem)->GetValue();
         }
@@ -1290,7 +1290,7 @@ bool SwDocShell::SetProtectionPassword( const OUString &rNewPassword )
 
     IDocumentRedlineAccess* pIDRA = mpWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
-    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
+    if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
         && ((SfxBoolItem*)pItem)->GetValue() == (aPasswd.getLength() > 0))
         return false;
 
@@ -1325,7 +1325,7 @@ bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
 
     IDocumentRedlineAccess* pIDRA = mpWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
-    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
+    if (pArgs && SfxItemState::SET == pArgs->GetItemState( FN_REDLINE_PROTECT, false, &pItem )
         && ((SfxBoolItem*)pItem)->GetValue() == (aPasswdHash.getLength() != 0))
         return false;
     rPasswordHash = aPasswdHash;

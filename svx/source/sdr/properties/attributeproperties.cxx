@@ -75,7 +75,7 @@ namespace sdr
 
                     while(nWhich)
                     {
-                        if(SFX_ITEM_SET == rStyle.GetItemState(nWhich))
+                        if(SfxItemState::SET == rStyle.GetItemState(nWhich))
                         {
                             mpItemSet->ClearItem(nWhich);
                         }
@@ -435,7 +435,7 @@ namespace sdr
 
                                 while(nWhich)
                                 {
-                                    if(mpItemSet->GetItemState(nWhich, false) == SFX_ITEM_SET)
+                                    if(mpItemSet->GetItemState(nWhich, false) == SfxItemState::SET)
                                     {
                                         pNewSet->Put(mpItemSet->Get(nWhich));
                                     }
@@ -498,7 +498,7 @@ namespace sdr
                 {
                     // #i61284# use mpItemSet with parents, makes things easier and reduces to
                     // one loop
-                    if(SFX_ITEM_SET == mpItemSet->GetItemState(nWhich, true, &pItem))
+                    if(SfxItemState::SET == mpItemSet->GetItemState(nWhich, true, &pItem))
                     {
                         pDestItemSet->Put(*pItem);
                     }

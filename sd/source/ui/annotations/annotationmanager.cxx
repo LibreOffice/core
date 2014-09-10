@@ -303,7 +303,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
         if( pArgs )
         {
             const SfxPoolItem*  pPoolItem = NULL;
-            if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, true, &pPoolItem ) )
+            if( SfxItemState::SET == pArgs->GetItemState( SID_DELETEALLBYAUTHOR_POSTIT, true, &pPoolItem ) )
             {
                 OUString sAuthor( (( const SfxStringItem* ) pPoolItem )->GetValue() );
                 DeleteAnnotationsByAuthor( sAuthor );
@@ -319,7 +319,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
                 if( pArgs )
                 {
                     const SfxPoolItem*  pPoolItem = NULL;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
+                    if( SfxItemState::SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
                         ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
                 }
             }
@@ -419,7 +419,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = NULL;
-        if( SFX_ITEM_SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
+        if( SfxItemState::SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
             ( ( const SfxUnoAnyItem* ) pPoolItem )->GetValue() >>= xAnnotation;
     }
 
@@ -947,25 +947,25 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
         {
             SfxItemSet aSet(pAnnotationWindow->getView()->GetAttribs());
 
-            if ( aSet.GetItemState( EE_CHAR_WEIGHT ) == SFX_ITEM_SET )
+            if ( aSet.GetItemState( EE_CHAR_WEIGHT ) == SfxItemState::SET )
             {
                 if( ((const SvxWeightItem&)aSet.Get( EE_CHAR_WEIGHT )).GetWeight() == WEIGHT_BOLD )
                     pMenu->CheckItem( SID_ATTR_CHAR_WEIGHT );
             }
 
-            if ( aSet.GetItemState( EE_CHAR_ITALIC ) == SFX_ITEM_SET )
+            if ( aSet.GetItemState( EE_CHAR_ITALIC ) == SfxItemState::SET )
             {
                 if( ((const SvxPostureItem&)aSet.Get( EE_CHAR_ITALIC )).GetPosture() != ITALIC_NONE )
                     pMenu->CheckItem( SID_ATTR_CHAR_POSTURE );
 
             }
-            if ( aSet.GetItemState( EE_CHAR_UNDERLINE ) == SFX_ITEM_SET )
+            if ( aSet.GetItemState( EE_CHAR_UNDERLINE ) == SfxItemState::SET )
             {
                 if( ((const SvxUnderlineItem&)aSet.Get( EE_CHAR_UNDERLINE )).GetLineStyle() != UNDERLINE_NONE )
                     pMenu->CheckItem( SID_ATTR_CHAR_UNDERLINE );
             }
 
-            if ( aSet.GetItemState( EE_CHAR_STRIKEOUT ) == SFX_ITEM_SET )
+            if ( aSet.GetItemState( EE_CHAR_STRIKEOUT ) == SfxItemState::SET )
             {
                 if( ((const SvxCrossedOutItem&)aSet.Get( EE_CHAR_STRIKEOUT )).GetStrikeout() != STRIKEOUT_NONE )
                     pMenu->CheckItem( SID_ATTR_CHAR_STRIKEOUT );

@@ -462,7 +462,7 @@ XclExpStringRef lclCreateFormattedString(
             {
                 // test if the character is a text field
                 const SfxPoolItem* pItem;
-                if( aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET )
+                if( aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
                 {
                     const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
                     if( const SvxURLField* pUrlField = PTR_CAST( SvxURLField, pField ) )
@@ -804,7 +804,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
                 const SfxPoolItem* pItem;
                 if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     // fields are single characters
-                    (aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET) )
+                    (aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET) )
                 {
                     if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
                     {

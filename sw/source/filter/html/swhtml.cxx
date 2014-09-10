@@ -4663,7 +4663,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
             pCSS1Parser->GetTxtFmtColl( nTopColl, rTopClass );
         const SfxItemSet& rItemSet = pTopColl->GetAttrSet();
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState(RES_LR_SPACE,true, &pItem) )
+        if( SfxItemState::SET == rItemSet.GetItemState(RES_LR_SPACE,true, &pItem) )
         {
             const SvxLRSpaceItem *pLRItem =
                 (const SvxLRSpaceItem *)pItem;
@@ -4695,7 +4695,7 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
             pContext->SetMargins( nLeftMargin, nRightMargin,
                                   nFirstLineIndent );
         }
-        if( SFX_ITEM_SET == rItemSet.GetItemState(RES_UL_SPACE,true, &pItem) )
+        if( SfxItemState::SET == rItemSet.GetItemState(RES_UL_SPACE,true, &pItem) )
         {
             const SvxULSpaceItem *pULItem =
                 (const SvxULSpaceItem *)pItem;

@@ -1825,9 +1825,9 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
                     SfxItemState eItemState = rSet.GetItemState(pEntry->nWID, false);
 
-                    if(SFX_ITEM_SET == eItemState)
+                    if(SfxItemState::SET == eItemState)
                         pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;
-                    else if(SFX_ITEM_DEFAULT == eItemState)
+                    else if(SfxItemState::DEFAULT == eItemState)
                         pRet[nProperty] = beans::PropertyState_DEFAULT_VALUE;
                     else
                         pRet[nProperty] = beans::PropertyState_AMBIGUOUS_VALUE;

@@ -722,7 +722,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 eZoom = SVX_ZOOM_PERCENT;
-                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_ZOOMSLIDER, true, &pItem ) )
+                if( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( SID_ATTR_ZOOMSLIDER, true, &pItem ) )
                 {
                     const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem*)pItem)->GetValue();
                     if( nCurrentZoom )
@@ -742,7 +742,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                 SfxStyleSheetBase* pStyleSheet  = pStylePool->Find( aOldName, SFX_STYLE_FAMILY_PAGE );
                 OSL_ENSURE( pStyleSheet, "PageStyle not found! :-/" );
 
-                if ( pReqArgs && pStyleSheet && SFX_ITEM_SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, true, &pItem ) )
+                if ( pReqArgs && pStyleSheet && SfxItemState::SET == pReqArgs->GetItemState( SID_PREVIEW_SCALINGFACTOR, true, &pItem ) )
                 {
                     const sal_uInt16 nCurrentZoom   = ((const SvxZoomSliderItem *)pItem)->GetValue();
                     SfxItemSet& rSet            = pStyleSheet->GetItemSet();

@@ -2027,7 +2027,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
                 const SfxPoolItem* pItem( 0 );
                 // #i82637# - Found character attributes, whose value equals the value of
                 // the corresponding default character attributes, are excluded.
-                if ( aSet.GetItemState( aPropIt->nWID, true, &pItem ) == SFX_ITEM_SET )
+                if ( aSet.GetItemState( aPropIt->nWID, true, &pItem ) == SfxItemState::SET )
                 {
                     uno::Any aVal;
                     pItem->QueryValue( aVal, aPropIt->nMemberId );

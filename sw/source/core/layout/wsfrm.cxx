@@ -212,7 +212,7 @@ void SwCellFrm::CheckDirection( bool bVert )
     // Check if the item is set, before actually
     // using it. Otherwise the dynamic pool default is used, which may be set
     // to LTR in case of OOo 1.0 documents.
-    if( pFmt && SFX_ITEM_SET == pFmt->GetItemState( RES_FRAMEDIR, true, &pItem ) )
+    if( pFmt && SfxItemState::SET == pFmt->GetItemState( RES_FRAMEDIR, true, &pItem ) )
     {
         const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
         const SwViewShell *pSh = getRootFrm()->GetCurrShell();

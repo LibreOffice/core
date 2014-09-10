@@ -93,7 +93,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
 void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
-    if ( SFX_ITEM_DEFAULT == eState )
+    if ( SfxItemState::DEFAULT == eState )
     {
         DBG_ASSERT( pState->ISA( SfxUInt16Item ), "invalid item type" );
         SfxUInt16Item* pItem = (SfxUInt16Item*)pState;

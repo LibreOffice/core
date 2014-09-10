@@ -663,7 +663,7 @@ namespace svx
             const SfxItemSet& rModifiedItems = *xDialog->GetOutputItemSet();
             for ( WhichId nWhich = pPool->GetFirstWhich(); nWhich <= pPool->GetLastWhich(); ++nWhich )
             {
-                if ( rModifiedItems.GetItemState( nWhich ) == SFX_ITEM_SET )
+                if ( rModifiedItems.GetItemState( nWhich ) == SfxItemState::SET )
                 {
                     SfxSlotId nSlotForItemSet = pPool->GetSlotId( nWhich );
                     const SfxPoolItem* pModifiedItem = rModifiedItems.GetItem( nWhich );

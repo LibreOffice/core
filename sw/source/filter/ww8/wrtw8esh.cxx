@@ -286,7 +286,7 @@ void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrmFmt& rFmt,EscherProp
 {
     const SfxPoolItem* pItem;
     const SwAttrSet& rAttrSet = rFmt.GetAttrSet();
-    if (SFX_ITEM_SET == rAttrSet.GetItemState(RES_URL, true, &pItem))
+    if (SfxItemState::SET == rAttrSet.GetItemState(RES_URL, true, &pItem))
     {
         const SwFmtURL *pINetFmt = dynamic_cast<const SwFmtURL*>(pItem);
         if (pINetFmt && !pINetFmt->GetURL().isEmpty())
@@ -1436,7 +1436,7 @@ void WW8Export::CreateEscher()
 {
     SfxItemState eBackSet = pDoc->GetPageDesc(0).GetMaster().
         GetItemState(RES_BACKGROUND);
-    if (pHFSdrObjs->size() || pSdrObjs->size() || SFX_ITEM_SET == eBackSet)
+    if (pHFSdrObjs->size() || pSdrObjs->size() || SfxItemState::SET == eBackSet)
     {
         OSL_ENSURE( !pEscher, "wer hat den Pointer nicht geloescht?" );
         SvMemoryStream* pEscherStrm = new SvMemoryStream;
@@ -1685,19 +1685,19 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
     sal_Int32 nContrast = 0;
     sal_Int16 nBrightness = 0;
 
-    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CONTRAST,
+    if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CONTRAST,
         true, &pItem))
     {
         nContrast = ((SfxInt16Item*)pItem)->GetValue();
     }
 
-    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_LUMINANCE,
+    if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_LUMINANCE,
         true, &pItem))
     {
         nBrightness = ((SfxInt16Item*)pItem)->GetValue();
     }
 
-    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
+    if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
         true, &pItem))
     {
         nMode = ((SfxEnumItem*)pItem)->GetValue();
@@ -1748,7 +1748,7 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
     if (nBrightness != 0)
         rPropOpt.AddOpt( ESCHER_Prop_pictureBrightness, nBrightness * 327 );
 
-    if (SFX_ITEM_SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CROPGRF,
+    if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_CROPGRF,
         true, &pItem))
     {
         const Size aSz( rNd.GetTwipSize() );
@@ -1901,7 +1901,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
     sal_Int32 nLineWidth=0;
     const SfxPoolItem* pItem;
     bool bFirstLine = true;
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_BOX, true, &pItem))
+    if (SfxItemState::SET == rFmt.GetItemState(RES_BOX, true, &pItem))
     {
         static const sal_uInt16 aExhperProp[4] =
         {
@@ -1981,13 +1981,13 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt,
         rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
     const SwAttrSet& rAttrSet = rFmt.GetAttrSet();
-    if (SFX_ITEM_SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
+    if (SfxItemState::SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
     {
         const SvxBoxItem* pBox = (const SvxBoxItem*)pItem;
         if( pBox )
         {
             const SfxPoolItem* pShadItem;
-            if (SFX_ITEM_SET
+            if (SfxItemState::SET
                 == rAttrSet.GetItemState(RES_SHADOW, true, &pShadItem))
             {
                 const SvxShadowItem* pSI = (const SvxShadowItem*)pShadItem;
@@ -2078,7 +2078,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
      are exporting!
      */
     const SfxPoolItem* pItem;
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_LR_SPACE, true, &pItem))
+    if (SfxItemState::SET == rFmt.GetItemState(RES_LR_SPACE, true, &pItem))
     {
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft,
                 DrawModelToEmu( ((SvxLRSpaceItem*)pItem)->GetLeft() ) );
@@ -2091,7 +2091,7 @@ sal_Int32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistRight, 0 );
     }
 
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_UL_SPACE, true, &pItem))
+    if (SfxItemState::SET == rFmt.GetItemState(RES_UL_SPACE, true, &pItem))
     {
         rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistTop,
                 DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetUpper() ) );
@@ -2318,7 +2318,7 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, WW8Export& rWW8Wrt)
             const SfxPoolItem* pItem = 0;
             SfxItemState eState = rFmt.GetItemState(RES_BACKGROUND, true,
                 &pItem);
-            if (SFX_ITEM_SET == eState && pItem)
+            if (SfxItemState::SET == eState && pItem)
             {
                 const SvxBrushItem* pBrush = (const SvxBrushItem*)pItem;
                 WriteBrushAttr(*pBrush, aPropOpt);

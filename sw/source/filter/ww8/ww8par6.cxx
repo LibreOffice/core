@@ -3354,7 +3354,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
     {
         if ( pAktColl ) //importing style
         {
-            if( SFX_ITEM_SET == pAktColl->GetItemState( RES_CHRATR_UNDERLINE, false ) )
+            if( SfxItemState::SET == pAktColl->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
                 const SwAttrSet& aSet = pAktColl->GetAttrSet();
                 SvxUnderlineItem *pUnderline
@@ -3368,7 +3368,7 @@ void SwWW8ImplReader::Read_UnderlineColor(sal_uInt16, const sal_uInt8* pData, sh
         }
         else if ( pAktItemSet )
         {
-            if ( SFX_ITEM_SET == pAktItemSet->GetItemState( RES_CHRATR_UNDERLINE, false ) )
+            if ( SfxItemState::SET == pAktItemSet->GetItemState( RES_CHRATR_UNDERLINE, false ) )
             {
                 SvxUnderlineItem *pUnderline
                     = (SvxUnderlineItem *)(pAktItemSet->Get( RES_CHRATR_UNDERLINE, false ) .Clone());

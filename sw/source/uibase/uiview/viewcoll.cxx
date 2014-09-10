@@ -46,7 +46,7 @@ void SwView::ExecColl(SfxRequest &rReq)
             if( pArgs )
             {
                 if (pArgs &&
-                    SFX_ITEM_SET == pArgs->GetItemState( nWhich , true, &pItem ))
+                    SfxItemState::SET == pArgs->GetItemState( nWhich , true, &pItem ))
                 {
                     if( ((SfxStringItem*)pItem)->GetValue() !=
                                             GetWrtShell().GetCurPageStyle(false) )

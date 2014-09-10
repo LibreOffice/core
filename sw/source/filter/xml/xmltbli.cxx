@@ -795,7 +795,7 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
                     XML_STYLE_FAMILY_TABLE_COLUMN,
                                               aStyleName, &pAutoItemSet ) &&
             pAutoItemSet &&
-            SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
+            SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
         {
             const SwFmtFrmSize *pSize = ((const SwFmtFrmSize *)pItem);
@@ -2080,7 +2080,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             // default num format?
             const SfxPoolItem* pItem = NULL;
             if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
-                            == SFX_ITEM_SET )
+                            == SfxItemState::SET )
             {
                 const SwTblBoxNumFormat* pNumFormat =
                     static_cast<const SwTblBoxNumFormat*>( pItem );
@@ -2135,7 +2135,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 // the cell gets the default text format.
                 const SfxPoolItem* pItem = NULL;
                 if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
-                    == SFX_ITEM_SET )
+                    == SfxItemState::SET )
                 {
                     const SwDoc* pDoc = pBoxFmt->GetDoc();
                     const SvNumberFormatter* pNumberFormatter = pDoc ?
@@ -2670,11 +2670,11 @@ void SwXMLTableContext::MakeTable()
     {
         const SfxPoolItem *pItem;
         const SvxLRSpaceItem *pLRSpace = 0;
-        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_LR_SPACE, false,
+        if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_LR_SPACE, false,
                                                         &pItem ) )
             pLRSpace = (const SvxLRSpaceItem *)pItem;
 
-        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_HORI_ORIENT, false,
+        if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_HORI_ORIENT, false,
                                                         &pItem ) )
         {
             eHoriOrient = ((const SwFmtHoriOrient *)pItem)->GetHoriOrient();
@@ -2704,7 +2704,7 @@ void SwXMLTableContext::MakeTable()
         }
 
         const SwFmtFrmSize *pSize = 0;
-        if( SFX_ITEM_SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
+        if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
                                                         &pItem ) )
             pSize = (const SwFmtFrmSize *)pItem;
 

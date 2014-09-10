@@ -739,7 +739,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if ( pArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) ) == SFX_ITEM_SET )
+                if ( ( pArgs->GetItemState( FN_PARAM_1, true, &pItem ) ) == SfxItemState::SET )
                 {
                     const SfxInt32Item* pTypedItem = PTR_CAST( SfxInt32Item, pItem );
                     if ( pTypedItem )
