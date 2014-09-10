@@ -24,6 +24,9 @@
 #include <jvmfwk/framework.h>
 #include <rtl/ustring.h>
 #include "jni.h"
+#include <vector>
+#include <utility>
+#include "../source/elements.hxx"
 
 /**
    @file
@@ -167,6 +170,81 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     rtl_uString * *arExcludeList,
     sal_Int32  nSizeExcludeList,
     JavaInfo ** ppInfo);
+
+
+
+/** obtains information for a JRE referenced by the JAVA_HOME environment variable.
+
+   <p>If the JAVA_HOME environment variable is set and points to a JRE whoose vendor
+   matches the requirements given by vecVendorInfos (i.e. it has a vendor that is
+   given in vecVendorInfos and the version requirements for the vendor are met),
+   then this function shall return a JavaInfo object for this JRE.</p>
+
+   @param vecVendorInfos
+       [in] vector specifying the vendor and version requirements that the JRE must fulfill.
+       The vector contains pairs of vendors and the respective version requirements
+       for those vendors. The JRE must support the requirements of one given pair in the
+       vector (i.e. it must be of one of the vendors and meet the version requirements
+       - minVersion, maxVersion, excludeVersions - for that specific vendor).
+   @param ppInfo
+       [out] if the JAVA_HOME environment variable is set and points to a suitable
+       JRE, then then <code>ppInfo</code> contains
+        on return a pointer to its <code>JavaInfo</code> object.
+
+   @return
+   JFW_PLUGIN_E_NONE the function ran successfully.</br>
+   JFW_PLUGIN_E_INVALID_ARG an argument was not valid, for example
+    <code>ppInfo</code> is an invalid pointer.
+   JFW_PLUGIN_E_NO_JRE no suitable JRE could be detected at the given location. However, that
+   does not mean necessarily that there is no JRE. There could be a JRE but it has
+   a vendor which is not supported by this API implementation or it does not
+   meet the version requirements.
+ */
+javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
+    std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
+    JavaInfo ** ppInfo);
+
+
+/** obtains information about installations of Java Runtime Environments (JREs)
+    whose executable is in the PATH.
+
+    <p>The function gathers information about available JREs which are on the PATH
+    (PATH environment variable) and meet the vendor and version requirements given by
+    <code>vecVendorInfos</code> (i.e. they have a vendor that is given in
+    <code>vecVendorInfos</code> and the version requirements for the vendor are met).
+    </p>
+    <p>
+    The JavaInfo structures returned in <code>vecJavaInfosFromPath</code> should be ordered
+    according to their occurrence in the PATH. The one that is the first one on the PATH
+    is also the first element in the vector.</p>
+    <p>
+    The function allocates memory for all the JavaInfo objects returned
+    in <code>vecJavaInfosFromPath</code>. The caller must free each JavaInfo object by calling
+    <code>jfw_freeJavaInfo</code> (#include "jvmfwk/framework.h").
+    </p>
+    @param vecVendorInfos
+       [in] vector specifying the vendor and version requirements that the JRE must fulfill.
+       The vector contains pairs of vendors and the respective version requirements
+       for those vendors. The JRE must support the requirements of one given pair in the
+       vector (i.e. it must be of one of the vendors and meet the version requirements
+       - minVersion, maxVersion, excludeVersions - for that specific vendor).
+    @param vecJavaInfosFromPath
+        [out] if the function runs successfully then <code>vecJavaInfosFromPath</code>
+        contains on return a vector of pointers to <code>JavaInfo</code> objects.
+        On return of this function, <code>vecJavaInfosFromPath</code> references
+        a newly created vector rather than the same vector as before with
+        the <code>JavaInfo</code> objects inserted into the existing vector.
+
+    @return
+    JFW_PLUGIN_E_NONE the function ran successfully and at least one JRE
+    that meets the requirements was found.</br>
+    JFW_PLUGIN_E_NO_JRE no JavaInfo that meets the version criteria was found
+    when inspecting the PATH
+ */
+
+javaPluginError jfw_plugin_getJavaInfosFromPath(
+    std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
+    std::vector<JavaInfo*> & vecJavaInfosFromPath);
 
 /** starts a Java Virtual Machine.
 

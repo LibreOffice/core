@@ -1131,7 +1131,8 @@ void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
     }
 }
 
-void createJavaInfoFromJavaHome(vector<rtl::Reference<VendorBase> >& vecInfos)
+
+rtl::Reference<VendorBase> getJavaInfoFromJavaHome()
 {
     // Get Java from JAVA_HOME environment
 
@@ -1142,11 +1143,28 @@ void createJavaInfoFromJavaHome(vector<rtl::Reference<VendorBase> >& vecInfos)
     char *szJavaHome= getenv("JAVA_HOME");
     if(szJavaHome)
     {
-        OUString sHome(szJavaHome,strlen(szJavaHome),osl_getThreadTextEncoding());
+        OUString sHome(szJavaHome, strlen(szJavaHome), osl_getThreadTextEncoding());
         OUString sHomeUrl;
         if(File::getFileURLFromSystemPath(sHome, sHomeUrl) == File::E_None)
         {
-            getJREInfoByPath(sHomeUrl, vecInfos);
+            return getJREInfoByPath(sHomeUrl);
+        }
+    }
+
+    return NULL;
+}
+
+void createJavaInfoFromJavaHome(vector<rtl::Reference<VendorBase> >& vecInfos)
+{
+    rtl::Reference<VendorBase> aInfo = getJavaInfoFromJavaHome();
+
+    if (aInfo.is())
+    {
+        vector<rtl::Reference<VendorBase> >::const_iterator it_impl= std::find_if(
+            vecInfos.begin(),vecInfos.end(), InfoFindSame(aInfo->getHome()));
+        if(it_impl == vecInfos.end())
+        {
+            vecInfos.push_back(aInfo);
         }
     }
 }

@@ -39,6 +39,12 @@ bool getJREInfoFromBinPath(
     const OUString& path, std::vector<rtl::Reference<VendorBase> > & vecInfos);
 inline OUString getDirFromFile(const OUString& usFilePath);
 void createJavaInfoFromPath(std::vector<rtl::Reference<VendorBase> >& vecInfos);
+
+/* Returns a VendorBase object if JAVA_HOME environment variable points
+   to a JRE.
+ */
+rtl::Reference<VendorBase> getJavaInfoFromJavaHome();
+
 void createJavaInfoFromJavaHome(std::vector<rtl::Reference<VendorBase> > &vecInfos);
 void createJavaInfoDirScan(std::vector<rtl::Reference<VendorBase> >& vecInfos);
 #ifdef WNT
