@@ -185,7 +185,7 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const com::sun::star::
         }
     }
 
-    if (newBreak || !icuBI->aICUText.equals(rText))
+    if (newBreak || icuBI->aICUText.pData != rText.pData)
     {
         // UChar != sal_Unicode in MinGW
         const UChar *pText = reinterpret_cast<const UChar *>(rText.getStr());
