@@ -931,10 +931,10 @@ protected:
     */
     virtual void            onDisconnectedValidator( );
 
-    /** nFieldType ist der Typ des Feldes, an das das Model gebunden werden soll.
-        Das Binden erfolgt genau dann, wenn Rueckgabewert sal_True.
-        Die Standard-Implementation erlaubt alles ausser den drei binary-Typen und
-        FieldType_OTHER.
+    /** nFieldType is the type of the field, on which the model will be linked.
+        The linking happens when sal_True is returned.
+        The default-implementation allows everything but the three binary types
+        and FieldType_OTHER.
     */
     virtual bool        approveDbColumnType(sal_Int32 _nColumnType);
 
@@ -1009,7 +1009,7 @@ public:
     }
 
 public:
-    // UNO Anbindung
+    // UNO link
     DECLARE_UNO3_AGG_DEFAULTS(OBoundControlModel, OControlModel)
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
