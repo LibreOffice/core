@@ -2180,6 +2180,12 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     }
 }
 
+const BitmapEx StyleSettings::GetPersonaFooter() const
+{
+    setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->maPersonaFooterBitmap, mpData->maPersonaMenuBarTextColor );
+    return mpData->maPersonaHeaderBitmap;
+}
+
 const BitmapEx StyleSettings::GetPersonaHeader() const
 {
     setupPersonaHeaderFooter( PERSONA_HEADER, mpData->maPersonaHeaderFooter, mpData->maPersonaHeaderBitmap, mpData->maPersonaMenuBarTextColor );
