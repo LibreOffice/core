@@ -153,7 +153,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCbShowDescription->Check( bCheck );
 
-        if( aState != SFX_ITEM_DEFAULT && aState != SFX_ITEM_SET)
+        if( aState != SFX_ITEM_DEFAULT && aState != SFX_ITEM_SET )
             m_pCbShowDescription->Hide();
     }
 
@@ -201,7 +201,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCbTextOverlap->Check( bCheck );
 
-        if( aState != SFX_ITEM_DEFAULT )
+        if( aState != SFX_ITEM_DEFAULT && aState != SFX_ITEM_SET )
             m_pCbTextOverlap->Hide();
     }
 
@@ -220,7 +220,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet* rInAttrs )
             bCheck = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCbTextBreak->Check( bCheck );
 
-        if( aState != SFX_ITEM_DEFAULT )
+        if( aState != SFX_ITEM_DEFAULT && aState != SFX_ITEM_SET )
         {
             m_pCbTextBreak->Hide();
             if( ! m_pCbTextOverlap->IsVisible() )
