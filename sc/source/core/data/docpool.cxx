@@ -702,7 +702,7 @@ static bool lcl_HFPresentation
     const SfxItemSet& rSet = ((const SfxSetItem&)rItem).GetItemSet();
     const SfxPoolItem* pItem;
 
-    if ( SFX_ITEM_SET == rSet.GetItemState(ATTR_PAGE_ON,false,&pItem) )
+    if ( SfxItemState::SET == rSet.GetItemState(ATTR_PAGE_ON,false,&pItem) )
     {
         if( false == ((const SfxBoolItem*)pItem)->GetValue() )
             return false;

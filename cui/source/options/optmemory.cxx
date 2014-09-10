@@ -240,9 +240,9 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet* rSet )
              get())));
 
     SfxItemState eState = rSet->GetItemState( SID_ATTR_QUICKLAUNCHER, false, &pItem );
-    if ( SFX_ITEM_SET == eState )
+    if ( SfxItemState::SET == eState )
         m_pQuickLaunchCB->Check( ( (SfxBoolItem*)pItem )->GetValue() );
-    else if ( SFX_ITEM_DISABLED == eState )
+    else if ( SfxItemState::DISABLED == eState )
     {
         // quickstart not installed
         m_pQuickStarterFrame->Hide();

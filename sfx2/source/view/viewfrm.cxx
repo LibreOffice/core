@@ -2259,7 +2259,7 @@ void SfxViewFrame::ExecView_Impl
         {
             const SfxPoolItem *pItem = 0;
             if  (   rReq.GetArgs()
-                &&  SFX_ITEM_SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, false, &pItem )
+                &&  SfxItemState::SET == rReq.GetArgs()->GetItemState( SID_VIEWSHELL, false, &pItem )
                 )
             {
                 const sal_uInt16 nViewId = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
@@ -3185,7 +3185,7 @@ void SfxViewFrame::ChildWindowState( SfxItemSet& rState )
         {
             const SfxPoolItem* pDummy = NULL;
             SfxItemState eState = GetDispatcher()->QueryState( SID_HYPERLINK_SETLINK, pDummy );
-            if ( SFX_ITEM_DISABLED == eState )
+            if ( SfxItemState::DISABLED == eState )
                 rState.DisableItem(nSID);
             else
             {

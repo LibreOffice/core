@@ -535,7 +535,7 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
         const SfxPoolItem* pItem=NULL;
-        if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SFX_ITEM_SET)
+        if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
         {
 
             UpdateNumberFormatter((const SvxNumberInfoItem&)*pItem);
@@ -744,7 +744,7 @@ void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
     switch (nSlotId)
     {
         case SID_GRID_VISIBLE:
-            if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SFX_ITEM_SET )
+            if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SfxItemState::SET )
             {
                 aGridOptions.SetGridVisible( ((const SfxBoolItem*)pItem)->GetValue() );
                 aViewOptions.SetGridOptions(aGridOptions);
@@ -753,7 +753,7 @@ void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
             break;
 
         case SID_GRID_USE:
-            if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SFX_ITEM_SET )
+            if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SfxItemState::SET )
             {
                 aGridOptions.SetUseGridSnap( ((const SfxBoolItem*)pItem)->GetValue() );
                 aViewOptions.SetGridOptions(aGridOptions);
@@ -762,7 +762,7 @@ void ScTabViewShell::ExecDrawOpt( SfxRequest& rReq )
             break;
 
         case SID_HELPLINES_MOVE:
-            if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SFX_ITEM_SET )
+            if ( pArgs && pArgs->GetItemState(nSlotId,true,&pItem) == SfxItemState::SET )
             {
                 aViewOptions.SetOption( VOPT_HELPLINES, ((const SfxBoolItem*)pItem)->GetValue() );
                 rBindings.Invalidate(SID_HELPLINES_MOVE);

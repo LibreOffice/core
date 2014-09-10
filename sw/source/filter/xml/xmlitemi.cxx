@@ -163,7 +163,7 @@ bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
         case MID_FRMSIZE_COL_WIDTH:
             // If the item is existing already, a relative value has been set
             // already that must be preserved.
-            if( SFX_ITEM_SET != rItemSet.GetItemState( RES_FRM_SIZE,
+            if( SfxItemState::SET != rItemSet.GetItemState( RES_FRM_SIZE,
                                                        false ) )
                 bRet = SvXMLImportItemMapper::PutXMLValue(
                     rItem, rValue, nMemberId, rUnitConv );
@@ -217,13 +217,13 @@ void SwXMLImportTableItemMapper_Impl::finished(
                 rSet.GetItemState(Ids[i][0], true, &pItem);
 
             // if not set, try the pool
-            if ((SFX_ITEM_SET != eState) && (SFX_WHICH_MAX > Ids[i][0]))
+            if ((SfxItemState::SET != eState) && (SFX_WHICH_MAX > Ids[i][0]))
             {
                 pItem = &rSet.GetPool()->GetDefaultItem(Ids[i][0]);
             }
 
             // do we have an item?
-            if (eState >= SFX_ITEM_DEFAULT && pItem)
+            if (eState >= SfxItemState::DEFAULT && pItem)
             {
                 SfxPoolItem *const pNewItem = pItem->Clone();
                 bool const bPut = PutXMLValue(
@@ -301,7 +301,7 @@ SvXMLImportContext *SwXMLItemSetContext_Impl::CreateChildContext(
     case RES_BACKGROUND:
         {
             const SfxPoolItem *pItem;
-            if( SFX_ITEM_SET == _rItemSet.GetItemState( RES_BACKGROUND,
+            if( SfxItemState::SET == _rItemSet.GetItemState( RES_BACKGROUND,
                                                        false, &pItem ) )
             {
                 pContext = new SwXMLBrushItemImportContext(

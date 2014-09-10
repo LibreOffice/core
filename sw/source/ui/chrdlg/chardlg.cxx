@@ -152,7 +152,7 @@ SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
 
     const SfxPoolItem* pItem;
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
+    if(SfxItemState::SET == rCoreSet.GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != ( pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
     {
@@ -191,7 +191,7 @@ SwCharURLPage::~SwCharURLPage()
 void SwCharURLPage::Reset(const SfxItemSet* rSet)
 {
     const SfxPoolItem* pItem;
-    if ( SFX_ITEM_SET == rSet->GetItemState( RES_TXTATR_INETFMT, false, &pItem ) )
+    if ( SfxItemState::SET == rSet->GetItemState( RES_TXTATR_INETFMT, false, &pItem ) )
     {
         const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*) pItem;
         m_pURLED->SetText(INetURLObject::decode(pINetFmt->GetValue(),
@@ -225,7 +225,7 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
         if( pINetFmt->GetMacroTbl() )
             pINetItem->SetMacroTable( *pINetFmt->GetMacroTbl() );
     }
-    if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_SELECTION, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_SELECTION, false, &pItem))
     {
         m_pTextED->SetText(((const SfxStringItem*)pItem)->GetValue());
         m_pTextFT->Enable( false );

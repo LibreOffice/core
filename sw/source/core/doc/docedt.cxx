@@ -357,11 +357,11 @@ void sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 if( ( pTxtNd = aIdx.GetNode().GetTxtNode())->HasSwAttrSet() )
                 {
                     const SfxPoolItem* pItem;
-                    if( SFX_ITEM_SET == pTxtNd->GetpSwAttrSet()->GetItemState(
+                    if( SfxItemState::SET == pTxtNd->GetpSwAttrSet()->GetItemState(
                         RES_BREAK, false, &pItem ) )
                         pTxtNd->ResetAttr( RES_BREAK );
                     if( pTxtNd->HasSwAttrSet() &&
-                        SFX_ITEM_SET == pTxtNd->GetpSwAttrSet()->GetItemState(
+                        SfxItemState::SET == pTxtNd->GetpSwAttrSet()->GetItemState(
                         RES_PAGEDESC, false, &pItem ) )
                         pTxtNd->ResetAttr( RES_PAGEDESC );
                 }
@@ -372,10 +372,10 @@ void sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                     const SfxPoolItem* pItem;
                     SfxItemSet aSet( pDoc->GetAttrPool(), aBreakSetRange );
                     const SfxItemSet* pSet = pOldTxtNd->GetpSwAttrSet();
-                    if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK,
+                    if( SfxItemState::SET == pSet->GetItemState( RES_BREAK,
                         false, &pItem ) )
                         aSet.Put( *pItem );
-                    if( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,
+                    if( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC,
                         false, &pItem ) )
                         aSet.Put( *pItem );
                     if( aSet.Count() )

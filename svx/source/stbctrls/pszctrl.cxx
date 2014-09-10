@@ -235,7 +235,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
     if ( nSID == SID_PSZ_FUNCTION )
     {
-        if ( eState == SFX_ITEM_DEFAULT )
+        if ( eState == SfxItemState::DEFAULT )
         {
             pImp->bHasMenu = true;
             if ( pState && pState->ISA(SfxUInt16Item) )
@@ -244,7 +244,7 @@ void SvxPosSizeStatusBarControl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         else
             pImp->bHasMenu = false;
     }
-    else if ( SFX_ITEM_DEFAULT != eState )
+    else if ( SfxItemState::DEFAULT != eState )
     {
         // don't switch to empty display before an empty state was
         // notified for all display types

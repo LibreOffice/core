@@ -630,9 +630,9 @@ void MoveRow(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
             const SfxItemSet* pSSet = rBox.GetItemSet( i, nS );
 
             if( pSSet ||
-                SFX_ITEM_SET == pTFmt->GetItemState( RES_BOXATR_FORMAT ) ||
-                SFX_ITEM_SET == pTFmt->GetItemState( RES_BOXATR_FORMULA ) ||
-                SFX_ITEM_SET == pTFmt->GetItemState( RES_BOXATR_VALUE ) )
+                SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_FORMAT ) ||
+                SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_FORMULA ) ||
+                SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_VALUE ) )
             {
                 pTFmt = ((SwTableBox*)pT)->ClaimFrmFmt();
                 pTFmt->LockModify();
@@ -674,9 +674,9 @@ void MoveCol(SwDoc* pDoc, const FlatFndBox& rBox, sal_uInt16 nS, sal_uInt16 nT,
             const SfxItemSet* pSSet = rBox.GetItemSet( nS, i );
 
             if( pSSet ||
-                SFX_ITEM_SET == pTFmt->GetItemState( RES_BOXATR_FORMAT ) ||
-                SFX_ITEM_SET == pTFmt->GetItemState( RES_BOXATR_FORMULA ) ||
-                SFX_ITEM_SET == pTFmt->GetItemState( RES_BOXATR_VALUE ) )
+                SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_FORMAT ) ||
+                SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_FORMULA ) ||
+                SfxItemState::SET == pTFmt->GetItemState( RES_BOXATR_VALUE ) )
             {
                 pTFmt = ((SwTableBox*)pT)->ClaimFrmFmt();
                 pTFmt->LockModify();
@@ -895,9 +895,9 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, bool bLastBox)
 
                 // Save the Formula/Format/Value values
                 const SwFrmFmt* pFmt = pBox->GetBox()->GetFrmFmt();
-                if( SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMAT ) ||
-                    SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_FORMULA ) ||
-                    SFX_ITEM_SET == pFmt->GetItemState( RES_BOXATR_VALUE ) )
+                if( SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_FORMAT ) ||
+                    SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_FORMULA ) ||
+                    SfxItemState::SET == pFmt->GetItemState( RES_BOXATR_VALUE ) )
                 {
                     SfxItemSet* pSet = new SfxItemSet( pDoc->GetAttrPool(),
                                     RES_BOXATR_FORMAT, RES_BOXATR_VALUE,

@@ -566,7 +566,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
             bool bLeftToRight = nSlot == SID_ATTR_PARA_LEFT_TO_RIGHT;
 
             const SfxPoolItem* pPoolItem;
-            if( pNewAttrs && SFX_ITEM_SET == pNewAttrs->GetItemState( nSlot, true, &pPoolItem ) )
+            if( pNewAttrs && SfxItemState::SET == pNewAttrs->GetItemState( nSlot, true, &pPoolItem ) )
             {
                 if( !( (SfxBoolItem*)pPoolItem)->GetValue() )
                     bLeftToRight = !bLeftToRight;
@@ -577,7 +577,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                         0 );
 
             sal_uInt16 nAdjust = SVX_ADJUST_LEFT;
-            if( SFX_ITEM_SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
+            if( SfxItemState::SET == aEditAttr.GetItemState(EE_PARA_JUST, true, &pPoolItem ) )
                 nAdjust = ( (SvxAdjustItem*)pPoolItem)->GetEnumValue();
 
             if( bLeftToRight )
@@ -636,7 +636,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_LRSPACE:
             {
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_LRSPACE );
-                if( eState >= SFX_ITEM_DEFAULT )
+                if( eState >= SfxItemState::DEFAULT )
                 {
                     SvxLRSpaceItem aLR = ( (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE ) );
                     aLR.SetWhich(SID_ATTR_PARA_LRSPACE);
@@ -649,7 +649,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_LINESPACE:
             {
                 SfxItemState eState = aEditAttr.GetItemState( EE_PARA_SBL );
-                if( eState >= SFX_ITEM_DEFAULT )
+                if( eState >= SfxItemState::DEFAULT )
                 {
                     SvxLineSpacingItem aLR = ( (const SvxLineSpacingItem&) aEditAttr.Get( EE_PARA_SBL ) );
                     rSet.Put(aLR);
@@ -661,7 +661,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
             case SID_ATTR_PARA_ULSPACE:
                 {
                     SfxItemState eState = aEditAttr.GetItemState( EE_PARA_ULSPACE );
-                    if( eState >= SFX_ITEM_DEFAULT )
+                    if( eState >= SfxItemState::DEFAULT )
                     {
                         SvxULSpaceItem aULSpace = (const SvxULSpaceItem&) aEditAttr.Get( EE_PARA_ULSPACE );
                         aULSpace.SetWhich(SID_ATTR_PARA_ULSPACE);
@@ -839,7 +839,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
         if(nEEWhich == EE_CHAR_KERNING)
         {
             SfxItemState eState = aEditAttr.GetItemState( EE_CHAR_KERNING, true );
-            if ( eState == SFX_ITEM_DONTCARE )
+            if ( eState == SfxItemState::DONTCARE )
             {
                 rSet.InvalidateItem(EE_CHAR_KERNING);
             }
@@ -917,7 +917,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
         {
             sal_uLong nFormat = 0;
             const SfxPoolItem* pItem;
-            if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
+            if ( rReq.GetArgs() && rReq.GetArgs()->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                                     pItem->ISA(SfxUInt32Item) )
             {
                 nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -1455,7 +1455,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     sal_uInt16 nId = rReq.GetSlot();
     sal_uInt16 nCnt = 1;
     const SfxPoolItem* pItem=0;
-    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, false, &pItem ) )
+    if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ) )
         nCnt = ((SfxUInt16Item*)pItem)->GetValue();
     switch( nId )
     {

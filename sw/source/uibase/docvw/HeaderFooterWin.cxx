@@ -439,7 +439,7 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 // Create a box info item... needed by the dialog
                 SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                 const SfxPoolItem *pBoxInfo;
-                if ( SFX_ITEM_SET == pHFFmt->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
+                if ( SfxItemState::SET == pHFFmt->GetAttrSet().GetItemState( SID_ATTR_BORDER_INNER,
                                                         true, &pBoxInfo) )
                     aBoxInfo = *(SvxBoxInfoItem*)pBoxInfo;
 
@@ -453,17 +453,17 @@ void SwHeaderFooterWin::ExecuteCommand( sal_uInt16 nSlot )
                 if ( svx::ShowBorderBackgroundDlg( this, &aSet, true ) )
                 {
                     const SfxPoolItem* pItem;
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {
+                    if ( SfxItemState::SET == aSet.GetItemState( RES_BACKGROUND, false, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
                         rView.GetDocShell()->SetModified(true);
                     }
 
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_BOX, false, &pItem ) ) {
+                    if ( SfxItemState::SET == aSet.GetItemState( RES_BOX, false, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
                         rView.GetDocShell()->SetModified(true);
                     }
 
-                    if ( SFX_ITEM_SET == aSet.GetItemState( RES_SHADOW, false, &pItem ) ) {
+                    if ( SfxItemState::SET == aSet.GetItemState( RES_SHADOW, false, &pItem ) ) {
                         pHFFmt->SetFmtAttr( *pItem );
                         rView.GetDocShell()->SetModified(true);
                     }

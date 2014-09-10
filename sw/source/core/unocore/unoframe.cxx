@@ -1524,7 +1524,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     if ( pFly )
                     {
                         const :: SfxPoolItem* pItem;
-                        if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_ANCHOR, false, &pItem ))
+                        if( SfxItemState::SET == pFrmFmt->GetItemState( RES_ANCHOR, false, &pItem ))
                         {
                             pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrmFmtSetRange );
                             pSet->Put( *pItem );
@@ -1911,7 +1911,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     if (pFly)
                     {
                         const :: SfxPoolItem* pItem;
-                        if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, false, &pItem ))
+                        if( SfxItemState::SET == aSet.GetItemState( RES_ANCHOR, false, &pItem ))
                         {
                             aSet.Put( *pItem );
                             if ( pFmt->GetDoc()->GetEditShell() != NULL )
@@ -2407,8 +2407,8 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
             else if(OWN_ATTR_FILLBMP_MODE == pEntry->nWID)
             {
                 //UUUU
-                if(SFX_ITEM_SET == rFmtSet.GetItemState(XATTR_FILLBMP_STRETCH, false)
-                    || SFX_ITEM_SET == rFmtSet.GetItemState(XATTR_FILLBMP_TILE, false))
+                if(SfxItemState::SET == rFmtSet.GetItemState(XATTR_FILLBMP_STRETCH, false)
+                    || SfxItemState::SET == rFmtSet.GetItemState(XATTR_FILLBMP_TILE, false))
                 {
                     pStates[i] = beans::PropertyState_DIRECT_VALUE;
                 }
@@ -2437,13 +2437,13 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
                         SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                         SfxItemSet aSet(pNoTxt->GetSwAttrSet());
                         aSet.GetItemState(pEntry->nWID);
-                        if(SFX_ITEM_SET == aSet.GetItemState( pEntry->nWID, false ))
+                        if(SfxItemState::SET == aSet.GetItemState( pEntry->nWID, false ))
                             pStates[i] = beans::PropertyState_DIRECT_VALUE;
                     }
                 }
                 else
                 {
-                    if(SFX_ITEM_SET == rFmtSet.GetItemState( pEntry->nWID, false ))
+                    if(SfxItemState::SET == rFmtSet.GetItemState( pEntry->nWID, false ))
                         pStates[i] = beans::PropertyState_DIRECT_VALUE;
                     else
                         pStates[i] = beans::PropertyState_DEFAULT_VALUE;
@@ -2739,7 +2739,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
         const SfxPoolItem* pItem;
         RndStdIds eAnchorId = FLY_AT_PARA;
-        if(SFX_ITEM_SET == aFrmSet.GetItemState(RES_ANCHOR, false, &pItem) )
+        if(SfxItemState::SET == aFrmSet.GetItemState(RES_ANCHOR, false, &pItem) )
         {
             eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
             if( FLY_AT_FLY == eAnchorId &&

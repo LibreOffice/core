@@ -105,12 +105,12 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
     const SfxPoolItem* pItem;
     sal_uInt16 nFamily = USHRT_MAX;
-    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILY,
+    if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILY,
         false, &pItem ))
     {
         nFamily = ( (const SfxUInt16Item &) pArgs->Get( SID_STYLE_FAMILY ) ).GetValue();
     }
-    else if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
+    else if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_STYLE_FAMILYNAME,
         false, &pItem ))
     {
         OUString sFamily = ( (const SfxStringItem &) pArgs->Get( SID_STYLE_FAMILYNAME ) ).GetValue();
@@ -154,7 +154,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 }
             }
 
-            if (pArgs && pArgs->GetItemState(nSId) == SFX_ITEM_SET)
+            if (pArgs && pArgs->GetItemState(nSId) == SfxItemState::SET)
                 aStyleName = ( ( (const SfxStringItem &) pArgs->Get( nSId ) ).GetValue() );
         }
     }
@@ -171,7 +171,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
             }
             pStyleSheet = &pSSPool->Make( aStyleName, (SfxStyleFamily) nFamily, SFXSTYLEBIT_USERDEF );
 
-            if (pArgs && pArgs->GetItemState(SID_STYLE_REFERENCE) == SFX_ITEM_SET)
+            if (pArgs && pArgs->GetItemState(SID_STYLE_REFERENCE) == SfxItemState::SET)
             {
                 OUString aParentName(((const SfxStringItem&) pArgs->Get(SID_STYLE_REFERENCE)).GetValue());
                 pStyleSheet->SetParent(aParentName);
@@ -255,7 +255,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
         {
             if( !SD_MOD()->GetWaterCan() )
             {
-                if (pArgs && pArgs->GetItemState( nSId ) == SFX_ITEM_SET)
+                if (pArgs && pArgs->GetItemState( nSId ) == SfxItemState::SET)
                 {
                     aStyleName = ( ( (const SfxStringItem &) pArgs->Get( nSId ) ).GetValue() );
                     SD_MOD()->SetWaterCan( true );
@@ -410,7 +410,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                             // EE_PARA_NUMBULLET item is only valid in first outline template
                             if( (ePO >= PO_OUTLINE_2) && (ePO <= PO_OUTLINE_9) )
                             {
-                                if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SFX_ITEM_SET)
+                                if (aTempSet.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET)
                                 {
                                     SvxNumRule aRule(*((SvxNumBulletItem*)aTempSet.GetItem(EE_PARA_NUMBULLET))->GetNumRule());
 
@@ -437,7 +437,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         sdr::properties::CleanupFillProperties( rAttr );
 
                         // check for unique names of named items for xml
-                        if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SFX_ITEM_SET )
+                        if( rAttr.GetItemState( XATTR_FILLBITMAP ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLBITMAP );
                             SfxPoolItem* pNewItem = ((XFillBitmapItem*)pOldItem)->checkForUniqueItem( mpDoc );
@@ -447,7 +447,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 delete pNewItem;
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_LINEDASH ) == SFX_ITEM_SET )
+                        if( rAttr.GetItemState( XATTR_LINEDASH ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEDASH );
                             SfxPoolItem* pNewItem = ((XLineDashItem*)pOldItem)->checkForUniqueItem( mpDoc );
@@ -457,7 +457,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 delete pNewItem;
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_LINESTART ) == SFX_ITEM_SET )
+                        if( rAttr.GetItemState( XATTR_LINESTART ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINESTART );
                             SfxPoolItem* pNewItem = ((XLineStartItem*)pOldItem)->checkForUniqueItem( mpDoc );
@@ -467,7 +467,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 delete pNewItem;
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_LINEEND ) == SFX_ITEM_SET )
+                        if( rAttr.GetItemState( XATTR_LINEEND ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_LINEEND );
                             SfxPoolItem* pNewItem = ((XLineEndItem*)pOldItem)->checkForUniqueItem( mpDoc );
@@ -477,7 +477,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 delete pNewItem;
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_FILLGRADIENT ) == SFX_ITEM_SET )
+                        if( rAttr.GetItemState( XATTR_FILLGRADIENT ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLGRADIENT );
                             SfxPoolItem* pNewItem = ((XFillGradientItem*)pOldItem)->checkForUniqueItem( mpDoc );
@@ -487,7 +487,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 delete pNewItem;
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SFX_ITEM_SET )
+                        if( rAttr.GetItemState( XATTR_FILLFLOATTRANSPARENCE ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLFLOATTRANSPARENCE );
                             SfxPoolItem* pNewItem = ((XFillFloatTransparenceItem*)pOldItem)->checkForUniqueItem( mpDoc );
@@ -497,7 +497,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                                 delete pNewItem;
                             }
                         }
-                        if( rAttr.GetItemState( XATTR_FILLHATCH ) == SFX_ITEM_SET )
+                        if( rAttr.GetItemState( XATTR_FILLHATCH ) == SfxItemState::SET )
                         {
                             const SfxPoolItem* pOldItem = rAttr.GetItem( XATTR_FILLHATCH );
                             SfxPoolItem* pNewItem = ((XFillHatchItem*)pOldItem)->checkForUniqueItem( mpDoc );
@@ -543,9 +543,9 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                         if( mpDoc->GetOnlineSpell() )
                         {
                             const SfxPoolItem* pTempItem;
-                            if( SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, false, &pTempItem ) ||
-                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, false, &pTempItem ) ||
-                                SFX_ITEM_SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, false, &pTempItem ) )
+                            if( SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE, false, &pTempItem ) ||
+                                SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CJK, false, &pTempItem ) ||
+                                SfxItemState::SET == rAttr.GetItemState(EE_CHAR_LANGUAGE_CTL, false, &pTempItem ) )
                             {
                                 mpDoc->StopOnlineSpelling();
                                 mpDoc->StartOnlineSpelling();

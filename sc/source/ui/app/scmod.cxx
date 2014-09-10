@@ -394,7 +394,7 @@ void ScModule::Execute( SfxRequest& rReq )
             {
                 bool bSet;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
+                if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
                 else
                 {   // Toggle
@@ -415,7 +415,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_ATTR_METRIC:
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
+                if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( nSlot, true, &pItem ) )
                 {
                     FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
                     switch( eUnit )
@@ -499,7 +499,7 @@ void ScModule::Execute( SfxRequest& rReq )
         case SID_ATTR_CHAR_CTL_LANGUAGE:
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( GetPool().GetWhich(nSlot), true, &pItem ) )
+                if ( pReqArgs && SfxItemState::SET == pReqArgs->GetItemState( GetPool().GetWhich(nSlot), true, &pItem ) )
                 {
                     ScDocShell* pDocSh = PTR_CAST(ScDocShell, SfxObjectShell::Current());
                     if ( pDocSh )

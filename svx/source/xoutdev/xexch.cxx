@@ -64,7 +64,7 @@ SvStream& WriteXFillExchangeData( SvStream& rOStm, const XFillExchangeData& rDat
 
         while( nWhich )
         {
-            if( SFX_ITEM_SET == rData.pXFillAttrSetItem->GetItemSet().GetItemState( nWhich, false, &pItem ) )
+            if( SfxItemState::SET == rData.pXFillAttrSetItem->GetItemSet().GetItemState( nWhich, false, &pItem ) )
             {
                 VersionCompat   aCompat( rOStm, STREAM_WRITE );
                 const sal_uInt16    nItemVersion2 = pItem->GetVersion( (sal_uInt16) rOStm.GetVersion() );

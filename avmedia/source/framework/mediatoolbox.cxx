@@ -108,7 +108,7 @@ void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eSta
 
     DBG_ASSERT( pCtrl, "MediaToolBoxControl::StateChanged: media control not found" );
 
-    if( eState == SFX_ITEM_DISABLED )
+    if( eState == SfxItemState::DISABLED )
     {
         pCtrl->Enable( false, false );
         pCtrl->SetText( OUString() );
@@ -122,7 +122,7 @@ void MediaToolBoxControl::StateChanged( sal_uInt16 /* nSID */, SfxItemState eSta
 
         const MediaItem* pMediaItem = PTR_CAST( MediaItem, pState );
 
-        if( pMediaItem && ( SFX_ITEM_DEFAULT == eState ) )
+        if( pMediaItem && ( SfxItemState::DEFAULT == eState ) )
             pCtrl->setState( *pMediaItem );
     }
 }

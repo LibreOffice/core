@@ -261,10 +261,10 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
         pISet = &rSet;                  // fuer Doppel-Attribute
 
         // If frame dir is set, but not adjust, then force adjust as well
-        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, bExportParentItemSet ) )
+        if ( bPapFmt && SfxItemState::SET == rSet.GetItemState( RES_FRAMEDIR, bExportParentItemSet ) )
         {
             // No explicit adjust set ?
-            if ( SFX_ITEM_SET != rSet.GetItemState( RES_PARATR_ADJUST, bExportParentItemSet ) )
+            if ( SfxItemState::SET != rSet.GetItemState( RES_PARATR_ADJUST, bExportParentItemSet ) )
             {
                 if ( 0 != ( pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet ) ) )
                 {
@@ -274,14 +274,14 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool
             }
         }
 
-        if ( bPapFmt && SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, bExportParentItemSet, &pItem ) )
+        if ( bPapFmt && SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE, bExportParentItemSet, &pItem ) )
         {
             AttrOutput().OutputItem( *pItem );
 
             // switch off the numerbering?
             if ( ( (SwNumRuleItem*)pItem )->GetValue().isEmpty() &&
-                 SFX_ITEM_SET != rSet.GetItemState( RES_LR_SPACE, false) &&
-                 SFX_ITEM_SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
+                 SfxItemState::SET != rSet.GetItemState( RES_LR_SPACE, false) &&
+                 SfxItemState::SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
             {
                 // the set the LR-Space of the parentformat!
                 AttrOutput().OutputItem( *pItem );
@@ -455,7 +455,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     if ( pSet && pSet->Count() )
     {
-        if ( SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) &&
+        if ( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) &&
              static_cast<const SwFmtPageDesc*>(pItem)->GetRegisteredIn() != NULL)
         {
             bBreakSet = true;
@@ -463,7 +463,7 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
             pPgDesc = static_cast<const SwFmtPageDesc*>(pItem);
             pAktPageDesc = pPgDesc->GetPageDesc();
         }
-        else if ( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
+        else if ( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
         {
             // Word does not like hard break attributes in some table cells
             bool bRemoveHardBreakInsideTable = false;
@@ -732,7 +732,7 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFmt &rFmt)
     //numbered, then in writer this is no inheritied, but in word it would
     //be, so we must export "no numbering" and "body level" to make word
     //behave like writer (see #i25755)
-    if (SFX_ITEM_SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
+    if (SfxItemState::SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
     {
         if (const SwFmt *pParent = rFmt.DerivedFrom())
         {
@@ -847,7 +847,7 @@ void MSWordExportBase::OutputFormat( const SwFmt& rFmt, bool bPapFmt, bool bChpF
                     aSet.Put(aAnchor);
                 }
 
-                if (SFX_ITEM_SET != aSet.GetItemState(RES_SURROUND))
+                if (SfxItemState::SET != aSet.GetItemState(RES_SURROUND))
                     aSet.Put(SwFmtSurround(SURROUND_NONE));
 
                 const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rFrmFmt.GetAttrSet().GetItem(XATTR_FILLSTYLE)));
@@ -3708,7 +3708,7 @@ void AttributeOutputBase::FormatPageDescription( const SwFmtPageDesc& rPageDesc 
     if ( GetExport().bStyDef && GetExport().pOutFmtNode && GetExport().pOutFmtNode->ISA( SwTxtFmtColl ) )
     {
         const SwTxtFmtColl* pC = (SwTxtFmtColl*)GetExport().pOutFmtNode;
-        if ( (SFX_ITEM_SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
+        if ( (SfxItemState::SET != pC->GetItemState( RES_BREAK, false ) ) && rPageDesc.KnowsPageDesc() )
             FormatBreak( SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE, RES_BREAK ) );
     }
 }
@@ -5520,7 +5520,7 @@ void AttributeOutputBase::OutputStyleItemSet( const SfxItemSet& rSet, bool bDeep
         sal_uInt16 nWhich = aIter.FirstWhich();
         while ( nWhich )
         {
-            if ( SFX_ITEM_SET == pSet->GetItemState( nWhich, bDeep, &pItem ) &&
+            if ( SfxItemState::SET == pSet->GetItemState( nWhich, bDeep, &pItem ) &&
                  ( !bTestForDefault ||
                    *pItem != rPool.GetDefaultItem( nWhich ) ||
                    ( pSet->GetParent() && *pItem != pSet->GetParent()->Get( nWhich ) ) ) )

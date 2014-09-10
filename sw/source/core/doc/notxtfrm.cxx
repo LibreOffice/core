@@ -618,7 +618,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         {
             sal_uInt16 n;
             for( n = RES_GRFATR_BEGIN; n < RES_GRFATR_END; ++n )
-                if( SFX_ITEM_SET == ((SwAttrSetChg*)pOld)->GetChgSet()->
+                if( SfxItemState::SET == ((SwAttrSetChg*)pOld)->GetChgSet()->
                                 GetItemState( n, false ))
                 {
                     CLEARCACHE( (SwGrfNode*) GetNode() )

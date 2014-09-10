@@ -647,7 +647,7 @@ const SfxPoolItem* MSWordExportBase::HasItem( sal_uInt16 nWhich ) const
         // ourer own Ids. So the Id have to translate from our into the
         // EditEngine Range
         nWhich = sw::hack::GetSetWhichFromSwDocWhich(*pISet, *pDoc, nWhich);
-        if (nWhich && SFX_ITEM_SET != pISet->GetItemState(nWhich, true, &pItem))
+        if (nWhich && SfxItemState::SET != pISet->GetItemState(nWhich, true, &pItem))
             pItem = 0;
     }
     else if( pChpIter )
@@ -1994,7 +1994,7 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
                 ((SwTxtNode*)pCNd)->GetAttr( aCoreSet, 0, ((SwTxtNode*)pCNd)->GetTxt().getLength());
                 const SvxCharRotateItem * pRotate = NULL;
                 const SfxPoolItem * pRotItem;
-                if ( SFX_ITEM_SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, true, &pRotItem))
+                if ( SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, true, &pRotItem))
                 {
                     pRotate = (SvxCharRotateItem*)pRotItem;
                     if(pRotate && pRotate->GetValue() == 900)
@@ -2473,7 +2473,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
         const SfxPoolItem * pI = NULL;
         Color aColor;
 
-        if ( SFX_ITEM_SET == pFrmFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
+        if ( SfxItemState::SET == pFrmFmt->GetAttrSet().GetItemState( RES_BACKGROUND, false, &pI ) )
         {
             aColor = dynamic_cast<const SvxBrushItem *>(pI)->GetColor();
         }
@@ -2505,7 +2505,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
             const SfxPoolItem * pI = NULL;
             Color aColor;
 
-                if ( SFX_ITEM_SET ==
+                if ( SfxItemState::SET ==
                          pFrmFmt->GetAttrSet().
                          GetItemState( RES_BACKGROUND, false, &pI ) )
             {
@@ -2592,7 +2592,7 @@ void MSWordExportBase::WriteText()
                     if ( pTempNext )
                     {
                         const SfxPoolItem * pTempItem = NULL;
-                        if (pTempNext->GetpSwAttrSet() && SFX_ITEM_SET == pTempNext->GetpSwAttrSet()->GetItemState(RES_PAGEDESC, false, &pTempItem)
+                        if (pTempNext->GetpSwAttrSet() && SfxItemState::SET == pTempNext->GetpSwAttrSet()->GetItemState(RES_PAGEDESC, false, &pTempItem)
                             && pTempItem && ((SwFmtPageDesc*)pTempItem)->GetRegisteredIn())
                         {
                             //Next node has a new page style which means this node is a section end. Do not insert another page/section break here
@@ -3219,7 +3219,7 @@ void WW8Export::ExportDocument_Impl()
     const SfxPoolItem* pItem;
     SwTxtFmtColl* pStdTxtFmtColl =
         pDoc->getIDocumentStylePoolAccess().GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false);
-    if (pStdTxtFmtColl && SFX_ITEM_SET == pStdTxtFmtColl->GetItemState(
+    if (pStdTxtFmtColl && SfxItemState::SET == pStdTxtFmtColl->GetItemState(
         RES_PARATR_HYPHENZONE, false, &pItem))
     {
         pDop->fAutoHyphen = ((const SvxHyphenZoneItem*)pItem)->IsHyphen();

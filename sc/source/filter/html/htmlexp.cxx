@@ -1179,7 +1179,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
         ESelection aSel( 0, 0, nParas-1, rEngine.GetTextLen( nParas-1 ) );
         SfxItemSet aSet( rEngine.GetAttribs( aSel ) );
         SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
-        if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
+        if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
             bFields = true;
     }
     if ( bFields )
@@ -1203,7 +1203,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
                 {
                     const SfxPoolItem* pItem;
                     SfxItemSet aSet = rEngine.GetAttribs( aSel );
-                    if ( aSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SFX_ITEM_SET )
+                    if ( aSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
                     {
                         const SvxFieldData* pField = ((const SvxFieldItem*)pItem)->GetField();
                         if ( pField && pField->ISA(SvxURLField) )

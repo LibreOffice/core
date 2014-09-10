@@ -169,7 +169,7 @@ public:
 
     void    SetShrinkScale( long nScale, sal_uInt8 nScript );
 
-    bool    HasCondHeight() const   { return pCondSet && SFX_ITEM_SET ==
+    bool    HasCondHeight() const   { return pCondSet && SfxItemState::SET ==
                                         pCondSet->GetItemState( ATTR_FONT_HEIGHT, true ); }
 
     bool    HasEditCharacters() const;
@@ -450,10 +450,10 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
 
     sal_uLong nOld = nValueFormat;
     const SfxPoolItem* pFormItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SFX_ITEM_SET )
+    if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SfxItemState::SET )
         pFormItem = &pPattern->GetItem(ATTR_VALUE_FORMAT);
     const SfxPoolItem* pLangItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SFX_ITEM_SET )
+    if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SfxItemState::SET )
         pLangItem = &pPattern->GetItem(ATTR_LANGUAGE_FORMAT);
     nValueFormat = pOutput->mpDoc->GetFormatTable()->GetFormatForLanguageIfBuiltIn(
                     ((SfxUInt32Item*)pFormItem)->GetValue(),
@@ -1617,11 +1617,11 @@ void ScOutputData::DrawStrings( bool bPixelToLogic )
                         else if ( SfxItemSet* pFontSet = mpDoc->GetPreviewFont( nCellX, nCellY, nTab ) )
                         {
                             const SfxPoolItem* pItem;
-                            if ( pFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SFX_ITEM_SET )
+                            if ( pFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
                                 pAltPattern->GetItemSet().Put( (const SvxFontItem&)*pItem );
-                            if ( pFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SFX_ITEM_SET )
+                            if ( pFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SfxItemState::SET )
                                 pAltPattern->GetItemSet().Put( (const SvxFontItem&)*pItem );
-                            if ( pFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SFX_ITEM_SET )
+                            if ( pFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SfxItemState::SET )
                                 pAltPattern->GetItemSet().Put( (const SvxFontItem&)*pItem );
                         }
                         pPattern = pAltPattern;
@@ -2379,19 +2379,19 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
     if ( mpPreviewFontSet )
     {
         const SfxPoolItem* pItem;
-        if ( mpPreviewFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SFX_ITEM_SET )
+        if ( mpPreviewFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
         {
             SvxFontItem aFontItem(EE_CHAR_FONTINFO);
             aFontItem = (const SvxFontItem&)*pItem;
             pSet->Put( aFontItem );
         }
-        if ( mpPreviewFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SFX_ITEM_SET )
+        if ( mpPreviewFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SfxItemState::SET )
         {
             SvxFontItem aCjkFontItem(EE_CHAR_FONTINFO_CJK);
             aCjkFontItem = (const SvxFontItem&)*pItem;
             pSet->Put( aCjkFontItem );
         }
-        if ( mpPreviewFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SFX_ITEM_SET )
+        if ( mpPreviewFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SfxItemState::SET )
         {
             SvxFontItem aCtlFontItem(EE_CHAR_FONTINFO_CTL);
             aCtlFontItem = (const SvxFontItem&)*pItem;
@@ -2986,7 +2986,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
         //! Allow clipping when vertically merged?
         if ( eType != OUTTYPE_PRINTER ||
             ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
+            ( rParam.mpCondSet && SfxItemState::SET ==
                 rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
             bClip = true;
         else
@@ -3200,7 +3200,7 @@ bool ScOutputData::Clip( DrawEditParam& rParam, const Size& aCellSize,
         //! Allow clipping when vertically merged?
         if ( eType != OUTTYPE_PRINTER ||
             ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
+            ( rParam.mpCondSet && SfxItemState::SET ==
                 rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
             bClip = true;
         else
@@ -3962,7 +3962,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
         //! Allow clipping when vertically merged?
         if ( eType != OUTTYPE_PRINTER ||
             ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
+            ( rParam.mpCondSet && SfxItemState::SET ==
                 rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
             bClip = true;
         else
@@ -4310,7 +4310,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
         //! Allow clipping when vertically merged?
         if ( eType != OUTTYPE_PRINTER ||
             ( mpDoc->GetRowFlags( rParam.mnCellY, nTab ) & CR_MANUALSIZE ) ||
-            ( rParam.mpCondSet && SFX_ITEM_SET ==
+            ( rParam.mpCondSet && SfxItemState::SET ==
                 rParam.mpCondSet->GetItemState(ATTR_FONT_HEIGHT, true) ) )
             bClip = true;
         else

@@ -85,14 +85,14 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
     {
         SfxPoolItem *pItem=NULL;
         sal_uInt16 nId = pCache->GetId();
-        SfxItemState eState = SFX_ITEM_DISABLED;
+        SfxItemState eState = SfxItemState::DISABLED;
         if ( !aStatus.IsEnabled )
         {
             // default
         }
         else if (aStatus.State.hasValue())
         {
-            eState = SFX_ITEM_DEFAULT;
+            eState = SfxItemState::DEFAULT;
             ::com::sun::star::uno::Any aAny = aStatus.State;
 
             ::com::sun::star::uno::Type pType = aAny.getValueType();
@@ -137,7 +137,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         {
             // DONTCARE status
             pItem = new SfxVoidItem(0);
-            eState = SFX_ITEM_UNKNOWN;
+            eState = SfxItemState::UNKNOWN;
         }
 
         for ( SfxControllerItem *pCtrl = pCache->GetItemLink();
@@ -184,7 +184,7 @@ SfxStateCache::SfxStateCache( sal_uInt16 nFuncId ):
     pInternalController(0),
     pController(0),
     pLastItem( 0 ),
-    eLastState( SFX_ITEM_UNKNOWN ),
+    eLastState( SfxItemState::UNKNOWN ),
     bItemVisible( true )
 {
     bCtrlDirty = true;
@@ -343,7 +343,7 @@ void SfxStateCache::SetState
 
 void SfxStateCache::SetVisibleState( bool bShow )
 {
-    SfxItemState        eState( SFX_ITEM_DEFAULT );
+    SfxItemState        eState( SfxItemState::DEFAULT );
     const SfxPoolItem*  pState( NULL );
     bool            bDeleteItem( false );
 

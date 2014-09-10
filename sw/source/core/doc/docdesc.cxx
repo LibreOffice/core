@@ -169,7 +169,7 @@ static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                     // All in aIdArr except from RES_HEADER_FOOTER_EAT_SPACING
                     case RES_HEADER_FOOTER_EAT_SPACING:
                     //UUUU take out SvxBrushItem; it's the result of the fallback
-                    // at SwFmt::GetItemState and not really in state SFX_ITEM_SET
+                    // at SwFmt::GetItemState and not really in state SfxItemState::SET
                     case RES_BACKGROUND:
                         bExecuteId = false;
                         break;
@@ -194,7 +194,7 @@ static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
 
             if(bExecuteId)
             {
-                if (SFX_ITEM_SET == rSource.GetItemState(nId, false, &pItem))
+                if (SfxItemState::SET == rSource.GetItemState(nId, false, &pItem))
                 {
                     rDest.SetFmtAttr(*pItem);
                 }

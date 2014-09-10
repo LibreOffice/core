@@ -156,7 +156,7 @@ sal_uInt16 getTransparenceForSvxBrushItem(const SfxItemSet& rSourceSet, bool bSe
     sal_uInt16 nFillTransparence(static_cast< const XFillTransparenceItem& >(rSourceSet.Get(XATTR_FILLTRANSPARENCE, bSearchInParents)).GetValue());
     const SfxPoolItem* pGradientItem = 0;
 
-    if(SFX_ITEM_SET == rSourceSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, bSearchInParents, &pGradientItem)
+    if(SfxItemState::SET == rSourceSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, bSearchInParents, &pGradientItem)
         && static_cast< const XFillFloatTransparenceItem* >(pGradientItem)->IsEnabled())
     {
         const XGradient& rGradient = static_cast< const XFillFloatTransparenceItem* >(pGradientItem)->GetGradientValue();

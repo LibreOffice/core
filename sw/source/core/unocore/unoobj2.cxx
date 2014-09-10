@@ -330,7 +330,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
         pDoc->getIDocumentContentOperations().InsertItemSet( rPam, rSet, nFlags );
     }
 
-    if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SFX_ITEM_DEFAULT )
+    if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SfxItemState::DEFAULT )
     {
         SwTxtNode * pTmpNode = rPam.GetNode().GetTxtNode();
         if ( pTmpNode )
@@ -1108,7 +1108,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode *const pSttNode,
     bool bRet = false;
     const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
     const SfxPoolItem* pItem;
-    if (SFX_ITEM_SET == rSet.GetItemState(
+    if (SfxItemState::SET == rSet.GetItemState(
             static_cast<sal_uInt16>(bHeader ? RES_HEADER : RES_FOOTER),
             true, &pItem))
     {

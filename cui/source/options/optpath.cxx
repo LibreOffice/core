@@ -95,7 +95,7 @@ struct PathUserData_Impl
     OUString        sWritablePath;
 
     PathUserData_Impl( sal_uInt16 nId ) :
-        nRealId( nId ), eState( SFX_ITEM_UNKNOWN ) {}
+        nRealId( nId ), eState( SfxItemState::UNKNOWN ) {}
 };
 
 struct Handle2CfgNameMapping_Impl
@@ -269,7 +269,7 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
     {
         PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(i)->GetUserData();
         sal_uInt16 nRealId = pPathImpl->nRealId;
-        if ( pPathImpl->eState == SFX_ITEM_SET )
+        if ( pPathImpl->eState == SfxItemState::SET )
             SetPathList( nRealId, pPathImpl->sUserPath, pPathImpl->sWritablePath );
     }
     return true;
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
             sWritablePath = sTemp.getToken( nOldCount - 1, MULTIPATH_DELIMITER );
 
             pPathBox->SetEntryText( Convert_Impl( sTemp ), pEntry, 1 );
-            pPathImpl->eState = SFX_ITEM_SET;
+            pPathImpl->eState = SfxItemState::SET;
             pPathImpl->sUserPath = sUserPath;
             pPathImpl->sWritablePath = sWritablePath;
         }
@@ -503,7 +503,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
         pPathBox->SetEntryText( Convert_Impl( sNewPathStr ), pEntry, 1 );
         nPos = (sal_uInt16)pPathBox->GetModel()->GetAbsPos( pEntry );
         pPathImpl = (PathUserData_Impl*)pPathBox->GetEntry(nPos)->GetUserData();
-        pPathImpl->eState = SFX_ITEM_SET;
+        pPathImpl->eState = SfxItemState::SET;
         pPathImpl->sWritablePath = sNewPathStr;
         if ( SvtPathOptions::PATH_WORK == pPathImpl->nRealId )
         {
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
                 pPathBox->SetEntryText( Convert_Impl( sFullPath ), pEntry, 1 );
                 // save modified flag
                 PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
-                pPathImpl->eState = SFX_ITEM_SET;
+                pPathImpl->eState = SfxItemState::SET;
                 pPathImpl->sUserPath = sUser;
                 pPathImpl->sWritablePath = sWritable;
             }

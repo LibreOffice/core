@@ -140,7 +140,7 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
 void SwUndoFmtAttr::Init()
 {
     // treat change of anchor specially
-    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, false ))
+    if ( SfxItemState::SET == m_pOldSet->GetItemState( RES_ANCHOR, false ))
     {
         SaveFlyAnchor( m_bSaveDrawPt );
     }
@@ -188,7 +188,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
     // restored, all other attributes are also restored.
     // Thus, keep track of its restoration
     bool bAnchorAttrRestored( false );
-    if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, false ))
+    if ( SfxItemState::SET == m_pOldSet->GetItemState( RES_ANCHOR, false ))
     {
         bAnchorAttrRestored = RestoreFlyAnchor(rContext);
         if ( bAnchorAttrRestored )
@@ -359,7 +359,7 @@ void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
             if( pFly )
             {
                 // Bug 43672: do not set all attributes!
-                if (SFX_ITEM_SET ==
+                if (SfxItemState::SET ==
                         m_pFmt->GetAttrSet().GetItemState( RES_CNTNT ))
                 {
                     SfxItemSet aTmpSet( m_pFmt->GetAttrSet() );
@@ -592,7 +592,7 @@ SwUndoFmtResetAttr::SwUndoFmtResetAttr( SwFmt& rChangedFormat,
     , m_pOldItem( 0 )
 {
     const SfxPoolItem* pItem = 0;
-    if (rChangedFormat.GetItemState( nWhichId, false, &pItem ) == SFX_ITEM_SET)
+    if (rChangedFormat.GetItemState( nWhichId, false, &pItem ) == SfxItemState::SET)
     {
         m_pOldItem.reset( pItem->Clone() );
     }
@@ -842,7 +842,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 void SwUndoAttr::RepeatImpl(::sw::RepeatContext & rContext)
 {
     // RefMarks are not repeat capable
-    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, false ) )
+    if ( SfxItemState::SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, false ) )
     {
         rContext.GetDoc().getIDocumentContentOperations().InsertItemSet( rContext.GetRepeatPaM(),
                                            m_AttrSet, m_nInsertFlags );
@@ -894,7 +894,7 @@ void SwUndoAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
 {
-    if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_FTN, false ))
+    if ( SfxItemState::SET != m_AttrSet.GetItemState( RES_TXTATR_FTN, false ))
         return ;
 
     SwHistoryHint* pHstHnt;
@@ -967,7 +967,7 @@ SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet )
     , m_pTabStop( 0 )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) )
     {
         // store separately, because it may change!
         m_pTabStop.reset( static_cast<SvxTabStopItem*>(pItem->Clone()) );

@@ -1886,7 +1886,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 const SfxItemSet& rAttrSet = pPattern->GetItemSet();
                 const SfxPoolItem* pItem;
 
-                if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) )
+                if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALUE_FORMAT, true, &pItem ) )
                 {
                     sal_uLong nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
                     bCellHasPercentFormat = ( NUMBERFORMAT_PERCENT ==
@@ -1896,7 +1896,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                     bCellHasPercentFormat = false; // Default: no percent
 
                 // Validity specified?
-                if ( SFX_ITEM_SET == rAttrSet.GetItemState( ATTR_VALIDDATA, true, &pItem ) )
+                if ( SfxItemState::SET == rAttrSet.GetItemState( ATTR_VALIDDATA, true, &pItem ) )
                     nValidation = ((const SfxUInt32Item*)pItem)->GetValue();
                 else
                     nValidation = 0;
@@ -2521,7 +2521,7 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
             {
                 SfxItemState eState = aOldAttribs.GetItemState( nId, false, &pItem );
-                if ( eState == SFX_ITEM_SET &&
+                if ( eState == SfxItemState::SET &&
                         nId != EE_CHAR_ESCAPEMENT && nId != EE_CHAR_PAIRKERNING &&
                         nId != EE_CHAR_KERNING && nId != EE_CHAR_XMLATTRIBS &&
                             *pItem != pEditDefaults->Get(nId) )
@@ -2554,9 +2554,9 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
             for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && !bAttrib; nId++)
             {
                 SfxItemState eState = aOldAttribs.GetItemState( nId, false, &pItem );
-                if (eState == SFX_ITEM_DONTCARE)
+                if (eState == SfxItemState::DONTCARE)
                     bAttrib = true;
-                else if (eState == SFX_ITEM_SET)
+                else if (eState == SfxItemState::SET)
                 {
                     // Keep same items in EditEngine as in ScEditAttrTester
                     if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
@@ -2570,12 +2570,12 @@ void ScInputHandler::EnterHandler( sal_uInt8 nBlockMode )
 
             // Contains fields?
             SfxItemState eFieldState = aOldAttribs.GetItemState( EE_FEATURE_FIELD, false );
-            if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
+            if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
                 bAttrib = true;
 
             // Not converted characters?
             SfxItemState eConvState = aOldAttribs.GetItemState( EE_FEATURE_NOTCONV, false );
-            if ( eConvState == SFX_ITEM_DONTCARE || eConvState == SFX_ITEM_SET )
+            if ( eConvState == SfxItemState::DONTCARE || eConvState == SfxItemState::SET )
                 bAttrib = true;
 
             // Always recognize formulas as formulas
@@ -3666,7 +3666,7 @@ bool ScInputHandler::GetTextAndFields( ScEditEngineDefaulter& rDestEngine )
         sal_Int32 nParCnt = pEngine->GetParagraphCount();
         SfxItemSet aSet = pEngine->GetAttribs( ESelection(0,0,nParCnt,0) );
         SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
-        if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
+        if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
         {
             // Copy content
             EditTextObject* pObj = pEngine->CreateTextObject();

@@ -599,7 +599,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     switch (nSID)
     {
         case SID_ATTR_TRANSFORM_WIDTH:
-            if ( SFX_ITEM_DEFAULT == eState )
+            if ( SfxItemState::DEFAULT == eState )
             {
                 pWidthItem = dynamic_cast< const SfxUInt32Item* >(pState);
 
@@ -619,7 +619,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_HEIGHT:
-            if ( SFX_ITEM_DEFAULT == eState )
+            if ( SfxItemState::DEFAULT == eState )
             {
                 pHeightItem = dynamic_cast< const SfxUInt32Item* >(pState);
 
@@ -639,7 +639,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_POS_X:
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >(pState);
 
@@ -657,7 +657,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_POS_Y:
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >(pState);
 
@@ -675,7 +675,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_ROT_X:
-            if (SFX_ITEM_DEFAULT == eState)
+            if (SfxItemState::DEFAULT == eState)
             {
                 const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >(pState);
 
@@ -688,7 +688,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_ROT_Y:
-            if (SFX_ITEM_DEFAULT == eState)
+            if (SfxItemState::DEFAULT == eState)
             {
                 const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >(pState);
 
@@ -701,7 +701,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_PROTECT_POS:
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >(pState);
 
@@ -717,7 +717,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_PROTECT_SIZE:
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >(pState);
 
@@ -733,7 +733,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_AUTOWIDTH:
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >(pState);
 
@@ -745,7 +745,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_AUTOHEIGHT:
-            if(SFX_ITEM_DEFAULT == eState)
+            if(SfxItemState::DEFAULT == eState)
             {
                 const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >(pState);
 
@@ -757,7 +757,7 @@ void PosSizePropertyPanel::NotifyItemUpdate(
             break;
 
         case SID_ATTR_TRANSFORM_ANGLE:
-            if (eState >= SFX_ITEM_DEFAULT)
+            if (eState >= SfxItemState::DEFAULT)
             {
                 const SfxInt32Item* pItem = dynamic_cast< const SfxInt32Item* >(pState);
 
@@ -1041,7 +1041,7 @@ FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPo
 {
     FieldUnit eUnit = FUNIT_NONE;
 
-    if ( pState && eState >= SFX_ITEM_DEFAULT )
+    if ( pState && eState >= SfxItemState::DEFAULT )
     {
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pState )->GetValue();
     }

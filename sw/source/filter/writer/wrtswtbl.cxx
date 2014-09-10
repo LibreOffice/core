@@ -39,7 +39,7 @@ sal_Int16 SwWriteTableCell::GetVertOri() const
     {
         const SfxItemSet& rItemSet = pBox->GetFrmFmt()->GetAttrSet();
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_VERT_ORIENT, false, &pItem ) )
+        if( SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, false, &pItem ) )
         {
             sal_Int16 eBoxVertOri =
                 ((const SwFmtVertOrient *)pItem)->GetVertOrient();
@@ -153,7 +153,7 @@ long SwWriteTable::GetLineHeight( const SwTableBox *pBox ) const
     const SfxItemSet& rItemSet = pLineFrmFmt->GetAttrSet();
 
     long nHeight = 0;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
+    if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
         nHeight = ((SwFmtFrmSize*)pItem)->GetHeight();
 
     return nHeight;
@@ -170,7 +170,7 @@ const SvxBrushItem *SwWriteTable::GetLineBrush( const SwTableBox *pBox,
         const SfxPoolItem* pItem;
         const SfxItemSet& rItemSet = pLineFrmFmt->GetAttrSet();
 
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false,
+        if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
             if( !pLine->GetUpper() )
@@ -589,11 +589,11 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, sal_uInt16 nStartRow,
         const SfxItemSet& rItemSet = pLineFrmFmt->GetAttrSet();
 
         long nHeight = 0;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
+        if( SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ))
             nHeight = ((SwFmtFrmSize*)pItem)->GetHeight();
 
         const SvxBrushItem *pBrushItem, *pLineBrush = pParentBrush;
-        if( SFX_ITEM_SET == rItemSet.GetItemState( RES_BACKGROUND, false,
+        if( SfxItemState::SET == rItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
             pLineBrush = (const SvxBrushItem *)pItem;

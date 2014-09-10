@@ -628,9 +628,9 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         }
 
         // Delete the current Formula/Format/Value values
-        if( SFX_ITEM_SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT ) ||
-            SFX_ITEM_SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_FORMULA ) ||
-            SFX_ITEM_SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE ) )
+        if( SfxItemState::SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT ) ||
+            SfxItemState::SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_FORMULA ) ||
+            SfxItemState::SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE ) )
         {
             pDstBox->ClaimFrmFmt()->ResetFmtAttr( RES_BOXATR_FORMAT,
                                                  RES_BOXATR_VALUE );
@@ -646,7 +646,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             {
                 const SfxPoolItem* pItem;
                 SvNumberFormatter* pN = pDoc->GetNumberFormatter( false );
-                if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == aBoxAttrSet.
+                if( pN && pN->HasMergeFmtTbl() && SfxItemState::SET == aBoxAttrSet.
                     GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
                 {
                     sal_uLong nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();

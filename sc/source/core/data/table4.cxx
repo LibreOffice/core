@@ -583,8 +583,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     pStyleSheet = pSrcPattern->GetStyleSheet();
                     //  do not transfer ATTR_MERGE / ATTR_MERGE_FLAG
                     const SfxItemSet& rSet = pSrcPattern->GetItemSet();
-                    if ( rSet.GetItemState(ATTR_MERGE, false) == SFX_ITEM_SET
-                            || rSet.GetItemState(ATTR_MERGE_FLAG, false) == SFX_ITEM_SET )
+                    if ( rSet.GetItemState(ATTR_MERGE, false) == SfxItemState::SET
+                            || rSet.GetItemState(ATTR_MERGE_FLAG, false) == SfxItemState::SET )
                     {
                         pNewPattern = new ScPatternAttr( *pSrcPattern );
                         SfxItemSet& rNewSet = pNewPattern->GetItemSet();

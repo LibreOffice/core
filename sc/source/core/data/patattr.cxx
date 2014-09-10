@@ -267,59 +267,59 @@ void ScPatternAttr::GetFont(
     {
         const SfxPoolItem* pItem;
 
-        if ( pCondSet->GetItemState( nFontId, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( nFontId, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( nFontId );
         pFontAttr = (const SvxFontItem*) pItem;
 
-        if ( pCondSet->GetItemState( nHeightId, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( nHeightId, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( nHeightId );
         nFontHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
 
-        if ( pCondSet->GetItemState( nWeightId, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( nWeightId, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( nWeightId );
         eWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( nPostureId, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( nPostureId, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( nPostureId );
         eItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_UNDERLINE );
         eUnder = (FontUnderline)((const SvxUnderlineItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_OVERLINE );
         eOver = (FontUnderline)((const SvxOverlineItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_WORDLINE );
         bWordLine = ((const SvxWordLineModeItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_CROSSEDOUT );
         eStrike = (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_CONTOUR, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_CONTOUR, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_CONTOUR );
         bOutline = ((const SvxContourItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_SHADOWED, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_SHADOWED, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_SHADOWED );
         bShadow = ((const SvxShadowedItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_EMPHASISMARK, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_EMPHASISMARK, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_EMPHASISMARK );
         eEmphasis = ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_RELIEF );
         eRelief = (FontRelief)((const SvxCharReliefItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_COLOR, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_COLOR, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( ATTR_FONT_COLOR );
         aColor = ((const SvxColorItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( nLangId, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( nLangId, true, &pItem ) != SfxItemState::SET )
             pItem = &rItemSet.Get( nLangId );
         eLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
     }
@@ -412,7 +412,7 @@ void ScPatternAttr::GetFont(
             if ( pCondSet )
             {
                 const SfxPoolItem* pItem;
-                if ( pCondSet->GetItemState( ATTR_BACKGROUND, true, &pItem ) != SFX_ITEM_SET )
+                if ( pCondSet->GetItemState( ATTR_BACKGROUND, true, &pItem ) != SfxItemState::SET )
                     pItem = &rItemSet.Get( ATTR_BACKGROUND );
                 aBackColor = ((const SvxBrushItem*)pItem)->GetColor();
             }
@@ -519,100 +519,100 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     {
         const SfxPoolItem* pItem;
 
-        if ( pCondSet->GetItemState( ATTR_FONT_COLOR, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_COLOR, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_COLOR );
         aColorItem = *(const SvxColorItem*)pItem;
 
-        if ( pCondSet->GetItemState( ATTR_FONT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT );
         aFontItem = *(const SvxFontItem*)pItem;
-        if ( pCondSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CJK_FONT );
         aCjkFontItem = *(const SvxFontItem*)pItem;
-        if ( pCondSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CTL_FONT );
         aCtlFontItem = *(const SvxFontItem*)pItem;
 
-        if ( pCondSet->GetItemState( ATTR_FONT_HEIGHT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_HEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_HEIGHT );
         nTHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
-        if ( pCondSet->GetItemState( ATTR_CJK_FONT_HEIGHT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT_HEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CJK_FONT_HEIGHT );
         nCjkTHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
-        if ( pCondSet->GetItemState( ATTR_CTL_FONT_HEIGHT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT_HEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CTL_FONT_HEIGHT );
         nCtlTHeight = ((const SvxFontHeightItem*)pItem)->GetHeight();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_WEIGHT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_WEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_WEIGHT );
         eWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
-        if ( pCondSet->GetItemState( ATTR_CJK_FONT_WEIGHT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT_WEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CJK_FONT_WEIGHT );
         eCjkWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
-        if ( pCondSet->GetItemState( ATTR_CTL_FONT_WEIGHT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT_WEIGHT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CTL_FONT_WEIGHT );
         eCtlWeight = (FontWeight)((const SvxWeightItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_POSTURE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_POSTURE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_POSTURE );
         eItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
-        if ( pCondSet->GetItemState( ATTR_CJK_FONT_POSTURE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT_POSTURE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CJK_FONT_POSTURE );
         eCjkItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
-        if ( pCondSet->GetItemState( ATTR_CTL_FONT_POSTURE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT_POSTURE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CTL_FONT_POSTURE );
         eCtlItalic = (FontItalic)((const SvxPostureItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_UNDERLINE );
         aUnderlineItem = *(const SvxUnderlineItem*)pItem;
 
-        if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_OVERLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_OVERLINE );
         aOverlineItem = *(const SvxOverlineItem*)pItem;
 
-        if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_WORDLINE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_WORDLINE );
         bWordLine = ((const SvxWordLineModeItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_CROSSEDOUT );
         eStrike = (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_CONTOUR, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_CONTOUR, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_CONTOUR );
         bOutline = ((const SvxContourItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_SHADOWED, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_SHADOWED, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_SHADOWED );
         bShadow = ((const SvxShadowedItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FORBIDDEN_RULES, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FORBIDDEN_RULES, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FORBIDDEN_RULES );
         bForbidden = ((const SvxForbiddenRuleItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_EMPHASISMARK, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_EMPHASISMARK, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_EMPHASISMARK );
         eEmphasis = ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark();
-        if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_RELIEF, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_RELIEF );
         eRelief = (FontRelief)((const SvxCharReliefItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_FONT_LANGUAGE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_FONT_LANGUAGE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_FONT_LANGUAGE );
         eLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
-        if ( pCondSet->GetItemState( ATTR_CJK_FONT_LANGUAGE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CJK_FONT_LANGUAGE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CJK_FONT_LANGUAGE );
         eCjkLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
-        if ( pCondSet->GetItemState( ATTR_CTL_FONT_LANGUAGE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_CTL_FONT_LANGUAGE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_CTL_FONT_LANGUAGE );
         eCtlLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
 
-        if ( pCondSet->GetItemState( ATTR_HYPHENATE, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_HYPHENATE, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_HYPHENATE );
         bHyphenate = ((const SfxBoolItem*)pItem)->GetValue();
 
-        if ( pCondSet->GetItemState( ATTR_WRITINGDIR, true, &pItem ) != SFX_ITEM_SET )
+        if ( pCondSet->GetItemState( ATTR_WRITINGDIR, true, &pItem ) != SfxItemState::SET )
             pItem = &rSrcSet.Get( ATTR_WRITINGDIR );
         eDirection = (SvxFrameDirection)((const SvxFrameDirectionItem*)pItem)->GetValue();
     }
@@ -732,80 +732,80 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
 {
     const SfxPoolItem* pItem;
 
-    if (rEditSet.GetItemState(EE_CHAR_COLOR,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_COLOR,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxColorItem(ATTR_FONT_COLOR) = *(const SvxColorItem*)pItem );
 
-    if (rEditSet.GetItemState(EE_CHAR_FONTINFO,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_FONTINFO,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxFontItem(ATTR_FONT) = *(const SvxFontItem*)pItem );
-    if (rEditSet.GetItemState(EE_CHAR_FONTINFO_CJK,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_FONTINFO_CJK,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxFontItem(ATTR_CJK_FONT) = *(const SvxFontItem*)pItem );
-    if (rEditSet.GetItemState(EE_CHAR_FONTINFO_CTL,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_FONTINFO_CTL,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxFontItem(ATTR_CTL_FONT) = *(const SvxFontItem*)pItem );
 
-    if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxFontHeightItem( HMMToTwips( ((const SvxFontHeightItem*)pItem)->GetHeight() ),
                         100, ATTR_FONT_HEIGHT ) );
-    if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT_CJK,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT_CJK,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxFontHeightItem( HMMToTwips( ((const SvxFontHeightItem*)pItem)->GetHeight() ),
                         100, ATTR_CJK_FONT_HEIGHT ) );
-    if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT_CTL,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_FONTHEIGHT_CTL,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxFontHeightItem( HMMToTwips( ((const SvxFontHeightItem*)pItem)->GetHeight() ),
                         100, ATTR_CTL_FONT_HEIGHT ) );
 
-    if (rEditSet.GetItemState(EE_CHAR_WEIGHT,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_WEIGHT,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
                         ATTR_FONT_WEIGHT) );
-    if (rEditSet.GetItemState(EE_CHAR_WEIGHT_CJK,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_WEIGHT_CJK,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
                         ATTR_CJK_FONT_WEIGHT) );
-    if (rEditSet.GetItemState(EE_CHAR_WEIGHT_CTL,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_WEIGHT_CTL,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
                         ATTR_CTL_FONT_WEIGHT) );
 
     // SvxTextLineItem contains enum and color
-    if (rEditSet.GetItemState(EE_CHAR_UNDERLINE,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_UNDERLINE,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxUnderlineItem(UNDERLINE_NONE,ATTR_FONT_UNDERLINE) = *(const SvxUnderlineItem*)pItem );
-    if (rEditSet.GetItemState(EE_CHAR_OVERLINE,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_OVERLINE,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxOverlineItem(UNDERLINE_NONE,ATTR_FONT_OVERLINE) = *(const SvxOverlineItem*)pItem );
-    if (rEditSet.GetItemState(EE_CHAR_WLM,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_WLM,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxWordLineModeItem( ((const SvxWordLineModeItem*)pItem)->GetValue(),
                         ATTR_FONT_WORDLINE) );
 
-    if (rEditSet.GetItemState(EE_CHAR_STRIKEOUT,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_STRIKEOUT,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxCrossedOutItem( (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue(),
                         ATTR_FONT_CROSSEDOUT) );
 
-    if (rEditSet.GetItemState(EE_CHAR_ITALIC,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_ITALIC,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxPostureItem( (FontItalic)((const SvxPostureItem*)pItem)->GetValue(),
                         ATTR_FONT_POSTURE) );
-    if (rEditSet.GetItemState(EE_CHAR_ITALIC_CJK,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_ITALIC_CJK,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxPostureItem( (FontItalic)((const SvxPostureItem*)pItem)->GetValue(),
                         ATTR_CJK_FONT_POSTURE) );
-    if (rEditSet.GetItemState(EE_CHAR_ITALIC_CTL,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_ITALIC_CTL,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxPostureItem( (FontItalic)((const SvxPostureItem*)pItem)->GetValue(),
                         ATTR_CTL_FONT_POSTURE) );
 
-    if (rEditSet.GetItemState(EE_CHAR_OUTLINE,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_OUTLINE,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxContourItem( ((const SvxContourItem*)pItem)->GetValue(),
                         ATTR_FONT_CONTOUR) );
-    if (rEditSet.GetItemState(EE_CHAR_SHADOW,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_SHADOW,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxShadowedItem( ((const SvxShadowedItem*)pItem)->GetValue(),
                         ATTR_FONT_SHADOWED) );
-    if (rEditSet.GetItemState(EE_CHAR_EMPHASISMARK,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_EMPHASISMARK,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxEmphasisMarkItem( ((const SvxEmphasisMarkItem*)pItem)->GetEmphasisMark(),
                         ATTR_FONT_EMPHASISMARK) );
-    if (rEditSet.GetItemState(EE_CHAR_RELIEF,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_RELIEF,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxCharReliefItem( (FontRelief)((const SvxCharReliefItem*)pItem)->GetValue(),
                         ATTR_FONT_RELIEF) );
 
-    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxLanguageItem(static_cast<const SvxLanguageItem*>(pItem)->GetValue(), ATTR_FONT_LANGUAGE) );
-    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE_CJK,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE_CJK,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxLanguageItem(static_cast<const SvxLanguageItem*>(pItem)->GetValue(), ATTR_CJK_FONT_LANGUAGE) );
-    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE_CTL,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_CHAR_LANGUAGE_CTL,true,&pItem) == SfxItemState::SET)
         rDestSet.Put( SvxLanguageItem(static_cast<const SvxLanguageItem*>(pItem)->GetValue(), ATTR_CTL_FONT_LANGUAGE) );
 
-    if (rEditSet.GetItemState(EE_PARA_JUST,true,&pItem) == SFX_ITEM_SET)
+    if (rEditSet.GetItemState(EE_PARA_JUST,true,&pItem) == SfxItemState::SET)
     {
         SvxCellHorJustify eVal;
         switch ( ((const SvxAdjustItem*)pItem)->GetAdjust() )
@@ -877,16 +877,16 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
     for ( sal_uInt16 nSubWhich=ATTR_PATTERN_START; nSubWhich<=ATTR_PATTERN_END; nSubWhich++ )
     {
         //  only items that are set are interesting
-        if ( rThisSet.GetItemState( nSubWhich, false, &pThisItem ) == SFX_ITEM_SET )
+        if ( rThisSet.GetItemState( nSubWhich, false, &pThisItem ) == SfxItemState::SET )
         {
             SfxItemState eOldState = rOldSet.GetItemState( nSubWhich, true, &pOldItem );
-            if ( eOldState == SFX_ITEM_SET )
+            if ( eOldState == SfxItemState::SET )
             {
                 //  item is set in OldAttrs (or its parent) -> compare pointers
                 if ( pThisItem == pOldItem )
                     rThisSet.ClearItem( nSubWhich );
             }
-            else if ( eOldState != SFX_ITEM_DONTCARE )
+            else if ( eOldState != SfxItemState::DONTCARE )
             {
                 //  not set in OldAttrs -> compare item value to default item
                 if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nSubWhich ) )
@@ -900,7 +900,7 @@ bool ScPatternAttr::HasItemsSet( const sal_uInt16* pWhich ) const
 {
     const SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
-        if ( rSet.GetItemState( pWhich[i], false ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( pWhich[i], false ) == SfxItemState::SET )
             return true;
     return false;
 }
@@ -944,7 +944,7 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
 
         const SfxPoolItem* pSrcItem;
         if ( pFormatExchangeList &&
-             rSrcSet.GetItemState( ATTR_VALUE_FORMAT, false, &pSrcItem ) == SFX_ITEM_SET )
+             rSrcSet.GetItemState( ATTR_VALUE_FORMAT, false, &pSrcItem ) == SfxItemState::SET )
         {
             sal_uLong nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
             SvNumberFormatterIndexTable::const_iterator it = pFormatExchangeList->find(nOldFormat);
@@ -999,7 +999,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
     {
         const SfxPoolItem* pSrcItem;
         SfxItemState eItemState = pSrcSet->GetItemState( nAttrId, false, &pSrcItem );
-        if (eItemState==SFX_ITEM_SET)
+        if (eItemState==SfxItemState::SET)
         {
             SfxPoolItem* pNewItem = NULL;
 
@@ -1055,12 +1055,12 @@ bool ScPatternAttr::IsVisible() const
     SfxItemState eState;
 
     eState = rSet.GetItemState( ATTR_BACKGROUND, true, &pItem );
-    if ( eState == SFX_ITEM_SET )
+    if ( eState == SfxItemState::SET )
         if ( ((const SvxBrushItem*)pItem)->GetColor().GetColor() != COL_TRANSPARENT )
             return true;
 
     eState = rSet.GetItemState( ATTR_BORDER, true, &pItem );
-    if ( eState == SFX_ITEM_SET )
+    if ( eState == SfxItemState::SET )
     {
         const SvxBoxItem* pBoxItem = (SvxBoxItem*) pItem;
         if ( pBoxItem->GetTop() || pBoxItem->GetBottom() ||
@@ -1069,17 +1069,17 @@ bool ScPatternAttr::IsVisible() const
     }
 
     eState = rSet.GetItemState( ATTR_BORDER_TLBR, true, &pItem );
-    if ( eState == SFX_ITEM_SET )
+    if ( eState == SfxItemState::SET )
         if( static_cast< const SvxLineItem* >( pItem )->GetLine() )
             return true;
 
     eState = rSet.GetItemState( ATTR_BORDER_BLTR, true, &pItem );
-    if ( eState == SFX_ITEM_SET )
+    if ( eState == SfxItemState::SET )
         if( static_cast< const SvxLineItem* >( pItem )->GetLine() )
             return true;
 
     eState = rSet.GetItemState( ATTR_SHADOW, true, &pItem );
-    if ( eState == SFX_ITEM_SET )
+    if ( eState == SfxItemState::SET )
         if ( ((const SvxShadowItem*)pItem)->GetLocation() != SVX_SHADOW_NONE )
             return true;
 
@@ -1123,7 +1123,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         {
             for (sal_uInt16 i=ATTR_PATTERN_START; i<=ATTR_PATTERN_END; i++)
             {
-                if (rStyleSet.GetItemState(i, true) == SFX_ITEM_SET)
+                if (rStyleSet.GetItemState(i, true) == SfxItemState::SET)
                     rPatternSet.ClearItem(i);
             }
         }
@@ -1183,7 +1183,7 @@ void ScPatternAttr::StyleToName()
 bool ScPatternAttr::IsSymbolFont() const
 {
     const SfxPoolItem* pItem;
-    if( GetItemSet().GetItemState( ATTR_FONT, true, &pItem ) == SFX_ITEM_SET )
+    if( GetItemSet().GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
         return ((const SvxFontItem*) pItem)->GetCharSet() == RTL_TEXTENCODING_SYMBOL;
     else
         return false;
@@ -1210,11 +1210,11 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
     OSL_ENSURE(pFormatter,"GetNumberFormat without Formatter");
 
     const SfxPoolItem* pFormItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SFX_ITEM_SET )
+    if ( !pCondSet || pCondSet->GetItemState(ATTR_VALUE_FORMAT,true,&pFormItem) != SfxItemState::SET )
         pFormItem = &GetItemSet().Get(ATTR_VALUE_FORMAT);
 
     const SfxPoolItem* pLangItem;
-    if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SFX_ITEM_SET )
+    if ( !pCondSet || pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT,true,&pLangItem) != SfxItemState::SET )
         pLangItem = &GetItemSet().Get(ATTR_LANGUAGE_FORMAT);
 
     return pFormatter->GetFormatForLanguageIfBuiltIn(
@@ -1225,7 +1225,7 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
 const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
 {
     const SfxPoolItem* pCondItem;
-    if ( pCondSet && pCondSet->GetItemState( nWhich, true, &pCondItem ) == SFX_ITEM_SET )
+    if ( pCondSet && pCondSet->GetItemState( nWhich, true, &pCondItem ) == SfxItemState::SET )
         return *pCondItem;
     return rItemSet.Get(nWhich);
 }

@@ -275,7 +275,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
 
     if (pFrame)
     {
-        if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
+        if (rSet.GetItemState(SID_RELOAD) != SfxItemState::UNKNOWN)
         {
             pFrame->GetSlotState(SID_RELOAD,
                                  pFrame->GetInterface(), &rSet);

@@ -2162,7 +2162,7 @@ namespace svxform
         if ( !pState  || SID_FM_DATANAVIGATOR_CONTROL != nSID )
             return;
 
-        if ( eState >= SFX_ITEM_DEFAULT )
+        if ( eState >= SfxItemState::DEFAULT )
         {
             FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
             Update( pShell );

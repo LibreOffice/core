@@ -146,18 +146,18 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
     {
         // Both Items set
         // PoolItems, meaning comparing pointers is valid
-        if ( SFX_ITEM_SET == eOldState )
+        if ( SfxItemState::SET == eOldState )
             bInvalidate = (&rNewAttrs.Get( nWhich ) != &rOldAttrs.Get( nWhich ));
     }
     else
     {
         // Contains a Default Item
         // PoolItems, meaning Item comparison necessary
-        const SfxPoolItem& rOldItem = ( SFX_ITEM_SET == eOldState )
+        const SfxPoolItem& rOldItem = ( SfxItemState::SET == eOldState )
                     ? rOldAttrs.Get( nWhich )
                     : rOldAttrs.GetPool()->GetDefaultItem( nWhich );
 
-        const SfxPoolItem& rNewItem = ( SFX_ITEM_SET == eNewState )
+        const SfxPoolItem& rNewItem = ( SfxItemState::SET == eNewState )
                     ? rNewAttrs.Get( nWhich )
                     : rNewAttrs.GetPool()->GetDefaultItem( nWhich );
 
@@ -1027,11 +1027,11 @@ sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhic
 
 void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 {
-    OSL_ENSURE( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, false ) == SFX_ITEM_DEFAULT,
+    OSL_ENSURE( rSet.GetItemState( ATTR_LANGUAGE_FORMAT, false ) == SfxItemState::DEFAULT,
         "ScGlobal::AddLanguage - language already added");
 
     const SfxPoolItem* pHardItem;
-    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, false, &pHardItem ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( ATTR_VALUE_FORMAT, false, &pHardItem ) == SfxItemState::SET )
     {
         const SvNumberformat* pHardFormat = rFormatter.GetEntry(
             ((const SfxUInt32Item*)pHardItem)->GetValue() );

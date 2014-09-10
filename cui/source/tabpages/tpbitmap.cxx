@@ -312,11 +312,11 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ChangeBitmapHdl_Impl)
     {
         const SfxPoolItem* pPoolItem = 0;
 
-        if(SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLSTYLE), true, &pPoolItem))
+        if(SfxItemState::SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLSTYLE), true, &pPoolItem))
         {
             const drawing::FillStyle eXFS((drawing::FillStyle)((const XFillStyleItem*)pPoolItem)->GetValue());
 
-            if((drawing::FillStyle_BITMAP == eXFS) && (SFX_ITEM_SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
+            if((drawing::FillStyle_BITMAP == eXFS) && (SfxItemState::SET == rOutAttrs.GetItemState(GetWhich(XATTR_FILLBITMAP), true, &pPoolItem)))
             {
                 pGraphicObject.reset(new GraphicObject(((const XFillBitmapItem*)pPoolItem)->GetGraphicObject()));
             }
@@ -537,7 +537,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickAddHdl_Impl)
         {
             const SfxPoolItem* pPoolItem = 0;
 
-            if(SFX_ITEM_SET == rOutAttrs.GetItemState(XATTR_FILLBITMAP, true, &pPoolItem))
+            if(SfxItemState::SET == rOutAttrs.GetItemState(XATTR_FILLBITMAP, true, &pPoolItem))
             {
                 pEntry = new XBitmapEntry(dynamic_cast< const XFillBitmapItem* >(pPoolItem)->GetGraphicObject(), aName);
             }

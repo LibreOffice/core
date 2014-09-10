@@ -302,21 +302,21 @@ SfxItemState SfxControllerItem::GetItemState
 
     [Return value]
 
-    SfxItemState        SFX_ITEM_UNKNOWN
+    SfxItemState        SfxItemState::UNKNOWN
                         Enabled, but no further status information available.
                         Typical for <Slot>s, which anyway are sometimes
                         disabled, but otherwise do not change their appearance.
 
-                        SFX_ITEM_DISABLED
+                        SfxItemState::DISABLED
                         Disabled and no further status information available.
                         All other values that may appear should be reset to
                         default.
 
-                        SFX_ITEM_DONTCARE
+                        SfxItemState::DONTCARE
                         Enabled but there were only ambiguous values available
                         (i.e. non that can be queried).
 
-                        SFX_ITEM_DEFAULT
+                        SfxItemState::DEFAULT
                         Enabled and with available values, which are queried
                         by 'pState'. The Type is thus clearly defined in the
                         entire Program and specified through the Slot.
@@ -324,12 +324,12 @@ SfxItemState SfxControllerItem::GetItemState
 
 {
     return !pState
-                ? SFX_ITEM_DISABLED
+                ? SfxItemState::DISABLED
                 : IsInvalidItem(pState)
-                    ? SFX_ITEM_DONTCARE
+                    ? SfxItemState::DONTCARE
                     : pState->ISA(SfxVoidItem) && !pState->Which()
-                        ? SFX_ITEM_UNKNOWN
-                        : SFX_ITEM_DEFAULT;
+                        ? SfxItemState::UNKNOWN
+                        : SfxItemState::DEFAULT;
 }
 
 

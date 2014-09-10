@@ -137,7 +137,7 @@ namespace sdr
             }
 
             // Extra-Repaint for radical layout changes (#43139#)
-            if(SFX_ITEM_SET == rSet.GetItemState(SDRATTR_TEXT_CONTOURFRAME))
+            if(SfxItemState::SET == rSet.GetItemState(SDRATTR_TEXT_CONTOURFRAME))
             {
                 // Here only repaint wanted
                 rObj.ActionChanged();
@@ -453,7 +453,7 @@ namespace sdr
 
                                 bool bHasURL(false);
 
-                                if(aSet.GetItemState(EE_CHAR_COLOR) == SFX_ITEM_SET)
+                                if(aSet.GetItemState(EE_CHAR_COLOR) == SfxItemState::SET)
                                 {
                                     EditEngine* pEditEngine = const_cast<EditEngine*>(&(pOutliner->GetEditEngine()));
                                     std::vector<EECharAttrib> aAttribs;

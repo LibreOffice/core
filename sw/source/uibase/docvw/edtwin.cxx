@@ -770,7 +770,7 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView&
             SfxItemSet aLangSet(rView.GetPool(), nWhich, nWhich);
             SwWrtShell& rSh = rView.GetWrtShell();
             rSh.GetCurAttr(aLangSet);
-            if(SFX_ITEM_DEFAULT <= aLangSet.GetItemState(nWhich, true))
+            if(SfxItemState::DEFAULT <= aLangSet.GetItemState(nWhich, true))
             {
                 LanguageType eLang = static_cast<const SvxLanguageItem&>(aLangSet.Get(nWhich)).GetLanguage();
                 if ( eLang == eBufferLanguage )
@@ -2205,7 +2205,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         {
                             SfxItemSet aSet(rSh.GetAttrPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
                             rSh.GetCurAttr(aSet);
-                            if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, false))
+                            if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false))
                             {
                                 const SfxPoolItem& rItem = aSet.Get(RES_TXTATR_INETFMT, true);
                                 bNormalChar = false;

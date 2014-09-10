@@ -329,7 +329,7 @@ bool shouldLaunchQuickstart()
         SfxItemSet aQLSet(SfxGetpApp()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
         SfxGetpApp()->GetOptions(aQLSet);
         SfxItemState eState = aQLSet.GetItemState(SID_ATTR_QUICKLAUNCHER, false, &pItem);
-        if (SFX_ITEM_SET == eState)
+        if (SfxItemState::SET == eState)
             bQuickstart = ((SfxBoolItem*)pItem)->GetValue();
     }
     return bQuickstart;

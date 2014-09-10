@@ -89,7 +89,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         }
     }
 
-    if( SFX_ITEM_SET != aInputSet.GetItemState(EE_PARA_NUMBULLET))
+    if( SfxItemState::SET != aInputSet.GetItemState(EE_PARA_NUMBULLET))
     {
         const SvxNumBulletItem *pItem = NULL;
         if(bOutliner)
@@ -109,7 +109,7 @@ OutlineBulletDlg::OutlineBulletDlg(
         aInputSet.Put(*pItem, EE_PARA_NUMBULLET);
     }
 
-    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_SET )
+    if(bTitle && aInputSet.GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
     {
         SvxNumBulletItem* pItem = (SvxNumBulletItem*)aInputSet.GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pItem->GetNumRule();
@@ -171,14 +171,14 @@ const SfxItemSet* OutlineBulletDlg::GetOutputItemSet() const
     pOutputSet->Put( aSet );
 
     const SfxPoolItem *pItem = NULL;
-    if( SFX_ITEM_SET == pOutputSet->GetItemState(pOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
+    if( SfxItemState::SET == pOutputSet->GetItemState(pOutputSet->GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE), false, &pItem ))
     {
         SdBulletMapper::MapFontsInNumRule( *((SvxNumBulletItem*)pItem)->GetNumRule(), *pOutputSet );
 
 // #i35937 - removed EE_PARA_BULLETSTATE setting
     }
 
-    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_SET )
+    if(bTitle && pOutputSet->GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
     {
         SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)pOutputSet->GetItem(EE_PARA_NUMBULLET,true);
         SvxNumRule* pRule = pBulletItem->GetNumRule();

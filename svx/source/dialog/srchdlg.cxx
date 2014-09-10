@@ -1905,7 +1905,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
             const SfxPoolItem* pItem;
             for( sal_uInt16 n = 0; n < pList->Count(); ++n )
                 if( !IsInvalidItem( (pAItem = &pList->GetObject(n))->pItem ) &&
-                    SFX_ITEM_SET == aOutSet.GetItemState(
+                    SfxItemState::SET == aOutSet.GetItemState(
                         pAItem->pItem->Which(), false, &pItem ) )
                 {
                     delete pAItem->pItem;

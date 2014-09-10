@@ -262,11 +262,11 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_ATTR_TRANSFORM );
     }
 
-    if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SfxItemState::UNKNOWN )
     {
         SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
         pView->GetAttributes( aAttrs );
-        if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_DEFAULT )
+        if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         {
             bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
@@ -349,13 +349,13 @@ void ScDrawShell::GetAttrFuncState(SfxItemSet &rSet)
     ScDrawView* pDrView = pViewData->GetScDrawView();
     SfxItemSet aViewSet = pDrView->GetAttrFromMarked(false);
 
-    if ( aViewSet.GetItemState( XATTR_LINESTYLE ) == SFX_ITEM_DEFAULT )
+    if ( aViewSet.GetItemState( XATTR_LINESTYLE ) == SfxItemState::DEFAULT )
     {
         rSet.DisableItem( SID_ATTRIBUTES_LINE );
         rSet.DisableItem( SID_ATTR_LINEEND_STYLE );     // Tbx-Controller
     }
 
-    if ( aViewSet.GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT )
+    if ( aViewSet.GetItemState( XATTR_FILLSTYLE ) == SfxItemState::DEFAULT )
         rSet.DisableItem( SID_ATTRIBUTES_AREA );
 }
 

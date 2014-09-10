@@ -859,9 +859,9 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             if ( !IsDefaultItem( pPattern ) )
             {
                 const SfxItemSet& rSet = pPattern->GetItemSet();
-                if ( rSet.GetItemState( ATTR_MERGE, false ) == SFX_ITEM_DEFAULT &&
-                     rSet.GetItemState( ATTR_MERGE_FLAG, false ) == SFX_ITEM_DEFAULT &&
-                     rSet.GetItemState( ATTR_BORDER, false ) == SFX_ITEM_DEFAULT )
+                if ( rSet.GetItemState( ATTR_MERGE, false ) == SfxItemState::DEFAULT &&
+                     rSet.GetItemState( ATTR_MERGE_FLAG, false ) == SfxItemState::DEFAULT &&
+                     rSet.GetItemState( ATTR_BORDER, false ) == SfxItemState::DEFAULT )
                 {
                     // no borders or merge items involved - use pattern as-is
                     for (nRow = nAttrRow1; nRow<=nAttrRow2; nRow++)
@@ -1985,7 +1985,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
             {
                 const SfxPoolItem* pCondItem;
                 if ( pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pCondItem )
-                        == SFX_ITEM_SET )
+                        == SfxItemState::SET )
                 {
                     //  alle Formate durchgehen, damit die Zellen nicht einzeln
                     //  angeschaut werden muessen

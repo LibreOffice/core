@@ -940,7 +940,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     {
         // slot is a property
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
-        if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
+        if ( rSet.GetItemState( nWhich ) == SfxItemState::SET ) //???
         {
             sal_uInt16 nSubCount = pType->nAttribs;
             if ( nSubCount )
@@ -976,7 +976,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             const SfxFormalArgument &rArg = bIsMediaDescriptor ? aFormalArgs[nArg] : pSlot->GetFormalArgument( nArg );
 
             sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
-            if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
+            if ( rSet.GetItemState( nWhich ) == SfxItemState::SET ) //???
             {
                 sal_uInt16 nSubCount = rArg.pType->nAttribs;
                 if ( nSubCount )
@@ -996,109 +996,109 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( bIsMediaDescriptor )
         {
             sal_Int32 nAdditional=0;
-            if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_INTERACTIONHANDLER ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_INTERACTIONHANDLER ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_PATH ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_PATH ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_FILE_DIALOG ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_FILE_DIALOG ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_STANDARD_DIR ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_STANDARD_DIR ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_BLACK_LIST ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_BLACK_LIST ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_CONTENT ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_CONTENT ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_INPUTSTREAM ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_STREAM ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_STREAM ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_OUTPUTSTREAM ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_OUTPUTSTREAM ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_TEMPLATE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_TEMPLATE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_OPEN_NEW_VIEW ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_OPEN_NEW_VIEW ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_FAIL_ON_WARNING ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_FAIL_ON_WARNING ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_VIEW_ID ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_VIEW_ID ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_VIEW_DATA ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_VIEW_DATA ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_FILTER_DATA ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_FILTER_DATA ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_PLUGIN_MODE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_PLUGIN_MODE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DOC_READONLY ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DOC_READONLY ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_SELECTION ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_SELECTION ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_CONTENTTYPE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_POSTDATA ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_FILLFRAME ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_FILLFRAME ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_CHARSET ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_CHARSET ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_TARGETNAME ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_TARGETNAME ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_TEMPLATE_NAME ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_TEMPLATE_NAME ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_HIDDEN ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_HIDDEN ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_MINIMIZED ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_MINIMIZED ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_PREVIEW ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_PREVIEW ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_VIEWONLY ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_VIEWONLY ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_EDITDOC ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_EDITDOC ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_SILENT ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_SILENT ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_JUMPMARK ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_JUMPMARK ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DOCUMENT ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DOCUMENT ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_MACROEXECMODE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_MACROEXECMODE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_UPDATEDOCMODE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_UPDATEDOCMODE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_REPAIRPACKAGE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_REPAIRPACKAGE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DOCINFO_TITLE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DOCINFO_TITLE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_COMPONENTDATA ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_COMPONENTDATA ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_COMPONENTCONTEXT ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_COMPONENTCONTEXT ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DOC_BASEURL ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DOC_BASEURL ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DOC_HIERARCHICALNAME ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DOC_HIERARCHICALNAME ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_NOAUTOSAVE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_NOAUTOSAVE ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_ENCRYPTIONDATA ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_ENCRYPTIONDATA ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME ) == SfxItemState::SET )
                 nAdditional++;
-            if ( rSet.GetItemState( SID_DOC_SERVICE ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( SID_DOC_SERVICE ) == SfxItemState::SET )
                 nAdditional++;
             if (rSet.HasItem(SID_FILTER_PROVIDER))
                 ++nAdditional;
@@ -1122,7 +1122,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         {
             for(sal_uInt16 nId = *pRanges++; nId <= *pRanges; ++nId)
             {
-                if ( rSet.GetItemState(nId) < SFX_ITEM_SET ) //???
+                if ( rSet.GetItemState(nId) < SfxItemState::SET ) //???
                     // not really set
                     continue;
 
@@ -1377,67 +1377,67 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
          nSlotId == SID_SAVEACOPY )
     {
         const SfxPoolItem *pItem=0;
-        if ( rSet.GetItemState( SID_COMPONENTDATA, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_COMPONENTDATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sComponentData);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_COMPONENTCONTEXT, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_COMPONENTCONTEXT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sComponentContext);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_PROGRESS_STATUSBAR_CONTROL, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sStatusInd);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_INTERACTIONHANDLER, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_INTERACTIONHANDLER, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sInteractionHdl);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_VIEW_DATA, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_VIEW_DATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sViewData);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_FILTER_DATA, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_FILTER_DATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFilterData);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_DOCUMENT, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DOCUMENT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sModel);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_CONTENT, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_CONTENT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sUCBContent);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_INPUTSTREAM, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_INPUTSTREAM, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sInputStream);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_STREAM, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_STREAM, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sStream);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_OUTPUTSTREAM, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_OUTPUTSTREAM, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sOutputStream);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_POSTDATA, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_POSTDATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sPostData);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_FILLFRAME, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_FILLFRAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFrame);
             if ( pItem->ISA( SfxUsrAnyItem ) )
@@ -1450,92 +1450,92 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             else
                 OSL_FAIL( "TransformItems: invalid item type for SID_FILLFRAME!" );
         }
-        if ( rSet.GetItemState( SID_TEMPLATE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_TEMPLATE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sAsTemplate);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_OPEN_NEW_VIEW, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_OPEN_NEW_VIEW, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sOpenNewView);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_FAIL_ON_WARNING, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_FAIL_ON_WARNING, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFailOnWarning);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_VIEW_ID, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_VIEW_ID, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sViewId);
             pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_PLUGIN_MODE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_PLUGIN_MODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sPluginMode);
             pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_DOC_READONLY, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DOC_READONLY, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sReadOnly);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DDE_RECONNECT_ONLOAD, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDdeReconnect);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DOC_STARTPRESENTATION, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sStartPresentation);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_SELECTION, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_SELECTION, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSelectionOnly);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_HIDDEN, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_HIDDEN, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sHidden);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_MINIMIZED, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_MINIMIZED, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sMinimized);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_SILENT, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_SILENT, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSilent);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_PREVIEW, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_PREVIEW, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sPreview);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_VIEWONLY, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_VIEWONLY, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sViewOnly);
             pValue[nActProp++].Value <<= ((SfxBoolItem*)pItem)->GetValue() ;
         }
-        if ( rSet.GetItemState( SID_EDITDOC, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_EDITDOC, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDontEdit);
             pValue[nActProp++].Value <<= !( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_FILE_DIALOG, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_FILE_DIALOG, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sUseSystemDialog);
             pValue[nActProp++].Value <<= ((SfxBoolItem*)pItem)->GetValue();
         }
-        if ( rSet.GetItemState( SID_STANDARD_DIR, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_STANDARD_DIR, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sStandardDir);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_BLACK_LIST, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_BLACK_LIST, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sBlackList);
 
@@ -1543,108 +1543,108 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             ((SfxStringListItem*)pItem)->GetStringList( aList );
             pValue[nActProp++].Value <<= aList ;
         }
-        if ( rSet.GetItemState( SID_TARGETNAME, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_TARGETNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFrameName);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_DOC_SALVAGE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DOC_SALVAGE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSalvagedFile);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_PATH, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_PATH, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sFolderName);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_CONTENTTYPE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_CONTENTTYPE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sMediaType);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
         }
-        if ( rSet.GetItemState( SID_TEMPLATE_NAME, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_TEMPLATE_NAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sTemplateName);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
         }
-        if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_TEMPLATE_REGIONNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sTemplateRegionName);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
         }
-        if ( rSet.GetItemState( SID_JUMPMARK, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_JUMPMARK, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sJumpMark);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
         }
 
-        if ( rSet.GetItemState( SID_CHARSET, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_CHARSET, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sCharacterSet);
             pValue[nActProp++].Value <<= (  OUString(((SfxStringItem*)pItem)->GetValue())  );
         }
-        if ( rSet.GetItemState( SID_MACROEXECMODE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_MACROEXECMODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sMacroExecMode);
             pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_UPDATEDOCMODE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_UPDATEDOCMODE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sUpdateDocMode);
             pValue[nActProp++].Value <<= ( (sal_Int16) ((SfxUInt16Item*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_REPAIRPACKAGE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_REPAIRPACKAGE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sRepairPackage);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_DOCINFO_TITLE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DOCINFO_TITLE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDocumentTitle);
             pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_DOC_BASEURL, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DOC_BASEURL, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDocumentBaseURL);
             pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_DOC_HIERARCHICALNAME, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DOC_HIERARCHICALNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sHierarchicalDocumentName);
             pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sCopyStreamIfPossible);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_NOAUTOSAVE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_NOAUTOSAVE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sNoAutoSave);
             pValue[nActProp++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_MODIFYPASSWORDINFO, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sModifyPasswordInfo);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_ENCRYPTIONDATA, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_ENCRYPTIONDATA, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sEncryptionData);
             pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_SUGGESTEDSAVEASDIR, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSuggestedSaveAsDir);
             pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_SUGGESTEDSAVEASNAME, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sSuggestedSaveAsName);
             pValue[nActProp++].Value <<= ( OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
-        if ( rSet.GetItemState( SID_DOC_SERVICE, false, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_DOC_SERVICE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = OUString(sDocumentService);
             pValue[nActProp++].Value <<= OUString(static_cast<const SfxStringItem*>(pItem)->GetValue());

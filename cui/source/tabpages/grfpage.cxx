@@ -139,7 +139,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     const SfxPoolItem* pItem;
     const SfxItemPool& rPool = *rSet->GetPool();
 
-    if(SFX_ITEM_SET == rSet->GetItemState( rPool.GetWhich(
+    if(SfxItemState::SET == rSet->GetItemState( rPool.GetWhich(
                                     SID_ATTR_GRAF_KEEP_ZOOM ), true, &pItem ))
     {
         if( ((const SfxBoolItem*)pItem)->GetValue() )
@@ -150,7 +150,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     }
 
     sal_uInt16 nW = rPool.GetWhich( SID_ATTR_GRAF_CROP );
-    if( SFX_ITEM_SET == rSet->GetItemState( nW, true, &pItem))
+    if( SfxItemState::SET == rSet->GetItemState( nW, true, &pItem))
     {
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
 
@@ -175,7 +175,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     }
 
     nW = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
-    if ( SFX_ITEM_SET == rSet->GetItemState( nW, false, &pItem ) )
+    if ( SfxItemState::SET == rSet->GetItemState( nW, false, &pItem ) )
     {
         // orientation and size from the PageItem
         FieldUnit eUnit = MapToFieldUnit( rSet->GetPool()->GetMetric( nW ));
@@ -199,7 +199,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet *rSet )
     }
 
     bool bFound = false;
-    if( SFX_ITEM_SET == rSet->GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
+    if( SfxItemState::SET == rSet->GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
         OUString referer;
         SfxStringItem const * it = static_cast<SfxStringItem const *>(
@@ -252,7 +252,7 @@ bool SvxGrfCropPage::FillItemSet(SfxItemSet *rSet)
         // #44204#
         const SfxItemSet* pExSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
         const SfxPoolItem* pItem = 0;
-        if( pExSet && SFX_ITEM_SET ==
+        if( pExSet && SfxItemState::SET ==
                 pExSet->GetItemState( nW, false, &pItem ) )
             aSz = *(const SvxSizeItem*)pItem;
         else
@@ -312,7 +312,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     // Size
     Size aSize;
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_FRMSIZE, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_FRMSIZE, false, &pItem ) )
         aSize = ((const SvxSizeItem*)pItem)->GetSize();
 
     nOldWidth = aSize.Width();
@@ -348,7 +348,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     m_pHeightMF->SaveValue();
     bInitialized = true;
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
         const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
         if( !rBrush.GetGraphicLink().isEmpty() &&

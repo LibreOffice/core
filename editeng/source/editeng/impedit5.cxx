@@ -335,27 +335,27 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
             // and then paragraph formatting and template...
             for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
             {
-                if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_DEFAULT )
+                if ( aCurSet.GetItemState( nWhich ) == SfxItemState::DEFAULT )
                 {
                     if ( nOnlyHardAttrib == EditEngineAttribs_All )
                     {
                         const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
                         aCurSet.Put( rItem );
                     }
-                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_SET )
+                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SfxItemState::SET )
                     {
                         const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItems().Get( nWhich );
                         aCurSet.Put( rItem );
                     }
                 }
-                else if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+                else if ( aCurSet.GetItemState( nWhich ) == SfxItemState::SET )
                 {
                     const SfxPoolItem* pItem = NULL;
                     if ( nOnlyHardAttrib == EditEngineAttribs_All )
                     {
                         pItem = &pNode->GetContentAttribs().GetItem( nWhich );
                     }
-                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SFX_ITEM_SET )
+                    else if ( pNode->GetContentAttribs().GetItems().GetItemState( nWhich ) == SfxItemState::SET )
                     {
                         pItem = &pNode->GetContentAttribs().GetItems().Get( nWhich );
                     }
@@ -381,7 +381,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
     {
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++ )
         {
-            if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_DEFAULT )
+            if ( aCurSet.GetItemState( nWhich ) == SfxItemState::DEFAULT )
             {
                 aCurSet.Put( aEditDoc.GetItemPool().GetDefaultItem( nWhich ) );
             }
@@ -504,9 +504,9 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
     bool bCheckLanguage = false;
     if ( GetStatus().DoOnlineSpelling() )
     {
-        bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SFX_ITEM_SET ) ||
-                         ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SFX_ITEM_SET ) ||
-                         ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SFX_ITEM_SET );
+        bCheckLanguage = ( rSet.GetItemState( EE_CHAR_LANGUAGE ) == SfxItemState::SET ) ||
+                         ( rSet.GetItemState( EE_CHAR_LANGUAGE_CJK ) == SfxItemState::SET ) ||
+                         ( rSet.GetItemState( EE_CHAR_LANGUAGE_CTL ) == SfxItemState::SET );
     }
 
     // iterate over the paragraphs ...
@@ -527,7 +527,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
         // Iterate over the Items...
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
         {
-            if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET )
+            if ( rSet.GetItemState( nWhich ) == SfxItemState::SET )
             {
                 const SfxPoolItem& rItem = rSet.Get( nWhich );
                 if ( nWhich <= EE_PARA_END )

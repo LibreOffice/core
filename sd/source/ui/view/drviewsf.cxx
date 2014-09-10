@@ -75,13 +75,13 @@ namespace sd {
  */
 void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 {
-    if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_RELOAD) != SfxItemState::UNKNOWN)
     {
         // let "last version" of SFx en/disable
         GetViewFrame()->GetSlotState (SID_RELOAD, NULL, &rSet);
     }
 
-    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_HYPERLINK_GETLINK))
+    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_HYPERLINK_GETLINK))
     {
         SvxHyperlinkItem aHLinkItem;
 
@@ -187,10 +187,10 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     rSet.Put( SfxBoolItem( SID_READONLY_MODE, mbReadOnly ) );
 
     // output quality
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_COLOR ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_GRAYSCALE ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_COLOR ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_GRAYSCALE ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
     {
         const sal_uLong nMode = (sal_Int32)GetActiveWindow()->GetDrawMode();
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_COLOR, (sal_uLong)OUTPUT_DRAWMODE_COLOR == nMode ) );
@@ -199,12 +199,12 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_CONTRAST, (sal_uLong)OUTPUT_DRAWMODE_CONTRAST == nMode ) );
     }
 
-    if ( SFX_ITEM_DEFAULT == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
+    if ( SfxItemState::DEFAULT == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
     {
         rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true ) );
     }
 
-    if ( SFX_ITEM_DEFAULT == rSet.GetItemState(SID_ATTR_YEAR2000) )
+    if ( SfxItemState::DEFAULT == rSet.GetItemState(SID_ATTR_YEAR2000) )
     {
         FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
         if (pFormShell != NULL)
@@ -420,7 +420,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
-                if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_DEFAULT )
+                if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
                 {
                     bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
                     rSet.Put( SfxBoolItem( SID_HYPHENATION, bValue ) );
@@ -691,14 +691,14 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
     if( bAttr && pSet )
     {
         // if the view owns selected objects, corresponding items have to be
-        // changed from SFX_ITEM_DEFAULT (_ON) to SFX_ITEM_DISABLED
+        // changed from SfxItemState::DEFAULT (_ON) to SfxItemState::DISABLED
         if( mpDrawView->AreObjectsMarked() )
         {
             SfxWhichIter aNewIter( *pSet, XATTR_LINE_FIRST, XATTR_FILL_LAST );
             nWhich = aNewIter.FirstWhich();
             while( nWhich )
             {
-                if( SFX_ITEM_DEFAULT == pSet->GetItemState( nWhich ) )
+                if( SfxItemState::DEFAULT == pSet->GetItemState( nWhich ) )
                 {
                     rSet.ClearItem( nWhich );
                     rSet.DisableItem( nWhich );
@@ -708,19 +708,19 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         }
 
         SfxItemState eState = pSet->GetItemState( EE_PARA_LRSPACE );
-        if ( eState == SFX_ITEM_DONTCARE )
+        if ( eState == SfxItemState::DONTCARE )
         {
             rSet.InvalidateItem(EE_PARA_LRSPACE);
             rSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
         }
         eState = pSet->GetItemState( EE_PARA_SBL );
-        if ( eState == SFX_ITEM_DONTCARE )
+        if ( eState == SfxItemState::DONTCARE )
         {
             rSet.InvalidateItem(EE_PARA_SBL);
             rSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
         }
         eState = pSet->GetItemState( EE_PARA_ULSPACE );
-        if ( eState == SFX_ITEM_DONTCARE )
+        if ( eState == SfxItemState::DONTCARE )
         {
             rSet.InvalidateItem(EE_PARA_ULSPACE);
             rSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
@@ -738,7 +738,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         }
 
         eState = pSet->GetItemState( EE_CHAR_KERNING, true );
-        if ( eState == SFX_ITEM_DONTCARE )
+        if ( eState == SfxItemState::DONTCARE )
         {
             rSet.InvalidateItem(EE_CHAR_KERNING);
             rSet.InvalidateItem(SID_ATTR_CHAR_KERNING);

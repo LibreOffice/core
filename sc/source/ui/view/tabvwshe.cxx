@@ -225,7 +225,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
         case FID_SEARCH_NOW:
             {
                 if ( pReqArgs &&
-                     SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
+                     SfxItemState::SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem) )
                 {
                     OSL_ENSURE( pItem->ISA(SvxSearchItem), "falsches Item" );
                     const SvxSearchItem* pSearchItem = (const SvxSearchItem*) pItem;
@@ -257,7 +257,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
             break;
 
         case SID_SEARCH_ITEM:
-            if (pReqArgs && SFX_ITEM_SET ==
+            if (pReqArgs && SfxItemState::SET ==
                             pReqArgs->GetItemState(SID_SEARCH_ITEM, false, &pItem))
             {
                 //  Search-Item merken
@@ -274,7 +274,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
         case FID_REPLACE_ALL:
         case FID_SEARCH_ALL:
             {
-                if (pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState(nSlot, false, &pItem))
+                if (pReqArgs && SfxItemState::SET == pReqArgs->GetItemState(nSlot, false, &pItem))
                 {
                     //  SearchItem holen
 
@@ -283,7 +283,7 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
                     //  SearchItem fuellen
 
                     aSearchItem.SetSearchString(((SfxStringItem*)pItem)->GetValue());
-                    if(SFX_ITEM_SET == pReqArgs->GetItemState(FN_PARAM_1, false, &pItem))
+                    if(SfxItemState::SET == pReqArgs->GetItemState(FN_PARAM_1, false, &pItem))
                         aSearchItem.SetReplaceString(((SfxStringItem*)pItem)->GetValue());
 
                     if (nSlot == FID_SEARCH)

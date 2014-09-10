@@ -644,7 +644,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
     switch( pMap->nWID )
     {
     case EE_FEATURE_FIELD:
-        if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SfxItemState::SET )
         {
             SvxFieldItem* pItem = (SvxFieldItem*)rSet.GetItem( EE_FEATURE_FIELD );
             const SvxFieldData* pData = pItem->GetField();
@@ -666,7 +666,7 @@ void SvxUnoTextRangeBase::getPropertyValue( const SfxItemPropertySimpleEntry* pM
         break;
 
     case WID_PORTIONTYPE:
-        if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( EE_FEATURE_FIELD, false ) == SfxItemState::SET )
         {
             OUString aType("TextField");
             rAny <<= aType;
@@ -700,7 +700,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
     case EE_PARA_NUMBULLET:
         {
             SfxItemState eState = rSet.GetItemState( EE_PARA_NUMBULLET, true );
-            if( eState != SFX_ITEM_SET && eState != SFX_ITEM_DEFAULT)
+            if( eState != SfxItemState::SET && eState != SfxItemState::DEFAULT)
                 throw uno::RuntimeException();
 
             SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)rSet.GetItem( EE_PARA_NUMBULLET, true );
@@ -742,7 +742,7 @@ bool SvxUnoTextRangeBase::GetPropertyValueHelper(  SfxItemSet& rSet, const SfxIt
         {
             bool bState = false;
             SfxItemState eState = rSet.GetItemState( EE_PARA_BULLETSTATE, true );
-            if( eState == SFX_ITEM_SET || eState == SFX_ITEM_DEFAULT )
+            if( eState == SfxItemState::SET || eState == SfxItemState::DEFAULT )
             {
                 SfxBoolItem* pItem = (SfxBoolItem*)rSet.GetItem( EE_PARA_BULLETSTATE, true );
                 bState = pItem->GetValue() ? sal_True : sal_False;
@@ -823,7 +823,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
                     if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                     {
                         const SfxPoolItem* pItem;
-                        if( pNewAttrSet->GetItemState( pMap->nWID, true, &pItem ) == SFX_ITEM_SET )
+                        if( pNewAttrSet->GetItemState( pMap->nWID, true, &pItem ) == SfxItemState::SET )
                         {
                             pOldAttrSet->Put( *pItem );
                         }
@@ -843,7 +843,7 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< OUSt
                     if( pMap->nWID >= EE_ITEMS_START && pMap->nWID <= EE_ITEMS_END )
                     {
                         const SfxPoolItem* pItem;
-                        if( pNewParaSet->GetItemState( pMap->nWID, true, &pItem ) == SFX_ITEM_SET )
+                        if( pNewParaSet->GetItemState( pMap->nWID, true, &pItem ) == SfxItemState::SET )
                         {
                             pOldParaSet->Put( *pItem );
                         }
@@ -965,7 +965,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
         SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : NULL;
         if( pForwarder )
         {
-            SfxItemState eItemState = SFX_ITEM_UNKNOWN;
+            SfxItemState eItemState = SfxItemState::UNKNOWN;
             sal_uInt16 nWID = 0;
 
             switch( pMap->nWID )
@@ -973,7 +973,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
             case WID_FONTDESC:
                 {
                     const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
-                    SfxItemState eTempItemState = SFX_ITEM_UNKNOWN;
+                    SfxItemState eTempItemState = SfxItemState::UNKNOWN;
                     while( *pWhichId )
                     {
                         if(nPara != -1)
@@ -983,25 +983,25 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
 
                         switch( eTempItemState )
                         {
-                        case SFX_ITEM_DISABLED:
-                        case SFX_ITEM_DONTCARE:
-                            eItemState = SFX_ITEM_DONTCARE;
+                        case SfxItemState::DISABLED:
+                        case SfxItemState::DONTCARE:
+                            eItemState = SfxItemState::DONTCARE;
                             break;
 
-                        case SFX_ITEM_DEFAULT:
-                            if( eItemState != SFX_ITEM_DEFAULT )
+                        case SfxItemState::DEFAULT:
+                            if( eItemState != SfxItemState::DEFAULT )
                             {
-                                if( eItemState == SFX_ITEM_UNKNOWN )
-                                    eItemState = SFX_ITEM_DEFAULT;
+                                if( eItemState == SfxItemState::UNKNOWN )
+                                    eItemState = SfxItemState::DEFAULT;
                             }
                             break;
 
-                        case SFX_ITEM_READONLY:
-                        case SFX_ITEM_SET:
-                            if( eItemState != SFX_ITEM_SET )
+                        case SfxItemState::READONLY:
+                        case SfxItemState::SET:
+                            if( eItemState != SfxItemState::SET )
                             {
-                                if( eItemState == SFX_ITEM_UNKNOWN )
-                                    eItemState = SFX_ITEM_SET;
+                                if( eItemState == SfxItemState::UNKNOWN )
+                                    eItemState = SfxItemState::SET;
                             }
                             break;
                         default:
@@ -1016,7 +1016,7 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
             case WID_NUMLEVEL:
             case WID_NUMBERINGSTARTVALUE:
             case WID_PARAISNUMBERINGRESTART:
-                eItemState = SFX_ITEM_SET;
+                eItemState = SfxItemState::SET;
                 break;
 
             default:
@@ -1033,16 +1033,16 @@ beans::PropertyState SAL_CALL SvxUnoTextRangeBase::_getPropertyState(const SfxIt
 
             switch( eItemState )
             {
-            case SFX_ITEM_DONTCARE:
-            case SFX_ITEM_DISABLED:
+            case SfxItemState::DONTCARE:
+            case SfxItemState::DISABLED:
                 return beans::PropertyState_AMBIGUOUS_VALUE;
-            case SFX_ITEM_READONLY:
-            case SFX_ITEM_SET:
+            case SfxItemState::READONLY:
+            case SfxItemState::SET:
                 return beans::PropertyState_DIRECT_VALUE;
-            case SFX_ITEM_DEFAULT:
+            case SfxItemState::DEFAULT:
                 return beans::PropertyState_DEFAULT_VALUE;
             default: break;
-//              case SFX_ITEM_UNKNOWN:
+//              case SfxItemState::UNKNOWN:
             }
         }
     }
@@ -1113,7 +1113,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
     bool bUnknownPropertyFound = false;
     if(pSet && pMap)
     {
-        SfxItemState eItemState = SFX_ITEM_UNKNOWN;
+        SfxItemState eItemState = SfxItemState::UNKNOWN;
         sal_uInt16 nWID = 0;
 
         switch( pMap->nWID )
@@ -1121,32 +1121,32 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             case WID_FONTDESC:
                 {
                     const sal_uInt16* pWhichId = aSvxUnoFontDescriptorWhichMap;
-                    SfxItemState eTempItemState = SFX_ITEM_UNKNOWN;
+                    SfxItemState eTempItemState = SfxItemState::UNKNOWN;
                     while( *pWhichId )
                     {
                         eTempItemState = pSet->GetItemState( *pWhichId );
 
                         switch( eTempItemState )
                         {
-                        case SFX_ITEM_DISABLED:
-                        case SFX_ITEM_DONTCARE:
-                            eItemState = SFX_ITEM_DONTCARE;
+                        case SfxItemState::DISABLED:
+                        case SfxItemState::DONTCARE:
+                            eItemState = SfxItemState::DONTCARE;
                             break;
 
-                        case SFX_ITEM_DEFAULT:
-                            if( eItemState != SFX_ITEM_DEFAULT )
+                        case SfxItemState::DEFAULT:
+                            if( eItemState != SfxItemState::DEFAULT )
                             {
-                                if( eItemState == SFX_ITEM_UNKNOWN )
-                                    eItemState = SFX_ITEM_DEFAULT;
+                                if( eItemState == SfxItemState::UNKNOWN )
+                                    eItemState = SfxItemState::DEFAULT;
                             }
                             break;
 
-                        case SFX_ITEM_READONLY:
-                        case SFX_ITEM_SET:
-                            if( eItemState != SFX_ITEM_SET )
+                        case SfxItemState::READONLY:
+                        case SfxItemState::SET:
+                            if( eItemState != SfxItemState::SET )
                             {
-                                if( eItemState == SFX_ITEM_UNKNOWN )
-                                    eItemState = SFX_ITEM_SET;
+                                if( eItemState == SfxItemState::UNKNOWN )
+                                    eItemState = SfxItemState::SET;
                             }
                             break;
                         default:
@@ -1162,7 +1162,7 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
             case WID_NUMLEVEL:
             case WID_NUMBERINGSTARTVALUE:
             case WID_PARAISNUMBERINGRESTART:
-                eItemState = SFX_ITEM_SET;
+                eItemState = SfxItemState::SET;
                 break;
 
             default:
@@ -1177,16 +1177,16 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
 
         switch( eItemState )
         {
-                case SFX_ITEM_READONLY:
-                case SFX_ITEM_SET:
+                case SfxItemState::READONLY:
+                case SfxItemState::SET:
                     rState = beans::PropertyState_DIRECT_VALUE;
                     break;
-                case SFX_ITEM_DEFAULT:
+                case SfxItemState::DEFAULT:
                     rState = beans::PropertyState_DEFAULT_VALUE;
                     break;
-//                  case SFX_ITEM_UNKNOWN:
-//                  case SFX_ITEM_DONTCARE:
-//                  case SFX_ITEM_DISABLED:
+//                  case SfxItemState::UNKNOWN:
+//                  case SfxItemState::DONTCARE:
+//                  case SfxItemState::DISABLED:
                 default:
                     rState = beans::PropertyState_AMBIGUOUS_VALUE;
         }
@@ -2430,12 +2430,12 @@ void SvxDummyTextSource::GetPortions( sal_Int32, std::vector<sal_Int32>& ) const
 
 SfxItemState SvxDummyTextSource::GetItemState( const ESelection&, sal_uInt16 ) const
 {
-    return SFX_ITEM_UNKNOWN;
+    return SfxItemState::UNKNOWN;
 }
 
 SfxItemState SvxDummyTextSource::GetItemState( sal_Int32, sal_uInt16 ) const
 {
-    return SFX_ITEM_UNKNOWN;
+    return SfxItemState::UNKNOWN;
 }
 
 SfxItemPool* SvxDummyTextSource::GetPool() const

@@ -1111,7 +1111,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 sal_uInt16 nId = rReq.GetSlot(), nCnt = 1;
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 const SfxPoolItem* pItem;
-                if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, false, &pItem ))
+                if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ))
                     nCnt = ((SfxUInt16Item*)pItem)->GetValue();
 
                 bool (::svl::IUndoManager:: *fnDo)();

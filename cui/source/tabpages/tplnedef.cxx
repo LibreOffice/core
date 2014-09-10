@@ -276,7 +276,7 @@ bool SvxLineDefTabPage::FillItemSet( SfxItemSet* rAttrs )
 
 void SvxLineDefTabPage::Reset( const SfxItemSet* rAttrs )
 {
-    if( rAttrs->GetItemState( GetWhich( XATTR_LINESTYLE ) ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( GetWhich( XATTR_LINESTYLE ) ) != SfxItemState::DONTCARE )
     {
         XLineStyle eXLS = (XLineStyle) ( ( const XLineStyleItem& ) rAttrs->Get( GetWhich( XATTR_LINESTYLE ) ) ).GetValue();
 

@@ -79,9 +79,9 @@ void ScTabPageProtection::Reset( const SfxItemSet* rCoreAttrs )
                                           (const SfxPoolItem**)&pProtAttr );
 
     // Is this a Default-Item?
-    if ( eItemState == SFX_ITEM_DEFAULT )
+    if ( eItemState == SfxItemState::DEFAULT )
         pProtAttr = (const ScProtectionAttr*)&(rCoreAttrs->Get(nWhich));
-    // At SFX_ITEM_DONTCARE let to 0
+    // At SfxItemState::DONTCARE let to 0
 
     bTriEnabled = ( pProtAttr == NULL );                // TriState, when DontCare
     bDontCare = bTriEnabled;
@@ -136,7 +136,7 @@ bool ScTabPageProtection::FillItemSet( SfxItemSet* rCoreAttrs )
 
     if ( bAttrsChanged )
         rCoreAttrs->Put( aProtAttr );
-    else if ( eItemState == SFX_ITEM_DEFAULT )
+    else if ( eItemState == SfxItemState::DEFAULT )
         rCoreAttrs->ClearItem( nWhich );
 
     return bAttrsChanged;

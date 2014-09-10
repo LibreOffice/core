@@ -103,7 +103,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
         SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == GetFrmFmt()->GetItemState(
+        if( SfxItemState::SET == GetFrmFmt()->GetItemState(
                                 RES_BOXATR_FORMULA, false, &pItem ) )
         {
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status
@@ -120,7 +120,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                     SfxItemSet aTmp( pDoc->GetAttrPool(),
                                         RES_BOXATR_BEGIN,RES_BOXATR_END-1 );
                     aTmp.Put( SwTblBoxValue( nRet ) );
-                    if( SFX_ITEM_SET != pFmt->GetItemState( RES_BOXATR_FORMAT ))
+                    if( SfxItemState::SET != pFmt->GetItemState( RES_BOXATR_FORMAT ))
                         aTmp.Put( SwTblBoxNumFormat( 0 ));
                     pFmt->SetFmtAttr( aTmp );
                 }
@@ -130,7 +130,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                 nRet = GetFrmFmt()->GetTblBoxValue().GetValue();
             break;
         }
-        else if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
+        else if( SfxItemState::SET == pBox->GetFrmFmt()->GetItemState(
                                 RES_BOXATR_VALUE, false, &pItem ) )
         {
             rCalcPara.rCalc.SetCalcError( CALC_NOERR ); // reset status

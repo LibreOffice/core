@@ -230,7 +230,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSort, true, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSort, true, &pItem ) == SfxItemState::SET )
         {
             ScSortParam aTempData = static_cast<const ScSortItem*>(pItem)->GetSortData();
             aTempData.maKeyState = aNewSortData.maKeyState;
@@ -690,7 +690,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSort, true, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSort, true, &pItem ) == SfxItemState::SET )
             aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
     }
     aNewSortData.bByRow          = m_pBtnTopDown->IsChecked();

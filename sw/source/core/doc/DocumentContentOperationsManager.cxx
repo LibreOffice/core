@@ -1197,7 +1197,7 @@ namespace //local functions originally from docfmt.cxx
         {
             SwTableNode* pTblNd;
             const SwFmtPageDesc* pDesc;
-            if( SFX_ITEM_SET == pOtherSet->GetItemState( RES_PAGEDESC,
+            if( SfxItemState::SET == pOtherSet->GetItemState( RES_PAGEDESC,
                             false, (const SfxPoolItem**)&pDesc ))
             {
                 if( pNode )
@@ -1244,7 +1244,7 @@ namespace //local functions originally from docfmt.cxx
             const SvxFmtBreakItem* pBreak;
             if( pNode && 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
                 0 != (pTblNd = pNode->FindTableNode() ) &&
-                SFX_ITEM_SET == pOtherSet->GetItemState( RES_BREAK,
+                SfxItemState::SET == pOtherSet->GetItemState( RES_BREAK,
                             false, (const SfxPoolItem**)&pBreak ) )
             {
                 SwTableNode* pCurTblNd = pTblNd;
@@ -1275,7 +1275,7 @@ namespace //local functions originally from docfmt.cxx
                 // If we have a PoolNumRule, create it if needed
                 const SwNumRuleItem* pRule;
                 sal_uInt16 nPoolId=0;
-                if( SFX_ITEM_SET == pOtherSet->GetItemState( RES_PARATR_NUMRULE,
+                if( SfxItemState::SET == pOtherSet->GetItemState( RES_PARATR_NUMRULE,
                                     false, (const SfxPoolItem**)&pRule ) &&
                     !pDoc->FindNumRulePtr( pRule->GetValue() ) &&
                     USHRT_MAX != (nPoolId = SwStyleNameMapper::GetPoolIdFromUIName ( pRule->GetValue(),
@@ -1498,8 +1498,8 @@ namespace //local functions originally from docfmt.cxx
         }
 
         bool bCreateSwpHints = pCharSet && (
-            SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, false ) ||
-            SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, false ) );
+            SfxItemState::SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, false ) ||
+            SfxItemState::SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, false ) );
 
         for(; aSt < aEnd; ++aSt )
         {
@@ -1769,14 +1769,14 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
         {
             const SfxPoolItem *pItem;
             const SfxItemSet* pSet = ((SwCntntNode*)pNd)->GetpSwAttrSet();
-            if( pSet && SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC,
+            if( pSet && SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC,
                 false, &pItem ) )
             {
                 pTableFmt->SetFmtAttr( *pItem );
                 bSavePageDesc = true;
             }
 
-            if( pSet && SFX_ITEM_SET == pSet->GetItemState( RES_BREAK,
+            if( pSet && SfxItemState::SET == pSet->GetItemState( RES_BREAK,
                 false, &pItem ) )
             {
                 pTableFmt->SetFmtAttr( *pItem );
@@ -2835,8 +2835,8 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
                 {
                     // Only if the table has page breaks!
                     const SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
-                    if( SFX_ITEM_SET != pFrmFmt->GetItemState(RES_PAGEDESC, false) &&
-                        SFX_ITEM_SET != pFrmFmt->GetItemState( RES_BREAK, false ) )
+                    if( SfxItemState::SET != pFrmFmt->GetItemState(RES_PAGEDESC, false) &&
+                        SfxItemState::SET != pFrmFmt->GetItemState( RES_BREAK, false ) )
                         pNd = 0;
                 }
             }
@@ -2856,13 +2856,13 @@ bool DocumentContentOperationsManager::SplitNode( const SwPosition &rPos, bool b
                     {
                         SwFrmFmt* pFrmFmt = pTblNd->GetTable().GetFrmFmt();
                         const SfxPoolItem *pItem;
-                        if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_PAGEDESC,
+                        if( SfxItemState::SET == pFrmFmt->GetItemState( RES_PAGEDESC,
                             false, &pItem ) )
                         {
                             pTxtNd->SetAttr( *pItem );
                             pFrmFmt->ResetFmtAttr( RES_PAGEDESC );
                         }
-                        if( SFX_ITEM_SET == pFrmFmt->GetItemState( RES_BREAK,
+                        if( SfxItemState::SET == pFrmFmt->GetItemState( RES_BREAK,
                             false, &pItem ) )
                         {
                             pTxtNd->SetAttr( *pItem );
@@ -3990,9 +3990,9 @@ SwFlyFrmFmt* DocumentContentOperationsManager::_InsNoTxtNode( const SwPosition& 
 }
 
 #define NUMRULE_STATE \
-     SfxItemState aNumRuleState = SFX_ITEM_UNKNOWN; \
+     SfxItemState aNumRuleState = SfxItemState::UNKNOWN; \
      SwNumRuleItem aNumRuleItem; \
-     SfxItemState aListIdState = SFX_ITEM_UNKNOWN; \
+     SfxItemState aListIdState = SfxItemState::UNKNOWN; \
      SfxStringItem aListIdItem( RES_PARATR_LIST_ID, OUString() ); \
 
 #define PUSH_NUMRULE_STATE \
@@ -4012,12 +4012,12 @@ static void lcl_PushNumruleState( SfxItemState &aNumRuleState, SwNumRuleItem &aN
     {
         const SfxPoolItem * pItem = NULL;
         aNumRuleState = pAttrSet->GetItemState(RES_PARATR_NUMRULE, false, &pItem);
-        if (SFX_ITEM_SET == aNumRuleState)
+        if (SfxItemState::SET == aNumRuleState)
             aNumRuleItem = *((SwNumRuleItem *) pItem);
 
         aListIdState =
             pAttrSet->GetItemState(RES_PARATR_LIST_ID, false, &pItem);
-        if (SFX_ITEM_SET == aListIdState)
+        if (SfxItemState::SET == aListIdState)
         {
             aListIdItem.SetValue( static_cast<const SfxStringItem*>(pItem)->GetValue() );
         }
@@ -4033,7 +4033,7 @@ static void lcl_PopNumruleState( SfxItemState aNumRuleState, const SwNumRuleItem
     // #i86492# - restore also <ListId> item
     if ( !lcl_MarksWholeNode(rPam) )
     {
-        if (SFX_ITEM_SET == aNumRuleState)
+        if (SfxItemState::SET == aNumRuleState)
         {
             pDestTxtNd->SetAttr(aNumRuleItem);
         }
@@ -4041,7 +4041,7 @@ static void lcl_PopNumruleState( SfxItemState aNumRuleState, const SwNumRuleItem
         {
             pDestTxtNd->ResetAttr(RES_PARATR_NUMRULE);
         }
-        if (SFX_ITEM_SET == aListIdState)
+        if (SfxItemState::SET == aListIdState)
         {
             pDestTxtNd->SetAttr(aListIdItem);
         }
@@ -4348,9 +4348,9 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             if( pSttTxtNd && bCopyCollFmt && pDestTxtNd->HasSwAttrSet() )
             {
                 aBrkSet.Put( *pDestTxtNd->GetpSwAttrSet() );
-                if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_BREAK, false ) )
+                if( SfxItemState::SET == aBrkSet.GetItemState( RES_BREAK, false ) )
                     pDestTxtNd->ResetAttr( RES_BREAK );
-                if( SFX_ITEM_SET == aBrkSet.GetItemState( RES_PAGEDESC, false ) )
+                if( SfxItemState::SET == aBrkSet.GetItemState( RES_PAGEDESC, false ) )
                     pDestTxtNd->ResetAttr( RES_PAGEDESC );
             }
 

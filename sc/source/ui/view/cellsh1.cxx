@@ -1250,7 +1250,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 sal_uLong nFormat = 0;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -1504,7 +1504,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 //  Clipboard-ID given as parameter? Basic "PasteSpecial(Format)"
                 const SfxPoolItem* pItem=NULL;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     sal_uLong nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -1791,7 +1791,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_CONSOLIDATE:
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && SFX_ITEM_SET ==
+                if ( pReqArgs && SfxItemState::SET ==
                         pReqArgs->GetItemState( SCITEM_CONSOLIDATEDATA, true, &pItem ) )
                 {
                     const ScConsolidateParam& rParam =
@@ -2150,7 +2150,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     bool bShow;
                     const SfxPoolItem* pItem;
-                    if ( pReqArgs && (pReqArgs->GetItemState( FID_NOTE_VISIBLE, true, &pItem ) == SFX_ITEM_SET) )
+                    if ( pReqArgs && (pReqArgs->GetItemState( FID_NOTE_VISIBLE, true, &pItem ) == SfxItemState::SET) )
                         bShow = ((const SfxBoolItem*) pItem)->GetValue();
                     else
                         bShow = !pNote->IsCaptionShown();

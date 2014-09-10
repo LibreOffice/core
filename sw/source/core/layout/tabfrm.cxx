@@ -4923,7 +4923,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 
     if ( ( bAttrSetChg && pNew &&
-           SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, false ) ) ||
+           SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_PROTECT, false ) ) ||
          ( pNew && RES_PROTECT == pNew->Which()) )
     {
         SwViewShell *pSh = getRootFrm()->GetCurrShell();
@@ -4932,7 +4932,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 
     if ( bAttrSetChg && pNew &&
-         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, false, &pItem ) )
+         SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_FRAMEDIR, false, &pItem ) )
     {
         SetDerivedVert( false );
         CheckDirChange();
@@ -4940,7 +4940,7 @@ void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
     // #i29550#
     if ( bAttrSetChg && pNew &&
-         SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_BOX, false, &pItem ) )
+         SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_BOX, false, &pItem ) )
     {
         SwFrm* pTmpUpper = GetUpper();
         while ( pTmpUpper->GetUpper() && !pTmpUpper->GetUpper()->IsTabFrm() )

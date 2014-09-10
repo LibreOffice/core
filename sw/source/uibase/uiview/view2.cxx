@@ -573,7 +573,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_ON:
         {
             if( pArgs &&
-                SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem ))
+                SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
             {
                 IDocumentRedlineAccess* pIDRA = m_pWrtShell->getIDocumentRedlineAccess();
                 Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
@@ -583,7 +583,7 @@ void SwView::Execute(SfxRequest &rReq)
                     // xmlsec05:    new password dialog
                     Window* pParent;
                     const SfxPoolItem* pParentItem;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
+                    if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
                         pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
@@ -613,7 +613,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             IDocumentRedlineAccess* pIDRA = m_pWrtShell->getIDocumentRedlineAccess();
             Sequence <sal_Int8> aPasswd = pIDRA->GetRedlinePassword();
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem )
+            if( pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem )
                 && ((SfxBoolItem*)pItem)->GetValue() == ( aPasswd.getLength() != 0 ) )
                 break;
 
@@ -621,7 +621,7 @@ void SwView::Execute(SfxRequest &rReq)
             //              message box for wrong password
             Window* pParent;
             const SfxPoolItem* pParentItem;
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
+            if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_ATTR_XWINDOW, false, &pParentItem ) )
                 pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
@@ -656,7 +656,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_REDLINE_SHOW:
 
             if( pArgs &&
-                SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem))
+                SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem))
             {
                 sal_uInt16 nMode = ( ~(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE)
                         & m_pWrtShell->GetRedlineMode() ) | nsRedlineMode_t::REDLINE_SHOW_INSERT;
@@ -756,19 +756,19 @@ void SwView::Execute(SfxRequest &rReq)
 
                 if( pArgs )
                 {
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_FILE_NAME, false, &pItem ))
+                    if( SfxItemState::SET == pArgs->GetItemState( SID_FILE_NAME, false, &pItem ))
                         sFileName = ((const SfxStringItem*)pItem)->GetValue();
                     bHasFileName = !sFileName.isEmpty();
 
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_FILTER_NAME, false, &pItem ))
+                    if( SfxItemState::SET == pArgs->GetItemState( SID_FILTER_NAME, false, &pItem ))
                         sFilterName = ((const SfxStringItem*)pItem)->GetValue();
 
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_VERSION, false, &pItem ))
+                    if( SfxItemState::SET == pArgs->GetItemState( SID_VERSION, false, &pItem ))
                     {
                         nVersion = ((const SfxInt16Item *)pItem)->GetValue();
                         m_pViewImpl->SetParam( nVersion );
                     }
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_NO_ACCEPT_DIALOG, false, &pItem ))
+                    if( SfxItemState::SET == pArgs->GetItemState( SID_NO_ACCEPT_DIALOG, false, &pItem ))
                     {
                         bNoAcceptDialog = ((const SfxBoolItem *)pItem)->GetValue();
                     }
@@ -968,7 +968,7 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case SID_ATTR_BRUSH:
         {
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_BACKGROUND, false, &pItem))
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState(RES_BACKGROUND, false, &pItem))
             {
                 const sal_uInt16 nCurIdx = m_pWrtShell->GetCurPageDesc();
                 SwPageDesc aDesc( m_pWrtShell->GetPageDesc( nCurIdx ));
@@ -991,7 +991,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_INSERT_CTRL:
         case FN_INSERT_OBJ_CTRL:
         {
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem))
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem))
             {
                 const sal_uInt16 nValue = ((SfxUInt16Item*)pItem)->GetValue();
                 switch ( nSlot )
@@ -1021,7 +1021,7 @@ void SwView::Execute(SfxRequest &rReq)
 
         case SID_ATTR_DEFTABSTOP:
         {
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
             {
                 SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
                 const sal_uInt16 nTab = ((const SfxUInt16Item*)pItem)->GetValue();
@@ -1031,7 +1031,7 @@ void SwView::Execute(SfxRequest &rReq)
         }
         break;
         case SID_ATTR_LANGUAGE  :
-        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_LANGUAGE, false, &pItem))
+        if(pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LANGUAGE, false, &pItem))
         {
             SvxLanguageItem aLang(((SvxLanguageItem*)pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
             m_pWrtShell->SetDefault( aLang );
@@ -1039,14 +1039,14 @@ void SwView::Execute(SfxRequest &rReq)
         }
         break;
         case  SID_ATTR_CHAR_CTL_LANGUAGE:
-        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_CHRATR_CTL_LANGUAGE, false, &pItem))
+        if(pArgs && SfxItemState::SET == pArgs->GetItemState(RES_CHRATR_CTL_LANGUAGE, false, &pItem))
         {
             m_pWrtShell->SetDefault( *pItem );
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CTL_LANGUAGE );
         }
         break;
         case  SID_ATTR_CHAR_CJK_LANGUAGE:
-        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_CHRATR_CJK_LANGUAGE, false, &pItem))
+        if(pArgs && SfxItemState::SET == pArgs->GetItemState(RES_CHRATR_CJK_LANGUAGE, false, &pItem))
         {
             m_pWrtShell->SetDefault( *pItem );
             lcl_SetAllTextToDefaultLanguage( *m_pWrtShell, RES_CHRATR_CJK_LANGUAGE );
@@ -1077,7 +1077,7 @@ void SwView::Execute(SfxRequest &rReq)
         }
         break;
         case SID_JUMPTOMARK:
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_JUMPTOMARK, false, &pItem))
+            if( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_JUMPTOMARK, false, &pItem))
                 JumpToSwMark( (( const SfxStringItem*)pItem)->GetValue() );
         break;
         case SID_GALLERY :
@@ -1106,7 +1106,7 @@ void SwView::Execute(SfxRequest &rReq)
         {
             bool bShow = false;
             if( pArgs &&
-                SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem ))
+                SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem ))
                 bShow = ((const SfxBoolItem*)pItem)->GetValue();
             if((bShow && m_bInMailMerge) != GetViewFrame()->HasChildWindow(nSlot))
                 GetViewFrame()->ToggleChildWindow(nSlot);
@@ -1143,7 +1143,7 @@ void SwView::Execute(SfxRequest &rReq)
         case FN_QRY_MERGE:
         {
             bool bUseCurrentDocument = true;
-            bool bQuery = !pArgs || SFX_ITEM_SET != pArgs->GetItemState(nSlot);
+            bool bQuery = !pArgs || SfxItemState::SET != pArgs->GetItemState(nSlot);
             if(bQuery)
             {
                 SfxViewFrame* pTmpFrame = GetViewFrame();
@@ -1556,7 +1556,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             SfxItemSet aSet(GetPool(),
                                     RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
                             rShell.GetCurAttr(aSet);
-                            if(SFX_ITEM_DEFAULT <=
+                            if(SfxItemState::DEFAULT <=
                                aSet.GetItemState(RES_PARATR_NUMRULE, true))
                             {
                                 const OUString& rNumStyle =
@@ -1658,7 +1658,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         case FN_STAT_BOOKMARK:
         if ( pArgs )
         {
-            if (SFX_ITEM_SET == pArgs->GetItemState( nWhich, true, &pItem))
+            if (SfxItemState::SET == pArgs->GetItemState( nWhich, true, &pItem))
             {
                 const IDocumentMarkAccess* pMarkAccess = rSh.getIDocumentMarkAccess();
                 const sal_Int32 nIdx = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
@@ -1728,14 +1728,14 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                 }
 
                 const SfxPoolItem* pViewLayoutItem = 0;
-                if ( pSet && SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pViewLayoutItem))
+                if ( pSet && SfxItemState::SET == pSet->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pViewLayoutItem))
                 {
                     const sal_uInt16 nColumns = ((const SvxViewLayoutItem *)pViewLayoutItem)->GetValue();
                     const bool bBookMode  = ((const SvxViewLayoutItem *)pViewLayoutItem)->IsBookMode();
                     SetViewLayout( nColumns, bBookMode );
                 }
 
-                if ( pSet && SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_ZOOM, true, &pItem))
+                if ( pSet && SfxItemState::SET == pSet->GetItemState(SID_ATTR_ZOOM, true, &pItem))
                 {
                     enum SvxZoomType eType = ((const SvxZoomItem *)pItem)->GetType();
                     SetZoom( eType, ((const SvxZoomItem *)pItem)->GetValue() );
@@ -1753,7 +1753,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
             if ( pArgs && !rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
                 ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
-                if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pItem ))
+                if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_VIEWLAYOUT, true, &pItem ))
                 {
                     const sal_uInt16 nColumns = ((const SvxViewLayoutItem *)pItem)->GetValue();
                     const bool bBookMode  = (0 == nColumns || 0 != (nColumns % 2)) ?
@@ -1775,7 +1775,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         {
             if ( pArgs && ( ( GetDocShell()->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED ) || !GetDocShell()->IsInPlaceActive() ) )
             {
-                if ( SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ))
+                if ( SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ))
                 {
                     const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
                     SetZoom( SVX_ZOOM_PERCENT, nCurrentZoom );
@@ -1824,7 +1824,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         {
             if ( pArgs )
             {
-                if (SFX_ITEM_SET == pArgs->GetItemState( nWhich, true, &pItem))
+                if (SfxItemState::SET == pArgs->GetItemState( nWhich, true, &pItem))
                 {
                     switch ( ((const SfxUInt16Item *)pItem)->GetValue() )
                     {
@@ -2071,9 +2071,9 @@ static sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
         const SwPageDesc& rPageDesc = rDoc.GetPageDesc( i );
         const SwFrmFmt& rMaster = rPageDesc.GetMaster();
         const SfxPoolItem* pItem;
-        if( ( SFX_ITEM_SET == rMaster.GetAttrSet().GetItemState( RES_HEADER, false, &pItem ) &&
+        if( ( SfxItemState::SET == rMaster.GetAttrSet().GetItemState( RES_HEADER, false, &pItem ) &&
               ((SwFmtHeader*)pItem)->IsActive() ) ||
-            ( SFX_ITEM_SET == rMaster.GetAttrSet().GetItemState( RES_FOOTER, false, &pItem )  &&
+            ( SfxItemState::SET == rMaster.GetAttrSet().GetItemState( RES_FOOTER, false, &pItem )  &&
               ((SwFmtFooter*)pItem)->IsActive()) )
             ++nRet;
     }
@@ -2095,7 +2095,7 @@ void SwView::ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem )
     {
         OUString sFile, sFilter;
         sFile = ( (const SfxStringItem *)pItem )->GetValue();
-        if ( SFX_ITEM_SET == rRequest.GetArgs()->GetItemState( FN_PARAM_1, true, &pItem ) )
+        if ( SfxItemState::SET == rRequest.GetArgs()->GetItemState( FN_PARAM_1, true, &pItem ) )
             sFilter = ( (const SfxStringItem *)pItem )->GetValue();
 
         bool bHasFileName = !sFile.isEmpty();

@@ -2852,10 +2852,10 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
     SfxItemState            eBLTRState = rSelItemSet.GetItemState( ATTR_BORDER_BLTR, true, &pBLTRItem );
 
     // any of the lines visible?
-    if( (eItemState != SFX_ITEM_DEFAULT) || (eTLBRState != SFX_ITEM_DEFAULT) || (eBLTRState != SFX_ITEM_DEFAULT) )
+    if( (eItemState != SfxItemState::DEFAULT) || (eTLBRState != SfxItemState::DEFAULT) || (eBLTRState != SfxItemState::DEFAULT) )
     {
         // none of the lines don't care?
-        if( (eItemState != SFX_ITEM_DONTCARE) && (eTLBRState != SFX_ITEM_DONTCARE) && (eBLTRState != SFX_ITEM_DONTCARE) )
+        if( (eItemState != SfxItemState::DONTCARE) && (eTLBRState != SfxItemState::DONTCARE) && (eBLTRState != SfxItemState::DONTCARE) )
         {
             boost::scoped_ptr<SfxItemSet> pOldSet(new SfxItemSet(
                                             *(pDoc->GetPool()),
@@ -2910,7 +2910,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
 
             ApplyAttributes( pNewSet.get(), pOldSet.get() );
         }
-        else // if ( eItemState == SFX_ITEM_DONTCARE )
+        else // if ( eItemState == SfxItemState::DONTCARE )
         {
             aFuncMark.MarkToMulti();
             pDoc->ApplySelectionLineStyle( aFuncMark, pLine, bColorOnly );

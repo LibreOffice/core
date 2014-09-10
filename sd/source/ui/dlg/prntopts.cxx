@@ -130,7 +130,7 @@ bool SdPrintOptions::FillItemSet( SfxItemSet* rAttrs )
 void SdPrintOptions::Reset( const SfxItemSet* rAttrs )
 {
     const SdOptionsPrintItem* pPrintOpts = NULL;
-    if( SFX_ITEM_SET == rAttrs->GetItemState( ATTR_OPTIONS_PRINT, false,
+    if( SfxItemState::SET == rAttrs->GetItemState( ATTR_OPTIONS_PRINT, false,
                             (const SfxPoolItem**) &pPrintOpts ) )
     {
         m_pCbxDraw->Check(              pPrintOpts->GetOptionsPrint().IsDraw() );

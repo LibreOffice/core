@@ -1452,7 +1452,7 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     if ( pNewAnchorFmt )
     {
         // Do not respond to a Reset Anchor !!!!!
-        if ( SFX_ITEM_SET ==
+        if ( SfxItemState::SET ==
                 GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, false ) )
         {
             // no connect to layout during disconnection
@@ -1503,11 +1503,11 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
              RES_OPAQUE == nWhich ||
              RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
              ( RES_ATTRSET_CHG == nWhich &&
-               ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+               ( SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                            RES_SURROUND, false ) ||
-                 SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                 SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                            RES_OPAQUE, false ) ||
-                 SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                 SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                            RES_WRAP_INFLUENCE_ON_OBJPOS, false ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
@@ -1519,15 +1519,15 @@ void SwDrawContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                   // #i28701# - add attribute 'Follow text flow'
                   RES_FOLLOW_TEXT_FLOW == nWhich ||
                   ( RES_ATTRSET_CHG == nWhich &&
-                    ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                    ( SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                                 RES_LR_SPACE, false ) ||
-                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                      SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                                 RES_UL_SPACE, false ) ||
-                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                      SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                                 RES_HORI_ORIENT, false ) ||
-                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                      SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                                 RES_VERT_ORIENT, false ) ||
-                      SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                      SfxItemState::SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                                 RES_FOLLOW_TEXT_FLOW, false ) ) ) )
         {
             lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );

@@ -561,7 +561,7 @@ void ScDocument::FillInfo(
 
                                                 // we need to check already here for protected cells
                                                 const SfxPoolItem* pItem;
-                                                if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SFX_ITEM_SET )
+                                                if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SfxItemState::SET )
                                                 {
                                                     const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(pItem);
                                                     bHidden = pProtAttr->GetHideCell();
@@ -705,23 +705,23 @@ void ScDocument::FillInfo(
                     const SfxPoolItem* pItem;
 
                             //  Hintergrund
-                    if ( pCondSet->GetItemState( ATTR_BACKGROUND, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_BACKGROUND, true, &pItem ) == SfxItemState::SET )
                     {
                         pInfo->pBackground = (const SvxBrushItem*) pItem;
                         pRowInfo[nArrRow].bEmptyBack = false;
                     }
 
                             //  Umrandung
-                    if ( pCondSet->GetItemState( ATTR_BORDER, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_BORDER, true, &pItem ) == SfxItemState::SET )
                         pInfo->pLinesAttr = (const SvxBoxItem*) pItem;
 
-                    if ( pCondSet->GetItemState( ATTR_BORDER_TLBR, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_BORDER_TLBR, true, &pItem ) == SfxItemState::SET )
                         pInfo->mpTLBRLine = static_cast< const SvxLineItem* >( pItem );
-                    if ( pCondSet->GetItemState( ATTR_BORDER_BLTR, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_BORDER_BLTR, true, &pItem ) == SfxItemState::SET )
                         pInfo->mpBLTRLine = static_cast< const SvxLineItem* >( pItem );
 
                             //  Schatten
-                    if ( pCondSet->GetItemState( ATTR_SHADOW, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pCondSet->GetItemState( ATTR_SHADOW, true, &pItem ) == SfxItemState::SET )
                     {
                         pInfo->pShadowAttr = (const SvxShadowItem*) pItem;
                         bAnyShadow = true;
@@ -767,7 +767,7 @@ void ScDocument::FillInfo(
                     // Hintergrund kopieren (oder in output.cxx)
 
                     if ( !pStartCond || pStartCond->
-                                    GetItemState(ATTR_BACKGROUND,true,&pItem) != SFX_ITEM_SET )
+                                    GetItemState(ATTR_BACKGROUND,true,&pItem) != SfxItemState::SET )
                         pItem = &pStartPattern->GetItem(ATTR_BACKGROUND);
                     pInfo->pBackground = (const SvxBrushItem*) pItem;
                     pRowInfo[nArrRow].bEmptyBack = false;
@@ -775,7 +775,7 @@ void ScDocument::FillInfo(
                     // Schatten
 
                     if ( !pStartCond || pStartCond->
-                                    GetItemState(ATTR_SHADOW,true,&pItem) != SFX_ITEM_SET )
+                                    GetItemState(ATTR_SHADOW,true,&pItem) != SfxItemState::SET )
                         pItem = &pStartPattern->GetItem(ATTR_SHADOW);
                     pInfo->pShadowAttr = (const SvxShadowItem*) pItem;
                     if (pInfo->pShadowAttr != pDefShadow)

@@ -107,7 +107,7 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
     m_pMetricLB->SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
 
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
+    if(SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
         m_pTabFT->Hide();
@@ -251,7 +251,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(false);
     const SfxPoolItem* pItem;
 
-    if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
         m_pWrtShell = (SwWrtShell*)((const SwPtrItem*)pItem)->GetValue();
 
     SwFldUpdateFlags eFldFlags = AUTOUPD_GLOBALSETTING;
@@ -279,7 +279,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     m_pAutoUpdateFields->SaveValue();
     m_pAutoUpdateCharts->SaveValue();
     m_pMetricLB->SetNoSelection();
-    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SfxItemState::DEFAULT )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();
@@ -295,7 +295,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
         ::SetFieldUnit(*m_pTabMF, eFieldUnit);
     }
     m_pMetricLB->SaveValue();
-    if(SFX_ITEM_SET == rSet->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
     {
         m_nLastTab = ((SfxUInt16Item*)pItem)->GetValue();
         m_pTabMF->SetValue(m_pTabMF->Normalize(m_nLastTab), FUNIT_TWIP);
@@ -310,7 +310,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
         m_pUseSquaredPageMode->SaveValue();
     }
 
-    if(SFX_ITEM_SET == rSet->GetItemState(SID_ATTR_APPLYCHARUNIT, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(SID_ATTR_APPLYCHARUNIT, false, &pItem))
     {
         bool bUseCharUnit = ((const SfxBoolItem*)pItem)->GetValue();
         m_pUseCharUnit->Check(bUseCharUnit);
@@ -556,7 +556,7 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet*  )
 void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
 {
     const SfxPoolItem* pItem;
-    if(SFX_ITEM_SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
     {
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }

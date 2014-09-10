@@ -1876,14 +1876,14 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( sal_uInt16 nItemWhic
         {
             SfxItemState eState = pPattern->GetItemSet().GetItemState( nItemWhich, false );
 
-            if ( nItemWhich == ATTR_VALUE_FORMAT && eState == SFX_ITEM_DEFAULT )
+            if ( nItemWhich == ATTR_VALUE_FORMAT && eState == SfxItemState::DEFAULT )
                 eState = pPattern->GetItemSet().GetItemState( ATTR_LANGUAGE_FORMAT, false );
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
                 eRet = beans::PropertyState_DIRECT_VALUE;
-            else if ( eState == SFX_ITEM_DEFAULT )
+            else if ( eState == SfxItemState::DEFAULT )
                 eRet = beans::PropertyState_DEFAULT_VALUE;
-            else if ( eState == SFX_ITEM_DONTCARE )
+            else if ( eState == SfxItemState::DONTCARE )
                 eRet = beans::PropertyState_AMBIGUOUS_VALUE;
             else
             {

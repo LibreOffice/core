@@ -1432,12 +1432,12 @@ void SwInsertDBColAutoPilot::SetTabSet()
         static const sal_uInt16 aIds[3] =
             { RES_BACKGROUND, SID_ATTR_BRUSH_ROW, SID_ATTR_BRUSH_TABLE };
         for( int i = 0; i < 3; ++i )
-            if( SFX_ITEM_SET == pTblSet->GetItemState( aIds[ i ],
+            if( SfxItemState::SET == pTblSet->GetItemState( aIds[ i ],
                 false, &pItem ) && *pItem == aBrush )
                 pTblSet->ClearItem( aIds[ i ] );
     }
 
-    if( SFX_ITEM_SET == pTblSet->GetItemState( FN_PARAM_TABLE_NAME, false,
+    if( SfxItemState::SET == pTblSet->GetItemState( FN_PARAM_TABLE_NAME, false,
         &pItem ) && ((const SfxStringItem*)pItem)->GetValue() ==
                     rSh.GetTableFmt()->GetName() )
         pTblSet->ClearItem( FN_PARAM_TABLE_NAME );

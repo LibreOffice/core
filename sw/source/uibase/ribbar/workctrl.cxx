@@ -93,9 +93,9 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
                                       const SfxPoolItem* pState )
 {
     sal_uInt16 nId = GetId();
-    GetToolBox().EnableItem( nId, (GetItemState(pState) != SFX_ITEM_DISABLED) );
+    GetToolBox().EnableItem( nId, (GetItemState(pState) != SfxItemState::DISABLED) );
 
-    if( eState == SFX_ITEM_DEFAULT )
+    if( eState == SfxItemState::DEFAULT )
     {
         const SfxImageItem* pItem = PTR_CAST( SfxImageItem, pState );
         if(pItem)
@@ -238,7 +238,7 @@ void SwTbxAutoTextCtrl::StateChanged( sal_uInt16,
                                               SfxItemState,
                                               const SfxPoolItem* pState )
 {
-    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
+    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
 }
 
 IMPL_LINK(SwTbxAutoTextCtrl, PopupHdl, PopupMenu*, pMenu)
@@ -344,8 +344,8 @@ void SwTbxFieldCtrl::StateChanged( sal_uInt16,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
-    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
-    if (eState >= SFX_ITEM_DEFAULT)
+    GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SfxItemState::DISABLED) );
+    if (eState >= SfxItemState::DEFAULT)
     {
         GetToolBox().CheckItem( GetId(), ((SfxBoolItem*)pState)->GetValue() );
     }
@@ -739,9 +739,9 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
                                          const SfxPoolItem* pState )
 {
     sal_uInt16 nId = GetId();
-    GetToolBox().EnableItem( nId, (GetItemState(pState) != SFX_ITEM_DISABLED) );
+    GetToolBox().EnableItem( nId, (GetItemState(pState) != SfxItemState::DISABLED) );
     SwZoomBox_Impl* pBox = (SwZoomBox_Impl*)GetToolBox().GetItemWindow( GetId() );
-    if(SFX_ITEM_DEFAULT <= eState)
+    if(SfxItemState::DEFAULT <= eState)
     {
         OUString sZoom(unicode::formatPercent(((const SfxUInt16Item*)pState)->GetValue(),
             Application::GetSettings().GetUILanguageTag()));

@@ -98,7 +98,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
             {
                 bool bDone = false;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlotId, true, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState( nSlotId, true, &pItem ) == SfxItemState::SET )
                 {
                     long nNewVal = ((const SfxInt32Item*)pItem)->GetValue();
                     if ( nNewVal < 0 )

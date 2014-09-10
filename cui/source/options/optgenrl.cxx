@@ -328,7 +328,7 @@ void SvxGeneralTabPage::Reset( const SfxItemSet* rSet )
 
     sal_uInt16 const nWhich = GetWhich(SID_FIELD_GRABFOCUS);
 
-    if (rSet->GetItemState(nWhich) == SFX_ITEM_SET)
+    if (rSet->GetItemState(nWhich) == SfxItemState::SET)
     {
         if (sal_uInt16 const nField = ((SfxUInt16Item&)rSet->Get(nWhich)).GetValue())
         {

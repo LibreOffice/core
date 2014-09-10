@@ -1077,31 +1077,31 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
                 SfxItemState eLRState = pOutSet->GetItemState(
                                         RES_LR_SPACE, false, &pLRSpaceItem);
 
-                if( SFX_ITEM_SET == eColState ||
-                    SFX_ITEM_SET == eBrushState ||
-                    SFX_ITEM_SET == eFtnState ||
-                    SFX_ITEM_SET == eEndState ||
-                    SFX_ITEM_SET == eBalanceState||
-                    SFX_ITEM_SET == eFrmDirState||
-                    SFX_ITEM_SET == eLRState)
+                if( SfxItemState::SET == eColState ||
+                    SfxItemState::SET == eBrushState ||
+                    SfxItemState::SET == eFtnState ||
+                    SfxItemState::SET == eEndState ||
+                    SfxItemState::SET == eBalanceState||
+                    SfxItemState::SET == eFrmDirState||
+                    SfxItemState::SET == eLRState)
                 {
                     SvTreeListEntry* pSelEntry = m_pTree->FirstSelected();
                     while( pSelEntry )
                     {
                         SectReprPtr pRepr = (SectReprPtr)pSelEntry->GetUserData();
-                        if( SFX_ITEM_SET == eColState )
+                        if( SfxItemState::SET == eColState )
                             pRepr->GetCol() = *(SwFmtCol*)pColItem;
-                        if( SFX_ITEM_SET == eBrushState )
+                        if( SfxItemState::SET == eBrushState )
                             pRepr->GetBackground() = *(SvxBrushItem*)pBrushItem;
-                        if( SFX_ITEM_SET == eFtnState )
+                        if( SfxItemState::SET == eFtnState )
                             pRepr->GetFtnNtAtEnd() = *(SwFmtFtnAtTxtEnd*)pFtnItem;
-                        if( SFX_ITEM_SET == eEndState )
+                        if( SfxItemState::SET == eEndState )
                             pRepr->GetEndNtAtEnd() = *(SwFmtEndAtTxtEnd*)pEndItem;
-                        if( SFX_ITEM_SET == eBalanceState )
+                        if( SfxItemState::SET == eBalanceState )
                             pRepr->GetBalance().SetValue(((SwFmtNoBalancedColumns*)pBalanceItem)->GetValue());
-                        if( SFX_ITEM_SET == eFrmDirState )
+                        if( SfxItemState::SET == eFrmDirState )
                             pRepr->GetFrmDir().SetValue(((SvxFrameDirectionItem*)pFrmDirItem)->GetValue());
-                        if( SFX_ITEM_SET == eLRState )
+                        if( SfxItemState::SET == eLRState )
                             pRepr->GetLRSpace() = *(SvxLRSpaceItem*)pLRSpaceItem;
 
                         pSelEntry = m_pTree->NextSelected(pSelEntry);
@@ -1314,7 +1314,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
             sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
-            if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
+            if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 sPassword = ( (SfxStringItem*)pItem )->GetValue();
             ::lcl_ReadSections(*pMedium, *m_pSubRegionED);
         }
@@ -1462,7 +1462,7 @@ short   SwInsertSectionTabDialog::Ok()
     {
         SfxRequest aRequest( pViewFrm, FN_INSERT_REGION);
         const SfxPoolItem* pCol;
-        if(SFX_ITEM_SET == pOutputItemSet->GetItemState(RES_COL, false, &pCol))
+        if(SfxItemState::SET == pOutputItemSet->GetItemState(RES_COL, false, &pCol))
         {
             aRequest.AppendItem(SfxUInt16Item(SID_ATTR_COLUMNS,
                 ((const SwFmtCol*)pCol)->GetColumns().size()));
@@ -1780,7 +1780,7 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
             m_sFileName = pMedium->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             m_sFilterName = pMedium->GetFilter()->GetFilterName();
             const SfxPoolItem* pItem;
-            if ( SFX_ITEM_SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
+            if ( SfxItemState::SET == pMedium->GetItemSet()->GetItemState( SID_PASSWORD, false, &pItem ) )
                 m_sFilePasswd = ( (SfxStringItem*)pItem )->GetValue();
             m_pFileNameED->SetText( INetURLObject::decode(
                 m_sFileName, '%', INetURLObject::DECODE_UNAMBIGUOUS, RTL_TEXTENCODING_UTF8 ) );
@@ -2120,7 +2120,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     SetMetric(*m_pAfterMF , aMetric);
 
     SfxItemState eItemState = rSet->GetItemState( RES_LR_SPACE );
-    if ( eItemState >= SFX_ITEM_DEFAULT )
+    if ( eItemState >= SfxItemState::DEFAULT )
     {
         const SvxLRSpaceItem& rSpace =
             (const SvxLRSpaceItem&)rSet->Get( RES_LR_SPACE );
