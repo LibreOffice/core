@@ -404,6 +404,105 @@ javaPluginError jfw_plugin_getJavaInfoByPath(
     return errorcode;
 }
 
+javaPluginError jfw_plugin_getJavaInfoFromJavaHome(
+    std::vector<pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
+    JavaInfo ** ppInfo)
+{
+    if (!ppInfo)
+        return JFW_PLUGIN_E_INVALID_ARG;
+
+    rtl::Reference<VendorBase> infoJavaHome = getJavaInfoFromJavaHome();
+
+    if (!infoJavaHome.is())
+        return JFW_PLUGIN_E_NO_JRE;
+
+    //Check if the detected JRE matches the version requirements
+    typedef std::vector<pair<OUString, jfw::VersionInfo>>::const_iterator ci_pl;
+    for (ci_pl vendorInfo = vecVendorInfos.begin(); vendorInfo != vecVendorInfos.end(); ++vendorInfo)
+    {
+        const OUString& vendor = vendorInfo->first;
+        jfw::VersionInfo versionInfo = vendorInfo->second;
+
+        if (vendor.equals(infoJavaHome->getVendor()))
+        {
+            javaPluginError errorcode = checkJavaVersionRequirements(
+                infoJavaHome,
+                versionInfo.sMinVersion,
+                versionInfo.sMaxVersion,
+                versionInfo.getExcludeVersions(),
+                versionInfo.getExcludeVersionSize());
+
+            if (errorcode == JFW_PLUGIN_E_NONE)
+            {
+                *ppInfo = createJavaInfo(infoJavaHome);
+                return JFW_PLUGIN_E_NONE;
+            }
+        }
+    }
+
+    return JFW_PLUGIN_E_NO_JRE;
+}
+
+javaPluginError jfw_plugin_getJavaInfosFromPath(
+    std::vector<std::pair<OUString, jfw::VersionInfo>> const& vecVendorInfos,
+    std::vector<JavaInfo*> & javaInfosFromPath)
+{
+    // find JREs from PATH
+    vector<rtl::Reference<VendorBase>> vecInfosFromPath;
+    createJavaInfoFromPath(vecInfosFromPath);
+
+    vector<rtl::Reference<VendorBase> > vecVerifiedInfos;
+
+    // copy JREs that meet version requirements to vecVerifiedInfos
+    typedef vector<rtl::Reference<VendorBase> >::iterator it;
+    for (it i= vecInfosFromPath.begin(); i != vecInfosFromPath.end(); ++i)
+    {
+        const rtl::Reference<VendorBase>& cur = *i;
+
+        typedef std::vector<pair<OUString, jfw::VersionInfo>>::const_iterator ci_pl;
+        for (ci_pl vendorInfo = vecVendorInfos.begin(); vendorInfo != vecVendorInfos.end(); ++vendorInfo)
+        {
+            const OUString& vendor = vendorInfo->first;
+            jfw::VersionInfo versionInfo = vendorInfo->second;
+
+            if (vendor.equals(cur->getVendor()))
+            {
+                javaPluginError errorcode = checkJavaVersionRequirements(
+                    cur,
+                    versionInfo.sMinVersion,
+                    versionInfo.sMaxVersion,
+                    versionInfo.getExcludeVersions(),
+                    versionInfo.getExcludeVersionSize());
+
+                if (errorcode == JFW_PLUGIN_E_NONE)
+                {
+                    vecVerifiedInfos.push_back(*i);
+                }
+            }
+        }
+    }
+
+    if (vecVerifiedInfos.empty())
+        return JFW_PLUGIN_E_NO_JRE;
+
+    // Now vecVerifiedInfos contains all those JREs which meet the version requirements
+    // Transfer them into the vector that is passed out.
+    vector<JavaInfo*> infosFromPath;
+
+    typedef vector<rtl::Reference<VendorBase> >::const_iterator cit;
+    for (cit ii = vecVerifiedInfos.begin(); ii != vecVerifiedInfos.end(); ++ii)
+    {
+        infosFromPath.push_back(createJavaInfo(*ii));
+    }
+
+    javaInfosFromPath = infosFromPath;
+
+    return JFW_PLUGIN_E_NONE;
+}
+
+
+
+
 #if defined(WNT)
 
 // Load msvcr71.dll using an explicit full path from where it is

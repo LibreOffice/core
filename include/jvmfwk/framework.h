@@ -72,7 +72,7 @@ extern "C" {
     necessary to specify the bootstrap parameter <code>UNO_JAVA_JFW_SHARED_DATA</code>.
     </p>
 
-    <p>Setting the class path used by a Java VM should not be necesarry. The locations
+    <p>Setting the class path used by a Java VM should not be necessary. The locations
     of Jar files should be known by a class loader. If a jar file depends on another
     jar file then it can be referenced in the manifest file of the first jar. However,
     a user may add jars to the class path by using this API. If it becomes necessary
@@ -320,16 +320,11 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
 /** detects a suitable JRE and configures the framework to use it.
 
     <p>Which JREs can be used is determined by the file javavendors.xml,
-    which contains version requirements, as well as information about available
-    plug-in libraries. Only these libraries are responsible for locating JRE
-    installations.</p>
+    which contains version requirements.</p>
     <p>
-    JREs can be provided by different vendors. In order to find the JREs of
-    a certain vendor a plug-in library must be provided. There must be only one
-    library for one vendor. The names of locations of those libraries have to
-    be put into the javavendors.xml file.<br/>
-    The function uses the plug-in libraries to obtain information about JRE
-    installation and checks if they there is one among them that supports
+    JREs can be provided by different vendors.
+    The function obtains information about JRE installations and checks if
+    there is one among them that supports
     a set of features (currently only accessibilty is possible). If none was
     found then it also uses a list of paths, which have been registered
     by <code>jfw_addJRELocation</code>
@@ -342,27 +337,36 @@ JVMFWK_DLLPUBLIC javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
     <p>
     While determining a proper JRE this function takes into account if a
     user requires support for assistive technology tools. If user
-    need that support they have to set up their system accordingly. When support
-    for assistive technology is required, then the lists of
+    need that support they have to set up their system accordingly.</p>
+    <p>
+    If the JAVA_HOME environment variable is set, this function prefers
+    the JRE which the variable refers to over other JREs.
+    If JAVA_HOME is not set or does not refer to a suitable JRE,
+    the PATH environment variable is inspected and the respective JREs
+    are checked for their suitability next.</p>
+    <p>
+    When support for assistive technology is required, then the
     <code>JavaInfo</code> objects,
-    which are provided by the <code>getJavaInfo</code> functions of the plug-ins, are
-    examined for a suitable JRE. That is, the <code>JavaInfo</code> objects
-    from the list
-    obtained from the first plug-in, are examined. If no <code>JavaInfo</code>
-    object has the flag
+    which are provided by the <code>getJavaInfo</code> functions, are
+    examined for a suitable JRE.
+    That is, the <code>JavaInfo</code> object that refers to the JRE referred to
+    by JAVA_HOME is examined. If it does not have the flag
     <code>JFW_FEATURE_ACCESSBRIDGE</code> in the member <code>nFeatures</code>
-    then the
-    next plug-in is used to obtain a list of <code>JavaInfo</code> objects.
+    then the <JavaInfo></code> objects that are related to the PATH variable
+    are examined.
+    If no suitable <code>JavaInfo</code> object is found, all <code>JavaInfo</code>
+    objects - representing Java installations on the system -, are examined.
+    As long as no <code>JavaInfo</code> object has the flag
+    <code>JFW_FEATURE_ACCESSBRIDGE</code> in the member <code>nFeatures</code>, more
+    <code>JavaInfo</code> objects are examined.
     This goes on until a <code>JavaInfo</code> object was found which
-    represents a suitable JRE. Or neither plug-in provided such a
-    <code>JavaInfo</code> object. In that case the first
-    <code>JavaInfo</code> object from the first plug-in is used to determine
-    the JRE which is to be used.</p>
+    represents a suitable JRE. Or no such <code>JavaInfo</code> object was found.
+    In that case the first <code>JavaInfo</code> object that was detected
+    by the algorithm described above is used to determine the JRE which is to be used.</p>
     <p>
     If there is no need for the support of assistive technology tools then
-    the first <code>JavaInfo</code> object from the list obtained by the
-    first plug-in is used. If this plug-in does not find any JREs then the
-    next plug-in is used, and so on.</p>
+    the first <code>JavaInfo</code> object that is detected by the algorithm
+    as described above is used.</p>
 
     @param ppInfo
     [out] a <code>JavaInfo</code> pointer, representing the selected JRE.
