@@ -201,7 +201,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 {
     static const char* pFilters[] = { "Advanced Audio Coding", "aac",
                                       "AIF Audio", "aif;aiff",
-                                      "Advanced Systems", "asf",
+                                      "Advanced Systems Format", "asf;wma;wmv",
                                       "AU Audio", "au",
                                       "AC3 Audio", "ac3",
                                       "AVI", "avi",
@@ -213,7 +213,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                       "MIDI Audio", "mid;midi",
                                       "MPEG Audio", "mp2;mp3;mpa;m4a",
                                       "MPEG Video", "mpg;mpeg;mpv;mp4;m4v",
-                                      "Ogg Audio", "ogg;oga",
+                                      "Ogg Audio", "ogg;oga;opus",
                                       "Ogg Video", "ogv;ogx",
                                       "Real Audio", "ra",
                                       "Real Media", "rm",
