@@ -2621,7 +2621,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
             if ( pItem )
             {
                 sal_uInt16 nWhich = pItem->Which();
-                if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
+                if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_DEFAULT )
                 {
                     rCurSet.Put( *pItem );
                 }
@@ -2671,7 +2671,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
             if ( pItem )
             {
                 sal_uInt16 nWhich = pItem->Which();
-                if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
+                if ( rCurSet.GetItemState( nWhich ) == SFX_ITEM_DEFAULT )
                 {
                     rCurSet.Put( *pItem );
                 }

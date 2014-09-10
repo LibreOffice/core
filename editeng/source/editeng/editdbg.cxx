@@ -300,7 +300,7 @@ void DbgOutItemSet( FILE* fp, const SfxItemSet& rSet, bool bSearchInParent, bool
     for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
         fprintf( fp, "\nWhich: %i\t", nWhich );
-        if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_OFF )
+        if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_DEFAULT )
             fprintf( fp, "ITEM_OFF   " );
         else if ( rSet.GetItemState( nWhich, bSearchInParent ) == SFX_ITEM_DONTCARE )
             fprintf( fp, "ITEM_DC    " );

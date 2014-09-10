@@ -137,7 +137,6 @@ enum SfxItemState {
 
 // old stuff - dont use!!!
 #define SFX_ITEM_AVAILABLE  SFX_ITEM_DEFAULT
-#define SFX_ITEM_OFF        SFX_ITEM_DEFAULT
 #define SFX_ITEM_ON         SFX_ITEM_SET
 
 class SvXMLUnitConverter;

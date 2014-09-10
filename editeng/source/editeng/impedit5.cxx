@@ -335,7 +335,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
             // and then paragraph formatting and template...
             for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
             {
-                if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
+                if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_DEFAULT )
                 {
                     if ( nOnlyHardAttrib == EditEngineAttribs_All )
                     {
@@ -381,7 +381,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
     {
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++ )
         {
-            if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_OFF )
+            if ( aCurSet.GetItemState( nWhich ) == SFX_ITEM_DEFAULT )
             {
                 aCurSet.Put( aEditDoc.GetItemPool().GetDefaultItem( nWhich ) );
             }
