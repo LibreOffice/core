@@ -20,13 +20,10 @@
 #ifndef INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_DATABASES_HXX
 #define INCLUDED_XMLHELP_SOURCE_CXXHELP_PROVIDER_DATABASES_HXX
 
-#include <config_global.h>
+#include <sal/config.h>
 
 #include <set>
 #include <vector>
-#if !HAVE_CXX11
-#define BOOST_NO_0X_HDR_TYPEINDEX
-#endif
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <osl/mutex.hxx>
