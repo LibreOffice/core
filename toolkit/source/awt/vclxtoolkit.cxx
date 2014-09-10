@@ -940,7 +940,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // #i70217# Don't always create a new component object. It's possible that VCL has called
                 // GetComponentInterface( sal_True ) in the Dialog ctor itself (see Window::IsTopWindow() )
                 // which creates a component object.
-                css::uno::Reference< css::awt::XWindowPeer > xWinPeer = pNewWindow->GetComponentInterface( sal_False );
+                css::uno::Reference< css::awt::XWindowPeer > xWinPeer = pNewWindow->GetComponentInterface( false );
                 if ( xWinPeer.is() )
                     *ppNewComp = dynamic_cast< VCLXDialog* >( xWinPeer.get() );
                 else
@@ -1271,7 +1271,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
         if ( !pNewComp )
         {
             // Default-Interface
-            xRef = pNewWindow->GetComponentInterface( sal_True );
+            xRef = pNewWindow->GetComponentInterface( true );
         }
         else
         {
@@ -1279,7 +1279,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             xRef = pNewComp;
             pNewWindow->SetComponentInterface( xRef );
         }
-        DBG_ASSERT( pNewWindow->GetComponentInterface( sal_False ) == xRef,
+        DBG_ASSERT( pNewWindow->GetComponentInterface( false ) == xRef,
             "VCLXToolkit::createWindow: did #133706# resurge?" );
 
         if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )

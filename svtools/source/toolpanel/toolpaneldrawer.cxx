@@ -292,9 +292,9 @@ namespace svt
     }
 
 
-    Reference< XWindowPeer > ToolPanelDrawer::GetComponentInterface( sal_Bool i_bCreate )
+    Reference< XWindowPeer > ToolPanelDrawer::GetComponentInterface( bool i_bCreate )
     {
-        Reference< XWindowPeer > xWindowPeer( Window::GetComponentInterface( sal_False ) );
+        Reference< XWindowPeer > xWindowPeer( Window::GetComponentInterface( false ) );
         if ( !xWindowPeer.is() && i_bCreate )
         {
             xWindowPeer.set( new ToolPanelDrawerPeer() );

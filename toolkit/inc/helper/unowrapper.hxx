@@ -52,7 +52,7 @@ public:
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) SAL_OVERRIDE;
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, sal_Bool bCreate ) SAL_OVERRIDE;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, bool bCreate ) SAL_OVERRIDE;
     virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace ) SAL_OVERRIDE;
 
     void                WindowDestroyed( Window* pWindow ) SAL_OVERRIDE;
@@ -75,7 +75,7 @@ public:
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                        CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar ) SAL_OVERRIDE;
+                        CreateAccessible( Menu* pMenu, bool bIsMenuBar ) SAL_OVERRIDE;
 
 private:
     virtual ~UnoWrapper();

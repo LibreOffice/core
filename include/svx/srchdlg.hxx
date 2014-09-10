@@ -143,7 +143,7 @@ public:
     void SetSrchFlag( bool bSuccess = false ) { mbSuccess = bSuccess; }
     bool GetSrchFlag() { return mbSuccess; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-        GetComponentInterface( sal_Bool bCreate ) SAL_OVERRIDE;
+        GetComponentInterface( bool bCreate ) SAL_OVERRIDE;
 
     void            SetSaveToModule(bool b);
 

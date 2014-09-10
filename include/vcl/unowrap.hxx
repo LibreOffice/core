@@ -67,14 +67,14 @@ public:
     virtual void                ReleaseAllGraphics( OutputDevice* pOutDev ) = 0;
 
     // Window
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, sal_Bool bCreate ) = 0;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, bool bCreate ) = 0;
     virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace ) = 0;
 
     virtual void                WindowDestroyed( Window* pWindow ) = 0;
 
     // Accessibility
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                                CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar ) = 0;
+                                CreateAccessible( Menu* pMenu, bool bIsMenuBar ) = 0;
 
 protected:
     ~UnoWrapperBase() {}

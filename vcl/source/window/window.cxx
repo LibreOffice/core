@@ -3254,7 +3254,7 @@ void Window::SetWindowPeer( Reference< css::awt::XWindowPeer > xPeer, VCLXWindow
     mpWindowImpl->mpVCLXWindow = pVCLXWindow;
 }
 
-Reference< css::awt::XWindowPeer > Window::GetComponentInterface( sal_Bool bCreate )
+Reference< css::awt::XWindowPeer > Window::GetComponentInterface( bool bCreate )
 {
     if ( !mpWindowImpl->mxWindowPeer.is() && bCreate )
     {

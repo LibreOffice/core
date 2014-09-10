@@ -152,7 +152,7 @@ UnoWrapper::~UnoWrapper()
     return mxToolkit.get();
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> UnoWrapper::GetWindowInterface( Window* pWindow, sal_Bool bCreate )
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> UnoWrapper::GetWindowInterface( Window* pWindow, bool bCreate )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
     if ( !xPeer.is() && bCreate )
@@ -227,7 +227,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         Window* pClient = pChild->GetWindow( WINDOW_CLIENT );
         if ( pClient->GetWindowPeer() )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( sal_False ), ::com::sun::star::uno::UNO_QUERY );
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( false ), ::com::sun::star::uno::UNO_QUERY );
             xComp->dispose();
         }
 
@@ -246,7 +246,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
             if ( pClient->GetWindowPeer() && lcl_ImplIsParent( pWindow, pClient ) )
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( sal_False ), ::com::sun::star::uno::UNO_QUERY );
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pClient->GetComponentInterface( false ), ::com::sun::star::uno::UNO_QUERY );
                 xComp->dispose();
             }
 
@@ -259,7 +259,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         pParent->GetWindowPeer()->notifyWindowRemoved( *pWindow );
 
     VCLXWindow* pWindowPeer = pWindow->GetWindowPeer();
-    uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( sal_False ), uno::UNO_QUERY );
+    uno::Reference< lang::XComponent > xWindowPeerComp( pWindow->GetComponentInterface( false ), uno::UNO_QUERY );
     OSL_ENSURE( ( pWindowPeer != NULL ) == xWindowPeerComp.is(),
         "UnoWrapper::WindowDestroyed: inconsistency in the window's peers!" );
     if ( pWindowPeer )
@@ -294,7 +294,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 }
 
 
-::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar )
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, bool bIsMenuBar )
 {
     return maAccessibleFactoryAccess.getFactory().createAccessible( pMenu, bIsMenuBar );
 }

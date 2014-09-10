@@ -80,7 +80,7 @@ namespace svt
         virtual void MouseButtonDown( const MouseEvent& i_rMouseEvent ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( sal_Bool i_bCreate ) SAL_OVERRIDE;
+                     GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
 
     private:
         Rectangle   impl_calcTextBoundingBox() const;

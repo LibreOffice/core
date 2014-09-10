@@ -95,7 +95,7 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
             for ( sal_uInt16 n = 0; n < nChildren; n++ )
             {
                 Window* pChild = pWindow->GetChild( n );
-                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xWP = pChild->GetComponentInterface( sal_True );
+                ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >  xWP = pChild->GetComponentInterface( true );
                 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xW( xWP, ::com::sun::star::uno::UNO_QUERY );
                 pChildRefs[n] = xW;
             }

@@ -2195,7 +2195,7 @@ void SvxSearchDialog::SaveToModule_Impl()
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-        SvxSearchDialog::GetComponentInterface( sal_Bool bCreate )
+        SvxSearchDialog::GetComponentInterface( bool bCreate )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer
         (Window::GetComponentInterface(false));

@@ -1066,7 +1066,7 @@ public:
 
     // API to set/query the component interfaces
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                                        GetComponentInterface( sal_Bool bCreate = sal_True );
+                                        GetComponentInterface( bool bCreate = true );
 
     virtual void                        SetComponentInterface( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xIFace );
 

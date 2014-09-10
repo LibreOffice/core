@@ -2094,7 +2094,7 @@ void ComplexEditorWindow::SetLineNumberDisplay(bool b)
 }
 
 uno::Reference< awt::XWindowPeer >
-EditorWindow::GetComponentInterface(sal_Bool bCreate)
+EditorWindow::GetComponentInterface(bool bCreate)
 {
     uno::Reference< awt::XWindowPeer > xPeer(
         Window::GetComponentInterface(false));

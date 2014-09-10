@@ -28,7 +28,7 @@ MultiLineEdit::MultiLineEdit( Window* pParent, WinBits nWinStyle )
 
 // virtual
 css::uno::Reference< css::awt::XWindowPeer >
-MultiLineEdit::GetComponentInterface(sal_Bool bCreate)
+MultiLineEdit::GetComponentInterface(bool bCreate)
 {
     css::uno::Reference< css::awt::XWindowPeer > xPeer(
         VclMultiLineEdit::GetComponentInterface(false));

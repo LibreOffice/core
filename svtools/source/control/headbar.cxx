@@ -1546,7 +1546,7 @@ void HeaderBar::SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::sta
     mxAccessible = _xAccessible;
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > HeaderBar::GetComponentInterface( sal_Bool bCreate )
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > HeaderBar::GetComponentInterface( bool bCreate )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xPeer
         (Window::GetComponentInterface(false));

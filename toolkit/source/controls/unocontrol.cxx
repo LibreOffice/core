@@ -189,7 +189,7 @@ Reference< XWindowPeer >    UnoControl::ImplGetCompatiblePeer( bool bAcceptExist
         }
         try
         {
-            xMe->createPeer( NULL, pParentWindow->GetComponentInterface( sal_True ) );
+            xMe->createPeer( NULL, pParentWindow->GetComponentInterface( true ) );
         }
         catch( const Exception& )
         {

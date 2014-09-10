@@ -169,7 +169,7 @@ namespace svt
         virtual void GetFocus() SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                     GetComponentInterface( sal_Bool i_bCreate ) SAL_OVERRIDE;
+                     GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
 
     private:
         ::std::auto_ptr< ToolPanelDeck_Impl >   m_pImpl;

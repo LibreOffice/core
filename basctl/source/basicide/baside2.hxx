@@ -116,7 +116,7 @@ private:
 
     virtual
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-    GetComponentInterface(sal_Bool bCreate = true) SAL_OVERRIDE;
+    GetComponentInterface(bool bCreate = true) SAL_OVERRIDE;
     CodeCompleteDataCache aCodeCompleteCache;
     boost::scoped_ptr< CodeCompleteWindow > pCodeCompleteWnd;
     OUString GetActualSubName( sal_uLong nLine ); // gets the actual subroutine name according to line number

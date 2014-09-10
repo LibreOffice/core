@@ -81,7 +81,7 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& i_rDataChanedEvent ) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
-                        GetComponentInterface( sal_Bool i_bCreate ) SAL_OVERRIDE;
+                        GetComponentInterface( bool i_bCreate ) SAL_OVERRIDE;
 
     private:
         ::std::auto_ptr< PanelTabBar_Impl > m_pImpl;

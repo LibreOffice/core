@@ -1345,9 +1345,9 @@ namespace svt
     }
 
 
-    Reference< XWindowPeer > PanelTabBar::GetComponentInterface( sal_Bool i_bCreate )
+    Reference< XWindowPeer > PanelTabBar::GetComponentInterface( bool i_bCreate )
     {
-        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( sal_False ) );
+        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( false ) );
         if ( !xWindowPeer.is() && i_bCreate )
         {
             xWindowPeer.set( new PanelTabBarPeer( *this ) );

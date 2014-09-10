@@ -617,7 +617,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                         if ( pNextC )
                             pNext = pNextC;
 
-                        pNext->GetComponentInterface( sal_True );
+                        pNext->GetComponentInterface( true );
                         aEvent.NextFocus = (::cppu::OWeakObject*)pNext->GetWindowPeer();
                     }
                     mpImpl->getFocusListeners().focusLost( aEvent );
