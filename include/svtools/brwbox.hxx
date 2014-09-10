@@ -319,18 +319,18 @@ protected:
     sal_uInt16          ColCount() const;
 
     // software plug for database access
-    // Der RowCount wird jetzt intern automatisch gezaehlt
-    // (ueber RowInserted und RowRemoved), daher ist das Ueberladen
-    // dieser Methode ueberfluessig!
+    // RowCount is counted automatically
+    // (with the help of RowInserted and RowRemoved), so overloading of
+    // the method is needless
 public:
     virtual long    GetRowCount() const SAL_OVERRIDE;
 
 protected:
-    // fuer Anzeige im VScrollBar z.B. auf "?" oder setzen
+    // for information in VScrollBar set it e.g. on  "?"
     void            SetRealRowCount( const OUString &rRealRowCount );
 
-    // Return Value muss immer sal_True sein - SeekRow *muss* klappen!
-    // (sonst ASSERT) MI: wer hat das eingebaut? Das darf nicht so sein!
+    // Return Value has to be sal_True always - SeekRow *has* to work!
+    // (else ASSERT) MI: who attached that? It must not be like that!
 
     /** seeks for the given row position
         @param nRow
@@ -342,39 +342,36 @@ protected:
     virtual void    PaintData( Window& rWin, const Rectangle& rRect );
     virtual void    PaintField( OutputDevice& rDev, const Rectangle& rRect,
                                 sal_uInt16 nColumnId ) const = 0;
-    // Benachrichtigung an die abgeleitete Klasse, dass sich der sichtbare
-    // Bereich von Rows geaendert hat. Aus dieser Methode heraus darf
-    // die abgeleitete Klasse Aenderungen des Model mit Hilfe der Methoden
-    // RowInserted und RowRemoved bekanntgeben. Mit sich daraus ergebenden
-    // neuen Zustand wird anschliessend ein Paint veranlasst (und entsprechend
-    // SeekRow etc. gerufen).
+    // Advice for the subclass: the visible scope of rows has changed.
+    // The subclass is able to announce changes of the model with the
+    // help of the methods RowInserted and RowRemoved. Because of the
+    // new status a paint is induced (SeekRow is called etc).
     //
-    // Parameter: nNewTopRow: Nr. der neuen TopRow (kann von VisibleRowsChanged
-    // durch Aufruf von RowInserted und RowDeleted noch veraendert werden).
-    // nNumRows: Anzahl der sichtbaren Rows (auch eine teilweise sichtbare Row
-    // wird mitgezaehlt).
+    // parameters: nNewTopRow: number of the new TopRow (can get changed from
+    // VisibleRowsChanged by request of RowInserted and RowDeleted).
+    // nNumRows: number of visible rows (a partial visible row is counted too)
     //
-    // Moegliche Ursachen fuer die Aenderung des sichtbaren Bereiches:
-    // - Vor dem sichtbaren Bereich sind Rows eingefuegt oder geloescht worden,
-    //   dadurch aendert sich nur die Numerierung der sichtbaren Rows
-    // - Scrollen (und daraus resultierend eine andere erste sichtbare Row)
-    // - Resize des Fensters
+    // Possible reason for changing the visible scope:
+    // - in front of the visible scope rows were inserted or removed, so the
+    //   numbering of the visible scope has changed
+    // - Scrolling (an other first visible row)
+    // - Resize the window
     virtual void    VisibleRowsChanged( long nNewTopRow, sal_uInt16 nNumRows);
 
-    // Anzahl sichtbarer Rows in dem Fenster (inkl. "angeschnittener" Rows)
+    // number of visible rows in the window (incl. "truncated" rows)
     sal_uInt16          GetVisibleRows()
                         { return (sal_uInt16)((pDataWin->GetOutputSizePixel().Height() - 1 )/ GetDataRowHeight() + 1); }
     long            GetTopRow() { return nTopRow; }
     sal_uInt16          GetFirstVisibleColNumber() const { return nFirstCol; }
 
-    // Focus-Rect ein-/ausschalten
+    // Focus-Rect enable / disable
     void            DoShowCursor( const char *pWhoLog );
     void            DoHideCursor( const char *pWhoLog );
     short           GetCursorHideCount() const;
 
     virtual BrowserHeader*  CreateHeaderBar( BrowseBox* pParent );
 
-    // HACK(virtuelles Create wird im Ctor nicht gerufen)
+    // HACK(virtual create is not called in Ctor)
     void            SetHeaderBar( BrowserHeader* );
 
     long            CalcReverseZoom(long nVal);
@@ -406,7 +403,7 @@ public:
                                BrowserMode nMode = 0 );
                     virtual ~BrowseBox();
 
-    // ererbte ueberladene Handler
+    // inherited overloaded handler
     virtual void    StateChanged( StateChangedType nStateChange ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rEvt ) SAL_OVERRIDE;
     virtual void    MouseMove( const MouseEvent& rEvt ) SAL_OVERRIDE;
