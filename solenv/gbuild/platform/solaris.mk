@@ -62,6 +62,7 @@ gb_CXXFLAGS := \
 	-Wshadow \
 	-Woverloaded-virtual \
 	-Wno-non-virtual-dtor \
+	-std=c++0x \
 
 # enable debug STL
 ifeq ($(gb_ENABLE_DBGUTIL),$(true))
@@ -83,21 +84,15 @@ gb_CXXFLAGS += -fno-strict-aliasing
 endif
 endif
 
-ifeq ($(HAVE_CXX11),TRUE)
-#Currently, as well as for its own merits, c++11/c++0x mode allows use to use
-#a template for SAL_N_ELEMENTS to detect at compiler time its misuse
-gb_CXXFLAGS += -std=c++0x
-
 #We have so many std::auto_ptr uses that we need to be able to disable
 #warnings for those so that -Werror continues to be useful, seeing as moving
 #to unique_ptr isn't an option when we must support different compilers
-
+#
 #When we are using 4.6.0 we can use gcc pragmas to selectively silence auto_ptr
 #warnings in isolation, but for <= 4.5.X we need to globally disable
 #deprecation
 ifeq ($(HAVE_GCC_PRAGMA_OPERATOR),)
 gb_CXXFLAGS += -Wno-deprecated-declarations
-endif
 endif
 
 ifneq ($(strip $(SYSBASE)),)

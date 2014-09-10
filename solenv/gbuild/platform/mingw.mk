@@ -47,15 +47,11 @@ gb_CXXFLAGS := \
 	-Wshadow \
 	-Wuninitialized \
 	-fno-strict-aliasing \
-
+	-std=gnu++0x \
 
 ifneq ($(SYSBASE),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
-endif
-
-ifeq ($(HAVE_CXX11),TRUE)
-gb_CXXFLAGS += -std=gnu++0x
 endif
 
 # At least sal defines its own __main, which would cause DLLs linking against
