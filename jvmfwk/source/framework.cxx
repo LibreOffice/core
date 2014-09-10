@@ -462,9 +462,12 @@ javaFrameworkError SAL_CALL jfw_startVM(
 
 /** We do not use here jfw_findAllJREs and then check if a JavaInfo
     meets the requirements, because that means using all plug-ins, which
-    may take quite a while. The implementation uses one plug-in and if
-    it already finds a suitable JRE then it is done and does not need to
-    load another plug-in
+    may take quite a while. The implementation first inspects JAVA_HOME and
+    PATH environment variables. If no suitable JavaInfo is found there, it uses
+    one plug-in and if it already finds a suitable JRE then it is done and
+    does not need to load another plug-in.
+    Nevertheless, several plug-ins might be used for inspecting JAVA_HOME
+    and PATH for Java installations.
  */
 javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 {
@@ -476,175 +479,257 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
             return JFW_E_DIRECT_MODE;
         sal_uInt64 nFeatureFlags = 0;
         jfw::CJavaInfo aCurrentInfo;
-//Determine if accessibility support is needed
+        //Determine if accessibility support is needed
         bool bSupportAccessibility = jfw::isAccessibilitySupportDesired();
         nFeatureFlags = bSupportAccessibility ?
             JFW_FEATURE_ACCESSBRIDGE : 0L;
+        // 'bInfoFound' indicates whether a Java installation has been found
+        // that supports all desired features
+        bool bInfoFound = false;
 
-        //Get a list of services which provide Java information
-        jfw::VendorSettings aVendorSettings;
-        std::vector<jfw::PluginLibrary> vecPlugins =
-             aVendorSettings.getPluginData();
-#ifndef DISABLE_DYNLOADING
-        //Create a vector that holds the libraries, which will be later
-        //dynamically loaded;
-        boost::scoped_array<osl::Module> sarModules;
-        sarModules.reset(new osl::Module[vecPlugins.size()]);
-        osl::Module * arModules = sarModules.get();
-#endif
-        //Use every plug-in library to get Java installations. At the first usable
-        //Java the loop will break
-        typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
-        int cModule = 0;
-        for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i, ++cModule)
+        // first inspect JAVA installation that the JAVA_HOME
+        // environment variable points to (if it is set)
+        char *szJavaHome= getenv("JAVA_HOME");
+        if(szJavaHome)
         {
-            const jfw::PluginLibrary & library = *i;
-            jfw::VersionInfo versionInfo =
-                aVendorSettings.getVersionInformation(library.sVendor);
-#ifndef DISABLE_DYNLOADING
-            arModules[cModule].load(library.sPath);
-            osl::Module & pluginLib = arModules[cModule];
-            if (pluginLib.is() == sal_False)
-                return JFW_E_NO_PLUGIN;
-
-            jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
-                (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getFunctionSymbol(
-                    OUString("jfw_plugin_getAllJavaInfos"));
-#else
-            jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
-                jfw_plugin_getAllJavaInfos;
-#endif
-            OSL_ASSERT(getAllJavaFunc);
-            if (getAllJavaFunc == NULL)
-                continue;
-
-            //get all installations of one vendor according to minVersion,
-            //maxVersion and excludeVersions
-            sal_Int32 cInfos = 0;
-            JavaInfo** arInfos = NULL;
-            javaPluginError plerr  = (*getAllJavaFunc)(
-                library.sVendor.pData,
-                versionInfo.sMinVersion.pData,
-                versionInfo.sMaxVersion.pData,
-                versionInfo.getExcludeVersions(),
-                versionInfo.getExcludeVersionSize(),
-                & arInfos,
-                & cInfos);
-
-            if (plerr != JFW_PLUGIN_E_NONE)
-                continue;
-            //iterate over all installations to find the best which has
-            //all features
-            if (cInfos == 0)
+            OUString sHome(szJavaHome, strlen(szJavaHome), osl_getThreadTextEncoding());
+            OUString sHomeUrl;
+            if(osl::File::getFileURLFromSystemPath(sHome, sHomeUrl) == osl::File::E_None)
             {
-                rtl_freeMemory(arInfos);
-                continue;
-            }
-            bool bInfoFound = false;
-            for (int ii = 0; ii < cInfos; ii++)
-            {
-                JavaInfo* pJInfo = arInfos[ii];
-
-                //We remember the very first installation in aCurrentInfo
-                if (aCurrentInfo.getLocation().isEmpty())
-                        aCurrentInfo = pJInfo;
-                // compare features
-                // If the user does not require any features (nFeatureFlags = 0)
-                // then the first installation is used
-                if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
+                if(!sHomeUrl.isEmpty())
                 {
-                    //the just found Java implements all required features
-                    //currently there is only accessibility!!!
-                    aCurrentInfo = pJInfo;
-                    bInfoFound = true;
-                    break;
+                    JavaInfo* pHomeInfo = NULL;
+                    if (jfw_getJavaInfoByPath(sHomeUrl.pData, &pHomeInfo) == JFW_E_NONE)
+                    {
+                        aCurrentInfo = pHomeInfo;
+
+                        // compare features
+                        // if the user does not require any features (nFeatureFlags = 0)
+                        // or the Java installation provides all features, then this installation is used
+                        if ((pHomeInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
+                        {
+                            bInfoFound = true;
+                        }
+                        jfw_freeJavaInfo(pHomeInfo);
+                    }
                 }
             }
-            //The array returned by jfw_plugin_getAllJavaInfos must be freed as well as
-            //its contents
-            for (int j = 0; j < cInfos; j++)
-                jfw_freeJavaInfo(arInfos[j]);
-            rtl_freeMemory(arInfos);
-
-            if (bInfoFound == true)
-                break;
-            //All Java installations found by the current plug-in lib
-            //do not provide the required features. Try the next plug-in
         }
-        if ((JavaInfo*) aCurrentInfo == NULL)
-        {//The plug-ins did not find a suitable Java. Now try the paths which have been
-        //added manually.
-            //get the list of paths to jre locations which have been added manually
-            const jfw::MergedSettings settings;
-            //node.loadFromSettings();
-            const std::vector<OUString> & vecJRELocations =
-                settings.getJRELocations();
-            //use every plug-in to determine the JavaInfo objects
-            bool bInfoFound = false;
-            for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i)
+
+        // if no Java installation providing all features was detected by using JAVA_HOME,
+        // query PATH for Java installations
+        if (!bInfoFound)
+        {
+            char *szPath= getenv("PATH");
+            if(szPath)
+            {
+                OUString usAllPath(szPath, strlen(szPath), osl_getThreadTextEncoding());
+                sal_Int32 nIndex = 0;
+                do
+                {
+                    OUString usToken = usAllPath.getToken( 0, SAL_PATHSEPARATOR, nIndex );
+                    OUString usFileUrl;
+                    if(osl::File::getFileURLFromSystemPath(usToken, usFileUrl) == osl::File::E_None)
+                    {
+                        if(!usFileUrl.isEmpty())
+                        {
+                            JavaInfo* pJInfo = NULL;
+                            if (jfw_getJavaInfoByPath(usFileUrl.pData, &pJInfo) == JFW_E_NONE)
+                            {
+                                // if the current Java installation implements all required features: use it
+                                if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
+                                {
+                                    aCurrentInfo = pJInfo;
+                                    bInfoFound = true;
+                                }
+                                else if ((JavaInfo*) pJInfo == NULL)
+                                {
+                                    // current Java installation does not provide all features
+                                    // but no Java installation has been detected before
+                                    // -> remember the current one until one is found
+                                    // that provides all features
+                                    aCurrentInfo = pJInfo;
+                                }
+
+                                jfw_freeJavaInfo(pJInfo);
+                            }
+                        }
+                    }
+                }
+                while ( nIndex >= 0 && !bInfoFound);
+            }
+        }
+
+        // if no suitable Java installation has been found yet:
+        // first iterate over plugins to find a suitable Java installation,
+        // then try paths that have been added manually
+        typedef std::vector<jfw::PluginLibrary>::const_iterator ci_pl;
+        if (!bInfoFound)
+        {
+            //Get a list of services which provide Java information
+            jfw::VendorSettings aVendorSettings;
+            std::vector<jfw::PluginLibrary> vecPlugins =
+                aVendorSettings.getPluginData();
+#ifndef DISABLE_DYNLOADING
+            //Create a vector that holds the libraries, which will be later
+            //dynamically loaded;
+            boost::scoped_array<osl::Module> sarModules;
+            sarModules.reset(new osl::Module[vecPlugins.size()]);
+            osl::Module * arModules = sarModules.get();
+#endif
+            //Use every plug-in library to get Java installations. At the first usable
+            //Java the loop will break
+            int cModule = 0;
+            for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i, ++cModule)
             {
                 const jfw::PluginLibrary & library = *i;
                 jfw::VersionInfo versionInfo =
                     aVendorSettings.getVersionInformation(library.sVendor);
 #ifndef DISABLE_DYNLOADING
-                osl::Module pluginLib(library.sPath);
+                arModules[cModule].load(library.sPath);
+                osl::Module & pluginLib = arModules[cModule];
                 if (pluginLib.is() == sal_False)
                     return JFW_E_NO_PLUGIN;
-                //Check if the current plugin can detect JREs at the location
-                // of the paths added by jfw_setJRELocations or jfw_addJRELocation
-                //get the function from the plugin
-                jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                    (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
-                        OUString("jfw_plugin_getJavaInfoByPath"));
+
+                jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
+                    (jfw_plugin_getAllJavaInfos_ptr) pluginLib.getFunctionSymbol(
+                        OUString("jfw_plugin_getAllJavaInfos"));
 #else
-                jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
-                    jfw_plugin_getJavaInfoByPath;
+                jfw_plugin_getAllJavaInfos_ptr getAllJavaFunc =
+                    jfw_plugin_getAllJavaInfos;
 #endif
-                OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
-                if (jfw_plugin_getJavaInfoByPathFunc == NULL)
-                    return JFW_E_ERROR;
+                OSL_ASSERT(getAllJavaFunc);
+                if (getAllJavaFunc == NULL)
+                    continue;
 
-                typedef std::vector<OUString>::const_iterator citLoc;
-                for (citLoc it = vecJRELocations.begin();
-                    it != vecJRELocations.end(); ++it)
+                //get all installations of one vendor according to minVersion,
+                //maxVersion and excludeVersions
+                sal_Int32 cInfos = 0;
+                JavaInfo** arInfos = NULL;
+                javaPluginError plerr  = (*getAllJavaFunc)(
+                    library.sVendor.pData,
+                    versionInfo.sMinVersion.pData,
+                    versionInfo.sMaxVersion.pData,
+                    versionInfo.getExcludeVersions(),
+                    versionInfo.getExcludeVersionSize(),
+                    & arInfos,
+                    & cInfos);
+
+                if (plerr != JFW_PLUGIN_E_NONE)
+                    continue;
+                //iterate over all installations to find the best which has
+                //all features
+                if (cInfos == 0)
                 {
-                    jfw::CJavaInfo aInfo;
-                    javaPluginError err = (*jfw_plugin_getJavaInfoByPathFunc)(
-                        it->pData,
-                        library.sVendor.pData,
-                        versionInfo.sMinVersion.pData,
-                        versionInfo.sMaxVersion.pData,
-                        versionInfo.getExcludeVersions(),
-                        versionInfo.getExcludeVersionSize(),
-                        & aInfo.pInfo);
-                    if (err == JFW_PLUGIN_E_NO_JRE)
-                        continue;
-                    if (err == JFW_PLUGIN_E_FAILED_VERSION)
-                        continue;
-                    else if (err !=JFW_PLUGIN_E_NONE)
-                        return JFW_E_ERROR;
+                    rtl_freeMemory(arInfos);
+                    continue;
+                }
+                for (int ii = 0; ii < cInfos; ii++)
+                {
+                    JavaInfo* pJInfo = arInfos[ii];
 
-                    if (aInfo)
+                    //We remember the very first installation in aCurrentInfo
+                    // if no JavaInfo was found before
+                    if (aCurrentInfo.getLocation().isEmpty())
+                        aCurrentInfo = pJInfo;
+                    // compare features
+                    // If the user does not require any features (nFeatureFlags = 0)
+                    // then the first installation is used
+                    if ((pJInfo->nFeatures & nFeatureFlags) == nFeatureFlags)
                     {
-                        //We remember the very first installation in aCurrentInfo
-                        if (aCurrentInfo.getLocation().isEmpty())
-                            aCurrentInfo = aInfo;
-                        // compare features
-                        // If the user does not require any features (nFeatureFlags = 0)
-                        // then the first installation is used
-                        if ((aInfo.getFeatures() & nFeatureFlags) == nFeatureFlags)
-                        {
-                            //the just found Java implements all required features
-                            //currently there is only accessibility!!!
-                            aCurrentInfo = aInfo;
-                            bInfoFound = true;
-                            break;
-                        }
+                        //the just found Java implements all required features
+                        //currently there is only accessibility!!!
+                        aCurrentInfo = pJInfo;
+                        bInfoFound = true;
+                        break;
                     }
-                }//end iterate over paths
+                }
+                //The array returned by jfw_plugin_getAllJavaInfos must be freed as well as
+                //its contents
+                for (int j = 0; j < cInfos; j++)
+                    jfw_freeJavaInfo(arInfos[j]);
+                rtl_freeMemory(arInfos);
+
                 if (bInfoFound == true)
                     break;
-            }// end iterate plug-ins
+                //All Java installations found by the current plug-in lib
+                //do not provide the required features. Try the next plug-in
+            }
+
+            if ((JavaInfo*) aCurrentInfo == NULL)
+            {//The plug-ins did not find a suitable Java. Now try the paths which have been
+            //added manually.
+                //get the list of paths to jre locations which have been added manually
+                const jfw::MergedSettings settings;
+                //node.loadFromSettings();
+                const std::vector<OUString> & vecJRELocations =
+                    settings.getJRELocations();
+                //use every plug-in to determine the JavaInfo objects
+                for (ci_pl i = vecPlugins.begin(); i != vecPlugins.end(); ++i)
+                {
+                    const jfw::PluginLibrary & library = *i;
+                    jfw::VersionInfo versionInfo =
+                        aVendorSettings.getVersionInformation(library.sVendor);
+#ifndef DISABLE_DYNLOADING
+                    osl::Module pluginLib(library.sPath);
+                    if (pluginLib.is() == sal_False)
+                        return JFW_E_NO_PLUGIN;
+                    //Check if the current plugin can detect JREs at the location
+                    // of the paths added by jfw_setJRELocations or jfw_addJRELocation
+                    //get the function from the plugin
+                    jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
+                        (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
+                            OUString("jfw_plugin_getJavaInfoByPath"));
+#else
+                    jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
+                        jfw_plugin_getJavaInfoByPath;
+#endif
+                    OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
+                    if (jfw_plugin_getJavaInfoByPathFunc == NULL)
+                        return JFW_E_ERROR;
+
+                    typedef std::vector<OUString>::const_iterator citLoc;
+                    for (citLoc it = vecJRELocations.begin();
+                        it != vecJRELocations.end(); ++it)
+                    {
+                        jfw::CJavaInfo aInfo;
+                        javaPluginError err = (*jfw_plugin_getJavaInfoByPathFunc)(
+                            it->pData,
+                            library.sVendor.pData,
+                            versionInfo.sMinVersion.pData,
+                            versionInfo.sMaxVersion.pData,
+                            versionInfo.getExcludeVersions(),
+                            versionInfo.getExcludeVersionSize(),
+                            & aInfo.pInfo);
+                        if (err == JFW_PLUGIN_E_NO_JRE)
+                            continue;
+                        if (err == JFW_PLUGIN_E_FAILED_VERSION)
+                            continue;
+                        else if (err !=JFW_PLUGIN_E_NONE)
+                            return JFW_E_ERROR;
+
+                        if (aInfo)
+                        {
+                            //We remember the very first installation in aCurrentInfo
+                            if (aCurrentInfo.getLocation().isEmpty())
+                                aCurrentInfo = aInfo;
+                            // compare features
+                            // If the user does not require any features (nFeatureFlags = 0)
+                            // then the first installation is used
+                            if ((aInfo.getFeatures() & nFeatureFlags) == nFeatureFlags)
+                            {
+                                //the just found Java implements all required features
+                                //currently there is only accessibility!!!
+                                aCurrentInfo = aInfo;
+                                bInfoFound = true;
+                                break;
+                            }
+                        }
+                    }//end iterate over paths
+                    if (bInfoFound == true)
+                        break;
+                }// end iterate plug-ins
+            }
         }
         if ((JavaInfo*) aCurrentInfo)
         {
