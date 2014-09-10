@@ -1659,7 +1659,7 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
     if (pTxtNode->HasSwAttrSet())
     {
         const SwAttrSet& rAttrSet = pTxtNode->GetSwAttrSet();
-        bItemSet = rAttrSet.GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET;
+        bItemSet = rAttrSet.GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SfxItemState::SET;
     }
 
     if (!bItemSet)
@@ -1673,7 +1673,7 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
             return false;
 
         boost::shared_ptr<SfxItemSet> pItemSet = pTxtAttr->GetAutoFmt().GetStyleHandle();
-        bItemSet = pItemSet->GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SFX_ITEM_SET;
+        bItemSet = pItemSet->GetItemState(RES_CHRATR_ROTATE, true, &pItem) == SfxItemState::SET;
     }
 
     if (bItemSet)

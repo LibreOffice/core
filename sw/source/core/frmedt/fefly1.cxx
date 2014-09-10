@@ -652,14 +652,14 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, bool bAnchValid,
             const_cast<SfxItemSet&>(rSet).Put( SwFmtAnchor( FLY_AT_PAGE, 1 ) );
 
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == rSet.GetItemState( RES_HORI_ORIENT, false, &pItem )
+            if( SfxItemState::SET == rSet.GetItemState( RES_HORI_ORIENT, false, &pItem )
                 && text::HoriOrientation::NONE == ((SwFmtHoriOrient*)pItem)->GetHoriOrient() )
             {
                 bHOriChgd = true;
                 aOldH = *((SwFmtHoriOrient*)pItem);
                 ((SfxItemSet&)rSet).Put( SwFmtHoriOrient( 0, text::HoriOrientation::LEFT ) );
             }
-            if( SFX_ITEM_SET == rSet.GetItemState( RES_VERT_ORIENT, false, &pItem )
+            if( SfxItemState::SET == rSet.GetItemState( RES_VERT_ORIENT, false, &pItem )
                 && text::VertOrientation::NONE == ((SwFmtVertOrient*)pItem)->GetVertOrient() )
             {
                 bVOriChgd = true;
@@ -760,7 +760,7 @@ void SwFEShell::Insert( const OUString& rGrfName, const OUString& rFltName,
         if( pFlyAttrSet )
         {
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pFlyAttrSet->GetItemState( RES_ANCHOR, false,
+            if( SfxItemState::SET == pFlyAttrSet->GetItemState( RES_ANCHOR, false,
                     &pItem ) )
             {
                 SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
@@ -993,7 +993,7 @@ bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
     // now examine all attributes. Remove forbidden attributes, then
     // get all remaining attributes and enter them
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false, &pItem ) )
     {
         SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
         RndStdIds eType = pAnchor->GetAnchorId();
@@ -1038,7 +1038,7 @@ bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
             StartAllAction();
             const Point aPt( pFly->Frm().Pos() );
 
-            if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, false ))
+            if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false ))
                 sw_ChkAndSetNewAnchor( *this, *pFly, rSet );
             SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)pFly->GetFmt();
 
@@ -1074,7 +1074,7 @@ bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
     SdrObject *pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
     SwFrmFmt *pFmt = FindFrmFmt( pObj );
     StartAllAction();
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, false ))
+    if( SfxItemState::SET == rSet.GetItemState( RES_ANCHOR, false ))
     {
         RndStdIds nNew = ((SwFmtAnchor&)rSet.Get( RES_ANCHOR )).GetAnchorId();
         if ( nNew != pFmt->GetAnchor().GetAnchorId() )
@@ -1176,7 +1176,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
 
         SfxItemSet* pSet = 0;
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pNewFmt->GetItemState( RES_ANCHOR, false, &pItem ))
+        if( SfxItemState::SET == pNewFmt->GetItemState( RES_ANCHOR, false, &pItem ))
         {
             pSet = new SfxItemSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
             pSet->Put( *pItem );
@@ -1772,10 +1772,10 @@ bool SwFEShell::ReplaceSdrObj( const OUString& rGrfName, const OUString& rFltNam
                                 std::max( nWidth,  long(MINFLY) ),
                                 std::max( nHeight, long(MINFLY) )));
 
-            if( SFX_ITEM_SET != aFrmSet.GetItemState( RES_HORI_ORIENT ))
+            if( SfxItemState::SET != aFrmSet.GetItemState( RES_HORI_ORIENT ))
                 aFrmSet.Put( SwFmtHoriOrient( aRelPos.getX(), text::HoriOrientation::NONE, text::RelOrientation::FRAME ));
 
-            if( SFX_ITEM_SET != aFrmSet.GetItemState( RES_VERT_ORIENT ))
+            if( SfxItemState::SET != aFrmSet.GetItemState( RES_VERT_ORIENT ))
                 aFrmSet.Put( SwFmtVertOrient( aRelPos.getY(), text::VertOrientation::NONE, text::RelOrientation::FRAME ));
 
         }

@@ -974,7 +974,7 @@ void SwHTMLParser::InsertBodyOptions()
                                        RES_CHRATR_CTL_FONTSIZE };
         for( sal_uInt16 i=0; i<3; i++ )
         {
-            if( SFX_ITEM_SET == aItemSet.GetItemState( aWhichIds[i], false,
+            if( SfxItemState::SET == aItemSet.GetItemState( aWhichIds[i], false,
                                                        &pItem ) &&
                 static_cast <const SvxFontHeightItem * >(pItem)->GetProp() != 100)
             {

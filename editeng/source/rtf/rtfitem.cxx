@@ -804,7 +804,7 @@ ATTR_SETUNDERLINE:
                 {
                     SvxUnderlineItem aUL( UNDERLINE_SINGLE, PLAINID->nUnderline );
                     const SfxPoolItem* pItem;
-                    if( SFX_ITEM_SET == pSet->GetItemState(
+                    if( SfxItemState::SET == pSet->GetItemState(
                         PLAINID->nUnderline, false, &pItem ) )
                     {
                         // is switched off ?
@@ -899,7 +899,7 @@ ATTR_SETOVERLINE:
                 {
                     SvxOverlineItem aOL( UNDERLINE_SINGLE, PLAINID->nOverline );
                     const SfxPoolItem* pItem;
-                    if( SFX_ITEM_SET == pSet->GetItemState(
+                    if( SfxItemState::SET == pSet->GetItemState(
                         PLAINID->nOverline, false, &pItem ) )
                     {
                         // is switched off ?
@@ -1398,7 +1398,7 @@ void SvxRTFParser::ReadBorderAttr( int nToken, SfxItemSet& rSet,
     // then read the border attribute
     SvxBoxItem aAttr( PARDID->nBox );
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( PARDID->nBox, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( PARDID->nBox, false, &pItem ) )
         aAttr = *(SvxBoxItem*)pItem;
 
     SvxBorderLine aBrd( 0, DEF_LINE_WIDTH_0 );  // Simple plain line
@@ -1772,19 +1772,19 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
                     pAkt->aAttrSet.Put( pDfltSet->Get( *pPtr ) );
                 else if( !pAkt->aAttrSet.GetParent() )
                 {
-                    if( SFX_ITEM_SET ==
+                    if( SfxItemState::SET ==
                         pDfltSet->GetItemState( *pPtr, false, &pDef ))
                         pAkt->aAttrSet.Put( *pDef );
                     else
                         pAkt->aAttrSet.ClearItem( *pPtr );
                 }
-                else if( SFX_ITEM_SET == pAkt->aAttrSet.GetParent()->
+                else if( SfxItemState::SET == pAkt->aAttrSet.GetParent()->
                             GetItemState( *pPtr, true, &pItem ) &&
                         *( pDef = &pDfltSet->Get( *pPtr )) != *pItem )
                     pAkt->aAttrSet.Put( *pDef );
                 else
                 {
-                    if( SFX_ITEM_SET ==
+                    if( SfxItemState::SET ==
                         pDfltSet->GetItemState( *pPtr, false, &pDef ))
                         pAkt->aAttrSet.Put( *pDef );
                     else

@@ -311,7 +311,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
     }
     pTabPage->FillItemSet(pSet);
 
-    if(pSelectionSet && SFX_ITEM_SET == pSelectionSet->GetItemState(RES_COL))
+    if(pSelectionSet && SfxItemState::SET == pSelectionSet->GetItemState(RES_COL))
     {
         //insert region with columns
         const SwFmtCol& rColItem = (const SwFmtCol&)pSelectionSet->Get(RES_COL);
@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
         rWrtShell.SetSectionAttr( *pSectionSet );
     }
 
-    if(pPageSet && SFX_ITEM_SET == pPageSet->GetItemState(RES_COL) && bPageChanged)
+    if(pPageSet && SfxItemState::SET == pPageSet->GetItemState(RES_COL) && bPageChanged)
     {
         // deterine current PageDescriptor and fill the Set with it
         const sal_uInt16 nCurIdx = rWrtShell.GetCurPageDesc();
@@ -344,7 +344,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
         rFmt.SetFmtAttr(pPageSet->Get(RES_COL));
         rWrtShell.ChgPageDesc(nCurIdx, aPageDesc);
     }
-    if(pFrameSet && SFX_ITEM_SET == pFrameSet->GetItemState(RES_COL) && bFrameChanged)
+    if(pFrameSet && SfxItemState::SET == pFrameSet->GetItemState(RES_COL) && bFrameChanged)
     {
         SfxItemSet aTmp(*pFrameSet->GetPool(), RES_COL, RES_COL);
         aTmp.Put(*pFrameSet);
@@ -601,14 +601,14 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     if(m_pBalanceColsCB->IsVisible())
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rSet->GetItemState( RES_COLUMNBALANCE, false, &pItem ))
+        if( SfxItemState::SET == rSet->GetItemState( RES_COLUMNBALANCE, false, &pItem ))
             m_pBalanceColsCB->Check(!((const SwFmtNoBalancedColumns*)pItem)->GetValue());
         else
             m_pBalanceColsCB->Check( true );
     }
 
     //text direction
-    if( SFX_ITEM_DEFAULT <= rSet->GetItemState( RES_FRAMEDIR ) )
+    if( SfxItemState::DEFAULT <= rSet->GetItemState( RES_FRAMEDIR ) )
     {
         const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet->Get(RES_FRAMEDIR);
         sal_uIntPtr nVal  = rItem.GetValue();
@@ -1156,7 +1156,7 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
 {
     if(!bFrm)
     {
-        if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
+        if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PAGE_SIZE ))
         {
             const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get(
                                                 SID_ATTR_PAGE_SIZE);

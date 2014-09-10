@@ -265,7 +265,7 @@ namespace sdr
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
                         aSet.Put(rSet);
-                        if (aSet.GetItemState(EE_CHAR_COLOR, false) == SFX_ITEM_SET)
+                        if (aSet.GetItemState(EE_CHAR_COLOR, false) == SfxItemState::SET)
                             pOutliner->RemoveCharAttribs( nPara, EE_CHAR_COLOR );
                         pOutliner->SetParaAttribs(nPara, aSet);
                     }
@@ -1111,14 +1111,14 @@ void SAL_CALL Cell::setPropertyValue( const OUString& rPropertyName, const Any& 
 
                 if( !SvxUnoTextRangeBase::SetPropertyValueHelper( aSet, pMap, rValue, aSet ))
                 {
-                    if( aSet.GetItemState( pMap->nWID ) != SFX_ITEM_SET )
+                    if( aSet.GetItemState( pMap->nWID ) != SfxItemState::SET )
                     {
                         // Default aus ItemPool holen
                         if(SfxItemPool::IsWhich(pMap->nWID))
                             aSet.Put(GetModel()->GetItemPool().GetDefaultItem(pMap->nWID));
                     }
 
-                    if( aSet.GetItemState( pMap->nWID ) == SFX_ITEM_SET )
+                    if( aSet.GetItemState( pMap->nWID ) == SfxItemState::SET )
                     {
                         SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rValue, aSet );
                     }
@@ -1349,8 +1349,8 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
         {
             const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
 
-            const bool bStretch = rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET;
-            const bool bTile = rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET;
+            const bool bStretch = rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SfxItemState::SET;
+            const bool bTile = rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SfxItemState::SET;
             if( bStretch || bTile )
             {
                 eState = PropertyState_DIRECT_VALUE;
@@ -1367,7 +1367,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
         case OWN_ATTR_TABLEBORDER:
         {
             const SfxItemSet& rSet = mpProperties->GetMergedItemSet();
-            if( (rSet.GetItemState( SDRATTR_TABLE_BORDER_INNER, false ) == SFX_ITEM_DEFAULT) && (rSet.GetItemState( SDRATTR_TABLE_BORDER, false ) == SFX_ITEM_DEFAULT) )
+            if( (rSet.GetItemState( SDRATTR_TABLE_BORDER_INNER, false ) == SfxItemState::DEFAULT) && (rSet.GetItemState( SDRATTR_TABLE_BORDER, false ) == SfxItemState::DEFAULT) )
                 return PropertyState_DEFAULT_VALUE;
 
             return PropertyState_DIRECT_VALUE;
@@ -1378,11 +1378,11 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
 
             switch( rSet.GetItemState( pMap->nWID, false ) )
             {
-            case SFX_ITEM_READONLY:
-            case SFX_ITEM_SET:
+            case SfxItemState::READONLY:
+            case SfxItemState::SET:
                 eState = PropertyState_DIRECT_VALUE;
                 break;
-            case SFX_ITEM_DEFAULT:
+            case SfxItemState::DEFAULT:
                 eState = PropertyState_DEFAULT_VALUE;
                 break;
             default:

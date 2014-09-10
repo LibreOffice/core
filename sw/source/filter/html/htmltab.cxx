@@ -1505,7 +1505,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
                                  ->GetCntntNode();
                     const SfxPoolItem *pItem;
                     if( pCNd && pCNd->HasSwAttrSet() &&
-                        SFX_ITEM_SET==pCNd->GetpSwAttrSet()->GetItemState(
+                        SfxItemState::SET==pCNd->GetpSwAttrSet()->GetItemState(
                             RES_PARATR_ADJUST, false, &pItem ) )
                     {
                         eAdjust = ((const SvxAdjustItem *)pItem)
@@ -1552,7 +1552,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
     else
     {
         OSL_ENSURE( pBox->GetSttNd() ||
-                SFX_ITEM_SET!=pFrmFmt->GetAttrSet().GetItemState(
+                SfxItemState::SET!=pFrmFmt->GetAttrSet().GetItemState(
                                     RES_VERT_ORIENT, false ),
                 "Box ohne Inhalt hat vertikale Ausrichtung" );
         pBox->ChgFrmFmt( (SwTableBoxFmt*)pFrmFmt );
@@ -1617,7 +1617,7 @@ static void ResetLineFrmFmtAttrs( SwFrmFmt *pFrmFmt )
 {
     pFrmFmt->ResetFmtAttr( RES_FRM_SIZE );
     pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
-    OSL_ENSURE( SFX_ITEM_SET!=pFrmFmt->GetAttrSet().GetItemState(
+    OSL_ENSURE( SfxItemState::SET!=pFrmFmt->GetAttrSet().GetItemState(
                                 RES_VERT_ORIENT, false ),
             "Zeile hat vertikale Ausrichtung" );
 }
@@ -2958,7 +2958,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
         pCSS1Parser->ParseStyleOption( rStyle, aItemSet, aPropInfo );
         const SfxPoolItem *pItem = 0;
-        if( SFX_ITEM_SET == aItemSet.GetItemState( RES_BACKGROUND, false,
+        if( SfxItemState::SET == aItemSet.GetItemState( RES_BACKGROUND, false,
                                                    &pItem ) )
         {
             pBrushItem = new SvxBrushItem( *((const SvxBrushItem *)pItem) );
@@ -3251,7 +3251,7 @@ _CellSaveStruct::_CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                                        aPropInfo, &aLang, &aDir ) )
         {
             SfxPoolItem const* pItem;
-            if (SFX_ITEM_SET == aItemSet.GetItemState(RES_BOX, false, &pItem))
+            if (SfxItemState::SET == aItemSet.GetItemState(RES_BOX, false, &pItem))
             {   // fdo#41796: steal box item to set it in FixFrameFmt later!
                 m_pBoxItem.reset(dynamic_cast<SvxBoxItem *>(pItem->Clone()));
                 aItemSet.ClearItem(RES_BOX);
@@ -3494,13 +3494,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             const SfxPoolItem *pItem = 0;
             if( bStyleParsed )
             {
-                if( SFX_ITEM_SET == aItemSet.GetItemState(
+                if( SfxItemState::SET == aItemSet.GetItemState(
                                         RES_BACKGROUND, false, &pItem ) )
                 {
                     pCurTable->SetBGBrush( *(const SvxBrushItem *)pItem );
                     aItemSet.ClearItem( RES_BACKGROUND );
                 }
-                if( SFX_ITEM_SET == aItemSet.GetItemState(
+                if( SfxItemState::SET == aItemSet.GetItemState(
                                         RES_PARATR_SPLIT, false, &pItem ) )
                 {
                     aItemSet.Put(
@@ -3753,14 +3753,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     SwFrmFmt *pFrmFmt = pSwTable->GetFrmFmt();
 
                     const SfxPoolItem* pItem2;
-                    if( SFX_ITEM_SET == pOldTxtNd->GetSwAttrSet()
+                    if( SfxItemState::SET == pOldTxtNd->GetSwAttrSet()
                             .GetItemState( RES_PAGEDESC, false, &pItem2 ) &&
                         ((SwFmtPageDesc *)pItem2)->GetPageDesc() )
                     {
                         pFrmFmt->SetFmtAttr( *pItem2 );
                         pOldTxtNd->ResetAttr( RES_PAGEDESC );
                     }
-                    if( SFX_ITEM_SET == pOldTxtNd->GetSwAttrSet()
+                    if( SfxItemState::SET == pOldTxtNd->GetSwAttrSet()
                             .GetItemState( RES_BREAK, true, &pItem2 ) )
                     {
                         switch( ((SvxFmtBreakItem *)pItem2)->GetBreak() )

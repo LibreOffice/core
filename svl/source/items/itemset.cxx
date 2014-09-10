@@ -452,7 +452,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
 {
     // Find the range in which the Which is located
     const SfxItemSet* pAktSet = this;
-    SfxItemState eRet = SFX_ITEM_UNKNOWN;
+    SfxItemState eRet = SfxItemState::UNKNOWN;
     do
     {
         SfxItemArray ppFnd = pAktSet->_aItems;
@@ -467,7 +467,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                     ppFnd += nWhich - *pPtr;
                     if ( !*ppFnd )
                     {
-                        eRet = SFX_ITEM_DEFAULT;
+                        eRet = SfxItemState::DEFAULT;
                         if( !bSrchInParent )
                             return eRet; // Not present
                         break; // Keep searching in the parents!
@@ -475,16 +475,16 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
 
                     if ( (SfxPoolItem*) -1 == *ppFnd )
                         // Different ones are present
-                        return SFX_ITEM_DONTCARE;
+                        return SfxItemState::DONTCARE;
 
                     if ( (*ppFnd)->Type() == TYPE(SfxVoidItem) )
-                        return SFX_ITEM_DISABLED;
+                        return SfxItemState::DISABLED;
 
                     if (ppItem)
                     {
                         *ppItem = *ppFnd;
                     }
-                    return SFX_ITEM_SET;
+                    return SfxItemState::SET;
                 }
                 ppFnd += *(pPtr+1) - *pPtr + 1;
                 pPtr += 2;
@@ -496,7 +496,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
 
 bool SfxItemSet::HasItem(sal_uInt16 nWhich, const SfxPoolItem** ppItem) const
 {
-    bool bRet = SFX_ITEM_SET == GetItemState(nWhich, true, ppItem);
+    bool bRet = SfxItemState::SET == GetItemState(nWhich, true, ppItem);
     if (!bRet && ppItem)
         *ppItem = NULL;
     return bRet;
@@ -621,9 +621,9 @@ bool SfxItemSet::Put( const SfxItemSet& rSet, bool bInvalidAsDefault )
  * Default (0 pointer) and Invalid (-1 pointer) Items are processed
  * according to their parameter 'eDontCareAs' and 'eDefaultAs':
  *
- * SFX_ITEM_SET:       Hard set to the default of the Pool
- * SFX_ITEM_DEFAULT:   Deleted (0 pointer)
- * SFX_ITEM_DONTCARE:  Invalid (-1 pointer)
+ * SfxItemState::SET:       Hard set to the default of the Pool
+ * SfxItemState::DEFAULT:   Deleted (0 pointer)
+ * SfxItemState::DONTCARE:  Invalid (-1 pointer)
  *
  * NB: All other values for 'eDontCareAs' and 'eDefaultAs' are invalid
  */
@@ -647,15 +647,15 @@ void SfxItemSet::PutExtended
                     // Item ist DontCare:
                     switch ( eDontCareAs )
                     {
-                        case SFX_ITEM_SET:
+                        case SfxItemState::SET:
                             Put( rSet.GetPool()->GetDefaultItem(nWhich), nWhich );
                             break;
 
-                        case SFX_ITEM_DEFAULT:
+                        case SfxItemState::DEFAULT:
                             ClearItem( nWhich );
                             break;
 
-                        case SFX_ITEM_DONTCARE:
+                        case SfxItemState::DONTCARE:
                             InvalidateItem( nWhich );
                             break;
 
@@ -672,15 +672,15 @@ void SfxItemSet::PutExtended
                 // Item is default:
                 switch ( eDefaultAs )
                 {
-                    case SFX_ITEM_SET:
+                    case SfxItemState::SET:
                         Put( rSet.GetPool()->GetDefaultItem(nWhich), nWhich );
                         break;
 
-                    case SFX_ITEM_DEFAULT:
+                    case SfxItemState::DEFAULT:
                         ClearItem( nWhich );
                         break;
 
-                    case SFX_ITEM_DONTCARE:
+                    case SfxItemState::DONTCARE:
                         InvalidateItem( nWhich );
                         break;
 
@@ -701,7 +701,7 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
 {
     // special case: exactly one sal_uInt16 which is already included?
     SfxItemState eItemState = GetItemState(nFrom, false);
-    if ( nFrom == nTo && ( eItemState == SFX_ITEM_DEFAULT || eItemState == SFX_ITEM_SET ) )
+    if ( nFrom == nTo && ( eItemState == SfxItemState::DEFAULT || eItemState == SfxItemState::SET ) )
         return;
 
     // merge new range
@@ -745,19 +745,19 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
             {
                 // direct move of pointer (not via pool)
                 SfxItemState eState = GetItemState( nWID, false, aNewItems+n );
-                if ( SFX_ITEM_SET == eState )
+                if ( SfxItemState::SET == eState )
                 {
                     // increment new item count and possibly increment ref count
                     ++nNewCount;
                     aNewItems[n]->AddRef();
                 }
-                else if ( SFX_ITEM_DISABLED == eState )
+                else if ( SfxItemState::DISABLED == eState )
                 {
                     // put "disabled" item
                     ++nNewCount;
                     aNewItems[n] = new SfxVoidItem(0);
                 }
-                else if ( SFX_ITEM_DONTCARE == eState )
+                else if ( SfxItemState::DONTCARE == eState )
                 {
                     ++nNewCount;
                     aNewItems[n] = (SfxPoolItem*)-1;
@@ -845,7 +845,7 @@ bool SfxItemSet::Set
         while ( nWhich )
         {
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == rSet.GetItemState( nWhich, true, &pItem ) )
+            if( SfxItemState::SET == rSet.GetItemState( nWhich, true, &pItem ) )
                 bRet |= 0 != Put( *pItem, pItem->Which() );
             nWhich = aIter.NextWhich();
         }
@@ -879,7 +879,7 @@ const SfxPoolItem* SfxItemSet::GetItem
     // Is the Item set or 'bDeep == true' available?
     const SfxPoolItem *pItem = 0;
     SfxItemState eState = GetItemState( nWhich, bSrchInParent, &pItem );
-    if ( bSrchInParent && SFX_ITEM_DEFAULT == eState &&
+    if ( bSrchInParent && SfxItemState::DEFAULT == eState &&
          nWhich <= SFX_WHICH_MAX )
         pItem = &_pPool->GetDefaultItem(nWhich);
 
@@ -1042,7 +1042,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
             sal_uInt16 nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )
                                 : pItem->Which();
-            if( SFX_ITEM_UNKNOWN == rSet.GetItemState( nWhich, false ) )
+            if( SfxItemState::UNKNOWN == rSet.GetItemState( nWhich, false ) )
                 ClearItem( nWhich );        // Delete
             if( aIter.IsAtEnd() )
                 break;
@@ -1112,7 +1112,7 @@ void SfxItemSet::Differentiate( const SfxItemSet& rSet )
             sal_uInt16 nWhich = IsInvalidItem( pItem )
                                 ? GetWhichByPos( aIter.GetCurPos() )
                                 : pItem->Which();
-            if( SFX_ITEM_SET == rSet.GetItemState( nWhich, false ) )
+            if( SfxItemState::SET == rSet.GetItemState( nWhich, false ) )
                 ClearItem( nWhich ); // Delete
             if( aIter.IsAtEnd() )
                 break;
@@ -1603,7 +1603,7 @@ SfxItemSet *SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool ) const
             while ( nWhich )
             {
                 const SfxPoolItem* pItem;
-                if ( SFX_ITEM_SET == GetItemState( nWhich, false, &pItem ) )
+                if ( SfxItemState::SET == GetItemState( nWhich, false, &pItem ) )
                     pNewSet->Put( *pItem, pItem->Which() );
                 nWhich = aIter.NextWhich();
             }

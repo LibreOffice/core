@@ -844,7 +844,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     do
                     {
                         const SfxPoolItem* pTmpItem = 0;
-                        if ( SFX_ITEM_SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
+                        if ( SfxItemState::SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
                              pTmpItem == pItem )
                         {
                             // Do not clear item if the attribute is set in a character format:
@@ -881,7 +881,7 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint,
                     do
                     {
                         const SfxPoolItem* pTmpItem = 0;
-                        if ( SFX_ITEM_SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
+                        if ( SfxItemState::SET == rWholeParaAttrSet.GetItemState( pItem->Which(), false, &pTmpItem ) &&
                              pTmpItem == pItem )
                         {
                             // Do not clear item if the attribute is set in a character format:
@@ -1699,7 +1699,7 @@ void SwTxtNode::DeleteAttributes(
                 // Check if character format contains hidden attribute:
                 const SwCharFmt* pFmt = pTxtHt->GetCharFmt().GetCharFmt();
                 const SfxPoolItem* pItem;
-                if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
+                if ( SfxItemState::SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
                     SetCalcHiddenCharFlags();
             }
             // #i75430# Recalc hidden flags if necessary
@@ -1820,7 +1820,7 @@ bool SwTxtNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
                 return bRet;
             SwCharFmt* pCurrCharFmt =pCurrNumFmt->GetCharFmt();
 
-            if (pCurrCharFmt && pCurrCharFmt->GetItemState(nWhich,false) != SFX_ITEM_SET)
+            if (pCurrCharFmt && pCurrCharFmt->GetItemState(nWhich,false) != SfxItemState::SET)
             {
                 pCurrCharFmt->SetFmtAttr(*pItem);
                 SwNumFmt aNewNumFmt(*pCurrNumFmt);
@@ -1882,7 +1882,7 @@ bool SwTxtNode::SetAttr(
 
             // check for auto style:
             const SfxPoolItem* pItem;
-            const bool bAutoStyle = SFX_ITEM_SET == aTxtSet.GetItemState( RES_TXTATR_AUTOFMT, false, &pItem );
+            const bool bAutoStyle = SfxItemState::SET == aTxtSet.GetItemState( RES_TXTATR_AUTOFMT, false, &pItem );
             if ( bAutoStyle )
             {
                 boost::shared_ptr<SfxItemSet> pAutoStyleSet = static_cast<const SwFmtAutoFmt*>(pItem)->GetStyleHandle();
@@ -1981,7 +1981,7 @@ static void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
         {
             if( ( nWhich < RES_CHRATR_END ||
                   RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) &&
-                ( SFX_ITEM_SET == pCFSet->GetItemState( nWhich, true ) ) )
+                ( SfxItemState::SET == pCFSet->GetItemState( nWhich, true ) ) )
                 rSet.Put( pCFSet->Get( nWhich ) );
             nWhich = aIter.NextWhich();
         }
@@ -2006,7 +2006,7 @@ static void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAt
             {
                 if( ( nWhich < RES_CHRATR_END ||
                       ( RES_TXTATR_AUTOFMT == rAttr.Which() && RES_TXTATR_UNKNOWN_CONTAINER == nWhich ) ) &&
-                    ( SFX_ITEM_SET == pCFSet->GetItemState( nWhich, true ) ) )
+                    ( SfxItemState::SET == pCFSet->GetItemState( nWhich, true ) ) )
                     rSet.Put( pCFSet->Get( nWhich ) );
                 nWhich = aIter.NextWhich();
             }
@@ -2511,7 +2511,7 @@ void SwTxtNode::FmtToTxtAttr( SwTxtNode* pNd )
 
             while( true )
             {
-                if( SFX_ITEM_SET == aNdSet.GetItemState( pItem->Which(), false, &pNdItem ) )
+                if( SfxItemState::SET == aNdSet.GetItemState( pItem->Which(), false, &pNdItem ) )
                 {
                     if (*pItem == *pNdItem) // 4
                     {
@@ -2965,7 +2965,7 @@ bool SwpHints::TryInsertHint(
         // Check if character format contains hidden attribute:
         const SwCharFmt* pFmt = pHint->GetCharFmt().GetCharFmt();
         const SfxPoolItem* pItem;
-        if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
+        if ( SfxItemState::SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) )
             rNode.SetCalcHiddenCharFlags();
 
         ((SwTxtCharFmt*)pHint)->ChgTxtNode( &rNode );

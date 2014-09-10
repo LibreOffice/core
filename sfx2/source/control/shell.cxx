@@ -210,7 +210,7 @@ void SfxShell::PutItem
             SfxStateCache* pCache = pBindings->GetStateCache( nSlotId );
             if ( pCache )
             {
-                pCache->SetState( SFX_ITEM_DEFAULT, pItem->Clone(), true );
+                pCache->SetState( SfxItemState::DEFAULT, pItem->Clone(), true );
                 pCache->SetCachedState( true );
             }
         }
@@ -424,7 +424,7 @@ bool SfxShell::CanExecuteSlot_Impl( const SfxSlot &rSlot )
     SfxItemSet aSet(rPool, nId, nId);
     SfxStateFunc pFunc = rSlot.GetStateFnc();
     CallState( pFunc, aSet );
-    return aSet.GetItemState(nId) != SFX_ITEM_DISABLED;
+    return aSet.GetItemState(nId) != SfxItemState::DISABLED;
 }
 
 long ShellCall_Impl( void* pObj, void* pArg )
@@ -481,7 +481,7 @@ const SfxPoolItem* SfxShell::GetSlotState
     // Get Slot on the given Interface
     if ( !pIF )
         pIF = GetInterface();
-    SfxItemState eState = SFX_ITEM_UNKNOWN;
+    SfxItemState eState = SfxItemState::UNKNOWN;
     SfxItemPool &rPool = GetPool();
 
     const SfxSlot* pSlot = NULL;
@@ -505,26 +505,26 @@ const SfxPoolItem* SfxShell::GetSlotState
         eState = aSet.GetItemState( nSlotId, true, &pItem );
 
         // get default Item if possible
-        if ( eState == SFX_ITEM_DEFAULT )
+        if ( eState == SfxItemState::DEFAULT )
         {
             if ( SfxItemPool::IsWhich(nSlotId) )
                 pItem = &rPool.GetDefaultItem(nSlotId);
             else
-                eState = SFX_ITEM_DONTCARE;
+                eState = SfxItemState::DONTCARE;
         }
     }
     else
-        eState = SFX_ITEM_UNKNOWN;
+        eState = SfxItemState::UNKNOWN;
 
     // Evaluate Item and item status and possibly maintain them in pStateSet
     SfxPoolItem *pRetItem = 0;
-    if ( eState <= SFX_ITEM_DISABLED )
+    if ( eState <= SfxItemState::DISABLED )
     {
         if ( pStateSet )
             pStateSet->DisableItem(nSlotId);
         return 0;
     }
-    else if ( eState == SFX_ITEM_DONTCARE )
+    else if ( eState == SfxItemState::DONTCARE )
     {
         if ( pStateSet )
             pStateSet->ClearItem(nSlotId);

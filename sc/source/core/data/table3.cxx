@@ -1506,7 +1506,7 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
 {
     const ScPatternAttr* pPattern = pTab->GetPattern( nCol, nRow );
     if ( pPattern->GetItemSet().GetItemState( ATTR_VALUE_FORMAT, false )
-            == SFX_ITEM_SET )
+            == SfxItemState::SET )
     {
         ScPatternAttr aNewPattern( *pPattern );
         SfxItemSet& rSet = aNewPattern.GetItemSet();

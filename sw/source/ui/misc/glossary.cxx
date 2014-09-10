@@ -528,7 +528,7 @@ IMPL_LINK( SwGlossaryDlg, MenuHdl, Menu *, pMn )
         boost::scoped_ptr<SfxAbstractDialog> pMacroDlg(pFact->CreateSfxDialog( this, aSet,
             pSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface(), SID_EVENTCONFIG ));
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
-            SFX_ITEM_SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, false, &pItem ) )
+            SfxItemState::SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, false, &pItem ) )
         {
             const SvxMacroTableDtor& rTbl = ((SvxMacroItem*)pItem)->GetMacroTable();
             pGlossaryHdl->SetMacros( m_pShortNameEdit->GetText(),

@@ -2124,41 +2124,41 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     Point aRef1(rSnap.Center());
     Point aRef2(aRef1); aRef2.Y()++;
     const SfxPoolItem *pPoolItem=NULL;
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1X,true,&pPoolItem)==SfxItemState::SET) {
         aRef1.X()=((const SdrTransformRef1XItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF1Y,true,&pPoolItem)==SfxItemState::SET) {
         aRef1.Y()=((const SdrTransformRef1YItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2X,true,&pPoolItem)==SfxItemState::SET) {
         aRef2.X()=((const SdrTransformRef2XItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_TRANSFORMREF2Y,true,&pPoolItem)==SfxItemState::SET) {
         aRef2.Y()=((const SdrTransformRef2YItem*)pPoolItem)->GetValue();
     }
 
     Rectangle aNewSnap(rSnap);
-    if (rAttr.GetItemState(SDRATTR_MOVEX,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_MOVEX,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrMoveXItem*)pPoolItem)->GetValue();
         aNewSnap.Move(n,0);
     }
-    if (rAttr.GetItemState(SDRATTR_MOVEY,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_MOVEY,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrMoveYItem*)pPoolItem)->GetValue();
         aNewSnap.Move(0,n);
     }
-    if (rAttr.GetItemState(SDRATTR_ONEPOSITIONX,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ONEPOSITIONX,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrOnePositionXItem*)pPoolItem)->GetValue();
         aNewSnap.Move(n-aNewSnap.Left(),0);
     }
-    if (rAttr.GetItemState(SDRATTR_ONEPOSITIONY,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ONEPOSITIONY,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrOnePositionYItem*)pPoolItem)->GetValue();
         aNewSnap.Move(0,n-aNewSnap.Top());
     }
-    if (rAttr.GetItemState(SDRATTR_ONESIZEWIDTH,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ONESIZEWIDTH,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrOneSizeWidthItem*)pPoolItem)->GetValue();
         aNewSnap.Right()=aNewSnap.Left()+n;
     }
-    if (rAttr.GetItemState(SDRATTR_ONESIZEHEIGHT,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ONESIZEHEIGHT,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrOneSizeHeightItem*)pPoolItem)->GetValue();
         aNewSnap.Bottom()=aNewSnap.Top()+n;
     }
@@ -2170,7 +2170,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         }
     }
 
-    if (rAttr.GetItemState(SDRATTR_SHEARANGLE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_SHEARANGLE,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrShearAngleItem*)pPoolItem)->GetValue();
         n-=GetShearAngle();
         if (n!=0) {
@@ -2178,7 +2178,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
             NbcShear(aRef1,n,nTan,false);
         }
     }
-    if (rAttr.GetItemState(SDRATTR_ROTATEANGLE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ROTATEANGLE,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrAngleItem*)pPoolItem)->GetValue();
         n-=GetRotateAngle();
         if (n!=0) {
@@ -2187,28 +2187,28 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
             NbcRotate(aRef1,n,nSin,nCos);
         }
     }
-    if (rAttr.GetItemState(SDRATTR_ROTATEONE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_ROTATEONE,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrRotateOneItem*)pPoolItem)->GetValue();
         double nSin=sin(n*nPi180);
         double nCos=cos(n*nPi180);
         NbcRotate(aRef1,n,nSin,nCos);
     }
-    if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_HORZSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrHorzShearOneItem*)pPoolItem)->GetValue();
         double nTan=tan(n*nPi180);
         NbcShear(aRef1,n,nTan,false);
     }
-    if (rAttr.GetItemState(SDRATTR_VERTSHEARONE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_VERTSHEARONE,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrVertShearOneItem*)pPoolItem)->GetValue();
         double nTan=tan(n*nPi180);
         NbcShear(aRef1,n,nTan,true);
     }
 
-    if (rAttr.GetItemState(SDRATTR_OBJMOVEPROTECT,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJMOVEPROTECT,true,&pPoolItem)==SfxItemState::SET) {
         bool b=((const SdrYesNoItem*)pPoolItem)->GetValue();
         SetMoveProtect(b);
     }
-    if (rAttr.GetItemState(SDRATTR_OBJSIZEPROTECT,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJSIZEPROTECT,true,&pPoolItem)==SfxItemState::SET) {
         bool b=((const SdrYesNoItem*)pPoolItem)->GetValue();
         SetResizeProtect(b);
     }
@@ -2217,21 +2217,21 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     if( IsMoveProtect() )
         SetResizeProtect( true );
 
-    if (rAttr.GetItemState(SDRATTR_OBJPRINTABLE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJPRINTABLE,true,&pPoolItem)==SfxItemState::SET) {
         bool b=((const SdrObjPrintableItem*)pPoolItem)->GetValue();
         SetPrintable(b);
     }
 
-    if (rAttr.GetItemState(SDRATTR_OBJVISIBLE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJVISIBLE,true,&pPoolItem)==SfxItemState::SET) {
         bool b=((const SdrObjVisibleItem*)pPoolItem)->GetValue();
         SetVisible(b);
     }
 
     SdrLayerID nLayer=SDRLAYER_NOTFOUND;
-    if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_LAYERID,true,&pPoolItem)==SfxItemState::SET) {
         nLayer=((const SdrLayerIdItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SFX_ITEM_SET && pModel!=NULL) {
+    if (rAttr.GetItemState(SDRATTR_LAYERNAME,true,&pPoolItem)==SfxItemState::SET && pModel!=NULL) {
         OUString aLayerName=((const SdrLayerNameItem*)pPoolItem)->GetValue();
         const SdrLayerAdmin* pLayAd=pPage!=NULL ? &pPage->GetLayerAdmin() : pModel!=NULL ? &pModel->GetLayerAdmin() : NULL;
         if (pLayAd!=NULL) {
@@ -2246,16 +2246,16 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
         NbcSetLayer(nLayer);
     }
 
-    if (rAttr.GetItemState(SDRATTR_OBJECTNAME,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_OBJECTNAME,true,&pPoolItem)==SfxItemState::SET) {
         OUString aName=((const SfxStringItem*)pPoolItem)->GetValue();
         SetName(aName);
     }
     Rectangle aNewLogic(rLogic);
-    if (rAttr.GetItemState(SDRATTR_LOGICSIZEWIDTH,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_LOGICSIZEWIDTH,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrLogicSizeWidthItem*)pPoolItem)->GetValue();
         aNewLogic.Right()=aNewLogic.Left()+n;
     }
-    if (rAttr.GetItemState(SDRATTR_LOGICSIZEHEIGHT,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_LOGICSIZEHEIGHT,true,&pPoolItem)==SfxItemState::SET) {
         long n=((const SdrLogicSizeHeightItem*)pPoolItem)->GetValue();
         aNewLogic.Bottom()=aNewLogic.Top()+n;
     }
@@ -2264,10 +2264,10 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
     Fraction aResizeX(1,1);
     Fraction aResizeY(1,1);
-    if (rAttr.GetItemState(SDRATTR_RESIZEXONE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_RESIZEXONE,true,&pPoolItem)==SfxItemState::SET) {
         aResizeX*=((const SdrResizeXOneItem*)pPoolItem)->GetValue();
     }
-    if (rAttr.GetItemState(SDRATTR_RESIZEYONE,true,&pPoolItem)==SFX_ITEM_SET) {
+    if (rAttr.GetItemState(SDRATTR_RESIZEYONE,true,&pPoolItem)==SfxItemState::SET) {
         aResizeY*=((const SdrResizeYOneItem*)pPoolItem)->GetValue();
     }
     if (aResizeX!=Fraction(1,1) || aResizeY!=Fraction(1,1)) {

@@ -190,11 +190,11 @@ SwUndoDelete::SwUndoDelete(
             if( pEndTxtNd->HasSwAttrSet() )
             {
                 SwRegHistory aRegHist( *pEndTxtNd, pHistory );
-                if( SFX_ITEM_SET == pEndTxtNd->GetpSwAttrSet()->GetItemState(
+                if( SfxItemState::SET == pEndTxtNd->GetpSwAttrSet()->GetItemState(
                         RES_BREAK, false ) )
                     pEndTxtNd->ResetAttr( RES_BREAK );
                 if( pEndTxtNd->HasSwAttrSet() &&
-                    SFX_ITEM_SET == pEndTxtNd->GetpSwAttrSet()->GetItemState(
+                    SfxItemState::SET == pEndTxtNd->GetpSwAttrSet()->GetItemState(
                         RES_PAGEDESC, false ) )
                     pEndTxtNd->ResetAttr( RES_PAGEDESC );
             }
@@ -1031,11 +1031,11 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
                 SwFrmFmt* pTableFmt = pTblNd->GetTable().GetFrmFmt();
 
                 const SfxPoolItem *pItem;
-                if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_PAGEDESC,
+                if( SfxItemState::SET == pTableFmt->GetItemState( RES_PAGEDESC,
                     false, &pItem ) )
                     pNextNd->SetAttr( *pItem );
 
-                if( SFX_ITEM_SET == pTableFmt->GetItemState( RES_BREAK,
+                if( SfxItemState::SET == pTableFmt->GetItemState( RES_BREAK,
                     false, &pItem ) )
                     pNextNd->SetAttr( *pItem );
             }

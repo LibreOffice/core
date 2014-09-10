@@ -83,7 +83,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
     bool bDeselect = false;
 
     sal_uInt16 nSlotId = rReq.GetSlot();
-    if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
+    if(pArgs && SfxItemState::SET == pArgs->GetItemState(GetPool().GetWhich(nSlotId), false, &pItem))
     {
         pEItem = dynamic_cast< const SfxAllEnumItem*>(pItem);
         pStringItem = dynamic_cast< const SfxStringItem*>(pItem);
@@ -751,7 +751,7 @@ bool SwView::IsDrawTextHyphenate()
     SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool(),
                             EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
     if( pSdrView->GetAttributes( aNewAttr ) &&
-        aNewAttr.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_DEFAULT )
+        aNewAttr.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         bHyphenate = ((const SfxBoolItem&)aNewAttr.Get( EE_PARA_HYPHENATE )).
                         GetValue();
 

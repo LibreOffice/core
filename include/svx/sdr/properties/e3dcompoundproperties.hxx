@@ -54,7 +54,7 @@ namespace sdr
             // Get merged ItemSet. Normally, this maps directly to GetObjectItemSet(), but may
             // be overloaded e.g for group objects to return a merged ItemSet of the object.
             // When using this method the returned ItemSet may contain items in the state
-            // SFX_ITEM_DONTCARE which means there were several such items with different
+            // SfxItemState::DONTCARE which means there were several such items with different
             // values.
             virtual const SfxItemSet& GetMergedItemSet() const SAL_OVERRIDE;
 

@@ -59,9 +59,9 @@ void ScViewUtil::PutItemScript( SfxItemSet& rShellSet, const SfxItemSet& rCoreSe
 
     SfxItemPool& rPool = *rShellSet.GetPool();
     SvxScriptSetItem aSetItem( rPool.GetSlotId(nWhichId), rPool );
-    //  use PutExtended with eDefaultAs = SFX_ITEM_SET, so defaults from rCoreSet
+    //  use PutExtended with eDefaultAs = SfxItemState::SET, so defaults from rCoreSet
     //  (document pool) are read and put into rShellSet (MessagePool)
-    aSetItem.GetItemSet().PutExtended( rCoreSet, SFX_ITEM_DONTCARE, SFX_ITEM_SET );
+    aSetItem.GetItemSet().PutExtended( rCoreSet, SfxItemState::DONTCARE, SfxItemState::SET );
     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
     if (pI)
         rShellSet.Put( *pI, nWhichId );
@@ -371,7 +371,7 @@ bool ScViewUtil::IsFullScreen( SfxViewShell& rViewShell )
     SfxPoolItem*    pItem           = 0;
     bool            bIsFullScreen   = false;
 
-    if (rBindings.QueryState( SID_WIN_FULLSCREEN, pItem ) >= SFX_ITEM_DEFAULT)
+    if (rBindings.QueryState( SID_WIN_FULLSCREEN, pItem ) >= SfxItemState::DEFAULT)
         bIsFullScreen = static_cast< SfxBoolItem* >( pItem )->GetValue();
     delete pItem;
 

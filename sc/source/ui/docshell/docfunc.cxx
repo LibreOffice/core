@@ -774,7 +774,7 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
 
         const SfxPoolItem* pItem;
         const ScPatternAttr* pPattern = rDoc.GetPattern( rPos.Col(),rPos.Row(),rPos.Tab() );
-        if ( SFX_ITEM_SET == pPattern->GetItemSet().GetItemState(
+        if ( SfxItemState::SET == pPattern->GetItemSet().GetItemState(
                                 ATTR_VALUE_FORMAT,false,&pItem) )
         {
             aOldValue.mbHasFormat = true;

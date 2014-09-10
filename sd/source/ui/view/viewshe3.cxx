@@ -86,7 +86,7 @@ namespace sd {
  */
 void  ViewShell::GetMenuState( SfxItemSet &rSet )
 {
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_STYLE_FAMILY ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_STYLE_FAMILY ) )
     {
         sal_uInt16 nFamily = (sal_uInt16)GetDocSh()->GetStyleFamily();
 
@@ -112,17 +112,17 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
     }
 
-    if(SFX_ITEM_DEFAULT == rSet.GetItemState(SID_GETUNDOSTRINGS))
+    if(SfxItemState::DEFAULT == rSet.GetItemState(SID_GETUNDOSTRINGS))
     {
         ImpGetUndoStrings(rSet);
     }
 
-    if(SFX_ITEM_DEFAULT == rSet.GetItemState(SID_GETREDOSTRINGS))
+    if(SfxItemState::DEFAULT == rSet.GetItemState(SID_GETREDOSTRINGS))
     {
         ImpGetRedoStrings(rSet);
     }
 
-    if(SFX_ITEM_DEFAULT == rSet.GetItemState(SID_UNDO))
+    if(SfxItemState::DEFAULT == rSet.GetItemState(SID_UNDO))
     {
         ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
         bool bActivate(false);
@@ -149,7 +149,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if(SFX_ITEM_DEFAULT == rSet.GetItemState(SID_REDO))
+    if(SfxItemState::DEFAULT == rSet.GetItemState(SID_REDO))
     {
         ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
         bool bActivate(false);

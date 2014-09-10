@@ -238,7 +238,7 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 if( SvtLanguageOptions().IsCTLFontEnabled() )
                 {
                     const SfxPoolItem *pItem = NULL;
-                    if( rChanges.GetItemState(ATTR_WRITINGDIR, true, &pItem ) == SFX_ITEM_SET )
+                    if( rChanges.GetItemState(ATTR_WRITINGDIR, true, &pItem ) == SfxItemState::SET )
                         ScChartHelper::DoUpdateAllCharts( this );
                 }
             }
@@ -279,9 +279,9 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 {
                     const SfxPoolItem* pItem;
                     SfxItemState eState = rChanges.GetItemState( nWhich, false, &pItem );
-                    if ( eState == SFX_ITEM_SET )
+                    if ( eState == SfxItemState::SET )
                         rSet.Put( *pItem );
-                    else if ( eState == SFX_ITEM_DONTCARE )
+                    else if ( eState == SfxItemState::DONTCARE )
                         rSet.ClearItem( nWhich );
                     // bei Default nichts
                 }

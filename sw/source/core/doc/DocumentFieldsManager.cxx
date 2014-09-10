@@ -817,7 +817,7 @@ void DocumentFieldsManager::UpdateTblFlds( SfxPoolItem* pHt )
                     if( pCalc->IsCalcError() )
                         nValue = DBL_MAX;
                     aTmp.Put( SwTblBoxValue( nValue ));
-                    if( SFX_ITEM_SET != pFmt->GetItemState( RES_BOXATR_FORMAT ))
+                    if( SfxItemState::SET != pFmt->GetItemState( RES_BOXATR_FORMAT ))
                         aTmp.Put( SwTblBoxNumFormat( 0 ));
                     pFmt->SetFmtAttr( aTmp );
 

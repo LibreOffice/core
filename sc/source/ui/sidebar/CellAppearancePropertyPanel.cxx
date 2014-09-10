@@ -387,7 +387,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
     switch(nSID)
     {
     case SID_BACKGROUND_COLOR:
-        if(eState >= SFX_ITEM_DEFAULT)
+        if(eState >= SfxItemState::DEFAULT)
         {
             const SvxColorItem* pSvxColorItem = dynamic_cast< const SvxColorItem* >(pState);
 
@@ -405,7 +405,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         mpFillColorUpdater->Update(COL_TRANSPARENT);
         break;
     case SID_FRAME_LINECOLOR:
-        if( eState == SFX_ITEM_DONTCARE)
+        if( eState == SfxItemState::DONTCARE)
         {
             mbLineColorAvailable = true;
             maLineColor.SetColor( COL_TRANSPARENT );
@@ -413,7 +413,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
             break;
         }
 
-        if(eState >= SFX_ITEM_DEFAULT && pState && pState->ISA(SvxColorItem) )
+        if(eState >= SfxItemState::DEFAULT && pState && pState->ISA(SvxColorItem) )
         {
             const SvxColorItem* pSvxColorItem = dynamic_cast< const SvxColorItem* >(pState);
 
@@ -439,7 +439,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         UpdateControlState();
         break;
     case SID_FRAME_LINESTYLE:
-        if( eState == SFX_ITEM_DONTCARE )
+        if( eState == SfxItemState::DONTCARE )
         {
             mbBorderStyleAvailable = true;
             mnIn = 0;
@@ -449,7 +449,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
             break;
         }
 
-        if(eState >= SFX_ITEM_DEFAULT)
+        if(eState >= SfxItemState::DEFAULT)
         {
             const SvxLineItem* pSvxLineItem = dynamic_cast< const SvxLineItem* >(pState);
 
@@ -474,7 +474,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         SetStyleIcon();
         break;
     case SID_ATTR_BORDER_OUTER:
-        if(eState >= SFX_ITEM_DEFAULT)
+        if(eState >= SfxItemState::DEFAULT)
         {
             const SvxBoxItem* pBoxItem = dynamic_cast< const SvxBoxItem* >(pState);
 
@@ -509,7 +509,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_BORDER_INNER:
-        if(eState >= SFX_ITEM_DEFAULT)
+        if(eState >= SfxItemState::DEFAULT)
         {
             const SvxBoxInfoItem* pBoxInfoItem = dynamic_cast< const SvxBoxInfoItem* >(pState);
 
@@ -552,7 +552,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_BORDER_DIAG_TLBR:
-        if( eState == SFX_ITEM_DONTCARE )
+        if( eState == SfxItemState::DONTCARE )
         {
             mbTLBR = true;
             maTLBRColor.SetColor(COL_TRANSPARENT);
@@ -561,7 +561,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
             break;
         }
 
-        if(eState >= SFX_ITEM_DEFAULT)
+        if(eState >= SfxItemState::DEFAULT)
         {
             const SvxLineItem* pItem = dynamic_cast< const SvxLineItem* >(pState);
 
@@ -594,7 +594,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         UpdateControlState();
         break;
     case SID_ATTR_BORDER_DIAG_BLTR:
-        if( eState == SFX_ITEM_DONTCARE )
+        if( eState == SfxItemState::DONTCARE )
         {
             mbBLTR = true;
             maBLTRColor.SetColor( COL_TRANSPARENT );
@@ -603,7 +603,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
             break;
         }
 
-        if(eState >= SFX_ITEM_DEFAULT)
+        if(eState >= SfxItemState::DEFAULT)
         {
             const SvxLineItem* pItem = dynamic_cast< const SvxLineItem* >(pState);
 
@@ -636,7 +636,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
         UpdateControlState();
         break;
     case FID_TAB_TOGGLE_GRID:
-        if(eState >= SFX_ITEM_DEFAULT)
+        if(eState >= SfxItemState::DEFAULT)
         {
             const SfxBoolItem* pItem = dynamic_cast< const SfxBoolItem* >(pState);
 

@@ -163,17 +163,17 @@ throw( RuntimeException, std::exception )
     SfxSlotPool& rPool = SfxSlotPool::GetSlotPool( pViewFrame );
     const SfxSlot* pSlot = rPool.GetSlot( m_nSlotID );
 
-    SfxItemState eState = SFX_ITEM_DISABLED;
+    SfxItemState eState = SfxItemState::DISABLED;
     SfxPoolItem* pItem = NULL;
     if ( rEvent.IsEnabled )
     {
-        eState = SFX_ITEM_DEFAULT;
+        eState = SfxItemState::DEFAULT;
         ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
         if ( pType == ::cppu::UnoType< ::cppu::UnoVoidType >::get() )
         {
             pItem = new SfxVoidItem( m_nSlotID );
-            eState = SFX_ITEM_UNKNOWN;
+            eState = SfxItemState::UNKNOWN;
         }
         else if ( pType == cppu::UnoType< bool >::get() )
         {

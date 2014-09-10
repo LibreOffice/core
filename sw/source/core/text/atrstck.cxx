@@ -167,7 +167,7 @@ const SfxPoolItem* GetItem( const SwTxtAttr& rAttr, sal_uInt16 nWhich )
 
        bool bInParent = RES_TXTATR_AUTOFMT != rAttr.Which();
        const SfxPoolItem* pItem;
-       bool bRet = SFX_ITEM_SET == pSet->GetItemState( nWhich, bInParent, &pItem );
+       bool bRet = SfxItemState::SET == pSet->GetItemState( nWhich, bInParent, &pItem );
 
        return bRet ? pItem : 0;
     }
@@ -182,7 +182,7 @@ bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
 
     const SfxItemSet* pItemSet = CharFmt::GetItemSet( pAttr->GetAttr() );
     if ( pItemSet )
-        bRet = SFX_ITEM_SET == pItemSet->GetItemState( nWhich, true );
+        bRet = SfxItemState::SET == pItemSet->GetItemState( nWhich, true );
 
     return bRet;
 }
@@ -427,7 +427,7 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
         for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, rAttr.Which() != RES_TXTATR_AUTOFMT, &pItem );
+            bool bRet = SfxItemState::SET == pSet->GetItemState( i, rAttr.Which() != RES_TXTATR_AUTOFMT, &pItem );
 
             if ( bRet )
             {
@@ -503,7 +503,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
         for ( sal_uInt16 i = RES_CHRATR_BEGIN; i < RES_CHRATR_END; i++)
         {
             const SfxPoolItem* pItem;
-            bool bRet = SFX_ITEM_SET == pSet->GetItemState( i, RES_TXTATR_AUTOFMT != rAttr.Which(), &pItem );
+            bool bRet = SfxItemState::SET == pSet->GetItemState( i, RES_TXTATR_AUTOFMT != rAttr.Which(), &pItem );
             if ( bRet )
             {
                 // we remove rAttr from the appropriate stack

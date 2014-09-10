@@ -440,7 +440,7 @@ SvxGrafFilterToolBoxControl::~SvxGrafFilterToolBoxControl()
 
 void SvxGrafFilterToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )
 {
-    GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
+    GetToolBox().EnableItem( GetId(), ( eState != SfxItemState::DISABLED ) );
 }
 
 SfxPopupWindowType SvxGrafFilterToolBoxControl::GetPopupWindowType() const
@@ -473,7 +473,7 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
     ImplGrafControl* pCtrl = (ImplGrafControl*) GetToolBox().GetItemWindow( GetId() );
     DBG_ASSERT( pCtrl, "Control not found" );
 
-    if( eState == SFX_ITEM_DISABLED )
+    if( eState == SfxItemState::DISABLED )
     {
         pCtrl->Disable();
         pCtrl->SetText( OUString() );
@@ -482,7 +482,7 @@ void SvxGrafToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const
     {
         pCtrl->Enable();
 
-        if( eState == SFX_ITEM_DEFAULT )
+        if( eState == SfxItemState::DEFAULT )
             pCtrl->Update( pState );
         else
             pCtrl->Update( NULL );
@@ -560,7 +560,7 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
     ImplGrafModeControl* pCtrl = (ImplGrafModeControl*) GetToolBox().GetItemWindow( GetId() );
     DBG_ASSERT( pCtrl, "Control not found" );
 
-    if( eState == SFX_ITEM_DISABLED )
+    if( eState == SfxItemState::DISABLED )
     {
         pCtrl->Disable();
         pCtrl->SetText( OUString() );
@@ -569,7 +569,7 @@ void SvxGrafModeToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, c
     {
         pCtrl->Enable();
 
-        if( eState == SFX_ITEM_DEFAULT )
+        if( eState == SfxItemState::DEFAULT )
             pCtrl->Update( pState );
         else
             pCtrl->Update( NULL );
@@ -598,7 +598,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
     const SfxPoolItem*  pItem;
     sal_uInt16              nSlot = rReq.GetSlot();
 
-    if( !pArgs || SFX_ITEM_SET != pArgs->GetItemState( nSlot, false, &pItem ))
+    if( !pArgs || SfxItemState::SET != pArgs->GetItemState( nSlot, false, &pItem ))
         pItem = 0;
 
     switch( nSlot )
@@ -757,7 +757,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCROP );
 
                             // set crop attributes
-                            if( SFX_ITEM_SET <= pOutAttr->GetItemState( SDRATTR_GRAFCROP ) )
+                            if( SfxItemState::SET <= pOutAttr->GetItemState( SDRATTR_GRAFCROP ) )
                             {
                                 const SdrGrafCropItem& rNewCrop = (const SdrGrafCropItem&) pOutAttr->Get( SDRATTR_GRAFCROP );
 
@@ -767,7 +767,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                             }
 
                             // set new logic rect
-                            if( SFX_ITEM_SET <= pOutAttr->GetItemState( SID_ATTR_GRAF_FRMSIZE ) )
+                            if( SfxItemState::SET <= pOutAttr->GetItemState( SID_ATTR_GRAF_FRMSIZE ) )
                             {
                                 Point       aNewOrigin( pObj->GetLogicRect().TopLeft() );
                                 const Size& rGrfSize = ( (const SvxSizeItem&) pOutAttr->Get( SID_ATTR_GRAF_FRMSIZE ) ).GetSize();
@@ -898,7 +898,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
         {
             case( SID_ATTR_GRAF_MODE ):
             {
-                if( SFX_ITEM_DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFMODE ) )
+                if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFMODE ) )
                 {
                     if( bEnableColors )
                     {
@@ -915,7 +915,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case( SID_ATTR_GRAF_RED ):
             {
-                if( SFX_ITEM_DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFRED ) )
+                if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFRED ) )
                 {
                     if( bEnableColors )
                     {
@@ -932,7 +932,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case( SID_ATTR_GRAF_GREEN ):
             {
-                if( SFX_ITEM_DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFGREEN ) )
+                if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFGREEN ) )
                 {
                     if( bEnableColors )
                     {
@@ -949,7 +949,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case( SID_ATTR_GRAF_BLUE ):
             {
-                if( SFX_ITEM_DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFBLUE ) )
+                if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFBLUE ) )
                 {
                     if( bEnableColors )
                     {
@@ -966,7 +966,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case( SID_ATTR_GRAF_LUMINANCE ):
             {
-                if( SFX_ITEM_DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFLUMINANCE ) )
+                if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFLUMINANCE ) )
                 {
                     if( bEnableColors )
                     {
@@ -983,7 +983,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case( SID_ATTR_GRAF_CONTRAST ):
             {
-                if( SFX_ITEM_DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFCONTRAST ) )
+                if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFCONTRAST ) )
                 {
                     if( bEnableColors )
                     {
@@ -1000,7 +1000,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case( SID_ATTR_GRAF_GAMMA ):
             {
-                if( SFX_ITEM_DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFGAMMA ) )
+                if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFGAMMA ) )
                 {
                     if( bEnableColors )
                     {
@@ -1017,7 +1017,7 @@ void SvxGrafAttrHelper::GetGrafAttrState( SfxItemSet& rSet, SdrView& rView )
 
             case( SID_ATTR_GRAF_TRANSPARENCE ):
             {
-                if( SFX_ITEM_DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFTRANSPARENCE ) )
+                if( SfxItemState::DEFAULT <= aAttrSet.GetItemState( SDRATTR_GRAFTRANSPARENCE ) )
                 {
                     if( bEnableTransparency )
                     {

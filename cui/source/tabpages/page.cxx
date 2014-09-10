@@ -249,7 +249,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     const SfxPoolItem* pItem;
 
     SfxObjectShell* pShell;
-    if(SFX_ITEM_SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
+    if(SfxItemState::SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
         ( 0 != (pShell = SfxObjectShell::Current()) &&
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
         bWeb = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
@@ -275,7 +275,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
     // #109989# show the text direction box in Writer/Web too
     if( (bCJK || bCTL) &&
-        SFX_ITEM_UNKNOWN < rAttr.GetItemState(GetWhich( SID_ATTR_FRAMEDIRECTION )))
+        SfxItemState::UNKNOWN < rAttr.GetItemState(GetWhich( SID_ATTR_FRAMEDIRECTION )))
     {
         m_pTextFlowLbl->Show();
         m_pTextFlowBox->Show();
@@ -637,14 +637,14 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     CheckMarginEdits( true );
 
 
-    if(SFX_ITEM_SET == rSet->GetItemState(SID_SWREGISTER_MODE))
+    if(SfxItemState::SET == rSet->GetItemState(SID_SWREGISTER_MODE))
     {
         m_pRegisterCB->Check(((const SfxBoolItem&)rSet->Get(
                                 SID_SWREGISTER_MODE)).GetValue());
         m_pRegisterCB->SaveValue();
         RegisterModify(m_pRegisterCB);
     }
-    if(SFX_ITEM_SET == rSet->GetItemState(SID_SWREGISTER_COLLECTION))
+    if(SfxItemState::SET == rSet->GetItemState(SID_SWREGISTER_COLLECTION))
     {
         m_pRegisterLB->SelectEntry(
                 ((const SfxStringItem&)rSet->Get(SID_SWREGISTER_COLLECTION)).GetValue());
@@ -653,9 +653,9 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
     SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_FRAMEDIRECTION ),
                                                 true, &pItem );
-    if( SFX_ITEM_UNKNOWN != eState )
+    if( SfxItemState::UNKNOWN != eState )
     {
-        sal_uInt32 nVal  = SFX_ITEM_SET == eState
+        sal_uInt32 nVal  = SfxItemState::SET == eState
                                 ? ((SvxFrameDirectionItem*)pItem)->GetValue()
                                 : 0;
         m_pTextFlowBox->SelectEntryValue( static_cast< SvxFrameDirection >( nVal ) );
@@ -830,7 +830,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
             bModified = true;
         }
     }
-    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich ) )
+    else if ( SfxItemState::DEFAULT == rOldSet.GetItemState( nWhich ) )
         rSet->ClearItem( nWhich );
     else
         rSet->Put( rOldSet.Get( nWhich ) );
@@ -1194,7 +1194,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 {
     sal_uInt16 nWhich(GetWhich(SID_ATTR_PAGE_HEADERSET));
 
-    if (SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
+    if (SfxItemState::SET == rSet.GetItemState(nWhich, false))
     {
         const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
@@ -1213,7 +1213,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             {
                 nWhich = GetWhich(SID_ATTR_BRUSH);
 
-                if(SFX_ITEM_SET == rTmpSet.GetItemState(nWhich))
+                if(SfxItemState::SET == rTmpSet.GetItemState(nWhich))
                 {
                     //UUUU create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
@@ -1227,7 +1227,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             m_pBspWin->setHeaderFillAttributes(aHeaderFillAttributes);
             nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 
-            if(rTmpSet.GetItemState(nWhich) == SFX_ITEM_SET)
+            if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
             {
                 const SvxBoxItem& rItem =
                     (const SvxBoxItem&)rTmpSet.Get( nWhich );
@@ -1238,7 +1238,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
 
     nWhich = GetWhich(SID_ATTR_PAGE_FOOTERSET);
 
-    if (SFX_ITEM_SET == rSet.GetItemState(nWhich, false))
+    if (SfxItemState::SET == rSet.GetItemState(nWhich, false))
     {
         const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich,false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
@@ -1257,7 +1257,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             {
                 nWhich = GetWhich(SID_ATTR_BRUSH);
 
-                if(SFX_ITEM_SET == rTmpSet.GetItemState(nWhich))
+                if(SfxItemState::SET == rTmpSet.GetItemState(nWhich))
                 {
                     //UUUU create FillAttributes from SvxBrushItem
                     const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rTmpSet.Get(nWhich));
@@ -1271,7 +1271,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
             m_pBspWin->setFooterFillAttributes(aFooterFillAttributes);
             nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 
-            if(rTmpSet.GetItemState(nWhich) == SFX_ITEM_SET)
+            if(rTmpSet.GetItemState(nWhich) == SfxItemState::SET)
             {
                 const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rTmpSet.Get(nWhich));
                 m_pBspWin->SetFtBorder(rItem);
@@ -1323,7 +1323,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     // evaluate header attributes
 
-    if ( SFX_ITEM_SET ==
+    if ( SfxItemState::SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
                             false, (const SfxPoolItem**)&pSetItem ) )
     {
@@ -1361,7 +1361,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         {
             const sal_uInt16 nWhich(GetWhich(SID_ATTR_BRUSH));
 
-            if(rHeaderSet.GetItemState(nWhich) >= SFX_ITEM_DEFAULT)
+            if(rHeaderSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
             {
                 //UUUU aBspWin.SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(nWhich));
@@ -1375,7 +1375,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         m_pBspWin->setHeaderFillAttributes(aHeaderFillAttributes);
         const sal_uInt16 nWhich(GetWhich(SID_ATTR_BORDER_OUTER));
 
-        if ( rHeaderSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+        if ( rHeaderSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT )
         {
             const SvxBoxItem& rItem =
                 (const SvxBoxItem&)rHeaderSet.Get( nWhich );
@@ -1385,7 +1385,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     // evaluate footer attributes
 
-    if ( SFX_ITEM_SET ==
+    if ( SfxItemState::SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
                             false, (const SfxPoolItem**)&pSetItem ) )
     {
@@ -1423,7 +1423,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         {
             const sal_uInt16 nWhich(GetWhich(SID_ATTR_BRUSH));
 
-            if(rFooterSet.GetItemState(nWhich) >= SFX_ITEM_DEFAULT)
+            if(rFooterSet.GetItemState(nWhich) >= SfxItemState::DEFAULT)
             {
                 //UUUU aBspWin.SetFtColor(rItem.GetColor());
                 const SvxBrushItem& rItem = (const SvxBrushItem&)rFooterSet.Get(nWhich);
@@ -1437,7 +1437,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         m_pBspWin->setFooterFillAttributes(aFooterFillAttributes);
         const sal_uInt16 nWhich(GetWhich(SID_ATTR_BORDER_OUTER));
 
-        if ( rFooterSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+        if ( rFooterSet.GetItemState( nWhich ) >= SfxItemState::DEFAULT )
         {
             const SvxBoxItem& rItem =
                 (const SvxBoxItem&)rFooterSet.Get( nWhich );
@@ -1535,9 +1535,9 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
     Size aBorder;
 
     if ( _pSet->GetItemState( GetWhich(SID_ATTR_BORDER_SHADOW) ) >=
-            SFX_ITEM_DEFAULT &&
+            SfxItemState::DEFAULT &&
          _pSet->GetItemState( GetWhich(SID_ATTR_BORDER_OUTER)  ) >=
-            SFX_ITEM_DEFAULT )
+            SfxItemState::DEFAULT )
     {
         aBorder = ( GetMinBorderSpace_Impl(
             (const SvxShadowItem&)_pSet->Get(GetWhich(SID_ATTR_BORDER_SHADOW)),

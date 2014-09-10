@@ -131,7 +131,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         sal_uInt16 const aSavIds[3] = { RES_PAGEDESC, RES_BREAK, RES_PARATR_NUMRULE };
         for (sal_uInt16 n = 0; n < 3; ++n)
         {
-            if (SFX_ITEM_SET == pAttrSetOfNode->GetItemState(aSavIds[n], false, &pItem))
+            if (SfxItemState::SET == pAttrSetOfNode->GetItemState(aSavIds[n], false, &pItem))
             {
                 bool bSave = false;
                 switch( aSavIds[ n ] )
@@ -181,7 +181,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                     if ( ( pItem->Which() != RES_PAGEDESC &&
                            pItem->Which() != RES_BREAK &&
                            pItem->Which() != RES_PARATR_NUMRULE ) ||
-                         ( aSavedAttrsSet.GetItemState( pItem->Which(), false ) != SFX_ITEM_SET ) )
+                         ( aSavedAttrsSet.GetItemState( pItem->Which(), false ) != SfxItemState::SET ) )
                     {
                         pNode->ResetAttr( pItem->Which() );
                     }
@@ -602,7 +602,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
         }
 
         const SfxPoolItem* pTmpItem;
-        if( ( SFX_ITEM_SET ==
+        if( ( SfxItemState::SET ==
                 aNew.GetItemState( RES_PARATR_TABSTOP, false, &pTmpItem ) ) &&
             ((SvxTabStopItem*)pTmpItem)->Count() )
         {
@@ -999,7 +999,7 @@ static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
         // #i62675# check, if paragraph style has changed
         if ( pPara->bResetListAttrs &&
              pFmt != pCNd->GetFmtColl() &&
-             pFmt->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET )
+             pFmt->GetItemState( RES_PARATR_NUMRULE ) == SfxItemState::SET )
         {
             // Check, if the list style of the paragraph will change.
             bool bChangeOfListStyleAtParagraph( true );
@@ -1188,7 +1188,7 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     if( this != rColl.GetDoc() )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pNewColl->GetItemState( RES_PARATR_NUMRULE,
+        if( SfxItemState::SET == pNewColl->GetItemState( RES_PARATR_NUMRULE,
             false, &pItem ))
         {
             const SwNumRule* pRule;
@@ -1285,7 +1285,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         // #i94285#: existing <SwFmtPageDesc> instance, before copying attributes
         const SfxPoolItem* pItem;
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
-            SFX_ITEM_SET == pSrc->GetAttrSet().GetItemState(
+            SfxItemState::SET == pSrc->GetAttrSet().GetItemState(
             RES_PAGEDESC, false, &pItem ) &&
             ((SwFmtPageDesc*)pItem)->GetPageDesc() )
         {
@@ -1344,7 +1344,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
     // Copy content nodes across documents!
     sal_uInt16 nAttr = static_cast<sal_uInt16>( bCpyHeader ? RES_HEADER : RES_FOOTER );
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET != rSrcFmt.GetAttrSet().GetItemState( nAttr, false, &pItem ))
+    if( SfxItemState::SET != rSrcFmt.GetAttrSet().GetItemState( nAttr, false, &pItem ))
         return ;
 
     // The header only contains the reference to the format from the other document!
@@ -1362,7 +1362,7 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                             GetDfltFrmFmt() );
         pNewFmt->CopyAttrs( *pOldFmt, true );
 
-        if( SFX_ITEM_SET == pNewFmt->GetAttrSet().GetItemState(
+        if( SfxItemState::SET == pNewFmt->GetAttrSet().GetItemState(
             RES_CNTNT, false, &pItem ))
         {
             SwFmtCntnt* pCntnt = (SwFmtCntnt*)pItem;
@@ -1760,7 +1760,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
             aTmp.Differentiate( *pSet );
             // we handle the adjust item separately
             const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pTNd->GetpSwAttrSet()->GetItemState(
+            if( SfxItemState::SET == pTNd->GetpSwAttrSet()->GetItemState(
                     RES_PARATR_ADJUST, false, &pItem ))
                 aTmp.Put( *pItem );
             aExtraData.SetItemSet( aTmp );
@@ -1942,7 +1942,7 @@ namespace docfunc
                 if ( !pParentTxtFmtColl )
                     continue;
 
-                if ( SFX_ITEM_SET == pParentTxtFmtColl->GetItemState( RES_PARATR_NUMRULE ) )
+                if ( SfxItemState::SET == pParentTxtFmtColl->GetItemState( RES_PARATR_NUMRULE ) )
                 {
                     // #i106218# consider that the outline style is set
                     const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();

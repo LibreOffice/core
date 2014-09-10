@@ -49,7 +49,7 @@ SvxInsertStatusBarControl::~SvxInsertStatusBarControl()
 void SvxInsertStatusBarControl::StateChanged( sal_uInt16 , SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
-    if ( SFX_ITEM_DEFAULT != eState )
+    if ( SfxItemState::DEFAULT != eState )
         GetStatusBar().SetItemText( GetId(), "" );
     else
     {

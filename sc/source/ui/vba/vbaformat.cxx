@@ -556,7 +556,7 @@ ScVbaFormat<Ifc1>::getLocked(  ) throw (script::BasicErrorException, uno::Runtim
             {
                 const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &) pDataSet->Get(ATTR_PROTECTION, true);
                 SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, true, NULL);
-                if(eState != SFX_ITEM_DONTCARE)
+                if(eState != SfxItemState::DONTCARE)
                     aCellProtection =  uno::makeAny(rProtAttr.GetProtection());
             }
             else // fallback to propertyset
@@ -589,7 +589,7 @@ ScVbaFormat<Ifc1>::getFormulaHidden(  ) throw (script::BasicErrorException, uno:
             {
                 const ScProtectionAttr& rProtAttr = (const ScProtectionAttr &) pDataSet->Get(ATTR_PROTECTION, true);
                 SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION, true, NULL);
-                if(eState != SFX_ITEM_DONTCARE)
+                if(eState != SfxItemState::DONTCARE)
                     aBoolRet = uno::makeAny(rProtAttr.GetHideFormula());
             }
             else

@@ -817,7 +817,7 @@ bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
                                     pSttNd->GetIndex() + 1 ]->GetTxtNode();
         if( !pNd ||
             ( pNd->GetTxt() == SwViewShell::GetShellRes()->aCalc_Error &&
-              SFX_ITEM_SET == pChkBox->GetFrmFmt()->
+              SfxItemState::SET == pChkBox->GetFrmFmt()->
                             GetItemState( RES_BOXATR_FORMULA )) )
             pChkBox = 0;
     }

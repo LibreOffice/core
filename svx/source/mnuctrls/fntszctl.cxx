@@ -80,9 +80,9 @@ void SvxFontSizeMenuControl::StateChanged(
     sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    rParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
+    rParent.EnableItem( GetId(), SfxItemState::DISABLED != eState );
 
-    if ( SFX_ITEM_DEFAULT == eState )
+    if ( SfxItemState::DEFAULT == eState )
     {
         if ( pState->ISA(SvxFontHeightItem) )
         {

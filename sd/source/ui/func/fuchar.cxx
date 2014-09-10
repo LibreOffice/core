@@ -115,9 +115,9 @@ void FuChar::DoExecute( SfxRequest& rReq )
     if( mpDoc->GetOnlineSpell() )
     {
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, false, &pItem ) ||
-            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, false, &pItem ) ||
-            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, false, &pItem ) )
+        if( SfxItemState::SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, false, &pItem ) ||
+            SfxItemState::SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, false, &pItem ) ||
+            SfxItemState::SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, false, &pItem ) )
         {
             mpDoc->StopOnlineSpelling();
             mpDoc->StartOnlineSpelling();

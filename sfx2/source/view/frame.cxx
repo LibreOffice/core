@@ -375,7 +375,7 @@ void SfxFrame::GetViewData_Impl()
 
         SfxItemSet *pSet = GetDescriptor()->GetArgs();
         bool bGetViewData = false;
-        if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SFX_ITEM_SET )
+        if ( GetController().is() && pSet->GetItemState( SID_VIEW_DATA ) != SfxItemState::SET )
         {
             ::com::sun::star::uno::Any aData = GetController()->getViewData();
             pSet->Put( SfxUsrAnyItem( SID_VIEW_DATA, aData ) );

@@ -712,7 +712,7 @@ void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, sal_uLong nSc
 {
     OSL_ENSURE( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND, "XclImpNumFmtBuffer::FillScFmtToItemSet - invalid number format" );
     ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
-    if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, false ) == SFX_ITEM_SET )
+    if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, false ) == SfxItemState::SET )
         ScGlobal::AddLanguage( rItemSet, GetFormatter() );
 }
 

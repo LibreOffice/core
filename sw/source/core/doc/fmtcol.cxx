@@ -205,7 +205,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     bool bContinue = true;
 
     // Check against the own attributes
-    if( pNewLRSpace && SFX_ITEM_SET == GetItemState( RES_LR_SPACE, false,
+    if( pNewLRSpace && SfxItemState::SET == GetItemState( RES_LR_SPACE, false,
                                         (const SfxPoolItem**)&pOldLRSpace ))
     {
         bool bChg = false;
@@ -246,7 +246,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         }
     }
 
-    if( pNewULSpace && SFX_ITEM_SET == GetItemState(
+    if( pNewULSpace && SfxItemState::SET == GetItemState(
             RES_UL_SPACE, false, (const SfxPoolItem**)&pOldULSpace ) &&
         pOldULSpace != pNewULSpace )    // Avoid recursion (SetAttr!)
     {
@@ -281,7 +281,7 @@ void SwTxtFmtColl::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             nC < nArrLen; ++nC )
     {
         SvxFontHeightItem *pFSize = aFontSizeArr[ nC ], *pOldFSize;
-        if( pFSize && SFX_ITEM_SET == GetItemState(
+        if( pFSize && SfxItemState::SET == GetItemState(
             pFSize->Which(), false, (const SfxPoolItem**)&pOldFSize ) &&
             // Avoid recursion (SetAttr!)
             pFSize != pOldFSize )
@@ -350,7 +350,7 @@ bool SwTxtFmtColl::SetFmtAttr( const SfxPoolItem& rAttr )
 bool SwTxtFmtColl::SetFmtAttr( const SfxItemSet& rSet )
 {
     const bool bIsNumRuleItemAffected =
-                rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET;
+                rSet.GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET;
     if ( bIsNumRuleItemAffected )
     {
         TxtFmtCollFunc::RemoveFromNumRule( *this );
@@ -413,17 +413,17 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
 {
     bool bAreListLevelIndentsApplicable( true );
 
-    if ( GetItemState( RES_PARATR_NUMRULE ) != SFX_ITEM_SET )
+    if ( GetItemState( RES_PARATR_NUMRULE ) != SfxItemState::SET )
     {
         // no list style applied to paragraph style
         bAreListLevelIndentsApplicable = false;
     }
-    else if ( GetItemState( RES_LR_SPACE, false ) == SFX_ITEM_SET )
+    else if ( GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
     {
         // paragraph style has hard-set indent attributes
         bAreListLevelIndentsApplicable = false;
     }
-    else if ( GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET )
+    else if ( GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET )
     {
         // list style is directly applied to paragraph style and paragraph
         // style has no hard-set indent attributes
@@ -438,14 +438,14 @@ bool SwTxtFmtColl::AreListLevelIndentsApplicable() const
         const SwTxtFmtColl* pColl = dynamic_cast<const SwTxtFmtColl*>(DerivedFrom());
         while ( pColl )
         {
-            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, false ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, false ) == SfxItemState::SET )
             {
                 // indent attributes found in the paragraph style hierarchy.
                 bAreListLevelIndentsApplicable = false;
                 break;
             }
 
-            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::SET )
             {
                 // paragraph style with the list style found and until now no
                 // indent attributes are found in the paragraph style hierarchy.
@@ -638,12 +638,12 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
     {
         if ( !pDerivedTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, false ) == SFX_ITEM_DEFAULT )
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_NUMRULE, false ) == SfxItemState::DEFAULT )
             {
                 SwNumRuleItem aItem(aEmptyOUStr);
                 pDerivedTxtFmtColl->SetFmtAttr( aItem );
             }
-            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, false ) == SFX_ITEM_DEFAULT )
+            if ( pDerivedTxtFmtColl->GetItemState( RES_PARATR_OUTLINELEVEL, false ) == SfxItemState::DEFAULT )
             {
                 pDerivedTxtFmtColl->SetAttrOutlineLevel( 0 );
             }

@@ -212,7 +212,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         sal_Int32 nInsert = 0;
 
         // The old item is for unknown reasons back in the set again.
-        if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, false, &pSelectionItem) )
+        if( !bSelectionPut && SfxItemState::SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, false, &pSelectionItem) )
         {
             OUString sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
             bInsert = !sInsert.isEmpty();
@@ -837,7 +837,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_INSERT_HYPERLINK:
         {
             const sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
-            if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
+            if ( pArgs && pArgs->GetItemState( nWhich ) == SfxItemState::SET )
                 bUseDialog = false;
             // intentionally no break
         }
@@ -870,7 +870,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case SID_ATTR_PARA_LRSPACE:
         {
             const sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
-            if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
+            if ( pArgs && pArgs->GetItemState( nWhich ) == SfxItemState::SET )
                 bUseDialog = false;
             // intentionally no break
 
@@ -1005,7 +1005,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // Apply defaults if nessecary.
                 pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 sal_uInt16 nNewDist;
-                if( SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, false, &pItem ) &&
+                if( SfxItemState::SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, false, &pItem ) &&
                     nDefDist != (nNewDist = ((SfxUInt16Item*)pItem)->GetValue()) )
                 {
                     SvxTabStopItem aDefTabs( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
@@ -1014,13 +1014,13 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     pSet->ClearItem( SID_ATTR_TABSTOP_DEFAULTS );
                 }
 
-                if ( SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_1,false,&pItem) )
+                if ( SfxItemState::SET == pSet->GetItemState(FN_PARAM_1,false,&pItem) )
                 {
                     pSet->Put(SfxStringItem(FN_DROP_TEXT, ((const SfxStringItem*)pItem)->GetValue()));
                     pSet->ClearItem(FN_PARAM_1);
                 }
 
-                if( SFX_ITEM_SET == pSet->GetItemState( RES_PARATR_DROP, false, &pItem ))
+                if( SfxItemState::SET == pSet->GetItemState( RES_PARATR_DROP, false, &pItem ))
                 {
                     OUString sCharStyleName;
                     if(((const SwFmtDrop*)pItem)->GetCharFmt())
@@ -1037,8 +1037,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 // enclose all undos.
                 // Thus, check conditions, if actions will be performed.
                 const bool bUndoNeeded( pSet->Count() ||
-                        SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) ||
-                        SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) );
+                        SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART) ||
+                        SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) );
                 if ( bUndoNeeded )
                 {
                     rWrtSh.StartUndo( UNDO_INSATTR );
@@ -1046,7 +1046,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if( pSet->Count() )
                 {
                     rWrtSh.StartAction();
-                    if ( SFX_ITEM_SET == pSet->GetItemState(FN_DROP_TEXT, false, &pItem) )
+                    if ( SfxItemState::SET == pSet->GetItemState(FN_DROP_TEXT, false, &pItem) )
                     {
                         if ( !((SfxStringItem*)pItem)->GetValue().isEmpty() )
                             rWrtSh.ReplaceDropTxt(((SfxStringItem*)pItem)->GetValue(), pPaM);
@@ -1060,7 +1060,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     }
                 }
 
-                if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
+                if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
                 {
                     //SetNumRuleStart(sal_True) restarts the numbering at the value
                     //that is defined at the starting point of the numbering level
@@ -1073,14 +1073,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     // in order to indicate that the restart value of the list
                     // style has to be used on restart.
                     sal_uInt16 nNumStart = USHRT_MAX;
-                    if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
+                    if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
                         nNumStart = ((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
                     }
                     rWrtSh.SetNumRuleStart(bStart, pPaM);
                     rWrtSh.SetNodeNumStart(nNumStart);
                 }
-                else if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
+                else if( SfxItemState::SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                 {
                     rWrtSh.SetNodeNumStart(((SfxUInt16Item&)pSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue());
                     rWrtSh.SetNumRuleStart(false, pPaM);
@@ -1268,7 +1268,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         if(pItem)
             sStyleName = ((const SfxStringItem*)pItem)->GetValue();
         bool bOn = true;
-        if( SFX_ITEM_SET == pArgs->GetItemState(FN_PARAM_1, false, &pItem))
+        if( SfxItemState::SET == pArgs->GetItemState(FN_PARAM_1, false, &pItem))
             bOn = ((const SfxBoolItem*)pItem)->GetValue();
         rWrtSh.ChangeHeaderOrFooter(sStyleName, FN_INSERT_PAGEHEADER == nSlot, bOn, !rReq.IsAPI());
         rReq.Done();
@@ -1286,7 +1286,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     case FN_SELECTION_MODE_BLOCK :
     {
         bool bSetBlockMode = !rWrtSh.IsBlockMode();
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, false, &pItem))
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState(nSlot, false, &pItem))
             bSetBlockMode = ((const SfxBoolItem*)pItem)->GetValue();
         if( ( nSlot == FN_SELECTION_MODE_DEFAULT ) != bSetBlockMode )
             rWrtSh.EnterBlockMode();
@@ -1304,7 +1304,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         RES_TXTATR_INETFMT,
                         RES_TXTATR_INETFMT);
         rWrtSh.GetCurAttr(aSet);
-        if(SFX_ITEM_SET <= aSet.GetItemState( RES_TXTATR_INETFMT, true ))
+        if(SfxItemState::SET <= aSet.GetItemState( RES_TXTATR_INETFMT, true ))
         {
             const SwFmtINetFmt& rINetFmt = dynamic_cast<const SwFmtINetFmt&>( aSet.Get(RES_TXTATR_INETFMT, true) );
             if( nSlot == FN_COPY_HYPERLINK_LOCATION )
@@ -1660,7 +1660,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         RES_TXTATR_INETFMT,
                         RES_TXTATR_INETFMT);
                     rSh.GetCurAttr(aSet);
-                    if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, true ) || rSh.HasReadonlySel())
+                    if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT, true ) || rSh.HasReadonlySel())
                     {
                         rSet.DisableItem(nWhich);
                     }
@@ -1674,7 +1674,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 rSh.GetCurAttr(aSet);
 
                 // If a hyperlink is selected, either alone or along with other text...
-                if(aSet.GetItemState( RES_TXTATR_INETFMT, true ) != SFX_ITEM_DONTCARE || rSh.HasReadonlySel())
+                if(aSet.GetItemState( RES_TXTATR_INETFMT, true ) != SfxItemState::DONTCARE || rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(nWhich);
                 }
@@ -1713,7 +1713,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 RES_TXTATR_INETFMT,
                                 RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
-                if(SFX_ITEM_SET > aSet.GetItemState( RES_TXTATR_INETFMT, false ))
+                if(SfxItemState::SET > aSet.GetItemState( RES_TXTATR_INETFMT, false ))
                     rSet.DisableItem(nWhich);
             }
             break;

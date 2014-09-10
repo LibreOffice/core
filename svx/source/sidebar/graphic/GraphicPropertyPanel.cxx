@@ -263,7 +263,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
     {
         case SID_ATTR_GRAF_LUMINANCE:
         {
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 mpMtrBrightness->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -274,7 +274,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                     mpMtrBrightness->SetValue(nBright);
                 }
             }
-            else if(SFX_ITEM_DISABLED == eState)
+            else if(SfxItemState::DISABLED == eState)
             {
                 mpMtrBrightness->Disable();
             }
@@ -287,7 +287,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_CONTRAST:
         {
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 mpMtrContrast->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -298,7 +298,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                     mpMtrContrast->SetValue(nContrast);
                 }
             }
-            else if(SFX_ITEM_DISABLED == eState)
+            else if(SfxItemState::DISABLED == eState)
             {
                 mpMtrContrast->Disable();
             }
@@ -311,7 +311,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_TRANSPARENCE:
         {
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 mpMtrTrans->Enable();
                 const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
@@ -322,7 +322,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                     mpMtrTrans->SetValue(nTrans);
                 }
             }
-            else if(SFX_ITEM_DISABLED == eState)
+            else if(SfxItemState::DISABLED == eState)
             {
                 mpMtrTrans->Disable();
             }
@@ -335,7 +335,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_MODE:
         {
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 mpLBColorMode->Enable();
                 const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
@@ -346,7 +346,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                     mpLBColorMode->SelectEntryPos(nTrans);
                 }
             }
-            else if(SFX_ITEM_DISABLED == eState)
+            else if(SfxItemState::DISABLED == eState)
             {
                 mpLBColorMode->Disable();
             }
@@ -359,7 +359,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_RED:
         {
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 mpMtrRed->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -370,7 +370,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                     mpMtrRed->SetValue( nRed );
                 }
             }
-            else if(SFX_ITEM_DISABLED == eState)
+            else if(SfxItemState::DISABLED == eState)
             {
                 mpMtrRed->Disable();
             }
@@ -383,7 +383,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_GREEN:
         {
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 mpMtrGreen->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -394,7 +394,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                     mpMtrGreen->SetValue( nGreen );
                 }
             }
-            else if(SFX_ITEM_DISABLED == eState)
+            else if(SfxItemState::DISABLED == eState)
             {
                 mpMtrGreen->Disable();
             }
@@ -407,7 +407,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_BLUE:
         {
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 mpMtrBlue->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -418,7 +418,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                     mpMtrBlue->SetValue( nBlue );
                 }
             }
-            else if(SFX_ITEM_DISABLED == eState)
+            else if(SfxItemState::DISABLED == eState)
             {
                 mpMtrBlue->Disable();
             }
@@ -431,7 +431,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_GAMMA:
         {
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 mpMtrGamma->Enable();
                 const SfxUInt32Item* pItem = dynamic_cast< const SfxUInt32Item* >(pState);
@@ -442,7 +442,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
                     mpMtrGamma->SetValue( nGamma );
                 }
             }
-            else if(SFX_ITEM_DISABLED == eState)
+            else if(SfxItemState::DISABLED == eState)
             {
                 mpMtrGamma->Disable();
             }

@@ -73,7 +73,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR );
     OUString aAuthorStr, aDateStr;
 
-    if ( rSet.GetItemState( nWhich, true ) >= SFX_ITEM_DEFAULT )
+    if ( rSet.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
     {
         bNew = false;
         const SvxPostItAuthorItem& rAuthor =
@@ -85,7 +85,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
 
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_DATE );
 
-    if ( rSet.GetItemState( nWhich, true ) >= SFX_ITEM_DEFAULT )
+    if ( rSet.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
     {
         const SvxPostItDateItem& rDate =
             (const SvxPostItDateItem&)rSet.Get( nWhich );
@@ -100,7 +100,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
     nWhich = rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_TEXT );
 
     OUString aTextStr;
-    if ( rSet.GetItemState( nWhich, true ) >= SFX_ITEM_DEFAULT )
+    if ( rSet.GetItemState( nWhich, true ) >= SfxItemState::DEFAULT )
     {
         const SvxPostItTextItem& rText =
             (const SvxPostItTextItem&)rSet.Get( nWhich );

@@ -976,7 +976,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
                 while (true)
                 {
                     if(  // ggfs. passenden pItem im pLowerLevelItemSet finden
-                         (SFX_ITEM_SET != pLowerLevelItemSet->GetItemState(
+                         (SfxItemState::SET != pLowerLevelItemSet->GetItemState(
                                             nWhich, false, &pItem ) )
                         || // virtuellen "!=" Operator anwenden
                          (*pItem != *aIter.GetCurItem() ) )

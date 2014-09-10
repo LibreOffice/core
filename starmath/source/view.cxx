@@ -1509,7 +1509,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
 
             bool  bVal;
             if ( pArgs &&
-                 SFX_ITEM_SET == pArgs->GetItemState( SID_FORMULACURSOR, false, &pItem))
+                 SfxItemState::SET == pArgs->GetItemState( SID_FORMULACURSOR, false, &pItem))
                 bVal = ((SfxBoolItem *) pItem)->GetValue();
             else
                 bVal = !pp->GetConfig()->IsShowFormulaCursor();
@@ -1806,7 +1806,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             const SfxItemSet *pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
 
-            if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) )
+            if ( pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem ) )
             {
                 const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
                 aGraphic.SetZoom( nCurrentZoom );

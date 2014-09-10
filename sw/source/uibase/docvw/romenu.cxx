@@ -61,7 +61,7 @@ void SwReadOnlyPopup::Check( sal_uInt16 nMID, sal_uInt16 nSID, SfxDispatcher &rD
 {
     SfxPoolItem *_pItem = 0;
     SfxItemState eState = rDis.GetBindings()->QueryState( nSID, _pItem );
-    if (eState >= SFX_ITEM_DEFAULT)
+    if (eState >= SfxItemState::DEFAULT)
     {
         EnableItem( nMID, true );
         if (_pItem)
@@ -115,7 +115,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         aGraphic = *pGrf;
         const SwFrmFmt* pGrfFmt = rSh.GetFmtFromObj( rDocPos );
         const SfxPoolItem* pURLItem;
-        if( pGrfFmt && SFX_ITEM_SET == pGrfFmt->GetItemState(
+        if( pGrfFmt && SfxItemState::SET == pGrfFmt->GetItemState(
             RES_URL, true, &pURLItem ))
         {
             const SwFmtURL& rURL = *(SwFmtURL*)pURLItem;
@@ -202,14 +202,14 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
 
     SfxItemState eState = pVFrame->GetBindings().QueryState( SID_COPY, pState );
     Check( MN_READONLY_COPY,            SID_COPY,           rDis );
-    if(eState < SFX_ITEM_DEFAULT)
+    if(eState < SfxItemState::DEFAULT)
         EnableItem( MN_READONLY_COPY, false );
     delete pState;
     pState = NULL;
 
     eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
     if (
-        eState < SFX_ITEM_DEFAULT ||
+        eState < SfxItemState::DEFAULT ||
         (rSh.IsGlobalDoc() && rView.GetDocShell()->IsReadOnlyUI())
        )
     {

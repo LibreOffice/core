@@ -1919,7 +1919,7 @@ void NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) con
     if ( maApiData.mnIndex )
         nScNumFmt = maApiData.mnIndex;
     ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
-    if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, false ) == SFX_ITEM_SET )
+    if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, false ) == SfxItemState::SET )
         ScGlobal::AddLanguage( rItemSet, *(rDoc.GetFormatTable()) );
 }
 

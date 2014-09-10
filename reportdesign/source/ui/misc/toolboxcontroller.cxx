@@ -248,14 +248,14 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                         util::Color nColor(COL_TRANSPARENT);
                         Event.State >>= nColor;
                         SvxColorItem aColorItem(::Color(nColor), 1);
-                        static_cast<SvxColorToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_SET : SFX_ITEM_DISABLED,&aColorItem);
+                        static_cast<SvxColorToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SfxItemState::SET : SfxItemState::DISABLED,&aColorItem);
                     }
                     break;
                 case SID_ATTR_CHAR_FONT:
                     {
                         SvxFontItem aItem(ITEMID_FONT);
                         aItem.PutValue(Event.State);
-                        static_cast<SvxFontNameToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_DEFAULT : SFX_ITEM_DISABLED,&aItem);
+                        static_cast<SvxFontNameToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SfxItemState::DEFAULT : SfxItemState::DISABLED,&aItem);
                     }
                     break;
             }

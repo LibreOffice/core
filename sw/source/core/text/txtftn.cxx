@@ -1279,14 +1279,14 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
 
         // set the correct rotation at the footnote font
         const SfxPoolItem* pItem;
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ROTATE,
+        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
             true, &pItem ))
             pFnt->SetVertical( ((SvxCharRotateItem*)pItem)->GetValue(),
                                 rInf.GetTxtFrm()->IsVertical() );
 
         pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
 
-        if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
+        if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_BACKGROUND,
             true, &pItem ))
             pFnt->SetBackColor( new Color( ((SvxBrushItem*)pItem)->GetColor() ) );
     }

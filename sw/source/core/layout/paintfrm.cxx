@@ -7562,7 +7562,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
         pGlobalShell = pSh;
 
         bool bNoteURL = pMap &&
-            SFX_ITEM_SET != GetAttrSet().GetItemState( RES_URL, true );
+            SfxItemState::SET != GetAttrSet().GetItemState( RES_URL, true );
         if( bNoteURL )
         {
             OSL_ENSURE( !pNoteURL, "MakeGraphic: pNoteURL already used? " );

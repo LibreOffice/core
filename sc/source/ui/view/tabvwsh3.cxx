@@ -107,14 +107,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(FID_INSERT_FILE,true,&pItem) == SFX_ITEM_SET )
+                     pReqArgs->GetItemState(FID_INSERT_FILE,true,&pItem) == SfxItemState::SET )
                 {
                     OUString aFileName = ((const SfxStringItem*)pItem)->GetValue();
 
                         // Einfuege-Position
 
                     Point aInsertPos;
-                    if ( pReqArgs->GetItemState(FN_PARAM_1,true,&pItem) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState(FN_PARAM_1,true,&pItem) == SfxItemState::SET )
                         aInsertPos = ((const SfxPointItem*)pItem)->GetValue();
                     else
                         aInsertPos = GetInsertPos();
@@ -122,7 +122,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         //  als Link?
 
                     bool bAsLink = false;
-                    if ( pReqArgs->GetItemState(FN_PARAM_2,true,&pItem) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState(FN_PARAM_2,true,&pItem) == SfxItemState::SET )
                         bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
 
                         // ausfuehren
@@ -150,13 +150,13 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     OUString aColStr;
                     bool bEntire = false;
                     const SfxPoolItem* pItem;
-                    if ( pReqArgs->GetItemState( SID_CHANGE_PRINTAREA, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( SID_CHANGE_PRINTAREA, true, &pItem ) == SfxItemState::SET )
                         aPrintStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    if ( pReqArgs->GetItemState( FN_PARAM_2, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( FN_PARAM_2, true, &pItem ) == SfxItemState::SET )
                         aRowStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    if ( pReqArgs->GetItemState( FN_PARAM_3, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( FN_PARAM_3, true, &pItem ) == SfxItemState::SET )
                         aColStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
-                    if ( pReqArgs->GetItemState( FN_PARAM_4, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( FN_PARAM_4, true, &pItem ) == SfxItemState::SET )
                         bEntire = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                     SetPrintRanges( bEntire, &aPrintStr, &aColStr, &aRowStr, false );
@@ -174,7 +174,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     OUString aPrintStr;
                     const SfxPoolItem* pItem;
-                    if ( pReqArgs->GetItemState( SID_DEFINE_PRINTAREA, true, &pItem ) == SFX_ITEM_SET )
+                    if ( pReqArgs->GetItemState( SID_DEFINE_PRINTAREA, true, &pItem ) == SfxItemState::SET )
                         aPrintStr = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     SetPrintRanges( false, &aPrintStr, NULL, NULL, bAdd );
                 }
@@ -224,10 +224,10 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 OUString aAddress;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                     aAddress = ((const SfxStringItem*)pItem)->GetValue();
                 else if ( nSlot == SID_JUMPTOMARK && pReqArgs->GetItemState(
-                                            SID_JUMPTOMARK, true, &pItem ) == SFX_ITEM_SET )
+                                            SID_JUMPTOMARK, true, &pItem ) == SfxItemState::SET )
                     aAddress = ((const SfxStringItem*)pItem)->GetValue();
 
                 //  #i14927# SID_CURRENTCELL with a single cell must unmark if FN_PARAM_1
@@ -235,11 +235,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 //  ScGridWindow::MouseButtonUp no longer executes the slot for a single
                 //  cell if there is a multi selection.
                 bool bUnmark = ( nSlot == SID_CURRENTCELL );
-                if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( FN_PARAM_1, true, &pItem ) == SfxItemState::SET )
                     bUnmark = ((const SfxBoolItem*)pItem)->GetValue();
 
                 bool bAlignToCursor = true;
-                if (pReqArgs->GetItemState(FN_PARAM_2, true, &pItem) == SFX_ITEM_SET)
+                if (pReqArgs->GetItemState(FN_PARAM_2, true, &pItem) == SfxItemState::SET)
                     bAlignToCursor = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
                 if ( nSlot == SID_JUMPTOMARK )
@@ -520,7 +520,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 // check whether there is an explicit argument, use it
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                 {
                     bool bItemValue = ((const SfxBoolItem*)pItem)->GetValue();
                     bWantPageBreak = (nSlot == FID_PAGEBREAKMODE) == bItemValue;
@@ -561,7 +561,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 bool bSet = !GetViewData().IsSyntaxMode();
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
                 GetViewData().SetSyntaxMode( bSet );
                 PaintGrid();
@@ -574,7 +574,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 bool bSet = !GetViewData().IsHeaderMode();
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
                 GetViewData().SetHeaderMode( bSet );
                 RepeatResize();
@@ -590,7 +590,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 const ScViewOptions& rOpts = rViewData.GetOptions();
                 bool bFormulaMode = !rOpts.GetOption( VOPT_FORMULAS );
                 const SfxPoolItem *pItem;
-                if( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
+                if( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     bFormulaMode = ((const SfxBoolItem *)pItem)->GetValue();
 
                 ScViewOptions rSetOpts = ScViewOptions( rOpts );
@@ -611,7 +611,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 SfxChildWindow* pWnd = pThisFrame->GetChildWindow( nId );
                 bool bSet = ( pWnd == NULL );
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     bSet = ((const SfxBoolItem*)pItem)->GetValue();
 
                 pThisFrame->SetChildWindow( nId, bSet );
@@ -736,7 +736,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             {
                 const SfxPoolItem* pItem = NULL;
                 bool bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
-                if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState(SID_ATTR_ZOOMSLIDER, true, &pItem) == SfxItemState::SET )
                 {
                     const sal_uInt16 nCurrentZoom = ((const SvxZoomSliderItem *)pItem)->GetValue();
                     if( nCurrentZoom )
@@ -931,7 +931,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     const SfxPoolItem* pItem;
                     if ( pReqArgs &&
-                         pReqArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET &&
+                         pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET &&
                          pItem->ISA( SfxStringItem ) )
                     {
                         OUString aComment = ((const SfxStringItem*)pItem)->GetValue();

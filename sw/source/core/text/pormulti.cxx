@@ -833,7 +833,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
 
     const SvxCharRotateItem* pRotate = NULL;
     const SfxPoolItem* pRotItem;
-    if( SFX_ITEM_SET == m_pFrm->GetTxtNode()->GetSwAttrSet().
+    if( SfxItemState::SET == m_pFrm->GetTxtNode()->GetSwAttrSet().
         GetItemState( RES_CHRATR_ROTATE, true, &pRotItem ) &&
         ((SvxCharRotateItem*)pRotItem)->GetValue() )
         pRotate = (SvxCharRotateItem*)pRotItem;
@@ -844,7 +844,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( sal_Int32 &rPos,
     if( !pLclTxtNode )
         return NULL;
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == pLclTxtNode->GetSwAttrSet().
+    if( SfxItemState::SET == pLclTxtNode->GetSwAttrSet().
         GetItemState( RES_CHRATR_TWO_LINES, true, &pItem ) &&
         ((SvxTwoLinesItem*)pItem)->GetValue() )
         p2Lines = (SvxTwoLinesItem*)pItem;

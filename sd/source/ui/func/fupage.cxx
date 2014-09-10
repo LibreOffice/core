@@ -326,9 +326,9 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             bool bChanges = false;
             for( sal_uInt16 i=XATTR_FILL_FIRST; i<XATTR_FILL_LAST; i++ )
             {
-                if( aMergedAttr.GetItemState( i ) != SFX_ITEM_DEFAULT )
+                if( aMergedAttr.GetItemState( i ) != SfxItemState::DEFAULT )
                 {
-                    if( pTempSet->GetItemState( i ) == SFX_ITEM_DEFAULT )
+                    if( pTempSet->GetItemState( i ) == SfxItemState::DEFAULT )
                         pTempSet->Put( aMergedAttr.Get( i ) );
                     else
                         if( aMergedAttr.GetItem( i ) != pTempSet->GetItem( i ) )
@@ -338,7 +338,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             // if the background for this page was set to invisible, the background-object has to be deleted, too.
             if( ( ( (XFillStyleItem*) pTempSet->GetItem( XATTR_FILLSTYLE ) )->GetValue() == drawing::FillStyle_NONE ) ||
-                ( ( pTempSet->GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT ) &&
+                ( ( pTempSet->GetItemState( XATTR_FILLSTYLE ) == SfxItemState::DEFAULT ) &&
                     ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == drawing::FillStyle_NONE ) ) )
                 mbPageBckgrdDeleted = true;
 
@@ -451,7 +451,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             }
 
             const SfxPoolItem *pItem;
-            if( SFX_ITEM_SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) )
+            if( SfxItemState::SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) )
             {
                 sal_uInt32 nVal = ((SvxFrameDirectionItem*)pItem)->GetValue();
                 mpDoc->SetDefaultWritingMode( nVal == FRMDIR_HORI_RIGHT_TOP ? ::com::sun::star::text::WritingMode_RL_TB : ::com::sun::star::text::WritingMode_LR_TB );
@@ -495,7 +495,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     bool                bFullSize = pMasterPage->IsBackgroundFullSize();
     sal_uInt16              nPaperBin = mpPage->GetPaperBin();
 
-    if( pArgs->GetItemState(SID_ATTR_PAGE, true, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(SID_ATTR_PAGE, true, &pPoolItem) == SfxItemState::SET )
     {
         mpDoc->SetPageNumType(((const SvxPageItem*) pPoolItem)->GetNumType());
 
@@ -508,7 +508,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         mpDrawViewShell->ResetActualPage();
     }
 
-    if( pArgs->GetItemState(SID_ATTR_PAGE_SIZE, true, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(SID_ATTR_PAGE_SIZE, true, &pPoolItem) == SfxItemState::SET )
     {
         aNewSize = ((const SvxSizeItem*) pPoolItem)->GetSize();
 
@@ -517,7 +517,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_LRSPACE),
-                            true, &pPoolItem) == SFX_ITEM_SET )
+                            true, &pPoolItem) == SfxItemState::SET )
     {
         nLeft = ((const SvxLRSpaceItem*) pPoolItem)->GetLeft();
         nRight = ((const SvxLRSpaceItem*) pPoolItem)->GetRight();
@@ -528,7 +528,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_ULSPACE),
-                            true, &pPoolItem) == SFX_ITEM_SET )
+                            true, &pPoolItem) == SfxItemState::SET )
     {
         nUpper = ((const SvxULSpaceItem*) pPoolItem)->GetUpper();
         nLower = ((const SvxULSpaceItem*) pPoolItem)->GetLower();
@@ -537,12 +537,12 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
             bSetPageSizeAndBorder = true;
     }
 
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT1), true, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT1), true, &pPoolItem) == SfxItemState::SET )
     {
         bScaleAll = ((const SfxBoolItem*) pPoolItem)->GetValue();
     }
 
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT2), true, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_EXT2), true, &pPoolItem) == SfxItemState::SET )
     {
         bFullSize = ((const SfxBoolItem*) pPoolItem)->GetValue();
 
@@ -551,7 +551,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     }
 
     // Paper Bin
-    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN), true, &pPoolItem) == SFX_ITEM_SET )
+    if( pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_ATTR_PAGE_PAPERBIN), true, &pPoolItem) == SfxItemState::SET )
     {
         nPaperBin = ((const SvxPaperBinItem*) pPoolItem)->GetValue();
 

@@ -316,7 +316,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
 
             //set the first used database as default source on the config item
             const SfxPoolItem* pItem = 0;
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState(
                    FN_PARAM_DATABASE_PROPERTIES, false, &pItem))
             {
                 //mailmerge has been called from the database beamer
@@ -603,7 +603,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
             break;
 
         case SID_ATTR_METRIC:
-        if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(nWhich, false, &pItem))
+        if(pArgs && SfxItemState::SET == pArgs->GetItemState(nWhich, false, &pItem))
         {
             FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
             switch( eUnit )
@@ -629,7 +629,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                 bool bWebView = 0 != PTR_CAST(SwWebView, ::GetActiveView() ),
                      bSet;
 
-                if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(
+                if( pArgs && SfxItemState::SET == pArgs->GetItemState(
                         nWhich, false, &pItem ))
                     bSet = ((SfxBoolItem*)pItem)->GetValue();
                 else
@@ -707,7 +707,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if(dynamic_cast<const SfxItemSetHint*>(&rHint))
     {
-        if( SFX_ITEM_SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
+        if( SfxItemState::SET == ((SfxItemSetHint&)rHint).GetItemSet().GetItemState(SID_ATTR_PATHNAME))
         {
             ::GetGlossaries()->UpdateGlosPath( false );
             SwGlossaryList* pList = ::GetGlossaryList();

@@ -489,7 +489,7 @@ const SfxPoolItem* SfxRequest::GetItem
 
         // Is the item set or available at bDeep == sal_True?
         const SfxPoolItem *pItem = 0;
-        if ( ( bDeep ? SFX_ITEM_DEFAULT : SFX_ITEM_SET )
+        if ( ( bDeep ? SfxItemState::DEFAULT : SfxItemState::SET )
              <= pArgs->GetItemState( nWhich, bDeep, &pItem ) )
         {
             // Compare type
@@ -703,9 +703,9 @@ void SfxRequest::Done_Impl
         // get the property as SfxPoolItem
         const SfxPoolItem *pItem;
         sal_uInt16 nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
-        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, false, &pItem ) : SFX_ITEM_UNKNOWN;
+        SfxItemState eState = pSet ? pSet->GetItemState( nWhich, false, &pItem ) : SfxItemState::UNKNOWN;
 #ifdef DBG_UTIL
-        if ( SFX_ITEM_SET != eState )
+        if ( SfxItemState::SET != eState )
         {
             OStringBuffer aStr("Recording property not available: ");
             aStr.append(static_cast<sal_Int32>(pImp->pSlot->GetSlotId()));
@@ -713,7 +713,7 @@ void SfxRequest::Done_Impl
         }
 #endif
         uno::Sequence < beans::PropertyValue > aSeq;
-        if ( eState == SFX_ITEM_SET )
+        if ( eState == SfxItemState::SET )
             TransformItems( pImp->pSlot->GetSlotId(), *pSet, aSeq, pImp->pSlot );
         pImp->Record( aSeq );
     }

@@ -410,7 +410,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ),true,&pItem);
 
-    if(eState==SFX_ITEM_SET)
+    if(eState==SfxItemState::SET)
     {
         const SfxBoolItem* pBoolLangItem = (const SfxBoolItem*)
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE);
@@ -428,7 +428,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_INFO ),true,&pItem);
 
-    if(eState==SFX_ITEM_SET)
+    if(eState==SfxItemState::SET)
     {
         if(pNumItem==NULL)
         {
@@ -448,7 +448,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ONE_AREA ));
 
-    if(eState==SFX_ITEM_SET)
+    if(eState==SfxItemState::SET)
     {
         const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ONE_AREA);
@@ -461,7 +461,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE ) );
 
-    if ( eState == SFX_ITEM_SET )
+    if ( eState == SfxItemState::SET )
     {
         const SfxBoolItem* pBoolItem = (const SfxBoolItem*)
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_SOURCE );
@@ -485,7 +485,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_VALUE ) );
 
-    if ( SFX_ITEM_DONTCARE != eState )
+    if ( SfxItemState::DONTCARE != eState )
         pValFmtAttr = (const SfxUInt32Item*)
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_VALUE );
 
@@ -570,7 +570,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
         SetCategory(nCatLbSelPos );
     }
     eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_ADD_AUTO ) );
-    if(SFX_ITEM_SET == eState)
+    if(SfxItemState::SET == eState)
          pAutoEntryAttr = (const SfxBoolItem*)
                       GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
     // no_NO is an alias for nb_NO and normally isn't listed, we need it for
@@ -748,7 +748,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             {
                 rCoreAttrs->Put( SfxUInt32Item( nWhich, nCurKey ) );
             }
-            else if(SFX_ITEM_DEFAULT == eItemState)
+            else if(SfxItemState::DEFAULT == eItemState)
             {
                 rCoreAttrs->ClearItem( nWhich );
             }
@@ -795,7 +795,7 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
             rCoreAttrs->Put( SfxBoolItem( _nWhich, m_pCbSourceFormat->IsChecked() ) );
             if ( !bDataChanged )
                 bDataChanged = (bOld != m_pCbSourceFormat->IsChecked() ||
-                    _eItemState != SFX_ITEM_SET);
+                    _eItemState != SfxItemState::SET);
         }
 
         // FillItemSet is only called on OK, here we can notify the

@@ -2056,12 +2056,12 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, const SfxPoolItem* &rp
     {
         rpState = pShell->GetSlotState(nSlot);
         if ( !rpState )
-            return SFX_ITEM_DISABLED;
+            return SfxItemState::DISABLED;
         else
-            return SFX_ITEM_DEFAULT;
+            return SfxItemState::DEFAULT;
     }
 
-    return SFX_ITEM_DISABLED;
+    return SfxItemState::DISABLED;
 }
 
 SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::Any& rAny )
@@ -2074,7 +2074,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::
 
         pItem = pShell->GetSlotState( nSID );
         if ( !pItem )
-            return SFX_ITEM_DISABLED;
+            return SfxItemState::DISABLED;
         else
         {
             ::com::sun::star::uno::Any aState;
@@ -2089,11 +2089,11 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::
             }
             rAny = aState;
 
-            return SFX_ITEM_DEFAULT;
+            return SfxItemState::DEFAULT;
         }
     }
 
-    return SFX_ITEM_DISABLED;
+    return SfxItemState::DISABLED;
 }
 
 bool SfxDispatcher::IsReadOnlyShell_Impl( sal_uInt16 nShell ) const

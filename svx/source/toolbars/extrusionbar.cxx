@@ -182,7 +182,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
 
     case SID_EXTRUSION_DIRECTION:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DIRECTION ) == SFX_ITEM_SET )
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DIRECTION ) == SfxItemState::SET )
         {
             sal_Int32 nSkew = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_DIRECTION))->GetValue();
 
@@ -266,7 +266,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     break;
     case SID_EXTRUSION_PROJECTION:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_PROJECTION ) == SFX_ITEM_SET )
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_PROJECTION ) == SfxItemState::SET )
         {
             sal_Int32 nProjection = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_PROJECTION))->GetValue();
             ProjectionMode eProjectionMode = nProjection == 1 ? ProjectionMode_PARALLEL : ProjectionMode_PERSPECTIVE;
@@ -279,7 +279,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     break;
     case SID_EXTRUSION_DEPTH:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SFX_ITEM_SET)
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SfxItemState::SET)
         {
             double fDepth = ((const SvxDoubleItem*)rReq.GetArgs()->GetItem(SID_EXTRUSION_DEPTH))->GetValue();
             double fFraction = 0.0;
@@ -300,7 +300,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     {
         static const OUString  sExtrusionColor( "Color" );
 
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_3D_COLOR ) == SFX_ITEM_SET)
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_3D_COLOR ) == SfxItemState::SET)
         {
             Color aColor( ((const SvxColorItem&)rReq.GetArgs()->Get(SID_EXTRUSION_3D_COLOR)).GetValue() );
 
@@ -330,7 +330,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         static const OUString sDiffusion( "Diffusion" );
         static const OUString sMetal( "Metal" );
 
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_SURFACE ) == SFX_ITEM_SET)
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_SURFACE ) == SfxItemState::SET)
         {
             sal_Int32 nSurface = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_SURFACE))->GetValue();
 
@@ -384,7 +384,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
         static const OUString sFirstLightLevel( "FirstLightLevel" );
         static const OUString sSecondLightLevel( "SecondLightLevel" );
 
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_INTENSITY ) == SFX_ITEM_SET)
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_INTENSITY ) == SfxItemState::SET)
         {
             sal_Int32 nLevel = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_LIGHTING_INTENSITY))->GetValue();
 
@@ -444,7 +444,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     break;
     case SID_EXTRUSION_LIGHTING_DIRECTION:
     {
-        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_DIRECTION ) == SFX_ITEM_SET)
+        if( rReq.GetArgs() && rReq.GetArgs()->GetItemState( SID_EXTRUSION_LIGHTING_DIRECTION ) == SfxItemState::SET)
         {
             sal_Int32 nDirection = ((const SfxInt32Item*)rReq.GetArgs()->GetItem(SID_EXTRUSION_LIGHTING_DIRECTION))->GetValue();
 
@@ -578,8 +578,8 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
 
         case SID_EXTRUSION_DEPTH_DIALOG:
             if( rReq.GetArgs() &&
-                (rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SFX_ITEM_SET) &&
-                (rReq.GetArgs()->GetItemState( SID_ATTR_METRIC ) == SFX_ITEM_SET))
+                (rReq.GetArgs()->GetItemState( SID_EXTRUSION_DEPTH ) == SfxItemState::SET) &&
+                (rReq.GetArgs()->GetItemState( SID_ATTR_METRIC ) == SfxItemState::SET))
             {
                 double fDepth = ((const SvxDoubleItem*)rReq.GetArgs()->GetItem(SID_EXTRUSION_DEPTH))->GetValue();
                 FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)rReq.GetArgs()->GetItem(SID_ATTR_METRIC))->GetValue();
@@ -1252,90 +1252,90 @@ bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
 
 void ExtrusionBar::getState( SdrView* pSdrView, SfxItemSet& rSet )
 {
-    if (rSet.GetItemState(SID_EXTRUSION_DIRECTION) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_DIRECTION) != SfxItemState::UNKNOWN)
     {
         getExtrusionDirectionState( pSdrView, rSet );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_PROJECTION) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_PROJECTION) != SfxItemState::UNKNOWN)
     {
         getExtrusionProjectionState( pSdrView, rSet );
     }
     const bool bOnlyExtrudedCustomShapes =
         checkForSelectedCustomShapes( pSdrView, true );
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_DOWN) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_TILT_DOWN) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_DOWN );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_DOWN) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_TILT_DOWN) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_DOWN );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_UP) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_TILT_UP) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_UP );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_LEFT) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_TILT_LEFT) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_LEFT );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_TILT_RIGHT) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_TILT_RIGHT) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_TILT_RIGHT );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_3D_COLOR) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_3D_COLOR) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_3D_COLOR );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_DEPTH_FLOATER) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_DEPTH_FLOATER) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_DEPTH_FLOATER );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_DIRECTION_FLOATER) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_DIRECTION_FLOATER) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_DIRECTION_FLOATER );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_FLOATER) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_FLOATER) != SfxItemState::UNKNOWN)
     {
         if (! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_LIGHTING_FLOATER );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_SURFACE_FLOATER) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_SURFACE_FLOATER) != SfxItemState::UNKNOWN)
     {
         if(! bOnlyExtrudedCustomShapes)
             rSet.DisableItem( SID_EXTRUSION_SURFACE_FLOATER );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_TOOGLE) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_TOOGLE) != SfxItemState::UNKNOWN)
     {
         if( !checkForSelectedCustomShapes( pSdrView, false ) )
             rSet.DisableItem( SID_EXTRUSION_TOOGLE );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_DEPTH) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_DEPTH) != SfxItemState::UNKNOWN)
     {
         getExtrusionDepthState( pSdrView, rSet );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_SURFACE) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_SURFACE) != SfxItemState::UNKNOWN)
     {
         getExtrusionSurfaceState( pSdrView, rSet );
     }
-    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_INTENSITY) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_INTENSITY) != SfxItemState::UNKNOWN)
     {
         getExtrusionLightingIntensityState( pSdrView, rSet );
     }
 
-    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_DIRECTION) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_LIGHTING_DIRECTION) != SfxItemState::UNKNOWN)
     {
         getExtrusionLightingDirectionState( pSdrView, rSet );
     }
 
-    if (rSet.GetItemState(SID_EXTRUSION_3D_COLOR) != SFX_ITEM_UNKNOWN)
+    if (rSet.GetItemState(SID_EXTRUSION_3D_COLOR) != SfxItemState::UNKNOWN)
     {
         getExtrusionColorState( pSdrView, rSet );
     }

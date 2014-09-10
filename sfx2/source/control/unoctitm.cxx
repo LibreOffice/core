@@ -134,11 +134,11 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
     }
     else if ( pCtrlItem )
     {
-        SfxItemState eState = SFX_ITEM_DISABLED;
+        SfxItemState eState = SfxItemState::DISABLED;
         SfxPoolItem* pItem = NULL;
         if ( rEvent.IsEnabled )
         {
-            eState = SFX_ITEM_DEFAULT;
+            eState = SfxItemState::DEFAULT;
             ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
             if ( pType == cppu::UnoType< bool >::get() )
@@ -223,7 +223,7 @@ void SfxUnoControllerItem::GetNewDispatch()
     if ( xDispatch.is() )
         xDispatch->addStatusListener( (::com::sun::star::frame::XStatusListener*) this, aCommand );
     else if ( pCtrlItem )
-        pCtrlItem->StateChanged( pCtrlItem->GetId(), SFX_ITEM_DISABLED, NULL );
+        pCtrlItem->StateChanged( pCtrlItem->GetId(), SfxItemState::DISABLED, NULL );
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SfxUnoControllerItem::TryGetDispatch( SfxFrame *pFrame )
@@ -808,9 +808,9 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     ::com::sun::star::uno::Any aState;
     if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
-    SfxItemState eState = pDispatcher ? pDispatcher->QueryState( GetId(), aState ) : SFX_ITEM_DONTCARE;
+    SfxItemState eState = pDispatcher ? pDispatcher->QueryState( GetId(), aState ) : SfxItemState::DONTCARE;
 
-    if ( eState == SFX_ITEM_DONTCARE )
+    if ( eState == SfxItemState::DONTCARE )
     {
         // Use special uno struct to transport don't care state
         ::com::sun::star::frame::status::ItemStatus aItemStatus;
@@ -824,7 +824,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     aEvent.Requery    = sal_False;
     if ( bVisible )
     {
-        aEvent.IsEnabled  = eState != SFX_ITEM_DISABLED;
+        aEvent.IsEnabled  = eState != SfxItemState::DISABLED;
         aEvent.State      = aState;
     }
     else
@@ -876,7 +876,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( bNotify && pContnr )
     {
         ::com::sun::star::uno::Any aState;
-        if ( ( eState >= SFX_ITEM_DEFAULT ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
+        if ( ( eState >= SfxItemState::DEFAULT ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
         {
             // Retrieve metric from pool to have correct sub ID when calling QueryValue
             sal_uInt16     nSubId( 0 );
@@ -899,7 +899,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
 
             pState->QueryValue( aState, (sal_uInt8)nSubId );
         }
-        else if ( eState == SFX_ITEM_DONTCARE )
+        else if ( eState == SfxItemState::DONTCARE )
         {
             // Use special uno struct to transport don't care state
             ::com::sun::star::frame::status::ItemStatus aItemStatus;
@@ -910,7 +910,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         ::com::sun::star::frame::FeatureStateEvent aEvent;
         aEvent.FeatureURL = aDispatchURL;
         aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
-        aEvent.IsEnabled = eState != SFX_ITEM_DISABLED;
+        aEvent.IsEnabled = eState != SfxItemState::DISABLED;
         aEvent.Requery = sal_False;
         aEvent.State = aState;
 

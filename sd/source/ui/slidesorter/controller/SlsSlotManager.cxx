@@ -550,7 +550,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         rSet.DisableItem(SID_SEARCH_DLG);
     }
 
-    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_EXPAND_PAGE))
+    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_EXPAND_PAGE))
     {
         bool bDisable = true;
         if (eEditMode == EM_PAGE)
@@ -593,7 +593,7 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
             rSet.DisableItem (SID_EXPAND_PAGE);
     }
 
-    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_SUMMARY_PAGE))
+    if (SfxItemState::DEFAULT == rSet.GetItemState(SID_SUMMARY_PAGE))
     {
         bool bDisable = true;
         if (eEditMode == EM_PAGE)
@@ -618,8 +618,8 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     }
 
     // starting of presentation possible?
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_PRESENTATION ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_PRESENTATION ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
         bool bDisable = true;
         model::PageEnumeration aAllPages (
@@ -641,9 +641,9 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     // Disable the rename slots when there are no or more than one slides/master
     // pages selected; disable the duplicate slot when there are no slides
     // selected:
-    if (rSet.GetItemState(SID_RENAMEPAGE) == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_RENAME_MASTER_PAGE) == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_DUPLICATE_PAGE) == SFX_ITEM_DEFAULT)
+    if (rSet.GetItemState(SID_RENAMEPAGE) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_RENAME_MASTER_PAGE) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_DUPLICATE_PAGE) == SfxItemState::DEFAULT)
     {
         int n = mrSlideSorter.GetController().GetPageSelector()
             .GetSelectedPageCount();
@@ -658,8 +658,8 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
         }
     }
 
-    if (rSet.GetItemState(SID_HIDE_SLIDE) == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_SHOW_SLIDE)  == SFX_ITEM_DEFAULT)
+    if (rSet.GetItemState(SID_HIDE_SLIDE) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_SHOW_SLIDE)  == SfxItemState::DEFAULT)
     {
         model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
@@ -700,9 +700,9 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
     // Disable some slots when in master page mode.
     if (eEditMode == EM_MASTERPAGE)
     {
-        if (rSet.GetItemState(SID_INSERTPAGE) == SFX_ITEM_DEFAULT)
+        if (rSet.GetItemState(SID_INSERTPAGE) == SfxItemState::DEFAULT)
             rSet.DisableItem(SID_INSERTPAGE);
-        if (rSet.GetItemState(SID_DUPLICATE_PAGE) == SFX_ITEM_DEFAULT)
+        if (rSet.GetItemState(SID_DUPLICATE_PAGE) == SfxItemState::DEFAULT)
             rSet.DisableItem(SID_DUPLICATE_PAGE);
     }
 }
@@ -711,8 +711,8 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
 {
     SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
 
-    if (rSet.GetItemState(SID_PASTE)  == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SFX_ITEM_DEFAULT)
+    if (rSet.GetItemState(SID_PASTE)  == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SfxItemState::DEFAULT)
     {
         // no own clipboard data?
         if ( !pTransferClip || !pTransferClip->GetDocShell() )
@@ -755,30 +755,30 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
     }
 
     // Cut, copy and paste of master pages is not yet implemented properly
-    if (rSet.GetItemState(SID_COPY) == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_PASTE)  == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_CUT)  == SFX_ITEM_DEFAULT)
+    if (rSet.GetItemState(SID_COPY) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_PASTE)  == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_CUT)  == SfxItemState::DEFAULT)
     {
         if (mrSlideSorter.GetModel().GetEditMode() == EM_MASTERPAGE)
         {
-            if (rSet.GetItemState(SID_CUT) == SFX_ITEM_DEFAULT)
+            if (rSet.GetItemState(SID_CUT) == SfxItemState::DEFAULT)
                 rSet.DisableItem(SID_CUT);
-            if (rSet.GetItemState(SID_COPY) == SFX_ITEM_DEFAULT)
+            if (rSet.GetItemState(SID_COPY) == SfxItemState::DEFAULT)
                 rSet.DisableItem(SID_COPY);
-            if (rSet.GetItemState(SID_PASTE) == SFX_ITEM_DEFAULT)
+            if (rSet.GetItemState(SID_PASTE) == SfxItemState::DEFAULT)
                 rSet.DisableItem(SID_PASTE);
-            if (rSet.GetItemState(SID_PASTE_SPECIAL) == SFX_ITEM_DEFAULT)
+            if (rSet.GetItemState(SID_PASTE_SPECIAL) == SfxItemState::DEFAULT)
                 rSet.DisableItem(SID_PASTE_SPECIAL);
         }
     }
 
     // Cut, copy, and delete page are disabled when there is no selection.
-    if (rSet.GetItemState(SID_CUT) == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_COPY)  == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_DELETE) == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_DELETE_PAGE) == SFX_ITEM_DEFAULT
-        || rSet.GetItemState(SID_DELETE_MASTER_PAGE) == SFX_ITEM_DEFAULT)
+    if (rSet.GetItemState(SID_CUT) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_COPY)  == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_DELETE) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_DELETE_PAGE) == SfxItemState::DEFAULT
+        || rSet.GetItemState(SID_DELETE_MASTER_PAGE) == SfxItemState::DEFAULT)
     {
         model::PageEnumeration aSelectedPages (
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(

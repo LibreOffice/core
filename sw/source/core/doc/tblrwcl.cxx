@@ -1973,7 +1973,7 @@ static void lcl_CopyBoxToDoc(_FndBox const& rFndBox, _CpyPara *const pCpyPara)
                     {
                         const SfxPoolItem* pItem;
                         SvNumberFormatter* pN = pCpyPara->pDoc->GetNumberFormatter( false );
-                        if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == aBoxAttrSet.
+                        if( pN && pN->HasMergeFmtTbl() && SfxItemState::SET == aBoxAttrSet.
                             GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
                         {
                             sal_uLong nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
@@ -4438,7 +4438,7 @@ SwFrmFmt* SwShareBoxFmt::GetFormat( const SfxPoolItem& rItem ) const
     SwFrmFmt *pRet = 0, *pTmp;
     const SfxPoolItem& rFrmSz = pOldFmt->GetFmtAttr( RES_FRM_SIZE, false );
     for( sal_uInt16 n = aNewFmts.size(); n; )
-        if( SFX_ITEM_SET == ( pTmp = aNewFmts[ --n ])->
+        if( SfxItemState::SET == ( pTmp = aNewFmts[ --n ])->
             GetItemState( nWhich, false, &pItem ) && *pItem == rItem &&
             pTmp->GetFmtAttr( RES_FRM_SIZE, false ) == rFrmSz )
         {

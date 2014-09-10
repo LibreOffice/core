@@ -1184,7 +1184,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     else if( bHeaderRulerMove && bHeaderRulerChange )
                     {
                         const SfxPoolItem* pItem = NULL;
-                        if ( rStyleSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SFX_ITEM_SET )
+                        if ( rStyleSet.GetItemState( ATTR_PAGE_HEADERSET, false, &pItem ) == SfxItemState::SET )
                         {
                             SfxItemSet& pHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
                             Size  aHeaderSize = ((const SvxSizeItem&)pHeaderSet.Get(ATTR_PAGE_SIZE)).GetSize();
@@ -1199,7 +1199,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     else if( bFooterRulerMove && bFooterRulerChange )
                     {
                         const SfxPoolItem* pItem = NULL;
-                        if( rStyleSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SFX_ITEM_SET )
+                        if( rStyleSet.GetItemState( ATTR_PAGE_FOOTERSET, false, &pItem ) == SfxItemState::SET )
                         {
                             SfxItemSet& pFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
                             Size aFooterSize = ((const SvxSizeItem&)pFooterSet.Get(ATTR_PAGE_SIZE)).GetSize();

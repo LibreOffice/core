@@ -353,7 +353,7 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
     }
 
     // When setting a formula, do not check further!
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMULA ))
+    if( SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMULA ))
         ClearTblBoxCntnt();
 
     StartAllAction();
@@ -386,7 +386,7 @@ bool SwEditShell::IsTableBoxTextFormat() const
 
     sal_uInt32 nFmt = 0;
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == pBox->GetFrmFmt()->GetAttrSet().GetItemState(
+    if( SfxItemState::SET == pBox->GetFrmFmt()->GetAttrSet().GetItemState(
         RES_BOXATR_FORMAT, true, &pItem ))
     {
         nFmt = ((SwTblBoxNumFormat*)pItem)->GetValue();

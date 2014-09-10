@@ -290,14 +290,14 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
 
 void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFrame* pViewFrame )
 {
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CHARMAP ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( FN_INSERT_SOFT_HYPHEN ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( FN_INSERT_HARDHYPHEN ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( FN_INSERT_HARD_SPACE ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_INSERT_RLM ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_INSERT_LRM ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_INSERT_ZWNBSP ) ||
-        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_INSERT_ZWSP ))
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_CHARMAP ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_SOFT_HYPHEN ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_HARDHYPHEN ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( FN_INSERT_HARD_SPACE ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_RLM ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_LRM ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_ZWNBSP ) ||
+        SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_ZWSP ))
     {
         ::sd::View* pView = pViewShell ? pViewShell->GetView() : 0;
         OutlinerView* pOLV = pView ? pView->GetTextEditOutlinerView() : 0;

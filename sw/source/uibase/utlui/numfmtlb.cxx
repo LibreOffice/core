@@ -415,7 +415,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
             }
 
             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-            if( SFX_ITEM_SET == pOutSet->GetItemState(
+            if( SfxItemState::SET == pOutSet->GetItemState(
                 SID_ATTR_NUMBERFORMAT_VALUE, false, &pItem ))
             {
                 sal_uInt32 nNumberFormat = ((SfxUInt32Item*)pItem)->GetValue();
@@ -426,7 +426,7 @@ IMPL_LINK( NumFormatListBox, SelectHdl, ListBox *, pBox )
                 // SetDefFormat uses eCurLanguage to look for if this format already in the list
                 SetDefFormat(nNumberFormat);
             }
-            if( bShowLanguageControl && SFX_ITEM_SET == pOutSet->GetItemState(
+            if( bShowLanguageControl && SfxItemState::SET == pOutSet->GetItemState(
                 SID_ATTR_NUMBERFORMAT_ADD_AUTO, false, &pItem ))
             {
                 bUseAutomaticLanguage = ((const SfxBoolItem*)pItem)->GetValue();

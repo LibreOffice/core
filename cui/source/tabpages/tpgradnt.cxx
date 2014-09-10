@@ -776,10 +776,10 @@ IMPL_LINK_NOARG(SvxGradientTabPage, ChangeGradientHdl_Impl)
     else
     {
         const SfxPoolItem* pPoolItem = NULL;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
+        if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
         {
             if( ( drawing::FillStyle_GRADIENT == (drawing::FillStyle) ( ( const XFillStyleItem* ) pPoolItem )->GetValue() ) &&
-                ( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true, &pPoolItem ) ) )
+                ( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true, &pPoolItem ) ) )
             {
                 pGradient.reset(new XGradient( ( ( const XFillGradientItem* ) pPoolItem )->GetGradientValue() ));
             }

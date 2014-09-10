@@ -1039,7 +1039,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                                      SID_ATTR_AUTO_COLOR_INVALID,
                                      OUString( ".uno:AutoColorInvalid" ));
         SfxItemState eState = aQueryStatus.QueryState( pDummy );
-        if( (SFX_ITEM_DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
+        if( (SfxItemState::DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
         {
             aColorSet.SetStyle( aColorSet.GetStyle() | WB_NONEFIELD );
             aColorSet.SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
@@ -1145,7 +1145,7 @@ bool SvxColorWindow_Impl::Close()
 
 void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if (( SFX_ITEM_DISABLED != eState ) && pState )
+    if (( SfxItemState::DISABLED != eState ) && pState )
     {
         if (( nSID == SID_COLOR_TABLE ) && ( pState->ISA( SvxColorListItem )))
         {
@@ -1159,7 +1159,7 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
             aColorSet.Clear();
             aColorSet.addEntriesForXColorList(*pColorList);
         }
-        else if ( SFX_ITEM_DEFAULT <= eState )
+        else if ( SfxItemState::DEFAULT <= eState )
         {
             aColorSet.SetNoSelection();
 
@@ -1598,7 +1598,7 @@ void SfxStyleControllerItem_Impl::StateChanged(
         {
             const sal_uInt16 nIdx = GetId() - SID_STYLE_FAMILY_START;
 
-            if ( SFX_ITEM_DEFAULT == eState )
+            if ( SfxItemState::DEFAULT == eState )
             {
                 const SfxTemplateItem* pStateItem =
                     PTR_CAST( SfxTemplateItem, pState );
@@ -2050,22 +2050,22 @@ void SvxStyleToolBoxControl::StateChanged(
 
     DBG_ASSERT( pBox, "Control not found!" );
 
-    if ( SFX_ITEM_DISABLED == eState )
+    if ( SfxItemState::DISABLED == eState )
         pBox->Disable();
     else
         pBox->Enable();
 
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
 
     switch ( eState )
     {
-        case SFX_ITEM_DEFAULT:
+        case SfxItemState::DEFAULT:
             eTri = ((const SfxBoolItem*)pState)->GetValue()
                         ? TRISTATE_TRUE
                         : TRISTATE_FALSE;
             break;
 
-        case SFX_ITEM_DONTCARE:
+        case SfxItemState::DONTCARE:
             eTri = TRISTATE_INDET;
             break;
 
@@ -2075,7 +2075,7 @@ void SvxStyleToolBoxControl::StateChanged(
 
     rTbx.SetItemState( nId, eTri );
 
-    if ( SFX_ITEM_DISABLED != eState )
+    if ( SfxItemState::DISABLED != eState )
         Update();
 }
 
@@ -2114,7 +2114,7 @@ void SvxFontNameToolBoxControl::StateChanged(
 
     DBG_ASSERT( pBox, "Control not found!" );
 
-    if ( SFX_ITEM_DISABLED == eState )
+    if ( SfxItemState::DISABLED == eState )
     {
         pBox->Disable();
         pBox->Update( (const SvxFontItem*)NULL );
@@ -2123,7 +2123,7 @@ void SvxFontNameToolBoxControl::StateChanged(
     {
         pBox->Enable();
 
-        if ( SFX_ITEM_DEFAULT == eState )
+        if ( SfxItemState::DEFAULT == eState )
         {
             const SvxFontItem* pFontItem = dynamic_cast< const SvxFontItem* >( pState );
 
@@ -2136,7 +2136,7 @@ void SvxFontNameToolBoxControl::StateChanged(
         pBox->SaveValue();
     }
 
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
 }
 
 Window* SvxFontNameToolBoxControl::CreateItemWindow( Window *pParent )
@@ -2259,12 +2259,12 @@ void SvxColorToolBoxControl::StateChanged(
 {
     ToolBox& rTbx = GetToolBox();
     sal_uInt16 nId = GetId();
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
+    rTbx.SetItemState( nId, ( SfxItemState::DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 
     if ( nSID == SID_ATTR_CHAR_COLOR_EXT || nSID == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
     {
-        if ( pState && SFX_ITEM_DONTCARE != eState )
+        if ( pState && SfxItemState::DONTCARE != eState )
         {
             const SfxBoolItem* pBool = static_cast< const SfxBoolItem* >( pState );
             rTbx.CheckItem( nId, pBool && pBool->GetValue() );
@@ -2368,8 +2368,8 @@ void SvxLineColorToolBoxControl::StateChanged(
 {
     ToolBox& rTbx = GetToolBox();
     sal_uInt16 nId = GetId();
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
+    rTbx.SetItemState( nId, ( SfxItemState::DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 void SvxLineColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
@@ -2415,8 +2415,8 @@ void SvxFrameToolBoxControl::StateChanged(
     sal_uInt16                  nId     = GetId();
     ToolBox&                rTbx    = GetToolBox();
 
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, (SFX_ITEM_DONTCARE == eState)
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
+    rTbx.SetItemState( nId, (SfxItemState::DONTCARE == eState)
                             ? TRISTATE_INDET
                             : TRISTATE_FALSE );
 }
@@ -2454,8 +2454,8 @@ void SvxFrameLineStyleToolBoxControl::StateChanged(
     sal_uInt16       nId    = GetId();
     ToolBox&     rTbx   = GetToolBox();
 
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, (SFX_ITEM_DONTCARE == eState)
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
+    rTbx.SetItemState( nId, (SfxItemState::DONTCARE == eState)
                                 ? TRISTATE_INDET
                                 : TRISTATE_FALSE );
 }
@@ -2474,14 +2474,14 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
 {
     SfxStringItem* pItem = PTR_CAST( SfxStringItem, pState );
     ToolBox& rBox = GetToolBox();
-    if ( pItem && eState != SFX_ITEM_DISABLED )
+    if ( pItem && eState != SfxItemState::DISABLED )
     {
         OUString aNewText( MnemonicGenerator::EraseAllMnemonicChars( pItem->GetValue() ) );
         rBox.SetQuickHelpText( GetId(), aNewText );
     }
-    if ( eState == SFX_ITEM_DISABLED )
+    if ( eState == SfxItemState::DISABLED )
         rBox.SetQuickHelpText( GetId(), aDefaultText );
-    rBox.EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
+    rBox.EnableItem( GetId(), eState != SfxItemState::DISABLED );
 }
 
 static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )

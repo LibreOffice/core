@@ -211,7 +211,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 {
     const SfxPoolItem* pAttr = 0;
 
-    if( SFX_ITEM_SET == rSet->GetItemState( SID_ATTR_GRID_OPTIONS , false,
+    if( SfxItemState::SET == rSet->GetItemState( SID_ATTR_GRID_OPTIONS , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*)pAttr;
@@ -237,7 +237,7 @@ void SvxGridTabPage::Reset( const SfxItemSet* rSet )
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pAttr = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , false,
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SvxGridItem* pGridAttr = (SvxGridItem*) pAttr;
@@ -248,7 +248,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
     // Metric Change if necessary (as TabPage is in the dialog, where the
     // metric can be set
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , false,
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
         const SfxUInt16Item* pItem = (SfxUInt16Item*) pAttr;
