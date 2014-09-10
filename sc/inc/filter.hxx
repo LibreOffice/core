@@ -129,7 +129,9 @@ class ScFormatFilter {
     SC_DLLPUBLIC static ScFormatFilterPlugin &Get();
 };
 
-FltError ScImportLotus123old( SvStream&, ScDocument*, rtl_TextEncoding eSrc );
+struct LotusContext;
+
+FltError ScImportLotus123old(LotusContext& rContext, SvStream&, ScDocument*, rtl_TextEncoding eSrc);
 
 #endif
 

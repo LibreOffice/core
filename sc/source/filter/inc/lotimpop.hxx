@@ -30,6 +30,7 @@
 
 class ScFormulaCell;
 class LotusFontBuffer;
+struct LotusContext;
 
 class ImportLotus : public ImportTyp
 {
@@ -76,7 +77,7 @@ private:
     inline void         Skip( const sal_uInt16 nNumBytes );
 
 public:
-                        ImportLotus( SvStream&, ScDocument*, rtl_TextEncoding eSrc );
+    ImportLotus(LotusContext& rContext, SvStream&, ScDocument*, rtl_TextEncoding eSrc);
 
     virtual             ~ImportLotus();
 

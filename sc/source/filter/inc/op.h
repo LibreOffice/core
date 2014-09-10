@@ -24,38 +24,39 @@
 
 // OP-Code-Funktionen
 class SvStream;
-void NI( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_BOF( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_EOF( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Integer( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Number( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Label( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Integer3( SvStream &aStream, sal_uInt16 nLaenge );  // WK3
-void OP_Number3( SvStream &aStream, sal_uInt16 nLaenge );   // WK3
-void OP_Formula( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Formula3( SvStream &aStream, sal_uInt16 nLaenge );  // WK3
-void OP_ColumnWidth( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_NamedRange( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_SymphNamedRange( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Footer( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Header( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Margins( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_HiddenCols( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Window1( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Blank( SvStream &aStream, sal_uInt16 nLaenge );
+struct LotusContext;
+void NI(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_BOF(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_EOF(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Integer(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Number(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Label(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Integer3(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );  // WK3
+void OP_Number3(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );   // WK3
+void OP_Formula(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Formula3(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );  // WK3
+void OP_ColumnWidth(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_NamedRange(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_SymphNamedRange(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Footer(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Header(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Margins(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_HiddenCols(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Window1(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Blank(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
 // Lotus 123 bits.
-void OP_BOF123( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_EOF123( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Number123( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Label123( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_Formula123( SvStream &aStream, sal_uInt16 nLaenge );
-void OP_IEEENumber123(SvStream& r, sal_uInt16 n);
-void OP_Note123(SvStream &aStream, sal_uInt16 nLaenge);
-void OP_CreatePattern123(SvStream &aStream, sal_uInt16 nLaenge);
-void OP_SheetName123( SvStream &rStream, sal_uInt16 nLength );
-void OP_HorAlign123(sal_uInt8 nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
-void OP_VerAlign123(sal_uInt8 nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
-void OP_ApplyPatternArea123(SvStream& r);
+void OP_BOF123(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_EOF123(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Number123(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Label123(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_Formula123(LotusContext &rContext, SvStream &aStream, sal_uInt16 nLaenge );
+void OP_IEEENumber123(LotusContext &rContext,SvStream& r, sal_uInt16 n);
+void OP_Note123(LotusContext &rContext,SvStream &aStream, sal_uInt16 nLaenge);
+void OP_CreatePattern123(LotusContext &rContext,SvStream &aStream, sal_uInt16 nLaenge);
+void OP_SheetName123(LotusContext &rContext, SvStream &rStream, sal_uInt16 nLength );
+void OP_HorAlign123(LotusContext &rContext,sal_uInt8 nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
+void OP_VerAlign123(LotusContext &rContext,sal_uInt8 nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
+void OP_ApplyPatternArea123(LotusContext &rContext,SvStream& r);
 
 #endif
 

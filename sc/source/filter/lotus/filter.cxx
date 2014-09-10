@@ -34,52 +34,25 @@
 #include "scmem.h"
 #include "decl.h"
 #include "tool.h"
-
 #include "fprogressbar.hxx"
-
-#include "op.h"
-
-// Konstanten
-const sal_uInt16        nBOF = 0x0000;
-
-// externe Variablen
-extern WKTYP        eTyp;   // Typ der gerade in bearbeitung befindlichen Datei
-WKTYP               eTyp;
-
-extern bool         bEOF;           // zeigt Ende der Datei
-bool                bEOF;
-
-extern rtl_TextEncoding eCharVon;
-rtl_TextEncoding        eCharVon;
-
-extern ScDocument*  pDoc;           // Aufhaenger zum Dokumentzugriff
-ScDocument*         pDoc;
-
-extern OPCODE_FKT   pOpFkt[ FKT_LIMIT ];
-                                    // -> optab.cxx, Tabelle moeglicher Opcodes
-extern OPCODE_FKT   pOpFkt123[ FKT_LIMIT123 ];
-                                    // -> optab.cxx, Table of possible Opcodes
-
-LOTUS_ROOT*         pLotusRoot = NULL;
-
-std::map<sal_uInt16, ScPatternAttr> aLotusPatternPool;
+#include "lotfilter.hxx"
 
 static FltError
-generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
-                  ScfStreamProgressBar& aPrgrsBar, WKTYP eType )
+generate_Opcodes(LotusContext &rContext, SvStream& aStream,
+                  ScfStreamProgressBar& aPrgrsBar)
 {
     OPCODE_FKT *pOps;
     int         nOps;
 
-    switch(eType)
+    switch (rContext.eTyp)
     {
         case eWK_1:
         case eWK_2:
-        pOps = pOpFkt;
+        pOps = rContext.pOpFkt;
         nOps = FKT_LIMIT;
         break;
         case eWK123:
-        pOps = pOpFkt123;
+        pOps = rContext.pOpFkt123;
         nOps = FKT_LIMIT123;
         break;
         case eWK3:      return eERR_NI;
@@ -91,62 +64,58 @@ generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
     aStream.Seek( STREAM_SEEK_TO_END );
     sal_Size nStrmSize = aStream.Tell();
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
-    while( !bEOF && !aStream.IsEof() && (aStream.Tell() < nStrmSize) )
+    while( !rContext.bEOF && !aStream.IsEof() && (aStream.Tell() < nStrmSize) )
     {
         sal_uInt16 nOpcode, nLength;
 
         aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
         aPrgrsBar.Progress();
         if( nOpcode == LOTUS_EOF )
-        bEOF = true;
-
+            rContext.bEOF = true;
         else if( nOpcode == LOTUS_FILEPASSWD )
-        return eERR_FILEPASSWD;
-
+            return eERR_FILEPASSWD;
         else if( nOpcode < nOps )
-        pOps[ nOpcode ] ( aStream, nLength );
-
-        else if( eType == eWK123 &&
-             nOpcode == LOTUS_PATTERN )
-            {
-        // This is really ugly - needs re-factoring ...
-        aStream.SeekRel(nLength);
-        aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
-        if ( nOpcode == 0x29a)
+            pOps[ nOpcode ] (rContext, aStream, nLength);
+        else if (rContext.eTyp == eWK123 && nOpcode == LOTUS_PATTERN)
         {
+            // This is really ugly - needs re-factoring ...
             aStream.SeekRel(nLength);
             aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
-            if ( nOpcode == 0x804 )
+            if ( nOpcode == 0x29a)
             {
-            aStream.SeekRel(nLength);
-            OP_ApplyPatternArea123(aStream);
+                aStream.SeekRel(nLength);
+                aStream.ReadUInt16( nOpcode ).ReadUInt16( nLength );
+                if ( nOpcode == 0x804 )
+                {
+                    aStream.SeekRel(nLength);
+                    OP_ApplyPatternArea123(rContext, aStream);
+                }
+                else
+                    aStream.SeekRel(nLength);
             }
             else
-            aStream.SeekRel(nLength);
+                aStream.SeekRel(nLength);
         }
         else
-            aStream.SeekRel(nLength);
-        }
-        else
-        aStream.SeekRel( nLength );
+            aStream.SeekRel( nLength );
     }
 
-    MemDelete();
+    MemDelete(rContext);
 
-    rDoc.CalcAfterLoad();
+    rContext.pDoc->CalcAfterLoad();
 
     return eERR_OK;
 }
 
-WKTYP ScanVersion( SvStream& aStream )
+WKTYP ScanVersion(LotusContext &rContext, SvStream& aStream)
 {
     // PREC:    pWKDatei:   Zeiger auf offene Datei
     // POST:    return:     Typ der Datei
-    sal_uInt16          nOpcode, nVersNr, nRecLen;
+    sal_uInt16 nOpcode(0), nVersNr(0), nRecLen(0);
 
     // erstes Byte muss wegen BOF zwingend 0 sein!
     aStream.ReadUInt16( nOpcode );
-    if( nOpcode != nBOF )
+    if (nOpcode != rContext.nBOF)
         return eWK_UNKNOWN;
 
     aStream.ReadUInt16( nRecLen ).ReadUInt16( nVersNr );
@@ -193,19 +162,17 @@ WKTYP ScanVersion( SvStream& aStream )
     return eWK_UNKNOWN;
 }
 
-FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, rtl_TextEncoding eSrc )
+FltError ScImportLotus123old(LotusContext& rContext, SvStream& aStream, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
     aStream.Seek( 0UL );
 
     // Zeiger auf Dokument global machen
-    pDoc = pDocument;
-
-    bEOF = false;
-
-    eCharVon = eSrc;
+    rContext.pDoc = pDocument;
+    rContext.bEOF = false;
+    rContext.eCharVon = eSrc;
 
     // Speicher besorgen
-    if( !MemNew() )
+    if( !MemNew(rContext) )
         return eERR_NOMEM;
 
     InitPage(); // Seitenformat initialisieren (nur Tab 0!)
@@ -214,11 +181,10 @@ FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, rtl_Text
     ScfStreamProgressBar aPrgrsBar( aStream, pDocument->GetDocumentShell() );
 
     // Datei-Typ ermitteln
-    eTyp = ScanVersion( aStream );
+    rContext.eTyp = ScanVersion(rContext, aStream);
+    rContext.aLotusPatternPool.clear();
 
-    aLotusPatternPool.clear();
-
-    return generate_Opcodes( aStream, *pDoc, aPrgrsBar, eTyp );
+    return generate_Opcodes(rContext, aStream, aPrgrsBar);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

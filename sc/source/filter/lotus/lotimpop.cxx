@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "lotfilter.hxx"
 #include "lotimpop.hxx"
 #include <osl/mutex.hxx>
 
@@ -41,12 +42,12 @@
 LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
     :
         pDoc( pDocP),
-        pRangeNames( new LotusRangeList),
+        pRangeNames( new LotusRangeList(this)),
         pScRangeName( pDocP->GetRangeName()),
         eCharsetQ( eQ),
         eFirstType( Lotus_X),
         eActType( Lotus_X),
-        pRngNmBffWK3( new RangeNameBufferWK3),
+        pRngNmBffWK3( new RangeNameBufferWK3(this)),
         pFontBuff( new LotusFontBuffer),
         pAttrTable( new LotAttrTable(this))
 {
@@ -62,23 +63,24 @@ LOTUS_ROOT::~LOTUS_ROOT()
 
 static osl::Mutex aLotImpSemaphore;
 
-ImportLotus::ImportLotus( SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eQ )
+ImportLotus::ImportLotus(LotusContext &rContext, SvStream& aStream, ScDocument* pDoc, rtl_TextEncoding eQ)
     : ImportTyp(pDoc, eQ)
     , pIn(&aStream)
-    , aConv(*pIn, pDoc->GetSharedStringPool(), eQ, false)
+    , aConv(rContext, *pIn, pDoc->GetSharedStringPool(), eQ, false)
     , nTab(0)
     , nExtTab(0)
 {
     // good point to start locking of import lotus
     aLotImpSemaphore.acquire();
 
-    pLotusRoot = new LOTUS_ROOT(pDoc, eQ);
+    rContext.pLotusRoot = new LOTUS_ROOT(pDoc, eQ);
 }
 
 ImportLotus::~ImportLotus()
 {
-    delete pLotusRoot;
-    pLotusRoot = NULL;
+    LotusContext &rContext = aConv.getContext();
+    delete rContext.pLotusRoot;
+    rContext.pLotusRoot = NULL;
 
     // no need 4 pLotusRoot anymore
     aLotImpSemaphore.release();
@@ -91,7 +93,8 @@ void ImportLotus::Bof( void )
 
     Read( nFileCode );
     Read( nFileSub );
-    Read( pLotusRoot->aActRange );
+    LotusContext &rContext = aConv.getContext();
+    Read( rContext.pLotusRoot->aActRange );
     Read( nSaveCnt );
     Read( nMajorId );
     Read( nMinorId );
@@ -102,11 +105,11 @@ void ImportLotus::Bof( void )
     {
         if( nFileCode == 0x1000 )
         {// <= WK3
-            pLotusRoot->eFirstType = pLotusRoot->eActType = Lotus_WK3;
+            rContext.pLotusRoot->eFirstType = rContext.pLotusRoot->eActType = Lotus_WK3;
         }
         else if( nFileCode == 0x1002 )
         {// WK4
-            pLotusRoot->eFirstType = pLotusRoot->eActType = Lotus_WK4;
+            rContext.pLotusRoot->eFirstType = rContext.pLotusRoot->eActType = Lotus_WK4;
         }
     }
 }
@@ -192,7 +195,8 @@ void ImportLotus::Userrange( void )
 
     Read( aScRange );
 
-    pLotusRoot->pRngNmBffWK3->Add( aName, aScRange );
+    LotusContext &rContext = aConv.getContext();
+    rContext.pLotusRoot->pRngNmBffWK3->Add( aName, aScRange );
 }
 
 void ImportLotus::Errcell( void )
@@ -350,26 +354,29 @@ void ImportLotus::Font_Face( void )
 
     Read( aName );
 
-    pLotusRoot->pFontBuff->SetName( nNum, aName );
+    LotusContext &rContext = aConv.getContext();
+    rContext.pLotusRoot->pFontBuff->SetName( nNum, aName );
 }
 
 void ImportLotus::Font_Type( void )
 {
+    LotusContext &rContext = aConv.getContext();
     for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
     {
         sal_uInt16 nType;
         Read( nType );
-        pLotusRoot->pFontBuff->SetType( nCnt, nType );
+        rContext.pLotusRoot->pFontBuff->SetType( nCnt, nType );
     }
 }
 
 void ImportLotus::Font_Ysize( void )
 {
+    LotusContext &rContext = aConv.getContext();
     for( sal_uInt16 nCnt = 0 ; nCnt < LotusFontBuffer::nSize ; nCnt++ )
     {
         sal_uInt16 nSize;
         Read( nSize );
-        pLotusRoot->pFontBuff->SetHeight( nCnt, nSize );
+        rContext.pLotusRoot->pFontBuff->SetHeight( nCnt, nSize );
     }
 }
 
@@ -396,13 +403,14 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
     if( nHeight )
         pD->SetRowHeight( static_cast<SCROW> (nRow), static_cast<SCTAB> (nExtTab), nHeight );
 
+    LotusContext &rContext = aConv.getContext();
     while( nCntDwn )
-        {
+    {
         Read( aAttr );
         Read( nRepeats );
 
         if( aAttr.HasStyles() )
-            pLotusRoot->pAttrTable->SetAttr(
+            rContext.pLotusRoot->pAttrTable->SetAttr(
                 nColCnt, static_cast<SCCOL> ( nColCnt + nRepeats ), static_cast<SCROW> (nRow), aAttr );
 
         // hier und NICHT in class LotAttrTable, weil nur Attributiert wird,
@@ -438,7 +446,7 @@ void ImportLotus::_Row( const sal_uInt16 nRecLen )
         nColCnt++;
 
         nCntDwn--;
-        }
+    }
 
     if( bCenter )
         // evtl. alte Center bemachen

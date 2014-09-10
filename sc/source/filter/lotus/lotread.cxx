@@ -21,6 +21,7 @@
 
 #include "scerrors.hxx"
 #include "root.hxx"
+#include "lotfilter.hxx"
 #include "lotimpop.hxx"
 #include "lotattr.hxx"
 #include "fprogressbar.hxx"
@@ -55,12 +56,12 @@ FltError ImportLotus::Read()
 
     // Progressbar starten
     ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
-
+    LotusContext &rContext = aConv.getContext();
     while( eAkt != S_END )
     {
         pIn->ReadUInt16( nOp ).ReadUInt16( nRecLen );
 
-		if( pIn->IsEof() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4 )
+        if( pIn->IsEof() || nNextRec > SAL_MAX_UINT32 - nRecLen - 4 )
             eAkt = S_END;
 
         nNextRec += nRecLen + 4;
@@ -79,7 +80,7 @@ FltError ImportLotus::Read()
                 if( nRecLen > 2 )
                 {
                     Bof();
-                    switch( pLotusRoot->eFirstType )
+                    switch (rContext.pLotusRoot->eFirstType)
                     {
                         case Lotus_WK1: eAkt = S_WK1; break;
                         case Lotus_WK3: eAkt = S_WK3; break;
@@ -225,7 +226,7 @@ FltError ImportLotus::Read()
     return eRet;
 }
 
-FltError ImportLotus::Read( SvStream& rIn )
+FltError ImportLotus::Read(SvStream& rIn)
 {
     pIn = &rIn;
 
@@ -242,7 +243,7 @@ FltError ImportLotus::Read( SvStream& rIn )
 
     // Progressbar starten
     ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
-
+    LotusContext &rContext = aConv.getContext();
     while( bRead )
     {
         pIn->ReadUInt16( nOp ).ReadUInt16( nRecLen );
@@ -284,7 +285,7 @@ FltError ImportLotus::Read( SvStream& rIn )
 
                 case 195:
                     if( nExtTab >= 0 )
-                        pLotusRoot->pAttrTable->Apply( ( SCTAB ) nExtTab );
+                        rContext.pLotusRoot->pAttrTable->Apply(rContext.pLotusRoot, (SCTAB)nExtTab);
                     nExtTab++;
                     break;
                 case 197:
@@ -299,7 +300,7 @@ FltError ImportLotus::Read( SvStream& rIn )
         }
     }
 
-    pLotusRoot->pAttrTable->Apply( ( SCTAB ) nExtTab );
+    rContext.pLotusRoot->pAttrTable->Apply(rContext.pLotusRoot, (SCTAB)nExtTab);
 
     return eRet;
 }

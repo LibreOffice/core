@@ -172,12 +172,13 @@ private:
                             }
     };
 
-    ScTokenArray*           pScTokenArray;
-    sal_uInt16                  nIntCount;
+    LOTUS_ROOT*        m_pLotRoot;
+    ScTokenArray*      pScTokenArray;
+    sal_uInt16         nIntCount;
     std::vector<Entry> maEntries;
 
 public:
-                            RangeNameBufferWK3( void );
+    RangeNameBufferWK3(LOTUS_ROOT* pLotRoot);
     virtual                 ~RangeNameBufferWK3();
     void                    Add( const OUString& rName, const ScComplexRefData& rCRD );
     inline void             Add( const OUString& rName, const ScRange& aScRange );

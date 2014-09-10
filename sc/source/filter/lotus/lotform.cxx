@@ -20,6 +20,7 @@
 #include "decl.h"
 #include "lotform.hxx"
 #include "compiler.hxx"
+#include "lotfilter.hxx"
 #include "lotrange.hxx"
 #include "namebuff.hxx"
 #include "root.hxx"
@@ -29,8 +30,6 @@
 #include <math.h>
 #include <comphelper/string.hxx>
 #include <boost/scoped_array.hpp>
-
-extern WKTYP                eTyp;
 
 static const sal_Char*      GetAddInName( const sal_uInt8 nIndex );
 
@@ -217,7 +216,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
     {
         rSRD.SetRowRel(true);
         // vorzeichenrichtige Erweiterung
-        switch( eTyp )
+        switch (m_rContext.eTyp)
         {
             // 5432 1098 7654 3210
             // 8421 8421 8421 8421
@@ -243,7 +242,7 @@ void LotusToSc::LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefDa
     else
     {
         rSRD.SetRowRel(false);
-        switch( eTyp )
+        switch (m_rContext.eTyp)
         {
             // 5432 1098 7654 3210
             // 8421 8421 8421 8421
@@ -320,8 +319,10 @@ void LotusToSc::Reset( const ScAddress& rEingPos )
     n0Token = aPool.Store( 0.0 );
 }
 
-LotusToSc::LotusToSc( SvStream &rStream, svl::SharedStringPool& rSPool, rtl_TextEncoding e, bool b ) :
-    LotusConverterBase(rStream, rSPool, 128)
+LotusToSc::LotusToSc(LotusContext &rContext, SvStream &rStream, svl::SharedStringPool& rSPool,
+    rtl_TextEncoding e, bool b)
+    : LotusConverterBase(rStream, rSPool, 128)
+    , m_rContext(rContext)
 {
     eSrcChar = e;
     bWK3 = false;
@@ -343,7 +344,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
     TokenId             nMerk0;
     DefTokenId          eOc;
     const sal_Char*     pExtName = 0;
-    RangeNameBufferWK3& rRangeNameBufferWK3 = *pLotusRoot->pRngNmBffWK3;
+    RangeNameBufferWK3& rRangeNameBufferWK3 = *m_rContext.pLotusRoot->pRngNmBffWK3;
 
     ScComplexRefData        aCRD;
     aCRD.InitFlags();
@@ -352,7 +353,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, sal_Int32& rRest,
     LR_ID               nId;
     TokenId             nNewId;
 
-    LotusRangeList&     rRangeList = *pLotusRoot->pRangeNames;
+    LotusRangeList&     rRangeList = *m_rContext.pLotusRoot->pRangeNames;
 
     FuncType1*          pIndexToType;
     FuncType2*          pIndexToToken;

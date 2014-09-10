@@ -110,7 +110,7 @@ class LotAttrCol
 public:
     void SetAttr (const SCROW nRow, const ScPatternAttr&);
 
-    void Apply (const SCCOL nCol, const SCTAB nTab );
+    void Apply(LOTUS_ROOT* pLotRoot, const SCCOL nCol, const SCTAB nTab);
 private:
 
     struct ENTRY
@@ -130,7 +130,7 @@ public:
 
     void SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const SCROW nRow, const LotAttrWK3& );
 
-    void Apply( const SCTAB nTabNum );
+    void Apply(LOTUS_ROOT* pLotRoot, const SCTAB nTabNum);
 
 private:
 

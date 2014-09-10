@@ -47,8 +47,8 @@ LotAttrCache::ENTRY::~ENTRY ()
     delete pPattAttr;
 }
 
-LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot):
-    mpLotusRoot(pLotRoot)
+LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)
+    : mpLotusRoot(pLotRoot)
 {
     pDocPool = mpLotusRoot->pDoc->GetPool();
 
@@ -218,7 +218,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
     }
 }
 
-void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum )
+void LotAttrCol::Apply(LOTUS_ROOT* pLotusRoot, const SCCOL nColNum, const SCTAB nTabNum)
 {
     ScDocument*     pDoc = pLotusRoot->pDoc;
 
@@ -248,11 +248,11 @@ void LotAttrTable::SetAttr( const SCCOL nColFirst, const SCCOL nColLast, const S
         pCols[ nColCnt ].SetAttr( nRow, rPattAttr );
 }
 
-void LotAttrTable::Apply( const SCTAB nTabNum )
+void LotAttrTable::Apply(LOTUS_ROOT* pLotusRoot, const SCTAB nTabNum)
 {
     SCCOL nColCnt;
     for( nColCnt = 0 ; nColCnt <= MAXCOL ; nColCnt++ )
-        pCols[ nColCnt ].Apply( nColCnt, nTabNum );     // macht auch gleich ein Clear() am Ende
+        pCols[ nColCnt ].Apply(pLotusRoot, nColCnt, nTabNum);     // macht auch gleich ein Clear() am Ende
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

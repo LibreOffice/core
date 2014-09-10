@@ -56,9 +56,12 @@ enum FUNC_TYPE
     // fuer 'Problemfaelle' beim Import
 };
 
+struct LotusContext;
+
 class LotusToSc : public LotusConverterBase
 {
 private:
+    LotusContext&       m_rContext;
     rtl_TextEncoding    eSrcChar;
     TokenId             nAddToken;  // ')+1.0'
     TokenId             nSubToken;  // ~
@@ -69,8 +72,7 @@ private:
     static FUNC_TYPE    IndexToTypeWK123( sal_uInt8 );
     static DefTokenId   IndexToTokenWK123( sal_uInt8 );
     void                DoFunc( DefTokenId eOc, sal_uInt8 nAnz, const sal_Char* pExtName );
-    void                LotusRelToScRel( sal_uInt16 nCol, sal_uInt16 nRow,
-                            ScSingleRefData& rSRD );
+    void                LotusRelToScRel(sal_uInt16 nCol, sal_uInt16 nRow, ScSingleRefData& rSRD);
     bool                bWK3;       // alternative Codeumsetzung statt fuer < WK1
     bool                bWK123;     // alternative for 123
 
@@ -85,13 +87,14 @@ private:
     void                NegToken( TokenId& rParam );
                         // ACHTUNG: wie ~, nur wird '-(<rParam>)' gebildet
 public:
-    LotusToSc( SvStream& aStr, svl::SharedStringPool& rSPool, rtl_TextEncoding eSrc, bool b );
+    LotusToSc(LotusContext &rContext, SvStream& aStr, svl::SharedStringPool& rSPool, rtl_TextEncoding eSrc, bool b);
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, sal_Int32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) SAL_OVERRIDE;
 
     void                Reset( const ScAddress& rEingPos );
     inline void         SetWK3( void );
+    LotusContext&       getContext() { return m_rContext; }
 
 private:
     using               LotusConverterBase::Reset;

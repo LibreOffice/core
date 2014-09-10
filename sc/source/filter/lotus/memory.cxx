@@ -24,43 +24,34 @@
 #include "scmem.h"
 #include <svx/algitem.hxx>
 #include <editeng/justifyitem.hxx>
-
 #include "attrib.hxx"
-
+#include "lotfilter.hxx"
 #include "tool.h"
 
-extern ScDocument*      pDoc;
-
-extern FormCache*       pValueFormCache;            // -> tool.cxx
-
-extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter,
-                            *pAttrRepeat, *pAttrStandard;   // -> tool.cxx, fuer GetFormAttr()
-extern ScProtectionAttr*    pAttrUnprot;   // -> tool.cxx, fuer PutFormString()
-
-bool MemNew( void )
+bool MemNew(LotusContext &rContext)
 {
-    pValueFormCache = new FormCache( pDoc );
+    rContext.pValueFormCache = new FormCache(rContext.pDoc);
 
     // fuer tool.cxx::PutFormString()
-    pAttrUnprot = new ScProtectionAttr( true );
-    pAttrRight = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY );
-    pAttrLeft = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY );
-    pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
-    pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT, ATTR_HOR_JUSTIFY );
-    pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
+    rContext.pAttrUnprot = new ScProtectionAttr( true );
+    rContext.pAttrRight = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_RIGHT, ATTR_HOR_JUSTIFY );
+    rContext.pAttrLeft = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_LEFT, ATTR_HOR_JUSTIFY );
+    rContext.pAttrCenter = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY );
+    rContext.pAttrRepeat = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_REPEAT, ATTR_HOR_JUSTIFY );
+    rContext.pAttrStandard = new SvxHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
 
     return true;
 }
 
-void MemDelete( void )
+void MemDelete(LotusContext &rContext)
 {
-    delete pValueFormCache;
-    delete pAttrRight;
-    delete pAttrLeft;
-    delete pAttrCenter;
-    delete pAttrRepeat;
-    delete pAttrStandard;
-    delete pAttrUnprot;
+    delete rContext.pValueFormCache;
+    delete rContext.pAttrRight;
+    delete rContext.pAttrLeft;
+    delete rContext.pAttrCenter;
+    delete rContext.pAttrRepeat;
+    delete rContext.pAttrStandard;
+    delete rContext.pAttrUnprot;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

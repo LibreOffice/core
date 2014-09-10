@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "lotfilter.hxx"
 #include "lotimpop.hxx"
 
 #include <sfx2/docfile.hxx>
@@ -29,7 +30,7 @@
 
 FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, rtl_TextEncoding eSrc )
 {
-        ScFilterOptions aFilterOpt;
+    ScFilterOptions aFilterOpt;
     bool bWithWK3 = aFilterOpt.GetWK3Flag();
 
     SvStream*           pStream = rMedium.GetInStream();
@@ -43,7 +44,9 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
 
     pStream->SetBufferSize( 32768 );
 
-    ImportLotus         aLotusImport( *pStream, pDocument, eSrc );
+    LotusContext aContext;
+
+    ImportLotus aLotusImport(aContext, *pStream, pDocument, eSrc);
 
     if( bWithWK3 )
         eRet = aLotusImport.Read();
@@ -57,7 +60,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
 
         pStream->SetBufferSize( 32768 );
 
-        eRet = ScImportLotus123old( *pStream, pDocument, eSrc );
+        eRet = ScImportLotus123old(aContext, *pStream, pDocument, eSrc);
 
         pStream->SetBufferSize( 0 );
 
@@ -67,8 +70,9 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
     if( eRet != eERR_OK )
         return eRet;
 
-    if( pLotusRoot->eFirstType == Lotus_WK3 )
-    {// versuchen *.FM3-File zu laden
+    if (aContext.pLotusRoot->eFirstType == Lotus_WK3)
+    {
+        // versuchen *.FM3-File zu laden
         INetURLObject aURL( rMedium.GetURLObject() );
         aURL.setExtension( "FM3" );
         SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ );

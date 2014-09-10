@@ -21,11 +21,12 @@
 #define INCLUDED_SC_SOURCE_FILTER_INC_SCMEM_H
 
 #include <sal/config.h>
-
 #include <sal/types.h>
 
-bool MemNew( void );
-void MemDelete( void );
+struct LotusContext;
+
+bool MemNew(LotusContext& rContext);
+void MemDelete(LotusContext& rContext);
 
 #endif
 

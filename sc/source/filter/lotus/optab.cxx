@@ -19,9 +19,10 @@
 
 #include "op.h"
 #include "optab.h"
+#include "lotfilter.hxx"
 
 // Bearbeitungsfunktion sal_Char *X( sal_Char * )
-OPCODE_FKT pOpFkt[ FKT_LIMIT ] =
+OPCODE_FKT LotusContext::pOpFkt[ FKT_LIMIT ] =
 {                       //  Code
     OP_BOF,             //    0
     OP_EOF,             //    1
@@ -126,7 +127,7 @@ OPCODE_FKT pOpFkt[ FKT_LIMIT ] =
     OP_HiddenCols,      //  100
 };
 
-OPCODE_FKT pOpFkt123[ FKT_LIMIT123 ] =
+OPCODE_FKT LotusContext::pOpFkt123[ FKT_LIMIT123 ] =
 {                       //  Code
     OP_BOF123,              //    0
     OP_EOF123,              //    1

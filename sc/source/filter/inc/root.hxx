@@ -102,8 +102,6 @@ struct LOTUS_ROOT
                         ~LOTUS_ROOT();
 };
 
-extern LOTUS_ROOT*      pLotusRoot; // -> Inkarn. in filter.cxx
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -33,31 +33,11 @@
 #include "ftools.hxx"
 #include "stringutil.hxx"
 #include "tokenarray.hxx"
+#include "lotfilter.hxx"
 
 #include <math.h>
 
-// External variable
-extern WKTYP                eTyp;           // -> filter.cxx, aktueller Dateityp
-extern ScDocument*          pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
-
-// Global variable
-sal_uInt8                       nDefaultFormat; // -> op.cpp, Standard-Zellenformat
-
-extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
-extern ScProtectionAttr*    pAttrUnprot;
-extern SfxUInt32Item**      pAttrValForms;
-
-SvxHorJustifyItem           *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
-                                                    // -> in memory.cxx initialisiert
-ScProtectionAttr*           pAttrUnprot;            // ->  " memory.cxx    "
-
-extern FormCache*           pValueFormCache;        // -> in memory.cxx initialisiert
-FormCache*                  pValueFormCache;
-
-SCCOL                       LotusRangeList::nEingCol;
-SCROW                       LotusRangeList::nEingRow;
-
-void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
+void PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString)
 {
     // Label-Format-Auswertung
     OSL_ENSURE( pString != NULL, "PutFormString(): pString == NULL" );
@@ -72,47 +52,47 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
     switch( cForm )
     {
         case '"':   // rechtsbuendig
-            pJustify = pAttrRight;
+            pJustify = rContext.pAttrRight;
             pString++;
             break;
         case '\'':  // linksbuendig
-            pJustify = pAttrLeft;
+            pJustify = rContext.pAttrLeft;
             pString++;
             break;
         case '^':   // zentriert
-            pJustify = pAttrCenter;
+            pJustify = rContext.pAttrCenter;
             pString++;
             break;
         case '|':   // printer command
             pString = NULL;
             break;
         case '\\':  // Wiederholung
-            pJustify = pAttrRepeat;
+            pJustify = rContext.pAttrRepeat;
             pString++;
             break;
         default:    // kenn' ich nicht!
-            pJustify = pAttrStandard;
+            pJustify = rContext.pAttrStandard;
     }
 
     if (!pString)
         return;
 
-    pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
+    rContext.pDoc->ApplyAttr( nCol, nRow, nTab, *pJustify );
     ScSetStringParam aParam;
     aParam.setTextInput();
-    pDoc->SetString(ScAddress(nCol,nRow,nTab), OUString(pString, strlen(pString), pLotusRoot->eCharsetQ), &aParam);
+    rContext.pDoc->SetString(ScAddress(nCol,nRow,nTab), OUString(pString, strlen(pString), rContext.pLotusRoot->eCharsetQ), &aParam);
 }
 
-void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt )
+void SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt)
 {
     //  PREC:   nSt = Standard-Dezimalstellenanzahl
-    pDoc->ApplyAttr( nCol, nRow, nTab, *( pValueFormCache->GetAttr( nFormat, nSt ) ) );
+    rContext.pDoc->ApplyAttr(nCol, nRow, nTab, *(rContext.pValueFormCache->GetAttr(nFormat, nSt)));
 
     ScProtectionAttr aAttr;
 
     aAttr.SetProtection( nFormat & 0x80 );
 
-    pDoc->ApplyAttr( nCol, nRow, nTab, aAttr );
+    rContext.pDoc->ApplyAttr( nCol, nRow, nTab, aAttr );
 }
 
 void InitPage( void )
@@ -391,7 +371,8 @@ LotusRange::LotusRange( const LotusRange& rCpy )
     Copy( rCpy );
 }
 
-LotusRangeList::LotusRangeList( void )
+LotusRangeList::LotusRangeList(LOTUS_ROOT* pLotRoot)
+    : m_pLotRoot(pLotRoot)
 {
     aComplRef.InitFlags();
 
@@ -410,6 +391,9 @@ LotusRangeList::LotusRangeList( void )
     pSingRef->SetRowRel( false );
     pSingRef->SetFlag3D( false );
 }
+
+SCCOL LotusRangeList::nEingCol;
+SCROW LotusRangeList::nEingRow;
 
 LotusRangeList::~LotusRangeList ()
 {
@@ -453,16 +437,17 @@ void LotusRangeList::Append( LotusRange* pLR, const OUString& rName )
     }
 
     ScRangeData*    pData = new ScRangeData(
-        pLotusRoot->pDoc, rName, aTokArray );
+        m_pLotRoot->pDoc, rName, aTokArray );
 
-    pLotusRoot->pScRangeName->insert( pData );
+    m_pLotRoot->pScRangeName->insert( pData );
 
     pLR->SetId( nIdCnt );
 
     nIdCnt++;
 }
 
-RangeNameBufferWK3::RangeNameBufferWK3( void )
+RangeNameBufferWK3::RangeNameBufferWK3(LOTUS_ROOT* pLotRoot)
+    : m_pLotRoot(pLotRoot)
 {
     pScTokenArray = new ScTokenArray;
     nIntCount = 1;
@@ -496,14 +481,14 @@ void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& 
         aInsert.bSingleRef = false;
     }
 
-    ScRangeData*        pData = new ScRangeData( pLotusRoot->pDoc, aScName, *pScTokenArray );
+    ScRangeData*        pData = new ScRangeData( m_pLotRoot->pDoc, aScName, *pScTokenArray );
 
     aInsert.nRelInd = nIntCount;
     pData->SetIndex( nIntCount );
     nIntCount++;
 
     maEntries.push_back( aInsert );
-    pLotusRoot->pScRangeName->insert( pData );
+    m_pLotRoot->pScRangeName->insert( pData );
 }
 
 bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
@@ -557,13 +542,13 @@ bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
                     pScTokenArray->AddDoubleReference( itr->aScComplexRefDataRel );
                 }
 
-                ScRangeData*    pData = new ScRangeData( pLotusRoot->pDoc, itr->aScAbsName, *pScTokenArray );
+                ScRangeData*    pData = new ScRangeData( m_pLotRoot->pDoc, itr->aScAbsName, *pScTokenArray );
 
                 rIndex = itr->nAbsInd = nIntCount;
                 pData->SetIndex( rIndex );
                 nIntCount++;
 
-                pLotusRoot->pScRangeName->insert( pData );
+                m_pLotRoot->pScRangeName->insert( pData );
             }
 
             return true;

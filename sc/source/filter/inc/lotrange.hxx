@@ -94,15 +94,16 @@ inline bool LotusRange::IsSingle( void ) const
 class LotusRangeList
 {
 private:
+    LOTUS_ROOT*         m_pLotRoot;
     LR_ID               nIdCnt;
-    ScComplexRefData        aComplRef;
+    ScComplexRefData    aComplRef;
     static SCCOL        nEingCol;
     static SCROW        nEingRow;
     std::vector<LotusRange*> maRanges;
 
 public:
-                        LotusRangeList( void );
-                        ~LotusRangeList( void );
+    LotusRangeList(LOTUS_ROOT* pLotRoot);
+    ~LotusRangeList( void );
     inline sal_uInt16       GetIndex( SCCOL nCol, SCROW nRow );
     inline sal_uInt16       GetIndex( SCCOL nColS, SCROW nRowS, SCCOL nColE, SCROW nRowE );
     sal_uInt16              GetIndex( const LotusRange& );

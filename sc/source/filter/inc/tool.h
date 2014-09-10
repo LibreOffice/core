@@ -27,9 +27,11 @@
 const sal_uInt8 nDezStd = 0;        // Dezimalstellen fuer Standard-Zellen
 const sal_uInt8 nDezFloat = 2;  //        "         "  Float-Zellen
 
-void        PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char *pString );
+struct LotusContext;
 
-void        SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt );
+void        PutFormString(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char *pString);
+
+void        SetFormat(LotusContext& rContext, SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt);
 
 void        InitPage( void );
 
