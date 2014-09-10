@@ -20,12 +20,9 @@
 #ifndef INCLUDED_HELPCOMPILER_INC_HELPCOMPILER_HXX
 #define INCLUDED_HELPCOMPILER_INC_HELPCOMPILER_HXX
 
-#include <config_global.h>
+#include <sal/config.h>
 
 #include <string>
-#if !HAVE_CXX11
-#define BOOST_NO_0X_HDR_TYPEINDEX
-#endif
 #include <boost/unordered_map.hpp>
 #include <vector>
 #include <list>
