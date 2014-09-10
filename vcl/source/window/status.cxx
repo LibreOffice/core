@@ -138,7 +138,6 @@ void StatusBar::ImplInit( Window* pParent, WinBits nStyle )
 
     ImplInitSettings( true, true, true );
     SetLineColor();
-
     SetOutputSizePixel( CalcWindowSizePixel() );
 }
 
@@ -165,7 +164,6 @@ void StatusBar::ImplInitSettings( bool bFont,
                                   bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
     if ( bFont )
     {
         Font aFont = rStyleSettings.GetToolFont();
@@ -173,7 +171,6 @@ void StatusBar::ImplInitSettings( bool bFont,
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );
     }
-
     if ( bForeground || bFont )
     {
         Color aColor;
@@ -212,6 +209,16 @@ void StatusBar::ImplInitSettings( bool bFont,
             EnableChildTransparentMode( true );
         }
     }
+       const BitmapEx& rPersonaBitmap = rStyleSettings.GetPersonaFooter();
+        if(!rPersonaBitmap.IsEmpty())
+        {
+            Wallpaper aWallpaper(rPersonaBitmap);
+            aWallpaper.SetStyle(WALLPAPER_TOPRIGHT);
+            aWallpaper.SetColor(rStyleSettings.GetWorkspaceColor());
+            mpImplData->mpVirDev->SetBackground(aWallpaper);
+
+        }
+
 }
 
 void StatusBar::ImplFormat()
