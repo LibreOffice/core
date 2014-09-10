@@ -135,6 +135,10 @@ void ScFiltersTest::testCVEs()
 
     testDir(OUString("dBase"),
         getURLFromSrc("/sc/qa/unit/data/dbf/"), OUString());
+
+    testDir(OUString("Lotus"),
+        getURLFromSrc("/sc/qa/unit/data/wks/"), OUString());
+
 #endif
 }
 
