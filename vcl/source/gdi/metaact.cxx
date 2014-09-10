@@ -1174,6 +1174,12 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
             rIStm >> nIndex;
             Polygon aPoly;
             aPoly.Read( rIStm );
+            if (nIndex >= maPolyPoly.Count())
+            {
+                SAL_WARN("vcl.gdi", "svm contains polygon index " << nIndex
+                         << " outside possible range " << maPolyPoly.Count());
+                continue;
+            }
             maPolyPoly.Replace( aPoly, nIndex );
         }
     }
