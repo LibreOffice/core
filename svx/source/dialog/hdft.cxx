@@ -872,7 +872,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     {
         nWhich = GetWhich(SID_ATTR_BRUSH);
 
-        if(rSet.GetItemState(nWhich) >= SFX_ITEM_AVAILABLE)
+        if(rSet.GetItemState(nWhich) >= SFX_ITEM_DEFAULT)
         {
             //UUUU create FillAttributes from SvxBrushItem
             const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rSet.Get(nWhich));
@@ -886,7 +886,7 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     m_pBspWin->setPageFillAttributes(aPageFillAttributes);
     nWhich = GetWhich(SID_ATTR_BORDER_OUTER);
 
-    if(rSet.GetItemState(nWhich) >= SFX_ITEM_AVAILABLE)
+    if(rSet.GetItemState(nWhich) >= SFX_ITEM_DEFAULT)
     {
         const SvxBoxItem& rItem = static_cast< const SvxBoxItem& >(rSet.Get(nWhich));
         m_pBspWin->SetBorder(rItem);

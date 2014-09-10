@@ -43,7 +43,7 @@ SvxSearchController::SvxSearchController
 void SvxSearchController::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                         const SfxPoolItem* pState )
 {
-    if ( SFX_ITEM_AVAILABLE == eState )
+    if ( SFX_ITEM_DEFAULT == eState )
     {
         if ( SID_STYLE_FAMILY1 <= nSID && nSID <= SID_STYLE_FAMILY4 )
         {

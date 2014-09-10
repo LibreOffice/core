@@ -95,7 +95,7 @@ void SwTbxInsertCtrl::StateChanged( sal_uInt16 /*nSID*/,
     sal_uInt16 nId = GetId();
     GetToolBox().EnableItem( nId, (GetItemState(pState) != SFX_ITEM_DISABLED) );
 
-    if( eState == SFX_ITEM_AVAILABLE )
+    if( eState == SFX_ITEM_DEFAULT )
     {
         const SfxImageItem* pItem = PTR_CAST( SfxImageItem, pState );
         if(pItem)
@@ -741,7 +741,7 @@ void SwPreviewZoomControl::StateChanged( sal_uInt16 /*nSID*/,
     sal_uInt16 nId = GetId();
     GetToolBox().EnableItem( nId, (GetItemState(pState) != SFX_ITEM_DISABLED) );
     SwZoomBox_Impl* pBox = (SwZoomBox_Impl*)GetToolBox().GetItemWindow( GetId() );
-    if(SFX_ITEM_AVAILABLE <= eState)
+    if(SFX_ITEM_DEFAULT <= eState)
     {
         OUString sZoom(unicode::formatPercent(((const SfxUInt16Item*)pState)->GetValue(),
             Application::GetSettings().GetUILanguageTag()));

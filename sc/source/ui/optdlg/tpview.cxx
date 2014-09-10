@@ -525,7 +525,7 @@ bool    ScTpLayoutOptions::FillItemSet( SfxItemSet* rCoreSet )
 void    ScTpLayoutOptions::Reset( const SfxItemSet* rCoreSet )
 {
     m_pUnitLB->SetNoSelection();
-    if ( rCoreSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_DEFAULT )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rCoreSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();

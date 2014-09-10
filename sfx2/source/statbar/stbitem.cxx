@@ -253,7 +253,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
             SfxPoolItem* pItem = NULL;
             if ( rEvent.IsEnabled )
             {
-                eState = SFX_ITEM_AVAILABLE;
+                eState = SFX_ITEM_DEFAULT;
                 uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == ::getVoidCppuType() )
@@ -446,11 +446,11 @@ void SfxStatusBarControl::StateChanged
     DBG_ASSERT( pBar != 0, "setting state to dangling StatusBar" );
 
     const SfxStringItem* pStr = PTR_CAST( SfxStringItem, pState );
-    if ( eState == SFX_ITEM_AVAILABLE && pStr )
+    if ( eState == SFX_ITEM_DEFAULT && pStr )
         pBar->SetItemText( nSID, pStr->GetValue() );
     else
     {
-        DBG_ASSERT( eState != SFX_ITEM_AVAILABLE || pState->ISA(SfxVoidItem),
+        DBG_ASSERT( eState != SFX_ITEM_DEFAULT || pState->ISA(SfxVoidItem),
                     "wrong SfxPoolItem subclass in SfxStatusBarControl" );
         pBar->SetItemText( nSID, OUString() );
     }

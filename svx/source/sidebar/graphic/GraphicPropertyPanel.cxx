@@ -263,7 +263,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
     {
         case SID_ATTR_GRAF_LUMINANCE:
         {
-            if(eState >= SFX_ITEM_AVAILABLE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 mpMtrBrightness->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -287,7 +287,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_CONTRAST:
         {
-            if(eState >= SFX_ITEM_AVAILABLE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 mpMtrContrast->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -311,7 +311,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_TRANSPARENCE:
         {
-            if(eState >= SFX_ITEM_AVAILABLE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 mpMtrTrans->Enable();
                 const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
@@ -335,7 +335,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_MODE:
         {
-            if(eState >= SFX_ITEM_AVAILABLE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 mpLBColorMode->Enable();
                 const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
@@ -359,7 +359,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_RED:
         {
-            if(eState >= SFX_ITEM_AVAILABLE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 mpMtrRed->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -383,7 +383,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_GREEN:
         {
-            if(eState >= SFX_ITEM_AVAILABLE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 mpMtrGreen->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -407,7 +407,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_BLUE:
         {
-            if(eState >= SFX_ITEM_AVAILABLE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 mpMtrBlue->Enable();
                 const SfxInt16Item* pItem = dynamic_cast< const SfxInt16Item* >(pState);
@@ -431,7 +431,7 @@ void GraphicPropertyPanel::NotifyItemUpdate(
         }
         case SID_ATTR_GRAF_GAMMA:
         {
-            if(eState >= SFX_ITEM_AVAILABLE)
+            if(eState >= SFX_ITEM_DEFAULT)
             {
                 mpMtrGamma->Enable();
                 const SfxUInt32Item* pItem = dynamic_cast< const SfxUInt32Item* >(pState);

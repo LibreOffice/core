@@ -130,7 +130,7 @@ SdTbxCtlGlueEscDir::SdTbxCtlGlueEscDir(
 void SdTbxCtlGlueEscDir::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pState )
 {
-    if( eState == SFX_ITEM_AVAILABLE )
+    if( eState == SFX_ITEM_DEFAULT )
     {
         GlueEscDirLB* pGlueEscDirLB = (GlueEscDirLB*) ( GetToolBox().
                                             GetItemWindow( GetId() ) );

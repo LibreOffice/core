@@ -279,40 +279,40 @@ sal_uIntPtr SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObj
 
 void SvxGraphicFilter::DisableGraphicFilterSlots( SfxItemSet& rSet )
 {
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER ) )
         rSet.DisableItem( SID_GRFFILTER );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_INVERT ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_INVERT ) )
         rSet.DisableItem( SID_GRFFILTER_INVERT );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SMOOTH ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_SMOOTH ) )
         rSet.DisableItem( SID_GRFFILTER_SMOOTH );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SHARPEN ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_SHARPEN ) )
         rSet.DisableItem( SID_GRFFILTER_SHARPEN );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_REMOVENOISE ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_REMOVENOISE ) )
         rSet.DisableItem( SID_GRFFILTER_REMOVENOISE );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SOBEL ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_SOBEL ) )
         rSet.DisableItem( SID_GRFFILTER_SOBEL );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_MOSAIC ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_MOSAIC ) )
         rSet.DisableItem( SID_GRFFILTER_MOSAIC );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_EMBOSS ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_EMBOSS ) )
         rSet.DisableItem( SID_GRFFILTER_EMBOSS );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_POSTER ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_POSTER ) )
         rSet.DisableItem( SID_GRFFILTER_POSTER );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_POPART ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_POPART ) )
         rSet.DisableItem( SID_GRFFILTER_POPART );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SEPIA ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_SEPIA ) )
         rSet.DisableItem( SID_GRFFILTER_SEPIA );
 
-    if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( SID_GRFFILTER_SOLARIZE ) )
+    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( SID_GRFFILTER_SOLARIZE ) )
         rSet.DisableItem( SID_GRFFILTER_SOLARIZE );
 };
 

@@ -904,7 +904,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
             {
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aEditAttr );
-                if( aEditAttr.GetItemState( EE_PARA_TABS ) >= SFX_ITEM_AVAILABLE )
+                if( aEditAttr.GetItemState( EE_PARA_TABS ) >= SFX_ITEM_DEFAULT )
                 {
                     const SvxTabStopItem& rItem = (const SvxTabStopItem&) aEditAttr.Get( EE_PARA_TABS );
                     rSet.Put( rItem );
@@ -963,7 +963,7 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                     aProtect.SetPosProtect( true );
                 }
 
-                if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SFX_ITEM_AVAILABLE )
+                if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SFX_ITEM_DEFAULT )
                 {
                     const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR );
                     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, rItem.GetValue() == ::com::sun::star::text::WritingMode_RL_TB));

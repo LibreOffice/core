@@ -67,7 +67,7 @@ void LibBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPool
     if ( !pBox )
         return;
 
-    if ( eState != SFX_ITEM_AVAILABLE )
+    if ( eState != SFX_ITEM_DEFAULT )
         pBox->Disable();
     else
     {
@@ -357,7 +357,7 @@ void LanguageBoxControl::StateChanged( sal_uInt16 nID, SfxItemState eState, cons
     (void)nID;
     if (LanguageBox* pBox = static_cast<LanguageBox*>(GetToolBox().GetItemWindow(GetId())))
     {
-        if (eState != SFX_ITEM_AVAILABLE)
+        if (eState != SFX_ITEM_DEFAULT)
             pBox->Disable();
         else
         {

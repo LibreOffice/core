@@ -47,7 +47,7 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState)
 {
     // SFX_ITEM_DONTCARE => pState == -1 => PTR_CAST buff
-    if ( eState != SFX_ITEM_AVAILABLE )
+    if ( eState != SFX_ITEM_DEFAULT )
         pState = 0;
 
     switch(nSID)

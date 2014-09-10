@@ -53,7 +53,7 @@ void  SwTbxAnchor::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
 
-    if( eState == SFX_ITEM_AVAILABLE )
+    if( eState == SFX_ITEM_DEFAULT )
     {
         const SfxUInt16Item* pItem = PTR_CAST( SfxUInt16Item, pState );
         if(pItem)

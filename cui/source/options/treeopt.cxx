@@ -1198,7 +1198,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
 
                 // miscellaneous - Year2000
-                if( SFX_ITEM_AVAILABLE <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
+                if( SFX_ITEM_DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, ((const SfxUInt16Item*)pItem)->GetValue() ) );
                 else
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
@@ -1247,15 +1247,15 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             if ( pViewFrame )
             {
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-                if(SFX_ITEM_AVAILABLE <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
+                if(SFX_ITEM_DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
                     pRet->Put(SfxUInt16Item(SID_ATTR_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
-                if(SFX_ITEM_AVAILABLE <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pItem))
+                if(SFX_ITEM_DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pItem))
                     pRet->Put(SfxUInt16Item(SID_ATTR_CHAR_CJK_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
-                if(SFX_ITEM_AVAILABLE <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pItem))
+                if(SFX_ITEM_DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pItem))
                     pRet->Put(SfxUInt16Item(SID_ATTR_CHAR_CTL_LANGUAGE, ((const SvxLanguageItem*)pItem)->GetLanguage()));
 
                 pRet->Put(aHyphen);
-                if(SFX_ITEM_AVAILABLE <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
+                if(SFX_ITEM_DEFAULT <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
                 {
                     pClone = pItem->Clone();
                     pRet->Put(*pClone);

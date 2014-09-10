@@ -2058,7 +2058,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSlot, const SfxPoolItem* &rp
         if ( !rpState )
             return SFX_ITEM_DISABLED;
         else
-            return SFX_ITEM_AVAILABLE;
+            return SFX_ITEM_DEFAULT;
     }
 
     return SFX_ITEM_DISABLED;
@@ -2089,7 +2089,7 @@ SfxItemState SfxDispatcher::QueryState( sal_uInt16 nSID, ::com::sun::star::uno::
             }
             rAny = aState;
 
-            return SFX_ITEM_AVAILABLE;
+            return SFX_ITEM_DEFAULT;
         }
     }
 

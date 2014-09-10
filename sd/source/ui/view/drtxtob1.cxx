@@ -191,7 +191,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 // gets enabled, through it doesn't really work (see above)
                 SfxItemSet aEditAttr( mpView->GetDoc().GetPool() );
                 mpView->GetAttributes( aEditAttr );
-                if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SFX_ITEM_AVAILABLE )
+                if( aEditAttr.GetItemState( EE_PARA_ULSPACE ) >= SFX_ITEM_DEFAULT )
                 {
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
                     const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aEditAttr.Get( EE_PARA_ULSPACE );

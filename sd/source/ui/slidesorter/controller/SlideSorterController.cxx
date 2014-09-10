@@ -628,10 +628,10 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
     }
 
     // Output quality.
-    if (rSet.GetItemState(SID_OUTPUT_QUALITY_COLOR)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_GRAYSCALE)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_BLACKWHITE)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_CONTRAST)==SFX_ITEM_AVAILABLE)
+    if (rSet.GetItemState(SID_OUTPUT_QUALITY_COLOR)==SFX_ITEM_DEFAULT
+        ||rSet.GetItemState(SID_OUTPUT_QUALITY_GRAYSCALE)==SFX_ITEM_DEFAULT
+        ||rSet.GetItemState(SID_OUTPUT_QUALITY_BLACKWHITE)==SFX_ITEM_DEFAULT
+        ||rSet.GetItemState(SID_OUTPUT_QUALITY_CONTRAST)==SFX_ITEM_DEFAULT)
     {
         if (mrSlideSorter.GetContentWindow())
         {
@@ -661,7 +661,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         }
     }
 
-    if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_AVAILABLE)
+    if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_DEFAULT)
     {
         rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true));
     }

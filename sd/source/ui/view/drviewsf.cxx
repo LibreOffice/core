@@ -81,7 +81,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         GetViewFrame()->GetSlotState (SID_RELOAD, NULL, &rSet);
     }
 
-    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_HYPERLINK_GETLINK))
+    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_HYPERLINK_GETLINK))
     {
         SvxHyperlinkItem aHLinkItem;
 
@@ -187,10 +187,10 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     rSet.Put( SfxBoolItem( SID_READONLY_MODE, mbReadOnly ) );
 
     // output quality
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_COLOR ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_GRAYSCALE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_COLOR ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_GRAYSCALE ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTPUT_QUALITY_CONTRAST ) )
     {
         const sal_uLong nMode = (sal_Int32)GetActiveWindow()->GetDrawMode();
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_COLOR, (sal_uLong)OUTPUT_DRAWMODE_COLOR == nMode ) );
@@ -199,12 +199,12 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         rSet.Put( SfxBoolItem( SID_OUTPUT_QUALITY_CONTRAST, (sal_uLong)OUTPUT_DRAWMODE_CONTRAST == nMode ) );
     }
 
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
+    if ( SFX_ITEM_DEFAULT == rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) )
     {
         rSet.Put( SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, true ) );
     }
 
-    if ( SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ATTR_YEAR2000) )
+    if ( SFX_ITEM_DEFAULT == rSet.GetItemState(SID_ATTR_YEAR2000) )
     {
         FmFormShell* pFormShell = GetViewShellBase().GetFormShellManager()->GetFormShell();
         if (pFormShell != NULL)
@@ -420,7 +420,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             {
                 SfxItemSet aAttrs( GetDoc()->GetPool() );
                 mpDrawView->GetAttributes( aAttrs );
-                if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
+                if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_DEFAULT )
                 {
                     bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
                     rSet.Put( SfxBoolItem( SID_HYPHENATION, bValue ) );

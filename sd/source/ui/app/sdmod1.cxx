@@ -343,7 +343,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         }
     }
 
-    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_METRIC ) )
+    if( SFX_ITEM_DEFAULT == rItemSet.GetItemState( SID_ATTR_METRIC ) )
     {
         ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current() );
         if(pDocSh)
@@ -371,7 +371,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
             rItemSet.Put(*pItem);
     }
 
-    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_AUTOSPELL_CHECK ) )
+    if( SFX_ITEM_DEFAULT == rItemSet.GetItemState( SID_AUTOSPELL_CHECK ) )
     {
         ::sd::DrawDocShell* pDocSh =
               PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
@@ -382,21 +382,21 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         }
     }
 
-    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_LANGUAGE ) )
+    if( SFX_ITEM_DEFAULT == rItemSet.GetItemState( SID_ATTR_LANGUAGE ) )
     {
         ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ), SID_ATTR_LANGUAGE ) );
     }
 
-    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE ) )
+    if( SFX_ITEM_DEFAULT == rItemSet.GetItemState( SID_ATTR_CHAR_CJK_LANGUAGE ) )
     {
         ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
         if( pDocSh )
             rItemSet.Put( SvxLanguageItem( pDocSh->GetDoc()->GetLanguage( EE_CHAR_LANGUAGE_CJK ), SID_ATTR_CHAR_CJK_LANGUAGE ) );
     }
 
-    if( SFX_ITEM_AVAILABLE == rItemSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE ) )
+    if( SFX_ITEM_DEFAULT == rItemSet.GetItemState( SID_ATTR_CHAR_CTL_LANGUAGE ) )
     {
         ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
         if( pDocSh )

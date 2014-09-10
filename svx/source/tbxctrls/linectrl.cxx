@@ -88,7 +88,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
     {
         pBox->Enable();
 
-        if ( eState == SFX_ITEM_AVAILABLE )
+        if ( eState == SFX_ITEM_DEFAULT )
         {
             if( nSID == SID_ATTR_LINE_STYLE )
             {
@@ -224,7 +224,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
         {
             pFld->Enable();
 
-            if ( eState == SFX_ITEM_AVAILABLE )
+            if ( eState == SFX_ITEM_DEFAULT )
             {
                 DBG_ASSERT( pState->ISA(XLineWidthItem), "wrong ItemType" );
 

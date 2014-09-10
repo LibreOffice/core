@@ -185,7 +185,7 @@ SvxZoomSliderControl::~SvxZoomSliderControl()
 
 void SvxZoomSliderControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if ( (SFX_ITEM_AVAILABLE != eState) || pState->ISA( SfxVoidItem ) )
+    if ( (SFX_ITEM_DEFAULT != eState) || pState->ISA( SfxVoidItem ) )
     {
         GetStatusBar().SetItemText( GetId(), "" );
         mpImpl->mbValuesSet   = false;

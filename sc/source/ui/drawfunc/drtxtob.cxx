@@ -442,7 +442,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         SdrView* pView = pViewData->GetScDrawView();
         SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
         pView->GetAttributes( aAttrs );
-        if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
+        if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_DEFAULT )
         {
             bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );

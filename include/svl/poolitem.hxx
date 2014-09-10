@@ -135,9 +135,6 @@ enum SfxItemState {
     SFX_ITEM_SET      = 0x0030
 };
 
-// old stuff - dont use!!!
-#define SFX_ITEM_AVAILABLE  SFX_ITEM_DEFAULT
-
 class SvXMLUnitConverter;
 class SfxItemPool;
 class SfxItemSet;

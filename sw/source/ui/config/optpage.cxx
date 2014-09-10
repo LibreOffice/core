@@ -167,7 +167,7 @@ SfxTabPage* SwContentOptPage::Create( Window* pParent,
 static void lcl_SelectMetricLB(ListBox* rMetric, sal_uInt16 nSID, const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem;
-    if( rSet.GetItemState( nSID, false, &pItem ) >= SFX_ITEM_AVAILABLE )
+    if( rSet.GetItemState( nSID, false, &pItem ) >= SFX_ITEM_DEFAULT )
     {
         FieldUnit eFieldUnit = (FieldUnit)((SfxUInt16Item*)pItem)->GetValue();
         for ( sal_Int32 i = 0; i < rMetric->GetEntryCount(); ++i )
@@ -1187,7 +1187,7 @@ bool SwTableOptionsTabPage::FillItemSet( SfxItemSet* )
 void SwTableOptionsTabPage::Reset( const SfxItemSet* rSet)
 {
     const SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
-    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_DEFAULT )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();

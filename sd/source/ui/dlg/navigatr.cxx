@@ -863,7 +863,7 @@ SdNavigatorControllerItem::SdNavigatorControllerItem(
 void SdNavigatorControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
-    if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_NAVIGATOR_STATE )
+    if( eState >= SFX_ITEM_DEFAULT && nSId == SID_NAVIGATOR_STATE )
     {
         const SfxUInt32Item* pStateItem = PTR_CAST( SfxUInt32Item, pItem );
         DBG_ASSERT( pStateItem, "SfxUInt16Item expected");
@@ -946,7 +946,7 @@ SdPageNameControllerItem::SdPageNameControllerItem(
 void SdPageNameControllerItem::StateChanged( sal_uInt16 nSId,
                         SfxItemState eState, const SfxPoolItem* pItem )
 {
-    if( eState >= SFX_ITEM_AVAILABLE && nSId == SID_NAVIGATOR_PAGENAME )
+    if( eState >= SFX_ITEM_DEFAULT && nSId == SID_NAVIGATOR_PAGENAME )
     {
         // only if doc in LB is the active
         NavDocInfo* pInfo = pNavigatorWin->GetDocInfo();

@@ -122,7 +122,7 @@ void SdTbxCtlDiaPages::StateChanged( sal_uInt16,
         pFld->Enable();
 
         const SfxUInt16Item* pItem = 0;
-        if ( eState == SFX_ITEM_AVAILABLE )
+        if ( eState == SFX_ITEM_DEFAULT )
         {
             pItem = dynamic_cast< const SfxUInt16Item* >( pState );
             DBG_ASSERT( pItem, "sd::SdTbxCtlDiaPages::StateChanged(), wrong item type!" );

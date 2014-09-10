@@ -217,7 +217,7 @@ SvxBorderTabPage::SvxBorderTabPage(Window* pParent, const SfxItemSet& rCoreAttrs
     sal_uInt16 nWhich = GetWhich( SID_ATTR_BORDER_INNER, false );
     bool bIsDontCare = true;
 
-    if ( rCoreAttrs.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreAttrs.GetItemState( nWhich, true ) >= SFX_ITEM_DEFAULT )
     {
         // paragraph or table
         const SvxBoxInfoItem* pBoxInfo =

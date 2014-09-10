@@ -489,7 +489,7 @@ const SfxPoolItem* SfxRequest::GetItem
 
         // Is the item set or available at bDeep == sal_True?
         const SfxPoolItem *pItem = 0;
-        if ( ( bDeep ? SFX_ITEM_AVAILABLE : SFX_ITEM_SET )
+        if ( ( bDeep ? SFX_ITEM_DEFAULT : SFX_ITEM_SET )
              <= pArgs->GetItemState( nWhich, bDeep, &pItem ) )
         {
             // Compare type

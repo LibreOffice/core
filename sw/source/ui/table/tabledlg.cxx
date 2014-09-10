@@ -1594,13 +1594,13 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
         m_pRepeatHeaderNF->SetMin( 1 );
         m_pRepeatHeaderNF->SaveValue();
     }
-    if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SFX_ITEM_DEFAULT )
     {
         sal_uLong nDirection = ((const SvxFrameDirectionItem&)rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
         m_pTextDirectionLB->SelectEntryPos(m_pTextDirectionLB->GetEntryPos( (const void*)nDirection ));
     }
 
-    if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SFX_ITEM_DEFAULT )
     {
         sal_uInt16 nVert = ((const SfxUInt16Item&)rSet->Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
         sal_uInt16 nPos = 0;

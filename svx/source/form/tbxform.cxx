@@ -156,7 +156,7 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
     if (nSID == SID_FM_CONFIG)
     {
         sal_uInt16 nSlot   = 0;
-        if (eState >= SFX_ITEM_AVAILABLE)
+        if (eState >= SFX_ITEM_DEFAULT)
             nSlot = ((SfxUInt16Item*)pState)->GetValue();
 
         switch( nSlot )

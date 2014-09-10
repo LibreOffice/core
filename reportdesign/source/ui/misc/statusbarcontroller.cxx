@@ -139,7 +139,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
             {
                 SvxZoomSliderItem aZoomSlider(100,20,400);
                 aZoomSlider.PutValue(_aEvent.State);
-                static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoomSlider);
+                static_cast<SvxZoomSliderControl*>(m_rController.get())->StateChanged(m_nSlotId,SFX_ITEM_DEFAULT,&aZoomSlider);
             }
         }
         else if ( m_aCommandURL == ".uno:Zoom" )
@@ -149,7 +149,7 @@ void SAL_CALL OStatusbarController::statusChanged( const FeatureStateEvent& _aEv
             {
                 SvxZoomItem aZoom;
                 aZoom.PutValue(_aEvent.State);
-                static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChanged(m_nSlotId,SFX_ITEM_AVAILABLE,&aZoom);
+                static_cast<SvxZoomStatusBarControl*>(m_rController.get())->StateChanged(m_nSlotId,SFX_ITEM_DEFAULT,&aZoom);
             }
         }
     }

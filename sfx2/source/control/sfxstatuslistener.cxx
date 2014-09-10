@@ -167,7 +167,7 @@ throw( RuntimeException, std::exception )
     SfxPoolItem* pItem = NULL;
     if ( rEvent.IsEnabled )
     {
-        eState = SFX_ITEM_AVAILABLE;
+        eState = SFX_ITEM_DEFAULT;
         ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
         if ( pType == ::cppu::UnoType< ::cppu::UnoVoidType >::get() )

@@ -317,7 +317,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     GetMenuStateSel(rSet);
 
-    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ASSIGN_LAYOUT))
+    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_ASSIGN_LAYOUT))
     {
         bool bDisable = true;
         if( pPageView )
@@ -337,7 +337,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_EXPAND_PAGE))
+    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_EXPAND_PAGE))
     {
         bool bDisable = true;
         if( pPageView )
@@ -378,7 +378,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_SUMMARY_PAGE))
+    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_SUMMARY_PAGE))
     {
         bool bDisable = true;
         if( pPageView )
@@ -402,7 +402,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ASSIGN_LAYOUT))
+    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_ASSIGN_LAYOUT))
     {
         bool bDisable = true;
         if( pPageView )
@@ -423,8 +423,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // is it possible to start the presentation?
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_PRESENTATION ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_REHEARSE_TIMINGS ) )
     {
         bool bDisable = true;
         sal_uInt16 nCount = GetDoc()->GetSdPageCount( PK_STANDARD );
@@ -445,20 +445,20 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // glue points
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_EDITMODE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_INSERT_POINT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_PERCENT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_ESCDIR ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_ESCDIR_LEFT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_ESCDIR_RIGHT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_ESCDIR_TOP ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_ESCDIR_BOTTOM ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_HORZALIGN_CENTER ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_HORZALIGN_LEFT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_HORZALIGN_RIGHT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_VERTALIGN_CENTER ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_VERTALIGN_TOP ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GLUE_VERTALIGN_BOTTOM ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_EDITMODE ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_INSERT_POINT ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_PERCENT ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_ESCDIR ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_ESCDIR_LEFT ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_ESCDIR_RIGHT ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_ESCDIR_TOP ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_ESCDIR_BOTTOM ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_HORZALIGN_CENTER ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_HORZALIGN_LEFT ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_HORZALIGN_RIGHT ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_VERTALIGN_CENTER ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_VERTALIGN_TOP ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GLUE_VERTALIGN_BOTTOM ) )
     {
         // percent
         TRISTATE eState = mpDrawView->IsMarkedGluePointsPercent();
@@ -521,8 +521,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.Put( SfxBoolItem( SID_GLUE_ESCDIR_BOTTOM, eState == TRISTATE_TRUE ) );
     }
 
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_GRID_FRONT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_HELPLINES_FRONT ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_GRID_FRONT ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_HELPLINES_FRONT ) )
     {
         rSet.Put( SfxBoolItem( SID_GRID_FRONT, mpDrawView->IsGridFront() ) );
         rSet.Put( SfxBoolItem( SID_HELPLINES_FRONT, mpDrawView->IsHlplFront() ) );
@@ -597,7 +597,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     else
         rSet.Put( SfxBoolItem( SID_LEAVE_ALL_GROUPS, true ) );
 
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_THESAURUS ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_THESAURUS ) )
     {
         if ( !mpDrawView->IsTextEdit() )
         {
@@ -618,8 +618,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_THESAURUS );
     }
 
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SELECTALL ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SIZE_ALL ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_SELECTALL ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_SIZE_ALL ) )
     {
         if( pPageView && pPageView->GetObjList()->GetObjCount() == 0 )
         {
@@ -629,14 +629,14 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONTEXT ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONTEXT ) )
         rSet.Put( SfxStringItem( SID_CONTEXT, mpDrawView->GetStatusText() ) );
 
     // clipboard (paste)
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE_SPECIAL ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE_UNFORMATTED ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_PASTE ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_PASTE_SPECIAL ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_PASTE_UNFORMATTED ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
     {
         if ( !mpClipEvtLstnr )
         {
@@ -665,7 +665,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem( SID_PASTE_UNFORMATTED );
             rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
         }
-        else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
+        else if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
         {
             if (mpCurrentClipboardFormats.get() != NULL)
                 rSet.Put(*mpCurrentClipboardFormats);
@@ -701,7 +701,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_CONVERT_TO_3D_LATHE_FAST);
     }
 
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MANAGE_LINKS ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_MANAGE_LINKS ) )
     {
         if ( GetDoc()->GetLinkCount() == 0 )
         {
@@ -784,7 +784,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, false));
 
         if (mePageKind == PK_STANDARD &&
-            rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_AVAILABLE)
+            rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_DEFAULT)
         {
             // Is there a page with the AutoLayout "Title"?
             bool bDisable = true;
@@ -836,7 +836,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.Put(SfxBoolItem(SID_NOTES_MASTERPAGE, false));
             rSet.Put(SfxBoolItem(SID_HANDOUT_MASTERPAGE, false));
 
-            if (rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_AVAILABLE)
+            if (rSet.GetItemState(SID_TITLE_MASTERPAGE) == SFX_ITEM_DEFAULT)
             {
                 bool bCheck = false;
                 bool bDisable = true;
@@ -904,12 +904,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // set state of the ruler
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_RULER ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_RULER ) )
         rSet.Put( SfxBoolItem( SID_RULER, HasRuler() ) );
 
     // do not delete the last page or a master page
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_PAGE )
-        || SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_MASTER_PAGE ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DELETE_PAGE )
+        || SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DELETE_MASTER_PAGE ) )
     {
         if (maTabControl.GetPageCount() == 1 ||
             meEditMode == EM_MASTERPAGE     ||
@@ -917,15 +917,15 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             mePageKind == PK_HANDOUT        ||
             (GetShellType()!=ST_DRAW&&IsLayerModeActive()))
         {
-            if (rSet.GetItemState(SID_DELETE_PAGE) == SFX_ITEM_AVAILABLE)
+            if (rSet.GetItemState(SID_DELETE_PAGE) == SFX_ITEM_DEFAULT)
                 rSet.DisableItem(SID_DELETE_PAGE);
-            if (rSet.GetItemState(SID_DELETE_MASTER_PAGE)==SFX_ITEM_AVAILABLE)
+            if (rSet.GetItemState(SID_DELETE_MASTER_PAGE)==SFX_ITEM_DEFAULT)
                 rSet.DisableItem(SID_DELETE_MASTER_PAGE);
         }
     }
 
     // is it allowed to delete the current layer?
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DELETE_LAYER ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DELETE_LAYER ) )
     {
         if(GetLayerTabControl()) // #i87182#
         {
@@ -951,9 +951,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CUT ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_COPY ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTLINE_BULLET ))
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CUT ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_COPY ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTLINE_BULLET ))
     {
         OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
 
@@ -1017,9 +1017,9 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
     // Zoom-State
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_IN ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_OUT )||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ZOOM_PANNING ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ZOOM_IN ) ||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ZOOM_OUT )||
+        SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ZOOM_PANNING ) )
     {
         if( GetActiveWindow()->GetZoom() <= GetActiveWindow()->GetMinZoom() || GetDocSh()->IsUIActive() )
         {
@@ -1039,7 +1039,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
        rSet.DisableItem(SID_ZOOM_PREV);
     }
 
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REMOTE_DLG ) )
+    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_REMOTE_DLG ) )
     {
 
         bool bDisableSdremoteForGood = false;
@@ -1573,17 +1573,17 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if(HasCurrentFunction())
             nCurrentSId = GetCurrentFunction()->GetSlotID();
 
-        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_BASIC ) )
+        if ( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_BASIC ) )
             rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_BASIC, SID_DRAWTBX_CS_BASIC == nCurrentSId ));
-        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_SYMBOL ) )
+        if ( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_SYMBOL ) )
             rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_SYMBOL, SID_DRAWTBX_CS_SYMBOL == nCurrentSId ));
-        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_ARROW ) )
+        if ( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_ARROW ) )
             rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_ARROW, SID_DRAWTBX_CS_ARROW == nCurrentSId ));
-        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_FLOWCHART ) )
+        if ( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_FLOWCHART ) )
             rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_FLOWCHART, SID_DRAWTBX_CS_FLOWCHART == nCurrentSId ));
-        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_CALLOUT ) )
+        if ( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_CALLOUT ) )
             rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_CALLOUT,SID_DRAWTBX_CS_CALLOUT == nCurrentSId ));
-        if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DRAWTBX_CS_STAR ) )
+        if ( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DRAWTBX_CS_STAR ) )
             rSet.Put(SfxBoolItem(SID_DRAWTBX_CS_STAR, SID_DRAWTBX_CS_STAR == nCurrentSId ));
     }
 
@@ -1639,8 +1639,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     // Set the state of two entries in the 'Slide' context sub-menu
     // concerning the visibility of master page background and master page
     // shapes.
-    if (rSet.GetItemState(SID_DISPLAY_MASTER_BACKGROUND) == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_DISPLAY_MASTER_OBJECTS) == SFX_ITEM_AVAILABLE)
+    if (rSet.GetItemState(SID_DISPLAY_MASTER_BACKGROUND) == SFX_ITEM_DEFAULT
+        || rSet.GetItemState(SID_DISPLAY_MASTER_OBJECTS) == SFX_ITEM_DEFAULT)
     {
         SdPage* pPage = GetActualPage();
         if (pPage != NULL
@@ -1658,7 +1658,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     }
 
 #if !HAVE_FEATURE_GLTF
-    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_INSERT_3DMODEL))
+    if (SFX_ITEM_DEFAULT == rSet.GetItemState(SID_INSERT_3DMODEL))
     {
         rSet.DisableItem(SID_INSERT_3DMODEL);
         rSet.Put(SfxVisibilityItem(SID_INSERT_3DMODEL, false));

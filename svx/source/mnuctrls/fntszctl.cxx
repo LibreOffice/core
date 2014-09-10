@@ -82,7 +82,7 @@ void SvxFontSizeMenuControl::StateChanged(
 {
     rParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
 
-    if ( SFX_ITEM_AVAILABLE == eState )
+    if ( SFX_ITEM_DEFAULT == eState )
     {
         if ( pState->ISA(SvxFontHeightItem) )
         {

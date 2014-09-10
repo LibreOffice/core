@@ -549,7 +549,7 @@ void SfxBindings::SetState
                 // Update status
                 if ( !pCache->IsControllerDirty() )
                     pCache->Invalidate(false);
-                pCache->SetState( SFX_ITEM_AVAILABLE, pItem );
+                pCache->SetState( SFX_ITEM_DEFAULT, pItem );
 
                 //! Not implemented: Updates from EnumSlots via master slots
             }
@@ -583,7 +583,7 @@ void SfxBindings::SetState
             // Update Status
             if ( !pCache->IsControllerDirty() )
                 pCache->Invalidate(false);
-            pCache->SetState( SFX_ITEM_AVAILABLE, &rItem );
+            pCache->SetState( SFX_ITEM_DEFAULT, &rItem );
 
             //! Not implemented: Updates from EnumSlots via master slots
         }
@@ -1171,11 +1171,11 @@ void SfxBindings::Execute_Impl( SfxRequest& aReq, const SfxSlot* pSlot, SfxShell
             if ( eState == SFX_ITEM_DISABLED )
                 return;
 
-            if ( SFX_ITEM_AVAILABLE == eState && SfxItemPool::IsWhich(nWhich) )
+            if ( SFX_ITEM_DEFAULT == eState && SfxItemPool::IsWhich(nWhich) )
                 pOldItem = &aSet.Get(nWhich);
 
             if ( SFX_ITEM_SET == eState ||
-                 ( SFX_ITEM_AVAILABLE == eState &&
+                 ( SFX_ITEM_DEFAULT == eState &&
                    SfxItemPool::IsWhich(nWhich) &&
                    pOldItem ) )
             {
@@ -1438,7 +1438,7 @@ void SfxBindings::UpdateControllers_Impl
         else if ( SFX_ITEM_DISABLED == eState )
             pCache->SetState(SFX_ITEM_DISABLED, 0);
         else
-            pCache->SetState(SFX_ITEM_AVAILABLE, pItem);
+            pCache->SetState(SFX_ITEM_DEFAULT, pItem);
     }
 
     // Update the slots for so far available and bound Controllers for
@@ -1452,7 +1452,7 @@ void SfxBindings::UpdateControllers_Impl
         // Items cast on EnumItem
         const SfxEnumItemInterface *pEnumItem =
                 PTR_CAST(SfxEnumItemInterface,pItem);
-        if ( eState == SFX_ITEM_AVAILABLE && !pEnumItem )
+        if ( eState == SFX_ITEM_DEFAULT && !pEnumItem )
             eState = SFX_ITEM_DONTCARE;
         else
             eState = SfxControllerItem::GetItemState( pEnumItem );
@@ -1487,12 +1487,12 @@ void SfxBindings::UpdateControllers_Impl
                     // disabled
                     pEnumCache->SetState(SFX_ITEM_DISABLED, 0);
                 }
-                else if ( SFX_ITEM_AVAILABLE == eState && pEnumItem )
+                else if ( SFX_ITEM_DEFAULT == eState && pEnumItem )
                 {
                     // Determine enum value
                     sal_uInt16 nValue = pEnumItem->GetEnumValue();
                     SfxBoolItem aBool( pFound->nWhichId, pSlave->GetValue() == nValue );
-                    pEnumCache->SetState(SFX_ITEM_AVAILABLE, &aBool);
+                    pEnumCache->SetState(SFX_ITEM_DEFAULT, &aBool);
                 }
                 else
                 {
@@ -1944,7 +1944,7 @@ SfxItemState SfxBindings::QueryState( sal_uInt16 nSlot, SfxPoolItem* &rpState )
         if ( pItem )
             rpState = pItem->Clone();
     }
-    else if ( eState == SFX_ITEM_AVAILABLE && pItem )
+    else if ( eState == SFX_ITEM_DEFAULT && pItem )
     {
         rpState = pItem->Clone();
     }

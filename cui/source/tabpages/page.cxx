@@ -1361,7 +1361,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         {
             const sal_uInt16 nWhich(GetWhich(SID_ATTR_BRUSH));
 
-            if(rHeaderSet.GetItemState(nWhich) >= SFX_ITEM_AVAILABLE)
+            if(rHeaderSet.GetItemState(nWhich) >= SFX_ITEM_DEFAULT)
             {
                 //UUUU aBspWin.SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(nWhich));
@@ -1375,7 +1375,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         m_pBspWin->setHeaderFillAttributes(aHeaderFillAttributes);
         const sal_uInt16 nWhich(GetWhich(SID_ATTR_BORDER_OUTER));
 
-        if ( rHeaderSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+        if ( rHeaderSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
         {
             const SvxBoxItem& rItem =
                 (const SvxBoxItem&)rHeaderSet.Get( nWhich );
@@ -1423,7 +1423,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         {
             const sal_uInt16 nWhich(GetWhich(SID_ATTR_BRUSH));
 
-            if(rFooterSet.GetItemState(nWhich) >= SFX_ITEM_AVAILABLE)
+            if(rFooterSet.GetItemState(nWhich) >= SFX_ITEM_DEFAULT)
             {
                 //UUUU aBspWin.SetFtColor(rItem.GetColor());
                 const SvxBrushItem& rItem = (const SvxBrushItem&)rFooterSet.Get(nWhich);
@@ -1437,7 +1437,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         m_pBspWin->setFooterFillAttributes(aFooterFillAttributes);
         const sal_uInt16 nWhich(GetWhich(SID_ATTR_BORDER_OUTER));
 
-        if ( rFooterSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
+        if ( rFooterSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
         {
             const SvxBoxItem& rItem =
                 (const SvxBoxItem&)rFooterSet.Get( nWhich );
@@ -1535,9 +1535,9 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
     Size aBorder;
 
     if ( _pSet->GetItemState( GetWhich(SID_ATTR_BORDER_SHADOW) ) >=
-            SFX_ITEM_AVAILABLE &&
+            SFX_ITEM_DEFAULT &&
          _pSet->GetItemState( GetWhich(SID_ATTR_BORDER_OUTER)  ) >=
-            SFX_ITEM_AVAILABLE )
+            SFX_ITEM_DEFAULT )
     {
         aBorder = ( GetMinBorderSpace_Impl(
             (const SvxShadowItem&)_pSet->Get(GetWhich(SID_ATTR_BORDER_SHADOW)),

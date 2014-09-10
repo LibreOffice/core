@@ -761,7 +761,7 @@ void ParaPropertyPanel::StateChangedIndentImpl( sal_uInt16 /*nSID*/, SfxItemStat
 
     const sal_uInt16 nIdHangingIndent   = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT);
     const sal_uInt16 nIdHangingIndent2  = mpTbxIndent_IncDec->GetItemId(UNO_HANGINGINDENT2);
-    if( pState && eState >= SFX_ITEM_AVAILABLE )
+    if( pState && eState >= SFX_ITEM_DEFAULT )
     {
         SvxLRSpaceItem* pSpace = ( SvxLRSpaceItem*)pState;
         maTxtLeft = pSpace->GetTxtLeft();
@@ -871,7 +871,7 @@ void ParaPropertyPanel::StateChangedLnSPImpl( sal_uInt16 /*nSID*/, SfxItemState 
 {
     meLnSpState = eState;
 
-    if( pState && eState >= SFX_ITEM_AVAILABLE )
+    if( pState && eState >= SFX_ITEM_DEFAULT )
     {
         if(mpLnSPItem)
             delete mpLnSPItem;
@@ -884,7 +884,7 @@ void ParaPropertyPanel::StateChangedULImpl( sal_uInt16 /*nSID*/, SfxItemState eS
     mpTopDist->SetMax( mpTopDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
     mpBottomDist->SetMax( mpBottomDist->Normalize( MAX_DURCH ), MapToFieldUnit(m_eULSpaceUnit) );
 
-    if( pState && eState >= SFX_ITEM_AVAILABLE )
+    if( pState && eState >= SFX_ITEM_DEFAULT )
     {
         SvxULSpaceItem* pOldItem = (SvxULSpaceItem*)pState;
 

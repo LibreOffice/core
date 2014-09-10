@@ -1556,7 +1556,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             SfxItemSet aSet(GetPool(),
                                     RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
                             rShell.GetCurAttr(aSet);
-                            if(SFX_ITEM_AVAILABLE <=
+                            if(SFX_ITEM_DEFAULT <=
                                aSet.GetItemState(RES_PARATR_NUMRULE, true))
                             {
                                 const OUString& rNumStyle =

@@ -476,7 +476,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
 //     but it must be existing in the rSet!
 //  const SfxPoolItem* pX = GetOldItem( rSet, SID_VIEW_FLD_PIC );
 //  if( pX && pX->ISA(SfxWallpaperItem))
-    if(SFX_ITEM_AVAILABLE <= rSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
+    if(SFX_ITEM_DEFAULT <= rSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
     {
         ResetFromWallpaperItem( *rSet );
         return;
@@ -543,7 +543,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
         nDestValue = 0;
     sal_uInt16 nWhich = GetWhich( nSlot );
 
-    if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_DEFAULT )
         pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
 
     m_pBtnTile->Check();
@@ -584,21 +584,21 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             pTableBck_Impl->nActPos = nValue;
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
-            if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_DEFAULT )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
                 pTableBck_Impl->pCellBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nCellWhich = nWhich;
 
-            if ( rSet->GetItemState( SID_ATTR_BRUSH_ROW, false ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( SID_ATTR_BRUSH_ROW, false ) >= SFX_ITEM_DEFAULT )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet->Get( SID_ATTR_BRUSH_ROW ) );
                 pTableBck_Impl->pRowBrush = new SvxBrushItem(*pBgdAttr);
             }
             pTableBck_Impl->nRowWhich = SID_ATTR_BRUSH_ROW;
 
-            if ( rSet->GetItemState( SID_ATTR_BRUSH_TABLE, false ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( SID_ATTR_BRUSH_TABLE, false ) >= SFX_ITEM_DEFAULT )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet->Get( SID_ATTR_BRUSH_TABLE ) );
                 pTableBck_Impl->pTableBrush = new SvxBrushItem(*pBgdAttr);
@@ -623,7 +623,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             pParaBck_Impl->nActPos = nValue;
 
             nWhich = GetWhich( SID_ATTR_BRUSH );
-            if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( nWhich, false ) >= SFX_ITEM_DEFAULT )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
                 pParaBck_Impl->pParaBrush = new SvxBrushItem(*pBgdAttr);
@@ -632,7 +632,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet* rSet )
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
             rSet->GetItemState( nWhich, true );
             rSet->GetItemState( nWhich, false );
-            if ( rSet->GetItemState( nWhich, true ) > SFX_ITEM_AVAILABLE )
+            if ( rSet->GetItemState( nWhich, true ) > SFX_ITEM_DEFAULT )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet->Get( nWhich ) );
                 pParaBck_Impl->pCharBrush = new SvxBrushItem(*pBgdAttr);
@@ -660,7 +660,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     sal_uInt16 nWhich = GetWhich( nSlot );
     boost::scoped_ptr<SvxBrushItem> pTemp;
 
-    if ( rSet.GetItemState( nWhich, false ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet.GetItemState( nWhich, false ) >= SFX_ITEM_DEFAULT )
     {
         const CntWallpaperItem* pItem = (const CntWallpaperItem*)&rSet.Get( nWhich );
         pTemp.reset(new SvxBrushItem( *pItem, nWhich ));
@@ -729,7 +729,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
 
 //  const SfxPoolItem* pX = GetOldItem( rCoreSet, SID_VIEW_FLD_PIC );
 //  if( pX && pX->ISA(SfxWallpaperItem))
-    if(SFX_ITEM_AVAILABLE <= rCoreSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
+    if(SFX_ITEM_DEFAULT <= rCoreSet->GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
         return FillItemSetWithWallpaperItem( *rCoreSet, SID_VIEW_FLD_PIC );
 
     bool bModified = false;
@@ -790,7 +790,7 @@ bool SvxBackgroundTabPage::FillItemSet( SfxItemSet* rCoreSet )
             {
                 // Brush-treatment:
                 if ( rOldItem.GetColor() != aBgdColor ||
-                     (SFX_ITEM_AVAILABLE >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
+                     (SFX_ITEM_DEFAULT >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
                 {
                     bModified = true;
                     rCoreSet->Put( SvxBrushItem( aBgdColor, nWhich ) );

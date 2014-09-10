@@ -186,7 +186,7 @@ void AllMasterPagesSelector::GetState (SfxItemSet& rItemSet)
 {
     //    MasterPagesSelector::GetState(rItemSet);
 
-    if (rItemSet.GetItemState(SID_TP_EDIT_MASTER) == SFX_ITEM_AVAILABLE)
+    if (rItemSet.GetItemState(SID_TP_EDIT_MASTER) == SFX_ITEM_DEFAULT)
         rItemSet.DisableItem(SID_TP_EDIT_MASTER);
 }
 

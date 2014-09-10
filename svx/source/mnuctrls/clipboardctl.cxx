@@ -119,7 +119,7 @@ void SvxClipBoardControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
     if ( SID_CLIPBOARD_FORMAT_ITEMS == nSID )
     {
         DELETEZ( pClipboardFmtItem );
-        if ( eState >= SFX_ITEM_AVAILABLE )
+        if ( eState >= SFX_ITEM_DEFAULT )
         {
             pClipboardFmtItem = pState->Clone();
             GetToolBox().SetItemBits( GetId(), GetToolBox().GetItemBits( GetId() ) | TIB_DROPDOWN );

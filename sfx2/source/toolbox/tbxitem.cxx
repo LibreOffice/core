@@ -402,7 +402,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
                         Enabled but there were only ambiguous values available
                         (i.e. none that could be queried).
 
-                        SFX_ITEM_AVAILABLE
+                        SFX_ITEM_DEFAULT
                         Enabled and with available values which can be queried
                         through'pState'. The type is thus by the Slot clearly
                         defined in the entire Program.
@@ -415,7 +415,7 @@ SfxItemState SfxToolBoxControl::GetItemState(
                     ? SFX_ITEM_DONTCARE
                     : pState->ISA(SfxVoidItem) && !pState->Which()
                         ? SFX_ITEM_UNKNOWN
-                        : SFX_ITEM_AVAILABLE;
+                        : SFX_ITEM_DEFAULT;
 }
 
 void SfxToolBoxControl::Dispatch(
@@ -511,7 +511,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
             SfxPoolItem* pItem = NULL;
             if ( rEvent.IsEnabled )
             {
-                eState = SFX_ITEM_AVAILABLE;
+                eState = SFX_ITEM_DEFAULT;
                 ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == ::getVoidCppuType() )
@@ -909,7 +909,7 @@ void SfxToolBoxControl::StateChanged
     ::TriState eTri = TRISTATE_FALSE;
     switch ( eState )
     {
-        case SFX_ITEM_AVAILABLE:
+        case SFX_ITEM_DEFAULT:
         if ( pState )
         {
             if ( pState->ISA(SfxBoolItem) )
@@ -1059,7 +1059,7 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
             SfxPoolItem* pItem = NULL;
             if ( rEvent.IsEnabled )
             {
-                eState = SFX_ITEM_AVAILABLE;
+                eState = SFX_ITEM_DEFAULT;
                 ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == ::getVoidCppuType() )

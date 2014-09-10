@@ -316,7 +316,7 @@ SfxItemState SfxControllerItem::GetItemState
                         Enabled but there were only ambiguous values available
                         (i.e. non that can be queried).
 
-                        SFX_ITEM_AVAILABLE
+                        SFX_ITEM_DEFAULT
                         Enabled and with available values, which are queried
                         by 'pState'. The Type is thus clearly defined in the
                         entire Program and specified through the Slot.
@@ -329,7 +329,7 @@ SfxItemState SfxControllerItem::GetItemState
                     ? SFX_ITEM_DONTCARE
                     : pState->ISA(SfxVoidItem) && !pState->Which()
                         ? SFX_ITEM_UNKNOWN
-                        : SFX_ITEM_AVAILABLE;
+                        : SFX_ITEM_DEFAULT;
 }
 
 

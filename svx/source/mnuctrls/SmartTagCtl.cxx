@@ -140,7 +140,7 @@ void SvxSmartTagsControl::StateChanged( sal_uInt16, SfxItemState eState, const S
 {
     mrParent.EnableItem( GetId(), SFX_ITEM_DISABLED != eState );
 
-    if ( SFX_ITEM_AVAILABLE == eState )
+    if ( SFX_ITEM_DEFAULT == eState )
     {
         const SvxSmartTagItem* pSmartTagItem = PTR_CAST( SvxSmartTagItem, pState );
         if ( 0 != pSmartTagItem )

@@ -66,7 +66,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         case SID_STYLE_FAMILY4:
         case SID_STYLE_FAMILY5:
         {
-            bool bAvailable = SFX_ITEM_AVAILABLE == eState;
+            bool bAvailable = SFX_ITEM_DEFAULT == eState;
             if ( !bAvailable )
                 rTemplateDlg.SetFamilyState(GetId(), 0);
             else {
@@ -100,7 +100,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
         {
             if ( eState == SFX_ITEM_DISABLED )
                 nWaterCanState = 0xff;
-            else if( eState == SFX_ITEM_AVAILABLE )
+            else if( eState == SFX_ITEM_DEFAULT )
             {
                 const SfxBoolItem *pStateItem = PTR_CAST(SfxBoolItem, pItem);
                 assert(pStateItem); //BoolItem expected

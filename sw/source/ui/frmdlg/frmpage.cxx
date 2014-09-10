@@ -3031,7 +3031,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
     }
 
     // Content alignment
-    if ( rSet->GetItemState(RES_TEXT_VERT_ADJUST) > SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState(RES_TEXT_VERT_ADJUST) > SFX_ITEM_DEFAULT )
     {
         SdrTextVertAdjust nAdjust = ((const SdrTextVertAdjustItem&)rSet->Get(RES_TEXT_VERT_ADJUST)).GetValue();
         sal_Int32 nPos = 0;

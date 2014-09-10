@@ -85,7 +85,7 @@ XmlSecStatusBarControl::~XmlSecStatusBarControl()
 
 void XmlSecStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
-    if( SFX_ITEM_AVAILABLE != eState )
+    if( SFX_ITEM_DEFAULT != eState )
     {
         mpImpl->mnState = (sal_uInt16)SIGNATURESTATE_UNKNOWN;
     }

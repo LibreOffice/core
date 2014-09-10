@@ -1598,7 +1598,7 @@ void SfxStyleControllerItem_Impl::StateChanged(
         {
             const sal_uInt16 nIdx = GetId() - SID_STYLE_FAMILY_START;
 
-            if ( SFX_ITEM_AVAILABLE == eState )
+            if ( SFX_ITEM_DEFAULT == eState )
             {
                 const SfxTemplateItem* pStateItem =
                     PTR_CAST( SfxTemplateItem, pState );
@@ -2059,7 +2059,7 @@ void SvxStyleToolBoxControl::StateChanged(
 
     switch ( eState )
     {
-        case SFX_ITEM_AVAILABLE:
+        case SFX_ITEM_DEFAULT:
             eTri = ((const SfxBoolItem*)pState)->GetValue()
                         ? TRISTATE_TRUE
                         : TRISTATE_FALSE;
@@ -2123,7 +2123,7 @@ void SvxFontNameToolBoxControl::StateChanged(
     {
         pBox->Enable();
 
-        if ( SFX_ITEM_AVAILABLE == eState )
+        if ( SFX_ITEM_DEFAULT == eState )
         {
             const SvxFontItem* pFontItem = dynamic_cast< const SvxFontItem* >( pState );
 

@@ -104,7 +104,7 @@ void SvxFillToolBoxControl::StateChanged(
         mpFillAttrLB->Disable();
         mpFillAttrLB->SetNoSelection();
     }
-    else if(SFX_ITEM_AVAILABLE == eState)
+    else if(SFX_ITEM_DEFAULT == eState)
     {
         bool bEnableControls(false);
 

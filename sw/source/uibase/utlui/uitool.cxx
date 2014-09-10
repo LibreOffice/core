@@ -643,7 +643,7 @@ void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
         }
         break;
 
-    case SFX_ITEM_AVAILABLE:
+    case SFX_ITEM_DEFAULT:
         break;
 
     default:

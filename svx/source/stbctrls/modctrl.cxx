@@ -90,7 +90,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
 void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
 {
-    if ( SFX_ITEM_AVAILABLE != eState )
+    if ( SFX_ITEM_DEFAULT != eState )
         return;
 
     DBG_ASSERT( pState->ISA( SfxBoolItem ), "invalid item type" );

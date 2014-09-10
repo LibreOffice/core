@@ -260,7 +260,7 @@ void TextPropertyPanel::NotifyItemUpdate (
         break;
     case SID_ATTR_CHAR_KERNING:
         {
-            if ( SFX_ITEM_AVAILABLE == eState )
+            if ( SFX_ITEM_DEFAULT == eState )
             {
                 mbKernLBAvailable = true;
 

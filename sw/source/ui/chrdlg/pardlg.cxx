@@ -112,7 +112,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
         RemoveTabPage("labelTP_PARA_ASIAN");
 
     const sal_uInt16 nWhich(rCoreSet.GetPool()->GetWhich(SID_ATTR_LRSPACE));
-    bool bLRValid = SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(nWhich);
+    bool bLRValid = SFX_ITEM_DEFAULT <= rCoreSet.GetItemState(nWhich);
     if(bHtmlMode || !bLRValid)
         RemoveTabPage("labelTP_TABULATOR");
     else

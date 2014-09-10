@@ -2120,7 +2120,7 @@ void SwSectionIndentTabPage::Reset( const SfxItemSet* rSet)
     SetMetric(*m_pAfterMF , aMetric);
 
     SfxItemState eItemState = rSet->GetItemState( RES_LR_SPACE );
-    if ( eItemState >= SFX_ITEM_AVAILABLE )
+    if ( eItemState >= SFX_ITEM_DEFAULT )
     {
         const SvxLRSpaceItem& rSpace =
             (const SvxLRSpaceItem&)rSet->Get( RES_LR_SPACE );

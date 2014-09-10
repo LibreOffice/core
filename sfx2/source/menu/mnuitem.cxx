@@ -180,7 +180,7 @@ void SfxMenuControl::StateChanged
                 ? 0 != pOwnMenu->GetSVMenu()->GetPopupMenu( GetId() )
                 : eState != SFX_ITEM_DISABLED );
 
-    if ( eState != SFX_ITEM_AVAILABLE )
+    if ( eState != SFX_ITEM_DEFAULT )
     {
         // check only for non-Object Menus
         if ( !bIsObjMenu )

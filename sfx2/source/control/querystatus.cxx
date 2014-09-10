@@ -108,7 +108,7 @@ throw( RuntimeException, std::exception )
 
     if ( rEvent.IsEnabled )
     {
-        m_eState = SFX_ITEM_AVAILABLE;
+        m_eState = SFX_ITEM_DEFAULT;
         ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
         if ( pType == ::getBooleanCppuType() )

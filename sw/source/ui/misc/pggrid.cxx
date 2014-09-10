@@ -189,7 +189,7 @@ bool    SwTextGridPage::FillItemSet(SfxItemSet *rSet)
 
 void    SwTextGridPage::Reset(const SfxItemSet *rSet)
 {
-    if(SFX_ITEM_AVAILABLE <= rSet->GetItemState(RES_TEXTGRID, true))
+    if(SFX_ITEM_DEFAULT <= rSet->GetItemState(RES_TEXTGRID, true))
     {
         const SwTextGridItem& rGridItem = (const SwTextGridItem&)rSet->Get(RES_TEXTGRID);
         RadioButton* pButton = 0;

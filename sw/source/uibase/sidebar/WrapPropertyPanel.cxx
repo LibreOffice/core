@@ -185,7 +185,7 @@ void WrapPropertyPanel::NotifyItemUpdate(
 {
     (void)bIsEnabled;
 
-    if ( eState == SFX_ITEM_AVAILABLE &&
+    if ( eState == SFX_ITEM_DEFAULT &&
         pState->ISA(SfxBoolItem) )
     {
         //Set Radio Button enable

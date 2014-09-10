@@ -2456,7 +2456,7 @@ void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
                 {
                     sal_Int16 aFormatCode = -1;
                     const SfxItemSet& rAttrSet  = pTabViewShell->GetSelectionPattern()->GetItemSet();
-                    if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) >= SFX_ITEM_AVAILABLE ) //Modify for more robust
+                    if ( rAttrSet.GetItemState( ATTR_VALUE_FORMAT ) >= SFX_ITEM_DEFAULT ) //Modify for more robust
                     {
                         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                         sal_uInt32 nNumberFormat = pTabViewShell->GetSelectionPattern()->GetNumberFormat( pFormatter );

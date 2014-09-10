@@ -65,50 +65,50 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
     if ( nMarkCount == 1 )
     {
-        if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEZIER_EDIT ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_UNGROUP ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ENTER_GROUP ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_NAME_GROUP ) ||
+        if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_BEZIER_EDIT ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_UNGROUP ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ENTER_GROUP ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_NAME_GROUP ) ||
 
             // #i68101#
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_TITLE_DESCRIPTION ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OBJECT_TITLE_DESCRIPTION ) ||
 
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_STYLE ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_TRANSPARENCE ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ATTR_FILL_FLOATTRANSPARENCE ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHANGEBEZIER ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CHANGEPOLYGON ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_LINEEND_POLYGON ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( OBJ_TITLETEXT ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( OBJ_OUTLINETEXT ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MEASURE_DLG ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONNECTION_DLG ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONNECTION_NEW_ROUTING ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_SHEAR ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_1BIT_THRESHOLD ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_1BIT_MATRIX ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_4BIT_GRAYS ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_4BIT_COLORS ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_8BIT_GRAYS ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_8BIT_COLORS ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CONVERT_TO_24BIT ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_LEFT ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_CENTER ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_RIGHT ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_UP ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_MIDDLE ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OBJECT_ALIGN_DOWN ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_FRAME_TO_TOP ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MOREFRONT ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MOREBACK ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_FRAME_TO_BOTTOM ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEFORE_OBJ ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BEHIND_OBJ ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_REVERSE_ORDER ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_ORIGINAL_SIZE ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SAVE_GRAPHIC ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_COMPRESS_GRAPHIC ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_TEXTATTR_DLG ) )
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ATTR_FILL_STYLE ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ATTR_FILL_TRANSPARENCE ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ATTR_FILL_FLOATTRANSPARENCE ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CHANGEBEZIER ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CHANGEPOLYGON ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_LINEEND_POLYGON ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( OBJ_TITLETEXT ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( OBJ_OUTLINETEXT ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_MEASURE_DLG ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONNECTION_DLG ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONNECTION_NEW_ROUTING ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OBJECT_SHEAR ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONVERT_TO_1BIT_THRESHOLD ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONVERT_TO_1BIT_MATRIX ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONVERT_TO_4BIT_GRAYS ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONVERT_TO_4BIT_COLORS ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONVERT_TO_8BIT_GRAYS ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONVERT_TO_8BIT_COLORS ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_CONVERT_TO_24BIT ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_LEFT ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_CENTER ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_RIGHT ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_UP ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_MIDDLE ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OBJECT_ALIGN_DOWN ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_FRAME_TO_TOP ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_MOREFRONT ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_MOREBACK ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_FRAME_TO_BOTTOM ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_BEFORE_OBJ ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_BEHIND_OBJ ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_REVERSE_ORDER ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ORIGINAL_SIZE ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_SAVE_GRAPHIC ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_COMPRESS_GRAPHIC ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_TEXTATTR_DLG ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(pObj);
@@ -201,9 +201,9 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 SfxItemSet aAttrSet( GetDoc()->GetPool() );
                 GetView()->GetAttributes( aAttrSet );
 
-                if( aAttrSet.GetItemState( SDRATTR_EDGELINE1DELTA ) >= SFX_ITEM_AVAILABLE &&
-                    aAttrSet.GetItemState( SDRATTR_EDGELINE2DELTA ) >= SFX_ITEM_AVAILABLE &&
-                    aAttrSet.GetItemState( SDRATTR_EDGELINE3DELTA ) >= SFX_ITEM_AVAILABLE )
+                if( aAttrSet.GetItemState( SDRATTR_EDGELINE1DELTA ) >= SFX_ITEM_DEFAULT &&
+                    aAttrSet.GetItemState( SDRATTR_EDGELINE2DELTA ) >= SFX_ITEM_DEFAULT &&
+                    aAttrSet.GetItemState( SDRATTR_EDGELINE3DELTA ) >= SFX_ITEM_DEFAULT )
                 {
                     long nVal1 = ( ( const SdrMetricItem& ) aAttrSet.Get( SDRATTR_EDGELINE1DELTA ) ).GetValue();
                     long nVal2 = ( ( const SdrMetricItem& ) aAttrSet.Get( SDRATTR_EDGELINE2DELTA ) ).GetValue();
@@ -243,8 +243,8 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             }
         }
 
-        if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_DISMANTLE ) ||
-            SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_BREAK ) )
+        if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_DISMANTLE ) ||
+            SFX_ITEM_DEFAULT == rSet.GetItemState( SID_BREAK ) )
         {
             if ( !mpDrawView->IsDismantlePossible(false) )
             {
@@ -258,7 +258,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
                 rSet.DisableItem( SID_BREAK );
             }
         }
-        if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_MODIFY_FIELD ) )
+        if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_MODIFY_FIELD ) )
         {
             OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
 
@@ -277,7 +277,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             else
                 rSet.DisableItem( SID_MODIFY_FIELD );
         }
-        if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTLINE_TEXT_AUTOFIT ) )
+        if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_OUTLINE_TEXT_AUTOFIT ) )
         {
             const SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             const bool bSet = ((const SdrTextFitToSizeTypeItem*)pObj->GetMergedItemSet().GetItem(SDRATTR_TEXT_FITTOSIZE))->GetValue() != SDRTEXTFIT_NONE;

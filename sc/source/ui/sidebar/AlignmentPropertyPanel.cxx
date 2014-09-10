@@ -311,7 +311,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_ALIGN_DEGREES:
-        if (eState >= SFX_ITEM_AVAILABLE)
+        if (eState >= SFX_ITEM_DEFAULT)
         {
             long nTmp = ((const SfxInt32Item*)pState)->GetValue();
             mpMtrAngle->SetValue( nTmp / 100);  //wj
@@ -350,7 +350,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         }
         break;
     case SID_ATTR_ALIGN_STACKED:
-        if (eState >= SFX_ITEM_AVAILABLE)
+        if (eState >= SFX_ITEM_DEFAULT)
         {
             mpCbStacked->EnableTriState(false);
             const SfxBoolItem* aStackItem = (const SfxBoolItem*)pState;

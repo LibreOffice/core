@@ -1189,7 +1189,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                  ( nSelType & nsSelectionType::SEL_GRF ) ||
                  ( nSelType & nsSelectionType::SEL_FRM ) ||
                  ( nSelType & nsSelectionType::SEL_OLE ) ||
-                 ( SFX_ITEM_AVAILABLE > aCoreSet.GetItemState(RES_LR_SPACE) ) ||
+                 ( SFX_ITEM_DEFAULT > aCoreSet.GetItemState(RES_LR_SPACE) ) ||
                  (!bVerticalWriting && (SID_ATTR_TABSTOP_VERTICAL == nWhich) ) ||
                  ( bVerticalWriting && (RES_PARATR_TABSTOP == nWhich))
                )
@@ -1258,7 +1258,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             aUL.SetWhich(nWhich);
 
             SfxItemState e = aCoreSet.GetItemState(RES_UL_SPACE);
-            if( e >= SFX_ITEM_AVAILABLE )
+            if( e >= SFX_ITEM_DEFAULT )
                 rSet.Put( aUL );
             else
                 rSet.InvalidateItem(nWhich);

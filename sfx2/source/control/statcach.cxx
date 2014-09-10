@@ -92,7 +92,7 @@ void SAL_CALL  BindDispatch_Impl::statusChanged( const ::com::sun::star::frame::
         }
         else if (aStatus.State.hasValue())
         {
-            eState = SFX_ITEM_AVAILABLE;
+            eState = SFX_ITEM_DEFAULT;
             ::com::sun::star::uno::Any aAny = aStatus.State;
 
             ::com::sun::star::uno::Type pType = aAny.getValueType();
@@ -343,7 +343,7 @@ void SfxStateCache::SetState
 
 void SfxStateCache::SetVisibleState( bool bShow )
 {
-    SfxItemState        eState( SFX_ITEM_AVAILABLE );
+    SfxItemState        eState( SFX_ITEM_DEFAULT );
     const SfxPoolItem*  pState( NULL );
     bool            bDeleteItem( false );
 

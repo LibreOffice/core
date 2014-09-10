@@ -879,7 +879,7 @@ const SfxPoolItem* SfxItemSet::GetItem
     // Is the Item set or 'bDeep == true' available?
     const SfxPoolItem *pItem = 0;
     SfxItemState eState = GetItemState( nWhich, bSrchInParent, &pItem );
-    if ( bSrchInParent && SFX_ITEM_AVAILABLE == eState &&
+    if ( bSrchInParent && SFX_ITEM_DEFAULT == eState &&
          nWhich <= SFX_WHICH_MAX )
         pItem = &_pPool->GetDefaultItem(nWhich);
 

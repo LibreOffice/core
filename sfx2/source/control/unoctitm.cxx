@@ -138,7 +138,7 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
         SfxPoolItem* pItem = NULL;
         if ( rEvent.IsEnabled )
         {
-            eState = SFX_ITEM_AVAILABLE;
+            eState = SFX_ITEM_DEFAULT;
             ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
             if ( pType == cppu::UnoType< bool >::get() )
@@ -876,7 +876,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( bNotify && pContnr )
     {
         ::com::sun::star::uno::Any aState;
-        if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
+        if ( ( eState >= SFX_ITEM_DEFAULT ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
         {
             // Retrieve metric from pool to have correct sub ID when calling QueryValue
             sal_uInt16     nSubId( 0 );

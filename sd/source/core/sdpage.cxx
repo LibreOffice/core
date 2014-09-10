@@ -1905,7 +1905,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                 nFontHeight = long(nFontHeight * (double) aFractY);
                                 rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
-                                if( SFX_ITEM_AVAILABLE == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
+                                if( SFX_ITEM_DEFAULT == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                 {
                                     rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CJK);
                                     nFontHeight = rOldHgt.GetHeight();
@@ -1913,7 +1913,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                 }
 
-                                if( SFX_ITEM_AVAILABLE == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CTL ) )
+                                if( SFX_ITEM_DEFAULT == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CTL ) )
                                 {
                                     rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CTL);
                                     nFontHeight = rOldHgt.GetHeight();
@@ -1944,7 +1944,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     nFontHeight = long(nFontHeight * (double) aFractY);
                                     aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
-                                    if( SFX_ITEM_AVAILABLE == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
+                                    if( SFX_ITEM_DEFAULT == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                     {
                                         rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CJK);
                                         nFontHeight = rOldHgt.GetHeight();
@@ -1952,7 +1952,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                     }
 
-                                    if( SFX_ITEM_AVAILABLE == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CTL ) )
+                                    if( SFX_ITEM_DEFAULT == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CTL ) )
                                     {
                                         rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CTL);
                                         nFontHeight = rOldHgt.GetHeight();
@@ -1972,7 +1972,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                                     // Special treatment: only the valid parts
                                     // of the BulletItems
-                                    if (aTempSet.GetItemState(EE_PARA_BULLET) == SFX_ITEM_AVAILABLE)
+                                    if (aTempSet.GetItemState(EE_PARA_BULLET) == SFX_ITEM_DEFAULT)
                                     {
                                         SvxBulletItem aOldBulItem((SvxBulletItem&) pOutlineSheet->GetItemSet().Get(EE_PARA_BULLET));
                                         SvxBulletItem& rNewBulItem = (SvxBulletItem&) aTempSet.Get(EE_PARA_BULLET);

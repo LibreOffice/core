@@ -627,7 +627,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     m_bInStateChange = true;
     try
     {
-        if (eState >= SFX_ITEM_AVAILABLE)
+        if (eState >= SFX_ITEM_DEFAULT)
         {
             FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
             InterfaceBag aSelection;

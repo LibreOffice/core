@@ -330,7 +330,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
         pDoc->getIDocumentContentOperations().InsertItemSet( rPam, rSet, nFlags );
     }
 
-    if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SFX_ITEM_AVAILABLE )
+    if( rSet.GetItemState( RES_PARATR_OUTLINELEVEL, false ) >= SFX_ITEM_DEFAULT )
     {
         SwTxtNode * pTmpNode = rPam.GetNode().GetTxtNode();
         if ( pTmpNode )

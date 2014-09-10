@@ -255,7 +255,7 @@ void SAL_CALL OToolboxController::statusChanged( const FeatureStateEvent& Event 
                     {
                         SvxFontItem aItem(ITEMID_FONT);
                         aItem.PutValue(Event.State);
-                        static_cast<SvxFontNameToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_AVAILABLE : SFX_ITEM_DISABLED,&aItem);
+                        static_cast<SvxFontNameToolBoxControl*>(m_pToolbarController.get())->StateChanged(m_nSlotId,Event.IsEnabled ? SFX_ITEM_DEFAULT : SFX_ITEM_DISABLED,&aItem);
                     }
                     break;
             }

@@ -279,7 +279,7 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
     m_pAutoUpdateFields->SaveValue();
     m_pAutoUpdateCharts->SaveValue();
     m_pMetricLB->SetNoSelection();
-    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_AVAILABLE )
+    if ( rSet->GetItemState( SID_ATTR_METRIC ) >= SFX_ITEM_DEFAULT )
     {
         const SfxUInt16Item& rItem = (SfxUInt16Item&)rSet->Get( SID_ATTR_METRIC );
         FieldUnit eFieldUnit = (FieldUnit)rItem.GetValue();

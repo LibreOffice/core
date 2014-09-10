@@ -608,7 +608,7 @@ void SwColumnPage::Reset(const SfxItemSet *rSet)
     }
 
     //text direction
-    if( SFX_ITEM_AVAILABLE <= rSet->GetItemState( RES_FRAMEDIR ) )
+    if( SFX_ITEM_DEFAULT <= rSet->GetItemState( RES_FRAMEDIR ) )
     {
         const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet->Get(RES_FRAMEDIR);
         sal_uIntPtr nVal  = rItem.GetValue();

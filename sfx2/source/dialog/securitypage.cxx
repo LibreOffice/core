@@ -60,7 +60,7 @@ namespace
             const SfxPoolItem* pItem;
             SfxDispatcher* pDisp = pViewSh->GetDispatcher();
             SfxItemState nState = pDisp->QueryState( _nSlot, pItem );
-            bRet = SFX_ITEM_AVAILABLE <= nState;
+            bRet = SFX_ITEM_DEFAULT <= nState;
             if (bRet)
                 _rValue = ( static_cast< const SfxBoolItem* >( pItem ) )->GetValue();
         }
@@ -261,7 +261,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
         {
             const SfxPoolItem* pItem;
             SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            if (SFX_ITEM_AVAILABLE <= pDisp->QueryState( SID_HTML_MODE, pItem ))
+            if (SFX_ITEM_DEFAULT <= pDisp->QueryState( SID_HTML_MODE, pItem ))
             {
                 sal_uInt16 nMode = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
                 bIsHTMLDoc = ( ( nMode & HTMLMODE_ON ) != 0 );

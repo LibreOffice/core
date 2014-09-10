@@ -45,7 +45,7 @@ SvxHlinkCtrl::SvxHlinkCtrl( sal_uInt16 _nId, SfxBindings & rBindings, SvxHpLinkD
 void SvxHlinkCtrl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState )
 {
-    if ( eState == SFX_ITEM_AVAILABLE )
+    if ( eState == SFX_ITEM_DEFAULT )
     {
         switch ( nSID )
         {

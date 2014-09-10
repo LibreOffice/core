@@ -751,7 +751,7 @@ bool SwView::IsDrawTextHyphenate()
     SfxItemSet aNewAttr( pSdrView->GetModel()->GetItemPool(),
                             EE_PARA_HYPHENATE, EE_PARA_HYPHENATE );
     if( pSdrView->GetAttributes( aNewAttr ) &&
-        aNewAttr.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_AVAILABLE )
+        aNewAttr.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_DEFAULT )
         bHyphenate = ((const SfxBoolItem&)aNewAttr.Get( EE_PARA_HYPHENATE )).
                         GetValue();
 

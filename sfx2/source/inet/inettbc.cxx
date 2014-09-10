@@ -214,7 +214,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
             if ( GetURLBox()->IsVisible() )
                 GetURLBox()->GrabFocus();
         }
-        else if ( !GetURLBox()->IsModified() && SFX_ITEM_AVAILABLE == eState )
+        else if ( !GetURLBox()->IsModified() && SFX_ITEM_DEFAULT == eState )
         {
             SvtURLBox* pURLBox = GetURLBox();
             pURLBox->Clear();

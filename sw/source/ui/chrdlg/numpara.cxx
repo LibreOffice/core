@@ -165,7 +165,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     SfxItemState eItemState = rSet->GetItemState( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) );
 
     sal_Int16 nOutlineLv;
-    if( eItemState >= SFX_ITEM_AVAILABLE )
+    if( eItemState >= SFX_ITEM_DEFAULT )
     {
         nOutlineLv = ((const SfxUInt16Item &)rSet->Get( GetWhich(SID_ATTR_PARA_OUTLINE_LEVEL) )).GetValue();
         m_pOutlineLvLB->SelectEntryPos( nOutlineLv ) ;
@@ -178,7 +178,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
 
     eItemState = rSet->GetItemState( GetWhich(SID_ATTR_PARA_NUMRULE) );
 
-    if( eItemState >= SFX_ITEM_AVAILABLE )
+    if( eItemState >= SFX_ITEM_DEFAULT )
     {
         OUString aStyle = ((const SfxStringItem &)rSet->Get( GetWhich(SID_ATTR_PARA_NUMRULE) )).GetValue();
         if(aStyle.isEmpty())
@@ -204,7 +204,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     m_pNumberStyleLB->SaveValue();
 
     eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART );
-    if(eItemState > SFX_ITEM_AVAILABLE )
+    if(eItemState > SFX_ITEM_DEFAULT )
     {
         bCurNumrule = true;
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet->Get(FN_NUMBER_NEWSTART);
@@ -219,7 +219,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     m_pNewStartCB->SaveValue();
 
     eItemState = rSet->GetItemState( FN_NUMBER_NEWSTART_AT);
-    if( eItemState > SFX_ITEM_AVAILABLE )
+    if( eItemState > SFX_ITEM_DEFAULT )
     {
         const sal_uInt16 nNewStart = ((const SfxUInt16Item&)rSet->Get(FN_NUMBER_NEWSTART_AT)).GetValue();
         const bool bNotMax = USHRT_MAX != nNewStart;
@@ -233,7 +233,7 @@ void    SwParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     m_pNewStartNF->SaveValue();
     m_pNewStartNumberCB->SaveValue();
     StyleHdl_Impl(m_pNumberStyleLB);
-    if( SFX_ITEM_AVAILABLE <= rSet->GetItemState(RES_LINENUMBER))
+    if( SFX_ITEM_DEFAULT <= rSet->GetItemState(RES_LINENUMBER))
     {
         SwFmtLineNumber& rNum = (SwFmtLineNumber&)rSet->Get(RES_LINENUMBER);
         sal_uLong nStartValue = rNum.GetStartValue();

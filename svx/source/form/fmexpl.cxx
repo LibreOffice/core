@@ -529,7 +529,7 @@ namespace svxform
         if( !pState  || SID_FM_FMEXPLORER_CONTROL != nSID )
             return;
 
-        if( eState >= SFX_ITEM_AVAILABLE )
+        if( eState >= SFX_ITEM_DEFAULT )
         {
             FmFormShell* pShell = PTR_CAST( FmFormShell,((SfxObjectItem*)pState)->GetShell() );
             UpdateContent( pShell );

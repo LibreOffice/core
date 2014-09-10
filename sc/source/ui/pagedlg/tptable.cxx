@@ -164,7 +164,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
 
     // scaling:
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
-    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_DEFAULT )
     {
         sal_uInt16 nScale = ((const SfxUInt16Item&)rCoreSet->Get(nWhich)).GetValue();
         if( nScale > 0 )
@@ -173,7 +173,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETO);
-    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_DEFAULT )
     {
         const ScPageScaleToItem& rItem = static_cast< const ScPageScaleToItem& >( rCoreSet->Get( nWhich ) );
         sal_uInt16 nWidth = rItem.GetWidth();
@@ -189,7 +189,7 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
-    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
+    if ( rCoreSet->GetItemState( nWhich, true ) >= SFX_ITEM_DEFAULT )
     {
         sal_uInt16 nPages = ((const SfxUInt16Item&)rCoreSet->Get(nWhich)).GetValue();
         if( nPages > 0 )

@@ -108,7 +108,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
 void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
-    if( SFX_ITEM_AVAILABLE != eState )
+    if( SFX_ITEM_DEFAULT != eState )
     {
         GetStatusBar().SetItemText( GetId(), "" );
         nValueSet = 0;
