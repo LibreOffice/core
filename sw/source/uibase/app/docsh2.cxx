@@ -1488,6 +1488,15 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
     return pResult;
 }
 
+static bool lcl_MergePortions(SwNode *const& pNode, void *)
+{
+    if (pNode->IsTxtNode())
+    {
+        pNode->GetTxtNode()->FileLoadedInitHints();
+    }
+    return true;
+}
+
 int SwFindDocShell( SfxObjectShellRef& xDocSh,
                     SfxObjectShellLock& xLockRef,
                     const OUString& rFileName,
@@ -1572,10 +1581,15 @@ int SwFindDocShell( SfxObjectShellRef& xDocSh,
             pMed->SetFilter( pSfxFlt );
 
             // If the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
-            xLockRef = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            SwDocShell *const pNew(new SwDocShell(SFX_CREATE_MODE_INTERNAL));
+            xLockRef = pNew;
             xDocSh = (SfxObjectShell*)xLockRef;
             if( xDocSh->DoLoad( pMed ) )
+            {
+                SwDoc const& rDoc(*pNew->GetDoc());
+                const_cast<SwDoc&>(rDoc).GetNodes().ForEach(&lcl_MergePortions);
                 return 2;
+            }
         }
     }
 
