@@ -138,7 +138,7 @@ public class JavaFinder implements MethodFinder {
             }
         }
 
-        return new URLClassLoader(urls.toArray(new URL[0]));
+        return new URLClassLoader(urls.toArray(new URL[urls.size()]));
     }
 
     private ClassLoader getClassLoader(File basedir) {
@@ -232,6 +232,6 @@ public class JavaFinder implements MethodFinder {
                 }
             }
         }
-        return result.toArray(new String[0]);
+        return result.toArray(new String[result.size()]);
     }
 }
