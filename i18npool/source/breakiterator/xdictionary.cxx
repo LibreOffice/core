@@ -271,6 +271,23 @@ bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
     Boundary& segBoundary)
 {
     sal_Int32 indexUtf16;
+
+    if (segmentCachedString.pData != rText.pData) {
+        // Cache the passed text so we can avoid regenerating the segment if it's the same
+        // (pData is refcounted and assigning the OUString references it, which ensures that
+        // the object is the same if we get the same pointer back later)
+        segmentCachedString = rText;
+    } else {
+        // If pos is within the cached boundary, use that boundary
+        if (pos >= segmentCachedBoundary.startPos && pos <= segmentCachedBoundary.endPos) {
+            segBoundary.startPos = segmentCachedBoundary.startPos;
+            segBoundary.endPos = segmentCachedBoundary.endPos;
+            indexUtf16 = segmentCachedBoundary.startPos;
+            rText.iterateCodePoints(&indexUtf16, 1);
+            return segmentCachedBoundary.endPos > indexUtf16;
+        }
+    }
+
     segBoundary.endPos = segBoundary.startPos = pos;
 
     indexUtf16 = pos;
@@ -292,6 +309,10 @@ bool xdictionary::seekSegment(const OUString &rText, sal_Int32 pos,
         else
             break;
     }
+
+    // Cache the calculated boundary
+    segmentCachedBoundary.startPos = segBoundary.startPos;
+    segmentCachedBoundary.endPos = segBoundary.endPos;
 
     indexUtf16 = segBoundary.startPos;
     rText.iterateCodePoints(&indexUtf16, 1);
