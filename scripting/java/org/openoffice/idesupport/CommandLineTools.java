@@ -293,7 +293,7 @@ public class CommandLineTools {
                     throw new Exception("No valid scripts found");
 
                 ParcelDescriptor desc = new ParcelDescriptor(parcelxml, language);
-                desc.setScriptEntries((ScriptEntry[])scripts.toArray(new ScriptEntry[0]));
+                desc.setScriptEntries((ScriptEntry[])scripts.toArray(new ScriptEntry[scripts.size()]));
                 if (properties.size() != 0) {
                     Enumeration enumer = properties.keys();
 
