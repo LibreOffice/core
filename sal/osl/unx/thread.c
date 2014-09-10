@@ -252,7 +252,7 @@ static oslThread osl_thread_create_Impl (
     short             nFlags)
 {
     Thread_Impl* pImpl;
-#if defined OPENBSD || (defined MACOSX && !ENABLE_RUNTIME_OPTIMIZATIONS)
+#if defined OPENBSD || ((defined MACOSX || defined LINUX) && !ENABLE_RUNTIME_OPTIMIZATIONS)
     pthread_attr_t attr;
     size_t stacksize;
 #endif
@@ -268,12 +268,14 @@ static oslThread osl_thread_create_Impl (
 
     pthread_mutex_lock (&(pImpl->m_Lock));
 
-#if defined OPENBSD || (defined MACOSX && !ENABLE_RUNTIME_OPTIMIZATIONS)
+#if defined OPENBSD || ((defined MACOSX || defined LINUX) && !ENABLE_RUNTIME_OPTIMIZATIONS)
     if (pthread_attr_init(&attr) != 0)
         return (0);
 
 #if defined OPENBSD
     stacksize = 262144;
+#elif defined LINUX
+    stacksize = 12 * 1024 * 1024; // 8MB is not enough for ASAN on x86-64
 #else
     stacksize = 100 * PTHREAD_STACK_MIN;
 #endif
@@ -285,7 +287,7 @@ static oslThread osl_thread_create_Impl (
 
     if ((nRet = pthread_create (
         &(pImpl->m_hThread),
-#if defined OPENBSD || (defined MACOSX && !ENABLE_RUNTIME_OPTIMIZATIONS)
+#if defined OPENBSD || ((defined MACOSX || defined LINUX) && !ENABLE_RUNTIME_OPTIMIZATIONS)
         &attr,
 #else
         PTHREAD_ATTR_DEFAULT,
@@ -302,7 +304,7 @@ static oslThread osl_thread_create_Impl (
         return (0);
     }
 
-#if defined OPENBSD || (defined MACOSX && !ENABLE_RUNTIME_OPTIMIZATIONS)
+#if defined OPENBSD || ((defined MACOSX || defined LINUX) && !ENABLE_RUNTIME_OPTIMIZATIONS)
     pthread_attr_destroy(&attr);
 #endif
 
