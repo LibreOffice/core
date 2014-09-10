@@ -1187,14 +1187,14 @@ void ChartExport::exportBitmapFill( Reference< XPropertySet > xPropSet )
 {
     if( xPropSet.is() )
      {
-        OUString sFillGradientName;
-        xPropSet->getPropertyValue("FillBitmapName") >>= sFillGradientName;
+        OUString sFillBitmapName;
+        xPropSet->getPropertyValue("FillBitmapName") >>= sFillBitmapName;
 
         uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
         try
         {
-            uno::Reference< container::XNameAccess > xGradient( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
-            uno::Any rValue = xGradient->getByName( sFillGradientName );
+            uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY );
+            uno::Any rValue = xBitmap->getByName( sFillBitmapName );
             OUString sBitmapURL;
             if( (rValue >>= sBitmapURL) )
             {
