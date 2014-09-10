@@ -932,7 +932,6 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
 
     maStepDirection = (maTargetDirection - maCameraDirection)/((float)mnStepsTotal);
     */
-
 }
 
 void GL3DBarChart::render()
@@ -947,20 +946,27 @@ void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, s
 {
     long nDirection = rEndPos.X() - rStartPos.X();
     SharedResourceAccess(maCond1, maCond2);
-    osl::MutexGuard aGuard(maMutex);
+    osl::ClearableGuard<osl::Mutex> aGuard(maMutex);
     if ((maRenderEvent == EVENT_NONE) || (maRenderEvent == EVENT_SHOW_SCROLL) ||
         (maRenderEvent == EVENT_AUTO_FLY) || (maRenderEvent == EVENT_SHOW_SELECT))
         maRenderEvent = nDirection > 0 ? EVENT_DRAG_RIGHT : EVENT_DRAG_LEFT;
+    bool bMove = false;
     if(nDirection < 0)
     {
         mnCornerId = (mnCornerId + 1) % 4;
-        moveToCorner();
+        bMove = true;
     }
     else if(nDirection > 0)
     {
         mnCornerId = mnCornerId - 1;
         if(mnCornerId < 0)
             mnCornerId = 3;
+        bMove = true;
+    }
+
+    if (bMove)
+    {
+        aGuard.clear();
         moveToCorner();
     }
 }
