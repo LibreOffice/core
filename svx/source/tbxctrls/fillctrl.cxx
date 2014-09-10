@@ -92,7 +92,7 @@ void SvxFillToolBoxControl::StateChanged(
     SfxItemState eState,
     const SfxPoolItem* pState)
 {
-    if(eState == SFX_ITEM_DISABLED)
+    if(eState == SfxItemState::DISABLED)
     {
         // slot disable state
         if(nSID == SID_ATTR_FILL_STYLE)
@@ -104,7 +104,7 @@ void SvxFillToolBoxControl::StateChanged(
         mpFillAttrLB->Disable();
         mpFillAttrLB->SetNoSelection();
     }
-    else if(SFX_ITEM_DEFAULT == eState)
+    else if(SfxItemState::DEFAULT == eState)
     {
         bool bEnableControls(false);
 

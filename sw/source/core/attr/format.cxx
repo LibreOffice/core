@@ -328,7 +328,7 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
     default:
         {
             // attribute is defined in this format
-            if( SFX_ITEM_SET == aSet.GetItemState( nWhich, false ))
+            if( SfxItemState::SET == aSet.GetItemState( nWhich, false ))
             {
                 // DropCaps might come into this block
                 OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify was sent without sender" );
@@ -430,15 +430,15 @@ SfxItemState SwFmt::GetItemState( sal_uInt16 nWhich, bool bSrchInParent, const S
             if( ppItem )
                 *ppItem = &aSvxBrushItem;
 
-            return SFX_ITEM_SET;
+            return SfxItemState::SET;
         }
 
-        // if not, reset pointer and return SFX_ITEM_DEFAULT to signal that
+        // if not, reset pointer and return SfxItemState::DEFAULT to signal that
         // the item is not set
         if( ppItem )
             *ppItem = NULL;
 
-        return SFX_ITEM_DEFAULT;
+        return SfxItemState::DEFAULT;
     }
 
     return aSet.GetItemState( nWhich, bSrchInParent, ppItem );
@@ -458,11 +458,11 @@ SfxItemState SwFmt::GetBackgroundState(SvxBrushItem &rItem, bool bSrchInParent) 
             // as good as possible to have an instance for the pointer to point
             // to and return as state that it is set
             rItem = getSvxBrushItemFromSourceSet(aSet, RES_BACKGROUND, bSrchInParent);
-            return SFX_ITEM_SET;
+            return SfxItemState::SET;
         }
 
-        // if not return SFX_ITEM_DEFAULT to signal that the item is not set
-        return SFX_ITEM_DEFAULT;
+        // if not return SfxItemState::DEFAULT to signal that the item is not set
+        return SfxItemState::DEFAULT;
     }
 
     const SfxPoolItem* pItem = 0;
@@ -589,7 +589,7 @@ bool SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         const SfxPoolItem* pSource = 0;
 
-        if(SFX_ITEM_SET == aTempSet.GetItemState(RES_BACKGROUND, false, &pSource))
+        if(SfxItemState::SET == aTempSet.GetItemState(RES_BACKGROUND, false, &pSource))
         {
             //UUUU FALLBACKBREAKHERE should not be used; instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST]
             SAL_INFO("sw.core", "Do no longer use SvxBrushItem, instead use [XATTR_FILL_FIRST .. XATTR_FILL_LAST] FillAttributes (simple fallback is in place and used)");

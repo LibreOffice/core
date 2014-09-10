@@ -502,7 +502,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                         ( nAttrStart == *pAttrEnd || !nStart ))) )
                 {
                     const SfxPoolItem* pItem;
-                    if( !pDontExpItems || SFX_ITEM_SET != pDontExpItems->
+                    if( !pDontExpItems || SfxItemState::SET != pDontExpItems->
                         GetItemState( pHt->Which(), false, &pItem ) ||
                         *pItem != pHt->GetAttr() )
                     {

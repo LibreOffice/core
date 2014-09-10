@@ -242,7 +242,7 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
     }
 
     const SfxPoolItem* pViewLayoutItem = 0;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_VIEWLAYOUT, false, &pViewLayoutItem ) )
+    if ( SfxItemState::SET == rSet.GetItemState( SID_ATTR_VIEWLAYOUT, false, &pViewLayoutItem ) )
     {
         const sal_uInt16 nColumns = static_cast<const SvxViewLayoutItem*>(pViewLayoutItem)->GetValue();
         const bool bBookMode  = static_cast<const SvxViewLayoutItem*>(pViewLayoutItem)->IsBookMode();

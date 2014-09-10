@@ -158,7 +158,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         {
                             const SfxPoolItem* pWrapItem;
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                            if(SFX_ITEM_SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, false, &pWrapItem))
+                            if(SfxItemState::SET == pOutSet->GetItemState(FN_DRAW_WRAP_DLG, false, &pWrapItem))
                             {
                                 short nLayer = ((const SfxInt16Item*)pWrapItem)->GetValue();
                                 if (nLayer == 1)
@@ -266,9 +266,9 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                                 pSdrView->SetAttributes(*pOutSet);
 
                             bool bPosCorr =
-                                SFX_ITEM_SET != pOutSet->GetItemState(
+                                SfxItemState::SET != pOutSet->GetItemState(
                                     SID_ATTR_TRANSFORM_POS_X, false ) &&
-                                SFX_ITEM_SET != pOutSet->GetItemState(
+                                SfxItemState::SET != pOutSet->GetItemState(
                                     SID_ATTR_TRANSFORM_POS_Y, false );
 
                             SfxItemSet aFrmAttrSet(GetPool(), RES_FRMATR_BEGIN, RES_FRMATR_END - 1);
@@ -276,7 +276,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             bool bSingleSelection = rMarkList.GetMarkCount() == 1;
 
                             const SfxPoolItem* pAnchorItem;
-                            if(SFX_ITEM_SET == pOutSet->GetItemState(
+                            if(SfxItemState::SET == pOutSet->GetItemState(
                                 SID_ATTR_TRANSFORM_ANCHOR, false, &pAnchorItem))
                             {
                                 if(!bSingleSelection)

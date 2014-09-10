@@ -82,7 +82,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
     if( RES_FRMFMT == rFmt.Which() && XML_TABLE == eFamily )
     {
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET == rFmt.GetAttrSet().GetItemState( RES_PAGEDESC,
+        if( SfxItemState::SET == rFmt.GetAttrSet().GetItemState( RES_PAGEDESC,
                                                             false, &pItem ) )
         {
             OUString sName;
@@ -104,7 +104,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
         OSL_ENSURE(RES_FRMFMT == rFmt.Which(), "only frame format");
 
         const SfxPoolItem *pItem;
-        if( SFX_ITEM_SET ==
+        if( SfxItemState::SET ==
             rFmt.GetAttrSet().GetItemState( RES_BOXATR_FORMAT,
                                             false, &pItem ) )
         {

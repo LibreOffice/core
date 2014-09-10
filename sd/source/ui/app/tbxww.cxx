@@ -132,7 +132,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
 {
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
 
-    if( eState == SFX_ITEM_DEFAULT )
+    if( eState == SfxItemState::DEFAULT )
     {
         TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
         // StarDesktop can also receive another item,

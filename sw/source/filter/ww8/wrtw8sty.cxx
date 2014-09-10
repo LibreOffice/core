@@ -471,7 +471,7 @@ void MSWordStyles::SetStyleDefaults( const SwFmt& rFmt, bool bPap )
     for ( n = nStt; n < nEnd; ++n, ++pFlags )
     {
         if ( *pFlags && !m_rExport.ignoreAttributeForStyles( n )
-            && SFX_ITEM_SET != rFmt.GetItemState(n, false))
+            && SfxItemState::SET != rFmt.GetItemState(n, false))
         {
             //If we are a character property then see if it is one of the
             //western/asian ones that must be collapsed together for export to
@@ -1071,7 +1071,7 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
 
     // Hole evtl. Pagedesc des 1. Nodes
     if ( pSet &&
-         SFX_ITEM_SET == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
+         SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
          ( (SwFmtPageDesc*)pI )->GetPageDesc() )
     {
         AppendSection( *(SwFmtPageDesc*)pI, *pNd, pFmt, nRstLnNum );
@@ -1272,7 +1272,7 @@ void MSWordSections::SetHeaderFlag( sal_uInt8& rHeadFootFlags, const SwFmt& rFmt
     sal_uInt8 nFlag )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rFmt.GetItemState(RES_HEADER, true, &pItem)
+    if( SfxItemState::SET == rFmt.GetItemState(RES_HEADER, true, &pItem)
         && ((SwFmtHeader*)pItem)->IsActive() &&
         ((SwFmtHeader*)pItem)->GetHeaderFmt() )
         rHeadFootFlags |= nFlag;
@@ -1282,7 +1282,7 @@ void MSWordSections::SetFooterFlag( sal_uInt8& rHeadFootFlags, const SwFmt& rFmt
     sal_uInt8 nFlag )
 {
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rFmt.GetItemState(RES_FOOTER, true, &pItem)
+    if( SfxItemState::SET == rFmt.GetItemState(RES_FOOTER, true, &pItem)
         && ((SwFmtFooter*)pItem)->IsActive() &&
         ((SwFmtFooter*)pItem)->GetFooterFmt() )
         rHeadFootFlags |= nFlag;
@@ -1390,7 +1390,7 @@ void MSWordSections::CheckForFacinPg( WW8Export& rWrt ) const
 bool MSWordSections::HasBorderItem( const SwFmt& rFmt )
 {
     const SfxPoolItem* pItem;
-    return SFX_ITEM_SET == rFmt.GetItemState(RES_BOX, true, &pItem) &&
+    return SfxItemState::SET == rFmt.GetItemState(RES_BOX, true, &pItem) &&
             (   ((SvxBoxItem*)pItem)->GetTop() ||
                 ((SvxBoxItem*)pItem)->GetBottom()  ||
                 ((SvxBoxItem*)pItem)->GetLeft()  ||
@@ -1756,7 +1756,7 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
         const SfxItemSet* pOldI = pISet;
 
         const SfxPoolItem* pItem;
-        if ( titlePage && SFX_ITEM_SET ==
+        if ( titlePage && SfxItemState::SET ==
                 pPdFirstPgFmt->GetItemState( RES_PAPER_BIN, true, &pItem ) )
         {
             pISet = &pPdFirstPgFmt->GetAttrSet();

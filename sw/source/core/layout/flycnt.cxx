@@ -61,7 +61,7 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     sal_uInt16 nWhich = pNew ? pNew->Which() : 0;
     const SwFmtAnchor *pAnch = 0;
 
-    if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
+    if( RES_ATTRSET_CHG == nWhich && SfxItemState::SET ==
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, false,
             (const SfxPoolItem**)&pAnch ))
         ;       // The anchor pointer is set at GetItemState!

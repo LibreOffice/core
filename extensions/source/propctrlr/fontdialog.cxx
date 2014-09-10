@@ -309,7 +309,7 @@ namespace pcr
             // font name
             SfxItemState eState = _rSet.GetItemState(CFID_FONT);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxFontItem& rFontItem =
                     static_cast<const SvxFontItem&>(_rSet.Get(CFID_FONT));
@@ -324,7 +324,7 @@ namespace pcr
             // font height
             eState = _rSet.GetItemState(CFID_HEIGHT);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxFontHeightItem& rSvxFontHeightItem =
                     static_cast<const SvxFontHeightItem&>(_rSet.Get(CFID_HEIGHT));
@@ -338,7 +338,7 @@ namespace pcr
             // font weight
             eState = _rSet.GetItemState(CFID_WEIGHT);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxWeightItem& rWeightItem =
                     static_cast<const SvxWeightItem&>(_rSet.Get(CFID_WEIGHT));
@@ -351,7 +351,7 @@ namespace pcr
             // font slant
             eState = _rSet.GetItemState(CFID_POSTURE);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxPostureItem& rPostureItem =
                     static_cast<const SvxPostureItem&>(_rSet.Get(CFID_POSTURE));
@@ -364,7 +364,7 @@ namespace pcr
             // font underline
             eState = _rSet.GetItemState(CFID_UNDERLINE);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxUnderlineItem& rUnderlineItem =
                     static_cast<const SvxUnderlineItem&>(_rSet.Get(CFID_UNDERLINE));
@@ -386,7 +386,7 @@ namespace pcr
             // font strikeout
             eState = _rSet.GetItemState(CFID_STRIKEOUT);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxCrossedOutItem& rCrossedOutItem =
                     static_cast<const SvxCrossedOutItem&>(_rSet.Get(CFID_STRIKEOUT));
@@ -400,7 +400,7 @@ namespace pcr
             // font wordline mode
             eState = _rSet.GetItemState(CFID_WORDLINEMODE);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxWordLineModeItem& rWordLineModeItem =
                     static_cast<const SvxWordLineModeItem&>(_rSet.Get(CFID_WORDLINEMODE));
@@ -413,7 +413,7 @@ namespace pcr
             // text color
             eState = _rSet.GetItemState(CFID_CHARCOLOR);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxColorItem& rColorItem =
                     static_cast<const SvxColorItem&>(_rSet.Get(CFID_CHARCOLOR));
@@ -431,7 +431,7 @@ namespace pcr
             // font relief
             eState = _rSet.GetItemState(CFID_RELIEF);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxCharReliefItem& rReliefItem =
                     static_cast<const SvxCharReliefItem&>(_rSet.Get(CFID_RELIEF));
@@ -443,7 +443,7 @@ namespace pcr
             // font emphasis mark
             eState = _rSet.GetItemState(CFID_EMPHASIS);
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
             {
                 const SvxEmphasisMarkItem& rEmphMarkItem =
                     static_cast<const SvxEmphasisMarkItem&>(_rSet.Get(CFID_EMPHASIS));

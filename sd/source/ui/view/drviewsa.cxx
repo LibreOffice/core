@@ -574,7 +574,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     /* Zoom-Item
        Here we should propagate the corresponding value (Optimal ?, page width
        or page) with the help of the ZoomItems !!!   */
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ATTR_ZOOM ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOM ) )
     {
         if (GetDocSh()->IsUIActive() || (SlideShow::IsRunning(GetViewShellBase())) )
         {
@@ -604,7 +604,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             rSet.Put( *pZoomItem );
         }
     }
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_ATTR_ZOOMSLIDER ) )
     {
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
         if (GetDocSh()->IsUIActive() || (xSlideshow.is() && xSlideshow->isRunning()) || !GetActiveWindow() )
@@ -696,7 +696,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     }
 
     // Display of current page and layer.
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_STATUS_PAGE ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_STATUS_PAGE ) )
     {
         sal_Int32 nPageCount = sal_Int32(GetDoc()->GetSdPageCount(mePageKind));
         sal_Int32 nActivePageCount = sal_Int32(GetDoc()->GetActiveSdPageCount());
@@ -758,7 +758,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         rSet.Put (SfxStringItem (SID_STATUS_PAGE, aOUString));
     }
     // Layout
-    if( SFX_ITEM_DEFAULT == rSet.GetItemState( SID_STATUS_LAYOUT ) )
+    if( SfxItemState::DEFAULT == rSet.GetItemState( SID_STATUS_LAYOUT ) )
     {
         OUString aString = mpActualPage->GetLayoutName();
         sal_Int32 nPos = aString.indexOf(SD_LT_SEPARATOR);

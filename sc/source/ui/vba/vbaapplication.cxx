@@ -1244,7 +1244,7 @@ ScVbaApplication::getDisplayFormulaBar()
 
         pViewShell->GetState( reqList );
         const SfxPoolItem *pItem=0;
-        if ( reqList.GetItemState( FID_TOGGLEINPUTLINE, false, &pItem ) == SFX_ITEM_SET )
+        if ( reqList.GetItemState( FID_TOGGLEINPUTLINE, false, &pItem ) == SfxItemState::SET )
             bRes =   ((SfxBoolItem*)pItem)->GetValue();
     }
     return bRes;

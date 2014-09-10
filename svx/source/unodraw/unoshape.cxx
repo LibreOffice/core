@@ -1687,12 +1687,12 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                 pSet = new SfxItemSet( mpModel->GetItemPool(),  pMap->nWID, pMap->nWID);
             }
 
-            if( pSet->GetItemState( pMap->nWID ) != SFX_ITEM_SET )
+            if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
                 pSet->Put(mpObj->GetMergedItem(pMap->nWID));
 
             if( !SvxUnoTextRangeBase::SetPropertyValueHelper( *pSet, pMap, rVal, *pSet ))
             {
-                if( pSet->GetItemState( pMap->nWID ) != SFX_ITEM_SET )
+                if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
                 {
                     if(bIsNotPersist)
                     {
@@ -1701,14 +1701,14 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
                     }
                 }
 
-                if( pSet->GetItemState( pMap->nWID ) != SFX_ITEM_SET )
+                if( pSet->GetItemState( pMap->nWID ) != SfxItemState::SET )
                 {
                     // Default aus ItemPool holen
                     if(SfxItemPool::IsWhich(pMap->nWID))
                         pSet->Put(mpModel->GetItemPool().GetDefaultItem(pMap->nWID));
                 }
 
-                if( pSet->GetItemState( pMap->nWID ) == SFX_ITEM_SET )
+                if( pSet->GetItemState( pMap->nWID ) == SfxItemState::SET )
                 {
                     SvxItemPropertySet_setPropertyValue( *mpPropSet, pMap, rVal, *pSet );
                 }
@@ -1964,7 +1964,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
     case SDRATTR_CIRCSTARTANGLE:
     {
         const SfxPoolItem* pPoolItem=NULL;
-        if(aSet.GetItemState(SDRATTR_CIRCSTARTANGLE,false,&pPoolItem)==SFX_ITEM_SET)
+        if(aSet.GetItemState(SDRATTR_CIRCSTARTANGLE,false,&pPoolItem)==SfxItemState::SET)
         {
             sal_Int32 nAngle = ((SdrCircStartAngleItem*)pPoolItem)->GetValue();
             aAny <<= nAngle;
@@ -1975,7 +1975,7 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleE
     case SDRATTR_CIRCENDANGLE:
     {
         const SfxPoolItem* pPoolItem=NULL;
-        if (aSet.GetItemState(SDRATTR_CIRCENDANGLE,false,&pPoolItem)==SFX_ITEM_SET)
+        if (aSet.GetItemState(SDRATTR_CIRCENDANGLE,false,&pPoolItem)==SfxItemState::SET)
         {
             sal_Int32 nAngle = ((SdrCircEndAngleItem*)pPoolItem)->GetValue();
             aAny <<= nAngle;
@@ -2066,11 +2066,11 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
 
         switch( rSet.GetItemState( pMap->nWID, false ) )
         {
-        case SFX_ITEM_READONLY:
-        case SFX_ITEM_SET:
+        case SfxItemState::READONLY:
+        case SfxItemState::SET:
             eState = beans::PropertyState_DIRECT_VALUE;
             break;
-        case SFX_ITEM_DEFAULT:
+        case SfxItemState::DEFAULT:
             eState = beans::PropertyState_DEFAULT_VALUE;
             break;
         default:
@@ -2959,8 +2959,8 @@ bool SvxShape::getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty
     {
         const SfxItemSet& rSet = mpObj->GetMergedItemSet();
 
-        if( rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SFX_ITEM_SET ||
-            rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SFX_ITEM_SET )
+        if( rSet.GetItemState( XATTR_FILLBMP_STRETCH, false ) == SfxItemState::SET ||
+            rSet.GetItemState( XATTR_FILLBMP_TILE, false ) == SfxItemState::SET )
         {
             rState = beans::PropertyState_DIRECT_VALUE;
         }

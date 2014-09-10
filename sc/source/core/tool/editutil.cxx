@@ -154,7 +154,7 @@ void ScEditUtil::RemoveCharAttribs( EditTextObject& rEditText, const ScPatternAt
     const SfxPoolItem* pItem;
     for (sal_uInt16 i = 0; i < nMapCount; ++i)
     {
-        if ( rSet.GetItemState(AttrTypeMap[i].nAttrType, false, &pItem) == SFX_ITEM_SET )
+        if ( rSet.GetItemState(AttrTypeMap[i].nAttrType, false, &pItem) == SfxItemState::SET )
             rEditText.RemoveCharAttribs(AttrTypeMap[i].nCharType);
     }
 }
@@ -383,9 +383,9 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
         for (sal_uInt16 nId = EE_CHAR_START; nId <= EE_CHAR_END && !bNeedsObject; nId++)
         {
             SfxItemState eState = pEditAttrs->GetItemState( nId, false, &pItem );
-            if (eState == SFX_ITEM_DONTCARE)
+            if (eState == SfxItemState::DONTCARE)
                 bNeedsObject = true;
-            else if (eState == SFX_ITEM_SET)
+            else if (eState == SfxItemState::SET)
             {
                 if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
                         nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
@@ -409,13 +409,13 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
         //  Feldbefehle enthalten?
 
         SfxItemState eFieldState = pEditAttrs->GetItemState( EE_FEATURE_FIELD, false );
-        if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
+        if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
             bNeedsObject = true;
 
         //  not converted characters?
 
         SfxItemState eConvState = pEditAttrs->GetItemState( EE_FEATURE_NOTCONV, false );
-        if ( eConvState == SFX_ITEM_DONTCARE || eConvState == SFX_ITEM_SET )
+        if ( eConvState == SfxItemState::DONTCARE || eConvState == SfxItemState::SET )
             bNeedsObject = true;
     }
 }
@@ -629,7 +629,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
         for (nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich ++)
         {
             const SfxPoolItem* pParaItem;
-            if ( rParaAttribs.GetItemState( nWhich, false, &pParaItem ) == SFX_ITEM_SET )
+            if ( rParaAttribs.GetItemState( nWhich, false, &pParaItem ) == SfxItemState::SET )
             {
                 //  if defaults are set, use only items that are different from default
                 if ( !pDefaults || *pParaItem != pDefaults->Get(nWhich) )
@@ -661,7 +661,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
                     //  Clear those items that are different from existing character attributes.
                     //  Where no character attributes are set, GetAttribs returns the paragraph attributes.
                     const SfxPoolItem* pItem;
-                    if ( aNewCharAttrs.GetItemState( nWhich, false, &pItem ) == SFX_ITEM_SET &&
+                    if ( aNewCharAttrs.GetItemState( nWhich, false, &pItem ) == SfxItemState::SET &&
                          *pItem != aOldCharAttrs.Get(nWhich) )
                     {
                         aNewCharAttrs.ClearItem(nWhich);

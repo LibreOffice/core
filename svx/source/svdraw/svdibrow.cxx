@@ -95,7 +95,7 @@ public:
 
 public:
     ImpItemListRow()
-    :   eState(SFX_ITEM_UNKNOWN),
+    :   eState(SfxItemState::UNKNOWN),
         nWhichId(0),
         pType(NULL),
         eItemType(ITEM_DONTKNOW),
@@ -320,12 +320,12 @@ OUString _SdrItemBrowserControl::GetCellText(long _nRow, sal_uInt16 _nColId) con
                     {
                         switch (pEntry->eState)
                         {
-                            case SFX_ITEM_UNKNOWN : sRet = "Unknown";  break;
-                            case SFX_ITEM_DISABLED: sRet = "Disabled"; break;
-                            case SFX_ITEM_DONTCARE: sRet = "DontCare"; break;
-                            case SFX_ITEM_SET     : sRet = "Set";      break;
-                            case SFX_ITEM_DEFAULT : sRet = "Default";  break;
-                            case SFX_ITEM_READONLY: sRet = "ReadOnly";  break;
+                            case SfxItemState::UNKNOWN : sRet = "Unknown";  break;
+                            case SfxItemState::DISABLED: sRet = "Disabled"; break;
+                            case SfxItemState::DONTCARE: sRet = "DontCare"; break;
+                            case SfxItemState::SET     : sRet = "Set";      break;
+                            case SfxItemState::DEFAULT : sRet = "Default";  break;
+                            case SfxItemState::READONLY: sRet = "ReadOnly";  break;
                         } // switch
                     } break;
                     case ITEMBROWSER_TYPECOL_ID: sRet = pEntry->GetItemTypeStr(); break;
@@ -589,10 +589,10 @@ void _SdrItemBrowserControl::ImpSetEntry(const ImpItemListRow& rEntry, sal_uIntP
 bool ImpGetItem(const SfxItemSet& rSet, sal_uInt16 nWhich, const SfxPoolItem*& rpItem)
 {
     SfxItemState eState=rSet.GetItemState(nWhich,true,&rpItem);
-    if (eState==SFX_ITEM_DEFAULT) {
+    if (eState==SfxItemState::DEFAULT) {
         rpItem=&rSet.Get(nWhich);
     }
-    return (eState==SFX_ITEM_DEFAULT || eState==SFX_ITEM_SET) && rpItem!=NULL;
+    return (eState==SfxItemState::DEFAULT || eState==SfxItemState::SET) && rpItem!=NULL;
 }
 
 bool IsItemIneffective(sal_uInt16 nWhich, const SfxItemSet* pSet, sal_uInt16& rIndent)
@@ -922,10 +922,10 @@ void _SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItem
             SfxItemState eState=pSet->GetItemState(nWhich);
             if (p2ndSet!=NULL) {
                 SfxItemState e2ndState=p2ndSet->GetItemState(nWhich);
-                if (eState==SFX_ITEM_DEFAULT) eState=SFX_ITEM_DISABLED;
-                else if (e2ndState==SFX_ITEM_DEFAULT) eState=SFX_ITEM_DEFAULT;
+                if (eState==SfxItemState::DEFAULT) eState=SfxItemState::DISABLED;
+                else if (e2ndState==SfxItemState::DEFAULT) eState=SfxItemState::DEFAULT;
             }
-            if (eState!=SFX_ITEM_DISABLED) {
+            if (eState!=SfxItemState::DISABLED) {
                 const SfxPoolItem& rItem=pSet->Get(nWhich);
                 sal_uInt16 nIndent=0;
                 if (!HAS_BASE(SfxVoidItem,&rItem) && !HAS_BASE(SfxSetItem,&rItem) && (!IsItemIneffective(nWhich,pSet,nIndent) || bDontHideIneffectiveItems)) {

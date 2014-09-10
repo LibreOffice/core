@@ -917,11 +917,11 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                                     // we need some properties in the media descriptor, so we have to make sure that they are in
                                     Any aStreamAny;
                                     aStreamAny <<= pMedium->GetInputStream();
-                                    if ( pSet->GetItemState( SID_INPUTSTREAM ) < SFX_ITEM_SET )
+                                    if ( pSet->GetItemState( SID_INPUTSTREAM ) < SfxItemState::SET )
                                         pSet->Put( SfxUnoAnyItem( SID_INPUTSTREAM, aStreamAny ) );
-                                    if ( pSet->GetItemState( SID_FILE_NAME ) < SFX_ITEM_SET )
+                                    if ( pSet->GetItemState( SID_FILE_NAME ) < SfxItemState::SET )
                                         pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
-                                    if ( pSet->GetItemState( SID_FILTER_NAME ) < SFX_ITEM_SET )
+                                    if ( pSet->GetItemState( SID_FILTER_NAME ) < SfxItemState::SET )
                                         pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
 
                                     Sequence< PropertyValue > rProperties;
@@ -2666,7 +2666,7 @@ bool SfxObjectShell::CommonSaveAs_Impl
     }
     aParams->ClearItem( SID_COPY_STREAM_IF_POSSIBLE );
 
-    pImp->bPasswd = SFX_ITEM_SET == aParams->GetItemState(SID_PASSWORD);
+    pImp->bPasswd = SfxItemState::SET == aParams->GetItemState(SID_PASSWORD);
 
     SfxMedium *pActMed = GetMedium();
     const INetURLObject aActName(pActMed->GetName());
@@ -2680,7 +2680,7 @@ bool SfxObjectShell::CommonSaveAs_Impl
         return false;
     }
 
-    if( SFX_ITEM_SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
+    if( SfxItemState::SET != aParams->GetItemState(SID_UNPACK) && SvtSaveOptions().IsSaveUnpacked() )
         aParams->Put( SfxBoolItem( SID_UNPACK, false ) );
 
     OUString aTempFileURL;
@@ -2788,7 +2788,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl
         pMergedParams->Put( *pParams );
 
 #ifdef DBG_UTIL
-    if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SFX_ITEM_SET )
+    if ( pMergedParams->GetItemState( SID_DOC_SALVAGE) >= SfxItemState::SET )
         SAL_WARN( "sfx.doc","Salvage item present in Itemset, check the parameters!");
 #endif
 

@@ -280,7 +280,7 @@ void FmFieldWin::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoo
     if (!pState  || SID_FM_FIELDS_CONTROL != nSID)
         return;
 
-    if (eState >= SFX_ITEM_DEFAULT)
+    if (eState >= SfxItemState::DEFAULT)
     {
         FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
         UpdateContent(pShell);

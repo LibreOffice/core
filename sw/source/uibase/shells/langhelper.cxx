@@ -420,17 +420,17 @@ namespace SwLangHelper
 
         const SfxPoolItem *pItem = 0;
         SfxItemState nState = aSet.GetItemState( nLangWhichId, true, &pItem );
-        if (nState > SFX_ITEM_DEFAULT && pItem)
+        if (nState > SfxItemState::DEFAULT && pItem)
         {
             // the item is set and can be used
             nLang = (dynamic_cast<const SvxLanguageItem&>(*pItem)).GetLanguage();
         }
-        else if (nState == SFX_ITEM_DEFAULT)
+        else if (nState == SfxItemState::DEFAULT)
         {
             // since the attribute is not set: retrieve the default value
             nLang = (dynamic_cast<const SvxLanguageItem&>(aSet.GetPool()->GetDefaultItem( nLangWhichId ))).GetLanguage();
         }
-        else if (nState == SFX_ITEM_DONTCARE)
+        else if (nState == SfxItemState::DONTCARE)
         {
             // there is more than one language...
             nLang = LANGUAGE_DONTKNOW;

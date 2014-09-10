@@ -185,10 +185,10 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
     // get the SfxPoolItem
     const SfxPoolItem* pItem = 0;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
-    if(SFX_ITEM_SET != eState && SFX_WHICH_MAX > rEntry.nWID )
+    if(SfxItemState::SET != eState && SFX_WHICH_MAX > rEntry.nWID )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     // return item values as uno::Any
-    if(eState >= SFX_ITEM_DEFAULT && pItem)
+    if(eState >= SfxItemState::DEFAULT && pItem)
     {
         pItem->QueryValue( rAny, rEntry.nMemberId );
     }
@@ -245,10 +245,10 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
     const SfxPoolItem* pItem = 0;
     boost::scoped_ptr<SfxPoolItem> pNewItem;
     SfxItemState eState = rSet.GetItemState( rEntry.nWID, true, &pItem );
-    if(SFX_ITEM_SET != eState && SFX_WHICH_MAX > rEntry.nWID )
+    if(SfxItemState::SET != eState && SFX_WHICH_MAX > rEntry.nWID )
         pItem = &rSet.GetPool()->GetDefaultItem(rEntry.nWID);
     //maybe there's another way to find an Item
-    if(eState < SFX_ITEM_DEFAULT)
+    if(eState < SfxItemState::DEFAULT)
     {
         SfxItemSet aSet(*rSet.GetPool(), rEntry.nWID, rEntry.nWID);
         if(FillItem(aSet, rEntry.nWID, false))
@@ -296,9 +296,9 @@ PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEn
     // Get item state
     SfxItemState eState = rSet.GetItemState( nWhich, false );
     // Return item value as UnoAny
-    if(eState == SFX_ITEM_DEFAULT)
+    if(eState == SfxItemState::DEFAULT)
         eRet = PropertyState_DEFAULT_VALUE;
-    else if(eState < SFX_ITEM_DEFAULT)
+    else if(eState < SfxItemState::DEFAULT)
         eRet = PropertyState_AMBIGUOUS_VALUE;
     return eRet;
 }
@@ -319,9 +319,9 @@ PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, cons
     // Get item state
     SfxItemState eState = rSet.GetItemState(nWhich, false);
     // Return item value as UnoAny
-    if(eState == SFX_ITEM_DEFAULT)
+    if(eState == SfxItemState::DEFAULT)
         eRet = PropertyState_DEFAULT_VALUE;
-    else if(eState < SFX_ITEM_DEFAULT)
+    else if(eState < SfxItemState::DEFAULT)
         eRet = PropertyState_AMBIGUOUS_VALUE;
     return eRet;
 }

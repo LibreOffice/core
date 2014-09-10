@@ -84,12 +84,12 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             mpView->GetAttributes( aAttr );
             const SfxPoolItem*  pPoolItem = NULL;
 
-            if( SFX_ITEM_SET == aAttr.GetItemState( XATTR_FILLSTYLE, true, &pPoolItem ) )
+            if( SfxItemState::SET == aAttr.GetItemState( XATTR_FILLSTYLE, true, &pPoolItem ) )
             {
                 drawing::FillStyle eStyle = ( ( const XFillStyleItem* ) pPoolItem )->GetValue();
 
                 if( eStyle == drawing::FillStyle_SOLID &&
-                    SFX_ITEM_SET == aAttr.GetItemState( XATTR_FILLCOLOR, true, &pPoolItem ) )
+                    SfxItemState::SET == aAttr.GetItemState( XATTR_FILLCOLOR, true, &pPoolItem ) )
                 {
                     const XFillColorItem* pItem = ( const XFillColorItem* ) pPoolItem;
                     XColorItem aXColorItem( ATTR_COPY_START_COLOR, pItem->GetName(),
@@ -134,30 +134,30 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         const SfxPoolItem*  pPoolItem = NULL;
 
         // Count
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
             nNumber = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
 
         // translation
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
             lSizeX = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
             lSizeY = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
             lAngle = ( ( const SfxInt32Item* )pPoolItem )->GetValue();
 
         // scale
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
             lWidth = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
             lHeight = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
 
         // start/end color
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
             aStartColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
             bColor = true;
         }
-        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_END_COLOR, true, &pPoolItem ) )
+        if( pArgs && SfxItemState::SET == pArgs->GetItemState( ATTR_COPY_END_COLOR, true, &pPoolItem ) )
         {
             aEndColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
             if( aStartColor == aEndColor )

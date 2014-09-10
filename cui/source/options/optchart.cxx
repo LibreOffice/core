@@ -66,7 +66,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(Window* pParent, const SfxItemSet
     pColorList = XColorList::CreateStdColorList();
 
     const SfxPoolItem* pItem = NULL;
-    if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, false, &pItem ) == SFX_ITEM_SET )
+    if ( rInAttrs.GetItemState( SID_SCH_EDITOPTIONS, false, &pItem ) == SfxItemState::SET )
     {
         pColorConfig = (static_cast< SvxChartColorTableItem* >(pItem->Clone()) );
     }

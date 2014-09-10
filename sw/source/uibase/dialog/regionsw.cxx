@@ -93,7 +93,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
     {
         const SfxPoolItem *pItem = 0;
         OUString aTmpStr;
-        if ( SFX_ITEM_SET ==
+        if ( SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_REGION_NAME, true, &pItem) )
         {
             const OUString sRemoveWhenUniStringIsGone = ((const SfxStringItem *)pItem)->GetValue();
@@ -106,8 +106,8 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         rReq.SetReturnValue(SfxStringItem(FN_INSERT_REGION, aTmpStr));
 
         aSet.Put( *pSet );
-        if(SFX_ITEM_SET == pSet->GetItemState(SID_ATTR_COLUMNS, false, &pItem)||
-            SFX_ITEM_SET == pSet->GetItemState(FN_INSERT_REGION, false, &pItem))
+        if(SfxItemState::SET == pSet->GetItemState(SID_ATTR_COLUMNS, false, &pItem)||
+            SfxItemState::SET == pSet->GetItemState(FN_INSERT_REGION, false, &pItem))
         {
             SwFmtCol aCol;
             SwRect aRect;
@@ -121,17 +121,17 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
                 aSet.Put(aCol);
             }
         }
-        else if(SFX_ITEM_SET == pSet->GetItemState(RES_COL, false, &pItem))
+        else if(SfxItemState::SET == pSet->GetItemState(RES_COL, false, &pItem))
         {
             aSet.Put(*pItem);
         }
 
-        const bool bHidden = SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_REGION_HIDDEN, true, &pItem) &&
+        const bool bHidden = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_HIDDEN, true, &pItem) &&
                              ((const SfxBoolItem *)pItem)->GetValue();
-        const bool bProtect = SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_REGION_PROTECT, true, &pItem) &&
+        const bool bProtect = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_PROTECT, true, &pItem) &&
                               ((const SfxBoolItem *)pItem)->GetValue();
         // #114856# edit in readonly sections
-        const bool bEditInReadonly = SFX_ITEM_SET == pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, true, &pItem) &&
+        const bool bEditInReadonly = SfxItemState::SET == pSet->GetItemState(FN_PARAM_REGION_EDIT_IN_READONLY, true, &pItem) &&
                                      ((const SfxBoolItem *)pItem)->GetValue();
 
         aSection.SetProtectFlag(bProtect);
@@ -139,16 +139,16 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         // #114856# edit in readonly sections
         aSection.SetEditInReadonlyFlag(bEditInReadonly);
 
-        if(SFX_ITEM_SET ==
+        if(SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_REGION_CONDITION, true, &pItem))
             aSection.SetCondition(((const SfxStringItem *)pItem)->GetValue());
 
         OUString aFile, aSub;
-        if(SFX_ITEM_SET ==
+        if(SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_1, true, &pItem))
             aFile = ((const SfxStringItem *)pItem)->GetValue();
 
-        if(SFX_ITEM_SET ==
+        if(SfxItemState::SET ==
                 pSet->GetItemState(FN_PARAM_3, true, &pItem))
             aSub = ((const SfxStringItem *)pItem)->GetValue();
 
@@ -158,7 +158,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
             sLinkFileName += OUString(sfx2::cTokenSeparator);
             sLinkFileName = comphelper::string::setToken(sLinkFileName, 0, sfx2::cTokenSeparator, aFile);
 
-            if(SFX_ITEM_SET ==
+            if(SfxItemState::SET ==
                     pSet->GetItemState(FN_PARAM_2, true, &pItem))
             {
                 sLinkFileName = comphelper::string::setToken(sLinkFileName, 1, sfx2::cTokenSeparator,

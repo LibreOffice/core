@@ -339,7 +339,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     sal_uInt16              nWhich = 0;
 
                     for ( nWhich=ATTR_PATTERN_START; nWhich<=ATTR_PATTERN_END; nWhich++ )
-                        if ( pReqArgs->GetItemState( nWhich, true, &pAttr ) == SFX_ITEM_SET )
+                        if ( pReqArgs->GetItemState( nWhich, true, &pAttr ) == SfxItemState::SET )
                             pNewSet->Put( *pAttr );
 
                     pTabViewShell->ApplyAttributes( pNewSet.get(), pEmptySet.get() );
@@ -475,9 +475,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             OUString aArgName;
                             OUString aArgComment;
                             const SfxPoolItem* pItem;
-                            if ( pReqArgs->GetItemState( SID_SCENARIOS, true, &pItem ) == SFX_ITEM_SET )
+                            if ( pReqArgs->GetItemState( SID_SCENARIOS, true, &pItem ) == SfxItemState::SET )
                                 aArgName = ((const SfxStringItem*)pItem)->GetValue();
-                            if ( pReqArgs->GetItemState( SID_NEW_TABLENAME, true, &pItem ) == SFX_ITEM_SET )
+                            if ( pReqArgs->GetItemState( SID_NEW_TABLENAME, true, &pItem ) == SfxItemState::SET )
                                 aArgComment = ((const SfxStringItem*)pItem)->GetValue();
 
                             aColor = Color( COL_LIGHTGRAY );        // Default
@@ -734,7 +734,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     {
                         bCenter = true;
                         SfxPoolItem* pItem = 0;
-                        if( rBindings.QueryState( nSlot, pItem ) >= SFX_ITEM_DEFAULT )
+                        if( rBindings.QueryState( nSlot, pItem ) >= SfxItemState::DEFAULT )
                             bMerge = !static_cast< SfxBoolItem* >( pItem )->GetValue();
 
                         delete pItem;
@@ -749,7 +749,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     bool bApi = rReq.IsAPI();
                     const SfxPoolItem* pItem;
                     if ( pReqArgs &&
-                        pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET )
+                        pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET )
                     {
                         OSL_ENSURE(pItem && pItem->ISA(SfxBoolItem), "falsches Item");
                         bMoveContents = ((const SfxBoolItem*)pItem)->GetValue();

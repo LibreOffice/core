@@ -119,7 +119,7 @@ void SvxPopupWindowListBox::PopupModeEnd()
 void SvxPopupWindowListBox::StateChanged(
         sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
-    rToolBox.EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SFX_ITEM_DISABLED) );
+    rToolBox.EnableItem( nTbxId, ( SfxToolBoxControl::GetItemState( pState ) != SfxItemState::DISABLED) );
     SfxPopupWindow::StateChanged( nSID, eState, pState );
 }
 
@@ -161,7 +161,7 @@ void SvxListBoxControl::StateChanged(
         sal_uInt16, SfxItemState, const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(),
-                            SFX_ITEM_DISABLED != GetItemState(pState) );
+                            SfxItemState::DISABLED != GetItemState(pState) );
 }
 
 
@@ -241,7 +241,7 @@ void SvxUndoRedoControl::StateChanged(
 {
     if ( nSID == SID_UNDO || nSID == SID_REDO )
     {
-        if ( eState == SFX_ITEM_DISABLED )
+        if ( eState == SfxItemState::DISABLED )
         {
             ToolBox& rBox = GetToolBox();
             rBox.SetQuickHelpText( GetId(), aDefaultText );

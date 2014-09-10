@@ -111,7 +111,7 @@ bool SdParagraphNumTabPage::FillItemSet( SfxItemSet* rSet )
 void SdParagraphNumTabPage::Reset( const SfxItemSet* rSet )
 {
     SfxItemState eItemState = rSet->GetItemState( ATTR_NUMBER_NEWSTART );
-    if(eItemState > SFX_ITEM_DEFAULT )
+    if(eItemState > SfxItemState::DEFAULT )
     {
         const SfxBoolItem& rStart = (const SfxBoolItem&)rSet->Get(ATTR_NUMBER_NEWSTART);
         m_pNewStartCB->SetState( rStart.GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
@@ -125,7 +125,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet* rSet )
     m_pNewStartCB->SaveValue();
 
     eItemState = rSet->GetItemState( ATTR_NUMBER_NEWSTART_AT);
-    if( eItemState > SFX_ITEM_DEFAULT )
+    if( eItemState > SfxItemState::DEFAULT )
     {
         sal_Int16 nNewStart = ((const SfxInt16Item&)rSet->Get(ATTR_NUMBER_NEWSTART_AT)).GetValue();
         m_pNewStartNumberCB->Check(-1 != nNewStart);

@@ -156,7 +156,7 @@ void SvxFmTbxCtlConfig::StateChanged(sal_uInt16 nSID, SfxItemState eState, const
     if (nSID == SID_FM_CONFIG)
     {
         sal_uInt16 nSlot   = 0;
-        if (eState >= SFX_ITEM_DEFAULT)
+        if (eState >= SfxItemState::DEFAULT)
             nSlot = ((SfxUInt16Item*)pState)->GetValue();
 
         switch( nSlot )
@@ -264,7 +264,7 @@ void SvxFmTbxCtlAbsRec::StateChanged( sal_uInt16 nSID, SfxItemState eState, cons
         pWin->SetValue( pItem ? pItem->GetValue() : -1 );
     }
 
-    bool bEnable = SFX_ITEM_DISABLED != eState && pState;
+    bool bEnable = SfxItemState::DISABLED != eState && pState;
     if (!bEnable)
         pWin->SetText(OUString());
 

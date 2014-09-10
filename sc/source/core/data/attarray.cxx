@@ -678,7 +678,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
             const SfxPoolItem*      pBLTRItem = 0;
             SfxItemState            eBLTRState = rOldSet.GetItemState( ATTR_BORDER_BLTR, true, &pBLTRItem );
 
-            if ( (SFX_ITEM_SET == eState) || (SFX_ITEM_SET == eTLBRState) || (SFX_ITEM_SET == eBLTRState) )
+            if ( (SfxItemState::SET == eState) || (SfxItemState::SET == eTLBRState) || (SfxItemState::SET == eBLTRState) )
             {
                 boost::scoped_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
                 SfxItemSet&     rNewSet = pNewPattern->GetItemSet();
@@ -880,19 +880,19 @@ static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
         //  pMergeSet has no parent
         SfxItemState eOldState = rMergeSet.GetItemState( nId, false, &pOldItem );
 
-        if ( eOldState == SFX_ITEM_DEFAULT )
+        if ( eOldState == SfxItemState::DEFAULT )
         {
             SfxItemState eNewState = rSource.GetItemState( nId, true, &pNewItem );
-            if ( eNewState == SFX_ITEM_SET )
+            if ( eNewState == SfxItemState::SET )
             {
                 if ( *pNewItem != rMergeSet.GetPool()->GetDefaultItem(nId) )
                     rMergeSet.InvalidateItem( nId );
             }
         }
-        else if ( eOldState == SFX_ITEM_SET ) // Item set
+        else if ( eOldState == SfxItemState::SET ) // Item set
         {
             SfxItemState eNewState = rSource.GetItemState( nId, true, &pNewItem );
-            if ( eNewState == SFX_ITEM_SET )
+            if ( eNewState == SfxItemState::SET )
             {
                 if ( pNewItem != pOldItem ) // Both pulled
                     rMergeSet.InvalidateItem( nId );
@@ -1266,7 +1266,7 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
                     const SfxItemSet* pSet = pDocument->GetCondResult( nCol, nRowCond, nTab );
 
                     const SfxPoolItem* pItem;
-                    if( pSet && pSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SFX_ITEM_SET )
+                    if( pSet && pSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SfxItemState::SET )
                     {
                         const ScProtectionAttr* pCondProtect = static_cast<const ScProtectionAttr*>(pItem);
                         if( pCondProtect->GetProtection() || pCondProtect->GetHideCell() )
@@ -1648,7 +1648,7 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         const SfxItemSet& rOldSet = pOldPattern->GetItemSet();
         const SfxPoolItem* pItem;
 
-        bool bNeedJust = ( rOldSet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem ) != SFX_ITEM_SET
+        bool bNeedJust = ( rOldSet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem ) != SfxItemState::SET
                            || (((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_LEFT &&
                                ((const SvxHorJustifyItem*)pItem)->GetValue() != SVX_HOR_JUSTIFY_RIGHT ));
         sal_uInt16 nOldValue = ((const SfxUInt16Item&)rOldSet.Get( ATTR_INDENT )).GetValue();

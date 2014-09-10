@@ -250,7 +250,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 sal_uLong nFormat = 0;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -510,7 +510,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SfxItemState::SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
                     const OUString& rName     = pHyper->GetName();
@@ -1072,19 +1072,19 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
     }
 
     // #i55929# according to spec, nInputScript is used for font and font height only
-    if ( rSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( EE_CHAR_FONTINFO ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTINFO, nInputScript );
-    if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_FONTHEIGHT, nInputScript );
-    if ( rSet.GetItemState( EE_CHAR_WEIGHT ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( EE_CHAR_WEIGHT ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_WEIGHT, nScript );
-    if ( rSet.GetItemState( EE_CHAR_ITALIC ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( EE_CHAR_ITALIC ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rSet, aAttribs, EE_CHAR_ITALIC, nScript );
 
     //  Unterstreichung
 
     SfxItemState eState = aAttribs.GetItemState( EE_CHAR_UNDERLINE, true );
-    if ( eState == SFX_ITEM_DONTCARE )
+    if ( eState == SfxItemState::DONTCARE )
     {
         rSet.InvalidateItem( SID_ULINE_VAL_NONE );
         rSet.InvalidateItem( SID_ULINE_VAL_SINGLE );
@@ -1127,7 +1127,7 @@ void ScEditShell::GetAttrState(SfxItemSet &rSet)
 
     eState = aAttribs.GetItemState( EE_CHAR_KERNING, true );
     pViewData->GetBindings().Invalidate( SID_ATTR_CHAR_KERNING );
-    if ( eState == SFX_ITEM_DONTCARE )
+    if ( eState == SfxItemState::DONTCARE )
     {
     //  rSet.InvalidateItem( SID_ATTR_CHAR_KERNING );
         rSet.InvalidateItem(EE_CHAR_KERNING);
@@ -1182,7 +1182,7 @@ void ScEditShell::ExecuteUndo(SfxRequest& rReq)
 
                 sal_uInt16 nCount = 1;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET )
                     nCount = ((const SfxUInt16Item*)pItem)->GetValue();
 
                 for (sal_uInt16 i=0; i<nCount; i++)

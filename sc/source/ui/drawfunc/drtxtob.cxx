@@ -179,7 +179,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                 sal_uLong nFormat = 0;
                 const SfxPoolItem* pItem;
                 if ( pReqArgs &&
-                     pReqArgs->GetItemState(nSlot, true, &pItem) == SFX_ITEM_SET &&
+                     pReqArgs->GetItemState(nSlot, true, &pItem) == SfxItemState::SET &&
                      pItem->ISA(SfxUInt32Item) )
                 {
                     nFormat = ((const SfxUInt32Item*)pItem)->GetValue();
@@ -257,7 +257,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             if( pReqArgs )
             {
                 const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs->GetItemState( SID_HYPERLINK_SETLINK, true, &pItem ) == SfxItemState::SET )
                 {
                     const SvxHyperlinkItem* pHyper = (const SvxHyperlinkItem*) pItem;
                     const OUString& rName     = pHyper->GetName();
@@ -377,7 +377,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     else
         rSet.Put(SfxBoolItem(SID_FONTWORK, bHasFontWork));
 
-    if ( rSet.GetItemState( SID_HYPERLINK_GETLINK ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_HYPERLINK_GETLINK ) != SfxItemState::UNKNOWN )
     {
         SvxHyperlinkItem aHLinkItem;
         SdrView* pView = pViewData->GetScDrawView();
@@ -410,7 +410,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         rSet.Put(aHLinkItem);
     }
 
-    if ( rSet.GetItemState( SID_OPEN_HYPERLINK ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_OPEN_HYPERLINK ) != SfxItemState::UNKNOWN )
     {
         SdrView* pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
@@ -428,29 +428,29 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             rSet.DisableItem( SID_OPEN_HYPERLINK );
     }
 
-    if( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SFX_ITEM_UNKNOWN )
+    if( rSet.GetItemState( SID_TRANSLITERATE_HALFWIDTH ) != SfxItemState::UNKNOWN )
         ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_HALFWIDTH );
-    if( rSet.GetItemState( SID_TRANSLITERATE_FULLWIDTH ) != SFX_ITEM_UNKNOWN )
+    if( rSet.GetItemState( SID_TRANSLITERATE_FULLWIDTH ) != SfxItemState::UNKNOWN )
         ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_FULLWIDTH );
-    if( rSet.GetItemState( SID_TRANSLITERATE_HIRAGANA ) != SFX_ITEM_UNKNOWN )
+    if( rSet.GetItemState( SID_TRANSLITERATE_HIRAGANA ) != SfxItemState::UNKNOWN )
         ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_HIRAGANA );
-    if( rSet.GetItemState( SID_TRANSLITERATE_KATAGANA ) != SFX_ITEM_UNKNOWN )
+    if( rSet.GetItemState( SID_TRANSLITERATE_KATAGANA ) != SfxItemState::UNKNOWN )
         ScViewUtil::HideDisabledSlot( rSet, pViewFrm->GetBindings(), SID_TRANSLITERATE_KATAGANA );
 
-    if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_ENABLE_HYPHENATION ) != SfxItemState::UNKNOWN )
     {
         SdrView* pView = pViewData->GetScDrawView();
         SfxItemSet aAttrs( pView->GetModel()->GetItemPool() );
         pView->GetAttributes( aAttrs );
-        if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SFX_ITEM_DEFAULT )
+        if( aAttrs.GetItemState( EE_PARA_HYPHENATE ) >= SfxItemState::DEFAULT )
         {
             bool bValue = ( (const SfxBoolItem&) aAttrs.Get( EE_PARA_HYPHENATE ) ).GetValue();
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
 
-    if ( rSet.GetItemState( SID_THES ) != SFX_ITEM_UNKNOWN  ||
-         rSet.GetItemState( SID_THESAURUS ) != SFX_ITEM_UNKNOWN )
+    if ( rSet.GetItemState( SID_THES ) != SfxItemState::UNKNOWN  ||
+         rSet.GetItemState( SID_THESAURUS ) != SfxItemState::UNKNOWN )
     {
         SdrView * pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
@@ -623,7 +623,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
                 {
                     ESelection aFieldSel( nPar, nStart, nPar, nEnd );
                     SfxItemSet aSet = rEditEng.GetAttribs( aFieldSel );
-                    if ( aSet.GetItemState( EE_FEATURE_FIELD ) == SFX_ITEM_SET )
+                    if ( aSet.GetItemState( EE_FEATURE_FIELD ) == SfxItemState::SET )
                     {
                         if (!bChanged)
                         {
@@ -953,13 +953,13 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     }
 
     // #i55929# according to spec, nInputScript is used for font and font height only
-    if ( rDestSet.GetItemState( EE_CHAR_FONTINFO ) != SFX_ITEM_UNKNOWN )
+    if ( rDestSet.GetItemState( EE_CHAR_FONTINFO ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_FONTINFO, nInputScript );
-    if ( rDestSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SFX_ITEM_UNKNOWN )
+    if ( rDestSet.GetItemState( EE_CHAR_FONTHEIGHT ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_FONTHEIGHT, nInputScript );
-    if ( rDestSet.GetItemState( EE_CHAR_WEIGHT ) != SFX_ITEM_UNKNOWN )
+    if ( rDestSet.GetItemState( EE_CHAR_WEIGHT ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_WEIGHT, nScript );
-    if ( rDestSet.GetItemState( EE_CHAR_ITALIC ) != SFX_ITEM_UNKNOWN )
+    if ( rDestSet.GetItemState( EE_CHAR_ITALIC ) != SfxItemState::UNKNOWN )
         ScViewUtil::PutItemScript( rDestSet, aAttrSet, EE_CHAR_ITALIC, nScript );
     //  Ausrichtung
 
@@ -1006,7 +1006,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put(aLR);
     Invalidate( SID_ATTR_PARA_LRSPACE );
     SfxItemState eState = aAttrSet.GetItemState( EE_PARA_LRSPACE );
-    if ( eState == SFX_ITEM_DONTCARE )
+    if ( eState == SfxItemState::DONTCARE )
         rDestSet.InvalidateItem(SID_ATTR_PARA_LRSPACE);
     //xuxu for Line Space
     SvxLineSpacingItem aLineSP = ((const SvxLineSpacingItem&)aAttrSet.
@@ -1015,7 +1015,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put(aLineSP);
     Invalidate(SID_ATTR_PARA_LINESPACE);
     eState = aAttrSet.GetItemState( EE_PARA_SBL );
-    if ( eState == SFX_ITEM_DONTCARE )
+    if ( eState == SfxItemState::DONTCARE )
         rDestSet.InvalidateItem(SID_ATTR_PARA_LINESPACE);
     //xuxu for UL Space
     SvxULSpaceItem aULSP = ((const SvxULSpaceItem&)aAttrSet.
@@ -1024,7 +1024,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     rDestSet.Put(aULSP);
     Invalidate(SID_ATTR_PARA_ULSPACE);
     eState = aAttrSet.GetItemState( EE_PARA_ULSPACE );
-    if ( eState == SFX_ITEM_DONTCARE )
+    if ( eState == SfxItemState::DONTCARE )
         rDestSet.InvalidateItem(SID_ATTR_PARA_ULSPACE);
 
     //  Zeilenabstand
@@ -1057,7 +1057,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
     //  Unterstreichung
 
     eState = aAttrSet.GetItemState( EE_CHAR_UNDERLINE, true );
-    if ( eState == SFX_ITEM_DONTCARE )
+    if ( eState == SfxItemState::DONTCARE )
     {
         rDestSet.InvalidateItem( SID_ULINE_VAL_NONE );
         rDestSet.InvalidateItem( SID_ULINE_VAL_SINGLE );
@@ -1112,7 +1112,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         rDestSet.DisableItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
         rDestSet.DisableItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
     }
-    else if ( aAttrSet.GetItemState( EE_PARA_WRITINGDIR ) == SFX_ITEM_DONTCARE )
+    else if ( aAttrSet.GetItemState( EE_PARA_WRITINGDIR ) == SfxItemState::DONTCARE )
     {
         rDestSet.InvalidateItem( SID_ATTR_PARA_LEFT_TO_RIGHT );
         rDestSet.InvalidateItem( SID_ATTR_PARA_RIGHT_TO_LEFT );
@@ -1176,7 +1176,7 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
             case SID_TABLE_VERT_BOTTOM:
                 bool bContour = false;
                 SfxItemState eConState = aEditAttr.GetItemState( SDRATTR_TEXT_CONTOURFRAME );
-                if( eConState != SFX_ITEM_DONTCARE )
+                if( eConState != SfxItemState::DONTCARE )
                 {
                     bContour = ( ( const SdrOnOffItem& )aEditAttr.Get( SDRATTR_TEXT_CONTOURFRAME ) ).GetValue();
                 }
@@ -1185,8 +1185,8 @@ void ScDrawTextObjectBar::GetStatePropPanelAttr(SfxItemSet &rSet)
                 SfxItemState eVState = aEditAttr.GetItemState( SDRATTR_TEXT_VERTADJUST );
                 //SfxItemState eHState = aAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
 
-                //if(SFX_ITEM_DONTCARE != eVState && SFX_ITEM_DONTCARE != eHState)
-                if(SFX_ITEM_DONTCARE != eVState)
+                //if(SfxItemState::DONTCARE != eVState && SfxItemState::DONTCARE != eHState)
+                if(SfxItemState::DONTCARE != eVState)
                 {
                     SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)aEditAttr.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
                     bool bSet = (nSlotId == SID_TABLE_VERT_NONE && eTVA == SDRTEXTVERTADJUST_TOP) ||

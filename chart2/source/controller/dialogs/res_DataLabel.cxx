@@ -44,7 +44,7 @@ bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, sal_uInt16 nValueW
 {
     bool bSet = false;
     const SfxPoolItem *pItem1 = NULL;
-    if( rSet.GetItemState( nValueWhich, true, &pItem1 ) == SFX_ITEM_SET )
+    if( rSet.GetItemState( nValueWhich, true, &pItem1 ) == SfxItemState::SET )
     {
         const SfxUInt32Item * pNumItem = dynamic_cast< const SfxUInt32Item * >( pItem1 );
         if( pNumItem )
@@ -56,7 +56,7 @@ bool lcl_ReadNumberFormatFromItemSet( const SfxItemSet& rSet, sal_uInt16 nValueW
 
     rbSourceFormatMixedStateOut=true;
     const SfxPoolItem *pItem2 = NULL;
-    if( rSet.GetItemState( nSourceFormatWhich, true, &pItem2 ) == SFX_ITEM_SET )
+    if( rSet.GetItemState( nSourceFormatWhich, true, &pItem2 ) == SfxItemState::SET )
     {
         const SfxBoolItem * pBoolItem = dynamic_cast< const SfxBoolItem * >( pItem2 );
         if( pBoolItem )
@@ -73,7 +73,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId,
     rCheckbox.EnableTriState( false );
 
     const SfxPoolItem *pPoolItem = NULL;
-    if( rInAttrs.GetItemState(nWhichId, true, &pPoolItem) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState(nWhichId, true, &pPoolItem) == SfxItemState::SET )
         rCheckbox.Check( ((const SfxBoolItem*)pPoolItem)->GetValue() );
     else
     {
@@ -134,7 +134,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, Window* pPa
 
     ::com::sun::star::uno::Sequence < sal_Int32 > aAvailabelPlacementList;
     const SfxPoolItem *pPoolItem = NULL;
-    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, true, &pPoolItem) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, true, &pPoolItem) == SfxItemState::SET )
         aAvailabelPlacementList =((const SfxIntegerListItem*)pPoolItem)->GetConstSequence();
 
     m_pLB_LabelPlacement->Clear();
@@ -159,7 +159,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, Window* pPa
     m_bNumberFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, m_nNumberFormatForValue, m_bSourceFormatForValue, m_bSourceFormatMixedState );
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent , m_bPercentSourceMixedState);
 
-    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_NO_PERCENTVALUE, true, &pPoolItem) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_NO_PERCENTVALUE, true, &pPoolItem) == SfxItemState::SET )
     {
         bool bForbidPercentValue = (static_cast< const SfxBoolItem & >( rInAttrs.Get( SCHATTR_DATADESCR_NO_PERCENTVALUE )).GetValue() );
         if( bForbidPercentValue )
@@ -328,7 +328,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     m_bPercentFormatMixedState = !lcl_ReadNumberFormatFromItemSet( rInAttrs, SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, m_nNumberFormatForPercent, m_bSourceFormatForPercent ,  m_bPercentSourceMixedState);
 
     const SfxPoolItem *pPoolItem = NULL;
-    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_SEPARATOR, true, &pPoolItem) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_SEPARATOR, true, &pPoolItem) == SfxItemState::SET )
        for(sal_Int32 i=0; i < NUMBER_SEPARATORS; ++i )
        {
           if( m_aEntryMap[i] == ((const SfxStringItem*)pPoolItem)->GetValue())
@@ -337,7 +337,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     else
         m_pLB_Separator->SelectEntryPos( 0 );
 
-    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_PLACEMENT, true, &pPoolItem) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_PLACEMENT, true, &pPoolItem) == SfxItemState::SET )
     {
         sal_Int32 nPlacement = ((const SfxInt32Item*)pPoolItem)->GetValue();
         ::std::map< sal_Int32, sal_uInt16 >::const_iterator aIt( m_aPlacementToListBoxMap.find(nPlacement) );
@@ -352,10 +352,10 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     else
         m_pLB_LabelPlacement->SetNoSelection();
 
-    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState(EE_PARA_WRITINGDIR, true, &pPoolItem ) == SfxItemState::SET )
         m_pLB_TextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 
-    if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, true, &pPoolItem ) == SFX_ITEM_SET )
+    if( rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, true, &pPoolItem ) == SfxItemState::SET )
     {
         sal_Int32 nDegrees = static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         m_pDC_Dial->SetRotation( nDegrees );

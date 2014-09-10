@@ -1090,7 +1090,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     bool bEnable=true;
     bool bIgnoreGraphic=false;
     bool bIgnoreSize=false;
-    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),true,&pPoolItem) == SFX_ITEM_SET)
+    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),true,&pPoolItem) == SfxItemState::SET)
     {
         nSymType=((const SfxInt32Item *)pPoolItem)->GetValue();
     }
@@ -1172,7 +1172,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         }
         }
     }
-    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH),true,&pPoolItem) == SFX_ITEM_SET)
+    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH),true,&pPoolItem) == SfxItemState::SET)
     {
         const Graphic* pGraphic = ((const SvxBrushItem *)pPoolItem)->GetGraphic();
         if( pGraphic )
@@ -1191,7 +1191,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         }
     }
 
-    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),true,&pPoolItem) == SFX_ITEM_SET)
+    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),true,&pPoolItem) == SfxItemState::SET)
     {
         aSymbolSize = ((const SvxSizeItem *)pPoolItem)->GetSize();
     }
@@ -1206,7 +1206,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         aSymbolLastSize=aSymbolSize;
     }
 
-    if( rAttrs->GetItemState( XATTR_LINESTYLE ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( XATTR_LINESTYLE ) != SfxItemState::DONTCARE )
     {
         eXLS = (XLineStyle) ( ( const XLineStyleItem& ) rAttrs->Get( XATTR_LINESTYLE ) ).GetValue();
 
@@ -1234,7 +1234,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Line strength
-    if( rAttrs->GetItemState( XATTR_LINEWIDTH ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( XATTR_LINEWIDTH ) != SfxItemState::DONTCARE )
     {
         SetMetricValue( *m_pMtrLineWidth, ( ( const XLineWidthItem& ) rAttrs->Get( XATTR_LINEWIDTH ) ).GetValue(), ePoolUnit );
     }
@@ -1244,7 +1244,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     // Line color
     m_pLbColor->SetNoSelection();
 
-    if ( rAttrs->GetItemState( XATTR_LINECOLOR ) != SFX_ITEM_DONTCARE )
+    if ( rAttrs->GetItemState( XATTR_LINECOLOR ) != SfxItemState::DONTCARE )
     {
         Color aCol = ( ( const XLineColorItem& ) rAttrs->Get( XATTR_LINECOLOR ) ).GetColorValue();
         m_pLbColor->SelectEntry( aCol );
@@ -1256,11 +1256,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Line start
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINESTART ) == SFX_ITEM_DEFAULT )
+    if( bObjSelected && rAttrs->GetItemState( XATTR_LINESTART ) == SfxItemState::DEFAULT )
     {
         m_pLbStartStyle->Disable();
     }
-    else if( rAttrs->GetItemState( XATTR_LINESTART ) != SFX_ITEM_DONTCARE )
+    else if( rAttrs->GetItemState( XATTR_LINESTART ) != SfxItemState::DONTCARE )
     {
         // #86265# select entry using list and polygon, not string
         bool bSelected(false);
@@ -1288,11 +1288,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Line end
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEEND ) == SFX_ITEM_DEFAULT )
+    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEEND ) == SfxItemState::DEFAULT )
     {
         m_pLbEndStyle->Disable();
     }
-    else if( rAttrs->GetItemState( XATTR_LINEEND ) != SFX_ITEM_DONTCARE )
+    else if( rAttrs->GetItemState( XATTR_LINEEND ) != SfxItemState::DONTCARE )
     {
         // #86265# select entry using list and polygon, not string
         bool bSelected(false);
@@ -1320,11 +1320,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Line start strength
-    if( bObjSelected &&  rAttrs->GetItemState( XATTR_LINESTARTWIDTH ) == SFX_ITEM_DEFAULT )
+    if( bObjSelected &&  rAttrs->GetItemState( XATTR_LINESTARTWIDTH ) == SfxItemState::DEFAULT )
     {
         m_pMtrStartWidth->Disable();
     }
-    else if( rAttrs->GetItemState( XATTR_LINESTARTWIDTH ) != SFX_ITEM_DONTCARE )
+    else if( rAttrs->GetItemState( XATTR_LINESTARTWIDTH ) != SfxItemState::DONTCARE )
     {
         SetMetricValue( *m_pMtrStartWidth,
                         ( ( const XLineStartWidthItem& ) rAttrs->Get( XATTR_LINESTARTWIDTH ) ).GetValue(),
@@ -1334,11 +1334,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         m_pMtrStartWidth->SetText( "" );
 
     // Line end strength
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEENDWIDTH ) == SFX_ITEM_DEFAULT )
+    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEENDWIDTH ) == SfxItemState::DEFAULT )
     {
         m_pMtrEndWidth->Disable();
     }
-    else if( rAttrs->GetItemState( XATTR_LINEENDWIDTH ) != SFX_ITEM_DONTCARE )
+    else if( rAttrs->GetItemState( XATTR_LINEENDWIDTH ) != SfxItemState::DONTCARE )
     {
         SetMetricValue( *m_pMtrEndWidth,
                         ( ( const XLineEndWidthItem& ) rAttrs->Get( XATTR_LINEENDWIDTH ) ).GetValue(),
@@ -1348,11 +1348,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         m_pMtrEndWidth->SetText( "" );
 
     // Centered line end (start)
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINESTARTCENTER ) == SFX_ITEM_DEFAULT )
+    if( bObjSelected && rAttrs->GetItemState( XATTR_LINESTARTCENTER ) == SfxItemState::DEFAULT )
     {
         m_pTsbCenterStart->Disable();
     }
-    else if( rAttrs->GetItemState( XATTR_LINESTARTCENTER ) != SFX_ITEM_DONTCARE )
+    else if( rAttrs->GetItemState( XATTR_LINESTARTCENTER ) != SfxItemState::DONTCARE )
     {
         m_pTsbCenterStart->EnableTriState( false );
 
@@ -1367,11 +1367,11 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Centered line end (end)
-    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEENDCENTER ) == SFX_ITEM_DEFAULT )
+    if( bObjSelected && rAttrs->GetItemState( XATTR_LINEENDCENTER ) == SfxItemState::DEFAULT )
     {
         m_pTsbCenterEnd->Disable();
     }
-    else if( rAttrs->GetItemState( XATTR_LINEENDCENTER ) != SFX_ITEM_DONTCARE )
+    else if( rAttrs->GetItemState( XATTR_LINEENDCENTER ) != SfxItemState::DONTCARE )
     {
         m_pTsbCenterEnd->EnableTriState( false );
 
@@ -1386,7 +1386,7 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // Transparency
-    if( rAttrs->GetItemState( XATTR_LINETRANSPARENCE ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( XATTR_LINETRANSPARENCE ) != SfxItemState::DONTCARE )
     {
         sal_uInt16 nTransp = ( ( const XLineTransparenceItem& ) rAttrs->Get( XATTR_LINETRANSPARENCE ) ).GetValue();
         m_pMtrTransparent->SetValue( nTransp );
@@ -1412,12 +1412,12 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     m_pCbxSynchronize->Check( aStr.toInt32() != 0 );
 
     // #116827#
-    if(bObjSelected && SFX_ITEM_DEFAULT == rAttrs->GetItemState(XATTR_LINEJOINT))
+    if(bObjSelected && SfxItemState::DEFAULT == rAttrs->GetItemState(XATTR_LINEJOINT))
     {
 //         maFTEdgeStyle.Disable();
         m_pLBEdgeStyle->Disable();
     }
-    else if(SFX_ITEM_DONTCARE != rAttrs->GetItemState(XATTR_LINEJOINT))
+    else if(SfxItemState::DONTCARE != rAttrs->GetItemState(XATTR_LINEJOINT))
     {
         const com::sun::star::drawing::LineJoint eLineJoint = ((const XLineJointItem&)(rAttrs->Get(XATTR_LINEJOINT))).GetValue();
 
@@ -1437,12 +1437,12 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
 
     // fdo#43209
-    if(bObjSelected && SFX_ITEM_DEFAULT == rAttrs->GetItemState(XATTR_LINECAP))
+    if(bObjSelected && SfxItemState::DEFAULT == rAttrs->GetItemState(XATTR_LINECAP))
     {
 //         maFTCapStyle.Disable();
         m_pLBCapStyle->Disable();
     }
-    else if(SFX_ITEM_DONTCARE != rAttrs->GetItemState(XATTR_LINECAP))
+    else if(SfxItemState::DONTCARE != rAttrs->GetItemState(XATTR_LINECAP))
     {
         const com::sun::star::drawing::LineCap eLineCap(((const XLineCapItem&)(rAttrs->Get(XATTR_LINECAP))).GetValue());
 

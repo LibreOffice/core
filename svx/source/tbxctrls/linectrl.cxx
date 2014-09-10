@@ -79,7 +79,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
     SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
     DBG_ASSERT( pBox, "Window not found!" );
 
-    if( eState == SFX_ITEM_DISABLED )
+    if( eState == SfxItemState::DISABLED )
     {
         pBox->Disable();
         pBox->SetNoSelection();
@@ -88,7 +88,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
     {
         pBox->Enable();
 
-        if ( eState == SFX_ITEM_DEFAULT )
+        if ( eState == SfxItemState::DEFAULT )
         {
             if( nSID == SID_ATTR_LINE_STYLE )
             {
@@ -215,7 +215,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
     }
     else
     {
-        if ( eState == SFX_ITEM_DISABLED )
+        if ( eState == SfxItemState::DISABLED )
         {
             pFld->Disable();
             pFld->SetText( "" );
@@ -224,7 +224,7 @@ void SvxLineWidthToolBoxControl::StateChanged(
         {
             pFld->Enable();
 
-            if ( eState == SFX_ITEM_DEFAULT )
+            if ( eState == SfxItemState::DEFAULT )
             {
                 DBG_ASSERT( pState->ISA(XLineWidthItem), "wrong ItemType" );
 
@@ -644,8 +644,8 @@ void SvxLineEndToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, co
     sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
 
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
+    rTbx.EnableItem( nId, SfxItemState::DISABLED != eState );
+    rTbx.SetItemState( nId, ( SfxItemState::DONTCARE == eState ) ? TRISTATE_INDET : TRISTATE_FALSE );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

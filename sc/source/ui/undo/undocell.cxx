@@ -136,9 +136,9 @@ void ScUndoCursorAttr::DoChange( const ScPatternAttr* pWhichPattern, const share
     }
 
     const SfxItemSet& rApplySet = pApplyPattern->GetItemSet();
-    bool bPaintExt = ( rApplySet.GetItemState( ATTR_SHADOW, true ) != SFX_ITEM_DEFAULT ||
-                       rApplySet.GetItemState( ATTR_CONDITIONAL, true ) != SFX_ITEM_DEFAULT );
-    bool bPaintRows = ( rApplySet.GetItemState( ATTR_HOR_JUSTIFY, true ) != SFX_ITEM_DEFAULT );
+    bool bPaintExt = ( rApplySet.GetItemState( ATTR_SHADOW, true ) != SfxItemState::DEFAULT ||
+                       rApplySet.GetItemState( ATTR_CONDITIONAL, true ) != SfxItemState::DEFAULT );
+    bool bPaintRows = ( rApplySet.GetItemState( ATTR_HOR_JUSTIFY, true ) != SfxItemState::DEFAULT );
 
     sal_uInt16 nFlags = SC_PF_TESTMERGE;
     if (bPaintExt)

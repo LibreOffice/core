@@ -1086,7 +1086,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             OUString sItStr;
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
-            if ( pSet && SFX_ITEM_SET ==
+            if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
@@ -1159,7 +1159,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             ScAsciiOptions aOptions;
             bool bOptInit = false;
 
-            if ( pSet && SFX_ITEM_SET ==
+            if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 aOptions.ReadFromString( ((const SfxStringItem*)pItem)->GetValue() );
@@ -1228,7 +1228,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             OUString sItStr;
             SfxItemSet*  pSet = rMedium.GetItemSet();
             const SfxPoolItem* pItem;
-            if ( pSet && SFX_ITEM_SET ==
+            if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
@@ -1269,7 +1269,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 OUString sItStr;
                 SfxItemSet*  pSet = rMedium.GetItemSet();
                 const SfxPoolItem* pItem;
-                if ( pSet && SFX_ITEM_SET ==
+                if ( pSet && SfxItemState::SET ==
                      pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
                 {
                     sItStr = ((const SfxStringItem*)pItem)->GetValue();
@@ -1396,7 +1396,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bool bDateConvert = false;
                     SfxItemSet*  pSet = rMedium.GetItemSet();
                     const SfxPoolItem* pItem;
-                    if ( pSet && SFX_ITEM_SET ==
+                    if ( pSet && SfxItemState::SET ==
                          pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
                     {
                         OUString aFilterOption = (static_cast<const SfxStringItem*>(pItem))->GetValue();
@@ -2225,7 +2225,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             {
                 SfxItemSet* pItemSet = rMed.GetItemSet();
                 const SfxPoolItem* pItem = 0;
-                if( pItemSet && pItemSet->GetItemState( SID_PASSWORD, true, &pItem ) == SFX_ITEM_SET )
+                if( pItemSet && pItemSet->GetItemState( SID_PASSWORD, true, &pItem ) == SfxItemState::SET )
                 {
                     bDoSave = ScWarnPassword::WarningOnPassword( rMed );
                     // #i42858# remove password from medium (warn only one time)
@@ -2268,7 +2268,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             OUString sItStr;
             SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
-            if ( pSet && SFX_ITEM_SET ==
+            if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
@@ -2298,7 +2298,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         OUString sCharSet;
         SfxItemSet* pSet = rMed.GetItemSet();
         const SfxPoolItem* pItem;
-        if ( pSet && SFX_ITEM_SET ==
+        if ( pSet && SfxItemState::SET ==
              pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
         {
             sCharSet = ((const SfxStringItem*)pItem)->GetValue();
@@ -2365,7 +2365,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             OUString sItStr;
             SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
-            if ( pSet && SFX_ITEM_SET ==
+            if ( pSet && SfxItemState::SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
@@ -2415,7 +2415,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             const SfxPoolItem* pItem;
             OUString sFilterOptions;
 
-            if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SFX_ITEM_SET)
+            if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
                 sFilterOptions = ((SfxStringItem*)pItem)->GetValue();
 
             WaitObject aWait(GetActiveDialogParent());

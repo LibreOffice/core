@@ -762,7 +762,7 @@ bool RtfExport::DisallowInheritingOutlineNumbering(const SwFmt& rFmt)
 {
     bool bRet(false);
 
-    if (SFX_ITEM_SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
+    if (SfxItemState::SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
     {
         if (const SwFmt* pParent = rFmt.DerivedFrom())
         {
@@ -1112,10 +1112,10 @@ void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bWriteReset, b
     // normal header / footer (without a style)
     const SfxPoolItem* pItem;
     if (pAktPageDesc->GetLeft().GetAttrSet().GetItemState(RES_HEADER, false,
-            &pItem) == SFX_ITEM_SET)
+            &pItem) == SfxItemState::SET)
         WriteHeaderFooter(*pItem, true);
     if (pAktPageDesc->GetLeft().GetAttrSet().GetItemState(RES_FOOTER, false,
-            &pItem) == SFX_ITEM_SET)
+            &pItem) == SfxItemState::SET)
         WriteHeaderFooter(*pItem, false);
 
     // title page
@@ -1124,10 +1124,10 @@ void RtfExport::OutPageDescription(const SwPageDesc& rPgDsc, bool bWriteReset, b
         Strm().WriteCharPtr(OOO_STRING_SVTOOLS_RTF_TITLEPG);
         pAktPageDesc = &rPgDsc;
         if (pAktPageDesc->GetMaster().GetAttrSet().GetItemState(RES_HEADER,
-                false, &pItem) == SFX_ITEM_SET)
+                false, &pItem) == SfxItemState::SET)
             WriteHeaderFooter(*pItem, true);
         if (pAktPageDesc->GetMaster().GetAttrSet().GetItemState(RES_FOOTER,
-                false, &pItem) == SFX_ITEM_SET)
+                false, &pItem) == SfxItemState::SET)
             WriteHeaderFooter(*pItem, false);
     }
 

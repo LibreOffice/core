@@ -388,21 +388,21 @@ SfxItemState SfxToolBoxControl::GetItemState(
 
     [Return value]
 
-    SfxItemState        SFX_ITEM_UNKNOWN
+    SfxItemState        SfxItemState::UNKNOWN
                         Enabled, however no further status information is available.
                         Typical for <Slot>s, which are temporarily disabled a
                         anyway but other than that do not change their appearance.
 
-                        SFX_ITEM_DISABLED
+                        SfxItemState::DISABLED
                         Disabled, no further status information is available.
                         All other displayed values should be reset to the default
                         if possible.
 
-                        SFX_ITEM_DONTCARE
+                        SfxItemState::DONTCARE
                         Enabled but there were only ambiguous values available
                         (i.e. none that could be queried).
 
-                        SFX_ITEM_DEFAULT
+                        SfxItemState::DEFAULT
                         Enabled and with available values which can be queried
                         through'pState'. The type is thus by the Slot clearly
                         defined in the entire Program.
@@ -410,12 +410,12 @@ SfxItemState SfxToolBoxControl::GetItemState(
 
 {
     return !pState
-                ? SFX_ITEM_DISABLED
+                ? SfxItemState::DISABLED
                 : IsInvalidItem(pState)
-                    ? SFX_ITEM_DONTCARE
+                    ? SfxItemState::DONTCARE
                     : pState->ISA(SfxVoidItem) && !pState->Which()
-                        ? SFX_ITEM_UNKNOWN
-                        : SFX_ITEM_DEFAULT;
+                        ? SfxItemState::UNKNOWN
+                        : SfxItemState::DEFAULT;
 }
 
 void SfxToolBoxControl::Dispatch(
@@ -507,17 +507,17 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
             svt::ToolboxController::statusChanged( rEvent );
         else
         {
-            SfxItemState eState = SFX_ITEM_DISABLED;
+            SfxItemState eState = SfxItemState::DISABLED;
             SfxPoolItem* pItem = NULL;
             if ( rEvent.IsEnabled )
             {
-                eState = SFX_ITEM_DEFAULT;
+                eState = SfxItemState::DEFAULT;
                 ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == ::getVoidCppuType() )
                 {
                     pItem = new SfxVoidItem( nSlotId );
-                    eState = SFX_ITEM_UNKNOWN;
+                    eState = SfxItemState::UNKNOWN;
                 }
                 else if ( pType == ::getBooleanCppuType() )
                 {
@@ -549,9 +549,9 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= aItemStatus;
                     SfxItemState tmpState = (SfxItemState) aItemStatus.State;
                     // make sure no-one tries to send us a combination of states
-                    if (eState != SFX_ITEM_UNKNOWN && eState != SFX_ITEM_DISABLED &&
-                        eState != SFX_ITEM_READONLY && eState != SFX_ITEM_DONTCARE &&
-                        eState != SFX_ITEM_DEFAULT && eState != SFX_ITEM_SET)
+                    if (eState != SfxItemState::UNKNOWN && eState != SfxItemState::DISABLED &&
+                        eState != SfxItemState::READONLY && eState != SfxItemState::DONTCARE &&
+                        eState != SfxItemState::DEFAULT && eState != SfxItemState::SET)
                         throw ::com::sun::star::uno::RuntimeException("unknown status");
                     eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
@@ -908,14 +908,14 @@ void SfxToolBoxControl::StateChanged
         return;
 
     // enabled/disabled-Flag correcting the lump sum
-    pImpl->pBox->EnableItem( GetId(), eState != SFX_ITEM_DISABLED );
+    pImpl->pBox->EnableItem( GetId(), eState != SfxItemState::DISABLED );
 
     sal_uInt16 nItemBits = pImpl->pBox->GetItemBits( GetId() );
     nItemBits &= ~TIB_CHECKABLE;
     ::TriState eTri = TRISTATE_FALSE;
     switch ( eState )
     {
-        case SFX_ITEM_DEFAULT:
+        case SfxItemState::DEFAULT:
         if ( pState )
         {
             if ( pState->ISA(SfxBoolItem) )
@@ -938,7 +938,7 @@ void SfxToolBoxControl::StateChanged
         }
         break;
 
-        case SFX_ITEM_DONTCARE:
+        case SfxItemState::DONTCARE:
         {
             eTri = TRISTATE_INDET;
             nItemBits |= TIB_CHECKABLE;
@@ -1061,17 +1061,17 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
         }
         else
         {
-            SfxItemState eState = SFX_ITEM_DISABLED;
+            SfxItemState eState = SfxItemState::DISABLED;
             SfxPoolItem* pItem = NULL;
             if ( rEvent.IsEnabled )
             {
-                eState = SFX_ITEM_DEFAULT;
+                eState = SfxItemState::DEFAULT;
                 ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
                 if ( pType == ::getVoidCppuType() )
                 {
                     pItem = new SfxVoidItem( nSlotId );
-                    eState = SFX_ITEM_UNKNOWN;
+                    eState = SfxItemState::UNKNOWN;
                 }
                 else if ( pType == ::getBooleanCppuType() )
                 {
@@ -1103,9 +1103,9 @@ throw ( ::com::sun::star::uno::RuntimeException, std::exception )
                     rEvent.State >>= aItemStatus;
                     SfxItemState tmpState = (SfxItemState) aItemStatus.State;
                     // make sure no-one tries to send us a combination of states
-                    if (eState != SFX_ITEM_UNKNOWN && eState != SFX_ITEM_DISABLED &&
-                        eState != SFX_ITEM_READONLY && eState != SFX_ITEM_DONTCARE &&
-                        eState != SFX_ITEM_DEFAULT && eState != SFX_ITEM_SET)
+                    if (eState != SfxItemState::UNKNOWN && eState != SfxItemState::DISABLED &&
+                        eState != SfxItemState::READONLY && eState != SfxItemState::DONTCARE &&
+                        eState != SfxItemState::DEFAULT && eState != SfxItemState::SET)
                         throw ::com::sun::star::uno::RuntimeException("unknown status");
                     eState = tmpState;
                     pItem = new SfxVoidItem( nSlotId );
@@ -1357,7 +1357,7 @@ void SfxPopupWindow::StateChanged(
 /*  [Description]
 
     See also <SfxControllerItem::StateChanged()>. In addition the Popup
-    will become hidden when eState==SFX_ITEM_DISABLED and in all other
+    will become hidden when eState==SfxItemState::DISABLED and in all other
     cases it will be shown again if it is floating. In general this requires
     to call the Base class.
 
@@ -1365,7 +1365,7 @@ void SfxPopupWindow::StateChanged(
 */
 
 {
-    if ( SFX_ITEM_DISABLED == eState )
+    if ( SfxItemState::DISABLED == eState )
     {
         Hide();
     }

@@ -305,7 +305,7 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
     OUString aFileName;
 
     // m_pLbAction
-    if( rAttrs->GetItemState( ATTR_ACTION ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( ATTR_ACTION ) != SfxItemState::DONTCARE )
     {
         eCA = (presentation::ClickAction) ( ( const SfxAllEnumItem& ) rAttrs->
                     Get( ATTR_ACTION ) ).GetValue();
@@ -315,7 +315,7 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
         m_pLbAction->SetNoSelection();
 
     // m_pEdtSound
-    if( rAttrs->GetItemState( ATTR_ACTION_FILENAME ) != SFX_ITEM_DONTCARE )
+    if( rAttrs->GetItemState( ATTR_ACTION_FILENAME ) != SfxItemState::DONTCARE )
     {
             aFileName = ( ( const SfxStringItem& ) rAttrs->Get( ATTR_ACTION_FILENAME ) ).GetValue();
             SetEditText( aFileName );

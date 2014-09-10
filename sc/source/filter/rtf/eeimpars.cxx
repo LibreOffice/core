@@ -176,9 +176,9 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             {
                 const SfxPoolItem* pItem = 0;
                 SfxItemState eState = aSet.GetItemState( nId, true, &pItem );
-                if (eState == SFX_ITEM_DONTCARE)
+                if (eState == SfxItemState::DONTCARE)
                     bSimple = false;
-                else if (eState == SFX_ITEM_SET)
+                else if (eState == SfxItemState::SET)
                 {
                     if ( nId == EE_CHAR_ESCAPEMENT ) // Super-/Subscript always via EE
                     {
@@ -191,7 +191,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             if ( bSimple )
             {   //  Contains field commands?
                 SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, false );
-                if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
+                if ( eFieldState == SfxItemState::DONTCARE || eFieldState == SfxItemState::SET )
                     bSimple = false;
             }
 
@@ -222,39 +222,39 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             if ( rESet.Count() )
             {
                 const SfxPoolItem* pItem;
-                if ( rESet.GetItemState( ATTR_BACKGROUND, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_BACKGROUND, false, &pItem) == SfxItemState::SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_BORDER, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_BORDER, false, &pItem) == SfxItemState::SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_SHADOW, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_SHADOW, false, &pItem) == SfxItemState::SET )
                     rSet.Put( *pItem );
                 // HTML
-                if ( rESet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem) == SfxItemState::SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_VER_JUSTIFY, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_VER_JUSTIFY, false, &pItem) == SfxItemState::SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_LINEBREAK, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_LINEBREAK, false, &pItem) == SfxItemState::SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_FONT_COLOR, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_COLOR, false, &pItem) == SfxItemState::SET )
                     rSet.Put( *pItem );
-                if ( rESet.GetItemState( ATTR_FONT_UNDERLINE, false, &pItem) == SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_UNDERLINE, false, &pItem) == SfxItemState::SET )
                     rSet.Put( *pItem );
                 // HTML LATIN/CJK/CTL script type dependent
                 const SfxPoolItem* pFont;
-                if ( rESet.GetItemState( ATTR_FONT, false, &pFont) != SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT, false, &pFont) != SfxItemState::SET )
                     pFont = 0;
                 const SfxPoolItem* pHeight;
-                if ( rESet.GetItemState( ATTR_FONT_HEIGHT, false, &pHeight) != SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_HEIGHT, false, &pHeight) != SfxItemState::SET )
                     pHeight = 0;
                 const SfxPoolItem* pWeight;
-                if ( rESet.GetItemState( ATTR_FONT_WEIGHT, false, &pWeight) != SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_WEIGHT, false, &pWeight) != SfxItemState::SET )
                     pWeight = 0;
                 const SfxPoolItem* pPosture;
-                if ( rESet.GetItemState( ATTR_FONT_POSTURE, false, &pPosture) != SFX_ITEM_SET )
+                if ( rESet.GetItemState( ATTR_FONT_POSTURE, false, &pPosture) != SfxItemState::SET )
                     pPosture = 0;
                 // Number format
                 const SfxPoolItem* pNumFmt = NULL;
-                if ( rESet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SFX_ITEM_SET )
+                if ( rESet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SfxItemState::SET )
                     rSet.Put(*pNumFmt);
                 if ( pFont || pHeight || pWeight || pPosture )
                 {
@@ -343,7 +343,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                     bool bTextFormat = false;
 
                     const SfxPoolItem* pNumFmt = NULL;
-                    if (rSet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SFX_ITEM_SET)
+                    if (rSet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SfxItemState::SET)
                     {
                         sal_uInt32 nNumFmt = static_cast<const SfxUInt32Item*>(pNumFmt)->GetValue();
                         sal_uInt16 nType = pFormatter->GetType(nNumFmt);

@@ -1224,14 +1224,14 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const OUString& aPro
 
 //           //  if no rotate value is set, look at orientation
 //           //! also for a fixed value of 0 (in case orientation is ambiguous)?
-//           if ( nWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
+//           if ( nWhich == ATTR_ROTATE_VALUE && eState == SfxItemState::DEFAULT )
 //               eState = pItemSet->GetItemState( ATTR_ORIENTATION, sal_False );
 
-            if ( eState == SFX_ITEM_SET )
+            if ( eState == SfxItemState::SET )
                 eRet = beans::PropertyState_DIRECT_VALUE;
-            else if ( eState == SFX_ITEM_DEFAULT )
+            else if ( eState == SfxItemState::DEFAULT )
                 eRet = beans::PropertyState_DEFAULT_VALUE;
-            else if ( eState == SFX_ITEM_DONTCARE )
+            else if ( eState == SfxItemState::DONTCARE )
                 eRet = beans::PropertyState_AMBIGUOUS_VALUE;    // kann eigentlich nicht sein...
             else
             {
@@ -1294,7 +1294,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const OUString& aPropertyName 
             //  Default-Items mit falscher Slot-ID funktionieren im SfxItemPropertySet3 nicht
             //! Slot-IDs aendern...
             if ( aEmptySet.GetPool()->GetSlotId(nWhich) == nWhich &&
-                 aEmptySet.GetItemState(nWhich, false) == SFX_ITEM_DEFAULT )
+                 aEmptySet.GetItemState(nWhich, false) == SfxItemState::DEFAULT )
             {
                 aEmptySet.Put( aEmptySet.Get( nWhich ) );
             }
@@ -1761,7 +1761,7 @@ void ScStyleObj::SetOnePropertyValue( const OUString& rPropertyName, const SfxIt
                                 //  funktionieren im SfxItemPropertySet3 nicht
                                 //! Slot-IDs aendern...
                                 if ( rSet.GetPool()->GetSlotId(pEntry->nWID) == pEntry->nWID &&
-                                     rSet.GetItemState(pEntry->nWID, false) == SFX_ITEM_DEFAULT )
+                                     rSet.GetItemState(pEntry->nWID, false) == SfxItemState::DEFAULT )
                                 {
                                     rSet.Put( rSet.Get(pEntry->nWID) );
                                 }
@@ -1953,7 +1953,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const OUString& aPropertyName )
                         //  funktionieren im SfxItemPropertySet3 nicht
                         //! Slot-IDs aendern...
                         if ( pItemSet->GetPool()->GetSlotId(nWhich) == nWhich &&
-                             pItemSet->GetItemState(nWhich, false) == SFX_ITEM_DEFAULT )
+                             pItemSet->GetItemState(nWhich, false) == SfxItemState::DEFAULT )
                         {
                             SfxItemSet aNoEmptySet( *pItemSet );
                             aNoEmptySet.Put( aNoEmptySet.Get( nWhich ) );

@@ -186,7 +186,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SfxItemState::SET )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 
@@ -501,7 +501,7 @@ bool ScTpSubTotalOptions::FillItemSet( SfxItemSet* rArgSet )
     {
         const SfxItemSet* pExample = pDlg->GetExampleSet();
         const SfxPoolItem* pItem;
-        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SFX_ITEM_SET )
+        if ( pExample && pExample->GetItemState( nWhichSubTotals, true, &pItem ) == SfxItemState::SET )
             theSubTotalData = ((const ScSubTotalItem*)pItem)->GetSubTotalData();
     }
 

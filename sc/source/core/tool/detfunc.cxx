@@ -244,7 +244,7 @@ void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
 
     for( sal_uInt16 nWhich = aWhichIter.FirstWhich(); nWhich > 0; nWhich = aWhichIter.NextWhich() )
     {
-        if(rItemSet.GetItemState(nWhich, false, &pPoolItem) == SFX_ITEM_SET)
+        if(rItemSet.GetItemState(nWhich, false, &pPoolItem) == SfxItemState::SET)
         {
             switch(nWhich)
             {

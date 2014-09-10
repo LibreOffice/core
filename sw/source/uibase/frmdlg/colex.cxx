@@ -44,7 +44,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 {
     SfxItemPool* pPool = rSet.GetPool();
     sal_uInt16 nWhich = pPool->GetWhich( SID_ATTR_PAGE );
-    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // alignment
         const SvxPageItem* pPage = (const SvxPageItem*)&rSet.Get( nWhich );
@@ -55,14 +55,14 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     nWhich = pPool->GetWhich( SID_ATTR_PAGE_SIZE );
 
-    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // orientation and size from PageItem
         const SvxSizeItem& rSize = (const SvxSizeItem&)rSet.Get( nWhich );
         SetSize( rSize.GetSize() );
     }
     nWhich = RES_LR_SPACE;
-    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // set left and right border
         const SvxLRSpaceItem& rLRSpace = (const SvxLRSpaceItem&)rSet.Get( nWhich );
@@ -78,7 +78,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     nWhich = RES_UL_SPACE;
 
-    if ( rSet.GetItemState( nWhich, false ) == SFX_ITEM_SET )
+    if ( rSet.GetItemState( nWhich, false ) == SfxItemState::SET )
     {
         // set upper and lower border
         const SvxULSpaceItem& rULSpace = (const SvxULSpaceItem&)rSet.Get( nWhich );
@@ -94,7 +94,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
 
     // evaluate header-attributes
     const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
+    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_HEADERSET),
             false, &pItem ) )
     {
         const SfxItemSet& rHeaderSet = ((SvxSetItem*)pItem)->GetItemSet();
@@ -117,7 +117,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetHdRight( rLR.GetRight() );
             SetHeader( true );
 
-            if(SFX_ITEM_SET == rHeaderSet.GetItemState(RES_BACKGROUND))
+            if(SfxItemState::SET == rHeaderSet.GetItemState(RES_BACKGROUND))
             {
                 //UUUU create FillAttributes from SvxBrushItem //SetHdColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rHeaderSet.Get(RES_BACKGROUND));
@@ -130,7 +130,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
                             aTempSet)));
             }
 
-            if ( rHeaderSet.GetItemState( RES_BOX ) == SFX_ITEM_SET )
+            if ( rHeaderSet.GetItemState( RES_BOX ) == SfxItemState::SET )
             {
                 const SvxBoxItem& rItem =
                     (const SvxBoxItem&)rHeaderSet.Get( RES_BOX );
@@ -141,7 +141,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetHeader( false );
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
+    if( SfxItemState::SET == rSet.GetItemState( pPool->GetWhich( SID_ATTR_PAGE_FOOTERSET),
             false, &pItem ) )
     {
         const SfxItemSet& rFooterSet = ((SvxSetItem*)pItem)->GetItemSet();
@@ -164,7 +164,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetFtRight( rLR.GetRight() );
             SetFooter( true );
 
-            if( rFooterSet.GetItemState( RES_BACKGROUND ) == SFX_ITEM_SET )
+            if( rFooterSet.GetItemState( RES_BACKGROUND ) == SfxItemState::SET )
             {
                 //UUUU create FillAttributes from SvxBrushItem //SetFtColor(rItem.GetColor());
                 const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(rFooterSet.Get(RES_BACKGROUND));
@@ -177,7 +177,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
                             aTempSet)));
             }
 
-            if( rFooterSet.GetItemState( RES_BOX ) == SFX_ITEM_SET )
+            if( rFooterSet.GetItemState( RES_BOX ) == SfxItemState::SET )
             {
                 const SvxBoxItem& rItem =
                     (const SvxBoxItem&)rFooterSet.Get( RES_BOX );
@@ -188,7 +188,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
             SetFooter( false );
     }
 
-    if(SFX_ITEM_SET == rSet.GetItemState(RES_BACKGROUND, false, &pItem))
+    if(SfxItemState::SET == rSet.GetItemState(RES_BACKGROUND, false, &pItem))
     {
         //UUUU create FillAttributes from SvxBrushItem
         const SvxBrushItem& rItem = static_cast< const SvxBrushItem& >(*pItem);
@@ -595,9 +595,9 @@ void SwPageGridExample::UpdateExample( const SfxItemSet& rSet )
 {
     DELETEZ(pGridItem);
     //get the grid information
-    if(SFX_ITEM_DEFAULT <= rSet.GetItemState(RES_TEXTGRID, true))
+    if(SfxItemState::DEFAULT <= rSet.GetItemState(RES_TEXTGRID, true))
         pGridItem = (SwTextGridItem*)((const SwTextGridItem&)rSet.Get(RES_TEXTGRID)).Clone();
-    if( SFX_ITEM_DEFAULT <= rSet.GetItemState( RES_FRAMEDIR, true ))
+    if( SfxItemState::DEFAULT <= rSet.GetItemState( RES_FRAMEDIR, true ))
     {
         const SvxFrameDirectionItem& rDirItem =
                     (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);

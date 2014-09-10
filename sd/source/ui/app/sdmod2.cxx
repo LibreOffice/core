@@ -526,7 +526,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
     SdOptions* pOptions = GetSdOptions(eDocType);
     // Grid
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS ,
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS ,
                             false, (const SfxPoolItem**) &pItem ))
     {
         const SdOptionsGridItem* pGridItem = (SdOptionsGridItem*) pItem;
@@ -535,14 +535,14 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 
     // Layout
     const SdOptionsLayoutItem* pLayoutItem = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_LAYOUT,
+    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_LAYOUT,
                             false, (const SfxPoolItem**) &pLayoutItem ))
     {
         pLayoutItem->SetOptions( pOptions );
     }
 
     // Metric
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_METRIC, false, &pItem ) )
     {
         if( pDoc && eDocType == pDoc->GetDocumentType() )
             PutItem( *pItem );
@@ -550,7 +550,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
     sal_uInt16 nDefTab = pOptions->GetDefTab();
     // Default-Tabulator
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_DEFTABSTOP, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_DEFTABSTOP, false, &pItem ) )
     {
         nDefTab = ( (SfxUInt16Item*) pItem )->GetValue();
         pOptions->SetDefTab( nDefTab );
@@ -559,10 +559,10 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
     }
 
     // Scale
-    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_X, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_X, false, &pItem ) )
     {
         sal_Int32 nX = ( (SfxInt32Item*) pItem )->GetValue();
-        if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_Y, false, &pItem ) )
+        if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SCALE_Y, false, &pItem ) )
         {
             sal_Int32 nY = ( (SfxInt32Item*) pItem )->GetValue();
             pOptions->SetScale( nX, nY );
@@ -579,7 +579,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 
     // Contents
     const SdOptionsContentsItem* pContentsItem = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_CONTENTS,
+    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_CONTENTS,
                             false, (const SfxPoolItem**) &pContentsItem ))
     {
         pContentsItem->SetOptions( pOptions );
@@ -587,7 +587,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 
     // Misc
     const SdOptionsMiscItem* pMiscItem = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_MISC,
+    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_MISC,
                             false, (const SfxPoolItem**) &pMiscItem ))
     {
         pMiscItem->SetOptions( pOptions );
@@ -596,7 +596,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 
     // Snap
     const SdOptionsSnapItem* pSnapItem = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_SNAP,
+    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_SNAP,
                             false, (const SfxPoolItem**) &pSnapItem ))
     {
         pSnapItem->SetOptions( pOptions );
@@ -610,7 +610,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
 
     // Print
     const SdOptionsPrintItem* pPrintItem = NULL;
-    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_OPTIONS_PRINT,
+    if( SfxItemState::SET == rSet.GetItemState( ATTR_OPTIONS_PRINT,
                             false, (const SfxPoolItem**) &pPrintItem ))
     {
         pPrintItem->SetOptions( pOptions );

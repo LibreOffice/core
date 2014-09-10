@@ -131,13 +131,13 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     if (!mbForceBreaks)
     {
-         if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SFX_ITEM_SET )
+         if ( pStyleSet->GetItemState( ATTR_PAGE_SCALETOPAGES, false, &pItem ) == SfxItemState::SET )
          {
               OSL_ENSURE( pItem->ISA(SfxUInt16Item), "invalid Item" );
               bSkipColBreaks = bSkipRowBreaks = ( ((const SfxUInt16Item*)pItem)->GetValue() > 0 );
          }
 
-         if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SFX_ITEM_SET )
+         if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SfxItemState::SET )
          {
               // #i54993# when fitting to width or height, ignore only manual breaks in that direction
               const ScPageScaleToItem* pScaleToItem = static_cast<const ScPageScaleToItem*>(pItem);

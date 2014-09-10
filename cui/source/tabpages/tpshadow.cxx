@@ -92,14 +92,14 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 
     // setting the output device
     drawing::FillStyle eXFS = drawing::FillStyle_SOLID;
-    if( rOutAttrs.GetItemState( XATTR_FILLSTYLE ) != SFX_ITEM_DONTCARE )
+    if( rOutAttrs.GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE )
     {
         eXFS = (drawing::FillStyle) ( ( ( const XFillStyleItem& ) rOutAttrs.
                                 Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue() );
         switch( eXFS )
         {
             case drawing::FillStyle_SOLID:
-                if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )
+                if( SfxItemState::DONTCARE != rOutAttrs.GetItemState( XATTR_FILLCOLOR ) )
                 {
                     XFillColorItem aColorItem( ( const XFillColorItem& )
                                         rOutAttrs.Get( XATTR_FILLCOLOR ) );
@@ -108,7 +108,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
             break;
 
             case drawing::FillStyle_GRADIENT:
-                if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLGRADIENT ) )
+                if( SfxItemState::DONTCARE != rOutAttrs.GetItemState( XATTR_FILLGRADIENT ) )
                 {
                     XFillGradientItem aGradientItem( ( ( const XFillGradientItem& )
                                             rOutAttrs.Get( XATTR_FILLGRADIENT ) ) );
@@ -117,7 +117,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
             break;
 
             case drawing::FillStyle_HATCH:
-                if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLHATCH ) )
+                if( SfxItemState::DONTCARE != rOutAttrs.GetItemState( XATTR_FILLHATCH ) )
                 {
                     XFillHatchItem aHatchItem( ( ( const XFillHatchItem& )
                                     rOutAttrs.Get( XATTR_FILLHATCH ) ) );
@@ -127,7 +127,7 @@ SvxShadowTabPage::SvxShadowTabPage( Window* pParent, const SfxItemSet& rInAttrs 
 
             case drawing::FillStyle_BITMAP:
             {
-                if( SFX_ITEM_DONTCARE != rOutAttrs.GetItemState( XATTR_FILLBITMAP ) )
+                if( SfxItemState::DONTCARE != rOutAttrs.GetItemState( XATTR_FILLBITMAP ) )
                 {
                     XFillBitmapItem aBitmapItem( ( const XFillBitmapItem& )
                                         rOutAttrs.Get( XATTR_FILLBITMAP ) );
@@ -282,18 +282,18 @@ bool SvxShadowTabPage::FillItemSet( SfxItemSet* rAttrs )
             case RP_MM: break;
         }
 
-        // If the values of the shadow distances==SFX_ITEM_DONTCARE and the displayed
+        // If the values of the shadow distances==SfxItemState::DONTCARE and the displayed
         // string in the respective MetricField=="", then the comparison of the old
         // and the new distance values would return a wrong result because in such a
         // case the new distance values would matche the default values of the MetricField !!!!
         if ( !m_pMtrDistance->IsEmptyFieldValue()                                  ||
-             rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE ||
-             rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE    )
+             rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE ||
+             rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE    )
         {
             sal_Int32 nOldX = 9876543; // impossible value, so DontCare
             sal_Int32 nOldY = 9876543;
-            if( rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
-                rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
+            if( rOutAttrs.GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE &&
+                rOutAttrs.GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE )
             {
                 nOldX = ( ( const SdrMetricItem& ) rOutAttrs.
                                     Get( SDRATTR_SHADOWXDIST ) ).GetValue();
@@ -361,7 +361,7 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         // at the moment there are only 8 possible positions where a shadow can be set
 
         // has a shadow been set?
-        if( rAttrs->GetItemState( SDRATTR_SHADOW ) != SFX_ITEM_DONTCARE )
+        if( rAttrs->GetItemState( SDRATTR_SHADOW ) != SfxItemState::DONTCARE )
         {
             m_pTsbShowShadow->EnableTriState( false );
 
@@ -378,8 +378,8 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
         // distance (only 8 possible positions),
         // so there is only one item evaluated
 
-        if( rAttrs->GetItemState( SDRATTR_SHADOWXDIST ) != SFX_ITEM_DONTCARE &&
-            rAttrs->GetItemState( SDRATTR_SHADOWYDIST ) != SFX_ITEM_DONTCARE )
+        if( rAttrs->GetItemState( SDRATTR_SHADOWXDIST ) != SfxItemState::DONTCARE &&
+            rAttrs->GetItemState( SDRATTR_SHADOWYDIST ) != SfxItemState::DONTCARE )
         {
             sal_Int32 nX = ( ( const SdrMetricItem& ) rAttrs->Get( SDRATTR_SHADOWXDIST ) ).GetValue();
             sal_Int32 nY = ( ( const SdrMetricItem& ) rAttrs->Get( SDRATTR_SHADOWYDIST ) ).GetValue();
@@ -424,14 +424,14 @@ void SvxShadowTabPage::Reset( const SfxItemSet* rAttrs )
             m_pCtlPosition->SetActualRP( RP_MM );
         }
 
-        if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SFX_ITEM_DONTCARE )
+        if( rAttrs->GetItemState( SDRATTR_SHADOWCOLOR ) != SfxItemState::DONTCARE )
         {
             m_pLbShadowColor->SelectEntry( ( ( const XColorItem& ) rAttrs->Get( SDRATTR_SHADOWCOLOR ) ).GetColorValue() );
         }
         else
             m_pLbShadowColor->SetNoSelection();
 
-        if( rAttrs->GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SFX_ITEM_DONTCARE )
+        if( rAttrs->GetItemState( SDRATTR_SHADOWTRANSPARENCE ) != SfxItemState::DONTCARE )
         {
             sal_uInt16 nTransp = ( ( const SdrPercentItem& ) rAttrs->Get( SDRATTR_SHADOWTRANSPARENCE ) ).GetValue();
             m_pMtrTransparent->SetValue( nTransp );

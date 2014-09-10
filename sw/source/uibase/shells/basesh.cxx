@@ -287,7 +287,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
                 const SfxPoolItem* pFmt;
-                if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, false, &pFmt ) )
+                if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pFmt ) )
                 {
                     TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
@@ -462,7 +462,7 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     sal_uInt16 nId = rReq.GetSlot(), nCnt = 1;
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
-    if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, false, &pItem ))
+    if( pArgs && SfxItemState::SET == pArgs->GetItemState( nId, false, &pItem ))
         nCnt = ((SfxUInt16Item*)pItem)->GetValue();
 
     // #i106349#: save pointer: undo/redo may delete the shell, i.e., this!
@@ -740,7 +740,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 SwFmtCol aFmtCol = rFmt.GetCol();
 
                 sal_uInt16 nCount;
-                if(SFX_ITEM_SET == pArgs->GetItemState(nSlot))
+                if(SfxItemState::SET == pArgs->GetItemState(nSlot))
                     nCount = ((SfxUInt16Item &)pArgs->Get(nSlot)).GetValue();
                 else
                     nCount = ((SfxUInt16Item &)pArgs->Get(SID_ATTR_COLUMNS)).GetValue();
@@ -771,7 +771,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
             SwTableAutoFmt const* pTAFmt = 0;
             boost::scoped_ptr<SwTableAutoFmtTbl> pAutoFmtTbl;
             bool bDeleteFormat = true;
-            if(pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_1, true, &pItem))
+            if(pArgs && SfxItemState::SET == pArgs->GetItemState( FN_PARAM_1, true, &pItem))
             {
                 aInsTblOpts.mnInsMode = 0;
                 // Delimiter
@@ -779,7 +779,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 if(!sDelim.isEmpty())
                     cDelim = sDelim[0];
                 // AutoFormat
-                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_2, true, &pItem))
+                if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_2, true, &pItem))
                 {
                     OUString sAutoFmt = static_cast< const SfxStringItem* >(pItem)->GetValue();
 
@@ -798,19 +798,19 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     }
                 }
                 //WithHeader
-                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_3, true, &pItem) &&
+                if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_3, true, &pItem) &&
                             static_cast< const SfxBoolItem* >(pItem)->GetValue())
                     aInsTblOpts.mnInsMode |= tabopts::HEADLINE;
                 // RepeatHeaderLines
-                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_4, true, &pItem))
+                if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_4, true, &pItem))
                    aInsTblOpts.mnRowsToRepeat =
                             (sal_uInt16)static_cast< const SfxInt16Item* >(pItem)->GetValue();
                 //WithBorder
-                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_5, true, &pItem) &&
+                if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_5, true, &pItem) &&
                     static_cast< const SfxBoolItem* >(pItem)->GetValue())
                     aInsTblOpts.mnInsMode |= tabopts::DEFAULT_BORDER;
                 //DontSplitTable
-                if(SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_6, true, &pItem) &&
+                if(SfxItemState::SET == pArgs->GetItemState( FN_PARAM_6, true, &pItem) &&
                     !static_cast< const SfxBoolItem* >(pItem)->GetValue() )
                     aInsTblOpts.mnInsMode |= tabopts::SPLIT_LAYOUT;
             }
@@ -1108,7 +1108,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
         case FN_XFORMS_DESIGN_MODE:
             if( pArgs != NULL
-                && pArgs->GetItemState( nSlot, true, &pItem ) == SFX_ITEM_SET
+                && pArgs->GetItemState( nSlot, true, &pItem ) == SfxItemState::SET
                 && pItem != NULL
                 && pItem->ISA( SfxBoolItem ) )
             {

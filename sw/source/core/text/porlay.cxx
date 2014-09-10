@@ -2057,7 +2057,7 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTxtNode& rNode, MultiSelecti
         || (rNode.GetTxt().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
     const SfxPoolItem* pItem = 0;
-    if( SFX_ITEM_SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) &&
+    if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) &&
         ((SvxCharHiddenItem*)pItem)->GetValue() )
     {
         rHiddenMulti.SelectAll();

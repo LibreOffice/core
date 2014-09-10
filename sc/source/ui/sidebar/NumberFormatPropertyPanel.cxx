@@ -216,7 +216,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
     {
     case SID_NUMBER_TYPE_FORMAT:
         {
-            if( eState >= SFX_ITEM_DEFAULT)
+            if( eState >= SfxItemState::DEFAULT)
             {
                 const SfxInt16Item* pItem = (const SfxInt16Item*)pState;
                 sal_uInt16 nVal = pItem->GetValue();
@@ -254,7 +254,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
             bool          bNegRed       =    false;
             sal_uInt16        nPrecision    =    0;
             sal_uInt16        nLeadZeroes   =    0;
-            if( eState >= SFX_ITEM_DEFAULT)
+            if( eState >= SfxItemState::DEFAULT)
             {
                 const SfxStringItem* pItem = (const SfxStringItem*)pState;
                 OUString aCode = pItem->GetValue();

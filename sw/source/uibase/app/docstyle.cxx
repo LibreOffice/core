@@ -1272,7 +1272,7 @@ void SwDocStyleSheet::MergeIndentAttrsOfListStyle( SfxItemSet& rSet )
     OSL_ENSURE( pColl, "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - missing paragraph style");
     if ( pColl->AreListLevelIndentsApplicable() )
     {
-        OSL_ENSURE( pColl->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET,
+        OSL_ENSURE( pColl->GetItemState( RES_PARATR_NUMRULE ) == SfxItemState::SET,
                 "<SwDocStyleSheet::MergeIndentAttrsOfListStyle(..)> - list level indents are applicable at paragraph style, but no list style found. Serious defect -> please inform OD." );
         const OUString sNumRule = pColl->GetNumRule().GetValue();
         if (!sNumRule.isEmpty())
@@ -1329,13 +1329,13 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         {
             OSL_ENSURE(pColl, "Where's Collection");
             const SfxPoolItem* pAutoUpdate;
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
+            if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
             {
                 pColl->SetAutoUpdateFmt(((const SfxBoolItem*)pAutoUpdate)->GetValue());
             }
 
             const SwCondCollItem* pCondItem;
-            if( SFX_ITEM_SET != rSet.GetItemState( FN_COND_COLL, false,
+            if( SfxItemState::SET != rSet.GetItemState( FN_COND_COLL, false,
                 (const SfxPoolItem**)&pCondItem ))
                 pCondItem = 0;
 
@@ -1393,9 +1393,9 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 pColl = pCColl;
             }
             if ( bResetIndentAttrsAtParagraphStyle &&
-                 rSet.GetItemState( RES_PARATR_NUMRULE, false, 0 ) == SFX_ITEM_SET &&
-                 rSet.GetItemState( RES_LR_SPACE, false, 0 ) != SFX_ITEM_SET &&
-                 pColl->GetItemState( RES_LR_SPACE, false, 0 ) == SFX_ITEM_SET )
+                 rSet.GetItemState( RES_PARATR_NUMRULE, false, 0 ) == SfxItemState::SET &&
+                 rSet.GetItemState( RES_LR_SPACE, false, 0 ) != SfxItemState::SET &&
+                 pColl->GetItemState( RES_LR_SPACE, false, 0 ) == SfxItemState::SET )
             {
                 rDoc.ResetAttrAtFormat( RES_LR_SPACE, *pColl );
             }
@@ -1405,7 +1405,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             // neither the paragraph style nor the numbering style is used in the document
             // the numbering style will not be saved with the document and the assignment got lost.
             const SfxPoolItem* pNumRuleItem = 0;
-            if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_NUMRULE, false, &pNumRuleItem ) )
+            if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE, false, &pNumRuleItem ) )
             {   // Setting a numbering rule?
                 const OUString sNumRule = ((SwNumRuleItem*)pNumRuleItem)->GetValue();
                 if (!sNumRule.isEmpty())
@@ -1454,7 +1454,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         {
             OSL_ENSURE(pFrmFmt, "Where's FrmFmt");
             const SfxPoolItem* pAutoUpdate;
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
+            if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
             {
                 pFrmFmt->SetAutoUpdateFmt(((const SfxBoolItem*)pAutoUpdate)->GetValue());
             }
@@ -1489,7 +1489,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                 const SfxPoolItem* pItem;
                 switch( rSet.GetItemState( SID_ATTR_NUMBERING_RULE, false, &pItem ))
                 {
-                case SFX_ITEM_SET:
+                case SfxItemState::SET:
                 {
                     SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                     pSetRule->UnLinkGraphics();
@@ -1498,7 +1498,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
                     rDoc.ChgNumRuleFmts( aSetRule );
                 }
                 break;
-                case SFX_ITEM_DONTCARE:
+                case SfxItemState::DONTCARE:
                 // set NumRule to default values
                 // what are the default values?
                 {

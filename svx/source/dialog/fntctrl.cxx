@@ -71,7 +71,7 @@
 //TODO: remove this and calculate off the actual size of text, not
 //an arbitrary number of characters
 #define TEXT_WIDTH 80
-#define ISITEMSET rSet.GetItemState(nWhich)>=SFX_ITEM_DEFAULT
+#define ISITEMSET rSet.GetItemState(nWhich)>=SfxItemState::DEFAULT
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -857,7 +857,7 @@ void SvxFontPrevWindow::AutoCorrectFontColor( void )
 static bool GetWhich (const SfxItemSet &rSet, sal_uInt16 nSlot, sal_uInt16 &rWhich)
 {
     rWhich = rSet.GetPool()->GetWhich( nSlot, true );
-    return rSet.GetItemState(rWhich) >= SFX_ITEM_DEFAULT;
+    return rSet.GetItemState(rWhich) >= SfxItemState::DEFAULT;
 }
 
 static void SetPrevFont( const SfxItemSet& rSet, sal_uInt16 nSlot, SvxFont& rFont )

@@ -61,7 +61,7 @@ _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
     , bIDEDialogMode(false)
 {
     const SfxPoolItem* pItem;
-    if ( SFX_ITEM_SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, false, &pItem ) )
+    if ( SfxItemState::SET == rAttrSet.GetItemState( SID_ATTR_MACROITEM, false, &pItem ) )
         bIDEDialogMode = ((const SfxBoolItem*)pItem)->GetValue();
 }
 

@@ -75,7 +75,7 @@ class SfxQueryStatus_Impl:
 
 SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
     m_bQueryInProgress( false ),
-    m_eState( SFX_ITEM_DISABLED ),
+    m_eState( SfxItemState::DISABLED ),
     m_pItem( 0 ),
     m_nSlotID( nSlotId )
 {
@@ -104,11 +104,11 @@ throw( RuntimeException, std::exception )
     SolarMutexGuard aGuard;
 
     m_pItem  = NULL;
-    m_eState = SFX_ITEM_DISABLED;
+    m_eState = SfxItemState::DISABLED;
 
     if ( rEvent.IsEnabled )
     {
-        m_eState = SFX_ITEM_DEFAULT;
+        m_eState = SfxItemState::DEFAULT;
         ::com::sun::star::uno::Type pType = rEvent.State.getValueType();
 
         if ( pType == ::getBooleanCppuType() )
@@ -150,7 +150,7 @@ throw( RuntimeException, std::exception )
         }
         else
         {
-            m_eState = SFX_ITEM_UNKNOWN;
+            m_eState = SfxItemState::UNKNOWN;
             m_pItem  = new SfxVoidItem( m_nSlotID );
         }
     }
@@ -176,7 +176,7 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
     if ( !m_bQueryInProgress )
     {
         m_pItem  = NULL;
-        m_eState = SFX_ITEM_DISABLED;
+        m_eState = SfxItemState::DISABLED;
 
         if ( m_xDispatch.is() )
         {

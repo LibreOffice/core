@@ -865,9 +865,9 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
     const SfxPoolItem* pItem = NULL;
     const SwFmtAnchor& rAnchor = (const SwFmtAnchor&)rSet->Get(RES_ANCHOR);
 
-    if (SFX_ITEM_SET == rSet->GetItemState(FN_OLE_IS_MATH, false, &pItem))
+    if (SfxItemState::SET == rSet->GetItemState(FN_OLE_IS_MATH, false, &pItem))
         m_bIsMathOLE = ((const SfxBoolItem*)pItem)->GetValue();
-    if (SFX_ITEM_SET == rSet->GetItemState(FN_MATH_BASELINE_ALIGNMENT, false, &pItem))
+    if (SfxItemState::SET == rSet->GetItemState(FN_MATH_BASELINE_ALIGNMENT, false, &pItem))
         m_bIsMathBaselineAlignment = ((const SfxBoolItem*)pItem)->GetValue();
     EnableVerticalPositioning( !(m_bIsMathOLE && m_bIsMathBaselineAlignment
             && FLY_AS_CHAR == rAnchor.GetAnchorId()) );
@@ -897,7 +897,7 @@ void SwFrmPage::Reset( const SfxItemSet *rSet )
     {
         OSL_ENSURE(pSh , "shell not found");
         //OS: only for the variant Insert/Graphic/Properties
-        if(SFX_ITEM_SET == rSet->GetItemState(FN_PARAM_GRF_REALSIZE, false, &pItem))
+        if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_GRF_REALSIZE, false, &pItem))
             aGrfSize = ((const SvxSizeItem*)pItem)->GetSize();
         else
             pSh->GetGrfSize( aGrfSize );
@@ -1822,7 +1822,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
 
     // all columns have to be correct
     if(GetTabDialog()->GetExampleSet() &&
-            SFX_ITEM_DEFAULT <= GetTabDialog()->GetExampleSet()->GetItemState(RES_COL))
+            SfxItemState::DEFAULT <= GetTabDialog()->GetExampleSet()->GetItemState(RES_COL))
     {
         const SwFmtCol& rCol = (const SwFmtCol&)GetTabDialog()->GetExampleSet()->Get(RES_COL);
         if ( rCol.GetColumns().size() > 1 )
@@ -2232,7 +2232,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, bool bReset)
     nUpperBorder = rUL.GetUpper();
     nLowerBorder = rUL.GetLower();
 
-    if(SFX_ITEM_SET == rSet.GetItemState(FN_KEEP_ASPECT_RATIO))
+    if(SfxItemState::SET == rSet.GetItemState(FN_KEEP_ASPECT_RATIO))
     {
         m_pFixedRatioCB->Check(((const SfxBoolItem&)rSet.Get(FN_KEEP_ASPECT_RATIO)).GetValue());
         m_pFixedRatioCB->SaveValue();
@@ -2387,7 +2387,7 @@ void SwGrfExtPage::Reset(const SfxItemSet *rSet)
     const sal_uInt16 nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
-    if( SFX_ITEM_SET == rSet->GetItemState( FN_PARAM_GRF_CONNECT, true, &pItem)
+    if( SfxItemState::SET == rSet->GetItemState( FN_PARAM_GRF_CONNECT, true, &pItem)
         && ((const SfxBoolItem *)pItem)->GetValue() )
     {
         m_pBrowseBT->Enable();
@@ -2407,9 +2407,9 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
     bool bEnableMirrorRB = false;
 
     SfxItemState eState = rSet.GetItemState(RES_GRFATR_MIRRORGRF, true, &pItem);
-    if( SFX_ITEM_UNKNOWN != eState && !bProtCntnt && !bHtmlMode )
+    if( SfxItemState::UNKNOWN != eState && !bProtCntnt && !bHtmlMode )
     {
-        if( SFX_ITEM_SET != eState )
+        if( SfxItemState::SET != eState )
             pItem = &rSet.Get( RES_GRFATR_MIRRORGRF );
 
         bEnable = true;
@@ -2450,7 +2450,7 @@ void SwGrfExtPage::ActivatePage(const SfxItemSet& rSet)
         }
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
+    if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_GRAF_GRAPHIC, false, &pItem ) )
     {
         const SvxBrushItem& rBrush = *(SvxBrushItem*)pItem;
         if( !rBrush.GetGraphicLink().isEmpty() )
@@ -2719,7 +2719,7 @@ SwFrmURLPage::~SwFrmURLPage()
 void SwFrmURLPage::Reset( const SfxItemSet *rSet )
 {
     const SfxPoolItem* pItem;
-    if ( SFX_ITEM_SET == rSet->GetItemState( SID_DOCFRAME, true, &pItem))
+    if ( SfxItemState::SET == rSet->GetItemState( SID_DOCFRAME, true, &pItem))
     {
         boost::scoped_ptr<TargetList> pList(new TargetList);
         ((const SfxFrameItem*)pItem)->GetFrame()->GetTargetList(*pList);
@@ -2733,7 +2733,7 @@ void SwFrmURLPage::Reset( const SfxItemSet *rSet )
         }
     }
 
-    if ( SFX_ITEM_SET == rSet->GetItemState( RES_URL, true, &pItem ) )
+    if ( SfxItemState::SET == rSet->GetItemState( RES_URL, true, &pItem ) )
     {
         const SwFmtURL* pFmtURL = (const SwFmtURL*)pItem;
         pURLED->SetText( INetURLObject::decode( pFmtURL->GetURL(),
@@ -2885,7 +2885,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
         m_pContentAlignFrame->Hide();
     }
 
-    if(SFX_ITEM_SET == rSet->GetItemState(FN_SET_FRM_ALT_NAME, false, &pItem))
+    if(SfxItemState::SET == rSet->GetItemState(FN_SET_FRM_ALT_NAME, false, &pItem))
     {
         pAltNameED->SetText(((const SfxStringItem*)pItem)->GetValue());
         pAltNameED->SaveValue();
@@ -2896,7 +2896,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
         // insert graphic - properties
         // bNew is not set, so recognise by selection
         OUString aTmpName1;
-        if(SFX_ITEM_SET == rSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
+        if(SfxItemState::SET == rSet->GetItemState(FN_SET_FRM_NAME, false, &pItem))
         {
             aTmpName1 = ((const SfxStringItem*)pItem)->GetValue();
         }
@@ -3004,7 +3004,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
     SfxItemState eState;
     if( (!bHtmlMode || (0 != (nHtmlMode&HTMLMODE_SOME_STYLES)))
             && sDlgType != "PictureDialog" && sDlgType != "ObjectDialog" &&
-        SFX_ITEM_UNKNOWN != ( eState = rSet->GetItemState(
+        SfxItemState::UNKNOWN != ( eState = rSet->GetItemState(
                                         RES_FRAMEDIR, true )) )
     {
         pTextFlowFT->Show();
@@ -3031,7 +3031,7 @@ void SwFrmAddPage::Reset(const SfxItemSet *rSet )
     }
 
     // Content alignment
-    if ( rSet->GetItemState(RES_TEXT_VERT_ADJUST) > SFX_ITEM_DEFAULT )
+    if ( rSet->GetItemState(RES_TEXT_VERT_ADJUST) > SfxItemState::DEFAULT )
     {
         SdrTextVertAdjust nAdjust = ((const SdrTextVertAdjustItem&)rSet->Get(RES_TEXT_VERT_ADJUST)).GetValue();
         sal_Int32 nPos = 0;

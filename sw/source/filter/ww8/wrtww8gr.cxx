@@ -539,7 +539,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
 
             // write Crop-Attribut content in Header ( if available )
     const SfxPoolItem* pItem;
-    if (pAttrSet && (SFX_ITEM_SET
+    if (pAttrSet && (SfxItemState::SET
         == pAttrSet->GetItemState(RES_GRFATR_CROPGRF, false, &pItem)))
     {
         const SwCropGrf& rCr = *(SwCropGrf*)pItem;
@@ -560,7 +560,7 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     sal_uInt8* pArr = aArr + 0x2E;  // Do borders first
 
     const SwAttrSet& rAttrSet = rFly.GetFrmFmt().GetAttrSet();
-    if (SFX_ITEM_SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
+    if (SfxItemState::SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
     {
         const SvxBoxItem* pBox = (const SvxBoxItem*)pItem;
         if( pBox )

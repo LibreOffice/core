@@ -739,7 +739,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
     {
         const SfxItemSet& rSet = pPattern->GetItemSet();
         const SfxPoolItem* pItem;
-        if ( rSet.GetItemState( ATTR_CONDITIONAL, true, &pItem ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( ATTR_CONDITIONAL, true, &pItem ) == SfxItemState::SET )
         {
             const std::vector<sal_uInt32>& rIndex = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
             ScConditionalFormatList* pCondFormList = GetCondFormList( nTab );
@@ -760,7 +760,7 @@ const SfxPoolItem* ScDocument::GetEffItem(
                             SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
                                     aStyle, SFX_STYLE_FAMILY_PARA );
                             if ( pStyleSheet && pStyleSheet->GetItemSet().GetItemState(
-                                        nWhich, true, &pItem ) == SFX_ITEM_SET )
+                                        nWhich, true, &pItem ) == SfxItemState::SET )
                                 return pItem;
                         }
                     }

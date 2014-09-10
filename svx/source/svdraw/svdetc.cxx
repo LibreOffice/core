@@ -485,7 +485,7 @@ bool SearchOutlinerItems(const SfxItemSet& rSet, bool bInklDefaults, bool* pbOnl
         // in other cases only the set items are.
         // Disabled and DontCare are regarded as holes in the Which range.
         SfxItemState eState=rSet.GetItemState(nWhich);
-        if ((eState==SFX_ITEM_DEFAULT && bInklDefaults) || eState==SFX_ITEM_SET) {
+        if ((eState==SfxItemState::DEFAULT && bInklDefaults) || eState==SfxItemState::SET) {
             if (nWhich<EE_ITEMS_START || nWhich>EE_ITEMS_END) bOnly=false;
             else bHas=true;
         }

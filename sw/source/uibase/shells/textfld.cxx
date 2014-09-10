@@ -228,30 +228,30 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     OUString aPar2;
                     sal_Int32 nCommand = 0;
 
-                    if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
+                    if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                                 false, &pItem ))
                         nType = ((SfxUInt16Item *)pItem)->GetValue();
                     aPar1 += OUString(DB_DELIM);
-                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                    if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_1, false, &pItem ))
                     {
                         aPar1 += ((SfxStringItem *)pItem)->GetValue();
                     }
-                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                    if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_3, false, &pItem ))
                         nCommand = ((SfxInt32Item*)pItem)->GetValue();
                     aPar1 += OUString(DB_DELIM);
                     aPar1 += OUString::number(nCommand);
                     aPar1 += OUString(DB_DELIM);
-                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                    if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_2, false, &pItem ))
                     {
                         aPar1 += ((SfxStringItem *)pItem)->GetValue();
                     }
-                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                    if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_CONTENT, false, &pItem ))
                         aPar2 = ((SfxStringItem *)pItem)->GetValue();
-                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                    if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, false, &pItem ))
                         nFormat = ((SfxUInt32Item *)pItem)->GetValue();
                     OSL_FAIL("Command is not yet used");
@@ -275,19 +275,19 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     OUString aPar2;
                     sal_Unicode cSeparator = ' ';
 
-                    if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
+                    if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
                                                                 false, &pItem ))
                         nType = ((SfxUInt16Item *)pItem)->GetValue();
-                    if( SFX_ITEM_SET == pArgs->GetItemState( FN_PARAM_FIELD_SUBTYPE,
+                    if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_SUBTYPE,
                                                                 false, &pItem ))
                         nSubType = ((SfxUInt16Item *)pItem)->GetValue();
-                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                    if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_CONTENT, false, &pItem ))
                         aPar2 = ((SfxStringItem *)pItem)->GetValue();
-                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                    if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_FIELD_FORMAT, false, &pItem ))
                         nFormat = ((SfxUInt32Item *)pItem)->GetValue();
-                    if( SFX_ITEM_SET == pArgs->GetItemState(
+                    if( SfxItemState::SET == pArgs->GetItemState(
                                         FN_PARAM_3, false, &pItem ))
                     {
                         OUString sTmp = ((SfxStringItem *)pItem)->GetValue();
@@ -798,7 +798,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         rSh.GetCurAttr( aSet );
 
         const SfxPoolItem* pItem;
-        if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
+        if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
         {
             // Select links
             rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT, false);

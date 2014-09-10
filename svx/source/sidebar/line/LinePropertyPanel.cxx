@@ -338,7 +338,7 @@ void LinePropertyPanel::NotifyItemUpdate(
     const bool bIsEnabled)
 {
     (void)bIsEnabled;
-    const bool bDisabled(SFX_ITEM_DISABLED == eState);
+    const bool bDisabled(SfxItemState::DISABLED == eState);
 
     // By default, fill and show the color of existing line-color
     mpColorUpdater->Update( maColor );
@@ -358,7 +358,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 mpTBColor->Enable();
             }
 
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 const XLineColorItem* pItem = dynamic_cast< const XLineColorItem* >(pState);
                 if(pItem)
@@ -388,7 +388,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 mpLBStyle->Enable();
             }
 
-            if(eState  >= SFX_ITEM_DEFAULT)
+            if(eState  >= SfxItemState::DEFAULT)
             {
                 if(nSID == SID_ATTR_LINE_STYLE)
                 {
@@ -437,7 +437,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 mpMFTransparent->Enable();
             }
 
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 const XLineTransparenceItem* pItem = dynamic_cast< const XLineTransparenceItem* >(pState);
 
@@ -466,7 +466,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 mpFTWidth->Enable();
             }
 
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 const XLineWidthItem* pItem = dynamic_cast< const XLineWidthItem* >(pState);
 
@@ -496,7 +496,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 mpLBStart->Enable();
             }
 
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 const XLineStartItem* pItem = dynamic_cast< const XLineStartItem* >(pState);
 
@@ -525,7 +525,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 mpLBEnd->Enable();
             }
 
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 const XLineEndItem* pItem = dynamic_cast< const XLineEndItem* >(pState);
 
@@ -567,7 +567,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 mpFTEdgeStyle->Enable();
             }
 
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 const XLineJointItem* pItem = dynamic_cast< const XLineJointItem* >(pState);
 
@@ -627,7 +627,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 mpLBCapStyle->Enable();
             }
 
-            if(eState >= SFX_ITEM_DEFAULT)
+            if(eState >= SfxItemState::DEFAULT)
             {
                 const XLineCapItem* pItem = dynamic_cast< const XLineCapItem* >(pState);
 

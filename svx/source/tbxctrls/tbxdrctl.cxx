@@ -57,7 +57,7 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
 void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
-    GetToolBox().EnableItem( GetId(), ( eState != SFX_ITEM_DISABLED ) );
+    GetToolBox().EnableItem( GetId(), ( eState != SfxItemState::DISABLED ) );
     SfxToolBoxControl::StateChanged( nSID, eState, pState );
 
     Reference< XLayoutManager > xLayoutMgr = getLayoutManager();

@@ -722,7 +722,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
 {
     const SfxPoolItem* pTmpItem = NULL;
 
-    if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SFX_ITEM_SET)
+    if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SfxItemState::SET)
     {
         return pTmpItem;
     }
@@ -730,7 +730,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
     {
         nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
         SfxItemState eState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
-        if (eState == SFX_ITEM_SET)
+        if (eState == SfxItemState::SET)
             return pTmpItem;
         else
         {
@@ -775,7 +775,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
-            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SFX_ITEM_SET )
+            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET,true) == SfxItemState::SET )
             {
                 SvxNumBulletItem* pBulletItem = (SvxNumBulletItem*)aNewAttr.GetItem(EE_PARA_NUMBULLET,true);
                 SvxNumRule* pRule = pBulletItem->GetNumRule();
@@ -790,7 +790,7 @@ const SfxPoolItem* ViewShell::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16&
             }
 
             SfxItemState eNumState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
-            if (eNumState == SFX_ITEM_SET)
+            if (eNumState == SfxItemState::SET)
                 return pTmpItem;
 
         }
