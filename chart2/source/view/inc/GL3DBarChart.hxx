@@ -85,6 +85,8 @@ public:
 
 private:
 
+    void spawnRenderThread(RenderThread *pThread);
+    void joinRenderThread();
     void moveToCorner();
     void moveToDefault();
     glm::vec3 getCornerPosition(sal_Int8 nCornerId);

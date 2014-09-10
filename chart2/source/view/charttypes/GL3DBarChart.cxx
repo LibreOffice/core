@@ -546,8 +546,7 @@ GL3DBarChart::~GL3DBarChart()
         mbRenderDie = true;
     }
 
-    if(mpRenderThread.is())
-        mpRenderThread->join();
+    joinRenderThread();
 
     if(mbValidContext && mpWindow)
         mpWindow->setRenderer(NULL);
@@ -776,28 +775,41 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
             mpRenderer->SetScrollSpeed((float)(BAR_SIZE_X + BAR_DISTANCE_X) / (float)miScrollRate);
             mpRenderer->SetScrollDistance((float)(BAR_SIZE_X + BAR_DISTANCE_X));
         }
-        Size aSize = mpWindow->GetSizePixel();
-        mpWindow->getContext().setWinSize(aSize);
-        mpRenderThread = rtl::Reference<RenderThread>(new RenderBenchMarkThread(this));
-        mpWindow->getContext().resetCurrent();
-        mpRenderThread->launch();
+        spawnRenderThread(new RenderBenchMarkThread(this));
     }
     miDataUpdateCounter++;
     maHistoryCounter++;
     mbNeedsNewRender = true;
 }
 
+void GL3DBarChart::joinRenderThread()
+{
+    if(mpRenderThread.is())
+    {
+        // FIXME: badly want to assert that we don't
+        // hold the mutex here ... but can't API-wise.
+        mpRenderThread->join();
+    }
+}
+
+void GL3DBarChart::spawnRenderThread(RenderThread *pThread)
+{
+    joinRenderThread(); // not holding maMutex
+
+    osl::MutexGuard aGuard(maMutex);
+
+    Size aSize = mpWindow->GetSizePixel();
+    mpWindow->getContext().setWinSize(aSize);
+    mpRenderThread = rtl::Reference<RenderThread>(pThread);
+    mpWindow->getContext().resetCurrent();
+    mpRenderThread->launch();
+}
+
 void GL3DBarChart::update()
 {
     if (mbBenchMarkMode)
         return;
-    if(mpRenderThread.is())
-        mpRenderThread->join();
-    Size aSize = mpWindow->GetSizePixel();
-    mpWindow->getContext().setWinSize(aSize);
-    mpRenderThread = rtl::Reference<RenderThread>(new RenderOneFrameThread(this));
-    mpWindow->getContext().resetCurrent();
-    mpRenderThread->launch();
+    spawnRenderThread(new RenderOneFrameThread(this));
 }
 
 namespace {
@@ -839,15 +851,7 @@ void GL3DBarChart::moveToDefault()
         return;
     }
 
-    if(mpRenderThread.is())
-        mpRenderThread->join();
-
-    osl::MutexGuard aGuard(maMutex);
-    Size aSize = mpWindow->GetSizePixel();
-    mpWindow->getContext().setWinSize(aSize);
-    mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition, maDefaultCameraPosition, STEPS));
-    mpWindow->getContext().resetCurrent();
-    mpRenderThread->launch();
+    spawnRenderThread(new RenderAnimationThread(this, maCameraPosition, maDefaultCameraPosition, STEPS));
 
     /*
      * TODO: moggi: add to thread
@@ -891,7 +895,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     {
         PickingModeSetter aPickingModeSetter(mpRenderer.get());
         update();
-        mpRenderThread->join();
+        joinRenderThread();
         nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
     }
     // we need this update here to render one frame without picking mode being set
@@ -916,11 +920,9 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
     glm::vec3 aTargetPosition = rBarInfo.maPos;
     aTargetPosition.z += 240;
     aTargetPosition.y += BAR_SIZE_Y / 2.0f;
-    Size aSize = mpWindow->GetSizePixel();
-    mpWindow->getContext().setWinSize(aSize);
-    mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition, aTargetPosition, STEPS));
-    mpWindow->getContext().resetCurrent();
-    mpRenderThread->launch();
+
+    spawnRenderThread(new RenderAnimationThread(this, maCameraPosition,
+                                                aTargetPosition, STEPS));
 
     /*
      * TODO: moggi: add to thread
@@ -1002,17 +1004,8 @@ void GL3DBarChart::moveToCorner()
         return;
     }
 
-    if(mpRenderThread.is())
-        mpRenderThread->join();
-
-    osl::MutexGuard aGuard(maMutex);
-
-    Size aSize = mpWindow->GetSizePixel();
-    mpWindow->getContext().setWinSize(aSize);
-    mpRenderThread = rtl::Reference<RenderThread>(new RenderAnimationThread(this, maCameraPosition,
-                getCornerPosition(mnCornerId), STEPS));
-    mpWindow->getContext().resetCurrent();
-    mpRenderThread->launch();
+    spawnRenderThread(new RenderAnimationThread(this, maCameraPosition,
+                                                getCornerPosition(mnCornerId), STEPS));
 
     // TODO: moggi: add to thread
     // maStepDirection = (glm::vec3(mnMaxX/2.0f, mnMaxY/2.0f, 0) - maCameraDirection)/ float(mnStepsTotal);
