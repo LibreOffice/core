@@ -4924,6 +4924,89 @@ void DomainMapper_Impl::appendGrabBag(std::vector<beans::PropertyValue>& rIntero
     rInteropGrabBag.push_back(aProperty);
 }
 
+void DomainMapper_Impl::substream(Id rName,
+        ::writerfilter::Reference<Stream>::Pointer_t const& ref)
+{
+#ifndef NDEBUG
+    size_t contextSize(m_aContextStack.size());
+    size_t propSize[NUMBER_OF_CONTEXTS];
+    for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
+        propSize[i] = m_aPropertyStacks[i].size();
+    }
+#endif
+
+    appendTableManager();
+    // Appending a TableManager resets its TableHandler, so we need to append
+    // that as well, or tables won't be imported properly in headers/footers.
+    appendTableHandler();
+    getTableManager().startLevel();
+
+    //import of page header/footer
+
+    switch( rName )
+    {
+    case NS_ooxml::LN_headerl:
+
+        PushPageHeader(SectionPropertyMap::PAGE_LEFT);
+        break;
+    case NS_ooxml::LN_headerr:
+
+        PushPageHeader(SectionPropertyMap::PAGE_RIGHT);
+        break;
+    case NS_ooxml::LN_headerf:
+
+        PushPageHeader(SectionPropertyMap::PAGE_FIRST);
+        break;
+    case NS_ooxml::LN_footerl:
+
+        PushPageFooter(SectionPropertyMap::PAGE_LEFT);
+        break;
+    case NS_ooxml::LN_footerr:
+
+        PushPageFooter(SectionPropertyMap::PAGE_RIGHT);
+        break;
+    case NS_ooxml::LN_footerf:
+
+        PushPageFooter(SectionPropertyMap::PAGE_FIRST);
+        break;
+    case NS_ooxml::LN_footnote:
+    case NS_ooxml::LN_endnote:
+        PushFootOrEndnote( NS_ooxml::LN_footnote == rName );
+    break;
+    case NS_ooxml::LN_annotation :
+        PushAnnotation();
+    break;
+    }
+    ref->resolve(m_rDMapper);
+    switch( rName )
+    {
+    case NS_ooxml::LN_headerl:
+    case NS_ooxml::LN_headerr:
+    case NS_ooxml::LN_headerf:
+    case NS_ooxml::LN_footerl:
+    case NS_ooxml::LN_footerr:
+    case NS_ooxml::LN_footerf:
+        PopPageHeaderFooter();
+    break;
+    case NS_ooxml::LN_footnote:
+    case NS_ooxml::LN_endnote:
+        PopFootOrEndnote();
+    break;
+    case NS_ooxml::LN_annotation :
+        PopAnnotation();
+    break;
+    }
+
+    getTableManager().endLevel();
+    popTableManager();
+
+    // check that stacks are the same as before substream
+    assert(m_aContextStack.size() == contextSize);
+    for (int i = 0; i < NUMBER_OF_CONTEXTS; ++i) {
+        assert(m_aPropertyStacks[i].size() == propSize[i]);
+    }
+}
+
 }}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
