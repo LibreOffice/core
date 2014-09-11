@@ -1458,7 +1458,9 @@ AC_ARG_WITH(gnu-patch,
 ,)
 
 AC_ARG_WITH(build-platform-configure-options,
-        [Specify options for the configure script run for the *build* platform in a cross-compilation])
+    AS_HELP_STRING([--with-build-platform-configure-options],
+        [Specify options for the configure script run for the *build* platform in a cross-compilation]),
+,)
 
 AC_ARG_WITH(gnu-cp,
     AS_HELP_STRING([--with-gnu-cp],
