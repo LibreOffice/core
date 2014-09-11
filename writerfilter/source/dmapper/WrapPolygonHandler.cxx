@@ -130,20 +130,8 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
 drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
 {
     drawing::PointSequenceSequence aPolyPolygon(1L);
-    drawing::PointSequence * pPolygon = aPolyPolygon.getArray();
-    pPolygon->realloc(size());
-
-    sal_uInt32 n = 0;
-    Points_t::const_iterator aIt = begin();
-    Points_t::const_iterator aItEnd = end();
-
-    while (aIt != aItEnd)
-    {
-        (*pPolygon)[n] = *aIt;
-        ++n;
-        ++aIt;
-    }
-
+    drawing::PointSequence aPolygon = mPoints.getAsConstList();
+    aPolyPolygon[0] = aPolygon;
     return aPolyPolygon;
 }
 
