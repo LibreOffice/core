@@ -20,11 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.prefs.Preferences;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.app.SherlockActivity;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.graphics.Shader.TileMode;
@@ -33,6 +28,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Color;
 
+import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -47,6 +43,9 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -83,7 +82,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ByteOrder;
 
-public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar.OnNavigationListener {
+public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavigationListener {
     private String tag = "file_manager";
 	private SharedPreferences prefs;
     private File homeDirectory;
@@ -142,7 +141,7 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
     }
     
     public void createUI(){
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getActionBar();
         actionBar.setDisplayShowTitleEnabled(false);//This should show current directory if anything
         /*actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         SpinnerAdapter mSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.file_view_modes,
@@ -150,21 +149,21 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
         actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
         */
         //make the navigation spinner
-        Context context = getSupportActionBar().getThemedContext();
-        ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.file_view_modes, R.layout.sherlock_spinner_item);
-        list.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+        Context context = actionBar.getThemedContext();
+        ArrayAdapter<CharSequence> list = ArrayAdapter.createFromResource(context, R.array.file_view_modes, android.R.layout.simple_spinner_item);
+        list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        getSupportActionBar().setListNavigationCallbacks(list, this);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        actionBar.setListNavigationCallbacks(list, this);
 
         //make striped actionbar
         BitmapDrawable bg = (BitmapDrawable)getResources().getDrawable(R.drawable.bg_striped);
         bg.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
-        getSupportActionBar().setBackgroundDrawable(bg);
+        actionBar.setBackgroundDrawable(bg);
 
         BitmapDrawable bgSplit = (BitmapDrawable)getResources().getDrawable(R.drawable.bg_striped_split_img);
         bgSplit.setTileModeXY(TileMode.REPEAT, TileMode.REPEAT);
-        getSupportActionBar().setSplitBackgroundDrawable(bgSplit);
+        actionBar.setSplitBackgroundDrawable(bgSplit);
 
         if( !currentDirectory.equals( homeDirectory )){
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -206,10 +205,10 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
     public void openDirectory(File dir ){
     	currentDirectory = dir; 
         if( !currentDirectory.equals( homeDirectory )){
-            ActionBar actionBar = getSupportActionBar();
+            ActionBar actionBar = getActionBar();
             actionBar.setDisplayHomeAsUpEnabled(true);
         }else{
-            ActionBar actionBar = getSupportActionBar();
+            ActionBar actionBar = getActionBar();
             actionBar.setDisplayHomeAsUpEnabled( false );
         }
     	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
@@ -249,7 +248,7 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getSupportMenuInflater();
+        MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
         
         MenuItem item = (MenuItem)menu.findItem(R.id.menu_view_toggle);

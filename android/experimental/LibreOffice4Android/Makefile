@@ -18,11 +18,6 @@ native-code.cxx: $(SRCDIR)/solenv/bin/native-code.py
 		> $@
 
 build-ant: android_version_setup copy-stuff link-so properties
-	echo sdk.dir=$(ANDROID_SDK_HOME) >../../abs-lib/local.properties
-# ActionBarSherlock uses the v4 support library, apparently one needs to copy
-# it like this for it to be found
-	mkdir -p ../../abs-lib/libs
-	cp $(ANDROID_SDK_HOME)/extras/android/support/v4/android-support-v4.jar ../../abs-lib/libs
 #
 # Copy jar files we need
 #
