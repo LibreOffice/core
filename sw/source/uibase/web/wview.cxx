@@ -142,9 +142,12 @@ void SwWebView::SelectShell()
                     pSfxShell->ISA( SwDrawTextShell ) || pSfxShell->ISA( SwAnnotationShell ) ) )
                     break;
             }
-            pSfxShell = rDispatcher.GetShell( --i );
-            OSL_ENSURE( pSfxShell, "My Shell ist lost in space" );
-            rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
+            if (i)
+            {
+                pSfxShell = rDispatcher.GetShell( --i );
+                OSL_ENSURE( pSfxShell, "My Shell ist lost in space" );
+                rDispatcher.Pop( *pSfxShell, SFX_SHELL_POP_UNTIL | SFX_SHELL_POP_DELETE);
+            }
         }
 
         bool bInitFormShell = false;
