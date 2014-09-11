@@ -114,6 +114,8 @@ sal_Char const sXML_1_2[] = "1.2";
 
 #define XML_USEPRETTYPRINTING       "UsePrettyPrinting"
 
+namespace {
+
 struct XMLServiceMapEntry_Impl
 {
     const sal_Char *sModelService;
@@ -121,6 +123,8 @@ struct XMLServiceMapEntry_Impl
     const sal_Char *sFilterService;
     sal_Int32      nFilterServiceLen;
 };
+
+}
 
 #define SERVICE_MAP_ENTRY( app ) \
     { XML_MODEL_SERVICE_##app, sizeof(XML_MODEL_SERVICE_##app)-1, \

@@ -41,12 +41,16 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
+namespace {
+
 struct XMLServiceMapEntry_Impl
 {
     enum XMLTokenEnum eClass;
     const sal_Char *sFilterService;
     sal_Int32      nFilterServiceLen;
 };
+
+}
 
 #define SERVICE_MAP_ENTRY( cls, app ) \
     { XML_##cls, \
