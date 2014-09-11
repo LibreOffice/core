@@ -1249,7 +1249,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
         BitmapReadAccess*   pB = aBmp.AcquireReadAccess();
         BitmapWriteAccess*  pW = aDither.AcquireWriteAccess();
 
-        if( pB && pP && pA && pW && pAlphaW )
+        if (pB && pP && pA && pW && pAlphaW)
         {
             int nOutY;
 
@@ -1286,7 +1286,7 @@ Bitmap OutputDevice::BlendBitmapWithAlpha(
     else
     {
         BitmapWriteAccess*  pB = aBmp.AcquireWriteAccess();
-        if( pP && pA && pB )
+        if (pB && pP && pA && pAlphaW)
         {
             for( nY = 0; nY < nDstHeight; nY++ )
             {
