@@ -142,8 +142,8 @@ Directory gid_Brand_Dir_Share
     ParentID = gid_Dir_Bundle_Contents;
 #else
     ParentID = gid_Dir_Brand_Root;
-#endif
     DosName = LIBO_SHARE_FOLDER;
+#endif
 End
 
 Directory gid_Brand_Dir_Share_Config
