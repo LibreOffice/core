@@ -1565,14 +1565,15 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
     sal_uInt32 tdoffset = 0;        /* offset to TableDirectory in a TTC file. For TTF files is 0 */
     int indexfmt;
 
-    sal_uInt32 version = GetInt32(t->ptr, 0, 1);
+    sal_uInt32 TTCTag = GetInt32(t->ptr, 0, 1);
 
-    if ((version == 0x00010000) || (version == T_true)) {
+    if ((TTCTag == 0x00010000) || (TTCTag == T_true)) {
         tdoffset = 0;
-    } else if (version == T_otto) {                         /* PS-OpenType font */
+    } else if (TTCTag == T_otto) {                         /* PS-OpenType font */
         tdoffset = 0;
-    } else if (version == T_ttcf) {                         /* TrueType collection */
-        if (GetUInt32(t->ptr, 4, 1) != 0x00010000) {
+    } else if (TTCTag == T_ttcf) {                         /* TrueType collection */
+        sal_uInt32 Version = GetUInt32(t->ptr, 4, 1);
+        if (Version != 0x00010000 && Version != 0x00020000) {
             CloseTTFont(t);
             return SF_TTFORMAT;
         }
