@@ -1064,7 +1064,11 @@ void TextFieldElement::endElement()
     if (getStringAttr( &aValue, "echochar", _xAttributes, _pImport->XMLNS_DIALOGS_UID ) && !aValue.isEmpty() )
     {
         SAL_WARN_IF( aValue.getLength() != 1, "xmlscript.xmldlg", "### more than one character given for echochar!" );
-        sal_Int16 nChar = (sal_Int16)aValue[ 0 ];
+        sal_Int16 nChar = 0;
+        if(!aValue.isEmpty())
+        {
+            nChar = (sal_Int16)aValue[ 0 ];
+        }
         xControlModel->setPropertyValue( "EchoChar", makeAny( nChar ) );
     }
 
