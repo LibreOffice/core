@@ -150,7 +150,6 @@ public:
 
     void resize(size_t n) { mvLayers.resize(n); }
 
-    const SharedLayer& operator[](size_t i) const { return mvLayers[i]; }
     SharedLayer& operator[](size_t i) { return mvLayers[i]; }
 
 private:
