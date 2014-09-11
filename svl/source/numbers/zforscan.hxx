@@ -236,7 +236,7 @@ private: // Private section
     bool InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const OUString& rStr );
 
     static inline bool StringEqualsChar( const OUString& rStr, sal_Unicode ch )
-        { return rStr[0] == ch && rStr.getLength() == 1; }
+        { return rStr.getLength() == 1 && rStr[0] == ch; }
         // Yes, for efficiency get the character first and then compare length
         // because in most places where this is used the string is one char.
 
