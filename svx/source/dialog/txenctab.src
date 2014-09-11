@@ -64,6 +64,7 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Hebrew (Windows-1255)"                       ; RTL_TEXTENCODING_MS_1255          ; > ;
         < "Arabic (Windows-1256)"                           ; RTL_TEXTENCODING_MS_1256          ; > ;
         < "Baltic (Windows-1257)"                           ; RTL_TEXTENCODING_MS_1257          ; > ;
+        < "Vietnamese (Windows-1258)"                       ; RTL_TEXTENCODING_MS_1258          ; > ;
         < "Eastern Europe (Apple Macintosh)"                        ; RTL_TEXTENCODING_APPLE_CENTEURO   ; > ;
         < "Eastern Europe (Apple Macintosh/Croatian)"           ; RTL_TEXTENCODING_APPLE_CROATIAN   ; > ;
         < "Cyrillic (Apple Macintosh)"                  ; RTL_TEXTENCODING_APPLE_CYRILLIC   ; > ;
