@@ -64,6 +64,9 @@
 
 #include "pptexanimations.hxx"
 
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 // presentation namespaces
 #define PNMSS         FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main", \
                       FSNS( XML_xmlns, XML_p ), "http://schemas.openxmlformats.org/presentationml/2006/main", \
@@ -318,6 +321,18 @@ PowerPointExport::~PowerPointExport()
 {
 }
 
+void PowerPointExport::writeDocumentProperties()
+{
+    uno::Reference<document::XDocumentPropertiesSupplier> xDPS( mXModel, uno::UNO_QUERY );
+    uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
+
+    if (xDocProps.is())
+    {
+        PowerPointExport& mrExport(*this);
+        mrExport.exportDocumentProperties( xDocProps );
+    }
+}
+
 bool PowerPointExport::importDocument() throw()
 {
     return false;
@@ -327,6 +342,11 @@ bool PowerPointExport::exportDocument() throw (css::uno::RuntimeException, std::
 {
     DrawingML::ResetCounters();
     maShapeMap.clear ();
+
+    mXModel.set( getModel(), UNO_QUERY );
+
+    //write document properties
+    writeDocumentProperties();
 
     addRelation( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument", "ppt/presentation.xml" );
 
@@ -339,7 +359,6 @@ bool PowerPointExport::exportDocument() throw (css::uno::RuntimeException, std::
 
     mPresentationFS->startElementNS( XML_p, XML_presentation, PNMSS, FSEND );
 
-    mXModel.set( getModel(), UNO_QUERY );
     mXStatusIndicator.set( getStatusIndicator(), UNO_QUERY );
 
     OUString sBaseURI( "BaseURI");
