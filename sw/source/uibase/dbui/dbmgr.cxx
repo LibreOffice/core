@@ -1049,191 +1049,191 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
 #endif
 
-                            //create a view frame for the document
-                            SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
-                            //request the layout calculation
-                            SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
-                            pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
+                        //create a view frame for the document
+                        SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
+                        //request the layout calculation
+                        SwWrtShell& rWorkShell = pWorkView->GetWrtShell();
+                        pWorkView->AttrChangedNotify( &rWorkShell );// in order for SelectShell to be called
 
-                            SwDoc* pWorkDoc = rWorkShell.GetDoc();
-                            SwDBManager* pOldDBManager = pWorkDoc->GetDBManager();
-                            pWorkDoc->SetDBManager( this );
-                            pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
+                        SwDoc* pWorkDoc = rWorkShell.GetDoc();
+                        SwDBManager* pOldDBManager = pWorkDoc->GetDBManager();
+                        pWorkDoc->SetDBManager( this );
+                        pWorkDoc->getIDocumentLinksAdministration().EmbedAllLinks();
 
-                            // #i69485# lock fields to prevent access to the result set while calculating layout
-                            rWorkShell.LockExpFlds();
-                            rWorkShell.CalcLayout();
-                            rWorkShell.UnlockExpFlds();
+                        // #i69485# lock fields to prevent access to the result set while calculating layout
+                        rWorkShell.LockExpFlds();
+                        rWorkShell.CalcLayout();
+                        rWorkShell.UnlockExpFlds();
 
-                            SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
-                            rWorkShell.SwViewShell::UpdateFlds();
-                            SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
+                        SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE), xWorkDocSh));
+                        rWorkShell.SwViewShell::UpdateFlds();
+                        SfxGetpApp()->NotifyEvent(SfxEventHint(SW_EVENT_FIELD_MERGE_FINISHED, SwDocShell::GetEventName(STR_SW_EVENT_FIELD_MERGE_FINISHED), xWorkDocSh));
 
-                            pWorkDoc->RemoveInvisibleContent();
+                        pWorkDoc->RemoveInvisibleContent();
 
-                            // launch MailMergeEvent if required
-                            const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
-                            if(pEvtSrc)
+                        // launch MailMergeEvent if required
+                        const SwXMailMerge *pEvtSrc = GetMailMergeEvtSrc();
+                        if(pEvtSrc)
+                        {
+                            uno::Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
+                            text::MailMergeEvent aEvt( xRef, xWorkDocSh->GetModel() );
+                            pEvtSrc->LaunchMailMergeEvent( aEvt );
+                        }
+
+                        if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile )
+                        {
+                            OSL_ENSURE( pTargetShell, "no target shell available!" );
+                            // copy created file into the target document
+                            rWorkShell.ConvertFieldsToText();
+                            rWorkShell.SetNumberingRestart();
+                            if( bSynchronizedDoc )
                             {
-                                uno::Reference< XInterface > xRef( (XMailMergeBroadcaster *) pEvtSrc );
-                                text::MailMergeEvent aEvt( xRef, xWorkDocSh->GetModel() );
-                                pEvtSrc->LaunchMailMergeEvent( aEvt );
+                                lcl_RemoveSectionLinks( rWorkShell );
                             }
 
-                            if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile )
+                            // insert the document into the target document
+
+                            //#i72517# put the styles to the target document
+                            //if the source uses headers or footers each new copy need to copy a new page styles
+                            SwPageDesc* pTargetPageDesc;
+                            if(bPageStylesWithHeaderFooter)
                             {
-                                OSL_ENSURE( pTargetShell, "no target shell available!" );
-                                // copy created file into the target document
-                                rWorkShell.ConvertFieldsToText();
-                                rWorkShell.SetNumberingRestart();
-                                if( bSynchronizedDoc )
+                                //create a new pagestyle
+                                //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
+                                OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                                pTargetPageDesc = pTargetDoc->MakePageDesc( sNewPageDescName );
+                                const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
+
+                                if(pWorkPageDesc && pTargetPageDesc)
                                 {
-                                    lcl_RemoveSectionLinks( rWorkShell );
+                                    pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, false );
+                                    sModifiedStartingPageDesc = sNewPageDescName;
+                                    lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
                                 }
-
-                                // insert the document into the target document
-
-                                //#i72517# put the styles to the target document
-                                //if the source uses headers or footers each new copy need to copy a new page styles
-                                SwPageDesc* pTargetPageDesc;
-                                if(bPageStylesWithHeaderFooter)
-                                {
-                                    //create a new pagestyle
-                                    //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
-                                    OUString sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
-                                    pTargetPageDesc = pTargetDoc->MakePageDesc( sNewPageDescName );
-                                    const SwPageDesc* pWorkPageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
-
-                                    if(pWorkPageDesc && pTargetPageDesc)
-                                    {
-                                        pTargetDoc->CopyPageDesc( *pWorkPageDesc, *pTargetPageDesc, false );
-                                        sModifiedStartingPageDesc = sNewPageDescName;
-                                        lcl_CopyFollowPageDesc( *pTargetShell, *pWorkPageDesc, *pTargetPageDesc, nDocNo );
-                                    }
-                                }
-                                else
-                                    pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
-
-#ifdef DBG_UTIL
-                                if ( nDocNo <= MAX_DOC_DUMP )
-                                    lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
-#endif
-                                pTargetDoc->Append( *(rWorkShell.GetDoc()), nStartingPageNo, pTargetPageDesc, nDocNo == 1 );
-
-                                // #i72820# calculate layout to be able to find the correct page index
-                                pTargetShell->CalcLayout();
-#ifdef DBG_UTIL
-                                if ( nDocNo <= MAX_DOC_DUMP )
-                                    lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
-#endif
                             }
                             else
-                            {
-                                OUString sFileURL =  aTempFileURL.GetMainURL( INetURLObject::NO_DECODE );
-                                SfxMedium* pDstMed = new SfxMedium(
-                                    sFileURL,
-                                    STREAM_STD_READWRITE );
-                                pDstMed->SetFilter( pStoreToFilter );
-                                if(pDstMed->GetItemSet())
-                                {
-                                    if(pStoreToFilterOptions )
-                                        pDstMed->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, *pStoreToFilterOptions));
-                                    if(rMergeDescriptor.aSaveToFilterData.getLength())
-                                        pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
-                                }
+                                pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
-                                //convert fields to text if we are exporting to PDF
-                                //this prevents a second merge while updating the fields in SwXTextDocument::getRendererCount()
-                                if( pStoreToFilter && pStoreToFilter->GetFilterName().equalsAscii("writer_pdf_Export"))
-                                    rWorkShell.ConvertFieldsToText();
-                                xWorkDocSh->DoSaveAs(*pDstMed);
-                                xWorkDocSh->DoSaveCompleted(pDstMed);
-                                if( xWorkDocSh->GetError() )
+#ifdef DBG_UTIL
+                            if ( nDocNo <= MAX_DOC_DUMP )
+                                lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
+#endif
+                            pTargetDoc->Append( *(rWorkShell.GetDoc()), nStartingPageNo, pTargetPageDesc, nDocNo == 1 );
+
+                            // #i72820# calculate layout to be able to find the correct page index
+                            pTargetShell->CalcLayout();
+#ifdef DBG_UTIL
+                            if ( nDocNo <= MAX_DOC_DUMP )
+                                lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
+#endif
+                        }
+                        else
+                        {
+                            OUString sFileURL =  aTempFileURL.GetMainURL( INetURLObject::NO_DECODE );
+                            SfxMedium* pDstMed = new SfxMedium(
+                                sFileURL,
+                                STREAM_STD_READWRITE );
+                            pDstMed->SetFilter( pStoreToFilter );
+                            if(pDstMed->GetItemSet())
+                            {
+                                if(pStoreToFilterOptions )
+                                    pDstMed->GetItemSet()->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, *pStoreToFilterOptions));
+                                if(rMergeDescriptor.aSaveToFilterData.getLength())
+                                    pDstMed->GetItemSet()->Put(SfxUsrAnyItem(SID_FILTER_DATA, makeAny(rMergeDescriptor.aSaveToFilterData)));
+                            }
+
+                            //convert fields to text if we are exporting to PDF
+                            //this prevents a second merge while updating the fields in SwXTextDocument::getRendererCount()
+                            if( pStoreToFilter && pStoreToFilter->GetFilterName().equalsAscii("writer_pdf_Export"))
+                                rWorkShell.ConvertFieldsToText();
+                            xWorkDocSh->DoSaveAs(*pDstMed);
+                            xWorkDocSh->DoSaveCompleted(pDstMed);
+                            if( xWorkDocSh->GetError() )
+                            {
+                                // error message ??
+                                ErrorHandler::HandleError( xWorkDocSh->GetError() );
+                                bCancel = true;
+                                bNoError = false;
+                            }
+                            if( bEMail )
+                            {
+                                SwDBFormatData aDBFormat;
+                                aDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
+                                aDBFormat.aNullDate = pImpl->pMergeData->aNullDate;
+                                OUString sMailAddress = GetDBField( xColumnProp, aDBFormat);
+                                if(!SwMailMergeHelper::CheckMailAddress( sMailAddress ))
                                 {
-                                    // error message ??
-                                    ErrorHandler::HandleError( xWorkDocSh->GetError() );
-                                    bCancel = true;
-                                    bNoError = false;
+                                    OSL_FAIL("invalid e-Mail address in database column");
                                 }
-                                if( bEMail )
+                                else
                                 {
-                                    SwDBFormatData aDBFormat;
-                                    aDBFormat.xFormatter = pImpl->pMergeData->xFormatter;
-                                    aDBFormat.aNullDate = pImpl->pMergeData->aNullDate;
-                                    OUString sMailAddress = GetDBField( xColumnProp, aDBFormat);
-                                    if(!SwMailMergeHelper::CheckMailAddress( sMailAddress ))
+                                    SwMailMessage* pMessage = new SwMailMessage;
+                                    uno::Reference< mail::XMailMessage > xMessage = pMessage;
+                                    if(rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo())
+                                        pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
+                                    pMessage->addRecipient( sMailAddress );
+                                    pMessage->SetSenderAddress( rMergeDescriptor.pMailMergeConfigItem->GetMailAddress() );
+                                    OUString sBody;
+                                    if(rMergeDescriptor.bSendAsAttachment)
                                     {
-                                        OSL_FAIL("invalid e-Mail address in database column");
+                                        sBody = rMergeDescriptor.sMailBody;
+                                        mail::MailAttachment aAttach;
+                                        aAttach.Data = new SwMailTransferable(
+                                                sFileURL,
+                                                rMergeDescriptor.sAttachmentName,
+                                                pStoreToFilter->GetMimeType());
+                                        aAttach.ReadableName = rMergeDescriptor.sAttachmentName;
+                                        pMessage->addAttachment( aAttach );
                                     }
                                     else
                                     {
-                                        SwMailMessage* pMessage = new SwMailMessage;
-                                        uno::Reference< mail::XMailMessage > xMessage = pMessage;
-                                        if(rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo())
-                                            pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
-                                        pMessage->addRecipient( sMailAddress );
-                                        pMessage->SetSenderAddress( rMergeDescriptor.pMailMergeConfigItem->GetMailAddress() );
-                                        OUString sBody;
-                                        if(rMergeDescriptor.bSendAsAttachment)
                                         {
-                                            sBody = rMergeDescriptor.sMailBody;
-                                            mail::MailAttachment aAttach;
-                                            aAttach.Data = new SwMailTransferable(
-                                                    sFileURL,
-                                                    rMergeDescriptor.sAttachmentName,
-                                                    pStoreToFilter->GetMimeType());
-                                            aAttach.ReadableName = rMergeDescriptor.sAttachmentName;
-                                            pMessage->addAttachment( aAttach );
-                                        }
-                                        else
-                                        {
+                                            //read in the temporary file and use it as mail body
+                                            SfxMedium aMedium( sFileURL, STREAM_READ);
+                                            SvStream* pInStream = aMedium.GetInStream();
+                                            OSL_ENSURE(pInStream, "no output file created?");
+                                            if(pInStream)
                                             {
-                                                //read in the temporary file and use it as mail body
-                                                SfxMedium aMedium( sFileURL, STREAM_READ);
-                                                SvStream* pInStream = aMedium.GetInStream();
-                                                OSL_ENSURE(pInStream, "no output file created?");
-                                                if(pInStream)
+                                                pInStream->SetStreamCharSet( eEncoding );
+                                                OString sLine;
+                                                bool bDone = pInStream->ReadLine( sLine );
+                                                while ( bDone )
                                                 {
-                                                    pInStream->SetStreamCharSet( eEncoding );
-                                                    OString sLine;
-                                                    bool bDone = pInStream->ReadLine( sLine );
-                                                    while ( bDone )
-                                                    {
-                                                        sBody += OStringToOUString(sLine, eEncoding);
-                                                        sBody += "\n";
-                                                        bDone = pInStream->ReadLine( sLine );
-                                                    }
+                                                    sBody += OStringToOUString(sLine, eEncoding);
+                                                    sBody += "\n";
+                                                    bDone = pInStream->ReadLine( sLine );
                                                 }
                                             }
                                         }
-                                        pMessage->setSubject( rMergeDescriptor.sSubject );
-                                        uno::Reference< datatransfer::XTransferable> xBody =
-                                                    new SwMailTransferable(
-                                                        sBody,
-                                                        sBodyMimeType);
-                                        pMessage->setBody( xBody );
-
-                                        if(rMergeDescriptor.aCopiesTo.getLength())
-                                        {
-                                            const OUString* pCopies = rMergeDescriptor.aCopiesTo.getConstArray();
-                                            for( sal_Int32 nToken = 0; nToken < rMergeDescriptor.aCopiesTo.getLength(); ++nToken)
-                                                pMessage->addCcRecipient( pCopies[nToken] );
-                                        }
-                                        if(rMergeDescriptor.aBlindCopiesTo.getLength())
-                                        {
-                                            const OUString* pCopies = rMergeDescriptor.aBlindCopiesTo.getConstArray();
-                                            for( sal_Int32 nToken = 0; nToken < rMergeDescriptor.aBlindCopiesTo.getLength(); ++nToken)
-                                                pMessage->addBccRecipient( pCopies[nToken] );
-                                        }
-                                        xMailDispatcher->enqueueMailMessage( xMessage );
-                                        if(!xMailDispatcher->isStarted())
-                                                xMailDispatcher->start();
-                                        //schedule for removal
-                                        aFilesToRemove.push_back(sFileURL);
                                     }
+                                    pMessage->setSubject( rMergeDescriptor.sSubject );
+                                    uno::Reference< datatransfer::XTransferable> xBody =
+                                                new SwMailTransferable(
+                                                    sBody,
+                                                    sBodyMimeType);
+                                    pMessage->setBody( xBody );
+
+                                    if(rMergeDescriptor.aCopiesTo.getLength())
+                                    {
+                                        const OUString* pCopies = rMergeDescriptor.aCopiesTo.getConstArray();
+                                        for( sal_Int32 nToken = 0; nToken < rMergeDescriptor.aCopiesTo.getLength(); ++nToken)
+                                            pMessage->addCcRecipient( pCopies[nToken] );
+                                    }
+                                    if(rMergeDescriptor.aBlindCopiesTo.getLength())
+                                    {
+                                        const OUString* pCopies = rMergeDescriptor.aBlindCopiesTo.getConstArray();
+                                        for( sal_Int32 nToken = 0; nToken < rMergeDescriptor.aBlindCopiesTo.getLength(); ++nToken)
+                                            pMessage->addBccRecipient( pCopies[nToken] );
+                                    }
+                                    xMailDispatcher->enqueueMailMessage( xMessage );
+                                    if(!xMailDispatcher->isStarted())
+                                            xMailDispatcher->start();
+                                    //schedule for removal
+                                    aFilesToRemove.push_back(sFileURL);
                                 }
                             }
-                            pWorkDoc->SetDBManager( pOldDBManager );
+                        }
+                        pWorkDoc->SetDBManager( pOldDBManager );
 
                         xWorkDocSh->DoClose();
                     }
