@@ -81,18 +81,12 @@ public class GeckoLayerClient {
         mScreenSize = new IntSize(0, 0);
     }
 
-    protected boolean setupLayer() {
-        Log.i(LOGTAG, "Creating MultiTileLayer");
+    protected void setupLayer() {
         if (mTileLayer == null) {
+            Log.i(LOGTAG, "Creating MultiTileLayer");
             mTileLayer = new MultiTileLayer(TILE_SIZE);
             mLayerController.setRoot(mTileLayer);
         }
-
-        // Force a resize event to be sent because the results of this
-        // are different depending on what tile system we're using
-        //sendResizeEventIfNecessary(true);
-
-        return false;
     }
 
     protected void updateLayerAfterDraw() {
@@ -119,15 +113,10 @@ public class GeckoLayerClient {
         sendResizeEventIfNecessary(false);
     }
 
-    public boolean beginDrawing(ViewportMetrics viewportMetrics) {
-        if (setupLayer()) {
-            Log.e(LOGTAG, "### Cancelling due to layer setup");
-            return false;
-        }
+    public void beginDrawing(ViewportMetrics viewportMetrics) {
+        setupLayer();
         mNewGeckoViewport = viewportMetrics;
         mTileLayer.beginTransaction();
-
-        return true;
     }
 
     public void endDrawing() {
@@ -213,19 +202,11 @@ public class GeckoLayerClient {
 
         long timeDelta = System.currentTimeMillis() - mLastViewportChangeTime;
         if (timeDelta < MIN_VIEWPORT_CHANGE_DELAY) {
-            mLayerController.getView().postDelayed(
-                    new Runnable() {
-                        public void run() {
-                            mPendingViewportAdjust = false;
-                            adjustViewport();
-                        }
-                    }, MIN_VIEWPORT_CHANGE_DELAY - timeDelta
-            );
+            mLayerController.getView().postDelayed(new AdjustRunnable(), MIN_VIEWPORT_CHANGE_DELAY - timeDelta);
             mPendingViewportAdjust = true;
-            return;
+        } else {
+            adjustViewport();
         }
-
-        adjustViewport();
     }
 
     public void viewportSizeChanged() {
@@ -272,5 +253,12 @@ public class GeckoLayerClient {
             return ((MultiTileLayer) mTileLayer).getTiles();
         }
         return null;
+    }
+
+    private class AdjustRunnable implements Runnable {
+        public void run() {
+            mPendingViewportAdjust = false;
+            adjustViewport();
+        }
     }
 }

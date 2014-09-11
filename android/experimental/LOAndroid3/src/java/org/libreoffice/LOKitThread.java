@@ -64,11 +64,7 @@ public class LOKitThread extends Thread {
         mViewportMetrics.setPageSize(new FloatSize(pageWidth, pageHeight));
 
         GeckoLayerClient layerClient = mApplication.getLayerClient();
-        boolean shouldContinue = layerClient.beginDrawing(mViewportMetrics);
-
-        if (!shouldContinue) {
-            return false;
-        }
+        layerClient.beginDrawing(mViewportMetrics);
 
         ViewportMetrics metrics = mApplication.getLayerController().getViewportMetrics();
         RectF viewport = normlizeRect(metrics);
