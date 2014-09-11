@@ -38,6 +38,9 @@
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/NumberFormat.hpp>
+
 #include <iostream>
 
 using namespace com::sun::star;
@@ -292,6 +295,15 @@ std::vector<uno::Sequence<uno::Any> > getDataSeriesLabelsFromChartType( const Re
     }
 
     return aRet;
+}
+
+sal_Int32 getNumberFormat( const Reference<chart2::XChartDocument>& xChartDoc, const OUString& sFormat )
+{
+    Reference<util::XNumberFormatsSupplier> xNFS(xChartDoc, uno::UNO_QUERY_THROW);
+    Reference<util::XNumberFormats> xNumberFormats = xNFS->getNumberFormats();
+    CPPUNIT_ASSERT(xNumberFormats.is());
+
+    return xNumberFormats->queryKey(sFormat, css::lang::Locale(), sal_False);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
