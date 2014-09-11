@@ -35,11 +35,11 @@ using namespace ::com::sun::star;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 
-OrdinalSuffix::OrdinalSuffix()
+OrdinalSuffixService::OrdinalSuffixService()
 {
 }
 
-OrdinalSuffix::~OrdinalSuffix()
+OrdinalSuffixService::~OrdinalSuffixService()
 {
 }
 
@@ -65,7 +65,7 @@ namespace
  * For this method to properly return the ordinal suffix for other locales
  * than english ones, ICU 4.2+ has to be used.
  */
-uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nNumber,
+uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_Int32 nNumber,
         const lang::Locale &rLocale ) throw( RuntimeException, std::exception )
 {
     uno::Sequence< OUString > retValue;
@@ -135,17 +135,17 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
 
 const sal_Char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";
 
-OUString SAL_CALL OrdinalSuffix::getImplementationName(void) throw( RuntimeException, std::exception )
+OUString SAL_CALL OrdinalSuffixService::getImplementationName(void) throw( RuntimeException, std::exception )
 {
     return OUString::createFromAscii(cOrdinalSuffix);
 }
 
-sal_Bool SAL_CALL OrdinalSuffix::supportsService( const OUString& rServiceName) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL OrdinalSuffix::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL OrdinalSuffixService::getSupportedServiceNames(void) throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii(cOrdinalSuffix);
@@ -159,7 +159,7 @@ com_sun_star_i18n_OrdinalSuffix_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::OrdinalSuffix());
+    return cppu::acquire(new css::i18n::OrdinalSuffixService());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

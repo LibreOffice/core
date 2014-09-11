@@ -28,15 +28,15 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-class OrdinalSuffix : public cppu::WeakImplHelper2
+class OrdinalSuffixService : public cppu::WeakImplHelper2
 <
     XOrdinalSuffix,
     com::sun::star::lang::XServiceInfo
 >
 {
     public:
-        OrdinalSuffix();
-        virtual ~OrdinalSuffix();
+        OrdinalSuffixService();
+        virtual ~OrdinalSuffixService();
 
         // XOrdinalSuffix
         virtual com::sun::star::uno::Sequence< OUString > SAL_CALL getOrdinalSuffix( sal_Int32 nNumber, const com::sun::star::lang::Locale &rLocale ) throw(com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
