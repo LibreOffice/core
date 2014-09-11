@@ -128,6 +128,9 @@ protected:
     sal_Int32 GetAuthorIdAndLastIndex( const OUString& sAuthor, sal_Int32& nLastIndex );
 
 private:
+    // Write docProps/core.xml and docprops/custom.xml and docprops/app.xml
+    void writeDocumentProperties();
+
     void AddLayoutIdAndRelation( ::sax_fastparser::FSHelperPtr pFS, sal_Int32 nLayoutFileId );
 
     virtual OUString implGetImplementationName() const SAL_OVERRIDE;
