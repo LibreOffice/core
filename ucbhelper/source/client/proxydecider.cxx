@@ -496,8 +496,8 @@ const InternetProxyServer & InternetProxyDecider_Impl::getProxy(
 
         OUString aHost;
 
-        if ( ( rHost[ 0 ] == '[' ) &&
-             ( rHost.getLength() > 1 ) )
+        if ( ( rHost.getLength() > 1 ) &&
+             ( rHost[ 0 ] == '[' ))
         {
             // host is given as numeric IPv6 address. name resolution
             // functions need hostname without square brackets.
