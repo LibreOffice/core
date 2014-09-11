@@ -1106,19 +1106,21 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
     }
 }
 
-void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFormat& rNumberFormat, bool bPercentFormat )
+void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFormat& rNumberFormat, bool bAxis, bool bShowPercent )
 {
     if( mxData->mxNumFmts.is() )
     {
-        sal_Int32 nPropId = bPercentFormat ? PROP_PercentageNumberFormat : PROP_NumberFormat;
+        const bool bGeneral = rNumberFormat.maFormatCode.equalsIgnoreAsciiCase("general");
+        const bool bPercent = !bAxis && bShowPercent && !rNumberFormat.mbSourceLinked;
+        sal_Int32 nPropId = bPercent ? PROP_PercentageNumberFormat : PROP_NumberFormat;
+        OUString sFormatCode(rNumberFormat.maFormatCode);
+        if (bPercent && bGeneral)
+            sFormatCode = OUString("0%");
         try
         {
-            bool bGeneral = rNumberFormat.maFormatCode.equalsIgnoreAsciiCase("general");
-            sal_Int32 nIndex = bGeneral && !bPercentFormat ?
+            sal_Int32 nIndex = bGeneral && !bPercent ?
                 mxData->mxNumTypes->getStandardIndex( mxData->maFromLocale ) :
-                mxData->mxNumFmts->addNewConverted(
-                        bGeneral ? OUString("0%") : rNumberFormat.maFormatCode,
-                        mxData->maEnUsLocale, mxData->maFromLocale );
+                mxData->mxNumFmts->addNewConverted( sFormatCode, mxData->maEnUsLocale, mxData->maFromLocale );
             if( nIndex >= 0 )
                 rPropSet.setProperty( nPropId, nIndex );
         }
@@ -1128,9 +1130,11 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
                 append( OUStringToOString( rNumberFormat.maFormatCode, osl_getThreadTextEncoding() ) ).append( '\'' ).getStr() );
         }
 
-        // Format code is ignored if "LinkNumberFormatToSource" is set to "true" :-/
-        // See AxisHelper::getExplicitNumberFormatKeyForAxis()
-        rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.maFormatCode.isEmpty()));
+        // Setting "LinkNumberFormatToSource" does not really work, at least not for axis :-/
+        if (!bAxis)
+            rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.mbSourceLinked));
+        else
+            rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.maFormatCode.isEmpty()));
     }
 }
 

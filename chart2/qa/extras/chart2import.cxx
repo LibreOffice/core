@@ -11,6 +11,7 @@
 #include "charttest.hxx"
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/chart2/CurveStyle.hpp>
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -33,6 +34,7 @@ public:
     void testPPTXChartSeries();
     void testPPTChartSeries();
     void testODPChartSeries();
+    void testNumberFormatsXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -53,6 +55,7 @@ public:
 //    CPPUNIT_TEST(testPPTChartSeries);
 //    CPPUNIT_TEST(testPPTXChartSeries);
 //    CPPUNIT_TEST(testODPChartSeries);
+    CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -293,6 +296,56 @@ void Chart2ImportTest::testODPChartSeries()
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 3"), seriesList[2]);
 
+}
+
+void Chart2ImportTest::testNumberFormatsXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "number-formats.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    chart2::DataPointLabel aLabel;
+    sal_Int32 nNumberFormat;
+    bool bLinkNumberFormatToSource = false;
+    bool bSuccess = false;
+    const sal_Int32 nChartDataNumberFormat = getNumberFormat(
+            xChartDoc, "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)");
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue("NumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(false, bSuccess);
+    bSuccess = xPropertySet->getPropertyValue("LinkNumberFormatToSource") >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue("NumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(false, bSuccess);
+    bSuccess = xPropertySet->getPropertyValue("LinkNumberFormatToSource") >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue("NumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(false, bSuccess);
+    bSuccess = xPropertySet->getPropertyValue("LinkNumberFormatToSource") >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
