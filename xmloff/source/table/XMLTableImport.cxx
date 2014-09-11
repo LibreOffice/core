@@ -51,12 +51,16 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
+namespace {
+
 struct ColumnInfo
 {
     OUString msStyleName;
     bool mbVisibility;
     OUString msDefaultCellStyleName;
 };
+
+}
 
 class XMLProxyContext : public SvXMLImportContext
 {

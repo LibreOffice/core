@@ -71,6 +71,7 @@ using namespace ::com::sun::star;
 using namespace ::svxform;
 using namespace ::svx;
 
+namespace {
 
 struct ColumnInfo
 {
@@ -82,6 +83,8 @@ struct ColumnInfo
     {
     }
 };
+
+}
 
 static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
 {
