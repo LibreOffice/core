@@ -428,14 +428,18 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
                 m_aFirstPageStyle = uno::Reference< beans::XPropertySet > (
                         xTextFactory->createInstance("com.sun.star.style.PageStyle"),
                         uno::UNO_QUERY);
+
+                // Call insertByName() before GetPageStyle(), otherwise the
+                // first and the follow page style will have the same name, and
+                // insertByName() will fail.
+                if (xPageStyles.is())
+                    xPageStyles->insertByName( m_sFirstPageStyleName, uno::makeAny(m_aFirstPageStyle) );
+
                 // Ensure that m_aFollowPageStyle has been created
                 GetPageStyle( xPageStyles, xTextFactory, false );
                 // Chain m_aFollowPageStyle to be after m_aFirstPageStyle
                 m_aFirstPageStyle->setPropertyValue("FollowStyle",
                     uno::makeAny(m_sFollowPageStyleName));
-
-                if (xPageStyles.is())
-                    xPageStyles->insertByName( m_sFirstPageStyleName, uno::makeAny(m_aFirstPageStyle) );
             }
             else if( !m_aFirstPageStyle.is() && xPageStyles.is() )
             {
@@ -462,8 +466,9 @@ uno::Reference< beans::XPropertySet > SectionPropertyMap::GetPageStyle(
         }
 
     }
-    catch( const uno::Exception& )
+    catch( const uno::Exception& rException )
     {
+        SAL_WARN("writerfilter", "SectionPropertyMap::GetPageStyle() failed: " << rException.Message);
     }
 
     return xRet;

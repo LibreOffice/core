@@ -2086,6 +2086,15 @@ DECLARE_RTFIMPORT_TEST(testFdo86750, "fdo86750.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("#anchor"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo82114, "fdo82114.rtf")
+{
+    uno::Reference<text::XText> xHeaderText = getProperty< uno::Reference<text::XText> >(getStyles("PageStyles")->getByName("Converted1"), "HeaderText");
+    OUString aActual = xHeaderText->getString();
+    OUString aExpected("First page header, section 2");
+    // This was 'Right page header, section 1'.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
