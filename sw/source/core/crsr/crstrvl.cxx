@@ -635,7 +635,7 @@ lcl_FindField(bool & o_rFound, _SetGetExpFlds const& rSrtLst,
 
     _SetGetExpFlds::const_iterator it = rSrtLst.lower_bound(pSrch.get());
 
-    o_rFound = (**it == *pSrch);
+    o_rFound = (it == rSrtLst.end()) ? false : (**it == *pSrch);
     return it;
 }
 
