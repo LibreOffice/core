@@ -122,13 +122,21 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, rtl::OUString * url) {
 void cppu::decodeRdbUri(rtl::OUString * uri, bool * optional, bool * directory)
 {
     assert(uri != 0 && optional != 0 && directory != 0);
-    *optional = (*uri)[0] == '?';
-    if (*optional) {
-        *uri = uri->copy(1);
+    if(!(uri->isEmpty()))
+    {
+        *optional = (*uri)[0] == '?';
+        if (*optional) {
+            *uri = uri->copy(1);
+        }
+        *directory = uri->startsWith("<") && uri->endsWith(">*");
+        if (*directory) {
+            *uri = uri->copy(1, uri->getLength() - 3);
+        }
     }
-    *directory = uri->startsWith("<") && uri->endsWith(">*");
-    if (*directory) {
-        *uri = uri->copy(1, uri->getLength() - 3);
+    else
+    {
+        *optional = false;
+        *directory = false;
     }
 }
 
