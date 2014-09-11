@@ -887,8 +887,14 @@ void PPDParser::parse( ::std::list< OString >& rLines )
         sal_Int32 nPos = aKey.indexOf('/');
         if (nPos != -1)
             aKey = aKey.copy(0, nPos);
-        aKey = aKey.copy(1); // remove the '*'
-
+        if(!aKey.isEmpty())
+        {
+            aKey = aKey.copy(1); // remove the '*'
+        }
+        if(aKey.isEmpty())
+        {
+            continue;
+        }
         if ((aKey == "CloseUI") ||
             (aKey == "JCLCloseUI") ||
             (aKey == "OpenGroup") ||
@@ -1245,7 +1251,7 @@ void PPDParser::parseConstraint( const OString& rLine )
     for( int i = 0; i < nTokens; i++ )
     {
         OUString aToken = GetCommandLineToken( i, aLine );
-        if( aToken[ 0 ] == '*' )
+        if( !aToken.isEmpty() && aToken[ 0 ] == '*' )
         {
             aToken = aToken.replaceAt( 0, 1, "" );
             if( aConstraint.m_pKey1 )
