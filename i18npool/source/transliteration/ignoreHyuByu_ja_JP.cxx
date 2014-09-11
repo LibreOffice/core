@@ -24,7 +24,7 @@ using namespace com::sun::star::lang;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-static const Mapping HyuByu[] = {
+static const transliteration_Ignore::Mapping HyuByu[] = {
     { 0x30D5, 0x30E5, 0x30D2, false },
     { 0x3075, 0x3085, 0x3072, false },
     { 0x30F4, 0x30E5, 0x30D3, false },

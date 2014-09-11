@@ -24,13 +24,6 @@
 
 typedef sal_Unicode (*TransFunc)(const sal_Unicode);
 
-typedef struct {
-    sal_Unicode previousChar;
-    sal_Unicode currentChar;
-    sal_Unicode replaceChar;
-    bool two2one;
-} Mapping;
-
 namespace com { namespace sun { namespace star { namespace i18n {
 
 class transliteration_Ignore : public transliteration_commonclass
@@ -67,6 +60,13 @@ public:
         com::sun::star::uno::Sequence< OUString > SAL_CALL
         transliterateRange( const OUString& str1, const OUString& str2, XTransliteration& t1, XTransliteration& t2 )
         throw(com::sun::star::uno::RuntimeException);
+
+        struct Mapping {
+            sal_Unicode previousChar;
+            sal_Unicode currentChar;
+            sal_Unicode replaceChar;
+            bool two2one;
+        };
 
 protected:
         TransFunc func;
