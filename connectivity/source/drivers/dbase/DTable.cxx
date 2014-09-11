@@ -214,6 +214,8 @@ void ODbaseTable::readHeader()
     (*m_pFileStream).ReadUInt16( m_aHeader.db_slng );
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
+    if (m_aHeader.db_slng == 0)
+        throwInvalidDbaseFormat();
     m_pFileStream->Read((char*)(&m_aHeader.db_frei), 20*sizeof(sal_uInt8));
     if(ERRCODE_NONE != m_pFileStream->GetErrorCode())
         throwInvalidDbaseFormat();
@@ -1497,9 +1499,9 @@ bool ODbaseTable::DropImpl()
 bool ODbaseTable::InsertRow(OValueRefVector& rRow, bool bFlush, const Reference<XIndexAccess>& _xCols)
 {
     // fill buffer with blanks
-    AllocBuffer();
-    if (!m_pBuffer)
+    if (!AllocBuffer())
         return false;
+
     memset(m_pBuffer, 0, m_aHeader.db_slng);
     m_pBuffer[0] = ' ';
 
@@ -1556,7 +1558,8 @@ bool ODbaseTable::InsertRow(OValueRefVector& rRow, bool bFlush, const Reference<
 bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow, const Reference<XIndexAccess>& _xCols)
 {
     // fill buffer with blanks
-    AllocBuffer();
+    if (!AllocBuffer())
+        return false;
 
     // position on desired record:
     sal_Size nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;
@@ -2743,10 +2746,10 @@ bool ODbaseTable::ReadMemo(sal_Size nBlockNo, ORowSetValue& aVariable)
     return true;
 }
 
-void ODbaseTable::AllocBuffer()
+bool ODbaseTable::AllocBuffer()
 {
     sal_uInt16 nSize = m_aHeader.db_slng;
-    OSL_ENSURE(nSize > 0, "Size too small");
+    SAL_WARN_IF(nSize == 0, "connectivity.drivers", "Size too small");
 
     if (m_nBufferSize != nSize)
     {
@@ -2760,6 +2763,8 @@ void ODbaseTable::AllocBuffer()
         m_nBufferSize = nSize;
         m_pBuffer = new sal_uInt8[m_nBufferSize+1];
     }
+
+    return m_pBuffer != NULL;
 }
 
 bool ODbaseTable::WriteBuffer()

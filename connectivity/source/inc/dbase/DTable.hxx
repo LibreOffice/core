@@ -112,7 +112,7 @@ namespace connectivity
             bool WriteBuffer();
             bool UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols, bool bForceAllFields);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
-            void AllocBuffer();
+            bool AllocBuffer();
 
             void throwInvalidDbaseFormat();
             void SAL_CALL renameImpl( const OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
