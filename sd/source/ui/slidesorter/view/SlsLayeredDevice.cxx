@@ -130,11 +130,31 @@ typedef ::boost::shared_ptr<Layer> SharedLayer;
 
 } // end of anonymous namespace
 
-class LayeredDevice::LayerContainer : public ::std::vector<SharedLayer>
+class LayeredDevice::LayerContainer
 {
 public:
-    LayerContainer (void) {}
-    ~LayerContainer (void) {}
+    LayerContainer() : mvLayers() {}
+
+    bool empty() const { return mvLayers.empty(); }
+
+    size_t size() const { return mvLayers.size(); }
+
+    const SharedLayer& back() const { return mvLayers.back(); }
+
+    const ::std::vector<SharedLayer>::const_iterator begin() const { return mvLayers.begin(); }
+    const ::std::vector<SharedLayer>::const_iterator end() const { return mvLayers.end(); }
+
+    void clear() { mvLayers.clear(); }
+
+    void pop_back() { mvLayers.pop_back(); }
+
+    void resize(size_t n) { mvLayers.resize(n); }
+
+    const SharedLayer& operator[](size_t i) const { return mvLayers[i]; }
+    SharedLayer& operator[](size_t i) { return mvLayers[i]; }
+
+private:
+    ::std::vector<SharedLayer> mvLayers;
 };
 
 //===== LayeredDevice =========================================================
@@ -232,7 +252,7 @@ void LayeredDevice::RemovePainter (
 
     // Remove top most layers that do not contain any painters.
     while ( ! mpLayers->empty() && ! mpLayers->back()->HasPainter())
-        mpLayers->erase(mpLayers->end()-1);
+        mpLayers->pop_back();
 }
 
 void LayeredDevice::Repaint (const Region& rRepaintRegion)
