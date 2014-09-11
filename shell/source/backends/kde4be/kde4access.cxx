@@ -83,7 +83,7 @@ css::beans::Optional< css::uno::Any > getValue(OUString const & id) {
     } else if (id == "EnableATToolSupport")
     {
         /* does not make much sense without an accessibility bridge */
-        sal_Bool ATToolSupport = sal_False;
+        bool ATToolSupport = false;
         return css::beans::Optional< css::uno::Any >(
             true, uno::makeAny( OUString::boolean( ATToolSupport ) ) );
     } else if (id == "WorkPathVariable")
