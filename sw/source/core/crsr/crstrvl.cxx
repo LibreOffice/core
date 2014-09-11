@@ -608,6 +608,37 @@ void lcl_MakeFldLst(
     }
 }
 
+static _SetGetExpFlds::const_iterator
+lcl_FindField(bool & o_rFound, _SetGetExpFlds const& rSrtLst,
+        SwRootFrm *const pLayout, SwTxtNode *const pTxtNode,
+        SwTxtFld *const pTxtFld, SwPosition const& rPos,
+        sal_Int32 const nContentOffset)
+{
+    boost::scoped_ptr<_SetGetExpFld> pSrch;
+    boost::scoped_ptr<SwIndex> pIndex;
+    if (-1 == nContentOffset)
+    {
+        pSrch.reset(new _SetGetExpFld(rPos.nNode, pTxtFld, &rPos.nContent));
+    }
+    else
+    {
+        pIndex.reset(new SwIndex(rPos.nNode.GetNode().GetCntntNode(), nContentOffset));
+        pSrch.reset(new _SetGetExpFld(rPos.nNode, pTxtFld, pIndex.get()));
+    }
+
+    if (rPos.nNode.GetIndex() < pTxtNode->GetNodes().GetEndOfExtras().GetIndex())
+    {
+        // also at collection use only the first frame
+        Point aPt;
+        pSrch->SetBodyPos(*pTxtNode->getLayoutFrm(pLayout, &aPt, &rPos, false));
+    }
+
+    _SetGetExpFlds::const_iterator it = rSrtLst.lower_bound(pSrch.get());
+
+    o_rFound = (**it == *pSrch);
+    return it;
+}
+
 bool SwCrsrShell::MoveFldType(
     const SwFieldType* pFldType,
     const bool bNext,
@@ -693,31 +724,9 @@ bool SwCrsrShell::MoveFldType(
                     && rPos.nContent.GetIndex() != pTxtFld->GetStart())
                 nContentOffset = pTxtFld->GetStart();
         }
-
-        _SetGetExpFld *pSrch = NULL;
-        SwIndex *pIndex = NULL;
-        if( -1 == nContentOffset )
-        {
-            pSrch = new _SetGetExpFld( rPos.nNode, pTxtFld, &rPos.nContent );
-        }
-        else
-        {
-            pIndex = new SwIndex( rPos.nNode.GetNode().GetCntntNode(), nContentOffset );
-            pSrch = new _SetGetExpFld( rPos.nNode, pTxtFld, pIndex );
-        }
-
-        if( rPos.nNode.GetIndex() < mpDoc->GetNodes().GetEndOfExtras().GetIndex() )
-        {
-            // also at collection use only the first frame
-            Point aPt;
-            pSrch->SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, false ) );
-        }
-
-        it = aSrtLst.lower_bound( pSrch );
-
-        bool isSrch = (**it == *pSrch);
-        delete pIndex;
-        delete pSrch;
+        bool isSrch;
+        it = lcl_FindField(isSrch, aSrtLst,
+                GetLayout(), pTNd, pTxtFld, rPos, nContentOffset);
 
         if( bDelFld )
         {
