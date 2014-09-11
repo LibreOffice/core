@@ -45,16 +45,16 @@ namespace cppu
                 9 +1, sal_False, sal_False,
                 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                 {
-                    { { Ifc1::static_type }, ((sal_IntPtr)(Ifc1 *) (Impl *) 16) - 16 },
-                    { { Ifc2::static_type }, ((sal_IntPtr)(Ifc2 *) (Impl *) 16) - 16 },
-                    { { Ifc3::static_type }, ((sal_IntPtr)(Ifc3 *) (Impl *) 16) - 16 },
-                    { { Ifc4::static_type }, ((sal_IntPtr)(Ifc4 *) (Impl *) 16) - 16 },
-                    { { Ifc5::static_type }, ((sal_IntPtr)(Ifc5 *) (Impl *) 16) - 16 },
-                    { { Ifc6::static_type }, ((sal_IntPtr)(Ifc6 *) (Impl *) 16) - 16 },
-                    { { Ifc7::static_type }, ((sal_IntPtr)(Ifc7 *) (Impl *) 16) - 16 },
-                    { { Ifc8::static_type }, ((sal_IntPtr)(Ifc8 *) (Impl *) 16) - 16 },
-                    { { Ifc9::static_type }, ((sal_IntPtr)(Ifc9 *) (Impl *) 16) - 16 },
-                    { { com::sun::star::lang::XTypeProvider::static_type }, ((sal_IntPtr)(com::sun::star::lang::XTypeProvider *) (Impl *) 16) - 16 }
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc1),
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc2),
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc3),
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc4),
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc5),
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc6),
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc7),
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc8),
+                    CPPUHELPER_DETAIL_TYPEENTRY(Ifc9),
+                    CPPUHELPER_DETAIL_TYPEENTRY(com::sun::star::lang::XTypeProvider)
                 }
             };
             return reinterpret_cast< class_data * >(&s_cd);

@@ -301,7 +301,7 @@ inline bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI )
         ::rtl::OUString( CPPU_CURRENT_LANGUAGE_BINDING_NAME ) );
     OSL_ASSERT( aMapping.is() );
     aMapping.mapInterface(
-            (void **)ppRet, pUnoI, ::cppu::getTypeFavourUnsigned( ppRet ) );
+            reinterpret_cast<void **>(ppRet), pUnoI, ::cppu::getTypeFavourUnsigned( ppRet ) );
     return (0 != *ppRet);
 }
 /** Deprecated. This function DOES NOT WORK with Purpose Environments

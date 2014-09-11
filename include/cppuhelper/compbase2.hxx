@@ -51,7 +51,7 @@ namespace cppu
             : WeakComponentImplHelperBase( rMutex )
             {}
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-            { return WeakComponentImplHelper_query( rType, cd::get(), this, (WeakComponentImplHelperBase *)this ); }
+            { return WeakComponentImplHelper_query( rType, cd::get(), this, static_cast<WeakComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
             { WeakComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw () SAL_OVERRIDE
@@ -89,7 +89,7 @@ namespace cppu
             : WeakComponentImplHelperBase( rMutex )
             {}
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-            { return WeakComponentImplHelper_query( rType, cd::get(), this, (WeakComponentImplHelperBase *)this ); }
+            { return WeakComponentImplHelper_query( rType, cd::get(), this, static_cast<WeakComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
             { WeakComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw () SAL_OVERRIDE
@@ -132,7 +132,7 @@ namespace cppu
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-            { return WeakAggComponentImplHelper_queryAgg( rType, cd::get(), this, (WeakAggComponentImplHelperBase *)this ); }
+            { return WeakAggComponentImplHelper_queryAgg( rType, cd::get(), this, static_cast<WeakAggComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
             { WeakAggComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw () SAL_OVERRIDE
