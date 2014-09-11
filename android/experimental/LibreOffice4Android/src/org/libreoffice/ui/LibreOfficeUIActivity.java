@@ -215,6 +215,7 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
     	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
     	fileNames = new String[ filePaths.length ];
     	FileUtilities.sortFiles( filePaths, sortMode );
+/*
     	for( int i = 0; i < fileNames.length; i++){
             fileNames[ i ] = filePaths[ i ].getName();
             if( !FileUtilities.hasThumbnail( filePaths[ i ] ) )
@@ -222,6 +223,7 @@ public class LibreOfficeUIActivity extends SherlockActivity implements ActionBar
                 new ThumbnailGenerator( filePaths[ i ] );
             }
     	}
+*/
     	if( viewMode == GRID_VIEW){
     		gv.setAdapter( new GridItemAdapter(getApplicationContext(), currentDirectory, filePaths ) );
     	}else{
