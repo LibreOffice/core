@@ -131,7 +131,8 @@ public:
     void                convertNumberFormat(
                             PropertySet& rPropSet,
                             const NumberFormat& rNumberFormat,
-                            bool bPercentFormat = false );
+                            bool bAxis,
+                            bool bShowPercent = false );
 
     /** Sets automatic fill properties to the passed property set. */
     void                convertAutomaticFill(
