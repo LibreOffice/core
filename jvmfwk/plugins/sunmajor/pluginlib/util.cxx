@@ -390,12 +390,16 @@ bool getJavaProps(const OUString & exePath,
     OUString sThisLib;
     if (osl_getModuleURLFromAddress((void *) (sal_IntPtr)& getJavaProps,
                                     & sThisLib.pData) == sal_False)
+    {
         return false;
+    }
     sThisLib = getDirFromFile(sThisLib);
     OUString sClassPath;
     if (osl_getSystemPathFromFileURL(sThisLib.pData, & sClassPath.pData)
         != osl_File_E_None)
+    {
         return false;
+    }
 
 #ifdef MACOSX
     if (sClassPath.endsWith("/"))
@@ -456,6 +460,8 @@ bool getJavaProps(const OUString & exePath,
     {
         JFW_TRACE2("[Java framework] Execution failed. \n");
         *bProcessRun = false;
+        SAL_WARN("jfw",
+            "osl_executeProcess failed (" << ret << "): \"" << exePath << "\"");
         return ret;
     }
     else
@@ -885,7 +891,9 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     OUString sResolvedDir = resolveDirPath(path);
     // If this path is invalid then there is no chance to find a JRE here
     if (sResolvedDir.isEmpty())
+    {
         return 0;
+    }
 
     //check if the directory path is good, that is a JRE was already recognized.
     //Then we need not detect it again
@@ -936,13 +944,17 @@ rtl::Reference<VendorBase> getJREInfoByPath(
                 //The file path (to java exe) is not valid
                 cit_path ifull = find(vecBadPaths.begin(), vecBadPaths.end(), sFullPath);
                 if (ifull == vecBadPaths.end())
+                {
                     vecBadPaths.push_back(sFullPath);
+                }
                 continue;
             }
 
             cit_path ifile = find(vecBadPaths.begin(), vecBadPaths.end(), sFilePath);
             if (ifile != vecBadPaths.end())
+            {
                 continue;
+            }
 
             MapIt entry =  mapJREs.find(sFilePath);
             if (entry != mapJREs.end())
@@ -1008,7 +1020,9 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     }
 
     if (props.empty())
+    {
         return rtl::Reference<VendorBase>();
+    }
 
     //find java.vendor property
     typedef vector<pair<OUString, OUString> >::const_iterator c_ip;
@@ -1040,7 +1054,9 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         }
     }
     if (!ret.is())
+    {
         vecBadPaths.push_back(sFilePath);
+    }
     else
     {
         JFW_TRACE2(OUString("[Java framework] sunjavaplugin")
