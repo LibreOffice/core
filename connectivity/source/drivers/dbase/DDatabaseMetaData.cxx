@@ -18,6 +18,7 @@
  */
 
 #include "dbase/DDatabaseMetaData.hxx"
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -157,7 +158,6 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-
     Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
     if(!xTables.is())
         throw SQLException();
@@ -169,71 +169,81 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     ODatabaseMetaDataResultSet::ORows aRows;
     ODatabaseMetaDataResultSet::ORow aRow(19);
 
-    aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
-    Sequence< OUString> aTabNames(xNames->getElementNames());
-    const OUString* pTabBegin    = aTabNames.getConstArray();
-    const OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
-    for(;pTabBegin != pTabEnd;++pTabBegin)
+    try
     {
-        if(match(tableNamePattern,*pTabBegin,'\0'))
+        aRow[10] = new ORowSetValueDecorator((sal_Int32)10);
+        Sequence< OUString> aTabNames(xNames->getElementNames());
+        const OUString* pTabBegin    = aTabNames.getConstArray();
+        const OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
+        for(;pTabBegin != pTabEnd;++pTabBegin)
         {
-            Reference< XColumnsSupplier> xTable(
-                xNames->getByName(*pTabBegin), css::uno::UNO_QUERY);
-            OSL_ENSURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
-            aRow[3] = new ORowSetValueDecorator(*pTabBegin);
-
-            Reference< XNameAccess> xColumns = xTable->getColumns();
-            if(!xColumns.is())
-                throw SQLException();
-
-            Sequence< OUString> aColNames(xColumns->getElementNames());
-
-            const OUString* pBegin = aColNames.getConstArray();
-            const OUString* pEnd = pBegin + aColNames.getLength();
-            Reference< XPropertySet> xColumn;
-            for(sal_Int32 i=1;pBegin != pEnd;++pBegin,++i)
+            if(match(tableNamePattern,*pTabBegin,'\0'))
             {
-                if(match(columnNamePattern,*pBegin,'\0'))
-                {
-                    aRow[4] = new ORowSetValueDecorator(*pBegin);
+                Reference< XColumnsSupplier> xTable(
+                    xNames->getByName(*pTabBegin), css::uno::UNO_QUERY);
+                OSL_ENSURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
+                aRow[3] = new ORowSetValueDecorator(*pTabBegin);
 
-                    xColumn.set(
-                        xColumns->getByName(*pBegin), css::uno::UNO_QUERY);
-                    OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
-                    aRow[5] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
-                    aRow[6] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
-                    aRow[7] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))));
-                    aRow[9] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
-                    aRow[11] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))));
-                    aRow[13] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))));
-                    switch((sal_Int32)aRow[5]->getValue())
+                Reference< XNameAccess> xColumns = xTable->getColumns();
+                if(!xColumns.is())
+                    throw SQLException();
+
+                Sequence< OUString> aColNames(xColumns->getElementNames());
+
+                const OUString* pBegin = aColNames.getConstArray();
+                const OUString* pEnd = pBegin + aColNames.getLength();
+                Reference< XPropertySet> xColumn;
+                for(sal_Int32 i=1;pBegin != pEnd;++pBegin,++i)
+                {
+                    if(match(columnNamePattern,*pBegin,'\0'))
                     {
-                    case DataType::CHAR:
-                    case DataType::VARCHAR:
-                        aRow[16] = new ORowSetValueDecorator((sal_Int32)254);
-                        break;
-                    case DataType::LONGVARCHAR:
-                        aRow[16] = new ORowSetValueDecorator((sal_Int32)65535);
-                        break;
-                    default:
-                        aRow[16] = new ORowSetValueDecorator((sal_Int32)0);
+                        aRow[4] = new ORowSetValueDecorator(*pBegin);
+
+                        xColumn.set(
+                            xColumns->getByName(*pBegin), css::uno::UNO_QUERY);
+                        OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
+                        aRow[5] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))));
+                        aRow[6] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME))));
+                        aRow[7] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))));
+                        aRow[9] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))));
+                        aRow[11] = new ORowSetValueDecorator(getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))));
+                        aRow[13] = new ORowSetValueDecorator(getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))));
+                        switch((sal_Int32)aRow[5]->getValue())
+                        {
+                        case DataType::CHAR:
+                        case DataType::VARCHAR:
+                            aRow[16] = new ORowSetValueDecorator((sal_Int32)254);
+                            break;
+                        case DataType::LONGVARCHAR:
+                            aRow[16] = new ORowSetValueDecorator((sal_Int32)65535);
+                            break;
+                        default:
+                            aRow[16] = new ORowSetValueDecorator((sal_Int32)0);
+                        }
+                        aRow[17] = new ORowSetValueDecorator(i);
+                        switch(sal_Int32(aRow[11]->getValue()))
+                        {
+                        case ColumnValue::NO_NULLS:
+                            aRow[18] = new ORowSetValueDecorator(OUString("NO"));
+                            break;
+                        case ColumnValue::NULLABLE:
+                            aRow[18] = new ORowSetValueDecorator(OUString("YES"));
+                            break;
+                        default:
+                            aRow[18] = new ORowSetValueDecorator(OUString());
+                        }
+                        aRows.push_back(aRow);
                     }
-                    aRow[17] = new ORowSetValueDecorator(i);
-                    switch(sal_Int32(aRow[11]->getValue()))
-                    {
-                    case ColumnValue::NO_NULLS:
-                        aRow[18] = new ORowSetValueDecorator(OUString("NO"));
-                        break;
-                    case ColumnValue::NULLABLE:
-                        aRow[18] = new ORowSetValueDecorator(OUString("YES"));
-                        break;
-                    default:
-                        aRow[18] = new ORowSetValueDecorator(OUString());
-                    }
-                    aRows.push_back(aRow);
                 }
             }
         }
+    }
+    catch (const WrappedTargetException& e)
+    {
+        SQLException aSql;
+        if (e.TargetException >>= aSql)
+            throw aSql;
+        throw WrappedTargetRuntimeException(e.Message, e.Context, e.TargetException);
     }
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     Reference< XResultSet > xRef = pResult;
