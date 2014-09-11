@@ -65,6 +65,10 @@
 
 #include "pptexanimations.hxx"
 
+#include "../source/ui/inc/DrawDocShell.hxx"
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+
 // presentation namespaces
 #define PNMSS         FSNS( XML_xmlns, XML_a ), "http://schemas.openxmlformats.org/drawingml/2006/main", \
                       FSNS( XML_xmlns, XML_p ), "http://schemas.openxmlformats.org/presentationml/2006/main", \
@@ -325,6 +329,24 @@ PowerPointExport::~PowerPointExport()
 {
 }
 
+void PowerPointExport::WritePPTCustomProperties()
+{
+    ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
+    uno::Reference<document::XDocumentProperties> xDocProps;
+
+    if ( pDocShell )
+    {
+        uno::Reference<document::XDocumentPropertiesSupplier> xDPS(pDocShell->GetModel( ), uno::UNO_QUERY );
+        xDocProps = xDPS->getDocumentProperties();
+    }
+
+    if (xDocProps.is())
+    {
+        PowerPointExport& mrExport(*this);
+        mrExport.exportDocumentProperties( xDocProps );
+    }
+}
+
 bool PowerPointExport::importDocument() throw()
 {
     return false;
@@ -334,6 +356,9 @@ bool PowerPointExport::exportDocument() throw (css::uno::RuntimeException, std::
 {
     DrawingML::ResetCounters();
     maShapeMap.clear ();
+
+    //write document properties
+    WritePPTCustomProperties();
 
     addRelation( "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument", "ppt/presentation.xml" );
 
