@@ -10510,10 +10510,10 @@ if test "x$enable_gltf" != "xno" -a $_os != iOS -a $_os != Android; then
     AC_MSG_RESULT([yes])
     AC_DEFINE(HAVE_FEATURE_GLTF,1)
     if test "$with_system_libgltf" = "yes"; then
-	SYSTEM_LIBGLTF=TRUE
-	PKG_CHECK_MODULES( LIBGLTF, [libgltf-0.0 >= 0.0.1] )
+        SYSTEM_LIBGLTF=TRUE
+        PKG_CHECK_MODULES( LIBGLTF, [libgltf-0.0 >= 0.0.1] )
     else
-    	BUILD_TYPE="$BUILD_TYPE LIBGLTF"
+        BUILD_TYPE="$BUILD_TYPE LIBGLTF"
     fi
 else
     AC_MSG_RESULT([no])
