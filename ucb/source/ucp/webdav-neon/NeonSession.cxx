@@ -1239,7 +1239,7 @@ void NeonSession::MKCOL( const OUString & inPath,
 void NeonSession::COPY( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
-                        sal_Bool inOverWrite )
+                        bool inOverWrite )
     throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -1265,7 +1265,7 @@ void NeonSession::COPY( const OUString & inSourceURL,
 void NeonSession::MOVE( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
-                        sal_Bool inOverWrite )
+                        bool inOverWrite )
     throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );

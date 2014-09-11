@@ -186,14 +186,14 @@ public:
     COPY( const OUString & inSourceURL,
           const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
-          sal_Bool inOverWrite )
+          bool inOverWrite )
         throw ( std::exception ) SAL_OVERRIDE;
 
     virtual void
     MOVE( const OUString & inSourceURL,
           const OUString & inDestinationURL,
           const DAVRequestEnvironment & rEnv,
-          sal_Bool inOverWrite )
+          bool inOverWrite )
         throw ( std::exception ) SAL_OVERRIDE;
 
     virtual void DESTROY( const OUString & inPath,

@@ -57,7 +57,7 @@ int DAVAuthListener_Impl::authenticate(
     const OUString & inHostName,
     OUString & inoutUserName,
     OUString & outPassWord,
-    sal_Bool bCanUseSystemCredentials )
+    bool bCanUseSystemCredentials )
 {
     if ( m_xEnv.is() )
     {

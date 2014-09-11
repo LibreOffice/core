@@ -46,7 +46,7 @@ class DAVAuthListener : public salhelper::SimpleReferenceObject
             const OUString & inHostName,
             OUString & inoutUserName,
             OUString & outPassWord,
-            sal_Bool bCanUseSystemCredentials ) = 0;
+            bool bCanUseSystemCredentials ) = 0;
 };
 
 } // namespace webdav_ucp

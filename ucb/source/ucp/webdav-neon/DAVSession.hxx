@@ -165,13 +165,13 @@ public:
     virtual void COPY( const OUString & inSource,
                        const OUString & inDestination,
                        const DAVRequestEnvironment & rEnv,
-                       sal_Bool inOverwrite = false )
+                       bool inOverwrite = false )
         throw( std::exception ) = 0;
 
     virtual void MOVE( const OUString & inSource,
                        const OUString & inDestination,
                        const DAVRequestEnvironment & rEnv,
-                       sal_Bool inOverwrite = false )
+                       bool inOverwrite = false )
         throw( std::exception ) = 0;
 
     virtual void DESTROY( const OUString & inPath,
