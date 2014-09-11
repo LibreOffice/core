@@ -31,17 +31,17 @@
 namespace com { namespace sun { namespace star { namespace i18n {
 
 
-//  class TextConversion
+//  class TextConversionService
 
-class TextConversion: public cppu::WeakImplHelper2
+class TextConversionService: public cppu::WeakImplHelper2
 <
     com::sun::star::i18n::XExtendedTextConversion,
     com::sun::star::lang::XServiceInfo
 >
 {
 public:
-        TextConversion(const char* pImplName);
-        virtual ~TextConversion();
+        TextConversionService(const char* pImplName);
+        virtual ~TextConversionService();
         // Methods
         virtual com::sun::star::i18n::TextConversionResult SAL_CALL
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
@@ -100,7 +100,7 @@ typedef struct {
 
 //  class TextConversion_ko
 
-class TextConversion_ko : public TextConversion
+class TextConversion_ko : public TextConversionService
 {
 public:
     TextConversion_ko( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
@@ -156,7 +156,7 @@ typedef struct {
     sal_Int16 count;
 } STC_WordIndex;
 
-class TextConversion_zh : public TextConversion
+class TextConversion_zh : public TextConversionService
 {
 public:
     TextConversion_zh( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );

@@ -37,7 +37,7 @@ using namespace com::sun::star::uno;
 namespace com { namespace sun { namespace star { namespace i18n {
 
 TextConversion_zh::TextConversion_zh( const Reference < XComponentContext >& xContext )
-    : TextConversion("com.sun.star.i18n.TextConversion_zh")
+    : TextConversionService("com.sun.star.i18n.TextConversion_zh")
 {
     xCDL = ConversionDictionaryList::create(xContext);
 }

@@ -31,7 +31,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 #endif
 
-TextConversion::TextConversion(const char *pImplName)
+TextConversionService::TextConversionService(const char *pImplName)
     : implementationName(pImplName)
 {
 #ifndef DISABLE_DYNLOADING
@@ -45,7 +45,7 @@ TextConversion::TextConversion(const char *pImplName)
 #endif
 }
 
-TextConversion::~TextConversion()
+TextConversionService::~TextConversionService()
 {
 #ifndef DISABLE_DYNLOADING
     if (hModule) osl_unloadModule(hModule);
@@ -60,7 +60,7 @@ static void* nullFunc()
 }
 
 oslGenericFunction SAL_CALL
-TextConversion::getFunctionBySymbol(const sal_Char* func)
+TextConversionService::getFunctionBySymbol(const sal_Char* func)
 {
     if (hModule)
         return osl_getFunctionSymbol(hModule, OUString::createFromAscii(func).pData);
@@ -71,19 +71,19 @@ TextConversion::getFunctionBySymbol(const sal_Char* func)
 #endif
 
 OUString SAL_CALL
-TextConversion::getImplementationName() throw( RuntimeException, std::exception )
+TextConversionService::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString::createFromAscii(implementationName);
 }
 
 sal_Bool SAL_CALL
-TextConversion::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+TextConversionService::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-TextConversion::getSupportedServiceNames() throw( RuntimeException, std::exception )
+TextConversionService::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii(implementationName);

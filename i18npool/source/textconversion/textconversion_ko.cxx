@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 #define SCRIPT_HANGUL   2
 
 TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xContext )
-    : TextConversion("com.sun.star.i18n.TextConversion_ko")
+    : TextConversionService("com.sun.star.i18n.TextConversion_ko")
 {
     Reference < XInterface > xI;
 
