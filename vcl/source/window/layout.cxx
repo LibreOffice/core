@@ -1231,7 +1231,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
 
 bool toBool(const OString &rValue)
 {
-    return (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1');
+    return (!rValue.isEmpty() && (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1'));
 }
 
 bool VclGrid::set_property(const OString &rKey, const OString &rValue)
