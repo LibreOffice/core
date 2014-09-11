@@ -488,6 +488,10 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     // it becomes reponsible for the ServerFont instantiation
     ((ImplServerFontEntry*)rFSD.mpFontEntry)->SetServerFont( this );
 
+    maFaceFT = pFI->GetFaceFT();
+    if( !maFaceFT )
+        return;
+
     if( rFSD.mnOrientation != 0 )
     {
         const double dRad = rFSD.mnOrientation * ( F_2PI / 3600.0 );
@@ -502,10 +506,6 @@ ServerFont::ServerFont( const FontSelectPattern& rFSD, FtFontInfo* pFI )
     mfStretch = (double)mnWidth / rFSD.mnHeight;
     // sanity check (e.g. #i66394#, #i66244#, #66537#)
     if( (mnWidth < 0) || (mfStretch > +64.0) || (mfStretch < -64.0) )
-        return;
-
-    maFaceFT = pFI->GetFaceFT();
-    if( !maFaceFT )
         return;
 
     FT_New_Size( maFaceFT, &maSizeFT );
@@ -623,8 +623,7 @@ const OString& ServerFont::GetFontFileName() const
 
 ServerFont::~ServerFont()
 {
-    if( mpLayoutEngine )
-        delete mpLayoutEngine;
+    delete mpLayoutEngine;
 
     if( maSizeFT )
         FT_Done_Size( maSizeFT );
