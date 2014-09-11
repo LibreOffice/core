@@ -69,6 +69,9 @@ public:
 
     virtual ~PowerPointExport();
 
+    // Write docProps/core.xml and docprops/custom.xml and docprops/app.xml
+    void WriteProperties();
+
     // from FilterBase
     virtual bool importDocument() throw() SAL_OVERRIDE;
     virtual bool exportDocument() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
