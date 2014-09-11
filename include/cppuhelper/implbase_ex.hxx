@@ -66,6 +66,11 @@ struct type_entry
     sal_IntPtr m_offset;
 };
 
+/** in the future, this can be a constexpr template method */
+#define CPPUHELPER_DETAIL_TYPEENTRY(Ifc) \
+    { { Ifc::static_type }, \
+      reinterpret_cast<sal_IntPtr>( static_cast<Ifc *>( reinterpret_cast<Impl *>(16) )) - 16 }
+
 /** identical dummy struct for casting class_dataN to class_data
 */
 struct class_data

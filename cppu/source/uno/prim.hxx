@@ -134,7 +134,7 @@ inline typelib_TypeDescriptionReference * _getVoidType()
 #if OSL_DEBUG_LEVEL > 0
 #define CONSTRUCT_EMPTY_ANY( pAny ) \
 (pAny)->pType = _getVoidType(); \
-(pAny)->pData = (void *)0xdeadbeef;
+(pAny)->pData = reinterpret_cast<void *>(0xdeadbeef);
 #else
 #define CONSTRUCT_EMPTY_ANY( pAny ) \
 (pAny)->pType = _getVoidType(); \
