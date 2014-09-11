@@ -2047,7 +2047,7 @@ OUString NeonSession::makeAbsoluteURL( OUString const & rURL ) const
     try
     {
         // Is URL relative or already absolute?
-        if ( rURL[ 0 ] != '/' )
+        if ( !rURL.isEmpty() && rURL[ 0 ] != '/' )
         {
             // absolute.
             return OUString( rURL );
