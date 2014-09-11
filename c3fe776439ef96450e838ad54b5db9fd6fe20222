@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_35551ac6",
+        "filename": "solenv/gbuild/JunitTest.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-11T12:19:54Z",
+      "side": 1,
+      "message": "the uses of HAMCREST_JAR should probably be conditional on it not being empty",
+      "revId": "c3fe776439ef96450e838ad54b5db9fd6fe20222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
