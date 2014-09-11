@@ -129,7 +129,7 @@ inline void _destructAny(
         break;
     }
 #if OSL_DEBUG_LEVEL > 0
-    pAny->pData = (void *)0xdeadbeef;
+    pAny->pData = reinterpret_cast<void *>(0xdeadbeef);
 #endif
 
     ::typelib_typedescriptionreference_release( pType );

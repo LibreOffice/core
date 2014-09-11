@@ -109,7 +109,7 @@ void SAL_CALL OWeakConnectionPoint::dispose() throw(::com::sun::star::uno::Runti
     {
         try
         {
-            ((XReference *)aIt.next())->dispose();
+            static_cast<XReference *>(aIt.next())->dispose();
         }
         catch (com::sun::star::lang::DisposedException &) {}
         catch (RuntimeException &)

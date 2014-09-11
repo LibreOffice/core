@@ -129,7 +129,7 @@ struct FctOUStringHash : public std::unary_function< const OUString &, size_t >
 struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 {
     size_t operator()( uno_Mapping * pKey ) const
-        { return (size_t)pKey; }
+        { return reinterpret_cast<size_t>(pKey); }
 };
 
 typedef boost::unordered_map<

@@ -701,12 +701,12 @@ void OPropertySetHelper::fire
                         {
                             if( bVetoable ) // fire change Events?
                             {
-                                ((XVetoableChangeListener *)pL)->vetoableChange(
+                                static_cast<XVetoableChangeListener *>(pL)->vetoableChange(
                                     pEvts[i] );
                             }
                             else
                             {
-                                ((XPropertyChangeListener *)pL)->propertyChange(
+                                static_cast<XPropertyChangeListener *>(pL)->propertyChange(
                                     pEvts[i] );
                             }
                         }
@@ -753,12 +753,12 @@ void OPropertySetHelper::fire
                         {
                             if( bVetoable ) // fire change Events?
                             {
-                                ((XVetoableChangeListener *)pL)->vetoableChange(
+                                static_cast<XVetoableChangeListener *>(pL)->vetoableChange(
                                     pEvts[i] );
                             }
                             else
                             {
-                                ((XPropertyChangeListener *)pL)->propertyChange(
+                                static_cast<XPropertyChangeListener *>(pL)->propertyChange(
                                     pEvts[i] );
                             }
                         }
@@ -798,7 +798,7 @@ void OPropertySetHelper::fire
                 while( aIt.hasMoreElements() )
                 {
                     XPropertiesChangeListener * pL =
-                        (XPropertiesChangeListener *)aIt.next();
+                        static_cast<XPropertiesChangeListener *>(aIt.next());
                     try
                     {
                         try

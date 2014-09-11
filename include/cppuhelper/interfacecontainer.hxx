@@ -41,7 +41,7 @@ inline OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::~OMu
 
     while( iter != end )
     {
-        delete (OInterfaceContainerHelper*)(*iter).second;
+        delete static_cast<OInterfaceContainerHelper*>((*iter).second);
         (*iter).second = 0;
         ++iter;
     }
@@ -66,7 +66,7 @@ inline ::com::sun::star::uno::Sequence< key > OMultiTypeInterfaceContainerHelper
         while( iter != end )
         {
             // are interfaces added to this container?
-            if( ((OInterfaceContainerHelper*)(*iter).second)->getLength() )
+            if( static_cast<OInterfaceContainerHelper*>((*iter).second)->getLength() )
                 // yes, put the type in the array
                 pArray[i++] = (*iter).first;
             iter++;
@@ -89,7 +89,7 @@ OInterfaceContainerHelper * OMultiTypeInterfaceContainerHelperVar< key , hashImp
 
      typename InterfaceMap::iterator iter = find( rKey );
     if( iter != m_pMap->end() )
-            return (OInterfaceContainerHelper*) (*iter).second;
+            return static_cast<OInterfaceContainerHelper*>( (*iter).second );
     return 0;
 }
 
@@ -108,7 +108,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::a
         return pLC->addInterface( rListener );
     }
     else
-        return ((OInterfaceContainerHelper*)(*iter).second)->addInterface( rListener );
+        return static_cast<OInterfaceContainerHelper*>((*iter).second)->addInterface( rListener );
 }
 
 
@@ -123,7 +123,7 @@ inline sal_Int32 OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalIm
     typename InterfaceMap::iterator iter = find( rKey );
     // container found?
     if( iter != m_pMap->end() )
-        return ((OInterfaceContainerHelper*)(*iter).second)->removeInterface( rListener );
+        return static_cast<OInterfaceContainerHelper*>((*iter).second)->removeInterface( rListener );
 
     // no container with this id. Always return 0
     return 0;
@@ -150,7 +150,7 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::dispos
             typename InterfaceMap::size_type i = 0;
             while( iter != end )
             {
-                ppListenerContainers[i++] = (OInterfaceContainerHelper*)(*iter).second;
+                ppListenerContainers[i++] = static_cast<OInterfaceContainerHelper*>((*iter).second);
                 ++iter;
             }
         }
@@ -176,7 +176,7 @@ void OMultiTypeInterfaceContainerHelperVar< key , hashImpl , equalImpl >::clear(
 
     while( iter != end )
     {
-        ((OInterfaceContainerHelper*)(*iter).second)->clear();
+        static_cast<OInterfaceContainerHelper*>((*iter).second)->clear();
         ++iter;
     }
 }
