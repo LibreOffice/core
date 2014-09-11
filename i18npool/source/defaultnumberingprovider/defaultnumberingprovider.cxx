@@ -857,7 +857,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
       }
 
         if (natNum) {
-            NativeNumberSupplier sNatNum;
+            NativeNumberSupplierService sNatNum;
             result += sNatNum.getNativeNumberString(OUString::number( number ), locale, natNum);
         } else if (tableSize) {
             if ( number > tableSize && !recycleSymbol)

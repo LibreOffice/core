@@ -93,7 +93,7 @@ public:
 protected:
     const Era *eraArray;
     icu::Calendar *body;
-    NativeNumberSupplier aNatNum;
+    NativeNumberSupplierService aNatNum;
     const sal_Char* cCalendar;
     com::sun::star::lang::Locale aLocale;
     sal_uInt32 fieldSet;

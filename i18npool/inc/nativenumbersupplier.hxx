@@ -28,16 +28,16 @@
 namespace com { namespace sun { namespace star { namespace i18n {
 
 //      ----------------------------------------------------
-//      class NativeNumberSupplier
+//      class NativeNumberSupplierService
 //      ----------------------------------------------------
-class NativeNumberSupplier : public cppu::WeakImplHelper2
+class NativeNumberSupplierService : public cppu::WeakImplHelper2
 <
         com::sun::star::i18n::XNativeNumberSupplier,
         com::sun::star::lang::XServiceInfo
 >
 {
 public:
-        NativeNumberSupplier(bool _useOffset = false) : useOffset(_useOffset) {}
+        NativeNumberSupplierService(bool _useOffset = false) : useOffset(_useOffset) {}
 
         // Methods
         virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,

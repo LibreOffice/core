@@ -517,7 +517,7 @@ static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
     return -1;
 }
 
-OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
+OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode, Sequence< sal_Int32 >& offset) throw (RuntimeException)
 {
     const Number *number = 0;
@@ -595,14 +595,14 @@ OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aN
         return aNumberString;
 }
 
-OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
+OUString SAL_CALL NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                 sal_Int16 nNativeNumberMode) throw (RuntimeException, std::exception)
 {
     Sequence< sal_Int32 > offset;
     return getNativeNumberString(aNumberString, rLocale, nNativeNumberMode, offset);
 }
 
-sal_Unicode SAL_CALL NativeNumberSupplier::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw(com::sun::star::uno::RuntimeException)
+sal_Unicode SAL_CALL NativeNumberSupplierService::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw(com::sun::star::uno::RuntimeException)
 {
     if (nNativeNumberMode == NativeNumberMode::NATNUM0) { // Ascii
         for (sal_Int16 i = 0; i < NumberChar_Count; i++)
@@ -636,7 +636,7 @@ sal_Unicode SAL_CALL NativeNumberSupplier::getNativeNumberChar( const sal_Unicod
     return inChar;
 }
 
-sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL NativeNumberSupplierService::isValidNatNum( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException, std::exception)
 {
     sal_Int16 langnum = getLanguageNumber(rLocale);
 
@@ -663,7 +663,7 @@ sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sa
     return sal_False;
 }
 
-NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException, std::exception)
+NativeNumberXmlAttributes SAL_CALL NativeNumberSupplierService::convertToXmlAttributes( const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw (RuntimeException, std::exception)
 {
     static const sal_Int16 attShort         = 0;
     static const sal_Int16 attMedium        = 1;
@@ -739,7 +739,7 @@ static bool natNumIn(sal_Int16 num, const sal_Int16 natnum[], sal_Int16 len)
     return false;
 }
 
-sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr ) throw (RuntimeException, std::exception)
+sal_Int16 SAL_CALL NativeNumberSupplierService::convertFromXmlAttributes( const NativeNumberXmlAttributes& aAttr ) throw (RuntimeException, std::exception)
 {
     sal_Unicode numberChar[NumberChar_Count];
     for (sal_Int16 i = 0; i < NumberChar_Count; i++)
@@ -887,19 +887,19 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, boo
 
 static const sal_Char* implementationName = "com.sun.star.i18n.NativeNumberSupplier";
 
-OUString SAL_CALL NativeNumberSupplier::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL NativeNumberSupplierService::getImplementationName() throw( RuntimeException, std::exception )
 {
     return OUString::createFromAscii( implementationName );
 }
 
 sal_Bool SAL_CALL
-NativeNumberSupplier::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+NativeNumberSupplierService::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-NativeNumberSupplier::getSupportedServiceNames() throw( RuntimeException, std::exception )
+NativeNumberSupplierService::getSupportedServiceNames() throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(1);
     aRet[0] = OUString::createFromAscii( implementationName );
@@ -913,7 +913,7 @@ com_sun_star_i18n_NativeNumberSupplier_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new css::i18n::NativeNumberSupplier());
+    return cppu::acquire(new css::i18n::NativeNumberSupplierService());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
