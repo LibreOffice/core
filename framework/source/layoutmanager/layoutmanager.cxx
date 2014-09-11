@@ -782,7 +782,14 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
         if ( pSysWindow )
         {
             if ( bSetVisible )
+            {
                 pSysWindow->SetMenuBar(pMenuBar);
+                if (getenv("LO_USE_NOTEBOOKBAR"))
+                {
+                    pSysWindow->CreateNotebookBar("vcl/ui/notebookbar.ui", m_xFrame);
+                    pSysWindow->SetMenuBarMode(MenuBarMode::Hide);
+                }
+            }
             else
                 pSysWindow->SetMenuBar( 0 );
         }
