@@ -160,6 +160,13 @@ DIM nStrPos as Long
 
     GlobalTestLog = OpenLogDat (sLogFileName)
     call WriteTestSequence
+
+    &apos; Do extension test first to avoid OOM with ASAN
+    if bMakeExtensionTest then
+    gCurrentDocTest = frmExtension
+        call Test_Ext.TestExtensions
+    end if
+
     if bMakeWriterTest then
     gCurrentDocTest = frmWriter
         call MakeDocTest
@@ -196,10 +203,6 @@ DIM nStrPos as Long
     gCurrentDocTest = frmDataBase
         call Test_DB.TestDB
     end if
-    if bMakeExtensionTest then
-    gCurrentDocTest = frmExtension
-        call Test_Ext.TestExtensions
-    end if
 
     Close #GlobalTestLog
     GlobalTestLog = 0
@@ -208,6 +211,8 @@ end Sub
 Sub WriteTestSequence
     Print #GlobalTestLog, &quot;Sequence of testing&quot;
 
+    if bMakeExtensionTest then
+        WriteExtensionTests (&quot;Extension   : &quot;, GlobalTestLog)
     if bMakeWriterTest then
         WriteTests (&quot;writer  : &quot;, true, GlobalTestLog)
     end if
@@ -235,8 +240,6 @@ Sub WriteTestSequence
     if bMakeDBTest then
         WriteDBTests (&quot;Database    : &quot;, GlobalTestLog)
     end if
-    if bMakeExtensionTest then
-        WriteExtensionTests (&quot;Extension   : &quot;, GlobalTestLog)
   end if
 
   Print #GlobalTestLog, &quot;testclosure : setup, write_status&quot;
