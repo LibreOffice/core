@@ -182,7 +182,8 @@ endef
 # the default goal is all (see Module.mk)
 ifeq (,$(filter-out all build check unitcheck slowcheck subsequentcheck,$(MAKECMDGOALS)))
 $(eval $(call repositorymodule_serialize,\
-	scfilt scopencl \
+	scfilt \
+	$(if $(ENABLE_OPENCL),scopencl) \
 	$(call gb_Helper_optional,SCRIPTING,vbaobj) \
 	sc msword \
 	$(call gb_Helper_optional,DESKTOP,swui) \
