@@ -1608,7 +1608,7 @@ AC_ARG_WITH(system-jpeg,
 AC_ARG_WITH(system-libgltf,
     AS_HELP_STRING([--with-system-libgltf],
         [Use libgltf already on system.]),,
-    [with_system_libgltf=auto])
+    [with_system_libgltf="$with_system_libs"])
 
 AC_ARG_WITH(system-clucene,
     AS_HELP_STRING([--with-system-clucene],
