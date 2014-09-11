@@ -2830,8 +2830,10 @@ if test $_os = Darwin; then
         case $with_macosx_sdk in
         10.5)
             with_macosx_version_min_required="10.5";;
-        *)
+        10.6|10.7)
             with_macosx_version_min_required="10.6";;
+        *)
+            with_macosx_version_min_required="10.8";;
         esac
     fi
 
