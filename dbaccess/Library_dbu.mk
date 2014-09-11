@@ -251,6 +251,7 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/uno/ColumnModel \
     dbaccess/source/ui/uno/ColumnPeer \
     dbaccess/source/ui/uno/composerdialogs \
+	dbaccess/source/ui/uno/copytablewizard \
     dbaccess/source/ui/uno/dbinteraction \
     dbaccess/source/ui/uno/DBTypeWizDlg \
     dbaccess/source/ui/uno/DBTypeWizDlgSetup \
@@ -265,18 +266,6 @@ $(eval $(call gb_Library_add_exception_objects,dbu,\
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,dbu,\
     dbaccess/source/ui/dlg/adodatalinks \
-))
-endif
-
-# workaround for issue http://qa.openoffice.org/issues/show_bug.cgi?id=102305 Linux specific
-ifeq ($(COM),GCC)
-$(eval $(call gb_Library_add_cxxobjects,dbu,\
-    dbaccess/source/ui/uno/copytablewizard \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILERNOOPTFLAGS) $(if $(call gb_LinkTarget__debug_enabled,dbu),$(gb_DEBUG_CFLAGS)) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,dbu,\
-    dbaccess/source/ui/uno/copytablewizard \
 ))
 endif
 
