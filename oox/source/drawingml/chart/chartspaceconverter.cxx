@@ -23,7 +23,6 @@
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include "oox/core/xmlfilterbase.hxx"
@@ -40,12 +39,10 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::makeAny;
-using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XTitled;
-using ::com::sun::star::chart2::data::XDataReceiver;
 using ::com::sun::star::beans::XPropertySet;
 
 namespace oox {
@@ -76,17 +73,6 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     /*  create data provider (virtual function in the ChartConverter class,
         derived converters may create an external data provider) */
     getChartConverter()->createDataProvider( getChartDocument() );
-
-    // attach number formatter of container document to data receiver
-    try
-    {
-        Reference< XDataReceiver > xDataRec( getChartDocument(), UNO_QUERY_THROW );
-        Reference< XNumberFormatsSupplier > xNumFmtSupp( getFilter().getModel(), UNO_QUERY_THROW );
-        xDataRec->attachNumberFormatsSupplier( xNumFmtSupp );
-    }
-    catch( Exception& )
-    {
-    }
 
     // formatting of the chart background.  The default fill style varies with applications.
     PropertySet aBackPropSet( getChartDocument()->getPageBackground() );

@@ -20,6 +20,8 @@
 #include "oox/drawingml/chart/chartconverter.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include "drawingml/chart/chartspaceconverter.hxx"
 #include "drawingml/chart/chartspacemodel.hxx"
 #include "oox/helper/containerhelper.hxx"
@@ -96,6 +98,11 @@ void ChartConverter::convertFromModel( XmlFilterBase& rFilter,
     OSL_ENSURE( rxChartDoc.is(), "ChartConverter::convertFromModel - missing chart document" );
     if( rxChartDoc.is() )
     {
+        Reference< data::XDataReceiver > xDataReceiver( rxChartDoc, uno::UNO_QUERY_THROW );
+        Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( rFilter.getModel(), uno::UNO_QUERY );
+        if (xNumberFormatsSupplier.is())
+            xDataReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+
         ConverterRoot aConvBase( rFilter, *this, rChartModel, rxChartDoc, rChartSize );
         ChartSpaceConverter aSpaceConv( aConvBase, rChartModel );
         aSpaceConv.convertFromModel( rxExternalPage, rChartPos );

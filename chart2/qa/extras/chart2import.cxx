@@ -53,6 +53,7 @@ public:
     void testFdo78080();
     void testFdo54361();
     void testAutoBackgroundXLSX();
+    void testNumberFormatsXLSX();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -85,6 +86,7 @@ public:
     CPPUNIT_TEST(testFdo78080);
     CPPUNIT_TEST(testFdo54361);
     CPPUNIT_TEST(testAutoBackgroundXLSX);
+    CPPUNIT_TEST(testNumberFormatsXLSX);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -624,6 +626,56 @@ void Chart2ImportTest::testAutoBackgroundXLSX()
         eStyle == drawing::FillStyle_SOLID);
     CPPUNIT_ASSERT_MESSAGE("'Automatic' chart background fill in xlsx should be loaded as solid white.",
         (nColor & 0x00FFFFFF) == 0x00FFFFFF); // highest 2 bytes are transparency which we ignore here.
+}
+
+void Chart2ImportTest::testNumberFormatsXLSX()
+{
+    load("/chart2/qa/extras/data/xlsx/", "number-formats.xlsx");
+    Reference<chart2::XChartDocument> xChartDoc = getChartDocFromSheet(0, mxComponent);
+    CPPUNIT_ASSERT_MESSAGE("failed to load chart", xChartDoc.is());
+
+    uno::Reference<chart2::XDataSeries> xDataSeries(getDataSeriesFromDoc(xChartDoc, 0));
+    CPPUNIT_ASSERT(xDataSeries.is());
+    uno::Reference<beans::XPropertySet> xPropertySet;
+    chart2::DataPointLabel aLabel;
+    sal_Int32 nNumberFormat;
+    bool bLinkNumberFormatToSource = false;
+    bool bSuccess = false;
+    const sal_Int32 nChartDataNumberFormat = getNumberFormat(
+            xChartDoc, "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)");
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(0), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(false, bSuccess);
+    bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(1), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(false, bSuccess);
+    bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
+
+    xPropertySet.set(xDataSeries->getDataPointByIndex(2), uno::UNO_QUERY_THROW);
+    xPropertySet->getPropertyValue("Label") >>= aLabel;
+    CPPUNIT_ASSERT_EQUAL(sal_False, aLabel.ShowNumber);
+    CPPUNIT_ASSERT_EQUAL(sal_True, aLabel.ShowNumberInPercent);
+    xPropertySet->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(nChartDataNumberFormat, nNumberFormat);
+    bSuccess = xPropertySet->getPropertyValue("PercentageNumberFormat") >>= nNumberFormat;
+    CPPUNIT_ASSERT_EQUAL(false, bSuccess);
+    bSuccess = xPropertySet->getPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT) >>= bLinkNumberFormatToSource;
+    CPPUNIT_ASSERT_MESSAGE("\"LinkNumberFormatToSource\" should be set to true.", bSuccess && bLinkNumberFormatToSource);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
