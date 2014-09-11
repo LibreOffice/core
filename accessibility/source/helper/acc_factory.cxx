@@ -114,7 +114,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXWindow* _pXWindow ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-        createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar ) SAL_OVERRIDE;
+        createAccessible( Menu* _pMenu, bool _bIsMenuBar ) SAL_OVERRIDE;
 
     // ::svt::IAccessibleFactory
     virtual IAccessibleTabListBox*
@@ -228,7 +228,7 @@ AccessibleFactory::~AccessibleFactory()
 {
 }
 
-Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar )
+Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, bool _bIsMenuBar )
 {
     OAccessibleMenuBaseComponent* pAccessible;
     if ( _bIsMenuBar )

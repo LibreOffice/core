@@ -116,7 +116,7 @@ namespace toolkit
             return NULL;
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-                createAccessible( Menu* /*_pMenu*/, sal_Bool /*_bIsMenuBar*/ ) SAL_OVERRIDE
+                createAccessible( Menu* /*_pMenu*/, bool /*_bIsMenuBar*/ ) SAL_OVERRIDE
         {
             return NULL;
         }

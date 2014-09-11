@@ -119,7 +119,7 @@ namespace toolkit
         /** creates an accessible component for the given menu
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
-            createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar ) = 0;
+            createAccessible( Menu* _pMenu, bool _bIsMenuBar ) = 0;
 
     protected:
         virtual ~IAccessibleFactory() {}

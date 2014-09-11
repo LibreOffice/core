@@ -4370,7 +4370,7 @@ void VCLXComboBox::setProperty( const OUString& PropertyName, const ::com::sun::
                      pComboBox->EnableAutocomplete( n != 0 );
                 else
                 {
-                    sal_Bool b = sal_Bool();
+                    bool b = bool();
                     if ( Value >>= b )
                         pComboBox->EnableAutocomplete( b );
                 }
