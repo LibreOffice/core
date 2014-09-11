@@ -104,6 +104,7 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/vbapivottables \
 	sc/source/ui/vba/vbarange \
 	sc/source/ui/vba/vbasheetobject \
+	sc/source/ui/vba/vbasheetobjects \
 	sc/source/ui/vba/vbastyle \
 	sc/source/ui/vba/vbastyles \
 	sc/source/ui/vba/vbatextboxshape \
@@ -117,22 +118,6 @@ $(eval $(call gb_Library_add_exception_objects,vbaobj,\
 	sc/source/ui/vba/vbaworksheets \
 	sc/source/ui/vba/vbawsfunction \
 ))
-
-#http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50255
-ifeq ($(COM)-$(OS)-$(CPUNAME)$(COM_GCC_IS_CLANG),GCC-LINUX-INTEL)
-sc_gccthunkBroken := $(shell expr $(GCC_VERSION) \>= 40500 \& $(GCC_VERSION) \< 40602)
-endif
-
-ifeq ($(sc_gccthunkBroken),1)
-$(eval $(call gb_Library_add_cxxobjects,vbaobj,\
-    sc/source/ui/vba/vbasheetobjects \
-    , $(gb_COMPILERNOOPTFLAGS) $(if $(call gb_LinkTarget__debug_enabled,vbaobj),$(gb_DEBUG_CFLAGS)) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-else
-$(eval $(call gb_Library_add_exception_objects,vbaobj,\
-    sc/source/ui/vba/vbasheetobjects \
-))
-endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_system_win32_libs,vbaobj,\
