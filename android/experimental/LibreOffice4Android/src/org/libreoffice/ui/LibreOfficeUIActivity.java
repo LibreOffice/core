@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.prefs.Preferences;
 
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.graphics.Shader.TileMode;
 import android.graphics.BlurMaskFilter;
@@ -34,6 +35,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -93,7 +95,6 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
 	
 	FileFilter fileFilter;
 	FilenameFilter filenameFilter;
-	private String[] fileNames;
 	private File[] filePaths;
 	
 	
@@ -173,17 +174,15 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
 	        // code to make a grid view
         	setContentView(R.layout.file_grid);
 	    	gv = (GridView)findViewById(R.id.file_explorer_grid_view);
-        	fileNames = currentDirectory.list( FileUtilities.getFilenameFilter( filterMode ) );
         	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
 	        gv.setOnItemClickListener(new OnItemClickListener() {
 	            public void onItemClick(AdapterView<?> parent, View view,
 	                int position, long id) {
 	            	File file = filePaths[position];
 	            	if(!file.isDirectory()){
-	            		open(fileNames[position]);
+                        open(file);
 	            	}else{
-	            		file = new File( currentDirectory, file.getName() );
-	            		openDirectory( file );
+                        openDirectory( file );
 	            	}
 	            		
 	            }
@@ -194,7 +193,6 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
         	setContentView(R.layout.file_list);
         	lv = (ListView)findViewById( R.id.file_explorer_list_view);
         	lv.setClickable(true);
-        	fileNames = currentDirectory.list( FileUtilities.getFilenameFilter( filterMode ) );
         	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
         	lv.setAdapter( new ListItemAdapter(getApplicationContext(), filePaths) );
         	actionBar.setSelectedNavigationItem( filterMode + 1 );
@@ -212,7 +210,6 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
             actionBar.setDisplayHomeAsUpEnabled( false );
         }
     	filePaths = currentDirectory.listFiles( FileUtilities.getFileFilter( filterMode ) );
-    	fileNames = new String[ filePaths.length ];
     	FileUtilities.sortFiles( filePaths, sortMode );
 /*
     	for( int i = 0; i < fileNames.length; i++){
@@ -230,7 +227,7 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
     	}
     }
     
-    public void open(String file){
+    public void open(File file) {
     	/*
     	Intent i = new Intent( this , WriterViewerActivity.class );
     	i.putExtra( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
@@ -239,7 +236,7 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
     	startActivity( i );
     	*/
     	Intent i = new Intent( this , DocumentLoader.class );
-    	i.putExtra("input",new File( currentDirectory , file).getAbsolutePath() );
+        i.putExtra("input", file.getAbsolutePath() );
     	i.putExtra( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
     	i.putExtra( FILTER_MODE_KEY  , filterMode );
     	i.putExtra( EXPLORER_VIEW_TYPE_KEY  , viewMode );
@@ -546,7 +543,7 @@ class ListItemAdapter implements ListAdapter{
 					if(filePaths[ pos ].isDirectory() ){
 						openDirectory( filePaths[ pos ] );
 					}else{
-						open( filePaths[ pos ].getName() );
+                        open( filePaths[ pos ] );
 					}
 				}
 			});
