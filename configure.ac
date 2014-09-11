@@ -6136,17 +6136,23 @@ elif test "$GCC" = "yes"; then
     fi
 fi
 
+dnl Test for temporarily incompatible libstdc++ 4.7.{0,1}, where
+dnl <https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=179528> introduced
+dnl an additional member _M_size into C++11 std::list towards 4.7.0 and
+dnl <https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=189186> removed it
+dnl again towards 4.7.2:
 if test $CPP_LIBRARY = GLIBCXX -a "$HAVE_CXX11" = TRUE; then
     AC_MSG_CHECKING([whether using C++11 causes libstdc++ 4.7.0/4.7.1 ABI breakage])
     AC_LANG_PUSH([C++])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <list>
-#if !defined(__GLIBCXX__)
+#if !defined __GLIBCXX__ || (__GLIBCXX__ != 20120322 && __GLIBCXX__ != 20120614)
+    // according to <https://gcc.gnu.org/onlinedocs/libstdc++/manual/abi.html>:
+    //   GCC 4.7.0: 20120322
+    //   GCC 4.7.1: 20120614
+    // and using a range check is not possible as the mapping between
+    // __GLIBCXX__ values and GCC versions is not monotonic
 /* ok */
-#elif __GLIBCXX__ < 20111004
-/* before breakage */
-#elif __GLIBCXX__ > 20120703
-/* after breakage */
 #else
 abi broken
 #endif
