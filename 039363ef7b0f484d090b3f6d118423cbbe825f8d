@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_9124dcaf",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 848,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-09-12T20:51:23Z",
+      "side": 1,
+      "message": "that\u0027s a a lot of copy-paste - can you at least create a common function for copying the user-defined properties?",
+      "revId": "039363ef7b0f484d090b3f6d118423cbbe825f8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
