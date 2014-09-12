@@ -52,6 +52,7 @@
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 
 #include <config_features.h>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 using namespace ::com::sun::star;
 
@@ -69,6 +70,7 @@ public:
     void testBnc880763();
     void testBnc862510_5();
     void testBnc822347_EmptyBullet();
+    void testFdo83751();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testN821567);
@@ -82,6 +84,7 @@ public:
     CPPUNIT_TEST(testBnc880763);
     CPPUNIT_TEST(testBnc862510_5);
     CPPUNIT_TEST(testBnc822347_EmptyBullet);
+    CPPUNIT_TEST(testFdo83751);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -455,6 +458,22 @@ void SdFiltersTest::testBnc822347_EmptyBullet()
     CPPUNIT_ASSERT_EQUAL(sal_Int16(-1), nDepth); // depth >= 0 means that the paragraph has bullets enabled
 
     xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testFdo83751()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/fdo83751.pptx"), PPTX);
+    xDocShRef = saveAndReload( xDocShRef, PPTX );
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier( xDocShRef->GetModel(), uno::UNO_QUERY );
+    uno::Reference<document::XDocumentProperties> xProps( xDocumentPropertiesSupplier->getDocumentProperties(), uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xUDProps( xProps->getUserDefinedProperties(), uno::UNO_QUERY );
+    OUString propValue;
+    xUDProps->getPropertyValue(OUString("Testing")) >>= propValue;
+    CPPUNIT_ASSERT_EQUAL(OUString("Document"), propValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdFiltersTest);
