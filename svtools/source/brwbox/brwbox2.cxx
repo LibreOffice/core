@@ -989,7 +989,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, bool
                     Region aClipToField(Rectangle(aPos, aFieldSize));
                     _rOut.SetClipRegion(aClipToField);
                 }
-                pCol->Draw( *this, _rOut, aPos, sal_False );
+                pCol->Draw( *this, _rOut, aPos, false );
                 if (_bForeignDevice)
                     _rOut.SetClipRegion();
             }

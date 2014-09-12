@@ -89,7 +89,7 @@ public:
     void                Freeze( bool bFreeze = true ) { _bFrozen = bFreeze; }
 
     virtual void        Draw( BrowseBox& rBox, OutputDevice& rDev,
-                              const Point& rPos, sal_Bool bCurs  );
+                              const Point& rPos, bool bCurs  );
 
     void                SetWidth(sal_uLong nNewWidthPixel, const Fraction& rCurrentZoom);
     void                ZoomChanged(const Fraction& rNewZoom);
