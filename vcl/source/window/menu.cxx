@@ -1733,9 +1733,9 @@ Size Menu::ImplCalcSize( const Window* pWin )
 
         // account for the size of the close button, which actually is a toolbox
         // due to NWF this is variable
-        long nCloserHeight = ((MenuBarWindow*) pWindow)->MinCloseButtonSize().Height();
-        if( aSz.Height() < nCloserHeight )
-            aSz.Height() = nCloserHeight;
+        long nCloseButtonHeight = ((MenuBarWindow*) pWindow)->MinCloseButtonSize().Height();
+        if (aSz.Height() < nCloseButtonHeight)
+            aSz.Height() = nCloseButtonHeight;
     }
 
     if ( pLogo )
@@ -2467,7 +2467,7 @@ void Menu::HighlightItem( sal_uInt16 nItemPos )
 
 MenuBar::MenuBar()
     : Menu(),
-      mbCloserVisible(false),
+      mbCloseBtnVisible(false),
       mbFloatBtnVisible(false),
       mbHideBtnVisible(false),
       mbDisplayable(true)
@@ -2477,7 +2477,7 @@ MenuBar::MenuBar()
 
 MenuBar::MenuBar( const MenuBar& rMenu )
     : Menu(),
-      mbCloserVisible(false),
+      mbCloseBtnVisible(false),
       mbFloatBtnVisible(false),
       mbHideBtnVisible(false),
       mbDisplayable(true)
@@ -2491,20 +2491,20 @@ MenuBar::~MenuBar()
     ImplDestroy( this, true );
 }
 
-void MenuBar::ShowCloser( bool bShow )
+void MenuBar::ShowCloseButton(bool bShow)
 {
     ShowButtons( bShow, mbFloatBtnVisible, mbHideBtnVisible );
 }
 
 void MenuBar::ShowButtons( bool bClose, bool bFloat, bool bHide )
 {
-    if ( (bClose != mbCloserVisible)    ||
-         (bFloat != mbFloatBtnVisible)  ||
-         (bHide  != mbHideBtnVisible) )
+    if ((bClose != mbCloseBtnVisible) ||
+        (bFloat != mbFloatBtnVisible) ||
+        (bHide  != mbHideBtnVisible))
     {
-        mbCloserVisible     = bClose;
-        mbFloatBtnVisible   = bFloat;
-        mbHideBtnVisible    = bHide;
+        mbCloseBtnVisible = bClose;
+        mbFloatBtnVisible = bFloat;
+        mbHideBtnVisible = bHide;
         if ( ImplGetWindow() )
             ((MenuBarWindow*)ImplGetWindow())->ShowButtons( bClose, bFloat, bHide );
     }

@@ -627,7 +627,7 @@ void Dialog::StateChanged( StateChangedType nType )
             if ( ImplGetCancelButton( this ) || ImplGetOKButton( this ) )
             {
                 if ( ImplGetBorderWindow() )
-                    ((ImplBorderWindow*)ImplGetBorderWindow())->SetCloser();
+                    ((ImplBorderWindow*)ImplGetBorderWindow())->SetCloseButton();
             }
         }
 

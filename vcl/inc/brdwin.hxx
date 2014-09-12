@@ -149,7 +149,7 @@ public:
     sal_uInt16                  GetBorderStyle() const { return mnBorderStyle; }
     void                    SetPin( bool bPin );
     void                    SetRollUp( bool bRollUp, const Size& rSize );
-    void                    SetCloser();
+    void                    SetCloseButton();
     void                    SetDockButton( bool bDockButton );
     void                    SetHideButton( bool bHideButton );
     void                    SetMenuButton( bool bMenuButton );

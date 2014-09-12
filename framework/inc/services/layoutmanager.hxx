@@ -295,7 +295,7 @@ namespace framework
             bool                                                                        m_bHideCurrentUI;
             bool                                                                        m_bGlobalSettings;
             bool                                                                        m_bPreserveContentSize;
-            bool                                                                        m_bMenuBarCloser;
+            bool                                                                        m_bMenuBarCloseButton;
             css::awt::Rectangle                                                         m_aDockingArea;
             css::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
             css::uno::Reference< ::com::sun::star::lang::XComponent >                   m_xInplaceMenuBar;

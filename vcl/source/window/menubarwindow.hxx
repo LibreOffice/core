@@ -81,7 +81,7 @@ private:
     bool            bIgnoreFirstMove;
     bool            bStayActive;
 
-    DecoToolBox     aCloser;
+    DecoToolBox     aCloseBtn;
     PushButton      aFloatBtn;
     PushButton      aHideBtn;
 
@@ -97,7 +97,7 @@ private:
 
     void            ImplInitStyleSettings();
 
-                    DECL_LINK(CloserHdl, void *);
+                    DECL_LINK(CloseHdl, void *);
                     DECL_LINK(FloatHdl, void *);
                     DECL_LINK(HideHdl, void *);
                     DECL_LINK( ToolboxEventHdl, VclWindowEvent* );

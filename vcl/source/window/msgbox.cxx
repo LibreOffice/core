@@ -217,7 +217,7 @@ void MessBox::ImplPosControls()
     nMaxWidth -= mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder+4;
 
     // MessagBox should be at least as wide as to see the title
-    // Extra-Width for Closer, because Closer is set after this call
+    // Extra-Width for Close button, because Close button is set after this call
     nTitleWidth = CalcTitleWidth();
     nTitleWidth += mpWindowImpl->mnTopBorder;
 

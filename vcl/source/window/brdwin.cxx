@@ -2122,7 +2122,7 @@ void ImplBorderWindow::SetRollUp( bool bRollUp, const Size& rSize )
     UpdateView( false, rSize );
 }
 
-void ImplBorderWindow::SetCloser()
+void ImplBorderWindow::SetCloseButton()
 {
     SetStyle( GetStyle() | WB_CLOSEABLE );
     Size aSize = GetOutputSizePixel();

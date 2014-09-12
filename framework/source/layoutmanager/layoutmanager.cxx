@@ -118,7 +118,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_bHideCurrentUI( false )
         , m_bGlobalSettings( false )
         , m_bPreserveContentSize( false )
-        , m_bMenuBarCloser( false )
+        , m_bMenuBarCloseButton( false )
         , m_pInplaceMenuBar( NULL )
         , m_xModuleManager( ModuleManager::create( xContext ))
         , m_xUIElementFactoryManager( ui::theUIElementFactoryManager::get(xContext) )
@@ -144,7 +144,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
     registerProperty( LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, css::beans::PropertyAttribute::TRANSIENT, &m_bAutomaticToolbars, ::getCppuType( &m_bAutomaticToolbars ) );
     registerProperty( LAYOUTMANAGER_PROPNAME_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, beans::PropertyAttribute::TRANSIENT, &m_bHideCurrentUI, ::getCppuType( &m_bHideCurrentUI ) );
     registerProperty( LAYOUTMANAGER_PROPNAME_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, beans::PropertyAttribute::TRANSIENT | beans::PropertyAttribute::READONLY, &m_nLockCount, getCppuType( &m_nLockCount )  );
-    registerProperty( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloser, ::getCppuType( &m_bMenuBarCloser ) );
+    registerProperty( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, beans::PropertyAttribute::TRANSIENT, &m_bMenuBarCloseButton, ::getCppuType( &m_bMenuBarCloseButton ) );
     registerPropertyNoMember( LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, beans::PropertyAttribute::TRANSIENT, ::getCppuType( &bRefreshVisibility ), &bRefreshVisibility );
     registerProperty( LAYOUTMANAGER_PROPNAME_PRESERVE_CONTENT_SIZE, LAYOUTMANAGER_PROPHANDLE_PRESERVE_CONTENT_SIZE, beans::PropertyAttribute::TRANSIENT, &m_bPreserveContentSize, ::getCppuType( &m_bPreserveContentSize ) );
 }
@@ -2526,12 +2526,10 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rB
     }
 }
 
-//      XMenuCloser
-
 void LayoutManager::implts_updateMenuBarClose()
 {
     SolarMutexClearableGuard aWriteLock;
-    bool                      bShowCloser( m_bMenuBarCloser );
+    bool                      bShowCloseButton( m_bMenuBarCloseButton );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
     aWriteLock.clear();
 
@@ -2546,8 +2544,8 @@ void LayoutManager::implts_updateMenuBarClose()
             if ( pMenuBar )
             {
                 // TODO remove link on sal_False ?!
-                pMenuBar->ShowCloser( bShowCloser );
-                pMenuBar->SetCloserHdl( LINK( this, LayoutManager, MenuBarClose ));
+                pMenuBar->ShowCloseButton(bShowCloseButton);
+                pMenuBar->SetCloseButtonClickHdl(LINK(this, LayoutManager, MenuBarClose));
             }
         }
     }

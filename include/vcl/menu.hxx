@@ -393,13 +393,13 @@ namespace vcl
 
 class VCL_DLLPUBLIC MenuBar : public Menu
 {
-    Link                maCloserHdl;
+    Link                maCloseHdl;
     Link                maFloatHdl;
     Link                maHideHdl;
-    bool            mbCloserVisible;
-    bool            mbFloatBtnVisible;
-    bool            mbHideBtnVisible;
-    bool            mbDisplayable;
+    bool                mbCloseBtnVisible;
+    bool                mbFloatBtnVisible;
+    bool                mbHideBtnVisible;
+    bool                mbDisplayable;
 
     friend class Application;
     friend class Menu;
@@ -420,8 +420,8 @@ public:
 
     virtual bool        IsMenuBar() const SAL_OVERRIDE { return true; }
 
-    void                ShowCloser( bool bShow = true );
-    bool            HasCloser() const { return mbCloserVisible; }
+    void                ShowCloseButton( bool bShow = true );
+    bool                HasCloseButton() const { return mbCloseBtnVisible; }
     bool            HasFloatButton() const { return mbFloatBtnVisible; }
     bool            HasHideButton() const { return mbHideBtnVisible; }
     void                ShowButtons( bool bClose, bool bFloat, bool bHide );
@@ -433,8 +433,8 @@ public:
     bool            HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
     bool            HandleMenuButtonEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
 
-    void                SetCloserHdl( const Link& rLink )           { maCloserHdl = rLink; }
-    const Link&         GetCloserHdl() const                        { return maCloserHdl; }
+    void                SetCloseButtonClickHdl( const Link& rLink ) { maCloseHdl = rLink; }
+    const Link&         GetCloseButtonClickHdl() const              { return maCloseHdl; }
     void                SetFloatButtonClickHdl( const Link& rLink ) { maFloatHdl = rLink; }
     const Link&         GetFloatButtonClickHdl() const              { return maFloatHdl; }
     void                SetHideButtonClickHdl( const Link& rLink )  { maHideHdl = rLink; }
