@@ -74,7 +74,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             self.myAgendaDoc = AgendaDocument(
                 self.xMSF, self.agenda, self.resources,
                 self.templateConsts, self.terminateListener)
-            self.initializeTemplates()                
+            self.initializeTemplates()
 
             self.myAgendaDoc.load(
                 self.agendaTemplates[1][self.agenda.cp_AgendaType])
@@ -187,7 +187,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         RadioDataAware.attachRadioButtons(
             self.agenda, "cp_ProceedMethod",
                 (self.optCreateAgenda, self.optMakeChanges), True).updateUI()
-                
+
     def insertRoadmap(self):
         self.addRoadmap()
         self.insertRoadMapItems(
@@ -204,7 +204,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         try:
             sAgendaPath = self.sTemplatePath + "/wizard/agenda"
             self.agendaTemplates = FileAccess.getFolderTitles(
-                self.xMSF, "aw", sAgendaPath)
+                self.xMSF, "aw", sAgendaPath, self.resources.dictPageDesign)
             return True
         except NoValidPathException:
             traceback.print_exc()
@@ -311,7 +311,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                     # user said: no, do not overwrite
                     endWizard = False
                     return False
-            
+
             xDocProps = self.myAgendaDoc.xTextDocument.DocumentProperties
             xDocProps.Title = self.txtTemplateName.Text
             self.myAgendaDoc.setWizardTemplateDocInfo( \
@@ -372,7 +372,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     def drawConstants(self):
         '''Localise the template'''
         constRangeList = self.myAgendaDoc.searchFillInItems(1)
-        
+
         for i in constRangeList:
             text = i.String.lower()
             aux = TextElement(i, self.resources.dictConstants[text])
