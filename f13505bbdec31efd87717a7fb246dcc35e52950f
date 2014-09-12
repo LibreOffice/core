@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_7595e23e",
+        "filename": "include/cppuhelper/implbase_ex.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-12T07:17:06Z",
+      "side": 1,
+      "message": "at a minimum, the name of the macro should be prefixed to avoid clashes, CPPUHELPER_DETAIL_TYPEENTRY, say, but personally I wouldn\u0027t bother with introducing a macro to fight the repetition in the implbase*.hxx files\n\n(and please change all the implbase*.hxx files, not just the {1,2,3,4,8} subset; same for the compbase*.hxx ones)",
+      "revId": "f13505bbdec31efd87717a7fb246dcc35e52950f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
