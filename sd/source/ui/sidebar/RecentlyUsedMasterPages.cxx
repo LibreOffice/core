@@ -59,37 +59,9 @@ static const OUString& GetPathToSetNode (void)
     return sPathToSetNode;
 }
 
-class Descriptor
-{
-public:
-    OUString msURL;
-    OUString msName;
-    ::sd::sidebar::MasterPageContainer::Token maToken;
-    Descriptor (::sd::sidebar::MasterPageContainer::Token aToken,
-        const OUString& rsURL, const OUString& rsName)
-        : msURL(rsURL),
-          msName(rsName),
-          maToken(aToken)
-    {}
-    class TokenComparator
-    { public:
-        TokenComparator(::sd::sidebar::MasterPageContainer::Token aToken)
-            : maToken(aToken) {}
-        bool operator () (const Descriptor& rDescriptor)
-        { return maToken==rDescriptor.maToken; }
-    private: ::sd::sidebar::MasterPageContainer::Token maToken;
-    };
-};
-
 } // end of anonymous namespace
 
 namespace sd { namespace sidebar {
-
-class RecentlyUsedMasterPages::MasterPageList : public ::std::vector<Descriptor>
-{
-public:
-    MasterPageList (void) {}
-};
 
 RecentlyUsedMasterPages* RecentlyUsedMasterPages::mpInstance = NULL;
 
