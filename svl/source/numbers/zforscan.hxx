@@ -237,8 +237,6 @@ private: // Private section
 
     static inline bool StringEqualsChar( const OUString& rStr, sal_Unicode ch )
         { return rStr.getLength() == 1 && rStr[0] == ch; }
-        // Yes, for efficiency get the character first and then compare length
-        // because in most places where this is used the string is one char.
 
     // remove "..." and \... quotes from rStr, return how many chars removed
     static sal_Int32 RemoveQuotes( OUString& rStr );
