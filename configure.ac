@@ -5880,7 +5880,20 @@ if test "$GCC" = "yes"; then
     dnl manual/abi.html#abi.versioning.history>; 4.3.0 is 20080306, 4.2.4 is
     dnl 20080519, 4.3.1 is 20080606) for Clang (for which GCC_VERSION is notoriously
     dnl "too old"):
-    if test "$_os" != Darwin -a "$_os" != Android; then
+    if test "$_os" = Darwin; then
+        dnl On Mac OS X, both /usr/lib/libstdc++.6.dylib and
+        dnl /usr/lib/libc++1.dylib delegate to /usr/lib/libc++abi.dylib for the
+        dnl __cxa_guard_* functionality; up to 10.8, libc++abi.dylib is
+        dnl apparently provided by a libcppabi project that has broken semantics
+        dnl (cf. <http://www.opensource.apple.com/source/libcppabi/libcppabi-26/
+        dnl src/cxa_guard.cxx>), while in 10.9 (verified at least on 10.9.4) it
+        dnl is apparently provided by LLVM's libcxxabi project, which has good
+        dnl semantics (cf. <http://llvm.org/svn/llvm-project/libcxxabi/trunk/
+        dnl src/cxa_guard.cpp>):
+        if test "$MAC_OS_X_VERSION_MIN_REQUIRED" -ge 1090; then
+            HAVE_THREADSAFE_STATICS=TRUE
+        fi
+    elif test "$_os" != Android; then
         if test "$COM_GCC_IS_CLANG" = TRUE; then
             AC_LANG_PUSH([C++])
             AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
