@@ -175,7 +175,6 @@ protected:
     {
         FileFormat* pFormat = getFormat(nExportType);
         utl::TempFile aTempFile;
-        aTempFile.EnableKillingFile();
         save(pShell, pFormat, aTempFile);
         if(nExportType == ODP)
         {
@@ -185,6 +184,7 @@ protected:
         {
             BootstrapFixture::validate(aTempFile.GetFileName(), test::OOXML);
         }
+        aTempFile.EnableKillingFile();
         return loadURL(aTempFile.GetURL(), nExportType);
     }
 
