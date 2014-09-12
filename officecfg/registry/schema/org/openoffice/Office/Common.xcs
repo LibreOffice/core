@@ -1652,7 +1652,7 @@
           <info>
             <desc>Specifies the path to the Office help files.</desc>
           </info>
-          <value>$(instpath)/help</value>
+          <value>$(instpath)/@LIBO_SHARE_HELP_FOLDER@</value>
         </prop>
         <prop oor:name="Linguistic" oor:type="xs:string" oor:nillable="false">
           <info>
@@ -1847,7 +1847,7 @@
             <desc>Specifies the default directory where Office help files are
             located.</desc>
           </info>
-          <value>$(instpath)/help</value>
+          <value>$(instpath)/@LIBO_SHARE_HELP_FOLDER@</value>
         </prop>
         <prop oor:name="Linguistic" oor:type="xs:string" oor:nillable="false">
           <info>
