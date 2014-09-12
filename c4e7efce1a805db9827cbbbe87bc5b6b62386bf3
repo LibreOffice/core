@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_f5a0b2a7",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 12255,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-12T06:36:43Z",
+      "side": 1,
+      "message": "the lines 12255--12265 need to go into the preceding else block, and not also be executed for the \"Included in $OOO_JUNIT_JAR\" case where HAMCREST_JAR is empty",
+      "revId": "c4e7efce1a805db9827cbbbe87bc5b6b62386bf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_15c5765a",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 12258,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-12T06:36:43Z",
+      "side": 1,
+      "message": "re-creating conftest.java is unnecessary, as it already has the same content from line 12239 (and could this interfere badly with the shell\u0027s noclobber option?)",
+      "revId": "c4e7efce1a805db9827cbbbe87bc5b6b62386bf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
