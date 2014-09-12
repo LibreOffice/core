@@ -20,6 +20,8 @@
 #include <svx/charthelper.hxx>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
+#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
@@ -34,67 +36,111 @@
 
 using namespace ::com::sun::star;
 
+bool ChartHelper::isGL3DDiagram( const css::uno::Reference<css::chart2::XDiagram>& xDiagram )
+{
+    uno::Reference<chart2::XCoordinateSystemContainer> xCooSysContainer(xDiagram, uno::UNO_QUERY);
+
+    if (!xCooSysContainer.is())
+        return false;
+
+    uno::Sequence< uno::Reference<chart2::XCoordinateSystem> > aCooSysList = xCooSysContainer->getCoordinateSystems();
+    for (sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS)
+    {
+        uno::Reference<chart2::XCoordinateSystem> xCooSys = aCooSysList[nCS];
+
+        //iterate through all chart types in the current coordinate system
+        uno::Reference<chart2::XChartTypeContainer> xChartTypeContainer(xCooSys, uno::UNO_QUERY);
+        OSL_ASSERT( xChartTypeContainer.is());
+        if( !xChartTypeContainer.is() )
+            continue;
+
+        uno::Sequence< uno::Reference<chart2::XChartType> > aChartTypeList = xChartTypeContainer->getChartTypes();
+        for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+        {
+            uno::Reference<chart2::XChartType> xChartType = aChartTypeList[nT];
+            OUString aChartType = xChartType->getChartType();
+            if( aChartType == "com.sun.star.chart2.GL3DBarChartType" )
+                return true;
+        }
+    }
+
+    return false;
+}
+
+void ChartHelper::updateChart(const uno::Reference< ::frame::XModel >& rXModel)
+{
+    if (!rXModel.is())
+        return;
+
+    try
+    {
+        const uno::Reference< lang::XMultiServiceFactory > xChartFact(rXModel, uno::UNO_QUERY_THROW);
+        const uno::Reference< lang::XUnoTunnel > xChartView(xChartFact->createInstance("com.sun.star.chart2.ChartView"), uno::UNO_QUERY_THROW);
+        const uno::Reference< util::XUpdatable > xUpdatable(xChartView, uno::UNO_QUERY_THROW);
+
+        if (xUpdatable.is())
+            xUpdatable->update();
+    }
+    catch(uno::Exception&)
+    {
+        OSL_ENSURE(false, "Unexpected exception!");
+    }
+}
+
 drawinglayer::primitive2d::Primitive2DSequence ChartHelper::tryToGetChartContentAsPrimitive2DSequence(
     const uno::Reference< ::frame::XModel >& rXModel,
     basegfx::B2DRange& rRange)
 {
     drawinglayer::primitive2d::Primitive2DSequence aRetval;
 
-    if(rXModel.is())
+    if (!rXModel.is())
+        return aRetval;
+
+    updateChart(rXModel);
+
+    try
     {
-        try
+        const uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier(rXModel, uno::UNO_QUERY_THROW);
+        const uno::Reference< container::XIndexAccess > xShapeAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW);
+
+        if(xShapeAccess.is() && xShapeAccess->getCount())
         {
-            const uno::Reference< lang::XMultiServiceFactory > xChartFact(rXModel, uno::UNO_QUERY_THROW);
-            const uno::Reference< lang::XUnoTunnel > xChartView(xChartFact->createInstance("com.sun.star.chart2.ChartView"), uno::UNO_QUERY_THROW);
-            const uno::Reference< util::XUpdatable > xUpdatable(xChartView, uno::UNO_QUERY_THROW);
+            const sal_Int32 nShapeCount(xShapeAccess->getCount());
+            const uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+            const uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory =
+                graphic::PrimitiveFactory2D::create( xContext );
 
-            if(xUpdatable.is())
+            const uno::Sequence< beans::PropertyValue > aParams;
+            uno::Reference< drawing::XShape > xShape;
+
+            for(sal_Int32 a(0); a < nShapeCount; a++)
             {
-                xUpdatable->update();
+                xShapeAccess->getByIndex(a) >>= xShape;
 
-                const uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier(rXModel, uno::UNO_QUERY_THROW);
-                const uno::Reference< container::XIndexAccess > xShapeAccess(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW);
-
-                if(xShapeAccess.is() && xShapeAccess->getCount())
+                if(xShape.is())
                 {
-                    const sal_Int32 nShapeCount(xShapeAccess->getCount());
-                    const uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-                    const uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory =
-                        graphic::PrimitiveFactory2D::create( xContext );
+                    const drawinglayer::primitive2d::Primitive2DSequence aNew(
+                            xPrimitiveFactory->createPrimitivesFromXShape(
+                                xShape,
+                                aParams));
 
-                    const uno::Sequence< beans::PropertyValue > aParams;
-                    uno::Reference< drawing::XShape > xShape;
-
-                    for(sal_Int32 a(0); a < nShapeCount; a++)
-                    {
-                        xShapeAccess->getByIndex(a) >>= xShape;
-
-                        if(xShape.is())
-                        {
-                            const drawinglayer::primitive2d::Primitive2DSequence aNew(
-                                xPrimitiveFactory->createPrimitivesFromXShape(
-                                    xShape,
-                                    aParams));
-
-                            drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
-                                aRetval,
-                                aNew);
-                        }
-                    }
+                    drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
+                            aRetval,
+                            aNew);
                 }
             }
         }
-        catch(uno::Exception&)
-        {
-            OSL_ENSURE(false, "Unexpected exception!");
-        }
+    }
+    catch(uno::Exception&)
+    {
+        OSL_ENSURE(false, "Unexpected exception!");
+    }
 
-        if(aRetval.hasElements())
-        {
-            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
+    if(aRetval.hasElements())
+    {
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
-            rRange = drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(aRetval, aViewInformation2D);
-        }
+        rRange = drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(aRetval, aViewInformation2D);
     }
 
     return aRetval;

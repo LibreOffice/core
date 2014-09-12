@@ -51,7 +51,6 @@
 #include "defines.hxx"
 #include <unonames.hxx>
 #include <GL3DBarChart.hxx>
-#include <GL3DHelper.hxx>
 
 #include <editeng/frmdiritem.hxx>
 #include <rtl/uuid.h>
@@ -60,6 +59,7 @@
 #include <boost/bind.hpp>
 #include <unotools/streamwrap.hxx>
 #include <unotools/localedatawrapper.hxx>
+#include <svx/charthelper.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
@@ -2444,7 +2444,7 @@ bool ChartView::isReal3DChart()
 {
     uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
 
-    return GL3DHelper::isGL3DDiagram(xDiagram);
+    return ChartHelper::isGL3DDiagram(xDiagram);
 }
 
 static const char* envChartDummyFactory = getenv("CHART_DUMMY_FACTORY");

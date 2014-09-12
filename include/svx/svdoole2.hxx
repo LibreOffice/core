@@ -153,6 +153,7 @@ public:
 
     // #109985#
     bool IsChart() const;
+    bool IsReal3DChart() const;
     bool IsCalc() const;
 
     bool UpdateLinkURL_Impl();

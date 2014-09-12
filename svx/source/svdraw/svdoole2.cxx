@@ -17,10 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <svx/svdoole2.hxx>
+
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
@@ -33,7 +34,7 @@
 #include <com/sun/star/embed/XWindowSupplier.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include "com/sun/star/document/XStorageBasedDocument.hpp"
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -66,6 +67,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
+#include <svx/charthelper.hxx>
 #include <svx/svdmodel.hxx>
 #include "svdglob.hxx"
 #include "svx/svdstr.hrc"
@@ -2154,6 +2156,19 @@ bool SdrOle2Obj::IsChart() const
     return mpImpl->mbIsChart;
 }
 
+bool SdrOle2Obj::IsReal3DChart() const
+{
+    if (!IsChart())
+        return false;
+
+    uno::Reference<chart2::XChartDocument> xChart2Document(getXModel(), uno::UNO_QUERY);
+    uno::Reference<chart2::XDiagram> xChart2Diagram(xChart2Document->getFirstDiagram(), uno::UNO_QUERY);
+
+    if (!xChart2Diagram.is())
+        return false;
+
+    return ChartHelper::isGL3DDiagram(xChart2Diagram);
+}
 
 void SdrOle2Obj::SetGraphicToObj( const Graphic& aGraphic, const OUString& aMediaType )
 {

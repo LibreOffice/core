@@ -25,11 +25,18 @@
 #include <basegfx/range/b2drange.hxx>
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 class SVX_DLLPUBLIC ChartHelper
 {
 public:
+    /// Check that the XDiagram is a real 3D chart.
+    static bool isGL3DDiagram(const css::uno::Reference<css::chart2::XDiagram>& xDiagram);
+
+    /// Use chart's XUpdatable::update() to update values.
+    static void updateChart(const css::uno::Reference< css::frame::XModel >& rXModel);
+
     // try to access rXModel in case of a chart to to get the chart content
     // as sequence of primitives. Return range of primitives (chart size) in rRange;
     // it will be used to embed the chart to the SdrObject transformation. This

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
+#include <svx/charthelper.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
@@ -32,12 +35,11 @@
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
+#include <svx/svdoole2.hxx>
 
-
+#include <sdr/contact/viewcontactofsdrole2obj.hxx>
 
 using namespace com::sun::star;
-
-
 
 namespace
 {
@@ -205,6 +207,14 @@ namespace sdr
 
         const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         {
+#if HAVE_FEATURE_DESKTOP
+            // 3D charts need to be notified separately, they are not to be
+            // drawn by the drawinglayer
+            ViewContactOfSdrOle2Obj* pViewContact = dynamic_cast<ViewContactOfSdrOle2Obj*>(&GetViewContact());
+            if (pViewContact && pViewContact->GetOle2Obj().IsReal3DChart())
+                ChartHelper::updateChart(pViewContact->GetOle2Obj().getXModel());
+#endif
+
             if(maObjectRange.isEmpty())
             {
                 // if range is not computed (new or LazyInvalidate objects), force it

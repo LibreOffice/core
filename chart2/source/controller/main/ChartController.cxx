@@ -43,7 +43,6 @@
 #include "DrawCommandDispatch.hxx"
 #include "ShapeController.hxx"
 #include "UndoActions.hxx"
-#include <GL3DHelper.hxx>
 
 #include <comphelper/InlineContainer.hxx>
 
