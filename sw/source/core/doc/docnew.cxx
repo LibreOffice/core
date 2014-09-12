@@ -1142,7 +1142,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     SAL_INFO( "sw.createcopy", "CC-Nd-Src: " << CNTNT_DOC( this ) );
     SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
 #endif
-    pRet->Append(*this, 0, NULL, bCallInitNew);
+    pRet->AppendDoc(*this, 0, NULL, bCallInitNew);
 #ifdef DBG_UTIL
     SAL_INFO( "sw.createcopy", "CC-Nd: " << CNTNT_DOC( pRet ) );
 #endif
@@ -1156,8 +1156,8 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 }
 
 // appends all pages of source SwDoc - based on SwFEShell::Paste( SwDoc* )
-void SwDoc::Append( const SwDoc& rSource, sal_uInt16 nStartPageNumber,
-                    SwPageDesc* pTargetPageDesc, bool bDeletePrevious )
+void SwDoc::AppendDoc(const SwDoc& rSource, sal_uInt16 const nStartPageNumber,
+            SwPageDesc *const pTargetPageDesc, bool const bDeletePrevious)
 {
     // GetEndOfExtras + 1 = StartOfContent == no content node!
     // @see IDocumentContentOperations::CopyRange
