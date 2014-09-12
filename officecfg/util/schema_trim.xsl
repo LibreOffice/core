@@ -24,6 +24,7 @@
 		version="1.0">
 
         <xsl:param name="LIBO_SHARE_FOLDER"/>
+        <xsl:param name="LIBO_SHARE_HELP_FOLDER"/>
 
 <!-- Get the correct format -->
 	<xsl:output method="xml" indent="yes"/>
@@ -81,10 +82,12 @@
         </xsl:template>
 
         <xsl:template match="text()">
-          <xsl:call-template name="replace">
+          <xsl:call-template name="replacetwo">
             <xsl:with-param name="input" select="current()"/>
-            <xsl:with-param name="pattern" select="'@LIBO_SHARE_FOLDER@'"/>
-            <xsl:with-param name="replace" select="$LIBO_SHARE_FOLDER"/>
+            <xsl:with-param name="pattern1" select="'@LIBO_SHARE_FOLDER@'"/>
+            <xsl:with-param name="replace1" select="$LIBO_SHARE_FOLDER"/>
+            <xsl:with-param name="pattern2" select="'@LIBO_SHARE_HELP_FOLDER@'"/>
+            <xsl:with-param name="replace2" select="$LIBO_SHARE_HELP_FOLDER"/>
           </xsl:call-template>
         </xsl:template>
 
@@ -105,6 +108,41 @@
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="$input"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:template>
+
+        <xsl:template name="replacetwo">
+          <xsl:param name="input"/>
+          <xsl:param name="pattern1"/>
+          <xsl:param name="replace1"/>
+          <xsl:param name="pattern2"/>
+          <xsl:param name="replace2"/>
+          <xsl:choose>
+            <xsl:when test="contains($input, $pattern1)">
+	      <xsl:call-template name="replace">
+		<xsl:with-param
+		    name="input" select="substring-before($input, $pattern1)"/>
+		<xsl:with-param name="pattern" select="$pattern2"/>
+		<xsl:with-param name="replace" select="$replace2"/>
+	      </xsl:call-template>
+              <xsl:value-of select="$replace1"/>
+              <xsl:call-template name="replacetwo">
+                <xsl:with-param
+                    name="input" select="substring-after($input, $pattern1)"/>
+                <xsl:with-param name="pattern1" select="$pattern1"/>
+                <xsl:with-param name="replace1" select="$replace1"/>
+                <xsl:with-param name="pattern2" select="$pattern2"/>
+                <xsl:with-param name="replace2" select="$replace2"/>
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+	      <xsl:call-template name="replace">
+		<xsl:with-param
+		    name="input" select="$input"/>
+		<xsl:with-param name="pattern" select="$pattern2"/>
+		<xsl:with-param name="replace" select="$replace2"/>
+	      </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
         </xsl:template>
