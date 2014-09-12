@@ -48,6 +48,22 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
+static OUString lcl_CopyToTempFile(const OUString& rStream, const oox::core::XmlFilterBase& rFilter)
+{
+    if (rStream.isEmpty())
+        return OUString();
+
+    Reference< XInputStream > xInStrm( rFilter.openInputStream(rStream), UNO_SET_THROW );
+    Reference< XTempFile > xTempFile( TempFile::create(rFilter.getComponentContext()) );
+    Reference< XOutputStream > xOutStrm( xTempFile->getOutputStream(), UNO_SET_THROW );
+    oox::BinaryXOutputStream aOutStrm( xOutStrm, false );
+    oox::BinaryXInputStream aInStrm( xInStrm, false );
+    aInStrm.copyToStream( aOutStrm );
+
+    xTempFile->setRemoveFile( false );
+    return xTempFile->getUri();
+}
+
 namespace oox {
 namespace drawingml {
 
@@ -70,19 +86,17 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
     case XML_wavAudioFile:
         {
             getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), mpShapePtr->getGraphicProperties().maAudio );
-            if( !mpShapePtr->getGraphicProperties().maAudio.msEmbed.isEmpty() )
-            {
-                Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-                Reference< XInputStream > xInStrm( getFilter().openInputStream( mpShapePtr->getGraphicProperties().maAudio.msEmbed ), UNO_SET_THROW );
-                Reference< XTempFile > xTempFile( TempFile::create(xContext) );
-                Reference< XOutputStream > xOutStrm( xTempFile->getOutputStream(), UNO_SET_THROW );
-                BinaryXOutputStream aOutStrm( xOutStrm, false );
-                BinaryXInputStream aInStrm( xInStrm, false );
-                aInStrm.copyToStream( aOutStrm );
-
-                xTempFile->setRemoveFile( false );
-                mpShapePtr->getGraphicProperties().maAudio.msEmbed = xTempFile->getUri();
-            }
+            mpShapePtr->getGraphicProperties().maAudio.msEmbed =
+                lcl_CopyToTempFile( mpShapePtr->getGraphicProperties().maAudio.msEmbed, getFilter() );
+        }
+        break;
+    case XML_audioFile:
+    case XML_videoFile:
+        {
+            OUString rPath = getRelations().getFragmentPathFromRelId(
+                    rAttribs.getString(R_TOKEN(link)).get() );
+            mpShapePtr->getGraphicProperties().maAudio.msEmbed =
+                lcl_CopyToTempFile( rPath, getFilter() );
         }
         break;
     }
