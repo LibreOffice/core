@@ -74,7 +74,7 @@ protected:
                                      OUString& aStrIntName, OUString& aStrFrame,
                                      SvxLinkInsertMode& eMode ) SAL_OVERRIDE;
     virtual bool ShouldOpenMarkWnd () SAL_OVERRIDE {return ( mbMarkWndOpen && m_pRbtLinktypInternet->IsChecked() );}
-    virtual void SetMarkWndShouldOpen (sal_Bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
+    virtual void SetMarkWndShouldOpen (bool bOpen) SAL_OVERRIDE {mbMarkWndOpen=bOpen;}
 
 public:
     SvxHyperlinkInternetTp ( Window *pParent, IconChoiceDialog* pDlg, const SfxItemSet& rItemSet);

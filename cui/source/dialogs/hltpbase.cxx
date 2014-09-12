@@ -544,7 +544,7 @@ bool SvxHyperlinkTabPageBase::ShouldOpenMarkWnd()
     return false;
 }
 
-void SvxHyperlinkTabPageBase::SetMarkWndShouldOpen(sal_Bool)
+void SvxHyperlinkTabPageBase::SetMarkWndShouldOpen(bool)
 {
 }
 

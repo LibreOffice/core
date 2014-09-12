@@ -144,7 +144,7 @@ public:
 
 protected:
     virtual bool ShouldOpenMarkWnd();
-    virtual void SetMarkWndShouldOpen(sal_Bool bOpen);
+    virtual void SetMarkWndShouldOpen(bool bOpen);
 
     void ShowMarkWnd ();
     void HideMarkWnd ()           { ( ( Window* ) mpMarkWnd )->Hide(); }
