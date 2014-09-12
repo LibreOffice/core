@@ -175,11 +175,6 @@ struct HashReferenceXInterface
     }
 };
 
-struct HashOUString
-{
-    size_t operator()( const OUString& oustr ) const { return static_cast< size_t >( oustr.hashCode() ); }
-};
-
 struct HashUChar
 {
     size_t operator()( const sal_Unicode uchar ) const { return static_cast< size_t >( uchar ); }
@@ -212,7 +207,7 @@ public:
     typedef Sequence< Reference< XDrawPage > >                                                                  XDrawPageSequence;
 
     typedef ::boost::unordered_set< sal_Unicode, HashUChar >                                                    UCharSet;
-    typedef ::boost::unordered_map< OUString, UCharSet, HashOUString >                                   UCharSetMap;
+    typedef ::boost::unordered_map< OUString, UCharSet, OUStringHash >                                          UCharSetMap;
     typedef ::boost::unordered_map< Reference< XInterface >, UCharSetMap, HashReferenceXInterface >             UCharSetMapMap;
 
     typedef ::boost::unordered_map< Reference< XInterface >, OUString, HashReferenceXInterface >         UOStringMap;

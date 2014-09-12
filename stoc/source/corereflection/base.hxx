@@ -78,9 +78,9 @@ inline typelib_TypeDescription * getTypeByName( const OUString & rName )
 }
 
 typedef boost::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlField >,
-    FctHashOUString, std::equal_to< OUString > > OUString2Field;
+    OUStringHash > OUString2Field;
 typedef boost::unordered_map< OUString, css::uno::WeakReference< css::reflection::XIdlMethod >,
-    FctHashOUString, std::equal_to< OUString > > OUString2Method;
+    OUStringHash > OUString2Method;
 
 
 class IdlReflectionServiceImpl

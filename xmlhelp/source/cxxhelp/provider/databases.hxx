@@ -145,22 +145,6 @@ namespace chelp {
     {
     public:
 
-        struct eq
-        {
-            bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
-            {
-                return (rKey1 == rKey2);
-            }
-        };
-
-        struct ha
-        {
-            size_t operator()( const OUString& rName ) const
-            {
-                return rName.hashCode();
-            }
-        };
-
         /**
          *  Input is the installdirectory in system dependent notation
          */
@@ -298,55 +282,37 @@ namespace chelp {
 
         std::vector< OUString >    m_avModules;
 
-        typedef boost::unordered_map< OUString,helpdatafileproxy::Hdf*,ha,eq >   DatabasesTable;
+        typedef boost::unordered_map< OUString,helpdatafileproxy::Hdf*,OUStringHash >   DatabasesTable;
         DatabasesTable m_aDatabases;         // Language and module dependent databases
 
-        typedef  boost::unordered_map< OUString,OUString,ha,eq > LangSetTable;
+        typedef  boost::unordered_map< OUString,OUString,OUStringHash > LangSetTable;
         LangSetTable m_aLangSet;   // Mapping to of lang-country to lang
 
-        typedef boost::unordered_map< OUString,StaticModuleInformation*,ha,eq > ModInfoTable;
+        typedef boost::unordered_map< OUString,StaticModuleInformation*,OUStringHash > ModInfoTable;
         ModInfoTable m_aModInfo;   // Module information
 
-        typedef boost::unordered_map< OUString,KeywordInfo*,ha,eq > KeywordInfoTable;
+        typedef boost::unordered_map< OUString,KeywordInfo*,OUStringHash > KeywordInfoTable;
         KeywordInfoTable m_aKeywordInfo;   // Module information
 
         typedef
         boost::unordered_map<
         OUString,
              ::com::sun::star::uno::Reference< com::sun::star::container::XHierarchicalNameAccess >,
-            ha,
-            eq >         ZipFileTable;
+            OUStringHash >         ZipFileTable;
         ZipFileTable m_aZipFileTable;   // No closing of an once opened jarfile
 
         typedef
         boost::unordered_map<
         OUString,
              ::com::sun::star::uno::Reference< com::sun::star::i18n::XCollator >,
-            ha,
-            eq >      CollatorTable;
+            OUStringHash >      CollatorTable;
         CollatorTable    m_aCollatorTable;
 
-        struct ostring_eq
-        {
-            bool operator()( const OString& rKey1, const OString& rKey2 ) const
-            {
-                return (rKey1 == rKey2);
-            }
-        };
-
-        struct ostring_ha
-        {
-            size_t operator()( const OString& rName ) const
-            {
-                return rName.hashCode();
-            }
-        };
 
         typedef
         boost::unordered_set<
             OString,
-            ostring_ha,
-            ostring_eq >      EmptyActiveTextSet;
+            OStringHash >      EmptyActiveTextSet;
         EmptyActiveTextSet  m_aEmptyActiveTextSet;
 
         // methods
@@ -370,8 +336,7 @@ namespace chelp {
     <
         OUString,
         bool,
-        Databases::ha,
-        Databases::eq
+        OUStringHash
     >
     ExtensionHelpExistanceMap;
 

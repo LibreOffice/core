@@ -32,7 +32,7 @@
     <br>
     @author Daniel Boelzle
 */
-template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
+template< class t_Key, class t_Val, class t_KeyHash >
 class LRU_Cache
 {
     struct CacheEntry
@@ -42,7 +42,7 @@ class LRU_Cache
         CacheEntry *        pPred;
         CacheEntry *        pSucc;
     };
-    typedef ::boost::unordered_map< t_Key, CacheEntry *, t_KeyHash, t_KeyEqual > t_Key2Element;
+    typedef ::boost::unordered_map< t_Key, CacheEntry *, t_KeyHash > t_Key2Element;
 
     mutable ::osl::Mutex        _aCacheMutex;
     sal_Int32                   _nCachedElements;
@@ -89,8 +89,8 @@ public:
     inline void clear();
 };
 
-template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::LRU_Cache( sal_Int32 nCachedElements )
+template< class t_Key, class t_Val, class t_KeyHash >
+inline LRU_Cache< t_Key, t_Val, t_KeyHash >::LRU_Cache( sal_Int32 nCachedElements )
 #ifdef __CACHE_DIAGNOSE
     : _nCachedElements( 4 )
 #else
@@ -113,14 +113,14 @@ inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::LRU_Cache( sal_Int32 nC
     }
 }
 
-template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::~LRU_Cache()
+template< class t_Key, class t_Val, class t_KeyHash >
+inline LRU_Cache< t_Key, t_Val, t_KeyHash >::~LRU_Cache()
 {
     delete [] _pBlock;
 }
 
-template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront( CacheEntry * pEntry ) const
+template< class t_Key, class t_Val, class t_KeyHash >
+inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::toFront( CacheEntry * pEntry ) const
 {
     if (pEntry != _pHead)
     {
@@ -141,16 +141,16 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::toFront( CacheEntr
     }
 }
 
-template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline bool LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::hasValue( const t_Key & rKey ) const
+template< class t_Key, class t_Val, class t_KeyHash >
+inline bool LRU_Cache< t_Key, t_Val, t_KeyHash >::hasValue( const t_Key & rKey ) const
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
     const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
     return (iFind != _aKey2Element.end());
 }
 
-template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue( const t_Key & rKey ) const
+template< class t_Key, class t_Val, class t_KeyHash >
+inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash >::getValue( const t_Key & rKey ) const
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
     const typename t_Key2Element::const_iterator iFind( _aKey2Element.find( rKey ) );
@@ -168,8 +168,8 @@ inline t_Val LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::getValue( const t
     return t_Val();
 }
 
-template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
+template< class t_Key, class t_Val, class t_KeyHash >
+inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::setValue(
     const t_Key & rKey, const t_Val & rValue )
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
@@ -206,8 +206,8 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::setValue(
     }
 }
 
-template< class t_Key, class t_Val, class t_KeyHash, class t_KeyEqual >
-inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
+template< class t_Key, class t_Val, class t_KeyHash >
+inline void LRU_Cache< t_Key, t_Val, t_KeyHash >::clear()
 {
     ::osl::MutexGuard aGuard( _aCacheMutex );
     _aKey2Element.clear();
@@ -223,16 +223,9 @@ inline void LRU_Cache< t_Key, t_Val, t_KeyHash, t_KeyEqual >::clear()
 }
 
 
-struct FctHashOUString : public ::std::unary_function< const OUString &, size_t >
-{
-    size_t operator()( const OUString & rKey ) const
-        { return rKey.hashCode(); }
-};
-
 /** Template instance for OUString keys, Any values.<br>
 */
-typedef LRU_Cache< OUString, css::uno::Any,
-                   FctHashOUString, ::std::equal_to< OUString > >
+typedef LRU_Cache< OUString, css::uno::Any, OUStringHash >
     LRU_CacheAnyByOUString;
 
 

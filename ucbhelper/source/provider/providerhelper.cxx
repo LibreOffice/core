@@ -38,29 +38,11 @@ using namespace com::sun::star;
 namespace ucbhelper_impl
 {
 
-struct equalString
-{
-    bool operator()(
-        const OUString& rKey11, const OUString& rKey22 ) const
-      {
-          return !!( rKey11 == rKey22 );
-      }
-};
-
-struct hashString
-{
-    size_t operator()( const OUString & rName ) const
-    {
-        return rName.hashCode();
-    }
-};
-
 typedef boost::unordered_map
 <
     OUString,
     uno::WeakReference< ucb::XContent >,
-    hashString,
-    equalString
+    OUStringHash
 >
 Contents;
 

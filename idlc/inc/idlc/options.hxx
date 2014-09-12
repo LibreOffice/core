@@ -24,8 +24,7 @@
 
 typedef ::boost::unordered_map< OString,
                          OString,
-                         HashString,
-                         EqualString > OptionMap;
+                         OStringHash > OptionMap;
 
 class IllegalArgument
 {
