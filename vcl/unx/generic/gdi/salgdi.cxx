@@ -481,8 +481,9 @@ void X11SalGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY ) // cons
         return;
     }
 
-    rDPIX = pDisplay->GetResolution().A();
-    rDPIY = pDisplay->GetResolution().B();
+    Pair dpi = pDisplay->GetResolution();
+    rDPIX = dpi.A();
+    rDPIY = dpi.B();
 
     if ( rDPIY > 200 )
     {
