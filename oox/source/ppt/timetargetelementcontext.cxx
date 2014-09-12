@@ -123,11 +123,7 @@ namespace oox { namespace ppt {
         case PPT_TOKEN( sndTgt ):
         {
             mpTarget->mnType = XML_sndTgt;
-            drawingml::EmbeddedWAVAudioFile aAudio;
-            drawingml::getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), aAudio);
-
-            OUString sSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msEmbed );
-            mpTarget->msValue = sSndName;
+            mpTarget->msValue = drawingml::getEmbeddedWAVAudioFile( getRelations(), rAttribs );
             break;
         }
         case PPT_TOKEN( spTgt ):

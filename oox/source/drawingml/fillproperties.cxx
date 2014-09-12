@@ -34,6 +34,7 @@
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/graphic/XGraphicTransformer.hpp>
+#include <oox/core/fragmenthandler.hxx>
 #include "oox/helper/graphichelper.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
@@ -752,8 +753,8 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         rPropMap.setProperty(PROP_AdjustContrast, nContrast);
 
     // Media content
-    if( !maAudio.msEmbed.isEmpty() )
-        rPropMap.setProperty(PROP_MediaURL, maAudio.msEmbed);
+    if( !msMediaTempFile.isEmpty() )
+        rPropMap.setProperty(PROP_MediaURL, msMediaTempFile);
 }
 
 bool ArtisticEffectProperties::isEmpty() const

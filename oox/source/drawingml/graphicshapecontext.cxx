@@ -19,8 +19,10 @@
 
 #include <com/sun/star/io/TempFile.hpp>
 #include "oox/drawingml/graphicshapecontext.hxx"
+
 #include <osl/diagnose.h>
 
+#include <drawingml/embeddedwavaudiofile.hxx>
 #include "drawingml/fillpropertiesgroupcontext.hxx"
 #include "drawingml/graphicproperties.hxx"
 #include "drawingml/customshapeproperties.hxx"
@@ -38,7 +40,6 @@
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::io;
@@ -85,9 +86,8 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
         return new BlipFillContext( *this, rAttribs, mpShapePtr->getGraphicProperties().maBlipProps );
     case XML_wavAudioFile:
         {
-            getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), mpShapePtr->getGraphicProperties().maAudio );
-            mpShapePtr->getGraphicProperties().maAudio.msEmbed =
-                lcl_CopyToTempFile( mpShapePtr->getGraphicProperties().maAudio.msEmbed, getFilter() );
+            mpShapePtr->getGraphicProperties().msMediaTempFile =
+                lcl_CopyToTempFile( getEmbeddedWAVAudioFile(getRelations(), rAttribs), getFilter() );
         }
         break;
     case XML_audioFile:
@@ -95,7 +95,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
         {
             OUString rPath = getRelations().getFragmentPathFromRelId(
                     rAttribs.getString(R_TOKEN(link)).get() );
-            mpShapePtr->getGraphicProperties().maAudio.msEmbed =
+            mpShapePtr->getGraphicProperties().msMediaTempFile =
                 lcl_CopyToTempFile( rPath, getFilter() );
         }
         break;

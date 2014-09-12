@@ -74,10 +74,7 @@ namespace oox { namespace ppt {
         case PPT_TOKEN( snd ):
             if( mbHasStartSound )
             {
-                drawingml::EmbeddedWAVAudioFile aAudio;
-                drawingml::getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), aAudio);
-
-                msSndName = ( aAudio.mbBuiltIn ? aAudio.msName : aAudio.msEmbed );
+                msSndName = drawingml::getEmbeddedWAVAudioFile( getRelations(), rAttribs );
             }
             return this;
         case PPT_TOKEN( endSnd ):

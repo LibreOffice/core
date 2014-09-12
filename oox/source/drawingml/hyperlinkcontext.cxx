@@ -150,15 +150,14 @@ HyperLinkContext::~HyperLinkContext()
 }
 
 ContextHandlerRef HyperLinkContext::onCreateContext(
-        ::sal_Int32 aElement, const AttributeList& rAttribs )
+        ::sal_Int32 aElement, const AttributeList&  )
 {
     switch( aElement )
     {
     case A_TOKEN( extLst ):
         return 0;
     case A_TOKEN( snd ):
-        EmbeddedWAVAudioFile aAudio;
-        getEmbeddedWAVAudioFile( getRelations(), rAttribs.getFastAttributeList(), aAudio );
+        // TODO use getEmbeddedWAVAudioFile() here
         break;
     }
 

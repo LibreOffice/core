@@ -405,7 +405,7 @@ Reference< XShape > Shape::createAndInsert(
 
     OUString aServiceName;
     if( rServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
-        mpGraphicPropertiesPtr && !mpGraphicPropertiesPtr->maAudio.msEmbed.isEmpty() )
+        mpGraphicPropertiesPtr && !mpGraphicPropertiesPtr->msMediaTempFile.isEmpty() )
     {
         aServiceName = finalizeServiceName( rFilterBase, "com.sun.star.presentation.MediaShape", aShapeRectHmm );
         bIsEmbMedia = true;

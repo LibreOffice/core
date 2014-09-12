@@ -21,27 +21,15 @@
 #define INCLUDED_OOX_DRAWINGML_EMBEDDEDWAVAUDIOFILE_HXX
 
 #include <rtl/ustring.hxx>
-#include <com/sun/star/xml/sax/XFastAttributeList.hpp>
 
 #include <oox/core/fragmenthandler.hxx>
+#include <oox/helper/attributelist.hxx>
 
 namespace oox { namespace drawingml {
 
-    struct EmbeddedWAVAudioFile
-    {
-        EmbeddedWAVAudioFile()
-            : mbBuiltIn(false)
-            {
-            }
-        bool mbBuiltIn;
-        OUString msName;
-        OUString msEmbed;
-    };
-
-    void getEmbeddedWAVAudioFile(
+    OUString getEmbeddedWAVAudioFile(
             const ::oox::core::Relations& rRelations,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& xAttribs,
-            EmbeddedWAVAudioFile & aAudio );
+            const AttributeList& rAttribs );
 
 } }
 

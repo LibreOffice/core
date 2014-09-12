@@ -24,7 +24,6 @@
 
 #include <oox/drawingml/fillproperties.hxx>
 #include <oox/helper/helper.hxx>
-#include <drawingml/embeddedwavaudiofile.hxx>
 
 namespace oox {
     class GraphicHelper;
@@ -36,8 +35,8 @@ namespace drawingml {
 
 struct GraphicProperties
 {
-    BlipFillProperties      maBlipProps;            /// Properties for the graphic.
-    EmbeddedWAVAudioFile    maAudio;                /// Audio file details
+    BlipFillProperties      maBlipProps;            ///< Properties for the graphic.
+    OUString                msMediaTempFile;        ///< Audio/Video temporary file.
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const GraphicProperties& rSourceProps );
