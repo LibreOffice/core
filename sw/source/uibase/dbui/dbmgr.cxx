@@ -1118,7 +1118,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             if ( nDocNo <= MAX_DOC_DUMP )
                                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
 #endif
-                            pTargetDoc->Append( *(rWorkShell.GetDoc()), nStartingPageNo, pTargetPageDesc, nDocNo == 1 );
+                            pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
+                                nStartingPageNo, pTargetPageDesc, nDocNo == 1);
 
                             // #i72820# calculate layout to be able to find the correct page index
                             pTargetShell->CalcLayout();
@@ -2877,7 +2878,8 @@ sal_Int32 SwDBManager::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             if ( nDocNo <= MAX_DOC_DUMP )
                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
 #endif
-            pTargetDoc->Append( *(rWorkShell.GetDoc()), nStartingPageNo, pTargetPageDesc, nDocNo == 1 );
+            pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
+                    nStartingPageNo, pTargetPageDesc, nDocNo == 1);
 
             // #i72820# calculate layout to be able to find the correct page index
             pTargetShell->CalcLayout();
