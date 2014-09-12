@@ -163,7 +163,7 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler
 
     protected:
         virtual void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL, const OUString& aTooltip, sal_Int16 nStyle,
-                                       sal_Int16 nWidth, sal_Bool bVisible ) throw
+                                       sal_Int16 nWidth, bool bVisible ) throw
             ( ::com::sun::star::xml::sax::SAXException,
               ::com::sun::star::uno::RuntimeException );
 

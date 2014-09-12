@@ -762,7 +762,7 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rTooltip,
     sal_Int16       nStyle,
     sal_Int16       nWidth,
-    sal_Bool        bVisible )
+    bool        bVisible )
 throw ( SAXException, RuntimeException )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
@@ -784,7 +784,7 @@ throw ( SAXException, RuntimeException )
                              rLabel );
     }
 
-    if ( bVisible == sal_False )
+    if ( !bVisible )
     {
         pList->AddAttribute( m_aXMLToolbarNS + OUString( ATTRIBUTE_VISIBLE ),
                              m_aAttributeType,
