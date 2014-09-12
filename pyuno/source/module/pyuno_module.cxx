@@ -615,10 +615,6 @@ static PyObject *getClass( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     }
     catch(const RuntimeException & e)
     {
-        // NOOPT !!!
-        // gcc 3.2.3 crashes here in the regcomp test scenario
-        // only since migration to python 2.3.4 ???? strange thing
-        // optimization switched off for this module !
         raisePyExceptionWithAny( makeAny(e) );
     }
     return NULL;
