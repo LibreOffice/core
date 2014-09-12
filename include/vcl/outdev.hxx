@@ -1722,8 +1722,6 @@ public:
 
     SAL_DLLPRIVATE DeviceCoordinate LogicWidthToDeviceCoordinate( long nWidth ) const;
     SAL_DLLPRIVATE DeviceCoordinate LogicHeightToDeviceCoordinate( long nHeight ) const;
-    SAL_DLLPRIVATE long DeviceCoordinateToLogicWidth(DeviceCoordinate width) const;
-    SAL_DLLPRIVATE long DeviceCoordinateToLogicHeight(DeviceCoordinate height) const;
 
 private:
 

@@ -80,7 +80,7 @@ public:
         {
             return maImpl.GetTextBreak(max_width, extra, factor);
         }
-        virtual void GetCaretPositions( int as, DeviceCoordinate* cxa ) const SAL_OVERRIDE
+        virtual void    GetCaretPositions( int as, long* cxa ) const SAL_OVERRIDE
         {
             maImpl.GetCaretPositions(as, cxa);
         }

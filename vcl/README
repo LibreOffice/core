@@ -188,11 +188,3 @@ other programs, use the "pdfunzip" tool:
 
 LD_LIBRARY_PATH=$PWD/instdir/ure/lib workdir/LinkTarget/Executable/pdfunzip input.pdf output.pdf
 
-=== DeviceCoordinate ===
-
-The type DeviceCoordinate is meant to represent coordinate in the native Device space
-The implementation is platform dependant. it is a scalar type, but can by int/long/float/double...
-Originally such coordinate was represented with int or long... DeviceCoordinate
-was introduced to allow for sub-point coordiante (iow float/double), which is
-quite important when dealing with HiDPI devices.
-

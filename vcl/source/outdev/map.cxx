@@ -2142,31 +2142,6 @@ long Window::ImplLogicUnitToPixelY( long nY, MapUnit eUnit )
     return nY;
 }
 
-long OutputDevice::DeviceCoordinateToLogicWidth(DeviceCoordinate width) const
-{
-    if ( !mbMap )
-    {
-        return (long)width;
-    }
-#if VCL_FLOAT_DEVICE_PIXEL
-    return (long)(width / (maMapRes.mfScaleX * mnDPIX));
-#else
-    return ImplDevicePixelToLogicWidth(width);
-#endif
-}
-
-long OutputDevice::DeviceCoordinateToLogicHeight(DeviceCoordinate height) const
-{
-    if ( !mbMap )
-    {
-        return (long)height;
-    }
-#if VCL_FLOAT_DEVICE_PIXEL
-    return (long)(height / (maMapRes.mfScaleY * mnDPIY));
-#else
-    return ImplDevicePixelToLogicHeight(height);
-#endif
-}
 
 DeviceCoordinate OutputDevice::LogicWidthToDeviceCoordinate( long nWidth ) const
 {

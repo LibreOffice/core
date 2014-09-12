@@ -147,7 +147,7 @@ public:
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
     // for glyph+font+script fallback
     virtual void    MoveGlyph( int nStart, long nNewXPos );
@@ -667,9 +667,9 @@ sal_Int32 SimpleWinLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoord
     return -1;
 }
 
-void SimpleWinLayout::GetCaretPositions( int nMaxIdx, DeviceCoordinate* pCaretXArray ) const
+void SimpleWinLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
-    DeviceCoordinate nXPos = mnBaseAdv;
+    long nXPos = mnBaseAdv;
 
     if( !mpGlyphs2Chars )
     {
@@ -684,13 +684,13 @@ void SimpleWinLayout::GetCaretPositions( int nMaxIdx, DeviceCoordinate* pCaretXA
     {
         int  i;
         for( i = 0; i < nMaxIdx; ++i )
-            pCaretXArray[ i ] = (DeviceCoordinate)-1;
+            pCaretXArray[ i ] = -1;
 
         // assign glyph positions to character positions
         for( i = 0; i < mnGlyphCount; ++i )
         {
             int nCurrIdx = mpGlyphs2Chars[ i ] - mnMinCharPos;
-            DeviceCoordinate nXRight = nXPos + mpCharWidths[ nCurrIdx ];
+            long nXRight = nXPos + mpCharWidths[ nCurrIdx ];
             nCurrIdx *= 2;
             if( !(mpGlyphRTLFlags && mpGlyphRTLFlags[i]) )
             {
@@ -968,7 +968,7 @@ public:
 
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra, int nFactor) const SAL_OVERRIDE;
-    virtual void    GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const;
+    virtual void    GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
     virtual bool    IsKashidaPosValid ( int nCharPos ) const;
 
     // for glyph+font+script fallback
@@ -2158,16 +2158,16 @@ sal_Int32 UniscribeLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoord
     return -1;
 }
 
-void UniscribeLayout::GetCaretPositions( int nMaxIdx, DeviceCoordinate* pCaretXArray ) const
+void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
 {
     int i;
     for( i = 0; i < nMaxIdx; ++i )
         pCaretXArray[ i ] = -1;
-    DeviceCoordinate* const pGlyphPos = (DeviceCoordinate*)alloca( (mnGlyphCount+1) * sizeof(DeviceCoordinate) );
+    long* const pGlyphPos = (long*)alloca( (mnGlyphCount+1) * sizeof(long) );
     for( i = 0; i <= mnGlyphCount; ++i )
         pGlyphPos[ i ] = -1;
 
-    DeviceCoordinate nXPos = 0;
+    long nXPos = 0;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         const VisualItem& rVisualItem = mpVisualItems[ nItem ];
@@ -2643,7 +2643,7 @@ public:
     virtual sal_Int32 GetTextBreak(DeviceCoordinate nMaxWidth, DeviceCoordinate nCharExtra=0, int nFactor=1) const SAL_OVERRIDE;
     virtual DeviceCoordinate FillDXArray( DeviceCoordinate* pDXArray ) const;
 
-    virtual void  GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const;
+    virtual void  GetCaretPositions( int nArraySize, long* pCaretXArray ) const;
 
     // methods using glyph indexing
     virtual int   GetNextGlyphs(int nLen, sal_GlyphId* pGlyphIdxAry, ::Point & rPos, int&,
@@ -2787,7 +2787,7 @@ DeviceCoordinate GraphiteWinLayout::FillDXArray( DeviceCoordinate* pDXArray ) co
     return maImpl.FillDXArray(pDXArray);
 }
 
-void GraphiteWinLayout::GetCaretPositions( int nArraySize, DeviceCoordinate* pCaretXArray ) const
+void GraphiteWinLayout::GetCaretPositions( int nArraySize, long* pCaretXArray ) const
 {
     maImpl.GetCaretPositions(nArraySize, pCaretXArray);
 }

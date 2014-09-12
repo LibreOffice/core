@@ -1014,7 +1014,6 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
     {
         pDXPixelArray = (DeviceCoordinate*)alloca(nLen * sizeof(DeviceCoordinate));
     }
-    long nWidthRes;
     DeviceCoordinate nWidth = pSalLayout->FillDXArray( pDXPixelArray );
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
     pSalLayout->Release();
@@ -1027,6 +1026,17 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
             pDXPixelArray[ i ] += pDXPixelArray[ i-1 ];
         }
     }
+    if( mbMap )
+    {
+        if( pDXPixelArray )
+        {
+            for( int i = 0; i < nLen; ++i )
+            {
+                pDXPixelArray[i] = ImplDevicePixelToLogicWidth( pDXPixelArray[i] );
+            }
+        }
+        nWidth = ImplDevicePixelToLogicWidth( nWidth );
+    }
     if( nWidthFactor > 1 )
     {
         if( pDXPixelArray )
@@ -1038,30 +1048,14 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
         }
         nWidth /= nWidthFactor;
     }
-    if( mbMap )
+    if(pDXAry)
     {
-        if( pDXPixelArray )
+        for( int i = 0; i < nLen; ++i )
         {
-            for( int i = 0; i < nLen; ++i )
-            {
-                pDXAry[i] = DeviceCoordinateToLogicWidth( pDXPixelArray[i] );
-            }
+            pDXAry[i] = basegfx::fround(pDXPixelArray[i]);
         }
-        nWidthRes = DeviceCoordinateToLogicWidth( nWidth );
     }
-    else
-    {
-        if( pDXPixelArray )
-        {
-            for( int i = 0; i < nLen; ++i )
-            {
-                pDXAry[i] = (long)pDXPixelArray[i];
-            }
-        }
-        nWidthRes = (long) nWidth;
-    }
-
-    return nWidth;
+    return basegfx::fround(nWidth);
 
 #else /* ! VCL_FLOAT_DEVICE_PIXEL */
 
@@ -1097,7 +1091,7 @@ long OutputDevice::GetTextArray( const OUString& rStr, long* pDXAry,
 bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
                                       sal_Int32 nIndex, sal_Int32 nLen,
                                       long* pDXAry, long nLayoutWidth,
-                                      bool /* bCellBreaking */ ) const
+                                      bool bCellBreaking ) const
 {
 
     if( nIndex >= rStr.getLength() )
@@ -1111,121 +1105,50 @@ bool OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
     if( !pSalLayout )
         return false;
 
-#if VCL_FLOAT_DEVICE_PIXEL
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-    DeviceCoordinate* pDevCaretXArray = (DeviceCoordinate*)alloca(2 * nLen * sizeof(DeviceCoordinate));
-
-    pSalLayout->GetCaretPositions( 2*nLen, pDevCaretXArray );
-    DeviceCoordinate nWidth = pSalLayout->GetTextWidth();
-    pSalLayout->Release();
-
-    // fixup unknown caret positions
-    int i;
-    for( i = 0; i < 2 * nLen; ++i )
-    {
-        if( pDevCaretXArray[ i ] >= 0 )
-        {
-            break;
-        }
-    }
-    DeviceCoordinate nXPos = pCaretXArray[ i ];
-    for( i = 0; i < 2 * nLen; ++i )
-    {
-        if( pCaretXArray[ i ] >= 0 )
-        {
-            nXPos = pCaretXArray[ i ];
-        }
-        else
-        {
-            pCaretXArray[ i ] = nXPos;
-        }
-    }
-    if( nWidthFactor != 1 )
-    {
-        for( i = 0; i < 2*nLen; ++i )
-        {
-            pDevCaretXArray[i] /= nWidthFactor;
-        }
-    }
-
-    // handle window mirroring
-    if( IsRTLEnabled() )
-    {
-        for( i = 0; i < 2 * nLen; ++i )
-        {
-            pDevCaretXArray[i] = nWidth - pDevCaretXArray[i] - 1;
-        }
-    }
-
-    // convert from font units to logical units
-    if( mbMap )
-    {
-        for( i = 0; i < 2*nLen; ++i )
-        {
-            pCaretXArray[i] = DeviceCoordinateToLogicWidth( pDevCaretXArray[i] );
-        }
-    }
-    else
-    {
-        for( i = 0; i < 2*nLen; ++i )
-        {
-            pCaretXArray[i] = (long)pDevCaretXArray[i];
-        }
-    }
-#else
-    int nWidthFactor = pSalLayout->GetUnitsPerPixel();
-
     pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
-    DeviceCoordinate nWidth = pSalLayout->GetTextWidth();
+    long nWidth = pSalLayout->GetTextWidth();
     pSalLayout->Release();
 
     // fixup unknown caret positions
     int i;
     for( i = 0; i < 2 * nLen; ++i )
-    {
         if( pCaretXArray[ i ] >= 0 )
-        {
             break;
-        }
-    }
-    DeviceCoordinate nXPos = pCaretXArray[ i ];
+    long nXPos = pCaretXArray[ i ];
     for( i = 0; i < 2 * nLen; ++i )
     {
         if( pCaretXArray[ i ] >= 0 )
-        {
             nXPos = pCaretXArray[ i ];
-        }
         else
-        {
             pCaretXArray[ i ] = nXPos;
-        }
     }
 
     // handle window mirroring
     if( IsRTLEnabled() )
     {
         for( i = 0; i < 2 * nLen; ++i )
-        {
             pCaretXArray[i] = nWidth - pCaretXArray[i] - 1;
-        }
     }
 
     // convert from font units to logical units
     if( mbMap )
     {
         for( i = 0; i < 2*nLen; ++i )
-        {
             pCaretXArray[i] = ImplDevicePixelToLogicWidth( pCaretXArray[i] );
-        }
     }
+
     if( nWidthFactor != 1 )
     {
         for( i = 0; i < 2*nLen; ++i )
-        {
             pCaretXArray[i] /= nWidthFactor;
-        }
     }
-#endif
+
+    // if requested move caret position to cell limits
+    if( bCellBreaking )
+    {
+        ; // FIXME
+    }
 
     return true;
 }
