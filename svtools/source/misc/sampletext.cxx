@@ -26,6 +26,12 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
         // that it only covers "Phoenician" when in fact it's a Chinese font.
         return USCRIPT_HAN;
     }
+    else if (rName == "BiauKai")
+    {
+        // "BiauKai" makes crazy claims to cover BUGINESE, SUNDANESE, etc
+        // but in fact it's a Traditional Chinese font.
+        return USCRIPT_TRADITIONAL_HAN;
+    }
     else if (rName.startsWith("Bangla "))
     {
         // "Bangla Sangam MN" claims it supports MALAYALAM, but it doesn't
