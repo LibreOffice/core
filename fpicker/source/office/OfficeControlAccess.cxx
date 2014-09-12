@@ -397,7 +397,7 @@ namespace svt
     {
         Any aRet;
 
-        Control* pControl = m_pFilePickerController->getControl( _nControlId, sal_False );
+        Control* pControl = m_pFilePickerController->getControl( _nControlId, false );
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
         {
@@ -463,7 +463,7 @@ namespace svt
 
     void OControlAccess::setLabel( sal_Int16 nId, const OUString &rLabel )
     {
-        Control* pControl = m_pFilePickerController->getControl( nId, sal_True );
+        Control* pControl = m_pFilePickerController->getControl( nId, true );
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
             pControl->SetText( rLabel );
@@ -474,7 +474,7 @@ namespace svt
     {
         OUString sLabel;
 
-        Control* pControl = m_pFilePickerController->getControl( nId, sal_True );
+        Control* pControl = m_pFilePickerController->getControl( nId, true );
         DBG_ASSERT( pControl, "OControlAccess::GetValue: don't have this control in the current mode!" );
         if ( pControl )
             sLabel = pControl->GetText();

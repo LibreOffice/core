@@ -2366,7 +2366,7 @@ void SvtFileDialog::Resize()
         _pFileNotifier->notify( DIALOG_SIZE_CHANGED, 0 );
 }
 
-Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl ) const
+Control* SvtFileDialog::getControl( sal_Int16 _nControlId, bool _bLabelControl ) const
 {
     Control* pReturn = NULL;
 
@@ -2491,12 +2491,12 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelContr
 }
 
 
-void SvtFileDialog::enableControl( sal_Int16 _nControlId, sal_Bool _bEnable )
+void SvtFileDialog::enableControl( sal_Int16 _nControlId, bool _bEnable )
 {
-    Control* pControl = getControl( _nControlId, sal_False );
+    Control* pControl = getControl( _nControlId, false );
     if ( pControl )
         EnableControl( pControl, _bEnable );
-    Control* pLabel = getControl( _nControlId, sal_True );
+    Control* pLabel = getControl( _nControlId, true );
     if ( pLabel )
         EnableControl( pLabel, _bEnable );
 }

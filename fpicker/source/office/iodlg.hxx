@@ -298,8 +298,8 @@ private:
     sal_uInt16                  adjustFilter( const OUString& _rFilter );
 
     // IFilePickerController, needed by OControlAccess
-    virtual Control*            getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl = sal_False ) const SAL_OVERRIDE;
-    virtual void                enableControl( sal_Int16 _nControlId, sal_Bool _bEnable ) SAL_OVERRIDE;
+    virtual Control*            getControl( sal_Int16 _nControlId, bool _bLabelControl = false ) const SAL_OVERRIDE;
+    virtual void                enableControl( sal_Int16 _nControlId, bool _bEnable ) SAL_OVERRIDE;
     virtual OUString            getCurFilter( ) const SAL_OVERRIDE;
 
     OUString                    implGetInitialURL( const OUString& _rPath, const OUString& _rFallback );

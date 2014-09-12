@@ -34,8 +34,8 @@ namespace svt
     class IFilePickerController
     {
     public:
-        virtual Control*    getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl = sal_False ) const = 0;
-        virtual void        enableControl( sal_Int16 _nControlId, sal_Bool _bEnable ) = 0;
+        virtual Control*    getControl( sal_Int16 _nControlId, bool _bLabelControl = false ) const = 0;
+        virtual void        enableControl( sal_Int16 _nControlId, bool _bEnable ) = 0;
         virtual OUString    getCurFilter( ) const = 0;
 
     protected:
