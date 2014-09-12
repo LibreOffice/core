@@ -632,11 +632,10 @@ void DrawingML::WriteOutline( Reference<XPropertySet> rXPropSet )
             break;
     }
 
-    OString sWidth = (nLineWidth > 1 && nStyleLineWidth != nLineWidth) ? I64S(MM100toEMU(nLineWidth)) : NULL;
-
     mpFS->startElementNS( XML_a, XML_ln,
                           XML_cap, cap,
-                          XML_w, sWidth,
+                          XML_w, nLineWidth > 1 && nStyleLineWidth != nLineWidth ?
+                                  I64S( MM100toEMU( nLineWidth ) ) :NULL,
                           FSEND );
 
     if( bColorSet )
