@@ -41,22 +41,6 @@ struct DAVResource;
 
 
 
-struct equalString
-{
-  bool operator()( const OUString& s1, const OUString& s2 ) const
-  {
-      return !!( s1 == s2 );
-  }
-};
-
-struct hashString
-{
-    size_t operator()( const OUString & rName ) const
-    {
-        return rName.hashCode();
-    }
-};
-
 
 
 // PropertyValueMap.
@@ -87,8 +71,7 @@ typedef boost::unordered_map
 <
     OUString,
     PropertyValue,
-    hashString,
-    equalString
+    OUStringHash
 >
 PropertyValueMap;
 

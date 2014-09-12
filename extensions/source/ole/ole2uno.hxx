@@ -70,23 +70,6 @@ const VARTYPE getVarType( const Any& val);
 bool getType( BSTR name, Type & type);
 void o2u_attachCurrentThread();
 
-struct equalOUString_Impl
-{
-  bool operator()(const OUString & s1, const OUString & s2) const
-  {
-    return s1 == s2;
-  }
-};
-
-struct hashOUString_Impl
-{
-    size_t operator()(const OUString & rName) const
-    {
-        return rName.hashCode();
-    }
-};
-
-
 class BridgeRuntimeError
 {
 public:

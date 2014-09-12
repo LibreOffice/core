@@ -47,6 +47,7 @@
 
 
 using ::rtl::OUString;
+using ::rtl::OUStringHash;
 
 namespace
 {
@@ -102,17 +103,9 @@ struct FctPtrHash :
 };
 
 
-struct FctOUStringHash :
-    public ::std::unary_function< const OUString &, ::std::size_t >
-{
-    ::std::size_t operator () ( const OUString & rKey ) const
-        { return rKey.hashCode(); }
-};
-
 // mapping from environment name to environment
 typedef ::boost::unordered_map<
-    OUString, uno_Environment *, FctOUStringHash,
-    ::std::equal_to< OUString > > OUString2EnvironmentMap;
+    OUString, uno_Environment *, OUStringHash > OUString2EnvironmentMap;
 
 // mapping from ptr to object entry
 typedef ::boost::unordered_map<
@@ -120,8 +113,7 @@ typedef ::boost::unordered_map<
     ::std::equal_to< void * > > Ptr2ObjectMap;
 // mapping from oid to object entry
 typedef ::boost::unordered_map<
-    OUString, ObjectEntry *, FctOUStringHash,
-    ::std::equal_to< OUString > > OId2ObjectMap;
+    OUString, ObjectEntry *, OUStringHash > OId2ObjectMap;
 
 
 

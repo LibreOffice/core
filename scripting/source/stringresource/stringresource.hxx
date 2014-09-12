@@ -53,28 +53,11 @@ namespace stringresource
 
 
 // Hashtable to map string ids to string
-struct hashName_Impl
-{
-    size_t operator()(const OUString& Str) const
-    {
-        return (size_t)Str.hashCode();
-    }
-};
-
-struct eqName_Impl
-{
-    bool operator()(const OUString& Str1, const OUString& Str2) const
-    {
-        return ( Str1 == Str2 );
-    }
-};
-
 typedef boost::unordered_map
 <
     OUString,
     OUString,
-    hashName_Impl,
-    eqName_Impl
+    OUStringHash
 >
 IdToStringMap;
 
@@ -82,8 +65,7 @@ typedef boost::unordered_map
 <
     OUString,
     sal_Int32,
-    hashName_Impl,
-    eqName_Impl
+    OUStringHash
 >
 IdToIndexMap;
 

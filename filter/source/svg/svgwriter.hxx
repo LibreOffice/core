@@ -169,22 +169,13 @@ struct BulletListItemInfo
 };
 
 
-// - OUStringHasher -
-
-
-struct OUStringHasher
-{
-    size_t operator()( const OUString& oustr ) const { return static_cast< size_t >( oustr.hashCode() ); }
-};
-
-
 
 // - SVGTextWriter -
 
 class SVGTextWriter
 {
   public:
-    typedef ::boost::unordered_map< OUString, BulletListItemInfo, OUStringHasher >         BulletListItemInfoMap;
+    typedef ::boost::unordered_map< OUString, BulletListItemInfo, OUStringHash >         BulletListItemInfoMap;
 
   private:
     SVGExport&                                  mrExport;

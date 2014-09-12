@@ -30,22 +30,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
 
-struct EqualString
-{
-    bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
-    {
-        return (str1 == str2);
-    }
-};
-
-struct HashString
-{
-    size_t operator()(const ::rtl::OString& str) const
-    {
-        return str.hashCode();
-    }
-};
-
 struct LessString
 {
     bool operator()(const ::rtl::OString& str1, const ::rtl::OString& str2) const
