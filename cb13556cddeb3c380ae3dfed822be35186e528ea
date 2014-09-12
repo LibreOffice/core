@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_b156c004",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-09-12T21:35:06Z",
+      "side": 1,
+      "message": "please don\u0027t use C-syntax casts",
+      "revId": "cb13556cddeb3c380ae3dfed822be35186e528ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
