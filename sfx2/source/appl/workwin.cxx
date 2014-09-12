@@ -299,13 +299,13 @@ throw (css::uno::RuntimeException, std::exception)
         {
             m_pWrkWin->MakeVisible_Impl( true );
             m_pWrkWin->ShowChildren_Impl();
-            m_pWrkWin->ArrangeChildren_Impl( sal_True );
+            m_pWrkWin->ArrangeChildren_Impl( true );
         }
         else if ( eLayoutEvent == css::frame::LayoutManagerEvents::INVISIBLE )
         {
             m_pWrkWin->MakeVisible_Impl( false );
             m_pWrkWin->HideChildren_Impl();
-            m_pWrkWin->ArrangeChildren_Impl( sal_True );
+            m_pWrkWin->ArrangeChildren_Impl( true );
         }
         else if ( eLayoutEvent == css::frame::LayoutManagerEvents::LOCK )
         {
@@ -754,12 +754,12 @@ void SfxWorkWindow::DeleteControllers_Impl()
 
 // Virtual method for placing the child window.
 
-void SfxWorkWindow::ArrangeChildren_Impl( sal_Bool /*bForce*/)
+void SfxWorkWindow::ArrangeChildren_Impl( bool /*bForce*/)
 {
     Arrange_Impl();
 }
 
-void SfxFrameWorkWin_Impl::ArrangeChildren_Impl( sal_Bool bForce )
+void SfxFrameWorkWin_Impl::ArrangeChildren_Impl( bool bForce )
 {
     if ( pFrame->IsClosing_Impl() || ( m_nLock && !bForce ))
         return;
@@ -1235,7 +1235,7 @@ void SfxFrameWorkWin_Impl::UpdateObjectBars_Impl()
             pWork = pWork->GetParent_Impl();
         }
 
-        ArrangeChildren_Impl( sal_False );
+        ArrangeChildren_Impl( false );
 
         pWork = pParent;
         while ( pWork )
@@ -2736,7 +2736,7 @@ void SfxWorkWindow::SetActiveChild_Impl( Window *pChild )
     pActiveChild = pChild;
 }
 
-bool SfxWorkWindow::ActivateNextChild_Impl( sal_Bool bForward )
+bool SfxWorkWindow::ActivateNextChild_Impl( bool bForward )
 {
     // Sort all children under list
     std::vector<sal_uInt16> aList;

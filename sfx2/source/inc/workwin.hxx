@@ -277,7 +277,7 @@ public:
     void                    ShowChildren_Impl();
     void                    HideChildren_Impl();
     bool                    PrepareClose_Impl();
-    virtual void            ArrangeChildren_Impl( sal_Bool bForce = sal_True );
+    virtual void            ArrangeChildren_Impl( bool bForce = true );
     void                    DeleteControllers_Impl();
     void                    HidePopups_Impl(bool bHide, bool bParent=false, sal_uInt16 nId=0);
     void                    ConfigChild_Impl(SfxChildIdentifier,
@@ -317,7 +317,7 @@ public:
     bool                    IsVisible_Impl( sal_uInt16 nMode ) const;
     bool                    IsFloating( sal_uInt16 nId );
     void                    SetActiveChild_Impl( Window *pChild );
-    virtual bool            ActivateNextChild_Impl( sal_Bool bForward = sal_True );
+    virtual bool            ActivateNextChild_Impl( bool bForward = true );
     bool                    AllowChildWindowCreation_Impl( const SfxChildWin_Impl& i_rCW ) const;
 
     // Methods for StatusBar
@@ -334,7 +334,7 @@ class SfxFrameWorkWin_Impl : public SfxWorkWindow
     SfxFrame*           pFrame;
 public:
                         SfxFrameWorkWin_Impl( Window* pWin, SfxFrame* pFrm, SfxFrame* pMaster );
-    virtual void        ArrangeChildren_Impl( sal_Bool bForce = sal_True ) SAL_OVERRIDE;
+    virtual void        ArrangeChildren_Impl( bool bForce = true ) SAL_OVERRIDE;
     virtual void        UpdateObjectBars_Impl() SAL_OVERRIDE;
     virtual Rectangle   GetTopRect_Impl() SAL_OVERRIDE;
 };
