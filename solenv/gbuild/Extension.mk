@@ -151,7 +151,7 @@ endef
 # gb_Extension__Extension_deliver extension package-name
 define gb_Extension__Extension_deliver
 $(call gb_GeneratedPackage_GeneratedPackage,$(2),$(dir $(call gb_Extension_get_rootdir,$(1))))
-$(call gb_GeneratedPackage_add_dir,$(2),$(INSTROOT)/share/extensions/$(1),$(notdir $(call gb_Extension_get_rootdir,$(1))))
+$(call gb_GeneratedPackage_add_dir,$(2),$(INSTROOT)/$(LIBO_SHARE_FOLDER)/extensions/$(1),$(notdir $(call gb_Extension_get_rootdir,$(1))))
 
 $(call gb_GeneratedPackage_get_target,$(2)) : $(call gb_Extension_get_target,$(1))
 $(call gb_Extension__get_final_target,$(1)) : $(call gb_GeneratedPackage_get_target,$(2))

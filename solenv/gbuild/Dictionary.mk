@@ -185,7 +185,7 @@ endef
 # all installed files of the dictionary.
 
 gb_Dictionary_ALL_LANGS := $(filter-out en-US,$(gb_WITH_LANG))
-gb_Dictionary_INSTDIR := share/extensions
+gb_Dictionary_INSTDIR := $(LIBO_SHARE_FOLDER)/extensions
 
 $(dir $(call gb_Dictionary_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
