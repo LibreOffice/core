@@ -72,14 +72,14 @@
 #include <svl/slstitm.hxx>
 #include <boost/scoped_ptr.hpp>
 
-using namespace com::sun::star;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::i18n;
-using namespace com::sun::star::text;
-using namespace com::sun::star::container;
-using namespace com::sun::star::style;
+using namespace css;
+using namespace css::uno;
+using namespace css::beans;
+using namespace css::lang;
+using namespace css::i18n;
+using namespace css::text;
+using namespace css::container;
+using namespace css::style;
 
 #define NUM_PAGETYPE_BULLET         0
 #define NUM_PAGETYPE_SINGLENUM      1
@@ -1169,11 +1169,15 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
     if(*pActNum != *pSaveNum ||
         nActNumLvl != nTmpNumLvl)
     {
+        *pActNum = *pSaveNum;
         nActNumLvl = nTmpNumLvl;
         sal_uInt16 nMask = 1;
         m_pLevelLB->SetUpdateMode(false);
         m_pLevelLB->SetNoSelection();
-        m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
+        if(bModified)
+            m_pLevelLB->SelectEntryPos( 0, true);
+        else
+            m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
         if(nActNumLvl != SAL_MAX_UINT16)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
@@ -1182,7 +1186,7 @@ void    SvxNumOptionsTabPage::ActivatePage(const SfxItemSet& rSet)
                 nMask <<= 1 ;
             }
         m_pLevelLB->SetUpdateMode(true);
-        *pActNum = *pSaveNum;
+
         InitControls();
     }
 
@@ -1249,7 +1253,11 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 nMask = 1;
     m_pLevelLB->SetUpdateMode(false);
     m_pLevelLB->SetNoSelection();
-    if(nActNumLvl == SAL_MAX_UINT16)
+    if(nActNumLvl == SAL_MAX_UINT16  && !bModified)
+    {
+        m_pLevelLB->SelectEntryPos( 0, true);
+    }
+    else if (nActNumLvl == SAL_MAX_UINT16)
     {
         m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), true);
     }
@@ -2923,7 +2931,10 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
         sal_uInt16 nMask = 1;
         m_pLevelLB->SetUpdateMode(false);
         m_pLevelLB->SetNoSelection();
-        m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
+        if(bModified)
+            m_pLevelLB->SelectEntryPos( 0, true);
+        else
+            m_pLevelLB->SelectEntryPos( pActNum->GetLevelCount(), nActNumLvl == SAL_MAX_UINT16);
         if(nActNumLvl != SAL_MAX_UINT16)
             for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
             {
@@ -3009,7 +3020,11 @@ void SvxNumPositionTabPage::Reset( const SfxItemSet* rSet )
     sal_uInt16 nMask = 1;
     m_pLevelLB->SetUpdateMode(false);
     m_pLevelLB->SetNoSelection();
-    if(nActNumLvl == SAL_MAX_UINT16)
+    if(nActNumLvl == SAL_MAX_UINT16  && !bModified)
+    {
+        m_pLevelLB->SelectEntryPos( 0, true);
+    }
+    else if (nActNumLvl == SAL_MAX_UINT16)
     {
         m_pLevelLB->SelectEntryPos( pSaveNum->GetLevelCount(), true);
     }
