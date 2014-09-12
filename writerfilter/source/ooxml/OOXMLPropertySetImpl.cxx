@@ -286,12 +286,6 @@ OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
 {
 }
 
-OOXMLBooleanValue::OOXMLBooleanValue(const char *pValue)
-: mbValue(false)
-{
-    mbValue = GetBooleanValue(pValue);
-}
-
 OOXMLBooleanValue::~OOXMLBooleanValue()
 {
 }
