@@ -17,7 +17,7 @@
 #
 
 class AgendaWizardDialogResources(object):
-    
+
     RID_AGENDAWIZARDDIALOG_START = 5000
     RID_AGENDAWIZARDROADMAP_START = 5049
     RID_COMMON_START = 500
@@ -153,7 +153,7 @@ class AgendaWizardDialogResources(object):
         self.resButtonUp = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 70)
         self.resButtonDown = oWizardResource.getResText(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 71)        
+            AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 71)
 
         #Create a dictionary for localised string in the template
         self.dictConstants = {
@@ -188,11 +188,34 @@ class AgendaWizardDialogResources(object):
         "#deadline#" : oWizardResource.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 86)}
 
+        #Create a dictionary for localising the page design
+        self.dictPageDesign = {
+        "Blue" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 87),
+        "Classic" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 88),
+        "Colorful" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 89),
+        "Elegant" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 90),
+        "Green" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 91),
+        "Grey" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 92),
+        "Modern" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 93),
+        "Orange" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 94),
+        "Red" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 95),
+        "Simple" : oWizardResource.getResText(
+                AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 96)}
+
         #Common Resources
         self.resOverwriteWarning = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 19)
         self.resTemplateDescription = oWizardResource.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 20)
-            
+
         self.RoadmapLabels = oWizardResource.getResArray(
-            AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 1 , 6)            
+            AgendaWizardDialogResources.RID_AGENDAWIZARDROADMAP_START + 1 , 6)
