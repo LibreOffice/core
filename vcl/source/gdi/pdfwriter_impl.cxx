@@ -5951,6 +5951,17 @@ char *PDFSigningPKCS7PasswordCallback(PK11SlotInfo * /*slot*/, PRBool /*retry*/,
     return (char *)arg;
 }
 
+namespace {
+    class HashContextScope {
+        HASHContext *mpPtr;
+    public:
+        HashContextScope(HASHContext *pPtr) : mpPtr(pPtr) {}
+        ~HashContextScope() { clear(); }
+        void clear() { if (mpPtr) { HASH_Destroy(mpPtr); } mpPtr = NULL; }
+        HASHContext *get() { return mpPtr; }
+    };
+}
+
 bool PDFWriterImpl::finalizeSignature()
 {
 
@@ -6000,9 +6011,8 @@ bool PDFWriterImpl::finalizeSignature()
     // Prepare buffer and calculate PDF file digest
     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( m_aFile, osl_Pos_Absolut, 0) ) );
 
-    boost::scoped_ptr<HASHContext> hc(HASH_Create(HASH_AlgSHA1));
-
-    if (!hc)
+    HashContextScope hc(HASH_Create(HASH_AlgSHA1));
+    if (!hc.get())
     {
         SAL_WARN("vcl.gdi", "PDF Signing: SHA1 HASH_Create failed!");
         return false;
@@ -6033,7 +6043,7 @@ bool PDFWriterImpl::finalizeSignature()
     unsigned char hash[SHA1_LENGTH];
     digest.data = hash;
     HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
-    HASH_Destroy(hc.get());
+    hc.clear();
 
     const char *pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr();
 
