@@ -119,6 +119,8 @@ public:
 
     bool VisitUnaryAddrOf(UnaryOperator const * op);
 
+    bool VisitCallExpr(CallExpr * expr);
+
     bool VisitCStyleCastExpr(CStyleCastExpr * expr);
 
     bool VisitCXXStaticCastExpr(CXXStaticCastExpr * expr);
@@ -204,6 +206,51 @@ bool SalBool::VisitUnaryAddrOf(UnaryOperator const * op) {
             VarDecl const * d = dyn_cast<VarDecl>(e2->getDecl());
             if (d != nullptr) {
                 varDecls_.erase(d);
+            }
+        }
+    }
+    return true;
+}
+
+bool SalBool::VisitCallExpr(CallExpr * expr) {
+    Decl const * d = expr->getCalleeDecl();
+    FunctionProtoType const * ft = nullptr;
+    if (d != nullptr) {
+        FunctionDecl const * fd = dyn_cast<FunctionDecl>(d);
+        if (fd != nullptr) {
+            PointerType const * pt = fd->getType()->getAs<PointerType>();
+            QualType t2(pt == nullptr ? fd->getType() : pt->getPointeeType());
+            ft = t2->getAs<FunctionProtoType>();
+            assert(
+                ft != nullptr || !compiler.getLangOpts().CPlusPlus
+                || (fd->getBuiltinID() != Builtin::NotBuiltin
+                    && isa<FunctionNoProtoType>(t2)));
+                // __builtin_*s have no proto type?
+        } else {
+            VarDecl const * vd = dyn_cast<VarDecl>(d);
+            if (vd != nullptr) {
+                PointerType const * pt = vd->getType()->getAs<PointerType>();
+                ft = (pt == nullptr ? vd->getType() : pt->getPointeeType())
+                    ->getAs<FunctionProtoType>();
+            }
+        }
+    }
+    if (ft != nullptr) {
+        for (unsigned i = 0; i != compat::getNumParams(*ft); ++i) {
+            QualType t(compat::getParamType(*ft, i));
+            if (t->isLValueReferenceType()) {
+                t = t.getNonReferenceType();
+                if (!t.isConstQualified() && isSalBool(t)
+                    && i < expr->getNumArgs())
+                {
+                    DeclRefExpr * ref = dyn_cast<DeclRefExpr>(expr->getArg(i));
+                    if (ref != nullptr) {
+                        VarDecl const * d = dyn_cast<VarDecl>(ref->getDecl());
+                        if (d != nullptr) {
+                            varDecls_.erase(d);
+                        }
+                    }
+                }
             }
         }
     }
