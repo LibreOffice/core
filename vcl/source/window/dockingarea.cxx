@@ -52,13 +52,10 @@ static void ImplInitBackground( DockingAreaWindow* pThis )
     {
         Wallpaper aWallpaper( rPersonaBitmap );
         if(pThis->GetAlign() == WINDOWALIGN_TOP)
-        {
               aWallpaper.SetStyle( WALLPAPER_TOPRIGHT);
-        }
         else
-              aWallpaper.SetStyle( WALLPAPER_BOTTOM );
+              aWallpaper.SetStyle( WALLPAPER_BOTTOMRIGHT);
         aWallpaper.SetColor( Application::GetSettings().GetStyleSettings().GetWorkspaceColor() );
-
         // we need to shift the bitmap vertically so that it spans over the
         // menubar conveniently
         long nMenubarHeight = 0;

@@ -164,7 +164,7 @@ void StatusBar::ImplInitSettings( bool bFont,
                                   bool bForeground, bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
+    const BitmapEx& rPersonaBitmap = rStyleSettings.GetPersonaHeader();
     if ( bFont )
     {
         Font aFont = rStyleSettings.GetToolFont();
@@ -189,35 +189,25 @@ void StatusBar::ImplInitSettings( bool bFont,
         mpImplData->mpVirDev->SetTextAlign( GetTextAlign() );
         mpImplData->mpVirDev->SetTextFillColor();
     }
-
     if ( bBackground )
     {
-        Color aColor;
-        if ( IsControlBackground() )
-            aColor = GetControlBackground();
-        else if ( GetStyle() & WB_3DLOOK )
-            aColor = rStyleSettings.GetFaceColor();
-        else
-            aColor = rStyleSettings.GetWindowColor();
-        SetBackground( aColor );
-        mpImplData->mpVirDev->SetBackground( GetBackground() );
-
-        // NWF background
-        if( ! IsControlBackground() &&
+            Color aColor;
+            if ( IsControlBackground() )
+                aColor = GetControlBackground();
+            else if ( GetStyle() & WB_3DLOOK )
+                aColor = rStyleSettings.GetFaceColor();
+            else
+                aColor = rStyleSettings.GetWindowColor();
+            SetBackground( aColor );
+            mpImplData->mpVirDev->SetBackground( GetBackground() );
+            // NWF background
+            if( ! IsControlBackground() &&
               IsNativeControlSupported( CTRL_WINDOW_BACKGROUND, PART_BACKGROUND_WINDOW ) )
-        {
-            ImplGetWindowImpl()->mnNativeBackground = PART_BACKGROUND_WINDOW;
-            EnableChildTransparentMode( true );
-        }
-    }
-    const BitmapEx& rPersonaBitmap = rStyleSettings.GetPersonaFooter();
-    if(!rPersonaBitmap.IsEmpty())
-    {
-         Wallpaper aWallpaper(rPersonaBitmap);
-         aWallpaper.SetStyle(WALLPAPER_BOTTOM);
-         aWallpaper.SetColor(rStyleSettings.GetWorkspaceColor());
-         mpImplData->mpVirDev->SetBackground(aWallpaper);
-    }
+            {
+                ImplGetWindowImpl()->mnNativeBackground = PART_BACKGROUND_WINDOW;
+                EnableChildTransparentMode( true );
+            }
+     }
 }
 
 void StatusBar::ImplFormat()
