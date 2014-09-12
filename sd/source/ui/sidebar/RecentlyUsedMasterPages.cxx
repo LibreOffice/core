@@ -85,10 +85,35 @@ public:
 
 namespace sd { namespace sidebar {
 
-class RecentlyUsedMasterPages::MasterPageList : public ::std::vector<Descriptor>
+class RecentlyUsedMasterPages::MasterPageList
 {
 public:
-    MasterPageList (void) {}
+    MasterPageList() : mvDescs() {}
+
+    size_t size() const { return mvDescs.size(); }
+
+    ::std::vector<Descriptor>::const_iterator begin() const { return mvDescs.begin(); }
+    ::std::vector<Descriptor>::iterator begin() { return mvDescs.begin(); }
+    ::std::vector<Descriptor>::const_iterator end() const { return mvDescs.end(); }
+    ::std::vector<Descriptor>::iterator end() { return mvDescs.end(); }
+
+    void clear() { mvDescs.clear(); }
+
+    void erase(::std::vector<Descriptor>::iterator it) { mvDescs.erase(it); }
+
+    void insert(::std::vector<Descriptor>::iterator it, const Descriptor& rDesc)
+    { mvDescs.insert(it, rDesc); }
+
+    void pop_back() { mvDescs.pop_back(); }
+
+    void push_back(const Descriptor& rDesc) { mvDescs.push_back(rDesc); }
+
+    void reserve(size_t n) { mvDescs.reserve(n); }
+
+    Descriptor& operator[](size_t i) { return mvDescs[i]; }
+
+private:
+    ::std::vector<Descriptor> mvDescs;
 };
 
 RecentlyUsedMasterPages* RecentlyUsedMasterPages::mpInstance = NULL;
@@ -235,7 +260,7 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
             xSet, UNO_QUERY);
         if ( ! xChildFactory.is())
             return;
-        MasterPageList::const_iterator iDescriptor;
+        ::std::vector<Descriptor>::const_iterator iDescriptor;
         sal_Int32 nIndex(0);
         for (iDescriptor=mpMasterPages->begin();
                 iDescriptor!=mpMasterPages->end();
@@ -363,7 +388,7 @@ void RecentlyUsedMasterPages::AddMasterPage (
         && !mpContainer->GetURLForToken(aToken).isEmpty())
     {
 
-        MasterPageList::iterator aIterator (
+        ::std::vector<Descriptor>::iterator aIterator (
             ::std::find_if(mpMasterPages->begin(),mpMasterPages->end(),
                 Descriptor::TokenComparator(aToken)));
         if (aIterator != mpMasterPages->end())
@@ -395,7 +420,7 @@ void RecentlyUsedMasterPages::ResolveList (void)
 {
     bool bNotify (false);
 
-    MasterPageList::iterator iDescriptor;
+    ::std::vector<Descriptor>::iterator iDescriptor;
     for (iDescriptor=mpMasterPages->begin(); iDescriptor!=mpMasterPages->end(); ++iDescriptor)
     {
         if (iDescriptor->maToken == MasterPageContainer::NIL_TOKEN)
