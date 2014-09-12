@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <stdexcept>
 
 #include <limits.h>
 #include <rtl/ustring.hxx>
@@ -26,6 +27,41 @@
 #include <tools/lineend.hxx>
 #include <tools/stream.hxx>
 #include <tools/bigint.hxx>
+
+
+bool impl_ReduceInaccurate( unsigned nSignificantBits, long& nNumerator, long& nDenominator );
+
+void reduceInaccurate( boost::rational<long>& rRational, unsigned nSignificantBits )
+{
+    long n = rRational.numerator(), m = rRational.denominator();
+    if (impl_ReduceInaccurate(nSignificantBits, n, m)) {
+        rRational.assign(n, m);
+    }
+}
+
+SvStream& ReadFraction( SvStream& rIStream, boost::rational<long>& rRational )
+{
+    //fdo#39428 SvStream no longer supports operator>>(long&)
+    sal_Int32 n(0), m(0);
+    rIStream.ReadInt32( n );
+    rIStream.ReadInt32( m );
+    if (m == 0) {
+        // can't instantiate invalid rationals - instantiate zero
+        n = 0;
+        m = 1;
+    }
+    rRational.assign(n, m);
+    return rIStream;
+}
+
+SvStream& WriteFraction( SvStream& rOStream, const boost::rational<long>& rRational )
+{
+    //fdo#39428 SvStream no longer supports operator<<(long)
+    rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rRational.numerator()) );
+    rOStream.WriteInt32( sal::static_int_cast<sal_Int32>(rRational.denominator()) );
+    return rOStream;
+}
+
 
 /** Compute greates common divisor using Euclidian algorithm
 
@@ -392,6 +428,9 @@ static int impl_NumberOfBits( unsigned long nNum )
 
     @param nSignificantBits denotes, how many significant binary
     digits to maintain, in both nominator and denominator.
+    @param nNumerator
+    @param nDenominator
+    @return true when reduction was done successfully, false otherwise.
 
     @example ReduceInaccurate(8) has an error <1% [1/2^(8-1)] - the
     largest error occurs with the following pair of values:
@@ -402,10 +441,10 @@ static int impl_NumberOfBits( unsigned long nNum )
 
     A ReduceInaccurate(8) yields 1/1.
 */
-void Fraction::ReduceInaccurate( unsigned nSignificantBits )
+bool impl_ReduceInaccurate( unsigned nSignificantBits, long& nNumerator, long& nDenominator )
 {
     if ( !nNumerator || !nDenominator )
-        return;
+        return false;
 
     // Count with unsigned longs only
     const bool bNeg = ( nNumerator < 0 );
@@ -428,7 +467,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
     {
         // Return without reduction
         OSL_FAIL( "Oops, we reduced too much..." );
-        return;
+        return false;
     }
 
     // Reduce
@@ -441,6 +480,12 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
 
     nNumerator = bNeg? -long( nMul ): long( nMul );
     nDenominator = nDiv;
+    return true;
+}
+
+void Fraction::ReduceInaccurate( unsigned nSignificantBits )
+{
+    impl_ReduceInaccurate( nSignificantBits, nNumerator, nDenominator );
 }
 
 bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
