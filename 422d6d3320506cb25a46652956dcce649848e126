@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_35207af7",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "\"border\", \"boarder\" is \"to board a ship\" - mainly done by pirates :-)",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_151d76bd",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "What does \u003d\u003e mean?",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_f578b2fa",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "typo - \"always\"",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_d57daee8",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "typo \"weighting\"",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_b5822ac7",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "what does this mean?",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_958726d7",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "what are \"punishment points\"",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_756de231",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "what are \"punishment points\"",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_556ade1b",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t change code and comments in the one patch.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_35775a04",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t change code and comments in the one patch.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_157456fb",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t change code and comments in the one patch.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_f55f9273",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t translate and make code changes in the one patch - keep this seperate.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_b5590a91",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t translate and make code changes in the one patch - keep this seperate.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_955e0675",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 314,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t translate and make code changes in the one patch - keep this seperate.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_7554c253",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "just get rid of this comment - it\u0027s definitely not needed",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_5551be61",
+        "filename": "i18npool/source/search/levdis.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t translate and make code changes in the one patch - keep this seperate.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_354e3ac2",
+        "filename": "i18npool/source/search/levdis.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t translate and make code changes in the one patch - keep this seperate.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_154b36b2",
+        "filename": "i18npool/source/search/levdis.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-12T10:42:16Z",
+      "side": 1,
+      "message": "Please don\u0027t translate and make code changes in the one patch - keep this seperate.",
+      "revId": "422d6d3320506cb25a46652956dcce649848e126",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
