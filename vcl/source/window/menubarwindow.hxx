@@ -27,13 +27,10 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/window.hxx>
 
-/** Toolbox specialization for the 'closer' - the cross to close the document.
+/** Toolbox that holds the close button (right hand side of the menubar).
 
-To get the transparent mouse-over look, the closer is actually a toolbox
-overload DataChange to handle style changes correctly
-
-TODO: PushButtons can be transparent too; check if this DecoToolBox is still
-necessary...
+This is also used by the online update check; when an update is available, it
+inserts here the button that leads to the download of the update.
 */
 class DecoToolBox : public ToolBox
 {
@@ -135,12 +132,12 @@ public:
     void            ImplLayoutChanged();
     Size            MinCloseButtonSize();
 
-    // add an arbitrary button to the menubar (will appear next to closer)
-    sal_uInt16              AddMenuBarButton( const Image&, const Link&, const OUString&, sal_uInt16 nPos );
-    void                SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& );
-    Rectangle           GetMenuBarButtonRectPixel( sal_uInt16 nId );
-    void                RemoveMenuBarButton( sal_uInt16 nId );
-    bool                HandleMenuButtonEvent( sal_uInt16 i_nButtonId );
+    /// Add an arbitrary button to the menubar that will appear next to the close button.
+    sal_uInt16      AddMenuBarButton( const Image&, const Link&, const OUString&, sal_uInt16 nPos );
+    void            SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& );
+    Rectangle       GetMenuBarButtonRectPixel( sal_uInt16 nId );
+    void            RemoveMenuBarButton( sal_uInt16 nId );
+    bool            HandleMenuButtonEvent( sal_uInt16 i_nButtonId );
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_MENUBARWINDOW_HXX
