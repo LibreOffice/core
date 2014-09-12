@@ -44,7 +44,7 @@ namespace dbaui
         // clears the whole query
         virtual void clear();
         // set the view readonly or not
-        virtual void setReadOnly(sal_Bool _bReadOnly);
+        virtual void setReadOnly(bool _bReadOnly);
         // check if the statement is correct when not returning false
         virtual bool checkStatement();
         // set the statement for representation

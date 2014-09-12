@@ -129,7 +129,7 @@ public:
     virtual OUString getCommand() throw( ::com::sun::star::uno::RuntimeException );
     virtual void setCommand(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
     virtual bool getEscapeProcessing() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void setEscapeProcessing(sal_Bool) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void setEscapeProcessing(bool) throw( ::com::sun::star::uno::RuntimeException );
     virtual OUString getUpdateTableName() throw( ::com::sun::star::uno::RuntimeException );
     virtual void setUpdateTableName(const OUString&) throw( ::com::sun::star::uno::RuntimeException );
     virtual OUString getUpdateCatalogName() throw( ::com::sun::star::uno::RuntimeException );

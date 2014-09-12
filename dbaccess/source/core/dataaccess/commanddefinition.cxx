@@ -88,7 +88,7 @@ bool OCommandDefinition::getEscapeProcessing() throw( ::com::sun::star::uno::Run
     return getCommandDefinition().m_bEscapeProcessing;
 }
 
-void OCommandDefinition::setEscapeProcessing(sal_Bool p1) throw( ::com::sun::star::uno::RuntimeException )
+void OCommandDefinition::setEscapeProcessing(bool p1) throw( ::com::sun::star::uno::RuntimeException )
 {
     setPropertyValue(PROPERTY_ESCAPE_PROCESSING, Any(p1) );
 }

@@ -86,7 +86,7 @@ namespace dbaui
         // clears the whole query
         virtual void clear() SAL_OVERRIDE;
         // set the view readonly or not
-        virtual void setReadOnly(sal_Bool _bReadOnly) SAL_OVERRIDE;
+        virtual void setReadOnly(bool _bReadOnly) SAL_OVERRIDE;
         // check if the statement is correct when not returning false
         virtual bool checkStatement();
         // set the statement for representation

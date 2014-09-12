@@ -228,7 +228,7 @@ sal_uLong OJoinTableView::GetTabWinCount()
     return m_aTableMap.size();
 }
 
-bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,sal_Bool _bDelete )
+bool OJoinTableView::RemoveConnection( OTableConnection* _pConn,bool _bDelete )
 {
     DeselectConn(_pConn);
 
@@ -349,7 +349,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
             ( pData == pTabConn->GetData()->getReferencedTable())
         )
         {
-          bRemove = RemoveConnection( pTabConn ,sal_True);
+          bRemove = RemoveConnection( pTabConn ,true);
           aIter = m_vTableConnection.rbegin();
         }
         else
@@ -845,7 +845,7 @@ void OJoinTableView::KeyInput( const KeyEvent& rEvt )
     if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
     {
         if (GetSelectedConn())
-            RemoveConnection( GetSelectedConn() ,sal_True);
+            RemoveConnection( GetSelectedConn() ,true);
     }
     else
         Window::KeyInput( rEvt );
@@ -973,7 +973,7 @@ void OJoinTableView::ClearAll()
     ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
     ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
     for(;aIter != aEnd;++aIter)
-        RemoveConnection( *aIter ,sal_True);
+        RemoveConnection( *aIter ,true);
     m_vTableConnection.clear();
 
     m_pLastFocusTabWin  = NULL;
@@ -1122,7 +1122,7 @@ void OJoinTableView::executePopup(const Point& _aPos,OTableConnection* _pSelConn
     switch (aContextMenu.Execute(this, _aPos))
     {
         case SID_DELETE:
-            RemoveConnection( _pSelConnection ,sal_True);
+            RemoveConnection( _pSelConnection ,true);
             break;
         case ID_QUERY_EDIT_JOINCONNECTION:
             ConnDoubleClicked( _pSelConnection ); // is the same as double clicked

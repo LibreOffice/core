@@ -1210,10 +1210,10 @@ bool SAL_CALL OKeySet::first(  ) throw(SQLException, RuntimeException)
 
 bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
 {
-    return last_checked(sal_True);
+    return last_checked(true);
 }
 
-bool OKeySet::last_checked( sal_Bool /* i_bFetchRow */ )
+bool OKeySet::last_checked( bool /* i_bFetchRow */ )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     bool fetchedRow = fillAllRows();
@@ -1237,10 +1237,10 @@ sal_Int32 SAL_CALL OKeySet::getRow(  ) throw(SQLException, RuntimeException)
 
 bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
-    return absolute_checked(row,sal_True);
+    return absolute_checked(row,true);
 }
 
-bool OKeySet::absolute_checked( sal_Int32 row, sal_Bool /* i_bFetchRow */ )
+bool OKeySet::absolute_checked( sal_Int32 row, bool /* i_bFetchRow */ )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     OSL_ENSURE(row,"absolute(0) isn't allowed!");
@@ -1309,7 +1309,7 @@ bool SAL_CALL OKeySet::relative( sal_Int32 rows ) throw(SQLException, RuntimeExc
     return absolute(getRow()+rows);
 }
 
-bool OKeySet::previous_checked( sal_Bool /* i_bFetchRow */ )
+bool OKeySet::previous_checked( bool /* i_bFetchRow */ )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     if(m_aKeyIter != m_aKeyMap.begin())
@@ -1322,7 +1322,7 @@ bool OKeySet::previous_checked( sal_Bool /* i_bFetchRow */ )
 
 bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
 {
-    return previous_checked(sal_True);
+    return previous_checked(true);
 }
 
 bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException)

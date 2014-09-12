@@ -217,7 +217,7 @@ namespace dbaui
         virtual void AddColumnListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol) SAL_OVERRIDE;
         virtual void RemoveColumnListener(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & xCol) SAL_OVERRIDE;
 
-        virtual void LoadFinished(sal_Bool _bWasSynch) SAL_OVERRIDE;
+        virtual void LoadFinished(bool _bWasSynch) SAL_OVERRIDE;
 
         virtual void criticalFail() SAL_OVERRIDE;
 

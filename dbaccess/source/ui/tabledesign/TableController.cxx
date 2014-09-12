@@ -1396,7 +1396,7 @@ void OTableController::assignTable()
                     setEditable( xMeta.is() && !xMeta->isReadOnly() && (isAlterAllowed() || isDropAllowed() || isAddAllowed()) );
                     if(!isEditable())
                     {
-                        sal_Bool t( sal_True );
+                        bool t( true );
                         ::std::for_each(m_vRowList.begin(),m_vRowList.end(),boost::bind( &OTableRow::SetReadOnly, _1, boost::cref( t )));
                     }
                     m_bNew = false;

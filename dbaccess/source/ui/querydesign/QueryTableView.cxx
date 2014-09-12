@@ -683,11 +683,11 @@ void OQueryTableView::createNewConnection()
     }
 }
 
-bool OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool /*_bDelete*/ )
+bool OQueryTableView::RemoveConnection( OTableConnection* _pConnection,bool /*_bDelete*/ )
 {
 
     // we don't want that our connection will be deleted, we put it in the undo manager
-    bool bRet = OJoinTableView::RemoveConnection( _pConnection,sal_False);
+    bool bRet = OJoinTableView::RemoveConnection( _pConnection,false);
 
     // add undo action
     addUndoAction(  this,
@@ -802,7 +802,7 @@ void OQueryTableView::DropConnection(OQueryTableConnection* pConn)
 {
     // Pay attention to the selection
     // remove from me and the document
-    RemoveConnection( pConn ,sal_False);
+    RemoveConnection( pConn ,false);
 }
 
 void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction )
@@ -852,7 +852,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
             // call base class because we append an undo action
             // but this time we are in a undo action list
-            OJoinTableView::RemoveConnection(pTmpEntry,sal_False);
+            OJoinTableView::RemoveConnection(pTmpEntry,false);
             aIter2 = rTabConList.begin();
             ++nCnt;
         }

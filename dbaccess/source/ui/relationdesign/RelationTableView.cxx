@@ -228,7 +228,7 @@ void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
 
         case RET_NO:
             // tried at least one update, but did not succeed -> the original connection is lost
-            RemoveConnection( pConnection ,sal_True);
+            RemoveConnection( pConnection ,true);
             break;
 
         case RET_CANCEL:
@@ -255,13 +255,13 @@ void ORelationTableView::AddNewRelation()
     }
 }
 
-bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,sal_Bool /*_bDelete*/)
+bool ORelationTableView::RemoveConnection( OTableConnection* pConn ,bool /*_bDelete*/)
 {
     ORelationTableConnectionData* pTabConnData = (ORelationTableConnectionData*)pConn->GetData().get();
     try
     {
         if ( m_bInRemove || pTabConnData->DropRelation())
-            return OJoinTableView::RemoveConnection( pConn ,sal_True);
+            return OJoinTableView::RemoveConnection( pConn ,true);
     }
     catch(SQLException& e)
     {

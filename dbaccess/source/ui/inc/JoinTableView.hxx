@@ -150,7 +150,7 @@ namespace dbaui
 
             @return an iterator to next valid connection, so it can be used in any loop
         */
-        virtual bool RemoveConnection(OTableConnection* _pConnection,sal_Bool _bDelete);
+        virtual bool RemoveConnection(OTableConnection* _pConnection,bool _bDelete);
 
         /** allows to add new connections to join table view
 

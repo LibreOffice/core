@@ -221,7 +221,7 @@ TTableConnectionData::value_type ORelationDialog::getConnectionData() const
     return m_pConnData;
 }
 
-void ORelationDialog::setValid(sal_Bool _bValid)
+void ORelationDialog::setValid(bool _bValid)
 {
     m_pPB_OK->Enable(_bValid);
 }

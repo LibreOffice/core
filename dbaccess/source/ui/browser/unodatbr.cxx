@@ -1621,7 +1621,7 @@ void SbaTableQueryBrowser::criticalFail()
     unloadAndCleanup( false );
 }
 
-void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
+void SbaTableQueryBrowser::LoadFinished(bool _bWasSynch)
 {
     SbaXDataBrowserController::LoadFinished(_bWasSynch);
 
@@ -2421,7 +2421,7 @@ bool SbaTableQueryBrowser::implLoadAnything(const OUString& _rDataSourceName, co
             if ( m_bPreview )
                 initializePreviewMode();
 
-            LoadFinished(sal_True);
+            LoadFinished(true);
         }
 
         InvalidateAll();
@@ -3703,7 +3703,7 @@ bool SbaTableQueryBrowser::preReloadForm()
 void SbaTableQueryBrowser::postReloadForm()
 {
     InitializeGridModel(getFormComponent());
-    LoadFinished(sal_True);
+    LoadFinished(true);
 }
 
 Reference< XEmbeddedScripts > SAL_CALL SbaTableQueryBrowser::getScriptContainer() throw (RuntimeException, std::exception)

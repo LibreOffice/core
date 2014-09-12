@@ -573,17 +573,17 @@ bool SAL_CALL OCacheSet::previous(  ) throw(SQLException, RuntimeException)
     return m_xDriverSet->previous();
 }
 
-bool OCacheSet::last_checked( sal_Bool /*i_bFetchRow*/)
+bool OCacheSet::last_checked( bool /*i_bFetchRow*/)
 {
     return last();
 }
 
-bool OCacheSet::previous_checked( sal_Bool /*i_bFetchRow*/ )
+bool OCacheSet::previous_checked( bool /*i_bFetchRow*/ )
 {
     return previous();
 }
 
-bool OCacheSet::absolute_checked( sal_Int32 row,sal_Bool /*i_bFetchRow*/ )
+bool OCacheSet::absolute_checked( sal_Int32 row,bool /*i_bFetchRow*/ )
 {
     return absolute(row);
 }

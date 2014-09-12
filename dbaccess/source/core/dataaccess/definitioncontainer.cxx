@@ -381,10 +381,10 @@ Any SAL_CALL ODefinitionContainer::getByName( const OUString& _rName ) throw(NoS
 {
     MutexGuard aGuard(m_aMutex);
 
-    return makeAny( implGetByName( _rName, sal_True ) );
+    return makeAny( implGetByName( _rName, true ) );
 }
 
-Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName, sal_Bool _bReadIfNecessary) throw (NoSuchElementException)
+Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName, bool _bReadIfNecessary) throw (NoSuchElementException)
 {
     Documents::iterator aMapPos = m_aDocumentMap.find(_rName);
     if (aMapPos == m_aDocumentMap.end())

@@ -228,9 +228,9 @@ namespace dbaccess
         virtual void SAL_CALL moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
 
-        virtual bool previous_checked( sal_Bool i_bFetchRow ) SAL_OVERRIDE;
-        virtual bool absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow ) SAL_OVERRIDE;
-        virtual bool last_checked( sal_Bool i_bFetchRow) SAL_OVERRIDE;
+        virtual bool previous_checked( bool i_bFetchRow ) SAL_OVERRIDE;
+        virtual bool absolute_checked( sal_Int32 row,bool i_bFetchRow ) SAL_OVERRIDE;
+        virtual bool last_checked( bool i_bFetchRow) SAL_OVERRIDE;
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_KEYSET_HXX

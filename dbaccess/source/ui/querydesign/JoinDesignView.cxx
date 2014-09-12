@@ -91,7 +91,7 @@ void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
 
-void OJoinDesignView::setReadOnly(sal_Bool /*_bReadOnly*/)
+void OJoinDesignView::setReadOnly(bool /*_bReadOnly*/)
 {
 }
 

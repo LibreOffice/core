@@ -2127,7 +2127,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             break;
 
         case ID_BROWSER_SAVERECORD:
-            if ( SaveModified( sal_False ) )
+            if ( SaveModified( false ) )
                 setCurrentModified( false );
             break;
 
@@ -2166,7 +2166,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
     }
 }
 
-bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
+bool SbaXDataBrowserController::SaveModified(bool bAskFor)
 {
     if ( bAskFor && GetState(ID_BROWSER_SAVERECORD).bEnabled )
     {
@@ -2463,7 +2463,7 @@ void SbaXDataBrowserController::criticalFail()
     m_nRowSetPrivileges = 0;
 }
 
-void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
+void SbaXDataBrowserController::LoadFinished(bool /*bWasSynch*/)
 {
     m_nRowSetPrivileges = 0;
 

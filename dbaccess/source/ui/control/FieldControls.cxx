@@ -48,7 +48,7 @@ OPropColumnEditCtrl::OPropColumnEditCtrl(Window* pParent,
 }
 
 void
-OPropColumnEditCtrl::SetSpecialReadOnly(sal_Bool _bReadOnly)
+OPropColumnEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
 {
     SetReadOnly(_bReadOnly);
     lcl_setSpecialReadOnly(_bReadOnly,this);
@@ -64,14 +64,14 @@ OPropEditCtrl::OPropEditCtrl(Window* pParent, sal_uInt16 nHelpId, short nPositio
 }
 
 void
-OPropEditCtrl::SetSpecialReadOnly(sal_Bool _bReadOnly)
+OPropEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
 {
     SetReadOnly(_bReadOnly);
     lcl_setSpecialReadOnly(_bReadOnly,this);
 }
 
 void
-OPropNumericEditCtrl::SetSpecialReadOnly(sal_Bool _bReadOnly)
+OPropNumericEditCtrl::SetSpecialReadOnly(bool _bReadOnly)
 {
     SetReadOnly(_bReadOnly);
     lcl_setSpecialReadOnly(_bReadOnly,this);
@@ -93,7 +93,7 @@ OPropListBoxCtrl::OPropListBoxCtrl(Window* pParent, sal_uInt16 nHelpId, short nP
 }
 
 void
-OPropListBoxCtrl::SetSpecialReadOnly(sal_Bool _bReadOnly)
+OPropListBoxCtrl::SetSpecialReadOnly(bool _bReadOnly)
 {
     SetReadOnly(_bReadOnly);
     lcl_setSpecialReadOnly(_bReadOnly,this);

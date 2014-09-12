@@ -75,7 +75,7 @@ namespace dbaui
         /// base class overwritten: create and delete Connections
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) SAL_OVERRIDE;
 
-        virtual bool RemoveConnection( OTableConnection* _pConn ,sal_Bool _bDelete) SAL_OVERRIDE;
+        virtual bool RemoveConnection( OTableConnection* _pConn ,bool _bDelete) SAL_OVERRIDE;
 
         // transfer of connections from and to UndoAction
 

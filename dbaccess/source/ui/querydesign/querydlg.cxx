@@ -276,7 +276,7 @@ TTableConnectionData::value_type DlgQryJoin::getConnectionData() const
     return m_pConnData;
 }
 
-void DlgQryJoin::setValid(sal_Bool _bValid)
+void DlgQryJoin::setValid(bool _bValid)
 {
     m_pPB_OK->Enable(_bValid || eJoinType == CROSS_JOIN );
 }

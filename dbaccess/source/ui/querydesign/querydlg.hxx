@@ -79,7 +79,7 @@ namespace dbaui
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update
         */
-        virtual void setValid(sal_Bool _bValid) SAL_OVERRIDE;
+        virtual void setValid(bool _bValid) SAL_OVERRIDE;
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() SAL_OVERRIDE { return m_xConnection; }
 

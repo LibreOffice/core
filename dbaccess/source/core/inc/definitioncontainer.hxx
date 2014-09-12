@@ -232,7 +232,7 @@ protected:
         @see    createObject
     */
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent >
-                implGetByName(const OUString& _rName, sal_Bool _bCreateIfNecessary) throw (::com::sun::star::container::NoSuchElementException);
+                implGetByName(const OUString& _rName, bool _bCreateIfNecessary) throw (::com::sun::star::container::NoSuchElementException);
 
     /** quickly checks if there already is an element with a given name. No access to the configuration occurs, i.e.
         if there is such an object which is not already loaded, it won't be loaded now.

@@ -2625,7 +2625,7 @@ void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
 
-void OQueryDesignView::setReadOnly(sal_Bool _bReadOnly)
+void OQueryDesignView::setReadOnly(bool _bReadOnly)
 {
     m_pSelectionBox->SetReadOnly(_bReadOnly);
 }

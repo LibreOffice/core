@@ -57,7 +57,7 @@ namespace dbaui
 
         virtual void RemoveTabWin( OTableWindow* pTabWin ) SAL_OVERRIDE;
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest) SAL_OVERRIDE;
-        virtual bool RemoveConnection(OTableConnection* pConn,sal_Bool _bDelete) SAL_OVERRIDE;
+        virtual bool RemoveConnection(OTableConnection* pConn,bool _bDelete) SAL_OVERRIDE;
 
         virtual void ReSync() SAL_OVERRIDE;
 

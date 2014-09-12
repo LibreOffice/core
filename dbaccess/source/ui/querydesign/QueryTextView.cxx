@@ -79,7 +79,7 @@ OUString OQueryTextView::getStatement()
     return m_pEdit->GetText();
 }
 
-void OQueryTextView::setReadOnly(sal_Bool _bReadOnly)
+void OQueryTextView::setReadOnly(bool _bReadOnly)
 {
     m_pEdit->SetReadOnly(_bReadOnly);
 }

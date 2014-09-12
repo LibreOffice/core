@@ -278,7 +278,7 @@ namespace dbaui
             // the default implementation also calls LoadFinished after a syncronous load, so be sure to do the same if you override
             // this metod and don't call the base class' method
 
-        virtual void LoadFinished(sal_Bool bWasSynch);
+        virtual void LoadFinished(bool bWasSynch);
             // called if the loading (the _complete_ loading process) is done (no matter if synchron or asynchron).
 
         virtual void criticalFail();
@@ -290,7 +290,7 @@ namespace dbaui
             // empty the frame where our view resides
         virtual bool CommitCurrent();
             // commit the current column (i.e. cell)
-        virtual bool SaveModified(sal_Bool bAskFor = sal_True);
+        virtual bool SaveModified(bool bAskFor = true);
             // save the modified record
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   getBoundField(sal_uInt16 nViewPos = (sal_uInt16)-1) const;

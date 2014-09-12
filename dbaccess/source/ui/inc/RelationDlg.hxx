@@ -79,7 +79,7 @@ namespace dbaui
         /** setValid set the valid inside, can be used for OK buttons
             @param  _bValid true when the using control allows an update
         */
-        virtual void setValid(sal_Bool _bValid) SAL_OVERRIDE;
+        virtual void setValid(bool _bValid) SAL_OVERRIDE;
 
         /** notifyConnectionChange is callback which is called when the table selection has changed and a new connection exists
             @param  _pConnectionData    the connection which exists between the new tables

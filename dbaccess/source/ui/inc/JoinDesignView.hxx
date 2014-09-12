@@ -44,7 +44,7 @@ namespace dbaui
         virtual ~OJoinDesignView();
 
         // set the view readonly or not
-        virtual void setReadOnly(sal_Bool _bReadOnly);
+        virtual void setReadOnly(bool _bReadOnly);
         // set the statement for representation
         /// late construction
         virtual void Construct() SAL_OVERRIDE;

@@ -374,7 +374,7 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
         }
 #endif
 
-        LoadFinished(sal_True);
+        LoadFinished(true);
 
         Reference< XResultSetUpdate >  xUpdate(xMaster, UNO_QUERY);
         try

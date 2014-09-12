@@ -656,7 +656,7 @@ OUString SAL_CALL ODocumentContainer::composeHierarchicalName( const OUString& i
     ::rtl::Reference<OContentHelper> pContent = NULL;
     try
     {
-        Reference<XUnoTunnel> xUnoTunnel(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, sal_True ), UNO_QUERY );
+        Reference<XUnoTunnel> xUnoTunnel(const_cast<ODocumentContainer*>(this)->implGetByName( _sName, true ), UNO_QUERY );
         if ( xUnoTunnel.is() )
             pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
     }
@@ -721,7 +721,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName ) throw(N
     if (!checkExistence(_rName))
         throw NoSuchElementException(_rName,*this);
 
-    Reference< XCommandProcessor > xContent( implGetByName( _rName, sal_True ), UNO_QUERY );
+    Reference< XCommandProcessor > xContent( implGetByName( _rName, true ), UNO_QUERY );
     if ( xContent.is() )
     {
         Command aCommand;
