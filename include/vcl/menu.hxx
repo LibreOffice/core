@@ -290,7 +290,7 @@ public:
 
     bool            IsItemPosVisible( sal_uInt16 nItemPos ) const;
     bool            IsMenuVisible() const;
-    virtual bool        IsMenuBar() const { return false; }
+    virtual bool        IsMenuBar() const = 0;
 
     void                RemoveDisabledEntries( bool bCheckPopups = true, bool bRemoveEmptyPopups = false );
     bool            HasValidEntries( bool bCheckPopups = true );
@@ -501,6 +501,8 @@ public:
                         PopupMenu( const PopupMenu& rMenu );
     explicit            PopupMenu( const ResId& );
     virtual             ~PopupMenu();
+
+    virtual bool        IsMenuBar() const SAL_OVERRIDE { return false; }
 
     void                SetText( const OUString& rTitle )  { aTitleText = rTitle; }
     const OUString&     GetText() const                     { return aTitleText; }
