@@ -3627,5 +3627,45 @@ String RID_AGENDAWIZARDDIALOG_START +86
 {
     Text [en-US ] = "Deadline:";
 };
+String RID_AGENDAWIZARDDIALOG_START +87
+{
+    Text [en-US ] = "Blue";
+};
+String RID_AGENDAWIZARDDIALOG_START +88
+{
+    Text [en-US ] = "Classic";
+};
+String RID_AGENDAWIZARDDIALOG_START +89
+{
+    Text [en-US ] = "Colorful";
+};
+String RID_AGENDAWIZARDDIALOG_START +90
+{
+    Text [en-US ] = "Elegant";
+};
+String RID_AGENDAWIZARDDIALOG_START +91
+{
+    Text [en-US ] = "Green";
+};
+String RID_AGENDAWIZARDDIALOG_START +92
+{
+    Text [en-US ] = "Grey";
+};
+String RID_AGENDAWIZARDDIALOG_START +93
+{
+    Text [en-US ] = "Modern";
+};
+String RID_AGENDAWIZARDDIALOG_START +94
+{
+    Text [en-US ] = "Orange";
+};
+String RID_AGENDAWIZARDDIALOG_START +95
+{
+    Text [en-US ] = "Red";
+};
+String RID_AGENDAWIZARDDIALOG_START +96
+{
+    Text [en-US ] = "Simple";
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

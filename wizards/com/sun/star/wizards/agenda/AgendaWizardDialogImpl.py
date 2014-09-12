@@ -205,6 +205,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             sAgendaPath = self.sTemplatePath + "/wizard/agenda"
             self.agendaTemplates = FileAccess.getFolderTitles(
                 self.xMSF, "aw", sAgendaPath)
+            self.PageDesign = FileAccess.getFolderTitles(
+                    self.xMSF, "pd", sAgendaPath, self.resources.dictPageDesign)
             return True
         except NoValidPathException:
             traceback.print_exc()
