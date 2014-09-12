@@ -656,7 +656,7 @@ endef
 
 # gb_HelpTarget__add_file target file
 define gb_HelpTarget__add_file
-$(call gb_Package_add_file,$(call gb_HelpTarget_get_packagename,$(1)),help/$(call gb_HelpTarget__get_lang,$(1))/$(2),$(2))
+$(call gb_Package_add_file,$(call gb_HelpTarget_get_packagename,$(1)),$(LIBO_SHARE_HELP_FOLDER)/$(call gb_HelpTarget__get_lang,$(1))/$(2),$(2))
 
 endef
 
