@@ -1254,7 +1254,7 @@ void SdXMLCustomShapePropertyMerge( std::vector< com::sun::star::beans::Property
     }
 }
 
-typedef boost::unordered_map< OUString, sal_Int32, OUStringHash, OUStringEqFunc> EquationHashMap;
+typedef boost::unordered_map< OUString, sal_Int32, OUStringHash > EquationHashMap;
 
 /* if rPara.Type is from type EnhancedCustomShapeParameterType::EQUATION, the name of the equation
    will be converted from OUString to index */

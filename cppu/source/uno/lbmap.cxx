@@ -50,6 +50,7 @@ using namespace com::sun::star::uno;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringToOString;
+using ::rtl::OUStringHash;
 using ::rtl::OString;
 
 namespace cppu
@@ -120,12 +121,6 @@ struct MappingEntry
         {}
 };
 
-struct FctOUStringHash : public std::unary_function< const OUString &, size_t >
-{
-    size_t operator()( const OUString & rKey ) const
-        { return (size_t)rKey.hashCode(); }
-};
-
 struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 {
     size_t operator()( uno_Mapping * pKey ) const
@@ -133,7 +128,7 @@ struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 };
 
 typedef boost::unordered_map<
-    OUString, MappingEntry *, FctOUStringHash, equal_to< OUString > > t_OUString2Entry;
+    OUString, MappingEntry *, OUStringHash > t_OUString2Entry;
 typedef boost::unordered_map<
     uno_Mapping *, MappingEntry *, FctPtrHash, equal_to< uno_Mapping * > > t_Mapping2Entry;
 

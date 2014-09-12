@@ -62,20 +62,8 @@ namespace helpdatafileproxy {
             { return m_pBuffer; }
     };
 
-    struct eq
-    {
-        bool operator()( const OString& rKey1, const OString& rKey2 ) const
-        { return (rKey1 == rKey2); }
-    };
-
-    struct ha
-    {
-        size_t operator()( const OString& rName ) const
-            { return rName.hashCode(); }
-    };
-
-    typedef boost::unordered_map< OString,std::pair<int,int>,ha,eq >   StringToValPosMap;
-    typedef boost::unordered_map< OString,OString,ha,eq >     StringToDataMap;
+    typedef boost::unordered_map< OString,std::pair<int,int>,OStringHash >   StringToValPosMap;
+    typedef boost::unordered_map< OString,OString,OStringHash >     StringToDataMap;
 
     class Hdf : hdf_internal::Noncopyable
     {

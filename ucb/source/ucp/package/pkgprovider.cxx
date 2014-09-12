@@ -91,29 +91,11 @@ public:
 
 
 
-struct equalString
-{
-    bool operator()(
-        const OUString& rKey1, const OUString& rKey2 ) const
-    {
-        return !!( rKey1 == rKey2 );
-    }
-};
-
-struct hashString
-{
-    size_t operator()( const OUString & rName ) const
-    {
-        return rName.hashCode();
-    }
-};
-
 typedef boost::unordered_map
 <
     OUString,
     Package*,
-    hashString,
-    equalString
+    OUStringHash
 >
 PackageMap;
 

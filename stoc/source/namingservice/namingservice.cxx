@@ -61,24 +61,11 @@ static OUString ns_getImplementationName()
     return OUString(IMPLNAME);
 }
 
-struct equalOWString_Impl
-{
-  bool operator()(const OUString & s1, const OUString & s2) const
-        { return s1 == s2; }
-};
-
-struct hashOWString_Impl
-{
-    size_t operator()(const OUString & rName) const
-        { return rName.hashCode(); }
-};
-
 typedef boost::unordered_map
 <
     OUString,
     Reference<XInterface >,
-    hashOWString_Impl,
-    equalOWString_Impl
+    OUStringHash
 > HashMap_OWString_Interface;
 
 

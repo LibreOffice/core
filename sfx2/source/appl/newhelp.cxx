@@ -553,24 +553,7 @@ IndexTabPage_Impl::~IndexTabPage_Impl()
 
 namespace sfx2 {
 
-    struct equalOUString
-    {
-        bool operator()( const OUString& rKey1, const OUString& rKey2 ) const
-        {
-            return !!( rKey1 == rKey2 );
-        }
-    };
-
-
-    struct hashOUString
-    {
-        size_t operator()( const OUString& rName ) const
-        {
-            return rName.hashCode();
-        }
-    };
-
-    typedef ::boost::unordered_map< OUString, int, hashOUString, equalOUString > KeywordInfo;
+    typedef ::boost::unordered_map< OUString, int, OUStringHash > KeywordInfo;
 }
 
 #define NEW_ENTRY( url, bool ) \

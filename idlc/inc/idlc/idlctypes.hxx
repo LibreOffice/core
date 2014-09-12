@@ -30,22 +30,6 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
-struct EqualString
-{
-    bool operator()(const OString& str1, const OString& str2) const
-    {
-        return (str1 == str2);
-    }
-};
-
-struct HashString
-{
-    sal_Int32 operator()(const OString& str) const
-    {
-        return str.hashCode();
-    }
-};
-
 struct LessString
 {
     bool operator()(const OString& str1, const OString& str2) const
@@ -60,7 +44,7 @@ typedef ::std::set< OString, LessString >    StringSet;
 
 class AstDeclaration;
 
-typedef ::boost::unordered_map< OString, AstDeclaration*, HashString, EqualString > DeclMap;
+typedef ::boost::unordered_map< OString, AstDeclaration*, OStringHash > DeclMap;
 typedef ::std::list< AstDeclaration* > DeclList;
 
 class AstScope;

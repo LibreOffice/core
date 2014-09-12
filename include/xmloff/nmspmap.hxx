@@ -50,14 +50,6 @@ public:
     sal_uInt16          nKey;
 };
 
-struct OUStringEqFunc
-{
-    bool operator()( const OUString &r1, const OUString &r2) const
-    {
-        return r1 == r2;
-    }
-};
-
 struct uInt32lt
 {
     bool operator()( const sal_uInt32 &r1, const sal_uInt32 &r2) const
@@ -76,7 +68,7 @@ struct QNamePairHash
 };
 
 typedef ::boost::unordered_map < QNamePair, OUString, QNamePairHash > QNameCache;
-typedef ::boost::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry >, OUStringHash, OUStringEqFunc > NameSpaceHash;
+typedef ::boost::unordered_map < OUString, ::rtl::Reference <NameSpaceEntry >, OUStringHash > NameSpaceHash;
 typedef ::std::map < sal_uInt16, ::rtl::Reference < NameSpaceEntry >, uInt32lt > NameSpaceMap;
 
 class XMLOFF_DLLPUBLIC SvXMLNamespaceMap
