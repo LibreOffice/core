@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_f12568ae",
+        "filename": "sw/source/uibase/inc/dbui.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-09-12T20:41:58Z",
+      "side": 1,
+      "message": "hmm... wouldn\u0027t this be auto-generated anyway?",
+      "revId": "7dd46a0a04fcd9e1c6e586f60cb42fc2a6d8a131",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
