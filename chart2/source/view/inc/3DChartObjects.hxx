@@ -37,7 +37,7 @@ struct TextCacheItem
 class TextCache
 {
 public:
-    const TextCacheItem &getText(OUString const & rText);
+    const TextCacheItem &getText(OUString const & rText, bool bIs3dText = false);
 private:
     typedef boost::ptr_map<OUString const, TextCacheItem> TextCacheType;
 
@@ -108,8 +108,8 @@ private:
 class ScreenText : public Renderable3DObject
 {
 public:
-    ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache, const OUString& rStr,
-            const glm::vec4& rColor, sal_uInt32 nId);
+    ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache,
+        const OUString& rStr, glm::vec4 rColor, sal_uInt32 nId, bool bIs3dText = false);
 
     virtual void render() SAL_OVERRIDE;
     void setPosition(const glm::vec2& rTopLeft, const glm::vec2& rBottomRight,

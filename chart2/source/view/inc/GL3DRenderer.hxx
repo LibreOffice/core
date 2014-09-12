@@ -282,6 +282,7 @@ private:
     void SetHighLightBar(BatchBarInfo &barInfo);
     void DisableHighLightBar(BatchBarInfo &barInfo);
     void CalcScrollMoveMatrix(bool bNewScene);
+    glm::mat4 GetDiffOfTwoCameras(glm::vec3& rBeginPos, glm::vec3& rEndPos, glm::vec3& rBeginDirection, glm::vec3& rEndDirection);
 private:
 
     struct ShaderResources

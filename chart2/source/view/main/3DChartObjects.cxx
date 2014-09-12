@@ -70,14 +70,18 @@ void Line::setLineColor(const Color& rColor)
     maLineColor = rColor;
 }
 
-const TextCacheItem& TextCache::getText(OUString const & rText)
+const TextCacheItem& TextCache::getText(OUString const & rText, bool bIs3dText)
 {
     TextCacheType::const_iterator itr = maTextCache.find(rText);
     if(itr != maTextCache.end())
         return *itr->second;
 
     VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
-    Font aFont = aDevice.GetFont();
+    Font aFont;
+    if(bIs3dText)
+        aFont = Font("postoffice Bold",Size(0,0));
+    else
+        aFont = aDevice.GetFont();
     aFont.SetSize(Size(0, 96));
     static bool bOldRender = getenv("OLDRENDER");
     if (bOldRender)
@@ -128,10 +132,10 @@ void Text::setPosition(const glm::vec3& rTopLeft, const glm::vec3& rTopRight, co
     maBottomRight = rBottomRight;
 }
 
-ScreenText::ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache,
-        const OUString& rStr, const glm::vec4& rColor, sal_uInt32 nId):
+ScreenText::ScreenTextScreenText::ScreenText(OpenGL3DRenderer* pRenderer, TextCache& rTextCache,
+        const OUString& rStr, glm::vec4 rColor, sal_uInt32 nId, bool bIs3dText):
     Renderable3DObject(pRenderer, nId),
-    maText(rTextCache.getText(rStr)),
+    maText(rTextCache.getText(rStr,bIs3dText)),
     maColor(rColor)
 {
 }
