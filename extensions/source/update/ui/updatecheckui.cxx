@@ -111,7 +111,7 @@ public:
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;
     void            Resize() SAL_OVERRIDE;
-    void            Show( sal_Bool bVisible = sal_True, sal_uInt16 nFlags = SHOW_NOACTIVATE );
+    void            Show( bool bVisible = true, sal_uInt16 nFlags = SHOW_NOACTIVATE );
     void            SetTipPosPixel( const Point& rTipPos ) { maTipPos = rTipPos; }
     void            SetTitleAndText( const OUString& rTitle, const OUString& rText,
                                      const Image& rImage );
@@ -357,7 +357,7 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
         mpBubbleWin = GetBubbleWindow();
         if ( mpBubbleWin )
         {
-            mpBubbleWin->Show( sal_True );
+            mpBubbleWin->Show( true );
             maTimeoutTimer.Start();
         }
         mbShowBubble = false;
@@ -426,7 +426,7 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
         if ( mbShowBubble )
             Application::PostUserEvent( LINK( this, UpdateCheckUI, UserEventHdl ) );
         else if ( mpBubbleWin )
-            mpBubbleWin->Show( sal_False );
+            mpBubbleWin->Show( false );
     }
     else if( rPropertyName == PROPERTY_CLICK_HDL ) {
         uno::Reference< task::XJob > aJob;
@@ -452,7 +452,7 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
         throw beans::UnknownPropertyException();
 
     if ( mbBubbleChanged && mpBubbleWin )
-        mpBubbleWin->Show( sal_False );
+        mpBubbleWin->Show( false );
 }
 
 
@@ -586,7 +586,7 @@ IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl)
 
     maWaitTimer.Stop();
     if ( mpBubbleWin )
-        mpBubbleWin->Show( sal_False );
+        mpBubbleWin->Show( false );
 
     if ( mrJob.is() )
     {
@@ -864,11 +864,11 @@ void BubbleWindow::Paint( const Rectangle& )
 
 void BubbleWindow::MouseButtonDown( const MouseEvent& )
 {
-    Show( sal_False );
+    Show( false );
 }
 
 
-void BubbleWindow::Show( sal_Bool bVisible, sal_uInt16 nFlags )
+void BubbleWindow::Show( bool bVisible, sal_uInt16 nFlags )
 {
     SolarMutexGuard aGuard;
 
@@ -920,7 +920,7 @@ void BubbleWindow::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 void BubbleWindow::RecalcTextRects()
 {
     Size aTotalSize;
-    sal_Bool bFinished = sal_False;
+    bool bFinished = false;
     Font aOldFont = GetFont();
     Font aBoldFont = aOldFont;
 
@@ -952,7 +952,7 @@ void BubbleWindow::RecalcTextRects()
             maMaxTextSize.Height() = maMaxTextSize.Height() * 3 / 2;
         }
         else
-            bFinished = sal_True;
+            bFinished = true;
     }
     maTitleRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT );
     maTextRect.Move( 2*BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT + maTitleRect.GetHeight() + aBoldFont.GetHeight() * 3 / 4 );

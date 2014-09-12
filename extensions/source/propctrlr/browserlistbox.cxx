@@ -882,7 +882,7 @@ namespace pcr
     }
 
 
-    void OBrowserListBox::buttonClicked( OBrowserLine* _pLine, sal_Bool _bPrimary )
+    void OBrowserListBox::buttonClicked( OBrowserLine* _pLine, bool _bPrimary )
     {
         DBG_ASSERT( _pLine, "OBrowserListBox::buttonClicked: invalid browser line!" );
         if ( _pLine && m_pLineListener )

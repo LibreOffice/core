@@ -201,7 +201,7 @@ namespace pcr
         /// sets a new SQL command
         virtual void     setSQLCommand( const OUString& _rCommand ) const = 0;
         /// sets a new EscapeProcessing property value
-        virtual void     setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const = 0;
+        virtual void     setEscapeProcessing( const bool _bEscapeProcessing ) const = 0;
 
         virtual ~ISQLCommandAdapter();
     };

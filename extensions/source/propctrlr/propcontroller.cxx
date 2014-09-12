@@ -1309,7 +1309,7 @@ namespace pcr
     }
 
 
-    void OPropertyBrowserController::Clicked( const OUString& _rName, sal_Bool _bPrimary )
+    void OPropertyBrowserController::Clicked( const OUString& _rName, bool _bPrimary )
     {
         try
         {
@@ -1353,7 +1353,7 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL OPropertyBrowserController::hasPropertyByName( const OUString& _rName ) throw (RuntimeException)
+    bool SAL_CALL OPropertyBrowserController::hasPropertyByName( const OUString& _rName ) throw (RuntimeException)
     {
         for (   OrderedPropertyMap::const_iterator search = m_aProperties.begin();
                 search != m_aProperties.end();

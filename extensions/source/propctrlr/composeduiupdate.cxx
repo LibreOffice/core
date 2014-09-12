@@ -518,7 +518,7 @@ namespace pcr
         class IStringKeyBooleanUIUpdate
         {
         public:
-            virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const = 0;
+            virtual void updateUIForKey( const OUString& _rKey, bool _bFlag ) const = 0;
 
             virtual ~IStringKeyBooleanUIUpdate() { }
         };
@@ -544,11 +544,11 @@ namespace pcr
             {
             }
             // IStringKeyBooleanUIUpdate
-            virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const SAL_OVERRIDE;
+            virtual void updateUIForKey( const OUString& _rKey, bool _bFlag ) const SAL_OVERRIDE;
         };
 
 
-        void EnablePropertyUIElement::updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const
+        void EnablePropertyUIElement::updateUIForKey( const OUString& _rKey, bool _bFlag ) const
         {
             m_xUIUpdate->enablePropertyUIElements( _rKey, m_nElement, _bFlag );
         }
@@ -575,7 +575,7 @@ namespace pcr
         public:
             DefaultStringKeyBooleanUIUpdate( const Reference< XObjectInspectorUI >& _rxUIUpdate, FPropertyUIFlagSetter _pSetter );
             // IStringKeyBooleanUIUpdate
-            virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const SAL_OVERRIDE;
+            virtual void updateUIForKey( const OUString& _rKey, bool _bFlag ) const SAL_OVERRIDE;
         };
 
 
@@ -586,7 +586,7 @@ namespace pcr
         }
 
 
-        void DefaultStringKeyBooleanUIUpdate::updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const
+        void DefaultStringKeyBooleanUIUpdate::updateUIForKey( const OUString& _rKey, bool _bFlag ) const
         {
             ((m_xUIUpdate.get())->*m_pSetter)( _rKey, _bFlag );
         }

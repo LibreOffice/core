@@ -198,7 +198,7 @@ namespace pcr
 
     protected:
         // IPropertyLineListener
-        virtual void    Clicked(    const OUString& _rName, sal_Bool _bPrimary ) SAL_OVERRIDE;
+        virtual void    Clicked(    const OUString& _rName, bool _bPrimary ) SAL_OVERRIDE;
         virtual void    Commit(     const OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) SAL_OVERRIDE;
 
         // IPropertyControlObserver
@@ -206,7 +206,7 @@ namespace pcr
         virtual void    valueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control ) SAL_OVERRIDE;
 
         // IPropertyExistenceCheck
-        virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual bool SAL_CALL hasPropertyByName( const OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
         // XObjectInspectorUI
         virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

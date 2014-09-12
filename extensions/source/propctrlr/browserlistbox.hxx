@@ -171,7 +171,7 @@ namespace pcr
         virtual void SAL_CALL activateNextControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& CurrentControl ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
         // IButtonClickListener
-        void    buttonClicked( OBrowserLine* _pLine, sal_Bool _bPrimary ) SAL_OVERRIDE;
+        void    buttonClicked( OBrowserLine* _pLine, bool _bPrimary ) SAL_OVERRIDE;
 
         using Window::SetHelpText;
     private:

@@ -2989,7 +2989,7 @@ namespace pcr
             virtual OUString        getSQLCommand() const SAL_OVERRIDE;
             virtual bool            getEscapeProcessing() const SAL_OVERRIDE;
             virtual void            setSQLCommand( const OUString& _rCommand ) const SAL_OVERRIDE;
-            virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const SAL_OVERRIDE;
+            virtual void            setEscapeProcessing( const bool _bEscapeProcessing ) const SAL_OVERRIDE;
 
             // ISQLCommandPropertyUI
             virtual OUString*    getPropertiesToDisable() SAL_OVERRIDE;
@@ -3027,7 +3027,7 @@ namespace pcr
         }
 
 
-        void FormSQLCommandUI::setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const
+        void FormSQLCommandUI::setEscapeProcessing( const bool _bEscapeProcessing ) const
         {
             m_xObject->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( _bEscapeProcessing ) );
         }
@@ -3056,7 +3056,7 @@ namespace pcr
             virtual OUString        getSQLCommand() const SAL_OVERRIDE;
             virtual bool            getEscapeProcessing() const SAL_OVERRIDE;
             virtual void            setSQLCommand( const OUString& _rCommand ) const SAL_OVERRIDE;
-            virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const SAL_OVERRIDE;
+            virtual void            setEscapeProcessing( const bool _bEscapeProcessing ) const SAL_OVERRIDE;
 
             // ISQLCommandPropertyUI
             virtual OUString*    getPropertiesToDisable() SAL_OVERRIDE;
@@ -3120,7 +3120,7 @@ namespace pcr
         }
 
 
-        void ValueListCommandUI::setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const
+        void ValueListCommandUI::setEscapeProcessing( const bool _bEscapeProcessing ) const
         {
             m_xObject->setPropertyValue( PROPERTY_LISTSOURCETYPE, makeAny(
                 _bEscapeProcessing ? ListSourceType_SQL : ListSourceType_SQLPASSTHROUGH ) );

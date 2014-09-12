@@ -493,7 +493,7 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL PropertyComposer::hasPropertyByName( const OUString& _rName ) throw (RuntimeException)
+    bool SAL_CALL PropertyComposer::hasPropertyByName( const OUString& _rName ) throw (RuntimeException)
     {
         return impl_isSupportedProperty_nothrow( _rName );
     }
