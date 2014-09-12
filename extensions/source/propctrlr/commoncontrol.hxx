@@ -194,15 +194,15 @@ namespace pcr
         inline CommonBehaviourControl( sal_Int16 _nControlType, Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers = true );
 
         // XPropertyControl - delegated to ->m_aImplControl
-        inline ::sal_Int16 SAL_CALL getControlType() throw (::com::sun::star::uno::RuntimeException);
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (::com::sun::star::uno::RuntimeException);
-        inline void SAL_CALL setControlContext( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >& _controlcontext ) throw (::com::sun::star::uno::RuntimeException);
-        inline ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getControlWindow() throw (::com::sun::star::uno::RuntimeException);
-        inline sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException);
-        inline void SAL_CALL notifyModifiedValue(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int16 SAL_CALL getControlType() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL setControlContext( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlContext >& _controlcontext ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > SAL_CALL getControlWindow() throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual sal_Bool SAL_CALL isModified(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
+        virtual void SAL_CALL notifyModifiedValue(  ) throw (::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
         // XComponent
-        inline virtual void SAL_CALL disposing();
+        virtual void SAL_CALL disposing() SAL_OVERRIDE;
 
         // IModifyListener
         virtual void modified() SAL_OVERRIDE
