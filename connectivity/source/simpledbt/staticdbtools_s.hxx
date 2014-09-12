@@ -75,7 +75,7 @@ namespace connectivity
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> connectRowset(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& _rxRowSet,
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext,
-            sal_Bool _bSetAsActiveConnection
+            bool _bSetAsActiveConnection
         ) const SAL_OVERRIDE;
 
 
@@ -86,7 +86,7 @@ namespace connectivity
 
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier> getNumberFormats(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
-            sal_Bool _bAllowDefault
+            bool _bAllowDefault
         ) const SAL_OVERRIDE;
 
 

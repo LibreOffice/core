@@ -187,7 +187,7 @@ void OCommonStatement::createTable( ) throw ( SQLException, RuntimeException )
 */
 }
 
-OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql , sal_Bool bAdjusted)
+OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql , bool bAdjusted)
     throw ( SQLException, RuntimeException )
 {
     OUString aErr;
@@ -253,7 +253,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
     else if(!bAdjusted) //Our sql parser does not support a statement like "create table foo"
                         // So we append ("E-mail" varchar) to the last of it to make it work
     {
-        return parseSql(sql + "(""E-mail"" character)", sal_True);
+        return parseSql(sql + "(""E-mail"" character)", true);
     }
 
     getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );

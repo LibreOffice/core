@@ -85,7 +85,7 @@ namespace connectivity
                         getComponentContext( ) const { return comphelper::getComponentContext( m_xFactory ); }
 
             // static methods
-            static sal_Bool acceptsURL_Stat( const OUString& url );
+            static bool acceptsURL_Stat( const OUString& url );
         };
     }
 

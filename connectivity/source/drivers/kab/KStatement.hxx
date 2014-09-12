@@ -63,7 +63,7 @@ namespace connectivity
                 const OSQLParseNode *pParseNode) const throw(::com::sun::star::sdbc::SQLException);
             class KabOrder *analyseOrderByClause(
                 const OSQLParseNode *pParseNode) const throw(::com::sun::star::sdbc::SQLException);
-            sal_Bool isTableKnown(class KabResultSet *pResult) const;
+            bool isTableKnown(class KabResultSet *pResult) const;
             void setKabFields(class KabResultSet *pResult) const throw(::com::sun::star::sdbc::SQLException);
             void selectAddressees(KabResultSet *pResult) const throw(::com::sun::star::sdbc::SQLException);
             void sortAddressees(KabResultSet *pResult) const throw(::com::sun::star::sdbc::SQLException);

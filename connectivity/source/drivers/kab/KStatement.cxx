@@ -269,7 +269,7 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
                 {
                     OUString sColumnName =
                         pColumnRef->getChild(0)->getTokenValue();
-                    sal_Bool bAscending =
+                    bool bAscending =
                         SQL_ISTOKEN(pAscendingDescending, DESC)?
                         sal_False:
                         sal_True;
@@ -285,17 +285,17 @@ KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNo
     return 0;
 }
 
-sal_Bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
+bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
 {
     // can handle requests like        SELECT * FROM addresses addresses
     // but cannot handle requests like SELECT * FROM addresses persons
     if (m_aSQLIterator.getTables().size() != 1)
-        return sal_False;
+        return false;
 
     if (m_aSQLIterator.getTables().begin()->first != pResult->getMetaData()->getTableName(0))
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLException)
@@ -515,7 +515,7 @@ sal_Bool KabCommonStatement::convertFastPropertyValue(
         sal_Int32,
         const Any&) throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bConverted = sal_False;
+    bool bConverted = false;
     // here we have to try to convert
     return bConverted;
 }

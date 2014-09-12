@@ -176,7 +176,7 @@ namespace connectivity
     guint findEvoabField(const OUString& aColName)
     {
         guint nRet = (guint)-1;
-        sal_Bool bFound = sal_False;
+        bool bFound = false;
         initFields();
         for (guint i=0;(i < nFields) && !bFound;i++)
         {
@@ -184,7 +184,7 @@ namespace connectivity
             if (aName == aColName)
             {
                 nRet = i;
-                bFound = sal_True;
+                bFound = true;
             }
         }
         return nRet;
@@ -1105,11 +1105,11 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 
     const OUString aTable("TABLE");
 
-    sal_Bool bTableFound = sal_True;
+    bool bTableFound = true;
     sal_Int32 nLength = types.getLength();
     if(nLength)
         {
-            bTableFound = sal_False;
+            bTableFound = false;
 
             const OUString* pBegin = types.getConstArray();
             const OUString* pEnd = pBegin + nLength;
@@ -1117,7 +1117,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
                 {
                     if(*pBegin == aTable)
                         {
-                            bTableFound = sal_True;
+                            bTableFound = true;
                             break;
                         }
                 }

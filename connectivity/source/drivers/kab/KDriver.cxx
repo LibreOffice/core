@@ -194,10 +194,10 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
                 aCreationArgs ),
             UNO_QUERY_THROW );
 
-        sal_Bool bDisableCheck = sal_False;
+        bool bDisableCheck = false;
         xSettings->getPropertyValue("DisableKDEMaximumVersionCheck") >>= bDisableCheck;
 
-        return bDisableCheck != sal_False;
+        return bDisableCheck;
     }
     catch( const Exception& )
     {

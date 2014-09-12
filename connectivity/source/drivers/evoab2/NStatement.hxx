@@ -161,7 +161,7 @@ namespace connectivity
             sal_Int32                                   m_nResultSetType;
             sal_Int32                                   m_nFetchDirection;
             sal_Int32                                   m_nResultSetConcurrency;
-            sal_Bool                                    m_bEscapeProcessing;
+            bool                                    m_bEscapeProcessing;
             // </properties>
 
         protected:

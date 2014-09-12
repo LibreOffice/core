@@ -87,7 +87,7 @@ protected:
         throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException ) = 0;
     virtual void checkColumnIndex( sal_Int32 index )
         throw ( com::sun::star::sdbc::SQLException, com::sun::star::uno::RuntimeException );
-    virtual void checkRowIndex( sal_Bool mustBeOnValidRow );
+    virtual void checkRowIndex( bool mustBeOnValidRow );
 
     virtual ::com::sun::star::uno::Any getValue( sal_Int32 columnIndex ) = 0;
     com::sun::star::uno::Any convertTo(

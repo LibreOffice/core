@@ -402,7 +402,7 @@ sal_Bool BaseResultSet::getBoolean( sal_Int32 columnIndex ) throw (SQLException,
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
+    checkRowIndex( true /* must be on row */ );
 
     OUString str = getString( columnIndex );
 
@@ -428,7 +428,7 @@ sal_Int8 BaseResultSet::getByte( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
+    checkRowIndex( true /* must be on row */ );
     sal_Int8 b = 0;
     convertTo( getValue( columnIndex ), getCppuType( &b )) >>= b;
     return b;
@@ -440,7 +440,7 @@ sal_Int16 BaseResultSet::getShort( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
+    checkRowIndex( true /* must be on row */ );
     sal_Int16 i = 0;
     convertTo( getValue( columnIndex ), getCppuType( &i )) >>= i;
     return i;
@@ -451,7 +451,7 @@ OUString BaseResultSet::getString( sal_Int32 columnIndex ) throw (SQLException, 
     MutexGuard guard(m_refMutex->mutex);
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
+    checkRowIndex( true /* must be on row */ );
     OUString ret;
     convertTo( getValue(  columnIndex ), getCppuType( &ret ) ) >>= ret;
 //     printf( "BaseResultSet::getString() %s\n" , OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ).getStr() );
@@ -464,7 +464,7 @@ sal_Int32 BaseResultSet::getInt( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
+    checkRowIndex( true /* must be on row */ );
     sal_Int32 i = 0;
     convertTo( getValue( columnIndex ), getCppuType( &i )) >>= i;
     return i;
@@ -476,7 +476,7 @@ sal_Int64 BaseResultSet::getLong( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
+    checkRowIndex( true /* must be on row */ );
     sal_Int64 i = 0;
     convertTo( getValue( columnIndex ), getCppuType( &i )) >>= i;
     return i;
@@ -488,7 +488,7 @@ float BaseResultSet::getFloat( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
+    checkRowIndex( true /* must be on row */ );
     float f = 0.;
     convertTo( getValue( columnIndex ), getCppuType( &f )) >>= f;
     return f;
@@ -511,7 +511,7 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     checkColumnIndex( columnIndex );
-    checkRowIndex( sal_True /* must be on row */ );
+    checkRowIndex( true /* must be on row */ );
 
     Sequence< sal_Int8 > ret;
     OUString ustr;
@@ -682,7 +682,7 @@ void BaseResultSet::checkColumnIndex(sal_Int32 index ) throw ( SQLException, Run
 
 }
 
-void BaseResultSet::checkRowIndex( sal_Bool mustBeOnValidRow )
+void BaseResultSet::checkRowIndex( bool mustBeOnValidRow )
 {
     OUStringBuffer buf( 128 );
     buf.appendAscii( "pq_baseresultset: row index out of range, allowed is " );

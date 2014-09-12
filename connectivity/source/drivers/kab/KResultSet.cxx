@@ -51,7 +51,7 @@ KabResultSet::KabResultSet(KabCommonStatement* pStmt)
       m_xMetaData(NULL),
       m_aKabAddressees(),
       m_nRowPos(-1),
-      m_bWasNull(sal_True)
+      m_bWasNull(true)
 {
 }
 

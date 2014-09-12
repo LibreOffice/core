@@ -79,7 +79,7 @@ namespace connectivity
 
             // OCommonStatement overridables
             virtual StatementType
-                            parseSql( const OUString& sql , sal_Bool bAdjusted = sal_False) throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
+                            parseSql( const OUString& sql , bool bAdjusted = false) throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) SAL_OVERRIDE;
             virtual void    initializeResultSet( OResultSet* _pResult ) SAL_OVERRIDE;
             virtual void    clearCachedResultSet() SAL_OVERRIDE;
             virtual void    cacheResultSet( const ::rtl::Reference< OResultSet >& _pResult ) SAL_OVERRIDE;

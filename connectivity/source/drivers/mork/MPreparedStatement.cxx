@@ -78,7 +78,7 @@ void SAL_CALL OPreparedStatement::disposing()
 }
 
 
-OCommonStatement::StatementType OPreparedStatement::parseSql( const OUString& sql , sal_Bool bAdjusted )
+OCommonStatement::StatementType OPreparedStatement::parseSql( const OUString& sql , bool bAdjusted )
     throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException )
 {
     StatementType eStatementType = OCommonStatement::parseSql( sql, bAdjusted );

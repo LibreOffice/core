@@ -101,7 +101,7 @@ namespace connectivity
 
             virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
             virtual void setResultSetType(sal_Int32 _par0)          ;
-            virtual void setUsingBookmarks(sal_Bool _bUseBookmark)  ;
+            virtual void setUsingBookmarks(bool _bUseBookmark)  ;
 
             void reset() throw (css::sdbc::SQLException, css::uno::RuntimeException);
             void clearMyResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException);

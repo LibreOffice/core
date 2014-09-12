@@ -37,7 +37,7 @@ namespace connectivity
         class KabDatabaseMetaData : public KabDatabaseMetaData_BASE
         {
             ::com::sun::star::uno::Reference< KabConnection >   m_xConnection;
-            sal_Bool                                            m_bUseCatalog;
+            bool                                            m_bUseCatalog;
 
         public:
 

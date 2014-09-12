@@ -790,7 +790,7 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
                         ((nCurProp & SQL_CA2_SENSITIVITY_ADDITIONS) != SQL_CA2_SENSITIVITY_ADDITIONS))
                     {
                         // bookmarks for keyset isn't supported so reset bookmark setting
-                        setUsingBookmarks(sal_False);
+                        setUsingBookmarks(false);
                         nSet = SQL_CURSOR_DYNAMIC;
                     }
                 }
@@ -875,7 +875,7 @@ bool OStatement_Base::getEscapeProcessing() const
     return SQL_NOSCAN_OFF == getStmtOption<SQLULEN, SQL_IS_UINTEGER>(SQL_ATTR_USE_BOOKMARKS, SQL_NOSCAN_OFF);;
 }
 
-void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark)
+void OStatement_Base::setUsingBookmarks(bool _bUseBookmark)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLULEN nValue = _bUseBookmark ? SQL_UB_VARIABLE : SQL_UB_OFF;

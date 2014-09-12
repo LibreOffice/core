@@ -165,7 +165,7 @@ sal_Int32 SAL_CALL OEvoabDriver::getMinorVersion(  ) throw(RuntimeException, std
     return 0;
 }
 
-sal_Bool OEvoabDriver::acceptsURL_Stat( const OUString& url )
+bool OEvoabDriver::acceptsURL_Stat( const OUString& url )
 {
     return ( url == "sdbc:address:evolution:local" || url == "sdbc:address:evolution:groupwise" || url == "sdbc:address:evolution:ldap" ) && EApiInit();
 }

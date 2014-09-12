@@ -27,7 +27,7 @@ KabOrder::~KabOrder()
 {
 }
 
-KabSimpleOrder::KabSimpleOrder(OUString &sColumnName, sal_Bool bAscending)
+KabSimpleOrder::KabSimpleOrder(OUString &sColumnName, bool bAscending)
     : KabOrder(),
       m_nFieldNumber(findKabField(sColumnName)),
       m_bAscending(bAscending)

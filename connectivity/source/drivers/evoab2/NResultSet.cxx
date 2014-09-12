@@ -766,7 +766,7 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLE
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     if ( m_xMetaData.is())
     {

@@ -64,7 +64,7 @@ OCommonStatement::OCommonStatement(OEvoabConnection* _pConnection)
     , m_nResultSetType(ResultSetType::FORWARD_ONLY)
     , m_nFetchDirection(FetchDirection::FORWARD)
     , m_nResultSetConcurrency(ResultSetConcurrency::UPDATABLE)
-    , m_bEscapeProcessing(sal_True)
+    , m_bEscapeProcessing(true)
 {
     m_pConnection->acquire();
 

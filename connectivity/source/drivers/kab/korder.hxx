@@ -40,11 +40,11 @@ namespace connectivity
         class KabSimpleOrder : public KabOrder
         {
             sal_Int32 m_nFieldNumber;
-            sal_Bool m_bAscending;
+            bool m_bAscending;
 
             QString value(const ::KABC::Addressee &aAddressee) const;
         public:
-            KabSimpleOrder(OUString &sColumnName, sal_Bool bAscending);
+            KabSimpleOrder(OUString &sColumnName, bool bAscending);
 
             virtual sal_Int32 compare(const ::KABC::Addressee &aAddressee1, const ::KABC::Addressee &aAddressee2) const SAL_OVERRIDE;
         };

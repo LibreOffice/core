@@ -29,23 +29,23 @@ KabCondition::~KabCondition()
 {
 }
 
-KabConditionConstant::KabConditionConstant(const sal_Bool bValue)
+KabConditionConstant::KabConditionConstant(const bool bValue)
     : KabCondition(),
       m_bValue(bValue)
 {
 }
 
-sal_Bool KabConditionConstant::isAlwaysTrue() const
+bool KabConditionConstant::isAlwaysTrue() const
 {
     return m_bValue;
 }
 
-sal_Bool KabConditionConstant::isAlwaysFalse() const
+bool KabConditionConstant::isAlwaysFalse() const
 {
     return !m_bValue;
 }
 
-sal_Bool KabConditionConstant::eval(const ::KABC::Addressee &) const
+bool KabConditionConstant::eval(const ::KABC::Addressee &) const
 {
     return m_bValue;
 }
@@ -56,16 +56,16 @@ KabConditionColumn::KabConditionColumn(const OUString &sColumnName) throw(SQLExc
 {
 }
 
-sal_Bool KabConditionColumn::isAlwaysTrue() const
+bool KabConditionColumn::isAlwaysTrue() const
 {
     // Sometimes true, sometimes false
-    return sal_False;
+    return false;
 }
 
-sal_Bool KabConditionColumn::isAlwaysFalse() const
+bool KabConditionColumn::isAlwaysFalse() const
 {
     // Sometimes true, sometimes false
-    return sal_False;
+    return false;
 }
 
 KabConditionNull::KabConditionNull(const OUString &sColumnName) throw(SQLException)
@@ -73,7 +73,7 @@ KabConditionNull::KabConditionNull(const OUString &sColumnName) throw(SQLExcepti
 {
 }
 
-sal_Bool KabConditionNull::eval(const ::KABC::Addressee &aAddressee) const
+bool KabConditionNull::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
 
@@ -87,7 +87,7 @@ KabConditionNotNull::KabConditionNotNull(const OUString &sColumnName) throw(SQLE
 {
 }
 
-sal_Bool KabConditionNotNull::eval(const ::KABC::Addressee &aAddressee) const
+bool KabConditionNotNull::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
 
@@ -107,7 +107,7 @@ KabConditionEqual::KabConditionEqual(const OUString &sColumnName, const OUString
 {
 }
 
-sal_Bool KabConditionEqual::eval(const ::KABC::Addressee &aAddressee) const
+bool KabConditionEqual::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
 // Timestamps should not be compared according to their string value
@@ -115,7 +115,7 @@ sal_Bool KabConditionEqual::eval(const ::KABC::Addressee &aAddressee) const
 //  {ts '2004-03-29 12:55:00.000000'}
 // They should also support operators like '<' or '>='
 
-    if (aQtName.isNull()) return sal_False;
+    if (aQtName.isNull()) return false;
 
     OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return sValue == m_sMatchString;
@@ -126,11 +126,11 @@ KabConditionDifferent::KabConditionDifferent(const OUString &sColumnName, const 
 {
 }
 
-sal_Bool KabConditionDifferent::eval(const ::KABC::Addressee &aAddressee) const
+bool KabConditionDifferent::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
 
-    if (aQtName.isNull()) return sal_False;
+    if (aQtName.isNull()) return false;
 
     OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return sValue != m_sMatchString;
@@ -141,11 +141,11 @@ KabConditionSimilar::KabConditionSimilar(const OUString &sColumnName, const OUSt
 {
 }
 
-sal_Bool KabConditionSimilar::eval(const ::KABC::Addressee &aAddressee) const
+bool KabConditionSimilar::eval(const ::KABC::Addressee &aAddressee) const
 {
     QString aQtName = valueOfKabField(aAddressee, m_nFieldNumber);
 
-    if (aQtName.isNull()) return sal_False;
+    if (aQtName.isNull()) return false;
 
     OUString sValue((const sal_Unicode *) aQtName.ucs2());
     return match(m_sMatchString, sValue, '\0');
@@ -169,26 +169,26 @@ KabConditionOr::KabConditionOr(KabCondition *pLeft, KabCondition *pRight)
 {
 }
 
-sal_Bool KabConditionOr::isAlwaysTrue() const
+bool KabConditionOr::isAlwaysTrue() const
 {
     return m_pLeft->isAlwaysTrue() || m_pRight->isAlwaysTrue();
 }
 
-sal_Bool KabConditionOr::isAlwaysFalse() const
+bool KabConditionOr::isAlwaysFalse() const
 {
     return m_pLeft->isAlwaysFalse() && m_pRight->isAlwaysFalse();
 }
 
-sal_Bool KabConditionOr::eval(const ::KABC::Addressee &aAddressee) const
+bool KabConditionOr::eval(const ::KABC::Addressee &aAddressee) const
 {
     // We avoid evaluating terms as much as we can
-    if (m_pLeft->isAlwaysTrue() || m_pRight->isAlwaysTrue()) return sal_True;
-    if (m_pLeft->isAlwaysFalse() && m_pRight->isAlwaysFalse()) return sal_False;
+    if (m_pLeft->isAlwaysTrue() || m_pRight->isAlwaysTrue()) return true;
+    if (m_pLeft->isAlwaysFalse() && m_pRight->isAlwaysFalse()) return false;
 
-    if (m_pLeft->eval(aAddressee)) return sal_True;
-    if (m_pRight->eval(aAddressee)) return sal_True;
+    if (m_pLeft->eval(aAddressee)) return true;
+    if (m_pRight->eval(aAddressee)) return true;
 
-    return sal_False;
+    return false;
 }
 
 KabConditionAnd::KabConditionAnd(KabCondition *pLeft, KabCondition *pRight)
@@ -196,26 +196,26 @@ KabConditionAnd::KabConditionAnd(KabCondition *pLeft, KabCondition *pRight)
 {
 }
 
-sal_Bool KabConditionAnd::isAlwaysTrue() const
+bool KabConditionAnd::isAlwaysTrue() const
 {
     return m_pLeft->isAlwaysTrue() && m_pRight->isAlwaysTrue();
 }
 
-sal_Bool KabConditionAnd::isAlwaysFalse() const
+bool KabConditionAnd::isAlwaysFalse() const
 {
     return m_pLeft->isAlwaysFalse() || m_pRight->isAlwaysFalse();
 }
 
-sal_Bool KabConditionAnd::eval(const ::KABC::Addressee &aAddressee) const
+bool KabConditionAnd::eval(const ::KABC::Addressee &aAddressee) const
 {
     // We avoid evaluating terms as much as we can
-    if (m_pLeft->isAlwaysFalse() || m_pRight->isAlwaysFalse()) return sal_False;
-    if (m_pLeft->isAlwaysTrue() && m_pRight->isAlwaysTrue()) return sal_True;
+    if (m_pLeft->isAlwaysFalse() || m_pRight->isAlwaysFalse()) return false;
+    if (m_pLeft->isAlwaysTrue() && m_pRight->isAlwaysTrue()) return true;
 
-    if (!m_pLeft->eval(aAddressee)) return sal_False;
-    if (!m_pRight->eval(aAddressee)) return sal_False;
+    if (!m_pLeft->eval(aAddressee)) return false;
+    if (!m_pRight->eval(aAddressee)) return false;
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

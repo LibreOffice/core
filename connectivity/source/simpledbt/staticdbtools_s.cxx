@@ -78,7 +78,7 @@ namespace connectivity
     }
 
 
-    Reference< XConnection> ODataAccessStaticTools::connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext, sal_Bool _bSetAsActiveConnection) const
+    Reference< XConnection> ODataAccessStaticTools::connectRowset(const Reference< XRowSet>& _rxRowSet, const Reference< XComponentContext >& _rxContext, bool _bSetAsActiveConnection) const
     {
         return ::dbtools::connectRowset( _rxRowSet, _rxContext, _bSetAsActiveConnection);
     }
@@ -92,7 +92,7 @@ namespace connectivity
     }
 
 
-    Reference< XNumberFormatsSupplier> ODataAccessStaticTools::getNumberFormats(const Reference< XConnection>& _rxConn, sal_Bool _bAllowDefault) const
+    Reference< XNumberFormatsSupplier> ODataAccessStaticTools::getNumberFormats(const Reference< XConnection>& _rxConn, bool _bAllowDefault) const
     {
         return ::dbtools::getNumberFormats(_rxConn, _bAllowDefault);
     }

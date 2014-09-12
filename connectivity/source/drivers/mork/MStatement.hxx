@@ -123,7 +123,7 @@ namespace connectivity
             /** called to do the parsing of a to-be-executed SQL statement, and set all members as needed
             */
             virtual StatementType
-                            parseSql( const OUString& sql , sal_Bool bAdjusted = sal_False) throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
+                            parseSql( const OUString& sql , bool bAdjusted = false) throw ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException );
             /** called to initialize a result set, according to a previously parsed SQL statement
             */
             virtual void    initializeResultSet( OResultSet* _pResult );
