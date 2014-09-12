@@ -53,6 +53,32 @@ public:
     MasterPageContainer::Token GetTokenForIndex (sal_uInt32 nIndex) const;
 
 private:
+    class Descriptor
+    {
+    public:
+        OUString msURL;
+        OUString msName;
+        ::sd::sidebar::MasterPageContainer::Token maToken;
+        Descriptor (::sd::sidebar::MasterPageContainer::Token aToken,
+                    const OUString& rsURL, const OUString& rsName)
+            : msURL(rsURL),
+              msName(rsName),
+              maToken(aToken)
+        {}
+
+        class TokenComparator
+        {
+        public:
+            TokenComparator(::sd::sidebar::MasterPageContainer::Token aToken)
+                : maToken(aToken) {}
+            bool operator () (const Descriptor& rDescriptor)
+            { return maToken==rDescriptor.maToken; }
+
+        private:
+            ::sd::sidebar::MasterPageContainer::Token maToken;
+        };
+    };
+
     /** The single instance of this class.  It is created on demand when
         Instance() is called for the first time.
     */
@@ -60,7 +86,7 @@ private:
 
     ::std::vector<Link> maListeners;
 
-    class MasterPageList;
+    typedef ::std::vector<Descriptor> MasterPageList;
     ::std::auto_ptr<MasterPageList> mpMasterPages;
     unsigned long int mnMaxListSize;
     ::boost::shared_ptr<MasterPageContainer> mpContainer;
