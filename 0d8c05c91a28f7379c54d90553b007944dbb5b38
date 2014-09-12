@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_b5346a4a",
+        "filename": "forms/source/inc/FormComponent.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1300,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:22:49Z",
+      "side": 1,
+      "message": "this looks like an error",
+      "revId": "0d8c05c91a28f7379c54d90553b007944dbb5b38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_154696bf",
+        "filename": "include/svtools/brwbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:22:49Z",
+      "side": 1,
+      "message": "information -\u003e display",
+      "revId": "0d8c05c91a28f7379c54d90553b007944dbb5b38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_35499ad1",
+        "filename": "include/svtools/brwbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 333,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:22:49Z",
+      "side": 1,
+      "message": "attached -\u003e integrated",
+      "revId": "0d8c05c91a28f7379c54d90553b007944dbb5b38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_553c1e2f",
+        "filename": "include/svtools/brwbox.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:22:49Z",
+      "side": 1,
+      "message": "(and thereof resulting in another first visible row)",
+      "revId": "0d8c05c91a28f7379c54d90553b007944dbb5b38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
