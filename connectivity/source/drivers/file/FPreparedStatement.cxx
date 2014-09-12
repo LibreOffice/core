@@ -412,7 +412,7 @@ void OPreparedStatement::checkAndResizeParameters(sal_Int32 parameterIndex)
     {
         sal_Int32 i = m_aParameterRow->get().size();
         (m_aParameterRow->get()).resize(parameterIndex+1);
-        for ( ;i <= parameterIndex+1; ++i )
+        for ( ; i <= parameterIndex; ++i)
         {
             if ( !(m_aParameterRow->get())[i].is() )
                 (m_aParameterRow->get())[i] = new ORowSetValueDecorator;
