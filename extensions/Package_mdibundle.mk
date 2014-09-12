@@ -11,7 +11,9 @@ $(eval $(call gb_Package_Package,extensions_mdibundle,$(SRCDIR)/extensions/sourc
 
 $(eval $(call gb_Package_add_files,extensions_mdibundle,Library/Spotlight/OOoSpotlightImporter.mdimporter/Contents,\
     Info.plist \
-    en.lproj/schema.strings \
+))
+
+$(eval $(call gb_Package_add_files,extensions_mdibundle,Library/Spotlight/OOoSpotlightImporter.mdimporter/Contents/Resources,\
     schema.xml \
 ))
 
