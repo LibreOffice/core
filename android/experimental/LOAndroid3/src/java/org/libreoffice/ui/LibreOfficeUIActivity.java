@@ -228,19 +228,11 @@ public class LibreOfficeUIActivity extends Activity implements ActionBar.OnNavig
     }
     
     public void open(File file) {
-    	/*
-    	Intent i = new Intent( this , WriterViewerActivity.class );
-    	i.putExtra( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
-    	i.putExtra( FILTER_MODE_KEY  , filterMode );
-    	i.putExtra( EXPLORER_VIEW_TYPE_KEY  , viewMode );
-    	startActivity( i );
-    	*/
-    	Intent i = new Intent( this , DocumentLoader.class );
-        i.putExtra("input", file.getAbsolutePath() );
-    	i.putExtra( CURRENT_DIRECTORY_KEY , currentDirectory.getAbsolutePath() );
-    	i.putExtra( FILTER_MODE_KEY  , filterMode );
-    	i.putExtra( EXPLORER_VIEW_TYPE_KEY  , viewMode );
-    	startActivity( i );
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
+        i.setComponent(new ComponentName(
+                "org.libreoffice",
+                "org.libreoffice.LibreOfficeMainActivity"));
+        startActivity(i);
     }
     
     @Override
