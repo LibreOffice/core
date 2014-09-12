@@ -2647,10 +2647,10 @@ bool getTTCoverage(
     const unsigned char* pTable, size_t nLength)
 {
     bool bRet = false;
-    sal_uInt16 nVersion = GetUInt16(pTable, 0, 1);
     // parse OS/2 header
-    if ( nVersion >= 0x0001 && nLength >= 58 )
+    if (nLength >= 58)
     {
+        pTable+=4; //skip Version
         rUnicodeRange.append(GetUInt32(pTable, 42, 1));
         rUnicodeRange.append(GetUInt32(pTable, 46, 1));
         rUnicodeRange.append(GetUInt32(pTable, 50, 1));
