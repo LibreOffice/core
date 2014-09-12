@@ -69,6 +69,15 @@
 
             </intent-filter>
         </activity>
+        <!-- Document Browser Activity -->
+        <activity android:name=".ui.LibreOfficeUIActivity"
+                  android:label="@string/browser_app_name"
+                  android:theme="@android:style/Theme.Holo">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
