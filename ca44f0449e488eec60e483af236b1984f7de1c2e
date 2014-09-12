@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_1573364f",
+        "filename": "cppu/source/uno/lbmap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T08:39:35Z",
+      "side": 1,
+      "message": "equal_to\u003cOUString\u003e has to be removed.",
+      "range": {
+        "startLine": 131,
+        "startChar": 44,
+        "endLine": 131,
+        "endChar": 52
+      },
+      "revId": "ca44f0449e488eec60e483af236b1984f7de1c2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_f58e7226",
+        "filename": "stoc/source/corereflection/lrucache.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T08:39:35Z",
+      "side": 1,
+      "message": "equal_to\u003cOUString\u003e has to be removed here, too",
+      "revId": "ca44f0449e488eec60e483af236b1984f7de1c2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
