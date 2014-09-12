@@ -48,6 +48,7 @@
 
 #include <sal/macros.h>
 
+#include "i18nlangtag/applelangid.hxx"
 #include "i18nlangtag/mslangid.hxx"
 
 #include "parseAFM.hxx"
@@ -1114,7 +1115,8 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
     int nNameRecords = GetTTNameRecords( (TrueTypeFont*)pTTFont, &pNameRecords );
     if( nNameRecords && pNameRecords )
     {
-        LanguageType aLang = MsLangId::getSystemLanguage();
+        LanguageTag aSystem("");
+        LanguageType eLang = aSystem.getLanguageType();
         int nLastMatch = -1;
         for( int i = 0; i < nNameRecords; i++ )
         {
@@ -1126,7 +1128,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
             else if( pNameRecords[i].platformID == 3 )
             {
                 // this bases on the LanguageType actually being a Win LCID
-                if( pNameRecords[i].languageID == aLang )
+                if (pNameRecords[i].languageID == eLang)
                     nMatch = 8000;
                 else if( pNameRecords[i].languageID == LANGUAGE_ENGLISH_US )
                     nMatch = 2000;
@@ -1136,13 +1138,12 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
                 else
                     nMatch = 1000;
             }
-            else if( pNameRecords[i].platformID == 1 )
+            else if (pNameRecords[i].platformID == 1)
             {
-/*
-                // to-do, mac to LanguageType conversion
-                if( pNameRecords[i].languageID == aLang )
+                LanguageTag aApple(makeLanguageTagFromAppleLanguageId(pNameRecords[i].languageID));
+                if (aApple == aSystem)
                     nMatch = 8000;
-                else*/ if( pNameRecords[i].languageID == 0 ) //English
+                else if (pNameRecords[i].languageID == APPLE_LANG_ENGLISH)
                     nMatch = 2000;
                 else
                     nMatch = 1000;
