@@ -4922,8 +4922,16 @@ int RTFDocumentImpl::popState()
         RTFSprms aFFAttributes;
         RTFSprms aFFSprms;
         aFFSprms.set(NS_ooxml::LN_ffdata, pValue);
-        writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aFFAttributes, aFFSprms));
-        Mapper().props(pProperties);
+        if (!m_aStates.top().pCurrentBuffer)
+        {
+            writerfilter::Reference<Properties>::Pointer_t const pProperties(new RTFReferenceProperties(aFFAttributes, aFFSprms));
+            Mapper().props(pProperties);
+        }
+        else
+        {
+            RTFValue::Pointer_t pFFValue(new RTFValue(aFFAttributes, aFFSprms));
+            m_aStates.top().pCurrentBuffer->push_back(Buf_t(BUFFER_PROPS, pFFValue));
+        }
         m_aFormfieldAttributes.clear();
         m_aFormfieldSprms.clear();
         singleChar(0x14);

@@ -1941,6 +1941,16 @@ DECLARE_RTFIMPORT_TEST(testFdo82114, "fdo82114.rtf")
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
 }
 
+DECLARE_RTFIMPORT_TEST(testFdo44984, "fdo44984.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    // This was Text, i.e. the checkbox field portion was missing.
+    CPPUNIT_ASSERT_EQUAL(OUString("TextFieldStartEnd"), getProperty<OUString>(getRun(getParagraphOfText(1, xCell->getText()), 1), "TextPortionType"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
