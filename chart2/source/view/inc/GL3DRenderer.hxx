@@ -282,7 +282,7 @@ private:
     void SetHighLightBar(BatchBarInfo &barInfo);
     void DisableHighLightBar(BatchBarInfo &barInfo);
     void CalcScrollMoveMatrix(bool bNewScene);
-    glm::mat4 GetDiffOfTwoCameras(glm::vec3& rBeginPos, glm::vec3& rEndPos, glm::vec3& rBeginDirection, glm::vec3& rEndDirection);
+    glm::mat4 GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection);
     glm::mat4 GetDiffOfTwoCameras( glm::vec3& rEndPos,  glm::vec3& rEndDirection);
     void AddMatrixDiff(glm::mat4& aMat);
     void ResetMatrixDiff();

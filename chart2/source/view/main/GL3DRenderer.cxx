@@ -2450,7 +2450,7 @@ void OpenGL3DRenderer::CalcScrollMoveMatrix(bool bNewScene)
     m_bUndrawFlag = m_fCurDistance >= m_fScrollDistance ? true : false;
 }
 
-glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras(glm::vec3& rBeginPos, glm::vec3& rEndPos, glm::vec3& rBeginDirection, glm::vec3& rEndDirection)
+glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection)
 {
     glm::mat4 aBegin = glm::lookAt(glm::vec3(m_GlobalScaleMatrix * glm::vec4(rBeginPos, 1.0)),
               glm::vec3(m_GlobalScaleMatrix * glm::vec4(rBeginDirection, 1.0)),
