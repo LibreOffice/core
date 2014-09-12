@@ -18,10 +18,59 @@
 // that caused it to be added
 static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevice)
 {
-    // As of OSX 10.9, the system font "GB18030 Bitmap" incorrectly declares
-    // that it only covers "Phoenician" when in fact it's a Chinese font.
-    if (rDevice.GetFont().GetName().equalsIgnoreAsciiCase("GB18030 Bitmap")) {
+    const OUString &rName = rDevice.GetFont().GetName();
+
+    if (rName == "GB18030 Bitmap")
+    {
+        // As of OSX 10.9, the system font "GB18030 Bitmap" incorrectly declares
+        // that it only covers "Phoenician" when in fact it's a Chinese font.
         return USCRIPT_HAN;
+    }
+    else if (rName.startsWith("Bangla "))
+    {
+        // "Bangla Sangam MN" claims it supports MALAYALAM, but it doesn't
+        // "Bangla MN" claims just DEVANAGARI and not an additional BENGALI
+        return USCRIPT_BENGALI;
+    }
+    else if (rName.startsWith("Gurmukhi "))
+    {
+        // "Gurmukhi MN" claims it supports TAMIL, but it doesn't
+        return USCRIPT_GURMUKHI;
+    }
+    else if (rName.startsWith("Kannada "))
+    {
+        // "Kannada MN" claims it supports TAMIL, but it doesn't
+        return USCRIPT_KANNADA;
+    }
+    else if (rName.startsWith("Lao "))
+    {
+        // "Lao Sangam MN" claims it supports TAMIL, but it doesn't
+        return USCRIPT_LAO;
+    }
+    else if (rName.startsWith("Malayalam "))
+    {
+        // "Malayalam MN" claims it supports TAMIL, but it doesn't
+        return USCRIPT_LAO;
+    }
+    else if (rName.startsWith("Sinhala "))
+    {
+        // "Sinhala MN" claims it supports CYRILLIC
+        return USCRIPT_SINHALA;
+    }
+    else if (rName.startsWith("Telugu "))
+    {
+        // "Telugu MN" claims it supports TAMIL, but it doesn't
+        return USCRIPT_TELUGU;
+    }
+    else if (rName.startsWith("Myanmar "))
+    {
+        return USCRIPT_MYANMAR;
+    }
+    else if (rName == "InaiMathi")
+    {
+        // "InaiMathi" claims it supports GOTHIC and CJK_UNIFIED_IDEOGRAPHS as well as
+        // TAMIL, but it doesn't
+        return USCRIPT_TAMIL;
     }
 
     return USCRIPT_INVALID_CODE;
