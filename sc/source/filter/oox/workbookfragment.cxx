@@ -300,10 +300,6 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
-    // Force threading off unless experimental mode or env. var is set.
-    if( !officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) )
-        nThreads = 0;
-
     const char *pEnv;
     if( ( pEnv = getenv( "SC_IMPORT_THREADS" ) ) )
         nThreads = rtl_str_toInt32( pEnv, 10 );
@@ -340,7 +336,7 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
         // join all the threads:
         aPool.waitUntilWorkersDone();
     }
-    else
+    else // single threaded iteration
     {
         SheetFragmentVector::iterator it = rSheets.begin(), itEnd = rSheets.end();
         for( ; it != itEnd; ++it )
