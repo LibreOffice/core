@@ -10,6 +10,7 @@
 #include <config_folders.h>
 
 #include "i18nlangtag/languagetag.hxx"
+#include "i18nlangtag/applelangid.hxx"
 #include "i18nlangtag/mslangid.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/bootstrap.hxx>
@@ -2743,6 +2744,372 @@ bool LanguageTag::isValidBcp47( const OUString& rString, OUString* o_pCanonicali
         SAL_INFO( "i18nlangtag", "LanguageTag:isValidBcp47: could not parse '" << rString << "'");
     }
     return bValid;
+}
+
+LanguageTag makeLanguageTagFromAppleLanguageId(AppleLanguageId nLanguage)
+{
+    //map the simple ones via LanguageTypes, and the hard ones explictly
+    LanguageType nLang(LANGUAGE_DONTKNOW);
+
+    switch (nLanguage)
+    {
+        case APPLE_LANG_ENGLISH:
+            nLang = LANGUAGE_ENGLISH;
+            break;
+        case APPLE_LANG_FRENCH:
+            nLang = LANGUAGE_FRENCH;
+            break;
+        case APPLE_LANG_GERMAN:
+            nLang = LANGUAGE_GERMAN;
+            break;
+        case APPLE_LANG_ITALIAN:
+            nLang = LANGUAGE_ITALIAN;
+            break;
+        case APPLE_LANG_DUTCH:
+            nLang = LANGUAGE_DUTCH;
+            break;
+        case APPLE_LANG_SWEDISH:
+            nLang = LANGUAGE_SWEDISH;
+            break;
+        case APPLE_LANG_SPANISH:
+            nLang = LANGUAGE_SPANISH;
+            break;
+        case APPLE_LANG_DANISH:
+            nLang = LANGUAGE_DANISH;
+            break;
+        case APPLE_LANG_PORTUGUESE:
+            nLang = LANGUAGE_PORTUGUESE;
+            break;
+        case APPLE_LANG_NORWEGIAN:
+            nLang = LANGUAGE_NORWEGIAN;
+            break;
+        case APPLE_LANG_HEBREW:
+            nLang = LANGUAGE_HEBREW;
+            break;
+        case APPLE_LANG_JAPANESE:
+            nLang = LANGUAGE_JAPANESE;
+            break;
+        case APPLE_LANG_ARABIC:
+            nLang = LANGUAGE_ARABIC_PRIMARY_ONLY;
+            break;
+        case APPLE_LANG_FINNISH:
+            nLang = LANGUAGE_FINNISH;
+            break;
+        case APPLE_LANG_GREEK:
+            nLang = LANGUAGE_GREEK;
+            break;
+        case APPLE_LANG_ICELANDIC:
+            nLang = LANGUAGE_ICELANDIC;
+            break;
+        case APPLE_LANG_MALTESE:
+            nLang = LANGUAGE_MALTESE;
+            break;
+        case APPLE_LANG_TURKISH:
+            nLang = LANGUAGE_TURKISH;
+            break;
+        case APPLE_LANG_CROATIAN:
+            nLang = LANGUAGE_CROATIAN;
+            break;
+        case APPLE_LANG_CHINESE_TRADITIONAL:
+            nLang = LANGUAGE_CHINESE_TRADITIONAL;
+            break;
+        case APPLE_LANG_URDU:
+            nLang = LANGUAGE_URDU_PAKISTAN; //probably, otherwise we need a LANGUAGE_URDU_PRIMARY_ONLY
+            break;
+        case APPLE_LANG_HINDI:
+            nLang = LANGUAGE_HINDI;
+            break;
+        case APPLE_LANG_THAI:
+            nLang = LANGUAGE_THAI;
+            break;
+        case APPLE_LANG_KOREAN:
+            nLang = LANGUAGE_KOREAN;
+            break;
+        case APPLE_LANG_LITHUANIAN:
+            nLang = LANGUAGE_LITHUANIAN;
+            break;
+        case APPLE_LANG_POLISH:
+            nLang = LANGUAGE_POLISH;
+            break;
+        case APPLE_LANG_HUNGARIAN:
+            nLang = LANGUAGE_HUNGARIAN;
+            break;
+        case APPLE_LANG_ESTONIAN:
+            nLang = LANGUAGE_ESTONIAN;
+            break;
+        case APPLE_LANG_LATVIAN:
+            nLang = LANGUAGE_LATVIAN;
+            break;
+        case APPLE_LANG_SAMI:
+            nLang = LANGUAGE_SAMI_NORTHERN_NORWAY; //maybe
+            break;
+        case APPLE_LANG_FAROESE:
+            nLang = LANGUAGE_FAEROESE;
+            break;
+        case APPLE_LANG_FARSI:
+            nLang = LANGUAGE_FARSI;
+            break;
+        case APPLE_LANG_RUSSIAN:
+            nLang = LANGUAGE_RUSSIAN;
+            break;
+        case APPLE_LANG_CHINESE_SIMPLIFIED:
+            nLang = LANGUAGE_CHINESE_SIMPLIFIED;
+            break;
+        case APPLE_LANG_FLEMISH:
+            nLang = LANGUAGE_DUTCH_BELGIAN;
+            break;
+        case APPLE_LANG_IRISH_GAELIC:
+            nLang = LANGUAGE_GAELIC_IRELAND;
+            break;
+        case APPLE_LANG_ALBANIAN:
+            nLang = LANGUAGE_ALBANIAN;
+            break;
+        case APPLE_LANG_ROMANIAN:
+            nLang = LANGUAGE_ROMANIAN;
+            break;
+        case APPLE_LANG_CZECH:
+            nLang = LANGUAGE_CZECH;
+            break;
+        case APPLE_LANG_SLOVAK:
+            nLang = LANGUAGE_SLOVAK;
+            break;
+        case APPLE_LANG_SLOVENIAN:
+            nLang = LANGUAGE_SLOVENIAN;
+            break;
+        case APPLE_LANG_YIDDISH:
+            nLang = LANGUAGE_YIDDISH;
+            break;
+        case APPLE_LANG_SERBIAN:
+            nLang = LANGUAGE_SERBIAN_CYRILLIC_SERBIA;   //maybe
+            break;
+        case APPLE_LANG_MACEDONIAN:
+            nLang = LANGUAGE_MACEDONIAN;
+            break;
+        case APPLE_LANG_BULGARIAN:
+            nLang = LANGUAGE_BULGARIAN;
+            break;
+        case APPLE_LANG_UKRAINIAN:
+            nLang = LANGUAGE_UKRAINIAN;
+            break;
+        case APPLE_LANG_BYELORUSSIAN:
+            nLang = LANGUAGE_BELARUSIAN;
+            break;
+        case APPLE_LANG_UZBEK:
+            nLang = LANGUAGE_UZBEK_CYRILLIC; //maybe
+            break;
+        case APPLE_LANG_KAZAKH:
+            nLang = LANGUAGE_KAZAKH;
+            break;
+        case APPLE_LANG_AZERI_CYRILLIC:
+            nLang = LANGUAGE_AZERI_CYRILLIC;
+            break;
+        case APPLE_LANG_AZERI_ARABIC:
+            return LanguageTag("az-Arab");
+            break;
+        case APPLE_LANG_ARMENIAN:
+            nLang = LANGUAGE_ARMENIAN;
+            break;
+        case APPLE_LANG_GEORGIAN:
+            nLang = LANGUAGE_GEORGIAN;
+            break;
+        case APPLE_LANG_MOLDAVIAN:
+            nLang = LANGUAGE_ROMANIAN_MOLDOVA;
+            break;
+        case APPLE_LANG_KIRGHIZ:
+            nLang = LANGUAGE_KIRGHIZ;
+            break;
+        case APPLE_LANG_TAJIKI:
+            nLang = LANGUAGE_TAJIK;
+            break;
+        case APPLE_LANG_TURKMEN:
+            nLang = LANGUAGE_TURKMEN;
+            break;
+        case APPLE_LANG_MONGOLIAN_MONGOLIAN:
+            nLang = LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA;
+            break;
+        case APPLE_LANG_MONGOLIAN_CYRILLIC:
+            nLang = LANGUAGE_MONGOLIAN_CYRILLIC_MONGOLIA;
+            break;
+        case APPLE_LANG_PASHTO:
+            nLang = LANGUAGE_PASHTO;
+            break;
+        case APPLE_LANG_KURDISH:
+            nLang = LANGUAGE_USER_KURDISH_TURKEY; //maybe
+            break;
+        case APPLE_LANG_KASHMIRI:
+            nLang = LANGUAGE_KASHMIRI;
+            break;
+        case APPLE_LANG_SINDHI:
+            nLang = LANGUAGE_SINDHI;
+            break;
+        case APPLE_LANG_TIBETAN:
+            nLang = LANGUAGE_TIBETAN;
+            break;
+        case APPLE_LANG_NEPALI:
+            nLang = LANGUAGE_NEPALI;
+            break;
+        case APPLE_LANG_SANSKRIT:
+            nLang = LANGUAGE_SANSKRIT;
+            break;
+        case APPLE_LANG_MARATHI:
+            nLang = LANGUAGE_MARATHI;
+            break;
+        case APPLE_LANG_BENGALI:
+            nLang = LANGUAGE_BENGALI;
+            break;
+        case APPLE_LANG_ASSAMESE:
+            nLang = LANGUAGE_ASSAMESE;
+            break;
+        case APPLE_LANG_GUJARATI:
+            nLang = LANGUAGE_GUJARATI;
+            break;
+        case APPLE_LANG_PUNJABI:
+            nLang = LANGUAGE_PUNJABI;
+            break;
+        case APPLE_LANG_ORIYA:
+            nLang = LANGUAGE_ODIA;
+            break;
+        case APPLE_LANG_MALAYALAM:
+            nLang = LANGUAGE_MALAYALAM;
+            break;
+        case APPLE_LANG_KANNADA:
+            nLang = LANGUAGE_KANNADA;
+            break;
+        case APPLE_LANG_TAMIL:
+            nLang = LANGUAGE_TAMIL;
+            break;
+        case APPLE_LANG_TELUGU:
+            nLang = LANGUAGE_TELUGU;
+            break;
+        case APPLE_LANG_SINHALESE:
+            nLang = LANGUAGE_SINHALESE_SRI_LANKA;
+            break;
+        case APPLE_LANG_BURMESE:
+            nLang = LANGUAGE_BURMESE;
+            break;
+        case APPLE_LANG_KHMER:
+            nLang = LANGUAGE_KHMER;
+            break;
+        case APPLE_LANG_LAO:
+            nLang = LANGUAGE_LAO;
+            break;
+        case APPLE_LANG_VIETNAMESE:
+            nLang = LANGUAGE_VIETNAMESE;
+            break;
+        case APPLE_LANG_INDONESIAN:
+            nLang = LANGUAGE_INDONESIAN;
+            break;
+        case APPLE_LANG_TAGALONG:
+            nLang = LANGUAGE_USER_TAGALOG;
+            break;
+        case APPLE_LANG_MALAY_LATIN:
+            nLang = LANGUAGE_MALAY_MALAYSIA;
+            break;
+        case APPLE_LANG_MALAY_ARABIC:
+            return LanguageTag("ms-Arab");
+            break;
+        case APPLE_LANG_AMHARIC:
+            nLang = LANGUAGE_AMHARIC_ETHIOPIA;
+            break;
+        case APPLE_LANG_TIGRINYA:
+            nLang = LANGUAGE_TIGRIGNA_ETHIOPIA;
+            break;
+        case APPLE_LANG_GALLA:
+            nLang = LANGUAGE_OROMO;
+            break;
+        case APPLE_LANG_SOMALI:
+            nLang = LANGUAGE_SOMALI;
+            break;
+        case APPLE_LANG_SWAHILI:
+            nLang = LANGUAGE_SWAHILI;
+            break;
+        case APPLE_LANG_KINYARWANDA:
+            nLang = LANGUAGE_KINYARWANDA_RWANDA;
+            break;
+        case APPLE_LANG_RUNDI:
+            return LanguageTag("rn");
+            break;
+        case APPLE_LANG_NYANJA:
+            nLang = LANGUAGE_USER_NYANJA;
+            break;
+        case APPLE_LANG_MALAGASY:
+            nLang = LANGUAGE_MALAGASY_PLATEAU;
+            break;
+        case APPLE_LANG_ESPERANTO:
+            nLang = LANGUAGE_USER_ESPERANTO;
+            break;
+        case APPLE_LANG_WELSH:
+            nLang = LANGUAGE_WELSH;
+            break;
+        case APPLE_LANG_BASQUE:
+            nLang = LANGUAGE_BASQUE;
+            break;
+        case APPLE_LANG_CATALAN:
+            nLang = LANGUAGE_CATALAN;
+            break;
+        case APPLE_LANG_LATIN:
+            nLang = LANGUAGE_USER_LATIN;
+            break;
+        case APPLE_LANG_QUENCHUA:
+            nLang = LANGUAGE_QUECHUA_BOLIVIA; //maybe
+            break;
+        case APPLE_LANG_GUARANI:
+            nLang = LANGUAGE_GUARANI_PARAGUAY;
+            break;
+        case APPLE_LANG_AYMARA:
+            return LanguageTag("ay");
+            break;
+        case APPLE_LANG_TATAR:
+            nLang = LANGUAGE_TATAR;
+            break;
+        case APPLE_LANG_UIGHUR:
+            nLang = LANGUAGE_UIGHUR_CHINA;
+            break;
+        case APPLE_LANG_DZONGKHA:
+            nLang = LANGUAGE_DZONGKHA;
+            break;
+        case APPLE_LANG_JAVANESE_LATIN:
+            return LanguageTag("jv-Latn");
+            break;
+        case APPLE_LANG_SUNDANESE_LATIN:
+            return LanguageTag("su-Latn");
+            break;
+        case APPLE_LANG_GALICIAN:
+            nLang = LANGUAGE_GALICIAN;
+            break;
+        case APPLE_LANG_AFRIKAANS:
+            nLang = LANGUAGE_AFRIKAANS;
+            break;
+        case APPLE_LANG_BRETON:
+            nLang = LANGUAGE_BRETON_FRANCE;
+            break;
+        case APPLE_LANG_INUKTITUT:
+            nLang = LANGUAGE_INUKTITUT_LATIN_CANADA; //probably
+            break;
+        case APPLE_LANG_SCOTTISH_GAELIC:
+            nLang = LANGUAGE_GAELIC_SCOTLAND;
+            break;
+        case APPLE_LANG_MANX_GAELIC:
+            nLang = LANGUAGE_USER_MANX;
+            break;
+        case APPLE_LANG_IRISH_GAELIC_WITH_DOT_ABOVE:
+            return LanguageTag("ga-Latg");
+            break;
+        case APPLE_LANG_TONGAN:
+            return LanguageTag("to");
+            break;
+        case APPLE_LANG_GREEK_POLYTONIC:
+            nLang = LANGUAGE_USER_ANCIENT_GREEK;
+            break;
+        case APPLE_LANG_GREENLANDIC:
+            nLang = LANGUAGE_KALAALLISUT_GREENLAND;
+            break;
+        case APPLE_LANG_AZERI_LATIN:
+            nLang = LANGUAGE_AZERI_LATIN;
+            break;
+    }
+
+    return LanguageTag(nLang);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
