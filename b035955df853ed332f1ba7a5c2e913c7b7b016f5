@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_f1fe8804",
+        "filename": "sw/inc/dbmgr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-09-12T20:16:51Z",
+      "side": 1,
+      "message": "a forward delcaration of SwCalc should be enough?",
+      "revId": "b035955df853ed332f1ba7a5c2e913c7b7b016f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae975fb_b108002a",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1855,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-09-12T20:16:51Z",
+      "side": 1,
+      "message": "reference varaible should be called \"rCalc\"",
+      "revId": "b035955df853ed332f1ba7a5c2e913c7b7b016f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae975fb_d103840c",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1875,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2014-09-12T20:16:51Z",
+      "side": 1,
+      "message": "the writer coding conventions say put the { on a separate line - but i agree with you that that is ugly so don\u0027t care that much :)",
+      "revId": "b035955df853ed332f1ba7a5c2e913c7b7b016f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
