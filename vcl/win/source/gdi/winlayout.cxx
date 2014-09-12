@@ -667,7 +667,7 @@ sal_Int32 SimpleWinLayout::GetTextBreak( DeviceCoordinate nMaxWidth, DeviceCoord
     return -1;
 }
 
-void SimpleWinLayout::GetCaretPositions( int nMaxIdx, DeviceCoordinat* pCaretXArray ) const
+void SimpleWinLayout::GetCaretPositions( int nMaxIdx, DeviceCoordinate* pCaretXArray ) const
 {
     DeviceCoordinate nXPos = mnBaseAdv;
 
