@@ -341,7 +341,7 @@ namespace svx
 
             case COMMIT_RECORD:
             {
-                sal_Bool bDummy( sal_False );
+                sal_Bool bDummy( false );
                 bSuccess = m_xFormOperations->commitCurrentRecord( bDummy );
             }
             break;

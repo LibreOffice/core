@@ -46,8 +46,8 @@ SvxPageWindow::SvxPageWindow(Window* pParent)
 
     //UUUU
     pBorder(0),
-    bResetBackground(sal_False),
-    bFrameDirection(sal_False),
+    bResetBackground(false),
+    bFrameDirection(false),
     nFrameDirection(0),
 
     nHdLeft(0),
@@ -169,7 +169,7 @@ void SvxPageWindow::DrawPage(const Point& rOrg, const bool bSecond, const bool b
         DrawRect(Rectangle(Point(0,0),winSize));
 
         if(bResetBackground)
-            bResetBackground = sal_False;
+            bResetBackground = false;
     }
     SetLineColor(rFieldTextColor);
     // Shadow

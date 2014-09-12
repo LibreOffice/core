@@ -38,7 +38,7 @@ public:
     virtual void LoseFocus() SAL_OVERRIDE;
 
 protected:
-    virtual void FirePosition( sal_Bool _bForce );
+    virtual void FirePosition( bool _bForce );
 };
 
 

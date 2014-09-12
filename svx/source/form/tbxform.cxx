@@ -64,7 +64,7 @@ SvxFmAbsRecWin::~SvxFmAbsRecWin()
 }
 
 
-void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
+void SvxFmAbsRecWin::FirePosition( bool _bForce )
 {
     if ( _bForce || IsValueChangedFromSaved() )
     {
@@ -92,14 +92,14 @@ void SvxFmAbsRecWin::FirePosition( sal_Bool _bForce )
 
 void SvxFmAbsRecWin::LoseFocus()
 {
-    FirePosition( sal_False );
+    FirePosition( false );
 }
 
 
 void SvxFmAbsRecWin::KeyInput( const KeyEvent& rKeyEvent )
 {
     if( rKeyEvent.GetKeyCode() == KEY_RETURN && !GetText().isEmpty() )
-        FirePosition( sal_True );
+        FirePosition( true );
     else
         NumericField::KeyInput( rKeyEvent );
 }

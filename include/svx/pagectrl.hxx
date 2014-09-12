@@ -41,8 +41,8 @@ private:
     long        nRight;
 
     SvxBoxItem*     pBorder;
-    sal_Bool        bResetBackground;
-    sal_Bool        bFrameDirection;
+    bool        bResetBackground;
+    bool        bFrameDirection;
     sal_Int32       nFrameDirection;
 
     long        nHdLeft;
