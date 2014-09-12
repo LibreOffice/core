@@ -2116,8 +2116,9 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     OUString aPersona( officecfg::Office::Common::Misc::Persona::get( xContext ) );
     OUString aPersonaSettings( officecfg::Office::Common::Misc::PersonaSettings::get( xContext ) );
 
-    // have the settings changed?
-    OUString aOldValue( aPersona + ";" + aPersonaSettings );
+    // have the settings changed? marks if header /footer prepared before
+    //should maybe extended to a flag that marks if header /footer /both are loaded
+    OUString  aOldValue= eWhich==PERSONA_HEADER?OUString(aPersona + ";" + aPersonaSettings+";h" ):OUString(aPersona + ";" + aPersonaSettings+";f" );
     if ( rHeaderFooter == aOldValue )
         return;
 
@@ -2183,7 +2184,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
 const BitmapEx StyleSettings::GetPersonaFooter() const
 {
     setupPersonaHeaderFooter( PERSONA_FOOTER, mpData->maPersonaHeaderFooter, mpData->maPersonaFooterBitmap, mpData->maPersonaMenuBarTextColor );
-    return mpData->maPersonaHeaderBitmap;
+    return mpData->maPersonaFooterBitmap;
 }
 
 const BitmapEx StyleSettings::GetPersonaHeader() const
