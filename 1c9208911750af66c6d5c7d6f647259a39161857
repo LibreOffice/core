@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_95eba6b0",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "equal to zero -\u003e always zero",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_75d162fb",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "u -\u003e you",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_55ce5e5b",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "start with simple insert",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_35dbda1d",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "inset -\u003e insert",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_15d8d61c",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "for all columns of the pattern, till limit is not reached",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_f5031275",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "increase insert count to get from null string to pattern",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_f52af2e6",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "I would reformat the whole block, because even in German this is hard to understand:\n\n// Character is equal in string and pattern.\n//\n// If from this point:\n// * pattern and string have the same count of this character\n// * and character count is the same before this position\n// the replace was none.\n//\n// Scrambled letters are recognized and the replace is withdrawed. Whereby\n// the double limit comes to fruition.\n//\n// Same quantity c",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_d5080e94",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "an insert... (like above)",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae47921_b5fd8a70",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 1,
+      "message": "0 plus anything produces 1",
+      "revId": "1c9208911750af66c6d5c7d6f647259a39161857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

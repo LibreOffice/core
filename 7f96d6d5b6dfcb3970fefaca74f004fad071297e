@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fae47921_9502866e",
+        "filename": "i18npool/source/search/levdis.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-12T09:14:55Z",
+      "side": 0,
+      "message": "\"same quantity c\" is missing",
+      "revId": "7f96d6d5b6dfcb3970fefaca74f004fad071297e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
