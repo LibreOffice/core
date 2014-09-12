@@ -1018,6 +1018,65 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
             }
         }
     }
+    else if( pNameRecord->platformID == 1 )
+    {
+        OString aName((const sal_Char*)(pNameRecord->sptr), pNameRecord->slen);
+        rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
+        switch (pNameRecord->encodingID)
+        {
+            case 0:
+                eEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
+                break;
+            case 1:
+                eEncoding = RTL_TEXTENCODING_APPLE_JAPANESE;
+                break;
+            case 2:
+                eEncoding = RTL_TEXTENCODING_APPLE_CHINTRAD;
+                break;
+            case 3:
+                eEncoding = RTL_TEXTENCODING_APPLE_KOREAN;
+                break;
+            case 4:
+                eEncoding = RTL_TEXTENCODING_APPLE_ARABIC;
+                break;
+            case 5:
+                eEncoding = RTL_TEXTENCODING_APPLE_HEBREW;
+                break;
+            case 6:
+                eEncoding = RTL_TEXTENCODING_APPLE_GREEK;
+                break;
+            case 7:
+                eEncoding = RTL_TEXTENCODING_APPLE_CYRILLIC;
+                break;
+            case 9:
+                eEncoding = RTL_TEXTENCODING_APPLE_DEVANAGARI;
+                break;
+            case 10:
+                eEncoding = RTL_TEXTENCODING_APPLE_GURMUKHI;
+                break;
+            case 11:
+                eEncoding = RTL_TEXTENCODING_APPLE_GUJARATI;
+                break;
+            case 21:
+                eEncoding = RTL_TEXTENCODING_APPLE_THAI;
+                break;
+            case 25:
+                eEncoding = RTL_TEXTENCODING_APPLE_CHINSIMP;
+                break;
+            case 29:
+                eEncoding = RTL_TEXTENCODING_APPLE_CENTEURO;
+                break;
+            case 32:    //Uninterpreted
+                eEncoding = RTL_TEXTENCODING_UTF8;
+                break;
+            default:
+                SAL_WARN("vcl", "Unimplmented mac encoding " << pNameRecord->encodingID << " to unicode conversion");
+                break;
+        }
+        if (eEncoding != RTL_TEXTENCODING_DONTKNOW)
+            aValue = OStringToOUString(aName, eEncoding);
+    }
+
     return aValue;
 }
 
@@ -1077,8 +1136,21 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
                 else
                     nMatch = 1000;
             }
+            else if( pNameRecords[i].platformID == 1 )
+            {
+/*
+                // to-do, mac to LanguageType conversion
+                if( pNameRecords[i].languageID == aLang )
+                    nMatch = 8000;
+                else*/ if( pNameRecords[i].languageID == 0 ) //English
+                    nMatch = 2000;
+                else
+                    nMatch = 1000;
+            }
             OUString aName = convertTrueTypeName( pNameRecords + i );
             aSet.insert( aName );
+            if (aName.isEmpty())
+                continue;
             if( nMatch > nLastMatch || isBadTNR(aName, aSet) )
             {
                 nLastMatch = nMatch;
