@@ -20,7 +20,8 @@
 #include <iterator>
 #include <boost/utility.hpp>
 
-#include "oox/drawingml/fillproperties.hxx"
+#include <oox/drawingml/fillproperties.hxx>
+#include <drawingml/graphicproperties.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

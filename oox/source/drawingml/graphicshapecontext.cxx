@@ -21,8 +21,9 @@
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include <osl/diagnose.h>
 
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/customshapeproperties.hxx"
+#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/graphicproperties.hxx"
+#include "drawingml/customshapeproperties.hxx"
 #include "drawingml/diagram/diagram.hxx"
 #include "drawingml/table/tablecontext.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -33,7 +34,7 @@
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 #include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/transform2dcontext.hxx"
+#include "drawingml/transform2dcontext.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"

@@ -29,7 +29,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
+#include "drawingml/colorchoicecontext.hxx"
 #include "pptfilterhelpers.hxx"
 
 using namespace ::oox::core;

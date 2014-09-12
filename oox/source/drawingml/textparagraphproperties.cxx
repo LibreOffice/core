@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textparagraphproperties.hxx"
+#include "drawingml/textparagraphproperties.hxx"
 
 #include <com/sun/star/text/XNumberingRulesSupplier.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>

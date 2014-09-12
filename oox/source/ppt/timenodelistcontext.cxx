@@ -41,7 +41,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
+#include "drawingml/colorchoicecontext.hxx"
 #include "oox/ppt/slidetransition.hxx"
 
 #include "animvariantcontext.hxx"

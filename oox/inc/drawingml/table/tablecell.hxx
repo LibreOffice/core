@@ -25,7 +25,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/lineproperties.hxx>
 #include <oox/drawingml/fillproperties.hxx>
-#include <oox/drawingml/textliststyle.hxx>
+#include <drawingml/textliststyle.hxx>
 #include <com/sun/star/table/XCell.hpp>
 
 #include <boost/shared_ptr.hpp>

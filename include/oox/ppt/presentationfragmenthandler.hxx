@@ -22,7 +22,6 @@
 
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <oox/drawingml/textliststyle.hxx>
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/core/contexthandler.hxx>
 #include <oox/core/fragmenthandler.hxx>

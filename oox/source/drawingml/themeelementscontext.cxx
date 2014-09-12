@@ -17,12 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/themeelementscontext.hxx"
-#include "oox/drawingml/clrschemecontext.hxx"
+#include "drawingml/themeelementscontext.hxx"
+#include "drawingml/clrschemecontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/linepropertiescontext.hxx"
+#include "drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/textcharacterproperties.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "effectproperties.hxx"

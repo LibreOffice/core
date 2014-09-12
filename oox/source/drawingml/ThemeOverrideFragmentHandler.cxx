@@ -7,9 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "oox/drawingml/ThemeOverrideFragmentHandler.hxx"
+#include <drawingml/ThemeOverrideFragmentHandler.hxx>
 #include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/themeelementscontext.hxx"
+#include "drawingml/themeelementscontext.hxx"
 
 using namespace ::oox::core;
 

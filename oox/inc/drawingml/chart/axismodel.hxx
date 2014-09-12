@@ -21,6 +21,7 @@
 #define INCLUDED_OOX_DRAWINGML_CHART_AXISMODEL_HXX
 
 #include <oox/drawingml/shape.hxx>
+#include <oox/token/tokens.hxx>
 #include <drawingml/chart/titlemodel.hxx>
 
 namespace oox {

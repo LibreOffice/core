@@ -8,7 +8,7 @@
  *
  */
 
-#include "oox/drawingml/texteffectscontext.hxx"
+#include "drawingml/texteffectscontext.hxx"
 
 #include <map>
 

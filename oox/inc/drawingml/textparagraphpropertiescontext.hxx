@@ -17,46 +17,39 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
 
+#include <list>
+
+#include <com/sun/star/style/TabStop.hpp>
+#include <oox/drawingml/drawingmltypes.hxx>
+#include <drawingml/textparagraphproperties.hxx>
+#include <drawingml/textspacing.hxx>
 #include <oox/core/contexthandler2.hxx>
-#include <oox/drawingml/clrscheme.hxx>
-#include <oox/drawingml/color.hxx>
-#include <oox/drawingml/colorchoicecontext.hxx>
 
 namespace oox { namespace drawingml {
 
-class clrMapContext : public oox::core::ContextHandler2
+class TextParagraphPropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    clrMapContext( ::oox::core::ContextHandler2Helper& rParent,
-        const ::oox::AttributeList& rAttributes, ClrMap& rClrMap );
-};
+    TextParagraphPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+            const ::oox::AttributeList& rAttributes,
+            TextParagraphProperties& rTextParagraphProperties );
+    virtual ~TextParagraphPropertiesContext();
 
-class clrSchemeColorContext : private Color, public ColorContext
-{
-public:
-    clrSchemeColorContext( ::oox::core::ContextHandler2Helper& rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken );
-    virtual ~clrSchemeColorContext();
-
-private:
-    ClrScheme&      mrClrScheme;
-    sal_Int32       mnColorToken;
-};
-
-class clrSchemeContext : public oox::core::ContextHandler2
-{
-public:
-    clrSchemeContext( ::oox::core::ContextHandler2Helper& rParent, ClrScheme& rClrScheme );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
-private:
-    ClrScheme&      mrClrScheme;
+protected:
+    TextParagraphProperties& mrTextParagraphProperties;
+    TextSpacing     maLineSpacing;
+    BulletList&     mrBulletList;
+    ::std::list< ::com::sun::star::style::TabStop >  maTabList;
+    ::boost::shared_ptr< BlipFillProperties > mxBlipProps;
 };
 
 } }
 
-#endif // INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
+#endif // INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,7 +8,7 @@
  */
 
 #include "WpgContext.hxx"
-#include <oox/drawingml/shapepropertiescontext.hxx>
+#include <drawingml/shapepropertiescontext.hxx>
 #include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
 

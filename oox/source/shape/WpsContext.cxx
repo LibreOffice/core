@@ -8,10 +8,14 @@
  */
 
 #include "WpsContext.hxx"
-#include <oox/drawingml/shapepropertiescontext.hxx>
-#include <oox/drawingml/shapestylecontext.hxx>
+#include <drawingml/customshapeproperties.hxx>
+#include <drawingml/shapepropertiescontext.hxx>
+#include <drawingml/shapestylecontext.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <oox/drawingml/drawingmltypes.hxx>
+
+#include <boost/optional.hpp>
 
 using namespace com::sun::star;
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textparagraphpropertiescontext.hxx"
+#include "drawingml/textparagraphpropertiescontext.hxx"
 
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -25,8 +25,8 @@
 
 #include <svx/unopage.hxx>
 
-#include "oox/drawingml/colorchoicecontext.hxx"
-#include "oox/drawingml/textcharacterpropertiescontext.hxx"
+#include "drawingml/colorchoicecontext.hxx"
+#include "drawingml/textcharacterpropertiescontext.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "textspacingcontext.hxx"

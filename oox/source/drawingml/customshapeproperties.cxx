@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/customshapeproperties.hxx"
+#include "drawingml/customshapeproperties.hxx"
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"

@@ -18,9 +18,9 @@
  */
 
 #include "oox/drawingml/themefragmenthandler.hxx"
-#include "oox/drawingml/objectdefaultcontext.hxx"
+#include "drawingml/objectdefaultcontext.hxx"
 #include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/themeelementscontext.hxx"
+#include "drawingml/themeelementscontext.hxx"
 
 using namespace ::oox::core;
 

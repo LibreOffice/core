@@ -23,7 +23,7 @@
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
 #include <oox/drawingml/color.hxx>
-#include <oox/drawingml/textfont.hxx>
+#include <drawingml/textfont.hxx>
 #include <oox/drawingml/fillproperties.hxx>
 
 namespace oox { class PropertySet; }

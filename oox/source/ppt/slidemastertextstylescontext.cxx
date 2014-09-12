@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textliststyle.hxx"
-#include "oox/drawingml/textliststylecontext.hxx"
+#include "drawingml/textliststyle.hxx"
+#include "drawingml/textliststylecontext.hxx"
 #include "oox/ppt/slidemastertextstylescontext.hxx"
 
 using namespace ::oox::core;

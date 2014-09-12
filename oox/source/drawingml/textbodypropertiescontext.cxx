@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textbodypropertiescontext.hxx"
+#include "drawingml/textbodypropertiescontext.hxx"
 
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include "oox/drawingml/textbodyproperties.hxx"
+#include "drawingml/textbodyproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"

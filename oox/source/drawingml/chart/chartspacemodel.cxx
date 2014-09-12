@@ -18,6 +18,7 @@
  */
 
 #include "drawingml/chart/chartspacemodel.hxx"
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace drawingml {

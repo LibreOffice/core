@@ -22,7 +22,7 @@
 #include "diagramdefinitioncontext.hxx"
 #include "diagramfragmenthandler.hxx"
 #include "datamodelcontext.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
+#include "drawingml/colorchoicecontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;

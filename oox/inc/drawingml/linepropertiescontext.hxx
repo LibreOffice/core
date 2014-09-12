@@ -17,28 +17,34 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 
-#include <oox/drawingml/textliststyle.hxx>
 #include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
 
-class TextListStyleContext : public ::oox::core::ContextHandler2
+
+
+struct LineProperties;
+
+class LinePropertiesContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextListStyleContext( ::oox::core::ContextHandler2Helper& rParent, TextListStyle& rTextListStyle );
-    virtual ~TextListStyleContext();
+    LinePropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
+            const ::oox::AttributeList& rAttributes,
+            LineProperties& rLineProperties ) throw();
+    virtual ~LinePropertiesContext();
 
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef
+        onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
-    TextListStyle& mrTextListStyle;
+    LineProperties& mrLineProperties;
 };
 
 } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TEXTLISTSTYLECONTEXT_HXX
+#endif // INCLUDED_OOX_DRAWINGML_LINEPROPERTIESCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

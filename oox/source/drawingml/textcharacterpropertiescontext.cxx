@@ -17,14 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textcharacterpropertiescontext.hxx"
+#include "drawingml/textcharacterpropertiescontext.hxx"
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
-#include "oox/drawingml/texteffectscontext.hxx"
+#include "drawingml/colorchoicecontext.hxx"
+#include "drawingml/texteffectscontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/textparagraphproperties.hxx"
+#include "drawingml/textparagraphproperties.hxx"
 #include "oox/core/relations.hxx"
 #include "hyperlinkcontext.hxx"
 

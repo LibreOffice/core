@@ -18,14 +18,16 @@
  */
 
 #include "oox/drawingml/shape.hxx"
-#include "oox/drawingml/customshapeproperties.hxx"
+#include "drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/fillproperties.hxx"
+#include "drawingml/graphicproperties.hxx"
+#include <drawingml/scene3dcontext.hxx>
 #include "oox/drawingml/lineproperties.hxx"
 #include "effectproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/ThemeOverrideFragmentHandler.hxx"
+#include "drawingml/textbody.hxx"
+#include <drawingml/ThemeOverrideFragmentHandler.hxx>
 #include "drawingml/table/tableproperties.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "drawingml/chart/chartspacefragment.hxx"

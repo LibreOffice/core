@@ -19,7 +19,7 @@
 
 #include "drawingml/chart/plotareacontext.hxx"
 
-#include "oox/drawingml/shapepropertiescontext.hxx"
+#include "drawingml/shapepropertiescontext.hxx"
 #include "drawingml/chart/axiscontext.hxx"
 #include "drawingml/chart/plotareamodel.hxx"
 #include "drawingml/chart/seriescontext.hxx"

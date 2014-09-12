@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textbody.hxx"
+#include "drawingml/textbody.hxx"
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "oox/drawingml/textparagraph.hxx"
+#include "drawingml/textparagraph.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;

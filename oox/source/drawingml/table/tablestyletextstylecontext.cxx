@@ -20,7 +20,7 @@
 #include <osl/diagnose.h>
 
 #include "drawingml/table/tablestyletextstylecontext.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
+#include "drawingml/colorchoicecontext.hxx"
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::oox::core;

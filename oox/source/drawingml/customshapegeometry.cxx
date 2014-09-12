@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/customshapegeometry.hxx"
+#include "drawingml/customshapegeometry.hxx"
+#include <drawingml/customshapeproperties.hxx>
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <boost/unordered_map.hpp>

@@ -18,6 +18,8 @@
  */
 
 #include "oox/drawingml/theme.hxx"
+#include <oox/token/tokens.hxx>
+#include <drawingml/textcharacterproperties.hxx>
 
 namespace oox {
 namespace drawingml {

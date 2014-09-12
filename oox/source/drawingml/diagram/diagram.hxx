@@ -30,6 +30,7 @@
 
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/fillproperties.hxx"
+#include <oox/token/tokens.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace dom { class XDocument; } }

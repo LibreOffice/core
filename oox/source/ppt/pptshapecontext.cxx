@@ -28,13 +28,13 @@
 #include "oox/ppt/pptshapecontext.hxx"
 #include "oox/ppt/pptshapepropertiescontext.hxx"
 #include "oox/ppt/slidepersist.hxx"
-#include "oox/drawingml/shapestylecontext.hxx"
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/shapestylecontext.hxx"
+#include "drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/customshapegeometry.hxx"
-#include "oox/drawingml/textbodycontext.hxx"
-#include "oox/drawingml/transform2dcontext.hxx"
+#include "drawingml/customshapegeometry.hxx"
+#include "drawingml/textbodycontext.hxx"
+#include "drawingml/transform2dcontext.hxx"
 
 using namespace oox::core;
 using namespace ::com::sun::star;

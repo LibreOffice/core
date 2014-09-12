@@ -21,10 +21,9 @@
 #define INCLUDED_OOX_DRAWINGML_SHAPE_HXX
 
 #include <oox/helper/propertymap.hxx>
+#include <oox/core/xmlfilterbase.hxx>
+#include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/drawingml/customshapeproperties.hxx>
-#include <oox/drawingml/textliststyle.hxx>
-#include <oox/drawingml/shape3dproperties.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>

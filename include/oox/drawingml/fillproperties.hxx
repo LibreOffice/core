@@ -25,13 +25,10 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include <oox/drawingml/color.hxx>
 #include <oox/helper/helper.hxx>
-#include <oox/drawingml/embeddedwavaudiofile.hxx>
 #include <oox/ole/oleobjecthelper.hxx>
 
 namespace oox {
     class GraphicHelper;
-    class PropertyMap;
-    class PropertySet;
 }
 
 namespace oox {
@@ -142,21 +139,6 @@ struct OOX_DLLPUBLIC FillProperties
                             sal_Int32 nPhClr = API_RGB_TRANSPARENT,
                             bool bFlipH = false,
                             bool bFlipV = false ) const;
-};
-
-struct GraphicProperties
-{
-    BlipFillProperties      maBlipProps;            /// Properties for the graphic.
-    EmbeddedWAVAudioFile    maAudio;                /// Audio file details
-
-    /** Overwrites all members that are explicitly set in rSourceProps. */
-    void                assignUsed( const GraphicProperties& rSourceProps );
-
-    /** Writes the properties to the passed property map. */
-    void                pushToPropMap(
-                            PropertyMap& rPropMap,
-                            const GraphicHelper& rGraphicHelper,
-                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
 };
 
 } // namespace drawingml

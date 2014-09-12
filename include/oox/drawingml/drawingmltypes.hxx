@@ -69,6 +69,9 @@ typedef ::boost::shared_ptr< EffectProperties > EffectPropertiesPtr;
 class TextBody;
 typedef ::boost::shared_ptr< TextBody > TextBodyPtr;
 
+class TextListStyle;
+typedef boost::shared_ptr< TextListStyle > TextListStylePtr;
+
 class Shape;
 typedef ::boost::shared_ptr< Shape > ShapePtr;
 

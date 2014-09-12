@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textliststylecontext.hxx"
-#include "oox/drawingml/textparagraphpropertiescontext.hxx"
+#include "drawingml/textliststylecontext.hxx"
+#include "drawingml/textparagraphpropertiescontext.hxx"
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::oox::core;

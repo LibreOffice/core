@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/objectdefaultcontext.hxx"
-#include "oox/drawingml/spdefcontext.hxx"
+#include "drawingml/objectdefaultcontext.hxx"
+#include "drawingml/spdefcontext.hxx"
 #include "oox/drawingml/theme.hxx"
 
 using namespace ::oox::core;

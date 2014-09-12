@@ -20,7 +20,7 @@
 #ifndef INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLETEXTSTYLECONTEXT_HXX
 #define INCLUDED_OOX_DRAWINGML_TABLE_TABLESTYLETEXTSTYLECONTEXT_HXX
 
-#include <oox/core/contexthandler.hxx>
+#include <oox/core/contexthandler2.hxx>
 #include <drawingml/table/tablestylepart.hxx>
 
 namespace oox { namespace drawingml { namespace table {

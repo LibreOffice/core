@@ -17,39 +17,46 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
 
-#include <list>
+#include <com/sun/star/text/XText.hpp>
 
-#include <com/sun/star/style/TabStop.hpp>
-#include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/drawingml/textparagraphproperties.hxx>
-#include <oox/drawingml/textspacing.hxx>
+#include <drawingml/textbody.hxx>
+#include <drawingml/textrun.hxx>
 #include <oox/core/contexthandler2.hxx>
 
 namespace oox { namespace drawingml {
 
-class TextParagraphPropertiesContext : public ::oox::core::ContextHandler2
+class TextBodyContext : public ::oox::core::ContextHandler2
 {
 public:
-    TextParagraphPropertiesContext( ::oox::core::ContextHandler2Helper& rParent,
-            const ::oox::AttributeList& rAttributes,
-            TextParagraphProperties& rTextParagraphProperties );
-    virtual ~TextParagraphPropertiesContext();
+    TextBodyContext( ::oox::core::ContextHandler2Helper& rParent, TextBody& rTextBody );
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
 
 protected:
-    TextParagraphProperties& mrTextParagraphProperties;
-    TextSpacing     maLineSpacing;
-    BulletList&     mrBulletList;
-    ::std::list< ::com::sun::star::style::TabStop >  maTabList;
-    ::boost::shared_ptr< BlipFillProperties > mxBlipProps;
+    TextBody&           mrTextBody;
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxText;
+};
+
+// CT_RegularTextRun
+class RegularTextRunContext : public ::oox::core::ContextHandler2
+{
+public:
+    RegularTextRunContext( ::oox::core::ContextHandler2Helper& rParent, TextRunPtr pRunPtr );
+
+    virtual void onEndElement() SAL_OVERRIDE;
+    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
+    virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
+
+protected:
+    TextRunPtr          mpRunPtr;
+    bool                mbIsInText;
 };
 
 } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TEXTPARAGRAPHPROPERTIESCONTEXT_HXX
+#endif // INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

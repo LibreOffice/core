@@ -21,7 +21,7 @@
 #include "drawingml/table/tableproperties.hxx"
 #include <basegfx/color/bcolor.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
-#include "oox/drawingml/textbody.hxx"
+#include "drawingml/textbody.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/propertyset.hxx"

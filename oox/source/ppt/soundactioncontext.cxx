@@ -24,7 +24,7 @@
 
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include "drawingml/embeddedwavaudiofile.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;

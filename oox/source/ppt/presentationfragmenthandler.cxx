@@ -35,7 +35,7 @@
 #include "oox/drawingml/theme.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/themefragmenthandler.hxx"
-#include "oox/drawingml/textliststylecontext.hxx"
+#include "drawingml/textliststylecontext.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/presentationfragmenthandler.hxx"
 #include "oox/ppt/slidefragmenthandler.hxx"

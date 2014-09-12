@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/shapepropertiescontext.hxx"
+#include "drawingml/shapepropertiescontext.hxx"
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -25,11 +25,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#include "oox/drawingml/scene3dcontext.hxx"
-#include "oox/drawingml/linepropertiescontext.hxx"
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/transform2dcontext.hxx"
-#include "oox/drawingml/customshapegeometry.hxx"
+#include "drawingml/scene3dcontext.hxx"
+#include "drawingml/linepropertiescontext.hxx"
+#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/transform2dcontext.hxx"
+#include "drawingml/customshapegeometry.hxx"
 #include "effectpropertiescontext.hxx"
 
 using namespace oox::core;

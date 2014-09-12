@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/scene3dcontext.hxx"
+#include "drawingml/scene3dcontext.hxx"
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
-#include "oox/drawingml/colorchoicecontext.hxx"
+#include "drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/core/xmlfilterbase.hxx"

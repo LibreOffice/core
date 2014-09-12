@@ -22,7 +22,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/shapecontext.hxx"
-#include "oox/drawingml/customshapeproperties.hxx"
+#include "drawingml/customshapeproperties.hxx"
 #include "diagramdefinitioncontext.hxx"
 #include "constraintlistcontext.hxx"
 

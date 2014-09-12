@@ -22,7 +22,7 @@
 
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/shape.hxx>
-#include <oox/drawingml/textfont.hxx>
+#include <oox/helper/refvector.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <oox/dllapi.h>
 
@@ -40,7 +40,7 @@ typedef RefVector< LineProperties >                     LineStyleList;
 typedef RefVector< EffectProperties >                   EffectStyleList;
 typedef RefMap< sal_Int32, TextCharacterProperties >    FontScheme;
 
-
+class TextFont;
 
 class OOX_DLLPUBLIC Theme
 {

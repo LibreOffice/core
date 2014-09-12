@@ -26,9 +26,9 @@
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <editeng/unoprnms.hxx>
-#include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/textparagraph.hxx"
-#include "oox/drawingml/textrun.hxx"
+#include "drawingml/textbody.hxx"
+#include "drawingml/textparagraph.hxx"
+#include "drawingml/textrun.hxx"
 #include "drawingml/diagram/diagram.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"

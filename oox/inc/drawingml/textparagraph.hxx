@@ -24,9 +24,9 @@
 #include <com/sun/star/text/XText.hpp>
 
 #include <oox/core/xmlfilterbase.hxx>
-#include <oox/drawingml/textrun.hxx>
-#include <oox/drawingml/textliststyle.hxx>
-#include <oox/drawingml/textparagraphproperties.hxx>
+#include <drawingml/textrun.hxx>
+#include <drawingml/textliststyle.hxx>
+#include <drawingml/textparagraphproperties.hxx>
 
 namespace oox { namespace drawingml {
 

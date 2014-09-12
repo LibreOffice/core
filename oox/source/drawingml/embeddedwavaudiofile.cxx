@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include "drawingml/embeddedwavaudiofile.hxx"
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::oox::core;

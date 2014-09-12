@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/spdefcontext.hxx"
-#include "oox/drawingml/shapepropertiescontext.hxx"
-#include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/textbodypropertiescontext.hxx"
-#include "oox/drawingml/textliststylecontext.hxx"
+#include "drawingml/spdefcontext.hxx"
+#include "drawingml/shapepropertiescontext.hxx"
+#include "drawingml/textbody.hxx"
+#include "drawingml/textbodypropertiescontext.hxx"
+#include "drawingml/textliststylecontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;

@@ -10,7 +10,7 @@
 #include "effectpropertiescontext.hxx"
 #include "effectproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::oox::core;

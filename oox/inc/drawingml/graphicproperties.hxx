@@ -17,42 +17,41 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/chart/titlemodel.hxx"
-#include <oox/token/tokens.hxx>
+#ifndef INCLUDED_OOX_DRAWINGML_GRAPHICPROPERTIES_HXX
+#define INCLUDED_OOX_DRAWINGML_GRAPHICPROPERTIES_HXX
+
+#include <sal/config.h>
+
+#include <oox/drawingml/fillproperties.hxx>
+#include <oox/helper/helper.hxx>
+#include <drawingml/embeddedwavaudiofile.hxx>
+
+namespace oox {
+    class GraphicHelper;
+    class PropertyMap;
+}
 
 namespace oox {
 namespace drawingml {
-namespace chart {
 
-TextModel::TextModel()
+struct GraphicProperties
 {
-}
+    BlipFillProperties      maBlipProps;            /// Properties for the graphic.
+    EmbeddedWAVAudioFile    maAudio;                /// Audio file details
 
-TextModel::~TextModel()
-{
-}
+    /** Overwrites all members that are explicitly set in rSourceProps. */
+    void                assignUsed( const GraphicProperties& rSourceProps );
 
-TitleModel::TitleModel() :
-    mbOverlay( false )
-{
-}
+    /** Writes the properties to the passed property map. */
+    void                pushToPropMap(
+                            PropertyMap& rPropMap,
+                            const GraphicHelper& rGraphicHelper,
+                            sal_Int32 nPhClr = API_RGB_TRANSPARENT ) const;
+};
 
-TitleModel::~TitleModel()
-{
-}
-
-LegendModel::LegendModel() :
-    mnPosition( XML_r ),
-    mbOverlay( false )
-{
-}
-
-LegendModel::~LegendModel()
-{
-}
-
-} // namespace chart
 } // namespace drawingml
 } // namespace oox
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

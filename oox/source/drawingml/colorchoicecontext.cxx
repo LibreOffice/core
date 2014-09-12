@@ -18,7 +18,7 @@
  */
 
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/colorchoicecontext.hxx"
+#include "drawingml/colorchoicecontext.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/color.hxx"
 

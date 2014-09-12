@@ -27,10 +27,10 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
-#include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/textparagraph.hxx"
-#include "oox/drawingml/textrun.hxx"
-#include "oox/drawingml/customshapeproperties.hxx"
+#include "drawingml/textbody.hxx"
+#include "drawingml/textparagraph.hxx"
+#include "drawingml/textrun.hxx"
+#include "drawingml/customshapeproperties.hxx"
 #include "layoutnodecontext.hxx"
 
 using namespace ::com::sun::star;

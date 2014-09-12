@@ -18,7 +18,7 @@
  */
 
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/textspacing.hxx"
+#include "drawingml/textspacing.hxx"
 #include "textspacingcontext.hxx"
 
 using namespace ::oox::core;

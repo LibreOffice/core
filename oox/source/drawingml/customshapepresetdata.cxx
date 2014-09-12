@@ -12,7 +12,7 @@
 #include <tools/stream.hxx>
 #include <comphelper/sequenceasvector.hxx>
 
-#include "oox/drawingml/customshapeproperties.hxx"
+#include "drawingml/customshapeproperties.hxx"
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"

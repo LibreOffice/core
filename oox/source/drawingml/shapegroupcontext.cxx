@@ -27,8 +27,9 @@
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/customshapegeometry.hxx"
-#include "oox/drawingml/textbodycontext.hxx"
+#include "drawingml/customshapegeometry.hxx"
+#include <drawingml/shapepropertiescontext.hxx>
+#include "drawingml/textbodycontext.hxx"
 
 using namespace oox::core;
 using namespace ::com::sun::star;

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/clrschemecontext.hxx"
+#include "drawingml/clrschemecontext.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 
 using namespace ::oox::core;

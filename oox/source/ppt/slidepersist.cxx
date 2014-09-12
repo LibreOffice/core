@@ -22,9 +22,12 @@
 #include "oox/ppt/slidepersist.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
+#include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "drawingml/textliststyle.hxx"
+#include "drawingml/textparagraphproperties.hxx"
 
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

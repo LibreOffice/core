@@ -24,7 +24,6 @@
 
 #include <oox/core/contexthandler2.hxx>
 #include <oox/drawingml/shape.hxx>
-#include <oox/drawingml/shapepropertiescontext.hxx>
 #include <oox/dllapi.h>
 
 namespace oox { namespace drawingml {

@@ -19,9 +19,9 @@
 
 #include "datamodelcontext.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/shapepropertiescontext.hxx"
-#include "oox/drawingml/textbodycontext.hxx"
+#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/shapepropertiescontext.hxx"
+#include "drawingml/textbodycontext.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;

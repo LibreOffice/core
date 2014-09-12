@@ -24,8 +24,6 @@
 #include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/clrscheme.hxx>
-#include <oox/drawingml/textliststyle.hxx>
-#include <oox/drawingml/textparagraphproperties.hxx>
 #include <oox/ppt/headerfooter.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>

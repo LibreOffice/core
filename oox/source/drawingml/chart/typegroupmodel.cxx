@@ -18,6 +18,7 @@
  */
 
 #include "drawingml/chart/typegroupmodel.hxx"
+#include <oox/token/tokens.hxx>
 
 namespace oox {
 namespace drawingml {

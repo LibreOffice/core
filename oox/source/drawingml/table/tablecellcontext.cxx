@@ -20,9 +20,9 @@
 #include <osl/diagnose.h>
 
 #include "drawingml/table/tablecellcontext.hxx"
-#include "oox/drawingml/textbodycontext.hxx"
-#include "oox/drawingml/linepropertiescontext.hxx"
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/textbodycontext.hxx"
+#include "drawingml/linepropertiescontext.hxx"
+#include "drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
 
 using namespace ::oox::core;

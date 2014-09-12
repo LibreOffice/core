@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textfont.hxx"
+#include "drawingml/textfont.hxx"
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
 #include "oox/drawingml/theme.hxx"

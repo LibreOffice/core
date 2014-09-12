@@ -18,7 +18,7 @@
  */
 
 #include "oox/ppt/backgroundproperties.hxx"
-#include "oox/drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/core/contexthandler2.hxx"
 

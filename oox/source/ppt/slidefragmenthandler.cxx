@@ -35,7 +35,8 @@
 #include "oox/ppt/pptshape.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
-#include "oox/drawingml/clrschemecontext.hxx"
+#include "drawingml/clrschemecontext.hxx"
+#include "drawingml/textliststyle.hxx"
 #include "oox/ppt/pptimport.hxx"
 
 using namespace ::com::sun::star;

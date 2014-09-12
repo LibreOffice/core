@@ -19,8 +19,8 @@
 
 #include "drawingml/chart/seriescontext.hxx"
 
-#include "oox/drawingml/shapepropertiescontext.hxx"
-#include "oox/drawingml/textbodycontext.hxx"
+#include "drawingml/shapepropertiescontext.hxx"
+#include "drawingml/textbodycontext.hxx"
 #include "drawingml/chart/datasourcecontext.hxx"
 #include "drawingml/chart/seriesmodel.hxx"
 #include "drawingml/chart/titlecontext.hxx"

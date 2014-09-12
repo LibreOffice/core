@@ -17,46 +17,46 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
-#define INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
+#ifndef INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
+#define INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 
-#include <com/sun/star/text/XText.hpp>
-
-#include <oox/drawingml/textbody.hxx>
-#include <oox/drawingml/textrun.hxx>
 #include <oox/core/contexthandler2.hxx>
+#include <oox/drawingml/clrscheme.hxx>
+#include <oox/drawingml/color.hxx>
+#include <drawingml/colorchoicecontext.hxx>
 
 namespace oox { namespace drawingml {
 
-class TextBodyContext : public ::oox::core::ContextHandler2
+class clrMapContext : public oox::core::ContextHandler2
 {
 public:
-    TextBodyContext( ::oox::core::ContextHandler2Helper& rParent, TextBody& rTextBody );
-
-    virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
-
-protected:
-    TextBody&           mrTextBody;
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > mxText;
+    clrMapContext( ::oox::core::ContextHandler2Helper& rParent,
+        const ::oox::AttributeList& rAttributes, ClrMap& rClrMap );
 };
 
-// CT_RegularTextRun
-class RegularTextRunContext : public ::oox::core::ContextHandler2
+class clrSchemeColorContext : private Color, public ColorContext
 {
 public:
-    RegularTextRunContext( ::oox::core::ContextHandler2Helper& rParent, TextRunPtr pRunPtr );
+    clrSchemeColorContext( ::oox::core::ContextHandler2Helper& rParent, ClrScheme& rClrScheme, sal_Int32 nColorToken );
+    virtual ~clrSchemeColorContext();
 
-    virtual void onEndElement() SAL_OVERRIDE;
+private:
+    ClrScheme&      mrClrScheme;
+    sal_Int32       mnColorToken;
+};
+
+class clrSchemeContext : public oox::core::ContextHandler2
+{
+public:
+    clrSchemeContext( ::oox::core::ContextHandler2Helper& rParent, ClrScheme& rClrScheme );
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) SAL_OVERRIDE;
-    virtual void onCharacters( const OUString& aChars ) SAL_OVERRIDE;
 
-protected:
-    TextRunPtr          mpRunPtr;
-    bool                mbIsInText;
+private:
+    ClrScheme&      mrClrScheme;
 };
 
 } }
 
-#endif // INCLUDED_OOX_DRAWINGML_TEXTBODYCONTEXT_HXX
+#endif // INCLUDED_OOX_DRAWINGML_CLRSCHEMECONTEXT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

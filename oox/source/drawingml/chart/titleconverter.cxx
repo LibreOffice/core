@@ -26,8 +26,8 @@
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include "oox/drawingml/textbody.hxx"
-#include "oox/drawingml/textparagraph.hxx"
+#include "drawingml/textbody.hxx"
+#include "drawingml/textparagraph.hxx"
 #include "drawingml/chart/datasourceconverter.hxx"
 #include "drawingml/chart/titlemodel.hxx"
 #include "oox/helper/containerhelper.hxx"

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textcharacterproperties.hxx"
+#include "drawingml/textcharacterproperties.hxx"
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>

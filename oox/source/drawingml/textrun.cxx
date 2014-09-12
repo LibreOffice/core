@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "oox/drawingml/textrun.hxx"
+#include "drawingml/textrun.hxx"
 
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>

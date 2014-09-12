@@ -26,7 +26,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/drawingml/embeddedwavaudiofile.hxx"
+#include "drawingml/embeddedwavaudiofile.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
