@@ -249,7 +249,7 @@ class BackendImpl : public ImplBaseT
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bRemoved, OUString const & identifier,
+        bool bRemoved, OUString const & identifier,
         Reference<ucb::XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
     virtual void SAL_CALL disposing() SAL_OVERRIDE;
@@ -375,7 +375,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
-    sal_Bool bRemoved, OUString const & identifier,
+    bool bRemoved, OUString const & identifier,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );

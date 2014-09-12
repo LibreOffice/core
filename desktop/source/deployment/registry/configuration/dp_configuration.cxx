@@ -107,7 +107,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
-        OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+        OUString const & url, OUString const & mediaType, bool bRemoved,
         OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
@@ -302,7 +302,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
-    sal_Bool bRemoved, OUString const & identifier,
+    bool bRemoved, OUString const & identifier,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString mediaType( mediaType_ );

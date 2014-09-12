@@ -303,7 +303,7 @@ protected:
     // @@@ to be implemented by specific backend:
     virtual css::uno::Reference<css::deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bRemoved, OUString const & identifier,
+        bool bRemoved, OUString const & identifier,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
 

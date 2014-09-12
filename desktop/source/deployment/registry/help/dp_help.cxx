@@ -92,7 +92,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
-        sal_Bool bRemoved, OUString const & identifier,
+        bool bRemoved, OUString const & identifier,
         Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
     void implProcessHelp( PackageImpl * package, bool doRegisterPackage,
@@ -174,7 +174,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
-    sal_Bool bRemoved, OUString const & identifier,
+    bool bRemoved, OUString const & identifier,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     // we don't support auto detection:

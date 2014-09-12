@@ -78,7 +78,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
-        OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+        OUString const & url, OUString const & mediaType, bool bRemoved,
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv ) SAL_OVERRIDE;
 
     void addDataToDb(OUString const & url);
@@ -156,7 +156,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
 
 // PackageRegistryBackend
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
-    OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+    OUString const & url, OUString const & mediaType, bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     if (mediaType.isEmpty())
