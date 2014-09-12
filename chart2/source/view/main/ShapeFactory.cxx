@@ -976,7 +976,7 @@ uno::Reference< drawing::XShape >
                     , const Stripe& rStripe
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , sal_Bool bDoubleSided
+                    , bool bDoubleSided
                     , short nRotatedTexture
                     , bool bFlatNormals )
 {

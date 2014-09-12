@@ -138,7 +138,7 @@ public:
                     , const Stripe& rStripe
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSourceProp
                     , const tPropertyNameMap& rPropertyNameMap
-                    , sal_Bool bDoubleSided = true
+                    , bool bDoubleSided = true
                     , short nRotatedTexture = 0 //0 to 7 are the different possibilities
                     , bool bFlatNormals=true ) = 0;
 

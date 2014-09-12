@@ -51,7 +51,7 @@ public:
     ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
                             throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
-    virtual uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( sal_Bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const = 0;
+    virtual uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const = 0;
 
 protected:
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -124,7 +124,7 @@ public:
     ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                             throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
-    uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( sal_Bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const SAL_OVERRIDE;
+    uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const SAL_OVERRIDE;
 };
 
 WrappedVolumeProperty::WrappedVolumeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
@@ -162,7 +162,7 @@ WrappedVolumeProperty::~WrappedVolumeProperty()
     return m_aOuterValue;
 }
 
-uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTemplate( sal_Bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
+uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
 {
     uno::Reference< chart2::XChartTypeTemplate > xTemplate(0);
 
@@ -195,7 +195,7 @@ public:
     ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
                             throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException) SAL_OVERRIDE;
 
-    uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( sal_Bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const SAL_OVERRIDE;
+    uno::Reference< chart2::XChartTypeTemplate > getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const SAL_OVERRIDE;
 };
 WrappedUpDownProperty::WrappedUpDownProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
         : WrappedStockProperty( "UpDown", uno::makeAny(sal_False) , spChart2ModelContact )
@@ -230,7 +230,7 @@ WrappedUpDownProperty::~WrappedUpDownProperty()
     }
     return m_aOuterValue;
 }
-uno::Reference< chart2::XChartTypeTemplate > WrappedUpDownProperty::getNewTemplate( sal_Bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
+uno::Reference< chart2::XChartTypeTemplate > WrappedUpDownProperty::getNewTemplate( bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
 {
     uno::Reference< chart2::XChartTypeTemplate > xTemplate(0);
     if( bNewValue ) //add open series
