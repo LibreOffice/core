@@ -207,14 +207,6 @@ namespace sdr
 
         const basegfx::B2DRange& ViewObjectContact::getObjectRange() const
         {
-#if HAVE_FEATURE_DESKTOP
-            // 3D charts need to be notified separately, they are not to be
-            // drawn by the drawinglayer
-            ViewContactOfSdrOle2Obj* pViewContact = dynamic_cast<ViewContactOfSdrOle2Obj*>(&GetViewContact());
-            if (pViewContact && pViewContact->GetOle2Obj().IsReal3DChart())
-                ChartHelper::updateChart(pViewContact->GetOle2Obj().getXModel());
-#endif
-
             if(maObjectRange.isEmpty())
             {
                 // if range is not computed (new or LazyInvalidate objects), force it
@@ -262,6 +254,14 @@ namespace sdr
             {
                 // reset flag
                 mbLazyInvalidate = false;
+
+#if HAVE_FEATURE_DESKTOP
+                // 3D charts need to be notified separately, they are not to be
+                // drawn by the drawinglayer
+                ViewContactOfSdrOle2Obj* pViewContact = dynamic_cast<ViewContactOfSdrOle2Obj*>(&GetViewContact());
+                if (pViewContact && pViewContact->GetOle2Obj().IsReal3DChart())
+                    ChartHelper::updateChart(pViewContact->GetOle2Obj().getXModel());
+#endif
 
                 // force ObjectRange
                 getObjectRange();
