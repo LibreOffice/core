@@ -176,18 +176,18 @@ public:
 
     virtual ~SvxDoCapitals() {}
 
-    virtual void DoSpace( const sal_Bool bDraw );
+    virtual void DoSpace( const bool bDraw );
     virtual void SetSpace();
     virtual void Do( const OUString &rTxt,
                      const sal_Int32 nIdx, const sal_Int32 nLen,
-                     const sal_Bool bUpper ) = 0;
+                     const bool bUpper ) = 0;
 
     const OUString &GetTxt() const { return rTxt; }
     sal_Int32 GetIdx() const { return nIdx; }
     sal_Int32 GetLen() const { return nLen; }
 };
 
-void SvxDoCapitals::DoSpace( const sal_Bool /*bDraw*/ ) { }
+void SvxDoCapitals::DoSpace( const bool /*bDraw*/ ) { }
 
 void SvxDoCapitals::SetSpace() { }
 
@@ -247,11 +247,11 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos-nOldPos);
                 OUString aNewText = CalcCaseMap(aSnippet);
 
-                rDo.Do( aNewText, 0, aNewText.getLength(), sal_True );
+                rDo.Do( aNewText, 0, aNewText.getLength(), true );
             }
             else
             {
-                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, sal_True );
+                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, true );
             }
 
             nOldPos = nPos;
@@ -277,11 +277,11 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos - nOldPos);
                 OUString aNewText = CalcCaseMap(aSnippet);
 
-                rDo.Do( aNewText, 0, aNewText.getLength(), sal_False );
+                rDo.Do( aNewText, 0, aNewText.getLength(), false );
             }
             else
             {
-                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, sal_False );
+                rDo.Do( aTxt, nIdx + nOldPos, nPos-nOldPos, false );
             }
 
             nOldPos = nPos;
@@ -292,7 +292,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 
         if( nOldPos != nPos )
         {
-            rDo.DoSpace( sal_False );
+            rDo.DoSpace( false );
 
             if(bCaseMapLengthDiffers)
             {
@@ -302,18 +302,18 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos - nOldPos);
                 OUString aNewText = CalcCaseMap(aSnippet);
 
-                rDo.Do( aNewText, 0, aNewText.getLength(), sal_False );
+                rDo.Do( aNewText, 0, aNewText.getLength(), false );
             }
             else
             {
-                rDo.Do( aTxt, nIdx + nOldPos, nPos - nOldPos, sal_False );
+                rDo.Do( aTxt, nIdx + nOldPos, nPos - nOldPos, false );
             }
 
             nOldPos = nPos;
             rDo.SetSpace();
         }
     }
-    rDo.DoSpace( sal_True );
+    rDo.DoSpace( true );
 }
 
 
@@ -600,13 +600,13 @@ public:
     virtual ~SvxDoGetCapitalSize() {}
 
     virtual void Do( const OUString &rTxt, const sal_Int32 nIdx,
-                     const sal_Int32 nLen, const sal_Bool bUpper ) SAL_OVERRIDE;
+                     const sal_Int32 nLen, const bool bUpper ) SAL_OVERRIDE;
 
     const Size &GetSize() const { return aTxtSize; };
 };
 
 void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
-                              const sal_Int32 _nLen, const sal_Bool bUpper )
+                              const sal_Int32 _nLen, const bool bUpper )
 {
     Size aPartSize;
     if ( !bUpper )
@@ -663,13 +663,13 @@ public:
           aSpacePos( rPos ),
           nKern( nKrn )
         { }
-    virtual void DoSpace( const sal_Bool bDraw ) SAL_OVERRIDE;
+    virtual void DoSpace( const bool bDraw ) SAL_OVERRIDE;
     virtual void SetSpace() SAL_OVERRIDE;
     virtual void Do( const OUString &rTxt, const sal_Int32 nIdx,
-                     const sal_Int32 nLen, const sal_Bool bUpper ) SAL_OVERRIDE;
+                     const sal_Int32 nLen, const bool bUpper ) SAL_OVERRIDE;
 };
 
-void SvxDoDrawCapital::DoSpace( const sal_Bool bDraw )
+void SvxDoDrawCapital::DoSpace( const bool bDraw )
 {
     if ( bDraw || pFont->IsWordLineMode() )
     {
@@ -696,7 +696,7 @@ void SvxDoDrawCapital::SetSpace()
 }
 
 void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
-                           const sal_Int32 _nLen, const sal_Bool bUpper)
+                           const sal_Int32 _nLen, const bool bUpper)
 {
     sal_uInt8 nProp = 0;
     Size aPartSize;
