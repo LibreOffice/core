@@ -20,8 +20,6 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#include <stdlib.h>
-
 using namespace ::com::sun::star;
 
 static const sal_Int32 nDefaultProgressBarRange = 1000000;
@@ -52,12 +50,7 @@ sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
         {
             double fPercent(nNewReference / nReference);
             double fValue(nValue * fPercent);
-#if OSL_DEBUG_LEVEL > 0
-            // workaround for toolchain bug on solaris/x86 Sun C++ 5.5
-            // just call some function here
-            (void) abs(nValue);
-#endif
-            nValue = static_cast< sal_Int32 >(fValue);
+            nValue = static_cast<sal_Int32>(fValue);
             nReference = nNewReference;
         }
         else
