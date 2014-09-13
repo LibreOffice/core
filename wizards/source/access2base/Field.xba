@@ -523,86 +523,87 @@ Dim oParent As Object
 			With com.sun.star.sdbc.DataType
 				If IsNull(pvValue) Then
 					If Column.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then Column.updateNull() Else Goto Trace_Null
-				End If
-				Select Case Column.Type
-					Case .BIT, .BOOLEAN
-						If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
-						Column.updateBoolean(pvValue)
-					Case .TINYINT
-						If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-						If pvValue &lt; -128 Or pvValue &gt; +127 Then Goto Trace_Error_Value
-						Column.updateShort(CInt(pvValue))
-					Case .SMALLINT
-						If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-						If pvValue &lt; -32768 Or pvValue &gt; 32767 Then Goto trace_Error_Value
-						Column.updateInt(CLng(pvValue))
-					Case .INTEGER
-						If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-						If pvValue &lt; -2147483648 Or pvValue &gt; 2147483647 Then Goto trace_Error_Value
-						Column.updateInt(CLng(pvValue))
-					Case .BIGINT
-						If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-						Column.updateLong(pvValue)		&apos;	No proper type conversion for HYPER data type
-					Case .FLOAT
-						If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-						If Abs(pvValue) &lt; 3.402823E38 And Abs(pvValue) &gt; 1.401298E-45 Then Column.updateFloat(CSng(pvValue)) Else Goto trace_Error_Value
-					Case .REAL, .DOUBLE
-						If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-						&apos;If Abs(pvValue) &lt; 1.79769313486232E308 And Abs(pvValue) &gt; 4.94065645841247E-307 Then Column.updateDouble(CDbl(pvValue)) Else Goto trace_Error_Value
-						Column.updateDouble(CDbl(pvValue))
-					Case .NUMERIC, .DECIMAL
-						If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
-						If Utils._hasUNOProperty(Column, &quot;Scale&quot;) Then
-							If Column.Scale &gt; 0 Then
-								&apos;If Abs(pvValue) &lt; 1.79769313486232E308 And Abs(pvValue) &gt; 4.94065645841247E-307 Then Column.updateDouble(CDbl(pvValue)) Else Goto trace_Error_Value
-								Column.updateDouble(CDbl(pvValue))
+				Else
+					Select Case Column.Type
+						Case .BIT, .Boolean
+							If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
+							Column.updateBoolean(pvValue)
+						Case .TINYINT
+							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+							If pvValue &lt; -128 Or pvValue &gt; +127 Then Goto Trace_Error_Value
+							Column.updateShort(CInt(pvValue))
+						Case .SMALLINT
+							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+							If pvValue &lt; -32768 Or pvValue &gt; 32767 Then Goto trace_Error_Value
+							Column.updateInt(CLng(pvValue))
+						Case .Integer
+							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+							If pvValue &lt; -2147483648 Or pvValue &gt; 2147483647 Then Goto trace_Error_Value
+							Column.updateInt(CLng(pvValue))
+						Case .BIGINT
+							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+							Column.updateLong(pvValue)		&apos;	No proper type conversion for HYPER data type
+						Case .FLOAT
+							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+							If Abs(pvValue) &lt; 3.402823E38 And Abs(pvValue) &gt; 1.401298E-45 Then Column.updateFloat(CSng(pvValue)) Else Goto trace_Error_Value
+						Case .REAL, .Double
+							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+							&apos;If Abs(pvValue) &lt; 1.79769313486232E308 And Abs(pvValue) &gt; 4.94065645841247E-307 Then Column.updateDouble(CDbl(pvValue)) Else Goto trace_Error_Value
+							Column.updateDouble(CDbl(pvValue))
+						Case .NUMERIC, .DECIMAL
+							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
+							If Utils._hasUNOProperty(Column, &quot;Scale&quot;) Then
+								If Column.Scale &gt; 0 Then
+									&apos;If Abs(pvValue) &lt; 1.79769313486232E308 And Abs(pvValue) &gt; 4.94065645841247E-307 Then Column.updateDouble(CDbl(pvValue)) Else Goto trace_Error_Value
+									Column.updateDouble(CDbl(pvValue))
+								Else
+									Column.updateString(CStr(pvValue))
+								End If
 							Else
 								Column.updateString(CStr(pvValue))
 							End If
-						Else
-							Column.updateString(CStr(pvValue))
-						End If
-					Case .CHAR, .VARCHAR, .LONGVARCHAR
-						If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
-						Column.updateString(pvValue)						&apos;	vbString
-					Case .DATE
-						If Not Utils._CheckArgument(pvValue, iArgNr, vbDate, , False) Then Goto Trace_Error_Value
-						vTemp = New com.sun.star.util.Date
-						With vTemp
-							.Day = Day(pvValue)
-							.Month = Month(pvValue)
-							.Year = Year(pvValue)
-						End With
-						Column.updateDate(vTemp)
-					Case .TIME
-						If Not Utils._CheckArgument(pvValue, iArgNr, vbDate, , False) Then Goto Trace_Error_Value
-						vTemp = New com.sun.star.util.Time
-						With vTemp
-							.Hours = Hour(pvValue)
-							.Minutes = Minute(pvValue)
-							.Seconds = Second(pvValue)
-							&apos;.HundredthSeconds = 0		&apos;	replaced with Long nanoSeconds in LO 4.1 ??
-						End With
-						Column.updateTime(vTemp)
-					Case .TIMESTAMP
-						If Not Utils._CheckArgument(pvValue, iArgNr, vbDate, , False) Then Goto Trace_Error_Value
-						vTemp = New com.sun.star.util.DateTime
-						With vTemp
-							.Day = Day(pvValue)
-							.Month = Month(pvValue)
-							.Year = Year(pvValue)
-							.Hours = Hour(pvValue)
-							.Minutes = Minute(pvValue)
-							.Seconds = Second(pvValue)
-							&apos;.HundredthSeconds = 0
-						End With
-						Column.updateTimestamp(vTemp)
-&apos;					Case .BINARY, .VARBINARY, .LONGVARBINARY
-&apos;					Case .BLOB
-&apos;					Case .CLOB
-					Case Else
-						Goto trace_Error
-				End Select
+						Case .CHAR, .VARCHAR, .LONGVARCHAR
+							If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
+							Column.updateString(pvValue)						&apos;	vbString
+						Case .Date
+							If Not Utils._CheckArgument(pvValue, iArgNr, vbDate, , False) Then Goto Trace_Error_Value
+							vTemp = New com.sun.star.util.Date
+							With vTemp
+								.Day = Day(pvValue)
+								.Month = Month(pvValue)
+								.Year = Year(pvValue)
+							End With
+							Column.updateDate(vTemp)
+						Case .TIME
+							If Not Utils._CheckArgument(pvValue, iArgNr, vbDate, , False) Then Goto Trace_Error_Value
+							vTemp = New com.sun.star.util.Time
+							With vTemp
+								.Hours = Hour(pvValue)
+								.Minutes = Minute(pvValue)
+								.Seconds = Second(pvValue)
+								&apos;.HundredthSeconds = 0		&apos;	replaced with Long nanoSeconds in LO 4.1 ??
+							End With
+							Column.updateTime(vTemp)
+						Case .TIMESTAMP
+							If Not Utils._CheckArgument(pvValue, iArgNr, vbDate, , False) Then Goto Trace_Error_Value
+							vTemp = New com.sun.star.util.DateTime
+							With vTemp
+								.Day = Day(pvValue)
+								.Month = Month(pvValue)
+								.Year = Year(pvValue)
+								.Hours = Hour(pvValue)
+								.Minutes = Minute(pvValue)
+								.Seconds = Second(pvValue)
+								&apos;.HundredthSeconds = 0
+							End With
+							Column.updateTimestamp(vTemp)
+&apos;						Case .BINARY, .VARBINARY, .LONGVARBINARY
+&apos;						Case .BLOB
+&apos;						Case .CLOB
+						Case Else
+							Goto trace_Error
+					End Select
+				End If
 			End With
 		Case Else
 			Goto Trace_Error

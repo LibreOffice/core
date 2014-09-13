@@ -8,7 +8,7 @@ REM ============================================================================
 Option Explicit
 
 REM Access2Base -----------------------------------------------------
-Global Const Access2Base_Version = &quot;1.1.0f&quot;
+Global Const Access2Base_Version = &quot;1.1.0g&quot;
 
 REM AcCloseSave
 REM -----------------------------------------------------------------
