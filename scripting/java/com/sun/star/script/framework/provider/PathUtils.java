@@ -68,7 +68,15 @@ public class PathUtils {
            {
                buff.append('/');
            }
-           buff.append( java.net.URLEncoder.encode( (String)t.nextElement(),"UTF-8" ) );        }
+           try
+           {
+               buff.append( java.net.URLEncoder.encode( (String)t.nextElement(), "UTF-8" ) );
+           }
+           catch (java.io.UnsupportedEncodingException e)
+           {
+               e.printStackTrace();
+           }
+        }
         return buff.toString();
     }
 
