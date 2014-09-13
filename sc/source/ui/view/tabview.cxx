@@ -53,8 +53,10 @@
 
 #include <basegfx/tools/zoomtools.hxx>
 
-#define SPLIT_MARGIN    30
-#define SPLIT_HANDLE_SIZE   5
+#define SPLIT_MARGIN      30
+#define SPLIT_HANDLE_SIZE 5
+#define WIDTH_MARGIN      5
+
 #define SC_ICONSIZE     36
 
 using namespace ::com::sun::star;
@@ -340,7 +342,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, bool bInner )
 
     const StyleSettings& rStyleSettings = pFrameWin->GetSettings().GetStyleSettings();
 
-    sal_Int32 nTabWidth = pFrameWin->GetFont().GetHeight() + 4;
+    sal_Int32 nTabWidth = pFrameWin->GetFont().GetHeight() + WIDTH_MARGIN;
 
     if ( aViewData.GetHSplitMode() != SC_SPLIT_NONE )
     {
