@@ -45,6 +45,7 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
             gid_Brand_Dir_Share_Ure,
+            gid_Brand_Dir_Share_Ure_Etc,
             gid_Brand_Dir_Share_Ure_Share,
             gid_Brand_Dir_Share_Glade,
             gid_Brand_Dir_Share_Labels,
@@ -451,6 +452,11 @@ End
 Directory gid_Brand_Dir_Share_Ure
     ParentID = gid_Brand_Dir_Share;
     DosName = "ure";
+End
+
+Directory gid_Brand_Dir_Share_Ure_Etc
+    ParentID = gid_Brand_Dir_Share_Ure;
+    DosName = "etc";
 End
 
 Directory gid_Brand_Dir_Share_Ure_Share
