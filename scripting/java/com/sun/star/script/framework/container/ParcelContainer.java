@@ -176,7 +176,7 @@ public class ParcelContainer implements XNameAccess
         {
             // return name
             String decodedUrl = java.net.URLDecoder.decode( containerUrl );
-            int indexOfSlash = decodedUrl.lastIndexOf( "/" );
+            int indexOfSlash = decodedUrl.lastIndexOf('/');
             if ( indexOfSlash != -1 )
             {
                 name =  decodedUrl.substring( indexOfSlash + 1 );
@@ -479,7 +479,7 @@ public class ParcelContainer implements XNameAccess
                 }
                 LogUtils.DEBUG("Processing " + parcelDescUrl + " closed " );
 
-                int indexOfSlash = parcelUrl.lastIndexOf("/");
+                int indexOfSlash = parcelUrl.lastIndexOf('/');
                 String name = parcelUrl.substring( indexOfSlash + 1 );
 
                 parcel = new Parcel( m_xSFA, this, pd, name );

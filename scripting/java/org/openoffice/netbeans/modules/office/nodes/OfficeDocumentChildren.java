@@ -95,7 +95,7 @@ public class OfficeDocumentChildren extends Children.Keys
             setIconBase("/org/openoffice/netbeans/modules/office/resources/ParcelIcon");
 
             setName(name);
-            setDisplayName(name.substring(name.lastIndexOf("/") + 1));
+            setDisplayName(name.substring(name.lastIndexOf('/') + 1));
             setShortDescription(name);
         }
 
