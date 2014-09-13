@@ -16640,23 +16640,23 @@
       <action name="start" action="setDefaultIntegerValue"/>
     </resource>
     <resource name="ST_HighlightColor" resource="List">
-      <value tokenid="1">black</value>
-      <value tokenid="2">blue</value>
-      <value tokenid="3">cyan</value>
-      <value tokenid="4">green</value>
-      <value tokenid="5">magenta</value>
-      <value tokenid="6">red</value>
-      <value tokenid="7">yellow</value>
-      <value tokenid="8">white</value>
-      <value tokenid="9">darkBlue</value>
-      <value tokenid="10">darkCyan</value>
-      <value tokenid="11">darkGreen</value>
-      <value tokenid="12">darkMagenta</value>
-      <value tokenid="13">darkRed</value>
-      <value tokenid="14">darkYellow</value>
-      <value tokenid="15">darkGray</value>
-      <value tokenid="16">lightGray</value>
-      <value tokenid="0">none</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_black">black</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_blue">blue</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_cyan">cyan</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_green">green</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_magenta">magenta</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_red">red</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_yellow">yellow</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_white">white</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_darkBlue">darkBlue</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_darkCyan">darkCyan</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_darkGreen">darkGreen</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_darkMagenta">darkMagenta</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_darkRed">darkRed</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_darkYellow">darkYellow</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_darkGray">darkGray</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_lightGray">lightGray</value>
+      <value tokenid="ooxml:Value_ST_HighlightColor_none">none</value>
     </resource>
     <resource name="CT_Highlight" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_Highlight_val" action="setValue"/>

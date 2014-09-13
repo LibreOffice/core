@@ -1412,7 +1412,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
     case NS_ooxml::LN_EG_RPrBase_highlight:
         {
             sal_Int32 nColor = 0;
-            if( (mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)) )
+            if( (mbIsHighlightSet = getColorFromId(nIntValue, nColor)) )
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nColor ));
             else if (mnBackgroundColor)
                 rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
@@ -3208,30 +3208,30 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::bo
     m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "jc", aStringValue);
 }
 
-bool DomainMapper::getColorFromIndex(const sal_Int32 nIndex, sal_Int32 &nColor)
+bool DomainMapper::getColorFromId(const Id nId, sal_Int32 &nColor)
 {
     nColor = 0;
-    if ((nIndex < 1) || (nIndex > 16))
+    if ((nId < NS_ooxml::LN_Value_ST_HighlightColor_black) || (nId > NS_ooxml::LN_Value_ST_HighlightColor_lightGray))
         return false;
 
-    switch (nIndex)
+    switch (nId)
     {
-    case 1: nColor=0x000000; break; //black
-    case 2: nColor=0x0000ff; break; //blue
-    case 3: nColor=0x00ffff; break; //cyan
-    case 4: nColor=0x00ff00; break; //green
-    case 5: nColor=0xff00ff; break; //magenta
-    case 6: nColor=0xff0000; break; //red
-    case 7: nColor=0xffff00; break; //yellow
-    case 8: nColor=0xffffff; break; //white
-    case 9: nColor=0x000080;  break;//dark blue
-    case 10: nColor=0x008080; break; //dark cyan
-    case 11: nColor=0x008000; break; //dark green
-    case 12: nColor=0x800080; break; //dark magenta
-    case 13: nColor=0x800000; break; //dark red
-    case 14: nColor=0x808000; break; //dark yellow
-    case 15: nColor=0x808080; break; //dark gray
-    case 16: nColor=0xC0C0C0; break; //light gray
+    case NS_ooxml::LN_Value_ST_HighlightColor_black: nColor=0x000000; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_blue: nColor=0x0000ff; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_cyan: nColor=0x00ffff; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_green: nColor=0x00ff00; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_magenta: nColor=0xff00ff; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_red: nColor=0xff0000; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_yellow: nColor=0xffff00; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_white: nColor=0xffffff; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_darkBlue: nColor=0x000080;  break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_darkCyan: nColor=0x008080; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_darkGreen: nColor=0x008000; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_darkMagenta: nColor=0x800080; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_darkRed: nColor=0x800000; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_darkYellow: nColor=0x808000; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_darkGray: nColor=0x808080; break;
+    case NS_ooxml::LN_Value_ST_HighlightColor_lightGray: nColor=0xC0C0C0; break;
     default:
         return false;
     }
