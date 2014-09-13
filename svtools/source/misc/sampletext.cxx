@@ -1247,22 +1247,19 @@ namespace
 
 OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
 {
-    vcl::FontCapabilities aFontCapabilities;
-    if (!rDevice.GetFontCapabilities(aFontCapabilities))
-        return OUString();
+    UScriptCode eScript = lcl_getHardCodedScriptNameForFont(rDevice);
+    if (eScript == USCRIPT_INVALID_CODE)
+    {
+        vcl::FontCapabilities aFontCapabilities;
+        if (!rDevice.GetFontCapabilities(aFontCapabilities))
+            return OUString();
 
 #if OSL_DEBUG_LEVEL > 2
-    fprintf(stderr, "font is %s\n",
-        OUStringToOString(rDevice.GetFont().GetName(), RTL_TEXTENCODING_UTF8).getStr());
-    lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
-    lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
+        lcl_dump_unicode_coverage(aFontCapabilities.maUnicodeRange);
+        lcl_dump_codepage_coverage(aFontCapabilities.maCodePageRange);
 #endif
 
-    aFontCapabilities.maUnicodeRange &= getCommonLatnSubsetMask();
-
-    UScriptCode eScript = lcl_getHardCodedScriptNameForFont (rDevice);
-
-    if (eScript == USCRIPT_INVALID_CODE) {
+        aFontCapabilities.maUnicodeRange &= getCommonLatnSubsetMask();
 
         //If this font is probably tuned to display a single non-Latin
         //script and the font name is itself in Latin, then show a small
@@ -1272,7 +1269,6 @@ OUString makeShortRepresentativeTextForSelectedFont(OutputDevice &rDevice)
             return OUString();
 
         eScript = attemptToDisambiguateHan(eScript, rDevice);
-
     }
 
     OUString sSampleText = makeShortRepresentativeTextForScript(eScript);
