@@ -61,7 +61,7 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
     else if (rName.startsWith("Malayalam "))
     {
         // "Malayalam MN" claims it supports TAMIL, but it doesn't
-        return USCRIPT_LAO;
+        return USCRIPT_MALAYALAM;
     }
     else if (rName.startsWith("Sinhala "))
     {
