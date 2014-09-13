@@ -986,7 +986,7 @@ public final class PropertySetMixin {
     private void checkUnknown(String propertyName)
         throws UnknownPropertyException
     {
-        if (!propertyName.equals("")) {
+        if (propertyName.length() != 0) {
             get(this, propertyName);
         }
     }
