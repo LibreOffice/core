@@ -1,0 +1,20 @@
+--- a/b/boost/boost/signals2/detail/auto_buffer.hpp.sav	2011-12-21 04:05:37.000000000 +0100
++++ a/b/boost/boost/signals2/detail/auto_buffer.hpp	2014-09-13 23:58:51.221215911 +0200
+@@ -99,7 +99,7 @@ namespace detail
+         }
+ 
+         template< class SizeType >
+-        static bool should_shrink( SizeType size, SizeType capacity )
++        static bool should_shrink( __attribute__ ((unused)) SizeType size, __attribute__ ((unused)) SizeType capacity )
+         {
+             //
+             // @remark: when defining a new grow policy, one might
+@@ -258,7 +258,7 @@ namespace detail
+                 auto_buffer_destroy( buffer );
+         }
+ 
+-        void destroy_back_n( size_type n, const boost::true_type& )
++        void destroy_back_n( __attribute__ ((unused)) size_type n, const boost::true_type& )
+         { }
+ 
+         void destroy_back_n( size_type n )

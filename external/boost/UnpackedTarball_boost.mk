@@ -93,6 +93,7 @@ boost_patches += boost.transform_width.patch
 # Help static analysis tools (see SAL_UNUSED_PARAMETER in sal/types.h):
 ifeq (GCC,$(COM))
 boost_patches += boost_1_44_0-unused-parameters.patch
+boost_patches += boost.signals2.unused.parameters.patch
 endif
 
 # Clang warnings:
