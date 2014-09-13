@@ -367,7 +367,6 @@ public:
     // Before the window is visible, a resize event
     // must be sent with the correct size
     virtual void                Show( bool bVisible, bool bNoActivate = false ) SAL_OVERRIDE;
-    virtual void                Enable( bool bEnable ) SAL_OVERRIDE;
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
     virtual void                SetMinClientSize( long nWidth, long nHeight ) SAL_OVERRIDE;

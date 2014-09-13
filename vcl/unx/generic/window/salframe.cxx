@@ -974,11 +974,6 @@ void X11SalFrame::updateGraphics( bool bClear )
         pFreeGraphics_->SetDrawable( aDrawable, m_nXScreen );
 }
 
-void X11SalFrame::Enable( bool /*bEnable*/ )
-{
-    // NYI: enable/disable frame
-}
-
 void X11SalFrame::SetIcon( sal_uInt16 nIcon )
 {
     if ( ! IsChildWindow() )

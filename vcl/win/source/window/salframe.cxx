@@ -1217,11 +1217,6 @@ void WinSalFrame::Show( bool bVisible, bool bNoActivate )
         ImplSalShow( mhWnd, bVisible, bNoActivate );
 }
 
-void WinSalFrame::Enable( bool bEnable )
-{
-    EnableWindow( mhWnd, bEnable );
-}
-
 void WinSalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
     mnMinWidth  = nWidth;

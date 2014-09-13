@@ -249,10 +249,6 @@ void SvpSalFrame::Show( bool bVisible, bool bNoActivate )
     }
 }
 
-void SvpSalFrame::Enable( bool )
-{
-}
-
 void SvpSalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
     m_nMinWidth = nWidth;

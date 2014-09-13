@@ -1879,11 +1879,6 @@ void GtkSalFrame::Show( bool bVisible, bool bNoActivate )
     }
 }
 
-void GtkSalFrame::Enable( bool /*bEnable*/ )
-{
-    // Not implemented by X11SalFrame either
-}
-
 void GtkSalFrame::setMinMaxSize()
 {
     /*  #i34504# metacity (and possibly others) do not treat
