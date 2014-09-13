@@ -1337,7 +1337,7 @@ AC_ARG_ENABLE(silent-msi,
 
 AC_ARG_ENABLE(macosx-retina,
     AS_HELP_STRING([--enable-macosx-retina],
-        [Declare the application as High Resolution Capable. (retina display)
+        [deprecated... enabled by default now. Kept for backward compat only.
          ]),
 ,)
 
@@ -3040,13 +3040,6 @@ if test $_os = Darwin; then
     MACOSX_APP_NAME="$with_macosx_app_name"
     AC_MSG_RESULT([$MACOSX_APP_NAME])
 
-    AC_MSG_CHECKING([build with mac retina support])
-    if test "$enable_macosx_retina" = yes ; then
-        MACOSX_HIGH_RESOLUTION_VALUE=true
-    else
-        MACOSX_HIGH_RESOLUTION_VALUE=false
-    fi
-    AC_MSG_RESULT([$MACOSX_HIGH_RESOLUTION_VALUE])
 fi
 AC_SUBST(MACOSX_SDK_PATH)
 AC_SUBST(MACOSX_SDK_VERSION)
