@@ -206,7 +206,7 @@ public class ProviderBrowseNode extends PropertySet
                     name = AnyConverter.toString(aParams[0]);
                 }
 
-                if (name == null || name.equals(""))
+                if (name == null || name.length() == 0)
                 {
                     result =  new Any(new Type(Boolean.class), Boolean.FALSE);
                 }

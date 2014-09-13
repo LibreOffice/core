@@ -331,7 +331,7 @@ public class ParcelDescriptor {
 
         tempitem = document.createElement("description");
         String description = script.getDescription();
-        if (description == null || description.equals(""))
+        if (description == null || description.length() == 0)
         {
             description = script.getLogicalName();
         }

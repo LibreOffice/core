@@ -127,7 +127,7 @@ public class SVersionRCFile {
               !(s.equals(VERSIONS_LINE))) {}
 
         while ((s = br.readLine()) != null &&
-              !(s.equals(""))) {
+              s.length() != 0) {
             StringTokenizer tokens = new StringTokenizer(s, "=");
             int count = tokens.countTokens();
 
