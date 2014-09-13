@@ -206,7 +206,7 @@ public class ParcelBrowseNode extends PropertySet
                     newName = AnyConverter.toString(aParams[0]);
                 }
 
-                if ( newName == null || newName.equals(""))
+                if ( newName == null || newName.length() == 0)
                 {
                     result =  new Any(new Type(Boolean.class), Boolean.FALSE);
                 }

@@ -140,12 +140,12 @@ public class DialogFactory
     private XDialog createInputDialog(String title, String prompt)
         throws com.sun.star.uno.Exception
     {
-        if (title == null || title.equals(""))
+        if (title == null || title.length() == 0)
         {
             title = "Scripting Framework";
         }
 
-        if (prompt == null || prompt.equals(""))
+        if (prompt == null || prompt.length() == 0)
         {
             prompt = "Enter name";
         }
