@@ -37,13 +37,13 @@ public:
     virtual void            ReleaseGraphics( SalGraphics* pGraphics ) = 0;
 
     // Set new size, without saving the old contents
-    virtual bool        SetSize( long nNewDX, long nNewDY ) = 0;
+    virtual bool            SetSize( long nNewDX, long nNewDY ) = 0;
 
     // Set new size using a buffer at the given address
-    virtual bool        SetSizeUsingBuffer( long nNewDX, long nNewDY,
-                                            const basebmp::RawMemorySharedArray & /* pBuffer */,
-                                            const bool /* bTopDown */
-                                          )
+    virtual bool            SetSizeUsingBuffer( long nNewDX, long nNewDY,
+                                                const basebmp::RawMemorySharedArray & /* pBuffer */,
+                                                const bool /* bTopDown */
+                                              )
         {
             // Only the headless virtual device has an implementation that uses
             // pBuffer (and bTopDown).
