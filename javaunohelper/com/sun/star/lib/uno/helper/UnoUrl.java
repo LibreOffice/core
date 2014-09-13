@@ -297,7 +297,7 @@ public class UnoUrl {
         throws com.sun.star.lang.IllegalArgumentException {
         String partName;
         String theParamPart;
-        int index = thePart.indexOf(",");
+        int index = thePart.indexOf(',');
         if (index != -1) {
             partName = thePart.substring(0, index).trim();
             theParamPart = thePart.substring(index + 1).trim();
