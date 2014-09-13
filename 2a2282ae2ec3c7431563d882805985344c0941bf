@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_91f73cf5",
+        "filename": "sd/source/ui/sidebar/RecentlyUsedMasterPages.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2014-09-13T15:37:41Z",
+      "side": 1,
+      "message": "Why do you not just use a typedef?",
+      "revId": "2a2282ae2ec3c7431563d882805985344c0941bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
