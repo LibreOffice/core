@@ -78,6 +78,7 @@ public:
     void testBnc887225();
     void testBnc480256();
     void testCreationDate();
+    void testBnc584721_1();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -100,6 +101,7 @@ public:
     CPPUNIT_TEST(testBnc887225);
     CPPUNIT_TEST(testBnc480256);
     CPPUNIT_TEST(testCreationDate);
+    CPPUNIT_TEST(testBnc584721_1);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -706,6 +708,24 @@ void SdFiltersTest::testBnc480256()
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4626400), nColor);
 
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testBnc584721_1()
+{
+    // Title text shape on the master page contained wrong text.
+
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1.pptx"), PPTX);
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = &(pDoc->GetPage (1)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    SdrObject *pObj = pPage->GetObj(0);
+    SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
+    CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
+    const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
+    CPPUNIT_ASSERT_EQUAL(OUString("Click to edit Master title style"), aEdit.GetText(0));
     xDocShRef->DoClose();
 }
 
