@@ -209,6 +209,7 @@ protected:
 private:
     void ProcessMouseEvent();
     void MoveCamera();
+    void MoveCameraToBar();
     void MoveToBar();
     void MoveToDefault();
     void MoveToCorner();
@@ -224,11 +225,14 @@ private:
     bool mbNeedFlyBack;
     glm::vec3 maStep;
     glm::vec3 maStepDirection;
+    glm::mat4 maMatrixStep;
     size_t mnStep;
     size_t mnStepsTotal;
     TimeValue maClickFlyBackStartTime;
     TimeValue maClickFlyBackEndTime;
     OUString maFPS;
+    glm::vec3 maTargetPosition;
+    glm::vec3 maTargetDirection;
 };
 
 void RenderBenchMarkThread::MoveCamera()
@@ -246,20 +250,35 @@ void RenderBenchMarkThread::MoveCamera()
         mnStep = 0;
         mbExecuting = false;
         mbAutoFlyExecuting = false;
-        if ((mpChart->maRenderEvent == EVENT_CLICK) || (mpChart->maRenderEvent == EVENT_AUTO_FLY))
-        {
-            mbNeedFlyBack = true;
-            osl_getSystemTime(&maClickFlyBackStartTime);
-            osl_getSystemTime(&maClickFlyBackEndTime);
-            mpChart->maRenderEvent = EVENT_SHOW_SELECT;
-        }
-        else
-        {
-            mbNeedFlyBack = false;
-            mpChart->maRenderEvent = EVENT_NONE;
-        }
+        mbNeedFlyBack = false;
+        mpChart->maRenderEvent = EVENT_NONE;
     }
 }
+
+void RenderBenchMarkThread::MoveCameraToBar()
+{
+    if(mnStep < mnStepsTotal)
+    {
+        ++mnStep;
+        mpChart->mpRenderer->AddMatrixDiff(maMatrixStep);
+    }
+    else
+    {
+        mpChart->maCameraPosition = maTargetPosition;
+        mpChart->maCameraDirection = maTargetDirection;
+        mpChart->mpCamera->setPosition(maTargetPosition);
+        mpChart->mpCamera->setDirection(maTargetDirection);
+        mpChart->mpRenderer->ResetMatrixDiff();
+        mnStep = 0;
+        mbExecuting = false;
+        mbAutoFlyExecuting = false;
+        mbNeedFlyBack = true;
+        osl_getSystemTime(&maClickFlyBackStartTime);
+        osl_getSystemTime(&maClickFlyBackEndTime);
+        mpChart->maRenderEvent = EVENT_SHOW_SELECT;
+    }
+}
+
 
 void RenderBenchMarkThread::MoveToDefault()
 {
@@ -301,21 +320,20 @@ void RenderBenchMarkThread::MoveToBar()
         const GL3DBarChart::BarInformation& rBarInfo = itr->second;
         mnStep = 0;
         mnStepsTotal = STEPS;
-        glm::vec3 maTargetPosition = rBarInfo.maPos;
+        maTargetPosition = rBarInfo.maPos;
         maTargetPosition.z += 240;
         maTargetPosition.x += BAR_SIZE_X / 2.0f;
-        glm::vec3 maTargetDirection = rBarInfo.maPos;
+        maTargetDirection = rBarInfo.maPos;
         maTargetDirection.x += BAR_SIZE_X / 2.0f;
         maTargetDirection.y += BAR_SIZE_Y / 2.0f;
         maTargetPosition.y = maTargetDirection.y - 240;
-        maStep = (maTargetPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
-        maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
+        maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras(mpChart->maCameraPosition, maTargetPosition, mpChart->maCameraDirection, maTargetDirection)/((float)mnStepsTotal);
         mpChart->maClickCond.set();
         mbExecuting = true;
         mbNeedFlyBack = false;
         mpChart->mpRenderer->StartClick(mpChart->mnSelectBarId);
     }
-    MoveCamera();
+    MoveCameraToBar();
 }
 
 void RenderBenchMarkThread::AutoMoveToBar()
@@ -332,20 +350,19 @@ void RenderBenchMarkThread::AutoMoveToBar()
         const GL3DBarChart::BarInformation& rBarInfo = itr->second;
         mnStep = 0;
         mnStepsTotal = STEPS;
-        glm::vec3 maTargetPosition = rBarInfo.maPos;
+         maTargetPosition = rBarInfo.maPos;
         maTargetPosition.z += 240;
         maTargetPosition.x += BAR_SIZE_X / 2.0f;
-        glm::vec3 maTargetDirection = rBarInfo.maPos;
+        maTargetDirection = rBarInfo.maPos;
         maTargetDirection.x += BAR_SIZE_X / 2.0f;
         maTargetDirection.y += BAR_SIZE_Y / 2.0f;
         maTargetPosition.y = maTargetDirection.y - 240;
-        maStep = (maTargetPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
-        maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
+        maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras(mpChart->maCameraPosition, maTargetPosition, mpChart->maCameraDirection, maTargetDirection)/((float)mnStepsTotal);
         mpChart->mpRenderer->StartClick(mpChart->mnSelectBarId);
         mbAutoFlyExecuting = true;
         mbNeedFlyBack = false;
     }
-    MoveCamera();
+    MoveCameraToBar();
 }
 
 void RenderBenchMarkThread::MoveToCorner()
