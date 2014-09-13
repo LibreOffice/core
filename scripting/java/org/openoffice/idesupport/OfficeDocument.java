@@ -71,7 +71,7 @@ public class OfficeDocument
                 if (ze.getName().endsWith(ParcelZipper.PARCEL_DESCRIPTOR_XML))
                 {
                     String tmp = ze.getName();
-                    int end = tmp.lastIndexOf("/");
+                    int end = tmp.lastIndexOf('/');
                     tmp = tmp.substring(0, end);
 
                     String parcelName = ze.getName().substring(0, end);

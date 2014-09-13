@@ -48,7 +48,7 @@ public class ScriptNode extends AbstractNode {
 
         String name = nameElement.getAttribute("value");
         setName(name);
-        setDisplayName(name.substring(name.lastIndexOf(".") + 1));
+        setDisplayName(name.substring(name.lastIndexOf('.') + 1));
         setShortDescription(name);
     }
 

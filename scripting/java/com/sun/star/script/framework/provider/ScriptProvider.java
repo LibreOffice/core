@@ -612,12 +612,12 @@ public abstract class ScriptProvider
             String libName;
             if (Name.endsWith("/"))
             {
-                String tmp = Name.substring( 0, Name.lastIndexOf( "/" ) );
-                libName = tmp.substring( tmp.lastIndexOf( "/" ) + 1 );
+                String tmp = Name.substring( 0, Name.lastIndexOf('/') );
+                libName = tmp.substring( tmp.lastIndexOf('/') + 1 );
             }
             else
             {
-                libName = Name.substring( Name.lastIndexOf( "/" ) + 1 );
+                libName = Name.substring( Name.lastIndexOf('/') + 1 );
             }
             LogUtils.DEBUG("Deregistering library " + libName );
             if ( c.removeParcel( libName ) )

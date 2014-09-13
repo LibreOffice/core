@@ -260,7 +260,7 @@ public class ScriptMetaData extends ScriptEntry {
     }
     private URL createURL( String path ) throws java.net.MalformedURLException
     {
-        int indexOfColon = path.indexOf(":");
+        int indexOfColon = path.indexOf(':');
         String scheme = path.substring( 0, indexOfColon );
         UCBStreamHandler handler = new UCBStreamHandler( scheme, parent.m_xSFA);
 

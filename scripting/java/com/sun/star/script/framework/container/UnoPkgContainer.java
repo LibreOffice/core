@@ -364,11 +364,11 @@ public class UnoPkgContainer extends ParcelContainer
             //its in a bundle need to determine the uno-package file its in
             LogUtils.DEBUG("processUnoPackage - is part of a uno bundle");
 
-            int index = uri.lastIndexOf("/");
+            int index = uri.lastIndexOf('/');
             if ( uri.endsWith("/") )
             {
                 uri = uri.substring( 0, index );
-                index = uri.lastIndexOf("/");
+                index = uri.lastIndexOf('/');
             }
 
             if ( index > -1 )
