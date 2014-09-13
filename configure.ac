@@ -8527,13 +8527,18 @@ if test "$with_system_boost" = "yes"; then
     fi
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS $BOOST_CPPFLAGS"
+    CXXFLAGS="$CXXFLAGS $BOOST_CPPFLAGS $CXXFLAGS_CXX11"
     AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
        [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
     AC_CHECK_HEADER(boost/spirit/include/classic_core.hpp, [],
        [AC_MSG_ERROR(boost/spirit/include/classic_core.hpp not found. install boost >= 1.36)], [])
     AC_CHECK_HEADER(boost/function.hpp, [],
        [AC_MSG_ERROR(boost/function.hpp not found. install boost)], [])
+    AC_MSG_CHECKING([whether boost signals2 works])
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <boost/signals2/signal.hpp>]],
+        [[ boost::signals2::signal<void()> s; s(); ]])],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_ERROR([no, install boost >= 1.55 or use --without-system-boost])])
     CXXFLAGS="$CXXFLAGS -fno-exceptions"
     AC_MSG_CHECKING([whether boost/function.hpp compiles with -fno-exceptions])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <boost/function.hpp>
