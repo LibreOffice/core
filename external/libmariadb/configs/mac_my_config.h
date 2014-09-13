@@ -140,9 +140,7 @@
 #define HAVE_STPCPY 1
 #define HAVE_STRERROR 1
 #define HAVE_STRLCPY 1
-#if MACOSX_SDK_VERSION >= 1070
 #define HAVE_STRNLEN 1
-#endif
 #define HAVE_STRPBRK 1
 #define HAVE_STRSEP 1
 #define HAVE_STRSTR 1

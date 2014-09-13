@@ -61,19 +61,6 @@ gb_CXXFLAGS := \
 	#-Wshadow \ break in compiler headers already
 	#-fsigned-char \ might be removed?
 
-# Without this I get struct/class clashes for "complex" when compiling
-# some source files in vcl, at least with the 10.7 SDK.
-ifneq ($(filter 1070,$(MACOSX_SDK_VERSION)),)
-gb_COMPILERDEFS += \
-		-DBOOST_DETAIL_NO_CONTAINER_FWD \
-
-endif
-
-ifneq ($(filter 1060,$(MACOSX_SDK_VERSION)),)
-gb_COMPILERNOOPTFLAGS := -O0 -fstrict-overflow
-
-endif
-
 ifeq ($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
 gb_CXXFLAGS += -Wno-long-double
 endif
