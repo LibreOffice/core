@@ -165,7 +165,7 @@ public class ScriptDescriptor
     @Override
     public String toString()
     {
-        StringBuffer description = new StringBuffer( m_name );
+        StringBuilder description = new StringBuilder( m_name );
         Class<?>[] types = getArgumentTypes();
 
         description.append( " (" );

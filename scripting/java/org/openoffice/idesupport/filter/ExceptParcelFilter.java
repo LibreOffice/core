@@ -42,10 +42,6 @@ public class ExceptParcelFilter implements FileFilter {
 
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer(DESCRIPTION + ": ");
-
-        buf.append("<" + ExceptParcelFilter.parcelName + ">");
-
-        return buf.toString();
+        return DESCRIPTION + ": " + "<" + ExceptParcelFilter.parcelName + ">";
     }
 }

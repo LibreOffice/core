@@ -71,7 +71,7 @@ public class ScriptEditorForBeanShell
                 ScriptEditorForBeanShell.class.getResource("template.bsh");
 
             InputStream in = url.openStream();
-            StringBuffer buf = new StringBuffer();
+            StringBuilder buf = new StringBuilder();
             byte[] b = new byte[1024];
             int len;
             while ((len = in.read(b)) != -1) {

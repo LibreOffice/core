@@ -35,7 +35,7 @@ public class ScriptSourceModel {
     }
 
     private String load() throws IOException {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         InputStream in = file.openStream();
 
         byte[] contents = new byte[1024];
