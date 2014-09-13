@@ -457,10 +457,6 @@ void AquaSalFrame::Show(bool bVisible, bool bNoActivate)
     }
 }
 
-void AquaSalFrame::Enable( bool )
-{
-}
-
 void AquaSalFrame::SetMinClientSize( long nWidth, long nHeight )
 {
     // #i113170# may not be the main thread if called from UNO API

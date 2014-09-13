@@ -90,7 +90,6 @@ public:
 
     virtual void                SetExtendedFrameStyle( SalExtStyle nExtStyle ) SAL_OVERRIDE;
     virtual void                Show( bool bVisible, bool bNoActivate = false ) SAL_OVERRIDE;
-    virtual void                Enable( bool bEnable ) SAL_OVERRIDE;
     virtual void                SetMinClientSize( long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void                SetMaxClientSize( long nWidth, long nHeight ) SAL_OVERRIDE;
     virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags ) SAL_OVERRIDE;

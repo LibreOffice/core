@@ -128,7 +128,7 @@ public:
     // Before the window is visible, a resize event
     // must be sent with the correct size
     virtual void            Show( bool bVisible, bool bNoActivate = false ) = 0;
-    virtual void            Enable( bool bEnable ) = 0;
+
     // Set ClientSize and Center the Window to the desktop
     // and send/post a resize message
     virtual void            SetMinClientSize( long nWidth, long nHeight ) = 0;
