@@ -304,10 +304,11 @@ void RenderBenchMarkThread::MoveToBar()
         glm::vec3 maTargetPosition = rBarInfo.maPos;
         maTargetPosition.z += 240;
         maTargetPosition.x += BAR_SIZE_X / 2.0f;
-        maStep = (maTargetPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
         glm::vec3 maTargetDirection = rBarInfo.maPos;
         maTargetDirection.x += BAR_SIZE_X / 2.0f;
         maTargetDirection.y += BAR_SIZE_Y / 2.0f;
+        maTargetPosition.y = maTargetDirection.y - 240;
+        maStep = (maTargetPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
         maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
         mpChart->maClickCond.set();
         mbExecuting = true;
@@ -334,10 +335,11 @@ void RenderBenchMarkThread::AutoMoveToBar()
         glm::vec3 maTargetPosition = rBarInfo.maPos;
         maTargetPosition.z += 240;
         maTargetPosition.x += BAR_SIZE_X / 2.0f;
-        maStep = (maTargetPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
         glm::vec3 maTargetDirection = rBarInfo.maPos;
         maTargetDirection.x += BAR_SIZE_X / 2.0f;
         maTargetDirection.y += BAR_SIZE_Y / 2.0f;
+        maTargetPosition.y = maTargetDirection.y - 240;
+        maStep = (maTargetPosition - mpChart->maCameraPosition)/((float)mnStepsTotal);
         maStepDirection = (maTargetDirection - mpChart->maCameraDirection)/((float)mnStepsTotal);
         mpChart->mpRenderer->StartClick(mpChart->mnSelectBarId);
         mbAutoFlyExecuting = true;
