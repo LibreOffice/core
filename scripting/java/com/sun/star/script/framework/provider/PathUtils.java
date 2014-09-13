@@ -68,7 +68,7 @@ public class PathUtils {
            {
                buff.append('/');
            }
-           buff.append( java.net.URLEncoder.encode( (String)t.nextElement() ) );        }
+           buff.append( java.net.URLEncoder.encode( (String)t.nextElement(),"UTF-8" ) );        }
         return buff.toString();
     }
 
