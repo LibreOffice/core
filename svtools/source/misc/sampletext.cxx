@@ -32,6 +32,11 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
         // but in fact it's a Traditional Chinese font.
         return USCRIPT_TRADITIONAL_HAN;
     }
+    else if (rName == "GungSeo")
+    {
+        // "GungSeo" has no OS/2 table, but we know it's a Korean font.
+        return USCRIPT_KOREAN;
+    }
     else if (rName.startsWith("Bangla "))
     {
         // "Bangla Sangam MN" claims it supports MALAYALAM, but it doesn't
