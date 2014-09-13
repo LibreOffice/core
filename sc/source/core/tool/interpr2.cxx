@@ -1429,7 +1429,7 @@ void ScInterpreter::ScLaufz()
         double nFuture = GetDouble();
         double nPresent = GetDouble();
         double nInterest = GetDouble();
-        PushDouble(log(nFuture / nPresent) / log(1.0 + nInterest));
+        PushDouble(log(nFuture / nPresent) / log1p(nInterest));
     }
 }
 
@@ -1543,9 +1543,9 @@ void ScInterpreter::ScZZR()
         PushDouble(-(nBw + nZw)/nRmz);
     else if (nFlag > 0.0)
         PushDouble(log(-(nInterest*nZw-nRmz*(1.0+nInterest))/(nInterest*nBw+nRmz*(1.0+nInterest)))
-                  /log(1.0+nInterest));
+                  /log1p(nInterest));
     else
-        PushDouble(log(-(nInterest*nZw-nRmz)/(nInterest*nBw+nRmz))/log(1.0+nInterest));
+        PushDouble(log(-(nInterest*nZw-nRmz)/(nInterest*nBw+nRmz))/log1p(nInterest));
 }
 
 bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,

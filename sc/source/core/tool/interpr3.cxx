@@ -587,7 +587,7 @@ double ScInterpreter::GetGamma(double fZ)
 
     if (fZ >= -0.5) // shift to x>=1, might overflow
     {
-        double fLogTest = lcl_GetLogGammaHelper(fZ+2) - log(fZ+1) - log( fabs(fZ));
+        double fLogTest = lcl_GetLogGammaHelper(fZ+2) - log1p(fZ) - log( fabs(fZ));
         if (fLogTest >= fLogDblMax)
         {
             SetError( errIllegalFPOperation);
@@ -620,7 +620,7 @@ double ScInterpreter::GetLogGamma(double fZ)
         return log(lcl_GetGammaHelper(fZ));
     if (fZ >= 0.5)
         return log( lcl_GetGammaHelper(fZ+1) / fZ);
-    return lcl_GetLogGammaHelper(fZ+2) - log(fZ+1) - log(fZ);
+    return lcl_GetLogGammaHelper(fZ+2) - log1p(fZ) - log(fZ);
 }
 
 double ScInterpreter::GetFDist(double x, double fF1, double fF2)
