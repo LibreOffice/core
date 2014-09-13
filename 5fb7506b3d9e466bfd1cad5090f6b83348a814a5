@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_31be5000",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2014-09-13T22:58:08Z",
+      "side": 1,
+      "message": "did you mean log1p() in those +1 cases?http://en.cppreference.com/w/cpp/numeric/math/log1p",
+      "revId": "5fb7506b3d9e466bfd1cad5090f6b83348a814a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
