@@ -164,7 +164,7 @@ End
 Profile gid_Profile_Dl_Uno_Ini
     ModuleID = gid_Module_Root_Ure_Hidden;
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-    Dir = gid_Brand_Dir_Share_Ure;
+    Dir = gid_Brand_Dir_Share_Ure_Etc;
 #else
     Dir = SCP2_URE_DL_DIR;
 #endif
@@ -177,7 +177,7 @@ ProfileItem gid_Profileitem_Dl_Uno_Ure_Internal_Lib_Dir
     Section = "Bootstrap";
     Key = "URE_INTERNAL_LIB_DIR";
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-    Value = "${ORIGIN}/../../Frameworks";
+    Value = "${ORIGIN}/../../../Frameworks";
 #else
     Value = "${ORIGIN}";
 #endif
@@ -189,7 +189,7 @@ ProfileItem gid_Profileitem_Dl_Uno_Ure_Internal_Java_Dir
     Section = "Bootstrap";
     Key = "URE_INTERNAL_JAVA_DIR";
 #if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-    Value = "${ORIGIN}/../java";
+    Value = "${ORIGIN}/../../java";
 #elif defined WNT
     Value = "${ORIGIN}/../java";
 #else
@@ -210,9 +210,7 @@ ProfileItem gid_Profileitem_Dl_Uno_Uno_Types
     ProfileID = gid_Profile_Dl_Uno_Ini;
     Section = "Bootstrap";
     Key = "UNO_TYPES";
-#if defined ENABLE_MACOSX_MACLIKE_APP_STRUCTURE
-    Value = "${ORIGIN}/types.rdb ${URE_MORE_TYPES}";
-#elif defined WNT
+#if defined WNT
     Value = "${ORIGIN}/../misc/types.rdb ${URE_MORE_TYPES}";
 #else
     Value = "${ORIGIN}/../share/misc/types.rdb ${URE_MORE_TYPES}";
