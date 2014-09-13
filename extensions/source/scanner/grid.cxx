@@ -21,6 +21,7 @@
 #include <osl/thread.h>
 #include <cstdio>
 #include <math.h>
+#include <boost/math/special_functions/expm1.hpp>
 
 #include <cmath>
 
@@ -640,7 +641,7 @@ void GridWindow::ChangeMode(int nType)
         {
             for( int i = 0; i < m_nValues; i++ )
             {
-                m_pNewYValues[ i ] = m_fMinY + (m_fMaxY-m_fMinY)*(std::exp((m_pXValues[i]-m_fMinX)/(m_fMaxX-m_fMinX))-1.0)/(M_E-1.0);
+                m_pNewYValues[ i ] = m_fMinY + (m_fMaxY-m_fMinY)*(boost::math::expm1((m_pXValues[i]-m_fMinX)/(m_fMaxX-m_fMinX)))/(M_E-1.0);
             }
         }
         break;
