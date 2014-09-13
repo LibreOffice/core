@@ -32,10 +32,15 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
         // but in fact it's a Traditional Chinese font.
         return USCRIPT_TRADITIONAL_HAN;
     }
-    else if (rName == "GungSeo")
+    else if (rName == "GungSeo" || rName == "PCMyungjo" || rName == "PilGi")
     {
-        // "GungSeo" has no OS/2 table, but we know it's a Korean font.
+        // These have no OS/2 tables, but we know they are Korean fonts.
         return USCRIPT_KOREAN;
+    }
+    else if (rName == "Hei" || rName == "Kai")
+    {
+        // These have no OS/2 tables, but we know they are Chinese fonts.
+        return USCRIPT_HAN;
     }
     else if (rName.startsWith("Bangla "))
     {
@@ -82,6 +87,16 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
         // "InaiMathi" claims it supports GOTHIC and CJK_UNIFIED_IDEOGRAPHS as well as
         // TAMIL, but it doesn't
         return USCRIPT_TAMIL;
+    }
+    else if (rName == "Hannotate TC" || rName == "HanziPen TC" || rName == "Heiti TC" || rName == "Weibei TC")
+    {
+        // These fonts claim support for ARMENIAN and a bunch of other stuff they doesn't support
+        return USCRIPT_TRADITIONAL_HAN;
+    }
+    else if (rName == "Hannotate SC" || rName == "HanziPen SC" || rName == "Heiti SC" || rName == "Weibei SC")
+    {
+        // These fonts claim support for ARMENIAN and a bunch of other stuff they doesn't support
+        return USCRIPT_SIMPLIFIED_HAN;
     }
 
     return USCRIPT_INVALID_CODE;
