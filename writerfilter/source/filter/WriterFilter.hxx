@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <cppuhelper/implbase5.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 /// Common DOC/DOCX filter, calls DocxExportFilter via UNO or does the DOCX import.
 class WriterFilter : public cppu::WeakImplHelper5
@@ -76,7 +77,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
 private:
-    void putPropertiesToDocumentGrabBag( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProperties );
+    void putPropertiesToDocumentGrabBag(const comphelper::SequenceAsHashMap& rProperties);
 
 };
 

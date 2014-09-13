@@ -133,7 +133,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         // Adding the saved compat settings
         aGrabBagProperties["CompatSettings"] = uno::makeAny( aDomainMapper->GetCompatSettings() );
 
-        putPropertiesToDocumentGrabBag( aGrabBagProperties.getAsConstPropertyValueList() );
+        putPropertiesToDocumentGrabBag( aGrabBagProperties );
 
         writerfilter::ooxml::OOXMLStream::Pointer_t  pVBAProjectStream(writerfilter::ooxml::OOXMLDocumentFactory::createStream( pDocStream, writerfilter::ooxml::OOXMLStream::VBAPROJECT ));
         oox::StorageRef xVbaPrjStrg( new ::oox::ole::OleStorage( m_xContext, pVBAProjectStream->getDocumentStream(), false ) );
@@ -262,7 +262,7 @@ uno::Sequence< OUString > WriterFilter::getSupportedServiceNames(  ) throw (uno:
     return WriterFilter_getSupportedServiceNames();
 }
 
-void WriterFilter::putPropertiesToDocumentGrabBag( const uno::Sequence< beans::PropertyValue >& aProperties )
+void WriterFilter::putPropertiesToDocumentGrabBag( const comphelper::SequenceAsHashMap& rProperties )
 {
     try
     {
@@ -275,22 +275,13 @@ void WriterFilter::putPropertiesToDocumentGrabBag( const uno::Sequence< beans::P
             if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
             {
                 // get existing grab bag
-                uno::Sequence<beans::PropertyValue> aGrabBag;
-                xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-                sal_Int32 length = aGrabBag.getLength();
-
-                // update grab bag size to contain the new items
-                aGrabBag.realloc( length + aProperties.getLength() );
+                comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
 
                 // put the new items
-                for( sal_Int32 i=0; i < aProperties.getLength(); ++i )
-                {
-                    aGrabBag[length + i].Name = aProperties[i].Name;
-                    aGrabBag[length + i].Value = aProperties[i].Value;
-                }
+                aGrabBag.update(rProperties);
 
                 // put it back to the document
-                xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
+                xDocProps->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag.getAsConstPropertyValueList()));
             }
         }
     }
