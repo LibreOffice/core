@@ -453,7 +453,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
                     pAktCreate->SetMergedItemSet(aDefaultAttr);
                 }
 
-                if (HAS_BASE(SdrCaptionObj,pAktCreate))
+                if (pMod && HAS_BASE(SdrCaptionObj,pAktCreate))
                 {
                     SfxItemSet aSet(pMod->GetItemPool());
                     aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid
@@ -461,7 +461,7 @@ bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, const
 
                     pAktCreate->SetMergedItemSet(aSet);
                 }
-                if (nInvent==SdrInventor && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
+                if (pMod && nInvent==SdrInventor && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
                     nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT))
                 {
                     // default for all text frames: no background, no border
