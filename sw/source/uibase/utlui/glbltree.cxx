@@ -431,10 +431,10 @@ sal_uInt16  SwGlobalTree::GetEnableFlags() const
     if(nSelCount == 1)
     {
         nRet |= ENABLE_EDIT;
-        if( ((SwGlblDocContent*)pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
+        if (pEntry && ((SwGlblDocContent*)pEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN &&
                     (!pPrevEntry || ((SwGlblDocContent*)pPrevEntry->GetUserData())->GetType() != GLBLDOC_UNKNOWN))
             nRet |= ENABLE_INSERT_TEXT;
-        if( GLBLDOC_SECTION == ((SwGlblDocContent*)pEntry->GetUserData())->GetType() )
+        if (pEntry && GLBLDOC_SECTION == ((SwGlblDocContent*)pEntry->GetUserData())->GetType())
             nRet |= ENABLE_EDIT_LINK;
     }
     else if(!nEntryCount)
