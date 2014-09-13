@@ -256,7 +256,7 @@ public class ScriptEditorForBeanShell
 
         this.model.setView(this.view);
         initUI();
-        frame.show();
+        frame.setVisible(true);
     }
 
     private void showErrorMessage(String message) {
