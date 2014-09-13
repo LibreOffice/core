@@ -27,7 +27,7 @@
 
 struct SystemEnvData;
 
-// - SalObject-Types -
+// SalObject types
 
 #define SAL_OBJECT_CLIP_INCLUDERECTS            ((sal_uInt16)0x0001)
 #define SAL_OBJECT_CLIP_EXCLUDERECTS            ((sal_uInt16)0x0002)
@@ -40,11 +40,11 @@ class VCL_PLUGIN_PUBLIC SalObject
     bool                m_bMouseTransparent:1,
                         m_bEraseBackground:1;
 public:
-    SalObject() : m_pInst( NULL ), m_pCallback( NULL ), m_bMouseTransparent( false ), m_bEraseBackground( true ) {}
-    virtual ~SalObject();
+            SalObject() : m_pInst( NULL ), m_pCallback( NULL ), m_bMouseTransparent( false ), m_bEraseBackground( true ) {}
+            virtual ~SalObject();
 
     virtual void                    ResetClipRegion() = 0;
-    virtual sal_uInt16                  GetClipRegionType() = 0;
+    virtual sal_uInt16              GetClipRegionType() = 0;
     virtual void                    BeginSetClipRegion( sal_uLong nRects ) = 0;
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight ) = 0;
     virtual void                    EndSetClipRegion() = 0;
@@ -61,18 +61,20 @@ public:
 
     virtual const SystemEnvData*    GetSystemData() const = 0;
 
-    void                    SetCallback( void* pInst, SALOBJECTPROC pProc )
-    { m_pInst = pInst; m_pCallback = pProc; }
-    long                    CallCallback( sal_uInt16 nEvent, const void* pEvent )
-    { return m_pCallback ? m_pCallback( m_pInst, this, nEvent, pEvent ) : 0; }
-    void                    SetMouseTransparent( bool bMouseTransparent )
-    { m_bMouseTransparent = bMouseTransparent; }
-    bool                    IsMouseTransparent()
-    { return m_bMouseTransparent; }
-    void                    EnableEraseBackground( bool bEnable )
-    { m_bEraseBackground = bEnable; }
-    bool                    IsEraseBackgroundEnabled()
-    { return m_bEraseBackground; }
+    void                            SetCallback( void* pInst, SALOBJECTPROC pProc )
+                                        { m_pInst = pInst; m_pCallback = pProc; }
+    long                            CallCallback( sal_uInt16 nEvent, const void* pEvent )
+                                        { return m_pCallback ? m_pCallback( m_pInst, this, nEvent, pEvent ) : 0; }
+
+    void                            SetMouseTransparent( bool bMouseTransparent )
+                                        { m_bMouseTransparent = bMouseTransparent; }
+    bool                            IsMouseTransparent()
+                                        { return m_bMouseTransparent; }
+
+    void                            EnableEraseBackground( bool bEnable )
+                                        { m_bEraseBackground = bEnable; }
+    bool                            IsEraseBackgroundEnabled()
+                                        { return m_bEraseBackground; }
 };
 
 #endif // INCLUDED_VCL_INC_SALOBJ_HXX
