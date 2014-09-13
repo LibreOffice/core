@@ -279,7 +279,7 @@ public class ScriptMetaData extends ScriptEntry {
 
                 if ( sourceUrl != null )
                 {
-                    StringBuffer buf = new StringBuffer();
+                    StringBuilder buf = new StringBuilder();
                     InputStream in = sourceUrl.openStream();
 
                     byte[] contents = new byte[1024];

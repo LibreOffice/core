@@ -160,7 +160,7 @@ public class SVersionRCFile {
         if (System.getProperty("os.name").startsWith("Windows"))
             path = path.replace(File.separatorChar, '/');
 
-        StringBuffer buf = new StringBuffer(FILE_URL_PREFIX);
+        StringBuilder buf = new StringBuilder(FILE_URL_PREFIX);
         buf.append(path);
 
         if (f.isDirectory())
