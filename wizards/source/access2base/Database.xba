@@ -50,12 +50,15 @@ End Sub		&apos;	Constructor
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Sub Class_Terminate()
 	On Local Error Resume Next
-	If _DbConnect = DBCONNECTANY Then
+	Call CloseAllRecordsets()
+	If _DbConnect &lt;&gt; DBCONNECTANY Then
 		If Not IsNull(Connection) Then
 			Connection.close()
 			Connection.dispose()
 			Set Connection = Nothing
 		End If
+	Else
+		mClose()
 	End If
 	Call Class_Initialize()
 End Sub		&apos;	Destructor

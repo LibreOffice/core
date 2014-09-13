@@ -157,6 +157,7 @@ End Type
 
 Type DocContainer
 	Document			As Object				&apos;	com.sun.star.comp.dba.ODatabaseDocument	or SwXTextDocument or ScModelObj
+	Active				As Boolean
 	DbConnect			As Integer				&apos;	DBCONNECTxxx constants
 	URL					As String
 	DbContainers()		As Variant				&apos;	One entry by (data-aware) form
@@ -388,6 +389,56 @@ Error_Function:
 End Function		&apos;	AllForms	V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
+Public Sub CloseConnection ()
+				
+&apos;	Close all connections established by current document to free memory.
+&apos;	- if Base document =&gt; close the one concerned database connection
+&apos;	- if non-Base documents =&gt; close the connections of each individual standalone form
+
+Dim i As Integer, iCurrentDoc As Integer
+Dim vDbContainer As Variant, vDbContainers() As Variant, vDocContainer As Variant
+
+	If IsEmpty(_A2B_) Then Goto Exit_Sub
+	
+	If _ErrorHandler() Then On Local Error Goto Error_Sub
+Const cstThisSub = &quot;CloseConnection&quot;
+	Utils._SetCalledSub(cstThisSub)
+
+	With _A2B_
+		If Not IsArray(.CurrentDoc) Then Goto Exit_Sub
+		If UBound(.CurrentDoc) &lt; 0 Then Goto Exit_Sub
+		iCurrentDoc = _CurrentDoc( , False)			&apos;	False prevents error raising if not found
+		If iCurrentDoc &lt; 0 Then GoTo Exit_Sub		&apos;	If not found ignore
+		
+		vDocContainer = .CurrentDoc(iCurrentDoc)
+		With vDocContainer
+			If Not .Active Then GoTo Exit_Sub		&apos;	e.g. if successive calls to CloseConnection()
+			For i = 0 To UBound(.DbContainers)
+				If Not IsNull(.DbContainers(i).Database) Then
+					.DbContainers(i).Database.Dispose()
+					Set .DbContainers(i).Database = Nothing
+				End If
+				TraceLog(TRACEANY, UCase(cstThisSub) &amp; &quot; &quot; &amp; .URL &amp; Iif(i = 0, &quot;&quot;, &quot; Form=&quot; &amp; .DbContainers(i).FormName), False)
+				Set .DbContainers(i) = Nothing
+			Next i
+			.DbContainers = Array()
+			.URL = &quot;&quot;
+			.DbConnect = 0
+			.Active = False
+			Set .Document = Nothing
+		End With
+		.CurrentDoc(iCurrentDoc) = vDocContainer
+	End With
+	
+Exit_Sub:
+	Utils._ResetCalledSub(cstThisSub)
+	Exit Sub
+Error_Sub:
+	TraceError(TRACEABORT, Err, cstThisSub, Erl, False)		&apos;	No error message addressed to the user, only stored in console
+	GoTo Exit_Sub
+End Sub			&apos;	CloseConnection		V1.2.0
+
+REM -----------------------------------------------------------------------------------------------------------------------
 Public Function Controls(ByVal Optional pvObject As Variant, Optional ByVal pvIndex As Variant) As Variant
 &apos;	Return an object of type Control indicated by either its index (integer) or its name (CASE-INSENSITIVE string)
 &apos;	The 1st argument pvObject can be either
@@ -447,7 +498,9 @@ Dim i As Integer, bFound As Boolean, sURL As String, iCurrentDoc As Integer, oCu
 		If Not IsArray(.CurrentDoc) Then Goto Exit_Function
 		If UBound(.CurrentDoc) &lt; 0 Then Goto Exit_Function
 		iCurrentDoc = _CurrentDoc(, False)
-		If iCurrentDoc &gt;= 0 Then Set CurrentDb = .CurrentDoc(iCurrentDoc).DbContainers(0).Database
+		If iCurrentDoc &gt;= 0 Then
+			If UBound(.CurrentDoc(iCurrentDoc).DbContainers) &gt;= 0 Then Set CurrentDb = .CurrentDoc(iCurrentDoc).DbContainers(0).Database
+		End If
 	End With
 
 Exit_Function:
@@ -789,7 +842,7 @@ Const cstThisSub = &quot;OpenConnection&quot;
 					bFound = False
 					For i = 1 To UBound(vCurrentDoc)
 						If Not IsEmpty(vCurrentDoc(i)) Then
-							If vCurrentDoc(i).URL = .URL Then
+							If vCurrentDoc(i).Active And vCurrentDoc(i).URL = .URL Then
 								iCurrent = i
 								bFound = True
 								Exit For
@@ -807,6 +860,7 @@ Const cstThisSub = &quot;OpenConnection&quot;
 	&apos;	Initialize future entry
 	Set vDocContainer = New DocContainer
 	Set vDocContainer.Document = oComponent
+	vDocContainer.Active = True
 	vDocContainer.URL = oComponent.URL
 	&apos;	Initialize each DbContainer entry
 	vDbContainers() = Array()
@@ -1139,18 +1193,20 @@ Trace_Error:
 End Function		&apos;	_CurrentDb	V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Public Function _CurrentDoc(Optional pvURL As String, Optional pbAbort As Boolean) As Integer
+Public Function _CurrentDoc(Optional pvURL As Variant, Optional pbAbort As Variant) As Integer
 &apos;	Returns the entry in _A2B_.CurrentDoc(...) referring to the current document
 
 Dim i As Integer, bFound As Boolean, sURL As String
+Const cstBase = &quot;com.sun.star.comp.dba.ODatabaseDocument&quot;
 
 	bFound = False
+	_CurrentDoc = -1
 	If IsEmpty(_A2B_) Then GoTo Trace_Error
 	With _A2B_
 		If Not IsArray(.CurrentDoc) Then Goto Trace_Error
 		If UBound(.CurrentDoc) &lt; 0 Then Goto Trace_Error
 		For i = 1 To UBound(.CurrentDoc)					&apos;	[0] reserved to database .odb document
-			If IsMissing(pvURL) Then					&apos;	Not on 1 single line ?!?
+			If IsMissing(pvURL) Then						&apos;	Not on 1 single line ?!?
 				If Utils._hasUNOProperty(ThisComponent, &quot;URL&quot;) Then
 					sURL = ThisComponent.URL
 				Else
@@ -1159,14 +1215,25 @@ Dim i As Integer, bFound As Boolean, sURL As String
 			Else
 				sURL = pvURL	&apos;	To support the SelectObject action
 			End If
-			If .CurrentDoc(i).URL = sURL Then
+			If .CurrentDoc(i).Active And .CurrentDoc(i).URL = sURL Then
 				_CurrentDoc = i
 				bFound = True
 				Exit For
 			End If
 		Next  i
 		If Not bFound Then
-			If Not IsNull(.CurrentDoc(0)) Then _CurrentDoc = 0 Else GoTo Trace_Error
+			If IsNull(.CurrentDoc(0)) Then GoTo Trace_Error
+			With .CurrentDoc(0)
+				If Not .Active Then GoTo Trace_Error
+				If IsNull(.Document) Then GoTo Trace_Error
+				If Utils._ImplementationName(ThisComponent) &lt;&gt; cstBase Or .Document.URL &lt;&gt; ThisComponent.URL Then	&apos;	Give the parent a try
+					If Not  Utils._hasUNOProperty(ThisComponent, &quot;Parent&quot;) Then Goto Trace_Error
+					If IsNull(ThisComponent.Parent) Then Goto Trace_Error
+					If Utils._ImplementationName(ThisComponent.Parent) &lt;&gt; cstBase Then Goto Trace_Error
+					If .Document.URL &lt;&gt; ThisComponent.Parent.URL Then Goto Trace_Error
+				End If
+			End With
+			_CurrentDoc = 0
 		End If
 	End With
 

@@ -51,6 +51,10 @@ End Sub		&apos;	Destructor
 
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Sub Dispose()
+Dim ofForm As Object
+	If Not IsLoaded(True) Then
+		If Not IsNull(DatabaseForm) Then DatabaseForm.Dispose()
+	End If
 	Call Class_Terminate()
 End Sub		&apos;	Explicit destructor
 
@@ -138,12 +142,14 @@ Property Let Height(ByVal pvValue As Variant)
 End Property	&apos;	Height (set)
 
 REM -----------------------------------------------------------------------------------------------------------------------
-Function IsLoaded() As Boolean
+Function IsLoaded(ByVal Optional pbForce As Boolean) As Boolean
 &apos;Return True if form open
+&apos;pbForce = True forbids bypass on value of _IsLoaded
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
 	Utils._SetCalledSub(&quot;Form.getIsLoaded&quot;)
-	If _IsLoaded Then			&apos;	For performance reasons, a form object, once detected as loaded, is presumed remaining loaded
+	If IsMissing(pbForce) Then pbForce = False
+	If ( Not pbForce ) And _IsLoaded Then			&apos;	For performance reasons, a form object, once detected as loaded, is presumed remaining loaded. Except if pbForce = True
 		IsLoaded = True
 		Goto Exit_Function
 	End If
@@ -320,6 +326,7 @@ Dim oDatabase As Object, oController As Object
 
 	Set oController = oDatabase.Document.getFormDocuments.getByName(_Name)
 	oController.close()
+	Dispose()
 	mClose = True
 
 Exit_Function:
