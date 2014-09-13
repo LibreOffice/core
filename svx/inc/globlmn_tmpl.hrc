@@ -256,17 +256,17 @@
 #define ITEM_COMPRESS_GRAPHIC \
     Identifier = SID_COMPRESS_GRAPHIC ; \
     Command = ".uno:CompressGraphic" ; \
-    Text [ en-US ] = "Compress Graphic..." ; \
+    Text [ en-US ] = "Compress Image..." ; \
 
 #define ITEM_SAVE_GRAPHIC \
     Identifier = SID_SAVE_GRAPHIC ; \
     Command = ".uno:SaveGraphic" ; \
-    Text [ en-US ] = "Save Graphic..." ; \
+    Text [ en-US ] = "Save Image..." ; \
 
 #define ITEM_CHANGE_PICTURE \
     Identifier = SID_CHANGE_PICTURE ; \
     Command = ".uno:ChangePicture" ; \
-    Text [ en-US ] = "Change Picture..." ; \
+    Text [ en-US ] = "Change Image..." ; \
 
 #define ITEM_VIEW_ATTR_ZOOM \
     Identifier = SID_ATTR_ZOOM ; \
