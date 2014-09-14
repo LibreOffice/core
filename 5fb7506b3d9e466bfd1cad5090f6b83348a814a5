@@ -16,6 +16,24 @@
       "revId": "5fb7506b3d9e466bfd1cad5090f6b83348a814a5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae975fb_b157e0c9",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2014-09-14T07:38:56Z",
+      "side": 1,
+      "message": "No I did mean log10, I just used the cppcheck comments, see\nhttp://dev-builds.libreoffice.org/cppcheck_reports/master/639.html#line-590",
+      "parentUuid": "dae975fb_31be5000",
+      "revId": "5fb7506b3d9e466bfd1cad5090f6b83348a814a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
