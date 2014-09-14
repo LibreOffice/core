@@ -36,7 +36,6 @@
 #include <limits>
 
 
-#define TABBAR_PADDING          24
 #define TABBAR_DRAG_SCROLLOFF   5
 #define TABBAR_MINSIZE          5
 
@@ -607,7 +606,10 @@ bool TabBar::ImplCalcWidth()
         {
             pItem->mbShort = false;
         }
-        nNewWidth += TABBAR_PADDING;
+
+        // Padding is dependent on font height - bigger font = bigger padding
+        long nFontWidth = aFont.GetHeight();
+        nNewWidth += nFontWidth * 2;
 
         if ( pItem->mnWidth != nNewWidth )
         {
