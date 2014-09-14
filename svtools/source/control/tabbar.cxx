@@ -1137,48 +1137,6 @@ public:
         mrParent.DrawPolygon(maPoly);
     }
 
-    void drawLeftShadow()
-    {
-        Point p1 = maPoly[0], p2 = maPoly[1];
-        p1.X()++;
-        p2.X()++;
-        p2.Y()--;
-        mrParent.DrawLine(p1, p2);
-    }
-
-    void drawRightShadow()
-    {
-        Point p1 = maPoly[2];
-        Point p2 = maPoly[3];
-        p1.X()--;
-        p2.X()--;
-        mrParent.DrawLine(p1, p2);
-    }
-
-    void drawTopInnerShadow()
-    {
-        Point p1 = maPoly[0], p2 = maPoly[3];
-        p1.Y()++;
-        p2.Y()++;
-        mrParent.DrawLine(p1, p2);
-    }
-
-    void drawBottomShadow(bool bColored)
-    {
-        Point p1 = maPoly[1], p2 = maPoly[2];
-        p1.X() += 1;
-        p1.Y() -= 1;
-        p2.X() -= 1;
-        p2.Y() -= 1;
-        mrParent.DrawLine(p1, p2);
-        if (bColored)
-        {
-            p1 += Point(-1, -1);
-            p2 += Point(1, -1);
-            mrParent.DrawLine(p1, p2);
-        }
-    }
-
     void drawText(const OUString& aText)
     {
         Rectangle aRect = maRect;
@@ -1197,7 +1155,8 @@ public:
 
     void drawOverTopBorder(bool b3DTab)
     {
-        Point p1 = maPoly[0], p2 = maPoly[3];
+        Point p1 = maPoly[0];
+        Point p2 = maPoly[3];
         p1.X() += 1;
         p2.X() -= 1;
         Rectangle aDelRect(p1, p2);
@@ -1228,34 +1187,6 @@ public:
             mrParent.SetFillColor( maUnselectedColor );
         }
 
-        drawOuterFrame();
-
-        // If this is the current tab, draw the left inner shadow the default color,
-        // otherwise make it the same as the custom background color
-        Color aColor = mpStyleSettings->GetLightColor();
-        if (mbCustomColored && !mbSelected)
-            aColor = maCustomColor;
-
-        mrParent.SetLineColor(aColor);
-        drawLeftShadow();
-
-        if ( !mbSelected )
-            drawTopInnerShadow();
-
-        mrParent.SetLineColor( mpStyleSettings->GetShadowColor() );
-        drawRightShadow();
-        if ( mbCustomColored && mbSelected )
-        {
-            mrParent.SetLineColor(maCustomColor);
-            drawBottomShadow(true);
-        }
-        else
-            drawBottomShadow(false);
-
-        // Draw the outer frame once more.  In some environments, the outer frame
-        // gets overpainted.
-        mrParent.SetLineColor( mpStyleSettings->GetDarkShadowColor() );
-        mrParent.SetFillColor();
         drawOuterFrame();
     }
 
