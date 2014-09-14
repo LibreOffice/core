@@ -624,6 +624,11 @@ interface DrawView
     ]
     SID_ZOOM_OUT // ole : no, status : play rec
     [
+        ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_ZOOM_MODE // ole : no, status : play rec
+    [
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]

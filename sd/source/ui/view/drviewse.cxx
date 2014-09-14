@@ -1142,6 +1142,20 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
+        case SID_ZOOM_OUT:
+        {
+            mbZoomOnPage = false;
+            SetZoom( std::min( (long) ( GetActiveWindow()->GetZoom() * 2 ), (long) GetActiveWindow()->GetMaxZoom() ) );
+            Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0),
+                                              GetActiveWindow()->GetOutputSizePixel()) );
+            mpZoomList->InsertZoomRect(aVisAreaWin);
+            Invalidate( SID_ZOOM_IN );
+            Invalidate( SID_ZOOM_PANNING );
+            Invalidate( SID_ZOOM_TOOLBOX );
+            rReq.Done ();
+        }
+        break;
+
         case SID_SIZE_VISAREA:
         {
             Rectangle aVisArea = mpFrameView->GetVisArea();

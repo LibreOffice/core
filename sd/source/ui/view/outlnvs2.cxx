@@ -143,8 +143,14 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_ZOOM_OUT:
         {
-            SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );
-            // ends itself, no need for Cancel()!
+            SetZoom( std::min( (long) ( GetActiveWindow()->GetZoom() * 2 ), (long) GetActiveWindow()->GetMaxZoom() ) );
+            Rectangle aVisAreaWin = GetActiveWindow()->PixelToLogic( Rectangle( Point(0,0),
+                                             GetActiveWindow()->GetOutputSizePixel()) );
+            mpZoomList->InsertZoomRect(aVisAreaWin);
+            Invalidate( SID_ATTR_ZOOM );
+            Invalidate( SID_ZOOM_IN );
+            Invalidate( SID_ATTR_ZOOMSLIDER );
+            Cancel();
             rReq.Done();
         }
         break;

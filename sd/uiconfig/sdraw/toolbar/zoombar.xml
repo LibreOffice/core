@@ -29,5 +29,6 @@
  <toolbar:toolbaritem xlink:href=".uno:ZoomOptimal" toolbar:helpid="10101"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomObjects" toolbar:helpid="27099"/>
  <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ZoomPanning" toolbar:helpid="27017"/>
 </toolbar:toolbar>

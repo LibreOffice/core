@@ -106,6 +106,7 @@ sal_uInt16 DrawViewShell::GetIdBySubId( sal_uInt16 nSId )
         case SID_SIZE_OPTIMAL:
         case SID_ZOOM_NEXT:
         case SID_ZOOM_PREV:
+        case SID_ZOOM_MODE:
         {
             nMappedSId = SID_ZOOM_TOOLBOX;
         }

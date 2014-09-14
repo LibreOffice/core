@@ -1222,7 +1222,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         }
         break;
 
-        case SID_ZOOM_OUT:
+        case SID_ZOOM_MODE:
         case SID_ZOOM_PANNING:
         {
             mbZoomOnPage = false;

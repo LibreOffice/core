@@ -1480,6 +1480,14 @@
           <value xml:lang="en-US">E-mail as ~OpenDocument Presentation...</value>
         </prop>
       </node>
+      <node oor:name=".uno:ZoomMode" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Zoom Tool</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:ModifyMenu" oor:op="replace">

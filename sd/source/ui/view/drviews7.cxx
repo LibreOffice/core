@@ -1345,6 +1345,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_ZOOM_IN );
         rSet.DisableItem( SID_ZOOM_OUT );
         rSet.DisableItem( SID_ZOOM_PANNING );
+        rSet.DisableItem( SID_ZOOM_MODE );
         rSet.DisableItem( SID_ZOOM_NEXT );
         rSet.DisableItem( SID_ZOOM_PREV );
         rSet.DisableItem( SID_SIZE_REAL );

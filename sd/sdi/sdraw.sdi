@@ -6151,6 +6151,30 @@ SfxVoidItem ZoomPanning SID_ZOOM_PANNING
     GroupId = GID_VIEW;
 ]
 
+SfxVoidItem ZoomMode SID_ZOOM_MODE
+()
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
 SfxVoidItem Mirror SID_OBJECT_MIRROR
 ( SfxBoolItem MirrorVert ID_VAL_MIRRORVERT )
 [
