@@ -2391,74 +2391,113 @@ OUString SwDBManager::LoadAndRegisterDataSource()
 
     xFltMgr->setCurrentFilter( sFilterAll ) ;
     OUString sFind;
-    bool bTextConnection = false;
     if( ERRCODE_NONE == aDlgHelper.Execute() )
     {
-        OUString sURL = xFP->getFiles().getConstArray()[0];
-        //data sources have to be registered depending on their extensions
-        INetURLObject aURL( sURL );
-        OUString sExt( aURL.GetExtension() );
         Any aURLAny;
+        uno::Reference< beans::XPropertySet > aSettings;
+        const OUString aURI( xFP->getFiles().getConstArray()[0] );
+        const DBConnURITypes type = GetDBunoURI( aURI, aURLAny );
+
+        if( DBCONN_FLAT == type )
+        {
+            Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
+            uno::Reference < sdb::XTextConnectionSettings > xSettingsDlg = sdb::TextConnectionSettings::create(xContext);
+            if( xSettingsDlg->execute() )
+                aSettings.set( uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ) );
+        }
+        sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : 0, aURI );
+    }
+    return sFind;
+}
+
+SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, Any &aURLAny)
+{
+    INetURLObject aURL( rURI );
+    OUString sExt( aURL.GetExtension() );
+    DBConnURITypes type = DBCONN_UNKNOWN;
+
+    if(sExt == "odb")
+    {
+        type = DBCONN_ODB;
+    }
+    else if(sExt.equalsIgnoreAsciiCase("sxc")
+        || sExt.equalsIgnoreAsciiCase("ods")
+            || sExt.equalsIgnoreAsciiCase("xls"))
+    {
+        OUString sDBURL("sdbc:calc:");
+        sDBURL += aURL.GetMainURL(INetURLObject::NO_DECODE);
+        aURLAny <<= sDBURL;
+        type = DBCONN_CALC;
+    }
+    else if(sExt.equalsIgnoreAsciiCase("dbf"))
+    {
+        aURL.removeSegment();
+        aURL.removeFinalSlash();
+        OUString sDBURL("sdbc:dbase:");
+        sDBURL += aURL.GetMainURL(INetURLObject::NO_DECODE);
+        aURLAny <<= sDBURL;
+        type = DBCONN_DBASE;
+    }
+    else if(sExt.equalsIgnoreAsciiCase("csv") || sExt.equalsIgnoreAsciiCase("txt"))
+    {
+        aURL.removeSegment();
+        aURL.removeFinalSlash();
+        OUString sDBURL("sdbc:flat:");
+        //only the 'path' has to be added
+        sDBURL += aURL.GetMainURL(INetURLObject::NO_DECODE);
+        aURLAny <<= sDBURL;
+        type = DBCONN_FLAT;
+    }
+#ifdef WNT
+    else if(sExt.equalsIgnoreAsciiCase("mdb"))
+    {
+        OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
+        sDBURL += aURL.PathToFileName();
+        aURLAny <<= sDBURL;
+        type = DBCONN_MSJET;
+    }
+    else if(sExt.equalsIgnoreAsciiCase("accdb"))
+    {
+        OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
+        sDBURL += aURL.PathToFileName();
+        aURLAny <<= sDBURL;
+        type = DBCONN_MSACE;
+    }
+#endif
+    return type;
+}
+
+OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const Any &aURLAny, const uno::Reference< beans::XPropertySet > *pSettings,
+                                                const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir)
+{
+        INetURLObject aURL( rURI );
+        OUString sExt( aURL.GetExtension() );
         Any aTableFilterAny;
         Any aSuppressVersionsAny;
         Any aInfoAny;
-        INetURLObject aTempURL(aURL);
         bool bStore = true;
-        if(sExt == "odb")
-        {
-            bStore = false;
-        }
-        else if(sExt.equalsIgnoreAsciiCase("sxc")
-            || sExt.equalsIgnoreAsciiCase("ods")
-                || sExt.equalsIgnoreAsciiCase("xls"))
-        {
-            OUString sDBURL("sdbc:calc:");
-            sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
-            aURLAny <<= sDBURL;
-        }
-        else if(sExt.equalsIgnoreAsciiCase("dbf"))
-        {
-            aTempURL.removeSegment();
-            aTempURL.removeFinalSlash();
-            OUString sDBURL("sdbc:dbase:");
-            sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
-            aURLAny <<= sDBURL;
-            //set the filter to the file name without extension
-            Sequence<OUString> aFilters(1);
-            aFilters[0] = aURL.getBase();
-            aTableFilterAny <<= aFilters;
-        }
-        else if(sExt.equalsIgnoreAsciiCase("csv") || sExt.equalsIgnoreAsciiCase("txt"))
-        {
-            aTempURL.removeSegment();
-            aTempURL.removeFinalSlash();
-            OUString sDBURL("sdbc:flat:");
-            //only the 'path' has to be added
-            sDBURL += aTempURL.GetMainURL(INetURLObject::NO_DECODE);
-            aURLAny <<= sDBURL;
+        OUString sFind;
+        Sequence<OUString> aFilters(1);
 
-            bTextConnection = true;
+        switch (type) {
+        case DBCONN_UNKNOWN:
+        case DBCONN_CALC:
+            break;
+        case DBCONN_ODB:
+            bStore = false;
+            break;
+        case DBCONN_FLAT:
+        case DBCONN_DBASE:
             //set the filter to the file name without extension
-            Sequence<OUString> aFilters(1);
             aFilters[0] = aURL.getBase();
             aTableFilterAny <<= aFilters;
-        }
-#ifdef WNT
-        else if(sExt.equalsIgnoreAsciiCase("mdb"))
-        {
-            OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
-            sDBURL += aTempURL.PathToFileName();
-            aURLAny <<= sDBURL;
+            break;
+        case DBCONN_MSJET:
+        case DBCONN_MSACE:
             aSuppressVersionsAny <<= makeAny(true);
+            break;
         }
-        else if(sExt.equalsIgnoreAsciiCase("accdb"))
-        {
-            OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
-            sDBURL += aTempURL.PathToFileName();
-            aURLAny <<= sDBURL;
-            aSuppressVersionsAny <<= makeAny(true);
-        }
-#endif
+
         try
         {
             Reference<XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
@@ -2470,6 +2509,8 @@ OUString SwDBManager::LoadAndRegisterDataSource()
                                                      RTL_TEXTENCODING_UTF8 );
             sal_Int32 nExtLen = aURL.GetExtension().getLength();
             sNewName = sNewName.replaceAt( sNewName.getLength() - nExtLen - 1, nExtLen + 1, "" );
+            if (pPrefix)
+                sNewName = *pPrefix + sNewName;
 
             //find a unique name if sNewName already exists
             sFind = sNewName;
@@ -2484,7 +2525,7 @@ OUString SwDBManager::LoadAndRegisterDataSource()
             if(!bStore)
             {
                 //odb-file
-                Any aDataSource = xDBContext->getByName(aTempURL.GetMainURL(INetURLObject::NO_DECODE));
+                Any aDataSource = xDBContext->getByName(aURL.GetMainURL(INetURLObject::NO_DECODE));
                 aDataSource >>= xNewInstance;
             }
             else
@@ -2501,19 +2542,13 @@ OUString SwDBManager::LoadAndRegisterDataSource()
                 if(aInfoAny.hasValue())
                     xDataProperties->setPropertyValue("Info", aInfoAny);
 
-                if( bTextConnection )
+                if( DBCONN_FLAT == type && pSettings )
                 {
-                    uno::Reference < sdb::XTextConnectionSettings > xSettingsDlg = sdb::TextConnectionSettings::create(xContext);
-                    if( xSettingsDlg->execute() )
-                    {
                         uno::Any aSettings = xDataProperties->getPropertyValue( "Settings" );
                         uno::Reference < beans::XPropertySet > xDSSettings;
                         aSettings >>= xDSSettings;
-                        ::comphelper::copyProperties(
-                            uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ),
-                            xDSSettings );
+                        ::comphelper::copyProperties( *pSettings, xDSSettings );
                         xDSSettings->setPropertyValue( "Extension", uno::makeAny( sExt ));
-                    }
                 }
 
                 Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
@@ -2521,21 +2556,28 @@ OUString SwDBManager::LoadAndRegisterDataSource()
                 OUString sOutputExt = ".odb";
                 OUString sTmpName;
                 {
-                    utl::TempFile aTempFile(sNewName, true, &sOutputExt, &sHomePath);
+                    OUString sHomePath(SvtPathOptions().GetWorkPath());
+                    utl::TempFile aTempFile(sNewName, true, &sOutputExt, pDestDir ? pDestDir : &sHomePath);
                     aTempFile.EnableKillingFile(true);
                     sTmpName = aTempFile.GetURL();
                 }
                 xStore->storeAsURL(sTmpName, Sequence< PropertyValue >());
             }
             xDBContext->registerObject( sFind, xNewInstance );
-
         }
         catch(const Exception&)
         {
+            sFind = "";
         }
-    }
     return sFind;
+}
 
+OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir,
+                                                const uno::Reference< beans::XPropertySet > *pSettings)
+{
+    Any aURLAny;
+    DBConnURITypes type = GetDBunoURI( rURI, aURLAny );
+    return LoadAndRegisterDataSource( type, aURLAny, pSettings, rURI, pPrefix, pDestDir );
 }
 
 void SwDBManager::ExecuteFormLetter( SwWrtShell& rSh,

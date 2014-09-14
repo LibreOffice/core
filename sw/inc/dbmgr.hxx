@@ -73,6 +73,7 @@ class SwDbtoolsClient;
 class SwXMailMerge;
 class SwMailMergeConfigItem;
 class SwCalc;
+class INetURLObject;
 
 enum DBManagerOptions
 {
@@ -217,6 +218,16 @@ public:
     SwDBManager();
     ~SwDBManager();
 
+    enum DBConnURITypes {
+        DBCONN_UNKNOWN = 0,
+        DBCONN_ODB,
+        DBCONN_CALC,
+        DBCONN_DBASE,
+        DBCONN_FLAT,
+        DBCONN_MSJET,
+        DBCONN_MSACE
+    };
+
     /// MailMergeEvent source
     const SwXMailMerge *    GetMailMergeEvtSrc() const  { return pMergeEvtSrc; }
     void SetMailMergeEvtSrc( const SwXMailMerge *pSrc ) { pMergeEvtSrc = pSrc; }
@@ -328,10 +339,34 @@ public:
 
     static ::com::sun::star::uno::Sequence<OUString> GetExistingDatabaseNames();
 
+    static DBConnURITypes GetDBunoURI(const OUString &rURI, ::com::sun::star::uno::Any &aURLAny);
+
     /**
-     Loads a data source from file and registers it. Returns the registered name.
+     Loads a data source from file and registers it.
+
+     This function requires GUI interaction, as it loads the data source from
+     the filename returned by a file picker and additional settings dialog.
+     In case of success it returns the registered name, otherwise an empty string.
      */
     static OUString            LoadAndRegisterDataSource();
+
+    /**
+     Loads a data source from file and registers it.
+
+     In case of success it returns the registered name, otherwise an empty string.
+     Optionally add a prefix to the registered DB name.
+     */
+    static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const ::com::sun::star::uno::Any &rUnoURI,
+                                                         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings,
+                                                         const OUString &rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0);
+    /**
+     Loads a data source from file and registers it.
+
+     Convenience function, which calls GetDBunoURI and has just one mandatory parameter.
+     In case of success it returns the registered name, otherwise an empty string.
+     */
+    static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pPrefix = 0, const OUString *pDestDir = 0,
+                                                         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > *pSettings = 0);
 
     static SwDbtoolsClient&    GetDbtoolsClient();
     /// has to be called from _FinitUI()
