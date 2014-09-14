@@ -859,17 +859,13 @@ static void lcl_CopyDocumentPorperties(
     pTargetDoc->ReplaceUserDefinedDocumentProperties( xSourceDocProps );
 }
 
-#ifdef DBG_UTIL
-
-#define MAX_DOC_DUMP 3
-
 static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
                          const char *name, int no = 0 )
 {
     boost::scoped_ptr< utl::TempFile > aTempFile;
     String sExt( ".odt" );
     String basename = OUString::createFromAscii( name );
-    if (no > 0 )
+    if (no > 0)
         basename += OUString::number(no) + "-";
     aTempFile.reset( new utl::TempFile( basename, true, &sExt ) );
     OSL_ENSURE( aTempFile.get(), "Temporary file not available" );
@@ -883,7 +879,6 @@ static void lcl_SaveDoc( SfxObjectShell *xTargetDocShell,
         SAL_INFO( "sw.mailmerge", "Saved doc as: " << aTempFile->GetURL() );
     delete pDstMed;
 }
-#endif
 
 sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     const SwMergeDescriptor& rMergeDescriptor)
@@ -898,6 +893,17 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     OUString sBodyMimeType;
     rtl_TextEncoding eEncoding = ::osl_getThreadTextEncoding();
+
+    static const char *sMaxDumpDocs = 0;
+    static sal_Int32 nMaxDumpDocs = 0;
+    if (!sMaxDumpDocs)
+    {
+        sMaxDumpDocs = getenv("SW_DEBUG_MAILMERGE_DOCS");
+        if (!sMaxDumpDocs)
+            sMaxDumpDocs = "";
+        else
+            nMaxDumpDocs = rtl_ustr_toInt32(reinterpret_cast<const sal_Unicode*>( sMaxDumpDocs ), 10);
+    }
 
     if(bEMail)
     {
@@ -1005,9 +1011,8 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 // create a target docshell to put the merged document into
                 xTargetDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
                 xTargetDocShell->DoInitNew( 0 );
-#ifdef DBG_UTIL
-                lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
-#endif
+                if (nMaxDumpDocs)
+                    lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
                 SfxViewFrame* pTargetFrame = SfxViewFrame::LoadHiddenDocument( *xTargetDocShell, 0 );
                 if (bMergeOnly) {
                     //the created window has to be located at the same position as the source window
@@ -1056,7 +1061,7 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 pViewFrm = SfxViewFrame::GetNext(*pViewFrm, pSourceDocSh);
             }
 
-            sal_uLong nDocNo = 1;
+            sal_Int32 nDocNo = 1;
             sal_Int32 nDocCount = 0;
             if( !IsMergeSilent() && bMergeOnly &&
                     lcl_getCountFromResultSet( nDocCount, pImpl->pMergeData->xResultSet ) )
@@ -1142,10 +1147,8 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
                             SwDoc* pWorkDoc = rWorkShell.GetDoc();
                             lcl_CopyDocumentPorperties( xSourceDocProps, xWorkDocSh, pWorkDoc );
-#ifdef DBG_UTIL
-                            if ( nDocNo <= MAX_DOC_DUMP )
+                            if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
-#endif
                             SwNewDBMgr* pOldDBMgr = pWorkDoc->GetNewDBMgr();
                             pWorkDoc->SetNewDBMgr( this );
                             pWorkDoc->EmbedAllLinks();
@@ -1205,19 +1208,15 @@ sal_Bool SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
                                 sal_uInt16 nStartPage = pTargetShell->GetPageCnt();
-#ifdef DBG_UTIL
-                                if ( nDocNo <= MAX_DOC_DUMP )
+                                if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                     lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
-#endif
                                 pTargetDoc->AppendDoc(*rWorkShell.GetDoc(),
                                     nStartingPageNo, pTargetPageDesc, nDocNo == 1);
 
                                 // #i72820# calculate layout to be able to find the correct page index
                                 pTargetShell->CalcLayout();
-#ifdef DBG_UTIL
-                                if ( nDocNo <= MAX_DOC_DUMP )
+                                if ( (nMaxDumpDocs < 0) || (nDocNo <= nMaxDumpDocs) )
                                     lcl_SaveDoc( xTargetDocShell, "MergeDoc" );
-#endif
                                 if (bMergeOnly)
                                 {
                                     SwDocMergeInfo aMergeInfo;
