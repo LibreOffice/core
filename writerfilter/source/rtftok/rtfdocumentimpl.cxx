@@ -2427,14 +2427,14 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     int nParam = -1;
     int nSprm = -1;
 
-    // Map all underline flags to a single sprm.
+    // Underline flags.
     switch (nKeyword)
     {
     case RTF_ULD:
-        nSprm = 4;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dotted;
         break;
     case RTF_ULW:
-        nSprm = 2;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_words;
         break;
     default:
         break;
@@ -2935,7 +2935,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         break;
     case RTF_ULNONE:
     {
-        RTFValue::Pointer_t pValue(new RTFValue(0));
+        RTFValue::Pointer_t pValue(new RTFValue(NS_ooxml::LN_Value_ST_Underline_none));
         m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_Underline_val, pValue);
     }
     break;
@@ -4622,60 +4622,60 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
     int nSprm = -1;
     RTFValue::Pointer_t pBoolValue(new RTFValue(int(!bParam || nParam != 0)));
 
-    // Map all underline toggles to a single sprm.
+    // Underline toggles.
     switch (nKeyword)
     {
     case RTF_UL:
-        nSprm = 1;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_single;
         break;
     case RTF_ULDASH:
-        nSprm = 7;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dash;
         break;
     case RTF_ULDASHD:
-        nSprm = 9;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dotDash;
         break;
     case RTF_ULDASHDD:
-        nSprm = 10;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dotDotDash;
         break;
     case RTF_ULDB:
-        nSprm = 3;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_double;
         break;
     case RTF_ULHWAVE:
-        nSprm = 27;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_wavyHeavy;
         break;
     case RTF_ULLDASH:
-        nSprm = 39;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dashLong;
         break;
     case RTF_ULTH:
-        nSprm = 6;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_thick;
         break;
     case RTF_ULTHD:
-        nSprm = 20;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dottedHeavy;
         break;
     case RTF_ULTHDASH:
-        nSprm = 23;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dashedHeavy;
         break;
     case RTF_ULTHDASHD:
-        nSprm = 25;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dashDotHeavy;
         break;
     case RTF_ULTHDASHDD:
-        nSprm = 26;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dashDotDotHeavy;
         break;
     case RTF_ULTHLDASH:
-        nSprm = 55;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_dashLongHeavy;
         break;
     case RTF_ULULDBWAVE:
-        nSprm = 43;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_wavyDouble;
         break;
     case RTF_ULWAVE:
-        nSprm = 11;
+        nSprm = NS_ooxml::LN_Value_ST_Underline_wave;
         break;
     default:
         break;
     }
     if (nSprm >= 0)
     {
-        RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : 0));
+        RTFValue::Pointer_t pValue(new RTFValue((!bParam || nParam != 0) ? nSprm : NS_ooxml::LN_Value_ST_Underline_none));
         m_aStates.top().aCharacterAttributes.set(NS_ooxml::LN_CT_Underline_val, pValue);
         return 0;
     }

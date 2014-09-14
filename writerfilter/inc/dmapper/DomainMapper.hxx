@@ -161,7 +161,7 @@ private:
     // Table
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) SAL_OVERRIDE;
 
-    void handleUnderlineType(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext);
+    void handleUnderlineType(const Id nId, const ::boost::shared_ptr<PropertyMap> pContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight);
     bool getColorFromId(const Id, sal_Int32 &nColor);
     sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);

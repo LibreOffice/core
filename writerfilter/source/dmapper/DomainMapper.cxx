@@ -3145,33 +3145,68 @@ void DomainMapper::lcl_info(const std::string & /*info_*/)
 {
 }
 
-void DomainMapper::handleUnderlineType(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext)
+void DomainMapper::handleUnderlineType(const Id nId, const ::boost::shared_ptr<PropertyMap> pContext)
 {
-    sal_Int16 eUnderline = awt::FontUnderline::NONE;
+    sal_Int16 nUnderline = awt::FontUnderline::NONE;
 
-    switch(nIntValue)
+    switch (nId)
     {
-    case 0: eUnderline = awt::FontUnderline::NONE; break;
-    case 2: pContext->Insert(PROP_CHAR_WORD_MODE, uno::makeAny( true ) ); // TODO: how to get rid of it?
-    case 1: eUnderline = awt::FontUnderline::SINGLE;       break;
-    case 3: eUnderline = awt::FontUnderline::DOUBLE;       break;
-    case 4: eUnderline = awt::FontUnderline::DOTTED;       break;
-    case 7: eUnderline = awt::FontUnderline::DASH;         break;
-    case 9: eUnderline = awt::FontUnderline::DASHDOT;      break;
-    case 10:eUnderline = awt::FontUnderline::DASHDOTDOT;   break;
-    case 6: eUnderline = awt::FontUnderline::BOLD;         break;
-    case 11:eUnderline = awt::FontUnderline::WAVE;         break;
-    case 20:eUnderline = awt::FontUnderline::BOLDDOTTED;   break;
-    case 23:eUnderline = awt::FontUnderline::BOLDDASH;     break;
-    case 39:eUnderline = awt::FontUnderline::LONGDASH;     break;
-    case 55:eUnderline = awt::FontUnderline::BOLDLONGDASH; break;
-    case 25:eUnderline = awt::FontUnderline::BOLDDASHDOT;  break;
-    case 26:eUnderline = awt::FontUnderline::BOLDDASHDOTDOT;break;
-    case 27:eUnderline = awt::FontUnderline::BOLDWAVE;     break;
-    case 43:eUnderline = awt::FontUnderline::DOUBLEWAVE;   break;
-    default: ;
+    case NS_ooxml::LN_Value_ST_Underline_none:
+        nUnderline = awt::FontUnderline::NONE;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_words:
+        pContext->Insert(PROP_CHAR_WORD_MODE, uno::makeAny(true));
+        // fall-through intended
+    case NS_ooxml::LN_Value_ST_Underline_single:
+        nUnderline = awt::FontUnderline::SINGLE;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_double:
+        nUnderline = awt::FontUnderline::DOUBLE;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dotted:
+        nUnderline = awt::FontUnderline::DOTTED;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dash:
+        nUnderline = awt::FontUnderline::DASH;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dotDash:
+        nUnderline = awt::FontUnderline::DASHDOT;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dotDotDash:
+        nUnderline = awt::FontUnderline::DASHDOTDOT;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_thick:
+        nUnderline = awt::FontUnderline::BOLD;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_wave:
+        nUnderline = awt::FontUnderline::WAVE;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dottedHeavy:
+        nUnderline = awt::FontUnderline::BOLDDOTTED;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dashedHeavy:
+        nUnderline = awt::FontUnderline::BOLDDASH;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dashLong:
+        nUnderline = awt::FontUnderline::LONGDASH;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dashLongHeavy:
+        nUnderline = awt::FontUnderline::BOLDLONGDASH;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dashDotHeavy:
+        nUnderline = awt::FontUnderline::BOLDDASHDOT;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_dashDotDotHeavy:
+        nUnderline = awt::FontUnderline::BOLDDASHDOTDOT;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_wavyHeavy:
+        nUnderline = awt::FontUnderline::BOLDWAVE;
+        break;
+    case NS_ooxml::LN_Value_ST_Underline_wavyDouble:
+        nUnderline = awt::FontUnderline::DOUBLEWAVE;
+        break;
     }
-    pContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny( eUnderline ) );
+    pContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny(nUnderline));
 }
 
 void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight)
