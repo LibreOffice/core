@@ -101,7 +101,7 @@ public class OOoViewer extends Applet {
         try {
             Method methStop = m_objBean.getClass().getMethod(
                 "stopOOoConnection", new Class[0]);
-            methStop.invoke(m_objBean, null);
+            methStop.invoke(m_objBean, (Object[]) null);
         } catch (java.lang.NoSuchMethodException e) {
             e.printStackTrace();
         } catch (java.lang.IllegalAccessException e) {
