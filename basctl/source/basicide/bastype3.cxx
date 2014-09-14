@@ -201,9 +201,9 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
         for ( size_t n = 0; n < aEntries.size(); n++ )
         {
             SvTreeListEntry* pLE = aEntries[n];
-            DBG_ASSERT( pLE, "Can not find entry in array" );
+            assert(pLE && "Can not find entry in array");
             Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
-            DBG_ASSERT( pBE, "The data in the entry not found!" );
+            assert(pBE && "The data in the entry not found!");
             OUString aName( GetEntryText( pLE ) );
 
             switch ( pBE->GetType() )
