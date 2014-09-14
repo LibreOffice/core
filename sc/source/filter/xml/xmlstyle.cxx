@@ -671,7 +671,6 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                 }
                 break;
             }
-            ++i;
         }
     }
 }
