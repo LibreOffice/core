@@ -212,22 +212,22 @@ public final class PropertySetMixin {
             if ((p.Attributes & PropertyAttribute.CONSTRAINED) != 0) {
                 ArrayList<XVetoableChangeListener> o = vetoListeners.get(propertyName);
                 if (o != null) {
-                    specificVeto = (ArrayList<XVetoableChangeListener>) o.clone();
+                    specificVeto = new ArrayList<XVetoableChangeListener>(o);
                 }
                 o = vetoListeners.get("");
                 if (o != null) {
-                    unspecificVeto = (ArrayList<XVetoableChangeListener>) o.clone();
+                    unspecificVeto = new ArrayList<XVetoableChangeListener>(o);
                 }
             }
             if ((p.Attributes & PropertyAttribute.BOUND) != 0) {
                 // assert bound != null;
                 ArrayList<XPropertyChangeListener> o = boundListeners.get(propertyName);
                 if (o != null) {
-                    bound.specificListeners = (ArrayList<XPropertyChangeListener>) o.clone();
+                    bound.specificListeners = new ArrayList<XPropertyChangeListener>(o);
                 }
                 o = boundListeners.get("");
                 if (o != null) {
-                    bound.unspecificListeners = (ArrayList<XPropertyChangeListener>) o.clone();
+                    bound.unspecificListeners = new ArrayList<XPropertyChangeListener>(o);
                 }
             }
         }
