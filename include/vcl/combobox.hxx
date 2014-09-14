@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_COMBOBOX_HXX
 #define INCLUDED_VCL_COMBOBOX_HXX
 
+#include <boost/signals2/connection.hpp>
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
 #include <vcl/combobox.h>
@@ -50,6 +51,7 @@ private:
     sal_Int32 m_nMaxWidthChars;
     Link                        maSelectHdl;
     Link                        maDoubleClickHdl;
+    boost::signals2::scoped_connection mAutocompleteConnection;
 
     struct ComboBoxBounds
     {
@@ -71,11 +73,11 @@ private:
     DECL_DLLPRIVATE_LINK(   ImplDoubleClickHdl, void* );
     DECL_DLLPRIVATE_LINK(   ImplPopupModeEndHdl, void* );
     DECL_DLLPRIVATE_LINK(   ImplSelectionChangedHdl, void* );
-    DECL_DLLPRIVATE_LINK(   ImplAutocompleteHdl, Edit* );
     DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , void* );
 
     SAL_DLLPRIVATE void ImplClickButtonHandler( ImplBtn* );
     SAL_DLLPRIVATE void ImplUserDrawHandler( UserDrawEvent* );
+    SAL_DLLPRIVATE void ImplAutocompleteHandler( Edit* );
 
 protected:
     using Window::ImplInit;

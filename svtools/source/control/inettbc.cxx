@@ -899,7 +899,7 @@ void SvtURLBox::Init(bool bSetDefaultHelpID)
 
     SetText( OUString() );
 
-    GetSubEdit()->SetAutocompleteHdl( LINK( this, SvtURLBox, AutoCompleteHdl_Impl ) );
+    GetSubEdit()->autocompleteSignal.connect( boost::bind( &SvtURLBox::AutoCompleteHandler, this, _1 ) );
     UpdatePicklistForSmartProtocol_Impl();
 
     EnableAutoSize(GetStyle() & WB_AUTOSIZE);
@@ -1127,15 +1127,10 @@ bool SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 
-IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl)
+void SvtURLBox::AutoCompleteHandler( Edit* )
 {
     if ( GetSubEdit()->GetAutocompleteAction() == AUTOCOMPLETE_KEYINPUT )
-    {
         TryAutoComplete();
-        return 1L;
-    }
-
-    return 0L;
 }
 
 

@@ -1615,12 +1615,12 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                         ImplCopyToSelectionClipboard();
                     }
 
-                    if ( bGoEnd && maAutocompleteHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier() )
+                    if ( bGoEnd && !autocompleteSignal.empty() && !rKEvt.GetKeyCode().GetModifier() )
                     {
                         if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
                         {
                             meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
-                            maAutocompleteHdl.Call( this );
+                            autocompleteSignal( this );
                         }
                     }
 
@@ -1686,7 +1686,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                not suddenly to cycle the autocompletion
             case KEY_TAB:
             {
-                if ( !mbReadOnly && maAutocompleteHdl.IsSet() &&
+                if ( !mbReadOnly && !autocompleteSignal.empty() &&
                      maSelection.Min() && (maSelection.Min() == maText.Len()) &&
                      !rKEvt.GetKeyCode().IsMod1() && !rKEvt.GetKeyCode().IsMod2() )
                 {
@@ -1697,7 +1697,7 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     else
                         meAutocompleteAction = AUTOCOMPLETE_TABFORWARD;
 
-                    maAutocompleteHdl.Call( this );
+                    autocompleteSignal( this );
 
                     // Wurde nichts veraendert, dann TAB fuer DialogControl
                     if ( GetSelection().Len() )
@@ -1715,12 +1715,12 @@ bool Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     if ( !mbReadOnly )
                     {
                         ImplInsertText(OUString(rKEvt.GetCharCode()), 0, true);
-                        if ( maAutocompleteHdl.IsSet() )
+                        if ( !autocompleteSignal.empty() )
                         {
                             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
                             {
                                 meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
-                                maAutocompleteHdl.Call( this );
+                                autocompleteSignal( this );
                             }
                         }
                     }
@@ -2080,12 +2080,12 @@ void Edit::Command( const CommandEvent& rCEvt )
         ImplModified();
 
         // #i25161# call auto complete handler for ext text commit also
-        if ( maAutocompleteHdl.IsSet() )
+        if ( autocompleteSignal.empty() )
         {
             if ( (maSelection.Min() == maSelection.Max()) && (maSelection.Min() == maText.getLength()) )
             {
                 meAutocompleteAction = AUTOCOMPLETE_KEYINPUT;
-                maAutocompleteHdl.Call( this );
+                autocompleteSignal( this );
             }
         }
     }
@@ -2446,13 +2446,6 @@ void Edit::SetReadOnly( bool bReadOnly )
     }
 }
 
-void Edit::SetAutocompleteHdl( const Link& rHdl )
-{
-    maAutocompleteHdl = rHdl;
-    if ( mpSubEdit )
-        mpSubEdit->SetAutocompleteHdl( rHdl );
-}
-
 void Edit::SetInsertMode( bool bInsert )
 {
     if ( bInsert != mbInsertMode )
@@ -2709,6 +2702,7 @@ void Edit::SetSubEdit( Edit* pEdit )
         mpSubEdit->mbIsSubEdit = true;
 
         mpSubEdit->SetReadOnly( mbReadOnly );
+        mpSubEdit->autocompleteSignal.connect( autocompleteSignal );
     }
 }
 

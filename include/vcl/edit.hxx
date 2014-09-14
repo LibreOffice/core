@@ -20,6 +20,7 @@
 #ifndef INCLUDED_VCL_EDIT_HXX
 #define INCLUDED_VCL_EDIT_HXX
 
+#include <boost/signals2/signal.hpp>
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/timer.hxx>
@@ -94,7 +95,6 @@ private:
                         mbActivePopup:1;
     Link                maModifyHdl;
     Link                maUpdateDataHdl;
-    Link                maAutocompleteHdl;
 
     css::uno::Reference < css::i18n::XExtendedInputSequenceChecker > mxISC;
 
@@ -238,8 +238,7 @@ public:
     void                SetSubEdit( Edit* pEdit );
     Edit*               GetSubEdit() const { return mpSubEdit; }
 
-    void                SetAutocompleteHdl( const Link& rHdl );
-    const Link&         GetAutocompleteHdl() const { return maAutocompleteHdl; }
+    boost::signals2::signal< void ( Edit* ) > autocompleteSignal;
     AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
 
     virtual Size        CalcMinimumSize() const;

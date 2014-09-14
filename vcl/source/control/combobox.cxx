@@ -224,14 +224,18 @@ void ComboBox::EnableAutocomplete( bool bEnable, bool bMatchCase )
     mbMatchCase = bMatchCase;
 
     if ( bEnable )
-        mpSubEdit->SetAutocompleteHdl( LINK( this, ComboBox, ImplAutocompleteHdl ) );
+    {
+        if( !mAutocompleteConnection.connected())
+            mAutocompleteConnection = mpSubEdit->autocompleteSignal.connect(
+                boost::bind( &ComboBox::ImplAutocompleteHandler, this, _1 ) );
+    }
     else
-        mpSubEdit->SetAutocompleteHdl( Link() );
+        mAutocompleteConnection.disconnect();
 }
 
 bool ComboBox::IsAutocompleteEnabled() const
 {
-    return mpSubEdit->GetAutocompleteHdl().IsSet();
+    return mAutocompleteConnection.connected();
 }
 
 void ComboBox::ImplClickButtonHandler( ImplBtn* )
@@ -275,7 +279,7 @@ IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
     return 0;
 }
 
-IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
+void ComboBox::ImplAutocompleteHandler( Edit* pEdit )
 {
     Selection           aSel = pEdit->GetSelection();
     AutocompleteAction  eAction = pEdit->GetAutocompleteAction();
@@ -326,8 +330,6 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
             pEdit->SetText( aText, aSelection );
         }
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
