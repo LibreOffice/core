@@ -373,7 +373,7 @@ Time Time::GetUTCOffset()
     {
         nTime = time( 0 );
         localtime_r( &nTime, &aTM );
-        nLocalTime = mktime( &aTM );
+        nLocalTime = nTime;
 #if defined( SOLARIS )
         // Solaris gmtime_r() seems not to handle daylight saving time
         // flags correctly
