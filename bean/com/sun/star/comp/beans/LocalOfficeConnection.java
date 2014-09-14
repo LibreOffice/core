@@ -36,6 +36,7 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lib.uno.helper.UnoUrl;
 import com.sun.star.lib.util.NativeLibraryLoader;
+import java.io.UnsupportedEncodingException;
 
 /**
  * This class represents a connection to the local office application.
@@ -131,6 +132,8 @@ public class LocalOfficeConnection
             setUnoUrl( "uno:pipe,name=" + getPipeName() + ";urp;StarOffice.ServiceManager" );
         }
         catch ( java.net.MalformedURLException e )
+        {}
+        catch ( java.io.UnsupportedEncodingException e)
         {}
     }
 
@@ -632,12 +635,12 @@ public class LocalOfficeConnection
 
     /** creates a unique pipe name.
     */
-    private static String getPipeName()
+    private static String getPipeName() throws UnsupportedEncodingException
     {
         // turn user name into a URL and file system safe name (% chars will not work)
         String aPipeName = System.getProperty("user.name") + OFFICE_ID_SUFFIX;
         aPipeName = aPipeName.replace( "_", "%B7" );
-        return java.net.URLEncoder.encode(aPipeName).replace( "+", "%20" ).replace( "%", "_" );
+        return java.net.URLEncoder.encode( aPipeName, "UTF-8" ).replace( "+", "%20" ).replace( "%", "_" );
     }
 
     /**
@@ -653,10 +656,16 @@ public class LocalOfficeConnection
          */
         public String getIdentifier()
         {
-            if ( mPipe == null)
-                return getPipeName();
-            else
-                return mPipe;
+            String identifier = null;
+            try
+            {
+                identifier = ( mPipe == null) ? getPipeName() : mPipe;
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+            return identifier;
         }
 
         /**
