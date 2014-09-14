@@ -64,7 +64,7 @@ def getFactoryForNamespace(model):
 {
     OOXMLFactory_ns::Pointer_t pResult;
 
-    switch (nId & 0xffff0000)
+    switch (oox::getNamespace(nId))
     {""")
 
     for namespace in [ns.getAttribute("name") for ns in model.getElementsByTagName("namespace")]:
@@ -122,7 +122,7 @@ std::string fastTokenToId(sal_uInt32 nToken)
 
     std::string sResult;
 
-    switch (nToken & 0xffff0000)
+    switch (oox::getNamespace(nToken))
     {""")
 
     aliases = []

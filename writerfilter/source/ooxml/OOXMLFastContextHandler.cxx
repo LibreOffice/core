@@ -1797,9 +1797,8 @@ OOXMLFastContextHandlerShape::lcl_createFastChildContext
     bool bGroupShape = Element == Token_t(NMSP_vml | XML_group);
     // drawingML version also counts as a group shape.
     bGroupShape |= mrShapeContext->getStartToken() == Token_t(NMSP_wpg | XML_wgp);
-    sal_uInt32 nNamespace = Element & 0xffff0000;
 
-    switch (nNamespace)
+    switch (oox::getNamespace(Element))
     {
         case NMSP_doc:
         case NMSP_vmlWord:
@@ -1977,9 +1976,7 @@ OOXMLFastContextHandlerWrapper::lcl_createFastChildContext
 {
     uno::Reference< xml::sax::XFastContextHandler > xResult;
 
-    Id nNameSpace = Element & 0xffff0000;
-
-    bool bInNamespaces = mMyNamespaces.find(nNameSpace) != mMyNamespaces.end();
+    bool bInNamespaces = mMyNamespaces.find(oox::getNamespace(Element)) != mMyNamespaces.end();
     bool bInTokens = mMyTokens.find( Element ) != mMyTokens.end( );
 
     // We have methods to _add_ individual tokens or whole namespaces to be
