@@ -1227,7 +1227,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             mbZoomOnPage = false;
             SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), mpDrawView, GetDoc(), rReq) );
-            // finishes itself, no Cancel() needed!
             Invalidate( SID_ZOOM_TOOLBOX );
             rReq.Ignore ();
         }

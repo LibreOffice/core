@@ -82,12 +82,19 @@ bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 
     aBeginPosPix = rMEvt.GetPosPixel();
     aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
+    aZoomRect.SetSize( Size( 0, 0 ) );
+    aZoomRect.SetPos( aBeginPos );
 
     return true;
 }
 
 bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 {
+    if (rMEvt.IsShift())
+        mpWindow->SetPointer(Pointer(POINTER_HAND));
+    else if (nSlotId != SID_ZOOM_PANNING)
+        mpWindow->SetPointer(Pointer(POINTER_MAGNIFY));
+
     if (bStartDrag)
     {
         if (bVisible)
@@ -101,7 +108,7 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
         aEndPos = mpWindow->PixelToLogic(aPosPix);
         aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
 
-        if (nSlotId == SID_ZOOM_PANNING)
+        if (nSlotId == SID_ZOOM_PANNING || (rMEvt.IsShift() && !bVisible) )
         {
             // Panning
 
@@ -123,9 +130,8 @@ bool FuZoom::MouseMove(const MouseEvent& rMEvt)
             aZoomRect = aRect;
             aZoomRect.Justify();
             mpViewShell->DrawMarkRect(aZoomRect);
+            bVisible = true;
         }
-
-        bVisible = true;
     }
 
     return bStartDrag;
@@ -145,19 +151,27 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPosPix = rMEvt.GetPosPixel();
 
-    if(SID_ZOOM_PANNING != nSlotId)
+    if(SID_ZOOM_PANNING != nSlotId && !rMEvt.IsShift())
     {
         // Zoom
         Size aZoomSizePixel = mpWindow->LogicToPixel(aZoomRect).GetSize();
         sal_uLong nTol = DRGPIX + DRGPIX;
 
-        if ( aZoomSizePixel.Width() < (long) nTol && aZoomSizePixel.Height() < (long) nTol )
+        if ( ( aZoomSizePixel.Width() < (long) nTol && aZoomSizePixel.Height() < (long) nTol ) || rMEvt.IsMod1() )
         {
             // click at place: double zoom factor
             Point aPos = mpWindow->PixelToLogic(aPosPix);
             Size aSize = mpWindow->PixelToLogic(mpWindow->GetOutputSizePixel());
-            aSize.Width() /= 2;
-            aSize.Height() /= 2;
+            if ( rMEvt.IsMod1() )
+            {
+                aSize.Width() *= 2;
+                aSize.Height() *= 2;
+            }
+            else
+            {
+                aSize.Width() /= 2;
+                aSize.Height() /= 2;
+            }
             aPos.X() -= aSize.Width() / 2;
             aPos.Y() -= aSize.Height() / 2;
             aZoomRect.SetPos(aPos);
@@ -165,6 +179,7 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
         }
 
         mpViewShell->SetZoomRect(aZoomRect);
+        mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
     }
 
     Rectangle aVisAreaWin = mpWindow->PixelToLogic(Rectangle(Point(0,0),
@@ -173,7 +188,6 @@ bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 
     bStartDrag = false;
     mpWindow->ReleaseMouse();
-    mpViewShell->Cancel();
 
     return true;
 }
