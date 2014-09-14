@@ -139,7 +139,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
     pImpl           (new SwMailMergeDlg_Impl),
 
     rSh             (rShell),
-    nMergeType      (DBMGR_MERGE_MAILING),
+    nMergeType      (DBMGR_MERGE_EMAIL),
     m_aDialogSize( GetSizePixel() )
 {
     get(m_pBeamerWin, "beamer");
@@ -495,11 +495,10 @@ bool SwMailMergeDlg::ExecQryShell()
     SwDBManager* pMgr = rSh.GetDBManager();
 
     if (m_pPrinterRB->IsChecked())
-        nMergeType = DBMGR_MERGE_MAILMERGE;
+        nMergeType = DBMGR_MERGE_PRINTER;
     else
     {
-        nMergeType = m_pSaveSingleDocRB->IsChecked() ?
-            DBMGR_MERGE_SINGLE_FILE : DBMGR_MERGE_MAILFILES;
+        nMergeType = DBMGR_MERGE_FILE;
         SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
         INetURLObject aAbs;
         if( pMedium )

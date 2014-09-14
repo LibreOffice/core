@@ -77,11 +77,10 @@ class SwCalc;
 enum DBManagerOptions
 {
     DBMGR_MERGE,             ///< Data records in fields.
-    DBMGR_MERGE_MAILMERGE,   ///< Print mail merge.
-    DBMGR_MERGE_MAILING,     ///< Send mail merge as email.
-    DBMGR_MERGE_MAILFILES,   ///< Save mail merge as files.
-    DBMGR_MERGE_SINGLE_FILE, ///< Save merge as single file.
-    DBMGR_MERGE_ONLY         ///< Create merge doc w/o save/print.
+    DBMGR_MERGE_PRINTER,     ///< Print mail merge.
+    DBMGR_MERGE_EMAIL,       ///< Send mail merge as email.
+    DBMGR_MERGE_FILE,        ///< Save mail merge as files.
+    DBMGR_MERGE_SHELL        ///< Create merge doc and keep the doc shell.
 };
 
 // Administration of (new) logical databases.
@@ -154,6 +153,7 @@ struct SwMergeDescriptor
 
     bool                                            bPrintAsync;
     bool                                            bCreateSingleFile;
+    bool                                            bSubjectIsFilename;
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
@@ -167,6 +167,7 @@ struct SwMergeDescriptor
         bSendAsAttachment( false ),
         bPrintAsync( false ),
         bCreateSingleFile( false ),
+        bSubjectIsFilename( false ),
         pMailMergeConfigItem(0)
         {}
 
@@ -277,7 +278,7 @@ public:
 
     /// check if a data source is open
     bool            IsDataSourceOpen(const OUString& rDataSource,
-                                    const OUString& rTableOrQuery, bool bMergeOnly);
+                                    const OUString& rTableOrQuery, bool bMergeShell);
 
     /// open the source while fields are updated - for the calculator only!
     bool            OpenDataSource(const OUString& rDataSource, const OUString& rTableOrQuery,

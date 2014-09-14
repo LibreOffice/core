@@ -286,7 +286,7 @@ class AbstractMailMergeDlg_Impl : public AbstractMailMergeDlg
     virtual const OUString& GetSaveFilter() const SAL_OVERRIDE;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const SAL_OVERRIDE ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const SAL_OVERRIDE;
-    virtual bool IsSaveIndividualDocs() const SAL_OVERRIDE;
+    virtual bool IsSaveSingleDoc() const SAL_OVERRIDE;
     virtual bool IsGenerateFromDataBase() const SAL_OVERRIDE;
     virtual OUString GetColumnName() const SAL_OVERRIDE;
     virtual OUString GetPath() const SAL_OVERRIDE;

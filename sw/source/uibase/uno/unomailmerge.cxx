@@ -661,9 +661,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     DBManagerOptions nMergeType;
     switch (nCurOutputType)
     {
-        case MailMergeType::PRINTER : nMergeType = DBMGR_MERGE_MAILMERGE; break;
-        case MailMergeType::FILE    : nMergeType = DBMGR_MERGE_MAILFILES; break;
-        case MailMergeType::MAIL    : nMergeType = DBMGR_MERGE_MAILING; break;
+        case MailMergeType::PRINTER : nMergeType = DBMGR_MERGE_PRINTER; break;
+        case MailMergeType::FILE    : nMergeType = DBMGR_MERGE_FILE; break;
+        case MailMergeType::MAIL    : nMergeType = DBMGR_MERGE_EMAIL; break;
+        case MailMergeType::SHELL   : nMergeType = DBMGR_MERGE_SHELL; break;
         default:
             throw IllegalArgumentException("Invalid value of property: OutputType", static_cast < cppu::OWeakObject * > ( this ), 0 );
     }
@@ -678,87 +679,98 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     boost::scoped_ptr< SwMailMergeConfigItem > pMMConfigItem;
     uno::Reference< mail::XMailService > xInService;
-    if (MailMergeType::PRINTER == nCurOutputType)
+    switch (nCurOutputType)
     {
-        IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
-        SwPrintData aPrtData( pIDDA->getPrintData() );
-        aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
-        pIDDA->setPrintData( aPrtData );
-        // #i25686# printing should not be done asynchronously to prevent dangling offices
-        // when mail merge is called as command line macro
-        aMergeDesc.bPrintAsync = false;
-        aMergeDesc.aPrintOptions = aPrintSettings;
-        aMergeDesc.bCreateSingleFile = true;
-    }
-    else /* FILE and MAIL*/
-    {
-        INetURLObject aURLObj;
-        aURLObj.SetSmartProtocol( INET_PROT_FILE );
-
-        if (!aCurDocumentURL.isEmpty())
+    case MailMergeType::PRINTER:
         {
-            // if OutputURL or FileNamePrefix are missing get
-            // them from DocumentURL
-            aURLObj.SetSmartURL( aCurDocumentURL );
-            if (aCurFileNamePrefix.isEmpty())
-                aCurFileNamePrefix = aURLObj.GetBase(); // filename without extension
-            if (aCurOutputURL.isEmpty())
+            IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
+            SwPrintData aPrtData( pIDDA->getPrintData() );
+            aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
+            pIDDA->setPrintData( aPrtData );
+            // #i25686# printing should not be done asynchronously to prevent dangling offices
+            // when mail merge is called as command line macro
+            aMergeDesc.bPrintAsync = false;
+            aMergeDesc.aPrintOptions = aPrintSettings;
+            aMergeDesc.bCreateSingleFile = true;
+        }
+        break;
+    case MailMergeType::SHELL:
+        aMergeDesc.bCreateSingleFile = true;
+        pMMConfigItem.reset(new SwMailMergeConfigItem);
+        aMergeDesc.pMailMergeConfigItem = pMMConfigItem.get();
+        break;
+    case MailMergeType::FILE:
+    case MailMergeType::MAIL:
+        {
+            INetURLObject aURLObj;
+            aURLObj.SetSmartProtocol( INET_PROT_FILE );
+
+            if (!aCurDocumentURL.isEmpty())
             {
-                aURLObj.removeSegment();
-                aCurOutputURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+                // if OutputURL or FileNamePrefix are missing get
+                // them from DocumentURL
+                aURLObj.SetSmartURL( aCurDocumentURL );
+                if (aCurFileNamePrefix.isEmpty())
+                    aCurFileNamePrefix = aURLObj.GetBase(); // filename without extension
+                if (aCurOutputURL.isEmpty())
+                {
+                    aURLObj.removeSegment();
+                    aCurOutputURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+                }
+            }
+            else    // default empty document without URL
+            {
+                if (aCurOutputURL.isEmpty())
+                    throw RuntimeException("OutputURL is not set and can not be obtained.", static_cast < cppu::OWeakObject * > ( this ) );
+            }
+
+            aURLObj.SetSmartURL( aCurOutputURL );
+            OUString aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+
+            const OUString aDelim( "/" );
+            if (!aPath.isEmpty() && !aPath.endsWith(aDelim))
+                aPath += aDelim;
+            if (bCurFileNameFromColumn)
+                pMgr->SetEMailColumn( aCurFileNamePrefix );
+            else
+            {
+                aPath += aCurFileNamePrefix;
+                pMgr->SetEMailColumn( OUString() );
+            }
+            pMgr->SetSubject( aPath );
+            if(MailMergeType::FILE == nCurOutputType)
+            {
+                aMergeDesc.sSaveToFilter = sSaveFilter;
+                aMergeDesc.sSaveToFilterOptions = sSaveFilterOptions;
+                aMergeDesc.aSaveToFilterData = aSaveFilterData;
+                aMergeDesc.bCreateSingleFile = bSaveAsSingleFile;
+            }
+            else
+            {
+                pMgr->SetEMailColumn( sAddressFromColumn );
+                if(sAddressFromColumn.isEmpty())
+                    throw RuntimeException("Mail address column not set.", static_cast < cppu::OWeakObject * > ( this ) );
+                aMergeDesc.sSaveToFilter     = sAttachmentFilter;
+                aMergeDesc.sSubject          = sSubject;
+                aMergeDesc.sMailBody         = sMailBody;
+                aMergeDesc.sAttachmentName   = sAttachmentName;
+                aMergeDesc.aCopiesTo         = aCopiesTo;
+                aMergeDesc.aBlindCopiesTo    = aBlindCopiesTo;
+                aMergeDesc.bSendAsHTML       = bSendAsHTML;
+                aMergeDesc.bSendAsAttachment = bSendAsAttachment;
+
+                aMergeDesc.bCreateSingleFile = false;
+                pMMConfigItem.reset(new SwMailMergeConfigItem);
+                aMergeDesc.pMailMergeConfigItem = pMMConfigItem.get();
+                aMergeDesc.xSmtpServer = SwMailMergeHelper::ConnectToSmtpServer(
+                        *pMMConfigItem,
+                        xInService,
+                        sInServerPassword, sOutServerPassword );
+                if( !aMergeDesc.xSmtpServer.is() || !aMergeDesc.xSmtpServer->isConnected())
+                    throw RuntimeException("Failed to connect to mail server.", static_cast < cppu::OWeakObject * > ( this ) );
             }
         }
-        else    // default empty document without URL
-        {
-            if (aCurOutputURL.isEmpty())
-                throw RuntimeException("OutputURL is not set and can not be obtained.", static_cast < cppu::OWeakObject * > ( this ) );
-        }
-
-        aURLObj.SetSmartURL( aCurOutputURL );
-        OUString aPath = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-
-        const OUString aDelim( "/" );
-        if (!aPath.isEmpty() && !aPath.endsWith(aDelim))
-            aPath += aDelim;
-        if (bCurFileNameFromColumn)
-            pMgr->SetEMailColumn( aCurFileNamePrefix );
-        else
-        {
-            aPath += aCurFileNamePrefix;
-            pMgr->SetEMailColumn( OUString() );
-        }
-        pMgr->SetSubject( aPath );
-        if(MailMergeType::FILE == nCurOutputType)
-        {
-            aMergeDesc.sSaveToFilter = sSaveFilter;
-            aMergeDesc.sSaveToFilterOptions = sSaveFilterOptions;
-            aMergeDesc.aSaveToFilterData = aSaveFilterData;
-            aMergeDesc.bCreateSingleFile = bSaveAsSingleFile;
-        }
-        else
-        {
-            pMgr->SetEMailColumn( sAddressFromColumn );
-            if(sAddressFromColumn.isEmpty())
-                throw RuntimeException("Mail address column not set.", static_cast < cppu::OWeakObject * > ( this ) );
-            aMergeDesc.sSaveToFilter     = sAttachmentFilter;
-            aMergeDesc.sSubject          = sSubject;
-            aMergeDesc.sMailBody         = sMailBody;
-            aMergeDesc.sAttachmentName   = sAttachmentName;
-            aMergeDesc.aCopiesTo         = aCopiesTo;
-            aMergeDesc.aBlindCopiesTo    = aBlindCopiesTo;
-            aMergeDesc.bSendAsHTML       = bSendAsHTML;
-            aMergeDesc.bSendAsAttachment = bSendAsAttachment;
-
-            aMergeDesc.bCreateSingleFile = false;
-            pMMConfigItem.reset(new SwMailMergeConfigItem);
-            aMergeDesc.pMailMergeConfigItem = pMMConfigItem.get();
-            aMergeDesc.xSmtpServer = SwMailMergeHelper::ConnectToSmtpServer(
-                    *pMMConfigItem,
-                    xInService,
-                    sInServerPassword, sOutServerPassword );
-            if( !aMergeDesc.xSmtpServer.is() || !aMergeDesc.xSmtpServer->isConnected())
-                throw RuntimeException("Failed to connect to mail server.", static_cast < cppu::OWeakObject * > ( this ) );
-        }
+        break;
     }
 
     // save document with temporary filename
@@ -812,7 +824,13 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if(aMergeDesc.xSmtpServer.is() && aMergeDesc.xSmtpServer->isConnected())
         aMergeDesc.xSmtpServer->disconnect();
 
-    return makeAny( sal_True );
+    if (DBMGR_MERGE_SHELL == nMergeType)
+    {
+        SwXTextDocument *xTextDoc = new SwXTextDocument( aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell() );
+        return makeAny( Reference< XComponent >( xTextDoc->queryInterface( XComponent::static_type() ), css::uno::UNO_QUERY) );
+    }
+    else
+        return makeAny( sal_True );
 }
 
 void SAL_CALL SwXMailMerge::cancel() throw (com::sun::star::uno::RuntimeException, std::exception)

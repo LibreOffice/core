@@ -115,8 +115,8 @@ class SwMailMergeDlg : public SvxStandardDialog
     bool            ExecQryShell();
 
 public:
-     SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rSh,
-         const OUString& rSourceName,
+    SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rSh,
+        const OUString& rSourceName,
         const OUString& rTblName,
         sal_Int32 nCommandType,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
@@ -125,7 +125,7 @@ public:
 
     inline DBManagerOptions GetMergeType() { return nMergeType; }
 
-    bool IsSaveIndividualDocs() const { return m_pSaveIndividualRB->IsChecked(); }
+    bool IsSaveSingleDoc() const { return m_pSaveSingleDocRB->IsChecked(); }
     bool IsGenerateFromDataBase() const { return m_pGenerateFromDataBaseCB->IsChecked(); }
     OUString GetColumnName() const { return m_pColumnLB->GetSelectEntry();}
     OUString GetPath() const { return m_pPathED->GetText();}
