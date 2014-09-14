@@ -137,7 +137,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
 
         mpImplWin = new ImplWin( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
         mpImplWin->buttonDownSignal.connect( boost::bind( &ListBox::ImplClickButtonHandler, this, _1 ));
-        mpImplWin->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
+        mpImplWin->userDrawSignal.connect( boost::bind( &ListBox::ImplUserDrawHandler, this, _1 ) );
         mpImplWin->Show();
         mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
         mpImplWin->SetEdgeBlending(GetEdgeBlending());
@@ -157,7 +157,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
     mpImplLB->SetScrollHdl( LINK( this, ListBox, ImplScrollHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ListBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ListBox, ImplDoubleClickHdl ) );
-    mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
+    mpImplLB->userDrawSignal.connect( boost::bind( &ListBox::ImplUserDrawHandler, this, _1 ) );
     mpImplLB->SetFocusHdl( LINK( this, ListBox, ImplFocusHdl ) );
     mpImplLB->SetListItemSelectHdl( LINK( this, ListBox, ImplListItemSelectHdl ) );
     mpImplLB->SetPosPixel( Point() );
@@ -1360,10 +1360,9 @@ void ListBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines 
     }
 }
 
-IMPL_LINK( ListBox, ImplUserDrawHdl, UserDrawEvent*, pEvent )
+void ListBox::ImplUserDrawHandler( UserDrawEvent* pEvent )
 {
     UserDraw( *pEvent );
-    return 1;
 }
 
 void ListBox::UserDraw( const UserDrawEvent& )

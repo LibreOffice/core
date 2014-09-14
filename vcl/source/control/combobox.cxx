@@ -180,7 +180,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     mpImplLB->SetSelectHdl( LINK( this, ComboBox, ImplSelectHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ComboBox, ImplCancelHdl ) );
     mpImplLB->SetDoubleClickHdl( LINK( this, ComboBox, ImplDoubleClickHdl ) );
-    mpImplLB->SetUserDrawHdl( LINK( this, ComboBox, ImplUserDrawHdl ) );
+    mpImplLB->userDrawSignal.connect( boost::bind( &ComboBox::ImplUserDrawHandler, this, _1 ) );
     mpImplLB->SetSelectionChangedHdl( LINK( this, ComboBox, ImplSelectionChangedHdl ) );
     mpImplLB->SetListItemSelectHdl( LINK( this, ComboBox, ImplListItemSelectHdl ) );
     mpImplLB->Show();
@@ -1221,10 +1221,9 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, s
 
 }
 
-IMPL_LINK( ComboBox, ImplUserDrawHdl, UserDrawEvent*, pEvent )
+void::ComboBox::ImplUserDrawHandler( UserDrawEvent* pEvent )
 {
     UserDraw( *pEvent );
-    return 1;
 }
 
 void ComboBox::UserDraw( const UserDrawEvent& )

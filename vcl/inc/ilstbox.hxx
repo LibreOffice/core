@@ -233,7 +233,6 @@ private:
     Link            maSelectHdl;
     Link            maCancelHdl;
     Link            maDoubleClickHdl;
-    Link            maUserDrawHdl;
     Link            maMRUChangedHdl;
     Link            maFocusHdl;
     Link            maListItemSelectHdl;
@@ -342,12 +341,12 @@ public:
     const Link&     GetCancelHdl() const                { return maCancelHdl; }
     void            SetDoubleClickHdl( const Link& rLink )  { maDoubleClickHdl = rLink; }
     const Link&     GetDoubleClickHdl() const               { return maDoubleClickHdl; }
-    void            SetUserDrawHdl( const Link& rLink ) { maUserDrawHdl = rLink; }
-    const Link&     GetUserDrawHdl() const              { return maUserDrawHdl; }
     void            SetMRUChangedHdl( const Link& rLink )   { maMRUChangedHdl = rLink; }
     const Link&     GetMRUChangedHdl() const                { return maMRUChangedHdl; }
     void            SetFocusHdl( const Link& rLink )    { maFocusHdl = rLink ; }
     const Link&     GetFocusHdl() const             { return maFocusHdl; }
+
+    boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
     void            SetListItemSelectHdl( const Link& rLink )   { maListItemSelectHdl = rLink ; }
     const Link&     GetListItemSelectHdl() const                { return maListItemSelectHdl; }
@@ -478,8 +477,8 @@ public:
     const Link&     GetCancelHdl() const                { return maLBWindow.GetCancelHdl(); }
     void            SetDoubleClickHdl( const Link& rLink )  { maLBWindow.SetDoubleClickHdl( rLink ); }
     const Link&     GetDoubleClickHdl() const               { return maLBWindow.GetDoubleClickHdl(); }
-    void            SetUserDrawHdl( const Link& rLink ) { maLBWindow.SetUserDrawHdl( rLink ); }
-    const Link&     GetUserDrawHdl() const              { return maLBWindow.GetUserDrawHdl(); }
+
+    boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
     void            SetFocusHdl( const Link& rLink )    { maLBWindow.SetFocusHdl( rLink ); }
     const Link&     GetFocusHdl() const             { return maLBWindow.GetFocusHdl(); }
@@ -555,8 +554,6 @@ private:
     Rectangle       maFocusRect;
     Size            maUserItemSize;
 
-    Link            maUserDrawHdl;
-
     /// bitfield
     bool            mbUserDrawEnabled : 1;
     bool            mbInUserDraw : 1;
@@ -589,9 +586,7 @@ public:
     virtual void    MBDown();
 
     boost::signals2::signal< void ( ImplWin* ) > buttonDownSignal;
-
-    void            SetUserDrawHdl( const Link& rLink ) { maUserDrawHdl = rLink; }
-    const Link&     GetUserDrawHdl() const              { return maUserDrawHdl; }
+    boost::signals2::signal< void ( UserDrawEvent* ) > userDrawSignal;
 
     void            SetUserItemSize( const Size& rSz )  { maUserItemSize = rSz; }
     const Size&     GetUserItemSize() const             { return maUserItemSize; }

@@ -71,11 +71,11 @@ private:
     DECL_DLLPRIVATE_LINK(   ImplDoubleClickHdl, void* );
     DECL_DLLPRIVATE_LINK(   ImplPopupModeEndHdl, void* );
     DECL_DLLPRIVATE_LINK(   ImplSelectionChangedHdl, void* );
-    DECL_DLLPRIVATE_LINK(   ImplUserDrawHdl, UserDrawEvent* );
     DECL_DLLPRIVATE_LINK(   ImplAutocompleteHdl, Edit* );
     DECL_DLLPRIVATE_LINK( ImplListItemSelectHdl , void* );
 
     SAL_DLLPRIVATE void ImplClickButtonHandler( ImplBtn* );
+    SAL_DLLPRIVATE void ImplUserDrawHandler( UserDrawEvent* );
 
 protected:
     using Window::ImplInit;

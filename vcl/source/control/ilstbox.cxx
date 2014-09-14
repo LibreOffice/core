@@ -1739,7 +1739,7 @@ void ImplListBoxWindow::ImplPaint( sal_Int32 nPos, bool bErase, bool bLayout )
         nCurr = sal::static_int_cast<sal_Int32>( nCurr - GetEntryList()->GetMRUCount());
 
         UserDrawEvent aUDEvt( this, aRect, nPos, nCurr );
-        maUserDrawHdl.Call( &aUDEvt );
+        userDrawSignal( &aUDEvt );
         mbInUserDraw = false;
     }
     else
@@ -2132,6 +2132,8 @@ ImplListBox::ImplListBox( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
     maLBWindow( this, nWinStyle&(~WB_BORDER) )
 {
+    maLBWindow.userDrawSignal.connect( userDrawSignal );
+
     // for native widget rendering we must be able to detect this window type
     SetType( WINDOW_LISTBOXWINDOW );
 
@@ -2737,7 +2739,7 @@ void ImplWin::ImplDraw( bool bLayout )
     {
         mbInUserDraw = true;
         UserDrawEvent aUDEvt( this, maFocusRect, mnItemPos, 0 );
-        maUserDrawHdl.Call( &aUDEvt );
+        userDrawSignal( &aUDEvt );
         mbInUserDraw = false;
     }
     else
