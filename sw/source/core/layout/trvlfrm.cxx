@@ -2573,11 +2573,11 @@ void SwRootFrm::CalcFrmRects(SwShellCrsr &rCrsr)
                 const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
                 const SwVirtFlyDrawObj* pObj = pFly->GetVirtDrawObj();
                 const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
-                SwPosition anchoredAt = *pAnchoredObj->GetFrmFmt().GetAnchor().GetCntntAnchor();
-                bool inSelection = ( *pStartPos <= anchoredAt && anchoredAt < *pEndPos );
-                if( anchoredAt == *pEndPos )
+                const SwPosition* anchoredAt = pAnchoredObj->GetFrmFmt().GetAnchor().GetCntntAnchor();
+                bool inSelection = ( anchoredAt != NULL && *pStartPos <= *anchoredAt && *anchoredAt < *pEndPos );
+                if( anchoredAt != NULL && *anchoredAt == *pEndPos )
                 {
-                    const SwNodes& nodes = anchoredAt.GetDoc()->GetNodes();
+                    const SwNodes& nodes = anchoredAt->GetDoc()->GetNodes();
                     if( *pEndPos == SwPosition( nodes.GetEndOfContent()))
                         inSelection = true;
                     else
