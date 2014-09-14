@@ -281,7 +281,7 @@ void SwMailMergeWizard::CreateTargetDocument()
     aDescriptor[ svx::daCommand ]     <<= m_rConfigItem.GetCurrentDBData().sCommand;
     aDescriptor[ svx::daCommandType ] <<= m_rConfigItem.GetCurrentDBData().nCommandType;
 
-    SwMergeDescriptor aMergeDesc( DBMGR_MERGE_ONLY, GetSwView()->GetWrtShell(),
+    SwMergeDescriptor aMergeDesc( DBMGR_MERGE_SHELL, GetSwView()->GetWrtShell(),
         aDescriptor);
     aMergeDesc.pMailMergeConfigItem = &m_rConfigItem;
     aMergeDesc.bCreateSingleFile = true;

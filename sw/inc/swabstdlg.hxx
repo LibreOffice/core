@@ -145,7 +145,7 @@ public:
     virtual const OUString& GetSaveFilter() const = 0;
     virtual const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetSelection() const = 0;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> GetResultSet() const = 0;
-    virtual bool IsSaveIndividualDocs() const = 0;
+    virtual bool IsSaveSingleDoc() const = 0;
     virtual bool IsGenerateFromDataBase() const = 0;
     virtual String GetColumnName() const = 0;
     virtual String GetPath() const = 0;

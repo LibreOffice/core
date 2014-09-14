@@ -80,12 +80,10 @@ class SwCalc;
 enum DBMgrOptions
 {
     DBMGR_MERGE,             ///< Data records in fields.
-    DBMGR_INSERT,            ///< Data records in text.
-    DBMGR_MERGE_MAILMERGE,   ///< Print mail merge.
-    DBMGR_MERGE_MAILING,     ///< Send mail merge as email.
-    DBMGR_MERGE_MAILFILES,   ///< Save mail merge as files.
-    DBMGR_MERGE_SINGLE_FILE, ///< Save merge as single file.
-    DBMGR_MERGE_ONLY         ///< Create merge doc w/o save/print.
+    DBMGR_MERGE_PRINTER,     ///< Print mail merge.
+    DBMGR_MERGE_EMAIL,       ///< Send mail merge as email.
+    DBMGR_MERGE_FILE,        ///< Save mail merge as files.
+    DBMGR_MERGE_SHELL        ///< Create merge doc and keep the doc shell.
 };
 
 // -----------------------------------------------------------------------
@@ -162,6 +160,7 @@ struct SwMergeDescriptor
 
     sal_Bool                                            bPrintAsync;
     sal_Bool                                            bCreateSingleFile;
+    sal_Bool                                            bSubjectIsFilename;
 
     SwMailMergeConfigItem*                              pMailMergeConfigItem;
 
@@ -175,6 +174,7 @@ struct SwMergeDescriptor
         bSendAsAttachment( sal_False ),
         bPrintAsync( sal_False ),
         bCreateSingleFile( sal_False ),
+        bSubjectIsFilename( sal_False ),
         pMailMergeConfigItem(0)
         {}
 

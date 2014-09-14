@@ -139,7 +139,7 @@ public:
 
     inline sal_uInt16   GetMergeType() { return nMergeType; }
 
-    bool IsSaveIndividualDocs() const { return aSaveIndividualRB.IsChecked(); }
+    bool IsSaveSingleDoc() const { return aSaveSingleDocRB.IsChecked(); }
     bool IsGenerateFromDataBase() const { return aGenerateFromDataBaseCB.IsChecked(); }
     String GetColumnName() const { return aColumnLB.GetSelectEntry();}
     String GetPath() const { return aPathED.GetText();}
