@@ -20,6 +20,7 @@ package com.sun.star.comp.beans;
 
 import java.awt.Container;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
@@ -131,7 +132,17 @@ public class LocalOfficeConnection
             setUnoUrl( "uno:pipe,name=" + getPipeName() + ";urp;StarOffice.ServiceManager" );
         }
         catch ( java.net.MalformedURLException e )
-        {}
+        {
+            com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+            e2.initCause(e);
+            throw e2;
+        }
+        catch ( UnsupportedEncodingException e)
+        {
+            com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+            e2.initCause(e);
+            throw e2;
+        }
     }
 
         /**
@@ -632,12 +643,12 @@ public class LocalOfficeConnection
 
     /** creates a unique pipe name.
     */
-    private static String getPipeName()
+    private static String getPipeName() throws UnsupportedEncodingException
     {
         // turn user name into a URL and file system safe name (% chars will not work)
         String aPipeName = System.getProperty("user.name") + OFFICE_ID_SUFFIX;
         aPipeName = aPipeName.replace( "_", "%B7" );
-        return java.net.URLEncoder.encode(aPipeName).replace( "+", "%20" ).replace( "%", "_" );
+        return java.net.URLEncoder.encode( aPipeName, "UTF-8" ).replace( "+", "%20" ).replace( "%", "_" );
     }
 
     /**
@@ -653,10 +664,18 @@ public class LocalOfficeConnection
          */
         public String getIdentifier()
         {
-            if ( mPipe == null)
-                return getPipeName();
-            else
-                return mPipe;
+            String identifier = null;
+            try
+            {
+                identifier = ( mPipe == null) ? getPipeName() : mPipe;
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+                e2.initCause(e);
+                throw e2;
+            }
+            return identifier;
         }
 
         /**
@@ -706,7 +725,7 @@ public class LocalOfficeConnection
             // start process
             mProcess = Runtime.getRuntime().exec(cmdArray);
             if ( mProcess == null )
-                throw new RuntimeException( "cannot start soffice: " + cmdArray );
+                throw new com.sun.star.uno.RuntimeException( "cannot start soffice: " + cmdArray );
             new StreamProcessor(mProcess.getInputStream(), System.out);
             new StreamProcessor(mProcess.getErrorStream(), System.err);
         }
