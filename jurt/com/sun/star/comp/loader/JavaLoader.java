@@ -109,7 +109,7 @@ public class JavaLoader implements XImplementationLoader,
                 String macro = URLDecoder.decode(
                     StringHelper.replace(
                         url.substring( EXPAND_PROTOCOL_PREFIX.length() ),
-                        '+', "%2B" ) );
+                        '+', "%2B" ), "UTF-8" );
                 // expand macro string
                 String ret = m_xMacroExpander.expandMacros( macro );
                 if (DEBUG) {
