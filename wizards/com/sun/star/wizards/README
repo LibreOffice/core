@@ -1,8 +1,8 @@
 To call a wizard remotely you need to:
 
 -> For testing on core:
-    export URE_BOOTSTRAP="file:///home/'USER'/git/libo/install/program/fundamentalrc"
-    export PYTHONPATH=/home/'USER'/git/libo/install/program
+    export URE_BOOTSTRAP="file:///home/'USER'/libreoffice-core/instdir/program/fundamentalrc"
+    export PYTHONPATH=/home/'USER'/libreoffice-core/instdir/program
     #and run LibreOffice in listening mode:
     ./soffice --"accept=socket,host=localhost,port=2002;urp;"
       
