@@ -36,9 +36,7 @@
 #include <limits>
 
 
-
-#define TABBAR_OFFSET_X         7
-#define TABBAR_OFFSET_X2        2
+#define TABBAR_PADDING          24
 #define TABBAR_DRAG_SCROLLOFF   5
 #define TABBAR_MINSIZE          5
 
@@ -588,9 +586,7 @@ bool TabBar::ImplCalcWidth()
         mnCurMaxWidth = mnMaxPageWidth;
     else if ( mbAutoMaxWidth )
     {
-        mnCurMaxWidth = mnLastOffX-mnOffX-
-                        TABBAR_OFFSET_X-TABBAR_OFFSET_X-
-                        TABBAR_OFFSET_X2-TABBAR_OFFSET_X2-TABBAR_OFFSET_X2;
+        mnCurMaxWidth = mnLastOffX - mnOffX;
         if ( mnCurMaxWidth < 1 )
             mnCurMaxWidth = 1;
     }
@@ -608,8 +604,11 @@ bool TabBar::ImplCalcWidth()
             nNewWidth = mnCurMaxWidth;
         }
         else
+        {
             pItem->mbShort = false;
-        nNewWidth += TABBAR_OFFSET_X+TABBAR_OFFSET_X2;
+        }
+        nNewWidth += TABBAR_PADDING;
+
         if ( pItem->mnWidth != nNewWidth )
         {
             pItem->mnWidth = nNewWidth;
@@ -650,8 +649,8 @@ void TabBar::ImplFormat()
                 pItem->maRect.Left() = x;
                 x += pItem->mnWidth;
             }
-            pItem->maRect.Right() = x+TABBAR_OFFSET_X+TABBAR_OFFSET_X2;
-            pItem->maRect.Bottom() = maWinSize.Height()-1;
+            pItem->maRect.Right() = x;
+            pItem->maRect.Bottom() = maWinSize.Height() - 1;
 
             if( mbMirrored )
             {
@@ -679,7 +678,7 @@ sal_uInt16 TabBar::ImplGetLastFirstPos()
         return 0;
 
     sal_uInt16  nLastFirstPos = nCount-1;
-    long    nWinWidth = mnLastOffX-mnOffX-TABBAR_OFFSET_X-ADDNEWPAGE_AREAWIDTH;
+    long    nWinWidth = mnLastOffX - mnOffX - ADDNEWPAGE_AREAWIDTH;
     long    nWidth = (*mpItemList)[ nLastFirstPos ]->mnWidth;
     while ( nLastFirstPos && (nWidth < nWinWidth) )
     {
@@ -793,8 +792,7 @@ void TabBar::ImplShowPage( sal_uInt16 nPos )
 {
     // calculate width
     long nWidth = GetOutputSizePixel().Width();
-    if ( nWidth >= TABBAR_OFFSET_X )
-        nWidth -= TABBAR_OFFSET_X;
+
     ImplTabBarItem* pItem = (*mpItemList)[ nPos ];
     if ( nPos < mnFirstPos )
         SetFirstPageId( pItem->mnId );
@@ -1280,9 +1278,9 @@ public:
         long nOffY = mrParent.GetPageArea().getY();
 
         // first draw filled polygon
-        maPoly[0] = Point( rRect.Left(), nOffY );
-        maPoly[1] = Point( rRect.Left()+TABBAR_OFFSET_X, rRect.Bottom() );
-        maPoly[2] = Point( rRect.Right()-TABBAR_OFFSET_X, rRect.Bottom() );
+        maPoly[0] = Point( rRect.Left(),  nOffY );
+        maPoly[1] = Point( rRect.Left(),  rRect.Bottom() );
+        maPoly[2] = Point( rRect.Right(), rRect.Bottom() );
         maPoly[3] = Point( rRect.Right(), nOffY );
     }
 
@@ -1363,8 +1361,10 @@ void TabBar::Paint( const Rectangle& rect )
 
     TabBarPaintGuard aGuard(*this);
     TabDrawer aDrawer(*this);
+
     aDrawer.setSelectedFillColor(aSelectColor);
     aDrawer.setUnselectedFillColor(aFaceColor);
+
     aDrawer.drawOutputAreaBorder();
 
     // Now, start drawing the tabs.
@@ -1594,8 +1594,7 @@ void TabBar::RequestHelp( const HelpEvent& rHEvt )
         {
             sal_uInt16 nPos = GetPagePos( nItemId );
             ImplTabBarItem* pItem = (*mpItemList)[ nPos ];
-            if ( pItem->mbShort ||
-                (pItem->maRect.Right()-TABBAR_OFFSET_X-5 > mnLastOffX) )
+            if ( pItem->mbShort || (pItem->maRect.Right() - 5 > mnLastOffX) )
             {
                 Rectangle aItemRect = GetPageRect( nItemId );
                 Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -1792,11 +1791,9 @@ Rectangle TabBar::ImplGetInsertTabRect(ImplTabBarItem* pItem) const
     {
         Rectangle aInsTabRect = pItem->maRect;
         if ( !mbMirrored )
-            aInsTabRect.setX(
-                aInsTabRect.getX() + aInsTabRect.getWidth() - TABBAR_OFFSET_X - TABBAR_OFFSET_X2);
+            aInsTabRect.setX(aInsTabRect.getX() + aInsTabRect.getWidth());
         else
-            aInsTabRect.setX(
-                aInsTabRect.getX() - 3*TABBAR_OFFSET_X - TABBAR_OFFSET_X2);
+            aInsTabRect.setX(aInsTabRect.getX());
         aInsTabRect.setWidth(32);
         return aInsTabRect;
     }
@@ -2146,8 +2143,6 @@ void TabBar::SetCurPageId( sal_uInt16 nPageId )
             {
                 // calculate visible width
                 long nWidth = mnLastOffX;
-                if ( nWidth > TABBAR_OFFSET_X )
-                    nWidth -= TABBAR_OFFSET_X;
                 if ( nWidth > ADDNEWPAGE_AREAWIDTH )
                     nWidth -= ADDNEWPAGE_AREAWIDTH;
 
@@ -2204,8 +2199,6 @@ void TabBar::MakeVisible( sal_uInt16 nPageId )
 
             // calculate visible area
             long nWidth = mnLastOffX;
-            if ( nWidth > TABBAR_OFFSET_X )
-                nWidth -= TABBAR_OFFSET_X;
 
             if ( mbFormat || pItem->maRect.IsEmpty() )
             {
@@ -2332,8 +2325,8 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
 
         mpEdit = new TabBarEdit( this, WB_CENTER );
         Rectangle aRect = GetPageRect( mnEditId );
-        long nX = aRect.Left()+TABBAR_OFFSET_X+(TABBAR_OFFSET_X2/2);
-        long nWidth = aRect.GetWidth()-(TABBAR_OFFSET_X*2)-TABBAR_OFFSET_X2;
+        long nX = aRect.Left();
+        long nWidth = aRect.GetWidth();
         if ( mnEditId != GetCurPageId() )
             nX += 1;
         if ( nX+nWidth > mnLastOffX )
@@ -2646,7 +2639,7 @@ sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
     if ( mnDropPos < nItemCount )
     {
         pItem = (*mpItemList)[ mnDropPos ];
-        nX = pItem->maRect.Left()+TABBAR_OFFSET_X;
+        nX = pItem->maRect.Left();
         if ( mnDropPos == nCurPos )
             nX--;
         else
@@ -2661,7 +2654,7 @@ sal_uInt16 TabBar::ShowDropPos( const Point& rPos )
     if ( (mnDropPos > 0) && (mnDropPos < nItemCount+1) )
     {
         pItem = (*mpItemList)[ mnDropPos-1 ];
-        nX = pItem->maRect.Right()-TABBAR_OFFSET_X;
+        nX = pItem->maRect.Right();
         if ( mnDropPos == nCurPos )
             nX++;
         if ( !pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
@@ -2689,7 +2682,7 @@ void TabBar::HideDropPos()
         if ( mnDropPos < nItemCount )
         {
             pItem = (*mpItemList)[ mnDropPos ];
-            nX = pItem->maRect.Left()+TABBAR_OFFSET_X;
+            nX = pItem->maRect.Left();
             // immediately call Paint, as it is not possible during drag and drop
             Rectangle aRect( nX-1, nY1, nX+3, nY2 );
             Region aRegion( aRect );
@@ -2700,7 +2693,7 @@ void TabBar::HideDropPos()
         if ( (mnDropPos > 0) && (mnDropPos < nItemCount+1) )
         {
             pItem = (*mpItemList)[ mnDropPos-1 ];
-            nX = pItem->maRect.Right()-TABBAR_OFFSET_X;
+            nX = pItem->maRect.Right();
             // immediately call Paint, as it is not possible during drag and drop
             Rectangle aRect( nX-2, nY1, nX+1, nY2 );
             Region aRegion( aRect );
@@ -2787,7 +2780,6 @@ Size TabBar::CalcWindowSizePixel() const
             ImplTabBarItem* pItem = (*mpItemList)[ i ];
             nWidth += pItem->mnWidth;
         }
-        nWidth += TABBAR_OFFSET_X+TABBAR_OFFSET_X2;
     }
 
     return Size( nWidth, GetSettings().GetStyleSettings().GetScrollBarSize() );
