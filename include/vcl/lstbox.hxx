@@ -59,12 +59,13 @@ private:
     DECL_DLLPRIVATE_LINK(  ImplScrollHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplCancelHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplDoubleClickHdl, void* );
-    DECL_DLLPRIVATE_LINK(  ImplClickBtnHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplPopupModeEndHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplSelectionChangedHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplUserDrawHdl, UserDrawEvent* );
     DECL_DLLPRIVATE_LINK(  ImplFocusHdl, void* );
     DECL_DLLPRIVATE_LINK(  ImplListItemSelectHdl, void* );
+
+    SAL_DLLPRIVATE void ImplClickButtonHandler( Control* );
 protected:
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );

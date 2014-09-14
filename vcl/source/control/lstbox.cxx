@@ -136,7 +136,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         mpFloatWin->GetDropTarget()->addDropTargetListener(xDrop);
 
         mpImplWin = new ImplWin( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
-        mpImplWin->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
+        mpImplWin->buttonDownSignal.connect( boost::bind( &ListBox::ImplClickButtonHandler, this, _1 ));
         mpImplWin->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
         mpImplWin->Show();
         mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
@@ -144,7 +144,7 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
 
         mpBtn = new ImplBtn( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
-        mpBtn->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
+        mpBtn->buttonDownSignal.connect( boost::bind( &ListBox::ImplClickButtonHandler, this, _1 ));
         mpBtn->Show();
         mpBtn->GetDropTarget()->addDropTargetListener(xDrop);
     }
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG(ListBox, ImplDoubleClickHdl)
     return 1;
 }
 
-IMPL_LINK_NOARG(ListBox, ImplClickBtnHdl)
+void ListBox::ImplClickButtonHandler( Control* )
 {
     if( !mpFloatWin->IsInPopupMode() )
     {
@@ -315,8 +315,6 @@ IMPL_LINK_NOARG(ListBox, ImplClickBtnHdl)
         if( mpImplWin )
             mpImplWin->ImplClearLayoutData();
     }
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ListBox, ImplPopupModeEndHdl)

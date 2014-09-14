@@ -2599,7 +2599,7 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
 void ImplWin::MBDown()
 {
     if( IsEnabled() )
-        maMBDownHdl.Call( this );
+        buttonDownSignal( this );
 }
 
 void ImplWin::MouseButtonDown( const MouseEvent& )
@@ -2874,7 +2874,7 @@ ImplBtn::ImplBtn( Window* pParent, WinBits nWinStyle ) :
 void ImplBtn::MBDown()
 {
     if( IsEnabled() )
-       maMBDownHdl.Call( this );
+       buttonDownSignal( this );
 }
 
 void ImplBtn::MouseButtonDown( const MouseEvent& )

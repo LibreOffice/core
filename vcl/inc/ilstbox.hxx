@@ -21,6 +21,7 @@
 #define INCLUDED_VCL_INC_ILSTBOX_HXX
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/signals2/signal.hpp>
 #include <vcl/image.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/button.hxx>
@@ -554,7 +555,6 @@ private:
     Rectangle       maFocusRect;
     Size            maUserItemSize;
 
-    Link            maMBDownHdl;
     Link            maUserDrawHdl;
 
     /// bitfield
@@ -587,8 +587,8 @@ public:
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
     virtual void    MBDown();
-    void            SetMBDownHdl( const Link& rLink ) { maMBDownHdl = rLink; }
-    const Link&     GetMBDownHdl() const { return maMBDownHdl; }
+
+    boost::signals2::signal< void ( ImplWin* ) > buttonDownSignal;
 
     void            SetUserDrawHdl( const Link& rLink ) { maUserDrawHdl = rLink; }
     const Link&     GetUserDrawHdl() const              { return maUserDrawHdl; }
@@ -610,17 +610,14 @@ class ImplBtn : public PushButton
 private:
     bool            mbDown;
 
-    Link            maMBDownHdl;
-
 public:
                     ImplBtn( Window* pParent, WinBits nWinStyle = 0 );
                     virtual ~ImplBtn() {};
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
-
     virtual void    MBDown();
-    void            SetMBDownHdl( const Link& rLink ) { maMBDownHdl = rLink; }
-    const Link&     GetMBDownHdl() const { return maMBDownHdl; }
+
+    boost::signals2::signal< void ( ImplBtn* ) > buttonDownSignal;
 };
 
 void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBackground );

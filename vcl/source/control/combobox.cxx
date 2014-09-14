@@ -148,7 +148,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
 
         mpBtn = new ImplBtn( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
-        mpBtn->SetMBDownHdl( LINK( this, ComboBox, ImplClickBtnHdl ) );
+        mpBtn->buttonDownSignal.connect( boost::bind( &ComboBox::ImplClickButtonHandler, this, _1 ));
         mpBtn->Show();
 
         nEditStyle |= WB_NOBORDER;
@@ -234,7 +234,7 @@ bool ComboBox::IsAutocompleteEnabled() const
     return mpSubEdit->GetAutocompleteHdl().IsSet();
 }
 
-IMPL_LINK_NOARG(ComboBox, ImplClickBtnHdl)
+void ComboBox::ImplClickButtonHandler( ImplBtn* )
 {
     ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     mpSubEdit->GrabFocus();
@@ -250,8 +250,6 @@ IMPL_LINK_NOARG(ComboBox, ImplClickBtnHdl)
     ImplClearLayoutData();
     if( mpImplLB )
         mpImplLB->GetMainWindow().ImplClearLayoutData();
-
-    return 0;
 }
 
 IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
