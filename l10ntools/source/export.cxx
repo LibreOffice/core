@@ -275,7 +275,7 @@ Export::~Export()
 
     if ( bMergeMode ) {
         if ( !pMergeDataFile )
-            pMergeDataFile = new MergeDataFile(sMergeSrc, global::inputPathname, false);
+            pMergeDataFile = new MergeDataFile(sMergeSrc, global::inputPathname, true);
 
         delete pMergeDataFile;
     }
@@ -1062,14 +1062,14 @@ void Export::ResData2Output( MergeEntrys *pEntry, sal_uInt16 nType, const OStrin
 void Export::MergeRest( ResData *pResData )
 {
     if ( !pMergeDataFile ){
-        pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, false );
+        pMergeDataFile = new MergeDataFile( sMergeSrc, global::inputPathname, true );
         aLanguages = pMergeDataFile->GetLanguages();
 
     }
 
     MergeEntrys *pEntry = 0;
     if( pResData->bText || pResData->bQuickHelpText || pResData->bTitle )
-        pEntry = pMergeDataFile->GetMergeEntrys( pResData );
+        pEntry = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData );
 
     if ( pEntry )
     {
@@ -1154,7 +1154,7 @@ void Export::MergeRest( ResData *pResData )
                     ConvertExportContent( pResData->sId );
                 }
 
-                MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrys( pResData );
+                MergeEntrys* pEntrys = pMergeDataFile->GetMergeEntrysCaseSensitive( pResData );
                 OString sText;
                 bool bText = pEntrys && pEntrys->GetText( sText, STRING_TYP_TEXT, sCur, true );
 
