@@ -491,9 +491,9 @@ uno::Reference< sdbc::XResultSet> AbstractMailMergeDlg_Impl::GetResultSet() cons
 {
     return pDlg->GetResultSet();
 }
-bool AbstractMailMergeDlg_Impl::IsSaveIndividualDocs() const
+bool AbstractMailMergeDlg_Impl::IsSaveSingleDoc() const
 {
-    return pDlg->IsSaveIndividualDocs();
+    return pDlg->IsSaveSingleDoc();
 }
 bool AbstractMailMergeDlg_Impl::IsGenerateFromDataBase() const
 {
