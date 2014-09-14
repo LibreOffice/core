@@ -1517,7 +1517,7 @@ void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
 
                     if( pNewLibEntry )
                     {
-                        o3tl::heap_ptr<Entry>(new Entry(OBJ_TYPE_MODULE));
+                        e.reset(new Entry(OBJ_TYPE_MODULE));
                         SvTreeListEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
