@@ -400,7 +400,7 @@ static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 }
 
 #define addValue( n, v ) push_back( std::pair< OUString, Any >( OUString( n ), v ) )
-void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rValues, sal_Bool )
+void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rValues, bool )
 {
     std::vector< std::pair< OUString, Any > > aUserData;
 
@@ -550,7 +550,7 @@ static void createHelpLinesFromString( const OUString& rLines, SdrHelpLineList& 
     }
 }
 
-void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, sal_Bool )
+void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rSequence, bool )
 {
     const sal_Int32 nLength = rSequence.getLength();
     if (nLength)

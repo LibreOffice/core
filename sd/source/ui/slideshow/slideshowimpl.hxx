@@ -175,7 +175,7 @@ public:
     virtual void SAL_CALL setUsePen( sal_Bool _usepen ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual ::sal_Int32 SAL_CALL getPenColor() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPenColor( ::sal_Int32 _pencolor ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual void SAL_CALL setUseEraser( sal_Bool _usepen ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setUseEraser( bool _usepen ) throw (css::uno::RuntimeException);
     virtual double SAL_CALL getPenWidth() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setPenWidth( double dStrokeWidth ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setEraseAllInk( bool bEraseAllInk ) throw (css::uno::RuntimeException);

@@ -2920,7 +2920,7 @@ void SAL_CALL SlideshowImpl::setPenColor( sal_Int32 nColor ) throw (RuntimeExcep
     setUsePen( true ); // enable pen mode, update color
 }
 
-void SAL_CALL SlideshowImpl::setUseEraser( sal_Bool /*_usepen*/ ) throw (css::uno::RuntimeException)
+void SAL_CALL SlideshowImpl::setUseEraser( bool /*_usepen*/ ) throw (css::uno::RuntimeException)
 {
 }
 
