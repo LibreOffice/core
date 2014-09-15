@@ -2263,30 +2263,6 @@ bool Menu::HasValidEntries( bool bCheckPopups )
     return bValidEntries;
 }
 
-void Menu::CloseStartedFrom()
-{
-    // if the window was closed by TH, there is another menu
-    // which has this window as pActivePopup
-    if (!pStartedFrom)
-        return;
-
-    // pWin from parent could be 0, if the list is
-    // cleaned from the start, now clean up the endpopup-events
-    if (pStartedFrom->IsMenuBar())
-    {
-        MenuBarWindow* p = (MenuBarWindow*) pStartedFrom->ImplGetWindow();
-        if (p)
-            p->PopupClosed(this);
-    }
-    else
-    {
-        MenuFloatingWindow* p = (MenuFloatingWindow*) pStartedFrom->ImplGetWindow();
-        PopupMenu *pMenu = dynamic_cast<PopupMenu*>(this);
-        if (p && pMenu)
-            p->KillActivePopup(pMenu);
-    }
-}
-
 sal_uLong Menu::DeactivateMenuBar(sal_uLong nFocusId)
 {
     if (!IsMenuBar())
@@ -2489,6 +2465,18 @@ MenuBar::MenuBar( const MenuBar& rMenu )
 MenuBar::~MenuBar()
 {
     ImplDestroy( this, true );
+}
+
+void MenuBar::CloseStartedFrom()
+{
+    // if the window was closed by TH, there is another menu
+    // which has this window as pActivePopup
+    if (!pStartedFrom)
+        return;
+
+    MenuBarWindow* p = (MenuBarWindow*) pStartedFrom->ImplGetWindow();
+    if (p)
+        p->PopupClosed(this);
 }
 
 void MenuBar::ShowCloseButton(bool bShow)
@@ -2715,6 +2703,19 @@ PopupMenu::~PopupMenu()
 {
     if( pRefAutoSubMenu && *pRefAutoSubMenu == this )
         *pRefAutoSubMenu = NULL;    // #111060# avoid second delete in ~MenuItemData
+}
+
+void PopupMenu::CloseStartedFrom()
+{
+    // if the window was closed by TH, there is another menu
+    // which has this window as pActivePopup
+    if (!pStartedFrom)
+        return;
+
+    MenuFloatingWindow* p = (MenuFloatingWindow*) pStartedFrom->ImplGetWindow();
+    PopupMenu *pMenu = dynamic_cast<PopupMenu*>(this);
+    if (p && pMenu)
+        p->KillActivePopup(pMenu);
 }
 
 bool PopupMenu::IsInExecute()

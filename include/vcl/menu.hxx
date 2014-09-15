@@ -187,7 +187,7 @@ protected:
     SAL_DLLPRIVATE void                ImplRemoveDel( ImplMenuDelData &rDel );
 
     /// Close the 'pStartedFrom' menu window.
-    SAL_DLLPRIVATE void CloseStartedFrom();
+    virtual void CloseStartedFrom() = 0;
 
     /// Deactivate the MenuBarWindow.
     SAL_DLLPRIVATE sal_uLong DeactivateMenuBar(sal_uLong nFocusId);
@@ -420,6 +420,9 @@ public:
 
     virtual bool        IsMenuBar() const SAL_OVERRIDE { return true; }
 
+    /// Close the 'pStartedFrom' menu window.
+    virtual void CloseStartedFrom() SAL_OVERRIDE;
+
     void                ShowCloseButton( bool bShow = true );
     bool                HasCloseButton() const { return mbCloseBtnVisible; }
     bool            HasFloatButton() const { return mbFloatBtnVisible; }
@@ -503,6 +506,9 @@ public:
     virtual             ~PopupMenu();
 
     virtual bool        IsMenuBar() const SAL_OVERRIDE { return false; }
+
+    /// Close the 'pStartedFrom' menu window.
+    virtual void CloseStartedFrom() SAL_OVERRIDE;
 
     void                SetText( const OUString& rTitle )  { aTitleText = rTitle; }
     const OUString&     GetText() const                     { return aTitleText; }
