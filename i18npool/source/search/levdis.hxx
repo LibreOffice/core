@@ -37,7 +37,7 @@
 
  Wertebereich fuer X,Y,Z ist 0..33 um mit Limit sicher unter
  16-bit-signed-int-max zu bleiben, 31*32*33 gibt das Maximum
- KGV(31,32,33) == 32736
+ LCM(31,32,33) == 32736
  */
 
 #define LEVDISDEFAULT_XOTHER    2
@@ -132,8 +132,8 @@ class WLevDistance
     inline int Min3( int x, int y, int z );     // inline wegen Schleife
     int Mid3( int x, int y, int z );
     int Max3( int x, int y, int z );
-    int GGT( int a, int b );     // Groesster Gemeinsamer Teiler
-    int KGV( int a, int b );     // Kleinstes Gemeinsames Vielfaches
+    int GCM( int a, int b );     // Groesster Gemeinsamer Teiler
+    int LCM( int a, int b );     // Kleinstes Gemeinsames Vielfaches
 
 public:
     // CToren mit Userangaben, danach mit GetLimit() Limit holen
