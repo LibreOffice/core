@@ -370,6 +370,22 @@ SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentCo
 
 
 
+void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
+{
+    svt::PopupWindowController::initialize( aArguments );
+
+    ToolBox* pToolBox = 0;
+    sal_uInt16 nId = 0;
+    if ( getToolboxId( nId, &pToolBox ) )
+    {
+        if ( mbInsertPage )
+            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | TIB_DROPDOWN );
+        else
+            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | TIB_DROPDOWNONLY );
+    }
+}
+
 ::Window* SlideLayoutController::createPopupWindow( ::Window* pParent )
 {
     return new sd::LayoutToolbarMenu( *this, m_xFrame, pParent, mbInsertPage );
