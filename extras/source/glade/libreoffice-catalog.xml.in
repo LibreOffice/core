@@ -755,7 +755,7 @@
     <glade-widget-class title="Recent Documents View" name="sfxlo-RecentDocsView"
                         generic-name="Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>
-    <glade-widget-class title="Template Thumbnail View" name="sfxlo-TemplateLocalView"
+    <glade-widget-class title="Template Thumbnail View" name="sfxlo-TemplateDefaultView"
                         generic-name="Template Icon View" parent="GtkIconView"
                         icon-name="widget-gtk-iconview"/>
     <glade-widget-class title="Template Search View" name="sfxlo-TemplateSearchView"

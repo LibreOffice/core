@@ -22,6 +22,7 @@
 #include <sfx2/templateviewitem.hxx>
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 using namespace basegfx;
 using namespace basegfx::tools;
@@ -67,14 +68,24 @@ void TemplateContainerItem::Paint (drawinglayer::processor2d::BaseProcessor2D *p
 
     BColor aFillColor = pAttrs->aFillColor;
     drawinglayer::primitive2d::Primitive2DSequence aSeq(nSeqSize);
+    double fTransparence = 0.0;
 
     // Draw background
     if ( mbSelected || mbHover )
         aFillColor = pAttrs->aHighlightColor;
 
-    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    if (mbHover)
+    {
+        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+        fTransparence = aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01;
+    }
+
+    aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
-                                               aFillColor));
+                                               aFillColor,
+                                               fTransparence,
+                                               0.0,
+                                               true));
 
     // Create rounded rectangle border
     aSeq[nCount++] = drawinglayer::primitive2d::Primitive2DReference( new PolygonStrokePrimitive2D(

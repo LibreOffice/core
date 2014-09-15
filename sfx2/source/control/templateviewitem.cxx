@@ -20,6 +20,7 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <vcl/button.hxx>
 #include <vcl/graph.hxx>
+#include <svtools/optionsdrawinglayer.hxx>
 
 #define SUBTITLE_SCALE_FACTOR 0.85
 
@@ -70,14 +71,24 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
 
     int nCount = maSubTitle.isEmpty() ? 5 : 6;
     drawinglayer::primitive2d::Primitive2DSequence aSeq(nCount);
+    double fTransparence = 0.0;
 
     // Draw background
     if ( mbSelected || mbHover )
         aFillColor = pAttrs->aHighlightColor;
 
-    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    if(mbHover)
+    {
+        const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
+        fTransparence = aSvtOptionsDrawinglayer.GetTransparentSelectionPercent() * 0.01;
+    }
+
+    aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new PolyPolygonSelectionPrimitive2D(
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
-                                               aFillColor));
+                                               aFillColor,
+                                               fTransparence,
+                                               0.0,
+                                               true));
 
     // Draw thumbnail
     Size aImageSize = maPreview1.GetSizePixel();
