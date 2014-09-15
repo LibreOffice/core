@@ -245,7 +245,7 @@ sal_Int32 SAL_CALL ScVbaComboBox::getTextLength() throw (uno::RuntimeException, 
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new VbaNewFont( this, mxContext, m_xProps );
+    return new VbaNewFont( m_xProps );
 }
 
 OUString

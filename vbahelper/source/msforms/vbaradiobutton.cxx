@@ -87,7 +87,7 @@ ScVbaRadioButton::setValue( const uno::Any& _value ) throw (uno::RuntimeExceptio
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaRadioButton::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new VbaNewFont( this, mxContext, m_xProps );
+    return new VbaNewFont( m_xProps );
 }
 
 OUString

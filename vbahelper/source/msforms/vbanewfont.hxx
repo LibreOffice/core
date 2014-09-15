@@ -25,14 +25,12 @@
 
 
 
-typedef InheritedHelperInterfaceImpl1< ov::msforms::XNewFont > VbaNewFont_BASE;
+typedef cppu::WeakImplHelper1< ov::msforms::XNewFont > VbaNewFont_BASE;
 
 class VbaNewFont : public VbaNewFont_BASE
 {
 public:
     VbaNewFont(
-        const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         const css::uno::Reference< css::beans::XPropertySet >& rxModelProps ) throw (css::uno::RuntimeException);
 
     // XNewFont attributes
@@ -52,9 +50,6 @@ public:
     virtual void SAL_CALL setUnderline( sal_Bool bUnderline ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual sal_Bool SAL_CALL getStrikethrough() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL setStrikethrough( sal_Bool bStrikethrough ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-
-    // XHelperInterface
-    VBAHELPER_DECL_XHELPERINTERFACE
 
 private:
     css::uno::Reference< css::beans::XPropertySet > mxProps;

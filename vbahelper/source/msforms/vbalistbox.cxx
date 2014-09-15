@@ -274,7 +274,7 @@ ScVbaListBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn ) t
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaListBox::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new VbaNewFont( this, mxContext, m_xProps );
+    return new VbaNewFont( m_xProps );
 }
 
 OUString

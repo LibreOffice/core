@@ -30,10 +30,7 @@ using namespace ::ooo::vba;
 
 
 VbaNewFont::VbaNewFont(
-        const uno::Reference< XHelperInterface >& rxParent,
-        const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< beans::XPropertySet >& rxModelProps ) throw (uno::RuntimeException) :
-    VbaNewFont_BASE( rxParent, rxContext ),
     mxProps( rxModelProps, uno::UNO_SET_THROW )
 {
 }
@@ -131,11 +128,5 @@ void SAL_CALL VbaNewFont::setStrikethrough( sal_Bool bStrikethrough ) throw (uno
 {
     mxProps->setPropertyValue( "FontStrikeout" ,uno::Any( bStrikethrough ? awt::FontStrikeout::SINGLE : awt::FontStrikeout::NONE ) );
 }
-
-// XHelperInterface
-
-VBAHELPER_IMPL_XHELPERINTERFACE( VbaNewFont, "ooo.vba.msforms.NewFont" )
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

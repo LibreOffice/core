@@ -105,7 +105,7 @@ void SAL_CALL VbaButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::Ru
 
 uno::Reference< msforms::XNewFont > SAL_CALL VbaButton::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new VbaNewFont( this, mxContext, m_xProps );
+    return new VbaNewFont( m_xProps );
 }
 
 OUString

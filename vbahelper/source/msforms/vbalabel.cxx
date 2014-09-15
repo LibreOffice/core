@@ -70,7 +70,7 @@ ScVbaLabel::setAccelerator( const OUString& /*_accelerator*/ ) throw (::com::sun
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaLabel::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new VbaNewFont( this, mxContext, m_xProps );
+    return new VbaNewFont( m_xProps );
 }
 
 OUString ScVbaLabel::getServiceImplName()

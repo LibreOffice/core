@@ -133,7 +133,7 @@ sal_Int32 SAL_CALL ScVbaTextBox::getTextLength() throw (uno::RuntimeException, s
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaTextBox::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new VbaNewFont( this, mxContext, m_xProps );
+    return new VbaNewFont( m_xProps );
 }
 
 sal_Int32 SAL_CALL ScVbaTextBox::getBackColor() throw (uno::RuntimeException, std::exception)

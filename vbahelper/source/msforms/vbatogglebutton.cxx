@@ -130,7 +130,7 @@ void SAL_CALL ScVbaToggleButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw 
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaToggleButton::getFont() throw (uno::RuntimeException, std::exception)
 {
-    return new VbaNewFont( this, mxContext, m_xProps );
+    return new VbaNewFont( m_xProps );
 }
 
 sal_Bool SAL_CALL ScVbaToggleButton::getLocked() throw (uno::RuntimeException, std::exception)
