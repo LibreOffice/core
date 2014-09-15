@@ -276,10 +276,10 @@ int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
         if ( 0 == (nMid = Mid3( nX, nY, nZ )) )     // even two 0
             nLimit = nMax;  // either 0 or the only one >0
         else        // one is 0
-            nLimit = KGV( nMid, nMax );
+            nLimit = LCM( nMid, nMax );
     }
     else        // all three of them are not 0
-        nLimit = KGV( KGV( nX, nY ), nZ );
+        nLimit = LCM( LCM( nX, nY ), nZ );
     nRepP0 = ( nX ? nLimit / nX : nLimit + 1 );
     nInsQ0 = ( nY ? nLimit / nY : nLimit + 1 );
     nDelR0 = ( nZ ? nLimit / nZ : nLimit + 1 );
@@ -289,7 +289,7 @@ int WLevDistance::CalcLPQR( int nX, int nY, int nZ, bool bRelaxed )
 
 // greatest common divisior according to  Euklid (chaindivision)
 // special case: 0 plus anything produces 1
-int WLevDistance::GGT( int a, int b )
+int WLevDistance::GCD( int a, int b )
 {
     if ( !a || !b )
         return 1;
@@ -305,13 +305,13 @@ int WLevDistance::GGT( int a, int b )
     return( a ? a : b);
 }
 
-// least common multiple : a * b / GGT(a,b)
-int WLevDistance::KGV( int a, int b )
+// least common multiple : a * b / GCD(a,b)
+int WLevDistance::LCM( int a, int b )
 {
     if ( a > b )    // decrease owerflow chance
-        return( (a / GGT(a,b)) * b );
+        return( (a / GCD(a,b)) * b );
     else
-        return( (b / GGT(a,b)) * a );
+        return( (b / GCD(a,b)) * a );
 }
 
 // Minimum of three values
