@@ -14,7 +14,7 @@ $(eval $(call gb_CppunitTest_use_custom_headers,odk_checkapi,\
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,odk_checkapi,\
-    odk/qa/checkapi/strings \
+    odk/qa/checkapi/checkapi \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,odk_checkapi,boost_headers))
