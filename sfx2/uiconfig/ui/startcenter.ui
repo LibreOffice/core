@@ -402,7 +402,7 @@
               </packing>
             </child>
             <child>
-              <object class="sfxlo-TemplateLocalView" id="local_view">
+              <object class="sfxlo-TemplateDefaultView" id="local_view">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="margin">0</property>

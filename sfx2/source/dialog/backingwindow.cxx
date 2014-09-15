@@ -257,13 +257,11 @@ void BackingWindow::initControls()
 
     //initialize Template view
     mpLocalView->SetStyle( mpLocalView->GetStyle() | WB_VSCROLL);
-    mpLocalView->setItemDimensions(TEMPLATE_ITEM_MAX_WIDTH,TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
-                        TEMPLATE_ITEM_MAX_HEIGHT-TEMPLATE_ITEM_THUMBNAIL_MAX_HEIGHT,
-                        TEMPLATE_ITEM_PADDING);
     mpLocalView->Populate();
     mpLocalView->showRootRegion();
     mpLocalView->Hide();
     mpLocalView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
+
 
     mpCurrentView = mpLocalView;
 
@@ -550,6 +548,7 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         mpAllRecentThumbnails->Hide();
         mpCurrentView->filterItems(ViewFilter_Application(FILTER_APP_NONE));
         mpLocalView->Show();
+        mpLocalView->reload();
     }
     return 0;
 }
@@ -589,6 +588,7 @@ IMPL_LINK( BackingWindow, MenuSelectHdl, MenuButton*, pButton )
 
     mpAllRecentThumbnails->Hide();
     mpLocalView->Show();
+    mpLocalView->reload();
 
     return 0;
 }

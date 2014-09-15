@@ -30,7 +30,7 @@
 #include <vcl/menubtn.hxx>
 
 #include <sfx2/recentdocsview.hxx>
-#include <sfx2/templatelocalview.hxx>
+#include <sfx2/templatedefaultview.hxx>
 #include <sfx2/templateabstractview.hxx>
 #include <sfx2/templateviewitem.hxx>
 
@@ -85,7 +85,7 @@ class BackingWindow
     VclBox*                         mpExtensionsBox;
 
     RecentDocsView*                 mpAllRecentThumbnails;
-    TemplateLocalView*              mpLocalView;
+    TemplateDefaultView*              mpLocalView;
     TemplateAbstractView*           mpCurrentView;
 
     std::vector<Window*>            maDndWindows;
