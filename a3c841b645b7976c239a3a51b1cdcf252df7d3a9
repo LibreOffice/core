@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_d12f04f5",
+        "filename": "bean/com/sun/star/comp/beans/LocalOfficeConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-15T06:12:28Z",
+      "side": 1,
+      "message": "could you please make both of these do \n  throw new RuntimException(e)\nit\u0027s very bad practice to ignore or lose exceptions",
+      "revId": "a3c841b645b7976c239a3a51b1cdcf252df7d3a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dae975fb_b134804a",
+        "filename": "bean/com/sun/star/comp/beans/LocalOfficeConnection.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-15T06:12:28Z",
+      "side": 1,
+      "message": "make this rather do \n   throw new RuntimeException(e)\nother code will proceed and it might take us a while to figure out where the real failure was.",
+      "revId": "a3c841b645b7976c239a3a51b1cdcf252df7d3a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
