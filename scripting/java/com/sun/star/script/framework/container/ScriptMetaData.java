@@ -34,6 +34,7 @@ import com.sun.star.script.framework.io.UCBStreamHandler;
 import com.sun.star.ucb.XSimpleFileAccess2;
 
 import com.sun.star.uno.UnoRuntime;
+import java.io.UnsupportedEncodingException;
 
 public class ScriptMetaData extends ScriptEntry {
     private boolean hasSource = false;
@@ -148,23 +149,41 @@ public class ScriptMetaData extends ScriptEntry {
         if ( pathToParcel.contains(UNO_USER_PACKAGES1) ||
              pathToParcel.contains(UNO_USER_PACKAGES2) )
         {
-            // it's a package
-            placeHolder = "user:uno_packages";
-            String unoPkg = parent.parent.getName();
-            if ( unoPkg != null )
+            try
             {
-                placeHolder = PathUtils.make_url( placeHolder, unoPkg );
+                // it's a package
+                placeHolder = "user:uno_packages";
+                String unoPkg = parent.parent.getName();
+                if ( unoPkg != null )
+                {
+                    placeHolder = PathUtils.make_url( placeHolder, unoPkg );
+                }
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+                e2.initCause(e);
+                throw e2;
             }
         }
         else if ( pathToParcel.contains(UNO_SHARED_PACKAGES1) ||
                   pathToParcel.contains(UNO_SHARED_PACKAGES2) )
         {
-            //its a package
-            placeHolder = "share:uno_packages";
-            String unoPkg = parent.parent.getName();
-            if ( unoPkg != null )
+            try
             {
-                placeHolder = PathUtils.make_url( placeHolder, unoPkg );
+                //its a package
+                placeHolder = "share:uno_packages";
+                String unoPkg = parent.parent.getName();
+                if ( unoPkg != null )
+                {
+                    placeHolder = PathUtils.make_url( placeHolder, unoPkg );
+                }
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+                e2.initCause(e);
+                throw e2;
             }
         }
         else if ( pathToParcel.indexOf(SHARE) == 0 )

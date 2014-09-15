@@ -38,6 +38,7 @@ import com.sun.star.script.browse.BrowseNodeTypes;
 import com.sun.star.script.framework.provider.ScriptProvider;
 import com.sun.star.script.framework.log.*;
 import com.sun.star.script.framework.container.*;
+import java.io.UnsupportedEncodingException;
 
 import java.util.*;
 import javax.swing.JOptionPane;
@@ -109,7 +110,16 @@ public class ProviderBrowseNode extends PropertySet
                 }
             }
             ParcelContainer[] packageContainers = container.getChildContainers();
-            LogUtils.DEBUG("**** For container named " + container.getName() + " with root path " + container.getParcelContainerDir() + " has " + packageContainers.length + " child containers " );
+            try
+            {
+                LogUtils.DEBUG("**** For container named " + container.getName() + " with root path " + container.getParcelContainerDir() + " has " + packageContainers.length + " child containers " );
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+                e2.initCause(e);
+                throw e2;
+            }
 
             for (ParcelContainer packageContainer : packageContainers) {
                 XBrowseNode node = new PkgProviderBrowseNode(provider, packageContainer, m_xCtx);
