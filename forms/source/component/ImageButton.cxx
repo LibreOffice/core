@@ -211,7 +211,7 @@ void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::
         // Sonst nicht. Dann darf man aber auf keinen Fal die Listener
         // benachrichtigen, auch dann nicht, wenn er spaeter hinzukommt.
         aGuard.clear();
-        actionPerformed_Impl( sal_False, e );
+        actionPerformed_Impl( false, e );
     }
 }
 

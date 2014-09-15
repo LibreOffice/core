@@ -189,7 +189,7 @@ namespace frm
 
     // Diese Methode wird auch aus einem Thread gerufen und muss deshalb
     // thread-safe sein.
-    void OClickableImageBaseControl::actionPerformed_Impl(sal_Bool bNotifyListener, const MouseEvent& rEvt)
+    void OClickableImageBaseControl::actionPerformed_Impl(bool bNotifyListener, const MouseEvent& rEvt)
     {
         if( bNotifyListener )
         {
@@ -870,9 +870,9 @@ namespace frm
     void OImageProducerThread_Impl::processEvent( ::cppu::OComponentHelper *pCompImpl,
                                                 const EventObject* pEvt,
                                                 const Reference<XControl>&,
-                                                sal_Bool )
+                                                bool )
     {
-        ((OClickableImageBaseControl *)pCompImpl)->actionPerformed_Impl( sal_True, *(MouseEvent *)pEvt );
+        ((OClickableImageBaseControl *)pCompImpl)->actionPerformed_Impl( true, *(MouseEvent *)pEvt );
     }
 
 

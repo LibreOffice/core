@@ -163,7 +163,7 @@ public:
 protected:
     // OFormNavigationHelper overriables
     virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) SAL_OVERRIDE;
-    virtual void    featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled ) SAL_OVERRIDE;
+    virtual void    featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled ) SAL_OVERRIDE;
     virtual void    allFeatureStatesChanged( ) SAL_OVERRIDE;
     virtual bool    isEnabled( sal_Int16 _nFeatureId ) const SAL_OVERRIDE;
 
@@ -172,7 +172,7 @@ protected:
     virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     // OImageControl overridables
-    virtual void    actionPerformed_Impl( sal_Bool bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt ) SAL_OVERRIDE;
+    virtual void    actionPerformed_Impl( bool bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt ) SAL_OVERRIDE;
 
 private:
     DECL_LINK( OnClick, void* );

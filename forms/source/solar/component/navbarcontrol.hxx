@@ -127,7 +127,7 @@ namespace frm
 
         // OFormNavigationHelper overriables
         virtual void    interceptorsChanged( ) SAL_OVERRIDE;
-        virtual void    featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled ) SAL_OVERRIDE;
+        virtual void    featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled ) SAL_OVERRIDE;
         virtual void    allFeatureStatesChanged( ) SAL_OVERRIDE;
         virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) SAL_OVERRIDE;
 

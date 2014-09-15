@@ -483,13 +483,13 @@ IMPL_LINK_NOARG(OButtonControl, OnClick)
             }
         }
         else
-            actionPerformed_Impl( sal_False, ::com::sun::star::awt::MouseEvent() );
+            actionPerformed_Impl( false, ::com::sun::star::awt::MouseEvent() );
     }
     return 0L;
 }
 
 
-void OButtonControl::actionPerformed_Impl( sal_Bool _bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt )
+void OButtonControl::actionPerformed_Impl( bool _bNotifyListener, const ::com::sun::star::awt::MouseEvent& _rEvt )
 {
     {
         sal_Int16 nFeatureId = -1;
@@ -706,7 +706,7 @@ void OButtonControl::getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] 
 }
 
 
-void OButtonControl::featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled )
+void OButtonControl::featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled )
 {
     if ( _nFeatureId == m_nTargetUrlFeatureId )
     {

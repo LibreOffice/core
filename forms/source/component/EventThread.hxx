@@ -79,7 +79,7 @@ protected:
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
                                const ::com::sun::star::lang::EventObject* _pEvt,
                                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _rControl,
-                               sal_Bool _bFlag) = 0;
+                               bool _bFlag) = 0;
 
 public:
 

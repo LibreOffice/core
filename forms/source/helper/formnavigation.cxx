@@ -65,7 +65,7 @@ namespace frm
     }
 
 
-    void OFormNavigationHelper::featureStateChanged( sal_Int16 /*_nFeatureId*/, sal_Bool /*_bEnabled*/ )
+    void OFormNavigationHelper::featureStateChanged( sal_Int16 /*_nFeatureId*/, bool /*_bEnabled*/ )
     {
         // not interested in
     }
@@ -137,7 +137,7 @@ namespace frm
                     aFeature->second.aCachedAdditionalState.clear();
                     --m_nConnectedFeatures;
 
-                    featureStateChanged( aFeature->first, sal_False );
+                    featureStateChanged( aFeature->first, false );
                     break;
                 }
             }

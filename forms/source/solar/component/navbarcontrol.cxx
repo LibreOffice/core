@@ -422,7 +422,7 @@ namespace frm
     }
 
 
-    void ONavigationBarPeer::featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled )
+    void ONavigationBarPeer::featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         // enable this button on the toolbox
         NavigationToolBar* pNavBar = static_cast< NavigationToolBar* >( GetWindow() );

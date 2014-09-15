@@ -172,7 +172,7 @@ protected:
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
                                const EventObject* _pEvt,
                                const Reference<XControl>& _rControl,
-                               sal_Bool _bSubmit) SAL_OVERRIDE;
+                               bool _bSubmit) SAL_OVERRIDE;
 
 public:
 
@@ -191,7 +191,7 @@ void OFormSubmitResetThread::processEvent(
         ::cppu::OComponentHelper* pCompImpl,
         const EventObject *_pEvt,
         const Reference<XControl>& _rControl,
-        sal_Bool _bSubmit)
+        bool _bSubmit)
 {
     if (_bSubmit)
         ((ODatabaseForm *)pCompImpl)->submit_impl(_rControl, *static_cast<const ::com::sun::star::awt::MouseEvent*>(_pEvt), true);

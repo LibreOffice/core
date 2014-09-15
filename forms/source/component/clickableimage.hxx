@@ -223,7 +223,7 @@ namespace frm
         virtual void SAL_CALL releaseDispatchProviderInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     protected:
-        virtual void actionPerformed_Impl( sal_Bool bNotifyListener, const ::com::sun::star::awt::MouseEvent& rEvt );
+        virtual void actionPerformed_Impl( bool bNotifyListener, const ::com::sun::star::awt::MouseEvent& rEvt );
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > _getTypes() SAL_OVERRIDE;
 
@@ -258,7 +258,7 @@ namespace frm
         virtual void processEvent( ::cppu::OComponentHelper *pCompImpl,
                                 const ::com::sun::star::lang::EventObject*,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>&,
-                                sal_Bool ) SAL_OVERRIDE;
+                                bool ) SAL_OVERRIDE;
 
     public:
         OImageProducerThread_Impl( OClickableImageBaseControl *pControl ) :

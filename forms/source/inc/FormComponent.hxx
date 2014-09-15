@@ -315,7 +315,7 @@ public:
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type>   _getTypes() SAL_OVERRIDE;
     // implement the lock setting
-    virtual void         _setLock(sal_Bool _bLock);
+    virtual void         _setLock(bool _bLock);
 };
 
 

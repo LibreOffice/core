@@ -126,7 +126,7 @@ namespace frm
                 determines if the features is enabled or disabled
             @see getBooleanState
         */
-        virtual void    featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled );
+        virtual void    featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled );
 
         /** notification for (potential) changes in the state of all features
             <p>The base class implementation does nothing. Derived classes could force

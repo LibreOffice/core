@@ -387,7 +387,7 @@ void SAL_CALL OBoundControl::setLock(sal_Bool _bLock) throw(RuntimeException, st
     m_bLocked = _bLock;
 }
 
-void OBoundControl::_setLock(sal_Bool _bLock)
+void OBoundControl::_setLock(bool _bLock)
 {
     // try to set the text component to readonly
     Reference< XWindowPeer > xPeer = getPeer();
