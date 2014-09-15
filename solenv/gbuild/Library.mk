@@ -224,6 +224,7 @@ $(eval $(foreach method,\
 	set_visibility_default \
 	set_warnings_not_errors \
 	set_generated_cxx_suffix \
+	disable_compiler_plugins \
 ,\
 	$(call gb_Library__forward_to_Linktarget,$(method))\
 ))

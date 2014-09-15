@@ -42,17 +42,17 @@ endef
 
 # CObject class
 
-# $(call gb_CObject__command_pattern,object,flags,source,dep-file)
+# $(call gb_CObject__command_pattern,object,flags,source,dep-file,compiler-plugins)
 define gb_CObject__command_pattern
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
-	$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS_SETUP)) \
+	$(if $(5),$(gb_COMPILER_PLUGINS_SETUP)) \
 	$(if $(filter %.c %.m,$(3)), $(gb_CC), $(gb_CXX)) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
-		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \
+		$(if $(5),$(gb_COMPILER_PLUGINS)) \
 		$(2) \
 		-c $(3) \
 		-o $(1) \

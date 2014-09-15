@@ -139,6 +139,7 @@ $(eval $(foreach method,\
 	add_nativeres \
 	set_warnings_not_errors \
 	set_generated_cxx_suffix \
+	disable_compiler_plugins \
 ,\
 	$(call gb_Executable_forward_to_Linktarget,$(method))\
 ))
