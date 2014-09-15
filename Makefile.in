@@ -306,6 +306,10 @@ ifeq ($(OS_FOR_BUILD),WNT)
 else
 	@$(SRCDIR)/solenv/bin/ooinstall $(TESTINSTALLDIR)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
+# The InfoPlist_*.zip files in "bin" are totally pointless and should
+# not be there. I am too lazy at the moment to figure out how to
+# prevent them from ending up there.
+	rm -rf $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/bin
 	@$(SRCDIR)/solenv/bin/macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app
 endif
 endif
