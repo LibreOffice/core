@@ -37,7 +37,7 @@ namespace connectivity
         class MacabDatabaseMetaData : public MacabDatabaseMetaData_BASE
         {
             ::com::sun::star::uno::Reference< MacabConnection > m_xConnection;
-            sal_Bool                                            m_bUseCatalog;
+            bool                                            m_bUseCatalog;
 
         public:
 

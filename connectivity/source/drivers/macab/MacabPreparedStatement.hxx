@@ -43,7 +43,7 @@ namespace connectivity
             OUString                 m_sSqlStatement;
             ::rtl::Reference< MacabResultSetMetaData >
                                             m_xMetaData;
-            sal_Bool                        m_bPrepared;
+            bool                        m_bPrepared;
             mutable sal_Int32                   m_nParameterIndex;
             OValueRow                       m_aParameterRow;
 

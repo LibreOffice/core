@@ -270,10 +270,8 @@ MacabOrder *MacabCommonStatement::analyseOrderByClause(const OSQLParseNode *pPar
                 {
                     OUString sColumnName =
                         pColumnRef->getChild(0)->getTokenValue();
-                    sal_Bool bAscending =
-                        SQL_ISTOKEN(pAscendingDescending, DESC)?
-                        sal_False:
-                        sal_True;
+                    bool bAscending =
+                        !SQL_ISTOKEN(pAscendingDescending, DESC);
 
                     return new MacabSimpleOrder(m_pHeader, sColumnName, bAscending);
                 }
@@ -544,7 +542,7 @@ sal_Bool MacabCommonStatement::convertFastPropertyValue(
         sal_Int32,
         const Any&) throw (::com::sun::star::lang::IllegalArgumentException)
 {
-    sal_Bool bConverted = sal_False;
+    bool bConverted = false;
     // here we have to try to convert
     return bConverted;
 }

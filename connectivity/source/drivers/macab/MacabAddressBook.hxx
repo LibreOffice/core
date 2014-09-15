@@ -40,7 +40,7 @@ namespace connectivity
                 ABAddressBookRef m_aAddressBook;
                 MacabRecords *m_xMacabRecords;
                 ::std::vector<MacabGroup *> m_xMacabGroups;
-                sal_Bool m_bRetrievedGroups;
+                bool m_bRetrievedGroups;
             private:
                 void manageDuplicateGroups(::std::vector<MacabGroup *> _xGroups) const;
             public:

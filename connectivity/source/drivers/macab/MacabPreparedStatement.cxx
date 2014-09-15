@@ -88,7 +88,7 @@ MacabPreparedStatement::MacabPreparedStatement(
     const OUString& sql)
     : MacabPreparedStatement_BASE(_pConnection),
       m_sSqlStatement(sql),
-      m_bPrepared(sal_False),
+      m_bPrepared(false),
       m_nParameterIndex(0),
       m_aParameterRow()
 {

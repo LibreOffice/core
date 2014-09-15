@@ -52,8 +52,8 @@ namespace connectivity
                         iterator();
                         ~iterator();
                         void operator++ ();
-                        sal_Bool operator!= (const sal_Int32 i) const;
-                        sal_Bool operator== (const sal_Int32 i) const;
+                        bool operator!= (const sal_Int32 i) const;
+                        bool operator== (const sal_Int32 i) const;
                         macabfield *operator* () const;
                 };
         };

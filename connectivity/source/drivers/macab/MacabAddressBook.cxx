@@ -38,7 +38,7 @@ MacabAddressBook::MacabAddressBook( )
 {
     m_aAddressBook = ABGetSharedAddressBook();
     m_xMacabRecords = NULL;
-    m_bRetrievedGroups = sal_False;
+    m_bRetrievedGroups = false;
 }
 
 
@@ -59,7 +59,7 @@ MacabAddressBook::~MacabAddressBook()
             delete (*iter);
     }
 
-    m_bRetrievedGroups = sal_False;
+    m_bRetrievedGroups = false;
 }
 
 
@@ -120,7 +120,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString& _tableName)
 ::std::vector<MacabGroup *> MacabAddressBook::getMacabGroups()
 {
     /* If the MacabGroups haven't been created yet, create them. */
-    if(m_bRetrievedGroups == sal_False)
+    if(!m_bRetrievedGroups)
     {
         /* If the MacabRecords haven't been created yet, create them. */
         if(m_xMacabRecords == NULL)
@@ -148,7 +148,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString& _tableName)
 
         /* Manage duplicates. */
         manageDuplicateGroups(m_xMacabGroups);
-        m_bRetrievedGroups = sal_True;
+        m_bRetrievedGroups = true;
     }
 
     return m_xMacabGroups;
@@ -158,7 +158,7 @@ MacabRecords *MacabAddressBook::getMacabRecordsMatch(const OUString& _tableName)
 MacabGroup *MacabAddressBook::getMacabGroup(OUString const & _groupName)
 {
     // initialize groups if not already initialized
-    if(m_bRetrievedGroups == sal_False)
+    if(!m_bRetrievedGroups)
         getMacabGroups();
 
     sal_Int32 nGroups = m_xMacabGroups.size();
@@ -182,7 +182,7 @@ MacabGroup *MacabAddressBook::getMacabGroup(OUString const & _groupName)
 MacabGroup *MacabAddressBook::getMacabGroupMatch(OUString const & _groupName)
 {
     // initialize groups if not already initialized
-    if(m_bRetrievedGroups == sal_False)
+    if(!m_bRetrievedGroups)
         getMacabGroups();
 
     sal_Int32 nGroups = m_xMacabGroups.size();

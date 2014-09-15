@@ -52,7 +52,7 @@ MacabResultSet::MacabResultSet(MacabCommonStatement* pStmt)
       m_xMetaData(NULL),
       m_aMacabRecords(),
       m_nRowPos(-1),
-      m_bWasNull(sal_True)
+      m_bWasNull(true)
 {
     m_sTableName = MacabAddressBook::getDefaultTableName();
 }

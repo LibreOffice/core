@@ -52,8 +52,8 @@ namespace connectivity
                 MacabRecord(const sal_Int32 _size);
                 virtual ~MacabRecord();
                 void insertAtColumn (CFTypeRef _value, ABPropertyType _type, const sal_Int32 _column);
-                sal_Bool contains(const macabfield *_field) const;
-                sal_Bool contains(const CFTypeRef _value) const;
+                bool contains(const macabfield *_field) const;
+                bool contains(const CFTypeRef _value) const;
                 sal_Int32 getSize() const;
                 macabfield *copy(const sal_Int32 i) const;
                 macabfield *get(const sal_Int32 i) const;

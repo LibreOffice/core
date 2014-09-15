@@ -38,7 +38,7 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
     CFArrayRef xGroupMembers = ABGroupCopyArrayOfAllMembers(_xGroup);
     ABPersonRef xPerson;
     CFStringRef sGroupMemberUID;
-    sal_Bool bFound;
+    bool bFound;
     macabfield *xRecordField;
 
     // Set the group's name (stored in MacabRecords as m_sName)
@@ -66,7 +66,7 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
             sGroupMemberUID = (CFStringRef) ABRecordCopyValue(xPerson, kABUIDProperty);
             if(sGroupMemberUID != NULL)
             {
-                bFound = sal_False;
+                bFound = false;
                 for(j = 0; j < nAllRecordsSize; j++)
                 {
                     xRecordField = _allRecords->getField(j,CFStringToOUString(kABUIDProperty));
@@ -76,7 +76,7 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
                         {
                             /* Found the matching UID! Insert into the group... */
                             insertRecord(_allRecords->getRecord(j));
-                            bFound = sal_True;
+                            bFound = true;
                             break;
                         }
                     }

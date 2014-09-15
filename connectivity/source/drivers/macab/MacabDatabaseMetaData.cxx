@@ -41,7 +41,7 @@ using namespace com::sun::star::sdbc;
 
 MacabDatabaseMetaData::MacabDatabaseMetaData(MacabConnection* _pCon)
         : m_xConnection(_pCon),
-          m_bUseCatalog(sal_True)
+          m_bUseCatalog(true)
 {
     OSL_ENSURE(_pCon,"MacabDatabaseMetaData::MacabDatabaseMetaData: No connection set!");
 
@@ -223,7 +223,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsDifferentTableCorrelationNames(
 
 sal_Bool SAL_CALL MacabDatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
 {
-    sal_Bool bValue = sal_False;
+    bool bValue = false;
     if (m_bUseCatalog)
     {
     }
@@ -964,19 +964,19 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
     // for the moment, we answer only the "TABLE" table type
     // when no types are given at all, we return all the tables
     static const OUString aTable("TABLE");
-    sal_Bool bTableFound = sal_False;
+    bool bTableFound = false;
     const OUString* p = types.getConstArray(),
                          * pEnd = p + types.getLength();
 
     if (p == pEnd)
     {
-        bTableFound = sal_True;
+        bTableFound = true;
     }
     else while (p < pEnd)
     {
         if (match(*p, aTable, '\0'))
         {
-            bTableFound = sal_True;
+            bTableFound = true;
             break;
         }
         p++;

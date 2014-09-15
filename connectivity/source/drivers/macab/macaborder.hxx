@@ -41,10 +41,10 @@ namespace connectivity
         class MacabSimpleOrder : public MacabOrder
         {
             sal_Int32 m_nFieldNumber;
-            sal_Bool m_bAscending;
+            bool m_bAscending;
 
         public:
-            MacabSimpleOrder(MacabHeader *header, OUString &sColumnName, sal_Bool bAscending);
+            MacabSimpleOrder(MacabHeader *header, OUString &sColumnName, bool bAscending);
 
             virtual sal_Int32 compare(const MacabRecord *record1, const MacabRecord *record2) const SAL_OVERRIDE;
         };

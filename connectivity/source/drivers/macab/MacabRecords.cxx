@@ -347,8 +347,8 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     /* While searching through the properties for required properties, these
      * sal_Bools will keep track of what we have found.
      */
-    sal_Bool bFoundProperty;
-    sal_Bool bFoundRequiredProperties[numRequiredProperties];
+    bool bFoundProperty;
+    bool bFoundRequiredProperties[numRequiredProperties];
 
 
     /* We have three MacabHeaders: headerDataForProperty is where we
@@ -372,24 +372,24 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     nonRequiredProperties = new CFStringRef[numNonRequiredProperties];
     k = 0;
     for(i = 0; i < numRequiredProperties; i++)
-        bFoundRequiredProperties[i] = sal_False;
+        bFoundRequiredProperties[i] = false;
 
     /* Determine the non-required properties... */
     for(i = 0; i < numProperties; i++)
     {
         property = (CFStringRef) CFArrayGetValueAtIndex(allProperties, i);
-        bFoundProperty = sal_False;
+        bFoundProperty = false;
         for(j = 0; j < numRequiredProperties; j++)
         {
             if(CFEqual(property, requiredProperties[j]))
             {
-                bFoundProperty = sal_True;
-                bFoundRequiredProperties[j] = sal_True;
+                bFoundProperty = true;
+                bFoundRequiredProperties[j] = true;
                 break;
             }
         }
 
-        if(bFoundProperty == sal_False)
+        if(!bFoundProperty)
         {
             /* If we have found too many non-required properties */
             if(k == numNonRequiredProperties)
@@ -410,7 +410,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     /* Fill the header with required properties first... */
     for(i = 0; i < numRequiredProperties; i++)
     {
-        if(bFoundRequiredProperties[i] == sal_True)
+        if(bFoundRequiredProperties[i])
         {
             /* The order of these matters (we want all address properties
              * before any phone properties, or else things will look weird),
@@ -426,7 +426,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
             for(j = 0; j < numRecords; j++)
             {
                 record = (ABRecordRef) CFArrayGetValueAtIndex(_records, j);
-                headerDataForProperty = createHeaderForProperty(record,requiredProperties[i],_recordType,sal_True);
+                headerDataForProperty = createHeaderForProperty(record,requiredProperties[i],_recordType,true);
                 if(headerDataForProperty != NULL)
                 {
                     (*lcl_header) += headerDataForProperty;
@@ -450,7 +450,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         for(j = 0; j < numNonRequiredProperties; j++)
         {
             property = nonRequiredProperties[j];
-            headerDataForProperty = createHeaderForProperty(record,property,_recordType,sal_False);
+            headerDataForProperty = createHeaderForProperty(record,property,_recordType,false);
             if(headerDataForProperty != NULL)
             {
                 (*nonRequiredHeader) += headerDataForProperty;
@@ -475,7 +475,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
  * the property's value and type and then calls another method of
  * the same name to do the dirty work.
  */
-MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, const CFStringRef _propertyName, const CFStringRef _recordType, const sal_Bool _isPropertyRequired) const
+MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, const CFStringRef _propertyName, const CFStringRef _recordType, const bool _isPropertyRequired) const
 {
     // local variables
     CFStringRef localizedPropertyName;
@@ -485,7 +485,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, co
 
     /* Get the property's value */
     propertyValue = ABRecordCopyValue(_record,_propertyName);
-    if(propertyValue == NULL && _isPropertyRequired == sal_False)
+    if(propertyValue == NULL && !_isPropertyRequired)
         return NULL;
 
     propertyType = ABTypeOfProperty(addressBook, _recordType, _propertyName);
@@ -941,21 +941,21 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
              * there is nothing we can do: we have failed to place this
              * property into the record.
              */
-            sal_Bool bPlaced = sal_False;
+            bool bPlaced = false;
             OUString columnName = _propertyName;
             sal_Int32 i = 1;
 
             // A big safeguard to prevent two fields from having the same name.
-            while(bPlaced != sal_True)
+            while(!bPlaced)
             {
                 sal_Int32 columnNumber = _header->getColumnNumber(columnName);
-                bPlaced = sal_True;
+                bPlaced = true;
                 if(columnNumber != -1)
                 {
                     // collision! A property already exists here!
                     if(_abrecord->get(columnNumber) != NULL)
                     {
-                        bPlaced = sal_False;
+                        bPlaced = false;
                         i++;
                         columnName = _propertyName + " (" + OUString::number(i) + ")";
                     }
@@ -1157,13 +1157,13 @@ void MacabRecords::iterator::operator++ ()
 }
 
 
-sal_Bool MacabRecords::iterator::operator!= (const sal_Int32 i) const
+bool MacabRecords::iterator::operator!= (const sal_Int32 i) const
 {
     return(id != i);
 }
 
 
-sal_Bool MacabRecords::iterator::operator== (const sal_Int32 i) const
+bool MacabRecords::iterator::operator== (const sal_Int32 i) const
 {
     return(id == i);
 }

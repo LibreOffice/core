@@ -30,23 +30,23 @@ MacabCondition::~MacabCondition()
 {
 }
 
-MacabConditionConstant::MacabConditionConstant(const sal_Bool bValue)
+MacabConditionConstant::MacabConditionConstant(const bool bValue)
     : MacabCondition(),
       m_bValue(bValue)
 {
 }
 
-sal_Bool MacabConditionConstant::isAlwaysTrue() const
+bool MacabConditionConstant::isAlwaysTrue() const
 {
     return m_bValue;
 }
 
-sal_Bool MacabConditionConstant::isAlwaysFalse() const
+bool MacabConditionConstant::isAlwaysFalse() const
 {
     return !m_bValue;
 }
 
-sal_Bool MacabConditionConstant::eval(const MacabRecord *) const
+bool MacabConditionConstant::eval(const MacabRecord *) const
 {
     return m_bValue;
 }
@@ -57,16 +57,16 @@ MacabConditionColumn::MacabConditionColumn(const MacabHeader *header, const OUSt
 {
 }
 
-sal_Bool MacabConditionColumn::isAlwaysTrue() const
+bool MacabConditionColumn::isAlwaysTrue() const
 {
     // Sometimes true, sometimes false
-    return sal_False;
+    return false;
 }
 
-sal_Bool MacabConditionColumn::isAlwaysFalse() const
+bool MacabConditionColumn::isAlwaysFalse() const
 {
     // Sometimes true, sometimes false
-    return sal_False;
+    return false;
 }
 
 MacabConditionNull::MacabConditionNull(const MacabHeader *header, const OUString &sColumnName) throw(SQLException)
@@ -74,16 +74,16 @@ MacabConditionNull::MacabConditionNull(const MacabHeader *header, const OUString
 {
 }
 
-sal_Bool MacabConditionNull::eval(const MacabRecord *aRecord) const
+bool MacabConditionNull::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
     if(aValue == NULL)
-        return sal_True;
+        return true;
     else if(aValue->value == NULL)
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 MacabConditionNotNull::MacabConditionNotNull(const MacabHeader *header, const OUString &sColumnName) throw(SQLException)
@@ -91,16 +91,16 @@ MacabConditionNotNull::MacabConditionNotNull(const MacabHeader *header, const OU
 {
 }
 
-sal_Bool MacabConditionNotNull::eval(const MacabRecord *aRecord) const
+bool MacabConditionNotNull::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
     if(aValue == NULL)
-        return sal_False;
+        return false;
     else if(aValue->value == NULL)
-        return sal_False;
+        return false;
     else
-        return sal_True;
+        return true;
 }
 
 MacabConditionCompare::MacabConditionCompare(const MacabHeader *header, const OUString &sColumnName, const OUString &sMatchString) throw(SQLException)
@@ -114,17 +114,17 @@ MacabConditionEqual::MacabConditionEqual(const MacabHeader *header, const OUStri
 {
 }
 
-sal_Bool MacabConditionEqual::eval(const MacabRecord *aRecord) const
+bool MacabConditionEqual::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
     if(aValue == NULL)
-        return sal_False;
+        return false;
 
     macabfield *aValue2 = MacabRecord::createMacabField(m_sMatchString,aValue->type);
 
     if(aValue2 == NULL)
-        return sal_False;
+        return false;
 
     sal_Int32 nReturn = MacabRecord::compareFields(aValue, aValue2);
 
@@ -137,17 +137,17 @@ MacabConditionDifferent::MacabConditionDifferent(const MacabHeader *header, cons
 {
 }
 
-sal_Bool MacabConditionDifferent::eval(const MacabRecord *aRecord) const
+bool MacabConditionDifferent::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
     if(aValue == NULL)
-        return sal_False;
+        return false;
 
     macabfield *aValue2 = MacabRecord::createMacabField(m_sMatchString,aValue->type);
 
     if(aValue2 == NULL)
-        return sal_False;
+        return false;
 
     sal_Int32 nReturn = MacabRecord::compareFields(aValue, aValue2);
 
@@ -160,12 +160,12 @@ MacabConditionSimilar::MacabConditionSimilar(const MacabHeader *header, const OU
 {
 }
 
-sal_Bool MacabConditionSimilar::eval(const MacabRecord *aRecord) const
+bool MacabConditionSimilar::eval(const MacabRecord *aRecord) const
 {
     macabfield *aValue = aRecord->get(m_nFieldNumber);
 
     if(aValue == NULL)
-        return sal_False;
+        return false;
 
     OUString sName = MacabRecord::fieldToString(aValue);
 
@@ -190,26 +190,26 @@ MacabConditionOr::MacabConditionOr(MacabCondition *pLeft, MacabCondition *pRight
 {
 }
 
-sal_Bool MacabConditionOr::isAlwaysTrue() const
+bool MacabConditionOr::isAlwaysTrue() const
 {
     return m_pLeft->isAlwaysTrue() || m_pRight->isAlwaysTrue();
 }
 
-sal_Bool MacabConditionOr::isAlwaysFalse() const
+bool MacabConditionOr::isAlwaysFalse() const
 {
     return m_pLeft->isAlwaysFalse() && m_pRight->isAlwaysFalse();
 }
 
-sal_Bool MacabConditionOr::eval(const MacabRecord *aRecord) const
+bool MacabConditionOr::eval(const MacabRecord *aRecord) const
 {
     // We avoid evaluating terms as much as we can
-    if (m_pLeft->isAlwaysTrue() || m_pRight->isAlwaysTrue()) return sal_True;
-    if (m_pLeft->isAlwaysFalse() && m_pRight->isAlwaysFalse()) return sal_False;
+    if (m_pLeft->isAlwaysTrue() || m_pRight->isAlwaysTrue()) return true;
+    if (m_pLeft->isAlwaysFalse() && m_pRight->isAlwaysFalse()) return false;
 
-    if (m_pLeft->eval(aRecord)) return sal_True;
-    if (m_pRight->eval(aRecord)) return sal_True;
+    if (m_pLeft->eval(aRecord)) return true;
+    if (m_pRight->eval(aRecord)) return true;
 
-    return sal_False;
+    return false;
 }
 
 MacabConditionAnd::MacabConditionAnd(MacabCondition *pLeft, MacabCondition *pRight)
@@ -217,26 +217,26 @@ MacabConditionAnd::MacabConditionAnd(MacabCondition *pLeft, MacabCondition *pRig
 {
 }
 
-sal_Bool MacabConditionAnd::isAlwaysTrue() const
+bool MacabConditionAnd::isAlwaysTrue() const
 {
     return m_pLeft->isAlwaysTrue() && m_pRight->isAlwaysTrue();
 }
 
-sal_Bool MacabConditionAnd::isAlwaysFalse() const
+bool MacabConditionAnd::isAlwaysFalse() const
 {
     return m_pLeft->isAlwaysFalse() || m_pRight->isAlwaysFalse();
 }
 
-sal_Bool MacabConditionAnd::eval(const MacabRecord *aRecord) const
+bool MacabConditionAnd::eval(const MacabRecord *aRecord) const
 {
     // We avoid evaluating terms as much as we can
-    if (m_pLeft->isAlwaysFalse() || m_pRight->isAlwaysFalse()) return sal_False;
-    if (m_pLeft->isAlwaysTrue() && m_pRight->isAlwaysTrue()) return sal_True;
+    if (m_pLeft->isAlwaysFalse() || m_pRight->isAlwaysFalse()) return false;
+    if (m_pLeft->isAlwaysTrue() && m_pRight->isAlwaysTrue()) return true;
 
-    if (!m_pLeft->eval(aRecord)) return sal_False;
-    if (!m_pRight->eval(aRecord)) return sal_False;
+    if (!m_pLeft->eval(aRecord)) return false;
+    if (!m_pRight->eval(aRecord)) return false;
 
-    return sal_True;
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

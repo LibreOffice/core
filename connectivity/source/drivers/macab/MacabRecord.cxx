@@ -81,16 +81,16 @@ void MacabRecord::insertAtColumn (CFTypeRef _value, ABPropertyType _type, const 
 }
 
 
-sal_Bool MacabRecord::contains (const macabfield *_field) const
+bool MacabRecord::contains (const macabfield *_field) const
 {
     if(_field == NULL)
-        return sal_False;
+        return false;
     else
         return contains(_field->value);
 }
 
 
-sal_Bool MacabRecord::contains (const CFTypeRef _value) const
+bool MacabRecord::contains (const CFTypeRef _value) const
 {
     sal_Int32 i;
     for(i = 0; i < size; i++)
@@ -99,12 +99,12 @@ sal_Bool MacabRecord::contains (const CFTypeRef _value) const
         {
             if(CFEqual(fields[i]->value, _value))
             {
-                return sal_True;
+                return true;
             }
         }
     }
 
-    return sal_False;
+    return false;
 }
 
 
@@ -314,8 +314,8 @@ OUString MacabRecord::fieldToString(const macabfield *_aField)
                 CFNumberType numberType = CFNumberGetType( (CFNumberRef) _aField->value );
                 sal_Int64 nVal;
                 // Should we check for the wrong type here, e.g., a float?
-                sal_Bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
-                if(m_bSuccess != sal_False)
+                bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
+                if(m_bSuccess)
                     fieldString = OUString::number(nVal);
             }
             break;
@@ -324,8 +324,8 @@ OUString MacabRecord::fieldToString(const macabfield *_aField)
                 CFNumberType numberType = CFNumberGetType( (CFNumberRef) _aField->value );
                 double nVal;
                 // Should we check for the wrong type here, e.g., an int?
-                sal_Bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
-                if(m_bSuccess != sal_False)
+                bool m_bSuccess = !CFNumberGetValue((CFNumberRef) _aField->value, numberType, &nVal);
+                if(m_bSuccess)
                     fieldString = OUString::number(nVal);
             }
             break;

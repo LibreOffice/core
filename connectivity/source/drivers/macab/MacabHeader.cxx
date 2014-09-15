@@ -309,13 +309,13 @@ void MacabHeader::iterator::operator++ ()
 }
 
 
-sal_Bool MacabHeader::iterator::operator!= (const sal_Int32 i) const
+bool MacabHeader::iterator::operator!= (const sal_Int32 i) const
 {
     return(id != i);
 }
 
 
-sal_Bool MacabHeader::iterator::operator== (const sal_Int32 i) const
+bool MacabHeader::iterator::operator== (const sal_Int32 i) const
 {
     return(id == i);
 }
