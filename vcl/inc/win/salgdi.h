@@ -95,7 +95,7 @@ public:
 #endif
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
-    bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
+    bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
     {
@@ -312,7 +312,7 @@ public:
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     // get the layout capabilities of the current font
-    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const;
+    virtual bool GetFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* );
     // graphics must drop any cached font info

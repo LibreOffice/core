@@ -497,7 +497,7 @@ const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
     return mpFontData->GetImplFontCharMap();
 }
 
-bool AquaSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if( !mpFontData )
         return false;

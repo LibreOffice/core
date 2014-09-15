@@ -235,7 +235,7 @@ public:
                             GetImplFontCharMap() const = 0;
 
     // get the layout capabilities of the current font
-    virtual bool            GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
+    virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const = 0;
 
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* ) = 0;

@@ -240,7 +240,7 @@ const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
     return pIFCMap;
 }
 
-bool SvpSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool SvpSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if (!m_pServerFont[0])
         return false;

@@ -440,7 +440,7 @@ const ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
     return pIFCMap;
 }
 
-bool X11SalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
+bool X11SalGraphics::GetFontCapabilities(vcl::FontCapabilities &rGetImplFontCapabilities) const
 {
     if (!mpServerFont[0])
         return false;
