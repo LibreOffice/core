@@ -175,9 +175,9 @@ sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex ) thro
 
     VCLXRadioButton* pVCLXRadioButton = static_cast< VCLXRadioButton* >( GetVCLXWindow() );
     if ( pVCLXRadioButton && !pVCLXRadioButton->getState() )
-        pVCLXRadioButton->setState( sal_True );
+        pVCLXRadioButton->setState( true );
 
-    return sal_True;
+    return true;
 }
 
 

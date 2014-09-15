@@ -816,9 +816,9 @@ sal_Bool VCLXAccessibleToolBox::isAccessibleChildSelected( sal_Int32 nChildIndex
     ToolBox * pToolBox = static_cast < ToolBox * > ( GetWindow() );
     sal_uInt16 nPos = static_cast < sal_uInt16 > (nChildIndex);
     if ( pToolBox != NULL && pToolBox->GetHighlightItemId() == pToolBox->GetItemId( nPos ) )
-        return sal_True;
+        return true;
     else
-        return sal_False;
+        return false;
 }
 
 void VCLXAccessibleToolBox::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)

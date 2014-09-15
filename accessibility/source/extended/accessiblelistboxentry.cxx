@@ -713,7 +713,7 @@ namespace accessibility
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
         ::svt::OStringTransfer::CopyString( sText.copy( nStartIndex, nLen ), getListBox() );
 
-        return sal_True;
+        return true;
     }
 
     // XAccessibleEventBroadcaster
@@ -1013,7 +1013,7 @@ namespace accessibility
         if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return sal_False;
+        return false;
     }
     sal_Unicode SAL_CALL AccessibleListBoxEntry::getCharacter( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
     {
@@ -1073,7 +1073,7 @@ namespace accessibility
         if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return sal_False;
+        return false;
     }
     OUString SAL_CALL AccessibleListBoxEntry::getText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {

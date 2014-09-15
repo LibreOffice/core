@@ -219,7 +219,7 @@ sal_Bool VCLXAccessibleMenuItem::setCaretPosition( sal_Int32 nIndex ) throw (Ind
     if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 
@@ -337,7 +337,7 @@ sal_Bool VCLXAccessibleMenuItem::setSelection( sal_Int32 nStartIndex, sal_Int32 
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 
@@ -443,7 +443,7 @@ sal_Bool VCLXAccessibleMenuItem::doAccessibleAction ( sal_Int32 nIndex ) throw (
 
     Click();
 
-    return sal_True;
+    return true;
 }
 
 

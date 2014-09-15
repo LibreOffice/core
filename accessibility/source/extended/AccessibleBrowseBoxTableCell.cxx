@@ -236,7 +236,7 @@ namespace accessibility
         if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return sal_False;
+        return false;
     }
     sal_Unicode SAL_CALL AccessibleBrowseBoxTableCell::getCharacter( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
     {
@@ -288,7 +288,7 @@ namespace accessibility
         if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return sal_False;
+        return false;
     }
     OUString SAL_CALL AccessibleBrowseBoxTableCell::getText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {
@@ -329,7 +329,7 @@ namespace accessibility
         checkIndex_Impl( nEndIndex, sText );
 
         //!!! don't know how to put a string into the clipboard
-        return sal_False;
+        return false;
     }
     void AccessibleBrowseBoxTableCell::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
     {

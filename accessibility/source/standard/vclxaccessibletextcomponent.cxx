@@ -320,7 +320,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 

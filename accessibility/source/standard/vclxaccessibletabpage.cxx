@@ -568,7 +568,7 @@ sal_Bool VCLXAccessibleTabPage::setCaretPosition( sal_Int32 nIndex ) throw (Inde
     if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 
@@ -646,7 +646,7 @@ sal_Bool VCLXAccessibleTabPage::setSelection( sal_Int32 nStartIndex, sal_Int32 n
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 

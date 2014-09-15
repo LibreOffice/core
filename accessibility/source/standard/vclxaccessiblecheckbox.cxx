@@ -218,7 +218,7 @@ sal_Bool VCLXAccessibleCheckBox::doAccessibleAction ( sal_Int32 nIndex ) throw (
         pVCLXCheckBox->setState( (sal_Int16) nValue );
     }
 
-    return sal_True;
+    return true;
 }
 
 

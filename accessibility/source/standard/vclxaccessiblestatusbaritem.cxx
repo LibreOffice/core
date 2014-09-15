@@ -494,7 +494,7 @@ sal_Bool VCLXAccessibleStatusBarItem::setCaretPosition( sal_Int32 nIndex ) throw
     if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 
@@ -573,7 +573,7 @@ sal_Bool VCLXAccessibleStatusBarItem::setSelection( sal_Int32 nStartIndex, sal_I
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 

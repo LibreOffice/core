@@ -271,7 +271,7 @@ namespace accessibility
 
     bool AccessibleTabListBoxTable::implIsRowSelected( sal_Int32 _nRow ) const
     {
-        return m_pTabListBox ? m_pTabListBox->IsSelected( m_pTabListBox->GetEntry( _nRow ) ) : sal_False;
+        return m_pTabListBox ? m_pTabListBox->IsSelected( m_pTabListBox->GetEntry( _nRow ) ) : false;
     }
 
     void AccessibleTabListBoxTable::implSelectRow( sal_Int32 _nRow, bool _bSelect )

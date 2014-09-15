@@ -88,7 +88,7 @@ namespace accessibility
 
     sal_Bool SAL_CALL AccessibleCheckBoxCell::setCurrentValue( const Any& ) throw (RuntimeException, std::exception)
     {
-        return sal_False;
+        return false;
     }
 
     Any SAL_CALL AccessibleCheckBoxCell::getMaximumValue(  ) throw (RuntimeException, std::exception)

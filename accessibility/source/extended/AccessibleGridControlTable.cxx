@@ -202,7 +202,7 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleColumnSelected( sal_In
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     (void) nColumn;
-    return sal_False;
+    return false;
 }
 
 Reference< XAccessible > SAL_CALL AccessibleGridControlTable::getAccessibleCellAt(

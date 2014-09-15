@@ -494,7 +494,7 @@ throw(RuntimeException, std::exception)
         sal_Int32 nLen = nEndIndex - nStartIndex + 1;
         ::svt::OStringTransfer::CopyString( sText.copy( nStartIndex, nLen ), m_pIconCtrl );
 
-        return sal_True;
+        return true;
     }
 
     // XAccessibleEventBroadcaster
@@ -543,7 +543,7 @@ throw(RuntimeException, std::exception)
         if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return sal_False;
+        return false;
     }
     sal_Unicode SAL_CALL AccessibleIconChoiceCtrlEntry::getCharacter( sal_Int32 nIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException, std::exception)
     {
@@ -603,7 +603,7 @@ throw(RuntimeException, std::exception)
         if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
             throw IndexOutOfBoundsException();
 
-        return sal_False;
+        return false;
     }
     OUString SAL_CALL AccessibleIconChoiceCtrlEntry::getText(  ) throw (::com::sun::star::uno::RuntimeException, std::exception)
     {

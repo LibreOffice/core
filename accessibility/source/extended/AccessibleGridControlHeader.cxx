@@ -175,14 +175,14 @@ Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibl
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 /*nRow*/ )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    return sal_False;
+    return false;
 }
 //columns aren't selectable
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     (void)nColumn;
-    return sal_False;
+    return false;
 }
 //not implemented
 Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCellAt(
@@ -196,7 +196,7 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
         sal_Int32 /*nRow*/, sal_Int32 /*nColumn */)
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    return sal_False;
+    return false;
 }
 
 // XServiceInfo ---------------------------------------------------------------

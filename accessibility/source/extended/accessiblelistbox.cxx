@@ -136,7 +136,7 @@ namespace accessibility
                             /*
                               ImplSVData* pSVData = ImplGetAppSVData();
                               if (pSVData && pSVData->maWinData.mpFirstFloat == (FloatingWindow*)pParent)
-                              bNeedFocus = sal_True;
+                              bNeedFocus = true;
                             */
                         }
                     }

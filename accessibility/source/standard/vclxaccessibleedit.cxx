@@ -589,7 +589,7 @@ sal_Bool VCLXAccessibleEdit::setAttributes( sal_Int32 nStartIndex, sal_Int32 nEn
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;   // attributes cannot be set for an edit
+    return false;   // attributes cannot be set for an edit
 }
 
 

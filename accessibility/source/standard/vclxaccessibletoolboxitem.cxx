@@ -441,7 +441,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::setCaretPosition( sal_Int32 nIndex 
     if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 Sequence< PropertyValue > SAL_CALL VCLXAccessibleToolBoxItem::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -503,7 +503,7 @@ sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::setSelection( sal_Int32 nStartIndex
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 sal_Bool SAL_CALL VCLXAccessibleToolBoxItem::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -642,7 +642,7 @@ sal_Bool VCLXAccessibleToolBoxItem::doAccessibleAction ( sal_Int32 nIndex ) thro
     if ( m_pToolBox )
         m_pToolBox->TriggerItem( m_nItemId );
 
-    return sal_True;
+    return true;
 }
 
 OUString VCLXAccessibleToolBoxItem::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)

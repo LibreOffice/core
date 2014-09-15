@@ -414,7 +414,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setCaretPosition( sal_Int32 nIndex ) t
     if ( !implIsValidRange( nIndex, nIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 sal_Unicode SAL_CALL VCLXAccessibleListItem::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
@@ -517,7 +517,7 @@ sal_Bool SAL_CALL VCLXAccessibleListItem::setSelection( sal_Int32 nStartIndex, s
     if ( !implIsValidRange( nStartIndex, nEndIndex, implGetText().getLength() ) )
         throw IndexOutOfBoundsException();
 
-    return sal_False;
+    return false;
 }
 
 OUString SAL_CALL VCLXAccessibleListItem::getText() throw (RuntimeException, std::exception)

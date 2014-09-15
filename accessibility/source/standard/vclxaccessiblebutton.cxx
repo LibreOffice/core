@@ -200,7 +200,7 @@ sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (In
     if ( pButton )
         pButton->Click();
 
-    return sal_True;
+    return true;
 }
 
 
