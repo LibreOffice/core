@@ -770,15 +770,14 @@ SotStorageStream * SotStorage::OpenSotStream( const OUString & rEleName,
 
 SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
                                          StreamMode nMode,
-                                         StorageMode nStorageMode )
+                                         bool transacted )
 {
     DBG_ASSERT( Owner(), "must be owner" );
     if( m_pOwnStg )
     {
         nMode |= STREAM_SHARE_DENYALL;
         ErrCode nE = m_pOwnStg->GetError();
-        BaseStorage * p = m_pOwnStg->OpenStorage( rEleName, nMode,
-                        (nStorageMode & STORAGE_TRANSACTED) ? false : true );
+        BaseStorage * p = m_pOwnStg->OpenStorage(rEleName, nMode, !transacted);
         if( p )
         {
             SotStorage * pStor = new SotStorage( p );

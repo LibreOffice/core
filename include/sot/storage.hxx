@@ -196,7 +196,7 @@ public:
                                        StorageMode = 0 );
     SotStorage *        OpenSotStorage( const OUString & rEleName,
                                         StreamMode = STREAM_STD_READWRITE,
-                                        StorageMode = STORAGE_TRANSACTED );
+                                        bool transacted = true );
                         // Abfrage auf Storage oder Stream
     virtual bool        IsStream( const OUString & rEleName ) const;
     virtual bool        IsStorage( const OUString & rEleName ) const;
