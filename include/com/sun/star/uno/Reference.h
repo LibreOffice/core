@@ -136,7 +136,7 @@ enum UnoReference_Query
 {
     /** This enum value can be used for implicit interface query.
     */
-    UNO_QUERY,
+    UNO_QUERY
 };
 /** Enum defining UNO_QUERY_THROW for implicit interface query.
     If the demanded interface is unavailable, then a RuntimeException is thrown.
@@ -145,7 +145,7 @@ enum UnoReference_QueryThrow
 {
     /** This enum value can be used for implicit interface query.
     */
-    UNO_QUERY_THROW,
+    UNO_QUERY_THROW
 };
 /** Enum defining UNO_SET_THROW for throwing if attempts are made to assign a null
     interface
