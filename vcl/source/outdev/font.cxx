@@ -252,7 +252,7 @@ bool OutputDevice::GetFontCapabilities( FontCapabilities& rFontCapabilities ) co
     if( !mpFontEntry )
         return false;
 
-    return mpGraphics->GetImplFontCapabilities(rFontCapabilities);
+    return mpGraphics->GetFontCapabilities(rFontCapabilities);
 }
 
 SystemFontData OutputDevice::GetSysFontData(int nFallbacklevel) const

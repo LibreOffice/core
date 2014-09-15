@@ -786,7 +786,7 @@ const ImplFontCharMap* GenPspGraphics::GetImplFontCharMap() const
     return pIFCMap;
 }
 
-bool GenPspGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool GenPspGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if (!m_pServerFont[0])
         return false;

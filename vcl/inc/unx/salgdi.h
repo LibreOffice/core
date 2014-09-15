@@ -230,7 +230,7 @@ public:
     virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
     virtual const ImplFontCharMap* GetImplFontCharMap() const SAL_OVERRIDE;
-    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
+    virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
     virtual void ClearDevFontCache() SAL_OVERRIDE;
     virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) SAL_OVERRIDE;
