@@ -103,6 +103,7 @@ boost_patches += boost.auto_link.patch
 boost_patches += boost.std.move.patch
 boost_patches += boost.wunused.patch
 boost_patches += boost.wdeprecated-auto_ptr.patch.0
+boost_patches += boost.signal2.Wshadow.warnings.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 

@@ -1,0 +1,15 @@
+--- misc/boost_1_44_0/boost/signals2/detail/slot_template.hpp
++++ misc/build/boost_1_44_0/boost/signals2/detail/slot_template.hpp
+@@ -117,10 +117,10 @@
+         track_signal(signal);
+         return *this;
+       }
+-      BOOST_SIGNALS2_SLOT_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS)& track(const slot_base &slot)
++      BOOST_SIGNALS2_SLOT_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS)& track(const slot_base &slotitem)
+       {
+         tracked_container_type::const_iterator it;
+-        for(it = slot.tracked_objects().begin(); it != slot.tracked_objects().end(); ++it)
++        for(it = slotitem.tracked_objects().begin(); it != slotitem.tracked_objects().end(); ++it)
+         {
+           _tracked_objects.push_back(*it);
+         }
