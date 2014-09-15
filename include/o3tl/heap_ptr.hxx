@@ -23,7 +23,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
-
+#include <sal/types.h>
 
 namespace o3tl
 {
@@ -72,7 +72,7 @@ namespace o3tl
     complain.
 */
 template <class T, class Deleter = boost::checked_deleter<T> >
-class heap_ptr
+class SAL_WARN_UNUSED heap_ptr
 {
   public:
     typedef T               element_type;       /// Provided for generic programming.

@@ -138,6 +138,7 @@ class heap_ptr_test : public CppUnit::TestFixture
         {
             heap_ptr<Help>
                 t_raii( new Help(55) );
+            (void)t_raii;
             CPPUNIT_ASSERT_MESSAGE("raii1", Help::InstanceCount_() == nHelpCount + 1);
         }
         CPPUNIT_ASSERT_MESSAGE("raii2", Help::InstanceCount_() == nHelpCount);
