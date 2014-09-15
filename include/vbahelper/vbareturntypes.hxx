@@ -55,7 +55,7 @@ namespace ooo
         class ReturnBoolean : public ReturnBoolean_BASE
         {
             public:
-            ReturnBoolean( sal_Bool nValue ) : ReturnBoolean_BASE( nValue ){}
+            ReturnBoolean( bool nValue ) : ReturnBoolean_BASE( nValue ){}
         };
         typedef DefaultReturnHelper< float, ov::msforms::XReturnSingle > ReturnSingle_BASE;
         class ReturnSingle : public ReturnSingle_BASE
