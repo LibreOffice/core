@@ -82,10 +82,11 @@ public class LibreOfficeMainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         mAppContext = this;
-
-        mMainHandler = new Handler();
-
         super.onCreate(savedInstanceState);
+
+        if (mMainHandler == null) {
+            mMainHandler = new Handler();
+        }
 
         String inputFile;
 
@@ -100,13 +101,20 @@ public class LibreOfficeMainActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setHomeButtonEnabled(false);
 
-        mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        if (mGeckoLayout == null) {
+            mGeckoLayout = (RelativeLayout) findViewById(R.id.gecko_layout);
+        }
+        if (mDrawerLayout == null) {
+            mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        }
 
-        mDocumentPartViewListAdpater = new DocumentPartViewListAdpater(this, R.layout.document_part_list_layout, mDocumentPartView);
-        mDrawerList.setAdapter(mDocumentPartViewListAdpater);
-        mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
+        if (mDocumentPartViewListAdpater == null) {
+            mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
+            mDocumentPartViewListAdpater = new DocumentPartViewListAdpater(this, R.layout.document_part_list_layout, mDocumentPartView);
+            mDrawerList.setAdapter(mDocumentPartViewListAdpater);
+            mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
+        }
 
         if (mLayerController == null) {
             mLayerController = new LayerController(this);
@@ -119,28 +127,23 @@ public class LibreOfficeMainActivity extends Activity {
             mGeckoLayout.addView(mLayerController.getView(), 0);
         }
 
-        sLOKitThread = new LOKitThread(inputFile);
-        sLOKitThread.start();
+        if (sLOKitThread == null) {
+            sLOKitThread = new LOKitThread(inputFile);
+            sLOKitThread.start();
+        }
 
         Log.w(LOGTAG, "UI almost up");
     }
 
-    private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            DocumentPartView partView = mDocumentPartViewListAdpater.getItem(position);
-            LOKitShell.sendEvent(LOEvent.changePart(partView.getPartIndex()));
-            mDrawerLayout.closeDrawer(mDrawerList);
-        }
-    }
-
     @Override
     protected void onResume() {
+        Log.i(LOGTAG, "Resume..");
         super.onResume();
     }
 
     @Override
     protected void onPause() {
+        Log.i(LOGTAG, "Pause..");
         super.onPause();
     }
 
@@ -151,8 +154,18 @@ public class LibreOfficeMainActivity extends Activity {
     public List<DocumentPartView> getDocumentPartView() {
         return mDocumentPartView;
     }
+
     public DocumentPartViewListAdpater getDocumentPartViewListAdpater() {
         return mDocumentPartViewListAdpater;
+    }
+
+    private class DocumentPartClickListener implements android.widget.AdapterView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            DocumentPartView partView = mDocumentPartViewListAdpater.getItem(position);
+            LOKitShell.sendEvent(LOEvent.changePart(partView.getPartIndex()));
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
     }
 }
 
