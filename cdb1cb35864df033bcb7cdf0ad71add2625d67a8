@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dae975fb_d135c4f7",
+        "filename": "forms/source/component/FormattedField.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-15T19:26:49Z",
+      "side": 1,
+      "message": "\"submit asynchron ausloesen\" \u003d\u003e trigger submit asynchron",
+      "range": {
+        "startLine": 232,
+        "startChar": 29,
+        "endLine": 232,
+        "endChar": 33
+      },
+      "revId": "cdb1cb35864df033bcb7cdf0ad71add2625d67a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
