@@ -187,7 +187,7 @@ class SW_DLLPUBLIC SwPagePreview: public SfxViewShell
     SAL_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
     SAL_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
     SAL_DLLPRIVATE DECL_LINK( BtnPage, Button * );
-    SAL_DLLPRIVATE bool            ChgPage( int eMvMode, int bUpdateScrollbar = sal_True );
+    SAL_DLLPRIVATE bool            ChgPage( int eMvMode, bool bUpdateScrollbar = true );
 
     SAL_DLLPRIVATE virtual SfxPrinter*     GetPrinter( bool bCreate = false ) SAL_OVERRIDE;
     SAL_DLLPRIVATE virtual sal_uInt16      SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false ) SAL_OVERRIDE;
@@ -235,7 +235,7 @@ public:
     void            DocSzChgd(const Size& rNewSize);
     const Size&     GetDocSz() const { return aDocSz; }
 
-    virtual void    SetVisArea( const Rectangle&, sal_Bool bUpdateScrollbar = sal_True);
+    virtual void    SetVisArea( const Rectangle&, bool bUpdateScrollbar = true);
 
     inline void     AdjustEditWin();
 

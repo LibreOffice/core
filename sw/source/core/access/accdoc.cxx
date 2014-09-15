@@ -99,7 +99,7 @@ void SwAccessibleDocumentBase::SetVisArea()
     }
 }
 
-void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
+void SwAccessibleDocumentBase::AddChild( Window *pWin, bool bFireEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -369,7 +369,7 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
             Window* pChildWin = pWin->GetChild( i );
             if( pChildWin &&
                 AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
-                AddChild( pChildWin, sal_False );
+                AddChild( pChildWin, false );
         }
     }
 }

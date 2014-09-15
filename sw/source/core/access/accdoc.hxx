@@ -48,7 +48,7 @@ public:
 
     void SetVisArea();
 
-    virtual void AddChild( Window *pWin, sal_Bool bFireEvent = sal_True );
+    virtual void AddChild( Window *pWin, bool bFireEvent = true );
     virtual void RemoveChild( Window *pWin );
 
     // XAccessibleContext

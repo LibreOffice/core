@@ -609,7 +609,7 @@ void SwPagePreview::_ExecPgUpAndPgDown( const bool  _bPgUp,
             const int eMvMode = _bPgUp ?
                                 SwPagePreviewWin::MV_PAGE_UP :
                                 SwPagePreviewWin::MV_PAGE_DOWN;
-            if ( ChgPage( eMvMode, sal_True ) )
+            if ( ChgPage( eMvMode, true ) )
                 pViewWin->Invalidate();
         }
         else
@@ -839,7 +839,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
                 {
                     pViewWin->SetSelectedPage( nNewSelectedPage );
                     pViewWin->SetSttPage( nNewStartPage );
-                    bRefresh = ChgPage( SwPagePreviewWin::MV_SELPAGE, sal_True );
+                    bRefresh = ChgPage( SwPagePreviewWin::MV_SELPAGE, true );
                 }
                 GetViewShell()->ShowPreviewSelection( nNewSelectedPage );
                 // invalidate page status.
@@ -873,7 +873,7 @@ void  SwPagePreview::Execute( SfxRequest &rReq )
             eMvMode = SwPagePreviewWin::MV_DOC_END; bRetVal = true; goto MOVEPAGE;
 MOVEPAGE:
             {
-                bool nRet = ChgPage( eMvMode, sal_True );
+                bool nRet = ChgPage( eMvMode, true );
                 // return value fuer Basic
                 if(bRetVal)
                     rReq.SetReturnValue(SfxBoolItem(rReq.GetSlot(), !nRet));
@@ -1255,7 +1255,7 @@ int SwPagePreview::_CreateScrollbar( bool bHori )
     return 1;
 }
 
-bool SwPagePreview::ChgPage( int eMvMode, int bUpdateScrollbar )
+bool SwPagePreview::ChgPage( int eMvMode, bool bUpdateScrollbar )
 {
     Rectangle aPixVisArea( pViewWin->LogicToPixel( aVisArea ) );
     bool bChg = pViewWin->MovePage( eMvMode ) ||
@@ -1336,7 +1336,7 @@ void SwPagePreview::OuterResizePixel( const Point &rOfst, const Size &rSize )
                     *pVScrollbar, *pHScrollbar, *pScrollFill );
 }
 
-void SwPagePreview::SetVisArea( const Rectangle &rRect, sal_Bool bUpdateScrollbar )
+void SwPagePreview::SetVisArea( const Rectangle &rRect, bool bUpdateScrollbar )
 {
     const Point aTopLeft(AlignToPixel(rRect.TopLeft()));
     const Point aBottomRight(AlignToPixel(rRect.BottomRight()));
@@ -1453,7 +1453,7 @@ IMPL_LINK( SwPagePreview, EndScrollHdl, SwScrollbar *, pScrollbar )
                     {
                         pViewWin->SetSttPage( nThmbPos );
                         pViewWin->SetSelectedPage( nThmbPos );
-                        ChgPage( SwPagePreviewWin::MV_SCROLL, sal_False );
+                        ChgPage( SwPagePreviewWin::MV_SCROLL, false );
                         // update scrollbars
                         ScrollViewSzChg();
                     }
@@ -1527,7 +1527,7 @@ void SwPagePreview::DocSzChgd( const Size &rSz )
 
     if( aVisArea.GetWidth() )
     {
-        ChgPage( SwPagePreviewWin::MV_CALC, sal_True );
+        ChgPage( SwPagePreviewWin::MV_CALC, true );
         ScrollDocSzChg();
 
         pViewWin->Invalidate();
