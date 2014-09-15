@@ -37,6 +37,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uri.XUriReference;
 import com.sun.star.uri.XUriReferenceFactory;
 import com.sun.star.uri.XVndSunStarScriptUrl;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The <code>ParcelContainer</code> object is used to store the
@@ -126,12 +128,21 @@ public class ParcelContainer implements XNameAccess
         ParcelContainer result = null;
         for (ParcelContainer c : childContainers)
         {
-            String location = ScriptMetaData.getLocationPlaceHolder(
-                c.containerUrl, c.getName());
-            if ( key.equals( location ) )
+            try
             {
-                result = c;
-                break;
+                String location = ScriptMetaData.getLocationPlaceHolder(
+                        c.containerUrl, c.getName());
+                if ( key.equals( location ) )
+                {
+                    result = c;
+                    break;
+                }
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+                e2.initCause(e);
+                throw e2;
             }
         }
         return result;
@@ -168,14 +179,14 @@ public class ParcelContainer implements XNameAccess
      * @return    name of <tt>ParcelContainer</tt>
      * found.
      */
-    public String getName()
+    public String getName() throws UnsupportedEncodingException
     {
         String name = null;
         // TODO handler package ParcelContainer?
         if (  !containerUrl.startsWith( "vnd.sun.star.tdoc:" ) )
         {
             // return name
-            String decodedUrl = java.net.URLDecoder.decode( containerUrl );
+            String decodedUrl = java.net.URLDecoder.decode( containerUrl, "UTF-8" );
             int indexOfSlash = decodedUrl.lastIndexOf('/');
             if ( indexOfSlash != -1 )
             {
