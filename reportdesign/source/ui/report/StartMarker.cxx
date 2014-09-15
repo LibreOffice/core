@@ -274,7 +274,7 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
     }
 }
 
-void OStartMarker::setCollapsed(sal_Bool _bCollapsed)
+void OStartMarker::setCollapsed(bool _bCollapsed)
 {
     OColorListener::setCollapsed(_bCollapsed);
     showRuler(_bCollapsed);

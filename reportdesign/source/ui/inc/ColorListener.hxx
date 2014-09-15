@@ -69,7 +69,7 @@ namespace rptui
          *
          * \param _bCollapsed
          */
-        virtual void    setCollapsed(sal_Bool _bCollapsed);
+        virtual void    setCollapsed(bool _bCollapsed);
     };
 }
 #endif // INCLUDED_REPORTDESIGN_SOURCE_UI_INC_COLORLISTENER_HXX

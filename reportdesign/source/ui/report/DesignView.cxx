@@ -273,7 +273,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
 }
 
 // set the view readonly or not
-void ODesignView::setReadOnly(sal_Bool /*_bReadOnly*/)
+void ODesignView::setReadOnly(bool /*_bReadOnly*/)
 {
 }
 

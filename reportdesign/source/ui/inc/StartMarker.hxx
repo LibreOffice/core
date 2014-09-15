@@ -67,7 +67,7 @@ namespace rptui
         */
         void            showRuler(bool _bShow);
 
-        virtual void    setCollapsed(sal_Bool _bCollapsed) SAL_OVERRIDE;
+        virtual void    setCollapsed(bool _bCollapsed) SAL_OVERRIDE;
 
         /** zoom the ruler and view windows
         */

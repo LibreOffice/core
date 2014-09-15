@@ -66,9 +66,9 @@ void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void OColorListener::setCollapsed(sal_Bool _bCollapsed)
+void OColorListener::setCollapsed(bool _bCollapsed)
 {
-    if ( (m_bCollapsed ? 1 : 0) != _bCollapsed )
+    if ( m_bCollapsed != _bCollapsed )
     {
         m_bCollapsed = _bCollapsed;
         if ( m_aCollapsedLink.IsSet() )
