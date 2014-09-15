@@ -1494,16 +1494,6 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     return sRet;
 }
 
-OUString StyleSheetTable::GetStyleIdFromIndex(const sal_uInt32 sti)
-{
-    OUString sRet;
-    if (sti >= (sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2))
-        sRet = OUString();
-    else
-        sRet = OUString::createFromAscii(aStyleNamePairs[2 * sti]);
-    return sRet;
-}
-
 void StyleSheetTable::applyDefaults(bool bParaProperties)
 {
     try{

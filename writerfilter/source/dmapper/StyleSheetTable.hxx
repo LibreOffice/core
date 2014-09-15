@@ -101,7 +101,6 @@ public:
     const StyleSheetEntryPtr FindParentStyleSheet(const OUString& sBaseStyle);
 
     OUString ConvertStyleName( const OUString& rWWName, bool bExtendedSearch = false );
-    OUString GetStyleIdFromIndex(const sal_uInt32 sti);
 
     OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
 
