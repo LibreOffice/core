@@ -24,7 +24,7 @@
 #include <vbahelper/vbahelperinterface.hxx>
 #include "excelvbahelper.hxx"
 
-typedef InheritedHelperInterfaceImpl1< ov::excel::XPane > ScVbaPane_BASE;
+typedef cppu::WeakImplHelper1< ov::excel::XPane > ScVbaPane_BASE;
 
 class ScVbaPane : public ScVbaPane_BASE
 {
@@ -48,12 +48,13 @@ public:
     virtual void SAL_CALL SmallScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
     virtual void SAL_CALL LargeScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-    // XHelperInterface
-    VBAHELPER_DECL_XHELPERINTERFACE
-
 protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::sheet::XViewPane > m_xViewPane;
+
+private:
+    css::uno::WeakReference< ov::XHelperInterface > m_xParent;
+    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAPANE_HXX

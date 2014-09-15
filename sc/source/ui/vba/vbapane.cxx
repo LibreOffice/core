@@ -31,9 +31,10 @@ ScVbaPane::ScVbaPane(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< frame::XModel >& xModel,
         const uno::Reference< sheet::XViewPane > xViewPane ) throw (uno::RuntimeException) :
-    ScVbaPane_BASE( xParent, xContext ),
     m_xModel( xModel, uno::UNO_SET_THROW ),
-    m_xViewPane( xViewPane, uno::UNO_SET_THROW )
+    m_xViewPane( xViewPane, uno::UNO_SET_THROW ),
+    m_xParent(xParent),
+    m_xContext(xContext)
 {
 }
 
@@ -78,8 +79,8 @@ ScVbaPane::getVisibleRange() throw (uno::RuntimeException, std::exception)
     uno::Reference< container::XIndexAccess > xSheetsIA( xDoc->getSheets(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet( xSheetsIA->getByIndex( aRangeAddr.Sheet ), uno::UNO_QUERY_THROW );
     uno::Reference< table::XCellRange > xRange( xSheet->getCellRangeByPosition( aRangeAddr.StartColumn, aRangeAddr.StartRow, aRangeAddr.EndColumn, aRangeAddr.EndRow ), uno::UNO_SET_THROW );
-    // TODO: getParent() returns the window, Range needs the worksheet
-    return new ScVbaRange( getParent(), mxContext, xRange );
+    // TODO: m_xParent is the window, Range needs the worksheet
+    return new ScVbaRange( m_xParent, m_xContext, xRange );
 }
 
 //Method
@@ -190,9 +191,5 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
     m_xViewPane->setFirstVisibleRow( newStartRow );
     m_xViewPane->setFirstVisibleColumn( newStartCol );
 }
-
-// XHelperInterface
-
-VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaPane, "ooo.vba.excel.Pane" )
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
