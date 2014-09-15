@@ -175,39 +175,6 @@ Menu::~Menu()
     ImplSetSalMenu( NULL );
 }
 
-void Menu::ImplLoadRes( const ResId& rResId )
-{
-    ResMgr* pMgr = rResId.GetResMgr();
-    if( ! pMgr )
-        return;
-
-    rResId.SetRT( RSC_MENU );
-    GetRes( rResId );
-
-    sal_uLong nObjMask = ReadLongRes();
-
-    if( nObjMask & RSC_MENU_ITEMS )
-    {
-        sal_uLong nObjFollows = ReadLongRes();
-        // insert menu items
-        for( sal_uLong i = 0; i < nObjFollows; i++ )
-        {
-            InsertItem( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
-            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
-        }
-    }
-
-    if( nObjMask & RSC_MENU_TEXT )
-    {
-        if (IsMenuBar()) // no title in menubar
-            ReadStringRes();
-        else
-            aTitleText = ReadStringRes();
-    }
-    if( nObjMask & RSC_MENU_DEFAULTITEMID )
-        SetDefaultItem( sal::static_int_cast<sal_uInt16>(ReadLongRes()) );
-}
-
 void Menu::CreateAutoMnemonics()
 {
     MnemonicGenerator aMnemonicGenerator;
@@ -2691,7 +2658,33 @@ PopupMenu::PopupMenu( const ResId& rResId )
     : pRefAutoSubMenu(NULL)
 {
     mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu(false, this);
-    ImplLoadRes( rResId );
+
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( ! pMgr )
+        return;
+
+    rResId.SetRT( RSC_MENU );
+    GetRes( rResId );
+
+    sal_uLong nObjMask = ReadLongRes();
+
+    if( nObjMask & RSC_MENU_ITEMS )
+    {
+        sal_uLong nObjFollows = ReadLongRes();
+        // insert menu items
+        for( sal_uLong i = 0; i < nObjFollows; i++ )
+        {
+            InsertItem( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
+            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
+        }
+    }
+
+    if( nObjMask & RSC_MENU_TEXT )
+    {
+        aTitleText = ReadStringRes();
+    }
+    if( nObjMask & RSC_MENU_DEFAULTITEMID )
+        SetDefaultItem( sal::static_int_cast<sal_uInt16>(ReadLongRes()) );
 }
 
 PopupMenu::PopupMenu( const PopupMenu& rMenu )

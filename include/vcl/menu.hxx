@@ -153,7 +153,6 @@ private:
     SalMenu*            mpSalMenu;
 
 protected:
-    SAL_DLLPRIVATE void             ImplLoadRes( const ResId& rResId );
     SAL_DLLPRIVATE Menu*            ImplGetStartMenu();
     SAL_DLLPRIVATE Menu*            ImplFindSelectMenu();
     SAL_DLLPRIVATE Menu*            ImplFindMenu( sal_uInt16 nId );
