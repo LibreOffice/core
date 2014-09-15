@@ -101,7 +101,7 @@ void    XFList::ToXml(IXFStream *pStrm)
         pStrm->EndElement( "text:unordered-list" );
 }
 
-void    XFList::StartList(IXFStream *pStrm, sal_Bool bContinueNumber)
+void    XFList::StartList(IXFStream *pStrm, bool bContinueNumber)
 {
     IXFAttrList *pAttrList = pStrm->GetAttrList();
     assert(NULL!=pAttrList);

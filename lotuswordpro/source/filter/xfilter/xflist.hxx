@@ -92,7 +92,7 @@ public:
      */
     virtual void    ToXml(IXFStream *pStrm) SAL_OVERRIDE;
 
-    virtual void    StartList(IXFStream *pStrm, sal_Bool bContinueNumber = sal_False);
+    virtual void    StartList(IXFStream *pStrm, bool bContinueNumber = false);
 
     virtual void    EndList(IXFStream *pStrm);
 
