@@ -154,7 +154,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
 sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& ) throw( RuntimeException, std::exception )
 {
     // This object has NO model.
-    return sal_False;
+    return false;
 }
 
 //  XControl

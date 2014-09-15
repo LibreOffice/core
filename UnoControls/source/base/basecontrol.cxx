@@ -377,7 +377,7 @@ sal_Bool SAL_CALL BaseControl::isDesignMode() throw( RuntimeException, std::exce
 
 sal_Bool SAL_CALL BaseControl::isTransparent() throw( RuntimeException, std::exception )
 {
-    return sal_False;
+    return false;
 }
 
 //  XWindow

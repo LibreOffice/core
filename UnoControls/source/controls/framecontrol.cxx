@@ -181,7 +181,7 @@ void SAL_CALL FrameControl::createPeer( const   Reference< XToolkit >&      xToo
 sal_Bool SAL_CALL FrameControl::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException, std::exception )
 {
     // We have no model.
-    return sal_False;
+    return false;
 }
 
 //  XControl
@@ -205,7 +205,7 @@ void SAL_CALL FrameControl::dispose() throw( RuntimeException, std::exception )
 sal_Bool SAL_CALL FrameControl::setGraphics( const Reference< XGraphics >& /*xDevice*/ ) throw( RuntimeException, std::exception )
 {
     // it is not possible to print this control
-    return sal_False;
+    return false;
 }
 
 //  XView
@@ -356,7 +356,7 @@ IPropertyArrayHelper& FrameControl::getInfoHelper()
 
         if (!pInfo)
         {
-            pInfo = new OPropertyArrayHelper( impl_getStaticPropertyDescriptor(), sal_True );
+            pInfo = new OPropertyArrayHelper( impl_getStaticPropertyDescriptor(), true );
         }
     }
 
@@ -447,7 +447,7 @@ void FrameControl::impl_createFrame(    const   Reference< XWindowPeer >&   xPee
     Any aNewFrame ( &xNewFrame, cppu::UnoType<XFrame>::get());
     Any aOldFrame ( &xOldFrame, cppu::UnoType<XFrame>::get());
 
-    fire ( &nFrameId, &aNewFrame, &aOldFrame, 1, sal_False );
+    fire ( &nFrameId, &aNewFrame, &aOldFrame, 1, false );
 
     if (xOldFrame.is())
     {
@@ -473,7 +473,7 @@ void FrameControl::impl_deleteFrame()
     sal_Int32 nFrameId = PROPERTYHANDLE_FRAME;
     Any aNewFrame( &xNullFrame, cppu::UnoType<XFrame2>::get());
     Any aOldFrame( &xOldFrame, cppu::UnoType<XFrame2>::get());
-    fire( &nFrameId, &aNewFrame, &aOldFrame, 1, sal_False );
+    fire( &nFrameId, &aNewFrame, &aOldFrame, 1, false );
 
     // dispose the frame
     if( xOldFrame.is() )

@@ -413,11 +413,11 @@ private:
 
 private:
     ::std::vector < IMPL_TextlistItem* >        maTextlist_Top;         // Elements before progress
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Top;   // (used, if parameter "beforeProgress"=sal_True in "addText, updateText, removeText")
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Top;   // (used, if parameter "beforeProgress"=true in "addText, updateText, removeText")
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Top;
 
     ::std::vector < IMPL_TextlistItem* >        maTextlist_Bottom;      // Elements below of progress
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Bottom;   // (used, if parameter "beforeProgress"=sal_False in "addText, updateText, removeText")
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xTopic_Bottom;   // (used, if parameter "beforeProgress"=false in "addText, updateText, removeText")
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedText >   m_xText_Bottom;
 
     rtl::Reference<ProgressBar> m_xProgressBar;

@@ -294,7 +294,7 @@ void SAL_CALL ProgressBar::setPosSize (
 sal_Bool SAL_CALL ProgressBar::setModel( const Reference< XControlModel >& /*xModel*/ ) throw( RuntimeException, std::exception )
 {
     // A model is not possible for this control.
-    return sal_False;
+    return false;
 }
 
 //  XControl

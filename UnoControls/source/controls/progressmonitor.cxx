@@ -84,7 +84,7 @@ ProgressMonitor::ProgressMonitor( const css::uno::Reference< XComponentContext >
 
     // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
-    m_xProgressBar->setVisible( sal_True );
+    m_xProgressBar->setVisible( true );
 
     // Reset to defaults !!!
     // (progressbar take automatically its own defaults)
@@ -227,7 +227,7 @@ void SAL_CALL ProgressMonitor::addText(
         MutexGuard aGuard ( m_aMutex );
 
         // ... and insert it in right list.
-        if ( bbeforeProgress == sal_True )
+        if ( bbeforeProgress )
         {
             maTextlist_Top.push_back( pTextItem );
         }
@@ -258,7 +258,7 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
         MutexGuard aGuard ( m_aMutex );
 
         // ... delete item from right list ...
-        if ( bbeforeProgress == sal_True )
+        if ( bbeforeProgress )
         {
             vector< IMPL_TextlistItem* >::iterator
                 itr = find( maTextlist_Top.begin(), maTextlist_Top.end(), pSearchItem );
@@ -477,7 +477,7 @@ void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit 
 sal_Bool SAL_CALL ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException, std::exception )
 {
     // We have no model.
-    return sal_False;
+    return false;
 }
 
 //  XControl
@@ -890,7 +890,7 @@ bool ProgressMonitor::impl_debug_checkParameter (
 
     // "bbeforeProgress" is valid in everyway!
 
-    // Parameter OK ... return sal_True.
+    // Parameter OK ... return true.
     return true;
 }
 
@@ -901,7 +901,7 @@ bool ProgressMonitor::impl_debug_checkParameter ( const OUString& rTopic, bool /
 
     // "bbeforeProgress" is valid in everyway!
 
-    // Parameter OK ... return sal_True.
+    // Parameter OK ... return true.
     return true;
 }
 

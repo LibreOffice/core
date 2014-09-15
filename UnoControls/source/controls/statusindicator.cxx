@@ -57,7 +57,7 @@ StatusIndicator::StatusIndicator( const css::uno::Reference< XComponentContext >
     addControl( CONTROLNAME_PROGRESSBAR, m_xProgressBar.get() );
     // FixedText make it automatically visible by himself ... but not the progressbar !!!
     // it must be set explicitly
-    m_xProgressBar->setVisible( sal_True );
+    m_xProgressBar->setVisible( true );
     // Reset to defaults !!!
     // (progressbar take automatically its own defaults)
     m_xText->setText( STATUSINDICATOR_DEFAULT_TEXT );
@@ -188,7 +188,7 @@ void SAL_CALL StatusIndicator::end() throw( RuntimeException, std::exception )
     // Clear values of status controls.
     m_xText->setText( OUString() );
     m_xProgressBar->setValue( 0 );
-    setVisible( sal_False );
+    setVisible( false );
 }
 
 //  XStatusIndicator
@@ -295,7 +295,7 @@ void SAL_CALL StatusIndicator::createPeer (
 sal_Bool SAL_CALL StatusIndicator::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException, std::exception )
 {
     // We have no model.
-    return sal_False;
+    return false;
 }
 
 //  XControl
