@@ -393,7 +393,7 @@ CreateStream(uno::Reference<embed::XStorage> const& xStorage,
             //but currently xmloff has this one hardcoded anyway...
             "application/vnd.sun.star.media")));
         xStreamProps->setPropertyValue( // turn off compression
-            "Compressed", uno::makeAny(sal_False));
+            "Compressed", uno::makeAny(false));
     }
     return xStream;
 }

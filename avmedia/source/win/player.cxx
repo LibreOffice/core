@@ -97,7 +97,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mnFrameWnd( 0 ),
     mbMuted( false ),
     mbLooping( false ),
-    mbAddWindow( sal_True )
+    mbAddWindow( true )
 {
     ::CoInitialize( NULL );
 }
@@ -201,7 +201,7 @@ const IVideoWindow* Player::getVideoWindow() const
 
 void Player::setNotifyWnd( int nNotifyWnd )
 {
-    mbAddWindow = sal_False;
+    mbAddWindow = false;
     if( mpME )
         mpME->SetNotifyWindow( (OAHWND) nNotifyWnd, WM_GRAPHNOTIFY, reinterpret_cast< LONG_PTR>( this ) );
 }

@@ -35,7 +35,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mxMgr( rxMgr ),
     mpMovie( nil ),
     /* GST
-    mbFakeVideo (sal_False ),
+    mbFakeVideo (false ),
     */
     mnUnmutedVolume( 0 ),
     mnStopTime( DBL_MAX ),  //max double

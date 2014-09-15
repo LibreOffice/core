@@ -294,11 +294,11 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
         // for video link should be the default
         xCtrlAcc->setValue(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0,
-                uno::makeAny(sal_True) );
+                uno::makeAny(true) );
         // disabled for now: TODO: preview?
         xCtrlAcc->enableControl(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW,
-                sal_False);
+                false);
     }
 
     if( aDlg.Execute() == ERRCODE_NONE )
