@@ -133,7 +133,7 @@ XMLTransformerContext *XMLPersElemContentTContext::CreateChildContext(
             break;
         default:
             pContext = GetTransformer().CreateUserDefinedContext(
-                            (*aIter).second, rQName, sal_True );
+                            (*aIter).second, rQName, true );
             OSL_ENSURE( pContext && pContext->IsPersistent(),
                         "unknown or not persistent action" );
             if( pContext && !pContext->IsPersistent() )

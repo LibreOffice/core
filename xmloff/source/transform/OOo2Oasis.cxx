@@ -1545,7 +1545,7 @@ void XMLTableOOoTransformerContext_Impl::EndElement()
 XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
                               const TransformerAction_Impl& rAction,
                               const OUString& rQName,
-                                 sal_Bool bPersistent   )
+                                 bool bPersistent   )
 {
     switch( rAction.m_nActionType )
     {
@@ -1775,7 +1775,7 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
     return pActions;
 }
 
-OUString OOo2OasisTransformer::GetEventName( const OUString& rName, sal_Bool )
+OUString OOo2OasisTransformer::GetEventName( const OUString& rName, bool )
 {
     if( !m_pEventMap )
         m_pEventMap = XMLEventOOoTransformerContext::CreateEventMap();

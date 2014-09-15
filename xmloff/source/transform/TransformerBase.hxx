@@ -134,9 +134,9 @@ public:
     virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
                                       const OUString& rQName,
-                                         sal_Bool bPersistent=sal_False ) = 0;
+                                         bool bPersistent=false ) = 0;
     virtual OUString GetEventName( const OUString& rName,
-                                             sal_Bool bForm = sal_False ) = 0;
+                                             bool bForm = false ) = 0;
 
 
     XMLMutableAttributeList *ProcessAttrList( ::com::sun::star::uno::Reference<

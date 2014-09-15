@@ -1623,7 +1623,7 @@ void XMLTrackedChangesOASISTContext_Impl::StartElement(
 XMLTransformerContext *Oasis2OOoTransformer::CreateUserDefinedContext(
                               const TransformerAction_Impl& rAction,
                               const OUString& rQName,
-                                 sal_Bool bPersistent )
+                                 bool bPersistent )
 {
     switch( rAction.m_nActionType )
     {
@@ -1893,7 +1893,7 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
 }
 
 OUString Oasis2OOoTransformer::GetEventName( const OUString& rName,
-                                             sal_Bool bForm )
+                                             bool bForm )
 {
     if( bForm && !m_pFormEventMap )
         m_pFormEventMap =

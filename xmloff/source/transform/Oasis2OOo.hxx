@@ -36,7 +36,7 @@ protected:
     virtual XMLTransformerContext *CreateUserDefinedContext(
                                       const TransformerAction_Impl& rAction,
                                       const OUString& rQName,
-                                         sal_Bool bPersistent=sal_False ) SAL_OVERRIDE;
+                                         bool bPersistent=false ) SAL_OVERRIDE;
 
     virtual XMLTransformerActions *GetUserDefinedActions( sal_uInt16 n ) SAL_OVERRIDE;
 
@@ -55,7 +55,7 @@ public:
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     virtual OUString GetEventName( const OUString& rName,
-                                             sal_Bool bForm ) SAL_OVERRIDE;
+                                             bool bForm ) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_OASIS2OOO_HXX
