@@ -255,7 +255,7 @@ protected:
                   const OUString& rText,
                   sal_uInt16        MaxWidth);
 
-    virtual sal_uInt16 Print(SfxProgress &rProgress, sal_Bool bIsAPI);
+    virtual sal_uInt16 Print(SfxProgress &rProgress, bool bIsAPI);
     virtual SfxPrinter *GetPrinter(bool bCreate = false) SAL_OVERRIDE;
     virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
                               sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false) SAL_OVERRIDE;

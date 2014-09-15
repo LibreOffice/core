@@ -1322,7 +1322,7 @@ void SmViewShell::Impl_Print(
     rOutDev.Pop();
 }
 
-sal_uInt16 SmViewShell::Print(SfxProgress & /*rProgress*/, sal_Bool /*bIsAPI*/)
+sal_uInt16 SmViewShell::Print(SfxProgress & /*rProgress*/, bool /*bIsAPI*/)
 {
     SAL_WARN( "starmath", "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
     return 0;
