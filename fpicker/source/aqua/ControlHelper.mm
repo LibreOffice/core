@@ -157,9 +157,9 @@ void ControlHelper::initialize( sal_Int16 nTemplateId )
 // XFilePickerControlAccess functions
 
 
-void ControlHelper::enableControl( const sal_Int16 nControlId, const sal_Bool bEnable ) const
+void ControlHelper::enableControl( const sal_Int16 nControlId, const bool bEnable ) const
 {
-    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "enable", bEnable);
+    DBG_PRINT_ENTRY(CLASS_NAME, __func__, "controlId", nControlId, "enable", int(bEnable));
 
     SolarMutexGuard aGuard;
 
@@ -264,7 +264,7 @@ void ControlHelper::setValue( sal_Int16 nControlId, sal_Int16 nControlAction, co
             if( [pControl class] == [NSPopUpButton class] ) {
                 HandleSetListValue(pControl, nControlAction, rValue);
             } else if( [pControl class] == [NSButton class] ) {
-                sal_Bool bChecked = false;
+                bool bChecked = false;
                 rValue >>= bChecked;
                 SAL_INFO("fpicker.aqua"," value is a bool: " << bChecked);
                 [(NSButton*)pControl setState:(bChecked ? NSOnState : NSOffState)];
@@ -289,13 +289,13 @@ uno::Any ControlHelper::getValue( sal_Int16 nControlId, sal_Int16 nControlAction
 
     if( pControl == nil ) {
         SAL_INFO("fpicker.aqua","get value for unknown control " << nControlId);
-        aRetval <<= sal_True;
+        aRetval <<= true;
     } else {
         if( [pControl class] == [NSPopUpButton class] ) {
             aRetval = HandleGetListValue(pControl, nControlAction);
         } else if( [pControl class] == [NSButton class] ) {
             //NSLog(@"control: %@", [[pControl cell] title]);
-            sal_Bool bValue = [(NSButton*)pControl state] == NSOnState ? sal_True : sal_False;
+            bool bValue = [(NSButton*)pControl state] == NSOnState;
             aRetval <<= bValue;
             SAL_INFO("fpicker.aqua","value is a bool (checkbox): " << bValue);
         }
@@ -332,8 +332,8 @@ void ControlHelper::createUserPane()
     int currentHeight = kAquaSpaceBoxFrameViewDiffTop + kAquaSpaceBoxFrameViewDiffBottom;
     int currentWidth = 300;
 
-    sal_Bool bPopupControlPresent = NO;
-    sal_Bool bButtonControlPresent = NO;
+    bool bPopupControlPresent = false;
+    bool bButtonControlPresent = false;
 
     int nCheckboxMaxWidth = 0;
     int nPopupMaxWidth = 0;
@@ -355,7 +355,7 @@ void ControlHelper::createUserPane()
 
         // Note: controls are grouped by kind, first all popup menus, then checkboxes
         if ([pControl class] == [NSPopUpButton class]) {
-            if (bPopupControlPresent == YES) {
+            if (bPopupControlPresent) {
                 //this is not the first popup
                 currentHeight += kAquaSpaceBetweenPopupMenus;
             }
@@ -363,7 +363,7 @@ void ControlHelper::createUserPane()
                 currentHeight += kAquaSpaceBetweenControls;
             }
 
-            bPopupControlPresent = YES;
+            bPopupControlPresent = true;
 
             // we have to add the label text width
             NSString *label = m_aMapListLabels[pControl];

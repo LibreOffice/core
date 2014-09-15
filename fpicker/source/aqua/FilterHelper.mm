@@ -44,10 +44,10 @@ FilterEntry::FilterEntry( const rtl::OUString& _rTitle, const UnoFilterList& _rS
 }
 
 
-sal_Bool FilterEntry::hasSubFilters() const
+bool FilterEntry::hasSubFilters() const
 {
 //    OSL_TRACE(">>> FilterEntry::%s", __func__);
-    sal_Bool bReturn = ( 0 < m_aSubFilters.getLength() );
+    bool bReturn = ( 0 < m_aSubFilters.getLength() );
 //    OSL_TRACE("<<< FilterEntry::%s retVal: %d", __func__, bReturn);
     return bReturn;
 }
@@ -203,9 +203,9 @@ FilterHelper::~FilterHelper()
 }
 
 
-sal_Bool FilterHelper::FilterNameExists( const rtl::OUString& rTitle )
+bool FilterHelper::FilterNameExists( const rtl::OUString& rTitle )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( m_pFilterList )
         bRet =
@@ -219,9 +219,9 @@ sal_Bool FilterHelper::FilterNameExists( const rtl::OUString& rTitle )
 }
 
 
-sal_Bool FilterHelper::FilterNameExists( const UnoFilterList& _rGroupedFilters )
+bool FilterHelper::FilterNameExists( const UnoFilterList& _rGroupedFilters )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( m_pFilterList )
     {
@@ -351,7 +351,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     SolarMutexGuard aGuard;
 
     //add a separator if this is not the first group to be added
-    sal_Bool bPrependSeparator = m_pFilterList != NULL;
+    bool bPrependSeparator = m_pFilterList != NULL;
 
     // ensure that we have a filter list
     ::rtl::OUString sInitialCurrentFilter;
@@ -375,13 +375,13 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 }
 
-sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
+bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
 {
     DBG_PRINT_ENTRY(CLASS_NAME, __func__);
 
     if (m_aCurrentFilter == NULL) {
         OSL_TRACE("filter name is null");
-        return sal_True;
+        return true;
     }
 
     NSFileManager *manager = [NSFileManager defaultManager];
@@ -398,14 +398,14 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
             NSString* pT = (NSString*)pType;
             if( [pT isEqualToString: NSFileTypeDirectory]    ||
                 [pT isEqualToString: NSFileTypeSymbolicLink] )
-                return sal_True;
+                return true;
         }
     }
 
     FilterList::iterator filter = ::std::find_if(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(m_aCurrentFilter));
     if (filter == m_pFilterList->end()) {
         OSL_TRACE("filter not found in list");
-        return sal_True;
+        return true;
     }
 
     OUStringList suffixList = filter->getFilterSuffixList();
@@ -415,7 +415,7 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
         rtl::OUString allMatcher(".*");
         for(OUStringList::iterator iter = suffixList.begin(); iter != suffixList.end(); iter++) {
             if (aName.matchIgnoreAsciiCase(*iter, aName.getLength() - (*iter).getLength()) || ((*iter).equals(allMatcher))) {
-                return sal_True;
+                return true;
             }
         }
     }
@@ -424,15 +424,15 @@ sal_Bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
     NSString* pResolved = resolveAlias( sFilename );
     if( pResolved )
     {
-        sal_Bool bResult = filenameMatchesFilter( pResolved );
+        bool bResult = filenameMatchesFilter( pResolved );
         [pResolved autorelease];
         if( bResult )
-            return sal_True;
+            return true;
     }
 
     DBG_PRINT_EXIT(CLASS_NAME, __func__);
 
-    return sal_False;
+    return false;
 }
 
 FilterList* FilterHelper::getFilterList() {

@@ -55,7 +55,7 @@ public:
 
     void       setValue( sal_Int16 nControlId, sal_Int16 nControlAction, const uno::Any& rValue );
     uno::Any   getValue( sal_Int16 nControlId, sal_Int16 nControlAction ) const;
-    void       enableControl( sal_Int16 nControlId, sal_Bool bEnable ) const;
+    void       enableControl( sal_Int16 nControlId, bool bEnable ) const;
     OUString   getLabel( sal_Int16 nControlId );
     void       setLabel( sal_Int16 nControlId, NSString* aLabel );
 

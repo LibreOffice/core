@@ -59,7 +59,7 @@ public:
     OUStringList    getFilterSuffixList() const { return m_sFilterSuffixList; }
 
     /// determines if the filter has sub filter (i.e., the filter is a filter group in real)
-    sal_Bool        hasSubFilters( ) const;
+    bool        hasSubFilters( ) const;
 
     /** retrieves the filters belonging to the entry
         @return
@@ -105,15 +105,15 @@ public:
     OUStringList getCurrentFilterSuffixList();
     int getCurrentFilterIndex();
     void SetFilters();
-    sal_Bool filenameMatchesFilter(NSString * sFilename);
+    bool filenameMatchesFilter(NSString * sFilename);
 
 private:
     FilterList *m_pFilterList;
     OUString m_aCurrentFilter;
     NSStringList *m_pFilterNames;
 
-    sal_Bool FilterNameExists( const OUString& rTitle );
-    sal_Bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
+    bool FilterNameExists( const OUString& rTitle );
+    bool FilterNameExists( const UnoFilterList& _rGroupedFilters );
 
     void ensureFilterList( const OUString& _rInitialCurrentFilter );
 
