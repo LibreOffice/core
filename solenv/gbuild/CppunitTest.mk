@@ -378,6 +378,8 @@ $(eval $(foreach method,\
 	use_externals \
 	use_custom_headers \
 	set_visibility_default \
+	set_warnings_not_errors \
+	set_generated_cxx_suffix \
 ,\
 	$(call gb_CppunitTest__forward_to_Linktarget,$(method))\
 ))
