@@ -70,6 +70,8 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 
+gb_CXXFLAGS_Wundef = -Wno-undef
+
 ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
 gb_CXXFLAGS_COMMON += -fno-threadsafe-statics
 endif

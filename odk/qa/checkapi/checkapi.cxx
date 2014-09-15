@@ -7,6 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+// Acts as if building outside of LO.
+#undef LIBO_INTERNAL_ONLY
+
 // The whole purpose of this test is to check that public API headers
 // build even without RTL_USING (which enables using e.g. rtl::OUString
 // without to refer to the rtl namespace, which is not wanted
