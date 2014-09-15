@@ -2265,16 +2265,6 @@ bool Menu::HasValidEntries( bool bCheckPopups )
 
 sal_uLong Menu::DeactivateMenuBar(sal_uLong nFocusId)
 {
-    if (!IsMenuBar())
-        return nFocusId;
-
-    nFocusId = ((MenuBarWindow*)(dynamic_cast<MenuBar*>(this))->ImplGetWindow())->GetFocusId();
-    if (nFocusId)
-    {
-        ((MenuBarWindow*)(dynamic_cast<MenuBar*>(this))->ImplGetWindow())->SetFocusId(0);
-        ImplGetSVData()->maWinData.mbNoDeactivate = false;
-    }
-
     return nFocusId;
 }
 
@@ -2477,6 +2467,18 @@ void MenuBar::CloseStartedFrom()
     MenuBarWindow* p = (MenuBarWindow*) pStartedFrom->ImplGetWindow();
     if (p)
         p->PopupClosed(this);
+}
+
+sal_uLong MenuBar::DeactivateMenuBar(sal_uLong nFocusId)
+{
+    nFocusId = ((MenuBarWindow*)(dynamic_cast<MenuBar*>(this))->ImplGetWindow())->GetFocusId();
+    if (nFocusId)
+    {
+        ((MenuBarWindow*)(dynamic_cast<MenuBar*>(this))->ImplGetWindow())->SetFocusId(0);
+        ImplGetSVData()->maWinData.mbNoDeactivate = false;
+    }
+
+    return nFocusId;
 }
 
 void MenuBar::ShowCloseButton(bool bShow)

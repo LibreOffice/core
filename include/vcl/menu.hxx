@@ -190,7 +190,7 @@ protected:
     virtual void CloseStartedFrom() = 0;
 
     /// Deactivate the MenuBarWindow.
-    SAL_DLLPRIVATE sal_uLong DeactivateMenuBar(sal_uLong nFocusId);
+    virtual sal_uLong DeactivateMenuBar(sal_uLong nFocusId);
 
     /// Forward the KeyInput call to the MenuBar.
     SAL_DLLPRIVATE void MenuBarKeyInput(const KeyEvent& rEvent);
@@ -422,6 +422,9 @@ public:
 
     /// Close the 'pStartedFrom' menu window.
     virtual void CloseStartedFrom() SAL_OVERRIDE;
+
+    /// Deactivate the MenuBarWindow.
+    virtual sal_uLong DeactivateMenuBar(sal_uLong nFocusId) SAL_OVERRIDE;
 
     void                ShowCloseButton( bool bShow = true );
     bool                HasCloseButton() const { return mbCloseBtnVisible; }
