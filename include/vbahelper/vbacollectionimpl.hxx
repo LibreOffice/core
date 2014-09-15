@@ -281,13 +281,13 @@ public:
     ScVbaCollectionBase( const css::uno::Reference< ov::XHelperInterface >& xParent,   const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) : BaseColBase( xParent, xContext ), m_xIndexAccess( xIndexAccess ), mbIgnoreCase( bIgnoreCase ) { m_xNameAccess.set(m_xIndexAccess, css::uno::UNO_QUERY); }
 
     //XCollection
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException) SAL_OVERRIDE
     {
         return m_xIndexAccess->getCount();
     }
 
     virtual css::uno::Any SAL_CALL Item(const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/)
-         throw (css::lang::IndexOutOfBoundsException, css::script::BasicErrorException, css::uno::RuntimeException)
+         throw (css::lang::IndexOutOfBoundsException, css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         if ( Index1.getValueTypeClass() != css::uno::TypeClass_STRING )
         {
@@ -306,17 +306,17 @@ public:
     }
 
     // XDefaultMethod
-    OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException)
+    OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
     {
         return OUString("Item");
     }
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) = 0;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) SAL_OVERRIDE = 0;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) = 0;
+    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) SAL_OVERRIDE = 0;
     // XElementAccess
-    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException)
+    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException) SAL_OVERRIDE
     {
         return ( m_xIndexAccess->getCount() > 0 );
     }
