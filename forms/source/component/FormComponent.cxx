@@ -762,7 +762,7 @@ void SAL_CALL OControlModel::write(const Reference<css::io::XObjectOutputStream>
     // 2. wrting a version number
     _rxOutStream->writeShort(0x0003);
 
-    // 3. Schreiben der allgemeinen Properties
+    // 3. writing the general properties
     ::comphelper::operator<<( _rxOutStream, m_aName);
     _rxOutStream->writeShort(m_nTabIndex);
     ::comphelper::operator<<( _rxOutStream, m_aTag); // 3. version

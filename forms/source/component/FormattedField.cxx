@@ -196,7 +196,7 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
-    // Steht das Control in einem Formular mit einer Submit-URL?
+    // Is the control on a form with a submit URL?
     Reference<com::sun::star::beans::XPropertySet>  xSet(getModel(), UNO_QUERY);
     if( !xSet.is() )
         return;
@@ -223,13 +223,13 @@ void OFormattedControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) thr
             if (hasProperty(PROPERTY_CLASSID, xFCSet) &&
                 getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == FormComponentType::TEXTFIELD)
             {
-                // Noch ein weiteres Edit gefunden ==> dann nicht submitten
+                // Found another edit ==> no submit
                 if (xFCSet != xSet)
                     return;
             }
         }
     }
-    // Da wir noch im Haender stehen, submit asynchron ausloesen
+    // Still in the handler, read submit asynchron
     if( m_nKeyEvent )
         Application::RemoveUserEvent( m_nKeyEvent );
     m_nKeyEvent = Application::PostUserEvent( LINK(this, OFormattedControl,
@@ -363,8 +363,8 @@ void OFormattedModel::describeFixedProperties( Sequence< Property >& _rProps ) c
 void OFormattedModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
     OEditBaseModel::describeAggregateProperties( _rAggregateProps );
-    // TreatAsNumeric nicht transient : wir wollen es an der UI anbinden (ist noetig, um dem EffectiveDefault
-    // - der kann Text oder Zahl sein - einen Sinn zu geben)
+    // TreatAsNumeric not transient : we want to bind it to the UI (necessary, because EffectiveDefault
+    // - could be text or numbers - for making sense)
     ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, PropertyAttribute::TRANSIENT);
     // same for FormatKey
     // (though the paragraph above for the TreatAsNumeric does not hold anymore - we do not have an UI for this.
@@ -492,7 +492,7 @@ Reference< XNumberFormatsSupplier > OFormattedModel::calcFormatsSupplier() const
 {
     Reference<XNumberFormatsSupplier>  xSupplier;
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::calcFormatsSupplier : have no aggregate !");
-    // hat mein aggregiertes Model einen FormatSupplier ?
+    // check if my aggregated model has a FormatSupplier
     if( m_xAggregateSet.is() )
         m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
     if (!xSupplier.is())
@@ -501,7 +501,7 @@ Reference< XNumberFormatsSupplier > OFormattedModel::calcFormatsSupplier() const
     if (!xSupplier.is())
         xSupplier = calcDefaultFormatsSupplier();
     DBG_ASSERT(xSupplier.is(), "OFormattedModel::calcFormatsSupplier : no supplier !");
-        // jetzt sollte aber einer da sein
+        // now it should be there
     return xSupplier;
 }
 
@@ -509,10 +509,9 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
 {
     Reference<XChild>  xMe;
     query_interface(static_cast<XWeak*>(const_cast<OFormattedModel*>(this)), xMe);
-    // damit stellen wir sicher, dass wir auch fuer den Fall der Aggregation das richtige
-    // Objekt bekommen
+    // now we are sure, in case of an aggregation, to get the right object
     DBG_ASSERT(xMe.is(), "OFormattedModel::calcFormFormatsSupplier : I should have a content interface !");
-    // jetzt durchhangeln nach oben, bis wir auf eine starform treffen (angefangen mit meinem eigenen Parent)
+    // expand to the top, till we get to an initial form (starting with my own parent)
     Reference<XChild>  xParent(xMe->getParent(), UNO_QUERY);
     Reference<XForm>  xNextParentForm(xParent, UNO_QUERY);
     while (!xNextParentForm.is() && xParent.is())
@@ -525,7 +524,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
         OSL_FAIL("OFormattedModel::calcFormFormatsSupplier : have no ancestor which is a form !");
         return NULL;
     }
-    // den FormatSupplier von meinem Vorfahren (falls der einen hat)
+    // the FormatSupplier of my previous (if he owns one)
     Reference< XRowSet > xRowSet( xNextParentForm, UNO_QUERY );
     Reference< XNumberFormatsSupplier > xSupplier;
     if (xRowSet.is())
@@ -567,7 +566,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
     {   // all the following doesn't make any sense if we have no aggregate ...
         Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
         DBG_ASSERT( aSupplier.hasValue(), "OFormattedModel::onConnectedDbColumn : invalid property value !" );
-        // das sollte im Constructor oder im read auf was richtiges gesetzt worden sein
+        // this should already be initiated and correctly set by the constructor or the read function
         Any aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         if ( !(aFmtKey >>= nFormatKey ) )
         {   // nobody gave us a format to use. So we examine the field we're bound to for a
@@ -599,7 +598,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                 aSupplier >>= m_xOriginalFormatter;
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, aFmtKey);
-                // das Numeric-Flag an mein gebundenes Feld anpassen
+                // adapt the numeric-flag to my bound field
                 if (xField.is())
                 {
                     m_bNumeric = false;
@@ -641,7 +640,7 @@ void OFormattedModel::onDisconnectedDbColumn()
 {
     OEditBaseModel::onDisconnectedDbColumn();
     if (m_xOriginalFormatter.is())
-    {   // unser aggregiertes Model hatte keinerlei Format-Informationen
+    {   // the aggregated model has no format information
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
         setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny(m_bOriginalNumeric));
@@ -657,8 +656,8 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
     OEditBaseModel::write(_rxOutStream);
     _rxOutStream->writeShort(0x0003);
     DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::write : have no aggregate !");
-    // mein Format (evtl. void) in ein persistentes Format bringen (der Supplier zusammen mit dem Key ist es zwar auch,
-    // aber deswegen muessen wir ja nicht gleich den ganzen Supplier speichern, das waere ein klein wenig Overhead ;)
+    // take my format (possibly void) into a persistent format (the supplier together with the key
+    // would also be persistent, but saving the whole supplier would be overhead)
         Reference<XNumberFormatsSupplier>  xSupplier;
         Any aFmtKey;
     bool bVoidKey = true;
@@ -671,12 +670,12 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
         }
         aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         bVoidKey = (!xSupplier.is() || !aFmtKey.hasValue()) || (isLoaded() && m_xOriginalFormatter.is());
-            // (kein Fomatter und/oder Key) oder (loaded und faked Formatter)
+            // (no formatter and/or key) or (loaded and fakes formatter)
     }
     _rxOutStream->writeBoolean(!bVoidKey);
     if (!bVoidKey)
     {
-        // aus dem FormatKey und dem Formatter persistente Angaben basteln
+        // build persistend data with the FormatKey and the formatter
         Any aKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
         sal_Int32 nKey = aKey.hasValue() ? getINT32(aKey) : 0;
         Reference<XNumberFormats>  xFormats = xSupplier->getNumberFormats();
