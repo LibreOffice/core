@@ -34,6 +34,10 @@ public:
 
     virtual ::Window* createPopupWindow( ::Window* pParent ) SAL_OVERRIDE;
 
+    // XInitialization
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
+        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
