@@ -116,18 +116,15 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
                 << expr->getCastKindName() << expr->getSubExpr()->getType()
                 << expr->getType() << expr->getSourceRange();
         }
-// At least Clang 3.2 would erroneously warn about Cache::add
-// (binaryurp/source/cache.hxx:53)
-//
-//   if( !size_) {
-//
-// as "implicit conversion (IntegralToBoolean) of null pointer constant of type
-// 'std::size_t' (aka 'unsigned long') to 'bool'":
-#if (__clang_major__ == 3 && __clang_minor__ >= 4) || __clang_major__ > 3
     } else if (sub->isNullPointerConstant(
                    compiler.getASTContext(), Expr::NPC_ValueDependentIsNull)
-               != Expr::NPCK_NotNull)
+               > Expr::NPCK_ZeroExpression)
     {
+        // The test above originally checked for != Expr::NPCK_NotNull, but in non-C++11
+        // mode we can get also Expr::NPCK_ZeroExpression inside templates, even though
+        // the expression is actually not a null pointer. Clang bug or C++98 misfeature?
+        // See Clang's NPCK_ZeroExpression declaration and beginning of isNullPointerConstant().
+        static_assert( Expr::NPCK_NotNull == 0 && Expr::NPCK_ZeroExpression == 1, "Clang API change" );
         report(
             DiagnosticsEngine::Warning,
             ("implicit conversion (%0) of null pointer constant of type %1 to"
@@ -135,7 +132,6 @@ bool LiteralToBoolConversion::VisitImplicitCastExpr(
             expr->getLocStart())
             << expr->getCastKindName() << expr->getSubExpr()->getType()
             << expr->getType() << expr->getSourceRange();
-#endif
     } else if (sub->isIntegerConstantExpr(res, compiler.getASTContext())) {
         report(
             DiagnosticsEngine::Warning,
