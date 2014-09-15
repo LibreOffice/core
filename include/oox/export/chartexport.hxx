@@ -102,6 +102,7 @@ private:
     bool                mbIs3DChart;
     bool                mbStacked;
     bool                mbPercent;
+    bool                mbClustered;
 
 private:
     sal_Int32 getChartType();

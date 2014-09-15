@@ -72,6 +72,7 @@ public:
     void testDataLabelBordersDOCX();
     void testDataLabel3DChartDOCX();
     void testDataLabelBarChartDOCX();
+    void testDataLabelClusteredBarChartDOCX();
     void testDataLabelRadarChartDOCX();
     void testDataLabelDoughnutChartDOCX();
     void testDataLabelAreaChartDOCX();
@@ -113,6 +114,7 @@ public:
     CPPUNIT_TEST(testDataLabelBordersDOCX);
     CPPUNIT_TEST(testDataLabel3DChartDOCX);
     CPPUNIT_TEST(testDataLabelBarChartDOCX);
+    CPPUNIT_TEST(testDataLabelClusteredBarChartDOCX);
     CPPUNIT_TEST(testDataLabelRadarChartDOCX);
     CPPUNIT_TEST(testDataLabelDoughnutChartDOCX);
     CPPUNIT_TEST(testDataLabelAreaChartDOCX);
@@ -843,6 +845,20 @@ void Chart2ExportTest::testDataLabelBarChartDOCX()
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLblPos", "val", "ctr");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[2]/c:dLbls/c:dLblPos", "val", "inEnd");
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[3]/c:dLbls/c:dLblPos", "val", "inBase");
+}
+
+void Chart2ExportTest::testDataLabelClusteredBarChartDOCX()
+{
+    load("/chart2/qa/extras/data/docx/", "clustered-bar-chart-labels.docx");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    xmlDocPtr pXmlDoc = parseExport("word/charts/chart","Office Open XML Text");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // This was "t", should be one of the allowed values.
+    assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:barChart/c:ser[1]/c:dLbls/c:dLbl[2]/c:dLblPos", "val", "ctr");
 }
 
 void Chart2ExportTest::testDataLabelRadarChartDOCX()

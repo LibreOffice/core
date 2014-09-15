@@ -446,6 +446,7 @@ ChartExport::ChartExport( sal_Int32 nXmlNamespace, FSHelperPtr pFS, Reference< f
     , mbIs3DChart( false )
     , mbStacked(false)
     , mbPercent(false)
+    , mbClustered(false)
 {
 }
 
@@ -2670,7 +2671,7 @@ void ChartExport::exportDataLabels(
             aParam.mbExport = false;
         break;
         case chart::TYPEID_BAR:
-            if (mbStacked || mbPercent)
+            if (mbStacked || mbPercent || mbClustered)
             {
                 aParam.maAllowedValues.clear();
                 aParam.maAllowedValues.insert(css::chart::DataLabelPlacement::CENTER);
@@ -2816,7 +2817,10 @@ void ChartExport::exportGrouping( bool isBar )
     else
     {
         if( isBar && !isDeep3dChart() )
+        {
             grouping = "clustered";
+            mbClustered = true;
+        }
         else
             grouping = "standard";
     }
