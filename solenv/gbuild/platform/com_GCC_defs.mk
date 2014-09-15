@@ -97,6 +97,14 @@ endif
 
 gb_CFLAGS_WERROR := $(if $(ENABLE_WERROR),-Werror)
 
+# This is the default in non-C++11 mode
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+# doesn't know gnu++03 and this seems to be the same anyway
+gb_CXX03FLAGS := -std=gnu++98 -Werror=c++11-extensions -Wno-c++11-long-long
+else
+gb_CXX03FLAGS := -std=gnu++03 -pedantic-errors -Wno-long-long
+endif
+
 ifeq ($(ENABLE_LTO),TRUE)
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 gb_LTOFLAGS := -flto

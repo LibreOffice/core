@@ -20,6 +20,12 @@
 #error Build system problem, RTL_USING using should not be set here.
 #endif
 
+// Additionally, check that public API headers build also with C++03.
+
+//#if __cplusplus >= 201103L
+//#error Build system problem, C++03 should be used here.
+//#endif
+
 // This module contains no tests, this is for the build system.
 #include <cppunit/plugin/TestPlugIn.h>
 

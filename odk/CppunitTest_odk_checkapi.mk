@@ -27,6 +27,7 @@ $(eval $(call gb_CppunitTest_disable_compiler_plugins,odk_checkapi))
 
 $(eval $(call gb_CppunitTest_add_cxxflags,odk_checkapi,\
 	$(gb_CXXFLAGS_Wundef) \
+	$(gb_CXX03FLAGS) \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,odk_checkapi,\
