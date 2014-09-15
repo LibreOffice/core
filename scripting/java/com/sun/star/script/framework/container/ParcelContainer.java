@@ -127,7 +127,7 @@ public class ParcelContainer implements XNameAccess
         for (ParcelContainer c : childContainers)
         {
             String location = ScriptMetaData.getLocationPlaceHolder(
-                c.containerUrl, c.getName());
+                    c.containerUrl, c.getName());
             if ( key.equals( location ) )
             {
                 result = c;
@@ -174,12 +174,21 @@ public class ParcelContainer implements XNameAccess
         // TODO handler package ParcelContainer?
         if (  !containerUrl.startsWith( "vnd.sun.star.tdoc:" ) )
         {
-            // return name
-            String decodedUrl = java.net.URLDecoder.decode( containerUrl );
-            int indexOfSlash = decodedUrl.lastIndexOf('/');
-            if ( indexOfSlash != -1 )
+            try
             {
-                name =  decodedUrl.substring( indexOfSlash + 1 );
+                // return name
+                String decodedUrl = java.net.URLDecoder.decode( containerUrl, "UTF-8" );
+                int indexOfSlash = decodedUrl.lastIndexOf('/');
+                if ( indexOfSlash != -1 )
+                {
+                    name =  decodedUrl.substring( indexOfSlash + 1 );
+                }
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                com.sun.star.uno.RuntimeException e2 = new com.sun.star.uno.RuntimeException();
+                e2.initCause(e);
+                throw e2;
             }
         }
         else
