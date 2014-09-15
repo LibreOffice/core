@@ -223,7 +223,7 @@ class ControllerProperties
         }
     }
     
-    void changePropertyWithBoolValue( int i_nTag, sal_Bool i_bValue )
+    void changePropertyWithBoolValue( int i_nTag, bool i_bValue )
     {
         std::map< int, rtl::OUString >::const_iterator name_it = maTagToPropertyName.find( i_nTag );
         if( name_it != maTagToPropertyName.end() )
@@ -779,8 +779,8 @@ static void addSubgroup( NSView* pCurParent, long& rCurY, const rtl::OUString& r
 }
 
 static void addBool( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachOffset,
-                    const rtl::OUString& rText, sal_Bool bEnabled,
-                    const rtl::OUString& rProperty, sal_Bool bValue,
+                    const rtl::OUString& rText, bool bEnabled,
+                    const rtl::OUString& rProperty, bool bValue,
                     std::vector<ColumnItem >& rRightColumn,
                     ControllerProperties* pControllerProperties,
                     ControlTarget* pCtrlTarget
@@ -1106,7 +1106,7 @@ static void addEdit( NSView* pCurParent, long& rCurX, long& rCurY, long nAttachO
     NSTabView* pTabView = [[NSTabView alloc] initWithFrame: aTabViewFrame];
     [pAccessoryView addSubview: [pTabView autorelease]];
     
-    sal_Bool bIgnoreSubgroup = sal_False;
+    bool bIgnoreSubgroup = false;
     
     ControllerProperties* pControllerProperties = new ControllerProperties( pController, pOp, pAccessoryView, pTabView, pState );
     ControlTarget* pCtrlTarget = [[ControlTarget alloc] initWithControllerMap: pControllerProperties];
