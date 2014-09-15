@@ -497,7 +497,18 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
                  || (isInUnoIncludeFile(
                          compiler.getSourceManager().getSpellingLoc(
                              f->getNameInfo().getLoc()))
-                     && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()))))
+                     && (
+// Clang 3.2 FunctionDecl::isInlined doesn't work as advertised ("Determine
+// whether this function should be inlined, because it is either marked 'inline'
+// or 'constexpr' or is a member function of a class that was defined in the
+// class body.") but mis-classifies salhelper::Timer's isTicking, isExpired, and
+// expiresBefore members as defined in salhelper/source/timer.cxx as inlined:
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+                         !f->isInlined()
+#else
+                         true
+#endif
+                         || f->hasAttr<DeprecatedAttr>()))))
         {
             SourceLocation loc { decl->getLocStart() };
             SourceLocation l { compiler.getSourceManager().getExpansionLoc(
