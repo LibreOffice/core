@@ -2268,12 +2268,8 @@ sal_uLong Menu::DeactivateMenuBar(sal_uLong nFocusId)
     return nFocusId;
 }
 
-void Menu::MenuBarKeyInput(const KeyEvent& rEvent)
+void Menu::MenuBarKeyInput(const KeyEvent&)
 {
-    if (!IsMenuBar())
-        return;
-
-    ((MenuBarWindow*)(dynamic_cast<MenuBar*>(this))->ImplGetWindow())->KeyInput(rEvent);
 }
 
 void Menu::ImplKillLayoutData() const
@@ -2479,6 +2475,11 @@ sal_uLong MenuBar::DeactivateMenuBar(sal_uLong nFocusId)
     }
 
     return nFocusId;
+}
+
+void MenuBar::MenuBarKeyInput(const KeyEvent& rEvent)
+{
+    ((MenuBarWindow*)(dynamic_cast<MenuBar*>(this))->ImplGetWindow())->KeyInput(rEvent);
 }
 
 void MenuBar::ShowCloseButton(bool bShow)

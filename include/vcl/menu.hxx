@@ -193,7 +193,7 @@ protected:
     virtual sal_uLong DeactivateMenuBar(sal_uLong nFocusId);
 
     /// Forward the KeyInput call to the MenuBar.
-    SAL_DLLPRIVATE void MenuBarKeyInput(const KeyEvent& rEvent);
+    virtual void MenuBarKeyInput(const KeyEvent& rEvent);
 
 public:
     SAL_DLLPRIVATE void             ImplKillLayoutData() const;
@@ -425,6 +425,9 @@ public:
 
     /// Deactivate the MenuBarWindow.
     virtual sal_uLong DeactivateMenuBar(sal_uLong nFocusId) SAL_OVERRIDE;
+
+    /// Forward the KeyInput call to the MenuBar.
+    virtual void MenuBarKeyInput(const KeyEvent& rEvent) SAL_OVERRIDE;
 
     void                ShowCloseButton( bool bShow = true );
     bool                HasCloseButton() const { return mbCloseBtnVisible; }
