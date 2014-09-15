@@ -1352,14 +1352,6 @@ bool Menu::ImplIsSelectable( sal_uInt16 nPos ) const
     return bSelectable;
 }
 
-void Menu::SelectItem( sal_uInt16 nItemId )
-{
-    if (IsMenuBar())
-        static_cast<MenuBar*>(this)->SelectEntry( nItemId );
-    else
-        static_cast<PopupMenu*>(this)->SelectEntry( nItemId );
-}
-
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Menu::GetAccessible()
 {
     // Since PopupMenu are sometimes shared by different instances of MenuBar, the mxAccessible member gets
@@ -2521,7 +2513,7 @@ bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     return bDone;
 }
 
-void MenuBar::SelectEntry( sal_uInt16 nId )
+void MenuBar::SelectItem(sal_uInt16 nId)
 {
     MenuBarWindow* pMenuWin = (MenuBarWindow*) ImplGetWindow();
 
@@ -2721,7 +2713,7 @@ void PopupMenu::EndExecute( sal_uInt16 nSelectId )
         ImplGetFloatingWindow()->EndExecute( nSelectId );
 }
 
-void PopupMenu::SelectEntry( sal_uInt16 nId )
+void PopupMenu::SelectItem(sal_uInt16 nId)
 {
     if ( ImplGetWindow() )
     {

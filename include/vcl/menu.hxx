@@ -274,7 +274,7 @@ public:
     void                CheckItem( sal_uInt16 nItemId, bool bCheck = true );
     bool                IsItemChecked( sal_uInt16 nItemId ) const;
 
-    void                SelectItem( sal_uInt16 nItemId );
+    virtual void        SelectItem(sal_uInt16 nItemId) = 0;
     void                DeSelect() { SelectItem( 0xFFFF ); } // MENUITEMPOS_INVALID
 
     void                EnableItem( sal_uInt16 nItemId, bool bEnable = true );
@@ -434,12 +434,12 @@ public:
     bool            HasHideButton() const { return mbHideBtnVisible; }
     void                ShowButtons( bool bClose, bool bFloat, bool bHide );
 
-    void                SelectEntry( sal_uInt16 nId );
-    bool            HandleMenuActivateEvent( Menu *pMenu ) const;
-    bool            HandleMenuDeActivateEvent( Menu *pMenu ) const;
-    bool            HandleMenuHighlightEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
-    bool            HandleMenuCommandEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
-    bool            HandleMenuButtonEvent( Menu *pMenu, sal_uInt16 nEventId ) const;
+    virtual void        SelectItem(sal_uInt16 nId) SAL_OVERRIDE;
+    bool                HandleMenuActivateEvent(Menu *pMenu) const;
+    bool                HandleMenuDeActivateEvent(Menu *pMenu) const;
+    bool                HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
+    bool                HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
+    bool                HandleMenuButtonEvent(Menu *pMenu, sal_uInt16 nEventId) const;
 
     void                SetCloseButtonClickHdl( const Link& rLink ) { maCloseHdl = rLink; }
     const Link&         GetCloseButtonClickHdl() const              { return maCloseHdl; }
@@ -523,7 +523,7 @@ public:
 
     // Fuer das TestTool
     void                EndExecute( sal_uInt16 nSelect = 0 );
-    void                SelectEntry( sal_uInt16 nId );
+    virtual void        SelectItem(sal_uInt16 nId) SAL_OVERRIDE;
     void                SetSelectedEntry( sal_uInt16 nId ); // for use by native submenu only
 
     static bool         IsInExecute();
