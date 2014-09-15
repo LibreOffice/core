@@ -202,21 +202,21 @@ void SwUiWriterTest::testFdo70807()
         uno::Reference<style::XStyle> xStyle(stylesIter->getByIndex(i), uno::UNO_QUERY);
         uno::Reference<container::XNamed> xName(xStyle, uno::UNO_QUERY);
 
-        sal_Bool expectedUsedStyle = sal_False;
-        sal_Bool expectedUserDefined = sal_False;
+        bool expectedUsedStyle = false;
+        bool expectedUserDefined = false;
 
         OUString styleName(xName->getName());
 
         // just these styles are user defined styles
         if (styleName == "pagestyle1" || styleName == "pagestyle2")
-            expectedUserDefined = sal_True;
+            expectedUserDefined = true;
 
         // just these styles are used in the document
         if (styleName == "Right Page" || styleName == "pagestyle1" || styleName == "pagestyle2")
-            expectedUsedStyle = sal_True;
+            expectedUsedStyle = true;
 
-        CPPUNIT_ASSERT_EQUAL(expectedUserDefined, xStyle->isUserDefined());
-        CPPUNIT_ASSERT_EQUAL(expectedUsedStyle, xStyle->isInUse());
+        CPPUNIT_ASSERT_EQUAL(expectedUserDefined, bool(xStyle->isUserDefined()));
+        CPPUNIT_ASSERT_EQUAL(expectedUsedStyle, bool(xStyle->isInUse()));
     }
 }
 
