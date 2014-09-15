@@ -75,7 +75,7 @@ public:
     int             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
     const ImplFontCharMap*  GetImplFontCharMap() const;
-    bool                    GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
+    bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     bool                    HasChar( sal_uInt32 cChar ) const;
 
     void                    ReadOs2Table() const;
@@ -332,7 +332,7 @@ public:
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
     // get the repertoire of the current font
     virtual const ImplFontCharMap* GetImplFontCharMap() const SAL_OVERRIDE;
-    virtual bool GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
+    virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
     // graphics must drop any cached font info

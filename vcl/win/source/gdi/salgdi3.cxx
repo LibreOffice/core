@@ -1231,7 +1231,7 @@ const ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
     return mpUnicodeMap;
 }
 
-bool ImplWinFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool ImplWinFontData::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     rFontCapabilities = maFontCapabilities;
     return !rFontCapabilities.maUnicodeRange.empty() || !rFontCapabilities.maCodePageRange.empty();
@@ -1704,11 +1704,11 @@ const ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
     return mpWinFontData[0]->GetImplFontCharMap();
 }
 
-bool WinSalGraphics::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool WinSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     if( !mpWinFontData[0] )
         return false;
-    return mpWinFontData[0]->GetImplFontCapabilities(rFontCapabilities);
+    return mpWinFontData[0]->GetFontCapabilities(rFontCapabilities);
 }
 
 int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
