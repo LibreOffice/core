@@ -152,28 +152,28 @@ bool SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< OUString >
     return true;
 }
 
-
 // Service for application library container
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_ApplicationDialogLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
     SFX_APP()->GetBasicManager();
-    return SFX_APP()->GetDialogContainer();
+    css::uno::XInterface* pRet = SFX_APP()->GetDialogContainer();
+    pRet->acquire();
+    return pRet;
 }
 
-
 // Service for application library container
-
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_sfx2_ApplicationScriptLibraryContainer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
     SFX_APP()->GetBasicManager();
-    return SFX_APP()->GetBasicContainer();
+    css::uno::XInterface* pRet = SFX_APP()->GetBasicContainer();
+    pRet->acquire();
+    return pRet;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
