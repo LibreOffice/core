@@ -67,13 +67,13 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() = 0;
 
     // XHelperInterface Methods
-    virtual ::sal_Int32 SAL_CALL getCreator() throw (css::script::BasicErrorException, css::uno::RuntimeException)
+    virtual ::sal_Int32 SAL_CALL getCreator() throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
     {
         return 0x53756E4F;
     }
-    virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) { return mxParent; }
+    virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE { return mxParent; }
 
-    virtual css::uno::Any SAL_CALL Application(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) {
+    virtual css::uno::Any SAL_CALL Application(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE {
             // The application could certainly be passed around in the context - seems
             // to make sense
             css::uno::Reference< css::container::XNameAccess > xNameAccess( mxContext, css::uno::UNO_QUERY_THROW );
@@ -81,8 +81,8 @@ public:
     }
 
     // XServiceInfo Methods
-    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) { return getServiceImplName(); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException)
+    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE { return getServiceImplName(); }
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > sServices = getSupportedServiceNames();
         const OUString* pStart = sServices.getConstArray();
@@ -92,7 +92,7 @@ public:
                 return sal_True;
         return sal_False;
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException)
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) SAL_OVERRIDE
     {
         css::uno::Sequence< OUString > aNames = getServiceNames();
         return aNames;
