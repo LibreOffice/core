@@ -133,7 +133,7 @@ const ImplFontCharMap* CoreTextFontData::GetImplFontCharMap() const
     return mpCharMap;
 }
 
-bool CoreTextFontData::GetImplFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
+bool CoreTextFontData::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
 {
     // read this only once per font
     if( mbFontCapabilitiesRead )
@@ -502,7 +502,7 @@ bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabiliti
     if( !mpFontData )
         return false;
 
-    return mpFontData->GetImplFontCapabilities(rFontCapabilities);
+    return mpFontData->GetFontCapabilities(rFontCapabilities);
 }
 
 // fake a SFNT font directory entry for a font table
