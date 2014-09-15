@@ -362,6 +362,7 @@ void ScAccessibleSpreadsheet::LostFocus()
 
 void ScAccessibleSpreadsheet::GotFocus()
 {
+    CommitFocusGained();
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
     aEvent.Source = uno::Reference< XAccessibleContext >(this);
