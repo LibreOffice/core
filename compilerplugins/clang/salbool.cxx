@@ -9,7 +9,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cstdlib>
 #include <set>
 #include <string>
 
@@ -110,10 +109,7 @@ class SalBool:
     public RecursiveASTVisitor<SalBool>, public loplugin::RewritePlugin
 {
 public:
-    explicit SalBool(InstantiationData const & data):
-        RewritePlugin(data),
-        fullMode_(std::getenv("loplugin:salbool") != nullptr)
-    {}
+    explicit SalBool(InstantiationData const & data): RewritePlugin(data) {}
 
     virtual void run() override;
 
@@ -148,7 +144,6 @@ private:
 
     bool rewrite(SourceLocation location);
 
-    bool fullMode_;
     std::set<VarDecl const *> varDecls_;
 };
 
@@ -188,7 +183,7 @@ void SalBool::run() {
                     }
                 }
             }
-            if (fullMode_ && !rewrite(loc)) {
+            if (!rewrite(loc)) {
                 report(
                     DiagnosticsEngine::Warning,
                     "VarDecl, use \"bool\" instead of \"sal_Bool\"", loc)
@@ -381,15 +376,14 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                     // where the function would still implicitly override and
                     // cause a compilation error due to the incompatible return
                     // type):
-                    if (fullMode_
-                        && !((compat::isInMainFile(
-                                  compiler.getSourceManager(),
-                                  compiler.getSourceManager().getSpellingLoc(
-                                      dyn_cast<FunctionDecl>(
-                                          decl->getDeclContext())
-                                      ->getNameInfo().getLoc()))
-                              || f->isDefined() || f->isPure())
-                             && k != OverrideKind::MAYBE && rewrite(loc)))
+                    if (!((compat::isInMainFile(
+                               compiler.getSourceManager(),
+                               compiler.getSourceManager().getSpellingLoc(
+                                   dyn_cast<FunctionDecl>(
+                                       decl->getDeclContext())
+                                   ->getNameInfo().getLoc()))
+                           || f->isDefined() || f->isPure())
+                          && k != OverrideKind::MAYBE && rewrite(loc)))
                     {
                         report(
                             DiagnosticsEngine::Warning,
@@ -476,7 +470,7 @@ bool SalBool::VisitFieldDecl(FieldDecl const * decl) {
                     }
                 }
             }
-            if (fullMode_ && !rewrite(loc)) {
+            if (!rewrite(loc)) {
                 report(
                     DiagnosticsEngine::Warning,
                     "FieldDecl, use \"bool\" instead of \"sal_Bool\"", loc)
@@ -530,13 +524,12 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
             // rewriter had a chance to act upon the definition (but use the
             // heuristic of assuming pure virtual functions do not have
             // definitions):
-            if (fullMode_
-                && !((compat::isInMainFile(
-                          compiler.getSourceManager(),
-                          compiler.getSourceManager().getSpellingLoc(
-                              decl->getNameInfo().getLoc()))
-                      || f->isDefined() || f->isPure())
-                     && rewrite(loc)))
+            if (!((compat::isInMainFile(
+                       compiler.getSourceManager(),
+                       compiler.getSourceManager().getSpellingLoc(
+                           decl->getNameInfo().getLoc()))
+                   || f->isDefined() || f->isPure())
+                  && rewrite(loc)))
             {
                 report(
                     DiagnosticsEngine::Warning,
@@ -558,9 +551,7 @@ bool SalBool::VisitValueDecl(ValueDecl const * decl) {
     if (ignoreLocation(decl)) {
         return true;
     }
-    if (fullMode_ && isSalBool(decl->getType())
-        && !rewrite(decl->getLocStart()))
-    {
+    if (isSalBool(decl->getType()) && !rewrite(decl->getLocStart())) {
         report(
             DiagnosticsEngine::Warning,
             "ValueDecl, use \"bool\" instead of \"sal_Bool\"",
