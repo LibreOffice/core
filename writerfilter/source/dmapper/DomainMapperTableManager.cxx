@@ -515,7 +515,7 @@ void DomainMapperTableManager::endLevel( )
         oCurrentWidth.reset(m_aCellWidths.back()->back());
     m_aCellWidths.pop_back( );
     // And push it back to the right level.
-    if (oCurrentWidth)
+    if (oCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
         m_aCellWidths.back()->push_back(*oCurrentWidth);
 
     m_nCell.pop_back( );
