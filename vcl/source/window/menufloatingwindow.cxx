@@ -252,8 +252,8 @@ IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd)
     }
     else
     {
-        if (pMenu)
-            pMenu->CloseStartedFrom();
+        if (pMenu && pMenu->pStartedFrom)
+            pMenu->pStartedFrom->ClosePopup(pMenu);
     }
 
     if ( pM )
