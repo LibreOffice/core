@@ -117,7 +117,7 @@ ScVbaCondition< Ifc1 >::setFormula2( const uno::Any& _aFormula2) throw ( script:
 
 template< typename Ifc1 >
 sal_Int32
-ScVbaCondition< Ifc1 >::Operator(sal_Bool _bIncludeFormulaValue) throw ( script::BasicErrorException )
+ScVbaCondition< Ifc1 >::Operator(bool _bIncludeFormulaValue) throw ( script::BasicErrorException )
 {
     sal_Int32 retvalue = -1;
     sheet::ConditionOperator aConditionalOperator =  mxSheetCondition->getOperator();
