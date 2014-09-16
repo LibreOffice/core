@@ -37,7 +37,11 @@ IDL_DIR=$(PRJ)/idl
 BIN_DIR=$(PRJ)/bin
 CLASSES_DIR=$(PRJ)/classes
 URE_CLASSES_DIR=$(subst \,/,$(OO_SDK_URE_JAVA_DIR))
+ifeq "$(PLATFORM)" "macosx"
+OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_PROGRAM_PATH))/../Resources/java
+else
 OFFICE_CLASSES_DIR=$(subst \,/,$(OFFICE_PROGRAM_PATH))/classes
+endif
 COMP_PACKAGE_DIR=$(subst /,$(PS),$(OUT_BIN))
 
 SDKTYPEFLAG=$(OUT_MISC)/oosdk_cpp_types.flag
@@ -45,8 +49,13 @@ SDKTYPEFLAG=$(OUT_MISC)/oosdk_cpp_types.flag
 URE_TYPES="$(subst \,/,$(URE_MISC)$(PS)types.rdb)"
 URE_SERVICES="$(subst \\,\,$(URE_MISC)$(PS)services.rdb)"
 
+ifeq "$(PLATFORM)" "macosx"
+OFFICE_TYPES="$(subst \,/,$(OFFICE_PROGRAM_PATH)$(PS)..$(PS)Resources$(PS)types$(PS)offapi.rdb)"
+OFFICE_SERVICES="$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)..$(PS)Resources$(PS)services$(PS)services.rdb)"
+else
 OFFICE_TYPES="$(subst \,/,$(OFFICE_PROGRAM_PATH)$(PS)types$(PS)offapi.rdb)"
 OFFICE_SERVICES="$(subst \\,\,$(OFFICE_PROGRAM_PATH)$(PS)services$(PS)services.rdb)"
+endif
 
 OFFICE_TYPE_LIBRARY="$(OFFICE_TYPES)"
 
