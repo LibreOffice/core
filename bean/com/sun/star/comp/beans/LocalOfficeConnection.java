@@ -24,6 +24,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
@@ -725,7 +726,7 @@ public class LocalOfficeConnection
             // start process
             mProcess = Runtime.getRuntime().exec(cmdArray);
             if ( mProcess == null )
-                throw new com.sun.star.uno.RuntimeException( "cannot start soffice: " + cmdArray );
+                throw new com.sun.star.uno.RuntimeException( "cannot start soffice: " + Arrays.toString(cmdArray) );
             new StreamProcessor(mProcess.getInputStream(), System.out);
             new StreamProcessor(mProcess.getErrorStream(), System.err);
         }

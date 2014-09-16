@@ -23,6 +23,7 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XEventListener;
@@ -575,7 +576,7 @@ public class LocalOfficeConnection
             // start process
             mProcess = Runtime.getRuntime().exec(cmdArray);
             if ( mProcess == null )
-                throw new RuntimeException( "cannot start soffice: " + cmdArray );
+                throw new RuntimeException( "cannot start soffice: " + Arrays.toString(cmdArray) );
         }
 
         /**
