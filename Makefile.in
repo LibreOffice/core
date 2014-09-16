@@ -169,7 +169,8 @@ distclean : clean compilerplugins-clean
         $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
         $(BUILDDIR)/ios/lo.xcconfig \
         $(BUILDDIR)/lo.xcent \
-        $(BUILDDIR)/sysui/desktop/macosx/Info.plist
+        $(BUILDDIR)/sysui/desktop/macosx/Info.plist \
+        $(BUILDDIR)/ure/source/unorc
 	find $(SRCDIR)/solenv/gdb -name "*.pyc" -exec rm {} \;
 
 #
