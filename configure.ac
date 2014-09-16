@@ -8616,6 +8616,9 @@ if test "$with_system_odbc" = "yes" ; then
 elif test "$enable_database_connectivity" != yes; then
     AC_MSG_RESULT([none])
 else
+    if test $_os = Darwin -o $_os = WINNT; then
+        AC_MSG_ERROR([Please use --with-system-odbc on MacOS X and Microsoft Windows.])
+    fi
     AC_MSG_RESULT([internal])
     SYSTEM_ODBC_HEADERS=
 fi
