@@ -25,6 +25,9 @@
 #include "diagnose_ex.h"
 #include <rtl/ustrbuf.hxx>
 #include <boost/static_assert.hpp>
+#include <boost/typeof/typeof.hpp>
+#include <boost/mpl/bool.hpp>
+#include <boost/mpl/if.hpp>
 
 
 #include <string.h>
@@ -459,7 +462,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
 
             if (sizeof (SQLWCHAR) == 2)
             {
-                aData.append(waCharArray, nReadChars);
+                aData.append(reinterpret_cast< boost::mpl::if_< boost::mpl::bool_< sizeof(SQLWCHAR) == 2 >, BOOST_TYPEOF(&waCharArray[0]), sal_Unicode* >::type >(waCharArray), nReadChars);
             }
             else
             {
