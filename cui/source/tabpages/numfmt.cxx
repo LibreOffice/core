@@ -81,7 +81,7 @@ SvxNumberPreview::SvxNumberPreview(Window* pParent, WinBits nStyle)
     , mnPos(-1)
     , mnChar(0x0)
 {
-    Font aFont( GetFont() );
+    vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
     aFont.SetColor( Application::GetSettings().GetStyleSettings().GetFieldColor() );
     SetFont( aFont );
@@ -149,10 +149,10 @@ void SvxNumberPreview::NotifyChange( const OUString& rPrevStr,
 
 void SvxNumberPreview::Paint( const Rectangle& )
 {
-    Font    aDrawFont   = GetFont();
-    Size    aSzWnd      = GetOutputSizePixel();
-    OUString aTmpStr( aPrevStr );
-    long    nLeadSpace = (aSzWnd.Width()  - GetTextWidth( aTmpStr )) /2;
+    vcl::Font aDrawFont   = GetFont();
+    Size      aSzWnd      = GetOutputSizePixel();
+    OUString  aTmpStr( aPrevStr );
+    long      nLeadSpace = (aSzWnd.Width()  - GetTextWidth( aTmpStr )) /2;
 
     aDrawFont.SetColor( aPrevCol );
     SetFont( aDrawFont );
@@ -830,7 +830,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
 {
     OUString    aEntry;
     OUString    aTmpString;
-    Font        aFont=m_pLbCategory->GetFont();
+    vcl::Font   aFont=m_pLbCategory->GetFont();
     size_t      i = 0;
     short       nTmpCatPos;
     short       aPrivCat;
@@ -877,7 +877,7 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( std::vector<OUString>& rEnt
             {
                 Color* pPreviewColor = NULL;
                 OUString aPreviewString( GetExpColorString( pPreviewColor, aEntry, aPrivCat ) );
-                Font aEntryFont( m_pLbFormat->GetFont() );
+                vcl::Font aEntryFont( m_pLbFormat->GetFont() );
                 m_pLbFormat->InsertFontEntry( aPreviewString, aEntryFont, pPreviewColor );
             }
             else

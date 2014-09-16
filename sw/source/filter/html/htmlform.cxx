@@ -608,7 +608,7 @@ void SwHTMLParser::DeleteFormImpl()
 static void lcl_html_setFixedFontProperty(
         const uno::Reference< beans::XPropertySet >& rPropSet )
 {
-    Font aFixedFont( OutputDevice::GetDefaultFont(
+    vcl::Font aFixedFont( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
                                     DEFAULTFONT_FLAGS_ONLYONE )  );
     Any aTmp;

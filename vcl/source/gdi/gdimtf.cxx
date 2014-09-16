@@ -1322,7 +1322,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_FONT_ACTION ):
                 {
                     MetaFontAction* pAct = (MetaFontAction*) pAction;
-                    Font            aFont( pAct->GetFont() );
+                    vcl::Font       aFont( pAct->GetFont() );
 
                     aFont.SetOrientation( aFont.GetOrientation() + (sal_uInt16) nAngle10 );
                     aMtf.AddAction( new MetaFontAction( aFont ) );
@@ -2006,7 +2006,7 @@ void GDIMetaFile::ImplExchangeColors( ColorExchangeFnc pFncCol, const void* pCol
             case( META_FONT_ACTION ):
             {
                 MetaFontAction* pAct = (MetaFontAction*) pAction;
-                Font            aFont( pAct->GetFont() );
+                vcl::Font       aFont( pAct->GetFont() );
 
                 aFont.SetColor( pFncCol( aFont.GetColor(), pColParam ) );
                 aFont.SetFillColor( pFncCol( aFont.GetFillColor(), pColParam ) );

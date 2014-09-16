@@ -69,7 +69,7 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
 }
 
 
-void SmTmpDevice::SetFont(const Font &rNewFont)
+void SmTmpDevice::SetFont(const vcl::Font &rNewFont)
 {
     rOutDev.SetFont( rNewFont );
     rOutDev.SetTextColor( Impl_GetColor( rNewFont.GetColor() ) );

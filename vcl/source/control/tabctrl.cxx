@@ -127,7 +127,7 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
         pParent->AddChildEventListener( LINK( this, TabControl, ImplWindowEventListener ) );
 }
 
-const Font& TabControl::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& TabControl::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetAppFont();
 }
@@ -400,7 +400,7 @@ Rectangle TabControl::ImplGetTabRect( sal_uInt16 nItemPos, long nWidth, long nHe
 
     if ( mbFormat || (mnLastWidth != nWidth) || (mnLastHeight != nHeight) )
     {
-        Font aFont( GetFont() );
+        vcl::Font aFont( GetFont() );
         aFont.SetTransparent( true );
         SetFont( aFont );
 
@@ -918,7 +918,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 
     // set font accordingly, current item is painted bold
     // we set the font attributes always before drawing to be re-entrant (DrawNativeControl may trigger additional paints)
-    Font aFont( GetFont() );
+    vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
     SetFont( aFont );
 

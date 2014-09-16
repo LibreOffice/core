@@ -41,7 +41,7 @@
 #include <vector>
 #include <set>
 
-class Font;
+namespace vcl { class Font; }
 class Point;
 class OutputDevice;
 class GDIMetaFile;
@@ -234,7 +234,7 @@ public:
         Color               BorderColor;// COL_TRANSPARENT and Border=true means get color from application settings
         bool                Background; // true: widget shall draw its background, false: no background
         Color               BackgroundColor; // COL_TRANSPARENT and Background=true means get color from application settings
-        Font                TextFont;   // an empty font will be replaced by the
+        vcl::Font           TextFont;   // an empty font will be replaced by the
                                         // appropriate font from the user settings
         Color               TextColor;  // COL_TRANSPARENT will be replaced by the appropriate color from application settings
         sal_Int32           TabOrder; // lowest number is first in tab order
@@ -747,7 +747,7 @@ The following structure describes the permissions used in PDF security
     void               SetFillColor( const Color& rColor );
     void               SetFillColor() { SetFillColor( Color( COL_TRANSPARENT ) ); }
 
-    void               SetFont( const Font& rNewFont );
+    void               SetFont( const vcl::Font& rNewFont );
     void               SetTextColor( const Color& rColor );
     void               SetTextFillColor();
     void               SetTextFillColor( const Color& rColor );

@@ -178,7 +178,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     //test Sheet2
     const ScPatternAttr* pPattern = NULL;
     pPattern = pDoc->GetPattern(0,0,1);
-    Font aFont;
+    vcl::Font aFont;
     pPattern->GetFont(aFont,SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font size should be 10", 200l, aFont.GetSize().getHeight());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font color should be black", COL_AUTO, aFont.GetColor().GetColor());

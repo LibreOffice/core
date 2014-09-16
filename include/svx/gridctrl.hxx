@@ -217,7 +217,7 @@ public:
     };
 
 private:
-    Font            m_aDefaultFont;
+    vcl::Font      m_aDefaultFont;
     Link            m_aMasterStateProvider;
     Link            m_aMasterSlotExecutor;
 

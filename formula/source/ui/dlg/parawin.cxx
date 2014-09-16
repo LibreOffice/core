@@ -296,7 +296,7 @@ void ParaWin::DelParaArray()
     ::std::vector<OUString>().swap(aParaArray);
 }
 
-void ParaWin::SetArgumentFonts(const Font&aBoldFont,const Font&aLightFont)
+void ParaWin::SetArgumentFonts(const vcl::Font&aBoldFont,const vcl::Font&aLightFont)
 {
     aFntBold=aBoldFont;
     aFntLight=aLightFont;
@@ -366,7 +366,7 @@ void ParaWin::SetArgName(sal_uInt16 no,const OUString& aText)
     aArgInput[no].UpdateAccessibleNames();
 }
 
-void ParaWin::SetArgNameFont(sal_uInt16 no,const Font& aFont)
+void ParaWin::SetArgNameFont(sal_uInt16 no,const vcl::Font& aFont)
 {
     aArgInput[no].SetArgNameFont(aFont);
 }

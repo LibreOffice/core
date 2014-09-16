@@ -101,7 +101,7 @@ bool OutputDevice::IsFontAvailable( const OUString& rFontName ) const
     return (pFound != NULL);
 }
 
-int OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
+int OutputDevice::GetDevFontSizeCount( const vcl::Font& rFont ) const
 {
     delete mpGetDevSizeList;
 
@@ -110,7 +110,7 @@ int OutputDevice::GetDevFontSizeCount( const Font& rFont ) const
     return mpGetDevSizeList->Count();
 }
 
-Size OutputDevice::GetDevFontSize( const Font& rFont, int nSizeIndex ) const
+Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) const
 {
     // check range
     int nCount = GetDevFontSizeCount( rFont );
@@ -206,7 +206,7 @@ FontMetric OutputDevice::GetFontMetric() const
     return aMetric;
 }
 
-FontMetric OutputDevice::GetFontMetric( const Font& rFont ) const
+FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
 {
     // select font, query metrics, select original font again
     Font aOldFont = GetFont();
@@ -422,7 +422,7 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
         rYOff += nDotSize;
 }
 
-FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const Font& rFont )
+FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const vcl::Font& rFont )
 {
     FontEmphasisMark nEmphasisMark = rFont.GetEmphasisMark();
 
@@ -995,7 +995,7 @@ void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight
         mpUnicodeFallbackList->erase( it );
 }
 
-FontSelectPatternAttributes::FontSelectPatternAttributes( const Font& rFont,
+FontSelectPatternAttributes::FontSelectPatternAttributes( const vcl::Font& rFont,
     const OUString& rSearchName, const Size& rSize, float fExactHeight )
     : maSearchName( rSearchName )
     , mnWidth( rSize.Width() )
@@ -1027,7 +1027,7 @@ FontSelectPatternAttributes::FontSelectPatternAttributes( const Font& rFont,
         mnWidth = -mnWidth;
 }
 
-FontSelectPattern::FontSelectPattern( const Font& rFont,
+FontSelectPattern::FontSelectPattern( const vcl::Font& rFont,
     const OUString& rSearchName, const Size& rSize, float fExactHeight)
     : FontSelectPatternAttributes(rFont, rSearchName, rSize, fExactHeight)
     , mpFontData( NULL )
@@ -1212,7 +1212,7 @@ ImplFontCache::~ImplFontCache()
 }
 
 ImplFontEntry* ImplFontCache::GetFontEntry( PhysicalFontCollection* pFontList,
-    const Font& rFont, const Size& rSize, float fExactHeight )
+    const vcl::Font& rFont, const Size& rSize, float fExactHeight )
 {
     OUString aSearchName = rFont.GetName();
 
@@ -2143,7 +2143,7 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
     return (nLen == (int)rVector.size());
 }
 
-sal_Int32 OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
+sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& rStr,
     sal_Int32 nIndex, sal_Int32 nLen ) const
 {
     if( nIndex >= rStr.getLength() )
@@ -2158,7 +2158,7 @@ sal_Int32 OutputDevice::HasGlyphs( const Font& rTempFont, const OUString& rStr,
     DBG_ASSERT( nEnd <= rStr.getLength(), "String too short" );
 
     // to get the map temporarily set font
-    const Font aOrigFont = GetFont();
+    const vcl::Font aOrigFont = GetFont();
     const_cast<OutputDevice&>(*this).SetFont( rTempFont );
     FontCharMap aFontCharMap;
     bool bRet = GetFontCharMap( aFontCharMap );

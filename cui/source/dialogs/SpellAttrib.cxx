@@ -47,7 +47,7 @@ SpellErrorAttrib::~SpellErrorAttrib()
 }
 
 
-void SpellErrorAttrib::SetFont( Font&  ) const
+void SpellErrorAttrib::SetFont( vcl::Font&  ) const
 {
     //this attribute doesn't have a visual effect
 }
@@ -85,7 +85,7 @@ SpellLanguageAttrib::~SpellLanguageAttrib()
 }
 
 
-void SpellLanguageAttrib::SetFont( Font&  ) const
+void SpellLanguageAttrib::SetFont( vcl::Font&  ) const
 {
     //no visual effect
 }
@@ -123,7 +123,7 @@ SpellBackgroundAttrib::~SpellBackgroundAttrib()
 }
 
 
-void SpellBackgroundAttrib::SetFont( Font& rFont ) const
+void SpellBackgroundAttrib::SetFont( vcl::Font& rFont ) const
 {
     rFont.SetFillColor(m_aBackgroundColor);
 }

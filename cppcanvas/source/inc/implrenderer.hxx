@@ -37,7 +37,7 @@ class GDIMetaFile;
 class VirtualDevice;
 class Gradient;
 class Rectangle;
-class Font;
+namespace vcl { class Font; }
 class PolyPolygon;
 class Point;
 class MetaCommentAction;
@@ -242,7 +242,7 @@ static float GetSwapFloat( SvStream& rSt )
 
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::rendering::XCanvasFont > createFont( double&                         o_rFontRotation,
-                                                                       const ::Font&                   rFont,
+                                                                       const ::vcl::Font&              rFont,
                                                                        const ActionFactoryParameters&  rParms ) const;
             bool createActions( GDIMetaFile&                    rMtf,
                                 const ActionFactoryParameters&  rParms,

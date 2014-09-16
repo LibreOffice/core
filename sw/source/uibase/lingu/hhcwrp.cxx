@@ -85,7 +85,7 @@ SwHHCWrapper::SwHHCWrapper(
         const uno::Reference< uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage,
         LanguageType nTargetLanguage,
-        const Font *pTargetFont,
+        const vcl::Font *pTargetFont,
         sal_Int32 nConvOptions,
         bool bIsInteractive,
         bool bStart, bool bOther, bool bSelection )
@@ -148,7 +148,7 @@ SwHHCWrapper::~SwHHCWrapper()
         //!! Note: This also effects the default language of text boxes (EditEngine/EditView) !!
         pDoc->SetDefault( SvxLanguageItem( nTargetLang, RES_CHRATR_CJK_LANGUAGE ) );
 
-        const Font *pFont = GetTargetFont();
+        const vcl::Font *pFont = GetTargetFont();
         if (pFont)
         {
             SvxFontItem aFontItem( pFont->GetFamily(), pFont->GetName(),
@@ -499,7 +499,7 @@ void SwHHCWrapper::ReplaceUnit(
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );
             }
 
-            const Font *pTargetFont = GetTargetFont();
+            const vcl::Font *pTargetFont = GetTargetFont();
             OSL_ENSURE( pTargetFont, "target font missing?" );
             if (pTargetFont && pNewUnitLanguage)
             {

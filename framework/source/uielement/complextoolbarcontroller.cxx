@@ -269,7 +269,7 @@ void ComplexToolbarController::addNotifyInfo(
 sal_Int32 ComplexToolbarController::getFontSizePixel( const Window* pWindow )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-    const Font&          rFont     = rSettings.GetAppFont();
+    const vcl::Font&     rFont     = rSettings.GetAppFont();
 
     // Calculate height of the application font used by window
     sal_Int32 nHeight = sal_Int32( rFont.GetHeight() );

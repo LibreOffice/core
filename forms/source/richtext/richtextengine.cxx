@@ -61,7 +61,7 @@ namespace frm
         pPool->SetDefaultMetric(  (SfxMapUnit)( aDeviceMapMode.GetMapUnit() ) );
 
         // defaults
-        Font aFont = Application::GetSettings().GetStyleSettings().GetAppFont();
+        vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetAppFont();
         aFont.SetName( "Times New Roman" );
         pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), OUString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
 

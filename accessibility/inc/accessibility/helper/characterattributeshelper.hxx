@@ -40,7 +40,7 @@ private:
 
 public:
 
-    CharacterAttributesHelper( const Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor );
+    CharacterAttributesHelper( const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor );
     ~CharacterAttributesHelper();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetCharacterAttributes();

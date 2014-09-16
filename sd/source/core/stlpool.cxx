@@ -190,7 +190,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
 
     OUString aPrefix(rLayoutName + SD_LT_SEPARATOR);
 
-    Font aLatinFont, aCJKFont, aCTLFont;
+    vcl::Font aLatinFont, aCJKFont, aCTLFont;
 
     mpDoc->getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
 
@@ -204,7 +204,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
     SvxFontItem aSvxFontItemCTL( aCTLFont.GetFamily(), aCTLFont.GetName(), aCTLFont.GetStyleName(), aCTLFont.GetPitch(),
                                  aCTLFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
 
-    Font aBulletFont( GetBulletFont() );
+    vcl::Font aBulletFont( GetBulletFont() );
 
     /**************************************************************************
     * outline levels
@@ -261,7 +261,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
 
                 if( nLevel == 1 )
                 {
-                    Font f( GetBulletFont() );
+                    vcl::Font f( GetBulletFont() );
                     PutNumBulletItem( pSheet, f );
                 }
             }
@@ -423,7 +423,7 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const OUString& rLayoutName, bool
         aSvxLRSpaceItem.SetTxtLeft(0);
         rSubtitleSet.Put(aSvxLRSpaceItem);
 
-        Font aTmpFont( GetBulletFont() );
+        vcl::Font aTmpFont( GetBulletFont() );
         aTmpFont.SetSize(Size(0, 1129));        // 32 pt
         PutNumBulletItem( pSheet, aTmpFont );
     }
@@ -1090,7 +1090,7 @@ void SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i
 
 // Set new SvxNumBulletItem for the respective style sheet
 void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
-                                         Font& rBulletFont )
+                                         vcl::Font& rBulletFont )
 {
     OUString aHelpFile;
     sal_uLong nHelpId = pSheet->GetHelpId( aHelpFile );
@@ -1217,9 +1217,9 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
 |*
 \************************************************************************/
 
-Font SdStyleSheetPool::GetBulletFont()
+vcl::Font SdStyleSheetPool::GetBulletFont()
 {
-    Font aBulletFont( OUString( "StarSymbol" ), Size(0, 1000) );
+    vcl::Font aBulletFont( OUString( "StarSymbol" ), Size(0, 1000) );
     aBulletFont.SetCharSet(RTL_TEXTENCODING_UNICODE);
     aBulletFont.SetWeight(WEIGHT_NORMAL);
     aBulletFont.SetUnderline(UNDERLINE_NONE);

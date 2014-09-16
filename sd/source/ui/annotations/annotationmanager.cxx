@@ -109,7 +109,7 @@ SfxItemPool* GetAnnotationPool()
         mpAnnotationPool = EditEngine::CreatePool( false );
         mpAnnotationPool->SetPoolDefaultItem(SvxFontHeightItem(423,100,EE_CHAR_FONTHEIGHT));
 
-        Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
+        vcl::Font aAppFont( Application::GetSettings().GetStyleSettings().GetAppFont() );
         mpAnnotationPool->SetPoolDefaultItem(SvxFontItem(aAppFont.GetFamily(),aAppFont.GetName(),"",PITCH_DONTKNOW,RTL_TEXTENCODING_DONTKNOW,EE_CHAR_FONTINFO));
     }
 

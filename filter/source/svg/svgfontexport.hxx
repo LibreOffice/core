@@ -37,7 +37,7 @@
 
 class ObjectRepresentation;
 class SVGExport;
-class Font;
+namespace vcl { class Font; }
 class OutputDevice;
 
 
@@ -57,9 +57,9 @@ private:
     ObjectVector        maObjects;
     sal_Int32           mnCurFontId;
 
-    GlyphSet&           implGetGlyphSet( const Font& rFont );
+    GlyphSet&           implGetGlyphSet( const vcl::Font& rFont );
     void                implCollectGlyphs();
-    void                implEmbedFont( const Font& rFont );
+    void                implEmbedFont( const vcl::Font& rFont );
     void                implEmbedGlyph( OutputDevice& rOut, const OUString& rCellStr );
 
 public:
@@ -68,7 +68,7 @@ public:
                         ~SVGFontExport();
 
     void                EmbedFonts();
-    OUString     GetMappedFontName( const OUString& rFontName ) const;
+    OUString            GetMappedFontName( const OUString& rFontName ) const;
 };
 
 #endif

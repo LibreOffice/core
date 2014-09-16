@@ -240,7 +240,7 @@ void SvtIconChoiceCtrl::LoseFocus()
     Control::LoseFocus();
 }
 
-void SvtIconChoiceCtrl::SetFont( const Font& rFont )
+void SvtIconChoiceCtrl::SetFont( const vcl::Font& rFont )
 {
     if( rFont != GetFont() )
     {
@@ -249,7 +249,7 @@ void SvtIconChoiceCtrl::SetFont( const Font& rFont )
     }
 }
 
-void SvtIconChoiceCtrl::SetPointFont( const Font& rFont )
+void SvtIconChoiceCtrl::SetPointFont( const vcl::Font& rFont )
 {
     if( rFont != GetPointFont() )
     {
@@ -419,7 +419,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
 
         // If text colors are attributed "hard," don't use automatism to select
         // a readable text color.
-        Font aFont( GetFont() );
+        vcl::Font aFont( GetFont() );
         aFont.SetColor( rStyleSettings.GetFieldTextColor() );
         SetFont( aFont );
 

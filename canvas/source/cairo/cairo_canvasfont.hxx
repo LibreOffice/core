@@ -71,10 +71,10 @@ namespace cairocanvas
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( ::com::sun::star::uno::RuntimeException, std::exception ) SAL_OVERRIDE;
 
-        ::Font getVCLFont() const;
+        vcl::Font getVCLFont() const;
 
     private:
-        ::canvas::vcltools::VCLObject<Font>      maFont;
+        ::canvas::vcltools::VCLObject<vcl::Font> maFont;
         ::com::sun::star::rendering::FontRequest maFontRequest;
         SurfaceProviderRef                       mpRefDevice;
     };

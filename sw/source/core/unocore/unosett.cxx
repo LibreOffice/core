@@ -1461,7 +1461,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
             pData = new PropValData((void*)&nINT16, "BulletId", ::cppu::UnoType<sal_Int16>::get());
             aPropertyValues.push_back(pData);
 
-            const Font* pFont = rFmt.GetBulletFont();
+            const vcl::Font* pFont = rFmt.GetBulletFont();
 
             //BulletChar
             aUString = OUString(rFmt.GetBulletChar());
@@ -1921,7 +1921,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         // do not accept "empty" font
                         if ( !pDesc->Name.isEmpty() )
                         {
-                            Font aFont;
+                            vcl::Font aFont;
                             SvxUnoFontDescriptor::ConvertToFont( *pDesc, aFont );
                             aFmt.SetBulletFont(&aFont);
                         }
@@ -1944,7 +1944,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                         const FontList*  pList = pFontListItem->GetFontList();
                         vcl::FontInfo aInfo = pList->Get(
                             sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE);
-                        Font aFont(aInfo);
+                        vcl::Font aFont(aInfo);
                         aFmt.SetBulletFont(&aFont);
                     }
                     else

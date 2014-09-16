@@ -133,7 +133,7 @@ IMPL_LINK_NOARG(SwInsFootNoteDlg, NumberExtCharHdl)
             {
                 m_aFontName = pFontItem->GetFamilyName();
                 eCharSet  = pFontItem->GetCharSet();
-                Font aFont( m_aFontName, pFontItem->GetStyleName(), m_pNumberCharEdit->GetFont().GetSize() );
+                vcl::Font aFont( m_aFontName, pFontItem->GetStyleName(), m_pNumberCharEdit->GetFont().GetSize() );
                 aFont.SetCharSet( pFontItem->GetCharSet() );
                 aFont.SetPitch( pFontItem->GetPitch() );
                 m_pNumberCharEdit->SetFont( aFont  );
@@ -214,7 +214,7 @@ void SwInsFootNoteDlg::Init()
 {
     SwFmtFtn aFtnNote;
     OUString sNumStr;
-    Font aFont;
+    vcl::Font aFont;
     bExtCharAvailable = false;
 
     rSh.StartAction();

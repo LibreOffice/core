@@ -319,7 +319,7 @@ namespace vclcanvas
                     }
 
                     // paint sprite prio
-                    Font aVCLFont;
+                    vcl::Font aVCLFont;
                     aVCLFont.SetHeight( std::min(long(20),aOutputSize.Height()) );
                     aVCLFont.SetColor( COL_RED );
 

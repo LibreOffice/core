@@ -312,7 +312,7 @@ void SwAddressPreview::Paint(const Rectangle&)
     DrawRect( Rectangle(Point(0, 0), GetOutputSizePixel()) );
     Color aPaintColor(IsEnabled() ? rSettings.GetWindowTextColor() : rSettings.GetDisableColor());
     SetLineColor(aPaintColor);
-    Font aFont(GetFont());
+    vcl::Font aFont(GetFont());
     aFont.SetColor(aPaintColor);
     SetFont(aFont);
 

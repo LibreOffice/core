@@ -1371,7 +1371,7 @@ void DialogWindow::InitSettings(bool bFont, bool bForeground, bool bBackground)
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         SetPointFont( aFont );
     }

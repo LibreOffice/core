@@ -211,8 +211,8 @@ private:
     /** holds a model guard during drag and drop between BeginMovingHdl and EndMovingHdl */
     std::auto_ptr< OutlineViewModelChangeGuard > maDragAndDropModelGuard;
 
-    Font maPageNumberFont;
-    Font maBulletFont;
+    vcl::Font maPageNumberFont;
+    vcl::Font maBulletFont;
 
     SvxLRSpaceItem maLRSpaceItem;
     Image maSlideImage;

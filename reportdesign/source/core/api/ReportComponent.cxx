@@ -44,7 +44,7 @@ namespace reportdesign
     using namespace com::sun::star;
     using namespace comphelper;
 
-void lcl_getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont,LanguageType  _eLatin,LanguageType _eCJK,LanguageType _eCTL )
+void lcl_getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont, LanguageType  _eLatin, LanguageType _eCJK, LanguageType _eCTL )
 {
         LanguageType eLatin = _eLatin;
 
@@ -92,7 +92,7 @@ OFormatProperties::OFormatProperties()
         aLinguConfig.GetProperty(OUString("DefaultLocale_CTL"))  >>= aCharLocaleComplex;
         LanguageType eCurLangCTL = MsLangId::resolveSystemLanguageByScriptType(LanguageTag::convertToLanguageType( aCharLocaleComplex, false), COMPLEX);
 
-        Font aLatin,aCJK,aCTL;
+        vcl::Font aLatin,aCJK,aCTL;
         lcl_getDefaultFonts(aLatin,aCJK,aCTL,eCurLang,eCurLangCJK,eCurLangCTL);
         aFontDescriptor = VCLUnoHelper::CreateFontDescriptor(aLatin);
         aAsianFontDescriptor = VCLUnoHelper::CreateFontDescriptor(aCJK);

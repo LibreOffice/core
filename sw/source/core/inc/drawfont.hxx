@@ -31,7 +31,7 @@ class Point;
 class SwWrongList;
 class Size;
 class SwFont;
-class Font;
+namespace vcl { class Font; }
 class SwUnderlineFont;
 
 // encapsulates information for drawing text
@@ -607,7 +607,7 @@ public:
     // sets a new color at the output device if necessary if a font is passed
     // as argument, the change if made to the font otherwise the font at the
     // output device is changed returns if the font has been changed
-    bool ApplyAutoColor( Font* pFnt = 0 );
+    bool ApplyAutoColor( vcl::Font* pFnt = 0 );
 };
 
 #endif

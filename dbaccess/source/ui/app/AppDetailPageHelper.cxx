@@ -167,7 +167,7 @@ namespace
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         if( bFont )
         {
-            Font aFont;
+            vcl::Font aFont;
             aFont = rStyleSettings.GetFieldFont();
             aFont.SetColor( rStyleSettings.GetWindowTextColor() );
             SetPointFont( aFont );
@@ -1232,7 +1232,7 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
 
-        if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
+    if ( (rDCEvt.GetType() == DATACHANGED_FONTS) ||
         (rDCEvt.GetType() == DATACHANGED_DISPLAY) ||
         (rDCEvt.GetType() == DATACHANGED_FONTSUBSTITUTION) ||
         ((rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -1253,25 +1253,24 @@ void OAppDetailPageHelper::DataChanged( const DataChangedEvent& rDCEvt )
 void OAppDetailPageHelper::ImplInitSettings()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        Font aFont;
-        aFont = rStyleSettings.GetFieldFont();
-        aFont.SetColor( rStyleSettings.GetWindowTextColor() );
-        SetPointFont( aFont );
-        m_aTBPreview.SetPointFont( aFont );
+    vcl::Font aFont;
+    aFont = rStyleSettings.GetFieldFont();
+    aFont.SetColor( rStyleSettings.GetWindowTextColor() );
+    SetPointFont( aFont );
+    m_aTBPreview.SetPointFont( aFont );
 
-        SetTextColor( rStyleSettings.GetFieldTextColor() );
-        SetTextFillColor();
-        m_aBorder.SetTextColor( rStyleSettings.GetFieldTextColor() );
-        m_aBorder.SetTextFillColor();
-        m_aTBPreview.SetTextColor( rStyleSettings.GetFieldTextColor() );
-        m_aTBPreview.SetTextFillColor();
-
-        SetBackground( rStyleSettings.GetFieldColor() );
-        m_aBorder.SetBackground( rStyleSettings.GetFieldColor() );
-        m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
-        m_aDocumentInfo.SetBackground( rStyleSettings.GetFieldColor() );
-        m_aTBPreview.SetBackground( rStyleSettings.GetFieldColor() );
-        m_pTablePreview->SetBackground( rStyleSettings.GetFieldColor() );
+    SetTextColor( rStyleSettings.GetFieldTextColor() );
+    SetTextFillColor();
+    m_aBorder.SetTextColor( rStyleSettings.GetFieldTextColor() );
+    m_aBorder.SetTextFillColor();
+    m_aTBPreview.SetTextColor( rStyleSettings.GetFieldTextColor() );
+    m_aTBPreview.SetTextFillColor();
+    SetBackground( rStyleSettings.GetFieldColor() );
+    m_aBorder.SetBackground( rStyleSettings.GetFieldColor() );
+    m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
+    m_aDocumentInfo.SetBackground( rStyleSettings.GetFieldColor() );
+    m_aTBPreview.SetBackground( rStyleSettings.GetFieldColor() );
+    m_pTablePreview->SetBackground( rStyleSettings.GetFieldColor() );
 }
 
 OPreviewWindow::OPreviewWindow(Window* _pParent)
@@ -1346,7 +1345,7 @@ void OPreviewWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackg
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );

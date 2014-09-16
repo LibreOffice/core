@@ -143,7 +143,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
         if( pPrtFont != &aFont )
             delete pPrtFont;
 
-        const Font aOldFnt( rPrt.GetFont() );
+        const vcl::Font aOldFnt( rPrt.GetFont() );
         ((OutputDevice&)rPrt).SetFont( aFont );
         const FontMetric aWinMet( rPrt.GetFontMetric() );
         ((OutputDevice&)rPrt).SetFont( aOldFnt );
@@ -151,7 +151,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
 
         if( !nWidth )
             ++nWidth;
-        pPrtFont = new Font( aFont );
+        pPrtFont = new vcl::Font( aFont );
         pPrtFont->SetSize( Size( nWidth, aFont.GetSize().Height() ) );
         pScrFont = NULL;
     }
@@ -179,7 +179,7 @@ static bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
 struct CalcLinePosData
 {
     SwDrawTextInfo& rInf;
-    Font& rFont;
+    vcl::Font& rFont;
     sal_Int32 nCnt;
     const bool bSwitchH2V;
     const bool bSwitchL2R;
@@ -187,7 +187,7 @@ struct CalcLinePosData
     long* pKernArray;
     const bool bBidiPor;
 
-    CalcLinePosData( SwDrawTextInfo& _rInf, Font& _rFont,
+    CalcLinePosData( SwDrawTextInfo& _rInf, vcl::Font& _rFont,
                       sal_Int32 _nCnt, const bool _bSwitchH2V, const bool _bSwitchL2R,
                       long _nHalfSpace, long* _pKernArray, const bool _bBidiPor) :
         rInf( _rInf ),
@@ -282,7 +282,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
         if (nPrtAscent == USHRT_MAX) // printer ascent unknown?
         {
             CreatePrtFont( rOut );
-            const Font aOldFnt( rRefDev.GetFont() );
+            const vcl::Font aOldFnt( rRefDev.GetFont() );
             ((OutputDevice&)rRefDev).SetFont( *pPrtFont );
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             nPrtAscent = (sal_uInt16) aOutMet.GetAscent();
@@ -319,7 +319,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
         if (nPrtHeight == USHRT_MAX) // printer height unknown?
         {
             CreatePrtFont( rOut );
-            const Font aOldFnt( rRefDev.GetFont() );
+            const vcl::Font aOldFnt( rRefDev.GetFont() );
             ((OutputDevice&)rRefDev).SetFont( *pPrtFont );
             nPrtHeight = static_cast<sal_uInt16>(rRefDev.GetTextHeight());
 
@@ -353,7 +353,7 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
         {
             SolarMutexGuard aGuard;
 
-            const Font aOldFnt( rOut.GetFont() );
+            const vcl::Font aOldFnt( rOut.GetFont() );
             ((OutputDevice&)rOut).SetFont( *pPrtFont );
             const FontMetric aMet( rOut.GetFontMetric() );
             ((OutputDevice&)rOut).SetFont( aOldFnt );
@@ -404,7 +404,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
     OutputDevice* pOut = (OutputDevice*)&rOut;
 
     // Save old font
-    Font aOldOutFont( pOut->GetFont() );
+    vcl::Font aOldOutFont( pOut->GetFont() );
 
     nScrHeight = USHRT_MAX;
 
@@ -421,7 +421,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
         pPrinter = pPrt;
 
         // save old reference device font
-        Font aOldPrtFnt( pPrt->GetFont() );
+        vcl::Font aOldPrtFnt( pPrt->GetFont() );
 
         // set the font used at the reference device at the reference device
         // and the output device
@@ -511,7 +511,7 @@ void SwFntObj::GuessLeading( const SwViewShell&
         MapMode aTmpMap( MAP_TWIP );
         MapMode aOldMap = pWin->GetMapMode( );
         pWin->SetMapMode( aTmpMap );
-        const Font aOldFnt( pWin->GetFont() );
+        const vcl::Font aOldFnt( pWin->GetFont() );
         pWin->SetFont( *pPrtFont );
         const FontMetric aWinMet( pWin->GetFontMetric() );
         const sal_uInt16 nWinHeight = sal_uInt16( aWinMet.GetSize().Height() );
@@ -775,7 +775,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     const bool bUseScrFont =
         lcl_IsFontAdjustNecessary( rInf.GetOut(), rRefDev );
 
-    Font* pTmpFont = bUseScrFont ? pScrFont : pPrtFont;
+    vcl::Font* pTmpFont = bUseScrFont ? pScrFont : pPrtFont;
 
     //  bDirectPrint and bUseScrFont should have these values:
 
@@ -2215,7 +2215,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
         // Search by font comparison, quite expensive!
         // Look for same font and same printer
         pFntObj = pFntCache->First();
-        while ( pFntObj && !( pFntObj->aFont == *(Font *)pOwn &&
+        while ( pFntObj && !( pFntObj->aFont == *(vcl::Font *)pOwn &&
                               pFntObj->GetZoom() == nZoom &&
                               pFntObj->GetPropWidth() ==
                               ((SwSubFont*)pOwn)->GetPropWidth() &&
@@ -2227,7 +2227,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
             // found one without printer, let's see if there is one with
             // the same printer as well
             SwFntObj *pTmpObj = pFntObj;
-            while( pTmpObj && !( pTmpObj->aFont == *(Font *)pOwn &&
+            while( pTmpObj && !( pTmpObj->aFont == *(vcl::Font *)pOwn &&
                    pTmpObj->GetZoom()==nZoom && pTmpObj->pPrinter==pOut &&
                    pTmpObj->GetPropWidth() ==
                         ((SwSubFont*)pOwn)->GetPropWidth() ) )
@@ -2463,9 +2463,9 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
 
 extern Color aGlobalRetoucheColor;
 
-bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
+bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
 {
-    const Font& rFnt = pFont ? *pFont : GetOut().GetFont();
+    const vcl::Font& rFnt = pFont ? *pFont : GetOut().GetFont();
     bool bPrt = GetShell() && ! GetShell()->GetWin();
     ColorData nNewColor = COL_BLACK;
     bool bChgFntColor = false;
@@ -2565,7 +2565,7 @@ bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
             else if ( aNewColor != GetOut().GetFont().GetColor() )
             {
                 // set new font with new color at output device
-                Font aFont( rFnt );
+                vcl::Font aFont( rFnt );
                 aFont.SetColor( aNewColor );
                 GetOut().SetFont( aFont );
             }

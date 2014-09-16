@@ -42,7 +42,7 @@ namespace vclcanvas
                             rendering::XGraphicDevice&                      rDevice,
                             const OutDevProviderSharedPtr&                  rOutDevProvider ) :
         CanvasFont_Base( m_aMutex ),
-        maFont( Font( rFontRequest.FontDescription.FamilyName,
+        maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
@@ -169,7 +169,7 @@ namespace vclcanvas
         return aRet;
     }
 
-    ::Font CanvasFont::getVCLFont() const
+    vcl::Font CanvasFont::getVCLFont() const
     {
         return *maFont;
     }

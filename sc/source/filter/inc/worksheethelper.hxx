@@ -283,7 +283,7 @@ public:
     /** Inserts a rich-string cell directly into the Calc sheet. */
     void putRichString(
         const com::sun::star::table::CellAddress& rAddress,
-        const RichString& rString, const Font* pFirstPortionFont );
+        const RichString& rString, const oox::xls::Font* pFirstPortionFont );
     /** Inserts a formula cell directly into the Calc sheet. */
     void putFormulaTokens(
         const com::sun::star::table::CellAddress& rAddress, const ApiTokenSequence& rTokens );

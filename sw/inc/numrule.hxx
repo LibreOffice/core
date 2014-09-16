@@ -35,7 +35,7 @@
 class SwTxtFmtColl;
 class IDocumentListsAccess;
 class SwNodeNum;
-class Font;
+namespace vcl { class Font; }
 class SvxBrushItem;
 class SfxGrabBagItem;
 class SvxNumRule;
@@ -298,7 +298,7 @@ namespace numfunc
 
         @author OD
     */
-    SW_DLLPUBLIC const Font& GetDefBulletFont();
+    SW_DLLPUBLIC const vcl::Font& GetDefBulletFont();
 
     /** retrieve unicode of character used for the default bullet list for the given list level
 

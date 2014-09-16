@@ -77,17 +77,17 @@ private:
 
 public:
     SmSym();
-    SmSym(const OUString& rName, const Font& rFont, sal_UCS4 cChar,
+    SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar,
           const OUString& rSet, bool bIsPredefined = false);
     SmSym(const SmSym& rSymbol);
 
     SmSym&      operator = (const SmSym& rSymbol);
 
-    const Font&     GetFace() const { return m_aFace; }
+    const vcl::Font&  GetFace() const { return m_aFace; }
     sal_UCS4        GetCharacter() const { return m_cChar; }
     const OUString&   GetName() const { return m_aName; }
 
-    void            SetFace( const Font& rFont )        { m_aFace = rFont; }
+    void            SetFace( const vcl::Font& rFont )        { m_aFace = rFont; }
     void            SetCharacter( sal_UCS4 cChar )   { m_cChar = cChar; }
 
     bool            IsPredefined() const        { return m_bPredefined; }

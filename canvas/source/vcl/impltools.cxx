@@ -100,7 +100,7 @@ namespace vclcanvas
         }
 
         bool setupFontTransform( ::Point&                       o_rPoint,
-                                 ::Font&                        io_rVCLFont,
+                                 vcl::Font&                    io_rVCLFont,
                                  const rendering::ViewState&    rViewState,
                                  const rendering::RenderState&  rRenderState,
                                  ::OutputDevice&                rOutDev )

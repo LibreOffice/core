@@ -502,7 +502,7 @@ sal_Int32 AccessibleDialogControlShape::getForeground(  ) throw (RuntimeExceptio
             nColor = pWindow->GetControlForeground().GetColor();
         else
         {
-            Font aFont;
+            vcl::Font aFont;
             if ( pWindow->IsControlFont() )
                 aFont = pWindow->GetControlFont();
             else
@@ -548,7 +548,7 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  ) throw (Runtime
         Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), UNO_QUERY );
         if ( xDev.is() )
         {
-            Font aFont;
+            vcl::Font aFont;
             if ( pWindow->IsControlFont() )
                 aFont = pWindow->GetControlFont();
             else

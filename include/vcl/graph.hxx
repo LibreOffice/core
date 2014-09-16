@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star { namespace graphic { class XGrap
 
 class   ImpGraphic;
 class   OutputDevice;
-class   Font;
+namespace vcl { class Font; }
 class   GfxLink;
 
 class VCL_DLLPUBLIC GraphicConversionParameters
@@ -147,7 +147,7 @@ public:
                               const Point& rDestPt,
                               const Size& rDestSize ) const;
     static void         DrawEx( OutputDevice* pOutDev, const OUString& rText,
-                              Font& rFont, const BitmapEx& rBitmap,
+                              vcl::Font& rFont, const BitmapEx& rBitmap,
                               const Point& rDestPt, const Size& rDestSize );
 
     void                StartAnimation( OutputDevice* pOutDev,

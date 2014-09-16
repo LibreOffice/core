@@ -40,20 +40,20 @@
 class VCL_DLLPUBLIC InputContext
 {
 private:
-    Font            maFont;
-    sal_uLong           mnOptions;
+    vcl::Font       maFont;
+    sal_uLong       mnOptions;
 
 public:
                     InputContext() { mnOptions = 0; }
                     InputContext( const InputContext& rInputContext ) :
                         maFont( rInputContext.maFont )
                     { mnOptions = rInputContext.mnOptions; }
-                    InputContext( const Font& rFont, sal_uLong nOptions = 0 ) :
+                    InputContext( const vcl::Font& rFont, sal_uLong nOptions = 0 ) :
                         maFont( rFont )
                     { mnOptions = nOptions; }
 
-    void            SetFont( const Font& rFont ) { maFont = rFont; }
-    const Font&     GetFont() const { return maFont; }
+    void            SetFont( const vcl::Font& rFont ) { maFont = rFont; }
+    const vcl::Font& GetFont() const { return maFont; }
 
     void            SetOptions( sal_uLong nOptions ) { mnOptions = nOptions; }
     sal_uLong           GetOptions() const { return mnOptions; }

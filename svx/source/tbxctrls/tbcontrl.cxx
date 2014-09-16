@@ -163,7 +163,7 @@ private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<FontList>      m_aOwnFontList;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    Font                           aCurFont;
+    vcl::Font                      aCurFont;
     Size                           aLogicalSize;
     OUString                       aCurText;
     sal_uInt16                     nFtCount;
@@ -591,7 +591,7 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     aFont.SetEmphasisMark( static_cast< const SvxEmphasisMarkItem* >( pItem )->GetEmphasisMark() );
 
                 // setup the device & draw
-                Font aOldFont( pDevice->GetFont() );
+                vcl::Font aOldFont( pDevice->GetFont() );
                 Color aOldColor( pDevice->GetTextColor() );
                 Color aOldFillColor( pDevice->GetFillColor() );
 
@@ -768,7 +768,7 @@ IMPL_LINK( SvxFontNameBox_Impl, CheckAndMarkUnknownFont, VclWindowEvent*, event 
     OUString fontname = GetSubEdit()->GetText();
     lcl_GetDocFontList( &pFontList, this );
     // If the font is unknown, show it in italic.
-    Font font = GetControlFont();
+    vcl::Font font = GetControlFont();
     if( pFontList != NULL && pFontList->IsAvailable( fontname ))
     {
         if( font.GetItalic() != ITALIC_NONE )

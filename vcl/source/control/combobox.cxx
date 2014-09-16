@@ -1125,7 +1125,7 @@ void ComboBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, s
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
-    Font aFont = mpImplLB->GetMainWindow().GetDrawPixelFont( pDev );
+    vcl::Font aFont = mpImplLB->GetMainWindow().GetDrawPixelFont( pDev );
     OutDevType eOutDevType = pDev->GetOutDevType();
 
     pDev->Push();

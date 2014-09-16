@@ -37,7 +37,7 @@ ScScenarioListBox::ScScenarioListBox( ScScenarioWindow& rParent ) :
     ListBox( &rParent, WB_BORDER | WB_TABSTOP ),
     mrParent( rParent )
 {
-    Font aFont( GetFont() );
+    vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
     aFont.SetWeight( WEIGHT_LIGHT );
     SetFont( aFont );
@@ -200,7 +200,7 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent, const OUString& aQH_List,
         aLbScenario ( *this ),
         aEdComment  ( this,  WB_BORDER | WB_LEFT | WB_READONLY | WB_VSCROLL | WB_TABSTOP )
 {
-    Font aFont( GetFont() );
+    vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
     aFont.SetWeight( WEIGHT_LIGHT );
     aEdComment.SetFont( aFont );

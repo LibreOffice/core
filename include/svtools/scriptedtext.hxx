@@ -25,7 +25,7 @@
 
 
 class OutputDevice;
-class Font;
+namespace vcl { class Font; }
 class SvtScriptedTextHelper_Impl;
 class Size;
 class Point;
@@ -64,7 +64,7 @@ public:
                                     The font for asian characters.
                                     @param  _pCmplxFont
                                     The font for complex text layout. */
-    void                        SetFonts( Font* _pLatinFont, Font* _pAsianFont, Font* _pCmplxFont );
+    void                        SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont );
 
                                 /** Sets the default font of the current output device to all script types. */
     void                        SetDefaultFont();

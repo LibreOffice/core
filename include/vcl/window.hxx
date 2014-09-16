@@ -513,8 +513,8 @@ private:
 
     SAL_DLLPRIVATE void                 ImplInitResolutionSettings();
 
-    SAL_DLLPRIVATE void                 ImplPointToLogic( Font& rFont ) const;
-    SAL_DLLPRIVATE void                 ImplLogicToPoint( Font& rFont ) const;
+    SAL_DLLPRIVATE void                 ImplPointToLogic( vcl::Font& rFont ) const;
+    SAL_DLLPRIVATE void                 ImplLogicToPoint( vcl::Font& rFont ) const;
 
     SAL_DLLPRIVATE bool                 ImplSysObjClip( const Region* pOldRegion );
     SAL_DLLPRIVATE void                 ImplUpdateSysObjChildrenClip();
@@ -566,7 +566,7 @@ private:
     True if the font can be used as UI font
     False if the font is unsuitable as UI font
      */
-    SAL_DLLPRIVATE bool                 ImplCheckUIFont( const Font& rFont );
+    SAL_DLLPRIVATE bool                 ImplCheckUIFont( const vcl::Font& rFont );
 
     SAL_DLLPRIVATE void                 ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl = true );
 
@@ -764,15 +764,15 @@ public:
     void                                UpdateSettings( const AllSettings& rSettings, bool bChild = false );
     void                                NotifyAllChildren( DataChangedEvent& rDCEvt );
 
-    void                                SetPointFont( const Font& rFont );
-    Font                                GetPointFont() const;
-    void                                SetZoomedPointFont( const Font& rFont );
+    void                                SetPointFont( const vcl::Font& rFont );
+    vcl::Font                           GetPointFont() const;
+    void                                SetZoomedPointFont( const vcl::Font& rFont );
     long                                GetDrawPixel( OutputDevice* pDev, long nPixels ) const;
-    Font                                GetDrawPixelFont( OutputDevice* pDev ) const;
+    vcl::Font                           GetDrawPixelFont( OutputDevice* pDev ) const;
 
     void                                SetControlFont();
-    void                                SetControlFont( const Font& rFont );
-    Font                                GetControlFont() const;
+    void                                SetControlFont( const vcl::Font& rFont );
+    vcl::Font                           GetControlFont() const;
     bool                                IsControlFont() const;
     void                                SetControlForeground();
     void                                SetControlForeground( const Color& rColor );

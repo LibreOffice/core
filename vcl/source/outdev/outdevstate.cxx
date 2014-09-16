@@ -90,7 +90,7 @@ void OutputDevice::Push( PushFlags nFlags )
             pState->mpFillColor = NULL;
     }
     if ( nFlags & PUSH_FONT )
-        pState->mpFont = new Font( maFont );
+        pState->mpFont = new vcl::Font( maFont );
     if ( nFlags & PUSH_TEXTCOLOR )
         pState->mpTextColor = new Color( GetTextColor() );
     if ( nFlags & PUSH_TEXTFILLCOLOR )
@@ -488,10 +488,10 @@ void OutputDevice::SetBackground( const Wallpaper& rBackground )
         mpAlphaVDev->SetBackground( rBackground );
 }
 
-void OutputDevice::SetFont( const Font& rNewFont )
+void OutputDevice::SetFont( const vcl::Font& rNewFont )
 {
 
-    Font aFont( rNewFont );
+    vcl::Font aFont( rNewFont );
     aFont.SetLanguage(rNewFont.GetLanguage());
     if ( mnDrawMode & (DRAWMODE_BLACKTEXT | DRAWMODE_WHITETEXT | DRAWMODE_GRAYTEXT | DRAWMODE_GHOSTEDTEXT | DRAWMODE_SETTINGSTEXT |
                        DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_GRAYFILL | DRAWMODE_NOFILL |

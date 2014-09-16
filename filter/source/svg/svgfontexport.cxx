@@ -49,7 +49,7 @@ SVGFontExport::~SVGFontExport()
 
 
 
-SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const Font& rFont )
+SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont )
 {
     FontWeight      eWeight( WEIGHT_NORMAL );
     FontItalic      eItalic( ITALIC_NONE );
@@ -174,7 +174,7 @@ void SVGFontExport::implCollectGlyphs()
 
 
 
-void SVGFontExport::implEmbedFont( const Font& rFont )
+void SVGFontExport::implEmbedFont( const vcl::Font& rFont )
 {
     if( mrExport.IsEmbedFonts() )
     {
@@ -190,7 +190,7 @@ void SVGFontExport::implEmbedFont( const Font& rFont )
                 OUString     aCurIdStr( aEmbeddedFontStr );
                 OUString     aUnitsPerEM( OUString::number( nFontEM ) );
                 VirtualDevice       aVDev;
-                Font                aFont( rFont );
+                vcl::Font           aFont( rFont );
 
                 aFont.SetSize( Size( 0, nFontEM ) );
                 aFont.SetAlign( ALIGN_BASELINE );
@@ -309,7 +309,7 @@ void SVGFontExport::EmbedFonts()
 
             while( aFontItalicIter != rFontItalicMap.end() )
             {
-                Font aFont;
+                vcl::Font aFont;
 
                 aFont.SetName( (*aGlyphTreeIter).first );
                 aFont.SetWeight( (*aFontWeightIter).first );

@@ -915,7 +915,7 @@ void FontStylePropertyBox::update()
     mpMenu->CheckItem( CM_UNDERLINED, mnFontUnderline != awt::FontUnderline::NONE );
 
     // update sample edit
-    Font aFont( mpEdit->GetFont() );
+    vcl::Font aFont( mpEdit->GetFont() );
     aFont.SetWeight( mfFontWeight == awt::FontWeight::BOLD ? WEIGHT_BOLD : WEIGHT_NORMAL );
     aFont.SetItalic( meFontSlant == awt::FontSlant_ITALIC ? ITALIC_NORMAL : ITALIC_NONE  );
     aFont.SetUnderline( mnFontUnderline == awt::FontUnderline::NONE ? UNDERLINE_NONE : UNDERLINE_SINGLE );

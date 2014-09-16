@@ -97,10 +97,10 @@ static void lcl_PaintReplacement( const SwRect &rRect, const OUString &rText,
                            const SwViewShell &rSh, const SwNoTxtFrm *pFrm,
                            bool bDefect )
 {
-    static Font *pFont = 0;
+    static vcl::Font *pFont = 0;
     if ( !pFont )
     {
-        pFont = new Font();
+        pFont = new vcl::Font();
         pFont->SetWeight( WEIGHT_BOLD );
         pFont->SetStyleName( OUString() );
         pFont->SetName(OUString("Arial Unicode"));

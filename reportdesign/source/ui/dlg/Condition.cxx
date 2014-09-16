@@ -249,7 +249,7 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     m_pAddCondition->SetStyle( m_pAddCondition->GetStyle() | WB_NOPOINTERFOCUS );
     m_pRemoveCondition->SetStyle( m_pRemoveCondition->GetStyle() | WB_NOPOINTERFOCUS );
 
-    Font aFont( m_pAddCondition->GetFont() );
+    vcl::Font aFont( m_pAddCondition->GetFont() );
     aFont.SetWeight( WEIGHT_BOLD );
     m_pAddCondition->SetFont( aFont );
     m_pRemoveCondition->SetFont( aFont );
@@ -494,7 +494,7 @@ void Condition::updateToolbar(const uno::Reference< report::XReportControlFormat
 
         try
         {
-            Font aBaseFont( Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont() );
+            vcl::Font aBaseFont( Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont() );
             SvxFont aFont( VCLUnoHelper::CreateFont( _xReportControlFormat->getFontDescriptor(), aBaseFont ) );
             aFont.SetHeight( OutputDevice::LogicToLogic( Size( 0, (sal_Int32)aFont.GetHeight() ), MAP_POINT, MAP_TWIP ).Height());
             aFont.SetEmphasisMark( static_cast< FontEmphasisMark >( _xReportControlFormat->getControlTextEmphasis() ) );

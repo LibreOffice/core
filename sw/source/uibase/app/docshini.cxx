@@ -182,7 +182,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             {
                 sEntry = pStdFont->GetFontFor(nFontId);
 
-                Font aFont( sEntry, Size( 0, 10 ) );
+                vcl::Font aFont( sEntry, Size( 0, 10 ) );
                 if( pPrt )
                 {
                     aFont = pPrt->GetFontMetric( aFont );
@@ -201,7 +201,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
                         eLanguage = eUiLanguage;
                 }
 
-                Font aLangDefFont = OutputDevice::GetDefaultFont(
+                vcl::Font aLangDefFont = OutputDevice::GetDefaultFont(
                     nFontTypes[i],
                     eLanguage,
                     DEFAULTFONT_FLAGS_ONLYONE );
@@ -264,7 +264,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             {
                 sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
 
-                Font aFont( sEntry, Size( 0, 10 ) );
+                vcl::Font aFont( sEntry, Size( 0, 10 ) );
                 if( pPrt )
                     aFont = pPrt->GetFontMetric( aFont );
 

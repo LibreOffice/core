@@ -723,7 +723,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         // we want to have two pixels frame ...
         return;
 
-    Font aFont = GetDataWindow().GetDrawPixelFont( pDev );
+    vcl::Font aFont = GetDataWindow().GetDrawPixelFont( pDev );
         // the 'normal' painting uses always the data window as device to output to, so we have to calc the new font
         // relative to the data wins current settings
 

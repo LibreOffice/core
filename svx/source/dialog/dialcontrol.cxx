@@ -48,7 +48,7 @@ DialControlBmp::DialControlBmp( Window& rParent ) :
     EnableRTL( false );
 }
 
-void DialControlBmp::InitBitmap(const Font& rFont)
+void DialControlBmp::InitBitmap(const vcl::Font& rFont)
 {
     Init();
     SetFont(rFont);
@@ -82,7 +82,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
     if ( !rText.isEmpty() )
     {
         // rotated text
-        Font aFont( GetFont() );
+        vcl::Font aFont( GetFont() );
         aFont.SetColor( GetTextColor() );
         aFont.SetOrientation( static_cast< short >( (nAngle + 5) / 10 ) );  // Font uses 1/10 degrees
         aFont.SetWeight( WEIGHT_BOLD );
@@ -238,7 +238,7 @@ DialControl::DialControl_Impl::DialControl_Impl ( Window& rParent ) :
 {
 }
 
-void DialControl::DialControl_Impl::Init( const Size& rWinSize, const Font& rWinFont )
+void DialControl::DialControl_Impl::Init( const Size& rWinSize, const vcl::Font& rWinFont )
 {
     maWinFont = rWinFont;
     maWinFont.SetTransparent(true);
@@ -425,7 +425,7 @@ void DialControl::SetModifyHdl( const Link& rLink )
     mpImpl->maModifyHdl = rLink;
 }
 
-void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
+void DialControl::Init( const Size& rWinSize, const vcl::Font& rWinFont )
 {
     mpImpl->Init( rWinSize, rWinFont );
     EnableRTL( false ); // don't mirror mouse handling
@@ -436,9 +436,9 @@ void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 void DialControl::Init( const Size& rWinSize )
 {
     //hidpi TODO: GetDefaultFont() picks a font size too small, so fix it here.
-    Font aDefaultSize = GetFont();
+    vcl::Font aDefaultSize = GetFont();
 
-    Font aFont( OutputDevice::GetDefaultFont(
+    vcl::Font aFont( OutputDevice::GetDefaultFont(
         DEFAULTFONT_UI_SANS, Application::GetSettings().GetUILanguageTag().getLanguageType(), DEFAULTFONT_FLAGS_ONLYONE ) );
 
     aFont.SetHeight(aDefaultSize.GetHeight());

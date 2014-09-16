@@ -444,7 +444,7 @@ namespace accessibility
                 nColor = m_pTabBar->GetControlForeground().GetColor();
             else
             {
-                Font aFont;
+                vcl::Font aFont;
                 if ( m_pTabBar->IsControlFont() )
                     aFont = m_pTabBar->GetControlFont();
                 else
@@ -488,7 +488,7 @@ namespace accessibility
             Reference< awt::XDevice > xDev( m_pTabBar->GetComponentInterface(), UNO_QUERY );
             if ( xDev.is() )
             {
-                Font aFont;
+                vcl::Font aFont;
                 if ( m_pTabBar->IsControlFont() )
                     aFont = m_pTabBar->GetControlFont();
                 else

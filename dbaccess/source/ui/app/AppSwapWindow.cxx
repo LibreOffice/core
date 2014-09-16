@@ -74,7 +74,7 @@ void OApplicationSwapWindow::ImplInitSettings( bool bFont, bool bForeground, boo
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );

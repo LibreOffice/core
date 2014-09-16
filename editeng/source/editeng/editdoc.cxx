@@ -1996,7 +1996,7 @@ void EditDoc::RemoveItemsFromPool(const ContentNode& rNode)
 
 void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, short nScriptType )
 {
-    Font aPrevFont( rFont );
+    vcl::Font aPrevFont( rFont );
     rFont.SetAlign( ALIGN_BASELINE );
     rFont.SetTransparent( true );
 
@@ -2255,7 +2255,7 @@ EditPaM EditDoc::RemoveText()
     ContentNode* pPrevFirstNode = GetObject(0);
     SfxStyleSheet* pPrevStyle = pPrevFirstNode->GetStyleSheet();
     SfxItemSet aPrevSet( pPrevFirstNode->GetContentAttribs().GetItems() );
-    Font aPrevFont( pPrevFirstNode->GetCharAttribs().GetDefFont() );
+    vcl::Font aPrevFont( pPrevFirstNode->GetCharAttribs().GetDefFont() );
 
     ImplDestroyContents();
 

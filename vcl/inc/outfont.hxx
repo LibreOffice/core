@@ -38,7 +38,7 @@ class ImplFontEntry;
 class ImplPreMatchFontSubstitution;
 class ImplGlyphFallbackFontSubstitution;
 class FontSelectPattern;
-class Font;
+namespace vcl { class Font; }
 class ConvertChar;
 struct FontMatchStatus;
 class OutputDevice;
@@ -112,7 +112,7 @@ public: // TODO: hide members behind accessor methods
 class FontSelectPatternAttributes : public ImplFontAttributes
 {
 public:
-                        FontSelectPatternAttributes( const Font&, const OUString& rSearchName,
+                        FontSelectPatternAttributes( const vcl::Font&, const OUString& rSearchName,
                             const Size&, float fExactHeight );
 #ifdef WNT
                         FontSelectPatternAttributes( const PhysicalFontFace&, const Size&,
@@ -144,7 +144,7 @@ public:
 class FontSelectPattern : public FontSelectPatternAttributes
 {
 public:
-                        FontSelectPattern( const Font&, const OUString& rSearchName,
+                        FontSelectPattern( const vcl::Font&, const OUString& rSearchName,
                             const Size&, float fExactHeight );
 #ifdef WNT
 // ifdeffed to prevent it going into unusedcode.easy

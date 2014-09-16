@@ -127,7 +127,7 @@ void FileControl::StateChanged( StateChangedType nType )
         GetEdit().SetControlFont( GetControlFont() );
         // Only use height of the button, as in HTML
         // always Courier is used
-        Font aFont = GetButton().GetControlFont();
+        vcl::Font aFont = GetButton().GetControlFont();
         aFont.SetSize( GetControlFont().GetSize() );
         GetButton().SetControlFont( aFont );
     }

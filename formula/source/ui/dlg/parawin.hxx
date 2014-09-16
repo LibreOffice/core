@@ -53,8 +53,8 @@ private:
         const IFunctionDescription* pFuncDesc;
         IControlReferenceHandler*   pMyParent;
         sal_uInt16          nArgs;      // unsuppressed arguments
-        Font            aFntBold;
-        Font            aFntLight;
+        vcl::Font        aFntBold;
+        vcl::Font        aFntLight;
 
         FixedText       *m_pFtEditDesc;
         FixedText       *m_pFtArgName;
@@ -114,7 +114,7 @@ protected:
 
 
         void            SetArgName      (sal_uInt16 no,const OUString &aArg);
-        void            SetArgNameFont  (sal_uInt16 no,const Font&);
+        void            SetArgNameFont  (sal_uInt16 no,const vcl::Font&);
         void            SetArgVal       (sal_uInt16 no,const OUString &aArg);
 
         void            HideParaLine(sal_uInt16 no);
@@ -142,7 +142,7 @@ public:
 
         OUString        GetArgument(sal_uInt16 no);
         void            SetArgument(sal_uInt16 no, const OUString& aString);
-        void            SetArgumentFonts(const Font&aBoldFont,const Font&aLightFont);
+        void            SetArgumentFonts(const vcl::Font& aBoldFont,const vcl::Font& aLightFont);
 
         void            SetEdFocus(sal_uInt16 nEditLine); //Sichtbare Editzeilen
         sal_uInt16          GetSliderPos();

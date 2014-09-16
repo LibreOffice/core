@@ -29,8 +29,8 @@ private:
     OUString  aMessage;
     Point     aTextStart;
     long      nTextHeight;
-    Font      aTextFont;
-    Font      aHeadFont;
+    vcl::Font aTextFont;
+    vcl::Font aHeadFont;
 
 protected:
     virtual void    Paint( const Rectangle& rRect ) SAL_OVERRIDE;

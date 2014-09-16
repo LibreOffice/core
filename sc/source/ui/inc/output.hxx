@@ -36,7 +36,7 @@ namespace editeng {
 }
 
 class Rectangle;
-class Font;
+namespace vcl { class Font; }
 class OutputDevice;
 class EditEngine;
 class ScDocument;
@@ -233,7 +233,7 @@ private:
                                     long& rEngineWidth, long& rEngineHeight, long& rNeededPixel,
                                     bool& rLeftClip, bool& rRightClip );
 
-    void SetSyntaxColor( Font* pFont, const ScRefCellValue& rCell );
+    void SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell );
     void SetEditSyntaxColor( EditEngine& rEngine, ScRefCellValue& rCell );
 
     double          GetStretch();

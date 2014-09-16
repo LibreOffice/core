@@ -65,7 +65,7 @@ SmSym::SmSym(const SmSym& rSymbol)
 }
 
 
-SmSym::SmSym(const OUString& rName, const Font& rFont, sal_UCS4 cChar,
+SmSym::SmSym(const OUString& rName, const vcl::Font& rFont, sal_UCS4 cChar,
              const OUString& rSet, bool bIsPredefined)
 {
     m_aName     = m_aExportName   = rName;
@@ -269,7 +269,7 @@ void SmSymbolManager::Load()
     {
         // make the new symbol a copy but with ITALIC_NORMAL, and add it to iGreek
         const SmSym &rSym = *aGreekSymbols[i];
-        Font aFont( rSym.GetFace() );
+        vcl::Font aFont( rSym.GetFace() );
         OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
         OUString aSymbolName('i');

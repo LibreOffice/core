@@ -818,7 +818,7 @@ namespace svt
 
         if (bFont)
         {
-            Font aFont = rStyleSettings.GetFieldFont();
+            vcl::Font aFont = rStyleSettings.GetFieldFont();
             if (IsControlFont())
             {
                 GetDataWindow().SetControlFont(GetControlFont());

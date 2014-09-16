@@ -753,7 +753,7 @@ namespace cppcanvas
         }
 
         uno::Reference< rendering::XCanvasFont > ImplRenderer::createFont( double&                        o_rFontRotation,
-                                                                           const ::Font&                  rFont,
+                                                                           const vcl::Font&               rFont,
                                                                            const ActionFactoryParameters& rParms ) const
         {
             rendering::FontRequest aFontRequest;
@@ -824,7 +824,7 @@ namespace cppcanvas
             const sal_Int32 nFontWidthLog = rFontSizeLog.Width();
             if( nFontWidthLog != 0 )
             {
-                ::Font aTestFont = rFont;
+                vcl::Font aTestFont = rFont;
                 aTestFont.SetWidth( 0 );
                 sal_Int32 nNormalWidth = rParms.mrVDev.GetFontMetric( aTestFont ).GetWidth();
                 if( nNormalWidth != nFontWidthLog )
@@ -1488,7 +1488,7 @@ namespace cppcanvas
                     case META_FONT_ACTION:
                     {
                         ::cppcanvas::internal::OutDevState& rState = rStates.getState();
-                        const ::Font& rFont( static_cast<MetaFontAction*>(pCurrAct)->GetFont() );
+                        const vcl::Font& rFont( static_cast<MetaFontAction*>(pCurrAct)->GetFont() );
 
                         rState.xFont = createFont( rState.fontRotation,
                                                    rFont,
@@ -2985,7 +2985,7 @@ namespace cppcanvas
                 ::cppcanvas::internal::OutDevState& rState = aStateStack.getState();
 
                 rState.xFont = createFont( rState.fontRotation,
-                                           ::Font(), // default font
+                                           ::vcl::Font(), // default font
                                            aParms );
             }
 

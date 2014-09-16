@@ -420,7 +420,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     // Is the font of this edit larger than the field?
     if (m_aAbsolute.GetTextHeight() > nH)
     {
-        Font aApplFont (m_aAbsolute.GetFont());
+        vcl::Font aApplFont (m_aAbsolute.GetFont());
         const Size pointAbsoluteSize(m_aAbsolute.PixelToLogic( Size( 0, nH - 2 ), MapMode(MAP_POINT) ));
         aApplFont.SetSize( pointAbsoluteSize );
         m_aAbsolute.SetControlFont( aApplFont );
@@ -735,7 +735,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
             Fraction aZoom = GetZoom();
 
             // not all of these controls need to know the new zoom, but to be sure ...
-            Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
+            vcl::Font aFont( GetSettings().GetStyleSettings().GetFieldFont() );
             if ( IsControlFont() )
                 aFont.Merge( GetControlFont() );
 
@@ -1038,7 +1038,7 @@ void DbGridControl::ImplInitWindow( const InitWindowFacet _eInitWhat )
     {
         if ( m_bNavigationBar )
         {
-            Font aFont = m_aBar.GetSettings().GetStyleSettings().GetFieldFont();
+            vcl::Font aFont = m_aBar.GetSettings().GetStyleSettings().GetFieldFont();
             if ( IsControlFont() )
                 m_aBar.SetControlFont( GetControlFont() );
             else

@@ -102,7 +102,7 @@ class  SVX_DLLPUBLIC BulletsSettings_Impl:public BulletsSettings
 {
     public:
         sal_Unicode cBulletChar;
-        Font            aFont;
+        vcl::Font   aFont;
 
     public:
         BulletsSettings_Impl(NBType eTy)
@@ -259,7 +259,7 @@ class SVX_DLLPUBLIC BulletsTypeMgr: public NBOTypeMgrBase
         virtual OUString GetDescription(sal_uInt16 nIndex,bool isDefault=false) SAL_OVERRIDE;
         virtual bool IsCustomized(sal_uInt16 nIndex) SAL_OVERRIDE;
         sal_Unicode GetBulChar(sal_uInt16 nIndex);
-        Font GetBulCharFont(sal_uInt16 nIndex);
+        vcl::Font GetBulCharFont(sal_uInt16 nIndex);
         static BulletsTypeMgr& GetInstance();
 };
 

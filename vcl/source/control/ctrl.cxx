@@ -394,7 +394,7 @@ OutputDevice* Control::GetReferenceDevice() const
     return mpControlData->mpReferenceDevice;
 }
 
-const Font& Control::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& Control::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetLabelFont();
 }

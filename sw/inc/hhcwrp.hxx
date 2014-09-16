@@ -93,7 +93,7 @@ public:
         SwView* pView,
         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage, LanguageType nTargetLanguage,
-        const Font *pTargetFont,
+        const vcl::Font *pTargetFont,
         sal_Int32 nConvOptions, bool bIsInteractive,
         bool bStart, bool bOther, bool bSelection );
 

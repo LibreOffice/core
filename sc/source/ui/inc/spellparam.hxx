@@ -48,14 +48,14 @@ public:
                             ScConversionType eConvType,
                             LanguageType eSourceLang,
                             LanguageType eTargetLang,
-                            const Font& rTargetFont,
+                            const vcl::Font& rTargetFont,
                             sal_Int32 nOptions,
                             bool bIsInteractive );
 
     inline ScConversionType GetType() const     { return meConvType; }
     inline LanguageType GetSourceLang() const   { return meSourceLang; }
     inline LanguageType GetTargetLang() const   { return meTargetLang; }
-    inline const Font*  GetTargetFont() const   { return mbUseTargetFont ? &maTargetFont : 0; }
+    inline const vcl::Font*  GetTargetFont() const   { return mbUseTargetFont ? &maTargetFont : 0; }
     inline sal_Int32    GetOptions() const      { return mnOptions; }
     inline bool         IsInteractive() const   { return mbIsInteractive; }
 
@@ -63,7 +63,7 @@ private:
     ScConversionType    meConvType;         /// Type of the conversion.
     LanguageType        meSourceLang;       /// Source language for conversion.
     LanguageType        meTargetLang;       /// Target language for conversion.
-    Font                maTargetFont;       /// Target font to be used if language has to be changed.
+    vcl::Font          maTargetFont;       /// Target font to be used if language has to be changed.
     sal_Int32           mnOptions;          /// Conversion options.
     bool                mbUseTargetFont;    /// True = Use maTargetFont to change font during conversion.
     bool                mbIsInteractive;    /// True = Text conversion has (specific) dialog that may be raised.

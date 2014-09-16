@@ -1452,7 +1452,7 @@ void OJoinTableView::StateChanged( StateChangedType nType )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-        Font aFont = rStyleSettings.GetGroupFont();
+        vcl::Font aFont = rStyleSettings.GetGroupFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );

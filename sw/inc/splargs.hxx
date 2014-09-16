@@ -24,12 +24,13 @@
 #include <tools/gen.hxx>
 #include <limits.h>
 
-class SwTxtNode;
-class SwIndex;
-class Font;
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+
+class SwTxtNode;
+class SwIndex;
+namespace vcl { class Font; }
 
 struct SwArgsBase     // used for text conversion (Hangul/Hanja, ...)
 {
@@ -65,7 +66,7 @@ struct SwConversionArgs : SwArgsBase
 
     // used for chinese translation
     LanguageType    nConvTargetLang;    // target language of text to be changed
-    const Font     *pTargetFont;        // target font of text to be changed
+    const vcl::Font *pTargetFont;        // target font of text to be changed
     // explicitly enables or disables application of the above two
     bool            bAllowImplicitChangesForNotConvertibleText;
 

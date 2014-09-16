@@ -477,7 +477,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nTop, long nB
     }
     else
     {
-        Font aFont = GetFont();
+        vcl::Font aFont = GetFont();
         if ( mnWinStyle & WB_RIGHT_ALIGNED )
             aFont.SetOrientation( 2700 );
         else
@@ -998,7 +998,7 @@ void Ruler::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 
     if ( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetToolFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
@@ -1031,7 +1031,7 @@ void Ruler::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 
     maVirDev.SetSettings( GetSettings() );
     maVirDev.SetBackground( GetBackground() );
-    Font aFont = GetFont();
+    vcl::Font aFont = GetFont();
 
     if ( mnWinStyle & WB_VERT )
         aFont.SetOrientation( 900 );

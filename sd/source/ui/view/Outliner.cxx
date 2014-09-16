@@ -1453,7 +1453,7 @@ void Outliner::HandleChangedSelection (void)
 }
 
 void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-        const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
+        const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
     ::boost::shared_ptr<ViewShell> pViewShell (mpWeakViewShell.lock());
     bool bMultiDoc = pViewShell->ISA(DrawViewShell);

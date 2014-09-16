@@ -159,7 +159,7 @@ namespace toolkit
             pWindow->SetSettings( aAllSettings );
         }
 
-        FontDescriptor lcl_getStyleFont( WindowStyleSettings_Data& i_rData, Font const & (StyleSettings::*i_pGetter)() const )
+        FontDescriptor lcl_getStyleFont( WindowStyleSettings_Data& i_rData, vcl::Font const & (StyleSettings::*i_pGetter)() const )
         {
             const Window* pWindow = i_rData.pOwningWindow->GetWindow();
             const AllSettings aAllSettings = pWindow->GetSettings();
@@ -167,13 +167,13 @@ namespace toolkit
             return VCLUnoHelper::CreateFontDescriptor( (aStyleSettings.*i_pGetter)() );
         }
 
-        void lcl_setStyleFont( WindowStyleSettings_Data& i_rData, void (StyleSettings::*i_pSetter)( Font const &),
-            Font const & (StyleSettings::*i_pGetter)() const, const FontDescriptor& i_rFont )
+        void lcl_setStyleFont( WindowStyleSettings_Data& i_rData, void (StyleSettings::*i_pSetter)( vcl::Font const &),
+            vcl::Font const & (StyleSettings::*i_pGetter)() const, const FontDescriptor& i_rFont )
         {
             Window* pWindow = i_rData.pOwningWindow->GetWindow();
             AllSettings aAllSettings = pWindow->GetSettings();
             StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
-            const Font aNewFont = VCLUnoHelper::CreateFont( i_rFont, (aStyleSettings.*i_pGetter)() );
+            const vcl::Font aNewFont = VCLUnoHelper::CreateFont( i_rFont, (aStyleSettings.*i_pGetter)() );
             (aStyleSettings.*i_pSetter)( aNewFont );
             aAllSettings.SetStyleSettings( aStyleSettings );
             pWindow->SetSettings( aAllSettings );

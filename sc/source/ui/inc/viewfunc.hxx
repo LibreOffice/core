@@ -285,7 +285,7 @@ public:
     void            ExtendScenario();
     void            UseScenario( const OUString& rName );
 
-    void            InsertSpecialChar( const OUString& rStr, const Font& rFont );
+    void            InsertSpecialChar( const OUString& rStr, const vcl::Font& rFont );
 
     void            InsertDummyObject();
     void            InsertOleObject();

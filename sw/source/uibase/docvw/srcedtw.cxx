@@ -374,7 +374,7 @@ void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
         {
             const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
             SetBackground( rCol );
-            Font aFont( pTextView->GetTextEngine()->GetFont() );
+            vcl::Font aFont( pTextView->GetTextEngine()->GetFont() );
             aFont.SetFillColor( rCol );
             pTextView->GetTextEngine()->SetFont( aFont );
         }
@@ -505,7 +505,7 @@ void SwSrcEditWindow::CreateTextEngine()
     pTextEngine->SetUpdateMode( false );
     pTextEngine->InsertView( pTextView );
 
-    Font aFont;
+    vcl::Font aFont;
     aFont.SetTransparent( false );
     aFont.SetFillColor( rCol );
     SetPointFont( aFont );
@@ -956,7 +956,7 @@ void SwSrcEditWindow::SetFont()
         {
             LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM, LANGUAGE_SYSTEM
         };
-        Font aFont;
+        vcl::Font aFont;
         if(lcl_GetLanguagesForEncoding(eSourceEncoding, aLanguages))
         {
             //TODO: check for multiple languages
@@ -972,8 +972,8 @@ void SwSrcEditWindow::SetFont()
     const FontList*  pList = pFontListItem->GetFontList();
     vcl::FontInfo aInfo = pList->Get(sFontName,WEIGHT_NORMAL, ITALIC_NONE);
 
-    const Font& rFont = GetTextEngine()->GetFont();
-    Font aFont(aInfo);
+    const vcl::Font& rFont = GetTextEngine()->GetFont();
+    vcl::Font aFont(aInfo);
     Size aSize(rFont.GetSize());
     //font height is stored in point and set in twip
     aSize.Height() =

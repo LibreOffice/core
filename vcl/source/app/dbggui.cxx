@@ -338,7 +338,7 @@ IMPL_LINK( DbgDialog, ClickHdl, Button*, pButton )
         {
             AllSettings aSettings = Application::GetSettings();
             StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-            Font aFont = aStyleSettings.GetAppFont();
+            vcl::Font aFont = aStyleSettings.GetAppFont();
             if ( maBoldAppFont.IsChecked() )
                 aFont.SetWeight( WEIGHT_BOLD );
             else
@@ -387,7 +387,7 @@ DbgInfoDialog::DbgInfoDialog( Window* pParent, bool bHelpText ) :
 
     if ( !bHelpText )
     {
-        Font aFont = GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US, 0 );
+        vcl::Font aFont = GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US, 0 );
         aFont.SetHeight( 8 );
         aFont.SetPitch( PITCH_FIXED );
         maListBox.SetControlFont( aFont );

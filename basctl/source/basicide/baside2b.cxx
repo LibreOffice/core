@@ -1052,7 +1052,7 @@ void EditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
             if (!pOldSettings || aColor !=
                     pOldSettings-> GetStyleSettings().GetFieldTextColor())
             {
-                Font aFont(pEditEngine->GetFont());
+                vcl::Font aFont(pEditEngine->GetFont());
                 aFont.SetColor(aColor);
                 pEditEngine->SetFont(aFont);
             }
@@ -1220,11 +1220,11 @@ void EditorWindow::ImplSetFont()
         get_value_or( OUString() ) );
     if ( sFontName.isEmpty() )
     {
-        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
+        vcl::Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get());
-    Font aFont( sFontName, aFontSize );
+    vcl::Font aFont( sFontName, aFontSize );
     aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
     SetPointFont( aFont );
     aFont = GetFont();

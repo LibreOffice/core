@@ -61,7 +61,7 @@ namespace svx
             OutputDevice& m_rDev;
 
         public:
-            inline FontSwitch( OutputDevice& _rDev, const Font& _rTemporaryFont )
+            inline FontSwitch( OutputDevice& _rDev, const vcl::Font& _rTemporaryFont )
                 :m_rDev( _rDev )
             {
                 m_rDev.Push( PUSH_FONT );
@@ -127,7 +127,7 @@ namespace svx
         Size aPlaygroundSize( _rRect.GetSize() );
 
         // the font for the secondary text:
-        Font aSmallerFont( _rDevice.GetFont() );
+        vcl::Font aSmallerFont( _rDevice.GetFont() );
         // heuristic: 80% of the original size
         aSmallerFont.SetHeight( (long)( 0.8 * aSmallerFont.GetHeight() ) );
 
@@ -304,7 +304,7 @@ namespace svx
 
     Size RubyRadioButton::GetOptimalSize() const
     {
-        Font aSmallerFont( GetFont() );
+        vcl::Font aSmallerFont( GetFont() );
         aSmallerFont.SetHeight( static_cast<long>( 0.8 * aSmallerFont.GetHeight() ) );
         Rectangle rect( Point(), Size( SAL_MAX_INT32, SAL_MAX_INT32 ) );
         sal_uInt16 style = GetStyle();

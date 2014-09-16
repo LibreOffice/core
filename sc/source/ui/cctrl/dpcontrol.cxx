@@ -119,11 +119,11 @@ void ScDPFieldButton::draw()
 
         // Field name.
         // Get the font and size the same way as in scenario selection (lcl_DrawOneFrame in gridwin4.cxx)
-        Font aTextFont( mpStyle->GetAppFont() );
+        vcl::Font aTextFont( mpStyle->GetAppFont() );
         if ( mpDoc )
         {
             //  use ScPatternAttr::GetFont only for font size
-            Font aAttrFont;
+            vcl::Font aAttrFont;
             static_cast<const ScPatternAttr&>(mpDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
                 GetFont( aAttrFont, SC_AUTOCOL_BLACK, mpOutDev, &maZoomY );
             aTextFont.SetSize( aAttrFont.GetSize() );

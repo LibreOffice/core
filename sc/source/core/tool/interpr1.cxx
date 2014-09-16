@@ -2236,8 +2236,8 @@ void ScInterpreter::ScCell()
             {   // column width (rounded off as count of zero characters in standard font and size)
                 Printer*    pPrinter = pDok->GetPrinter();
                 MapMode     aOldMode( pPrinter->GetMapMode() );
-                Font        aOldFont( pPrinter->GetFont() );
-                Font        aDefFont;
+                vcl::Font   aOldFont( pPrinter->GetFont() );
+                vcl::Font   aDefFont;
 
                 pPrinter->SetMapMode( MAP_TWIP );
                 // font color doesn't matter here

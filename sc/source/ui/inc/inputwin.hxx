@@ -112,7 +112,7 @@ protected:
     typedef ::std::vector< ScAccessibleEditLineTextData* > AccTextDataVector;
 
     OUString    aString;
-    Font        aTextFont;
+    vcl::Font   aTextFont;
     ScEditEngineDefaulter*  pEditEngine;            // only created when needed
     EditView*   pEditView;
     AccTextDataVector maAccTextDatas;   // #i105267# text datas may be cloned, remember all copies

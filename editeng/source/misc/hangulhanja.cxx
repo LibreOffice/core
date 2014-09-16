@@ -82,7 +82,7 @@ namespace editeng
                                                     // save the applications from always converting to this
                                                     // type in their implementations
         LanguageType            m_nTargetLang;      // target language of new replacement text
-        const Font*             m_pTargetFont;      // target font of new replacement text
+        const vcl::Font*        m_pTargetFont;      // target font of new replacement text
         sal_Int32               m_nConvOptions;     // text conversion options (as used by 'getConversions')
         bool                    m_bIsInteractive;   // specifies if the conversion requires user interaction
                                                     // (and likeley a specialised dialog) or if it is to run
@@ -123,7 +123,7 @@ namespace editeng
             const Reference< XComponentContext >& rxContext,
             const Locale& _rSourceLocale,
             const Locale& _rTargetLocale,
-            const Font* _pTargetFont,
+            const vcl::Font* _pTargetFont,
             sal_Int32 _nConvOptions,
             bool _bIsInteractive,
             HangulHanjaConversion* _pAntiImpl );
@@ -137,7 +137,7 @@ namespace editeng
 
         inline LanguageType GetSourceLang() const   { return m_nSourceLang; }
         inline LanguageType GetTargetLang() const   { return m_nTargetLang; }
-        inline const Font * GetTargetFont() const   { return m_pTargetFont; }
+        inline const vcl::Font * GetTargetFont() const   { return m_pTargetFont; }
         inline sal_Int32    GetConvOptions() const  { return m_nConvOptions; }
         inline bool         IsInteractive() const   { return m_bIsInteractive; }
 
@@ -233,7 +233,7 @@ namespace editeng
                                                             const Reference< XComponentContext >& rxContext,
                                                             const Locale& _rSourceLocale,
                                                             const Locale& _rTargetLocale,
-                                                            const Font* _pTargetFont,
+                                                            const vcl::Font* _pTargetFont,
                                                             sal_Int32 _nOptions,
                                                             bool _bIsInteractive,
                                                             HangulHanjaConversion* _pAntiImpl )
@@ -968,7 +968,7 @@ namespace editeng
     HangulHanjaConversion::HangulHanjaConversion( Window* _pUIParent,
         const Reference< XComponentContext >& rxContext,
         const Locale& _rSourceLocale, const Locale& _rTargetLocale,
-        const Font* _pTargetFont,
+        const vcl::Font* _pTargetFont,
         sal_Int32 _nOptions, bool _bIsInteractive)
         :m_pImpl( new HangulHanjaConversion_Impl( _pUIParent, rxContext, _rSourceLocale, _rTargetLocale, _pTargetFont, _nOptions, _bIsInteractive, this ) )
     {
@@ -998,7 +998,7 @@ namespace editeng
         return m_pImpl->GetTargetLang();
     }
 
-    const Font * HangulHanjaConversion::GetTargetFont( ) const
+    const vcl::Font * HangulHanjaConversion::GetTargetFont( ) const
     {
         return m_pImpl->GetTargetFont();
     }

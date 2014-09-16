@@ -164,7 +164,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
                             if( !bCommonTerms )
                                 nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                            Font aTargetFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT,
+                            vcl::Font aTargetFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT,
                                                     nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 
                             // disallow formatting, updating the view, ... while
@@ -223,7 +223,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
 void SwView::StartTextConversion(
         LanguageType nSourceLang,
         LanguageType nTargetLang,
-        const Font *pTargetFont,
+        const vcl::Font *pTargetFont,
         sal_Int32 nOptions,
         bool bIsInteractive )
 {

@@ -35,7 +35,7 @@ SvLBoxFontString::SvLBoxFontString()
 
 SvLBoxFontString::SvLBoxFontString(
         SvTreeListEntry* pEntry, sal_uInt16 nFlags, const OUString& rString,
-        const Font& rFont, const Color* pColor ) :
+        const vcl::Font& rFont, const Color* pColor ) :
     SvLBoxString( pEntry, nFlags, rString ),
     maFont( rFont ),
     mbUseColor( pColor != NULL )
@@ -58,8 +58,8 @@ SvLBoxItem* SvLBoxFontString::Create() const
 void SvLBoxFontString::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* pView, const SvTreeListEntry* pEntry)
 {
-    Font aOldFont( rDev.GetFont() );
-    Font aNewFont( maFont );
+    vcl::Font aOldFont( rDev.GetFont() );
+    vcl::Font aNewFont( maFont );
     bool bSel = pView->IsSelected();
     if( !mbUseColor || bSel )       // selection always gets highlight color
     {
@@ -74,7 +74,7 @@ void SvLBoxFontString::Paint(
 
 void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
-    Font aOldFont( pView->GetFont() );
+    vcl::Font aOldFont( pView->GetFont() );
     pView->Control::SetFont( maFont );
     SvLBoxString::InitViewData( pView, pEntry, pViewData);
     pView->Control::SetFont( aOldFont );
@@ -102,7 +102,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFontListBox(Window *pPar
     return new SvxFontListBox(pParent, nWinStyle);
 }
 
-void SvxFontListBox::InsertFontEntry( const OUString& rString, const Font& rFont, const Color* pColor )
+void SvxFontListBox::InsertFontEntry( const OUString& rString, const vcl::Font& rFont, const Color* pColor )
 {
     mbUseFont = true;           // InitEntry() will use maEntryFont
     maEntryFont = rFont;        // font to use in InitEntry() over InsertEntry()

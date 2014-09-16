@@ -69,7 +69,7 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     m_pEditRB->SetClickHdl(aLk);
     m_pUrlPB->SetClickHdl(LINK(this, SwJavaEditDialog, InsertFileHdl));
 
-    Font aFont( m_pEditED->GetFont() );
+    vcl::Font aFont( m_pEditED->GetFont() );
     aFont.SetWeight( WEIGHT_LIGHT );
     m_pEditED->SetFont( aFont );
 

@@ -75,10 +75,10 @@ SmViewShell * SmGetActiveView();
 // SmFace
 
 
-bool    IsItalic( const Font &rFont );
-bool    IsBold( const Font &rFont );
+bool    IsItalic( const vcl::Font &rFont );
+bool    IsBold( const vcl::Font &rFont );
 
-class SmFace : public Font
+class SmFace : public vcl::Font
 {
     long    nBorderWidth;
 
@@ -123,24 +123,24 @@ class SmFontPickList
 {
 protected:
     sal_uInt16 nMaxItems;
-    std::deque<Font> aFontVec;
+    std::deque<vcl::Font> aFontVec;
 
-    bool     CompareItem(const Font & rFirstFont, const Font & rSecondFont) const;
-    OUString GetStringItem(const Font &rItem);
+    bool     CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont) const;
+    OUString GetStringItem(const vcl::Font &rItem);
 
 public:
     SmFontPickList(sal_uInt16 nMax = 5) : nMaxItems(nMax) {}
     virtual ~SmFontPickList() { Clear(); }
 
-    virtual void    Insert(const Font &rFont);
-    virtual void    Update(const Font &rFont, const Font &rNewFont);
-    virtual void    Remove(const Font &rFont);
+    virtual void    Insert(const vcl::Font &rFont);
+    virtual void    Update(const vcl::Font &rFont, const vcl::Font &rNewFont);
+    virtual void    Remove(const vcl::Font &rFont);
 
-    void     Clear();
-    Font     Get(sal_uInt16 nPos = 0) const;
+    void            Clear();
+    vcl::Font       Get(sal_uInt16 nPos = 0) const;
 
-    SmFontPickList&  operator = (const SmFontPickList& rList);
-    Font             operator [] (sal_uInt16 nPos) const;
+    SmFontPickList& operator = (const SmFontPickList& rList);
+    vcl::Font       operator [] (sal_uInt16 nPos) const;
 
     void            ReadFrom(const SmFontDialog& rDialog);
     void            WriteTo(SmFontDialog& rDialog) const;
@@ -161,10 +161,10 @@ public:
 
     SmFontPickListBox& operator = (const SmFontPickList& rList);
 
-    virtual void    Insert(const Font &rFont) SAL_OVERRIDE;
+    virtual void    Insert(const vcl::Font &rFont) SAL_OVERRIDE;
     using   Window::Update;
-    virtual void    Update(const Font &rFont, const Font &rNewFont) SAL_OVERRIDE;
-    virtual void    Remove(const Font &rFont) SAL_OVERRIDE;
+    virtual void    Update(const vcl::Font &rFont, const vcl::Font &rNewFont) SAL_OVERRIDE;
+    virtual void    Remove(const vcl::Font &rFont) SAL_OVERRIDE;
 };
 
 #endif

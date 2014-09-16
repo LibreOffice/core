@@ -289,7 +289,7 @@ void SVGAttributeWriter::AddGradientDef( const Rectangle& rObjRect, const Gradie
         rGradientId = "";
 }
 
-void SVGAttributeWriter::SetFontAttr( const Font& rFont )
+void SVGAttributeWriter::SetFontAttr( const vcl::Font& rFont )
 {
     if( rFont != maCurFont )
     {
@@ -1155,7 +1155,7 @@ void SVGTextWriter::startTextShape()
 
     {
         mbIsTextShapeStarted = true;
-        maParentFont = Font();
+        maParentFont = vcl::Font();
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextShape" );
         mpTextShapeElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemText, true, mbIWS );
         startTextParagraph();
@@ -1210,7 +1210,7 @@ void SVGTextWriter::startTextParagraph()
     {
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "TextParagraph" );
     }
-    maParentFont = Font();
+    maParentFont = vcl::Font();
     addFontAttributes( /* isTexTContainer: */ true );
     mpTextParagraphElem = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
     if( !mbIsListLevelStyleImage )
@@ -1246,7 +1246,7 @@ void SVGTextWriter::startTextPosition( bool bExportX, bool bExportY )
         mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, OUString::number( maTextPos.Y() ) );
 
     // if text is rotated, set transform matrix at new tspan element
-    const Font& rFont = mpVDev->GetFont();
+    const vcl::Font& rFont = mpVDev->GetFont();
     if( rFont.GetOrientation() )
     {
         Point   aRot( maTextPos );
@@ -1528,7 +1528,7 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     Point                                   aPos;
     Point                                   aBaseLinePos( rPos );
     const FontMetric                        aMetric( mpVDev->GetFontMetric() );
-    const Font&                             rFont = mpVDev->GetFont();
+    const vcl::Font&                        rFont = mpVDev->GetFont();
 
     if( rFont.GetAlign() == ALIGN_TOP )
         aBaseLinePos.Y() += aMetric.GetAscent();
@@ -2408,7 +2408,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const OUString& rText,
     Point                                   aPos;
     Point                                   aBaseLinePos( rPos );
     const FontMetric                        aMetric( mpVDev->GetFontMetric() );
-    const Font&                             rFont = mpVDev->GetFont();
+    const vcl::Font&                        rFont = mpVDev->GetFont();
 
     if( rFont.GetAlign() == ALIGN_TOP )
         aBaseLinePos.Y() += aMetric.GetAscent();
@@ -3432,7 +3432,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         if( mrExport.IsUsePositionedCharacters() )
                         {
-                            Font aFont = ImplSetCorrectFontHeight();
+                            vcl::Font aFont = ImplSetCorrectFontHeight();
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, NULL, 0 );
                         }
@@ -3456,7 +3456,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         if( mrExport.IsUsePositionedCharacters() )
                         {
-                            Font aFont = ImplSetCorrectFontHeight();
+                            vcl::Font aFont = ImplSetCorrectFontHeight();
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetRect().TopLeft(), pA->GetText(), NULL, 0 );
                         }
@@ -3479,7 +3479,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         if( mrExport.IsUsePositionedCharacters() )
                         {
-                            Font aFont = ImplSetCorrectFontHeight();
+                            vcl::Font aFont = ImplSetCorrectFontHeight();
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, pA->GetDXArray(), 0 );
                         }
@@ -3503,7 +3503,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     {
                         if( mrExport.IsUsePositionedCharacters() )
                         {
-                            Font aFont = ImplSetCorrectFontHeight();
+                            vcl::Font aFont = ImplSetCorrectFontHeight();
                             mpContext->SetFontAttr( aFont );
                             ImplWriteText( pA->GetPoint(), aText, NULL, pA->GetWidth() );
                         }
@@ -3561,10 +3561,10 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
     }
 }
 
-Font SVGActionWriter::ImplSetCorrectFontHeight() const
+vcl::Font SVGActionWriter::ImplSetCorrectFontHeight() const
 {
-    Font    aFont( mpVDev->GetFont() );
-    Size    aSz;
+    vcl::Font aFont( mpVDev->GetFont() );
+    Size      aSz;
 
     ImplMap( Size( 0, aFont.GetHeight() ), aSz );
 

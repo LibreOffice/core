@@ -362,7 +362,7 @@ FontItalic VCLUnoHelper::ConvertFontSlant(css::awt::FontSlant eSlant)
     return eRet;
 }
 
-::com::sun::star::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const Font& rFont )
+::com::sun::star::awt::FontDescriptor VCLUnoHelper::CreateFontDescriptor( const vcl::Font& rFont )
 {
     ::com::sun::star::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetName();
@@ -384,9 +384,9 @@ FontItalic VCLUnoHelper::ConvertFontSlant(css::awt::FontSlant eSlant)
     return aFD;
 }
 
-Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const Font& rInitFont )
+vcl::Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const vcl::Font& rInitFont )
 {
-    Font aFont( rInitFont );
+    vcl::Font aFont( rInitFont );
     if ( !rDescr.Name.isEmpty() )
         aFont.SetName( rDescr.Name );
     if ( !rDescr.StyleName.isEmpty() )
@@ -418,9 +418,9 @@ Font VCLUnoHelper::CreateFont( const ::com::sun::star::awt::FontDescriptor& rDes
     return aFont;
 }
 
-Font VCLUnoHelper::CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont )
+vcl::Font VCLUnoHelper::CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont )
 {
-    Font aFont;
+    vcl::Font aFont;
     VCLXFont* pVCLXFont = VCLXFont::GetImplementation( rxFont );
     if ( pVCLXFont )
         aFont = pVCLXFont->GetFont();

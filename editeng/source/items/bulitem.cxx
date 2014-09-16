@@ -34,7 +34,7 @@ TYPEINIT1(SvxBulletItem,SfxPoolItem);
 
 
 
-void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
+void SvxBulletItem::StoreFont( SvStream& rStream, const vcl::Font& rFont )
 {
     sal_uInt16 nTemp;
 
@@ -61,9 +61,9 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
 
 
 
-Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
+vcl::Font SvxBulletItem::CreateFont( SvStream& rStream, sal_uInt16 nVer )
 {
-    Font aFont;
+    vcl::Font aFont;
     Color aColor;
     ReadColor( rStream, aColor );    aFont.SetColor( aColor );
     sal_uInt16 nTemp;
@@ -237,8 +237,8 @@ sal_uInt16 SvxBulletItem::GetVersion( sal_uInt16 /*nVersion*/ ) const
 
 void SvxBulletItem::CopyValidProperties( const SvxBulletItem& rCopyFrom )
 {
-    Font _aFont = GetFont();
-    Font aNewFont = rCopyFrom.GetFont();
+    vcl::Font _aFont = GetFont();
+    vcl::Font aNewFont = rCopyFrom.GetFont();
     if ( rCopyFrom.IsValid( VALID_FONTNAME ) )
     {
         _aFont.SetName( aNewFont.GetName() );

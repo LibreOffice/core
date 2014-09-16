@@ -233,7 +233,7 @@ public:
     Pointer             maPointer;
     Fraction            maZoom;
     OUString            maText;
-    Font*               mpControlFont;
+    vcl::Font*          mpControlFont;
     Color               maControlForeground;
     Color               maControlBackground;
     sal_Int32           mnLeftBorder;

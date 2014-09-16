@@ -38,7 +38,7 @@ class DialControlBmp : public VirtualDevice
 public:
     explicit            DialControlBmp( Window& rParent );
 
-    void                InitBitmap(const Font& rFont);
+    void                InitBitmap(const vcl::Font& rFont);
     void                SetSize(const Size& rSize);
     void                CopyBackground( const DialControlBmp& rSrc );
     void                DrawBackground( const Size& rSize, bool bEnabled );
@@ -135,7 +135,7 @@ protected:
         NumericField*       mpLinkField;
         sal_Int32           mnLinkedFieldValueMultiplyer;
         Size                maWinSize;
-        Font                maWinFont;
+        vcl::Font           maWinFont;
         sal_Int32           mnAngle;
         sal_Int32           mnInitialAngle;
         sal_Int32           mnOldAngle;
@@ -144,7 +144,7 @@ protected:
         bool                mbNoRot;
 
         explicit            DialControl_Impl( Window& rParent );
-        void                Init( const Size& rWinSize, const Font& rWinFont );
+        void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
         void                SetSize( const Size& rWinSize );
     };
     std::auto_ptr< DialControl_Impl > mpImpl;
@@ -154,7 +154,7 @@ protected:
 
     void                SetRotation( sal_Int32 nAngle, bool bBroadcast );
 
-    void                Init( const Size& rWinSize, const Font& rWinFont );
+    void                Init( const Size& rWinSize, const vcl::Font& rWinFont );
     void                Init( const Size& rWinSize );
 
 private:

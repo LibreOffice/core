@@ -111,7 +111,7 @@ public:
     Region*         mpClipRegion;
     Color*          mpLineColor;
     Color*          mpFillColor;
-    Font*           mpFont;
+    vcl::Font*      mpFont;
     Color*          mpTextColor;
     Color*          mpTextFillColor;
     Color*          mpTextLineColor;

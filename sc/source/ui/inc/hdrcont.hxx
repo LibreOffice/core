@@ -33,8 +33,8 @@ class ScHeaderControl : public Window
 {
 private:
     SelectionEngine*    pSelEngine;
-    Font                aNormFont;
-    Font                aBoldFont;
+    vcl::Font           aNormFont;
+    vcl::Font           aBoldFont;
     bool                bBoldSet;
 
     bool            bVertical;              // Vertical = Row header

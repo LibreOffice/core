@@ -92,7 +92,7 @@ class SVGAttributeWriter
 {
 private:
 
-    Font                       maCurFont;
+    vcl::Font                  maCurFont;
     Color                      maCurLineColor;
     Color                      maCurFillColor;
     SVGExport&                 mrExport;
@@ -117,7 +117,7 @@ public:
     void                    AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
                                           const Rectangle* pObjBoundRect = NULL, const Gradient* pFillGradient = NULL );
 
-    void                    SetFontAttr( const Font& rFont );
+    void                    SetFontAttr( const vcl::Font& rFont );
     void                    startFontSettings();
     void                    endFontSettings();
     void                    setFontFamily();
@@ -205,20 +205,20 @@ class SVGTextWriter
     sal_Int32                                   mnLeftTextPortionLength;
     Point                                       maTextPos;
     long int                                    mnTextWidth;
-    bool                                    mbPositioningNeeded;
-    bool                                    mbIsNewListItem;
+    bool                                        mbPositioningNeeded;
+    bool                                        mbIsNewListItem;
     sal_Int16                                   meNumberingType;
     sal_Unicode                                 mcBulletChar;
     BulletListItemInfoMap                       maBulletListItemMap;
-    bool                                    mbIsListLevelStyleImage;
-    bool                                    mbLineBreak;
-    bool                                    mbIsURLField;
-    OUString                             msUrl;
-    OUString                             msHyperlinkIdList;
-    bool                                    mbIsPlacehlolderShape;
-    bool                                    mbIWS;
-    Font                                        maCurrentFont;
-    Font                                        maParentFont;
+    bool                                        mbIsListLevelStyleImage;
+    bool                                        mbLineBreak;
+    bool                                        mbIsURLField;
+    OUString                                    msUrl;
+    OUString                                    msHyperlinkIdList;
+    bool                                        mbIsPlacehlolderShape;
+    bool                                        mbIWS;
+    vcl::Font                                   maCurrentFont;
+    vcl::Font                                   maParentFont;
 
   public:
     SVGTextWriter( SVGExport& rExport );
@@ -377,7 +377,7 @@ private:
                                               const Reference< XShape >* pXShape = NULL,
                                               const GDIMetaFile* pTextEmbeddedBitmapMtf = NULL );
 
-    Font                    ImplSetCorrectFontHeight() const;
+    vcl::Font               ImplSetCorrectFontHeight() const;
 
 public:
 

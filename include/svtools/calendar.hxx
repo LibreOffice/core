@@ -228,7 +228,7 @@ private:
     using Window::ImplInit;
     SVT_DLLPRIVATE void         ImplInit( WinBits nWinStyle );
     SVT_DLLPRIVATE void         ImplInitSettings();
-    SVT_DLLPRIVATE void         ImplGetWeekFont( Font& rFont ) const;
+    SVT_DLLPRIVATE void         ImplGetWeekFont( vcl::Font& rFont ) const;
     SVT_DLLPRIVATE void         ImplFormat();
     using Window::ImplHitTest;
     SVT_DLLPRIVATE sal_uInt16           ImplHitTest( const Point& rPos, Date& rDate ) const;

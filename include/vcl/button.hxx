@@ -140,7 +140,7 @@ protected:
     explicit        PushButton( WindowType nType );
 
     virtual void    FillLayoutData() const SAL_OVERRIDE;
-    virtual const Font&
+    virtual const vcl::Font&
                     GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
@@ -320,7 +320,7 @@ public:
 
 protected:
     virtual void FillLayoutData() const SAL_OVERRIDE;
-    virtual const Font&
+    virtual const vcl::Font&
                     GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
@@ -441,7 +441,7 @@ protected:
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE void         ImplLoadRes( const ResId& rResId );
     virtual void FillLayoutData() const SAL_OVERRIDE;
-    virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+    virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
 
     virtual void ImplDrawCheckBoxState();

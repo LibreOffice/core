@@ -527,11 +527,11 @@ protected:
     using SvListView::SelectAll;
 
     SVT_DLLPRIVATE short        GetHeightOffset( const Image& rBmp, Size& rLogicSize);
-    SVT_DLLPRIVATE short        GetHeightOffset( const Font& rFont, Size& rLogicSize);
+    SVT_DLLPRIVATE short        GetHeightOffset( const vcl::Font& rFont, Size& rLogicSize);
 
     SVT_DLLPRIVATE void         SetEntryHeight( SvTreeListEntry* pEntry );
     SVT_DLLPRIVATE void         AdjustEntryHeight( const Image& rBmp );
-    SVT_DLLPRIVATE void         AdjustEntryHeight( const Font& rFont );
+    SVT_DLLPRIVATE void         AdjustEntryHeight( const vcl::Font& rFont );
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvTreeListEntry* pEntry );
     SVT_DLLPRIVATE long         PaintEntry1( SvTreeListEntry*, long nLine,
@@ -596,7 +596,7 @@ protected:
     bool            AreChildrenTransient() const;
     void            SetChildrenNotTransient();
 
-    void            AdjustEntryHeightAndRecalc( const Font& rFont );
+    void            AdjustEntryHeightAndRecalc( const vcl::Font& rFont );
 public:
 
     void                SetExtendedWinBits( ExtendedWinBits _nBits );
@@ -712,7 +712,7 @@ public:
     void            SetExpandedNodeBmp( const Image& );
     Image           GetExpandedNodeBmp( ) const;
 
-    void            SetFont( const Font& rFont );
+    void            SetFont( const vcl::Font& rFont );
 
     using Window::SetCursor;
     void            SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );

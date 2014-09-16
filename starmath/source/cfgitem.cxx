@@ -223,7 +223,7 @@ SmFontFormat::SmFontFormat()
 }
 
 
-SmFontFormat::SmFontFormat( const Font &rFont )
+SmFontFormat::SmFontFormat( const vcl::Font &rFont )
 {
     aName       = rFont.GetName();
     nCharSet    = (sal_Int16) rFont.GetCharSet();
@@ -234,9 +234,9 @@ SmFontFormat::SmFontFormat( const Font &rFont )
 }
 
 
-const Font SmFontFormat::GetFont() const
+const vcl::Font SmFontFormat::GetFont() const
 {
-    Font aRes;
+    vcl::Font aRes;
     aRes.SetName( aName );
     aRes.SetCharSet( (rtl_TextEncoding) nCharSet );
     aRes.SetFamily( (FontFamily) nFamily );
@@ -464,7 +464,7 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
     if (nProps  &&  aValues.getLength() == nProps)
     {
         const Any * pValue = aValues.getConstArray();
-        Font        aFont;
+        vcl::Font   aFont;
         sal_UCS4    cChar = '\0';
         OUString    aSet;
         bool        bPredefined = false;
@@ -1005,7 +1005,7 @@ void SmMathConfig::LoadFormat()
         LanguageType nLang = Application::GetSettings().GetUILanguageTag().getLanguageType();
         for (i = FNT_BEGIN;  i < FNT_END;  ++i)
         {
-            Font aFnt;
+            vcl::Font aFnt;
             bool bUseDefaultFont = true;
             if (pVal->hasValue()  &&  (*pVal >>= aTmpStr))
             {

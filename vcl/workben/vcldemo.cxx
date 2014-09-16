@@ -135,7 +135,7 @@ void MyWin::Paint( const Rectangle& rRect )
         DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
 
     SetTextColor( Color( COL_WHITE ) );
-    Font aFont( OUString( "Times" ), Size( 0, 25 ) );
+    vcl::Font aFont( OUString( "Times" ), Size( 0, 25 ) );
     SetFont( aFont );
     DrawText( Point( 20, 30 ), OUString( "Just a simple test text" ) );
 }

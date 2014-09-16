@@ -139,7 +139,7 @@ namespace drawinglayer
                 if(basegfx::fTools::more(aFontScaling.getX(), 0.0) && basegfx::fTools::more(aFontScaling.getY(), 0.0))
                 {
                     // Get the VCL font (use FontHeight as FontWidth)
-                    Font aFont(primitive2d::getVclFontFromFontAttribute(
+                    vcl::Font aFont(primitive2d::getVclFontFromFontAttribute(
                         rTextCandidate.getFontAttribute(),
                         aFontScaling.getX(),
                         aFontScaling.getY(),

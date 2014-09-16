@@ -41,7 +41,7 @@ VCLXFont::~VCLXFont()
     delete mpFontMetric;
 }
 
-void VCLXFont::Init( ::com::sun::star::awt::XDevice& rxDev, const Font& rFont )
+void VCLXFont::Init( ::com::sun::star::awt::XDevice& rxDev, const vcl::Font& rFont )
 {
     mxDevice = &rxDev;
 
@@ -58,7 +58,7 @@ bool VCLXFont::ImplAssertValidFontMetric()
         OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
         if ( pOutDev )
         {
-            Font aOldFont = pOutDev->GetFont();
+            vcl::Font aOldFont = pOutDev->GetFont();
             pOutDev->SetFont( maFont );
             mpFontMetric = new FontMetric( pOutDev->GetFontMetric() );
             pOutDev->SetFont( aOldFont );
@@ -114,7 +114,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
     if ( pOutDev )
     {
-        Font aOldFont = pOutDev->GetFont();
+        vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
 
         nRet = sal::static_int_cast< sal_Int16 >(
@@ -133,7 +133,7 @@ sal_Int16 VCLXFont::getCharWidth( sal_Unicode c ) throw(::com::sun::star::uno::R
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
     if ( pOutDev )
     {
-        Font aOldFont = pOutDev->GetFont();
+        vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
 
         sal_Int16 nCount = nLast-nFirst + 1;
@@ -158,7 +158,7 @@ sal_Int32 VCLXFont::getStringWidth( const OUString& str ) throw(::com::sun::star
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
     if ( pOutDev )
     {
-        Font aOldFont = pOutDev->GetFont();
+        vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
         nRet = pOutDev->GetTextWidth( str );
         pOutDev->SetFont( aOldFont );
@@ -174,7 +174,7 @@ sal_Int32 VCLXFont::getStringWidthArray( const OUString& str, ::com::sun::star::
     OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
     if ( pOutDev )
     {
-        Font aOldFont = pOutDev->GetFont();
+        vcl::Font aOldFont = pOutDev->GetFont();
         pOutDev->SetFont( maFont );
         long* pDXA = (long*)alloca(str.getLength() * sizeof(long));
         nRet = pOutDev->GetTextArray( str, pDXA );

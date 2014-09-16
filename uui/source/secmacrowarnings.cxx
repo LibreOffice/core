@@ -157,7 +157,7 @@ void MacroWarning::InitControls()
     mpSymbolImg->SetImage( aImg );
     mpSymbolImg->SetSizePixel( aImg.GetSizePixel() );
     // set bold font and path ellipsis for docname fixedtext
-    Font aTmpFont = mpDocNameFI->GetControlFont();
+    vcl::Font aTmpFont = mpDocNameFI->GetControlFont();
     aTmpFont.SetWeight( WEIGHT_BOLD );
     mpDocNameFI->SetControlFont( aTmpFont );
     WinBits nStyle = mpDocNameFI->GetStyle();

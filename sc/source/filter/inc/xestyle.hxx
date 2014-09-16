@@ -124,7 +124,7 @@ private:
 
 // FONT record - font information =============================================
 
-class Font;
+namespace { class Font; }
 class SvxFont;
 
 const size_t EXC_FONTLIST_NOTFOUND = static_cast< size_t >( -1 );
@@ -139,7 +139,7 @@ public:
                             const SfxItemSet& rItemSet );
 
     /** Returns a VCL font object filled from the passed item set. */
-    static Font         GetFontFromItemSet(
+    static vcl::Font    GetFontFromItemSet(
                             const XclExpRoot& rRoot,
                             const SfxItemSet& rItemSet,
                             sal_Int16 nScript );
@@ -218,7 +218,7 @@ public:
     /** Inserts the font into the buffer if not present.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
-    sal_uInt16          Insert( const Font& rFont,
+    sal_uInt16          Insert( const vcl::Font& rFont,
                             XclExpColorType eColorType, bool bAppFont = false );
     /** Inserts the SvxFont into the buffer if not present, e.g. where escapements are used.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.

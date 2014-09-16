@@ -1747,7 +1747,7 @@ void EditEngine::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAt
     pImpEditEngine->FormatAndUpdate();
 }
 
-Font EditEngine::GetStandardFont( sal_Int32 nPara )
+vcl::Font EditEngine::GetStandardFont( sal_Int32 nPara )
 {
     return GetStandardSvxFont( nPara );
 }
@@ -2578,7 +2578,7 @@ SfxItemPool& EditEngine::GetGlobalItemPool()
     return *pGlobalPool;
 }
 
-void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const Font& rFont )
+void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const vcl::Font& rFont )
 {
     SvxFont aSvxFont( rFont );
     SetFontInfoInItemSet( rSet, aSvxFont );
@@ -2609,7 +2609,7 @@ void EditEngine::SetFontInfoInItemSet( SfxItemSet& rSet, const SvxFont& rFont )
     rSet.Put( SvxCharReliefItem( rFont.GetRelief(), EE_CHAR_RELIEF ) );
 }
 
-Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType )
+vcl::Font EditEngine::CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType )
 {
     SvxFont aFont;
     CreateFont( aFont, rItemSet, true, nScriptType );

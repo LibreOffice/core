@@ -87,14 +87,14 @@ private:
     void    CalcLineMap     ();
     void    PaintCells      ();
 
-    sal_uInt8                GetFormatIndex( size_t nCol, size_t nRow ) const;
+    sal_uInt8           GetFormatIndex( size_t nCol, size_t nRow ) const;
     const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
 
     void                DrawString( size_t nCol, size_t nRow );
     void                DrawStrings();
     void                DrawBackground();
 
-    void    MakeFonts       ( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont );
+    void                MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont );
 };
 
 class SwStringInputDlg : public ModalDialog
@@ -537,7 +537,7 @@ AutoFmtPreview::~AutoFmtPreview()
 }
 
 static void lcl_SetFontProperties(
-        Font& rFont,
+        vcl::Font& rFont,
         const SvxFontItem& rFontItem,
         const SvxWeightItem& rWeightItem,
         const SvxPostureItem& rPostureItem )
@@ -556,7 +556,7 @@ rFont.MethodName( Value );                                  \
 rCJKFont.MethodName( Value );                               \
 rCTLFont.MethodName( Value );
 
-void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
+void AutoFmtPreview::MakeFonts( sal_uInt8 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )
 {
     const SwBoxAutoFmt& rBoxFmt = aCurData.GetBoxFmt( nIndex );
 
@@ -670,7 +670,7 @@ MAKENUMSTR:
                             cellRect.GetHeight() - FRAME_OFFSET );
         if( aCurData.IsFont() )
         {
-            Font aFont, aCJKFont, aCTLFont;
+            vcl::Font aFont, aCJKFont, aCTLFont;
             MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
             aScriptedText.SetFonts( &aFont, &aCJKFont, &aCTLFont );
         }
@@ -855,7 +855,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     Point   aCenterPos;
     Size    theWndSize = GetSizePixel();
     Color   oldColor;
-    Font    aFont;
+    vcl::Font aFont;
 
     aFont = aVD.GetFont();
     aFont.SetTransparent( true );

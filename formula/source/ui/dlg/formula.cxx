@@ -198,9 +198,9 @@ namespace formula
         OString    aActivWinId;
         bool            bIsShutDown;
 
-        Font            aFntBold;
-        Font            aFntLight;
-        sal_uInt16          nEdFocus;
+        vcl::Font       aFntBold;
+        vcl::Font       aFntLight;
+        sal_uInt16      nEdFocus;
         bool            bEditFlag;
         const IFunctionDescription* pFuncDesc;
         sal_Int32      nArgs;

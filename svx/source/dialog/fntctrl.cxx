@@ -83,19 +83,19 @@ using ::com::sun::star::i18n::BreakIterator;
 
 namespace
 {
-    void scaleFontWidth(Font& _rFont,const OutputDevice& rOutDev,long& _n100PercentFont)
+    void scaleFontWidth(vcl::Font& _rFont,const OutputDevice& rOutDev,long& _n100PercentFont)
     {
         _rFont.SetWidth( 0 );
         _n100PercentFont = rOutDev.GetFontMetric( _rFont ).GetWidth();
     }
 
-    void initFont(Font& _rFont)
+    void initFont(vcl::Font& _rFont)
     {
         _rFont.SetTransparent(true);
         _rFont.SetAlign(ALIGN_BASELINE);
     }
 
-    void setFontSize(Font& _rFont)
+    void setFontSize(vcl::Font& _rFont)
     {
         Size aSize( _rFont.GetSize() );
         aSize.Height() = ( aSize.Height() * 3 ) / 5;
@@ -103,7 +103,7 @@ namespace
         _rFont.SetSize( aSize );
     }
 
-    void calcFontHeightAnyAscent(OutputDevice* _pWin,const Font& _rFont,long& _nHeight,long& _nAscent)
+    void calcFontHeightAnyAscent(OutputDevice* _pWin,const vcl::Font& _rFont,long& _nHeight,long& _nAscent)
     {
         if ( !_nHeight )
         {
@@ -364,7 +364,7 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* _pPrinter
 void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* _pPrinter,
     Point &rPt, const SvxFont &rFont )
 {
-    Font aOldFont = _pPrinter->GetFont();
+    vcl::Font aOldFont = _pPrinter->GetFont();
     sal_uInt16 nScript;
     sal_uInt16 nIdx = 0;
     sal_Int32 nStart = 0;

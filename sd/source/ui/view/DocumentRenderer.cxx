@@ -315,8 +315,8 @@ namespace {
         const OUString& rsPageString,
         const Point& rPageStringOffset)
     {
-        const Font aOriginalFont (rPrinter.OutputDevice::GetFont());
-        rPrinter.SetFont(Font(FAMILY_SWISS, Size(0, 423)));
+        const vcl::Font aOriginalFont (rPrinter.OutputDevice::GetFont());
+        rPrinter.SetFont(vcl::Font(FAMILY_SWISS, Size(0, 423)));
         rPrinter.DrawText(rPageStringOffset, rsPageString);
         rPrinter.SetFont(aOriginalFont);
     }

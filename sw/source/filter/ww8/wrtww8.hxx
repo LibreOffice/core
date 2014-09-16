@@ -58,7 +58,7 @@ class RtfAttributeOutput;
 class BitmapPalette;
 class SwEscherEx;
 class DateTime;
-class Font;
+namespace vcl { class Font; }
 class MSWordExportBase;
 class SdrObject;
 class SfxItemSet;
@@ -322,7 +322,7 @@ public:
     wwFontHelper() : mbWrtWW8(false), bLoadAllFonts(false) {}
     /// rDoc used only to get the initial standard font(s) in use.
     void InitFontTable(bool bWrtWW8, const SwDoc& rDoc);
-    sal_uInt16 GetId(const Font& rFont);
+    sal_uInt16 GetId(const vcl::Font& rFont);
     sal_uInt16 GetId(const SvxFontItem& rFont);
     sal_uInt16 GetId(const wwFont& rFont);
     void WriteFontTable( SvStream *pTableStream, WW8Fib& pFib );

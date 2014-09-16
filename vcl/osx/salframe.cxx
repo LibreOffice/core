@@ -1131,9 +1131,9 @@ static Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin
     return aRet;
 }
 
-static Font getFont( NSFont* pFont, long nDPIY, const Font& rDefault )
+static vcl::Font getFont( NSFont* pFont, long nDPIY, const vcl::Font& rDefault )
 {
-    Font aResult( rDefault );
+    vcl::Font aResult( rDefault );
     if( pFont )
     {
         aResult.SetName( GetOUString( [pFont familyName] ) );
@@ -1188,7 +1188,7 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetShadowColor( aShadowColor );
 
     // get the system font settings
-    Font aAppFont = aStyleSettings.GetAppFont();
+    vcl::Font aAppFont = aStyleSettings.GetAppFont();
     sal_Int32 nDPIX = 72, nDPIY = 72;
     getResolution( nDPIX, nDPIY );
     aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
@@ -1200,16 +1200,16 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHelpFont( aAppFont );
     aStyleSettings.SetPushButtonFont( aAppFont );
 
-    Font aTitleFont( getFont( [NSFont titleBarFontOfSize: 0], nDPIY, aAppFont ) );
+    vcl::Font aTitleFont( getFont( [NSFont titleBarFontOfSize: 0], nDPIY, aAppFont ) );
     aStyleSettings.SetTitleFont( aTitleFont );
     aStyleSettings.SetFloatTitleFont( aTitleFont );
 
-    Font aMenuFont( getFont( [NSFont menuFontOfSize: 0], nDPIY, aAppFont ) );
+    vcl::Font aMenuFont( getFont( [NSFont menuFontOfSize: 0], nDPIY, aAppFont ) );
     aStyleSettings.SetMenuFont( aMenuFont );
 
     aStyleSettings.SetToolFont( aAppFont );
 
-    Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], nDPIY, aAppFont ) );
+    vcl::Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], nDPIY, aAppFont ) );
     aStyleSettings.SetLabelFont( aLabelFont );
     aStyleSettings.SetInfoFont( aLabelFont );
     aStyleSettings.SetRadioCheckFont( aLabelFont );

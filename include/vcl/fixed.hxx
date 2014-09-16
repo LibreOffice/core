@@ -51,7 +51,7 @@ public:
     SAL_DLLPRIVATE static sal_uInt16   ImplGetTextStyle( WinBits nWinBits );
 protected:
     virtual void    FillLayoutData() const SAL_OVERRIDE;
-    virtual const Font&
+    virtual const vcl::Font&
                     GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
@@ -106,7 +106,7 @@ private:
 
 protected:
     virtual void    FillLayoutData() const SAL_OVERRIDE;
-    virtual const Font&
+    virtual const vcl::Font&
                     GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;

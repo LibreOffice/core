@@ -997,7 +997,7 @@ Document::retrieveCharacterAttributes(
 {
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
 
-    Font aFont = m_rEngine.GetFont();
+    vcl::Font aFont = m_rEngine.GetFont();
     const sal_Int32 AttributeCount = 9;
     sal_Int32 i = 0;
     css::uno::Sequence< css::beans::PropertyValue > aAttribs( AttributeCount );

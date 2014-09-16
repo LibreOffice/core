@@ -619,7 +619,7 @@ bool SmGetGlyphBoundRect(const OutputDevice &rDev,
     const FontMetric  aDevFM (rDev.GetFontMetric());
 
     pGlyphDev->Push(PUSH_FONT | PUSH_MAPMODE);
-    Font aFnt(rDev.GetFont());
+    vcl::Font aFnt(rDev.GetFont());
     aFnt.SetAlign(ALIGN_TOP);
 
     // use scale factor when calling GetTextBoundRect to counter

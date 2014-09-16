@@ -382,7 +382,7 @@ void SwCaptionPreview::Init()
     SetFillColor( aBack.GetColor() );
     SetLineColor( aBack.GetColor() );
     SetBorderStyle( WINDOW_BORDER_MONO );
-    Font aFont(GetFont());
+    vcl::Font aFont(GetFont());
     aFont.SetHeight(aFont.GetHeight() * 120 / 100 );
     SetFont(aFont);
 }

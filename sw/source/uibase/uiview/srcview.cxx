@@ -136,11 +136,11 @@ static void lcl_PrintHeader( OutputDevice &rOutDev, sal_Int32 nPages, sal_Int32 
     short nBorder = BORDERPRN;
 
     Color aOldFillColor( rOutDev.GetFillColor() );
-    Font aOldFont( rOutDev.GetFont() );
+    vcl::Font aOldFont( rOutDev.GetFont() );
 
     rOutDev.SetFillColor( Color(COL_TRANSPARENT) );
 
-    Font aFont( aOldFont );
+    vcl::Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );
     aFont.SetAlign( ALIGN_BOTTOM );
     rOutDev.SetFont( aFont );
@@ -704,7 +704,7 @@ sal_Int32 SwSrcView::PrintSource(
 
     TextEngine* pTextEngine = aEditWin.GetTextEngine();
     pOutDev->SetMapMode( MAP_100TH_MM );
-    Font aFont( aEditWin.GetOutWin()->GetFont() );
+    vcl::Font aFont( aEditWin.GetOutWin()->GetFont() );
     Size aSize( aFont.GetSize() );
     aSize = aEditWin.GetOutWin()->PixelToLogic( aSize, MAP_100TH_MM );
     aFont.SetSize( aSize );

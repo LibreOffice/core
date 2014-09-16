@@ -32,7 +32,7 @@ class SwCntntFrm;
 struct SwPosition;
 struct SwCrsrMoveState;
 class SwAttrSetChg;
-class Font;
+namespace vcl { class Font; }
 class SwSortedObjs;
 class SwAnchoredObject;
 
@@ -327,7 +327,7 @@ public:
     bool IsOverHeaderFooterArea( const Point& rPt, FrameControlType &rControl ) const;
 
     // return font used to paint the "empty page" string
-    static const Font& GetEmptyPageFont();
+    static const vcl::Font& GetEmptyPageFont();
 
     static SwTwips GetSidebarBorderWidth( const SwViewShell* );
 };

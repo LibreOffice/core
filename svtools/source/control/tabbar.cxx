@@ -499,7 +499,7 @@ void TabBar::ImplInitSettings( bool bFont, bool bBackground )
 
     if ( bFont )
     {
-        Font aToolFont;
+        vcl::Font aToolFont;
         aToolFont = rStyleSettings.GetToolFont();
         if ( IsControlFont() )
             aToolFont.Merge( GetControlFont() );
@@ -509,7 +509,7 @@ void TabBar::ImplInitSettings( bool bFont, bool bBackground )
         // Adapt font size if window too small?
         while ( GetTextHeight() > (GetOutputSizePixel().Height()-1) )
         {
-            Font aFont = GetFont();
+            vcl::Font aFont = GetFont();
             if ( aFont.GetHeight() <= 6 )
                 break;
             aFont.SetHeight( aFont.GetHeight()-1 );
@@ -574,7 +574,7 @@ bool TabBar::ImplCalcWidth()
         return false;
 
     // retrieve width of tabs with bold font
-    Font aFont = GetFont();
+    vcl::Font aFont = GetFont();
     if ( aFont.GetWeight() != WEIGHT_BOLD )
     {
         aFont.SetWeight( WEIGHT_BOLD );
@@ -1090,8 +1090,8 @@ public:
         mrParent.SetClipRegion();
     }
 private:
-    TabBar& mrParent;
-    Font    maFont;
+    TabBar&   mrParent;
+    vcl::Font maFont;
 };
 
 class TabDrawer
@@ -1288,8 +1288,8 @@ void TabBar::Paint( const Rectangle& rect )
     ImplGetColors( aFaceColor, aFaceTextColor, aSelectColor, aSelectTextColor );
 
     // select font
-    Font aFont = GetFont();
-    Font aLightFont = aFont;
+    vcl::Font aFont = GetFont();
+    vcl::Font aLightFont = aFont;
     aLightFont.SetWeight( WEIGHT_NORMAL );
 
     TabBarPaintGuard aGuard(*this);
@@ -2271,7 +2271,7 @@ bool TabBar::StartEditMode( sal_uInt16 nPageId )
         }
         mpEdit->SetText( GetPageText( mnEditId ) );
         mpEdit->setPosSizePixel( nX, aRect.Top()+mnOffY+1, nWidth, aRect.GetHeight()-3 );
-        Font    aFont = GetPointFont();
+        vcl::Font aFont = GetPointFont();
         Color   aForegroundColor;
         Color   aBackgroundColor;
         Color   aFaceColor;
