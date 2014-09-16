@@ -31,7 +31,7 @@ bool isSalBool(QualType type) {
 // expiresBefore members as defined in salhelper/source/timer.cxx as inlined:
 bool isInlined(FunctionDecl const & decl) {
 #if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
-    return decl->isInlined();
+    return decl.isInlined();
 #else
     (void)decl;
     return false;
