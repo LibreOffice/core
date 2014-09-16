@@ -86,8 +86,8 @@ public:
 
     void                CreatePseudosIfNecessary();
     void                UpdateStdNames();
-    static void         PutNumBulletItem( SfxStyleSheetBase* pSheet, Font& rBulletFont );
-    static Font         GetBulletFont();
+    static void         PutNumBulletItem( SfxStyleSheetBase* pSheet, vcl::Font& rBulletFont );
+    static vcl::Font    GetBulletFont();
 
     SdDrawDocument*     GetDoc() const { return mpDoc; }
 

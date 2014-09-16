@@ -136,7 +136,7 @@ void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );
@@ -154,7 +154,7 @@ void OTitleWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
     Window* pWindows [] = { &m_aSpace1, &m_aSpace2, &m_aTitle};
     for (size_t i=0; i < sizeof(pWindows)/sizeof(pWindows[0]); ++i)
     {
-        Font aFont = pWindows[i]->GetFont();
+        vcl::Font aFont = pWindows[i]->GetFont();
         aFont.SetWeight(WEIGHT_BOLD);
         pWindows[i]->SetFont(aFont);
         pWindows[i]->SetTextColor( aStyle.GetLightColor() );

@@ -1237,7 +1237,7 @@ void Window::CopyDeviceArea( SalTwoRect& aPosAry, sal_uInt32 nFlags )
     OutputDevice::CopyDeviceArea(aPosAry, nFlags);
 }
 
-bool Window::ImplCheckUIFont( const Font& rFont )
+bool Window::ImplCheckUIFont( const vcl::Font& rFont )
 {
     if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
         return true;
@@ -1403,7 +1403,7 @@ void Window::ImplInitResolutionSettings()
     }
 }
 
-void Window::ImplPointToLogic( Font& rFont ) const
+void Window::ImplPointToLogic( vcl::Font& rFont ) const
 {
     Size    aSize = rFont.GetSize();
     sal_uInt16  nScreenFontZoom = mxSettings->GetStyleSettings().GetScreenFontZoom();
@@ -1428,7 +1428,7 @@ void Window::ImplPointToLogic( Font& rFont ) const
     rFont.SetSize( aSize );
 }
 
-void Window::ImplLogicToPoint( Font& rFont ) const
+void Window::ImplLogicToPoint( vcl::Font& rFont ) const
 {
     Size    aSize = rFont.GetSize();
     sal_uInt16  nScreenFontZoom = mxSettings->GetStyleSettings().GetScreenFontZoom();
@@ -1816,7 +1816,7 @@ void Window::ImplNewInputContext()
     pFocusWin->mpWindowImpl->mpFrameData->maOldInputContext = rInputContext;
 
     SalInputContext         aNewContext;
-    const Font&             rFont = rInputContext.GetFont();
+    const vcl::Font&        rFont = rInputContext.GetFont();
     const OUString&         rFontName = rFont.GetName();
     ImplFontEntry*          pFontEntry = NULL;
     aNewContext.mpFont = NULL;
@@ -2127,7 +2127,7 @@ long Window::CalcTitleWidth() const
         // we guess the width for frame windows as we do not know the
         // border of external dialogs
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-        Font aFont = GetFont();
+        vcl::Font aFont = GetFont();
         ((Window*)this)->SetPointFont( rStyleSettings.GetTitleFont() );
         long nTitleWidth = GetTextWidth( GetText() );
         ((Window*)this)->SetFont( aFont );
@@ -2220,18 +2220,18 @@ void Window::CollectChildren(::std::vector<Window *>& rAllChildren )
     }
 }
 
-void Window::SetPointFont( const Font& rFont )
+void Window::SetPointFont( const vcl::Font& rFont )
 {
 
-    Font aFont = rFont;
+    vcl::Font aFont = rFont;
     ImplPointToLogic( aFont );
     SetFont( aFont );
 }
 
-Font Window::GetPointFont() const
+vcl::Font Window::GetPointFont() const
 {
 
-    Font aFont = GetFont();
+    vcl::Font aFont = GetFont();
     ImplLogicToPoint( aFont );
     return aFont;
 }

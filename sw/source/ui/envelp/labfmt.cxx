@@ -62,7 +62,7 @@ SwLabPreview::SwLabPreview(Window* pParent)
     const Color& rWinColor = rStyleSettings.GetWindowColor();
     SetBackground(Wallpaper(rWinColor));
 
-    Font aFont = GetFont();
+    vcl::Font aFont = GetFont();
     aFont.SetTransparent(true);
     aFont.SetWeight  (WEIGHT_NORMAL);
     SetFont(aFont);
@@ -106,7 +106,7 @@ void SwLabPreview::Paint(const Rectangle &)
     const Color& rWinColor = rStyleSettings.GetWindowColor();
     const Color& rFieldTextColor = SwViewOption::GetFontColor();
 
-    Font aFont = GetFont();
+    vcl::Font aFont = GetFont();
     aFont.SetFillColor( rWinColor );
     aFont.SetColor(rFieldTextColor);
     SetFont(aFont);
@@ -115,7 +115,7 @@ void SwLabPreview::Paint(const Rectangle &)
 
     SetLineColor(rWinColor);
     SetFillColor(aGrayColor);
-    Font aPaintFont(GetFont());
+    vcl::Font aPaintFont(GetFont());
     aPaintFont.SetTransparent(false);
     SetFont(aPaintFont);
 

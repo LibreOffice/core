@@ -78,7 +78,7 @@ using ::com::sun::star::awt::XVclWindowPeer;
 
 
 
-::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const Font& rFont )
+::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const vcl::Font& rFont )
 {
     ::com::sun::star::awt::FontDescriptor aFD;
     aFD.Name = rFont.GetName();
@@ -101,9 +101,9 @@ using ::com::sun::star::awt::XVclWindowPeer;
 }
 
 
-Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
+vcl::Font ImplCreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr )
 {
-    Font aFont;
+    vcl::Font aFont;
     aFont.SetName( rDescr.Name );
     aFont.SetStyleName( rDescr.StyleName );
     aFont.SetSize( ::Size( rDescr.Width, rDescr.Height ) );
@@ -1880,14 +1880,14 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
     }
     else if ( PropertyName == FM_PROP_FONTEMPHASISMARK )
     {
-        Font aGridFont = pGrid->GetControlFont();
+        vcl::Font aGridFont = pGrid->GetControlFont();
         sal_Int16 nValue = ::comphelper::getINT16(Value);
         aGridFont.SetEmphasisMark( nValue );
         pGrid->SetControlFont( aGridFont );
     }
     else if ( PropertyName == FM_PROP_FONTRELIEF )
     {
-        Font aGridFont = pGrid->GetControlFont();
+        vcl::Font aGridFont = pGrid->GetControlFont();
         sal_Int16 nValue = ::comphelper::getINT16(Value);
         aGridFont.SetRelief( (FontRelief)nValue );
         pGrid->SetControlFont( aGridFont );
@@ -1923,18 +1923,18 @@ void FmXGridPeer::setProperty( const OUString& PropertyName, const Any& Value) t
     else if ( PropertyName == FM_PROP_FONT )
     {
         if ( bVoid )
-            pGrid->SetControlFont( Font() );
+            pGrid->SetControlFont( vcl::Font() );
         else
         {
             ::com::sun::star::awt::FontDescriptor aFont;
             if (Value >>= aFont)
             {
-                Font aNewVclFont;
+                vcl::Font aNewVclFont;
                 if (::comphelper::operator!=(aFont, ::comphelper::getDefaultFont()))    // ist das der Default
                     aNewVclFont = ImplCreateFont( aFont );
 
                 // need to add relief and emphasis (they're stored in a VCL-Font, but not in a FontDescriptor
-                Font aOldVclFont = pGrid->GetControlFont();
+                vcl::Font aOldVclFont = pGrid->GetControlFont();
                 aNewVclFont.SetRelief( aOldVclFont.GetRelief() );
                 aNewVclFont.SetEmphasisMark( aOldVclFont.GetEmphasisMark() );
 
@@ -2061,7 +2061,7 @@ Any FmXGridPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
 
         if ( _rPropertyName == FM_PROP_NAME )
         {
-            Font aFont = pDataWindow->GetControlFont();
+            vcl::Font aFont = pDataWindow->GetControlFont();
             aProp <<= ImplCreateFontDescriptor( aFont );
         }
         else if ( _rPropertyName == FM_PROP_TEXTCOLOR )

@@ -30,7 +30,7 @@
 #include "PhysicalFontFace.hxx"
 
 class Size;
-class Font;
+namespace vcl { class Font; }
 class VirtualDevice;
 class ImplGetDevFontList;
 class GetDevSizeList;
@@ -148,7 +148,7 @@ public:
                         ~ImplFontCache();
 
     ImplFontEntry*      GetFontEntry( PhysicalFontCollection*,
-                             const Font&, const Size& rPixelSize, float fExactHeight);
+                             const vcl::Font&, const Size& rPixelSize, float fExactHeight);
     ImplFontEntry*      GetFontEntry( PhysicalFontCollection*, FontSelectPattern& );
     ImplFontEntry*      GetGlyphFallbackFont( PhysicalFontCollection*, FontSelectPattern&,
                             int nFallbackLevel, OUString& rMissingCodes );

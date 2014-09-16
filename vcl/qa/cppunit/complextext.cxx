@@ -48,7 +48,7 @@ void VclComplexTextTest::testArabic()
 
     OutputDevice *pOutDev = static_cast< OutputDevice * >( pWin );
 
-    Font aFont = OutputDevice::GetDefaultFont(
+    vcl::Font aFont = OutputDevice::GetDefaultFont(
                         DEFAULTFONT_CTL_SPREADSHEET,
                         LANGUAGE_ARABIC_SAUDI_ARABIA,
                         DEFAULTFONT_FLAGS_ONLYONE, 0 );
@@ -59,7 +59,7 @@ void VclComplexTextTest::testArabic()
     Rectangle aRect = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
     // now rotate 270 degress
-    Font aRotated( aFont );
+    vcl::Font aRotated( aFont );
     aRotated.SetOrientation( 2700 );
     pOutDev->SetFont( aRotated );
     Rectangle aRectRot = pOutDev->GetTextRect( aInput, aOneTwoThree );

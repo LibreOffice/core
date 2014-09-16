@@ -3470,7 +3470,7 @@ void GetDefaultFonts( SvxFontItem& rLatin, SvxFontItem& rAsian, SvxFontItem& rCo
 
     for ( sal_uInt16 n = 0; n < nItemCnt; ++n )
     {
-        Font aFont( OutputDevice::GetDefaultFont( aOutTypeArr[ n ].nFontType,
+        vcl::Font aFont( OutputDevice::GetDefaultFont( aOutTypeArr[ n ].nFontType,
                                                   aOutTypeArr[ n ].nLanguage,
                                                   DEFAULTFONT_FLAGS_ONLYONE, 0 ) );
         SvxFontItem* pItem = aItemArr[ n ];

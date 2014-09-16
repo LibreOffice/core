@@ -793,7 +793,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Win
     aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
     aFmtLb.SetStyle( aFmtLb.GetStyle() | WB_SORT | WB_HIDESELECTION );
-    Font aFont = aFmtLb.GetFont();
+    vcl::Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFmtLb.SetFont( aFont );
 
@@ -2392,7 +2392,7 @@ void SfxTemplateDialog_Impl::Initialize (void)
     m_aActionTbR.SetDropdownClickHdl(LINK(this, SfxTemplateDialog_Impl, ToolBoxRClick));
     m_aActionTbL.Show();
     m_aActionTbR.Show();
-    Font aFont=aFilterLb.GetFont();
+    vcl::Font aFont = aFilterLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFilterLb.SetFont( aFont );
     m_aActionTbL.SetHelpId( HID_TEMPLDLG_TOOLBOX_LEFT );

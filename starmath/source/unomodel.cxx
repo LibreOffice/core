@@ -493,7 +493,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
                 bool bVal = *(sal_Bool*)(*pValues).getValue();
-                Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
+                vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetItalic((bVal) ? ITALIC_NORMAL : ITALIC_NONE);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
             }
@@ -509,7 +509,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                 if((*pValues).getValueType() != ::getBooleanCppuType())
                     throw IllegalArgumentException();
                 bool bVal = *(sal_Bool*)(*pValues).getValue();
-                Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
+                vcl::Font aNewFont(aFormat.GetFont((*ppEntries)->mnMemberId));
                 aNewFont.SetWeight((bVal) ? WEIGHT_BOLD : WEIGHT_NORMAL);
                 aFormat.SetFont((*ppEntries)->mnMemberId, aNewFont);
             }
@@ -676,7 +676,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     SymbolDescriptor *pDescriptor = aSequence.getArray();
                     for (sal_uInt32 i = 0; i < nSize ; i++, pDescriptor++)
                     {
-                        Font aFont;
+                        vcl::Font aFont;
                         aFont.SetName ( pDescriptor->sFontName );
                         aFont.SetCharSet ( static_cast < rtl_TextEncoding > (pDescriptor->nCharSet) );
                         aFont.SetFamily ( static_cast < FontFamily > (pDescriptor->nFamily ) );
@@ -894,7 +894,7 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                     pDescriptor->sSymbolSet = (*aIter)->GetSymbolSetName();
                     pDescriptor->nCharacter = static_cast < sal_Int32 > ((*aIter)->GetCharacter());
 
-                    Font rFont = (*aIter)->GetFace();
+                    vcl::Font rFont = (*aIter)->GetFace();
                     pDescriptor->sFontName = rFont.GetName();
                     pDescriptor->nCharSet  = sal::static_int_cast< sal_Int16 >(rFont.GetCharSet());
                     pDescriptor->nFamily   = sal::static_int_cast< sal_Int16 >(rFont.GetFamily());

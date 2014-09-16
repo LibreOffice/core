@@ -89,7 +89,7 @@ namespace svt
 
     void HyperLabel::MouseMove( const MouseEvent& rMEvt )
     {
-           Font aFont = GetControlFont( );
+        vcl::Font aFont = GetControlFont( );
         const Color aColor = GetTextColor();
 
         if (rMEvt.IsLeaveWindow())
@@ -111,7 +111,7 @@ namespace svt
         }
     }
 
-    void HyperLabel::ActivateHyperMode(Font aFont, const Color aColor)
+    void HyperLabel::ActivateHyperMode(vcl::Font aFont, const Color aColor)
     {
         aFont.SetUnderline(UNDERLINE_SINGLE);
         m_pImpl->m_bHyperMode = true;
@@ -121,7 +121,7 @@ namespace svt
 
     }
 
-    void HyperLabel::DeactivateHyperMode(Font aFont, const Color aColor)
+    void HyperLabel::DeactivateHyperMode(vcl::Font aFont, const Color aColor)
     {
         m_pImpl->m_bHyperMode = false;
         aFont.SetUnderline(UNDERLINE_NONE);

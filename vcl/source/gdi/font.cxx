@@ -232,7 +232,7 @@ Font::Font()
     mpImplFont = &aStaticImplFont;
 }
 
-Font::Font( const Font& rFont )
+Font::Font( const vcl::Font& rFont )
 {
     bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
     DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
@@ -563,7 +563,7 @@ void Font::SetWordLineMode( bool bWordLine )
     }
 }
 
-Font& Font::operator=( const Font& rFont )
+Font& Font::operator=( const vcl::Font& rFont )
 {
     bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
     DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
@@ -588,12 +588,12 @@ Font& Font::operator=( const Font& rFont )
     return *this;
 }
 
-bool Font::operator==( const Font& rFont ) const
+bool Font::operator==( const vcl::Font& rFont ) const
 {
     return mpImplFont == rFont.mpImplFont || *mpImplFont == *rFont.mpImplFont;
 }
 
-void Font::Merge( const Font& rFont )
+void Font::Merge( const vcl::Font& rFont )
 {
     if ( !rFont.GetName().isEmpty() )
     {
@@ -736,13 +736,13 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
     return rOStm;
 }
 
-SvStream& ReadFont( SvStream& rIStm, Font& rFont )
+SvStream& ReadFont( SvStream& rIStm, ::vcl::Font& rFont )
 {
     rFont.MakeUnique();
     return ReadImpl_Font( rIStm, *rFont.mpImplFont );
 }
 
-SvStream& WriteFont( SvStream& rOStm, const Font& rFont )
+SvStream& WriteFont( SvStream& rOStm, const ::vcl::Font& rFont )
 {
     return WriteImpl_Font( rOStm, *rFont.mpImplFont );
 }
@@ -1020,6 +1020,6 @@ FontEmphasisMark Font::GetEmphasisMark() const { return mpImplFont->meEmphasisMa
 
 bool Font::IsWordLineMode() const { return mpImplFont->mbWordLine; }
 
-bool Font::IsSameInstance( const Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
+bool Font::IsSameInstance( const vcl::Font& rFont ) const { return (mpImplFont == rFont.mpImplFont); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

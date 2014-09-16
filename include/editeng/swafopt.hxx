@@ -61,8 +61,8 @@ public:
 // Class of options for AutoFormat
 struct EDITENG_DLLPUBLIC SvxSwAutoFmtFlags
 {
-    Font aBulletFont;
-    Font aByInputBulletFont;
+    vcl::Font aBulletFont;
+    vcl::Font aByInputBulletFont;
     /// only valid inside the Dialog!!!
     const editeng::SortedAutoCompleteStrings * m_pAutoCompleteList;
     SmartTagMgr* pSmartTagMgr;

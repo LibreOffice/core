@@ -89,10 +89,10 @@ static const sal_Unicode aBulletTypes[] =
     0x2714
 };
 
-static Font& lcl_GetDefaultBulletFont()
+static vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
-    static Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
+    static vcl::Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
     if(!bInit)
     {
         aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
@@ -107,7 +107,7 @@ static Font& lcl_GetDefaultBulletFont()
 
 static void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
                         const OUString& rBulletChar, const OUString& rText, const OUString& rFontName,
-                        Point& rLeft, Font& rRuleFont, const Font& rTextFont)
+                        Point& rLeft, vcl::Font& rRuleFont, const vcl::Font& rTextFont)
 {
 
     if(NumberingType::CHAR_SPECIAL == nNumberingType )
@@ -151,15 +151,15 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     long nRectHeight = aRect.GetHeight();
     Size aRectSize(nRectWidth, aRect.GetHeight());
     Point aBLPos = aRect.TopLeft();
-    Font aOldFont = pDev->GetFont();
+    vcl::Font aOldFont = pDev->GetFont();
     Color aOldColor = pDev->GetLineColor();
     pDev->SetLineColor(aTextColor);
-    Font aFont(OutputDevice::GetDefaultFont(
+    vcl::Font aFont(OutputDevice::GetDefaultFont(
                 DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
 
     Size aSize = aFont.GetSize();
 
-    Font aRuleFont( lcl_GetDefaultBulletFont() );
+    vcl::Font aRuleFont( lcl_GetDefaultBulletFont() );
     aSize.Height() = nRectHeight/6;
     aRuleFont.SetSize(aSize);
     aRuleFont.SetColor(aTextColor);

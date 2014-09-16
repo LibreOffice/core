@@ -180,7 +180,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(makeSdrShadowXDistItem(200));         // 3 mm Shadow distance
     rISet.Put(makeSdrShadowYDistItem(200));
 
-    Font aLatinFont, aCJKFont, aCTLFont;
+    vcl::Font aLatinFont, aCJKFont, aCTLFont;
 
     getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
 
@@ -241,7 +241,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     aBulletItem.SetStart(1);
     aBulletItem.SetScale(45);           // In percent
 
-    Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
+    vcl::Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
 
     aBulletFont.SetSize(Size(0,635));   // sj: (i33745) changed default from 24 to 18 pt
 
@@ -560,7 +560,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put(XFillStyleItem(drawing::FillStyle_SOLID));
     rISet.Put(XFillColorItem(OUString(), RGB_Color(0x00ccccff)));
 
-    Font aLatinFont, aCJKFont, aCTLFont;
+    vcl::Font aLatinFont, aCJKFont, aCTLFont;
 
     getDefaultFonts( aLatinFont, aCJKFont, aCTLFont );
 
@@ -1204,7 +1204,7 @@ void SdDrawDocument::SetTextDefaults() const
 {
     // BulletItem and BulletFont for Titel and Outline
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
-    Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
+    vcl::Font aBulletFont( SdStyleSheetPool::GetBulletFont() );
     aBulletFont.SetSize(Size(0,846));       // 24 pt
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetStyle(BS_BULLET);
@@ -1292,7 +1292,7 @@ void SdDrawDocument::SetDefaultWritingMode(::com::sun::star::text::WritingMode e
     }
 }
 
-void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont )
+void SdDrawDocument::getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )
 {
     LanguageType eLatin = GetLanguage( EE_CHAR_LANGUAGE );
 

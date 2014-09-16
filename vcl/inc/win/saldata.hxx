@@ -36,7 +36,7 @@ class WinSalObject;
 class WinSalFrame;
 class WinSalVirtualDevice;
 class WinSalPrinter;
-class Font;
+namespace vcl { class Font; }
 struct HDCCache;
 struct TempFontItem;
 
@@ -195,7 +195,7 @@ WinSalObject* ImplFindSalObject( HWND hWndChild );
 bool ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
 
-void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont );
+void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Font& rFont );
 
 rtl_TextEncoding ImplSalGetSystemEncoding();
 OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 nLen = -1);

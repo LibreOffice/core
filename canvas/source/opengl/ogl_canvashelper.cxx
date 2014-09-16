@@ -735,7 +735,7 @@ namespace oglcanvas
                 // create the font
                 const rendering::FontRequest& rFontRequest = pFont->getFontRequest();
                 const geometry::Matrix2D&     rFontMatrix = pFont->getFontMatrix();
-                ::Font aFont(
+                vcl::Font aFont(
                     rFontRequest.FontDescription.FamilyName,
                     rFontRequest.FontDescription.StyleName,
                     Size( 0, ::basegfx::fround(rFontRequest.CellSize)));

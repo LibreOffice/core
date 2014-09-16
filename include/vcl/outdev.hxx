@@ -313,7 +313,7 @@ private:
     Region                          maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
     Color                           maFillColor;
-    Font                            maFont;
+    vcl::Font                       maFont;
     Color                           maTextColor;
     Color                           maTextLineColor;
     Color                           maOverlineColor;
@@ -589,8 +589,8 @@ public:
     const Wallpaper&            GetBackground() const { return maBackground; }
     bool                        IsBackground() const { return mbBackground; }
 
-    void                        SetFont( const Font& rNewFont );
-    const Font&                 GetFont() const { return maFont; }
+    void                        SetFont( const vcl::Font& rNewFont );
+    const vcl::Font&            GetFont() const { return maFont; }
 
 protected:
 
@@ -961,7 +961,7 @@ public:
 
         <code>
         VirtualDevice aDevice;
-        Font aFont = aDevice.GetFont();
+        vcl::Font aFont = aDevice.GetFont();
         aFont.SetSize(Size(0, 96));
         aFont.SetColor(COL_BLACK);
         aDevice.SetFont(aFont);
@@ -1119,7 +1119,7 @@ private:
     SAL_DLLPRIVATE void         ImplDrawStrikeoutChar( long nBaseX, long nBaseY, long nX, long nY, long nWidth, FontStrikeout eStrikeout, Color aColor );
     SAL_DLLPRIVATE void         ImplDrawMnemonicLine( long nX, long nY, long nWidth );
 
-    SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const Font& );
+    SAL_DLLPRIVATE static bool  ImplIsUnderlineAbove( const vcl::Font& );
 
     static
     SAL_DLLPRIVATE long         ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo, long nWidth, const OUString& rStr, sal_uInt16 nStyle, const ::vcl::ITextLayout& _rLayout );
@@ -1137,13 +1137,13 @@ public:
 
     bool                        IsFontAvailable( const OUString& rFontName ) const;
 
-    Size                        GetDevFontSize( const Font& rFont, int nSizeIndex ) const;
-    int                         GetDevFontSizeCount( const Font& ) const;
+    Size                        GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) const;
+    int                         GetDevFontSizeCount( const vcl::Font& ) const;
 
     bool                        AddTempDevFont( const OUString& rFileURL, const OUString& rFontName );
 
     FontMetric                  GetFontMetric() const;
-    FontMetric                  GetFontMetric( const Font& rFont ) const;
+    FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;
 
     bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
@@ -1159,12 +1159,12 @@ public:
     SAL_DLLPRIVATE void         ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine, Rectangle& rRect1, Rectangle& rRect2,
                                                      long& rYOff, long& rWidth, FontEmphasisMark eEmphasis, long nHeight, short nOrient );
     SAL_DLLPRIVATE static FontEmphasisMark
-                                ImplGetEmphasisMarkStyle( const Font& rFont );
+                                ImplGetEmphasisMarkStyle( const vcl::Font& rFont );
 
     bool                        GetGlyphBoundRects( const Point& rOrigin, const OUString& rStr, int nIndex,
                                                     int nLen, int nBase, MetricVector& rVector );
 
-    sal_Int32                   HasGlyphs( const Font& rFont, const OUString& rStr,
+    sal_Int32                   HasGlyphs( const vcl::Font& rFont, const OUString& rStr,
                                            sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
 
     long                        GetMinKashida() const;
@@ -1186,7 +1186,7 @@ public:
     static void                 RemoveFontSubstitute( sal_uInt16 n );
     static sal_uInt16           GetFontSubstituteCount();
 
-    static Font                 GetDefaultFont( sal_uInt16 nType,
+    static vcl::Font            GetDefaultFont( sal_uInt16 nType,
                                                 LanguageType eLang,
                                                 sal_uLong nFlags,
                                                 const OutputDevice* pOutDev = NULL );

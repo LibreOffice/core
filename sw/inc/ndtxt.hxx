@@ -155,7 +155,7 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 
     SAL_DLLPRIVATE void SetLanguageAndFont( const SwPaM &rPaM,
             LanguageType nLang, sal_uInt16 nLangWhichId,
-            const Font *pFont,  sal_uInt16 nFontWhichId );
+            const vcl::Font *pFont,  sal_uInt16 nFontWhichId );
 
     /// Start: Data collected during idle time
 

@@ -701,7 +701,7 @@ private:
     // graphics state
     struct GraphicsState
     {
-        Font                             m_aFont;
+        vcl::Font                       m_aFont;
         MapMode                          m_aMapMode;
         Color                            m_aLineColor;
         Color                            m_aFillColor;

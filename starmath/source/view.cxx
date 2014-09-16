@@ -1191,7 +1191,7 @@ void SmViewShell::Impl_Print(
     {
         Size aSize600 (0, 600);
         Size aSize650 (0, 650);
-        Font aFont(FAMILY_DONTKNOW, aSize600);
+        vcl::Font aFont(FAMILY_DONTKNOW, aSize600);
 
         aFont.SetAlign(ALIGN_TOP);
         aFont.SetWeight(WEIGHT_BOLD);
@@ -1236,7 +1236,7 @@ void SmViewShell::Impl_Print(
     // output text on bottom
     if (bIsPrintFormulaText)
     {
-        Font aFont(FAMILY_DONTKNOW, Size(0, 600));
+        vcl::Font aFont(FAMILY_DONTKNOW, Size(0, 600));
         aFont.SetAlign(ALIGN_TOP);
         aFont.SetColor( Color(COL_BLACK) );
 

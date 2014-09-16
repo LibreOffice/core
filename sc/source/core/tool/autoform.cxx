@@ -822,7 +822,7 @@ ScAutoFormat::ScAutoFormat() :
     pData->SetName(aName);
 
     //  default font, default height
-    Font aStdFont = OutputDevice::GetDefaultFont(
+    vcl::Font aStdFont = OutputDevice::GetDefaultFont(
         DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aFontItem(
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),

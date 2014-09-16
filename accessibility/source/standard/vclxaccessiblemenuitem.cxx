@@ -242,7 +242,7 @@ Sequence< PropertyValue > VCLXAccessibleMenuItem::getCharacterAttributes( sal_In
     if ( !implIsValidIndex( nIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
 
-    Font aFont = Application::GetSettings().GetStyleSettings().GetMenuFont();
+    vcl::Font aFont = Application::GetSettings().GetStyleSettings().GetMenuFont();
     sal_Int32 nBackColor = getBackground();
     sal_Int32 nColor = getForeground();
     return CharacterAttributesHelper( aFont, nBackColor, nColor )

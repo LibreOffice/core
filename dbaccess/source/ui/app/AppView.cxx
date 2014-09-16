@@ -153,7 +153,7 @@ void OAppBorderWindow::ImplInitSettings()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( true )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );
@@ -546,7 +546,7 @@ void OApplicationView::ImplInitSettings()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( true )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );

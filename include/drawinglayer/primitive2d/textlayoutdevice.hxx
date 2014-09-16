@@ -30,7 +30,7 @@
 
 // predefines
 class VirtualDevice;
-class Font;
+namespace vcl { class Font; }
 namespace rtl {
    class OUString;
 };
@@ -65,7 +65,7 @@ namespace drawinglayer
             ~TextLayouterDevice();
 
             /// tooling methods
-            void setFont(const Font& rFont);
+            void setFont(const vcl::Font& rFont);
             void setFontAttribute(
                 const attribute::FontAttribute& rFontAttribute,
                 double fFontScaleX,
@@ -125,7 +125,7 @@ namespace drawinglayer
             both defines FontStretching, where no stretching happens at
             fFontScaleY == fFontScaleX
          */
-        Font DRAWINGLAYER_DLLPUBLIC getVclFontFromFontAttribute(
+        vcl::Font DRAWINGLAYER_DLLPUBLIC getVclFontFromFontAttribute(
             const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
@@ -139,7 +139,7 @@ namespace drawinglayer
          */
         attribute::FontAttribute DRAWINGLAYER_DLLPUBLIC getFontAttributeFromVclFont(
             basegfx::B2DVector& o_rSize,
-            const Font& rFont,
+            const vcl::Font& rFont,
             bool bRTL,
             bool bBiDiStrong);
 

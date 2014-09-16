@@ -48,7 +48,7 @@ public:
     FontWidth           GetWidthType()  { if(meWidthType==WIDTH_DONTKNOW)AskConfig(); return meWidthType; }
 
 private:
-    friend class Font;
+    friend class vcl::Font;
     void                AskConfig();
 
     FontRefCount        mnRefCount;

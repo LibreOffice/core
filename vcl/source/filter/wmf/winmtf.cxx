@@ -462,7 +462,7 @@ Rectangle WinMtfOutput::ImplMap( const Rectangle& rRect )
     return Rectangle( ImplMap( rRect.TopLeft() ), ImplMap( rRect.GetSize() ) );
 }
 
-void WinMtfOutput::ImplMap( Font& rFont )
+void WinMtfOutput::ImplMap( vcl::Font& rFont )
 {
     // !!! HACK: we now always set the width to zero because the OS width is interpreted differently;
     // must later be made portable in SV (KA 1996-02-08)
@@ -1394,7 +1394,7 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, b
         bChangeFont = true;
         mpGDIMetaFile->AddAction( new MetaTextFillColorAction( maFont.GetFillColor(), !maFont.IsTransparent() ) );
     }
-    Font aTmp( maFont );
+    vcl::Font aTmp( maFont );
     aTmp.SetColor( maTextColor );
     aTmp.SetFillColor( maBkColor );
 

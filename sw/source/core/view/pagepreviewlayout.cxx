@@ -1048,7 +1048,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
     MapMode aMapMode( pOutputDev->GetMapMode() );
     MapMode aSavedMapMode = aMapMode;
 
-    const Font& rEmptyPgFont = SwPageFrm::GetEmptyPageFont();
+    const vcl::Font& rEmptyPgFont = SwPageFrm::GetEmptyPageFont();
 
     for ( std::vector<PreviewPage*>::const_iterator aPageIter = maPreviewPages.begin();
           aPageIter != maPreviewPages.end();
@@ -1078,7 +1078,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
                 pOutputDev->DrawRect( aPageRect );
 
                 // paint empty page text
-                Font aOldFont( pOutputDev->GetFont() );
+                vcl::Font aOldFont( pOutputDev->GetFont() );
                 pOutputDev->SetFont( rEmptyPgFont );
                 pOutputDev->DrawText( aPageRect, SW_RESSTR( STR_EMPTYPAGE ),
                                     TEXT_DRAW_VCENTER |

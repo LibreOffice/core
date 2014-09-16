@@ -281,10 +281,10 @@ void BrwStringDic_Impl::Paint(
 {
     ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
     Point aPos(rPos);
-    Font aOldFont( rDev.GetFont());
+    vcl::Font aOldFont( rDev.GetFont());
     if(pData->IsParent())
     {
-        Font aFont( aOldFont );
+        vcl::Font aFont( aOldFont );
         aFont.SetWeight( WEIGHT_BOLD );
         rDev.SetFont( aFont );
         aPos.X() = 0;
@@ -455,8 +455,8 @@ void BrwString_Impl::Paint(
     {
         Point aNewPos(aPos);
         aNewPos.X() += rDev.GetTextWidth(GetText());
-        Font aOldFont( rDev.GetFont());
-        Font aFont( aOldFont );
+        vcl::Font aOldFont( rDev.GetFont());
+        vcl::Font aFont( aOldFont );
         aFont.SetWeight( WEIGHT_BOLD );
 
         //??? convert the lower byte from the user date into a string

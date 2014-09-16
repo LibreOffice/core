@@ -183,7 +183,7 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
 
     if ( GetWindow() )
     {
-        Font aFont = GetWindow()->GetControlFont();
+        vcl::Font aFont = GetWindow()->GetControlFont();
 
         sal_Int32 nBackColor = GetWindow()->GetControlBackground().GetColor();
         sal_Int32 nColor = GetWindow()->GetControlForeground().GetColor();

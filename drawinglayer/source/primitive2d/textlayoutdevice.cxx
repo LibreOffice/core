@@ -155,7 +155,7 @@ namespace drawinglayer
             releaseGlobalVirtualDevice();
         }
 
-        void TextLayouterDevice::setFont(const Font& rFont)
+        void TextLayouterDevice::setFont(const vcl::Font& rFont)
         {
             mrDevice.SetFont( rFont );
         }
@@ -365,7 +365,7 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Font getVclFontFromFontAttribute(
+        vcl::Font getVclFontFromFontAttribute(
             const attribute::FontAttribute& rFontAttribute,
             double fFontScaleX,
             double fFontScaleY,
@@ -381,7 +381,7 @@ namespace drawinglayer
             // for WIN32 systems, start with creating an unscaled font. If FontScaling
             // is wanted, that width needs to be adapted using FontMetric again to get a
             // width of the unscaled font
-            Font aRetval(
+            vcl::Font aRetval(
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
                 Size(0, nHeight));
@@ -391,7 +391,7 @@ namespace drawinglayer
             // FontWidth when no scaling is used to explicitly have that zero when e.g. the
             // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
             // set FontWidth; import that in a WIN32 system, and trouble is there)
-            Font aRetval(
+            vcl::Font aRetval(
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
                 Size(bFontIsScaled ? nWidth : 0, nHeight));
@@ -432,7 +432,7 @@ namespace drawinglayer
 
         attribute::FontAttribute getFontAttributeFromVclFont(
             basegfx::B2DVector& o_rSize,
-            const Font& rFont,
+            const vcl::Font& rFont,
             bool bRTL,
             bool bBiDiStrong)
         {

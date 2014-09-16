@@ -1756,7 +1756,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     bool bDropTarget = pEntry->IsDropTarget();
     bool bNoEmphasis = pEntry->IsBlockingEmphasis();
 
-    Font aTempFont( pOut->GetFont() );
+    vcl::Font aTempFont( pOut->GetFont() );
 
     // AutoFontColor
     /*
@@ -1782,7 +1782,7 @@ void SvxIconChoiceCtrl_Impl::PaintEntry( SvxIconChoiceCtrlEntry* pEntry, const P
     if ( bShowSelection )
     {
         const StyleSettings& rSettings = pOut->GetSettings().GetStyleSettings();
-        Font aNewFont( aTempFont );
+        vcl::Font aNewFont( aTempFont );
 
         // font fill colors that are attributed "hard" need corresponding "hard"
         // attributed highlight colors
@@ -3290,7 +3290,7 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     bAlreadyInCallback( false ),
     bGrabFocus( false )
 {
-    Font aFont( pParent->GetPointFont() );
+    vcl::Font aFont( pParent->GetPointFont() );
     aFont.SetTransparent( false );
     SetControlFont( aFont );
     if( !pParent->HasFontFillColor() )
@@ -3424,8 +3424,8 @@ void SvxIconChoiceCtrl_Impl::InitSettings()
     if( !pView->HasFont() )
     {
         // unit (from settings) is Point
-        Font aFont( rStyleSettings.GetFieldFont() );
-        //const Font& rFont = pView->GetFont();
+        vcl::Font aFont( rStyleSettings.GetFieldFont() );
+        //const vcl::Font& rFont = pView->GetFont();
         //if( pView->HasFontTextColor() )
             aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         //if( pView->HasFontFillColor() )

@@ -149,7 +149,7 @@ private:
 class FlashFont
 {
 public:
-    FlashFont( const Font& rFont, sal_uInt16 nId );
+    FlashFont( const vcl::Font& rFont, sal_uInt16 nId );
     ~FlashFont();
 
     sal_uInt16 getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev );
@@ -157,10 +157,10 @@ public:
     void write( SvStream& out );
 
     sal_uInt16 getID() const { return mnId; }
-    const Font& getFont() { return maFont; }
+    const vcl::Font& getFont() { return maFont; }
 
 private:
-    const Font  maFont;
+    const vcl::Font maFont;
     std::map<sal_uInt16, sal_uInt16, ltuint16> maGlyphIndex;
     sal_uInt16 mnNextIndex;
     sal_uInt16 mnId;
@@ -354,7 +354,7 @@ private:
     bool Impl_writeFilling( SvtGraphicFill& rFilling );
     bool Impl_writeStroke( SvtGraphicStroke& rStroke );
 
-    FlashFont& Impl_getFont( const Font& rFont );
+    FlashFont& Impl_getFont( const vcl::Font& rFont );
 
     static void Impl_addPolygon( BitStream& rBits, const Polygon& rPoly, bool bFilled );
 

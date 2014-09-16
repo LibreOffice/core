@@ -597,7 +597,7 @@ static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
                     SfxPrinter* pPrt, const OUString& rStyle,
                     sal_uInt16 nFontWhich)
 {
-    Font aFont( rStyle, Size( 0, 10 ) );
+    vcl::Font aFont( rStyle, Size( 0, 10 ) );
     if( pPrt )
         aFont = pPrt->GetFontMetric( aFont );
     SwTxtFmtColl *pColl = pWrtShell->GetTxtCollFromPool(nType);
@@ -676,7 +676,7 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
             FONT_GROUP_CJK == nFontGroup ? RES_CHRATR_CJK_FONTSIZE : RES_CHRATR_CTL_FONTSIZE);
         if(sStandard != sShellStd)
         {
-            Font aFont( sStandard, Size( 0, 10 ) );
+            vcl::Font aFont( sStandard, Size( 0, 10 ) );
             if( pPrinter )
                 aFont = pPrinter->GetFontMetric( aFont );
             pWrtShell->SetDefault(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
@@ -2169,11 +2169,11 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
     SvxFont&            rCJKFont = rExampleWin.GetCJKFont();
     SvxFont&            rCTLFont = rExampleWin.GetCTLFont();
 
-    Font                aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, eLangType,
+    vcl::Font           aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF, eLangType,
                                                         DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
-    Font                aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT, eLangType,
+    vcl::Font           aCJKFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CJK_TEXT, eLangType,
                                                         DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
-    Font                aCTLFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_TEXT, eLangType,
+    vcl::Font           aCTLFont( OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_TEXT, eLangType,
                                                         DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ) );
     const Size          aDefSize( 0, 12 );
     aFont.SetSize( aDefSize );

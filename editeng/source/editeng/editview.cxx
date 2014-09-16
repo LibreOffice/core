@@ -704,7 +704,7 @@ EESpellState EditView::StartThesaurus()
 }
 
 void EditView::StartTextConversion(
-        LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
+        LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont,
         sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc )
 {
     pImpEditView->pEditEngine->pImpEditEngine->Convert( this, nSrcLang, nDestLang, pDestFont, nOptions, bIsInteractive, bMultipleDoc );

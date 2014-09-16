@@ -45,7 +45,7 @@ struct Impl_IMEInfos;
 #define EDIT_NOLIMIT                SAL_MAX_INT32
 #define EDIT_UPDATEDATA_TIMEOUT     350
 
-typedef OUString (*FncGetSpecialChars)( Window* pWin, const Font& rFont );
+typedef OUString (*FncGetSpecialChars)( Window* pWin, const vcl::Font& rFont );
 
 class VCL_DLLPUBLIC TextFilter
 {

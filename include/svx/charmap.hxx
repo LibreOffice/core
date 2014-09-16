@@ -45,7 +45,7 @@ public:
                     SvxShowCharSet( Window* pParent );
                     virtual ~SvxShowCharSet();
 
-    void            SetFont( const Font& rFont );
+    void            SetFont( const vcl::Font& rFont );
 
     void            SelectCharacter( sal_uInt32 cNew, bool bFocus = false );
     sal_UCS4        GetSelectCharacter() const;

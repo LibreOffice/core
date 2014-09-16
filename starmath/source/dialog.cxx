@@ -64,7 +64,7 @@ public:
     SmFontStyles();
 
     sal_uInt16          GetCount() const    { return 4; }
-    const OUString&  GetStyleName( const Font &rFont ) const;
+    const OUString&  GetStyleName( const vcl::Font &rFont ) const;
     const OUString&  GetStyleName( sal_uInt16 nIdx ) const;
 };
 
@@ -81,7 +81,7 @@ SmFontStyles::SmFontStyles() :
 }
 
 
-const OUString& SmFontStyles::GetStyleName( const Font &rFont ) const
+const OUString& SmFontStyles::GetStyleName( const vcl::Font &rFont ) const
 {
     //! compare also SmSpecialNode::Prepare
     bool bBold   = IsBold( rFont ),
@@ -124,7 +124,7 @@ const SmFontStyles & GetFontStyles()
 
 
 
-void SetFontStyle(const OUString &rStyleName, Font &rFont)
+void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont)
 {
     // Find index related to StyleName. For an empty StyleName it's assumed to be
     // 0 (neither bold nor italic).
@@ -255,10 +255,10 @@ Size SmShowFont::GetOptimalSize() const
     return LogicToPixel(Size(111 , 31), MapMode(MAP_APPFONT));
 }
 
-void SmShowFont::SetFont(const Font& rFont)
+void SmShowFont::SetFont(const vcl::Font& rFont)
 {
     Color aTxtColor( GetTextColor() );
-    Font aFont (rFont);
+    vcl::Font aFont (rFont);
 
     Invalidate();
     aFont.SetSize(Size(0, 24));
@@ -307,7 +307,7 @@ IMPL_LINK( SmFontDialog, AttrChangeHdl, CheckBox *, EMPTYARG /*pCheckBox*/ )
 }
 
 
-void SmFontDialog::SetFont(const Font &rFont)
+void SmFontDialog::SetFont(const vcl::Font &rFont)
 {
     Face = rFont;
 
@@ -1073,8 +1073,8 @@ void SmShowSymbolSetWindow::Paint(const Rectangle&)
     Color aTxtColor( GetTextColor() );
     for (sal_uInt16 i = v; i < nSymbols ; i++)
     {
-        SmSym    aSymbol (*aSymbolSet[i]);
-        Font     aFont   (aSymbol.GetFace());
+        SmSym     aSymbol (*aSymbolSet[i]);
+        vcl::Font aFont   (aSymbol.GetFace());
         aFont.SetAlign(ALIGN_TOP);
 
         // taking a FontSize which is a bit smaller (compared to nLen) in order to have a buffer
@@ -1298,7 +1298,7 @@ void SmShowSymbol::Resize()
     Invalidate();
 }
 
-void SmShowSymbol::setFontSize(Font &rFont) const
+void SmShowSymbol::setFontSize(vcl::Font &rFont) const
 {
     rFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
 }
@@ -1307,7 +1307,7 @@ void SmShowSymbol::Paint(const Rectangle &rRect)
 {
     Control::Paint( rRect );
 
-    Font aFont(GetFont());
+    vcl::Font aFont(GetFont());
     setFontSize(aFont);
     SetFont(aFont);
 
@@ -1332,7 +1332,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 {
     if (pSymbol)
     {
-        Font aFont (pSymbol->GetFace());
+        vcl::Font aFont (pSymbol->GetFace());
         setFontSize(aFont);
         aFont.SetAlign(ALIGN_BASELINE);
         SetFont(aFont);
@@ -1600,9 +1600,9 @@ void SmShowChar::SetSymbol( const SmSym *pSym )
 }
 
 
-void SmShowChar::SetSymbol( sal_UCS4 cChar, const Font &rFont )
+void SmShowChar::SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont )
 {
-    Font aFont( rFont );
+    vcl::Font aFont( rFont );
     aFont.SetSize( Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3) );
     aFont.SetAlign(ALIGN_BASELINE);
     SetFont(aFont);
@@ -2220,7 +2220,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
             if (pSymbol)
             {
                 // choose font and style accordingly
-                const Font &rFont = pSymbol->GetFace();
+                const vcl::Font &rFont = pSymbol->GetFace();
                 SelectFont(rFont.GetName(), false);
                 SelectStyle(GetFontStyles().GetStyleName(rFont), false);
 

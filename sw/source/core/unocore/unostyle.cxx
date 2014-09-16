@@ -1881,7 +1881,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                                 const FontList*  pList = pFontListItem->GetFontList();
                                 vcl::FontInfo aInfo = pList->Get(
                                     pBulletFontNames[i],WEIGHT_NORMAL, ITALIC_NONE);
-                                Font aFont(aInfo);
+                                vcl::Font aFont(aInfo);
                                 aFmt.SetBulletFont(&aFont);
                             }
                             aSetRule.Set( i, &aFmt );

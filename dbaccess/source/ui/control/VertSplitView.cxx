@@ -63,7 +63,7 @@ void OSplitterView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
 
     if ( bFont )
     {
-        Font aFont = rStyleSettings.GetAppFont();
+        vcl::Font aFont = rStyleSettings.GetAppFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetPointFont( aFont );

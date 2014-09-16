@@ -1105,7 +1105,7 @@ void FontNameBox::ImplCalcUserItemSize()
 
 namespace
 {
-    long shrinkFontToFit(OUString &rSampleText, long nH, Font &rFont, OutputDevice &rDevice, Rectangle &rTextRect)
+    long shrinkFontToFit(OUString &rSampleText, long nH, vcl::Font &rFont, OutputDevice &rDevice, Rectangle &rTextRect)
     {
         long nWidth = 0;
 
@@ -1147,10 +1147,10 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         const bool bSymbolFont = isSymbolFont(rInfo);
 
         Color aTextColor = rUDEvt.GetDevice()->GetTextColor();
-        Font aOldFont( rUDEvt.GetDevice()->GetFont() );
+        vcl::Font aOldFont( rUDEvt.GetDevice()->GetFont() );
         Size aSize( aOldFont.GetSize() );
         aSize.Height() += EXTRAFONTSIZE;
-        Font aFont( rInfo );
+        vcl::Font aFont( rInfo );
         aFont.SetSize( aSize );
         rUDEvt.GetDevice()->SetFont( aFont );
         rUDEvt.GetDevice()->SetTextColor( aTextColor );

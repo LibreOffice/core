@@ -1847,7 +1847,7 @@ long ScPrintFunc::DoNotes( long nNoteStart, bool bDoPrint, ScPreviewLocationData
     pEditDefaults->Put( SvxAdjustItem( SVX_ADJUST_LEFT, EE_PARA_JUST ) );
     pEditEngine->SetDefaults( *pEditDefaults );
 
-    Font aMarkFont;
+    vcl::Font aMarkFont;
     ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
     pDev->SetFont( aMarkFont );
@@ -2263,7 +2263,7 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         }
 
         ScPatternAttr aPattern( pDoc->GetPool() );
-        Font aFont;
+        vcl::Font aFont;
         ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
         aPattern.GetFont( aFont, eColorMode, pDev );
         pDev->SetFont( aFont );

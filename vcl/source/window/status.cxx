@@ -168,7 +168,7 @@ void StatusBar::ImplInitSettings( bool bFont,
 
     if ( bFont )
     {
-        Font aFont = rStyleSettings.GetToolFont();
+        vcl::Font aFont = rStyleSettings.GetToolFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );

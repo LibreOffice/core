@@ -52,8 +52,8 @@ void OptionString::InitViewData(
     OUString aDesc = maDesc + ": ";
     Size aDescSize(pView->GetTextWidth(aDesc), pView->GetTextHeight());
 
-    Font aOldFont = pView->GetFont();
-    Font aFont = aOldFont;
+    vcl::Font aOldFont = pView->GetFont();
+    vcl::Font aFont = aOldFont;
     aFont.SetWeight(WEIGHT_BOLD);
     //To not make the SvTreeListBox try and recalculate all rows, call the
     //underlying SetFont, we just want to know what size this text will be
@@ -72,8 +72,8 @@ void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDat
     rDev.DrawText(aPos, aDesc);
 
     aPos.X() += rDev.GetTextWidth(aDesc);
-    Font aOldFont = rDev.GetFont();
-    Font aFont = aOldFont;
+    vcl::Font aOldFont = rDev.GetFont();
+    vcl::Font aFont = aOldFont;
     aFont.SetWeight(WEIGHT_BOLD);
 
     //To not make the SvTreeListBox try and recalculate all rows, call the

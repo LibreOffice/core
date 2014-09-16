@@ -29,8 +29,8 @@
 class EDITENG_DLLPUBLIC SvxUnoFontDescriptor
 {
 public:
-    static void ConvertToFont( const ::com::sun::star::awt::FontDescriptor& rDesc, Font& rFont );
-    static void ConvertFromFont( const Font& rFont, ::com::sun::star::awt::FontDescriptor& rDesc );
+    static void ConvertToFont( const ::com::sun::star::awt::FontDescriptor& rDesc, vcl::Font& rFont );
+    static void ConvertFromFont( const vcl::Font& rFont, ::com::sun::star::awt::FontDescriptor& rDesc );
 
     static void FillItemSet( const ::com::sun::star::awt::FontDescriptor& rDesc, SfxItemSet& rSet );
     static void FillFromItemSet( const SfxItemSet& rSet, ::com::sun::star::awt::FontDescriptor& rDesc );

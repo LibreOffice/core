@@ -32,7 +32,7 @@ typedef sal_uInt32 sal_UCS4;
 namespace vcl {
 
 // avoid problems where poppler's FontInfo is picked up
-class VCL_DLLPUBLIC FontInfo : public Font
+class VCL_DLLPUBLIC FontInfo : public vcl::Font
 {
     friend class ::OutputDevice;
 

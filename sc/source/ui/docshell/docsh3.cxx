@@ -356,10 +356,10 @@ void ScDocShell::CalcOutputFactor()
     const ScPatternAttr* pPattern = (const ScPatternAttr*)&aDocument.GetPool()->
                                             GetDefaultItem(ATTR_PATTERN);
 
-    Font aDefFont;
+    vcl::Font aDefFont;
     OutputDevice* pRefDev = GetRefDevice();
     MapMode aOldMode = pRefDev->GetMapMode();
-    Font    aOldFont = pRefDev->GetFont();
+    vcl::Font aOldFont = pRefDev->GetFont();
 
     pRefDev->SetMapMode(MAP_PIXEL);
     pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, pRefDev); // font color doesn't matter here

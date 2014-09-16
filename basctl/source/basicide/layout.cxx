@@ -44,7 +44,7 @@ Layout::Layout (Window* pParent) :
 {
     SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
 
-    Font aFont = GetFont();
+    vcl::Font aFont = GetFont();
     Size aSz = aFont.GetSize();
     aSz.Height() *= 1.5;
     aFont.SetSize(aSz);
@@ -145,7 +145,7 @@ void Layout::DataChanged (DataChangedEvent const& rDCEvt)
         aColor = GetSettings().GetStyleSettings().GetWindowTextColor();
         if (!pOldSettings || aColor != pOldSettings->GetStyleSettings().GetWindowTextColor())
         {
-            Font aFont(GetFont());
+            vcl::Font aFont(GetFont());
             aFont.SetColor(aColor);
             SetFont(aFont);
             bInvalidate = true;

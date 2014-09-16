@@ -485,7 +485,7 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
 
             if( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
             {
-                const Font *pFmtFnt = rNumFmt.GetBulletFont();
+                const vcl::Font *pFmtFnt = rNumFmt.GetBulletFont();
 
                 // Build a new bullet font basing on the current paragraph font:
 

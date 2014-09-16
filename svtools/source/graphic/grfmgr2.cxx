@@ -1161,7 +1161,7 @@ bool GraphicManager::ImplCreateOutput( OutputDevice* pOut,
                 {
                     // taking care of font width default if scaling metafile.
                     MetaFontAction* pA = (MetaFontAction*)pAct;
-                    Font aFont( pA->GetFont() );
+                    vcl::Font aFont( pA->GetFont() );
                     if ( !aFont.GetWidth() )
                     {
                         FontMetric aFontMetric( pOut->GetFontMetric( aFont ) );

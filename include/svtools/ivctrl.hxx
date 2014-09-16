@@ -269,8 +269,8 @@ public:
 
     bool                SetChoiceWithCursor ( bool bDo = true );
 
-    void                SetFont( const Font& rFont );
-    void                SetPointFont( const Font& rFont );
+    void                SetFont( const vcl::Font& rFont );
+    void                SetPointFont( const vcl::Font& rFont );
 
     void                SetClickHdl( const Link& rLink ) { _aClickIconHdl = rLink; }
     const Link&         GetClickHdl() const { return _aClickIconHdl; }

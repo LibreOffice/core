@@ -34,11 +34,11 @@ class FuHangulHanjaConversion : public FuPoor
     static rtl::Reference<FuPoor> Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq );
 
     void StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLanguage,
-                          const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
+                          const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive );
 
     void StartChineseConversion();
 
-    void ConvertStyles( sal_Int16 nTargetLanguage, const Font *pTargetFont );
+    void ConvertStyles( sal_Int16 nTargetLanguage, const vcl::Font *pTargetFont );
 
     Outliner* GetOutliner() const { return pSdOutliner; }
 

@@ -94,7 +94,7 @@ WinBits FixedText::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-const Font& FixedText::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& FixedText::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return ( GetStyle() & WB_INFO ) ? _rStyle.GetInfoFont() : _rStyle.GetLabelFont();
 }
@@ -246,7 +246,7 @@ void FixedText::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
-    Font        aFont = GetDrawPixelFont( pDev );
+    vcl::Font   aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -497,7 +497,7 @@ WinBits FixedLine::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-const Font& FixedLine::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& FixedLine::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupFont();
 }
@@ -565,7 +565,7 @@ void FixedLine::ImplDraw( bool bLayout )
     {
         long nWidth = GetTextWidth( aText );
         Push( PUSH_FONT );
-        Font aFont( GetFont() );
+        vcl::Font aFont( GetFont() );
         aFont.SetOrientation( 900 );
         SetFont( aFont );
         Point aStartPt( aOutSize.Width()/2, aOutSize.Height()-1 );

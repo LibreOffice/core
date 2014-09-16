@@ -2057,7 +2057,7 @@ void MessageDialog::SetMessagesWidths(Window *pParent,
     if (pSecondaryMessage)
     {
         assert(pPrimaryMessage);
-        Font aFont = pParent->GetSettings().GetStyleSettings().GetLabelFont();
+        vcl::Font aFont = pParent->GetSettings().GetStyleSettings().GetLabelFont();
         aFont.SetSize(Size(0, aFont.GetSize().Height() * 1.2));
         aFont.SetWeight(WEIGHT_BOLD);
         pPrimaryMessage->SetControlFont(aFont);

@@ -67,7 +67,7 @@ SvRTLInputBox::SvRTLInputBox( Window* pParent, const OUString& rPrompt,
     aEdit.Show();
     aPromptText.Show();
     SetText( rTitle );
-    Font aFont( GetFont());
+    vcl::Font aFont( GetFont());
     Color aColor( GetBackground().GetColor() );
     aFont.SetFillColor( aColor );
     aEdit.SetFont( aFont );

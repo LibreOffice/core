@@ -1131,7 +1131,7 @@ static Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin
     return aRet;
 }
 
-static Font getFont( NSFont* pFont, long nDPIY, const Font& rDefault )
+static Font getFont( NSFont* pFont, long nDPIY, const vcl::Font& rDefault )
 {
     Font aResult( rDefault );
     if( pFont )

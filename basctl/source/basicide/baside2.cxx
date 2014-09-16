@@ -104,12 +104,12 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
     const Color aOldLineColor( pPrinter->GetLineColor() );
     const Color aOldFillColor( pPrinter->GetFillColor() );
-    const Font  aOldFont( pPrinter->GetFont() );
+    const vcl::Font aOldFont( pPrinter->GetFont() );
 
     pPrinter->SetLineColor( Color( COL_BLACK ) );
     pPrinter->SetFillColor();
 
-    Font aFont( aOldFont );
+    vcl::Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );
     aFont.SetAlign( ALIGN_BOTTOM );
     pPrinter->SetFont( aFont );
@@ -839,9 +839,9 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     AssertValidEditEngine();
 
     MapMode eOldMapMode( pPrinter->GetMapMode() );
-    Font aOldFont( pPrinter->GetFont() );
+    vcl::Font aOldFont( pPrinter->GetFont() );
 
-    Font aFont( GetEditEngine()->GetFont() );
+    vcl::Font aFont( GetEditEngine()->GetFont() );
     aFont.SetAlign( ALIGN_BOTTOM );
     aFont.SetTransparent( true );
     aFont.SetSize( Size( 0, 360 ) );

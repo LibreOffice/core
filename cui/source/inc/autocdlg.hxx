@@ -154,9 +154,9 @@ class OfaSwAutoFmtOptionsPage : public SfxTabPage
     OUString        sBulletChar;
     OUString        sByInputBulletChar;
 
-    Font            aBulletFont;
-    Font            aByInputBulletFont;
-    sal_uInt16          nPercent;
+    vcl::Font        aBulletFont;
+    vcl::Font        aByInputBulletFont;
+    sal_uInt16       nPercent;
 
     SvLBoxButtonData*   pCheckButtonData;
 

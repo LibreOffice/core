@@ -203,7 +203,7 @@ void VCLXGraphics::selectFont( const awt::FontDescriptor& rDescription ) throw(u
 {
     SolarMutexGuard aGuard;
 
-    maFont = VCLUnoHelper::CreateFont( rDescription, Font() );
+    maFont = VCLUnoHelper::CreateFont( rDescription, vcl::Font() );
 }
 
 void VCLXGraphics::setTextColor( sal_Int32 nColor ) throw(uno::RuntimeException, std::exception)

@@ -171,7 +171,7 @@ XclFontData::XclFontData()
     Clear();
 }
 
-XclFontData::XclFontData( const Font& rFont )
+XclFontData::XclFontData( const vcl::Font& rFont )
 {
     Clear();
     FillFromVclFont( rFont );
@@ -196,7 +196,7 @@ void XclFontData::Clear()
     mbItalic = mbStrikeout = mbOutline = mbShadow = false;
 }
 
-void XclFontData::FillFromVclFont( const Font& rFont )
+void XclFontData::FillFromVclFont( const vcl::Font& rFont )
 {
     maName = XclTools::GetXclFontName( rFont.GetName() );   // substitute with MS fonts
     maStyle = "";

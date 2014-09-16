@@ -229,7 +229,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                     if ( pFontItem )
                     {
                         OUString aFontName(pFontItem->GetValue());
-                        Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
+                        vcl::Font aFont(aFontName, Size(1,1)); // Size nur wg. CTOR
                         aNewItem = SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                                     aFont.GetStyleName(), aFont.GetPitch(),
                                     aFont.GetCharSet(), ATTR_FONT  );

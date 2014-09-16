@@ -785,7 +785,7 @@ sal_Int32 SAL_CALL VCLXAccessibleComponent::getForeground(  ) throw (uno::Runtim
             nColor = pWindow->GetControlForeground().GetColor();
         else
         {
-            Font aFont;
+            vcl::Font aFont;
             if ( pWindow->IsControlFont() )
                 aFont = pWindow->GetControlFont();
             else
@@ -830,7 +830,7 @@ uno::Reference< awt::XFont > SAL_CALL VCLXAccessibleComponent::getFont(  ) throw
         uno::Reference< awt::XDevice > xDev( pWindow->GetComponentInterface(), uno::UNO_QUERY );
         if ( xDev.is() )
         {
-            Font aFont;
+            vcl::Font aFont;
             if ( pWindow->IsControlFont() )
                 aFont = pWindow->GetControlFont();
             else

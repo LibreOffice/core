@@ -571,7 +571,7 @@ public:
 
     /** return the document fonts for latin, cjk and ctl according to the current
         languages set at this document */
-    SAL_DLLPRIVATE void getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont );
+    SAL_DLLPRIVATE void getDefaultFonts( vcl::Font& rLatinFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont );
 
     SAL_DLLPRIVATE sd::UndoManager* GetUndoManager() const;
 

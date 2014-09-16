@@ -5003,7 +5003,7 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     // insert position at every curor movement!
     if( !rMyView.GetDocShell()->IsReadOnly() )
     {
-        Font aFont;
+        vcl::Font aFont;
         SetInputContext( InputContext( aFont, INPUTCONTEXT_TEXT |
                                             INPUTCONTEXT_EXTTEXTINPUT ) );
     }

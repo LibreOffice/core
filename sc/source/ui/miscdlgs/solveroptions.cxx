@@ -84,8 +84,8 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
 
     Point aNewPos( rPos );
     aNewPos.X() += rDev.GetTextWidth( aNormalStr );
-    Font aOldFont( rDev.GetFont() );
-    Font aFont( aOldFont );
+    vcl::Font aOldFont( rDev.GetFont() );
+    vcl::Font aFont( aOldFont );
     aFont.SetWeight( WEIGHT_BOLD );
 
     OUString sTxt( ' ' );

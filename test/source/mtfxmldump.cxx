@@ -346,7 +346,7 @@ void MetafileXmlDump::writeXml(GDIMetaFile& rMetaFile, XmlWriter& rWriter)
                 MetaFontAction* pMetaFontAction = static_cast<MetaFontAction*>(pAction);
                 rWriter.startElement(sCurrentElementTag);
 
-                Font aFont = pMetaFontAction->GetFont();
+                vcl::Font aFont = pMetaFontAction->GetFont();
 
                 rWriter.attribute("color", convertColorToString(aFont.GetColor()));
                 rWriter.attribute("fillcolor", convertColorToString(aFont.GetFillColor()));

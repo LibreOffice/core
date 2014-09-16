@@ -45,7 +45,7 @@ struct PictWriterAttrStackMember {
     Color                               aLineColor;
     Color                               aFillColor;
     RasterOp                            eRasterOp;
-    Font                                aFont;
+    vcl::Font                           aFont;
     MapMode                             aMapMode;
     Rectangle                           aClipRect;
 };
@@ -74,7 +74,7 @@ private:
     Color       aLineColor;
     Color       aFillColor;
     RasterOp    eSrcRasterOp;
-    Font        aSrcFont;
+    vcl::Font   aSrcFont;
     MapMode     aSrcMapMode;
     MapMode     aTargetMapMode;
     Rectangle   aClipRect;
@@ -125,7 +125,7 @@ private:
     void ConvertLinePattern(PictPattern & rPat, bool bVisible) const;
     void ConvertFillPattern(PictPattern & rPat, bool bVisible) const;
 
-    void WriteOpcode_TxFace(const Font & rFont);
+    void WriteOpcode_TxFace(const vcl::Font & rFont);
     void WriteOpcode_TxMode(RasterOp eMode);
     void WriteOpcode_PnSize(sal_uInt16 nSize);
     void WriteOpcode_PnMode(RasterOp eMode);
@@ -138,7 +138,7 @@ private:
     void WriteOpcode_Line(const Point & rLocPt, const Point & rNewPt);
     void WriteOpcode_LineFrom(const Point & rNewPt);
     void WriteOpcode_Text(const Point & rPoint, const OUString& rString, bool bDelta);
-    void WriteOpcode_FontName(const Font & rFont);
+    void WriteOpcode_FontName(const vcl::Font & rFont);
     void WriteOpcode_ClipRect( const Rectangle& rRect );
     void WriteOpcode_Rect(PictDrawingMethod eMethod, const Rectangle & rRect);
     void WriteOpcode_SameRect(PictDrawingMethod eMethod);
@@ -445,7 +445,7 @@ void PictWriter::ConvertFillPattern(PictPattern & rPat, bool bVisible) const
 }
 
 
-void PictWriter::WriteOpcode_TxFace(const Font & rFont)
+void PictWriter::WriteOpcode_TxFace(const vcl::Font & rFont)
 {
     sal_uInt8 nFace;
     FontWeight eWeight;
@@ -676,7 +676,7 @@ void PictWriter::WriteOpcode_Text(const Point & rPoint, const OUString& rString,
 }
 
 
-void PictWriter::WriteOpcode_FontName(const Font & rFont)
+void PictWriter::WriteOpcode_FontName(const vcl::Font & rFont)
 {
     sal_uInt16 nDataLen,nFontId;
 
@@ -2204,7 +2204,7 @@ bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, F
     aLineColor=Color( COL_BLACK );
     aFillColor=Color( COL_WHITE );
     eSrcRasterOp=ROP_OVERPAINT;
-    aSrcFont=Font();
+    aSrcFont=vcl::Font();
     aSrcMapMode = rMTF.GetPrefMapMode();
 
     aMap72.SetScaleX( aDPIFrac );

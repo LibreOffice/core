@@ -95,7 +95,7 @@ public:
     int CreateTextTexture(const BitmapEx& rBitmapEx,
             const css::awt::Point& aPos, const css::awt::Size& aSize,
             long rotation, const css::drawing::HomogenMatrix3& rTrans);
-    int CreateTextTexture(::rtl::OUString const &textValue, Font aFont, long fontColor, css::awt::Point aPos, css::awt::Size aSize, long rotation);
+    int CreateTextTexture(::rtl::OUString const &textValue, vcl::Font aFont, long fontColor, css::awt::Point aPos, css::awt::Size aSize, long rotation);
     int RenderTextShape();
 
     int SetArea2DShapePoint(float x, float y, int listLength);

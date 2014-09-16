@@ -52,7 +52,7 @@ void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBa
 
     if ( bFont )
     {
-        Font aFont = rStyleSettings.GetFieldFont();
+        vcl::Font aFont = rStyleSettings.GetFieldFont();
         if ( pWin->IsControlFont() )
             aFont.Merge( pWin->GetControlFont() );
         pWin->SetZoomedPointFont( aFont );

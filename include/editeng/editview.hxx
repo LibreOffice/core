@@ -47,7 +47,7 @@ class Range;
 class SvStream;
 class SvKeyValueIterator;
 class SfxStyleSheet;
-class Font;
+namespace vcl { class Font; }
 class FontList;
 class OutputDevice;
 
@@ -194,7 +194,7 @@ public:
     sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
-    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
+    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
     bool            HasConvertibleTextPortion( LanguageType nLang );
 
     void            TransliterateText( sal_Int32 nTransliterationMode );

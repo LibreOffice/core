@@ -1086,7 +1086,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             if( aTmp.getValueType() == ::cppu::UnoType<OUString>::get() &&
                 !((OUString*)aTmp.getValue())->isEmpty() )
             {
-                Font aFixedFont( OutputDevice::GetDefaultFont(
+                vcl::Font aFixedFont( OutputDevice::GetDefaultFont(
                                     DEFAULTFONT_FIXED, LANGUAGE_ENGLISH_US,
                                     DEFAULTFONT_FLAGS_ONLYONE ) );
                 OUString aFName( *(OUString*)aTmp.getValue() );

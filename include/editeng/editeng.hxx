@@ -74,7 +74,7 @@ class SvxCharSetColorItem;
 class SfxUndoAction;
 class MapMode;
 class Color;
-class Font;
+namespace vcl { class Font; }
 class KeyEvent;
 class PolyPolygon;
 class Size;
@@ -308,7 +308,7 @@ public:
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich );
 
-    Font            GetStandardFont( sal_Int32 nPara );
+    vcl::Font       GetStandardFont( sal_Int32 nPara );
     SvxFont         GetStandardSvxFont( sal_Int32 nPara );
 
     void            RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich );
@@ -502,9 +502,9 @@ public:
     static bool     DoesKeyChangeText( const KeyEvent& rKeyEvent );
     static bool     DoesKeyMoveCursor( const KeyEvent& rKeyEvent );
     static bool     IsSimpleCharInput( const KeyEvent& rKeyEvent );
-    static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const Font& rFont );
+    static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const vcl::Font& rFont );
     static void     SetFontInfoInItemSet( SfxItemSet& rItemSet, const SvxFont& rFont );
-    static Font     CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType );
+    static vcl::Font CreateFontFromItemSet( const SfxItemSet& rItemSet, sal_uInt16 nScriptType );
     static SvxFont  CreateSvxFontFromItemSet( const SfxItemSet& rItemSet );
     static bool     IsPrintable( sal_Unicode c ) { return ( ( c >= 32 ) && ( c != 127 ) ); }
     static bool     HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable );

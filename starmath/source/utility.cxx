@@ -65,17 +65,17 @@ SmFontPickList& SmFontPickList::operator = (const SmFontPickList& rList)
     return *this;
 }
 
-Font SmFontPickList::operator [] (sal_uInt16 nPos) const
+vcl::Font SmFontPickList::operator [] (sal_uInt16 nPos) const
 {
     return aFontVec[nPos];
 }
 
-Font SmFontPickList::Get(sal_uInt16 nPos) const
+vcl::Font SmFontPickList::Get(sal_uInt16 nPos) const
 {
-    return nPos < aFontVec.size() ? aFontVec[nPos] : Font();
+    return nPos < aFontVec.size() ? aFontVec[nPos] : vcl::Font();
 }
 
-bool SmFontPickList::CompareItem(const Font & rFirstFont, const Font & rSecondFont) const
+bool SmFontPickList::CompareItem(const vcl::Font & rFirstFont, const vcl::Font & rSecondFont) const
 {
   return rFirstFont.GetName() == rSecondFont.GetName() &&
         rFirstFont.GetFamily()  == rSecondFont.GetFamily()  &&
@@ -84,7 +84,7 @@ bool SmFontPickList::CompareItem(const Font & rFirstFont, const Font & rSecondFo
         rFirstFont.GetItalic()  == rSecondFont.GetItalic();
 }
 
-OUString SmFontPickList::GetStringItem(const Font &rFont)
+OUString SmFontPickList::GetStringItem(const vcl::Font &rFont)
 {
     OUStringBuffer aString(rFont.GetName());
 
@@ -102,7 +102,7 @@ OUString SmFontPickList::GetStringItem(const Font &rFont)
     return aString.makeStringAndClear();
 }
 
-void SmFontPickList::Insert(const Font &rFont)
+void SmFontPickList::Insert(const vcl::Font &rFont)
 {
     Remove(rFont);
     aFontVec.push_front( rFont );
@@ -113,7 +113,7 @@ void SmFontPickList::Insert(const Font &rFont)
     }
 }
 
-void SmFontPickList::Update(const Font &rFont, const Font &rNewFont)
+void SmFontPickList::Update(const vcl::Font &rFont, const vcl::Font &rNewFont)
 {
     for (sal_uInt16 nPos = 0; nPos < aFontVec.size(); nPos++)
         if (CompareItem( aFontVec[nPos], rFont ))
@@ -123,7 +123,7 @@ void SmFontPickList::Update(const Font &rFont, const Font &rNewFont)
         }
 }
 
-void SmFontPickList::Remove(const Font &rFont)
+void SmFontPickList::Remove(const vcl::Font &rFont)
 {
     for (sal_uInt16 nPos = 0; nPos < aFontVec.size(); nPos++)
         if (CompareItem( aFontVec[nPos], rFont))
@@ -194,7 +194,7 @@ SmFontPickListBox& SmFontPickListBox::operator=(const SmFontPickList& rList)
     return *this;
 }
 
-void SmFontPickListBox::Insert(const Font &rFont)
+void SmFontPickListBox::Insert(const vcl::Font &rFont)
 {
     SmFontPickList::Insert(rFont);
 
@@ -209,7 +209,7 @@ void SmFontPickListBox::Insert(const Font &rFont)
 }
 
 
-void SmFontPickListBox::Update(const Font &rFont, const Font &rNewFont)
+void SmFontPickListBox::Update(const vcl::Font &rFont, const vcl::Font &rNewFont)
 {
     SmFontPickList::Update(rFont, rNewFont);
 
@@ -217,7 +217,7 @@ void SmFontPickListBox::Update(const Font &rFont, const Font &rNewFont)
 }
 
 
-void SmFontPickListBox::Remove(const Font &rFont)
+void SmFontPickListBox::Remove(const vcl::Font &rFont)
 {
     SmFontPickList::Remove(rFont);
 
@@ -226,7 +226,7 @@ void SmFontPickListBox::Remove(const Font &rFont)
 
 
 
-bool IsItalic( const Font &rFont )
+bool IsItalic( const vcl::Font &rFont )
 {
     FontItalic eItalic = rFont.GetItalic();
     // the code below leaves only _NONE and _DONTKNOW as not italic
@@ -234,7 +234,7 @@ bool IsItalic( const Font &rFont )
 }
 
 
-bool IsBold( const Font &rFont )
+bool IsBold( const vcl::Font &rFont )
 {
     FontWeight eWeight = rFont.GetWeight();
     return eWeight != WEIGHT_DONTKNOW && eWeight > WEIGHT_NORMAL;

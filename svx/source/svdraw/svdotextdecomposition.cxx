@@ -97,7 +97,7 @@ namespace
         DECL_LINK(decomposeBlockBulletPrimitive, DrawBulletInfo* );
         DECL_LINK(decomposeStretchBulletPrimitive, DrawBulletInfo* );
 
-        bool impIsUnderlineAbove(const Font& rFont) const;
+        bool impIsUnderlineAbove(const vcl::Font& rFont) const;
         void impCreateTextPortionPrimitive(const DrawPortionInfo& rInfo);
         drawinglayer::primitive2d::BasePrimitive2D* impCheckFieldPrimitive(drawinglayer::primitive2d::BasePrimitive2D* pPrimitive, const DrawPortionInfo& rInfo) const;
         void impFlushTextPortionPrimitivesToLinePrimitives();
@@ -159,7 +159,7 @@ namespace
         drawinglayer::primitive2d::Primitive2DSequence getPrimitive2DSequence();
     };
 
-    bool impTextBreakupHandler::impIsUnderlineAbove(const Font& rFont) const
+    bool impTextBreakupHandler::impIsUnderlineAbove(const vcl::Font& rFont) const
     {
         if(!rFont.IsVertical())
         {

@@ -310,8 +310,8 @@ void Writer::PutNumFmtFontsInAttrPool()
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
     const SwNumRule* pRule;
     const SwNumFmt* pFmt;
-    const Font* pFont;
-    const Font* pDefFont = &numfunc::GetDefBulletFont();
+    const vcl::Font* pFont;
+    const vcl::Font* pDefFont = &numfunc::GetDefBulletFont();
     bool bCheck = false;
 
     for( sal_uInt16 nGet = rListTbl.size(); nGet; )

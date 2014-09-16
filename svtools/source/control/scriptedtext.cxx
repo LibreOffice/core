@@ -38,10 +38,10 @@ class SvtScriptedTextHelper_Impl
 {
 private:
     OutputDevice&               mrOutDevice;        /// The output device for drawing the text.
-    Font                        maLatinFont;        /// The font for latin text portions.
-    Font                        maAsianFont;        /// The font for asian text portions.
-    Font                        maCmplxFont;        /// The font for complex text portions.
-    Font                        maDefltFont;        /// The default font of the output device.
+    vcl::Font                   maLatinFont;        /// The font for latin text portions.
+    vcl::Font                   maAsianFont;        /// The font for asian text portions.
+    vcl::Font                   maCmplxFont;        /// The font for complex text portions.
+    vcl::Font                   maDefltFont;        /// The default font of the output device.
     OUString                    maText;             /// The text.
 
     vector< sal_Int32 >         maPosVec;           /// The start position of each text portion.
@@ -53,7 +53,7 @@ private:
     SvtScriptedTextHelper_Impl& operator=( const SvtScriptedTextHelper_Impl& ) SAL_DELETED_FUNCTION;
 
                                 /** Gets the font of the given script type. */
-    const Font&                 GetFont( sal_uInt16 _nScript ) const;
+    const vcl::Font&            GetFont( sal_uInt16 _nScript ) const;
                                 /** Sets a font on the output device depending on the script type. */
     inline void                 SetOutDevFont( sal_uInt16 _nScript )
                                     { mrOutDevice.SetFont( GetFont( _nScript ) ); }
@@ -69,9 +69,9 @@ public:
                                 /** This constructor sets an output device and fonts for all script types. */
                                 SvtScriptedTextHelper_Impl(
                                     OutputDevice& _rOutDevice,
-                                    Font* _pLatinFont,
-                                    Font* _pAsianFont,
-                                    Font* _pCmplxFont );
+                                    vcl::Font* _pLatinFont,
+                                    vcl::Font* _pAsianFont,
+                                    vcl::Font* _pCmplxFont );
                                 /** Copy constructor. */
                                 SvtScriptedTextHelper_Impl(
                                     const SvtScriptedTextHelper_Impl& _rCopy );
@@ -79,7 +79,7 @@ public:
                                 ~SvtScriptedTextHelper_Impl();
 
                                 /** Sets new fonts and recalculates the text width. */
-    void                        SetFonts( Font* _pLatinFont, Font* _pAsianFont, Font* _pCmplxFont );
+    void                        SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont );
                                 /** Sets a new text and calculates all script breaks and the text width. */
     void                        SetText(
                                     const OUString& _rText,
@@ -95,7 +95,7 @@ public:
 
 SvtScriptedTextHelper_Impl::SvtScriptedTextHelper_Impl(
         OutputDevice& _rOutDevice,
-        Font* _pLatinFont, Font* _pAsianFont, Font* _pCmplxFont ) :
+        vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont ) :
     mrOutDevice( _rOutDevice ),
     maLatinFont( _pLatinFont ? *_pLatinFont : _rOutDevice.GetFont() ),
     maAsianFont( _pAsianFont ? *_pAsianFont : _rOutDevice.GetFont() ),
@@ -122,7 +122,7 @@ SvtScriptedTextHelper_Impl::~SvtScriptedTextHelper_Impl()
 {
 }
 
-const Font& SvtScriptedTextHelper_Impl::GetFont( sal_uInt16 _nScript ) const
+const vcl::Font& SvtScriptedTextHelper_Impl::GetFont( sal_uInt16 _nScript ) const
 {
     switch( _nScript )
     {
@@ -255,7 +255,7 @@ void SvtScriptedTextHelper_Impl::CalculateBreaks( const uno::Reference< i18n::XB
     CalculateSizes();
 }
 
-void SvtScriptedTextHelper_Impl::SetFonts( Font* _pLatinFont, Font* _pAsianFont, Font* _pCmplxFont )
+void SvtScriptedTextHelper_Impl::SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont )
 {
     maLatinFont = _pLatinFont ? *_pLatinFont : maDefltFont;
     maAsianFont = _pAsianFont ? *_pAsianFont : maDefltFont;
@@ -320,7 +320,7 @@ SvtScriptedTextHelper::~SvtScriptedTextHelper()
     delete mpImpl;
 }
 
-void SvtScriptedTextHelper::SetFonts( Font* _pLatinFont, Font* _pAsianFont, Font* _pCmplxFont )
+void SvtScriptedTextHelper::SetFonts( vcl::Font* _pLatinFont, vcl::Font* _pAsianFont, vcl::Font* _pCmplxFont )
 {
     mpImpl->SetFonts( _pLatinFont, _pAsianFont, _pCmplxFont );
 }

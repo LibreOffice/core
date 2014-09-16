@@ -81,7 +81,7 @@ protected:
     void drawMenuItem(size_t nPos);
     void drawSeparator(size_t nPos);
     void drawAllMenuItems();
-    const Font& getLabelFont() const { return maLabelFont;}
+    const vcl::Font& getLabelFont() const { return maLabelFont;}
 
     void queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow* pMenu);
     void queueCloseSubMenu();
@@ -171,7 +171,7 @@ private:
     SubMenuItemData   maOpenTimer;
     SubMenuItemData   maCloseTimer;
 
-    Font    maLabelFont;
+    vcl::Font         maLabelFont;
 
     // Name of this menu window, taken from the menu item of the parent window
     // that launches it (if this is a sub menu).  If this is a top-level menu

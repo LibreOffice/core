@@ -36,7 +36,7 @@ class Point;
 class Rectangle;
 class Size;
 
-class EDITENG_DLLPUBLIC SvxFont : public Font
+class EDITENG_DLLPUBLIC SvxFont : public vcl::Font
 {
     SvxCaseMap   eCaseMap;      // Text Markup
     short nEsc;                 // Degree of Superscript/Subscript
@@ -45,7 +45,7 @@ class EDITENG_DLLPUBLIC SvxFont : public Font
 
 public:
     SvxFont();
-    SvxFont( const Font &rFont );
+    SvxFont( const vcl::Font &rFont );
     SvxFont( const SvxFont &rFont );
 
     // Methods for Superscript/Subscript
@@ -77,7 +77,7 @@ public:
     void DoOnCapitals(SvxDoCapitals &rDo) const;
 
     void SetPhysFont( OutputDevice *pOut ) const;
-    Font ChgPhysFont( OutputDevice *pOut ) const;
+    vcl::Font ChgPhysFont( OutputDevice *pOut ) const;
 
     Size GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
                           const sal_Int32 nIdx, const sal_Int32 nLen) const;

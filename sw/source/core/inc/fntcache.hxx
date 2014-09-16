@@ -61,9 +61,9 @@ class SwFntObj : public SwCacheObj
     friend void _InitCore();
     friend void _FinitCore();
 
-    Font aFont;
-    Font *pScrFont;
-    Font *pPrtFont;
+    vcl::Font aFont;
+    vcl::Font *pScrFont;
+    vcl::Font *pPrtFont;
     OutputDevice* pPrinter;
     sal_uInt16 nGuessedLeading;
     sal_uInt16 nExtLeading;
@@ -92,9 +92,9 @@ public:
 
     virtual ~SwFntObj();
 
-    inline       Font *GetScrFont()     { return pScrFont; }
-    inline       Font& GetFont()        { return aFont; }
-    inline const Font& GetFont() const  { return aFont; }
+    inline       vcl::Font *GetScrFont()     { return pScrFont; }
+    inline       vcl::Font& GetFont()        { return aFont; }
+    inline const vcl::Font& GetFont() const  { return aFont; }
 
     inline sal_uInt16 GetGuessedLeading() const  { return nGuessedLeading; }
     inline sal_uInt16 GetExtLeading() const  { return nExtLeading; }

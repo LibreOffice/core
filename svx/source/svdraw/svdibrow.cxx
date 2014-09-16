@@ -500,7 +500,7 @@ bool _SdrItemBrowserControl::BegChangeEntry(sal_uIntPtr nPos)
         pEditControl->SetPosSizePixel(aRect.TopLeft(),aRect.GetSize());
         pEditControl->SetText(pEntry->aValue);
         pEditControl->SetBackground( Wallpaper(Color(COL_LIGHTGRAY)));
-        Font aFont(pEditControl->GetFont());
+        vcl::Font aFont(pEditControl->GetFont());
         aFont.SetFillColor(Color(COL_LIGHTGRAY));
         pEditControl->SetFont(aFont);
         pEditControl->Show();

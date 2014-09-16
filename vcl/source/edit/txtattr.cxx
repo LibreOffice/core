@@ -43,7 +43,7 @@ TextAttribFontColor::~TextAttribFontColor()
 {
 }
 
-void TextAttribFontColor::SetFont( Font& rFont ) const
+void TextAttribFontColor::SetFont( vcl::Font& rFont ) const
 {
     rFont.SetColor( maColor );
 }
@@ -73,7 +73,7 @@ TextAttribFontWeight::~TextAttribFontWeight()
 {
 }
 
-void TextAttribFontWeight::SetFont( Font& rFont ) const
+void TextAttribFontWeight::SetFont( vcl::Font& rFont ) const
 {
     rFont.SetWeight( meWeight );
 }
@@ -99,7 +99,7 @@ TextAttribHyperLink::~TextAttribHyperLink()
 {
 }
 
-void TextAttribHyperLink::SetFont( Font& rFont ) const
+void TextAttribHyperLink::SetFont( vcl::Font& rFont ) const
 {
     rFont.SetColor( maColor );
     rFont.SetUnderline( UNDERLINE_SINGLE );
@@ -132,7 +132,7 @@ TextAttribProtect::~TextAttribProtect()
 {
 }
 
-void TextAttribProtect::SetFont( Font& ) const
+void TextAttribProtect::SetFont( vcl::Font& ) const
 {
 }
 

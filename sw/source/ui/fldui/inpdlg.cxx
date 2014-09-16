@@ -46,7 +46,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     get(m_pNextBT, "next");
     get(m_pOKBT, "ok");
     // switch font for Edit
-    Font aFont(m_pEditED->GetFont());
+    vcl::Font aFont(m_pEditED->GetFont());
     aFont.SetWeight(WEIGHT_LIGHT);
     m_pEditED->SetFont(aFont);
 

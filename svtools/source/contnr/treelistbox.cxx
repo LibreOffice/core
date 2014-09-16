@@ -135,7 +135,7 @@ SvInplaceEdit2::SvInplaceEdit2
     else
         pEdit = new MyEdit_Impl( pParent, this );
 
-    Font aFont( pParent->GetFont() );
+    vcl::Font aFont( pParent->GetFont() );
     aFont.SetTransparent( false );
     Color aColor( pParent->GetBackground().GetColor() );
     aFont.SetFillColor(aColor );
@@ -2288,7 +2288,7 @@ short SvTreeListBox::GetHeightOffset(const Image& rBmp, Size& aSizeLogic )
     return nOffset;
 }
 
-short SvTreeListBox::GetHeightOffset(const Font& /* rFont */, Size& aSizeLogic )
+short SvTreeListBox::GetHeightOffset(const vcl::Font& /* rFont */, Size& aSizeLogic )
 {
     short nOffset = 0;
     aSizeLogic = Size(GetTextWidth(OUString('X')), GetTextHeight());
@@ -2347,7 +2347,7 @@ void SvTreeListBox::AdjustEntryHeight( const Image& rBmp )
     }
 }
 
-void SvTreeListBox::AdjustEntryHeight( const Font& rFont )
+void SvTreeListBox::AdjustEntryHeight( const vcl::Font& rFont )
 {
     Size aSize;
     GetHeightOffset( rFont, aSize );
@@ -2527,11 +2527,10 @@ void SvTreeListBox::SetExpandedNodeBmp( const Image& rBmp )
 }
 
 
-void SvTreeListBox::SetFont( const Font& rFont )
+void SvTreeListBox::SetFont( const vcl::Font& rFont )
 {
-
-    Font aTempFont( rFont );
-    Font aOrigFont( GetFont() );
+    vcl::Font aTempFont( rFont );
+    vcl::Font aOrigFont( GetFont() );
     aTempFont.SetTransparent( true );
     if (aTempFont == aOrigFont)
         return;
@@ -2547,7 +2546,7 @@ void SvTreeListBox::SetFont( const Font& rFont )
     AdjustEntryHeightAndRecalc( GetFont() );
 }
 
-void SvTreeListBox::AdjustEntryHeightAndRecalc( const Font& rFont )
+void SvTreeListBox::AdjustEntryHeightAndRecalc( const vcl::Font& rFont )
 {
     AdjustEntryHeight( rFont );
     // always invalidate, else things go wrong in SetEntryHeight
@@ -2898,7 +2897,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
     long nMaxRight = nWidth + aEntryPos.X() - 1;
 
     Color aBackupTextColor( GetTextColor() );
-    Font aBackupFont( GetFont() );
+    vcl::Font aBackupFont( GetFont() );
     Color aBackupColor = GetFillColor();
 
     bool bCurFontIsSel = false;
@@ -2909,7 +2908,7 @@ long SvTreeListBox::PaintEntry1(SvTreeListEntry* pEntry,long nLine,sal_uInt16 nT
     const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) !=0 && !HasFocus();
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 
-    Font aHighlightFont( GetFont() );
+    vcl::Font aHighlightFont( GetFont() );
     const Color aHighlightTextColor( rSettings.GetHighlightTextColor() );
     aHighlightFont.SetColor( aHighlightTextColor );
 
@@ -3759,7 +3758,7 @@ void SvTreeListBox::InitSettings(bool bFont, bool bForeground, bool bBackground)
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );

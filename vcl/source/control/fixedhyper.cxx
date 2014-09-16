@@ -35,7 +35,7 @@ void FixedHyperlink::Initialize()
     // saves the old pointer
     m_aOldPointer = GetPointer();
     // changes the font
-    Font aFont = GetControlFont( );
+    vcl::Font aFont = GetControlFont( );
     // to underline
     aFont.SetUnderline( UNDERLINE_SINGLE );
     SetControlFont( aFont );

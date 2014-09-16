@@ -166,7 +166,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
     //set fixed current font
     aSet.Put( SfxBoolItem( FN_PARAM_2, true ) ); //maybe not necessary in future
 
-    Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
+    vcl::Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
 
     boost::scoped_ptr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog( m_pChartWindow, aSet, getFrame(), RID_SVXDLG_CHARMAP ));

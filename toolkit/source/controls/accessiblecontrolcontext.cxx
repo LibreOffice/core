@@ -334,7 +334,7 @@ namespace toolkit
                 nColor = pWindow->GetControlForeground().GetColor();
             else
             {
-                Font aFont;
+                vcl::Font aFont;
                 if ( pWindow->IsControlFont() )
                     aFont = pWindow->GetControlFont();
                 else

@@ -152,8 +152,8 @@ void AnnotationMenuButton::Paint( const Rectangle& /*rRect*/ )
 
     if ( mrSidebarWin.IsPreview() )
     {
-        Font aOldFont( mrSidebarWin.GetFont() );
-        Font aFont(aOldFont);
+        vcl::Font aOldFont( mrSidebarWin.GetFont() );
+        vcl::Font aFont(aOldFont);
         Color aCol( COL_BLACK);
         aFont.SetColor( aCol );
         aFont.SetHeight(200);

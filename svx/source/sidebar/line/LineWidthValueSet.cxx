@@ -109,11 +109,11 @@ void  LineWidthValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     //const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     //Color aBackColor(0,0,200);
     //const Color aTextColor = rStyleSettings.GetFieldTextColor();
-    Font aOldFont = pDev->GetFont();
+    vcl::Font aOldFont = pDev->GetFont();
     Color aOldColor = pDev->GetLineColor();
     Color aOldFillColor = pDev->GetFillColor();
 
-    Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
+    vcl::Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
     Size aSize = aFont.GetSize();
     aSize.Height() = nRectHeight*3/5;
     aFont.SetSize( aSize );

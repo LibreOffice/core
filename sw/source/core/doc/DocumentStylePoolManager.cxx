@@ -117,7 +117,7 @@ namespace
         {
             sal_uInt16 nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
                                 aArr[n].nResLngId )).GetLanguage();
-            Font aFnt( OutputDevice::GetDefaultFont( nFntType,
+            vcl::Font aFnt( OutputDevice::GetDefaultFont( nFntType,
                                     nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
 
             rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
@@ -146,7 +146,7 @@ namespace
         {
             sal_uInt16 nLng = ((SvxLanguageItem&)rSet.GetPool()->GetDefaultItem(
                                 aArr[n].nResLngId )).GetLanguage();
-            Font aFnt( OutputDevice::GetDefaultFont( aArr[n].nFntType,
+            vcl::Font aFnt( OutputDevice::GetDefaultFont( aArr[n].nFntType,
                                     nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
 
             rSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
@@ -441,7 +441,7 @@ SwTxtFmtColl* DocumentStylePoolManager::GetTxtCollFromPool( sal_uInt16 nId, bool
                     if( LANGUAGE_DONTKNOW == nLng )
                         nLng = *(pArr+3);
 
-                    Font aFnt( OutputDevice::GetDefaultFont( *pArr,
+                    vcl::Font aFnt( OutputDevice::GetDefaultFont( *pArr,
                                             nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
 
                     aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
@@ -1171,7 +1171,7 @@ SwFmt* DocumentStylePoolManager::GetFmtFromPool( sal_uInt16 nId )
 
     case RES_POOLCHR_BUL_LEVEL:             // Bullet character
         {
-            const Font& rBulletFont = numfunc::GetDefBulletFont();
+            const vcl::Font& rBulletFont = numfunc::GetDefBulletFont();
             SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
                       rBulletFont.GetName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet(), RES_CHRATR_FONT ));

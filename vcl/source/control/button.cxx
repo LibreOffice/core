@@ -635,7 +635,7 @@ WinBits PushButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
-const Font& PushButton::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& PushButton::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetPushButtonFont();
 }
@@ -1322,7 +1322,7 @@ void PushButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
     Rectangle   aRect( aPos, aSize );
-    Font        aFont = GetDrawPixelFont( pDev );
+    vcl::Font   aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();
@@ -1801,7 +1801,7 @@ WinBits RadioButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
-const Font& RadioButton::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& RadioButton::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetRadioCheckFont();
 }
@@ -2419,7 +2419,7 @@ void RadioButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize
         Size        aImageSize = pDev->LogicToPixel( Size( 300, 300 ), aResMapMode );
         Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
         Size        aBrd2Size = pDev->LogicToPixel( Size( 60, 60 ), aResMapMode );
-        Font        aFont = GetDrawPixelFont( pDev );
+        vcl::Font   aFont = GetDrawPixelFont( pDev );
         Rectangle   aStateRect;
         Rectangle   aMouseRect;
 
@@ -2914,7 +2914,7 @@ WinBits CheckBox::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
     return nStyle;
 }
 
-const Font& CheckBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& CheckBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetRadioCheckFont();
 }
@@ -3300,7 +3300,7 @@ void CheckBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     Size        aBrd1Size = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode );
     Size        aBrd2Size = pDev->LogicToPixel( Size( 30, 30 ), aResMapMode );
     long        nCheckWidth = pDev->LogicToPixel( Size( 20, 20 ), aResMapMode ).Width();
-    Font        aFont = GetDrawPixelFont( pDev );
+    vcl::Font   aFont = GetDrawPixelFont( pDev );
     Rectangle   aStateRect;
     Rectangle   aMouseRect;
 

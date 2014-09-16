@@ -327,7 +327,7 @@ public:
 
 struct WinMtfFontStyle
 {
-    Font    aFont;
+    vcl::Font    aFont;
 
     WinMtfFontStyle( LOGFONTW& rLogFont );
 };
@@ -479,7 +479,7 @@ struct SaveStruct
     WinMtfLineStyle     aLineStyle;
     WinMtfFillStyle     aFillStyle;
 
-    Font                aFont;
+    vcl::Font           aFont;
     Color               aBkColor;
     Color               aTextColor;
     sal_uInt32          nTextAlign;
@@ -586,8 +586,8 @@ class WinMtfOutput
     WinMtfLineStyle     maLineStyle;
     WinMtfFillStyle     maLatestFillStyle;
     WinMtfFillStyle     maFillStyle;
-    Font                maLatestFont;
-    Font                maFont;
+    vcl::Font           maLatestFont;
+    vcl::Font           maFont;
     sal_uInt32          mnLatestTextAlign;
     sal_uInt32          mnTextAlign;
     Color               maLatestTextColor;
@@ -638,7 +638,7 @@ class WinMtfOutput
     Point               ImplScale( const Point& rPt );
     Size                ImplMap( const Size& rSize, bool bDoWorldTransform = true);
     Rectangle           ImplMap( const Rectangle& rRectangle );
-    void                ImplMap( Font& rFont );
+    void                ImplMap( vcl::Font& rFont );
     Polygon&            ImplMap( Polygon& rPolygon );
     PolyPolygon&        ImplMap( PolyPolygon& rPolyPolygon );
     Polygon&            ImplScale( Polygon& rPolygon );
@@ -690,7 +690,7 @@ public:
     void                SelectObject( sal_Int32 nIndex );
     rtl_TextEncoding    GetCharSet(){ return maFont.GetCharSet(); };
     WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
-    const Font&         GetFont() const { return maFont;}
+    const vcl::Font&    GetFont() const { return maFont;}
     void                SetTextLayoutMode( ComplexTextLayoutMode nLayoutMode );
 
     void                ClearPath(){ aPathObj.Init(); };

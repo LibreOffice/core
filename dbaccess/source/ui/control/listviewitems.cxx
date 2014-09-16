@@ -32,7 +32,7 @@ namespace dbaui
         if (!_pViewData)
             _pViewData = pView->GetViewDataItem( pEntry, this );
         pView->Push(PUSH_ALL);
-        Font aFont( pView->GetFont());
+        vcl::Font aFont( pView->GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
         pView->Control::SetFont( aFont );
         _pViewData->maSize = Size(pView->GetTextWidth(GetText()), pView->GetTextHeight());
@@ -51,7 +51,7 @@ namespace dbaui
         if (m_bEmphasized)
         {
             rDev.Push(PUSH_ALL);
-            Font aFont( rDev.GetFont());
+            vcl::Font aFont( rDev.GetFont());
             aFont.SetWeight(WEIGHT_BOLD);
             rDev.SetFont( aFont );
             Point aPos(rPos);

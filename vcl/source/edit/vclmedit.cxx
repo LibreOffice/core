@@ -974,12 +974,12 @@ void VclMultiLineEdit::ImplInitSettings( bool /*bFont*/, bool /*bForeground*/, b
     if ( !IsEnabled() )
         aTextColor = rStyleSettings.GetDisableColor();
 
-    Font aFont = rStyleSettings.GetFieldFont();
+    vcl::Font aFont = rStyleSettings.GetFieldFont();
     if ( IsControlFont() )
         aFont.Merge( GetControlFont() );
     aFont.SetTransparent( IsPaintTransparent() );
     SetZoomedPointFont( aFont );
-    Font TheFont = GetFont();
+    vcl::Font TheFont = GetFont();
     TheFont.SetColor( aTextColor );
     if( IsPaintTransparent() )
         TheFont.SetFillColor( Color( COL_TRANSPARENT ) );
@@ -1304,7 +1304,7 @@ void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
-    Font aFont = pImpVclMEdit->GetTextWindow()->GetDrawPixelFont( pDev );
+    vcl::Font aFont = pImpVclMEdit->GetTextWindow()->GetDrawPixelFont( pDev );
     aFont.SetTransparent( true );
     OutDevType eOutDevType = pDev->GetOutDevType();
 

@@ -356,7 +356,7 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
 }
 
 ScConversionParam::ScConversionParam( ScConversionType eConvType,
-        LanguageType eSourceLang, LanguageType eTargetLang, const Font& rTargetFont,
+        LanguageType eSourceLang, LanguageType eTargetLang, const vcl::Font& rTargetFont,
         sal_Int32 nOptions, bool bIsInteractive ) :
     meConvType( eConvType ),
     meSourceLang( eSourceLang ),

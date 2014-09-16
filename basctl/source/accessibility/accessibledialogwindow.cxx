@@ -832,7 +832,7 @@ sal_Int32 AccessibleDialogWindow::getForeground(  ) throw (RuntimeException, std
             nColor = m_pDialogWindow->GetControlForeground().GetColor();
         else
         {
-            Font aFont;
+            vcl::Font aFont;
             if ( m_pDialogWindow->IsControlFont() )
                 aFont = m_pDialogWindow->GetControlFont();
             else
@@ -876,7 +876,7 @@ Reference< awt::XFont > AccessibleDialogWindow::getFont(  ) throw (RuntimeExcept
         Reference< awt::XDevice > xDev( m_pDialogWindow->GetComponentInterface(), UNO_QUERY );
         if ( xDev.is() )
         {
-            Font aFont;
+            vcl::Font aFont;
             if ( m_pDialogWindow->IsControlFont() )
                 aFont = m_pDialogWindow->GetControlFont();
             else

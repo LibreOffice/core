@@ -236,7 +236,7 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
     OSL_ASSERT(mpWindow);
 
     // Set the correct font.
-    Font aOriginalFont (mpWindow->GetFont());
+    vcl::Font aOriginalFont (mpWindow->GetFont());
     if (mpPageNumberFont)
         mpWindow->SetFont(*mpPageNumberFont);
 

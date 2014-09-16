@@ -616,7 +616,7 @@ public:
                                 sal_uInt16 nFont,
                                 sal_Unicode nChar,
                                 sal_uInt32& nMappedFontId,
-                                Font& rFont,
+                                vcl::Font& rFont,
                                 char nDefault
                             ) const;
     const PptDocumentAtom&  GetDocumentAtom() const { return aDocAtom; }

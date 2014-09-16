@@ -646,7 +646,7 @@ SET_FONTALIGNMENT:
             case RTF_F:
             case RTF_AF:
                 {
-                    const Font& rSVFont = GetFont( sal_uInt16(nTokenValue) );
+                    const vcl::Font& rSVFont = GetFont( sal_uInt16(nTokenValue) );
                     SvxFontItem aTmpItem( rSVFont.GetFamily(),
                                     rSVFont.GetName(), rSVFont.GetStyleName(),
                                     rSVFont.GetPitch(), rSVFont.GetCharSet(),
@@ -1804,7 +1804,7 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
             //we can fall back to the ansicpg set codeset
             if (nDfltFont != -1)
             {
-                const Font& rSVFont = GetFont(sal_uInt16(nDfltFont));
+                const vcl::Font& rSVFont = GetFont(sal_uInt16(nDfltFont));
                 SetEncoding(rSVFont.GetCharSet());
             }
             else
@@ -1828,7 +1828,7 @@ void SvxRTFParser::SetDefault( int nToken, int nValue )
         {
             if( -1 == nValue )
                 nValue = 0;
-            const Font& rSVFont = GetFont( sal_uInt16(nValue) );
+            const vcl::Font& rSVFont = GetFont( sal_uInt16(nValue) );
             SvxFontItem aTmpItem(
                                 rSVFont.GetFamily(), rSVFont.GetName(),
                                 rSVFont.GetStyleName(), rSVFont.GetPitch(),

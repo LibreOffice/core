@@ -37,7 +37,7 @@ struct WMFWriterAttrStackMember
     LineInfo aLineInfo;
     TextAlign eTextAlign;
     RasterOp eRasterOp;
-    Font aFont;
+    vcl::Font aFont;
     MapMode aMapMode;
     Region aClipRegion;
     PushFlags nFlags;
@@ -73,7 +73,7 @@ private:
     LineInfo  aSrcLineInfo;
     RasterOp  eSrcRasterOp;
     FontAlign eSrcTextAlign;
-    Font      aSrcFont;
+    vcl::Font aSrcFont;
     MapMode   aSrcMapMode;
     bool      bSrcIsClipping;
     Region    aSrcClipRegion;
@@ -88,7 +88,7 @@ private:
     LineInfo  aDstLineInfo;
     RasterOp  eDstROP2;
     FontAlign eDstTextAlign;
-    Font      aDstFont;
+    vcl::Font aDstFont;
 
     sal_uInt32    eDstHorTextAlign;
 
@@ -138,7 +138,7 @@ private:
     void WMFRecord_Arc(const Rectangle& rRect, const Point& rStartPt, const Point& rEndPt);
     void WMFRecord_Chord(const Rectangle& rRect, const Point& rStartPt, const Point& rEndPt);
     void WMFRecord_CreateBrushIndirect(const Color& rColor);
-    void WMFRecord_CreateFontIndirect(const Font& rFont);
+    void WMFRecord_CreateFontIndirect(const vcl::Font& rFont);
     void WMFRecord_CreatePenIndirect(const Color& rColor, const LineInfo& rLineInfo );
     void WMFRecord_DeleteObject(sal_uInt16 nObjectHandle);
     void WMFRecord_Ellipse(const Rectangle& rRect);
@@ -176,7 +176,7 @@ private:
     sal_uInt16 AllocHandle();
     void FreeHandle(sal_uInt16 nObjectHandle);
     void CreateSelectDeletePen( const Color& rColor, const LineInfo& rLineInfo );
-    void CreateSelectDeleteFont(const Font & rFont);
+    void CreateSelectDeleteFont(const vcl::Font & rFont);
     void CreateSelectDeleteBrush(const Color& rColor);
 
     void SetLineAndFillAttr();

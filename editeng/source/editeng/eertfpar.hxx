@@ -107,7 +107,7 @@ public:
                 GetDestCharSet() const              { return eDestCharSet; }
 
     sal_uInt16      GetDefTab() const                   { return nDefTab; }
-    Font        GetDefFont()                        { return GetFont( nDefFont ); }
+    vcl::Font       GetDefFont()                        { return GetFont( nDefFont ); }
 
     EditPaM     GetCurPaM() const                   { return aCurSel.Max(); }
 };

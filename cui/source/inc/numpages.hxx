@@ -41,7 +41,7 @@ class SvxBrushItem;
 class SvxNumberingPreview : public Window
 {
     const SvxNumRule*   pActNum;
-    Font                aStdFont;
+    vcl::Font           aStdFont;
     long                nPageWidth;
     const OUString*     pOutlineNames;
     bool                bPosition;
@@ -308,7 +308,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     bool                bMenuButtonInitialized : 1;
 
     std::vector<OUString> aGrfNames;
-    Font                aActBulletFont;
+    vcl::Font             aActBulletFont;
 
     sal_uInt8               nBullet;
     sal_uInt16              nActNumLvl;

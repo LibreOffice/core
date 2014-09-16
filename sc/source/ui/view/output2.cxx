@@ -89,7 +89,7 @@ class ScDrawStringsVars
     const ScPatternAttr* pPattern;              // Attribute
     const SfxItemSet*   pCondSet;               // aus bedingter Formatierung
 
-    Font                aFont;                  // aus Attributen erzeugt
+    vcl::Font           aFont;                  // aus Attributen erzeugt
     FontMetric          aMetric;
     long                nAscentPixel;           // always pixels
     SvxCellOrientation  eAttrOrient;
@@ -234,7 +234,7 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, sal_uInt8 nScript )
     Fraction aFraction( nScale, 100 );
     if ( !bPixelToLogic )
         aFraction *= pOutput->aZoomY;
-    Font aTmpFont;
+    vcl::Font aTmpFont;
     pPattern->GetFont( aTmpFont, SC_AUTOCOL_RAW, pFmtDevice, &aFraction, pCondSet, nScript );
     long nNewHeight = aTmpFont.GetHeight();
     if ( nNewHeight > 0 )
@@ -844,7 +844,7 @@ static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, S
     }
 }
 
-void ScOutputData::SetSyntaxColor( Font* pFont, const ScRefCellValue& rCell )
+void ScOutputData::SetSyntaxColor( vcl::Font* pFont, const ScRefCellValue& rCell )
 {
     switch (rCell.meType)
     {
