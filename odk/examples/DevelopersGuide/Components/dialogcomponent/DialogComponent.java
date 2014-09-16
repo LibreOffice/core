@@ -32,16 +32,23 @@
  *
  *************************************************************************/
 
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.Factory;
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlContainer;
+import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XDialogEventHandler;
+import com.sun.star.awt.XDialogProvider2;
 import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
 
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindowPeer;
@@ -84,13 +91,79 @@ public class DialogComponent {
             }
         }
 
+        // XTestDialogHandler
+        public String createDialog( String DialogURL, XModel xModel, XFrame xFrame ) {
+            m_xFrame = xFrame;
 
+            try {
+                XMultiComponentFactory xMCF = m_xCmpCtx.getServiceManager();
+                Object obj;
 
+                // If valid we must pass the XModel when creating a DialogProvider object
+                if( xModel != null ) {
+                    Object[] args = new Object[1];
+                    args[0] = xModel;
 
+                    obj = xMCF.createInstanceWithArgumentsAndContext(
+                        "com.sun.star.awt.DialogProvider2", args, m_xCmpCtx );
+                }
+                else {
+                    obj = xMCF.createInstanceWithContext(
+                        "com.sun.star.awt.DialogProvider2", m_xCmpCtx );
+                }
 
+                XDialogProvider2 xDialogProvider = UnoRuntime.queryInterface( XDialogProvider2.class, obj );
 
+                XDialog xDialog = xDialogProvider.createDialogWithHandler( DialogURL, this );
+                if( xDialog != null )
+                    xDialog.execute();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "Created dialog \"" + DialogURL + "\"";
+        }
 
+        public void copyText( XDialog xDialog, Object aEventObject ) {
+            XControlContainer xControlContainer = UnoRuntime.queryInterface(
+                XControlContainer.class, xDialog );
+            String aTextPropertyStr = "Text";
+            String aText = "";
+            XControl xTextField1Control = xControlContainer.getControl( "TextField1" );
+            XControlModel xControlModel1 = xTextField1Control.getModel();
+            XPropertySet xPropertySet1 = UnoRuntime.queryInterface(
+                XPropertySet.class, xControlModel1 );
+            try
+            {
+                aText = (String)xPropertySet1.getPropertyValue( aTextPropertyStr );
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
 
+            XControl xTextField2Control = xControlContainer.getControl( "TextField2" );
+            XControlModel xControlModel2 = xTextField2Control.getModel();
+            XPropertySet xPropertySet2 = UnoRuntime.queryInterface(
+                XPropertySet.class, xControlModel2 );
+            try
+            {
+                xPropertySet2.setPropertyValue( aTextPropertyStr, aText );
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            showMessageBox( "DialogComponent", "copyText() called" );
+        }
+
+        public void handleEvent() {
+            showMessageBox( "DialogComponent", "handleEvent() called" );
+        }
+
+        public void handleEventWithArguments( XDialog xDialog, Object aEventObject ) {
+            showMessageBox( "DialogComponent", "handleEventWithArguments() called\n\n" +
+                "Event Object = " + aEventObject );
+        }
 
         private final String aHandlerMethod1 = "doit1";
         private final String aHandlerMethod2 = "doit2";
