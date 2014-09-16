@@ -22,4 +22,8 @@ $(eval $(call gb_Package_add_files,instsetoo_native_setup,$(LIBO_ETC_FOLDER),\
 	$(call gb_Helper_get_rcfile,version) \
 ))
 
+$(eval $(call gb_Package_add_files,instsetoo_native_setup,$(LIBO_URE_ETC_FOLDER), \
+    $(call gb_Helper_get_rcfile,uno) \
+))
+
 # vim: set noet sw=4 ts=4:

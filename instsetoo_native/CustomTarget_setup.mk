@@ -12,21 +12,23 @@ $(eval $(call gb_CustomTarget_CustomTarget,instsetoo_native/setup))
 $(eval $(call gb_CustomTarget_register_targets,instsetoo_native/setup,\
 	$(call gb_Helper_get_rcfile,bootstrap) \
 	$(call gb_Helper_get_rcfile,fundamental) \
+	$(call gb_Helper_get_rcfile,louno) \
 	$(if $(ENABLE_OOENV),ooenv) \
 	$(if $(filter TRUE,$(DISABLE_PYTHON)),,$(call gb_Helper_get_rcfile,pythonloader.uno)) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),$(if $(filter-out MACOSX,$(OS)), \
 	    $(call gb_Helper_get_rcfile,redirect))) \
 	$(call gb_Helper_get_rcfile,setup) \
 	$(call gb_Helper_get_rcfile,soffice) \
-	$(call gb_Helper_get_rcfile,louno) \
+	$(call gb_Helper_get_rcfile,uno) \
 	$(call gb_Helper_get_rcfile,version) \
 ))
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,bootstrap) \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,fundamental) \
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,louno) \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv \
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,pythonloader.uno) \
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,louno) \
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) \
 	: $(SRCDIR)/instsetoo_native/CustomTarget_setup.mk
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,bootstrap) :
@@ -68,6 +70,24 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'URE_MORE_JAVA_TYPES=$${BRAND_BASE_DIR}/$(LIBO_SHARE_JAVA_FOLDER)/unoil.jar $${BRAND_BASE_DIR}/$(LIBO_SHARE_JAVA_FOLDER)/ScriptFramework.jar $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}' \
 		&& echo 'URE_MORE_SERVICES=$${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_UserUnoFile}:UNO_SERVICES} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_SharedUnoFile}:UNO_SERVICES} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_BundledUnoFile}:UNO_SERVICES} <$$ORIGIN/services>*' \
 		&& echo 'URE_MORE_TYPES=<$$ORIGIN/types>* $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_UserUnoFile}:UNO_TYPES} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_SharedUnoFile}:UNO_TYPES} $${$${$$ORIGIN/$(call gb_Helper_get_rcfile,louno):PKG_BundledUnoFile}:UNO_TYPES}' \
+	) > $@
+
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,louno) :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	( \
+		echo '[Bootstrap]' \
+		&& echo 'PKG_BundledUnoFile=$$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
+		&& echo 'PKG_SharedUnoFile=$$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
+		&& echo 'PKG_UserUnoFile=$$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
+		&& echo 'BAK_EXTENSIONS=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/bak' \
+		&& echo 'BUNDLED_EXTENSIONS=$$BRAND_BASE_DIR/$(LIBO_SHARE_FOLDER)/extensions' \
+		&& echo 'BUNDLED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/bundled' \
+		&& echo 'TMP_EXTENSIONS=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/tmp' \
+		&& echo 'SHARED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/shared' \
+		&& echo 'UNO_SHARED_PACKAGES=$$BRAND_BASE_DIR/$(LIBO_SHARE_FOLDER)/uno_packages' \
+		&& echo 'UNO_SHARED_PACKAGES_CACHE=$$UNO_SHARED_PACKAGES/cache' \
+		&& echo 'UNO_USER_PACKAGES=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/uno_packages' \
+		&& echo 'UNO_USER_PACKAGES_CACHE=$$UNO_USER_PACKAGES/cache' \
 	) > $@
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/ooenv :
@@ -131,22 +151,15 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
 	) > $@
 
-$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,louno) :
+$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,uno) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
 		echo '[Bootstrap]' \
-		&& echo 'PKG_BundledUnoFile=$$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
-		&& echo 'PKG_SharedUnoFile=$$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
-		&& echo 'PKG_UserUnoFile=$$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/$(call gb_Helper_get_rcfile,uno)' \
-		&& echo 'BAK_EXTENSIONS=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/bak' \
-		&& echo 'BUNDLED_EXTENSIONS=$$BRAND_BASE_DIR/$(LIBO_SHARE_FOLDER)/extensions' \
-		&& echo 'BUNDLED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/bundled' \
-		&& echo 'TMP_EXTENSIONS=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/tmp' \
-		&& echo 'SHARED_EXTENSIONS_USER=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/extensions/shared' \
-		&& echo 'UNO_SHARED_PACKAGES=$$BRAND_BASE_DIR/$(LIBO_SHARE_FOLDER)/uno_packages' \
-		&& echo 'UNO_SHARED_PACKAGES_CACHE=$$UNO_SHARED_PACKAGES/cache' \
-		&& echo 'UNO_USER_PACKAGES=$${$$BRAND_BASE_DIR/$(LIBO_ETC_FOLDER)/$(call gb_Helper_get_rcfile,bootstrap):UserInstallation}/user/uno_packages' \
-		&& echo 'UNO_USER_PACKAGES_CACHE=$$UNO_USER_PACKAGES/cache' \
+		&& echo 'URE_INTERNAL_LIB_DIR=$${ORIGIN}$(if $(filter MACOSX,$(OS)),/../../Frameworks)' \
+		&& echo 'URE_INTERNAL_JAVA_DIR=$${ORIGIN}/..$(if $(filter-out MACOSX WNT,$(OS)),/share)/java' \
+		&& echo 'URE_INTERNAL_JAVA_CLASSPATH=$${URE_MORE_JAVA_TYPES}' \
+		&& echo 'UNO_TYPES=$${ORIGIN}/$(if $(filter-out MACOSX,$(OS)),$(if $(filter-out WNT,$(OS)),../share/)misc/)types.rdb $${URE_MORE_TYPES}' \
+		&& echo 'UNO_SERVICES=$${ORIGIN}/../$(if $(filter-out WNT,$(OS)),share/)misc/services.rdb $${URE_MORE_SERVICES}' \
 	) > $@
 
 .PHONY: $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_rcfile,version)

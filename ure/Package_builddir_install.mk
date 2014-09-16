@@ -9,8 +9,10 @@
 
 $(eval $(call gb_Package_Package,ure_builddir_install,$(BUILDDIR)/ure/source))
 
+ifneq ($(CROSS_COMPILING),)
 $(eval $(call gb_Package_add_files,ure_builddir_install,$(LIBO_URE_ETC_FOLDER),\
 	$(if $(filter unorc,$(call gb_Helper_get_rcfile,uno)),$(call gb_Helper_get_rcfile,uno)) \
 ))
+endif
 
 # vim:set noet sw=4 ts=4:

@@ -24,7 +24,6 @@ endif
 
 $(eval $(call gb_Package_add_files,ure_install,$(LIBO_URE_ETC_FOLDER),\
 	$(call gb_Helper_get_rcfile,jvmfwk3) \
-	$(if $(filter unorc,$(call gb_Helper_get_rcfile,uno)),,$(call gb_Helper_get_rcfile,uno)) \
 ))
 
 # vim:set noet sw=4 ts=4:
