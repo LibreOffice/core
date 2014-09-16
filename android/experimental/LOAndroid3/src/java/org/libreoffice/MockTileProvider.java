@@ -62,6 +62,11 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public Bitmap thumbnail() {
+        return null;
+    }
+
+    @Override
     public void changePart(int partIndex) {
 
     }

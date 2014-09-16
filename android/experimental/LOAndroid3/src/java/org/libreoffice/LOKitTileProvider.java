@@ -21,7 +21,10 @@ public class LOKitTileProvider implements TileProvider {
     private final LayerController mLayerController;
     private final double mTileWidth;
     private final double mTileHeight;
+
     private double mDPI;
+    private double mWidthTwip;
+    private double mHeightTwip;
 
     public LOKitTileProvider(LayerController layerController, String input) {
         mLayerController = layerController;
@@ -75,7 +78,10 @@ public class LOKitTileProvider implements TileProvider {
             return false;
         }
 
-        if (mDocument.getDocumentWidth() == 0 && mDocument.getDocumentHeight() == 0) {
+        mWidthTwip = mDocument.getDocumentWidth();
+        mHeightTwip = mDocument.getDocumentHeight();
+
+        if (mWidthTwip == 0 && mHeightTwip == 0) {
             Log.e(LOGTAG, "Document size zero - last error: " + mOffice.getError());
         } else {
             Log.i(LOGTAG, "Document size: " + mDocument.getDocumentWidth() + " x " + mDocument.getDocumentHeight());
@@ -86,12 +92,12 @@ public class LOKitTileProvider implements TileProvider {
 
     @Override
     public int getPageWidth() {
-        return (int) twipToPixel(mDocument.getDocumentWidth(), mDPI);
+        return (int) twipToPixel(mWidthTwip, mDPI);
     }
 
     @Override
     public int getPageHeight() {
-        return (int) twipToPixel(mDocument.getDocumentHeight(), mDPI);
+        return (int) twipToPixel(mHeightTwip, mDPI);
     }
 
     @Override
@@ -99,6 +105,7 @@ public class LOKitTileProvider implements TileProvider {
         return mDocument != null;
     }
 
+    @Override
     public SubTile createTile(int x, int y) {
         ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
         Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
@@ -111,6 +118,29 @@ public class LOKitTileProvider implements TileProvider {
         SubTile tile = new SubTile(image, x, y);
         tile.beginTransaction();
         return tile;
+    }
+
+    @Override
+    public Bitmap thumbnail() {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
+        Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
+
+        int widthPixel = getPageWidth();
+        int heightPixel = getPageHeight();
+
+        if (widthPixel > heightPixel) {
+            double ratio = heightPixel / (double) widthPixel;
+            widthPixel = 1000;
+            heightPixel = (int) (widthPixel * ratio);
+        } else {
+            double ratio = widthPixel / (double) heightPixel;
+            heightPixel = 1000;
+            widthPixel = (int) (heightPixel * ratio);
+        }
+
+        mDocument.paintTile(buffer, widthPixel, heightPixel, 0, 0, (int) mWidthTwip, (int) mHeightTwip);
+
+        return bitmap;
     }
 
     @Override
