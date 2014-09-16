@@ -24,6 +24,20 @@ bool isSalBool(QualType type) {
     return t != nullptr && t->getDecl()->getNameAsString() == "sal_Bool";
 }
 
+// Clang 3.2 FunctionDecl::isInlined doesn't work as advertised ("Determine
+// whether this function should be inlined, because it is either marked 'inline'
+// or 'constexpr' or is a member function of a class that was defined in the
+// class body.") but mis-classifies salhelper::Timer's isTicking, isExpired, and
+// expiresBefore members as defined in salhelper/source/timer.cxx as inlined:
+bool isInlined(FunctionDecl const & decl) {
+#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
+    return decl->isInlined();
+#else
+    (void)decl;
+    return false;
+#endif
+}
+
 // It appears that, given a function declaration, there is no way to determine
 // the language linkage of the function's type, only of the function's name
 // (via FunctionDecl::isExternC); however, in a case like
@@ -324,7 +338,7 @@ bool SalBool::VisitParmVarDecl(ParmVarDecl const * decl) {
                   || (isInUnoIncludeFile(
                           compiler.getSourceManager().getSpellingLoc(
                               f->getNameInfo().getLoc()))
-                      && (!f->isInlined() || f->hasAttr<DeprecatedAttr>()
+                      && (!isInlined(*f) || f->hasAttr<DeprecatedAttr>()
                           || decl->getType()->isReferenceType()
                           || hasBoolOverload(f, false)))
                   || f->isDeleted() || hasBoolOverload(f, true)))
@@ -497,18 +511,7 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
                  || (isInUnoIncludeFile(
                          compiler.getSourceManager().getSpellingLoc(
                              f->getNameInfo().getLoc()))
-                     && (
-// Clang 3.2 FunctionDecl::isInlined doesn't work as advertised ("Determine
-// whether this function should be inlined, because it is either marked 'inline'
-// or 'constexpr' or is a member function of a class that was defined in the
-// class body.") but mis-classifies salhelper::Timer's isTicking, isExpired, and
-// expiresBefore members as defined in salhelper/source/timer.cxx as inlined:
-#if (__clang_major__ == 3 && __clang_minor__ >= 3) || __clang_major__ > 3
-                         !f->isInlined()
-#else
-                         true
-#endif
-                         || f->hasAttr<DeprecatedAttr>()))))
+                     && (!isInlined(*f) || f->hasAttr<DeprecatedAttr>()))))
         {
             SourceLocation loc { decl->getLocStart() };
             SourceLocation l { compiler.getSourceManager().getExpansionLoc(
@@ -544,7 +547,7 @@ bool SalBool::VisitFunctionDecl(FunctionDecl const * decl) {
             {
                 report(
                     DiagnosticsEngine::Warning,
-                    "use \"bool\" instead of \"sal_Bool\" as return type%0",
+                    "use \"bool\" instead of \"sal_Bool\" as return type%0 [%1 %2]",
                     loc)
                     << (k == OverrideKind::MAYBE
                         ? (" (unless this member function overrides a dependent"
