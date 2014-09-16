@@ -20,6 +20,7 @@ package com.sun.star.beans;
 
 import com.sun.star.lang.XComponent;
 import com.sun.star.uno.XComponentContext;
+import java.awt.Container;
 
 /**
  * This abstract class reprecents a connection to the office
@@ -37,7 +38,13 @@ public interface OfficeConnection
     void setUnoUrl(String url)
         throws java.net.MalformedURLException;
 
-
+    /**
+     * Sets an AWT container catory.
+     *
+     * @param containerFactory This is a application provided AWT container
+     *  factory.
+     */
+    void setContainerFactory(ContainerFactory containerFactory);
 
     /**
      * Retrieves the UNO component context.
@@ -48,5 +55,15 @@ public interface OfficeConnection
      */
     XComponentContext getComponentContext();
 
-
+    /**
+     * Creates an office window.
+     * The window is either a sub-class of java.awt.Canvas (local) or
+     * java.awt.Container (RVP).
+     *
+     * This method does not add add the office window to its container.
+     *
+     * @param container This is an AWT container.
+     * @return The office window instance.
+     */
+    OfficeWindow createOfficeWindow(Container container);
 }

@@ -18,6 +18,7 @@
 
 package com.sun.star.beans;
 
+import java.awt.Container;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
@@ -155,6 +156,19 @@ public class LocalOfficeConnection
         if ( mContext == null )
             mContext = connect();
         return mContext;
+    }
+
+    /**
+     * Creates an office window.
+     * The window is either a sub-class of java.awt.Canvas (local) or
+     * java.awt.Container (RVP).
+     *
+     * @param container This is an AWT container.
+     * @return The office window instance.
+     */
+    public OfficeWindow createOfficeWindow(Container container)
+    {
+        return new LocalOfficeWindow(this);
     }
 
     /**

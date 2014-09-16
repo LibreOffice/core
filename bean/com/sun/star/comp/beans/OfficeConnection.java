@@ -40,7 +40,13 @@ public interface OfficeConnection
     void setUnoUrl(String url)
         throws java.net.MalformedURLException;
 
-
+    /**
+     * Sets an AWT container catory.
+     *
+     * @param containerFactory This is a application provided AWT container
+     *  factory.
+     */
+    void setContainerFactory(ContainerFactory containerFactory);
 
     /**
      * Retrieves the UNO component context.

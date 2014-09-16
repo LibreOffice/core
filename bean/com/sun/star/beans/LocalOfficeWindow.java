@@ -42,7 +42,7 @@ import com.sun.star.uno.XComponentContext;
  */
 public class LocalOfficeWindow
     extends java.awt.Canvas
-    implements XEventListener
+    implements OfficeWindow, XEventListener
 {
     private transient OfficeConnection  mConnection;
     private transient XWindowPeer       mParentProxy;

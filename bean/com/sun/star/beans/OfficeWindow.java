@@ -16,23 +16,31 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-package com.sun.star.comp.beans;
+package com.sun.star.beans;
 
-import java.awt.Container;
+import java.awt.Component;
+
+import com.sun.star.awt.XWindowPeer;
 
 /**
- * This interface represents an AWT container factory.
- *
+ * The concreate implementation of the OfficeWindow extends an
+ * approperate type of visual component (java.awt.Canvas for local
+ * and java.awt.Container for remote).
  * @deprecated
- *
  */
-
-public interface ContainerFactory
+public interface OfficeWindow
 {
     /**
-     * Creates an AWT container.
+     * Retrieves an AWT component object associated with the OfficeWindow.
      *
-     * @return An AWT container.
+     * @return The AWT component object associated with the OfficeWindow.
      */
-    Container createContainer();
+    Component getAWTComponent();
+
+    /**
+     * Retrieves an UNO XWindowPeer object associated with the OfficeWindow.
+     *
+     * @return The UNO XWindowPeer object associated with the OfficeWindow.
+     */
+    XWindowPeer getUNOWindowPeer();
 }
