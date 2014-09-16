@@ -185,7 +185,7 @@ ProfileItem gid_Profileitem_Dl_Uno_Ure_Internal_Java_Dir
     Section = "Bootstrap";
     Key = "URE_INTERNAL_JAVA_DIR";
 #if defined MACOSX
-    Value = "${ORIGIN}/../java";
+    Value = "${ORIGIN}/../../java";
 #elif defined WNT
     Value = "${ORIGIN}/../java";
 #else
