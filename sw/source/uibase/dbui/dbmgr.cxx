@@ -168,31 +168,6 @@ const sal_Char cActiveConnection[] = "ActiveConnection";
 namespace
 {
 
-bool lcl_getCountFromResultSet( sal_Int32& rCount, const uno::Reference<XResultSet>& xResultSet )
-{
-    uno::Reference<XPropertySet> xPrSet(xResultSet, UNO_QUERY);
-    if(xPrSet.is())
-    {
-        try
-        {
-            bool bFinal = false;
-            Any aFinal = xPrSet->getPropertyValue("IsRowCountFinal");
-            aFinal >>= bFinal;
-            if(!bFinal)
-            {
-                xResultSet->last();
-                xResultSet->first();
-            }
-            Any aCount = xPrSet->getPropertyValue("RowCount");
-            if( aCount >>= rCount )
-                return true;
-        }
-        catch(const Exception&)
-        {
-        }
-    }
-    return false;
-}
 // copy compatibility options
 void lcl_CopyCompatibilityOptions( SwWrtShell& rSourceShell, SwWrtShell& rTargetShell)
 {
@@ -1126,7 +1101,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
                             else
                                 pTargetPageDesc = pTargetShell->FindPageDescByName( sModifiedStartingPageDesc );
 
-                                sal_uInt16 nStartPage = pTargetShell->GetPageCnt();
+                            sal_uInt16 nStartPage = pTargetShell->GetPageCnt();
 #ifdef DBG_UTIL
                             if ( nDocNo <= MAX_DOC_DUMP )
                                 lcl_SaveDoc( xWorkDocSh, "WorkDoc", nDocNo );
