@@ -1822,7 +1822,7 @@ AC_ARG_WITH(libbase-jar,
 AC_ARG_WITH(system-odbc,
     AS_HELP_STRING([--with-system-odbc],
         [Use the odbc headers already on system.]),,
-    [with_system_odbc="auto"])
+    [with_system_odbc="$with_system_headers"])
 
 AC_ARG_WITH(system-sane,
     AS_HELP_STRING([--with-system-sane],
@@ -8607,7 +8607,7 @@ dnl ===================================================================
 dnl Check for system odbc
 dnl ===================================================================
 AC_MSG_CHECKING([which odbc headers to use])
-if test "$with_system_odbc" = "yes" -o '(' "$with_system_headers" = "yes" -a "$with_system_odbc" = "auto" ')' -o '(' "$_os" = "WINNT" -a  "$with_system_odbc" != "no" ')'; then
+if test "$with_system_odbc" = "yes" ; then
     AC_MSG_RESULT([external])
     SYSTEM_ODBC_HEADERS=TRUE
 
