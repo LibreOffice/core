@@ -1097,6 +1097,10 @@ com::sun::star::lang::Locale MsLangId::Conversion::getLocale( const IsoLanguageS
                     case LANGUAGE_USER_LOJBAN:
                     case LANGUAGE_KASHMIRI:
                     case LANGUAGE_USER_KEYID:
+                    // And the special codes without country.
+                    case LANGUAGE_MULTIPLE:
+                    case LANGUAGE_UNDETERMINED:
+                    case LANGUAGE_NONE:
                         return getLocale( pEntry);  // may override
                     default:
                         ;   // nothing
