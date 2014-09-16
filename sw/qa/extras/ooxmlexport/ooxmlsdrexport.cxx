@@ -1529,7 +1529,7 @@ DECLARE_OOXMLEXPORT_TEST(testLockedCanvas, "fdo78658.docx")
     if (!pXmlDoc)
         return;
     // Checking for lockedCanvas tag
-    assertXPath(pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[2]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/a:graphic[1]/a:graphicData[1]/wps:wsp[1]/wps:txbx[1]/w:txbxContent[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:inline[1]/a:graphic[1]/a:graphicData[1]/lc:lockedCanvas[1]", 1);
+    assertXPath(pXmlDoc, "//lc:lockedCanvas[1]", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(fdo78474, "fdo78474.docx")
