@@ -118,13 +118,7 @@ if ( $main::operatingSystem =~ m/darwin/ )
         }
 
         # check more details
-        if ( -d "$main::OFFICE_HOME/Contents/ure-link" ) {
-            $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME/Contents/ure-link";
-        } else {
-            $main::OFFICE_HOME = "";
-            $main::OO_SDK_URE_HOME = "";
-            print " Error: no URE found in office installation, please specify the path to a valid installation.\n";
-        }
+        $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME/Contents";
     }
 } else
 {

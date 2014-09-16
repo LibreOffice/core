@@ -456,7 +456,7 @@ LINK_LIBS=-L$(OUT)/lib -L$(OO_SDK_OUT)/$(PLATFORM)/lib -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-framework JavaVM
 
 ifneq "$(OO_SDK_URE_HOME)" ""
-URE_MISC=$(OO_SDK_URE_HOME)/share/misc
+URE_MISC=$(OO_SDK_URE_HOME)/Resources/ure/share/misc
 endif
 
 endif
