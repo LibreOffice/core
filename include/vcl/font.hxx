@@ -34,6 +34,12 @@ class SvStream;
 
 class Impl_Font;
 class ImplFontAttributes;
+namespace vcl { class Font; }
+// need to first declare these outside the vcl namespace, or the friend declarations won't work right
+VCL_DLLPUBLIC SvStream&  ReadFont( SvStream& rIStm, vcl::Font& );
+VCL_DLLPUBLIC SvStream&  WriteFont( SvStream& rOStm, const vcl::Font& );
+
+namespace vcl {
 
 class VCL_DLLPUBLIC Font
 {
@@ -127,11 +133,13 @@ public:
                             { return !(Font::operator==( rFont )); }
     bool                IsSameInstance( const Font& ) const;
 
-    friend VCL_DLLPUBLIC SvStream&  ReadFont( SvStream& rIStm, Font& );
-    friend VCL_DLLPUBLIC SvStream&  WriteFont( SvStream& rOStm, const Font& );
+    friend VCL_DLLPUBLIC SvStream&  ::ReadFont( SvStream& rIStm, ::vcl::Font& );
+    friend VCL_DLLPUBLIC SvStream&  ::WriteFont( SvStream& rOStm, const ::vcl::Font& );
 
     static Font identifyFont( const void* pBuffer, sal_uInt32 nLen );
 };
+
+}
 
 #endif  // _VCL_FONT_HXX
 

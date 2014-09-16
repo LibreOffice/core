@@ -510,7 +510,7 @@ namespace cairocanvas
 
             // Font rotation and scaling
             cairo_matrix_t m;
-            Font aFont = rOutDev.GetFont();
+            vcl::Font aFont = rOutDev.GetFont();
 
             cairo_matrix_init_identity(&m);
 

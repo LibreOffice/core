@@ -1270,7 +1270,7 @@ EESpellState OutlinerView::StartThesaurus()
 }
 
 void OutlinerView::StartTextConversion(
-    LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
+    LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont,
     sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc )
 {
     if (

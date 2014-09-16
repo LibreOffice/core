@@ -134,19 +134,19 @@ struct ImplStyleData
     Color                           maWorkspaceColor;
     Color                           maActiveTabColor;
     Color                           maInactiveTabColor;
-    Font                            maAppFont;
-    Font                            maHelpFont;
-    Font                            maTitleFont;
-    Font                            maFloatTitleFont;
-    Font                            maMenuFont;
-    Font                            maToolFont;
-    Font                            maLabelFont;
-    Font                            maInfoFont;
-    Font                            maRadioCheckFont;
-    Font                            maPushButtonFont;
-    Font                            maFieldFont;
-    Font                            maIconFont;
-    Font                            maGroupFont;
+    vcl::Font                       maAppFont;
+    vcl::Font                       maHelpFont;
+    vcl::Font                       maTitleFont;
+    vcl::Font                       maFloatTitleFont;
+    vcl::Font                       maMenuFont;
+    vcl::Font                       maToolFont;
+    vcl::Font                       maLabelFont;
+    vcl::Font                       maInfoFont;
+    vcl::Font                       maRadioCheckFont;
+    vcl::Font                       maPushButtonFont;
+    vcl::Font                       maFieldFont;
+    vcl::Font                       maIconFont;
+    vcl::Font                       maGroupFont;
     long                            mnBorderSize;
     long                            mnTitleHeight;
     long                            mnFloatTitleHeight;
@@ -673,7 +673,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
 
 void ImplStyleData::SetStandardStyles()
 {
-    Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
+    vcl::Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( osl_getThreadTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
     aStdFont.SetName( utl::DefaultFontConfiguration::get().getUserInterfaceFont( LanguageTag("en")) );
@@ -1508,169 +1508,169 @@ StyleSettings::GetCairoFontOptions() const
 }
 
 void
-StyleSettings::SetAppFont( const Font& rFont )
+StyleSettings::SetAppFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maAppFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetAppFont() const
 {
     return mpData->maAppFont;
 }
 
 void
-StyleSettings::SetHelpFont( const Font& rFont )
+StyleSettings::SetHelpFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maHelpFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetHelpFont() const
 {
     return mpData->maHelpFont;
 }
 
 void
-StyleSettings::SetTitleFont( const Font& rFont )
+StyleSettings::SetTitleFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maTitleFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetTitleFont() const
 {
     return mpData->maTitleFont;
 }
 
 void
-StyleSettings::SetFloatTitleFont( const Font& rFont )
+StyleSettings::SetFloatTitleFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maFloatTitleFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetFloatTitleFont() const
 {
     return mpData->maFloatTitleFont;
 }
 
 void
-StyleSettings::SetMenuFont( const Font& rFont )
+StyleSettings::SetMenuFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maMenuFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetMenuFont() const
 {
     return mpData->maMenuFont;
 }
 
 void
-StyleSettings::SetToolFont( const Font& rFont )
+StyleSettings::SetToolFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maToolFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetToolFont() const
 {
     return mpData->maToolFont;
 }
 
 void
-StyleSettings::SetGroupFont( const Font& rFont )
+StyleSettings::SetGroupFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maGroupFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetGroupFont() const
 {
     return mpData->maGroupFont;
 }
 
 void
-StyleSettings::SetLabelFont( const Font& rFont )
+StyleSettings::SetLabelFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maLabelFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetLabelFont() const
 {
     return mpData->maLabelFont;
 }
 
 void
-StyleSettings::SetInfoFont( const Font& rFont )
+StyleSettings::SetInfoFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maInfoFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetInfoFont() const
 {
     return mpData->maInfoFont;
 }
 
 void
-StyleSettings::SetRadioCheckFont( const Font& rFont )
+StyleSettings::SetRadioCheckFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maRadioCheckFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetRadioCheckFont() const
 {
     return mpData->maRadioCheckFont;
 }
 
 void
-StyleSettings::SetPushButtonFont( const Font& rFont )
+StyleSettings::SetPushButtonFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maPushButtonFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetPushButtonFont() const
 {
     return mpData->maPushButtonFont;
 }
 
 void
-StyleSettings::SetFieldFont( const Font& rFont )
+StyleSettings::SetFieldFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maFieldFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetFieldFont() const
 {
     return mpData->maFieldFont;
 }
 
 void
-StyleSettings::SetIconFont( const Font& rFont )
+StyleSettings::SetIconFont( const vcl::Font& rFont )
 {
     CopyData();
     mpData->maIconFont = rFont;
 }
 
-const Font&
+const vcl::Font&
 StyleSettings::GetIconFont() const
 {
     return mpData->maIconFont;

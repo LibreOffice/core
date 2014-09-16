@@ -1017,7 +1017,7 @@ void SAL_CALL SdStyleSheet::setPropertyValue( const OUString& aPropertyName, con
         {
             if( EE_PARA_NUMBULLET == pEntry->nWID )
             {
-                Font aBulletFont;
+                vcl::Font aBulletFont;
                 SdStyleSheetPool::PutNumBulletItem( this, aBulletFont );
                 aSet.Put( rStyleSet );
             }

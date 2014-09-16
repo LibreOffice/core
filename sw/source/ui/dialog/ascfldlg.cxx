@@ -204,7 +204,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
             if( aOpt.GetFontName().isEmpty() )
             {
                 LanguageType eLang = aOpt.GetLanguage();
-                Font aTmpFont(OutputDevice::GetDefaultFont(DEFAULTFONT_FIXED, eLang, DEFAULTFONT_FLAGS_ONLYONE, pPrt));
+                vcl::Font aTmpFont(OutputDevice::GetDefaultFont(DEFAULTFONT_FIXED, eLang, DEFAULTFONT_FLAGS_ONLYONE, pPrt));
                 aOpt.SetFontName(aTmpFont.GetName());
             }
 

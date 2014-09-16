@@ -184,7 +184,7 @@ OUString ArgInput::GetArgName()
 }
 
 //Sets the Name for the Argument
-void ArgInput::SetArgNameFont   (const Font &aFont)
+void ArgInput::SetArgNameFont   (const vcl::Font &aFont)
 {
     if(pFtArg !=NULL) pFtArg->SetFont(aFont);
 }

@@ -37,7 +37,7 @@ StructListBox::StructListBox(Window* pParent, WinBits nBits ):
 {
     bActiveFlag=false;
 
-    Font aFont( GetFont() );
+    vcl::Font aFont( GetFont() );
     Size aSize = aFont.GetSize();
     aSize.Height() -= 2;
     aFont.SetSize( aSize );

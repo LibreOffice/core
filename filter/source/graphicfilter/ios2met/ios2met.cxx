@@ -234,7 +234,7 @@ struct OSPath
 struct OSFont {
     OSFont *  pSucc;
     sal_uLong nID;
-    Font     aFont;
+    vcl::Font aFont;
 };
 
 struct OSBitmap {
@@ -980,7 +980,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     Point aP0;
     sal_uInt16 i, nLen;
     OSFont * pF;
-    Font aFont;
+    vcl::Font aFont;
     Size aSize;
 
     pF = pFontList;

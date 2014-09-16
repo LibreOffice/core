@@ -30,7 +30,7 @@
 #include <vector>
 #include <utility>
 
-class Font;
+namespace vcl { class Font; }
 namespace canvas{ namespace tools{ class ElapsedTime; }}
 namespace cppcanvas{ class CustomSprite; }
 namespace basegfx
@@ -124,7 +124,7 @@ private:
     /// screen rect of sprite (in view coordinates!)
     ::basegfx::B2DRange             maSpriteRectangle;
 
-    Font                            maFont;
+    vcl::Font                       maFont;
     boost::shared_ptr<WakeupEvent>  mpWakeUpEvent;
     boost::shared_ptr<MouseHandler> mpMouseHandler;
     ::basegfx::B2IVector            maSpriteSizePixel;

@@ -34,7 +34,7 @@
 using namespace ::com::sun::star;
 
 static void ImplDrawDefault( OutputDevice* pOutDev, const OUString* pText,
-                             Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
+                             vcl::Font* pFont, const Bitmap* pBitmap, const BitmapEx* pBitmapEx,
                              const Point& rDestPt, const Size& rDestSize )
 {
     sal_uInt16      nPixel = (sal_uInt16) pOutDev->PixelToLogic( Size( 1, 1 ) ).Width();
@@ -456,7 +456,7 @@ void Graphic::Draw( OutputDevice* pOutDev,
 }
 
 void Graphic::DrawEx( OutputDevice* pOutDev, const OUString& rText,
-                    Font& rFont, const BitmapEx& rBitmap,
+                    vcl::Font& rFont, const BitmapEx& rBitmap,
                     const Point& rDestPt, const Size& rDestSz )
 {
     ImplDrawDefault( pOutDev, &rText, &rFont, NULL, &rBitmap, rDestPt, rDestSz );

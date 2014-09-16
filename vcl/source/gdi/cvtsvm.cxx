@@ -199,7 +199,7 @@ void ImplWriteFillColor( SvStream& rOStm, const Color& rColor, sal_Int16 nStyle 
     }
 }
 
-void ImplWriteFont( SvStream& rOStm, const Font& rFont,
+void ImplWriteFont( SvStream& rOStm, const vcl::Font& rFont,
                     rtl_TextEncoding& rActualCharSet )
 {
     char    aName[32];
@@ -784,8 +784,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case( GDI_FONT_ACTION ):
                 {
-                    Font    aFont;
-                    char    aName[ 32 ];
+                    vcl::Font   aFont;
+                    char        aName[ 32 ];
                     sal_Int32   nWidth, nHeight;
                     sal_Int16   nCharSet, nFamily, nPitch, nAlign, nWeight, nUnderline, nStrikeout;
                     sal_Int16   nCharOrient, nLineOrient;
@@ -1346,9 +1346,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
 void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 {
-    sal_uLong               nCountPos;
-    Font                aSaveFont;
-    const sal_uInt16        nOldFormat = rOStm.GetNumberFormatInt();
+    sal_uLong           nCountPos;
+    vcl::Font           aSaveFont;
+    const sal_uInt16    nOldFormat = rOStm.GetNumberFormatInt();
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     const Size          aPrefSize( rMtf.GetPrefSize() );
     bool                bRop_0_1 = false;
@@ -2013,7 +2013,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TEXTCOLOR_ACTION ):
             {
-                Font aSaveFont( rSaveVDev.GetFont() );
+                vcl::Font aSaveFont( rSaveVDev.GetFont() );
 
                 aSaveFont.SetColor( ( (MetaTextColorAction*) pAction )->GetColor() );
                 rSaveVDev.SetFont( aSaveFont );
@@ -2025,7 +2025,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_TEXTFILLCOLOR_ACTION ):
             {
                 MetaTextFillColorAction*    pAct = (MetaTextFillColorAction*) pAction;
-                Font                        aSaveFont( rSaveVDev.GetFont() );
+                vcl::Font                   aSaveFont( rSaveVDev.GetFont() );
 
                 if( pAct->IsSetting() )
                     aSaveFont.SetFillColor( pAct->GetColor() );
@@ -2040,7 +2040,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TEXTALIGN_ACTION ):
             {
-                Font aSaveFont( rSaveVDev.GetFont() );
+                vcl::Font aSaveFont( rSaveVDev.GetFont() );
 
                 aSaveFont.SetAlign( ( (MetaTextAlignAction*) pAction )->GetTextAlign() );
                 rSaveVDev.SetFont( aSaveFont );

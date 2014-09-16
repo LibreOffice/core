@@ -51,10 +51,10 @@ using namespace com::sun::star::style;
 
 namespace svx { namespace sidebar {
 
-static Font& lcl_GetDefaultBulletFont()
+static vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
-    static Font aDefBulletFont( OUString( "StarSymbol" ),
+    static vcl::Font aDefBulletFont( OUString( "StarSymbol" ),
                                 OUString(), Size( 0, 14 ) );
     if(!bInit)
     {
@@ -197,7 +197,7 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     const long nRectHeight = aRect.GetHeight();
     const Point aBLPos = aRect.TopLeft();
 
-    Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
+    vcl::Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
     {
         Size aSize = aFont.GetSize();
         aSize.Height() = (nRectHeight*4)/9;
@@ -325,10 +325,10 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
     long nRectHeight = aRect.GetHeight();
     Size aRectSize(nRectWidth, aRect.GetHeight());
     Point aBLPos = aRect.TopLeft();
-    Font aOldFont = pDev->GetFont();
+    vcl::Font aOldFont = pDev->GetFont();
     Color aOldColor = pDev->GetLineColor();
     pDev->SetLineColor(aBackColor);
-    Font aFont(OutputDevice::GetDefaultFont(
+    vcl::Font aFont(OutputDevice::GetDefaultFont(
                 DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
 
     Size aSize = aFont.GetSize();
@@ -378,7 +378,7 @@ void  SvxNumValueSet2::UserDraw( const UserDrawEvent& rUDEvt )
     if ( nItemId == DEFAULT_NONE)
     {
         OUString sText(SVX_RESSTR( RID_SVXSTR_NUMBULLET_NONE));
-        Font aLclFont = pDev->GetFont();
+        vcl::Font aLclFont = pDev->GetFont();
         Size aLclSize = aLclFont.GetSize();
         aLclSize.Height() = nRectHeight/4;
         aLclFont.SetSize( aLclSize );
@@ -462,8 +462,8 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
                 const Color aBackColor = rStyleSettings.GetFieldColor();
                 const Color aTextColor = rStyleSettings.GetFieldTextColor();
 
-                Font aOldFont = pDev->GetFont();
-                Font aFont( lcl_GetDefaultBulletFont() );
+                vcl::Font aOldFont = pDev->GetFont();
+                vcl::Font aFont( lcl_GetDefaultBulletFont() );
 
                 Size aSize = aFont.GetSize();
                 aSize.Height() = nRectHeight*3/6;
@@ -474,8 +474,8 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
                 pDev->SetFillColor( aBackColor ); //wj
 
                 OUString sText(cChar);
-                Font aOldBulletFont = pDev->GetFont();
-                Font aBulletFnt(aFmt.GetBulletFont() ? *aFmt.GetBulletFont() : aOldBulletFont);
+                vcl::Font aOldBulletFont = pDev->GetFont();
+                vcl::Font aBulletFnt(aFmt.GetBulletFont() ? *aFmt.GetBulletFont() : aOldBulletFont);
                 Size aBulSize = aOldBulletFont.GetSize();
                 aBulletFnt.SetSize(aBulSize);
                 pDev->SetFont(aBulletFnt);
@@ -505,8 +505,8 @@ void  SvxNumValueSet3::UserDraw( const UserDrawEvent& rUDEvt )
             const Color aBackColor = rStyleSettings.GetFieldColor();
             const Color aTextColor = rStyleSettings.GetFieldTextColor();
 
-            Font aOldFont = pDev->GetFont();
-            Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
+            vcl::Font aOldFont = pDev->GetFont();
+            vcl::Font aFont(OutputDevice::GetDefaultFont(DEFAULTFONT_UI_SANS, MsLangId::getSystemLanguage(), DEFAULTFONT_FLAGS_ONLYONE));
             Size aSize = aFont.GetSize();
             //aSize.Height() = nRectHeight/5;
             aSize.Height() = nRectHeight/4;

@@ -2124,7 +2124,7 @@ bool SdrPowerPointImport::ReadFontCollection()
                 PptFontEntityAtom* pFont = new PptFontEntityAtom;
                 ReadPptFontEntityAtom( rStCtrl, *pFont );
 
-                Font aFont;
+                vcl::Font aFont;
                 aFont.SetCharSet( pFont->eCharSet );
                 aFont.SetName( pFont->aName );
                 aFont.SetFamily( pFont->eFamily );
@@ -3085,7 +3085,7 @@ void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderF
 
 // no longer needed
 sal_Unicode SdrPowerPointImport::PPTSubstitute( sal_uInt16 /*nFont*/, sal_Unicode /*nChar*/,
-                                        sal_uInt32& /*nMappedFontId*/, Font& /*rFont*/, char /*nDefault*/) const
+                                        sal_uInt32& /*nMappedFontId*/, vcl::Font& /*rFont*/, char /*nDefault*/) const
 {
     return 0;
 }
@@ -3600,7 +3600,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
             PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
             if ( pFontEnityAtom )
             {
-                Font aFont;
+                vcl::Font aFont;
                 aFont.SetCharSet( pFontEnityAtom->eCharSet );
                 aFont.SetName( pFontEnityAtom->aName );
                 aFont.SetFamily( pFontEnityAtom->eFamily );
@@ -3659,7 +3659,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
                     PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
                     if ( pFontEnityAtom )
                     {
-                        Font aFont;
+                        vcl::Font aFont;
                         aFont.SetCharSet( pFontEnityAtom->eCharSet );
                         aFont.SetName( pFontEnityAtom->aName );
                         aFont.SetFamily( pFontEnityAtom->eFamily );
@@ -3676,7 +3676,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
 
 void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, sal_uInt32 /*nLevel*/)
 {
-    Font aFont;
+    vcl::Font aFont;
     PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nBulletFont );
     if ( pAtom )
     {

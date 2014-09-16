@@ -154,7 +154,7 @@ void CalculateHorizontalScalingFactor( const SdrObject* pCustomShape,
     bool bSingleLineMode = false;
     sal_uInt16 nOutlinesCount2d = rOutline2d.Count();
 
-    Font aFont;
+    vcl::Font aFont;
     SvxFontItem& rFontItem = (SvxFontItem&)pCustomShape->GetMergedItem( EE_CHAR_FONTINFO );
     aFont.SetHeight( pCustomShape->GetLogicRect().GetHeight() / rFWData.nMaxParagraphsPerTextArea );
     aFont.SetAlign( ALIGN_TOP );
@@ -242,7 +242,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
             else if ( nScriptType == i18n::ScriptType::ASIAN )
                 nFntItm = EE_CHAR_FONTINFO_CJK;
             SvxFontItem& rFontItem = (SvxFontItem&)pCustomShape->GetMergedItem( nFntItm );
-            Font aFont;
+            vcl::Font aFont;
             aFont.SetHeight( rFWData.nSingleLineHeight );
             aFont.SetAlign( ALIGN_TOP );
 

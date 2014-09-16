@@ -469,8 +469,8 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     OUString        aText( SdResId( STR_PRES_PAUSE ) );
     bool            bDrawn = false;
 
-    Font            aFont( GetSettings().GetStyleSettings().GetMenuFont() );
-    const Font      aOldFont( GetFont() );
+    vcl::Font       aFont( GetSettings().GetStyleSettings().GetMenuFont() );
+    const vcl::Font aOldFont( GetFont() );
 
     aFont.SetSize( aTextSize );
     aFont.SetColor( COL_WHITE );
@@ -534,8 +534,8 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
 
 void ShowWindow::DrawEndScene()
 {
-    const Font      aOldFont( GetFont() );
-    Font            aFont( GetSettings().GetStyleSettings().GetMenuFont() );
+    const vcl::Font aOldFont( GetFont() );
+    vcl::Font       aFont( GetSettings().GetStyleSettings().GetMenuFont() );
 
     const Point     aOutOrg( PixelToLogic( Point() ) );
     const Size      aTextSize( LogicToLogic( Size( 0, 14 ), MAP_POINT, GetMapMode() ) );

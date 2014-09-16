@@ -34,7 +34,7 @@ class AnnotationWindow;
 class AnnotationTag : public SmartTag
 {
 public:
-    AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const css::uno::Reference< css::office::XAnnotation >& xAnnotation, Color& rColor, int nIndex, const Font& rFont );
+    AnnotationTag( AnnotationManagerImpl& rManager, ::sd::View& rView, const css::uno::Reference< css::office::XAnnotation >& xAnnotation, Color& rColor, int nIndex, const vcl::Font& rFont );
     virtual ~AnnotationTag();
 
     /// @return true if the SmartTag handled the event.
@@ -82,7 +82,7 @@ private:
     std::auto_ptr<AnnotationWindow>                 mpAnnotationWindow;
     Color                                           maColor;
     int                                             mnIndex;
-    const Font&                                     mrFont;
+    const vcl::Font&                                mrFont;
     Size                                            maSize;
     ImplSVEvent *                                   mnClosePopupEvent;
     ::Window*                                       mpListenWindow;

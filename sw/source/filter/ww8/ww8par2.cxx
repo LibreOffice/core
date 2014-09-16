@@ -647,7 +647,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
             if( GetFontParams( SVBT16ToShort( rAV.ftc ), eFamily, aName,
                                 ePitch, eCharSet ) ){
 
-                Font aFont;
+                vcl::Font aFont;
                 aFont.SetName( aName );
                 aFont.SetFamily( eFamily );
 

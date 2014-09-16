@@ -115,7 +115,7 @@ struct METGDIStackMember
     Color                       aLineColor;
     Color                       aFillColor;
     RasterOp                    eRasterOp;
-    Font                        aFont;
+    vcl::Font                   aFont;
     MapMode                     aMapMode;
     Rectangle                   aClipRect;
 };
@@ -135,7 +135,7 @@ private:
     Color               aGDILineColor;
     Color               aGDIFillColor;
     RasterOp            eGDIRasterOp;
-    Font                aGDIFont;
+    vcl::Font           aGDIFont;
     MapMode             aGDIMapMode;   // currently ununsed!
     Rectangle           aGDIClipRect; // currently ununsed!
     METGDIStackMember*  pGDIStack;
@@ -181,9 +181,9 @@ private:
     void WriteFieldId(sal_uInt32 nId);
 
     void CreateChrSets(const GDIMetaFile * pMTF);
-    void CreateChrSet(const Font & rFont);
+    void CreateChrSet(const vcl::Font & rFont);
     void WriteChrSets();
-    sal_uInt8 FindChrSet(const Font & rFont);
+    sal_uInt8 FindChrSet(const vcl::Font & rFont);
 
     void WriteColorAttributeTable(sal_uInt32 nFieldId=4, BitmapPalette* pPalette=NULL,
                                   sal_uInt8 nBasePartFlags=0x40, sal_uInt8 nBasePartLCTID=0);
@@ -422,7 +422,7 @@ void METWriter::CreateChrSets(const GDIMetaFile * pMTF)
 }
 
 
-void METWriter::CreateChrSet(const Font & rFont)
+void METWriter::CreateChrSet(const vcl::Font & rFont)
 {
     METChrSet * pCS;
 
@@ -437,7 +437,7 @@ void METWriter::CreateChrSet(const Font & rFont)
 }
 
 
-sal_uInt8 METWriter::FindChrSet(const Font & rFont)
+sal_uInt8 METWriter::FindChrSet(const vcl::Font & rFont)
 {
     METChrSet* pCS;
 
@@ -2523,7 +2523,7 @@ bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, Filt
     aGDILineColor=Color( COL_BLACK );
     aGDIFillColor=Color( COL_WHITE );
     eGDIRasterOp=ROP_OVERPAINT;
-    aGDIFont=Font();
+    aGDIFont=vcl::Font();
     aGDIMapMode=MapMode();
     aGDIClipRect=Rectangle();
     pGDIStack=NULL;

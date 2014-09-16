@@ -2099,7 +2099,7 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                 // Set input context of the SwEditWin according to the selected font and script type
                 if(RES_CHRATR_FONT == nWhich)
                 {
-                    Font aFont;
+                    vcl::Font aFont;
                     if(pI && pI->ISA(SvxFontItem))
                     {
                         aFont.SetName( ((const SvxFontItem*)pI)->GetFamilyName());

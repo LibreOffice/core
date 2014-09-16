@@ -1369,7 +1369,7 @@ namespace vclcanvas
 
         OutputDevice& rOutDev( mpOutDev->getOutDev() );
 
-        ::Font aVCLFont;
+        vcl::Font aVCLFont;
 
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 

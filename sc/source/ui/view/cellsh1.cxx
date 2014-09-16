@@ -1738,7 +1738,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 if( !bCommonTerms )
                                     nOptions |= i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                                Font aTargetFont = OutputDevice::GetDefaultFont(
+                                vcl::Font aTargetFont = OutputDevice::GetDefaultFont(
                                                     DEFAULTFONT_CJK_SPREADSHEET,
                                                     eTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
                                 ScConversionParam aConvParam( SC_CONVERSION_CHINESE_TRANSL,
@@ -2261,11 +2261,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( !aChars.isEmpty() )
                 {
-                    Font aFont;
+                    vcl::Font aFont;
                     pTabViewShell->GetSelectionPattern()->GetFont( aFont, SC_AUTOCOL_BLACK, NULL, NULL, NULL,
                                                                 pTabViewShell->GetSelectionScriptType() );
                     if ( !aFontName.isEmpty() )
-                        aFont = Font( aFontName, Size(1,1) );
+                        aFont = vcl::Font( aFontName, Size(1,1) );
                     pTabViewShell->InsertSpecialChar( aChars, aFont );
                     if( ! rReq.IsAPI() )
                         rReq.Done();
@@ -2276,7 +2276,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
                 // font color doesn't matter here
-                Font             aCurFont;
+                vcl::Font         aCurFont;
                 pTabViewShell->GetSelectionPattern()->GetFont( aCurFont, SC_AUTOCOL_BLACK, NULL, NULL, NULL,
                                                                 pTabViewShell->GetSelectionScriptType() );
 
@@ -2294,7 +2294,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     if ( pItem && pFontItem )
                     {
-                        Font aNewFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), Size(1,1) );
+                        vcl::Font aNewFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), Size(1,1) );
                         aNewFont.SetCharSet( pFontItem->GetCharSet() );
                         aNewFont.SetPitch( pFontItem->GetPitch() );
                         pTabViewShell->InsertSpecialChar( pItem->GetValue(), aNewFont );

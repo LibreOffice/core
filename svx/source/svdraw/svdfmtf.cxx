@@ -407,7 +407,7 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
 
     if(bText && mbFntDirty)
     {
-        Font aFnt(maVD.GetFont());
+        vcl::Font aFnt(maVD.GetFont());
         const sal_uInt32 nHeight(FRound(aFnt.GetSize().Height() * mfScaleY));
 
         mpTextAttr->Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(), aFnt.GetStyleName(), aFnt.GetPitch(), aFnt.GetCharSet(), EE_CHAR_FONTINFO ) );
@@ -993,7 +993,7 @@ void ImpSdrGDIMetaFileImport::ImportText( const Point& rPos, const OUString& rSt
     // calc text box size, add 5% to make it fit safely
 
     FontMetric aFontMetric( maVD.GetFontMetric() );
-    Font aFnt( maVD.GetFont() );
+    vcl::Font aFnt( maVD.GetFont() );
     FontAlign eAlg( aFnt.GetAlign() );
 
     sal_Int32 nTextWidth = (sal_Int32)( maVD.GetTextWidth( rStr ) * mfScaleX );

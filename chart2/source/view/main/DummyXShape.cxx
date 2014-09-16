@@ -767,7 +767,7 @@ namespace {
 
 struct FontAttribSetter
 {
-    FontAttribSetter(Font& rFont):
+    FontAttribSetter(vcl::Font& rFont):
         mrFont(rFont) {}
 
     void operator()(const std::pair<OUString, uno::Any>& rProp)
@@ -807,7 +807,7 @@ struct FontAttribSetter
         }
     }
 private:
-    Font& mrFont;
+    vcl::Font& mrFont;
 };
 
 }
@@ -836,7 +836,7 @@ DummyText::DummyText(const OUString& rText, const tNameSequence& rNames,
     }
     else
     {
-        Font aFont;
+        vcl::Font aFont;
         std::for_each(maProperties.begin(), maProperties.end(), FontAttribSetter(aFont));
         VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
         aDevice.Erase();

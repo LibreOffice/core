@@ -244,7 +244,7 @@ void InsertionIndicatorOverlay::PaintPageCount (
 {
     // Paint the number of slides.
     ::boost::shared_ptr<view::Theme> pTheme (mrSlideSorter.GetTheme());
-    ::boost::shared_ptr<Font> pFont(Theme::GetFont(Theme::Font_PageCount, rDevice));
+    ::boost::shared_ptr<vcl::Font> pFont(Theme::GetFont(Theme::Font_PageCount, rDevice));
     if (pFont)
     {
         OUString sNumber (OUString::number(nSelectionCount));

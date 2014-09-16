@@ -122,7 +122,7 @@ void OTableBorderWindow::ImplInitSettings( bool bFont, bool bForeground, bool bB
 
     if ( bFont )
     {
-        Font aFont = rStyleSettings.GetAppFont();
+        vcl::Font aFont = rStyleSettings.GetAppFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetPointFont( aFont );

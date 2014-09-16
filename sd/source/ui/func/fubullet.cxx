@@ -156,7 +156,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         pArgs->GetItemState(mpDoc->GetPool().GetWhich(SID_CHARMAP), false, &pItem);
 
     OUString aChars;
-    Font aFont;
+    vcl::Font aFont;
     if ( pItem )
     {
         aChars = ((const SfxStringItem*)pItem)->GetValue();
@@ -166,7 +166,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         if ( pFontItem )
         {
             OUString aFontName = pFontItem->GetValue();
-            aFont = Font( aFontName, Size(1,1) );
+            aFont = vcl::Font( aFontName, Size(1,1) );
         }
         else
         {
@@ -174,7 +174,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
             mpView->GetAttributes( aFontAttr );
             const SvxFontItem* pFItem = (const SvxFontItem*)aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
             if( pFItem )
-                aFont = Font( pFItem->GetFamilyName(), pFItem->GetStyleName(), Size( 1, 1 ) );
+                aFont = vcl::Font( pFItem->GetFamilyName(), pFItem->GetStyleName(), Size( 1, 1 ) );
         }
     }
 

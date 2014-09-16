@@ -300,7 +300,7 @@ void TextView::ImpPaint( OutputDevice* pOut, const Point& rStartPos, Rectangle c
     {
         // set correct background color;
         // unfortunately we cannot detect if it has changed
-        Font aFont = mpImpl->mpTextEngine->GetFont();
+        vcl::Font aFont = mpImpl->mpTextEngine->GetFont();
         Color aColor = pOut->GetBackground().GetColor();
         aColor.SetTransparency( 0 );
         if ( aColor != aFont.GetFillColor() )

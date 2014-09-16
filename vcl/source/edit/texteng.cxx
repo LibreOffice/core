@@ -102,7 +102,7 @@ TextEngine::TextEngine()
     ImpInitDoc();
 
     maTextColor = COL_BLACK;
-    Font aFont;
+    vcl::Font aFont;
     aFont.SetTransparent( false );
     Color aFillColor( aFont.GetFillColor() );
     aFillColor.SetTransparency( 0 );
@@ -170,7 +170,7 @@ void TextEngine::SetActiveView( TextView* pTextView )
     }
 }
 
-void TextEngine::SetFont( const Font& rFont )
+void TextEngine::SetFont( const vcl::Font& rFont )
 {
     if ( rFont != maFont )
     {
@@ -1130,7 +1130,7 @@ sal_uInt16 TextEngine::GetCharPos( sal_uLong nPortion, sal_uInt16 nLine, long nX
             {
                 nTmpX -= pTextPortion->GetWidth();  // position before Portion
                 // TODO: Optimize: no GetTextBreak if fixed-width Font
-                Font aFont;
+                vcl::Font aFont;
                 SeekCursor( nPortion, nCurIndex+1, aFont, NULL );
                 mpRefDev->SetFont( aFont);
                 long nPosInPortion = nXPos-nTmpX;
@@ -1213,7 +1213,7 @@ sal_uLong TextEngine::CalcTextHeight()
     return nY;
 }
 
-sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nLen, const Font* pFont )
+sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nLen, const vcl::Font* pFont )
 {
 #ifdef DBG_UTIL
     // within the text there must not be a Portion change (attribute/tab)!
@@ -1235,7 +1235,7 @@ sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, 
         }
         else
         {
-            Font aFont;
+            vcl::Font aFont;
             SeekCursor( nPara, nPortionStart+1, aFont, NULL );
             mpRefDev->SetFont( aFont );
         }
@@ -1392,7 +1392,7 @@ TextPaM TextEngine::ConnectContents( sal_uLong nLeftNode )
     return ImpConnectParagraphs( nLeftNode, nLeftNode+1 );
 }
 
-void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, OutputDevice* pOutDev )
+void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, vcl::Font& rFont, OutputDevice* pOutDev )
 {
     rFont = maFont;
     if ( pOutDev )
@@ -2011,7 +2011,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                 case PORTIONKIND_TEXT:
                                 {
                                     {
-                                        Font aFont;
+                                        vcl::Font aFont;
                                         SeekCursor( nPara, nIndex+1, aFont, pOutDev );
                                         if( bTransparent )
                                             aFont.SetTransparent( true );
@@ -2246,7 +2246,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
     sal_uInt16 nIndex = pLine->GetStart();
     TextLine aSaveLine( *pLine );
 
-    Font aFont;
+    vcl::Font aFont;
 
     bool bCalcPortion = true;
 

@@ -3758,7 +3758,7 @@ double getDefaultCharWidth( ScDocShell* pDocShell )
     ScDocument& rDoc = pDocShell->GetDocument();
     OutputDevice* pRefDevice = rDoc.GetRefDevice();
     ScPatternAttr* pAttr = rDoc.GetDefPattern();
-    ::Font aDefFont;
+    vcl::Font aDefFont;
     pAttr->GetFont( aDefFont, SC_AUTOCOL_BLACK, pRefDevice );
     pRefDevice->SetFont( aDefFont );
     long nCharWidth = pRefDevice->GetTextWidth( OUString( '0' ) );        // 1/100th mm

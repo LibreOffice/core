@@ -391,44 +391,44 @@ public:
     void                            SetCairoFontOptions( const void *pOptions );
     const void*                     GetCairoFontOptions() const;
 
-    void                            SetAppFont( const Font& rFont );
-    const Font&                     GetAppFont() const;
+    void                            SetAppFont( const vcl::Font& rFont );
+    const vcl::Font&                GetAppFont() const;
 
-    void                            SetHelpFont( const Font& rFont );
-    const Font&                     GetHelpFont() const;
+    void                            SetHelpFont( const vcl::Font& rFont );
+    const vcl::Font&                GetHelpFont() const;
 
-    void                            SetTitleFont( const Font& rFont );
-    const Font&                     GetTitleFont() const;
+    void                            SetTitleFont( const vcl::Font& rFont );
+    const vcl::Font&                GetTitleFont() const;
 
-    void                            SetFloatTitleFont( const Font& rFont );
-    const Font&                     GetFloatTitleFont() const;
+    void                            SetFloatTitleFont( const vcl::Font& rFont );
+    const vcl::Font&                GetFloatTitleFont() const;
 
-    void                            SetMenuFont( const Font& rFont );
-    const Font&                     GetMenuFont() const;
+    void                            SetMenuFont( const vcl::Font& rFont );
+    const vcl::Font&                GetMenuFont() const;
 
-    void                            SetToolFont( const Font& rFont );
-    const Font&                     GetToolFont() const;
+    void                            SetToolFont( const vcl::Font& rFont );
+    const vcl::Font&                GetToolFont() const;
 
-    void                            SetGroupFont( const Font& rFont );
-    const Font&                     GetGroupFont() const;
+    void                            SetGroupFont( const vcl::Font& rFont );
+    const vcl::Font&                GetGroupFont() const;
 
-    void                            SetLabelFont( const Font& rFont );
-    const Font&                     GetLabelFont() const;
+    void                            SetLabelFont( const vcl::Font& rFont );
+    const vcl::Font&                GetLabelFont() const;
 
-    void                            SetInfoFont( const Font& rFont );
-    const Font&                     GetInfoFont() const;
+    void                            SetInfoFont( const vcl::Font& rFont );
+    const vcl::Font&                GetInfoFont() const;
 
-    void                            SetRadioCheckFont( const Font& rFont );
-    const Font&                     GetRadioCheckFont() const;
+    void                            SetRadioCheckFont( const vcl::Font& rFont );
+    const vcl::Font&                GetRadioCheckFont() const;
 
-    void                            SetPushButtonFont( const Font& rFont );
-    const Font&                     GetPushButtonFont() const;
+    void                            SetPushButtonFont( const vcl::Font& rFont );
+    const vcl::Font&                GetPushButtonFont() const;
 
-    void                            SetFieldFont( const Font& rFont );
-    const Font&                     GetFieldFont() const;
+    void                            SetFieldFont( const vcl::Font& rFont );
+    const vcl::Font&                GetFieldFont() const;
 
-    void                            SetIconFont( const Font& rFont );
-    const Font&                     GetIconFont() const;
+    void                            SetIconFont( const vcl::Font& rFont );
+    const vcl::Font&                GetIconFont() const;
 
     long                            GetBorderSize() const;
 

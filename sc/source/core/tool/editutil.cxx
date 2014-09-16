@@ -332,7 +332,7 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
                                                 pDev, nPPTX, nPPTY, aZoomX, aZoomY, false );
         if (!nTextHeight)
         {                                   // leere Zelle
-            Font aFont;
+            vcl::Font aFont;
             // font color doesn't matter here
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
             pDev->SetFont(aFont);

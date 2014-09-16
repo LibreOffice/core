@@ -736,7 +736,7 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 #endif
 
         bool bWinUsed = false;
-        Font aOldFnt;
+        vcl::Font aOldFnt;
         MapMode aOldMap( MAP_TWIP );
         OutputDevice* pOut = rInf.GetOut();
         OutputDevice* pWin;

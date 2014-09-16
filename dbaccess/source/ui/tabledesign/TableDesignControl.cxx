@@ -57,7 +57,7 @@ void OTableRowView::Init()
 {
     EditBrowseBox::Init();
 
-    Font aFont( GetDataWindow().GetFont() );
+    vcl::Font aFont( GetDataWindow().GetFont() );
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );
 

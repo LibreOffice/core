@@ -402,7 +402,7 @@ namespace toolkitform
             {
                 FontDescriptor aUNOFont;
                 OSL_VERIFY( xModelProps->getPropertyValue( FM_PROP_FONT ) >>= aUNOFont );
-                _rpDescriptor->TextFont = VCLUnoHelper::CreateFont( aUNOFont, Font() );
+                _rpDescriptor->TextFont = VCLUnoHelper::CreateFont( aUNOFont, vcl::Font() );
             }
 
             // tab order

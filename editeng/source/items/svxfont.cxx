@@ -39,7 +39,7 @@ SvxFont::SvxFont()
     SetLanguage(LANGUAGE_SYSTEM);
 }
 
-SvxFont::SvxFont( const Font &rFont )
+SvxFont::SvxFont( const vcl::Font &rFont )
     : Font( rFont )
 {
     nKern = nEsc = 0;
@@ -319,7 +319,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 
 void SvxFont::SetPhysFont( OutputDevice *pOut ) const
 {
-    const Font& rCurrentFont = pOut->GetFont();
+    const vcl::Font& rCurrentFont = pOut->GetFont();
     if ( nPropr == 100 )
     {
         if ( !rCurrentFont.IsSameInstance( *this ) )
@@ -337,9 +337,9 @@ void SvxFont::SetPhysFont( OutputDevice *pOut ) const
 }
 
 
-Font SvxFont::ChgPhysFont( OutputDevice *pOut ) const
+vcl::Font SvxFont::ChgPhysFont( OutputDevice *pOut ) const
 {
-    Font aOldFont( pOut->GetFont() );
+    vcl::Font aOldFont( pOut->GetFont() );
     SetPhysFont( pOut );
     return aOldFont;
 }
@@ -566,7 +566,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
 }
 
 
-SvxFont& SvxFont::operator=( const Font& rFont )
+SvxFont& SvxFont::operator=( const vcl::Font& rFont )
 {
     Font::operator=( rFont );
     return *this;

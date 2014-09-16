@@ -57,7 +57,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
     m_pAuthorBtn->SetClickHdl( LINK( this, SvxPostItDialog, Stamp ) );
     m_pOKBtn->SetClickHdl( LINK( this, SvxPostItDialog, OKHdl ) );
 
-    Font aFont( m_pEditED->GetFont() );
+    vcl::Font aFont( m_pEditED->GetFont() );
     aFont.SetWeight( WEIGHT_LIGHT );
     m_pEditED->SetFont( aFont );
 

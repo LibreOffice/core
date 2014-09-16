@@ -51,7 +51,7 @@ private:
     DXFLineInfo aParentLayerDXFLineInfo;
     Color       aActLineColor;
     Color       aActFillColor;
-    Font        aActFont;
+    vcl::Font   aActFont;
 
     sal_uLong CountEntities(const DXFEntities & rEntities);
 

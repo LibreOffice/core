@@ -355,7 +355,7 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                     if(!bCommonTerms)
                         nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                    Font aTargetFont = OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, nTargetLang, DEFAULTFONT_FLAGS_ONLYONE);
+                    vcl::Font aTargetFont = OutputDevice::GetDefaultFont(DEFAULTFONT_CJK_TEXT, nTargetLang, DEFAULTFONT_FLAGS_ONLYONE);
 
                     pOutlinerView->StartTextConversion(nSourceLang, nTargetLang, &aTargetFont, nOptions, false, false);
                 }
@@ -724,7 +724,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
             sFontName = aSetDlgFont.GetFamilyName();
     }
 
-    Font aFont(sFontName, Size(1,1));
+    vcl::Font aFont(sFontName, Size(1,1));
     if(sSym.isEmpty())
     {
         SfxAllItemSet aAllSet( GetPool() );

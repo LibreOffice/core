@@ -25,7 +25,7 @@
 #include <boost/shared_ptr.hpp>
 #include <vcl/mapmod.hxx>
 
-class Font;
+namespace vcl { class Font; }
 
 namespace sd { namespace slidesorter { namespace view {
 
@@ -36,7 +36,7 @@ class FontProvider
     : public SdGlobalResource
 {
 public:
-    typedef ::boost::shared_ptr<Font> SharedFontPointer;
+    typedef ::boost::shared_ptr<vcl::Font> SharedFontPointer;
 
     /** Return the single instance of this class.  Throws a RuntimeException
         when no instance can be created.

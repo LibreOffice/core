@@ -460,7 +460,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
                       sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
 {
     SgfFontOne* pSgfFont; // Font from the IniFile
-    Font   aFont;
+    vcl::Font   aFont;
     Color  aColor;
     sal_uLong  Grad;
     sal_uLong  Brei;

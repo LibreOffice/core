@@ -119,7 +119,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
     nDockMode=0;
     bSizeFlag=false;
     aCatBox.SetDropDownLineCount(9);
-    Font aFont=aFiFuncDesc.GetFont();
+    vcl::Font aFont=aFiFuncDesc.GetFont();
     aFont.SetColor(Color(COL_BLACK));
     aFiFuncDesc.SetFont(aFont);
     aFiFuncDesc.SetBackground( GetBackground() );       //! never transparent?

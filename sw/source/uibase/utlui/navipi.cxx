@@ -802,7 +802,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aGlobalToolBox.SetDropdownClickHdl( LINK(this, SwNavigationPI, ToolBoxDropdownClickHdl) );
     aGlobalToolBox.CheckItem(FN_GLOBAL_SWITCH, true);
 
-    Font aFont(GetFont());
+    vcl::Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_NORMAL);
     GetPageEdit().SetFont(aFont);
     aFont = aContentTree.GetFont();

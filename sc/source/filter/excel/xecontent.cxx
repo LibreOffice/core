@@ -630,7 +630,7 @@ XclExpCFImpl::XclExpCFImpl( const XclExpRoot& rRoot, const ScCondFormatEntry& rF
         mbFontUsed = mbHeightUsed || mbWeightUsed || mbColorUsed || mbUnderlUsed || mbItalicUsed || mbStrikeUsed;
         if( mbFontUsed )
         {
-            Font aFont;
+            vcl::Font aFont;
             ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW );
             maFontData.FillFromVclFont( aFont );
             mnFontColorId = GetPalette().InsertColor( maFontData.maColor, EXC_COLOR_CELLTEXT );

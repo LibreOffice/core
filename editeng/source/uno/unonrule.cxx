@@ -351,7 +351,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
             awt::FontDescriptor aDesc;
             if( aVal >>= aDesc )
             {
-                Font aFont;
+                vcl::Font aFont;
                 SvxUnoFontDescriptor::ConvertToFont( aDesc, aFont );
                 aFmt.SetBulletFont(&aFont);
                 continue;

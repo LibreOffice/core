@@ -85,11 +85,11 @@ namespace vclcanvas
 
             @returns false, if no text output should happen
          */
-        bool setupFontTransform( ::Point&                                                   o_rPoint,
-                                 ::Font&                                                    io_rVCLFont,
+        bool setupFontTransform( ::Point&                                           o_rPoint,
+                                 vcl::Font&                                         io_rVCLFont,
                                  const ::com::sun::star::rendering::ViewState&      viewState,
                                  const ::com::sun::star::rendering::RenderState&    renderState,
-                                 ::OutputDevice&                                            rOutDev );
+                                 ::OutputDevice&                                    rOutDev );
 
         /** Predicate, to determine whether polygon is actually an axis-aligned rectangle
 

@@ -1556,7 +1556,7 @@ void WorksheetHelper::putString( const CellAddress& rAddress, const OUString& rT
         getDocImport().setStringCell(aAddress, rText);
 }
 
-void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const Font* pFirstPortionFont )
+void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichString& rString, const oox::xls::Font* pFirstPortionFont )
 {
     ScEditEngineDefaulter& rEE = getEditEngine();
 

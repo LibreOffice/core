@@ -1043,7 +1043,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
     if( SVX_NUM_CHAR_SPECIAL == aNumFmt.GetNumberingType() )
     {
         SwCharFmt* pFmt = aNumFmt.GetCharFmt();
-        Font aFont;
+        vcl::Font aFont;
         if( !pFmt )
         {
             aFont = numfunc::GetDefBulletFont();
@@ -2252,7 +2252,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const OUString &rString,
         { 0,                          0 }
     };
 
-    Font aFont;
+    vcl::Font aFont;
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
         rPropSet->getPropertySetInfo();
 

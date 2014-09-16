@@ -111,7 +111,7 @@ namespace dxcanvas
 
             // create the font
             const ::com::sun::star::rendering::FontRequest& rFontRequest = rCanvasFont->getFontRequest();
-            Font aFont(
+            vcl::Font aFont(
                 rFontRequest.FontDescription.FamilyName,
                 rFontRequest.FontDescription.StyleName,
                 Size( 0, ::basegfx::fround(rFontRequest.CellSize)));

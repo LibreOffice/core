@@ -27,7 +27,6 @@
 /* Types from <X11/X.h> that clash with LO's identifiers
  * and we don't need.
  */
-#define Font        HIDE_XLIB_Font
 #define Icon        HIDE_XLIB_Icon
 
 /* Types from <X11/X.h> that clash, but we do use. */

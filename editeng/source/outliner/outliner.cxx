@@ -853,12 +853,12 @@ bool Outliner::Collapse( Paragraph* pPara )
 }
 
 
-Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
+vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
 {
     const SvxNumberFormat* pFmt = GetNumberFormat( nPara );
     DBG_ASSERT( pFmt && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ), "ImpCalcBulletFont: Missing or BitmapBullet!" );
 
-    Font aStdFont;
+    vcl::Font aStdFont;
     if ( !pEditEngine->IsFlatMode() )
     {
         ESelection aSel( nPara, 0, nPara, 0 );
@@ -869,8 +869,8 @@ Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
         aStdFont = pEditEngine->GetStandardFont( nPara );
     }
 
-    Font aBulletFont;
-    const Font *pSourceFont = 0;
+    vcl::Font aBulletFont;
+    const vcl::Font *pSourceFont = 0;
     if ( pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL )
     {
         pSourceFont = pFmt->GetBulletFont();
@@ -949,11 +949,11 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
         {
             if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
             {
-                Font aBulletFont( ImpCalcBulletFont( nPara ) );
+                vcl::Font aBulletFont( ImpCalcBulletFont( nPara ) );
                 // Use baseline
                 bool bSymbol = pFmt->GetNumberingType() == SVX_NUM_CHAR_SPECIAL;
                 aBulletFont.SetAlign( bSymbol ? ALIGN_BOTTOM : ALIGN_BASELINE );
-                Font aOldFont = pOutDev->GetFont();
+                vcl::Font aOldFont = pOutDev->GetFont();
                 pOutDev->SetFont( aBulletFont );
 
                 ParagraphInfos  aParaInfos = pEditEngine->GetParagraphInfos( nPara );
@@ -990,7 +990,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
                     aTextPos = aRotatedPos;
                     // Translation...
                     aTextPos += rOrigin;
-                    Font aRotatedFont( aBulletFont );
+                    vcl::Font aRotatedFont( aBulletFont );
                     aRotatedFont.SetOrientation( nOrientation );
                     pOutDev->SetFont( aRotatedFont );
                 }
@@ -1004,7 +1004,7 @@ void Outliner::PaintBullet( sal_Int32 nPara, const Point& rStartPos,
 
                 if(bStrippingPortions)
                 {
-                    const Font aSvxFont(pOutDev->GetFont());
+                    const vcl::Font aSvxFont(pOutDev->GetFont());
                     boost::scoped_array<long> pBuf(new long[ pPara->GetText().getLength() ]);
                     pOutDev->GetTextArray( pPara->GetText(), pBuf.get() );
 
@@ -1479,8 +1479,8 @@ Size Outliner::ImplGetBulletSize( sal_Int32 nPara )
         {
             OUString aBulletText = ImplGetBulletText( nPara );
             OutputDevice* pRefDev = pEditEngine->GetRefDevice();
-            Font aBulletFont( ImpCalcBulletFont( nPara ) );
-            Font aRefFont( pRefDev->GetFont());
+            vcl::Font aBulletFont( ImpCalcBulletFont( nPara ) );
+            vcl::Font aRefFont( pRefDev->GetFont());
             pRefDev->SetFont( aBulletFont );
             pPara->aBulSize.Width() = pRefDev->GetTextWidth( aBulletText );
             pPara->aBulSize.Height() = pRefDev->GetTextHeight();
@@ -1607,11 +1607,11 @@ Rectangle Outliner::ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bRetu
             // may prefer to print out on the baseline ...
             if( ( pFmt->GetNumberingType() != SVX_NUM_NUMBER_NONE ) && ( pFmt->GetNumberingType() != SVX_NUM_BITMAP ) && ( pFmt->GetNumberingType() != SVX_NUM_CHAR_SPECIAL ) )
             {
-                Font aBulletFont( ImpCalcBulletFont( nPara ) );
+                vcl::Font aBulletFont( ImpCalcBulletFont( nPara ) );
                 if ( aBulletFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL )
                 {
                     OutputDevice* pRefDev = pEditEngine->GetRefDevice();
-                    Font aOldFont = pRefDev->GetFont();
+                    vcl::Font aOldFont = pRefDev->GetFont();
                     pRefDev->SetFont( aBulletFont );
                     FontMetric aMetric( pRefDev->GetFontMetric() );
                     // Leading on the first line ...

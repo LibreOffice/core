@@ -39,7 +39,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 
 
-void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, Font& rFont )
+void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, vcl::Font& rFont )
 {
     rFont.SetName( rDesc.Name );
     rFont.SetStyleName( rDesc.StyleName );
@@ -56,7 +56,7 @@ void SvxUnoFontDescriptor::ConvertToFont( const awt::FontDescriptor& rDesc, Font
     rFont.SetWordLineMode( rDesc.WordLineMode );
 }
 
-void SvxUnoFontDescriptor::ConvertFromFont( const Font& rFont, awt::FontDescriptor& rDesc )
+void SvxUnoFontDescriptor::ConvertFromFont( const vcl::Font& rFont, awt::FontDescriptor& rDesc )
 {
     rDesc.Name = rFont.GetName();
     rDesc.StyleName = rFont.GetStyleName();

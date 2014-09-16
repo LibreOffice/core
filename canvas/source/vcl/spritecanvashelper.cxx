@@ -161,7 +161,7 @@ namespace vclcanvas
                              const OUString& rStr,
                              const Point&           rPos )
         {
-            Font aVCLFont;
+            vcl::Font aVCLFont;
             aVCLFont.SetHeight( 20 );
             aVCLFont.SetColor( Color( INFO_COLOR ) );
 

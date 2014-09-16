@@ -685,7 +685,7 @@ namespace svt
             {
                 m_rTabBar.Push( PUSH_FONT );
 
-                Font aFont( m_rTabBar.GetFont() );
+                vcl::Font aFont( m_rTabBar.GetFont() );
                 aFont.SetOrientation( 2700 );
                 aFont.SetVertical( true );
                 m_rTabBar.SetFont( aFont );

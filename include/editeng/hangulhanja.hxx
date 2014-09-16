@@ -114,7 +114,7 @@ namespace editeng
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::lang::Locale& _rSourceLocale,
             const ::com::sun::star::lang::Locale& _rTargetLocale,
-            const Font* _pTargetFont,
+            const vcl::Font* _pTargetFont,
             sal_Int32 nOptions,
             bool _bIsInteractive
         );
@@ -126,7 +126,7 @@ namespace editeng
 
         LanguageType    GetSourceLanguage() const;
         LanguageType    GetTargetLanguage() const;
-        const Font *    GetTargetFont() const;
+        const vcl::Font* GetTargetFont() const;
         sal_Int32       GetConversionOptions() const;
         bool            IsInteractive() const;
 

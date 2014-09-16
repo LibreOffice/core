@@ -61,7 +61,7 @@ namespace cairocanvas
     static bool
     setupFontTransform( ::OutputDevice&                 rOutDev,
                         ::Point&                        o_rPoint,
-                        ::Font&                         io_rVCLFont,
+                        vcl::Font&                      io_rVCLFont,
                         const rendering::ViewState&     rViewState,
                         const rendering::RenderState&   rRenderState )
     {
@@ -247,7 +247,7 @@ namespace cairocanvas
     {
         setupOutDevState( rOutDev, pOwner, viewState, renderState, TEXT_COLOR );
 
-        ::Font aVCLFont;
+        vcl::Font aVCLFont;
 
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 

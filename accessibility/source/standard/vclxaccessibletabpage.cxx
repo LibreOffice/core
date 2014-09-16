@@ -585,7 +585,7 @@ Sequence< PropertyValue > VCLXAccessibleTabPage::getCharacterAttributes( sal_Int
 
     if ( m_pTabControl )
     {
-        Font aFont = m_pTabControl->GetFont();
+        vcl::Font aFont = m_pTabControl->GetFont();
         sal_Int32 nBackColor = getBackground();
         sal_Int32 nColor = getForeground();
         aValues = CharacterAttributesHelper( aFont, nBackColor, nColor )

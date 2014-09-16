@@ -26,7 +26,6 @@
 
 /* X Types */
 #undef Window
-#undef Font
 #undef Region
 #undef Icon
 #undef Time

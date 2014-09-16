@@ -250,7 +250,7 @@ void SvxPageWindow::DrawPage(const Point& rOrg, const bool bSecond, const bool b
     if(bFrameDirection && !bTable)
     {
         Point aPos;
-        Font aFont(GetFont());
+        vcl::Font aFont(GetFont());
         const Size aSaveSize = aFont.GetSize();
         Size aDrawSize(0,aRect.GetHeight() / 6);
         aFont.SetSize(aDrawSize);

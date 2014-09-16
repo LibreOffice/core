@@ -32,7 +32,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class Font;
+namespace vcl { class Font; }
 class Color;
 class Graphic;
 class DateTime;
@@ -78,7 +78,7 @@ public:
 
 typedef Color* ColorPtr;
 typedef std::deque< ColorPtr > SvxRTFColorTbl;
-typedef boost::ptr_map<short, Font> SvxRTFFontTbl;
+typedef boost::ptr_map<short, vcl::Font> SvxRTFFontTbl;
 typedef boost::ptr_map<sal_uInt16, SvxRTFStyleType> SvxRTFStyleTbl;
 
 // SvxRTFItemStack can't be "std::stack< SvxRTFItemStackType* >" type, because
@@ -190,7 +190,7 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     SvxPosition* pInsPos;
     SfxItemPool* pAttrPool;
     Color*  pDfltColor;
-    Font*   pDfltFont;
+    vcl::Font*   pDfltFont;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::document::XDocumentProperties> m_xDocProps;
     SfxItemSet *pRTFDefaults;
@@ -326,7 +326,7 @@ public:
     virtual SvParserState CallParser() SAL_OVERRIDE;
 
     inline const Color& GetColor( size_t nId ) const;
-    const Font& GetFont( sal_uInt16 nId );      // Changes the default Font
+    const vcl::Font& GetFont( sal_uInt16 nId );      // Changes the default Font
 
     virtual bool IsEndPara( SvxNodeIdx* pNd, sal_Int32 nCnt ) const = 0;
 

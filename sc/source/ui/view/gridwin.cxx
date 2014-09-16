@@ -979,8 +979,8 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     nSizeX += 1;
 
     {
-        Font    aOldFont = GetFont(); SetFont( pFilterBox->GetFont() );
-        MapMode aOldMode = GetMapMode(); SetMapMode( MAP_PIXEL );
+        vcl::Font aOldFont = GetFont(); SetFont( pFilterBox->GetFont() );
+        MapMode   aOldMode = GetMapMode(); SetMapMode( MAP_PIXEL );
 
         nHeight  = GetTextHeight();
         nHeight *= SC_FILTERLISTBOX_LINES;
@@ -1102,8 +1102,8 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow, bool bDataSelec
     nSizeX += 1;
 
     {
-        Font    aOldFont = GetFont(); SetFont( pFilterBox->GetFont() );
-        MapMode aOldMode = GetMapMode(); SetMapMode( MAP_PIXEL );
+        vcl::Font  aOldFont = GetFont(); SetFont( pFilterBox->GetFont() );
+        MapMode    aOldMode = GetMapMode(); SetMapMode( MAP_PIXEL );
 
         nHeight  = GetTextHeight();
         nHeight *= SC_FILTERLISTBOX_LINES;

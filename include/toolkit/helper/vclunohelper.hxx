@@ -98,9 +98,9 @@ public:
         @param  rFont  Font to be converted
         @return the new FontDescriptor
     */
-    static ::com::sun::star::awt::FontDescriptor    CreateFontDescriptor( const Font& rFont );
-    static Font                                     CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const Font& rInitFont );
-    static Font                                     CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont );
+    static ::com::sun::star::awt::FontDescriptor    CreateFontDescriptor( const vcl::Font& rFont );
+    static vcl::Font                                CreateFont( const ::com::sun::star::awt::FontDescriptor& rDescr, const vcl::Font& rInitFont );
+    static vcl::Font                                CreateFont( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& rxFont );
     static ::com::sun::star::awt::SimpleFontMetric  CreateFontMetric( const FontMetric& rFontMetric );
     static float                                    ConvertFontWidth( FontWidth eWidth );
     static FontWidth                                ConvertFontWidth( float f );

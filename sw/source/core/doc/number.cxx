@@ -1074,7 +1074,7 @@ namespace numfunc
                 return mbUserDefinedFontname;
             }
 
-            inline const Font& GetFont() const
+            inline const vcl::Font& GetFont() const
             {
                 return *mpFont;
             }
@@ -1118,7 +1118,7 @@ namespace numfunc
             sal_Unicode mnLevelChars[MAXLEVEL];
 
             // default bullet list font instance
-            Font* mpFont;
+            vcl::Font* mpFont;
     };
 
     namespace
@@ -1256,7 +1256,7 @@ namespace numfunc
     {
         delete mpFont;
 
-        mpFont = new Font( msFontname, OUString(), Size( 0, 14 ) );
+        mpFont = new vcl::Font( msFontname, OUString(), Size( 0, 14 ) );
         mpFont->SetWeight( meFontWeight );
         mpFont->SetItalic( meFontItalic );
         mpFont->SetCharSet( RTL_TEXTENCODING_SYMBOL );
@@ -1283,7 +1283,7 @@ namespace numfunc
         return SwDefBulletConfig::getInstance().IsFontnameUserDefined();
     }
 
-    const Font& GetDefBulletFont()
+    const vcl::Font& GetDefBulletFont()
     {
         return SwDefBulletConfig::getInstance().GetFont();
     }

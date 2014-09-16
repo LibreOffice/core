@@ -386,7 +386,7 @@ void Edit::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 
     if ( bFont )
     {
-        Font aFont = rStyleSettings.GetFieldFont();
+        vcl::Font aFont = rStyleSettings.GetFieldFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );
@@ -654,7 +654,7 @@ void Edit::ImplRepaint(bool bLayout)
                     aClip.Intersect(aRegion);
                     if( !aClip.IsEmpty() && nAttr )
                     {
-                        Font aFont = GetFont();
+                        vcl::Font aFont = GetFont();
                         if ( nAttr & EXTTEXTINPUT_ATTR_UNDERLINE )
                             aFont.SetUnderline( UNDERLINE_SINGLE );
                         else if ( nAttr & EXTTEXTINPUT_ATTR_BOLDUNDERLINE )
@@ -1775,7 +1775,7 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_u
 
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
-    Font aFont = GetDrawPixelFont( pDev );
+    vcl::Font aFont = GetDrawPixelFont( pDev );
     OutDevType eOutDevType = pDev->GetOutDevType();
 
     pDev->Push();

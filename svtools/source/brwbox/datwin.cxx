@@ -63,7 +63,7 @@ void ButtonFrame::Draw( OutputDevice& rDev )
     {
         OUString aVal = rDev.GetEllipsisString(aText,aInnerRect.GetWidth() - 2*MIN_COLUMNWIDTH);
 
-        Font aFont( rDev.GetFont() );
+        vcl::Font aFont( rDev.GetFont() );
         bool bOldTransp = aFont.IsTransparent();
         if ( !bOldTransp )
         {
@@ -250,7 +250,7 @@ void InitSettings_Impl( Window *pWin,
 
     if ( bFont )
     {
-        Font aFont = rStyleSettings.GetFieldFont();
+        vcl::Font aFont = rStyleSettings.GetFieldFont();
         if ( pWin->IsControlFont() )
             aFont.Merge( pWin->GetControlFont() );
         pWin->SetZoomedPointFont( aFont );

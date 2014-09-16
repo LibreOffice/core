@@ -1232,8 +1232,8 @@ void SwLBoxString::Paint(
     if(pCont->GetType() == GLBLDOC_SECTION &&
         !(pCont->GetSection())->IsConnectFlag() )
     {
-        Font aOldFont( rDev.GetFont());
-        Font aFont(aOldFont);
+        vcl::Font aOldFont( rDev.GetFont());
+        vcl::Font aFont(aOldFont);
         Color aCol( COL_LIGHTRED );
         aFont.SetColor( aCol );
         rDev.SetFont( aFont );

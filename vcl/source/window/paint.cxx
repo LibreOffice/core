@@ -1021,7 +1021,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
     // put a push action to metafile
     Push();
     // copy graphics state to metafile
-    Font aCopyFont = GetFont();
+    vcl::Font aCopyFont = GetFont();
     if( nOldDPIX != mnDPIX || nOldDPIY != mnDPIY )
     {
         aCopyFont.SetHeight( aCopyFont.GetHeight() * mnDPIY / nOldDPIY );

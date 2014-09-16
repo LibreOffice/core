@@ -233,12 +233,12 @@ void OSqlEdit::ImplSetFont()
         get_value_or( OUString() ) );
     if ( sFontName.isEmpty() )
     {
-        Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
+        vcl::Font aTmpFont( OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetUILanguageTag().getLanguageType(), 0 , this ) );
         sFontName = aTmpFont.GetName();
     }
     Size aFontSize(
         0, officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() );
-    Font aFont( sFontName, aFontSize );
+    vcl::Font aFont( sFontName, aFontSize );
     aStyleSettings.SetFieldFont(aFont);
     aSettings.SetStyleSettings(aStyleSettings);
     SetSettings(aSettings);

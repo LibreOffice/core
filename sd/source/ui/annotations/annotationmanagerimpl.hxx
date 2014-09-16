@@ -124,7 +124,7 @@ private:
 
     bool mbShowAnnotations;
     ImplSVEvent * mnUpdateTagsEvent;
-    Font maFont;
+    vcl::Font maFont;
 };
 
 OUString getAnnotationDateTimeString( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );

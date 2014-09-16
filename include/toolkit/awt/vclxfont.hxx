@@ -41,7 +41,7 @@ class TOOLKIT_DLLPUBLIC VCLXFont :  public ::com::sun::star::awt::XFont2,
 private:
     ::osl::Mutex    maMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice> mxDevice;
-    Font            maFont;
+    vcl::Font       maFont;
     FontMetric*     mpFontMetric;
 
 protected:
@@ -52,8 +52,8 @@ public:
                     VCLXFont();
                     virtual ~VCLXFont();
 
-    void            Init( ::com::sun::star::awt::XDevice& rxDev, const Font& rFont );
-    const Font&     GetFont() const { return maFont; }
+    void            Init( ::com::sun::star::awt::XDevice& rxDev, const vcl::Font& rFont );
+    const vcl::Font&     GetFont() const { return maFont; }
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

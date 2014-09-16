@@ -126,7 +126,7 @@ void UnitConverter::finalizeImport()
         maCoeffs[ UNIT_REFDEVY ] = 100000.0 / aInfo.PixelPerMeterY;
 
         // get character widths from default font
-        if( const Font* pDefFont = getStyles().getDefaultFont().get() )
+        if( const oox::xls::Font* pDefFont = getStyles().getDefaultFont().get() )
         {
             // XDevice expects pixels in font descriptor, but font contains twips
             FontDescriptor aDesc = pDefFont->getFontDescriptor();

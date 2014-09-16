@@ -203,7 +203,7 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
     mrData.mnCharWidth = 0;
     if( OutputDevice* pPrinter = GetPrinter() )
     {
-        Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );
+        vcl::Font aFont( rFontData.maName, Size( 0, rFontData.mnHeight ) );
         aFont.SetFamily( rFontData.GetScFamily( GetTextEncoding() ) );
         aFont.SetCharSet( rFontData.GetFontEncoding() );
         aFont.SetWeight( rFontData.GetScWeight() );

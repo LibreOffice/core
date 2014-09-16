@@ -51,8 +51,8 @@ namespace dbaui
         // members related to drawing the currently hovered/selected entry
         SvTreeListEntry*        m_pMouseDownEntry;
         SvTreeListEntry*        m_pLastActiveEntry;
-        Color               m_aOriginalBackgroundColor;
-        Font                m_aOriginalFont;
+        Color                   m_aOriginalBackgroundColor;
+        vcl::Font               m_aOriginalFont;
 
     public:
         OCreationList( OTasksWindow& _rParent );

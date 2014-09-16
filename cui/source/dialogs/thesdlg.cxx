@@ -145,10 +145,10 @@ void AlternativesString::Paint(
 {
     AlternativesExtraData* pData = m_rControlImpl.GetExtraData( pEntry );
     Point aPos( rPos );
-    Font aOldFont( rDev.GetFont());
+    vcl::Font aOldFont( rDev.GetFont());
     if (pData && pData->IsHeader())
     {
-        Font aFont( aOldFont );
+        vcl::Font aFont( aOldFont );
         aFont.SetWeight( WEIGHT_BOLD );
         rDev.SetFont( aFont );
         aPos.X() = 0;

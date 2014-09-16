@@ -445,7 +445,7 @@ void XclImpFont::GuessScriptType()
     // find the script types for which the font contains characters
     if( OutputDevice* pPrinter = GetPrinter() )
     {
-        Font aFont( maData.maName, Size( 0, 10 ) );
+        vcl::Font aFont( maData.maName, Size( 0, 10 ) );
         FontCharMap aCharMap;
 
         pPrinter->SetFont( aFont );

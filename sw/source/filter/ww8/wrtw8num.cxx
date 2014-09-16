@@ -365,7 +365,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
             OUString sNumStr;
             OUString sFontName;
             bool bWriteBullet = false;
-            const Font* pBulletFont=0;
+            const vcl::Font* pBulletFont=0;
             rtl_TextEncoding eChrSet=0;
             FontFamily eFamily=FAMILY_DECORATIVE;
             if( SVX_NUM_CHAR_SPECIAL == rFmt.GetNumberingType() ||
@@ -631,7 +631,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, sal_uInt8*& rpCh,
 
     if (1 < rCharLen)
     {
-        const Font& rFont = rFmt.GetBulletFont()
+        const vcl::Font& rFont = rFmt.GetBulletFont()
                             ? *rFmt.GetBulletFont()
                             : numfunc::GetDefBulletFont();
         OUString sNumStr = OUString(rFmt.GetBulletChar());

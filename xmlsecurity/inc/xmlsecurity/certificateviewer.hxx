@@ -98,8 +98,8 @@ private:
     SvSimpleTableContainer* m_pElementsLBContainer;
     SvSimpleTable*          m_pElementsLB;
     MultiLineEdit*          m_pValueDetails;
-    Font                    m_aStdFont;
-    Font                    m_aFixedWidthFont;
+    vcl::Font               m_aStdFont;
+    vcl::Font               m_aFixedWidthFont;
 
     DECL_LINK(          ElementSelectHdl, void* );
     void                Clear( void );

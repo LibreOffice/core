@@ -3051,7 +3051,7 @@ MetaFontAction::MetaFontAction() :
 MetaFontAction::~MetaFontAction()
 {}
 
-MetaFontAction::MetaFontAction( const Font& rFont ) :
+MetaFontAction::MetaFontAction( const vcl::Font& rFont ) :
     MetaAction  ( META_FONT_ACTION ),
     maFont      ( rFont )
 {

@@ -57,7 +57,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice> mxDevice;
 
     OutputDevice*   mpOutputDevice;
-    Font            maFont;
+    vcl::Font       maFont;
     Color           maTextColor;
     Color           maTextFillColor;
     Color           maLineColor;
@@ -77,7 +77,7 @@ public:
     void            SetOutputDevice( OutputDevice* pOutDev );
     OutputDevice*   GetOutputDevice() const { return mpOutputDevice; }
 
-    const Font&     GetFont() const { return maFont; }
+    const vcl::Font&  GetFont() const { return maFont; }
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;

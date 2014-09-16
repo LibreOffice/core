@@ -95,7 +95,7 @@ protected:
                                  const OUString& _rStr, sal_uInt16 _nStyle,
                                  MetricVector* _pVector, OUString* _pDisplayText ) const;
 
-    virtual const Font&
+    virtual const vcl::Font&
                 GetCanonicalFont( const StyleSettings& _rStyle ) const;
     virtual const Color&
                 GetCanonicalTextColor( const StyleSettings& _rStyle ) const;
@@ -182,7 +182,7 @@ public:
     void            SetReferenceDevice( OutputDevice* _referenceDevice );
     OutputDevice*   GetReferenceDevice() const;
 
-    Font            GetUnzoomedControlPointFont() const;
+    vcl::Font       GetUnzoomedControlPointFont() const;
 };
 
 #endif // INCLUDED_VCL_CTRL_HXX

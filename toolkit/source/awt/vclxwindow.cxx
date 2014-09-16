@@ -1537,7 +1537,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
         case BASEPROPERTY_FONTDESCRIPTOR:
         {
             if ( bVoid )
-                pWindow->SetControlFont( Font() );
+                pWindow->SetControlFont( vcl::Font() );
             else
             {
                 ::com::sun::star::awt::FontDescriptor aFont;
@@ -1551,7 +1551,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             sal_Int16 n = sal_Int16();
             if ( Value >>= n )
             {
-                Font aFont = pWindow->GetControlFont();
+                vcl::Font aFont = pWindow->GetControlFont();
                 aFont.SetRelief( (FontRelief)n );
                 pWindow->SetControlFont( aFont );
             }
@@ -1562,7 +1562,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             sal_Int16 n = sal_Int16();
             if ( Value >>= n )
             {
-                Font aFont = pWindow->GetControlFont();
+                vcl::Font aFont = pWindow->GetControlFont();
                 aFont.SetEmphasisMark( n );
                 pWindow->SetControlFont( aFont );
             }
@@ -1998,7 +1998,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:
             {
-                Font aFont = GetWindow()->GetControlFont();
+                vcl::Font aFont = GetWindow()->GetControlFont();
                 ::com::sun::star::awt::FontDescriptor aFD = VCLUnoHelper::CreateFontDescriptor( aFont );
                 aProp <<= aFD;
             }

@@ -219,7 +219,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     rStream.ReadUInt16( hasBulletFont );
     if ( hasBulletFont )
     {
-        pBulletFont = new Font( );
+        pBulletFont = new vcl::Font( );
         ReadFont( rStream, *pBulletFont );
     }
     else pBulletFont = NULL;
@@ -345,7 +345,7 @@ SvxNumberFormat& SvxNumberFormat::operator=( const SvxNumberFormat& rFormat )
     }
     DELETEZ(pBulletFont);
     if(rFormat.pBulletFont)
-            pBulletFont = new Font(*rFormat.pBulletFont);
+            pBulletFont = new vcl::Font(*rFormat.pBulletFont);
     return *this;
 }
 
@@ -443,10 +443,10 @@ sal_Int16    SvxNumberFormat::GetVertOrient() const
     return eVertOrient;
 }
 
-void SvxNumberFormat::SetBulletFont(const Font* pFont)
+void SvxNumberFormat::SetBulletFont(const vcl::Font* pFont)
 {
     delete pBulletFont;
-    pBulletFont = pFont ? new Font(*pFont): 0;
+    pBulletFont = pFont ? new vcl::Font(*pFont): 0;
 }
 
 void SvxNumberFormat::SetPositionAndSpaceMode( SvxNumPositionAndSpaceMode ePositionAndSpaceMode )

@@ -57,7 +57,7 @@ void PDFWriter::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
     pImplementation->setDocumentLocale( rLoc );
 }
 
-void PDFWriter::SetFont( const Font& rFont )
+void PDFWriter::SetFont( const vcl::Font& rFont )
 {
     pImplementation->setFont( rFont );
 }

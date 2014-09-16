@@ -625,7 +625,7 @@ void SplashScreen::Paint( const Rectangle&)
         _vdev.SetFillColor( _cProgressBarColor );
         _vdev.SetLineColor();
         _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
-        Font aFont;
+        vcl::Font aFont;
         aFont.SetSize(Size(0, 12));
         aFont.SetAlign(ALIGN_BASELINE);
         _vdev.SetFont(aFont);

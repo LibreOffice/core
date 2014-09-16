@@ -1410,7 +1410,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 {
                     int nBulletPos = pFndBulletChr - pBulletChar;
                     sal_Unicode cBullChar;
-                    const Font* pBullFnt( 0 );
+                    const vcl::Font* pBullFnt( 0 );
                     if( nBulletPos < cnPosEnDash )
                     {
                         cBullChar = m_aFlags.cBullet;

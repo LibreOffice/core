@@ -77,7 +77,7 @@ const TextCacheItem& TextCache::getText(OUString const & rText)
         return *itr->second;
 
     VirtualDevice aDevice(*Application::GetDefaultDevice(), 0, 0);
-    Font aFont = aDevice.GetFont();
+    vcl::Font aFont = aDevice.GetFont();
     aFont.SetSize(Size(0, 96));
     static bool bOldRender = getenv("OLDRENDER");
     if (bOldRender)

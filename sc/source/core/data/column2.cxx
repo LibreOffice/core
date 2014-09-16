@@ -241,7 +241,7 @@ long ScColumn::GetNeededSize(
     if (rOptions.bGetFont)
     {
         Fraction aFontZoom = ( eOrient == SVX_ORIENTATION_STANDARD ) ? rZoomX : rZoomY;
-        Font aFont;
+        vcl::Font aFont;
         // font color doesn't matter here
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aFontZoom, pCondSet, nScript );
         pDev->SetFont(aFont);
@@ -344,7 +344,7 @@ long ScColumn::GetNeededSize(
     if (bEditEngine)
     {
         //  the font is not reset each time with !bEditEngine
-        Font aOldFont = pDev->GetFont();
+        vcl::Font aOldFont = pDev->GetFont();
 
         MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
 
@@ -640,7 +640,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
     if ( pParam && pParam->mbSimpleText )
     {   // all the same except for number format
         const ScPatternAttr* pPattern = GetPattern( 0 );
-        Font aFont;
+        vcl::Font aFont;
         // font color doesn't matter here
         pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &rZoomX, NULL );
         pDev->SetFont( aFont );

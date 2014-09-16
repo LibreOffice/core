@@ -26,7 +26,7 @@
 #include <editeng/svxenum.hxx>
 #include "scdllapi.h"
 
-class Font;
+namespace vcl { class Font; }
 class OutputDevice;
 class Fraction;
 class ScStyleSheet;
@@ -80,7 +80,7 @@ public:
     SvxCellOrientation      GetCellOrientation( const SfxItemSet* pCondSet = 0 ) const;
 
     /** Static helper function to fill a font object from the passed item set. */
-    static void             GetFont( Font& rFont, const SfxItemSet& rItemSet,
+    static void             GetFont( vcl::Font& rFont, const SfxItemSet& rItemSet,
                                         ScAutoFontColorMode eAutoMode,
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
@@ -88,7 +88,7 @@ public:
                                         sal_uInt8 nScript = 0, const Color* pBackConfigColor = NULL,
                                         const Color* pTextConfigColor = NULL );
     /** Fills a font object from the own item set. */
-    void                    GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
+    void                    GetFont( vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
                                         const SfxItemSet* pCondSet = NULL,

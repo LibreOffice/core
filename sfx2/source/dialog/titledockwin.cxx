@@ -168,7 +168,7 @@ namespace sfx2
         SetLineColor();
 
         // bold font
-        Font aFont( GetFont() );
+        vcl::Font aFont( GetFont() );
         aFont.SetWeight( WEIGHT_BOLD );
         SetFont( aFont );
 
@@ -317,7 +317,7 @@ namespace sfx2
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
                 // Font.
-                Font aFont = rStyleSettings.GetAppFont();
+                vcl::Font aFont = rStyleSettings.GetAppFont();
                 if ( IsControlFont() )
                     aFont.Merge( GetControlFont() );
                 SetZoomedPointFont( aFont );

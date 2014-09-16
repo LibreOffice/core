@@ -192,7 +192,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     if ( !bUseSystemFont && !aUserInterfaceFont.isEmpty() )
     {
         StyleSettings aStyleSettings = rSettings.GetStyleSettings();
-        Font aFont = aStyleSettings.GetAppFont();
+        vcl::Font aFont = aStyleSettings.GetAppFont();
         aFont.SetName( aUserInterfaceFont );
         aStyleSettings.SetAppFont( aFont );
         aFont = aStyleSettings.GetHelpFont();
@@ -243,7 +243,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, bool bCallHdl )
     if( GetDesktopRectPixel().getHeight() > 600 )
         maxFontheight = (int) ((( 8.0 * (double) GetDesktopRectPixel().getHeight()) / 600.0) + 1.5);
 
-    Font aFont = aStyleSettings.GetMenuFont();
+    vcl::Font aFont = aStyleSettings.GetMenuFont();
     int defFontheight = aFont.GetHeight();
     if( defFontheight > maxFontheight )
         defFontheight = maxFontheight;

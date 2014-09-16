@@ -915,14 +915,14 @@ public:
                         ImpSpell( EditView* pEditView );
 
     // text conversion functions
-    void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
+    void                Convert( EditView* pEditView, LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
     void                ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang, EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
-                                    bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const Font *pTargetFont );
+                                    bool bAllowImplicitChangesForNotConvertibleText, LanguageType nTargetLang, const vcl::Font *pTargetFont );
     ConvInfo *          GetConvInfo() const { return pConvInfo; }
     bool            HasConvertibleTextPortion( LanguageType nLang );
     void                SetLanguageAndFont( const ESelection &rESel,
                                 LanguageType nLang, sal_uInt16 nLangWhichId,
-                                const Font *pFont,  sal_uInt16 nFontWhichId );
+                                const vcl::Font *pFont,  sal_uInt16 nFontWhichId );
 
     // returns true if input sequence checking should be applied
     bool            IsInputSequenceCheckingRequired( sal_Unicode nChar, const EditSelection& rCurSel ) const;

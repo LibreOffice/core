@@ -156,10 +156,10 @@ static bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
     return bRet;
 }
 
-static Font& lcl_GetDefaultBulletFont()
+static vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
-    static Font aDefBulletFont( OUString("StarSymbol"),
+    static vcl::Font aDefBulletFont( OUString("StarSymbol"),
                                 OUString(), Size( 0, 14 ) );
     if(!bInit)
     {
@@ -476,7 +476,7 @@ IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
         bPreset = false;
         bModified = true;
         sal_Unicode cChar = aBulletTypes[m_pExamplesVS->GetSelectItemId() - 1];
-        Font& rActBulletFont = lcl_GetDefaultBulletFont();
+        vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
         sal_uInt16 nMask = 1;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -679,7 +679,7 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
 
         SvxNumSettingsArr_Impl& rItemArr = aNumSettingsArrays[m_pExamplesVS->GetSelectItemId() - 1];
 
-        Font& rActBulletFont = lcl_GetDefaultBulletFont();
+        vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
         SvxNumSettings_Impl* pLevelSettings = 0;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
@@ -712,13 +712,13 @@ IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
                     {
                         vcl::FontInfo aInfo = pList->Get(
                             pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
-                        Font aFont(aInfo);
+                        vcl::Font aFont(aInfo);
                         aFmt.SetBulletFont(&aFont);
                     }
                     else
                     {
                         //if it cannot be found then create a new one
-                        Font aCreateFont( pLevelSettings->sBulletFont,
+                        vcl::Font aCreateFont( pLevelSettings->sBulletFont,
                                                 OUString(), Size( 0, 14 ) );
                         aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
                         aCreateFont.SetFamily( FAMILY_DONTKNOW );
@@ -2009,7 +2009,7 @@ IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
     boost::scoped_ptr<SvxCharacterMap> pMap(new SvxCharacterMap( this, true ));
 
     sal_uInt16 nMask = 1;
-    const Font* pFmtFont = 0;
+    const vcl::Font* pFmtFont = 0;
     bool bSameBullet = true;
     sal_Unicode cBullet = 0;
     bool bFirst = true;
@@ -2234,10 +2234,10 @@ static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
             const SvxNumberFormat& rFmt, sal_uInt16 nXStart,
             sal_uInt16 nYStart, const Size& rSize)
 {
-    Font aTmpFont(pVDev->GetFont());
+    vcl::Font aTmpFont(pVDev->GetFont());
 
     // via Uno it's possible that no font has been set!
-    Font aFont(rFmt.GetBulletFont() ? *rFmt.GetBulletFont() : aTmpFont);
+    vcl::Font aFont(rFmt.GetBulletFont() ? *rFmt.GetBulletFont() : aTmpFont);
     Size aTmpSize(rSize);
     aTmpSize.Width() *= rFmt.GetBulletRelSize();
     aTmpSize.Width() /= 100 ;
@@ -2403,8 +2403,8 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     if(pActNum->IsContinuousNumbering())
                         aNum.GetLevelVal()[nLevel] = nPreNum;
                     OUString aText(pActNum->MakeNumString( aNum ));
-                    Font aSaveFont = pVDev->GetFont();
-                    Font aColorFont(aSaveFont);
+                    vcl::Font aSaveFont = pVDev->GetFont();
+                    vcl::Font aColorFont(aSaveFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
                     if(aTmpBulletColor.GetColor() == COL_AUTO)
                         aTmpBulletColor = Color(aBackColor.IsDark() ? COL_WHITE : COL_BLACK);
@@ -2526,7 +2526,7 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                 }
                 else
                 {
-                    Font aColorFont(aStdFont);
+                    vcl::Font aColorFont(aStdFont);
                     Color aTmpBulletColor = rFmt.GetBulletColor();
                     if(aTmpBulletColor.GetColor() == COL_AUTO)
                         aTmpBulletColor = Color(aBackColor.IsDark() ? COL_WHITE : COL_BLACK);

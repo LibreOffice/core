@@ -302,7 +302,7 @@ void WMFWriter::WMFRecord_CreateBrushIndirect(const Color& rColor)
     pWMF->WriteUInt16( (sal_uInt16) 0 );
 }
 
-void WMFWriter::WMFRecord_CreateFontIndirect(const Font & rFont)
+void WMFWriter::WMFRecord_CreateFontIndirect(const vcl::Font & rFont)
 {
     sal_uInt16 nWeight,i;
     sal_uInt8 nPitchFamily;
@@ -873,7 +873,7 @@ void WMFWriter::CreateSelectDeletePen( const Color& rColor, const LineInfo& rLin
     }
 }
 
-void WMFWriter::CreateSelectDeleteFont(const Font & rFont)
+void WMFWriter::CreateSelectDeleteFont(const vcl::Font & rFont)
 {
     sal_uInt16 nOldHandle;
 
@@ -1776,7 +1776,7 @@ bool WMFWriter::WriteWMF( const GDIMetaFile& rMTF, SvStream& rTargetStream,
     aDstClipRegion = aSrcClipRegion = Region();
     bDstIsClipping = bSrcIsClipping = false;
 
-    Font aFont;
+    vcl::Font aFont;
     aFont.SetCharSet( GetExtendedTextEncoding( RTL_TEXTENCODING_MS_1252 ) );
     aFont.SetColor( Color( COL_WHITE ) );
     aFont.SetAlign( ALIGN_BASELINE );

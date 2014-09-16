@@ -638,7 +638,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
 {
     MapMode aMM( MAP_APPFONT );
     Size aAppFontSz = pOut->LogicToLogic( Size( 0, 8 ), &aMM, NULL );
-    Font aFnt( OUString("Helvetica"), aAppFontSz );
+    vcl::Font aFnt( OUString("Helvetica"), aAppFontSz );
     aFnt.SetTransparent( true );
     aFnt.SetColor( Color( COL_LIGHTRED ) );
     aFnt.SetWeight( WEIGHT_BOLD );

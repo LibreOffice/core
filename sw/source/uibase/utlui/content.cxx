@@ -3447,8 +3447,8 @@ void SwContentLBoxString::Paint(
     if(lcl_IsContent(pEntry) &&
             ((SwContent *)pEntry->GetUserData())->IsInvisible())
     {
-        Font aOldFont( rDev.GetFont());
-        Font aFont(aOldFont);
+        vcl::Font aOldFont( rDev.GetFont());
+        vcl::Font aFont(aOldFont);
         Color aCol( COL_LIGHTGRAY );
         aFont.SetColor( aCol );
         rDev.SetFont( aFont );

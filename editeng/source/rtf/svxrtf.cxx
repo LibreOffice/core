@@ -90,7 +90,7 @@ SvxRTFParser::SvxRTFParser( SfxItemPool& rPool, SvStream& rIn,
         aPardMap.insert( aPardMap.begin(), (sal_uInt16*)&aTmp,
                 (sal_uInt16*)&aTmp + (sizeof( RTFPardAttrMapIds ) / sizeof(sal_uInt16)) );
     }
-    pDfltFont = new Font;
+    pDfltFont = new vcl::Font;
     pDfltColor = new Color;
 }
 
@@ -465,7 +465,7 @@ void SvxRTFParser::ReadFontTable()
 {
     int nToken;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
-    Font* pFont = new Font();
+    vcl::Font* pFont = new vcl::Font();
     short nFontNo(0), nInsFontNo (0);
     OUString sAltNm, sFntNm;
     bool bIsAltFntNm = false, bCheckNewFont;
@@ -582,7 +582,7 @@ void SvxRTFParser::ReadFontTable()
 
             pFont->SetName( sFntNm );
             aFontTbl.insert( nInsFontNo, pFont );
-            pFont = new Font();
+            pFont = new vcl::Font();
             pFont->SetCharSet( nSystemChar );
             sAltNm = "";
             sFntNm = "";
@@ -814,10 +814,10 @@ OUString& SvxRTFParser::DelCharAtEnd( OUString& rStr, const sal_Unicode cDel )
 }
 
 
-const Font& SvxRTFParser::GetFont( sal_uInt16 nId )
+const vcl::Font& SvxRTFParser::GetFont( sal_uInt16 nId )
 {
     SvxRTFFontTbl::const_iterator it = aFontTbl.find( nId );
-    const Font* pFont;
+    const vcl::Font* pFont;
     if( it == aFontTbl.end() )
     {
         const SvxFontItem& rDfltFont = (const SvxFontItem&)

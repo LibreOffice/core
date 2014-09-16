@@ -240,11 +240,11 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
 
     if (mpMetadataAuthor->IsVisible())
     {
-        Font aOrigFont(mpMetadataAuthor->GetControlFont());
+        vcl::Font aOrigFont(mpMetadataAuthor->GetControlFont());
         Size aSize(PixelToLogic(mpMetadataAuthor->GetSizePixel()));
         Point aPos(PixelToLogic(mpMetadataAuthor->GetPosPixel()));
         aPos += rPt;
-        Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
         mpMetadataAuthor->SetControlFont( aFont );
         mpMetadataAuthor->Draw(pDev, aPos, aSize, nInFlags);
         mpMetadataAuthor->SetControlFont( aOrigFont );
@@ -252,11 +252,11 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
 
     if (mpMetadataDate->IsVisible())
     {
-        Font aOrigFont(mpMetadataDate->GetControlFont());
+        vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
         Size aSize(PixelToLogic(mpMetadataDate->GetSizePixel()));
         Point aPos(PixelToLogic(mpMetadataDate->GetPosPixel()));
         aPos += rPt;
-        Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
         mpMetadataDate->SetControlFont( aFont );
         mpMetadataDate->Draw(pDev, aPos, aSize, nInFlags);
         mpMetadataDate->SetControlFont( aOrigFont );
@@ -277,7 +277,7 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
 
     if (mpVScrollbar->IsVisible())
     {
-        Font aOrigFont(mpMetadataDate->GetControlFont());
+        vcl::Font aOrigFont(mpMetadataDate->GetControlFont());
         Color aOrigBg( mpMetadataDate->GetControlBackground() );
         OUString sOrigText(mpMetadataDate->GetText());
 
@@ -285,7 +285,7 @@ void SwSidebarWin::Draw(OutputDevice* pDev, const Point& rPt, const Size& rSz, s
         Point aPos(PixelToLogic(mpMenuButton->GetPosPixel()));
         aPos += rPt;
 
-        Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
         mpMetadataDate->SetControlFont( aFont );
         mpMetadataDate->SetControlBackground( 0xFFFFFF );
         mpMetadataDate->SetText("...");
@@ -369,7 +369,7 @@ void SwSidebarWin::InitControls()
     {
         AllSettings aSettings = mpMetadataAuthor->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        Font aFont = aStyleSettings.GetFieldFont();
+        vcl::Font aFont = aStyleSettings.GetFieldFont();
         aFont.SetHeight(8);
         aStyleSettings.SetFieldFont(aFont);
         aSettings.SetStyleSettings(aStyleSettings);
@@ -388,7 +388,7 @@ void SwSidebarWin::InitControls()
     {
         AllSettings aSettings = mpMetadataDate->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        Font aFont = aStyleSettings.GetFieldFont();
+        vcl::Font aFont = aStyleSettings.GetFieldFont();
         aFont.SetHeight(8);
         aStyleSettings.SetFieldFont(aFont);
         aSettings.SetStyleSettings(aStyleSettings);
@@ -506,7 +506,7 @@ void SwSidebarWin::Rescale()
     mpSidebarTxtControl->SetMapMode( aMode );
     if ( mpMetadataAuthor )
     {
-        Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
         sal_Int32 nHeight = aFont.GetHeight();
         nHeight = nHeight * aMode.GetScaleY().GetNumerator() / aMode.GetScaleY().GetDenominator();
         aFont.SetHeight( nHeight );
@@ -514,7 +514,7 @@ void SwSidebarWin::Rescale()
     }
     if ( mpMetadataDate )
     {
-        Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
         sal_Int32 nHeight = aFont.GetHeight();
         nHeight = nHeight * aMode.GetScaleY().GetNumerator() / aMode.GetScaleY().GetDenominator();
         aFont.SetHeight( nHeight );

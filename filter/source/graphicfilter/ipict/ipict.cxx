@@ -164,7 +164,7 @@ private:
     RasterOp      eActROP;
     PictDrawingMethod eActMethod;
     Size          aActOvalSize;
-    Font          aActFont;
+    vcl::Font     aActFont;
 
     Fraction        aHRes;
     Fraction        aVRes;

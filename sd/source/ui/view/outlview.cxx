@@ -1732,7 +1732,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             LanguageType eLang = rEditEngine.GetDefaultLanguage();
 
             Point aTextPos( aImagePos.X() - aOffset.Width(), pInfo->mrStartPos.Y() );
-            Font aNewFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 ) );
+            vcl::Font aNewFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 ) );
             aNewFont.SetSize( aFontSz );
             aNewFont.SetVertical( bVertical );
             aNewFont.SetOrientation( bVertical ? 2700 : 0 );

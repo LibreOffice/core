@@ -1451,7 +1451,7 @@ ScTextWnd::ScTextWnd( Window* pParent, ScTabViewShell* pViewSh )
     bIsRTL = GetSettings().GetLayoutRTL();
 
     //  always use application font, so a font with cjk chars can be installed
-    Font aAppFont = GetFont();
+    vcl::Font aAppFont = GetFont();
     aTextFont = aAppFont;
     aTextFont.SetSize( PixelToLogic( aAppFont.GetSize(), MAP_TWIP ) );  // AppFont is in pixels
 
