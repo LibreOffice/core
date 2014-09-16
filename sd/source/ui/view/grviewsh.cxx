@@ -29,8 +29,6 @@
 
 namespace sd {
 
-static const int TABCONTROL_INITIAL_SIZE = 350;
-
 GraphicViewShell::GraphicViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
@@ -54,10 +52,9 @@ void GraphicViewShell::ConstructGraphicViewShell(void)
 {
     meShellType = ST_DRAW;
 
-    mpLayerTabBar.reset (new LayerTabBar(this,GetParentWindow()));
-    mpLayerTabBar->SetSplitHdl(LINK(this,GraphicViewShell,TabBarSplitHandler));
+    mpLayerTabBar.reset (new LayerTabBar(this, GetParentWindow()));
 
-    // pb: #i67363# no layer tabbar on preview mode
+    // #i67363# no layer tabbar in preview mode
     if ( !GetObjectShell()->IsPreview() )
         mpLayerTabBar->Show();
 }
@@ -77,53 +74,17 @@ void GraphicViewShell::ArrangeGUIElements (void)
     if (mpLayerTabBar.get()!=NULL && mpLayerTabBar->IsVisible())
     {
         Size aSize = mpLayerTabBar->GetSizePixel();
-        const Size aFrameSize (
-            GetViewFrame()->GetWindow().GetOutputSizePixel());
+        const Size aFrameSize (GetViewFrame()->GetWindow().GetOutputSizePixel());
 
-        if (aSize.Width() == 0)
-        {
-            if (mpFrameView->GetTabCtrlPercent() == 0.0)
-                aSize.Width() = TABCONTROL_INITIAL_SIZE;
-            else
-                aSize.Width() = FRound(aFrameSize.Width()
-                    * mpFrameView->GetTabCtrlPercent());
-        }
-        aSize.Height() = GetParentWindow()->GetSettings().GetStyleSettings()
-            .GetScrollBarSize();
+        aSize.Height() = GetParentWindow()->GetFont().GetHeight() + 4;
+        aSize.Width() = aFrameSize.Width();
 
         Point aPos (0, maViewSize.Height() - aSize.Height());
 
         mpLayerTabBar->SetPosSizePixel (aPos, aSize);
-
-        if (aFrameSize.Width() > 0)
-            mpFrameView->SetTabCtrlPercent (
-                (double) maTabControl.GetSizePixel().Width()
-                / aFrameSize.Width());
-        else
-            mpFrameView->SetTabCtrlPercent( 0.0 );
     }
 
     DrawViewShell::ArrangeGUIElements();
-}
-
-IMPL_LINK(GraphicViewShell, TabBarSplitHandler, TabBar*, pTabBar)
-{
-    const long int nMax = maViewSize.Width()
-        - maScrBarWH.Width()
-        - pTabBar->GetPosPixel().X();
-
-    Size aTabSize = pTabBar->GetSizePixel();
-    aTabSize.Width() = std::min(pTabBar->GetSplitSize(), (long)(nMax-1));
-
-    pTabBar->SetSizePixel (aTabSize);
-
-    Point aPos = pTabBar->GetPosPixel();
-    aPos.X() += aTabSize.Width();
-
-    Size aScrSize (nMax - aTabSize.Width(), maScrBarWH.Height());
-    mpHorizontalScrollBar->SetPosSizePixel(aPos, aScrSize);
-
-    return 0;
 }
 
 } // end of namespace sd

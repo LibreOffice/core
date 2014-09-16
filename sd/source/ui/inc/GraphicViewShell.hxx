@@ -72,9 +72,6 @@ public:
 protected:
     void ConstructGraphicViewShell (void);
     virtual void ArrangeGUIElements (void) SAL_OVERRIDE;
-
-private:
-    DECL_LINK(TabBarSplitHandler, TabBar*);
 };
 
 } // end of namespace sd
