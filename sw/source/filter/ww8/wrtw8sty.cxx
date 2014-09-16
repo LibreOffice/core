@@ -930,7 +930,7 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
     }
 }
 
-sal_uInt16 wwFontHelper::GetId(const Font& rFont)
+sal_uInt16 wwFontHelper::GetId(const vcl::Font& rFont)
 {
     wwFont aFont(rFont.GetName(), rFont.GetPitch(), rFont.GetFamily(),
         rFont.GetCharSet(), mbWrtWW8);

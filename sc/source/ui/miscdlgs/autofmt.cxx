@@ -94,7 +94,7 @@ ScAutoFmtPreview::~ScAutoFmtPreview()
 }
 
 static void lcl_SetFontProperties(
-        Font& rFont,
+        vcl::Font& rFont,
         const SvxFontItem& rFontItem,
         const SvxWeightItem& rWeightItem,
         const SvxPostureItem& rPostureItem )
@@ -108,7 +108,7 @@ static void lcl_SetFontProperties(
     rFont.SetItalic     ( (FontItalic)rPostureItem.GetValue() );
 }
 
-void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, Font& rFont, Font& rCJKFont, Font& rCTLFont )
+void ScAutoFmtPreview::MakeFonts( sal_uInt16 nIndex, vcl::Font& rFont, vcl::Font& rCJKFont, vcl::Font& rCTLFont )
 {
     if ( pCurData )
     {
@@ -259,7 +259,7 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
             if ( pCurData->GetIncludeFont() )
             {
-                Font aFont, aCJKFont, aCTLFont;
+                vcl::Font aFont, aCJKFont, aCTLFont;
                 Size theMaxStrSize;
 
                 MakeFonts( nFmtIndex, aFont, aCJKFont, aCTLFont );
@@ -486,7 +486,7 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
 
     Size aWndSize( GetSizePixel() );
-    Font aFont( aVD.GetFont() );
+    vcl::Font aFont( aVD.GetFont() );
     Color aBackCol( GetSettings().GetStyleSettings().GetWindowColor() );
     Point aTmpPoint;
     Rectangle aRect( aTmpPoint, aWndSize );

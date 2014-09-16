@@ -1160,7 +1160,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
                     // #i63395# Only apply user defined default bullet font
                     if ( numfunc::IsDefBulletFontUserDefined() )
                     {
-                        const Font* pFnt = &numfunc::GetDefBulletFont();
+                        const vcl::Font* pFnt = &numfunc::GetDefBulletFont();
                         aFmt.SetBulletFont( pFnt );
                     }
                     aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<sal_uInt8>(nLevel)));
@@ -1187,7 +1187,7 @@ void SwWrtShell::NumOrBulletOn(bool bNum)
         SwDocShell* pDocSh = GetView().GetDocShell();
         // #i63395#
         // Only apply user defined default bullet font
-        const Font* pFnt = numfunc::IsDefBulletFontUserDefined()
+        const vcl::Font* pFnt = numfunc::IsDefBulletFontUserDefined()
                            ? &numfunc::GetDefBulletFont()
                            : 0;
 

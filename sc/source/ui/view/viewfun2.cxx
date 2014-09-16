@@ -2755,7 +2755,7 @@ void ScViewFunc::HideTable( const ScMarkData& rMark )
     }
 }
 
-void ScViewFunc::InsertSpecialChar( const OUString& rStr, const Font& rFont )
+void ScViewFunc::InsertSpecialChar( const OUString& rStr, const vcl::Font& rFont )
 {
     ScEditableTester aTester( this );
     if (!aTester.IsEditable())

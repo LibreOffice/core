@@ -271,7 +271,7 @@ namespace svt
                 const StyleSettings& rStyleSettings( GetSettings().GetStyleSettings() );
 
                 // Font.
-                Font aFont = rStyleSettings.GetAppFont();
+                vcl::Font aFont = rStyleSettings.GetAppFont();
                 if ( IsControlFont() )
                     aFont.Merge( GetControlFont() );
                 SetZoomedPointFont( aFont );
@@ -306,7 +306,7 @@ namespace svt
 
     Rectangle ToolPanelDrawer::impl_calcTextBoundingBox() const
     {
-        Font aFont( GetFont() );
+        vcl::Font aFont( GetFont() );
         if ( m_bExpanded )
             aFont.SetWeight( m_bExpanded ? WEIGHT_BOLD : WEIGHT_NORMAL );
         m_pPaintDevice->SetFont( aFont );

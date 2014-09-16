@@ -268,9 +268,9 @@ void OfaAutocorrOptionsPage::Reset( const SfxItemSet* )
 struct ImpUserData
 {
     OUString  *pString;
-    Font      *pFont;
+    vcl::Font *pFont;
 
-    ImpUserData(OUString* pText, Font* pFnt)
+    ImpUserData(OUString* pText, vcl::Font* pFnt)
         { pString = pText; pFont = pFnt;}
 };
 
@@ -324,8 +324,8 @@ void OfaImpBrwString::Paint(
         ImpUserData* pUserData = (ImpUserData* )pEntry->GetUserData();
         Point aNewPos(rPos);
         aNewPos.X() += rDev.GetTextWidth(GetText());
-        Font aOldFont( rDev.GetFont());
-        Font aFont( aOldFont );
+        vcl::Font aOldFont( rDev.GetFont());
+        vcl::Font aFont( aOldFont );
         if(pUserData->pFont)
         {
             aFont = *pUserData->pFont;
@@ -701,7 +701,7 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
         pMapDlg->SetChar( (*pUserData->pString)[0] );
         if(RET_OK == pMapDlg->Execute())
         {
-            Font aFont(pMapDlg->GetCharFont());
+            vcl::Font aFont(pMapDlg->GetCharFont());
             *pUserData->pFont = aFont;
             sal_UCS4 aChar = pMapDlg->GetChar();
             // using the UCS4 constructor

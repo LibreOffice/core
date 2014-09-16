@@ -339,7 +339,7 @@ void OFieldExpressionControl::lateInit()
 
     if ( ColCount() == 0 )
     {
-        Font aFont( GetDataWindow().GetFont() );
+        vcl::Font aFont( GetDataWindow().GetFont() );
         aFont.SetWeight( WEIGHT_NORMAL );
         GetDataWindow().SetFont( aFont );
 

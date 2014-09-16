@@ -111,7 +111,7 @@ void OCreationList::PreparePaint( SvTreeListEntry* _pEntry )
 
             if ( bIsMouseDownEntry )
             {
-                Font aFont( GetFont() );
+                vcl::Font aFont( GetFont() );
                 aFont.SetColor( GetSettings().GetStyleSettings().GetHighlightTextColor() );
                 Control::SetFont( aFont );
             }
@@ -384,7 +384,7 @@ void OTasksWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );
@@ -408,7 +408,7 @@ void OTasksWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackgro
         m_aFL.SetBackground( rStyleSettings.GetFieldColor() );
     }
 
-    Font aFont = m_aDescription.GetControlFont();
+    vcl::Font aFont = m_aDescription.GetControlFont();
     aFont.SetWeight(WEIGHT_BOLD);
     m_aDescription.SetControlFont(aFont);
 }
@@ -565,7 +565,7 @@ void OApplicationDetailView::ImplInitSettings( bool bFont, bool bForeground, boo
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     if( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetFieldFont();
         aFont.SetColor( rStyleSettings.GetWindowTextColor() );
         SetPointFont( aFont );

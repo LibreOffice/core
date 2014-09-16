@@ -2240,7 +2240,7 @@ void DrawGraphic(
     if( bReplaceGrfNum )
     {
         const BitmapEx& rBmp = SwViewShell::GetReplacementBitmap( false );
-        Font aTmp( pOutDev->GetFont() );
+        vcl::Font aTmp( pOutDev->GetFont() );
         Graphic::DrawEx( pOutDev, aEmptyOUStr, aTmp, rBmp, rOrg.Pos(), rOrg.SSize() );
     }
 }
@@ -3413,8 +3413,8 @@ void SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) c
                 pSh->GetOut()->DrawRect( aEmptyPageRect.SVRect() );
 
                 // paint empty page text
-                const Font& rEmptyPageFont = SwPageFrm::GetEmptyPageFont();
-                const Font aOldFont( pSh->GetOut()->GetFont() );
+                const vcl::Font& rEmptyPageFont = SwPageFrm::GetEmptyPageFont();
+                const vcl::Font aOldFont( pSh->GetOut()->GetFont() );
 
                 pSh->GetOut()->SetFont( rEmptyPageFont );
                 pSh->GetOut()->DrawText( aEmptyPageRect.SVRect(), SW_RESSTR( STR_EMPTYPAGE ),
@@ -3767,7 +3767,7 @@ void SwColumnFrm::PaintBreak( ) const
 
                     basegfx::B2DVector aFontSize;
                     OutputDevice* pOut = pGlobalShell->GetOut();
-                    Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
+                    vcl::Font aFont = pOut->GetSettings().GetStyleSettings().GetToolFont();
                     aFont.SetHeight( 8 * 20 );
                     pOut->SetFont( aFont );
                     drawinglayer::attribute::FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
@@ -7264,12 +7264,12 @@ const Color SwPageFrm::GetDrawBackgrdColor() const
 }
 
 /// create/return font used to paint the "empty page" string
-const Font& SwPageFrm::GetEmptyPageFont()
+const vcl::Font& SwPageFrm::GetEmptyPageFont()
 {
-    static Font* pEmptyPgFont = 0;
+    static vcl::Font* pEmptyPgFont = 0;
     if ( 0 == pEmptyPgFont )
     {
-        pEmptyPgFont = new Font;
+        pEmptyPgFont = new vcl::Font;
         pEmptyPgFont->SetSize( Size( 0, 80 * 20 )); // == 80 pt
         pEmptyPgFont->SetWeight( WEIGHT_BOLD );
         pEmptyPgFont->SetStyleName( aEmptyOUStr );

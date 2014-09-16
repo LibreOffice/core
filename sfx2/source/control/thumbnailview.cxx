@@ -191,7 +191,7 @@ void ThumbnailView::ImplInitSettings( bool bFont, bool bForeground, bool bBackgr
 
     if ( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetAppFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );

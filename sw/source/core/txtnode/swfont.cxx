@@ -1541,7 +1541,7 @@ long AttrSetToLineHeight( const IDocumentSettingAccess& rIDocumentSettingAccess,
     aFont.SetActual(nActual);
 
     OutputDevice &rMutableOut = const_cast<OutputDevice &>(rOut);
-    const Font aOldFont(rMutableOut.GetFont());
+    const vcl::Font aOldFont(rMutableOut.GetFont());
 
     rMutableOut.SetFont(aFont.GetActualFont());
     long nHeight = rMutableOut.GetTextHeight();

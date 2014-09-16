@@ -1954,8 +1954,8 @@ namespace cppcanvas
                 // (which is already contained in the render state
                 // transformation matrix - otherwise, glyph polygons
                 // will be rotated twice)
-                const ::Font aOrigFont( rVDev.GetFont() );
-                ::Font       aUnrotatedFont( aOrigFont );
+                const vcl::Font aOrigFont( rVDev.GetFont() );
+                vcl::Font       aUnrotatedFont( aOrigFont );
                 aUnrotatedFont.SetOrientation(0);
                 rVDev.SetFont( aUnrotatedFont );
 

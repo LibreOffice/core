@@ -95,7 +95,7 @@ class SwDropCapsPict : public Control
     Size            CalcTextSize( void );
     inline void     InitPrinter( void );
     void            _InitPrinter( void );
-    void            GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, sal_uInt16 _nWhich );
+    void            GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich );
     void            GetFirstScriptSegment(sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
     bool            GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_Int32 &end, sal_uInt16 &scriptType);
 
@@ -188,7 +188,7 @@ OUString GetDefaultString(sal_uInt16 nChars)
     return aStr;
 }
 
-static void calcFontHeightAnyAscent( OutputDevice* _pWin, Font& _rFont, long& _nHeight, long& _nAscent )
+static void calcFontHeightAnyAscent( OutputDevice* _pWin, vcl::Font& _rFont, long& _nHeight, long& _nAscent )
 {
     if ( !_nHeight )
     {
@@ -243,7 +243,7 @@ bool SwDropCapsPict::GetNextScriptSegment(size_t &nIdx, sal_Int32 &start, sal_In
 #define LINES  10
 #define BORDER  2
 
-void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, sal_uInt16 _nWhich )
+void SwDropCapsPict::GetFontSettings( const SwDropCapsPage& _rPage, vcl::Font& _rFont, sal_uInt16 _nWhich )
 {
     SfxItemSet aSet( _rPage.rSh.GetAttrPool(), _nWhich, _nWhich);
     _rPage.rSh.GetCurAttr(aSet);
@@ -264,7 +264,7 @@ void SwDropCapsPict::UpdatePaintSettings( void )
     mnTotLineH = (GetOutputSizePixel().Height() - 2 * BORDER) / LINES;
     mnLineH = mnTotLineH - 2;
 
-    Font aFont;
+    vcl::Font aFont;
     if (mpPage)
     {
         if (!mpPage->m_pTemplateBox->GetSelectEntryPos())
@@ -380,7 +380,7 @@ void SwDropCapsPict::DrawPrev( const Point& rPt )
     Point aPt(rPt);
     InitPrinter();
 
-    Font        aOldFont = mpPrinter->GetFont();
+    vcl::Font   aOldFont = mpPrinter->GetFont();
     sal_uInt16      nScript;
     size_t      nIdx = 0;
     sal_Int32  nStart;

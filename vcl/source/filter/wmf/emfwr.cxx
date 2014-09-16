@@ -502,11 +502,11 @@ void EMFWriter::ImplCheckTextAttr()
 {
     if( mbTextChanged && ImplPrepareHandleSelect( mnTextHandle, TEXT_SELECT ) )
     {
-        const Font&     rFont = maVDev.GetFont();
-        OUString        aFontName( rFont.GetName() );
-        sal_Int32       nWeight;
-        sal_uInt16      i;
-        sal_uInt8       nPitchAndFamily;
+        const vcl::Font& rFont = maVDev.GetFont();
+        OUString         aFontName( rFont.GetName() );
+        sal_Int32        nWeight;
+        sal_uInt16       i;
+        sal_uInt8        nPitchAndFamily;
 
         ImplBeginRecord( WIN_EMR_EXTCREATEFONTINDIRECTW );
         m_rStm.WriteUInt32( mnTextHandle );

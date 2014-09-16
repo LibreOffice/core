@@ -102,13 +102,13 @@ static UScriptCode lcl_getHardCodedScriptNameForFont (const OutputDevice &rDevic
     return USCRIPT_INVALID_CODE;
 }
 
-bool isOpenSymbolFont(const Font &rFont)
+bool isOpenSymbolFont(const vcl::Font &rFont)
 {
     return rFont.GetName().equalsIgnoreAsciiCase("starsymbol") ||
            rFont.GetName().equalsIgnoreAsciiCase("opensymbol");
 }
 
-bool isSymbolFont(const Font &rFont)
+bool isSymbolFont(const vcl::Font &rFont)
 {
     return (rFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL) ||
             rFont.GetName().equalsIgnoreAsciiCase("Apple Color Emoji") ||
@@ -140,7 +140,7 @@ bool isSymbolFont(const Font &rFont)
 
 bool canRenderNameOfSelectedFont(OutputDevice &rDevice)
 {
-    const Font &rFont = rDevice.GetFont();
+    const vcl::Font &rFont = rDevice.GetFont();
     return !isSymbolFont(rFont) && ( -1 == rDevice.HasGlyphs(rFont, rFont.GetName()) );
 }
 
@@ -1227,7 +1227,7 @@ namespace
         //If we're a CJK font, see if we seem to be tuned for C, J or K
         if (eScript == USCRIPT_HAN)
         {
-            const Font &rFont = rDevice.GetFont();
+            const vcl::Font &rFont = rDevice.GetFont();
 
             bool bKore = false, bJpan = false, bHant = false, bHans = false;
 
@@ -1617,7 +1617,7 @@ UScriptCode otCoverageToScript(vcl::UnicodeCoverage::UnicodeCoverageEnum eOTCove
     return eRet;
 }
 
-OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const Font &rFont)
+OUString makeRepresentativeTextForFont(sal_Int16 nScriptType, const vcl::Font &rFont)
 {
     OUString sRet(makeRepresentativeTextForLanguage(rFont.GetLanguage()));
 

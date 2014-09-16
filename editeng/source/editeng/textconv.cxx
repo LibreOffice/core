@@ -46,7 +46,7 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
         const Reference< XComponentContext >& rxContext,
         const Locale& rSourceLocale,
         const Locale& rTargetLocale,
-        const Font* pTargetFont,
+        const vcl::Font* pTargetFont,
         sal_Int32 nOptions,
         bool bIsInteractive,
         bool bIsStart,
@@ -245,7 +245,7 @@ bool TextConvWrapper::ConvContinue_impl()
 
 void TextConvWrapper::SetLanguageAndFont( const ESelection &rESel,
     LanguageType nLang, sal_uInt16 nLangWhichId,
-    const Font *pFont,  sal_uInt16 nFontWhichId )
+    const vcl::Font *pFont,  sal_uInt16 nFontWhichId )
 {
     ESelection aOldSel = m_pEditView->GetSelection();
     m_pEditView->SetSelection( rESel );

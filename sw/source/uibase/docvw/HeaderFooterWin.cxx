@@ -136,7 +136,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwPageFrm* pPag
     m_aFadeTimer( )
 {
     // Get the font and configure it
-    Font aFont = GetSettings().GetStyleSettings().GetToolFont();
+    vcl::Font aFont = GetSettings().GetStyleSettings().GetToolFont();
     SetZoomedPointFont( aFont );
 
     // Use pixels for the rest of the drawing

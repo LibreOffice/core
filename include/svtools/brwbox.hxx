@@ -445,11 +445,11 @@ public:
     bool            GetUpdateMode() const;
 
     // map-mode and font control
-    void            SetFont( const Font& rNewFont );
-    const Font&     GetFont() const { return pDataWin->GetFont(); }
-    void            SetTitleFont( const Font& rNewFont )
+    void            SetFont( const vcl::Font& rNewFont );
+    const vcl::Font& GetFont() const { return pDataWin->GetFont(); }
+    void            SetTitleFont( const vcl::Font& rNewFont )
                         { Control::SetFont( rNewFont ); }
-    const Font&     GetTitleFont() const { return Control::GetFont(); }
+    const vcl::Font& GetTitleFont() const { return Control::GetFont(); }
 
     // color for line painting
     void            SetGridLineColor(const Color& rColor) {aGridLineColor = rColor;}

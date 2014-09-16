@@ -102,12 +102,12 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
     aOuter.Bottom() += nVer;
 
     //  use ScPatternAttr::GetFont only for font size
-    Font aAttrFont;
+    vcl::Font aAttrFont;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
                                     GetFont(aAttrFont,SC_AUTOCOL_BLACK,pDev,&rZoomY);
 
     //  everything else from application font
-    Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
+    vcl::Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
     aAppFont.SetSize( aAttrFont.GetSize() );
 
     aAppFont.SetAlign( ALIGN_TOP );
@@ -928,7 +928,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 nPageScript = ScGlobal::GetDefaultScriptType();
         }
 
-        Font aFont;
+        vcl::Font aFont;
         boost::scoped_ptr<ScEditEngineDefaulter> pEditEng;
         const ScPatternAttr& rDefPattern = ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
         if ( nPageScript == SCRIPTTYPE_LATIN )

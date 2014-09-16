@@ -68,16 +68,15 @@ public:
     /** Converts the portion and replaces or appends to the passed XText. */
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
-
-                            const Font* pFont, bool bReplace );
-    void                convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const Font* pFont );
+                            const oox::xls::Font* pFont, bool bReplace );
+    void                convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const oox::xls::Font* pFont );
 
     void                writeFontProperties(
         const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
-        const Font* pFont ) const;
+        const oox::xls::Font* pFont ) const;
 
 private:
-    OUString     maText;         /// Portion text.
+    OUString            maText;         /// Portion text.
     FontRef             mxFont;         /// Embedded portion font, may be empty.
     sal_Int32           mnFontId;       /// Link to global font list.
     bool                mbConverted;    /// Without repeatly convert
@@ -250,7 +249,7 @@ public:
         if there is only one unformatted portion. */
     bool                extractPlainString(
                             OUString& orString,
-                            const Font* pFirstPortionFont = 0 ) const;
+                            const oox::xls::Font* pFirstPortionFont = 0 ) const;
 
     /** Converts the string and writes it into the passed XText.
         @param rxText  The XText interface of the target object.
@@ -260,8 +259,8 @@ public:
     void                convert(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >& rxText,
                             bool bReplaceOld,
-                            const Font* pFirstPortionFont = 0 ) const;
-    ::EditTextObject*   convert( ScEditEngineDefaulter& rEE, const Font* pFont ) const;
+                            const oox::xls::Font* pFirstPortionFont = 0 ) const;
+    ::EditTextObject*   convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFont ) const;
 
 private:
     /** Creates, appends, and returns a new empty string portion. */

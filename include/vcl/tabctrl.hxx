@@ -75,7 +75,7 @@ protected:
     SAL_DLLPRIVATE void         ImplInit( Window* pParent, WinBits nStyle );
 
     virtual void                FillLayoutData() const SAL_OVERRIDE;
-    virtual const Font&         GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
+    virtual const vcl::Font&    GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&        GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     SAL_DLLPRIVATE Rectangle*   ImplFindPartRect( const Point& rPt );
 

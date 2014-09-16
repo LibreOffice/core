@@ -112,7 +112,7 @@ public:
     const SpellErrorDescription& GetErrorDescription() const { return m_aSpellErrorDescription; }
 
 
-    virtual void            SetFont( Font& rFont ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
 };
@@ -135,7 +135,7 @@ public:
                                         {m_eLanguage = eLang;}
 
 
-    virtual void            SetFont( Font& rFont ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
 };
@@ -157,7 +157,7 @@ public:
     void                    SetColor( const Color& rNewCol ){m_aBackgroundColor = rNewCol;}
 
 
-    virtual void            SetFont( Font& rFont ) const SAL_OVERRIDE;
+    virtual void            SetFont( vcl::Font& rFont ) const SAL_OVERRIDE;
     virtual TextAttrib*     Clone() const SAL_OVERRIDE;
     virtual bool            operator==( const TextAttrib& rAttr ) const SAL_OVERRIDE;
 };

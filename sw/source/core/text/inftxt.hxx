@@ -32,7 +32,7 @@
 #include "ndtxt.hxx"
 #include <editeng/paravertalignitem.hxx>
 
-class Font;
+namespace vcl { class Font; }
 class OutputDevice;
 class SvxBrushItem;
 class SvxLineSpacingItem;

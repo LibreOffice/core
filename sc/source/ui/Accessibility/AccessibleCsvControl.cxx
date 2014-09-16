@@ -308,7 +308,7 @@ static inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropN
 }
 
 /** Fills the sequence with all font attributes of rFont. */
-static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font& rFont )
+static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const vcl::Font& rFont )
 {
     SvxFontItem aFontItem( rFont.GetFamily(), rFont.GetName(), rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), ATTR_FONT );
     SvxFontHeightItem aHeightItem( rFont.GetSize().Height(), 100, ATTR_FONT_HEIGHT );

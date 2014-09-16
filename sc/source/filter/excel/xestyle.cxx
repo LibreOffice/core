@@ -872,7 +872,7 @@ sal_Int16 XclExpFontHelper::GetFirstUsedScript( const XclExpRoot& rRoot, const S
     return nScript;
 }
 
-Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript )
+vcl::Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxItemSet& rItemSet, sal_Int16 nScript )
 {
     namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
@@ -891,7 +891,7 @@ Font XclExpFontHelper::GetFontFromItemSet( const XclExpRoot& rRoot, const SfxIte
     }
 
     // fill the font object
-    Font aFont;
+    vcl::Font aFont;
     ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, 0, 0, 0, nScScript );
     return aFont;
 }
@@ -1078,7 +1078,7 @@ sal_uInt16 XclExpFontBuffer::Insert(
 }
 
 sal_uInt16 XclExpFontBuffer::Insert(
-        const Font& rFont, XclExpColorType eColorType, bool bAppFont )
+        const vcl::Font& rFont, XclExpColorType eColorType, bool bAppFont )
 {
     return Insert( XclFontData( rFont ), eColorType, bAppFont );
 }
@@ -1093,7 +1093,7 @@ sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet,
         sal_Int16 nScript, XclExpColorType eColorType, bool bAppFont )
 {
     // #i17050# script type now provided by caller
-    Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rItemSet, nScript );
+    vcl::Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rItemSet, nScript );
     return Insert( aFont, eColorType, bAppFont );
 }
 
@@ -2922,7 +2922,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         // check if non default font is set and only export then
                         if (rSet.GetItemState(rSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT )) == SfxItemState::SET )
                         {
-                            Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
+                            vcl::Font aFont = XclExpFontHelper::GetFontFromItemSet( GetRoot(), rSet, com::sun::star::i18n::ScriptType::WEAK );
                             pFont = new XclExpFont( GetRoot(), XclFontData( aFont ), EXC_COLOR_CELLTEXT );
                         }
 

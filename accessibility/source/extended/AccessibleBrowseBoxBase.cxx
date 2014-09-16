@@ -509,7 +509,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun:
             nColor = pInst->GetControlForeground().GetColor();
         else
         {
-            Font aFont;
+            vcl::Font aFont;
             if ( pInst->IsControlFont() )
                 aFont = pInst->GetControlFont();
             else

@@ -135,7 +135,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     // switch off triState of ::com::sun::star::form::CheckBox
     m_pVisibleCell->GetBox().EnableTriState( false );
 
-    Font aTitleFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE,Window::GetSettings().GetLanguageTag().getLanguageType(),DEFAULTFONT_FLAGS_ONLYONE);
+    vcl::Font aTitleFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE,Window::GetSettings().GetLanguageTag().getLanguageType(),DEFAULTFONT_FLAGS_ONLYONE);
     aTitleFont.SetSize(Size(0, 6));
     SetTitleFont(aTitleFont);
 
@@ -330,7 +330,7 @@ void OSelectionBrowseBox::Init()
     SetHeaderBar(pNewHeaderBar);
     SetMode(m_nMode);
 
-    Font    aFont( GetDataWindow().GetFont() );
+    vcl::Font aFont( GetDataWindow().GetFont() );
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );
 

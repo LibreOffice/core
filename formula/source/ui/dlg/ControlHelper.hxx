@@ -126,7 +126,7 @@ public:
 
     void        SetArgName(const OUString &aArg);
     OUString    GetArgName();
-    void        SetArgNameFont(const Font&);
+    void        SetArgNameFont(const vcl::Font&);
 
     void        SetArgVal(const OUString &aVal);
     OUString    GetArgVal();

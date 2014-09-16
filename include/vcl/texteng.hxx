@@ -111,16 +111,16 @@ private:
 
     LocaleDataWrapper*  mpLocaleDataWrapper;
 
-    Font                maFont;
+    vcl::Font           maFont;
     Color               maTextColor;
     long                mnCharHeight;
-    sal_uInt16              mnFixCharWidth100;
+    sal_uInt16          mnFixCharWidth100;
 
-    sal_uLong               mnMaxTextLen;
-    sal_uLong               mnMaxTextWidth;
-    sal_uLong               mnCurTextWidth;
-    sal_uLong               mnCurTextHeight;
-    sal_uLong               mnDefTab;
+    sal_uLong           mnMaxTextLen;
+    sal_uLong           mnMaxTextWidth;
+    sal_uLong           mnCurTextWidth;
+    sal_uLong           mnCurTextHeight;
+    sal_uLong           mnDefTab;
 
     TxtAlign            meAlign;
 
@@ -182,7 +182,7 @@ protected:
     sal_uInt16              SplitTextPortion( sal_uLong nPara, sal_uInt16 nPos );
     void                CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos );
     void                RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short nNewChars );
-    void                SeekCursor( sal_uLong nNode, sal_uInt16 nPos, Font& rFont, OutputDevice* pOutDev );
+    void                SeekCursor( sal_uLong nNode, sal_uInt16 nPos, vcl::Font& rFont, OutputDevice* pOutDev );
 
     void                FormatDoc();
     void                FormatFullDoc();
@@ -209,7 +209,7 @@ protected:
     sal_uLong           CalcTextHeight();
     sal_uLong           CalcParaHeight( sal_uLong nParagraph ) const;
     sal_uLong           CalcTextWidth( sal_uLong nPara );
-    sal_uLong           CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nPortionLen, const Font* pFont = 0 );
+    sal_uLong           CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nPortionLen, const vcl::Font* pFont = 0 );
     Range               GetInvalidYOffsets( sal_uLong nPortion );
 
     // for Undo/Redo
@@ -234,8 +234,8 @@ public:
     sal_uLong           GetTextLen( LineEnd aSeparator = LINEEND_LF ) const;
     sal_uLong           GetTextLen( const TextSelection& rSel, LineEnd aSeparator = LINEEND_LF ) const;
 
-    void                SetFont( const Font& rFont );
-    const Font&         GetFont() const { return maFont; }
+    void                SetFont( const vcl::Font& rFont );
+    const vcl::Font&    GetFont() const { return maFont; }
 
     sal_uInt16          GetDefTab() const;
 

@@ -834,7 +834,7 @@ sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getForeground(  ) throw (RuntimeExc
             nColor = mpParent->GetControlForeground().GetColor();
         else
         {
-            Font aFont;
+            vcl::Font aFont;
             if ( mpParent->IsControlFont() )
                 aFont = mpParent->GetControlFont();
             else

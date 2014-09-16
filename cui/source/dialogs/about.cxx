@@ -144,8 +144,8 @@ void AboutDialog::StyleControls()
     m_pDescriptionText->SetPaintTransparent(true);
     m_pCopyrightText->SetPaintTransparent(true);
 
-    Font aLabelFont = GetSettings().GetStyleSettings().GetLabelFont();
-    Font aLargeFont = aLabelFont;
+    vcl::Font aLabelFont = GetSettings().GetStyleSettings().GetLabelFont();
+    vcl::Font aLargeFont = aLabelFont;
     aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 3 ) );
 
     // Logo Replacement Text

@@ -511,7 +511,7 @@ Sequence< PropertyValue > VCLXAccessibleStatusBarItem::getCharacterAttributes( s
 
     if ( m_pStatusBar )
     {
-        Font aFont = m_pStatusBar->GetFont();
+        vcl::Font aFont = m_pStatusBar->GetFont();
         sal_Int32 nBackColor = getBackground();
         sal_Int32 nColor = getForeground();
         aValues = CharacterAttributesHelper( aFont, nBackColor, nColor )

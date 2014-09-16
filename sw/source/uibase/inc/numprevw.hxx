@@ -28,11 +28,11 @@ namespace rtl { class OUString; }
 class NumberingPreview : public Window
 {
     const SwNumRule*    pActNum;
-    Font                aStdFont;
+    vcl::Font           aStdFont;
     long                nPageWidth;
     const OUString*     pOutlineNames;
     bool                bPosition;
-    sal_uInt16              nActLevel;
+    sal_uInt16          nActLevel;
 
     protected:
         virtual void        Paint( const Rectangle& rRect ) SAL_OVERRIDE;

@@ -61,7 +61,7 @@
 
 class EDITENG_DLLPUBLIC SvxBulletItem : public SfxPoolItem
 {
-    Font            aFont;
+    vcl::Font       aFont;
     GraphicObject*  pGraphicObject;
     OUString        aPrevText;
     OUString        aFollowText;
@@ -98,7 +98,7 @@ public:
     long                GetWidth() const { return nWidth; }
     sal_uInt16          GetStyle() const { return nStyle; }
     sal_uInt8           GetJustification() const { return nJustify; }
-    Font                GetFont() const { return aFont; }
+    vcl::Font           GetFont() const { return aFont; }
     sal_uInt16          GetScale() const { return nScale; }
 
     const GraphicObject& GetGraphicObject() const;
@@ -112,7 +112,7 @@ public:
     void                SetWidth( long nNew ) { nWidth = nNew; }
     void                SetStyle( sal_uInt16 nNew ) { nStyle = nNew; }
     void                SetJustification( sal_uInt8 nNew ) { nJustify = nNew; }
-    void                SetFont( const Font& rNew) { aFont = rNew; }
+    void                SetFont( const vcl::Font& rNew) { aFont = rNew; }
     void                SetScale( sal_uInt16 nNew ) { nScale = nNew; }
 
     virtual sal_uInt16      GetVersion(sal_uInt16 nFileVersion) const SAL_OVERRIDE;
@@ -122,8 +122,8 @@ public:
                                     SfxMapUnit ePresMetric,
                                     OUString &rText, const IntlWrapper * = 0 ) const SAL_OVERRIDE;
 
-    static void         StoreFont( SvStream&, const Font& );
-    static Font         CreateFont( SvStream&, sal_uInt16 nVer );
+    static void         StoreFont( SvStream&, const vcl::Font& );
+    static vcl::Font    CreateFont( SvStream&, sal_uInt16 nVer );
 
     sal_uInt16&         GetValidMask()                  { return nValidMask;    }
     sal_uInt16          GetValidMask() const            { return nValidMask;    }

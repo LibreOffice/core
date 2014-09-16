@@ -31,7 +31,7 @@
 class SvLBoxFontString : public SvLBoxString
 {
 private:
-    Font                        maFont;     /// The font used by this item.
+    vcl::Font                   maFont;     /// The font used by this item.
     bool                        mbUseColor; /// true = use font color, false = default listbox color.
 
 public:
@@ -40,7 +40,7 @@ public:
                                     SvTreeListEntry* pEntry,
                                     sal_uInt16 nFlags,
                                     const OUString& rString,
-                                    const Font& rFont,
+                                    const vcl::Font& rFont,
                                     const Color* pColor = NULL );
 
     virtual                     ~SvLBoxFontString();
@@ -62,10 +62,10 @@ public:
 class SVX_DLLPUBLIC SvxFontListBox : public SvTabListBox
 {
 private:
-    Font                        maStdFont;      /// Used for entries without specific font.
+    vcl::Font                   maStdFont;      /// Used for entries without specific font.
 
     // The following members are used to store additional parameters for InitEntry().
-    Font                        maEntryFont;    /// Current entry font used in InitEntry().
+    vcl::Font                   maEntryFont;    /// Current entry font used in InitEntry().
     const Color*                mpEntryColor;   /// Current entry color used in InitEntry().
     bool                        mbUseFont;      /// true = Use maEntryFont/mpEntryColor in InitEntry().
 
@@ -75,7 +75,7 @@ public:
     /** Inserts a list entry and sets the font used for this entry.
         @param pColor  The font color. NULL = use default listbox text color. */
     void                        InsertFontEntry(
-                                    const OUString& rString, const Font& rFont, const Color* pColor = NULL );
+                                    const OUString& rString, const vcl::Font& rFont, const Color* pColor = NULL );
 
     /** Selects/deselects an entry specified by its position in the list box. */
     void                        SelectEntryPos( sal_uLong nPos, bool bSelect = true );

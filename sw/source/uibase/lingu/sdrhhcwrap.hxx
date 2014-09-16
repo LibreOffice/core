@@ -36,13 +36,13 @@ class SdrHHCWrapper : public SdrOutliner
     sal_uInt16          nDocIndex;
     LanguageType        nSourceLang;
     LanguageType        nTargetLang;
-    const Font*         pTargetFont;
+    const vcl::Font*    pTargetFont;
     bool                bIsInteractive;
 
 public:
     SdrHHCWrapper( SwView* pVw,
                    LanguageType nSourceLanguage, LanguageType nTargetLanguage,
-                   const Font* pTargetFnt,
+                   const vcl::Font* pTargetFnt,
                    sal_Int32 nConvOptions, bool bInteractive );
 
     virtual ~SdrHHCWrapper();

@@ -94,9 +94,9 @@ private:
     SAL_DLLPRIVATE void                DrawBackground();
 
     SAL_DLLPRIVATE void    MakeFonts       ( sal_uInt16 nIndex,
-                              Font& rFont,
-                              Font& rCJKFont,
-                              Font& rCTLFont );
+                              vcl::Font& rFont,
+                              vcl::Font& rCJKFont,
+                              vcl::Font& rCTLFont );
 
     SAL_DLLPRIVATE void CheckPriority    ( sal_uInt16            nCurLine,
                               AutoFmtLine       eLine,

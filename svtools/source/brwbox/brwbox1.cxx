@@ -211,7 +211,7 @@ void BrowseBox::SetRealRowCount( const OUString &rRealRowCount )
 
 
 
-void BrowseBox::SetFont( const Font& rNewFont )
+void BrowseBox::SetFont( const vcl::Font& rNewFont )
 {
     pDataWin->SetFont( rNewFont );
     ImpGetDataRowHeight();

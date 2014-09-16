@@ -215,7 +215,7 @@ SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet* pCondSet
 }
 
 void ScPatternAttr::GetFont(
-        Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
+        vcl::Font& rFont, const SfxItemSet& rItemSet, ScAutoFontColorMode eAutoMode,
         OutputDevice* pOutDev, const Fraction* pScale,
         const SfxItemSet* pCondSet, sal_uInt8 nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor )
@@ -481,7 +481,7 @@ void ScPatternAttr::GetFont(
 }
 
 void ScPatternAttr::GetFont(
-        Font& rFont, ScAutoFontColorMode eAutoMode,
+        vcl::Font& rFont, ScAutoFontColorMode eAutoMode,
         OutputDevice* pOutDev, const Fraction* pScale,
         const SfxItemSet* pCondSet, sal_uInt8 nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor ) const

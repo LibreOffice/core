@@ -45,7 +45,7 @@ WinBits GroupBox::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-const Font& GroupBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
+const vcl::Font& GroupBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupFont();
 }
@@ -198,7 +198,7 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
 {
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
-    Font        aFont = GetDrawPixelFont( pDev );
+    vcl::Font   aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();

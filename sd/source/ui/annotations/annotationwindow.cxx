@@ -308,7 +308,7 @@ void AnnotationWindow::InitControls()
     // with variable meta size height
     AllSettings aSettings = mpMeta->GetSettings();
     StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-    Font aFont = aStyleSettings.GetFieldFont();
+    vcl::Font aFont = aStyleSettings.GetFieldFont();
     aFont.SetHeight(8);
     aStyleSettings.SetFieldFont(aFont);
     aSettings.SetStyleSettings(aStyleSettings);
@@ -374,7 +374,7 @@ void AnnotationWindow::Rescale()
     mpTextWindow->SetMapMode( aMode );
     if ( mpMeta )
     {
-        Font aFont( mpMeta->GetSettings().GetStyleSettings().GetFieldFont() );
+        vcl::Font aFont( mpMeta->GetSettings().GetStyleSettings().GetFieldFont() );
         sal_Int32 nHeight = aFont.GetHeight();
         nHeight = nHeight * aMode.GetScaleY().GetNumerator() / aMode.GetScaleY().GetDenominator();
         aFont.SetHeight( nHeight );

@@ -34,7 +34,7 @@
 #include <editeng/editengdllapi.h>
 
 class SvxBrushItem;
-class Font;
+namespace vcl { class Font; }
 class Graphic;
 class SvxNodeNum;
 namespace com{namespace sun{ namespace star{
@@ -147,7 +147,7 @@ private:
     sal_Int16           eVertOrient;        // vertical alignment of a bitmap
 
     Size                aGraphicSize;       // Always! in 1/100 mm
-    Font*               pBulletFont;        // Pointer to the bullet font
+    vcl::Font*          pBulletFont;        // Pointer to the bullet font
 
     OUString            sCharStyleName;     // Character Style
 
@@ -177,8 +177,8 @@ public:
     void                    SetCharFmtName(const OUString& rSet){ sCharStyleName = rSet; }
     virtual OUString        GetCharFmtName()const;
 
-    void            SetBulletFont(const Font* pFont);
-    const Font*     GetBulletFont() const {return pBulletFont;}
+    void            SetBulletFont(const vcl::Font* pFont);
+    const vcl::Font* GetBulletFont() const {return pBulletFont;}
     void            SetBulletChar(sal_Unicode cSet){cBullet = cSet;}
     sal_Unicode     GetBulletChar()const {return cBullet;}
     void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = nSet;}

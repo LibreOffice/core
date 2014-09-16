@@ -283,7 +283,7 @@ public:
     sal_Int32       StartSearchAndReplace( const SvxSearchItem& rSearchItem );
 
     // for text conversion
-    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
+    void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
 
     void            TransliterateText( sal_Int32 nTransliterationMode );
 
@@ -633,7 +633,7 @@ class EDITENG_DLLPUBLIC Outliner : public SfxBroadcaster
 
     void        ImpTextPasted( sal_Int32 nStartPara, sal_Int32 nCount );
     long        ImpCalcMaxBulletWidth( sal_Int32 nPara, const SvxBulletItem& rBullet );
-    Font        ImpCalcBulletFont( sal_Int32 nPara ) const;
+    vcl::Font   ImpCalcBulletFont( sal_Int32 nPara ) const;
     Rectangle   ImpCalcBulletArea( sal_Int32 nPara, bool bAdjust, bool bReturnPaperPos );
     long        ImpGetTextIndent( sal_Int32 nPara );
     bool        ImpCanIndentSelectedPages( OutlinerView* pCurView );

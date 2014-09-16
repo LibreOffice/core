@@ -79,7 +79,7 @@ struct StackMember
     bool        bTextFillCol;
     Color       aTextFillCol;
     Color       aBackgroundCol;
-    Font        aFont;
+    vcl::Font   aFont;
     TextAlign   eTextAlign;
 
     double                      fLineWidth;
@@ -142,8 +142,8 @@ private:
     SvtGraphicStroke::JoinType  eJoinType;
     SvtGraphicStroke::DashArray aDashArray;
 
-    Font                maFont;
-    Font                maLastFont;
+    vcl::Font           maFont;
+    vcl::Font           maLastFont;
     sal_uInt8           nChrSet;
     ChrSet*             pChrSetList;        // list of character sets
     sal_uInt8           nNextChrSetId;      // first unused ChrSet-Id
@@ -1142,7 +1142,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     aTextFillColor = pGS->aTextFillCol;
                     aBackgroundColor = pGS->aBackgroundCol;
                     maFont = pGS->aFont;
-                    maLastFont = Font();                // set maLastFont != maFont -> so that
+                    maLastFont = vcl::Font();                // set maLastFont != maFont -> so that
                     delete pGS;
                     sal_uInt32 nCurrentPos = mpPS->Tell();
                     if ( nCurrentPos - 3 == mnLatestPush )
@@ -2138,7 +2138,7 @@ void PSWriter::ImplText( const OUString& rUniString, const Point& rPos, const lo
         return;
     if ( mnTextMode == 0 )  // using glpyh outlines
     {
-        Font    aNotRotatedFont( maFont );
+        vcl::Font    aNotRotatedFont( maFont );
         aNotRotatedFont.SetOrientation( 0 );
 
         VirtualDevice aVirDev( 1 );

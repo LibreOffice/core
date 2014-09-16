@@ -160,7 +160,7 @@ void ValueSet::ImplInitSettings( bool bFont, bool bForeground, bool bBackground 
 
     if ( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetAppFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );

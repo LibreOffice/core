@@ -721,7 +721,7 @@ void SvxRubyDialog::UpdateColors( void )
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     svtools::ColorConfig        aColorConfig;
 
-    Font                    aFnt( m_pPreviewWin->GetFont() );
+    vcl::Font               aFnt( m_pPreviewWin->GetFont() );
 
     Color                   aNewTextCol( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
     Color                   aNewFillCol( rStyleSettings.GetWindowColor() );
@@ -769,7 +769,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
 {
     Size aWinSize = GetOutputSize();
 
-    Font aSaveFont = GetFont();
+    vcl::Font aSaveFont = GetFont();
     aSaveFont.SetHeight(aWinSize.Height() / 4);
     SetFont(aSaveFont);
 
@@ -784,7 +784,7 @@ void RubyPreview::Paint( const Rectangle& /* rRect */ )
     long nTextHeight = GetTextHeight();
     long nBaseWidth = GetTextWidth(sBaseText);
 
-    Font aRubyFont(aSaveFont);
+    vcl::Font aRubyFont(aSaveFont);
     aRubyFont.SetHeight(aRubyFont.GetHeight() * 70 / 100);
     SetFont(aRubyFont);
     long nRubyWidth = GetTextWidth(sRubyText);

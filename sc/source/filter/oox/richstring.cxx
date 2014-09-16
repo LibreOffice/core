@@ -38,7 +38,7 @@ namespace {
 const sal_uInt8 BIFF12_STRINGFLAG_FONTS         = 0x01;
 const sal_uInt8 BIFF12_STRINGFLAG_PHONETICS     = 0x02;
 
-inline bool lclNeedsRichTextFormat( const Font* pFont )
+inline bool lclNeedsRichTextFormat( const oox::xls::Font* pFont )
 {
     return pFont && pFont->needsRichTextFormat();
 }
@@ -76,7 +76,7 @@ void RichStringPortion::finalizeImport()
         mxFont = getStyles().getFont( mnFontId );
 }
 
-void RichStringPortion::convert( const Reference< XText >& rxText, const Font* pFont, bool bReplace )
+void RichStringPortion::convert( const Reference< XText >& rxText, const oox::xls::Font* pFont, bool bReplace )
 {
     if ( mbConverted )
         return;
@@ -110,7 +110,7 @@ void RichStringPortion::convert( const Reference< XText >& rxText, const Font* p
     mbConverted = true;
 }
 
-void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const Font* pFont )
+void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelection, const oox::xls::Font* pFont )
 {
     rSelection.nStartPos = rSelection.nEndPos;
     rSelection.nStartPara = rSelection.nEndPara;
@@ -145,7 +145,7 @@ void RichStringPortion::convert( ScEditEngineDefaulter& rEE, ESelection& rSelect
     rEE.QuickSetAttribs( aItemSet, rSelection );
 }
 
-void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, const Font* pFont ) const
+void RichStringPortion::writeFontProperties( const Reference<XText>& rxText, const oox::xls::Font* pFont ) const
 {
     PropertySet aPropSet(rxText);
 
@@ -358,7 +358,7 @@ void RichString::finalizeImport()
     maTextPortions.forEachMem( &RichStringPortion::finalizeImport );
 }
 
-bool RichString::extractPlainString( OUString& orString, const Font* pFirstPortionFont ) const
+bool RichString::extractPlainString( OUString& orString, const oox::xls::Font* pFirstPortionFont ) const
 {
     if( !maPhonPortions.empty() )
         return false;
@@ -375,7 +375,7 @@ bool RichString::extractPlainString( OUString& orString, const Font* pFirstPorti
     return false;
 }
 
-void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, const Font* pFirstPortionFont ) const
+void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, const oox::xls::Font* pFirstPortionFont ) const
 {
     if (maTextPortions.size() == 1)
     {
@@ -395,7 +395,7 @@ void RichString::convert( const Reference< XText >& rxText, bool bReplaceOld, co
     }
 }
 
-::EditTextObject* RichString::convert( ScEditEngineDefaulter& rEE, const Font* pFirstPortionFont ) const
+::EditTextObject* RichString::convert( ScEditEngineDefaulter& rEE, const oox::xls::Font* pFirstPortionFont ) const
 {
     ESelection aSelection;
 

@@ -301,8 +301,8 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
      Point aPos( rRect.TopLeft() );
 
     // Setup fonts
-    Font aStdFont( GetFont() );
-    Font aBoldFont( aStdFont );
+    vcl::Font aStdFont( GetFont() );
+    vcl::Font aBoldFont( aStdFont );
     aBoldFont.SetWeight( WEIGHT_BOLD );
     SetFont( aBoldFont );
     long aTextHeight = GetTextHeight();

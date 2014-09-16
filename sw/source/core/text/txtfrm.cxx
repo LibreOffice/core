@@ -2238,7 +2238,7 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
         }
         else
         {
-            Font aOldFont = pOut->GetFont();
+            vcl::Font aOldFont = pOut->GetFont();
             aFont.SetFntChg( true );
             aFont.ChgPhysFnt( pVsh, *pOut );
             mnHeightOfLastLine = aFont.GetHeight( pVsh, *pOut );

@@ -67,7 +67,7 @@ namespace svt
 
 class Window;
 class ToolBox;
-class Font;
+namespace vcl { class Font; }
 class SvNumberFormatter;
 class SfxFilter;
 

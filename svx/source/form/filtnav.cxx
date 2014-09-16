@@ -1089,8 +1089,8 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    Font aOldFont( pView->GetFont());
-    Font aFont( aOldFont );
+    vcl::Font aOldFont( pView->GetFont());
+    vcl::Font aFont( aOldFont );
     aFont.SetWeight(WEIGHT_BOLD);
     pView->Control::SetFont( aFont );
 
@@ -1104,8 +1104,8 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvTreeListEntry* pEntry,
 void FmFilterString::Paint(
     const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
-    Font aOldFont( rDev.GetFont());
-    Font aFont( aOldFont );
+    vcl::Font aOldFont( rDev.GetFont());
+    vcl::Font aFont( aOldFont );
     aFont.SetWeight(WEIGHT_BOLD);
     rDev.SetFont( aFont );
 

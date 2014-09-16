@@ -40,7 +40,7 @@ private:
                                       const Point& rPos, const Size& rSize, bool bLayout = false );
 
     virtual void    FillLayoutData() const SAL_OVERRIDE;
-    virtual const Font&
+    virtual const vcl::Font&
                     GetCanonicalFont( const StyleSettings& _rStyle ) const SAL_OVERRIDE;
     virtual const Color&
                     GetCanonicalTextColor( const StyleSettings& _rStyle ) const SAL_OVERRIDE;

@@ -45,8 +45,8 @@ void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
 {
     if (!IsEnabled())
     {
-        Font aOldFont = GetFont();
-        Font aNewFont(aOldFont);
+        vcl::Font aOldFont = GetFont();
+        vcl::Font aNewFont(aOldFont);
 
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
         aNewFont.SetColor(aSystemStyle.GetDisableColor());

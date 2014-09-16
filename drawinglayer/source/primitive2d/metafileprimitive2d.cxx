@@ -87,7 +87,7 @@ namespace
         basegfx::B2DPolyPolygon maClipPolyPoygon;
 
         /// font, etc.
-        Font                    maFont;
+        vcl::Font               maFont;
         RasterOp                maRasterOp;
         ComplexTextLayoutMode   mnLayoutMode;
         LanguageType            maLanguageType;
@@ -175,8 +175,8 @@ namespace
         bool getClipPolyPolygonActive() const { return mbClipPolyPolygonActive; }
         void setClipPolyPolygonActive(bool bNew) { if(bNew != mbClipPolyPolygonActive) mbClipPolyPolygonActive = bNew; }
 
-        const Font& getFont() const { return maFont; }
-        void setFont(const Font& rFont) { if(rFont != maFont) maFont = rFont; }
+        const vcl::Font& getFont() const { return maFont; }
+        void setFont(const vcl::Font& rFont) { if(rFont != maFont) maFont = rFont; }
 
         const RasterOp& getRasterOp() const { return maRasterOp; }
         void setRasterOp(const RasterOp& rRasterOp) { if(rRasterOp != maRasterOp) maRasterOp = rRasterOp; }
@@ -302,7 +302,7 @@ namespace
                             {
                                 if(pLast->getFont().GetAlign() != pTip->getFont().GetAlign())
                                 {
-                                    Font aFont(pLast->getFont());
+                                    vcl::Font aFont(pLast->getFont());
                                     aFont.SetAlign(pTip->getFont().GetAlign());
                                     pLast->setFont(aFont);
                                 }
@@ -1200,7 +1200,7 @@ namespace
     }
 
     /** helper to decide UnderlineAbove for text primitives */
-    bool isUnderlineAbove(const Font& rFont)
+    bool isUnderlineAbove(const vcl::Font& rFont)
     {
         if(!rFont.IsVertical())
         {
@@ -1222,7 +1222,7 @@ namespace
         basegfx::B2DVector& rAlignmentOffset,
         PropertyHolder& rProperty)
     {
-        const Font& rFont = rProperty.getFont();
+        const vcl::Font& rFont = rProperty.getFont();
         basegfx::B2DVector aFontScaling;
 
         rFontAttribute = drawinglayer::attribute::FontAttribute(
@@ -1273,7 +1273,7 @@ namespace
         PropertyHolder& rProperty)
     {
         drawinglayer::primitive2d::BasePrimitive2D* pResult = 0;
-        const Font& rFont = rProperty.getFont();
+        const vcl::Font& rFont = rProperty.getFont();
         basegfx::B2DVector aAlignmentOffset(0.0, 0.0);
 
         if(nTextLength)
@@ -2121,7 +2121,7 @@ namespace
 
                                 // for sub-Mteafile contents, do start with new, default render state
                                 // #i124686# ...but copy font, this is already set accordingly
-                                Font aTargetFont = rPropertyHolders.Current().getFont();
+                                vcl::Font aTargetFont = rPropertyHolders.Current().getFont();
                                 rPropertyHolders.PushDefault();
                                 rPropertyHolders.Current().setFont(aTargetFont);
 
@@ -2660,7 +2660,7 @@ namespace
                     // playing the Metafile)
                     if(rPropertyHolders.Current().getFont().GetAlign() != aNewTextAlign)
                     {
-                        Font aNewFont(rPropertyHolders.Current().getFont());
+                        vcl::Font aNewFont(rPropertyHolders.Current().getFont());
                         aNewFont.SetAlign(aNewTextAlign);
                         rPropertyHolders.Current().setFont(aNewFont);
                     }
@@ -2735,7 +2735,7 @@ namespace
                     {
                         // this should not happen but i got Metafiles where this was the
                         // case. A height needs to be guessed (similar to OutputDevice::ImplNewFont())
-                        Font aCorrectedFont(pA->GetFont());
+                        vcl::Font aCorrectedFont(pA->GetFont());
 
                         // guess 16 pixel (as in VCL)
                         aFontSize = Size(0, 16);

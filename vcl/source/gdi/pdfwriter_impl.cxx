@@ -4611,7 +4611,7 @@ bool PDFWriterImpl::emitNoteAnnotations()
     return true;
 }
 
-Font PDFWriterImpl::replaceFont( const Font& rControlFont, const Font&  rAppSetFont )
+Font PDFWriterImpl::replaceFont( const vcl::Font& rControlFont, const vcl::Font&  rAppSetFont )
 {
     bool bAdjustSize = false;
 
@@ -4643,7 +4643,7 @@ Font PDFWriterImpl::replaceFont( const Font& rControlFont, const Font&  rAppSetF
     return aFont;
 }
 
-sal_Int32 PDFWriterImpl::getBestBuiltinFont( const Font& rFont )
+sal_Int32 PDFWriterImpl::getBestBuiltinFont( const vcl::Font& rFont )
 {
     sal_Int32 nBest = 4; // default to Helvetica
     OUString aFontName( rFont.GetName() );
@@ -6969,7 +6969,7 @@ bool PDFWriterImpl::emit()
 }
 
 
-sal_Int32 PDFWriterImpl::getSystemFont( const Font& i_rFont )
+sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 {
     getReferenceDevice()->Push();
     getReferenceDevice()->SetFont( i_rFont );
@@ -10604,7 +10604,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
 *  if a font with a nontransparent color is set, it overwrites the current
 *  text color. OTOH setting the text color will overwrite the color of the font.
 */
-void PDFWriterImpl::setFont( const Font& rFont )
+void PDFWriterImpl::setFont( const vcl::Font& rFont )
 {
     Color aColor = rFont.GetColor();
     if( aColor == Color( COL_TRANSPARENT ) )

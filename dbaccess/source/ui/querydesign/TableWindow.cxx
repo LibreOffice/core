@@ -478,7 +478,7 @@ void OTableWindow::Resize()
 
 void OTableWindow::SetBoldTitle( bool bBold )
 {
-    Font aFont = m_aTitle.GetFont();
+    vcl::Font aFont = m_aTitle.GetFont();
     aFont.SetWeight( bBold?WEIGHT_BOLD:WEIGHT_NORMAL );
     m_aTitle.SetFont( aFont );
     m_aTitle.Invalidate();
@@ -554,7 +554,7 @@ void OTableWindow::StateChanged( StateChangedType nType )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-        Font aFont = rStyleSettings.GetGroupFont();
+        vcl::Font aFont = rStyleSettings.GetGroupFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );

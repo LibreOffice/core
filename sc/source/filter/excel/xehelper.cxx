@@ -722,7 +722,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
 // --- font attributes ---
 
-                Font aFont;
+                vcl::Font aFont;
                 aItemSet.ClearItem();
                 SfxItemSet aEditSet( mrEE.GetAttribs( aSel ) );
                 ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );

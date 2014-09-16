@@ -64,10 +64,10 @@ using namespace com::sun::star::style;
 namespace svx { namespace sidebar {
 #define MAX_VALUESET_GRAPHIC    30
 
-Font& lcl_GetDefaultBulletFont()
+vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
-    static Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
+    static vcl::Font aDefBulletFont( "StarSymbol", "", Size( 0, 14 ) );
     if(!bInit)
     {
         aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
@@ -187,7 +187,7 @@ void NBOTypeMgrBase::ImplLoad(const OUString& filename)
                 {
                     SvxNumberFormat aFmt(aNum.GetLevel(i));
                     if (aFmt.GetBulletFont()) {
-                        Font aFont(*aFmt.GetBulletFont());
+                        vcl::Font aFont(*aFmt.GetBulletFont());
                         Color c=aFont.GetColor();
                         c.SetTransparency(0xFF);
                         aFont.SetColor(c);
@@ -283,7 +283,7 @@ BulletsTypeMgr& BulletsTypeMgr::GetInstance()
 
 void BulletsTypeMgr::Init()
 {
-    Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
 
     if( Application::GetSettings().GetLayoutRTL() )
     {
@@ -321,7 +321,7 @@ sal_uInt16 BulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 mLe
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_Unicode cChar = aFmt.GetBulletChar();
-    //const Font* pFont = aFmt.GetBulletFont();
+    //const vcl::Font* pFont = aFmt.GetBulletFont();
     //sal_uInt16 nLength = 0;
     /*if( Application::GetSettings().GetLayoutRTL() )
     {
@@ -377,7 +377,7 @@ bool BulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
     sal_Unicode cChar = aFmt.GetBulletChar();
-    const Font* pFont = aFmt.GetBulletFont();
+    const vcl::Font* pFont = aFmt.GetBulletFont();
     //sal_uInt16 nLength = 0;
     /*if( Application::GetSettings().GetLayoutRTL() )
     {
@@ -442,8 +442,8 @@ bool BulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         return false;
     cChar = pActualBullets[nIndex]->cBulletChar;
-    //Font& rActBulletFont = lcl_GetDefaultBulletFont();
-    Font rActBulletFont = pActualBullets[nIndex]->aFont;
+    //vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+    vcl::Font rActBulletFont = pActualBullets[nIndex]->aFont;
 
     sal_uInt16 nMask = 1;
     OUString sBulletCharFmtName = GetBulCharFmtName();
@@ -524,9 +524,9 @@ sal_Unicode BulletsTypeMgr::GetBulChar(sal_uInt16 nIndex)
 
     return cChar;
 }
-Font BulletsTypeMgr::GetBulCharFont(sal_uInt16 nIndex)
+vcl::Font BulletsTypeMgr::GetBulCharFont(sal_uInt16 nIndex)
 {
-    Font aRet;
+    vcl::Font aRet;
     if ( nIndex >= DEFAULT_BULLET_TYPES )
         aRet = lcl_GetDefaultBulletFont();
     else
@@ -960,7 +960,7 @@ sal_uInt16 MixBulletsTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 
     if( eNumType == SVX_NUM_CHAR_SPECIAL)
     {
         sal_Unicode cChar = aFmt.GetBulletChar();
-        // const Font* pFont = aFmt.GetBulletFont();
+        // const vcl::Font* pFont = aFmt.GetBulletFont();
 
         for(sal_uInt16 i = nFromIndex; i < DEFAULT_BULLET_TYPES; i++)
         {
@@ -1031,7 +1031,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
     if( eNumType == SVX_NUM_CHAR_SPECIAL && pActualBullets[nIndex]->eType == eNBType::BULLETS )
     {
         sal_Unicode cChar = aFmt.GetBulletChar();
-        const Font* pFont = aFmt.GetBulletFont();
+        const vcl::Font* pFont = aFmt.GetBulletFont();
         BulletsSettings_Impl* pEntry = (BulletsSettings_Impl*) (pActualBullets[nIndex]->pBullets);
         pEntry->cBulletChar = cChar;
         pEntry->aFont = pFont?*pFont:lcl_GetDefaultBulletFont();
@@ -1083,7 +1083,7 @@ bool MixBulletsTypeMgr::RelplaceNumRule(SvxNumRule& aNum,sal_uInt16 nIndex,sal_u
         if ( eNumType == SVX_NUM_CHAR_SPECIAL )
         {
             sal_Unicode cChar = aFmt.GetBulletChar();
-            const Font* pFont = aFmt.GetBulletFont();
+            const vcl::Font* pFont = aFmt.GetBulletFont();
             pActualBullets[nIndex]->eType = eNBType::BULLETS;
             pActualBullets[nIndex]->nIndex = nIndex+1; //index in the tab page display,decrease 1 to the index within arr
             pActualBullets[nIndex]->pBullets = new BulletsSettings_Impl(eNBType::BULLETS) ;
@@ -1167,8 +1167,8 @@ bool MixBulletsTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
         sal_Unicode cChar;
         cChar = ((BulletsSettings_Impl*)(pCurrentBullets->pBullets))->cBulletChar;
 
-        //Font& rActBulletFont = lcl_GetDefaultBulletFont();
-        Font rActBulletFont = ((BulletsSettings_Impl*)(pCurrentBullets->pBullets))->aFont;
+        //vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
+        vcl::Font rActBulletFont = ((BulletsSettings_Impl*)(pCurrentBullets->pBullets))->aFont;
         sal_uInt16 nMask = 1;
         OUString sBulletCharFmtName = GetBulCharFmtName();
         for(sal_uInt16 i = 0; i < aNum.GetLevelCount(); i++)
@@ -1585,7 +1585,7 @@ sal_uInt16 OutlineTypeMgr::GetNBOIndexForNumRule(SvxNumRule& aNum,sal_uInt16 /*m
                 if( eNumType == SVX_NUM_CHAR_SPECIAL)
             {
                 sal_Unicode cChar = aFmt.GetBulletChar();
-                //const Font* pFont = aFmt.GetBulletFont();
+                //const vcl::Font* pFont = aFmt.GetBulletFont();
                 sal_Unicode ccChar = _pSet->sBulletChar[0];
                 // rtl::OUString sFont = _pSet->sBulletFont;
                 if ( !((cChar == ccChar) && //pFont && sFont.compareTo(pFont->GetName()) &&
@@ -1741,7 +1741,7 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
 
         SvxNumberFormat aFmt(aNum.GetLevel(i));
         //aFmt.SetBulletFont(&pLevelSettings->aFont);
-        Font& rActBulletFont = lcl_GetDefaultBulletFont();
+        vcl::Font& rActBulletFont = lcl_GetDefaultBulletFont();
         if (pLevelSettings->nNumberType !=aFmt.GetNumberingType()) isResetSize=true;
         aFmt.SetNumberingType( pLevelSettings->nNumberType );
         sal_uInt16 nUpperLevelOrChar = (sal_uInt16)pLevelSettings->nParentNumbering;
@@ -1760,13 +1760,13 @@ bool OutlineTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uInt1
                 if(pList && pList->IsAvailable( pLevelSettings->sBulletFont ) )
                 {
                     vcl::FontInfo aInfo = pList->Get(pLevelSettings->sBulletFont,WEIGHT_NORMAL, ITALIC_NONE);
-                    Font aFont(aInfo);
+                    vcl::Font aFont(aInfo);
                     aFmt.SetBulletFont(&aFont);
                 }
                 else
                 {
                     //if it cannot be found then create a new one
-                    Font aCreateFont( pLevelSettings->sBulletFont, OUString(), Size( 0, 14 ) );
+                    vcl::Font aCreateFont( pLevelSettings->sBulletFont, OUString(), Size( 0, 14 ) );
                     aCreateFont.SetCharSet( RTL_TEXTENCODING_DONTKNOW );
                     aCreateFont.SetFamily( FAMILY_DONTKNOW );
                     aCreateFont.SetPitch( PITCH_DONTKNOW );

@@ -1004,7 +1004,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aFontName = aFont.GetFamilyName();
     }
 
-    Font aNewFont(aFontName, Size(1,1)); // Size only because CTOR.
+    vcl::Font aNewFont(aFontName, Size(1,1)); // Size only because CTOR.
     if( aChars.isEmpty() )
     {
         // Set selected font as default.

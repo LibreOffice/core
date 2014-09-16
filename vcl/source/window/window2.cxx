@@ -519,12 +519,12 @@ inline long WinFloatRound( double fVal )
     return( fVal > 0.0 ? (long) ( fVal + 0.5 ) : -(long) ( -fVal + 0.5 ) );
 }
 
-void Window::SetZoomedPointFont( const Font& rFont )
+void Window::SetZoomedPointFont( const vcl::Font& rFont )
 {
     const Fraction& rZoom = GetZoom();
     if ( rZoom.GetNumerator() != rZoom.GetDenominator() )
     {
-        Font aFont( rFont );
+        vcl::Font aFont( rFont );
         Size aSize = aFont.GetSize();
         double n = (double)aSize.Width();
         n *= (double)rZoom.GetNumerator();
@@ -548,7 +548,7 @@ void Window::SetZoomedPointFont( const Font& rFont )
                 nType = DEFAULTFONT_FIXED;
             else
                 nType = DEFAULTFONT_UI_SANS;
-            Font aTempFont = GetDefaultFont( nType, GetSettings().GetLanguageTag().getLanguageType(), 0 );
+            vcl::Font aTempFont = GetDefaultFont( nType, GetSettings().GetLanguageTag().getLanguageType(), 0 );
             aFont.SetName( aTempFont.GetName() );
             SetPointFont( aFont );
         }
@@ -581,9 +581,9 @@ void Window::SetControlFont()
     }
 }
 
-void Window::SetControlFont( const Font& rFont )
+void Window::SetControlFont( const vcl::Font& rFont )
 {
-    if ( rFont == Font() )
+    if ( rFont == vcl::Font() )
     {
         SetControlFont();
         return;
@@ -596,18 +596,18 @@ void Window::SetControlFont( const Font& rFont )
         *mpWindowImpl->mpControlFont = rFont;
     }
     else
-        mpWindowImpl->mpControlFont = new Font( rFont );
+        mpWindowImpl->mpControlFont = new vcl::Font( rFont );
 
     StateChanged( STATE_CHANGE_CONTROLFONT );
 }
 
-Font Window::GetControlFont() const
+vcl::Font Window::GetControlFont() const
 {
     if ( mpWindowImpl->mpControlFont )
         return *mpWindowImpl->mpControlFont;
     else
     {
-        Font aFont;
+        vcl::Font aFont;
         return aFont;
     }
 }
@@ -692,9 +692,9 @@ Size Window::CalcOutputSize( const Size& rWinSz ) const
     return aSz;
 }
 
-Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
+vcl::Font Window::GetDrawPixelFont( OutputDevice* pDev ) const
 {
-    Font    aFont = GetPointFont();
+    vcl::Font aFont = GetPointFont();
     Size    aFontSize = aFont.GetSize();
     MapMode aPtMapMode( MAP_POINT );
     aFontSize = pDev->LogicToPixel( aFontSize, aPtMapMode );
@@ -1478,7 +1478,7 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
 {
     if (rKey == "weight")
     {
-        Font aFont(GetControlFont());
+        vcl::Font aFont(GetControlFont());
         if (rValue == "thin")
             aFont.SetWeight(WEIGHT_THIN);
         else if (rValue == "ultralight")
@@ -1503,7 +1503,7 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
     }
     else if (rKey == "style")
     {
-        Font aFont(GetControlFont());
+        vcl::Font aFont(GetControlFont());
         if (rValue == "normal")
             aFont.SetItalic(ITALIC_NONE);
         else if (rValue == "oblique")
@@ -1514,13 +1514,13 @@ bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
     }
     else if (rKey == "underline" && toBool(rValue) == true)
     {
-        Font aFont(GetControlFont());
+        vcl::Font aFont(GetControlFont());
         aFont.SetUnderline(UNDERLINE_SINGLE);
         SetControlFont(aFont);
     }
     else if (rKey == "size")
     {
-        Font aFont(GetControlFont());
+        vcl::Font aFont(GetControlFont());
         sal_Int32 nHeight = rValue.toInt32() / 1000;
         aFont.SetHeight(nHeight);
         SetControlFont(aFont);

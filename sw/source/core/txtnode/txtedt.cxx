@@ -1056,7 +1056,7 @@ bool SwTxtNode::Spell(SwSpellArgs* pArgs)
 
 void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
     LanguageType nLang, sal_uInt16 nLangWhichId,
-    const Font *pFont,  sal_uInt16 nFontWhichId )
+    const vcl::Font *pFont,  sal_uInt16 nFontWhichId )
 {
     sal_uInt16 aRanges[] = {
             nLangWhichId, nLangWhichId,

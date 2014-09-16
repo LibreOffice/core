@@ -239,7 +239,7 @@ bool OutputDevice::ImplDrawRotateText( SalLayout& rSalLayout )
     if( !pVDev->SetOutputSizePixel( aBoundRect.GetSize() ) )
         return false;
 
-    Font aFont( GetFont() );
+    vcl::Font aFont( GetFont() );
     aFont.SetOrientation( 0 );
     aFont.SetSize( Size( mpFontEntry->maFontSelData.mnWidth, mpFontEntry->maFontSelData.mnHeight ) );
     pVDev->SetFont( aFont );
@@ -2460,7 +2460,7 @@ bool OutputDevice::GetTextBoundRect( Rectangle& rRect,
     // fall back to bitmap method to get the bounding rectangle,
     // so we need a monochrome virtual device with matching font
     VirtualDevice aVDev( 1 );
-    Font aFont( GetFont() );
+    vcl::Font aFont( GetFont() );
     aFont.SetShadow( false );
     aFont.SetOutline( false );
     aFont.SetRelief( RELIEF_NONE );
@@ -2682,7 +2682,7 @@ bool OutputDevice::GetTextOutlines( ::basegfx::B2DPolyPolygonVector& rVector,
 
     VirtualDevice aVDev(1);
 
-    Font aFont(GetFont());
+    vcl::Font aFont(GetFont());
     aFont.SetShadow(false);
     aFont.SetOutline(false);
     aFont.SetRelief(RELIEF_NONE);

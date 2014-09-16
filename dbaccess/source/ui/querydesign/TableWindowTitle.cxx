@@ -48,7 +48,7 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
     SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
     SetTextColor(aSystemStyle.GetButtonTextColor());
 
-    Font aFont( GetFont() );
+    vcl::Font aFont( GetFont() );
     aFont.SetTransparent( true );
     SetFont( aFont );
 }
@@ -173,7 +173,7 @@ void OTableWindowTitle::StateChanged( StateChangedType nType )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-        Font aFont = rStyleSettings.GetGroupFont();
+        vcl::Font aFont = rStyleSettings.GetGroupFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );

@@ -305,7 +305,7 @@ DayOfWeek Calendar::ImplGetWeekStart() const
 
 
 
-void Calendar::ImplGetWeekFont( Font& rFont ) const
+void Calendar::ImplGetWeekFont( vcl::Font& rFont ) const
 {
     // weeknumber is displayed in WEEKNUMBER_HEIGHT%-Fontheight
     Size aFontSize = rFont.GetSize();
@@ -331,12 +331,12 @@ void Calendar::ImplFormat()
 
         OUString a99Text("99");
 
-        Font aOldFont = GetFont();
+        vcl::Font aOldFont = GetFont();
 
         // Wochenanzeige beruecksichtigen
         if ( mnWinStyle & WB_WEEKNUMBER )
         {
-            Font aTempFont = aOldFont;
+            vcl::Font aTempFont = aOldFont;
             ImplGetWeekFont( aTempFont );
             SetFont( aTempFont );
             mnWeekWidth = GetTextWidth( a99Text )+WEEKNUMBER_OFFX;
@@ -347,7 +347,7 @@ void Calendar::ImplFormat()
 
         if ( mnWinStyle & WB_BOLDTEXT )
         {
-            Font aFont = aOldFont;
+            vcl::Font aFont = aOldFont;
             if ( aFont.GetWeight() < WEIGHT_BOLD )
                 aFont.SetWeight( WEIGHT_BOLD );
             else
@@ -941,8 +941,8 @@ void Calendar::ImplDraw( bool bPaint )
                 else
                     Erase( Rectangle( nDayX-mnWeekWidth-WEEKNUMBER_OFFX, nDeltaY, nDayX-WEEKNUMBER_OFFX-1, nDeltaY+nMonthHeight ) );
 
-                Font aOldFont = GetFont();
-                Font aTempFont = aOldFont;
+                vcl::Font aOldFont = GetFont();
+                vcl::Font aTempFont = aOldFont;
                 ImplGetWeekFont( aTempFont );
                 SetFont( aTempFont );
                 nDayX -= mnWeekWidth;
@@ -2126,14 +2126,14 @@ void Calendar::EndSelection()
 Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
                                     long nCalcLines ) const
 {
-    OUString a99Text("99");
-    Font        aOldFont = GetFont();
+    OUString  a99Text("99");
+    vcl::Font aOldFont = GetFont();
 
     // take display of week into account
     long nWeekWidth;
     if ( mnWinStyle & WB_WEEKNUMBER )
     {
-        Font aTempFont = aOldFont;
+        vcl::Font aTempFont = aOldFont;
         ImplGetWeekFont( aTempFont );
         ((Calendar*)this)->SetFont( aTempFont );
         nWeekWidth = GetTextWidth( a99Text )+WEEKNUMBER_OFFX;
@@ -2144,7 +2144,7 @@ Size Calendar::CalcWindowSizePixel( long nCalcMonthPerLine,
 
     if ( mnWinStyle & WB_BOLDTEXT )
     {
-        Font aFont = aOldFont;
+        vcl::Font aFont = aOldFont;
         if ( aFont.GetWeight() < WEIGHT_BOLD )
             aFont.SetWeight( WEIGHT_BOLD );
         else

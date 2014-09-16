@@ -745,7 +745,7 @@ void DbCellControl::ImplInitWindow( Window& rParent, const InitWindowFacet _eIni
             pWindows[i]->SetZoom( rParent.GetZoom() );
 
             const StyleSettings& rStyleSettings = pWindows[i]->GetSettings().GetStyleSettings();
-            Font aFont = rStyleSettings.GetFieldFont();
+            vcl::Font aFont = rStyleSettings.GetFieldFont();
             aFont.SetTransparent( isTransparent() );
 
             if ( rParent.IsControlFont() )
@@ -978,7 +978,7 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect )
         m_pPainter->SetTextColor( _rDev.GetTextColor() );
         m_pPainter->SetTextFillColor( _rDev.GetTextColor() );
 
-        Font aFont( _rDev.GetFont() );
+        vcl::Font aFont( _rDev.GetFont() );
         aFont.SetTransparent( true );
         m_pPainter->SetFont( aFont );
 

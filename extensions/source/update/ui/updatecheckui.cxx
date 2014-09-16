@@ -846,8 +846,8 @@ void BubbleWindow::Paint( const Rectangle& )
 
     DrawImage( Point( BUBBLE_BORDER, BUBBLE_BORDER + TIP_HEIGHT ), maBubbleImage );
 
-    Font aOldFont = GetFont();
-    Font aBoldFont = aOldFont;
+    vcl::Font aOldFont = GetFont();
+    vcl::Font aBoldFont = aOldFont;
     aBoldFont.SetWeight( WEIGHT_BOLD );
 
     SetFont( aBoldFont );
@@ -921,8 +921,8 @@ void BubbleWindow::RecalcTextRects()
 {
     Size aTotalSize;
     bool bFinished = false;
-    Font aOldFont = GetFont();
-    Font aBoldFont = aOldFont;
+    vcl::Font aOldFont = GetFont();
+    vcl::Font aBoldFont = aOldFont;
 
     aBoldFont.SetWeight( WEIGHT_BOLD );
 

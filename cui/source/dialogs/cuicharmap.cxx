@@ -88,14 +88,14 @@ SvxCharacterMap::SvxCharacterMap( Window* pParent, bool bOne_, const SfxItemSet*
     SFX_ITEMSET_ARG( pSet, pFontNameItem, SfxStringItem, SID_FONT_NAME, false );
     if ( pFontItem )
     {
-        Font aTmpFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetSize() );
+        vcl::Font aTmpFont( pFontItem->GetFamilyName(), pFontItem->GetStyleName(), GetCharFont().GetSize() );
         aTmpFont.SetCharSet( pFontItem->GetCharSet() );
         aTmpFont.SetPitch( pFontItem->GetPitch() );
         SetCharFont( aTmpFont );
     }
     else if ( pFontNameItem )
     {
-        Font aTmpFont( GetCharFont() );
+        vcl::Font aTmpFont( GetCharFont() );
         aTmpFont.SetName( pFontNameItem->GetValue() );
         SetCharFont( aTmpFont );
     }
@@ -151,7 +151,7 @@ short SvxCharacterMap::Execute()
         if ( pSet )
         {
             const SfxItemPool* pPool = pSet->GetPool();
-            const Font& rFont( GetCharFont() );
+            const vcl::Font& rFont( GetCharFont() );
             pSet->Put( SfxStringItem( pPool->GetWhich(SID_CHARMAP), GetCharacters() ) );
             pSet->Put( SvxFontItem( rFont.GetFamily(), rFont.GetName(),
                 rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), pPool->GetWhich(SID_ATTR_CHAR_FONT) ) );
@@ -195,7 +195,7 @@ void SvxShowText::Paint( const Rectangle& )
 
     bool bGotBoundary = true;
     bool bShrankFont = false;
-    Font aOrigFont(GetFont());
+    vcl::Font aOrigFont(GetFont());
     Size aFontSize(aOrigFont.GetSize());
     Rectangle aBoundRect;
 
@@ -212,7 +212,7 @@ void SvxShowText::Paint( const Rectangle& )
         long nTextWidth = aBoundRect.GetWidth();
         if (nAvailWidth > nTextWidth)
             break;
-        Font aFont(aOrigFont);
+        vcl::Font aFont(aOrigFont);
         aFontSize.Height() = nFontHeight;
         aFont.SetSize(aFontSize);
         Control::SetFont(aFont);
@@ -263,10 +263,10 @@ void SvxShowText::Paint( const Rectangle& )
 
 
 
-void SvxShowText::SetFont( const Font& rFont )
+void SvxShowText::SetFont( const vcl::Font& rFont )
 {
     long nWinHeight = GetOutputSizePixel().Height();
-    Font aFont = rFont;
+    vcl::Font aFont = rFont;
     aFont.SetWeight( WEIGHT_NORMAL );
     aFont.SetAlign( ALIGN_TOP );
     aFont.SetSize( PixelToLogic( Size( 0, nWinHeight/2 ) ) );
@@ -279,7 +279,7 @@ void SvxShowText::SetFont( const Font& rFont )
 
 Size SvxShowText::GetOptimalSize() const
 {
-    const Font &rFont = GetFont();
+    const vcl::Font &rFont = GetFont();
     const Size rFontSize = rFont.GetSize();
     long nWinHeight = LogicToPixel(rFontSize).Height() * 2;
     return Size( GetTextWidth( GetText() ) + 2 * 12, nWinHeight );
@@ -379,11 +379,11 @@ void SvxCharacterMap::init()
 
 
 
-void SvxCharacterMap::SetCharFont( const Font& rFont )
+void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
 {
     // first get the underlying info in order to get font names
     // like "Times New Roman;Times" resolved
-    Font aTmp( GetFontMetric( rFont ) );
+    vcl::Font aTmp( GetFontMetric( rFont ) );
 
     if ( m_pFontLB->GetEntryPos( aTmp.GetName() ) == LISTBOX_ENTRY_NOTFOUND )
         return;

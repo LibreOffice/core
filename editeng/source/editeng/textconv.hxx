@@ -90,7 +90,7 @@ protected:
 
     void SetLanguageAndFont( const ESelection &rESel,
                             LanguageType nLang, sal_uInt16 nLangWhichId,
-                            const Font *pFont,  sal_uInt16 nFontWhichId );
+                            const vcl::Font *pFont,  sal_uInt16 nFontWhichId );
 
 
 public:
@@ -98,7 +98,7 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::lang::Locale& rSourceLocale,
             const ::com::sun::star::lang::Locale& rTargetLocale,
-            const Font* pTargetFont,
+            const vcl::Font* pTargetFont,
             sal_Int32 nOptions,
             bool bIsInteractive,
             bool bIsStart, EditView* pView );

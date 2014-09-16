@@ -97,7 +97,7 @@ rtl::Reference<FuPoor> FuHangulHanjaConversion::Create( ViewShell* pViewSh, ::sd
  * Search and replace
  */
 void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_Int16 nTargetLanguage,
-        const Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
+        const vcl::Font *pTargetFont, sal_Int32 nOptions, bool bIsInteractive )
 {
 
     mpView->BegUndo(SD_RESSTR(STR_UNDO_HANGULHANJACONVERSION));
@@ -148,7 +148,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
         mpView->EndUndo();
 }
 
-void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Font *pTargetFont )
+void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const vcl::Font *pTargetFont )
 {
     if( !mpDoc )
         return;
@@ -241,7 +241,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
                     if( !bCommonTerms )
                         nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 
-                    Font aTargetFont = OutputDevice::GetDefaultFont(
+                    vcl::Font aTargetFont = OutputDevice::GetDefaultFont(
                                         DEFAULTFONT_CJK_PRESENTATION,
                                         nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
 

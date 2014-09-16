@@ -370,7 +370,7 @@ void Writer::setClipping( const PolyPolygon* pClipPolyPolygon )
 //  differences in font that actually require different glyphs to be defined,
 //  and some that don't.  This function is meant to capture all the differences
 //  that we care about.
-bool compare_fonts_for_me(const Font& rFont1, const Font& rFont2)
+bool compare_fonts_for_me(const vcl::Font& rFont1, const vcl::Font& rFont2)
 {
     return rFont1.GetName() == rFont2.GetName() &&
             rFont1.GetWeight() == rFont2.GetWeight() &&
@@ -382,14 +382,14 @@ bool compare_fonts_for_me(const Font& rFont1, const Font& rFont2)
 
 
 
-FlashFont& Writer::Impl_getFont( const Font& rFont )
+FlashFont& Writer::Impl_getFont( const vcl::Font& rFont )
 {
     FontMap::iterator aIter( maFonts.begin() );
     const FontMap::iterator aEnd( maFonts.end() );
 
     for(; aIter != aEnd; ++aIter)
     {
-        const Font tempFont = (*aIter)->getFont();
+        const vcl::Font tempFont = (*aIter)->getFont();
         if( compare_fonts_for_me(tempFont, rFont) )
         {
             return **aIter;
@@ -553,10 +553,10 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
             }
         }
 
-        Font aOldFont( mpVDev->GetFont() );
+        vcl::Font aOldFont( mpVDev->GetFont() );
         Point               aBaseLinePos( rPos );
 
-        Font aFont(aOldFont);
+        vcl::Font aFont(aOldFont);
         short nOrientation = aFont.GetOrientation();
         aFont.SetOrientation( 0 );
         aFont.SetUnderline(UNDERLINE_NONE);
@@ -603,7 +603,7 @@ void Writer::Impl_writeText( const Point& rPos, const OUString& rText, const lon
         // scale width if we have a stretched text
         if( 0 != aFont.GetSize().Width() )
         {
-            Font aTmpFont( aFont );
+            vcl::Font aTmpFont( aFont );
             aTmpFont.SetWidth(0);
             mpVDev->SetFont( aTmpFont );
 

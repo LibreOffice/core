@@ -370,7 +370,7 @@ SwNumRulesWithName::_SwNumFmtGlobal::_SwNumFmtGlobal( SvStream& rStream,
 
         if( !aName.isEmpty() )
         {
-            Font aFont( static_cast<FontFamily>(nFamily), Size( nWidth, nHeight ) );
+            vcl::Font aFont( static_cast<FontFamily>(nFamily), Size( nWidth, nHeight ) );
             aFont.SetName( aName );
             aFont.SetCharSet( (rtl_TextEncoding)nCharSet );
             aFont.SetPitch( (FontPitch)nPitch );
@@ -451,7 +451,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
         sal_uInt16 nFamily = FAMILY_DONTKNOW, nCharSet = 0, nPitch = 0;
         short  nWidth = 0, nHeight = 0;
 
-        const Font* pFnt = aFmt.GetBulletFont();
+        const vcl::Font* pFnt = aFmt.GetBulletFont();
         if( pFnt )
         {
             aName = pFnt->GetName();

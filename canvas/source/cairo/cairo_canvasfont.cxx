@@ -41,7 +41,7 @@ namespace cairocanvas
                             const geometry::Matrix2D&                       rFontMatrix,
                             const SurfaceProviderRef&                       rDevice ) :
         CanvasFont_Base( m_aMutex ),
-        maFont( Font( rFontRequest.FontDescription.FamilyName,
+        maFont( vcl::Font( rFontRequest.FontDescription.FamilyName,
                       rFontRequest.FontDescription.StyleName,
                       Size( 0, ::basegfx::fround(rFontRequest.CellSize) ) ) ),
         maFontRequest( rFontRequest ),
@@ -157,7 +157,7 @@ namespace cairocanvas
         return aRet;
     }
 
-    ::Font CanvasFont::getVCLFont() const
+    vcl::Font CanvasFont::getVCLFont() const
     {
         return *maFont;
     }

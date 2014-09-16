@@ -43,7 +43,7 @@ awt::Size lcl_getOptimalWidth(StyleSheetTablePtr pStyleSheet, OUString& rDefault
     pOut->Push(PUSH_FONT | PUSH_MAPMODE);
 
     PropertyMapPtr pDefaultCharProps = pStyleSheet->GetDefaultCharProps();
-    Font aFont(pOut->GetFont());
+    vcl::Font aFont(pOut->GetFont());
     boost::optional<PropertyMap::Property> aFontName = pDefaultCharProps->getProperty(PROP_CHAR_FONT_NAME);
     if (aFontName)
         aFont.SetName(aFontName->second.get<OUString>());

@@ -45,8 +45,8 @@ namespace svt
         virtual void        GetFocus() SAL_OVERRIDE;
         virtual void        LoseFocus() SAL_OVERRIDE;
 
-        void                DeactivateHyperMode(Font aFont, const Color aColor);
-        void                ActivateHyperMode(Font aFont, const Color aColor);
+        void                DeactivateHyperMode(vcl::Font aFont, const Color aColor);
+        void                ActivateHyperMode(vcl::Font aFont, const Color aColor);
 
     protected:
         void                implInit();

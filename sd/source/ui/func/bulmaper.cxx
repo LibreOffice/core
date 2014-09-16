@@ -62,7 +62,7 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             long nWeightID = SID_ATTR_CHAR_WEIGHT;
             long nPostureID = SID_ATTR_CHAR_POSTURE;
 
-            Font aMyFont;
+            vcl::Font aMyFont;
             const SvxFontItem& rFItem =
                 (SvxFontItem&)rSet.Get(GetWhich( (sal_uInt16)nFontID ));
             aMyFont.SetFamily(rFItem.GetFamily());

@@ -173,7 +173,7 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
         aTitleBox.Left() += gnLeftIconSpace + maIcon.GetSizePixel().Width() + gnRightIconSpace;
     }
 
-    Font aFont(GetFont());
+    vcl::Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_BOLD);
     SetFont(aFont);
 
@@ -194,7 +194,7 @@ void TitleBar::PaintFocus (const Rectangle& rFocusBox)
 {
     Push(PUSH_FONT | PUSH_TEXTCOLOR);
 
-    Font aFont(GetFont());
+    vcl::Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_BOLD);
     SetFont(aFont);
 

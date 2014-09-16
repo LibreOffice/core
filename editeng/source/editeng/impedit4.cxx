@@ -1551,7 +1551,7 @@ bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
 
 
 void ImpEditEngine::Convert( EditView* pEditView,
-        LanguageType nSrcLang, LanguageType nDestLang, const Font *pDestFont,
+        LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont,
         sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc )
 {
     // modified version of ImpEditEngine::Spell
@@ -1641,7 +1641,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
 void ImpEditEngine::SetLanguageAndFont(
     const ESelection &rESel,
     LanguageType nLang, sal_uInt16 nLangWhichId,
-    const Font *pFont,  sal_uInt16 nFontWhichId )
+    const vcl::Font *pFont,  sal_uInt16 nFontWhichId )
 {
     ESelection aOldSel = pActiveView->GetSelection();
     pActiveView->SetSelection( rESel );
@@ -1674,7 +1674,7 @@ void ImpEditEngine::SetLanguageAndFont(
 void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
         EditView* pEditView, LanguageType nSrcLang, const ESelection &rConvRange,
         bool bAllowImplicitChangesForNotConvertibleText,
-        LanguageType nTargetLang, const Font *pTargetFont  )
+        LanguageType nTargetLang, const vcl::Font *pTargetFont  )
 {
     // modified version of ImpEditEngine::ImpSpell
 

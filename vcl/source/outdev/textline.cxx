@@ -36,7 +36,7 @@
 #define UNDERLINE_LAST      UNDERLINE_BOLDWAVE
 #define STRIKEOUT_LAST      STRIKEOUT_X
 
-bool OutputDevice::ImplIsUnderlineAbove( const Font& rFont )
+bool OutputDevice::ImplIsUnderlineAbove( const vcl::Font& rFont )
 {
     if ( !rFont.IsVertical() )
         return false;

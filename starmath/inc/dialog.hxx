@@ -45,7 +45,7 @@ class SubsetMap;
 
 /**************************************************************************/
 
-void SetFontStyle(const OUString &rStyleName, Font &rFont);
+void SetFontStyle(const OUString &rStyleName, vcl::Font &rFont);
 
 /**************************************************************************/
 
@@ -84,7 +84,7 @@ public:
     {
     }
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
-    void SetFont(const Font& rFont);
+    void SetFont(const vcl::Font& rFont);
 };
 
 class SmFontDialog : public ModalDialog
@@ -95,7 +95,7 @@ class SmFontDialog : public ModalDialog
     CheckBox*       m_pItalicCheckBox;
     SmShowFont*     m_pShowFont;
 
-    Font    Face;
+    vcl::Font       Face;
 
     DECL_LINK(FontSelectHdl, ComboBox *);
     DECL_LINK(FontModifyHdl, ComboBox *);
@@ -108,8 +108,8 @@ class SmFontDialog : public ModalDialog
 public:
     SmFontDialog(Window * pParent, OutputDevice *pFntListDevice, bool bHideCheckboxes);
 
-    const Font& GetFont() const { return Face; }
-    void        SetFont(const Font &rFont);
+    const vcl::Font& GetFont() const { return Face; }
+    void        SetFont(const vcl::Font &rFont);
 };
 
 /**************************************************************************/
@@ -313,7 +313,7 @@ class SmShowSymbol : public Control
     virtual void    MouseButtonDown(const MouseEvent& rMEvt) SAL_OVERRIDE;
     virtual void    Resize() SAL_OVERRIDE;
 
-    void setFontSize(Font &rFont) const;
+    void setFontSize(vcl::Font &rFont) const;
 
 public:
     SmShowSymbol(Window *pParent, WinBits nStyle)
@@ -382,7 +382,7 @@ public:
     }
 
     void    SetSymbol( const SmSym *pSym );
-    void    SetSymbol( sal_UCS4 cChar, const Font &rFont );
+    void    SetSymbol( sal_UCS4 cChar, const vcl::Font &rFont );
 };
 
 

@@ -175,7 +175,7 @@ namespace svt
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         Color aTextColor = rStyleSettings.GetFieldTextColor();
-        Font aFont = GetFont( );
+        vcl::Font aFont = GetFont( );
         aFont.SetColor( aTextColor );
         aFont.SetWeight( WEIGHT_BOLD );
         aFont.SetUnderline( UNDERLINE_SINGLE );
@@ -667,7 +667,7 @@ namespace svt
             const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
             SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
             Color aTextColor = rStyleSettings.GetFieldTextColor();
-            Font aFont = GetFont();
+            vcl::Font aFont = GetFont();
             aFont.SetColor( aTextColor );
             SetFont( aFont );
             RoadmapTypes::ItemId curItemID = GetCurrentRoadmapItemID();

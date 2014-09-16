@@ -128,22 +128,22 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     }
 }
 
-::boost::shared_ptr<Font> Theme::GetFont (
+::boost::shared_ptr<vcl::Font> Theme::GetFont (
     const FontType eType,
     const OutputDevice& rDevice)
 {
-    ::boost::shared_ptr<Font> pFont;
+    ::boost::shared_ptr<vcl::Font> pFont;
 
     switch (eType)
     {
         case Font_PageNumber:
-            pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
+            pFont.reset(new vcl::Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
             pFont->SetTransparent(true);
             pFont->SetWeight(WEIGHT_BOLD);
             break;
 
         case Font_PageCount:
-            pFont.reset(new Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
+            pFont.reset(new vcl::Font(Application::GetSettings().GetStyleSettings().GetAppFont()));
             pFont->SetTransparent(true);
             pFont->SetWeight(WEIGHT_NORMAL);
             {

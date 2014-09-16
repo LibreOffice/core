@@ -119,7 +119,7 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
 
 void RecentDocsView::SetMessageFont()
 {
-    Font aFont(GetFont());
+    vcl::Font aFont(GetFont());
     aFont.SetHeight(aFont.GetHeight()*1.3);
     SetFont(aFont);
 }
@@ -204,7 +204,7 @@ void RecentDocsView::Reload()
     // Set preferred width
     if (mFilteredItemList.empty())
     {
-        Font aOldFont(GetFont());
+        vcl::Font aOldFont(GetFont());
         SetMessageFont();
         set_width_request(std::max(GetTextWidth(maWelcomeLine1), GetTextWidth(maWelcomeLine2)));
         SetFont(aOldFont);
@@ -261,7 +261,7 @@ void RecentDocsView::Paint( const Rectangle &aRect )
     if ( mItemList.size() == 0 )
     {
         // No recent files to be shown yet. Show a welcome screen.
-        Font aOldFont(GetFont());
+        vcl::Font aOldFont(GetFont());
         SetMessageFont();
 
         long nTextHeight = GetTextHeight();
@@ -299,7 +299,7 @@ void RecentDocsView::LoseFocus()
 
 void RecentDocsView::Clear()
 {
-    Font aOldFont(GetFont());
+    vcl::Font aOldFont(GetFont());
     SetMessageFont();
     set_width_request(std::max(GetTextWidth(maWelcomeLine1), GetTextWidth(maWelcomeLine2)));
     SetFont(aOldFont);

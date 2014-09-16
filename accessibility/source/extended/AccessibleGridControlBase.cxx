@@ -426,7 +426,7 @@ sal_Int32 SAL_CALL AccessibleGridControlBase::getForeground(  ) throw (::com::su
             nColor = pInst->GetControlForeground().GetColor();
     else
     {
-        Font aFont;
+        vcl::Font aFont;
         if ( pInst->IsControlFont() )
             aFont = pInst->GetControlFont();
         else

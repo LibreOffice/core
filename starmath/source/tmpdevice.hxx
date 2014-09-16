@@ -35,7 +35,7 @@ public:
     SmTmpDevice(OutputDevice &rTheDev, bool bUseMap100th_mm);
     ~SmTmpDevice()  { rOutDev.Pop(); }
 
-    void SetFont(const Font &rNewFont);
+    void SetFont(const vcl::Font &rNewFont);
 
     void SetLineColor( const Color& rColor )    { rOutDev.SetLineColor( Impl_GetColor(rColor) ); }
     void SetFillColor( const Color& rColor )    { rOutDev.SetFillColor( Impl_GetColor(rColor) ); }

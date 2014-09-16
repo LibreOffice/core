@@ -1325,9 +1325,9 @@ class VCL_DLLPUBLIC MetaFontAction : public MetaAction
 {
 private:
 
-    Font                maFont;
+    vcl::Font           maFont;
 
-    virtual bool    Compare( const MetaAction& ) const SAL_OVERRIDE;
+    virtual bool        Compare( const MetaAction& ) const SAL_OVERRIDE;
 
 public:
                         MetaFontAction();
@@ -1339,11 +1339,11 @@ public:
     virtual void        Write( SvStream& rOStm, ImplMetaWriteData* pData ) SAL_OVERRIDE;
     virtual void        Read( SvStream& rIStm, ImplMetaReadData* pData ) SAL_OVERRIDE;
 
-    explicit            MetaFontAction( const Font& );
+    explicit            MetaFontAction( const vcl::Font& );
 
     virtual void        Scale( double fScaleX, double fScaleY ) SAL_OVERRIDE;
 
-    const Font&         GetFont() const { return maFont; }
+    const vcl::Font&    GetFont() const { return maFont; }
 };
 
 class VCL_DLLPUBLIC MetaPushAction : public MetaAction

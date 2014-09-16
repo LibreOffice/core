@@ -425,7 +425,7 @@ sal_uInt32 swf::getFixed( double fValue )
 
 
 /** constructs a new flash font for the given VCL Font */
-FlashFont::FlashFont( const Font& rFont, sal_uInt16 nId )
+FlashFont::FlashFont( const vcl::Font& rFont, sal_uInt16 nId )
 : maFont( rFont ), mnNextIndex(0), mnId( nId )
 {
 }
@@ -452,8 +452,8 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
 
     maGlyphIndex[nChar] = mnNextIndex;
 
-    Font aOldFont( pVDev->GetFont() );
-    Font aNewFont( aOldFont );
+    vcl::Font aOldFont( pVDev->GetFont() );
+    vcl::Font aNewFont( aOldFont );
     aNewFont.SetAlign( ALIGN_BASELINE );
     pVDev->SetFont( aNewFont );
     aOldFont.SetOrientation(0);

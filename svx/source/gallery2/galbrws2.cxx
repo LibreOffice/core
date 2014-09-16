@@ -438,7 +438,7 @@ GalleryBrowser2::GalleryBrowser2( Window* pParent, const ResId& rResId, Gallery*
 
     Image       aDummyImage;
     const Link  aSelectHdl( LINK( this, GalleryBrowser2, SelectObjectHdl ) );
-    Font        aInfoFont( maInfoBar.GetControlFont() );
+    vcl::Font   aInfoFont( maInfoBar.GetControlFont() );
 
     maMiscOptions.AddListenerLink( LINK( this, GalleryBrowser2, MiscHdl ) );
 
@@ -491,7 +491,7 @@ GalleryBrowser2::~GalleryBrowser2()
 
 void GalleryBrowser2::InitSettings()
 {
-    Font  aInfoFont( maInfoBar.GetControlFont() );
+    vcl::Font  aInfoFont( maInfoBar.GetControlFont() );
 
     aInfoFont.SetWeight( WEIGHT_BOLD );
     aInfoFont.SetColor( GALLERY_FG_COLOR );

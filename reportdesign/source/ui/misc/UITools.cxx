@@ -199,7 +199,7 @@ void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32
 namespace
 {
 
-    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat, awt::FontDescriptor& _out_rControlFont ,sal_uInt16 _nWichFont)
+    vcl::Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat, awt::FontDescriptor& _out_rControlFont ,sal_uInt16 _nWichFont)
     {
         if ( !_rxReportControlFormat.is() )
             throw uno::RuntimeException();
@@ -218,23 +218,23 @@ namespace
 
         }
 
-        Font aDefaultFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
+        vcl::Font aDefaultFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
         return VCLUnoHelper::CreateFont( _out_rControlFont, aDefaultFont );
     }
 
 
-    Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,sal_uInt16 _nWhich )
+    vcl::Font lcl_getReportControlFont( const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,sal_uInt16 _nWhich )
     {
         awt::FontDescriptor aAwtFont;
         return lcl_getReportControlFont( _rxReportControlFormat, aAwtFont, _nWhich );
     }
 
-    const Font lcl_setFont(const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
+    const vcl::Font lcl_setFont(const uno::Reference<report::XReportControlFormat >& _rxReportControlFormat,
         SfxItemSet& _rItemSet,sal_uInt16 _nWhich,sal_uInt16 _nFont, sal_uInt16 _nFontHeight,sal_uInt16 _nLanguage,sal_uInt16 _nPosture, sal_uInt16 _nWeight)
     {
         // fill it
         awt::FontDescriptor aControlFont;
-        const Font aFont( lcl_getReportControlFont( _rxReportControlFormat, aControlFont,_nWhich ) );
+        const vcl::Font aFont( lcl_getReportControlFont( _rxReportControlFormat, aControlFont,_nWhich ) );
 
         SvxFontItem aFontItem(_nFont);
         aFontItem.PutValue( uno::makeAny( aControlFont ) );
@@ -329,7 +329,7 @@ namespace
         uno::Reference< beans::XPropertySet > xSet(_rxReportControlFormat,uno::UNO_QUERY_THROW);
 
         // fill it
-        const Font aFont( lcl_setFont(_rxReportControlFormat, _rItemSet,WESTERN,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_LANGUAGE,ITEMID_POSTURE,ITEMID_WEIGHT ) );
+        const vcl::Font aFont( lcl_setFont(_rxReportControlFormat, _rItemSet,WESTERN,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_LANGUAGE,ITEMID_POSTURE,ITEMID_WEIGHT ) );
 
         _rItemSet.Put(SvxShadowedItem(_rxReportControlFormat->getCharShadowed(),ITEMID_SHADOWED));
         _rItemSet.Put(SvxWordLineModeItem(aFont.IsWordLineMode(),ITEMID_WORDLINEMODE));
@@ -376,10 +376,10 @@ namespace
     }
 
 
-    void lcl_initAwtFont( const Font& _rOriginalFont, const SfxItemSet& _rItemSet, awt::FontDescriptor& _out_rAwtFont,
+    void lcl_initAwtFont( const vcl::Font& _rOriginalFont, const SfxItemSet& _rItemSet, awt::FontDescriptor& _out_rAwtFont,
         sal_uInt16 _nFont, sal_uInt16 _nFontHeight,sal_uInt16 _nPosture, sal_uInt16 _nWeight)
     {
-        Font aNewFont( _rOriginalFont );
+        vcl::Font aNewFont( _rOriginalFont );
         const SfxPoolItem* pItem( NULL );
         if ( SfxItemState::SET == _rItemSet.GetItemState( _nFont,true,&pItem) && pItem->ISA(SvxFontItem))
         {
@@ -441,7 +441,7 @@ namespace
     }
 
 
-    void lcl_itemsToCharProperties( const Font& _rOriginalControlFont,const Font& _rOriginalControlFontAsian,const Font& _rOriginalControlFontComplex, const SfxItemSet& _rItemSet, uno::Sequence< beans::NamedValue >& _out_rProperties )
+    void lcl_itemsToCharProperties( const vcl::Font& _rOriginalControlFont,const vcl::Font& _rOriginalControlFontAsian,const vcl::Font& _rOriginalControlFontComplex, const SfxItemSet& _rItemSet, uno::Sequence< beans::NamedValue >& _out_rProperties )
     {
         const SfxPoolItem* pItem( NULL );
 

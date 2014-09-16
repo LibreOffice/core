@@ -506,7 +506,7 @@ sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 
 
 
-void SvxShowCharSet::SetFont( const Font& rFont )
+void SvxShowCharSet::SetFont( const vcl::Font& rFont )
 {
     // save last selected unicode
     if( nSelectedIndex >= 0 )
@@ -516,7 +516,7 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     long nSBWidth = aVscrollSB.GetOptimalSize().Width();
     aSize.Width() -= nSBWidth;
 
-    Font aFont = rFont;
+    vcl::Font aFont = rFont;
     aFont.SetWeight( WEIGHT_LIGHT );
     aFont.SetAlign( ALIGN_TOP );
     int nFontHeight = (aSize.Height() - 5) * 2 / (3 * ROW_COUNT);

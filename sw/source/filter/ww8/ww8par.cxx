@@ -5342,7 +5342,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
                             {
                                 Graphic aGraphic = vecBulletGrf[nGrfBulletCP]->GetGrf();
                                 SvxBrushItem aBrush(aGraphic, GPOS_AREA, SID_ATTR_BRUSH);
-                                Font aFont = numfunc::GetDefBulletFont();
+                                vcl::Font aFont = numfunc::GetDefBulletFont();
                                 int nHeight = aFont.GetHeight() * 12;
                                 Size aPrefSize( aGraphic.GetPrefSize());
                                 if (aPrefSize.Height() * aPrefSize.Width() != 0 )

@@ -368,7 +368,7 @@ void ImpEditEngine::FormatDoc()
     long nY = 0;
     bool bGrow = false;
 
-    Font aOldFont( GetRefDevice()->GetFont() );
+    vcl::Font aOldFont( GetRefDevice()->GetFont() );
 
     // Here already, so that not always in CreateLines...
     bool bMapChanged = ImpCheckRefMapMode();
@@ -2857,7 +2857,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
     Point aRedLineTmpPos;
     DBG_ASSERT( GetParaPortions().Count(), "No ParaPortion?!" );
     SvxFont aTmpFont( GetParaPortions()[0]->GetNode()->GetCharAttribs().GetDefFont() );
-    Font aOldFont( pOutDev->GetFont() );
+    vcl::Font aOldFont( pOutDev->GetFont() );
     vcl::PDFExtOutDevData* pPDFExtOutDevData = PTR_CAST( vcl::PDFExtOutDevData, pOutDev->GetExtOutDevData() );
 
     // In the case of rotated text is aStartPos considered TopLeft because
@@ -3186,7 +3186,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
 
                                     pTmpDXArray.reset(new long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
-                                    Font _aOldFont( GetRefDevice()->GetFont() );
+                                    vcl::Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, pTmpDXArray.get() );
                                     if ( aStatus.DoRestoreFont() )
@@ -3216,7 +3216,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                     // crash when accessing 0 pointer in pDXArray
                                     pTmpDXArray.reset(new long[ aText.getLength() ]);
                                     pDXArray = pTmpDXArray.get();
-                                    Font _aOldFont( GetRefDevice()->GetFont() );
+                                    vcl::Font _aOldFont( GetRefDevice()->GetFont() );
                                     aTmpFont.SetPhysFont( GetRefDevice() );
                                     aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), pTmpDXArray.get() );
                                     if ( aStatus.DoRestoreFont() )
@@ -3925,7 +3925,7 @@ void ImpEditEngine::ShowParagraph( sal_Int32 nParagraph, bool bShow )
             {
                 if ( pPPortion->IsInvalid() )
                 {
-                    Font aOldFont( GetRefDevice()->GetFont() );
+                    vcl::Font aOldFont( GetRefDevice()->GetFont() );
                     CreateLines( nParagraph, 0 );   // 0: No TextRanger
                     if ( aStatus.DoRestoreFont() )
                         GetRefDevice()->SetFont( aOldFont );

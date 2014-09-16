@@ -847,9 +847,9 @@ static long lcl_DrawBullet(VirtualDevice* pVDev,
             const SwNumFmt& rFmt, long nXStart,
             long nYStart, const Size& rSize)
 {
-    Font aTmpFont(pVDev->GetFont());
+    vcl::Font aTmpFont(pVDev->GetFont());
 
-    Font aFont(*rFmt.GetBulletFont());
+    vcl::Font aFont(*rFmt.GetBulletFont());
     aFont.SetSize(rSize);
     aFont.SetTransparent(true);
     pVDev->SetFont( aFont );

@@ -897,7 +897,7 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
                 case( META_FONT_ACTION ):
                 {
                     MetaFontAction* pAct = (MetaFontAction*) pAction;
-                    Font            aFont( pAct->GetFont() );
+                    vcl::Font       aFont( pAct->GetFont() );
 
                     aCol = aFont.GetColor();
                     TEST_COLS();

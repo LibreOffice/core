@@ -374,7 +374,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // create font
                             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObject );
                             const SdrTextVertAdjust eTVA(pTextObj ? pTextObj->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_CENTER);
-                            Font aScaledVclFont;
+                            vcl::Font aScaledVclFont;
 
                             // use a text size factor to get more reliable text sizes from the text layouter
                             // (and from vcl), tipp from HDU
@@ -403,7 +403,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                             // get font attributes; use normally scaled font
                             const basegfx::BColor aFontColor(aRGBColor);
-                            Font aVclFont;
+                            vcl::Font aVclFont;
                             basegfx::B2DVector aTextSizeAttribute;
 
                             aVclFont.SetHeight( 500 );

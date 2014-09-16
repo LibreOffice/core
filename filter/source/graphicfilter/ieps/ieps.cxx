@@ -443,7 +443,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 {
     GDIMetaFile aMtf;
     VirtualDevice   aVDev;
-    Font            aFont;
+    vcl::Font       aFont;
 
     aVDev.EnableOutput( false );
     aMtf.Record( &aVDev );

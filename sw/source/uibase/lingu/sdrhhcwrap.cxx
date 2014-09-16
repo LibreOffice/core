@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
        LanguageType nSourceLanguage, LanguageType nTargetLanguage,
-       const Font* pTargetFnt,
+       const vcl::Font* pTargetFnt,
        sal_Int32 nConvOptions,
        bool bInteractive ) :
     SdrOutliner(pVw->GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->

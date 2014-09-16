@@ -131,7 +131,7 @@ void HeaderBar::ImplInitSettings( bool bFont,
 
     if ( bFont )
     {
-        Font aFont;
+        vcl::Font aFont;
         aFont = rStyleSettings.GetToolFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
@@ -1033,7 +1033,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     Point       aPos  = pDev->LogicToPixel( rPos );
     Size        aSize = pDev->LogicToPixel( rSize );
     Rectangle   aRect( aPos, aSize );
-    Font        aFont = GetDrawPixelFont( pDev );
+    vcl::Font   aFont = GetDrawPixelFont( pDev );
 
     pDev->Push();
     pDev->SetMapMode();

@@ -1436,7 +1436,7 @@ void ToolBox::ImplInitSettings( bool bFont,
 
     if ( bFont )
     {
-        Font aFont = rStyleSettings.GetToolFont();
+        vcl::Font aFont = rStyleSettings.GetToolFont();
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetZoomedPointFont( aFont );
@@ -3008,8 +3008,8 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
     // during configuration mode visible windows will be drawn in a special way
     if ( mbCustomizeMode && pItem->mbShowWindow )
     {
-        Font    aOldFont = GetFont();
-        Color   aOldTextColor = GetTextColor();
+        vcl::Font aOldFont = GetFont();
+        Color     aOldTextColor = GetTextColor();
 
         SetZoomedPointFont( rStyleSettings.GetAppFont() );
         SetLineColor( Color( COL_BLACK ) );
@@ -3160,13 +3160,13 @@ void ToolBox::ImplDrawItem( sal_uInt16 nPos, sal_uInt16 nHighlight, bool bPaint,
         long nTextOffY = nOffY;
 
         // rotate text when vertically docked
-        Font aOldFont = GetFont();
+        vcl::Font aOldFont = GetFont();
         if( pItem->mbVisibleText && !ImplIsFloatingMode() &&
             ((meAlign == WINDOWALIGN_LEFT) || (meAlign == WINDOWALIGN_RIGHT)) )
         {
             bRotate = true;
 
-            Font aRotateFont = aOldFont;
+            vcl::Font aRotateFont = aOldFont;
             aRotateFont.SetOrientation( 2700 );
 
             // center horizontally

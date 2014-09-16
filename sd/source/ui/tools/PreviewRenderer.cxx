@@ -330,8 +330,8 @@ void PreviewRenderer::PaintSubstitutionText (const OUString& rSubstitutionText)
     if (!rSubstitutionText.isEmpty())
     {
         // Set the font size.
-        const Font& rOriginalFont (mpPreviewDevice->GetFont());
-        Font aFont (mpPreviewDevice->GetSettings().GetStyleSettings().GetAppFont());
+        const vcl::Font& rOriginalFont (mpPreviewDevice->GetFont());
+        vcl::Font aFont (mpPreviewDevice->GetSettings().GetStyleSettings().GetAppFont());
         sal_Int32 nHeight (mpPreviewDevice->PixelToLogic(Size(0,snSubstitutionTextSize)).Height());
         aFont.SetHeight(nHeight);
         mpPreviewDevice->SetFont (aFont);

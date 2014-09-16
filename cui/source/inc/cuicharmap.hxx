@@ -43,7 +43,7 @@ public:
                                  bool bCenter = false );
                     virtual ~SvxShowText();
 
-    void            SetFont( const Font& rFont );
+    void            SetFont( const vcl::Font& rFont );
     void            SetText( const OUString& rText ) SAL_OVERRIDE;
     void            SetCentered(bool bCenter) { mbCenter = bCenter; }
 
@@ -80,8 +80,8 @@ private:
     FixedText*      m_pSymbolText;
     SvxShowText*    m_pShowChar;
     FixedText*      m_pCharCodeText;
-    Font            aFont;
-    bool        bOne;
+    vcl::Font       aFont;
+    bool            bOne;
     const SubsetMap* pSubsetMap;
 
     DECL_LINK(OKHdl, void *);
@@ -102,8 +102,8 @@ public:
 
     void            DisableFontSelection();
 
-    const Font&     GetCharFont() const { return aFont;}
-    void            SetCharFont( const Font& rFont );
+    const vcl::Font&     GetCharFont() const { return aFont;}
+    void            SetCharFont( const vcl::Font& rFont );
 
     void            SetChar( sal_UCS4 );
     sal_UCS4        GetChar() const;

@@ -40,7 +40,7 @@
 
 class SmSym;
 class SmFormat;
-class Font;
+namespace vcl { class Font; }
 struct SmCfgOther;
 
 struct SmFontFormat
@@ -53,9 +53,9 @@ struct SmFontFormat
     sal_Int16       nItalic;
 
     SmFontFormat();
-    SmFontFormat( const Font &rFont );
+    SmFontFormat( const vcl::Font &rFont );
 
-    const Font      GetFont() const;
+    const vcl::Font GetFont() const;
     bool            operator == ( const SmFontFormat &rFntFmt ) const;
 };
 

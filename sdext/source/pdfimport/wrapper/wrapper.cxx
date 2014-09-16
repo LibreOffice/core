@@ -664,7 +664,7 @@ void Parser::readFont()
     if (vDev == 0)
         vDev = new VirtualDevice;
 
-    Font font(aResult.familyName, Size(0, 1000));
+    vcl::Font font(aResult.familyName, Size(0, 1000));
     vDev->SetFont(font);
     FontMetric metric(vDev->GetFontMetric());
     aResult.ascent = metric.GetAscent() / 1000.0;
