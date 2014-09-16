@@ -24,7 +24,7 @@ import com.sun.star.lib.util.NativeLibraryLoader;
 public final class JNI_info_holder
 {
     static {
-        if (System.getProperty("java.vendor") == "The Android Project") {
+        if ("The Android Project".equals(System.getProperty("java.vendor"))) {
             // See corresponding code in
             // javaunohelper/com/sun/star/comp/helper/Bootstrap.java for more
             // comments.
