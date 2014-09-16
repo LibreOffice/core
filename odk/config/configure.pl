@@ -41,9 +41,6 @@ $main::OO_SDK_HOME = $main::sdkpath;
 #$main::OO_SDK_HOME = "";
 $main::OO_SDK_HOME_SUGGESTION = $main::sdkpath;
 
-$main::OFFICE_OR_URE = "Office";
-$main::OFFICE_OR_URE_SUGGESTION = "Office";
-
 $main::OFFICE_HOME = "";
 
 $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
@@ -97,131 +94,109 @@ $main::skipOutputDir = 0;
 
 $main::return = 0;
 
-if ( $main::OFFICE_OR_URE eq "Office" )
+if ( $main::operatingSystem =~ m/darwin/ )
 {
-    if ( $main::operatingSystem =~ m/darwin/ )
-    {
 # used for a SDK as part of the office installation
 #       $main::OFFICE_HOME = `cd $main::sdkpath/../../.. && pwd`;
 #       chomp($main::OFFICE_HOME);
 #       print " Used Office = $main::OFFICE_HOME\n";
-        print " Used SDK = $main::OO_SDK_HOME\n\n";
+    print " Used SDK = $main::OO_SDK_HOME\n\n";
 
-        $main::OFFICE_HOME_SUGGESTION = searchMacOffice();
-        while ( (! -d "$main::OFFICE_HOME" ) ||
-                ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/Contents/MacOS")) )
-        {
-            print " Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
-            $main::OFFICE_HOME = readStdIn();
-            chop($main::OFFICE_HOME);
-            if ( $main::OFFICE_HOME eq "" )
-            {
-                $main::OFFICE_HOME = $main::OFFICE_HOME_SUGGESTION;
-            }
-
-            if ( ! -d "$main::OFFICE_HOME" )
-            {
-                $main::OFFICE_HOME = "";
-                print " Error: An office installation is required, please specify the path to a valid installation.\n";
-            }
-
-            # check more details
-            if ( -d "$main::OFFICE_HOME/Contents/ure-link" ) {
-                $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME/Contents/ure-link";
-            } else {
-                $main::OFFICE_HOME = "";
-                $main::OO_SDK_URE_HOME = "";
-                print " Error: no URE found in office installation, please specify the path to a valid installation.\n";
-            }
-        }
-    } else
+    $main::OFFICE_HOME_SUGGESTION = searchMacOffice();
+    while ( (! -d "$main::OFFICE_HOME" ) ||
+            ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/Contents/MacOS")) )
     {
-        $main::OFFICE_HOME_SUGGESTION = searchoffice();
-
-        if ( $main::OFFICE_HOME_SUGGESTION eq "" ) {
-            # prepare Office path
-            $main::OFFICE_HOME_SUGGESTION = searchprog("soffice");
+        print " Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
+        $main::OFFICE_HOME = readStdIn();
+        chop($main::OFFICE_HOME);
+        if ( $main::OFFICE_HOME eq "" )
+        {
+            $main::OFFICE_HOME = $main::OFFICE_HOME_SUGGESTION;
         }
 
-        if ( ! $main::OFFICE_HOME_SUGGESTION eq "" )
+        if ( ! -d "$main::OFFICE_HOME" )
         {
-            my $tmpOffice = readlink "$main::OFFICE_HOME_SUGGESTION/soffice";
+            $main::OFFICE_HOME = "";
+            print " Error: An office installation is required, please specify the path to a valid installation.\n";
+        }
 
-            if ( $tmpOffice eq "" )
-            {
-                $tmpOffice = "$main::OFFICE_HOME_SUGGESTION/soffice";
-            }
+        # check more details
+        if ( -d "$main::OFFICE_HOME/Contents/ure-link" ) {
+            $main::OO_SDK_URE_HOME = "$main::OFFICE_HOME/Contents/ure-link";
+        } else {
+            $main::OFFICE_HOME = "";
+            $main::OO_SDK_URE_HOME = "";
+            print " Error: no URE found in office installation, please specify the path to a valid installation.\n";
+        }
+    }
+} else
+{
+    $main::OFFICE_HOME_SUGGESTION = searchoffice();
 
-            my $offset = rindex($tmpOffice, "/program/soffice");
+    if ( $main::OFFICE_HOME_SUGGESTION eq "" ) {
+        # prepare Office path
+        $main::OFFICE_HOME_SUGGESTION = searchprog("soffice");
+    }
+
+    if ( ! $main::OFFICE_HOME_SUGGESTION eq "" )
+    {
+        my $tmpOffice = readlink "$main::OFFICE_HOME_SUGGESTION/soffice";
+
+        if ( $tmpOffice eq "" )
+        {
+            $tmpOffice = "$main::OFFICE_HOME_SUGGESTION/soffice";
+        }
+
+        my $offset = rindex($tmpOffice, "/program/soffice");
+        if ( $offset != -1 )
+        {
+            $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
+        } else
+        {
+            $offset = rindex($tmpOffice, "/soffice");
             if ( $offset != -1 )
             {
                 $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
             } else
             {
-                $offset = rindex($tmpOffice, "/soffice");
-                if ( $offset != -1 )
-                {
-                    $main::OFFICE_HOME_SUGGESTION = substr($tmpOffice, 0, $offset);
-                } else
-                {
-                    $main::OFFICE_HOME_SUGGESTION = "";
-                }
-            }
-        }
-
-        while ( (! -d "$main::OFFICE_HOME" ) ||
-                ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/program")) )
-        {
-            print " Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
-            $main::OFFICE_HOME = readStdIn();
-            chop($main::OFFICE_HOME);
-            if ( $main::OFFICE_HOME eq "" )
-            {
-                $main::OFFICE_HOME = $main::OFFICE_HOME_SUGGESTION;
-            }
-
-            if ( ! -d "$main::OFFICE_HOME" )
-            {
-                $main::OFFICE_HOME = "";
-                print " Error: An office installation is required, please specify the path to a valid installation.\n";
-            } else
-            {
-                # special work for a network installation, no prgram directory but a link to the soffice binary
-                if ( (! -d "$main::OFFICE_HOME/program") && (-e "$main::OFFICE_HOME/soffice") )
-                {
-                    my $soserver = `ls -l $OFFICE_HOME_SUGGESTION/soffice | sed -n 's/.* -> //p'`;
-                    $soserver= substr($soserver, 0, rindex($soserver, "program") - 1);
-
-                    if ( ! -d $soserver )
-                    {
-                        $main::OFFICE_HOME = "";
-                        print " Error: An office installation is required, please specify the path to a valid installation.\n";
-                    } else
-                    {
-                        $main::OFFICE_HOME = $soserver;
-                    }
-                }
+                $main::OFFICE_HOME_SUGGESTION = "";
             }
         }
     }
-}
-else
-{
-    # prepare URE path
-    $main::OO_SDK_URE_HOME_SUGGESTION = "/opt/openoffice.org/ure";
-    $main::OO_SDK_URE_HOME_SUGGESTION = "" unless
-        -e "$main::OO_SDK_URE_HOME_SUGGESTION/bin/uno";
-    for (;;)
+
+    while ( (! -d "$main::OFFICE_HOME" ) ||
+            ((-d "$main::OFFICE_HOME") && (! -d "$main::OFFICE_HOME/program")) )
     {
-        print " Enter the URE installation directory",
-            " [$main::OO_SDK_URE_HOME_SUGGESTION]: ";
-        $main::OO_SDK_URE_HOME = readStdIn();
-        chop $main::OO_SDK_URE_HOME;
-        $main::OO_SDK_URE_HOME = $main::OO_SDK_URE_HOME_SUGGESTION if
-            $main::OO_SDK_URE_HOME eq "" &&
-            $main::OO_SDK_URE_HOME_SUGGESTION ne "";
-        last if -e "$main::OO_SDK_URE_HOME/bin/uno";
-        print " Error: A valid URE installation is required.\n";
+        print " Enter the Office installation directory [$main::OFFICE_HOME_SUGGESTION]: ";
+        $main::OFFICE_HOME = readStdIn();
+        chop($main::OFFICE_HOME);
+        if ( $main::OFFICE_HOME eq "" )
+        {
+            $main::OFFICE_HOME = $main::OFFICE_HOME_SUGGESTION;
+        }
+
+        if ( ! -d "$main::OFFICE_HOME" )
+        {
+            $main::OFFICE_HOME = "";
+            print " Error: An office installation is required, please specify the path to a valid installation.\n";
+        } else
+        {
+            # special work for a network installation, no prgram directory but a link to the soffice binary
+            if ( (! -d "$main::OFFICE_HOME/program") && (-e "$main::OFFICE_HOME/soffice") )
+            {
+                my $soserver = `ls -l $OFFICE_HOME_SUGGESTION/soffice | sed -n 's/.* -> //p'`;
+                $soserver= substr($soserver, 0, rindex($soserver, "program") - 1);
+
+                if ( ! -d $soserver )
+                {
+                    $main::OFFICE_HOME = "";
+                    print " Error: An office installation is required, please specify the path to a valid installation.\n";
+                } else
+                {
+                    $main::OFFICE_HOME = $soserver;
+                }
+            }
+        }
     }
 }
 
@@ -513,24 +488,17 @@ while ( (!$main::skipOutputDir) &&
 }
 
 # prepare auto deployment
-if ( $main::OFFICE_OR_URE eq "Office" )
+while ( $main::SDK_AUTO_DEPLOYMENT eq "" ||
+     ((! $main::SDK_AUTO_DEPLOYMENT eq "YES") &&
+      (! $main::SDK_AUTO_DEPLOYMENT eq "NO")) )
 {
-    while ( $main::SDK_AUTO_DEPLOYMENT eq "" ||
-         ((! $main::SDK_AUTO_DEPLOYMENT eq "YES") &&
-          (! $main::SDK_AUTO_DEPLOYMENT eq "NO")) )
+    print " Automatic deployment of UNO components (YES/NO) [$main::SDK_AUTO_DEPLOYMENT_SUGGESTION]: ";
+    $main::SDK_AUTO_DEPLOYMENT = uc <STDIN>;
+    chop($main::SDK_AUTO_DEPLOYMENT);
+    if ( $main::SDK_AUTO_DEPLOYMENT eq "" )
     {
-        print " Automatic deployment of UNO components (YES/NO) [$main::SDK_AUTO_DEPLOYMENT_SUGGESTION]: ";
-        $main::SDK_AUTO_DEPLOYMENT = uc <STDIN>;
-        chop($main::SDK_AUTO_DEPLOYMENT);
-        if ( $main::SDK_AUTO_DEPLOYMENT eq "" )
-        {
-            $main::SDK_AUTO_DEPLOYMENT = "YES";
-        }
+        $main::SDK_AUTO_DEPLOYMENT = "YES";
     }
-}
-else
-{
-    $main::SDK_AUTO_DEPLOYMENT = "NO";
 }
 
 prepareScriptFile("setsdkenv_unix.sh.in", "setsdkenv_unix.sh");
