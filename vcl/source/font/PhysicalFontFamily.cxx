@@ -294,7 +294,10 @@ void PhysicalFontFamily::UpdateCloneFontList( PhysicalFontCollection& rFontColle
 
         PhysicalFontFace* pClonedFace = pFace->Clone();
 
-        assert( pClonedFace->GetFamilyName().trim() == GetFamilyName().trim() );
+        //assert( pClonedFace->GetFamilyName().trim() == GetFamilyName().trim() );
+        if (pClonedFace->GetFamilyName().trim() != GetFamilyName().trim()) {
+            SAL_WARN( "vcl", "fonts differ: pClonedFace->GetFamilyName(): " << pClonedFace->GetFamilyName().trim() << " | GetFamilyName(): " << GetFamilyName().trim() );
+        }
         assert( rFontCollection.FindOrCreateFamily( GetEnglishSearchFontName( pClonedFace->GetFamilyName() ) ) == pFamily );
 
         if (! pFamily->AddFontFace( pClonedFace ) )
