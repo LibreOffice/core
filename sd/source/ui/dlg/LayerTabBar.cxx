@@ -45,7 +45,7 @@ namespace sd {
  * default constructor
  */
 LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, Window* pParent)
-    : TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL | WB_SIZEABLE ) ),
+    : TabBar( pParent, WinBits( WB_BORDER | WB_3DLOOK | WB_SCROLL ) ),
     DropTargetHelper( this ),
     pDrViewSh(pViewSh)
 {
