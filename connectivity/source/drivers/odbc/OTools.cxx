@@ -25,9 +25,6 @@
 #include "diagnose_ex.h"
 #include <rtl/ustrbuf.hxx>
 #include <boost/static_assert.hpp>
-#include <boost/typeof/typeof.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/if.hpp>
 
 
 #include <string.h>
@@ -402,6 +399,25 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     return aData;
 }
 
+namespace
+{
+    template < typename C > inline void append(OUStringBuffer s, C* d, sal_Int32 n);
+
+    template <> inline void append(OUStringBuffer s, wchar_t* d, sal_Int32 n)
+    {
+        assert(sizeof(wchar_t) == 4);
+        for (sal_Int32 i = 0; i < n; ++i)
+        {
+            s.appendUtf32(d[i]);
+        }
+    }
+
+    template <> inline void append(OUStringBuffer s, sal_Unicode* d, sal_Int32 n)
+    {
+        s.append(d, n);
+    }
+}
+
 OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLHANDLE _aStatementHandle,
                                        sal_Int32 columnIndex,
@@ -460,17 +476,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                 nReadChars = pcbValue/sizeof(SQLWCHAR);
             }
 
-            if (sizeof (SQLWCHAR) == 2)
-            {
-                aData.append(reinterpret_cast< boost::mpl::if_< boost::mpl::bool_< sizeof(SQLWCHAR) == 2 >, BOOST_TYPEOF(&waCharArray[0]), sal_Unicode* >::type >(waCharArray), nReadChars);
-            }
-            else
-            {
-                for (sal_Int32 i = 0; i < nReadChars; ++i)
-                {
-                    aData.appendUtf32(waCharArray[i]);
-                }
-            }
+            append(aData, waCharArray, nReadChars);
         }
         break;
     }
