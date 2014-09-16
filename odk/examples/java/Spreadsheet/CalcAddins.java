@@ -89,11 +89,23 @@ public class CalcAddins {
         private static final short shortGETMYFIRSTVALUE = 0;
         private static final short shortGETMYSECONDVALUE = 1;
 
+/** TO DO:
+ * This is where you implement all methods of your interface. The parameters have to
+ * be the same as in your IDL file and their types have to be the correct
+ * IDL-to-Java mappings of their types in the IDL file.
+ */
+        public int getMyFirstValue(
+            com.sun.star.beans.XPropertySet xOptions
+        ) {
+            return 1;
+        }
 
-
-
-
-
+        public int getMySecondValue(
+            com.sun.star.beans.XPropertySet xOptions,
+            int intDummy
+        ) {
+            return( 2 + intDummy );
+        }
 
         // Implement method from interface XServiceName
         public String getServiceName() {
