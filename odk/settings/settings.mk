@@ -434,8 +434,8 @@ OPT_FLAGS=-g
 else
 OPT_FLAGS=-O
 endif
-CC_FLAGS_JNI=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION) $(OPT_FLAGS)
-CC_FLAGS=-malign-natural -c -fPIC -fno-common $(GCC_ARCH_OPTION) -fvisibility=hidden $(OPT_FLAGS)
+CC_FLAGS_JNI=-c -fPIC -fno-common $(GCC_ARCH_OPTION) $(OPT_FLAGS)
+CC_FLAGS=-c -fPIC -fno-common $(GCC_ARCH_OPTION) -fvisibility=hidden $(OPT_FLAGS)
 
 SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
