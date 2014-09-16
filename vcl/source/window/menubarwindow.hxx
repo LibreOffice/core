@@ -54,7 +54,7 @@ public:
 
 /** Class that implements the actual window of the menu bar.
 */
-class MenuBarWindow : public MenuWindow, public Window
+class MenuBarWindow : public Window, public IMenuBarWindow
 {
     friend class MenuBar;
     friend class Menu;
@@ -85,11 +85,11 @@ private:
     std::map< sal_uInt16, AddButtonEntry > m_aAddButtons;
 
     void            HighlightItem( sal_uInt16 nPos, bool bHighlight );
-    void            ChangeHighlightItem( sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true );
+    virtual void    ChangeHighlightItem(sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true) SAL_OVERRIDE;
 
     sal_uInt16          ImplFindEntry( const Point& rMousePos ) const;
     void            ImplCreatePopup( bool bPreSelectFirst );
-    bool            ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu = true );
+    virtual bool    HandleKeyEvent(const KeyEvent& rKEvent, bool bFromMenu = true) SAL_OVERRIDE;
     Rectangle       ImplGetItemRect( sal_uInt16 nPos );
 
     void            ImplInitStyleSettings();
@@ -109,7 +109,7 @@ public:
                     MenuBarWindow( Window* pParent );
                     virtual ~MenuBarWindow();
 
-    void            ShowButtons( bool bClose, bool bFloat, bool bHide );
+    virtual void    ShowButtons(bool bClose, bool bFloat, bool bHide);
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
@@ -119,25 +119,25 @@ public:
     virtual void    Resize() SAL_OVERRIDE;
     virtual void    RequestHelp( const HelpEvent& rHEvt ) SAL_OVERRIDE;
 
-    void            SetFocusId( sal_uLong nId ) { nSaveFocusId = nId; }
-    sal_uLong           GetFocusId() const { return nSaveFocusId; }
+    virtual void    SetFocusId(sal_uLong nId) SAL_OVERRIDE { nSaveFocusId = nId; }
+    virtual sal_uLong GetFocusId() const SAL_OVERRIDE { return nSaveFocusId; }
 
-    void            SetMenu( MenuBar* pMenu );
-    void            KillActivePopup();
-    void            PopupClosed( Menu* pMenu );
-    sal_uInt16          GetHighlightedItem() const { return nHighlightedItem; }
+    virtual void    SetMenu(MenuBar* pMenu) SAL_OVERRIDE;
+    virtual void    KillActivePopup() SAL_OVERRIDE;
+    virtual void    PopupClosed(Menu* pMenu) SAL_OVERRIDE;
+    virtual sal_uInt16 GetHighlightedItem() const SAL_OVERRIDE { return nHighlightedItem; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible() SAL_OVERRIDE;
 
-    void SetAutoPopup( bool bAuto ) { mbAutoPopup = bAuto; }
-    void            ImplLayoutChanged();
+    virtual void    SetAutoPopup(bool bAuto) SAL_OVERRIDE { mbAutoPopup = bAuto; }
+    virtual void    LayoutChanged() SAL_OVERRIDE;
     Size            MinCloseButtonSize();
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.
-    sal_uInt16      AddMenuBarButton( const Image&, const Link&, const OUString&, sal_uInt16 nPos );
-    void            SetMenuBarButtonHighlightHdl( sal_uInt16 nId, const Link& );
-    Rectangle       GetMenuBarButtonRectPixel( sal_uInt16 nId );
-    void            RemoveMenuBarButton( sal_uInt16 nId );
-    bool            HandleMenuButtonEvent( sal_uInt16 i_nButtonId );
+    virtual sal_uInt16 AddMenuBarButton(const Image&, const Link&, const OUString&, sal_uInt16 nPos) SAL_OVERRIDE;
+    virtual void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link&) SAL_OVERRIDE;
+    virtual Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId) SAL_OVERRIDE;
+    virtual void RemoveMenuBarButton(sal_uInt16 nId) SAL_OVERRIDE;
+    virtual bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId) SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_MENUBARWINDOW_HXX

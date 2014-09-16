@@ -21,9 +21,14 @@
 #define INCLUDED_VCL_SOURCE_WINDOW_MENUWINDOW_HXX
 
 #include <sal/types.h>
+#include <tools/solar.h>
+#include <vcl/event.hxx>
 
 class HelpEvent;
+class Image;
+class Link;
 class Menu;
+class MenuBar;
 class Rectangle;
 class Window;
 
@@ -46,6 +51,7 @@ common class for MenuFloatingWindow and MenuBarWindow:
 class MenuWindow
 {
 public:
+    virtual ~MenuWindow() {}
 
     /// Sets up some visual properties of the underlying window.
     void ImplInitMenuWindow(Window* pWin, bool bFont, bool bMenuBar);
@@ -53,6 +59,35 @@ public:
     /// Show the appropriate help tooltip.
     bool ImplHandleHelpEvent(Window* pMenuWindow, Menu* pMenu, sal_uInt16 nHighlightedItem,
             const HelpEvent& rHEvt, const Rectangle &rHighlightRect);
+};
+
+/// Interface for the MenuBarWindow functionality.
+class IMenuBarWindow : public MenuWindow
+{
+public:
+    virtual ~IMenuBarWindow() {}
+
+    virtual sal_uLong GetFocusId() const = 0;
+    virtual void SetFocusId(sal_uLong nId) = 0;
+
+    virtual bool HandleKeyEvent(const KeyEvent& rKEvent, bool bFromMenu = true) = 0;
+    virtual void LayoutChanged() = 0;
+    virtual void PopupClosed(Menu* pMenu) = 0;
+    virtual void ShowButtons(bool bClose, bool bFloat, bool bHide) = 0;
+
+    virtual void ChangeHighlightItem(sal_uInt16 n, bool bSelectPopupEntry, bool bAllowRestoreFocus = true, bool bDefaultToDocument = true ) = 0;
+    virtual sal_uInt16 GetHighlightedItem() const = 0;
+
+    virtual void SetAutoPopup(bool bAuto) = 0;
+    virtual void SetMenu(MenuBar* pMenu) = 0;
+    virtual void KillActivePopup() = 0;
+
+    /// Add an arbitrary button to the menubar that will appear next to the close button.
+    virtual sal_uInt16 AddMenuBarButton(const Image&, const Link&, const OUString&, sal_uInt16 nPos) = 0;
+    virtual void SetMenuBarButtonHighlightHdl(sal_uInt16 nId, const Link&) = 0;
+    virtual Rectangle GetMenuBarButtonRectPixel(sal_uInt16 nId) = 0;
+    virtual void RemoveMenuBarButton(sal_uInt16 nId) = 0;
+    virtual bool HandleMenuButtonEvent(sal_uInt16 i_nButtonId) = 0;
 };
 
 #endif // INCLUDED_VCL_SOURCE_WINDOW_MENUWINDOW_HXX

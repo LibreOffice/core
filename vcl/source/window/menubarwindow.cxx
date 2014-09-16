@@ -690,11 +690,11 @@ Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos )
 
 void MenuBarWindow::KeyInput( const KeyEvent& rKEvent )
 {
-    if ( !ImplHandleKeyEvent( rKEvent ) )
+    if ( !HandleKeyEvent( rKEvent ) )
         Window::KeyInput( rKEvent );
 }
 
-bool MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
+bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
 {
     if( ! pMenu )
         return false;
@@ -986,7 +986,7 @@ void MenuBarWindow::StateChanged( StateChangedType nType )
 
 }
 
-void MenuBarWindow::ImplLayoutChanged()
+void MenuBarWindow::LayoutChanged()
 {
     if( pMenu )
     {
@@ -1037,7 +1037,7 @@ void MenuBarWindow::DataChanged( const DataChangedEvent& rDCEvt )
           (rDCEvt.GetFlags() & SETTINGS_STYLE)) )
     {
         ImplInitStyleSettings();
-        ImplLayoutChanged();
+        LayoutChanged();
     }
 }
 
@@ -1085,7 +1085,7 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link& i
     aCloseBtn.InsertItem(nId, i_rImage, 0, 0);
     aCloseBtn.calcMinSize();
     ShowButtons(aCloseBtn.IsItemVisible(IID_DOCUMENTCLOSE), aFloatBtn.IsVisible(), aHideBtn.IsVisible());
-    ImplLayoutChanged();
+    LayoutChanged();
 
     if( pMenu->mpSalMenu )
         pMenu->mpSalMenu->AddMenuBarButton( SalMenuButtonItem( nId, i_rImage, i_rToolTip ) );
@@ -1131,7 +1131,7 @@ void MenuBarWindow::RemoveMenuBarButton( sal_uInt16 nId )
     aCloseBtn.RemoveItem(nPos);
     m_aAddButtons.erase( nId );
     aCloseBtn.calcMinSize();
-    ImplLayoutChanged();
+    LayoutChanged();
 
     if( pMenu->mpSalMenu )
         pMenu->mpSalMenu->RemoveMenuBarButton( nId );

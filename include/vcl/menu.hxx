@@ -45,6 +45,7 @@ class KeyEvent;
 class MenuFloatingWindow;
 class Window;
 class SalMenu;
+class IMenuBarWindow;
 struct SystemMenuData;
 
 namespace com {
@@ -410,6 +411,11 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, bool bDelete );
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu = true );
 
+protected:
+
+    /// Return the IMenuBarWindow interface.
+    IMenuBarWindow* getMenuBarWindow();
+
 public:
                         MenuBar();
                         MenuBar( const MenuBar& rMenu );
@@ -439,7 +445,7 @@ public:
     bool                HandleMenuDeActivateEvent(Menu *pMenu) const;
     bool                HandleMenuHighlightEvent(Menu *pMenu, sal_uInt16 nEventId) const;
     bool                HandleMenuCommandEvent(Menu *pMenu, sal_uInt16 nEventId) const;
-    bool                HandleMenuButtonEvent(Menu *pMenu, sal_uInt16 nEventId) const;
+    bool                HandleMenuButtonEvent(Menu *pMenu, sal_uInt16 nEventId);
 
     void                SetCloseButtonClickHdl( const Link& rLink ) { maCloseHdl = rLink; }
     const Link&         GetCloseButtonClickHdl() const              { return maCloseHdl; }

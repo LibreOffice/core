@@ -30,7 +30,7 @@
 
 /** Class that implements the actual window of the floating menu.
 */
-class MenuFloatingWindow : public MenuWindow, public FloatingWindow
+class MenuFloatingWindow : public FloatingWindow, public MenuWindow
 {
     friend void Menu::ImplFillLayoutData() const;
     friend Menu::~Menu();
