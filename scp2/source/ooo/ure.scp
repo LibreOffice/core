@@ -206,9 +206,7 @@ ProfileItem gid_Profileitem_Dl_Uno_Uno_Types
     ProfileID = gid_Profile_Dl_Uno_Ini;
     Section = "Bootstrap";
     Key = "UNO_TYPES";
-#if defined MACOSX
-    Value = "${ORIGIN}/types.rdb ${URE_MORE_TYPES}";
-#elif defined WNT
+#if defined WNT
     Value = "${ORIGIN}/../misc/types.rdb ${URE_MORE_TYPES}";
 #else
     Value = "${ORIGIN}/../share/misc/types.rdb ${URE_MORE_TYPES}";
