@@ -63,7 +63,7 @@ public class OOoViewer extends Applet {
     @Override
     public void start() {
         try {
-        Class beanClass = m_loader.loadClass("com.sun.star.comp.beans.OOoBean");
+        Class<?> beanClass = m_loader.loadClass("com.sun.star.comp.beans.OOoBean");
         m_objBean = beanClass.newInstance();
         setLayout(new BorderLayout());
         add((java.awt.Container)m_objBean, BorderLayout.CENTER);
