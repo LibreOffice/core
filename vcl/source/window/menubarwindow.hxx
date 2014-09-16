@@ -109,7 +109,7 @@ public:
                     MenuBarWindow( Window* pParent );
                     virtual ~MenuBarWindow();
 
-    virtual void    ShowButtons(bool bClose, bool bFloat, bool bHide);
+    virtual void    ShowButtons(bool bClose, bool bFloat, bool bHide) SAL_OVERRIDE;
 
     virtual void    MouseMove( const MouseEvent& rMEvt ) SAL_OVERRIDE;
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) SAL_OVERRIDE;
