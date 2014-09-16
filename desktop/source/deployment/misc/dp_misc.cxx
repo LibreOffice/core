@@ -530,10 +530,7 @@ OUString readConsole()
 
 void TRACE(OUString const & sText)
 {
-    (void) sText;
-#if OSL_DEBUG_LEVEL > 1
-    writeConsole(sText);
-#endif
+    SAL_INFO("desktop.deployment", sText);
 }
 
 void syncRepositories(
