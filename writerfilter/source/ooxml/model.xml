@@ -18210,6 +18210,7 @@
       <element name="hideMark" tokenid="ooxml:CT_TcPrBase_hideMark"/>
       <element name="cellDel" tokenid="ooxml:CT_TcPrBase_cellDel"/>
       <element name="cellIns" tokenid="ooxml:CT_TcPrBase_cellIns"/>
+      <element name="cellMerge" tokenid="ooxml:CT_TcPrBase_cellMerge"/>
     </resource>
     <resource name="CT_TcPr" resource="Properties">
       <element name="tcPrChange" tokenid="ooxml:CT_TcPr_tcPrChange"/>
@@ -18324,6 +18325,9 @@
       <element name="tblPrChange" tokenid="ooxml:CT_TblPr_tblPrChange"/>
       <action name="end" action="propagateTableProperties"/>
       <action name="end" action="clearProps"/>
+    </resource>
+    <resource name="CT_TblPrEx" resource="Properties">
+        <element name="tblPrExChange" tokenid="ooxml:CT_TblPrEx_tblPrExChange"/>
     </resource>
     <resource name="CT_Tbl" resource="TextTable"/>
     <resource name="CT_TblLook" resource="Properties">
