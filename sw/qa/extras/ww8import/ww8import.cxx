@@ -510,6 +510,10 @@ DECLARE_WW8IMPORT_TEST(testBnc787942, "bnc787942.doc")
     parseDump("/root/page[1]/body/txt[4]/anchored");
 }
 
+DECLARE_WW8IMPORT_TEST(testLayoutHanging, "fdo68967.doc")
+{
+    // This must not hang in layout
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

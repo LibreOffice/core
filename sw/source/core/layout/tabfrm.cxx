@@ -1831,6 +1831,7 @@ void SwTabFrm::MakeAll()
     }
 
     int nUnSplitted = 5; // Just another loop control :-(
+    int nThrowAwayValidLayoutLimit = 5; // And another one :-(
     SWRECTFN( this )
     while ( !mbValidPos || !mbValidSize || !mbValidPrtArea )
     {
@@ -2301,7 +2302,13 @@ void SwTabFrm::MakeAll()
                     // An existing follow flow line has to be removed.
                     if ( HasFollowFlowLine() )
                     {
+                        if (!nThrowAwayValidLayoutLimit)
+                            continue;
+                        bool bInitialLoopEndCondition = mbValidPos && mbValidSize && mbValidPrtArea;
                         RemoveFollowFlowLine();
+                        bool bFinalLoopEndCondition = mbValidPos && mbValidSize && mbValidPrtArea;
+                        if (bInitialLoopEndCondition && !bFinalLoopEndCondition)
+                            --nThrowAwayValidLayoutLimit;
                     }
 
                     const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !bAllowSplitOfRow ) );
