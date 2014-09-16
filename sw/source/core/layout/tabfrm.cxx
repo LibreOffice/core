@@ -2169,7 +2169,7 @@ void SwTabFrm::MakeAll()
         //right moment to do some preferably constructive changes.
 
         //If I'm NOT allowed to leave the parent Frm, I've got a problem.
-        // Following Artur Dent, we do the only thing that you can do with
+        // Following Arthur Dent, we do the only thing that you can do with
         // an unsolvable problem: We ignore it with all our power.
         if ( !bMoveable )
         {
