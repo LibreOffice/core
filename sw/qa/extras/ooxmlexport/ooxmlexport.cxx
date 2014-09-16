@@ -219,6 +219,18 @@ DECLARE_OOXMLEXPORT_TEST(testfdo83428, "fdo83428.docx")
      CPPUNIT_ASSERT_EQUAL(OUString("Document"), getProperty<OUString>(xUDProps, "Testing"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testShapeInFloattable, "shape-in-floattable.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // No nested drawingML w:txbxContent.
+        assertXPath(pXmlDoc, "//mc:Choice//w:txbxContent//w:txbxContent", 0);
+        // Instead, make sure we have a separate shape and group shape:
+        assertXPath(pXmlDoc, "//mc:AlternateContent//mc:Choice[@Requires='wps']", 1);
+        assertXPath(pXmlDoc, "//mc:AlternateContent//mc:Choice[@Requires='wpg']", 1);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

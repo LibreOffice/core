@@ -4887,8 +4887,6 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                     }
                     else
                     {
-                        uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
-                        OUString sShapeType = xShape->getShapeType();
                         if ( m_postponedDMLDrawing == NULL )
                         {
                             bool bStartedParaSdt = m_bStartedParaSdt;
@@ -4908,8 +4906,7 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
                         }
                         // IsAlternateContentChoiceOpen() : check is to ensure that only one object is getting added. Without this check, plus one obejct gets added
                         // m_bParagraphFrameOpen : Check if the frame is open.
-                        // sShapeType : This check is to ensure that if the custom shape is within a text frame then only we should postpone it.
-                        else if (IsAlternateContentChoiceOpen() && m_bParagraphFrameOpen && sShapeType == "com.sun.star.drawing.CustomShape")
+                        else if (IsAlternateContentChoiceOpen() && m_bParagraphFrameOpen)
                         {
                             m_postponedCustomShape->push_back(PostponedDrawing(pSdrObj, &(rFrame.GetFrmFmt()), &rNdTopLeft));
                         }
