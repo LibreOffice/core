@@ -155,7 +155,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	( \
 		echo '[Bootstrap]' \
-		&& echo 'URE_INTERNAL_LIB_DIR=$${ORIGIN}$(if $(filter MACOSX,$(OS)),/../../Frameworks)' \
+		&& echo 'URE_INTERNAL_LIB_DIR=$${ORIGIN}$(if $(filter MACOSX,$(OS)),/../../../Frameworks)' \
 		&& echo 'URE_INTERNAL_JAVA_DIR=$${ORIGIN}/..$(if $(filter-out WNT,$(OS)),/$(if $(filter MACOSX,$(OS)),..,share))/java' \
 		&& echo 'URE_INTERNAL_JAVA_CLASSPATH=$${URE_MORE_JAVA_TYPES}' \
 		&& echo 'UNO_TYPES=$${ORIGIN}/../$(if $(filter-out WNT,$(OS)),share/)misc/types.rdb $${URE_MORE_TYPES}' \

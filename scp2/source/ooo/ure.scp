@@ -173,7 +173,7 @@ ProfileItem gid_Profileitem_Dl_Uno_Ure_Internal_Lib_Dir
     Section = "Bootstrap";
     Key = "URE_INTERNAL_LIB_DIR";
 #if defined MACOSX
-    Value = "${ORIGIN}/../../Frameworks";
+    Value = "${ORIGIN}/../../../Frameworks";
 #else
     Value = "${ORIGIN}";
 #endif
