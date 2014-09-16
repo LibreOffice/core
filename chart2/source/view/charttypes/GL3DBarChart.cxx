@@ -125,23 +125,7 @@ void RenderThread::renderFrame()
         return;
 
     mpChart->mpWindow->getContext().makeCurrent();
-    Size aSize = mpChart->mpWindow->GetSizePixel();
-    mpChart->mpRenderer->SetSize(aSize);
-    if(mpChart->mbNeedsNewRender)
-    {
-        mpChart->mpRenderer->ReleaseTextTexture();
-        for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = mpChart->maShapes.begin(),
-                itrEnd = mpChart->maShapes.end(); itr != itrEnd; ++itr)
-        {
-            itr->render();
-        }
-    }
-    else
-    {
-        mpChart->mpCamera->render();
-    }
-    mpChart->mpRenderer->ProcessUnrenderedShape(mpChart->mbNeedsNewRender);
-    mpChart->mbNeedsNewRender = false;
+    mpChart->renderFrame();
     mpChart->mpWindow->getContext().swapBuffers();
     mpChart->mpWindow->getContext().resetCurrent();
 }
@@ -301,11 +285,8 @@ void RenderBenchMarkThread::MoveToBar()
 {
     if (!mbExecuting)
     {
-        mpChart->mpRenderer->SetPickingMode(true);
-        mpChart->mpCamera->render();
-        mpChart->mpRenderer->ProcessUnrenderedShape(mpChart->mbNeedsNewRender);
-        mpChart->mnSelectBarId = mpChart->mpRenderer->GetPixelColorFromPoint(mpChart->maClickPos.X(), mpChart->maClickPos.Y());
-        mpChart->mpRenderer->SetPickingMode(false);
+        mpChart->mnSelectBarId = mpChart->barIdAtPosition(mpChart->maClickPos);
+
         std::map<sal_uInt32, const GL3DBarChart::BarInformation>::const_iterator itr = mpChart->maBarMap.find(mpChart->mnSelectBarId);
         if(itr == mpChart->maBarMap.end())
         {
@@ -814,28 +795,6 @@ void GL3DBarChart::update()
     spawnRenderThread(new RenderOneFrameThread(this));
 }
 
-namespace {
-
-class PickingModeSetter
-{
-private:
-    opengl3D::OpenGL3DRenderer* mpRenderer;
-
-public:
-    PickingModeSetter(opengl3D::OpenGL3DRenderer* pRenderer):
-        mpRenderer(pRenderer)
-    {
-        mpRenderer->SetPickingMode(true);
-    }
-
-    ~PickingModeSetter()
-    {
-        mpRenderer->SetPickingMode(false);
-    }
-};
-
-}
-
 void GL3DBarChart::moveToDefault()
 {
     if(mbBenchMarkMode)
@@ -860,6 +819,21 @@ void GL3DBarChart::moveToDefault()
     glm::vec3 maTargetDirection = maDefaultCameraDirection;
     maStepDirection = (maTargetDirection - maCameraDirection)/((float)mnStepsTotal);
     */
+}
+
+sal_uInt32 GL3DBarChart::barIdAtPosition(const Point& rPos)
+{
+    sal_uInt32 nId = 5;
+    {
+        osl::MutexGuard aGuard(maMutex);
+        mpWindow->getContext().makeCurrent();
+        mpRenderer->SetPickingMode(true);
+        renderFrame();
+        nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
+        mpRenderer->SetPickingMode(false);
+        mpWindow->getContext().resetCurrent();
+    }
+    return nId;
 }
 
 void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
@@ -893,15 +867,7 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
         return;
     }
 
-    sal_uInt32 nId = 5;
-    {
-        PickingModeSetter aPickingModeSetter(mpRenderer.get());
-        update();
-        joinRenderThread();
-        nId = mpRenderer->GetPixelColorFromPoint(rPos.X(), rPos.Y());
-    }
-    // we need this update here to render one frame without picking mode being set
-    update();
+    sal_uInt32 nId = barIdAtPosition(rPos);
 
     std::map<sal_uInt32, const BarInformation>::const_iterator itr =
         maBarMap.find(nId);
@@ -910,14 +876,20 @@ void GL3DBarChart::clickedAt(const Point& rPos, sal_uInt16 nButtons)
         return;
 
     const BarInformation& rBarInfo = itr->second;
-    glm::vec3 aTextPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
-                                  rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
-                                  rBarInfo.maPos.z);
-    maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
-                OUString("Value: ") + OUString::number(rBarInfo.mnVal), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), CALC_POS_EVENT_ID));
-    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
-    pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f), aTextPos);
-    pScreenText->render();
+
+    {
+        osl::MutexGuard aGuard(maMutex);
+        mpWindow->getContext().makeCurrent();
+        glm::vec3 aTextPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
+                rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
+                rBarInfo.maPos.z);
+        maShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache,
+                    OUString("Value: ") + OUString::number(rBarInfo.mnVal), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), CALC_POS_EVENT_ID));
+        opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maShapes.back());
+        pScreenText->setPosition(glm::vec2(-0.9f, 0.9f), glm::vec2(-0.6f, 0.8f), aTextPos);
+        pScreenText->render();
+        mpWindow->getContext().resetCurrent();
+    }
 
     glm::vec3 aTargetPosition = rBarInfo.maPos;
     aTargetPosition.z += 240;
@@ -942,6 +914,27 @@ void GL3DBarChart::render()
         return;
 
     update();
+}
+
+void GL3DBarChart::renderFrame()
+{
+    Size aSize = mpWindow->GetSizePixel();
+    mpRenderer->SetSize(aSize);
+    if(mbNeedsNewRender)
+    {
+        mpRenderer->ReleaseTextTexture();
+        for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = maShapes.begin(),
+                itrEnd = maShapes.end(); itr != itrEnd; ++itr)
+        {
+            itr->render();
+        }
+    }
+    else
+    {
+        mpCamera->render();
+    }
+    mpRenderer->ProcessUnrenderedShape(mbNeedsNewRender);
+    mbNeedsNewRender = false;
 }
 
 void GL3DBarChart::mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 )

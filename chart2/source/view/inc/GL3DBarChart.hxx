@@ -74,9 +74,15 @@ public:
 
     virtual void render() SAL_OVERRIDE;
 
+    /// Render one frame of the 3D bar chart.
+    void renderFrame();
+
     virtual void update() SAL_OVERRIDE;
 
+    /// Draw to the framebuffer context, and provide the ID of the bar that the user has clicked.
+    sal_uInt32 barIdAtPosition(const Point& rPos);
     virtual void clickedAt(const Point& rPos, sal_uInt16 nButtons) SAL_OVERRIDE;
+
     virtual void mouseDragMove(const Point& rStartPos, const Point& rEndPos, sal_uInt16 nButtons) SAL_OVERRIDE;
     virtual void scroll(long nDelta) SAL_OVERRIDE;
     virtual void contextDestroyed() SAL_OVERRIDE;
