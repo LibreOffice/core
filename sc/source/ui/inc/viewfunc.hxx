@@ -240,6 +240,7 @@ public:
     void            FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount, bool bRecord = true );
     void            FillCrossDblClick();
+    void            ConvertFormulaToValue();
 
     void            TransliterateText( sal_Int32 nType );
 

@@ -75,6 +75,7 @@ struct FormulaGroupContext;
 class DocumentStreamAccess;
 class DocumentLinkManager;
 class CellValues;
+class TableValues;
 class RowHeightContext;
 struct SetFormulaDirtyContext;
 class RefMovedHint;
@@ -2109,6 +2110,10 @@ public:
 
     void SetCalcConfig( const ScCalcConfig& rConfig );
     const ScCalcConfig& GetCalcConfig() const { return maCalcConfig; }
+
+    void ConvertFormulaToValue( const ScRange& rRange, sc::TableValues* pUndo );
+
+    void SwapNonEmpty( sc::TableValues& rValues );
 
 private:
 

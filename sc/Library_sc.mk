@@ -514,6 +514,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/undo/undoblk3 \
     sc/source/ui/undo/undocell \
     sc/source/ui/undo/undocell2 \
+    sc/source/ui/undo/undoconvert \
     sc/source/ui/undo/undodat \
     sc/source/ui/undo/undodraw \
     sc/source/ui/undo/undoolk \

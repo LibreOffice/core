@@ -84,6 +84,8 @@
 #include "cellvalue.hxx"
 #include "tokenarray.hxx"
 #include <rowheightcontext.hxx>
+#include <cellvalues.hxx>
+#include <undoconvert.hxx>
 
 #include <memory>
 #include <utility>
@@ -5382,6 +5384,38 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     rDoc.SetStreamValid(nTab, false);
     aModificator.SetDocumentModified();
     SfxGetpApp()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+}
+
+void ScDocFunc::ConvertFormulaToValue( const ScRange& rRange, bool bRecord, bool bInteraction )
+{
+    ScDocShellModificator aModificator(rDocShell);
+    ScDocument& rDoc = rDocShell.GetDocument();
+    if (!rDoc.IsUndoEnabled())
+        bRecord = false;
+
+    ScEditableTester aTester(&rDoc, rRange);
+    if (!aTester.IsEditable())
+    {
+        if (bInteraction)
+            rDocShell.ErrorMessage(aTester.GetMessageId());
+        return;
+    }
+
+    sc::TableValues aUndoVals(rRange);
+    sc::TableValues* pUndoVals = bRecord ? &aUndoVals : NULL;
+
+    rDoc.ConvertFormulaToValue(rRange, pUndoVals);
+
+    if (bRecord && pUndoVals)
+    {
+        rDocShell.GetUndoManager()->AddUndoAction(
+            new sc::UndoFormulaToValue(&rDocShell, *pUndoVals));
+    }
+
+    rDocShell.PostPaint(rRange, PAINT_GRID);
+    rDocShell.PostDataChanged();
+    rDoc.BroadcastCells(rRange, SC_HINT_DATACHANGED);
+    aModificator.SetDocumentModified();
 }
 
 void ScDocFunc::EnterListAction( sal_uInt16 nNameResId )

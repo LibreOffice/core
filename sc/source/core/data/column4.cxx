@@ -322,6 +322,155 @@ void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
     BroadcastCells(aRows, SC_HINT_DATACHANGED);
 }
 
+namespace {
+
+class ConvertFormulaToValueHandler
+{
+    SCTAB mnTab;
+    SCCOL mnCol;
+    sc::CellValues maResValues;
+    bool mbModified;
+
+public:
+    ConvertFormulaToValueHandler( SCTAB nTab, SCCOL nCol ) :
+        mnTab(nTab),
+        mnCol(nCol),
+        mbModified(false)
+    {
+        maResValues.reset(MAXROWCOUNT);
+    }
+
+    void operator() ( size_t nRow, const ScFormulaCell* pCell )
+    {
+        sc::FormulaResultValue aRes = pCell->GetResult();
+        switch (aRes.meType)
+        {
+            case sc::FormulaResultValue::Value:
+                maResValues.setValue(nRow, aRes.mfValue);
+            break;
+            case sc::FormulaResultValue::String:
+                maResValues.setValue(nRow, aRes.maString);
+            break;
+            case sc::FormulaResultValue::Error:
+            case sc::FormulaResultValue::Invalid:
+            default:
+                maResValues.setValue(nRow, svl::SharedString::getEmptyString());
+        }
+
+        mbModified = true;
+    }
+
+    bool isModified() const { return mbModified; }
+
+    sc::CellValues& getResValues() { return maResValues; }
+};
+
+}
+
+void ScColumn::ConvertFormulaToValue(
+    sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, sc::TableValues* pUndo )
+{
+    if (!ValidRow(nRow1) || !ValidRow(nRow2) || nRow1 > nRow2)
+        return;
+
+    std::vector<SCROW> aBounds;
+    aBounds.push_back(nRow1);
+    if (nRow2 < MAXROW-1)
+        aBounds.push_back(nRow2+1);
+
+    // Split formula cell groups at top and bottom boundaries (if applicable).
+    sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
+
+    // Parse all formulas within the range and store their results into temporary storage.
+    ConvertFormulaToValueHandler aFunc(nTab, nCol);
+    sc::ParseFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
+    if (!aFunc.isModified())
+        // No formula cells encountered.
+        return;
+
+    DetachFormulaCells(rCxt, nRow1, nRow2);
+
+    // Undo storage to hold static values which will get swapped to the cell storage later.
+    sc::CellValues aUndoCells;
+    aFunc.getResValues().swap(aUndoCells);
+    aUndoCells.swapNonEmpty(*this);
+    if (pUndo)
+        pUndo->swap(nTab, nCol, aUndoCells);
+}
+
+namespace {
+
+class StartListeningHandler
+{
+    sc::StartListeningContext& mrCxt;
+
+public:
+    StartListeningHandler( sc::StartListeningContext& rCxt ) :
+        mrCxt(rCxt) {}
+
+    void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
+    {
+        pCell->StartListeningTo(mrCxt);
+    }
+};
+
+class EndListeningHandler
+{
+    sc::EndListeningContext& mrCxt;
+
+public:
+    EndListeningHandler( sc::EndListeningContext& rCxt ) :
+        mrCxt(rCxt) {}
+
+    void operator() (size_t /*nRow*/, ScFormulaCell* pCell)
+    {
+        pCell->EndListeningTo(mrCxt);
+    }
+};
+
+}
+
+void ScColumn::SwapNonEmpty(
+    sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt )
+{
+    const ScRange& rRange = rValues.getRange();
+    std::vector<SCROW> aBounds;
+    aBounds.push_back(rRange.aStart.Row());
+    if (rRange.aEnd.Row() < MAXROW-1)
+        aBounds.push_back(rRange.aEnd.Row()+1);
+
+    // Split formula cell groups at top and bottom boundaries (if applicable).
+    sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
+    std::vector<sc::CellValueSpan> aSpans = rValues.getNonEmptySpans(nTab, nCol);
+
+    // Detach formula cells within the spans (if any).
+    EndListeningHandler aEndLisFunc(rEndCxt);
+    std::vector<sc::CellValueSpan>::const_iterator it = aSpans.begin(), itEnd = aSpans.end();
+    sc::CellStoreType::iterator itPos = maCells.begin();
+    for (; it != itEnd; ++it)
+    {
+        SCROW nRow1 = it->mnRow1;
+        SCROW nRow2 = it->mnRow2;
+        itPos = sc::ProcessFormula(itPos, maCells, nRow1, nRow2, aEndLisFunc);
+    }
+
+    rValues.swapNonEmpty(nTab, nCol, *this);
+    RegroupFormulaCells();
+
+    // Attach formula cells within the spans (if any).
+    StartListeningHandler aStartLisFunc(rStartCxt);
+    it = aSpans.begin();
+    itPos = maCells.begin();
+    for (; it != itEnd; ++it)
+    {
+        SCROW nRow1 = it->mnRow1;
+        SCROW nRow2 = it->mnRow2;
+        itPos = sc::ProcessFormula(itPos, maCells, nRow1, nRow2, aStartLisFunc);
+    }
+
+    CellStorageModified();
+}
+
 void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDeleteFlags nDelFlag, bool bBroadcast )
 {
     std::vector<sc::RowSpan>::const_iterator itSpan = rRanges.begin(), itSpanEnd = rRanges.end();

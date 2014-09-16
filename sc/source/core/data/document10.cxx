@@ -18,6 +18,7 @@
 #include <tokenstringcontext.hxx>
 #include <poolhelp.hxx>
 #include <bcaslot.hxx>
+#include <cellvalues.hxx>
 
 #include "dociter.hxx"
 #include "patattr.hxx"
@@ -300,6 +301,46 @@ std::vector<Color> ScDocument::GetDocColors()
 void ScDocument::SetCalcConfig( const ScCalcConfig& rConfig )
 {
     maCalcConfig = rConfig;
+}
+
+void ScDocument::ConvertFormulaToValue( const ScRange& rRange, sc::TableValues* pUndo )
+{
+    sc::EndListeningContext aCxt(*this);
+
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->ConvertFormulaToValue(
+            aCxt, rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(),
+            pUndo);
+    }
+
+    aCxt.purgeEmptyBroadcasters();
+}
+
+void ScDocument::SwapNonEmpty( sc::TableValues& rValues )
+{
+    const ScRange& rRange = rValues.getRange();
+    if (!rRange.IsValid())
+        return;
+
+    boost::shared_ptr<sc::ColumnBlockPositionSet> pPosSet(new sc::ColumnBlockPositionSet(*this));
+    sc::StartListeningContext aStartCxt(*this, pPosSet);
+    sc::EndListeningContext aEndCxt(*this, pPosSet);
+
+    for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+    {
+        ScTable* pTab = FetchTable(nTab);
+        if (!pTab)
+            continue;
+
+        pTab->SwapNonEmpty(rValues, aStartCxt, aEndCxt);
+    }
+
+    aEndCxt.purgeEmptyBroadcasters();
 }
 
 void ScDocument::PreprocessRangeNameUpdate()

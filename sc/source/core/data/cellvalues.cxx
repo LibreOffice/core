@@ -16,10 +16,44 @@
 
 namespace sc {
 
+namespace {
+
+struct BlockPos
+{
+    size_t mnStart;
+    size_t mnEnd;
+};
+
+CellType toCellType( mdds::mtv::element_t eType )
+{
+    switch (eType)
+    {
+        case element_type_numeric:
+            return CELLTYPE_VALUE;
+        case element_type_string:
+            return CELLTYPE_STRING;
+        case element_type_edittext:
+            return CELLTYPE_EDIT;
+        case element_type_formula:
+            return CELLTYPE_FORMULA;
+        default:
+            ;
+    }
+
+    return CELLTYPE_NONE;
+}
+
+}
+
+CellValueSpan::CellValueSpan( SCROW nRow1, SCROW nRow2, CellType eType ) :
+    mnRow1(nRow1), mnRow2(nRow2), meType(eType) {}
+
 struct CellValuesImpl : boost::noncopyable
 {
     CellStoreType maCells;
     CellTextAttrStoreType maCellTextAttrs;
+    CellStoreType::iterator miCellPos;
+    CellTextAttrStoreType::iterator miAttrPos;
 };
 
 CellValues::CellValues() :
@@ -53,6 +87,34 @@ void CellValues::copyTo( ScColumn& rCol, SCROW nRow ) const
     copyCellTextAttrsTo(rCol, nRow);
 }
 
+void CellValues::swapNonEmpty( ScColumn& rCol )
+{
+    std::vector<BlockPos> aBlocksToSwap;
+
+    {
+        // Go through static value blocks and record their positions and sizes.
+        sc::CellStoreType::const_iterator it = mpImpl->maCells.begin(), itEnd = mpImpl->maCells.end();
+        for (; it != itEnd; ++it)
+        {
+            if (it->type == sc::element_type_empty)
+                continue;
+
+            BlockPos aPos;
+            aPos.mnStart = it->position;
+            aPos.mnEnd = aPos.mnStart + it->size - 1;
+            aBlocksToSwap.push_back(aPos);
+        }
+    }
+
+    // Do the swapping.  The undo storage will store the replaced formula cells after this.
+    std::vector<BlockPos>::const_iterator it = aBlocksToSwap.begin(), itEnd = aBlocksToSwap.end();
+    for (; it != itEnd; ++it)
+    {
+        rCol.maCells.swap(it->mnStart, it->mnEnd, mpImpl->maCells, it->mnStart);
+        rCol.maCellTextAttrs.swap(it->mnStart, it->mnEnd, mpImpl->maCellTextAttrs, it->mnStart);
+    }
+}
+
 void CellValues::assign( const std::vector<double>& rVals )
 {
     mpImpl->maCells.resize(rVals.size());
@@ -68,6 +130,51 @@ size_t CellValues::size() const
 {
     assert(mpImpl->maCells.size() == mpImpl->maCellTextAttrs.size());
     return mpImpl->maCells.size();
+}
+
+void CellValues::reset( size_t nSize )
+{
+    mpImpl->maCells.clear();
+    mpImpl->maCells.resize(nSize);
+    mpImpl->maCellTextAttrs.clear();
+    mpImpl->maCellTextAttrs.resize(nSize);
+
+    mpImpl->miCellPos = mpImpl->maCells.begin();
+    mpImpl->miAttrPos = mpImpl->maCellTextAttrs.begin();
+}
+
+void CellValues::setValue( size_t nRow, double fVal )
+{
+    mpImpl->miCellPos = mpImpl->maCells.set(mpImpl->miCellPos, nRow, fVal);
+    mpImpl->miAttrPos = mpImpl->maCellTextAttrs.set(mpImpl->miAttrPos, nRow, sc::CellTextAttr());
+}
+
+void CellValues::setValue( size_t nRow, const svl::SharedString& rStr )
+{
+    mpImpl->miCellPos = mpImpl->maCells.set(mpImpl->miCellPos, nRow, rStr);
+    mpImpl->miAttrPos = mpImpl->maCellTextAttrs.set(mpImpl->miAttrPos, nRow, sc::CellTextAttr());
+}
+
+void CellValues::swap( CellValues& r )
+{
+    std::swap(mpImpl, r.mpImpl);
+}
+
+std::vector<CellValueSpan> CellValues::getNonEmptySpans() const
+{
+    std::vector<CellValueSpan> aRet;
+    CellStoreType::const_iterator it = mpImpl->maCells.begin(), itEnd = mpImpl->maCells.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->type != element_type_empty)
+        {
+            // Record this span.
+            size_t nRow1 = it->position;
+            size_t nRow2 = nRow1 + it->size - 1;
+            aRet.push_back(CellValueSpan(nRow1, nRow2, toCellType(it->type)));
+        }
+    }
+    return aRet;
 }
 
 void CellValues::copyCellsTo( ScColumn& rCol, SCROW nRow ) const
@@ -165,6 +272,101 @@ void CellValues::copyCellTextAttrsTo( ScColumn& rCol, SCROW nRow ) const
 
         nCurRow += itBlk->size;
     }
+}
+
+typedef boost::ptr_vector<CellValues> TableType;
+typedef boost::ptr_vector<TableType> TablesType;
+
+struct TableValues::Impl
+{
+    ScRange maRange;
+    TablesType maTables;
+
+    Impl( const ScRange& rRange ) : maRange(rRange)
+    {
+        size_t nTabs = rRange.aEnd.Tab() - rRange.aStart.Tab() + 1;
+        size_t nCols = rRange.aEnd.Col() - rRange.aStart.Col() + 1;
+
+        for (size_t nTab = 0; nTab < nTabs; ++nTab)
+        {
+            maTables.push_back(new TableType);
+            TableType& rTab = maTables.back();
+            for (size_t nCol = 0; nCol < nCols; ++nCol)
+                rTab.push_back(new CellValues);
+        }
+    }
+
+    CellValues* getCellValues( SCTAB nTab, SCCOL nCol )
+    {
+        if (nTab < maRange.aStart.Tab() || maRange.aEnd.Tab() < nTab)
+            // sheet index out of bound.
+            return NULL;
+
+        if (nCol < maRange.aStart.Col() || maRange.aEnd.Col() < nCol)
+            // column index out of bound.
+            return NULL;
+
+        size_t nTabOffset = nTab - maRange.aStart.Tab();
+        if (nTabOffset >= maTables.size())
+            return NULL;
+
+        TableType& rTab = maTables[nTab-maRange.aStart.Tab()];
+
+        size_t nColOffset = nCol - maRange.aStart.Col();
+        if (nColOffset >= rTab.size())
+            return NULL;
+
+        return &rTab[nColOffset];
+    }
+};
+
+TableValues::TableValues() :
+    mpImpl(new Impl(ScRange(ScAddress::INITIALIZE_INVALID))) {}
+
+TableValues::TableValues( const ScRange& rRange ) :
+    mpImpl(new Impl(rRange)) {}
+
+TableValues::~TableValues()
+{
+    delete mpImpl;
+}
+
+const ScRange& TableValues::getRange() const
+{
+    return mpImpl->maRange;
+}
+
+void TableValues::swap( SCTAB nTab, SCCOL nCol, CellValues& rColValue )
+{
+    CellValues* pCol = mpImpl->getCellValues(nTab, nCol);
+    if (!pCol)
+        return;
+
+    pCol->swap(rColValue);
+}
+
+void TableValues::swapNonEmpty( SCTAB nTab, SCCOL nCol, ScColumn& rCol )
+{
+    CellValues* pCol = mpImpl->getCellValues(nTab, nCol);
+    if (!pCol)
+        return;
+
+    pCol->swapNonEmpty(rCol);
+}
+
+std::vector<CellValueSpan> TableValues::getNonEmptySpans( SCTAB nTab, SCCOL nCol ) const
+{
+    std::vector<CellValueSpan> aRet;
+    CellValues* pCol = mpImpl->getCellValues(nTab, nCol);
+    if (pCol)
+        aRet = pCol->getNonEmptySpans();
+
+    return aRet;
+}
+
+void TableValues::swap( TableValues& rOther )
+{
+    std::swap(mpImpl, rOther.mpImpl);
 }
 
 }

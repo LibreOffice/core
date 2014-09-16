@@ -1414,6 +1414,17 @@ void ScViewFunc::FillCrossDblClick()
     }
 }
 
+void ScViewFunc::ConvertFormulaToValue()
+{
+    ScRange aRange;
+    GetViewData().GetSimpleArea(aRange);
+    aRange.Justify();
+
+    ScDocShell* pDocSh = GetViewData().GetDocShell();
+    pDocSh->GetDocFunc().ConvertFormulaToValue(aRange, true, true);
+    pDocSh->PostPaint(aRange, PAINT_GRID);
+}
+
 void ScViewFunc::TransliterateText( sal_Int32 nType )
 {
     ScMarkData aFuncMark = GetViewData().GetMarkData();

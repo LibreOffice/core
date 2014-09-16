@@ -2076,6 +2076,11 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Conditional Format";
     };
+
+    String STR_UNDO_FORMULA_TO_VALUE
+    {
+        Text [ en-US ] = "Convert Formula To Value";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -275,8 +275,9 @@
 
 // functions
 
-#define SID_OPEN_CALC           (SC_FUNCTION_START + 4)
-#define FILE_MENU_END           (SC_FUNCTION_START + 20)
+#define SID_OPEN_CALC                   (SC_FUNCTION_START + 4)
+#define SID_CONVERT_FORMULA_TO_VALUE    (SC_FUNCTION_START + 5)
+#define FILE_MENU_END                   (SC_FUNCTION_START + 20)
 
 #define EDIT_MENU_START         (FILE_MENU_END)
 #define FID_DELETE_CELL         (EDIT_MENU_START + 2)

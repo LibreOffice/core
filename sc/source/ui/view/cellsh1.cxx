@@ -1754,6 +1754,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_CONVERT_FORMULA_TO_VALUE:
+        {
+            pTabViewShell->ConvertFormulaToValue();
+        }
+        break;
         case SID_THESAURUS:
             pTabViewShell->DoThesaurus();
             break;

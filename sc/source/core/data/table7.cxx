@@ -14,6 +14,7 @@
 #include <bcaslot.hxx>
 #include <segmenttree.hxx>
 #include <sharedformula.hxx>
+#include <cellvalues.hxx>
 
 bool ScTable::IsMerged( SCCOL nCol, SCROW nRow ) const
 {
@@ -80,6 +81,26 @@ void ScTable::CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& 
         return;
 
     aCol[nCol].CopyCellValuesFrom(nRow, rSrc);
+}
+
+void ScTable::ConvertFormulaToValue(
+    sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+    sc::TableValues* pUndo )
+{
+    if (!ValidCol(nCol1) || !ValidCol(nCol2) || nCol1 > nCol2)
+        return;
+
+    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        aCol[nCol].ConvertFormulaToValue(rCxt, nRow1, nRow2, pUndo);
+}
+
+void ScTable::SwapNonEmpty(
+    sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt )
+{
+    const ScRange& rRange = rValues.getRange();
+    assert(rRange.IsValid());
+    for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+        aCol[nCol].SwapNonEmpty(rValues, rStartCxt, rEndCxt);
 }
 
 void ScTable::PreprocessRangeNameUpdate(

@@ -2513,6 +2513,15 @@ sc::FormulaResultValue ScFormulaCell::GetResult()
     return aResult.GetResult();
 }
 
+sc::FormulaResultValue ScFormulaCell::GetResult() const
+{
+    sal_uInt16 nErr = pCode->GetCodeError();
+    if (nErr)
+        return sc::FormulaResultValue(nErr);
+
+    return aResult.GetResult();
+}
+
 bool ScFormulaCell::HasOneReference( ScRange& r ) const
 {
     pCode->Reset();

@@ -300,6 +300,7 @@ public:
     sal_uInt16      GetRawError();  // don't interpret, just return code or result error
     bool GetErrorOrValue( sal_uInt16& rErr, double& rVal );
     sc::FormulaResultValue GetResult();
+    sc::FormulaResultValue GetResult() const;
     sal_uInt8       GetMatrixFlag() const { return cMatrixFlag;}
     ScTokenArray* GetCode() { return pCode;}
     const ScTokenArray* GetCode() const { return pCode;}

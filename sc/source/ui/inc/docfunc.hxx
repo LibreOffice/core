@@ -222,6 +222,8 @@ public:
      * @param nTab the tab to which the conditional format list belongs
      */
     void SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab );
+
+    void ConvertFormulaToValue( const ScRange& rRange, bool bRecord, bool bInteraction );
 };
 
 class ScDocFuncDirect : public ScDocFunc

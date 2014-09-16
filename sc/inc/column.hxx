@@ -60,6 +60,7 @@ class EditTextIterator;
 struct NoteEntry;
 class DocumentStreamAccess;
 class CellValues;
+class TableValues;
 struct RowSpan;
 class RowHeightContext;
 class CompileFormulaContext;
@@ -153,6 +154,7 @@ friend class sc::SingleColumnSpanSet;
 friend class sc::ColumnSpanSet;
 friend class sc::EditTextIterator;
 friend class sc::CellValues;
+friend class sc::TableValues;
 
     ScColumn(const ScColumn&); // disabled
     ScColumn& operator= (const ScColumn&); // disabled
@@ -601,6 +603,11 @@ public:
 
     void TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rDest );
     void CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc );
+    void ConvertFormulaToValue(
+        sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2, sc::TableValues* pUndo );
+
+    void SwapNonEmpty(
+        sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt );
 
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups() const;

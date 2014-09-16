@@ -69,6 +69,7 @@ struct RefUpdateMoveTabContext;
 struct NoteEntry;
 class DocumentStreamAccess;
 class CellValues;
+class TableValues;
 class RowHeightContext;
 class CompileFormulaContext;
 struct SetFormulaDirtyContext;
@@ -933,6 +934,13 @@ public:
 
     void TransferCellValuesTo( SCCOL nCol, SCROW nRow, size_t nLen, sc::CellValues& rDest );
     void CopyCellValuesFrom( SCCOL nCol, SCROW nRow, const sc::CellValues& rSrc );
+
+    void ConvertFormulaToValue(
+        sc::EndListeningContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+        sc::TableValues* pUndo );
+
+    void SwapNonEmpty(
+        sc::TableValues& rValues, sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt );
 
 #if DEBUG_COLUMN_STORAGE
     void DumpFormulaGroups( SCCOL nCol ) const;

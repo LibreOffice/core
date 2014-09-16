@@ -8753,6 +8753,33 @@ SfxVoidItem OpenFromCalc SID_OPEN_CALC
     GroupId = GID_OPTIONS;
 ]
 
+SfxVoidItem ConvertFormulaToValue SID_CONVERT_FORMULA_TO_VALUE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxStringItem
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
 SfxVoidItem ShowDetail SID_OUTLINE_SHOW
 ()
 [
