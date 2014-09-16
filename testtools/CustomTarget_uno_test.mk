@@ -15,6 +15,7 @@ $(eval $(call gb_CustomTarget_CustomTarget,testtools/uno_test))
 $(call gb_CustomTarget_get_target,testtools/uno_test) : \
 		$(call gb_Executable_get_runtime_dependencies,uno) \
 		$(call gb_InternalUnoApi_get_target,bridgetest) \
+		$(call gb_Package_get_target,instsetoo_native_setup) \
 		$(call gb_Rdb_get_target,uno_services) \
 		$(call gb_Rdb_get_target,ure/services) \
 		$(call gb_UnoApi_get_target,udkapi)
