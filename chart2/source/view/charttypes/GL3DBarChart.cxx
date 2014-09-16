@@ -423,6 +423,7 @@ void RenderBenchMarkThread::UpdateScreenText()
 {
     if (mpChart->mbScreenTextNewRender)
     {
+        mpChart->mpWindow->getContext().makeCurrent();
         mpChart->mpRenderer->ReleaseScreenTextTexture();
         for(boost::ptr_vector<opengl3D::Renderable3DObject>::iterator itr = mpChart->maScreenTextShapes.begin(),
                 itrEnd = mpChart->maScreenTextShapes.end(); itr != itrEnd; ++itr)
@@ -430,6 +431,7 @@ void RenderBenchMarkThread::UpdateScreenText()
             itr->render();
         }
         mpChart->mbScreenTextNewRender = false;
+        mpChart->mpWindow->getContext().resetCurrent();
     }
 }
 
