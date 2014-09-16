@@ -2830,8 +2830,9 @@ void DomainMapper::lcl_startCharacterGroup()
         m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION, uno::makeAny(sal_Int16(900)));
     if (m_pImpl->isSdtEndDeferred())
     {
+        // Fields have an empty character group before the real one, so don't
+        // call setSdtEndDeferred(false) here, that will happen only in lcl_utext().
         m_pImpl->GetTopContext()->Insert(PROP_SDT_END_BEFORE, uno::makeAny(true), true, CHAR_GRAB_BAG);
-        m_pImpl->setSdtEndDeferred(false);
     }
 
     // Remember formatting of the date control as it only supports plain strings natively.
@@ -2936,6 +2937,17 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     OUStringBuffer aBuffer = OUStringBuffer(len);
     aBuffer.append( (const sal_Unicode *) data_, len);
     sText = aBuffer.makeStringAndClear();
+
+    if (m_pImpl->isSdtEndDeferred())
+    {
+        // In case we have a field context, then save the property there, so
+        // SDT's ending right before a field start are handled as well.
+        PropertyMapPtr pContext = m_pImpl->GetTopContext();
+        if (m_pImpl->IsOpenField())
+            pContext = m_pImpl->GetTopFieldContext()->getProperties();
+        pContext->Insert(PROP_SDT_END_BEFORE, uno::makeAny(true), true, CHAR_GRAB_BAG);
+        m_pImpl->setSdtEndDeferred(false);
+    }
 
     if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
     {

@@ -4231,13 +4231,16 @@ void DomainMapper_Impl::PopFieldContext()
                         xToInsert = uno::Reference< text::XTextContent >(pContext->GetTextField(), uno::UNO_QUERY);
                     if( xToInsert.is() && !m_bStartTOC && !m_bStartIndex && !m_bStartBibliography)
                     {
-                        uno::Sequence<beans::PropertyValue> aValues;
+                        PropertyMap aMap;
                         // Character properties of the field show up here the
                         // last (always empty) run. Inherit character
                         // properties from there.
+                        // Also merge in the properties from the field context,
+                        // e.g. SdtEndBefore.
                         if (m_pLastCharacterContext.get())
-                            aValues = m_pLastCharacterContext->GetPropertyValues();
-                        appendTextContent(xToInsert, aValues);
+                            aMap.InsertProps(m_pLastCharacterContext);
+                        aMap.InsertProps(m_aFieldStack.top()->getProperties());
+                        appendTextContent(xToInsert, aMap.GetPropertyValues());
                     }
                     else
                     {

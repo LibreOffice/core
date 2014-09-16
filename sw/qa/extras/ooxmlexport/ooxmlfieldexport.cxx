@@ -599,6 +599,15 @@ DECLARE_OOXMLEXPORT_TEST(testfdo82123, "fdo82123.docx")
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl/w:tr/w:tc[2]/w:p/w:sdt[1]/w:sdtContent/w:r",1);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdtBeforeField, "sdt-before-field.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // Make sure the field doesn't sneak inside the SDT: the SDT should contain only a single run (there were 6 ones).
+        assertXPath(pXmlDoc, "//w:sdt/w:sdtContent/w:r", 1);
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testfdo81946, "fdo81946.docx")
 {
     xmlDocPtr pXmlDoc = parseExport("word/header1.xml");
