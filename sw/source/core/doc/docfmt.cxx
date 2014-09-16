@@ -1934,7 +1934,7 @@ std::vector<Color> SwDoc::GetDocColors()
         while( nWhich )
         {
             const SfxPoolItem *pItem;
-            if( SFX_ITEM_SET == pItemSet->GetItemState( nWhich, false, &pItem ) )
+            if( SfxItemState::SET == pItemSet->GetItemState( nWhich, false, &pItem ) )
             {
                 sal_uInt16 aWhich = pItem->Which();
                 if( std::find(aColAttrs.begin(), aColAttrs.end(), aWhich) != aColAttrs.end() )
