@@ -31,7 +31,7 @@ import com.sun.star.uno.IQueryInterface;
 public final class JNI_proxy implements java.lang.reflect.InvocationHandler
 {
     static {
-        if (System.getProperty("java.vendor") == "The Android Project") {
+        if ("The Android Project".equals(System.getProperty("java.vendor"))) {
             // See corresponding code in
             // javaunohelper/com/sun/star/comp/helper/Bootstrap.java for more
             // comments.
