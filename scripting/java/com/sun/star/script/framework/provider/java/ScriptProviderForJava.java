@@ -43,7 +43,7 @@ import com.sun.star.script.framework.log.LogUtils;
 
 public class ScriptProviderForJava
 {
-    private static class _ScriptProviderForJava extends ScriptProvider
+    public static class _ScriptProviderForJava extends ScriptProvider
     {
         private Resolver m_resolutionPolicy = new StrictResolver();
 
