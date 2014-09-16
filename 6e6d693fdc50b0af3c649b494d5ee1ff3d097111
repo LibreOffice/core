@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_101a246f",
+        "filename": "forms/source/component/FormattedField.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-16T16:40:05Z",
+      "side": 1,
+      "message": "On second thought:\ntrigger submit asynchronous",
+      "revId": "6e6d693fdc50b0af3c649b494d5ee1ff3d097111",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
