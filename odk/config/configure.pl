@@ -43,9 +43,6 @@ $main::OO_SDK_HOME_SUGGESTION = $main::sdkpath;
 
 $main::OFFICE_HOME = "";
 
-$main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
-chomp($main::OO_SDK_URE_HOME);
-
 $main::OO_SDK_MAKE_HOME = "";
 $main::makeName = "make";
 if ( $main::operatingSystem =~ m/solaris/ ||
@@ -131,6 +128,9 @@ if ( $main::operatingSystem =~ m/darwin/ )
     }
 } else
 {
+    $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
+    chomp($main::OO_SDK_URE_HOME);
+
     $main::OFFICE_HOME_SUGGESTION = searchoffice();
 
     if ( $main::OFFICE_HOME_SUGGESTION eq "" ) {
