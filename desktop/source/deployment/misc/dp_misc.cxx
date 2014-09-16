@@ -75,7 +75,7 @@ namespace {
 struct UnoRc : public rtl::StaticWithInit<
     boost::shared_ptr<rtl::Bootstrap>, UnoRc> {
     const boost::shared_ptr<rtl::Bootstrap> operator () () {
-        OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("uno") );
+        OUString unorc( "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("louno") );
         ::rtl::Bootstrap::expandMacros( unorc );
         ::boost::shared_ptr< ::rtl::Bootstrap > ret(
             new ::rtl::Bootstrap( unorc ) );

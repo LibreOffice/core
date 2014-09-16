@@ -20,9 +20,9 @@
 
 #include "config_folders.h"
 
-Profile gid_Profile_Uno_Ini
+Profile gid_Profile_Louno_ini
     ModuleID = gid_Module_Root;
-    Name = PROFILENAME(uno);
+    Name = PROFILENAME(louno);
     Dir = GID_BRAND_DIR_ETC;
     Styles = (NETWORK);
 End
@@ -103,8 +103,8 @@ End
 
 #endif
 
-ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_Bundled_Extensions
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 1;
@@ -112,8 +112,8 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions
     Value = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/extensions";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_Bundled_Extensions_User
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 1;
@@ -121,8 +121,8 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
     Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_Shared_Packages
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 1;
@@ -130,8 +130,8 @@ ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     Value = "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/uno_packages";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages_Cache
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_Shared_Packages_Cache
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 2;
@@ -139,8 +139,8 @@ ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages_Cache
     Value = "$UNO_SHARED_PACKAGES/cache";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Shared_Extensions_User
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_Shared_Extensions_User
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 1;
@@ -148,8 +148,8 @@ ProfileItem gid_Profileitem_Uno_Uno_Shared_Extensions_User
     Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/shared";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_User_Packages
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_User_Packages
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 3;
@@ -157,8 +157,8 @@ ProfileItem gid_Profileitem_Uno_Uno_User_Packages
     Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Bundled_Tmp_Extensions
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_Bundled_Tmp_Extensions
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 1;
@@ -166,8 +166,8 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Tmp_Extensions
     Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Bundled_Bak_Extensions
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_Bundled_Bak_Extensions
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 1;
@@ -175,16 +175,16 @@ ProfileItem gid_Profileitem_Uno_Uno_Bundled_Bak_Extensions
     Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bak";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Uno_User_Packages_Cache
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 4;
     Key = "UNO_USER_PACKAGES_CACHE";
     Value = "$UNO_USER_PACKAGES/cache";
 End
-ProfileItem gid_Profileitem_Uno_Pkg_BundledUnoFile
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Pkg_BundledUnoFile
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 5;
@@ -192,8 +192,8 @@ ProfileItem gid_Profileitem_Uno_Pkg_BundledUnoFile
     Value = "$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
 End
 
-ProfileItem gid_Profileitem_Uno_Pkg_SharedUnoFile
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Pkg_SharedUnoFile
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 5;
@@ -201,8 +201,8 @@ ProfileItem gid_Profileitem_Uno_Pkg_SharedUnoFile
     Value = "$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
 End
 
-ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
-    ProfileID = gid_Profile_Uno_Ini;
+ProfileItem gid_Profileitem_Louno_Pkg_UserUnoFile
+    ProfileID = gid_Profile_Louno_ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 6;

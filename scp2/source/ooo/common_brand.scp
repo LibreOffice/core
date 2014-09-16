@@ -1081,7 +1081,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "BUNDLED_EXTENSIONS";
-    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS}";
+    Value = "${$ORIGIN/" PROFILENAME(louno) ":BUNDLED_EXTENSIONS}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
@@ -1089,7 +1089,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bundled_Extensions_User
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "BUNDLED_EXTENSIONS_USER";
-    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}";
+    Value = "${$ORIGIN/" PROFILENAME(louno) ":BUNDLED_EXTENSIONS_USER}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
@@ -1097,7 +1097,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Packages_Cache
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "UNO_SHARED_PACKAGES_CACHE";
-    Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_SHARED_PACKAGES_CACHE}";
+    Value = "${$ORIGIN/" PROFILENAME(louno) ":UNO_SHARED_PACKAGES_CACHE}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Extensions_User
@@ -1105,7 +1105,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Shared_Extensions_User
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "SHARED_EXTENSIONS_USER";
-    Value = "${$ORIGIN/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}";
+    Value = "${$ORIGIN/" PROFILENAME(louno) ":SHARED_EXTENSIONS_USER}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_User_Packages_Cache
@@ -1113,7 +1113,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_User_Packages_Cache
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "UNO_USER_PACKAGES_CACHE";
-    Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}";
+    Value = "${$ORIGIN/" PROFILENAME(louno) ":UNO_USER_PACKAGES_CACHE}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Tmp_Extensions
@@ -1121,7 +1121,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Tmp_Extensions
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "TMP_EXTENSIONS";
-    Value = "${$ORIGIN/" PROFILENAME(uno) ":TMP_EXTENSIONS}";
+    Value = "${$ORIGIN/" PROFILENAME(louno) ":TMP_EXTENSIONS}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bak_Extensions
@@ -1129,7 +1129,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Uno_Bak_Extensions
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "BAK_EXTENSIONS";
-    Value = "${$ORIGIN/" PROFILENAME(uno) ":TMP_EXTENSIONS}";
+    Value = "${$ORIGIN/" PROFILENAME(louno) ":TMP_EXTENSIONS}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Types
@@ -1137,7 +1137,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Types
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_TYPES";
-    Value = "<$ORIGIN/types>* ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
+    Value = "<$ORIGIN/types>* ${${$ORIGIN/" PROFILENAME(louno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_BundledUnoFile}:UNO_TYPES}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
@@ -1145,7 +1145,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Services
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_SERVICES";
-    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_SERVICES} <$ORIGIN/services>*";
+    Value = "${${$ORIGIN/" PROFILENAME(louno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_SharedUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_BundledUnoFile}:UNO_SERVICES} <$ORIGIN/services>*";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types
@@ -1153,7 +1153,7 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Ure_More_Java_Types
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_TYPES";
-    Value = "${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER "/unoil.jar ${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER "/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
+    Value = "${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER "/unoil.jar ${BRAND_BASE_DIR}/" LIBO_SHARE_JAVA_FOLDER "/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(louno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(louno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Ure_Java_Jfw_Shared_Data
@@ -1213,9 +1213,9 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Configuration_Layers
     Section = "Bootstrap";
     Key = "CONFIGURATION_LAYERS";
 #if defined WNT
-    Value = "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry winreg: res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
+    Value = "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry winreg: res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
 #else
-    Value = "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
+    Value = "xcsxcu:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry res:${BRAND_BASE_DIR}/" LIBO_SHARE_FOLDER "/registry bundledext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":BUNDLED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini sharedext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":SHARED_EXTENSIONS_USER}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini userext:${${BRAND_BASE_DIR}/" LIBO_ETC_FOLDER "/" PROFILENAME(louno) ":UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/configmgr.ini user:${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/user/registrymodifications.xcu";
 #endif
 End
 
