@@ -97,7 +97,7 @@ javadir=bin
 case ${sdk_platform} in
   darwin*)
     programdir="Contents/MacOS"
-    javacdir=Commands
+    javadir=Commands
     ;;
 esac
 
