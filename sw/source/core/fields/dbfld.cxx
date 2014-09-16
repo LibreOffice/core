@@ -333,9 +333,9 @@ void SwDBField::Evaluate()
         SetFormat( nFmt = pMgr->GetColumnFmt( aTmpData.sDataSource, aTmpData.sCommand,
                                         aColNm, pDocFormatter, GetLanguage() ));
 
-    sal_Int32 nColumnType;
-    if( DBL_MAX != nValue )
-        nColumnType = pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aColNm);
+    sal_Int32 nColumnType = nValue == DBL_MAX
+        ? 0
+        : pMgr->GetColumnType(aTmpData.sDataSource, aTmpData.sCommand, aColNm);
 
     bValidValue = FormatValue( pDocFormatter, aContent, nFmt, nValue, nColumnType, this );
 
