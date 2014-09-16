@@ -54,6 +54,7 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.registry.XRegistryKey;
 import com.sun.star.ui.dialogs.XExecutableDialog;
 import com.sun.star.ui.dialogs.XFolderPicker2;
 import com.sun.star.uno.UnoRuntime;
@@ -440,6 +441,17 @@ public class Inspector{
         return xFactory;
     }
 
-
+    /**
+     * Writes the service information into the given registry key.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     * @return  returns true if the operation succeeded
+     * @param   regKey the registryKey
+     * @see     com.sun.star.comp.loader.JavaLoader
+     */
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return (Factory.writeRegistryServiceInfo(_Inspector.class.getName(), _Inspector.getServiceNames(), regKey)
+                && InspectorAddon.__writeRegistryServiceInfo(regKey));
+    }
 }
 
