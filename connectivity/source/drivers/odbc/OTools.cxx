@@ -401,21 +401,22 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
 
 namespace
 {
-    template < typename C > inline void append(OUStringBuffer s, C* d, sal_Int32 n);
-
-    template <> inline void append(OUStringBuffer s, wchar_t* d, sal_Int32 n)
+// Approximation of "#if sizeof (SQLWCHAR) == 4 && sizeof (wchar_t) == 4":
+#if defined SQL_WCHART_CONVERT && defined SAL_UNICODE_NOTEQUAL_WCHAR_T
+    BOOST_STATIC_ASSERT(sizeof (wchar_t) == 4);
+    void append(OUStringBuffer & s, wchar_t* d, sal_Int32 n)
     {
-        assert(sizeof(wchar_t) == 4);
         for (sal_Int32 i = 0; i < n; ++i)
         {
             s.appendUtf32(d[i]);
         }
     }
-
-    template <> inline void append(OUStringBuffer s, sal_Unicode* d, sal_Int32 n)
+#else
+    void append(OUStringBuffer & s, sal_Unicode* d, sal_Int32 n)
     {
         s.append(d, n);
     }
+#endif
 }
 
 OUString OTools::getStringValue(OConnection* _pConnection,
