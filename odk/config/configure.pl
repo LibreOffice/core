@@ -34,7 +34,7 @@ $main::OO_MINORVERSION =~ s#[^\d]+(\d).(\d).+#$2#go;
 
 $main::OO_SDK_CONFIG_HOME= "$ENV{HOME}/$main::OO_SDK_NAME";
 
-$main::operatingSystem = `$main::sdkpath/config.guess | cut -d"-" -f3,4`;
+$main::operatingSystem = `/bin/sh $main::sdkpath/config.guess | cut -d"-" -f3,4`;
 chomp ($main::operatingSystem);
 
 $main::OO_SDK_HOME = $main::sdkpath;

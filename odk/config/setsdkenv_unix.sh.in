@@ -89,7 +89,7 @@ then
 fi
 
 # Get the operating system.
-sdk_platform=`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`
+sdk_platform=`/bin/sh ${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`
 
 # Set the directory name.
 programdir=program
@@ -143,7 +143,7 @@ fi
 # Set the directory name.
 case ${sdk_platform} in
   solaris*)
-    sdk_proctype=`${OO_SDK_HOME}/config.guess | cut -d"-" -f1`
+    sdk_proctype=`/bin/sh ${OO_SDK_HOME}/config.guess | cut -d"-" -f1`
     if [ "${sdk_proctype}" = "sparc" ]
     then
         directoryname=solsparc
