@@ -103,7 +103,7 @@ ifeq ($(COM_GCC_IS_CLANG),TRUE)
 gb_CXX03FLAGS := -std=gnu++98 -Werror=c++11-extensions -Wno-c++11-long-long \
     -Wno-deprecated-declarations
 else
-gb_CXX03FLAGS := -std=gnu++03 -pedantic-errors -Wno-long-long \
+gb_CXX03FLAGS := -std=gnu++98 -pedantic-errors -Wno-long-long \
     -Wno-variadic-macros -Wno-non-virtual-dtor -Wno-deprecated-declarations
 endif
 
