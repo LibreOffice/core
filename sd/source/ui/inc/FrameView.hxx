@@ -163,9 +163,6 @@ public:
     void SetDrawMode(sal_uLong nNewDrawMode) { mnDrawMode = nNewDrawMode; };
     sal_uLong GetDrawMode() const { return mnDrawMode; };
 
-    void SetTabCtrlPercent( double nPercent ) { mnTabCtrlPercent = nPercent; }
-    double GetTabCtrlPercent() const { return mnTabCtrlPercent; }
-
     void SetIsNavigatorShowingAllShapes (const bool bIsNavigatorShowingAllShapes);
     bool IsNavigatorShowingAllShapes (void) const { return mbIsNavigatorShowingAllShapes;}
 
@@ -200,7 +197,6 @@ private:
     sal_uInt16          mnSlotId;           ///< SlotId, which was initial mentioned
     sal_uInt16          mnSlidesPerRow;     ///< slides per row on the slide-desk
     sal_uLong           mnDrawMode;         ///< draw mode for the normal window
-    double              mnTabCtrlPercent;
     /** Remember whether the navigator shows all shapes (<TRUE/>) or only
         the names ones (<FALSE/>).  Not persistent.
     */

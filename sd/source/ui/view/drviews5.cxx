@@ -106,8 +106,7 @@ void DrawViewShell::ArrangeGUIElements (void)
     // Retrieve the current size (thickness) of the scroll bars.  That is
     // the width of the vertical and the height of the horizontal scroll
     // bar.
-    int nScrollBarSize =
-        GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
+    int nScrollBarSize = GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
     maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
 
     Point aHPos = maViewPos;

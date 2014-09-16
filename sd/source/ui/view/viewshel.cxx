@@ -873,13 +873,12 @@ void ViewShell::ArrangeGUIElements (void)
     if (mpHorizontalScrollBar.get()!=NULL
         && mpHorizontalScrollBar->IsVisible())
     {
-        int nLocalLeft = nLeft;
-        if (mpLayerTabBar.get()!=NULL && mpLayerTabBar->IsVisible())
-            nLocalLeft += mpLayerTabBar->GetSizePixel().Width();
         nBottom -= maScrBarWH.Height();
+        if (mpLayerTabBar.get()!=NULL && mpLayerTabBar->IsVisible())
+            nBottom -= mpLayerTabBar->GetSizePixel().Height();
         mpHorizontalScrollBar->SetPosSizePixel (
-            Point(nLocalLeft,nBottom),
-            Size(nRight-nLocalLeft-maScrBarWH.Width(),maScrBarWH.Height()));
+            Point(nLeft, nBottom),
+            Size(nRight - nLeft - maScrBarWH.Width(), maScrBarWH.Height()));
     }
 
     // Vertical scrollbar.
@@ -889,7 +888,7 @@ void ViewShell::ArrangeGUIElements (void)
         nRight -= maScrBarWH.Width();
         mpVerticalScrollBar->SetPosSizePixel (
             Point(nRight,nTop),
-            Size (maScrBarWH.Width(),nBottom-nTop));
+            Size (maScrBarWH.Width(), nBottom-nTop));
     }
 
     // Filler in the lower right corner.

@@ -192,7 +192,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mbClickChangeRotation = pFrameView->IsClickChangeRotation();
         mnSlidesPerRow = pFrameView->GetSlidesPerRow();
         mnDrawMode = pFrameView->GetDrawMode();
-        mnTabCtrlPercent = pFrameView->GetTabCtrlPercent();
         mbIsNavigatorShowingAllShapes = pFrameView->IsNavigatorShowingAllShapes();
         SetPreviousViewShellType (pFrameView->GetPreviousViewShellType());
         SetViewShellTypeOnLoad (pFrameView->GetViewShellTypeOnLoad());
@@ -226,7 +225,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
             bool bUseContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
             mnDrawMode = bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR;
         }
-        mnTabCtrlPercent = 0.0;
         mbIsNavigatorShowingAllShapes = false;
         SetPreviousViewShellType (ViewShell::ST_NONE);
         SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
