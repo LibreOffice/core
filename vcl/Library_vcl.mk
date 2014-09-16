@@ -132,6 +132,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/dockingarea \
     vcl/source/window/dockmgr \
     vcl/source/window/dockwin \
+    vcl/source/window/event \
     vcl/source/window/floatwin \
     vcl/source/window/introwin \
     vcl/source/window/keycod \
@@ -146,7 +147,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/mnemonicengine \
     vcl/source/window/mouse \
     vcl/source/window/mouseevent \
-    vcl/source/window/event \
     vcl/source/window/msgbox \
     vcl/source/window/popupmenuwindow \
     vcl/source/window/printdlg \
