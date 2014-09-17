@@ -696,23 +696,18 @@ IMAGE_SETEVENT:
 
     Graphic aEmptyGrf;
     INetURLObject aGraphicURL( sGrfNm );
-    if( aGraphicURL.GetProtocol() == INET_PROT_DATA )
+    if (aGraphicURL.GetProtocol() == INET_PROT_DATA ||
+        aGraphicURL.GetProtocol() == INET_PROT_FILE)
     {
-        SvMemoryStream* aStream = aGraphicURL.getData();
-        if( aStream )
-        {
-            GraphicFilter::GetGraphicFilter().ImportGraphic( aEmptyGrf, OUString(), *aStream );
-            free( aStream );
-        }
-        else
-        {
-            aEmptyGrf.SetDefaultType();
-        }
+        if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aEmptyGrf, aGraphicURL))
+            sGrfNm = "";
     }
-    else
+    if (!sGrfNm.isEmpty())
     {
         aEmptyGrf.SetDefaultType();
     }
+
+    // passing empty sGrfNm here, means we don't want the graphic to be linked
     SwFrmFmt *pFlyFmt = pDoc->getIDocumentContentOperations().Insert( *pPam, sGrfNm, aEmptyOUStr, &aEmptyGrf,
                                       &aFrmSet, NULL, NULL );
     SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
