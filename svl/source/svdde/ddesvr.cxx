@@ -42,7 +42,23 @@ struct DdeItemImpData
     DdeItemImpData( sal_uLong nH ) : nHCnv( nH ), nCnt( 1 ) {}
 };
 
-class DdeItemImp : public std::vector<DdeItemImpData> {};
+class DdeItemImp {
+public:
+    DdeItemImp() : mvData() {}
+
+    size_t size() const { return mvData.size(); }
+
+    std::vector<DdeItemImpData>::iterator begin() { return mvData.begin(); }
+
+    void erase(std::vector<DdeItemImpData>::iterator it) { mvData.erase(it); }
+
+    void push_back(const DdeItemImpData& rData) { mvData.push_back(rData); }
+
+    DdeItemImpData& operator[](size_t i) { return mvData[i]; }
+
+private:
+    std::vector<DdeItemImpData> mvData;
+};
 
 HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
