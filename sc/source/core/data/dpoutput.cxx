@@ -1129,6 +1129,15 @@ void ScDPOutput::Output()
         }
     }
 
+    if (nColCount == 1 && nRowCount > 0 && nColFieldCount == 0)
+    {
+        // the table contains excatly one data field and no column fields.
+        // Display data description at top right corner.
+        ScSetStringParam aParam;
+        aParam.setTextInput();
+        pDoc->SetString(nDataStartCol, nDataStartRow-1, nTab, aDataDescription, &aParam);
+    }
+
     //  output data results:
 
     for (long nRow=0; nRow<nRowCount; nRow++)
