@@ -56,10 +56,10 @@ public:
     PaletteGPL( const OUString &rFPath, const OUString &rFName );
     virtual ~PaletteGPL();
 
-    virtual const OUString&     GetName();
-    virtual void                LoadColorSet( SvxColorValueSet& rColorSet );
+    virtual const OUString&     GetName() SAL_OVERRIDE;
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) SAL_OVERRIDE;
 
-    virtual bool                IsValid();
+    virtual bool                IsValid() SAL_OVERRIDE;
 };
 
 class PaletteSOC : public Palette
@@ -72,10 +72,10 @@ public:
     PaletteSOC( const OUString &rFPath, const OUString &rFName );
     virtual ~PaletteSOC();
 
-    virtual const OUString&     GetName();
-    virtual void                LoadColorSet( SvxColorValueSet& rColorSet );
+    virtual const OUString&     GetName() SAL_OVERRIDE;
+    virtual void                LoadColorSet( SvxColorValueSet& rColorSet ) SAL_OVERRIDE;
 
-    virtual bool                IsValid();
+    virtual bool                IsValid() SAL_OVERRIDE;
 };
 
 #endif // INCLUDED_SVX_PALETTE_HXX
