@@ -352,7 +352,7 @@ public:
     // start parenthesing, hide SV-Cursor and selected areas
     void StartAction();
     // end parenthesing, show SV-Cursor and selected areas
-    void EndAction( const bool bIdleEnd = false );
+    void EndAction( const bool bIdleEnd = false, const bool DoSetPosX = false );
 
     // basic cursor travelling
     long GetUpDownX() const             { return m_nUpDownX; }
@@ -453,7 +453,7 @@ public:
 #else
     void SttCrsrMove() { ++m_nCrsrMove; StartAction(); }
     void EndCrsrMove( const bool bIdleEnd = false )
-            { EndAction( bIdleEnd ); --m_nCrsrMove; }
+            { EndAction( bIdleEnd, true ); --m_nCrsrMove; }
 #endif
 
     /*
