@@ -171,8 +171,9 @@ namespace connectivity
             virtual ~OStatement(){}
 
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-            OStatement(OConnection* _pConnection, sql::Statement *_cppStatement) : OCommonStatement(_pConnection, _cppStatement) {}
+            // A constructor which is required for the return of the objects
+            OStatement(OConnection* _pConnection, sql::Statement *_cppStatement) :
+                OCommonStatement(_pConnection, _cppStatement) {}
 
             virtual OUString SAL_CALL getImplementationName()
                 throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
@@ -204,14 +205,5 @@ namespace connectivity
     }
 }
 #endif // INCLUDED_MYSQLC_SOURCE_MYSQLC_STATEMENT_HXX
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * End:
- * vim600: noet sw=4 ts=4 fdm=marker
- * vim<600: noet sw=4 ts=4
- */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

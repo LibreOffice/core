@@ -48,7 +48,6 @@ using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using ::osl::MutexGuard;
 
-/* {{{ OConnection::OCommonStatement() -I- */
 OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_cppStatement)
     :OCommonStatement_IBase(m_aMutex)
     ,OPropertySetHelper(OCommonStatement_IBase::rBHelper)
@@ -60,18 +59,12 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection, sql::Statement *_c
     OSL_TRACE("OCommonStatement::OCommonStatement");
     m_pConnection->acquire();
 }
-/* }}} */
 
-
-/* {{{ OConnection::~OCommonStatement() -I- */
 OCommonStatement::~OCommonStatement()
 {
     OSL_TRACE("OCommonStatement::~OCommonStatement");
 }
-/* }}} */
 
-
-/* {{{ OConnection::disposeResultSet() -I- */
 void OCommonStatement::disposeResultSet()
 {
     OSL_TRACE("OCommonStatement::disposeResultSet");
@@ -79,10 +72,7 @@ void OCommonStatement::disposeResultSet()
     delete cppStatement;
     cppStatement = NULL;
 }
-/* }}} */
 
-
-/* {{{ OConnection::disposing() -I- */
 void OCommonStatement::disposing()
 {
     OSL_TRACE("OCommonStatement::disposing");
@@ -99,10 +89,7 @@ void OCommonStatement::disposing()
     dispose_ChildImpl();
     OCommonStatement_IBase::disposing();
 }
-/* }}} */
 
-
-/* {{{ OCommonStatement::queryInterface() -I- */
 Any SAL_CALL OCommonStatement::queryInterface(const Type & rType)
     throw(RuntimeException, std::exception)
 {
@@ -113,10 +100,7 @@ Any SAL_CALL OCommonStatement::queryInterface(const Type & rType)
     }
     return aRet;
 }
-/* }}} */
 
-
-/* {{{ OCommonStatement::getTypes() -I- */
 Sequence< Type > SAL_CALL OCommonStatement::getTypes()
     throw(RuntimeException, std::exception)
 {
@@ -127,10 +111,7 @@ Sequence< Type > SAL_CALL OCommonStatement::getTypes()
 
     return concatSequences(aTypes.getTypes(), OCommonStatement_IBase::getTypes());
 }
-/* }}} */
 
-
-/* {{{ OCommonStatement::cancel() -I- */
 void SAL_CALL OCommonStatement::cancel()
     throw(RuntimeException, std::exception)
 {
@@ -139,10 +120,7 @@ void SAL_CALL OCommonStatement::cancel()
     checkDisposed(rBHelper.bDisposed);
     // cancel the current sql statement
 }
-/* }}} */
 
-
-/* {{{ OCommonStatement::close() -I- */
 void SAL_CALL OCommonStatement::close()
     throw(SQLException, RuntimeException, std::exception)
 {
