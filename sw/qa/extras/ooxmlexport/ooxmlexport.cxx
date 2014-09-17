@@ -231,6 +231,28 @@ DECLARE_OOXMLEXPORT_TEST(testShapeInFloattable, "shape-in-floattable.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testEmptyAnnotationMark, "empty-annotation-mark.docx")
+{
+    if (mbExported)
+    {
+        // Delete the word that is commented, and save again.
+        uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 3);
+        CPPUNIT_ASSERT_EQUAL(OUString("with"), xRun->getString());
+        xRun->setString("");
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        xStorable->store();
+
+        // Then inspect the OOXML markup of the modified document model.
+        xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+        // There were two commentReference nodes.
+        assertXPath(pXmlDoc, "//w:commentReference", "id", "0");
+        // Empty comment range was not ignored on export, this was 1.
+        assertXPath(pXmlDoc, "//w:commentRangeStart", 0);
+        // Ditto.
+        assertXPath(pXmlDoc, "//w:commentRangeEnd", 0);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

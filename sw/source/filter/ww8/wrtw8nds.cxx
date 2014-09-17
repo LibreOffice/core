@@ -1806,7 +1806,12 @@ bool MSWordExportBase::GetAnnotationMarks( const SwTxtNode& rNd, sal_Int32 nStt,
             bool bIsStartOk = ( pMark->GetMarkStart().nNode == nNd ) && ( nBStart >= nStt ) && ( nBStart <= nEnd );
             bool bIsEndOk = ( pMark->GetMarkEnd().nNode == nNd ) && ( nBEnd >= nStt ) && ( nBEnd <= nEnd );
 
-            if ( bIsStartOk || bIsEndOk )
+            // Annotation marks always have at least one character: the anchor
+            // point of the comment field. In this case Word wants only the
+            // comment field, so ignore the annotation mark itself.
+            bool bSingleChar = pMark->GetMarkStart().nNode == pMark->GetMarkEnd().nNode && nBStart + 1 == nBEnd;
+
+            if ( ( bIsStartOk || bIsEndOk ) && !bSingleChar )
             {
                 rArr.push_back( pMark );
             }
