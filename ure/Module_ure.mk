@@ -11,7 +11,6 @@ $(eval $(call gb_Module_Module,ure))
 
 $(eval $(call gb_Module_add_targets,ure,\
 	Package_install \
-	Package_builddir_install \
 	Rdb_ure \
 ))
 
