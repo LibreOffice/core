@@ -2199,6 +2199,7 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                                         default:
                                             break;
                                     }
+                                    break;
                                 case SVXDATEFORMAT_C:       // 13.Feb 1996
                                 case SVXDATEFORMAT_D:       // 13.February 1996
                                     switch( eCurDateFormat )
