@@ -148,7 +148,7 @@ End
 
 // We set up the URE unorc/uno.ini in scp2 because then it is easy to
 // get the platform differences into it compared to constructing it in
-// Makefiles etc. On OS X it goes into .app/Contents/Resources/ure/unorc,
+// Makefiles etc. On OS X it goes into .app/Contents/Resources/ure/etc/unorc,
 // on other Unix into .../ure/lib/unorc and on Windows into
 // .../ure/bin/unorc. The latter two locations are factored out as
 // SCP2_URE_DL_DIR.
