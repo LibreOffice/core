@@ -34,7 +34,7 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGSpreadsheetInterface &rGenerator) SAL_OVERRIDE;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGSpreadsheetInterface &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
     virtual void doRegisterHandlers(OdsGenerator &rGenerator) SAL_OVERRIDE;
 };
 

@@ -25,7 +25,7 @@ using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool PageMakerImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator)
+bool PageMakerImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator, utl::MediaDescriptor &)
 {
     return libpagemaker::PMDocument::parse(&rInput, &rGenerator);
 }

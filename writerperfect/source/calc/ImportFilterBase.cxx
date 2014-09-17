@@ -97,7 +97,8 @@ throw (RuntimeException, std::exception)
 
     doRegisterHandlers(exporter);
 
-    return doImportDocument(input, exporter);
+    utl::MediaDescriptor aMediaDescriptor(aDescriptor);
+    return doImportDocument(input, exporter, aMediaDescriptor);
 }
 
 void SAL_CALL ImportFilterImpl::cancel()

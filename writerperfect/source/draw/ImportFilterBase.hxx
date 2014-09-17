@@ -20,6 +20,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 
+#include <unotools/mediadescriptor.hxx>
+
 namespace com
 {
 namespace sun
@@ -91,7 +93,7 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) = 0;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator) = 0;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGDrawingInterface &rGenerator, utl::MediaDescriptor &) = 0;
     virtual void doRegisterHandlers(OdgGenerator &rGenerator);
 
 private:
