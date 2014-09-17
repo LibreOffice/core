@@ -1361,6 +1361,7 @@ private:
     {
         SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();
         rInfo.meOrientation = ORIENTATION_PORTRAIT;
+        bool bDoDodgyHeightWidthFit = !mpOptions->IsDraw() && !mpOptions->IsNotes();
 
         if( ! mpOptions->IsBooklet())
         {
@@ -1369,9 +1370,9 @@ private:
         else if (rInfo.maPageSize.Width() < rInfo.maPageSize.Height())
             rInfo.meOrientation = ORIENTATION_LANDSCAPE;
 
-        // Draw should abide by specified paper size
+        // Draw and Notes should abide by their specified paper size
         Size aPaperSize;
-        if (mpOptions->IsDraw())
+        if (!bDoDodgyHeightWidthFit)
         {
             aPaperSize.setWidth(rInfo.maPageSize.Width());
             aPaperSize.setHeight(rInfo.maPageSize.Height());
@@ -1382,18 +1383,19 @@ private:
             aPaperSize.setHeight(rInfo.mpPrinter->GetPaperSize().Height());
         }
 
-        if( (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
-              (aPaperSize.Width() < aPaperSize.Height()))
-           ||
-            (rInfo.meOrientation == ORIENTATION_PORTRAIT &&
-              (aPaperSize.Width() > aPaperSize.Height()))
-          )
+        maPrintSize = awt::Size(aPaperSize.Width(), aPaperSize.Height());
+
+        if (bDoDodgyHeightWidthFit)
         {
-            maPrintSize = awt::Size(aPaperSize.Height(), aPaperSize.Width());
-        }
-        else
-        {
-            maPrintSize = awt::Size(aPaperSize.Width(), aPaperSize.Height());
+            if( (rInfo.meOrientation == ORIENTATION_LANDSCAPE &&
+                  (aPaperSize.Width() < aPaperSize.Height()))
+               ||
+                (rInfo.meOrientation == ORIENTATION_PORTRAIT &&
+                  (aPaperSize.Width() > aPaperSize.Height()))
+              )
+            {
+                maPrintSize = awt::Size(aPaperSize.Height(), aPaperSize.Width());
+            }
         }
 
         return true;
