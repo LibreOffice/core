@@ -52,8 +52,7 @@ void PaletteGPL::LoadColorSet( SvxColorValueSet& rColorSet )
 
     rColorSet.Clear();
     int nIx = 1;
-    for(typename ColorList::const_iterator it = maColors.begin();
-        it != maColors.end(); ++it)
+    for (ColorList::const_iterator it = maColors.begin(); it != maColors.end(); ++it)
     {
         rColorSet.InsertItem(nIx, it->first, it->second);
         ++nIx;
