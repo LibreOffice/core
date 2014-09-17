@@ -95,7 +95,7 @@ public class ScriptMetaData extends ScriptEntry {
         "vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR";
 
     private static final String USER =
-        "vnd.sun.star.expand:${$BRAND_BASE_DIR/BRAND_BIN_SUBDIR/" +
+        "vnd.sun.star.expand:${$BRAND_INI_DIR/" +
         PathUtils.BOOTSTRAP_NAME +
         "::UserInstallation}/user";
 

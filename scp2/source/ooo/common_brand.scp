@@ -1056,8 +1056,8 @@ ProfileItem gid_Brand_Profileitem_Fundamental_Brand_Bin_Subdir
     ModuleID = gid_Module_Root_Brand;
     ProfileID = gid_Brand_Profile_Fundamental_Ini;
     Section = "Bootstrap";
-    Key = "BRAND_BIN_SUBDIR";
-    Value = LIBO_BIN_FOLDER;
+    Key = "BRAND_INI_DIR";
+    Value = "${ORIGIN}";
 End
 
 ProfileItem gid_Brand_Profileitem_Fundamental_Lo_Lib_Dir
