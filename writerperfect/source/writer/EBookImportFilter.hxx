@@ -34,7 +34,7 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator) SAL_OVERRIDE;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGTextInterface &rGenerator, utl::MediaDescriptor &rDescriptor) SAL_OVERRIDE;
 };
 
 OUString EBookImportFilter_getImplementationName()

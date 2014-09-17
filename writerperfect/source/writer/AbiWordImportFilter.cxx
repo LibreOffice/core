@@ -24,7 +24,7 @@ using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 using com::sun::star::uno::XInterface;
 
-bool AbiWordImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, const rtl::OUString &, librevenge::RVNGTextInterface &rGenerator)
+bool AbiWordImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGTextInterface &rGenerator, utl::MediaDescriptor &)
 {
     return libabw::AbiDocument::parse(&rInput, &rGenerator);
 }

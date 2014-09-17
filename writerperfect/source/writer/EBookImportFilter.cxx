@@ -26,21 +26,26 @@ using com::sun::star::uno::XComponentContext;
 
 using libebook::EBOOKDocument;
 
-bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, const rtl::OUString &rFilterName, librevenge::RVNGTextInterface &rGenerator)
+bool EBookImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGTextInterface &rGenerator, utl::MediaDescriptor &rDescriptor)
 {
     EBOOKDocument::Type type = EBOOKDocument::TYPE_UNKNOWN;
 
-    if (rFilterName == "FictionBook 2")
+    rtl::OUString aFilterName;
+
+    rDescriptor[utl::MediaDescriptor::PROP_FILTERNAME()] >>= aFilterName;
+    assert(!aFilterName.isEmpty());
+
+    if (aFilterName == "FictionBook 2")
         type = EBOOKDocument::TYPE_FICTIONBOOK2;
-    else if (rFilterName == "PalmDoc")
+    else if (aFilterName == "PalmDoc")
         type = EBOOKDocument::TYPE_PALMDOC;
-    else if (rFilterName == "Plucker eBook")
+    else if (aFilterName == "Plucker eBook")
         type = EBOOKDocument::TYPE_PLUCKER;
-    else if (rFilterName == "eReader eBook")
+    else if (aFilterName == "eReader eBook")
         type = EBOOKDocument::TYPE_PEANUTPRESS;
-    else if (rFilterName == "TealDoc")
+    else if (aFilterName == "TealDoc")
         type = EBOOKDocument::TYPE_TEALDOC;
-    else if (rFilterName == "zTXT")
+    else if (aFilterName == "zTXT")
         type = EBOOKDocument::TYPE_ZTXT;
 
     if (EBOOKDocument::TYPE_UNKNOWN != type)
