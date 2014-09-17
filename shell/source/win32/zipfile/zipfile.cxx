@@ -304,7 +304,7 @@ static bool findCentralDirectoryEnd(StreamInterface *stream)
 
     try
     {
-        for (long nOffset = nLength - BLOCK_SIZE;
+        for (long nOffset = nLength - BLOCK_SIZE - 4;
              nOffset > 0; nOffset -= BLOCK_SIZE)
         {
             if (findSignatureAtOffset(stream, nOffset))
