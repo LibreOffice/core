@@ -37,7 +37,7 @@ private:
     const sal_uInt16    theSlotId;
     SvxColorValueSet*   mpColorSet;
     SvxColorValueSet*   mpRecentColorSet;
-    Size                maWindowSize;
+
     ListBox*            mpPaletteListBox;
     PushButton*         mpButtonAutoColor;
     PushButton*         mpButtonPicker;

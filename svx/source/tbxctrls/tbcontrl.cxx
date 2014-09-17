@@ -1009,7 +1009,6 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
                     "palette_popup_window", "svx/ui/colorwindow.ui",
                     rFrame ),
     theSlotId( nSlotId ),
-    maWindowSize( 250, 350 ),
     maCommand( rCommand ),
     mrPaletteManager( rPaletteManager ),
     mnColorSetCols( 10 )
@@ -1186,7 +1185,6 @@ void SvxColorWindow_Impl::Resize()
 {
     mpColorSet->SetSizePixel( this->GetOutputSizePixel() );
     mpRecentColorSet->SetSizePixel( this->GetOutputSizePixel() );
-    SetOutputSizePixel(maWindowSize);
 }
 
 void SvxColorWindow_Impl::StartSelection()
