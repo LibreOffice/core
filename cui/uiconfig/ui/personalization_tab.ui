@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.1 -->
+<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkVBox" id="PersonalizationTabPage">
@@ -28,7 +28,7 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkRadioButton" id="no_persona">
-                    <property name="label" translatable="yes">Plain look, do not use Themes</property>
+                    <property name="label" translatable="yes">Default look, do not use Themes</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -154,7 +154,7 @@
                   <object class="GtkLabel" id="extensions_label">
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Or, select from the personas installed via extensions</property>
+                    <property name="label" translatable="yes">Or, select from the Themes installed via extensions:</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
