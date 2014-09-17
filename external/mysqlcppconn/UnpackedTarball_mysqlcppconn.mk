@@ -19,6 +19,7 @@ $(eval $(call gb_UnpackedTarball_add_file,mysqlcppconn,driver/nativeapi/binding_
 $(eval $(call gb_UnpackedTarball_add_patches,mysqlcppconn,\
 	external/mysqlcppconn/patches/mysql-connector-c++-1.1.0.patch \
 	external/mysqlcppconn/patches/warnings.patch.0 \
+        external/mysqlcppconn/patches/enable-libmysql-proxy.patch \
 ))
 
 # vim: set noet sw=4 ts=4:
