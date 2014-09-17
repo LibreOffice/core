@@ -248,8 +248,6 @@ void ScDocument::CopyCellValuesFrom( const ScAddress& rTopPos, const sc::CellVal
 
 std::vector<Color> ScDocument::GetDocColors()
 {
-    // list of color attributes to collect
-    const std::vector<sal_uInt16> aColAttrs({ATTR_FONT_COLOR, ATTR_BACKGROUND});
     std::vector<Color> docColors;
 
     for( unsigned int nTabIx = 0; nTabIx < maTabs.size(); ++nTabIx )
@@ -273,14 +271,22 @@ std::vector<Color> ScDocument::GetDocColors()
                 if( SfxItemState::SET == rItemSet.GetItemState( nWhich, false, &pItem ) )
                 {
                     sal_uInt16 aWhich = pItem->Which();
-                    if( std::find(aColAttrs.begin(), aColAttrs.end(), aWhich) != aColAttrs.end() )
+                    switch (aWhich)
                     {
-                        Color aColor( ((SvxColorItem*)pItem)->GetValue() );
-                        if( COL_AUTO != aColor.GetColor() &&
-                            std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
-                        {
-                            docColors.push_back( aColor );
-                        }
+                        // attributes we want to collect
+                        case ATTR_FONT_COLOR:
+                        case ATTR_BACKGROUND:
+                            {
+                                Color aColor( ((SvxColorItem*)pItem)->GetValue() );
+                                if( COL_AUTO != aColor.GetColor() &&
+                                        std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
+                                {
+                                    docColors.push_back( aColor );
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
 
