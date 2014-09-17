@@ -27,6 +27,8 @@
 #include <documentlinkmgr.hxx>
 
 #include <config_orcus.h>
+#include "officecfg/Office/calc.hxx"
+
 
 #if ENABLE_ORCUS
 #if defined WNT
@@ -38,6 +40,11 @@
 #include <queue>
 
 namespace sc {
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sheet;
 
 enum {
     DEBUG_TIME_IMPORT,
@@ -501,18 +508,14 @@ void DataStream::MoveData()
         default:
             ;
     }
-
     if(mbIsFirst && mbIsUpdate)
     {
-         int nImportTimeout = 0;
-         static char * cenv = getenv( "streamtimeout" );
-         if(cenv)
-         {
-             double nEnv = atof(cenv);
-             nImportTimeout = 1000 * nEnv;
-         }
-         maImportTimer.SetTimeout(nImportTimeout);
-         mbIsFirst = false;
+        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+        sal_Int32 nStreamTimeout = static_cast<sal_Int32>(officecfg::Office::Calc::DataStream::DataStreamTimeout::get( xContext ));
+        //Minus the helf time for empty lines.
+        nStreamTimeout = nStreamTimeout >> 1;
+        maImportTimer.SetTimeout(nStreamTimeout);
+        mbIsFirst = false;
     }
 }
 
