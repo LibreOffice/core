@@ -277,7 +277,7 @@ static Reference< XContent > getContentThrow(
         ensureContentProviderForURL( rBroker, xId->getContentIdentifier() );
 
         throw ContentCreationException(
-            "Unable to create Content! " + msg,
+            "Unable to create Content for <" + xId->getContentIdentifier() + ">: " + msg,
             Reference< XInterface >(),
             ContentCreationError_CONTENT_CREATION_FAILED );
     }
