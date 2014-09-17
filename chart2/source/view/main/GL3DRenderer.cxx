@@ -36,8 +36,8 @@ const int CORNER_DIVION_Z = 20;
 
 GLfloat texCoords[] = {
     1.0f, 0.0f,
-    1.0f, 1.0f,
-    0.0f, 1.0f,
+    1.0f, 0.96f,
+    0.0f, 0.96f,
     0.0f, 0.0f
 };
 
@@ -1927,6 +1927,8 @@ void OpenGL3DRenderer::ReleaseScreenTextTexture()
 
 void OpenGL3DRenderer::RenderScreenTextShape()
 {
+    if (mbPickingMode)
+        return;
     glUseProgram(maResources.m_ScreenTextProID);
     CHECK_GL_ERROR();
     for (size_t i = 0; i < m_ScreenTextInfoList.size(); i++)
