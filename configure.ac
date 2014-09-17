@@ -8068,7 +8068,6 @@ if test "$ENABLE_MARIADBC" = "TRUE"; then
         fi
     else
         AC_MSG_RESULT([internal])
-        AC_MSG_ERROR([libmariadb is known to be incompatible as of 2014-09; use libmysqlclient])
         SYSTEM_MARIADB=
         MARIADB_CFLAGS="-I${WORKDIR}/UnpackedTarball/mariadb/include"
         MARIADB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lmariadblib"
