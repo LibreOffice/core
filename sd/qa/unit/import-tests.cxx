@@ -79,6 +79,7 @@ public:
     void testBnc480256();
     void testCreationDate();
     void testBnc584721_1();
+    void testBnc584721_2();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
     CPPUNIT_TEST(testDocumentLayout);
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(testBnc480256);
     CPPUNIT_TEST(testCreationDate);
     CPPUNIT_TEST(testBnc584721_1);
+    CPPUNIT_TEST(testBnc584721_2);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -715,7 +717,7 @@ void SdFiltersTest::testBnc584721_1()
 {
     // Title text shape on the master page contained wrong text.
 
-    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1.pptx"), PPTX);
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1_2.pptx"), PPTX);
 
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
@@ -726,6 +728,21 @@ void SdFiltersTest::testBnc584721_1()
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT_EQUAL(OUString("Click to edit Master title style"), aEdit.GetText(0));
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testBnc584721_2()
+{
+    // Import created an extra/unneeded outliner shape on the master slide next to the imported title shape.
+
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc584721_1_2.pptx"), PPTX);
+
+    SdDrawDocument *pDoc = xDocShRef->GetDoc();
+    CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
+    const SdrPage *pPage = &(pDoc->GetPage(1)->TRG_GetMasterPage());
+    CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+
     xDocShRef->DoClose();
 }
 

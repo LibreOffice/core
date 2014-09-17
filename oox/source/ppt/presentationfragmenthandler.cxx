@@ -465,9 +465,20 @@ bool PresentationFragmentHandler::importSlide( const FragmentHandlerRef& rxSlide
     SlidePersistPtr pMasterPersistPtr( pSlidePersistPtr->getMasterPersist() );
     if ( pMasterPersistPtr.get() )
     {
+        // Setting "Layout" property adds extra title and outliner preset shapes to the master slide
+        Reference< drawing::XDrawPage > xMasterSlide(pMasterPersistPtr->getPage());
+        const int nCount = xMasterSlide->getCount();
+
         const OUString sLayout = "Layout";
         uno::Reference< beans::XPropertySet > xSet( xSlide, uno::UNO_QUERY_THROW );
         xSet->setPropertyValue( sLayout, Any( pMasterPersistPtr->getLayoutFromValueToken() ) );
+
+        while( nCount < xMasterSlide->getCount())
+        {
+            Reference< drawing::XShape > xShape;
+            xMasterSlide->getByIndex(xMasterSlide->getCount()-1) >>= xShape;
+            xMasterSlide->remove(xShape);
+        }
     }
     while( xSlide->getCount() )
     {
