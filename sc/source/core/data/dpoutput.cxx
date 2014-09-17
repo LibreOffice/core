@@ -1130,7 +1130,7 @@ void ScDPOutput::Output()
 
     if (nColCount == 1 && nRowCount > 0 && nColFieldCount == 0)
     {
-        // the table contains excatly one data field and no column fields.
+        // the table contains exactly one data field and no column fields.
         // Display data description at top right corner.
         ScSetStringParam aParam;
         aParam.setTextInput();
