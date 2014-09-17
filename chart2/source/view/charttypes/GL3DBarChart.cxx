@@ -33,6 +33,7 @@
 #define SHOW_VALUE_COUNT 15
 #define SHOW_SCROLL_TEXT_DISTANCE 1000
 #define FLY_THRESHOLD 20
+#define DISPLAY_BARS_NUM 3
 
 
 using namespace com::sun::star;
@@ -472,7 +473,8 @@ GL3DBarChart::GL3DBarChart(
     miDataUpdateCounter(0),
     mnColorRate(0),
     mbBenchMarkMode(false),
-    maHistoryCounter(0)
+    mnHistoryCounter(0),
+    mnBarsInRow(0)
 {
     maFPSRenderStartTime.Seconds = maFPSRenderStartTime.Nanosec = 0;
     maFPSRenderEndTime.Seconds = maFPSRenderEndTime.Nanosec = 0;
@@ -572,6 +574,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
     sal_Int32 nSeriesIndex = 0;
     sal_Int32 nMaxPointCount = 0;
     double nMaxVal = findMaxValue(rDataSeriesContainer)/100;
+    const VDataSeries& rFirstRow = *(rDataSeriesContainer.begin());
+    mnBarsInRow = rFirstRow.getTotalPointCount();
     for (boost::ptr_vector<VDataSeries>::const_iterator itr = rDataSeriesContainer.begin(),
             itrEnd = rDataSeriesContainer.end(); itr != itrEnd; ++itr)
     {
@@ -766,7 +770,7 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
         spawnRenderThread(new RenderBenchMarkThread(this));
     }
     miDataUpdateCounter++;
-    maHistoryCounter++;
+    mnHistoryCounter++;
     mbNeedsNewRender = true;
 }
 
@@ -1130,12 +1134,45 @@ void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
     aList.push_back(nVal);
 }
 
+void GL3DBarChart::getNeighborBarID(sal_uInt32 nSelectBarId, sal_uInt32 *pNeighborBarId)
+{
+    sal_uInt32 nSelectRow = (nSelectBarId - SHAPE_START_ID) / ID_STEP / (mnBarsInRow + 1);
+    for (sal_Int32 i = 0; i < DISPLAY_BARS_NUM; i++)
+    {
+        pNeighborBarId[i] = nSelectBarId + (i - DISPLAY_BARS_NUM / 2) * ID_STEP;
+        if (pNeighborBarId[i] == nSelectBarId)
+            continue;
+        if ((pNeighborBarId[i] - SHAPE_START_ID) / ID_STEP / (mnBarsInRow + 1) != nSelectRow)
+            pNeighborBarId[i] = 0;
+    }
+}
+
+void GL3DBarChart::addMovementScreenText(sal_uInt32 nBarId)
+{
+    if (nBarId == 0)
+        return;
+    std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(nBarId);
+    if (itr == maBarMap.end())
+        return;
+    const BarInformation& rBarInfo = itr->second;
+    glm::vec3 aTextPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
+                                  rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
+                                  rBarInfo.maPos.z);
+    OUString aBarValue = OUString("Value: ") + OUString::number(rBarInfo.mnVal);
+    maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID));
+    const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
+    float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.03;
+    opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
+    pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
+}
+
 void GL3DBarChart::updateClickEvent()
 {
     if (maRenderEvent == EVENT_CLICK || maRenderEvent == EVENT_AUTO_FLY || maRenderEvent == EVENT_SHOW_SELECT)
     {
         std::list<float>& aList = maBarHistory[mnSelectBarId];
         sal_uInt32 nIdex = 0;
+        sal_uInt32 nBarIdArray[DISPLAY_BARS_NUM] = {0};
         OUString aTitle;
         OUString aBarValue;
         float nXCoordStart, nYCoordStart, nTextWidth, nMaxXCoord = 0.0f, nMinXCoord = 1.0f, nMaxHight = 0.0f;
@@ -1158,33 +1195,16 @@ void GL3DBarChart::updateClickEvent()
             nTextWidth = addScreenTextShape(aTitle, glm::vec2(0.55f, 0.99f), 0.07f, true, glm::vec4(0.0f, 1.0f, 1.0f, 0.5f));
             nMaxXCoord = std::max(nMaxXCoord, 0.55f + nTextWidth);
         }
+        getNeighborBarID(mnSelectBarId, nBarIdArray);
         for (std::list<float>::iterator it = aList.begin();it != aList.end();++it)
         {
-            if (nIdex + 1 == aList.size())
+            if (nIdex + 1 < aList.size())
             {
-                aBarValue = OUString("Value: ") + OUString::number(*it);
-                maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 0.0f), CALC_POS_EVENT_ID));
-                const opengl3D::TextCacheItem& rTextCache = mpTextCache->getText(aBarValue);
-                float nRectWidth = (float)rTextCache.maSize.Width() / (float)rTextCache.maSize.Height() * 0.03;
-                std::map<sal_uInt32, const BarInformation>::const_iterator itr = maBarMap.find(mnSelectBarId);
-                const BarInformation& rBarInfo = itr->second;
-                glm::vec3 aTextPos = glm::vec3(rBarInfo.maPos.x + BAR_SIZE_X / 2.0f,
-                                              rBarInfo.maPos.y + BAR_SIZE_Y / 2.0f,
-                                              rBarInfo.maPos.z);
-                opengl3D::ScreenText* pScreenText = static_cast<opengl3D::ScreenText*>(&maScreenTextShapes.back());
-                pScreenText->setPosition(glm::vec2(-nRectWidth / 2, 0.03f), glm::vec2(nRectWidth / 2, -0.03f), aTextPos);
-            }
-            else
-            {
-                aTitle = OUString("[Time:") + OUString::number((maHistoryCounter - aList.size() + nIdex)) + "]: ";
+                aTitle = OUString("[Time:") + OUString::number((mnHistoryCounter - aList.size() + nIdex)) + "]: ";
                 if (nIdex == 0)
                 {
                     aTitle = OUString("Most Recent") + aTitle;
                 }
-                //else if ((aIdex + 2) == aList.size())
-                //{
-                    //aTitle = OUString("Least Recent") + aTitle;
-                //}
                 if (aList.size() <= 25)
                 {
                     nXCoordStart = 0.875f;
@@ -1203,6 +1223,10 @@ void GL3DBarChart::updateClickEvent()
                 nMaxXCoord = std::max(nMaxXCoord, nXCoordStart + nTextWidth);
             }
             nIdex++;
+        }
+        for (sal_uInt32 i = 0; i < DISPLAY_BARS_NUM; i++)
+        {
+            addMovementScreenText(nBarIdArray[i]);
         }
         //add translucent back ground
         aTitle = OUString(" ");
