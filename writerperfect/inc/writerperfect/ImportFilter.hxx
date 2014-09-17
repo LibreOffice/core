@@ -68,14 +68,9 @@ public:
     virtual sal_Bool SAL_CALL filter(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > &rDescriptor)
     throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
     {
-        sal_Int32 nLength = rDescriptor.getLength();
-        const css::beans::PropertyValue *pValue = rDescriptor.getConstArray();
+        utl::MediaDescriptor aDescriptor(rDescriptor);
         css::uno::Reference < css::io::XInputStream > xInputStream;
-        for (sal_Int32 i = 0 ; i < nLength; i++)
-        {
-            if (pValue[i].Name == "InputStream")
-                pValue[i].Value >>= xInputStream;
-        }
+        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
         if (!xInputStream.is())
         {
             OSL_ASSERT(false);
@@ -103,7 +98,6 @@ public:
 
         this->doRegisterHandlers(exporter);
 
-        utl::MediaDescriptor aDescriptor(rDescriptor);
         return this->doImportDocument(input, exporter, aDescriptor);
     }
 
