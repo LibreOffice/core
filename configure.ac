@@ -2010,12 +2010,13 @@ AC_ARG_WITH(
     [with_doxygen=yes])
 
 AC_ARG_WITH(visual-studio,
-    AS_HELP_STRING([--with-visual-studio=<2013/2012/2010>],
+    AS_HELP_STRING([--with-visual-studio=<2013/2012>],
         [Specify which Visual Studio version to use in case several are
          are installed. If not specified, the order of preference is
-         2013, 2012, 2010 (including Express editions).])
+         2013, 2012 (including Express editions). Note that it is
+         unclear whether using 2013 actually works as intended.])
     [
-                          Usage:     --with-visual-studio=<2013/2012/2010>
+                          Usage:     --with-visual-studio=<2013/2012>
     ],
 ,)
 
@@ -3381,8 +3382,6 @@ map_vs_year_to_version()
     unset vsversion
 
     case $1 in
-    2010)
-        vsversion=10.0;;
     2012)
         vsversion=11.0;;
     2013)
@@ -3403,14 +3402,14 @@ vs_versions_to_check()
         map_vs_year_to_version "$1"
         vsversions=$vsversion
     else
-        # By default we prefer 2013, 2012, then 2010
-        vsversions="12.0 11.0 10.0"
+        # By default we prefer 2013, then 2012
+        vsversions="12.0 11.0"
     fi
 }
 
 find_msvs()
 {
-    # Find Visual Studio 2013/2012/2010
+    # Find Visual Studio 2013/2012
     # Args: $1 (optional) : versions to check, in the order of preference
     # Return value: $vstest
 
@@ -3434,7 +3433,7 @@ find_msvs()
 
 find_msvc()
 {
-    # Find Visual C++ 2013/2012/2010
+    # Find Visual C++ 2013/2012
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
@@ -3457,10 +3456,6 @@ find_msvc()
     if test -n "$vctest"; then
         vcnumwithdot=$ver
         case "$vcnumwithdot" in
-        10.0)
-            vcyear=2010
-            vcnum=100
-            ;;
         11.0)
             vcyear=2012
             vcnum=110
@@ -3484,7 +3479,7 @@ if test "$_os" = "WINNT"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                AC_MSG_ERROR([No Visual Studio 2012, 2010 or 2013 installation found])
+                AC_MSG_ERROR([No Visual Studio 2012 or 2013 installation found])
             fi
         fi
 
@@ -3566,7 +3561,7 @@ if test "$_os" = "WINNT"; then
                     COMPATH=`echo $VC_PRODUCT_DIR`
                 fi
             fi
-            if test "$BITNESS_OVERRIDE" = "" -a "$vcnum" != "100"; then
+            if test "$BITNESS_OVERRIDE" = ""; then
                 CC="$CC -arch:SSE" # MSVC 2012 default for x86 is -arch:SSE2
             fi
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
@@ -3581,14 +3576,6 @@ if test "$_os" = "WINNT"; then
             # are always "better", we list them in reverse chronological order.
 
             case $vcnum in
-            100)
-                COMEX=13
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="7.1A 7.1 7.0A 6.0A"
-                if test "$ENABLE_LTO" = TRUE; then
-                    AC_MSG_WARN([LTO is known to cause problems with MSVC 2010])
-                    add_warning "LTO is known to cause problems with MSVC 2010"
-                fi
-                ;;
             110)
                 COMEX=14
                 WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.0 7.1A"

@@ -19,7 +19,6 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 		MSBuild.exe CoinMP.sln /t:Build \
 			/p:Configuration=$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
 			/p:Platform=Win32 \
-			$(if $(filter 100,$(VCVER)),/p:PlatformToolset=v100 /p:VisualStudioVersion=10.0) \
 			$(if $(filter 110,$(VCVER)),/p:PlatformToolset=$(if $(filter 80,$(WINDOWS_SDK_VERSION)),v110,v110_xp) /p:VisualStudioVersion=11.0) \
 			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 /p:VisualStudioVersion=12.0 /ToolsVersion:12.0) \
 	,CoinMP/MSVisualStudio/v9)

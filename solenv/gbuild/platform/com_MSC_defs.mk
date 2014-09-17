@@ -202,22 +202,13 @@ ifneq ($(ENABLE_LTO),)
 # the dbaccess dbu library. Let's try globally disabling C4702.
 
 # Might be fixed in VS2013 though?
-# VCVER=100 for VS2010 and VCVER=110 for VS2012
+# VCVER=110 for VS2012
 
-ifneq ($(filter 100 110,$(VCVER)),)
+ifneq ($(filter 110,$(VCVER)),)
 gb_CXXFLAGS += \
 	-wd4702 \
 
 endif
-
-endif
-
-# New warning(s) in Visual Studio 2010, let's try disabling these only
-# for that specific compiler version, in case a later one will not
-# need them disabled.
-ifeq ($(VCVER),100)
-
-# (none currently)
 
 endif
 
@@ -228,10 +219,8 @@ gb_CXXFLAGS += \
 
 endif
 
-ifneq ($(VCVER),100)
 # rc.exe does not support -nologo in 6.1.6723.1 that is in the Windows SDK 6.0A
 gb_RCFLAGS += -nologo
-endif
 
 # C4005: 'identifier' : macro redefinition
 
