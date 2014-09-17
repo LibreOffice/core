@@ -694,21 +694,30 @@ IMAGE_SETEVENT:
     aFrmSize.SetHeightPercent( nPrcHeight );
     aFrmSet.Put( aFrmSize );
 
-    Graphic aEmptyGrf;
+    Graphic aGraphic;
     INetURLObject aGraphicURL( sGrfNm );
-    if (aGraphicURL.GetProtocol() == INET_PROT_DATA ||
-        aGraphicURL.GetProtocol() == INET_PROT_FILE)
+    if( aGraphicURL.GetProtocol() == INET_PROT_DATA )
     {
-        if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aEmptyGrf, aGraphicURL))
+        SvMemoryStream* aStream = aGraphicURL.getData();
+        if( aStream )
+        {
+            if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *aStream))
+                sGrfNm = "";
+            free( aStream );
+        }
+    }
+    else if (aGraphicURL.GetProtocol() == INET_PROT_FILE)
+    {
+        if (GRFILTER_OK == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
             sGrfNm = "";
     }
     if (!sGrfNm.isEmpty())
     {
-        aEmptyGrf.SetDefaultType();
+        aGraphic.SetDefaultType();
     }
 
     // passing empty sGrfNm here, means we don't want the graphic to be linked
-    SwFrmFmt *pFlyFmt = pDoc->getIDocumentContentOperations().Insert( *pPam, sGrfNm, aEmptyOUStr, &aEmptyGrf,
+    SwFrmFmt *pFlyFmt = pDoc->getIDocumentContentOperations().Insert( *pPam, sGrfNm, aEmptyOUStr, &aGraphic,
                                       &aFrmSet, NULL, NULL );
     SwGrfNode *pGrfNd = pDoc->GetNodes()[ pFlyFmt->GetCntnt().GetCntntIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();
