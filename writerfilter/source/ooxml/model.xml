@@ -60,7 +60,7 @@
   <token tokenid="ooxml:footerl"/>
   <token tokenid="ooxml:footerr"/>
   <token tokenid="ooxml:footerf"/>
-  <namespace name="dml-stylesheet" file="dml-stylesheet.rng">
+  <namespace name="dml-stylesheet">
     <start name="theme"/>
     <start name="themeOverride"/>
     <start name="themeManager"/>
@@ -213,7 +213,7 @@
       <element name="hlinkClick" tokenid="ooxml:hlinkClick_hlinkClick"/>
     </resource>
   </namespace>
-  <namespace name="dml-styleDefaults" file="dml-styleDefaults">
+  <namespace name="dml-styleDefaults">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeProperties.rng"/>
@@ -1013,7 +1013,7 @@
       <element name="extLst" tokenid="ooxml:CT_BaseStyles_extLst"/>
     </resource>
   </namespace>
-  <namespace name="dml-textCharacter" file="dml-textCharacter.rng">
+  <namespace name="dml-textCharacter">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="dml-shapeEffects.rng"/>
@@ -2612,7 +2612,7 @@
       <attribute name="bwMode" tokenid="ooxml:CT_ShapeProperties_bwMode"/>
     </resource>
   </namespace>
-  <namespace name="dml-baseTypes" file="dml-baseTypes">
+  <namespace name="dml-baseTypes">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <include href="shared-relationshipReference.rng"/>
@@ -4112,7 +4112,7 @@
       <element name="sizeRelV" tokenid="ooxml:sizeRelV_sizeRelV"/>
     </resource>
   </namespace>
-  <namespace name="w14" file="w14.rng">
+  <namespace name="w14">
     <start name="glow"/>
     <start name="shadow"/>
     <start name="reflection"/>
@@ -5346,7 +5346,7 @@
       <element name="cntxtAlts" tokenid="ooxml:cntxtAlts_cntxtAlts"/>
     </resource>
   </namespace>
-  <namespace name="a14" file="a14.rng">
+  <namespace name="a14">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.microsoft.com/office/drawingml/2010/main">
       <!-- Simple types -->
       <define name="ST_ArtisticEffectParam10">
@@ -7159,7 +7159,7 @@
       <element name="anchor" tokenid="ooxml:anchor_anchor"/>
     </resource>
   </namespace>
-  <namespace name="sml-customXmlMappings" file="sml-customXmlMappings-rng">
+  <namespace name="sml-customXmlMappings">
     <start name="schemaLibrary"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/schemaLibrary/2006/main">
       <!-- ISO RELAX NG Schema -->
@@ -8291,7 +8291,7 @@
       </define>
     </grammar>
   </namespace>
-  <namespace name="dml-chartDrawing" file="dml-chartDrawing.rng">
+  <namespace name="dml-chartDrawing">
     <start name="pic"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/picture">
       <!-- ISO RELAX NG Schema -->
