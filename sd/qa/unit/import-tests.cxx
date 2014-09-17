@@ -77,6 +77,7 @@ public:
     void testBnc870237();
     void testBnc887225();
     void testBnc480256();
+    void testBnc591147();
     void testCreationDate();
     void testBnc584721_1();
     void testBnc584721_2();
@@ -102,6 +103,7 @@ public:
     CPPUNIT_TEST(testBnc870237);
     CPPUNIT_TEST(testBnc887225);
     CPPUNIT_TEST(testBnc480256);
+    CPPUNIT_TEST(testBnc591147);
     CPPUNIT_TEST(testCreationDate);
     CPPUNIT_TEST(testBnc584721_1);
     CPPUNIT_TEST(testBnc584721_2);
@@ -769,6 +771,41 @@ void SdFiltersTest::testBnc584721_3()
     // Check the text
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT_EQUAL(OUString("Click to edit Master subtitle style"), aEdit.GetText(0));
+
+    xDocShRef->DoClose();
+}
+
+void SdFiltersTest::testBnc591147()
+{
+    ::sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/pptx/bnc591147.pptx"), PPTX);
+
+    // In the document, there are two slides with media files.
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(
+        xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(2), xDoc->getDrawPages()->getCount() );
+
+    // First page has video file inserted
+    uno::Reference< drawing::XDrawPage > xPage(
+        xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), xPage->getCount() );
+
+    uno::Reference< drawing::XShape > xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY_THROW );
+    OUString sVideoURL("emptyURL");
+    bool bSucess = xPropSet->getPropertyValue("MediaURL") >>= sVideoURL;
+    CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSucess );
+
+    // Second page has audio file inserted
+    xPage.set( xDoc->getDrawPages()->getByIndex(1), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL( sal_Int32(1), xPage->getCount() );
+
+    xShape.set( xPage->getByIndex(0), uno::UNO_QUERY_THROW );
+    xPropSet.set( xShape, uno::UNO_QUERY_THROW );
+    OUString sAudioURL("emptyURL");
+    bSucess = xPropSet->getPropertyValue("MediaURL") >>= sAudioURL;
+    CPPUNIT_ASSERT_MESSAGE( "MediaURL property is not set", bSucess );
+
+    CPPUNIT_ASSERT_MESSAGE( "sAudioURL and sVideoURL should not be equal", sAudioURL != sVideoURL );
 
     xDocShRef->DoClose();
 }
