@@ -43,7 +43,7 @@
 #define VALUE_MODE_OPEN     store_AccessReadWrite
 #define VALUE_MODE_OPENREAD store_AccessReadOnly
 
-// 5 Bytes = 1 (Byte fuer den Typ) + 4 (Bytes fuer die Groesse der Daten)
+// 5 bytes = 1 (byte for the type) + 4 (bytes for the size of the data)
 #define VALUE_HEADERSIZE    5
 #define VALUE_TYPEOFFSET    1
 #define VALUE_HEADEROFFSET  5

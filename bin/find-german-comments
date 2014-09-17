@@ -255,7 +255,7 @@ class Parser:
             "cpputools" : 1,
             "crashrep" : 1,
             "cui" : 1,
-            "dbaccess" : 0, #
+            "dbaccess" : 1,
             "desktop" : 1,
             "drawinglayer" : 1,
             "dtrans" : 1,
@@ -294,7 +294,7 @@ class Parser:
             "package" : 1,
             "postprocess" : 1,
             "pyuno" : 1,
-            "registry" : 0, #
+            "registry" : 1,
             "remotebridges" : 1,
             "reportdesign" : 0, #
             "rsc" : 0, #

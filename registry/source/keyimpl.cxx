@@ -381,7 +381,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
         return REG_SET_VALUE_FAILED;
     }
 
-    sal_uInt32 size = 4; // 4 Bytes (sal_uInt32) fuer die Laenge
+    sal_uInt32 size = 4; // 4 bytes (sal_uInt32) for the length
 
     size += len * 4;
 
@@ -392,7 +392,7 @@ RegError ORegKey::setLongListValue(const OUString& valueName, sal_Int32* pValueL
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
+    sal_uInt32 offset = 4; // initial 4 bytes for the size of the array
 
     for (sal_uInt32 i=0; i < len; i++)
     {
@@ -440,7 +440,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
         return REG_SET_VALUE_FAILED;
     }
 
-    sal_uInt32 size = 4; // 4 Bytes (sal_uInt32) fuer die Laenge
+    sal_uInt32 size = 4; // 4 bytes (sal_uInt32) for the length
 
     sal_uInt32 i;
     for (i=0; i < len; i++)
@@ -455,7 +455,7 @@ RegError ORegKey::setStringListValue(const OUString& valueName, sal_Char** pValu
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
 
     for (i=0; i < len; i++)
@@ -508,7 +508,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
         return REG_SET_VALUE_FAILED;
     }
 
-    sal_uInt32 size = 4; // 4 Bytes (sal_uInt32) fuer die Laenge
+    sal_uInt32 size = 4; // 4 bytes (sal_uInt32) for the length
 
     sal_uInt32 i;
     for (i=0; i < len; i++)
@@ -523,7 +523,7 @@ RegError ORegKey::setUnicodeListValue(const OUString& valueName, sal_Unicode** p
     writeUINT32(pBuffer+VALUE_TYPEOFFSET, size);
     writeUINT32(pBuffer+VALUE_HEADEROFFSET, len);
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
 
     for (i=0; i < len; i++)
@@ -747,7 +747,7 @@ RegError ORegKey::getLongListValue(const OUString& valueName, sal_Int32** pValue
     *pLen = len;
     sal_Int32* pVList = (sal_Int32*)rtl_allocateZeroMemory(len * sizeof(sal_Int32));
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
 
     for (sal_uInt32 i = 0; i < len; i++)
     {
@@ -844,7 +844,7 @@ RegError ORegKey::getStringListValue(const OUString& valueName, sal_Char*** pVal
     *pLen = len;
     sal_Char** pVList = (sal_Char**)rtl_allocateZeroMemory(len * sizeof(sal_Char*));
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
 
     sal_Char *pValue;
@@ -950,7 +950,7 @@ RegError ORegKey::getUnicodeListValue(const OUString& valueName, sal_Unicode*** 
     *pLen = len;
     sal_Unicode** pVList = (sal_Unicode**)rtl_allocateZeroMemory(len * sizeof(sal_Unicode*));
 
-    sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays;
+    sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
 
     sal_Unicode *pValue;

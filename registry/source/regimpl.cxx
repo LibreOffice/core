@@ -1569,7 +1569,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             break;
         case 5:
             {
-                sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
+                sal_uInt32 offset = 4; // initial 4 bytes for the size of the array
                 sal_uInt32 len = 0;
 
                 readUINT32(pBuffer, len);
@@ -1601,7 +1601,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             break;
         case 6:
             {
-                sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
+                sal_uInt32 offset = 4; // initial 4 bytes for the size of the array
                 sal_uInt32 sLen = 0;
                 sal_uInt32 len = 0;
 
@@ -1639,7 +1639,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             break;
         case 7:
             {
-                sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
+                sal_uInt32 offset = 4; // initial 4 bytes for the size of the array
                 sal_uInt32 sLen = 0;
                 sal_uInt32 len = 0;
 
