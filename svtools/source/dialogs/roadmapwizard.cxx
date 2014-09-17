@@ -117,17 +117,8 @@ namespace svt
         return nMinLength;
     }
 
-
     //= RoadmapWizard
-
-
 #ifdef DBG_UTIL
-    const char* CheckInvariants( const void* pVoid )
-    {
-        return static_cast< const RoadmapWizard* >( pVoid )->checkInvariants();
-    }
-
-
     const sal_Char* RoadmapWizard::checkInvariants() const
     {
         // all paths have to start with the same state

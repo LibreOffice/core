@@ -748,14 +748,6 @@ SvNumberFormatter* SwEditShell::GetNumberFormatter()
     return GetDoc()->GetNumberFormatter();
 }
 
-bool SwEditShell::RemoveInvisibleContent()
-{
-    StartAllAction();
-    bool bRet = GetDoc()->RemoveInvisibleContent();
-    EndAllAction();
-    return bRet;
-}
-
 bool SwEditShell::ConvertFieldsToText()
 {
     StartAllAction();

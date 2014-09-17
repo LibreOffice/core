@@ -171,7 +171,6 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/queryshowchangesdialog \
 	sw/uiconfig/swriter/ui/mailmerge \
 	sw/uiconfig/swriter/ui/mmaddressblockpage \
-	sw/uiconfig/swriter/ui/mmcreatingdialog \
 	sw/uiconfig/swriter/ui/mmlayoutpage \
 	sw/uiconfig/swriter/ui/mmmailbody \
 	sw/uiconfig/swriter/ui/mmmergepage \

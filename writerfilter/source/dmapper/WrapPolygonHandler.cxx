@@ -66,11 +66,6 @@ WrapPolygon::Points_t::iterator WrapPolygon::end()
     return mPoints.end();
 }
 
-size_t WrapPolygon::size() const
-{
-    return mPoints.size();
-}
-
 WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
 {
     WrapPolygon::Pointer_t pResult(new WrapPolygon);

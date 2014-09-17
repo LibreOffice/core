@@ -102,8 +102,6 @@ public:
     OUString&    GetFilter() const;
     void                SetFilter(OUString&);
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>
-                        GetSelection()const;
     void                SetSelection(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& rSelection);
 
     void                SetCurrentDBData( const SwDBData& rDBData);

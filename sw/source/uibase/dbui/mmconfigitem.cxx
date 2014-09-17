@@ -1075,24 +1075,6 @@ void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
     }
 }
 
-Sequence< Any > SwMailMergeConfigItem::GetSelection() const
-{
-    Sequence< Any > aRet(m_aSelection.getLength());
-    sal_Int32 nRetIndex = 0;
-    sal_Int32 nRet;
-    for(sal_Int32 nIndex = 0; nIndex < m_aSelection.getLength(); ++nIndex)
-    {
-        m_aSelection[nIndex] >>= nRet;
-        if(nRet > 0)
-        {
-            aRet[nRetIndex] <<= nRet;
-            ++nRetIndex;
-        }
-    }
-    aRet.realloc(nRetIndex);
-    return aRet;
-}
-
 const uno::Sequence< OUString>&
                     SwMailMergeConfigItem::GetSavedDocuments() const
 {

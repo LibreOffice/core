@@ -49,8 +49,6 @@ public:
     Points_t::iterator begin();
     Points_t::iterator end();
 
-    size_t size() const;
-
     WrapPolygon::Pointer_t move(const css::awt::Point & rMove);
     WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
     WrapPolygon::Pointer_t correctWordWrapPolygon(const css::awt::Size & rSrcSize);

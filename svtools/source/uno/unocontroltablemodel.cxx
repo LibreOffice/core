@@ -123,25 +123,9 @@ namespace svt { namespace table
         }
     };
 
-
     //= UnoControlTableModel
-
-#ifdef DBG_UTIL
-    const char* UnoControlTableModel::checkInvariants() const
-    {
-        Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
-        if ( !xDataModel.is() )
-            return "data model anymore";
-
-        // TODO: more?
-
-        return NULL;
-    }
-#endif
-
 #define DBG_CHECK_ME() \
     DBG_TESTSOLARMUTEX(); \
-
 
     UnoControlTableModel::UnoControlTableModel()
         :m_pImpl( new UnoControlTableModel_Impl )

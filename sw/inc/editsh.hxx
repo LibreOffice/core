@@ -186,10 +186,6 @@ public:
     /// Count words in current selection.
     void CountWords( SwDocStat& rStat ) const;
 
-    /** Delete non-visible content in the document.
-     E.g. hidden ranges, hidden paragraphs. */
-    bool RemoveInvisibleContent();
-
     /// Replace fields by text - mailmerge support.
     bool ConvertFieldsToText();
 

@@ -64,8 +64,6 @@ public:
     /// Same, as DocxAttributeOutput::m_bBtLr, but for textframe rotation.
     bool getFrameBtLr();
 
-    /// Is paragraph sdt open in the current drawing?
-    bool isParagraphSdtOpen();
     /// Set if paragraph sdt open in the current drawing.
     void setParagraphSdtOpen(bool bParagraphSdtOpen);
 

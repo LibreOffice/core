@@ -270,11 +270,6 @@ bool DocxSdrExport::IsDrawingOpen()
     return m_pImpl->m_bDrawingOpen;
 }
 
-bool DocxSdrExport::isParagraphSdtOpen()
-{
-    return m_pImpl->m_bParagraphSdtOpen;
-}
-
 void DocxSdrExport::setParagraphSdtOpen(bool bParagraphSdtOpen)
 {
     m_pImpl->m_bParagraphSdtOpen = bParagraphSdtOpen;

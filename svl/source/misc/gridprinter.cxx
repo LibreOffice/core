@@ -126,16 +126,6 @@ void GridPrinter::print( const char* pHeader ) const
     }
 }
 
-void GridPrinter::clear()
-{
-    mpImpl->maMatrix.clear();
-}
-
-void GridPrinter::resize( size_t nRows, size_t nCols )
-{
-    mpImpl->maMatrix.resize(nRows, nCols);
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,6 +1,5 @@
 BigInt::BigInt(unsigned int)
 CalcUnoApiTest::CalcUnoApiTest(rtl::OUString const&)
-DocxSdrExport::isParagraphSdtOpen()
 GDriveDocument::GDriveDocument(GDriveSession*)
 GDriveFolder::GDriveFolder(GDriveSession*)
 GDriveProperty::GDriveProperty()
@@ -212,8 +211,4 @@ std::__cxx1998::vector<rtl::Reference<oox::xls::(anonymous namespace)::WorkerThr
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr<formula::FormulaTokenArray>&)
 std::auto_ptr<formula::FormulaTokenArray>::auto_ptr(std::auto_ptr_ref<formula::FormulaTokenArray>)
 svgio::svgreader::SvgDocument::removeSvgStyleAttributesFromMapper(rtl::OUString const&)
-svl::GridPrinter::clear()
-svl::GridPrinter::resize(unsigned long, unsigned long)
-svt::CheckInvariants(void const*)
-svt::table::UnoControlTableModel::checkInvariants() const
 vcl::MapChar(vcl::_TrueTypeFont*, unsigned short, bool)

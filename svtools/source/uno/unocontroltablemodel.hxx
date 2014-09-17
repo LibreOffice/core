@@ -152,10 +152,6 @@ namespace svt { namespace table
         */
         void    notifyAllDataChanged() const;
 
-#ifdef DBG_UTIL
-        const char* checkInvariants() const;
-#endif
-
     private:
         void    impl_notifyTableMetricsChanged() const;
     };
