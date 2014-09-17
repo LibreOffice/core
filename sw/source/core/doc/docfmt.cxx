@@ -1915,8 +1915,6 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
 
 std::vector<Color> SwDoc::GetDocColors()
 {
-    // list of color attributes to collect
-    const std::vector<sal_uInt16> aColAttrs({RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT, RES_BACKGROUND});
     std::vector<Color> docColors;
 
     for(unsigned int i = 0; i < m_pNodes->Count(); ++i)
@@ -1937,14 +1935,23 @@ std::vector<Color> SwDoc::GetDocColors()
             if( SfxItemState::SET == pItemSet->GetItemState( nWhich, false, &pItem ) )
             {
                 sal_uInt16 aWhich = pItem->Which();
-                if( std::find(aColAttrs.begin(), aColAttrs.end(), aWhich) != aColAttrs.end() )
+                switch (aWhich)
                 {
-                    Color aColor( ((SvxColorItem*)pItem)->GetValue() );
-                    if( COL_AUTO != aColor.GetColor() &&
-                        std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
-                    {
-                        docColors.push_back( aColor );
-                    }
+                    // list of color attributes to collect
+                    case RES_CHRATR_COLOR:
+                    case RES_CHRATR_HIGHLIGHT:
+                    case RES_BACKGROUND:
+                        {
+                            Color aColor( ((SvxColorItem*)pItem)->GetValue() );
+                            if( COL_AUTO != aColor.GetColor() &&
+                                    std::find(docColors.begin(), docColors.end(), aColor) == docColors.end() )
+                            {
+                                docColors.push_back( aColor );
+                            }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
 
