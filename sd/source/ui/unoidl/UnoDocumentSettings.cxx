@@ -140,7 +140,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION, HANDLE_CHARCOMPRESS, HANDLE_ASIANPUNCT, HANDLE_UPDATEFROMTEMPLATE,
     HANDLE_PRINTER_INDEPENDENT_LAYOUT
     // #i33095#
-    ,HANDLE_LOAD_READONLY, HANDLE_SAVE_VERSION
+    ,HANDLE_LOAD_READONLY, HANDLE_MODIFY_PASSWD, HANDLE_SAVE_VERSION
     ,HANDLE_SLIDESPERHANDOUT, HANDLE_HANDOUTHORIZONTAL, HANDLE_EMBED_FONTS
 };
 
@@ -201,6 +201,7 @@ enum SdDocumentSettingsPropertyHandles
             { OUString("PrinterIndependentLayout"),HANDLE_PRINTER_INDEPENDENT_LAYOUT,::cppu::UnoType<sal_Int16>::get(), 0,  0 },
             // --> #i33095#
             { OUString("LoadReadonly"),          HANDLE_LOAD_READONLY,       ::getBooleanCppuType(),                0,  0 },
+            { OUString("ModifyPasswordInfo"),    HANDLE_MODIFY_PASSWD,       ::getCppuType((uno::Sequence < beans::PropertyValue > *)0),  0,  0 },
             { OUString("SaveVersionOnClose"),    HANDLE_SAVE_VERSION,        ::getBooleanCppuType(),                0,  0 },
             { OUString("EmbedFonts"),            HANDLE_EMBED_FONTS,         ::getBooleanCppuType(),                0,  0 },
             { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -899,6 +900,22 @@ throw (UnknownPropertyException, PropertyVetoException,
             }
             break;
 
+            case HANDLE_MODIFY_PASSWD:
+            {
+                uno::Sequence< beans::PropertyValue > aInfo;
+                if ( !( *pValues >>= aInfo ) )
+                    throw lang::IllegalArgumentException(
+                        OUString( "Value of type Sequence<PropertyValue> expected!" ),
+                        uno::Reference< uno::XInterface >(),
+                        2 );
+
+                if ( !pDocSh->SetModifyPasswordInfo( aInfo ) )
+                    throw beans::PropertyVetoException(
+                        "The hash is not allowed to be changed now!" );
+
+            }
+            break;
+
             case HANDLE_SAVE_VERSION:
             {
                 bool bNewValue = false;
@@ -1147,6 +1164,12 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
             case HANDLE_LOAD_READONLY:
             {
                 *pValue <<= pDocSh->IsLoadReadonly();
+            }
+            break;
+
+            case HANDLE_MODIFY_PASSWD:
+            {
+                *pValue <<= pDocSh->GetModifyPasswordInfo();
             }
             break;
 
