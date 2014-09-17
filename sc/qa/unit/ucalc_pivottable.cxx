@@ -1075,7 +1075,7 @@ void Test::testPivotTableNormalGrouping()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "2" },
             { "C", "3" },
@@ -1123,7 +1123,7 @@ void Test::testPivotTableNormalGrouping()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][3] = {
-            { "Name2", "Name", 0 },
+            { "Name2", "Name", "Sum - Value" },
             { "D", "D", "4" },
             { "E", "E", "5" },
             { "F", "F", "6" },
@@ -1160,7 +1160,7 @@ void Test::testPivotTableNormalGrouping()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][3] = {
-            { "Name2", "Name", 0 },
+            { "Name2", "Name", "Sum - Value" },
             { "G", "G", "7" },
             { "Group1", "A", "1" },
             { 0,        "B", "2" },
@@ -1257,7 +1257,7 @@ void Test::testPivotTableNumberGrouping()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Order", 0 },
+            { "Order", "Sum - Score" },
             { "<30",   "423" },
             { "30-39", "87"  },
             { "40-49", "241" },
@@ -1372,7 +1372,7 @@ void Test::testPivotTableDateGrouping()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][4] = {
-            { "Years", "Quarters", "Date", 0 },
+            { "Years", "Quarters", "Date", "Sum - Value" },
             { "2011", "Q1", "Jan", "1" },
             { 0, 0,         "Mar", "2" },
             { 0,      "Q3", "Sep", "7" },
@@ -1404,7 +1404,7 @@ void Test::testPivotTableDateGrouping()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][4] = {
-            { "Years", "Quarters", "Date", 0 },
+            { "Years", "Quarters", "Date", "Sum - Value" },
             { "2011", "Q1", "Jan", "1" },
             { 0, 0,         "Mar", "2" },
             { 0,      "Q3", "Sep", "7" },
@@ -1428,7 +1428,7 @@ void Test::testPivotTableDateGrouping()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Date", 0 },
+            { "Date", "Sum - Value" },
             { "2011-01-01", "1" },
             { "2011-03-02", "2" },
             { "2011-09-03", "7" },
@@ -1496,7 +1496,7 @@ void Test::testPivotTableEmptyRows()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "2" },
             { "C", "3" },
@@ -1519,7 +1519,7 @@ void Test::testPivotTableEmptyRows()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "2" },
             { "C", "3" },
@@ -1546,7 +1546,7 @@ void Test::testPivotTableEmptyRows()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "B", "3" },
             { "C", "3" },
             { "D", "4" },
@@ -1624,7 +1624,7 @@ void Test::testPivotTableTextNumber()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "0001", "1" },
             { "0002", "2" },
             { "0003", "3" },
@@ -1708,7 +1708,7 @@ void Test::testPivotTableCaseInsensitiveStrings()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "3" },
             { "Total Result", "3" },
         };
@@ -1871,7 +1871,7 @@ void Test::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "2" },
             { "C", "4" },
@@ -1898,7 +1898,7 @@ void Test::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", 0 },
             { "B", "1" },
             { "C", "3" },
@@ -1918,7 +1918,7 @@ void Test::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "100.00%" },
             { "B", "200.00%" },
             { "C", "400.00%" },
@@ -1938,7 +1938,7 @@ void Test::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", 0 },
             { "B", "100.00%" },
             { "C", "300.00%" },
@@ -1958,7 +1958,7 @@ void Test::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "1" },
             { "B", "3" },
             { "C", "7" },
@@ -1978,7 +1978,7 @@ void Test::testPivotTableFieldReference()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "6.67%" },
             { "B", "13.33%" },
             { "C", "26.67%" },
@@ -2043,7 +2043,7 @@ void Test::testPivotTableDocFunc()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "Apple", "16" },
             { "Microsoft", "32" },
             { "Oracle", "2" },
@@ -2112,7 +2112,7 @@ void Test::testFuncGETPIVOTDATA()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
-            { "Name", 0 },
+            { "Name", "Sum - Value" },
             { "A", "6" },
             { "B", "15" },
             { "Total Result", "21" },
@@ -2270,12 +2270,12 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][3] = {
-            { "Type",         "Member",     0  },
-            { "A",            "Anna",     "1"  },
-            {  0,             "Cecilia",  "3"  },
-            { "B",            "Brittany", "2"  },
-            {  0,             "Donna",    "4"  },
-            { "Total Result",  0,         "10" },
+            { "Type",         "Member",   "Sum - Value" },
+            { "A",            "Anna",     "1"           },
+            {  0,             "Cecilia",  "3"           },
+            { "B",            "Brittany", "2"           },
+            {  0,             "Donna",    "4"           },
+            { "Total Result",  0,         "10"          },
         };
 
         bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "Pivot table refreshed");
