@@ -5,7 +5,7 @@
   <object class="GtkDialog" id="SelectPersonaDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
-    <property name="title" translatable="yes">Select Persona</property>
+    <property name="title" translatable="yes">Select Firefox Theme</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -389,7 +389,7 @@
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Suggested themes by category</property>
+                <property name="label" translatable="yes">Suggested Themes by Category</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>

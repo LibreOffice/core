@@ -21,12 +21,12 @@
 
 String RID_SVXSTR_SEARCHTERM
 {
-    Text [ en-US ] = "Search term...";
+    Text [ en-US ] = "Search term";
 };
 
 String RID_SVXSTR_SELECTEDPERSONA
 {
-    Text [ en-US ] = "Selected Persona: ";
+    Text [ en-US ] = "Selected theme: ";
 };
 
 String RID_SVXSTR_SEARCHING
@@ -46,7 +46,7 @@ String RID_SVXSTR_NORESULTS
 
 String RID_SVXSTR_APPLYPERSONA
 {
-    Text [ en-US ] = "Applying persona..";
+    Text [ en-US ] = "Applying theme...";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
