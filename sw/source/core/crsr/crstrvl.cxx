@@ -87,12 +87,12 @@ void SwCrsrShell::MoveCrsrToNum()
     if( pFrm->IsVertical() )
     {
         aPt.setX(m_aCharRect.Center().getX());
-        aPt.setY(pFrm->Frm().Top() + m_nUpDownX);
+        aPt.setY(pFrm->Frm().Top() + GetUpDownX());
     }
     else
     {
         aPt.setY(m_aCharRect.Center().getY());
-        aPt.setX(pFrm->Frm().Left() + m_nUpDownX);
+        aPt.setX(pFrm->Frm().Left() + GetUpDownX());
     }
     pFrm->GetCrsrOfst( m_pCurCrsr->GetPoint(), aPt );
     if ( !m_pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |

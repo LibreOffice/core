@@ -229,10 +229,15 @@ void SwCrsrShell::StartAction()
     SwViewShell::StartAction(); // to the SwViewShell
 }
 
-void SwCrsrShell::EndAction( const bool bIdleEnd )
+void SwCrsrShell::EndAction( const bool bIdleEnd, const bool DoSetPosX )
 {
     comphelper::FlagRestorationGuard g(mbSelectAll, StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false));
     bool bVis = m_bSVCrsrVis;
+
+    sal_uInt16 eFlags = SwCrsrShell::CHKRANGE;
+    if ( !DoSetPosX )
+        eFlags |= SwCrsrShell::UPDOWN;
+
 
     // Idle-formatting?
     if( bIdleEnd && Imp()->GetRegion() )
@@ -267,7 +272,7 @@ void SwCrsrShell::EndAction( const bool bIdleEnd )
             // Within a Basic action, one needs to update the cursor,
             // to e.g. create the table cursor. This is being done in
             // UpdateCrsr.
-            UpdateCrsr( SwCrsrShell::CHKRANGE, bIdleEnd );
+            UpdateCrsr( eFlags, bIdleEnd );
 
             {
                 // watch Crsr-Moves, call Link if needed, the DTOR is key here!
@@ -284,11 +289,10 @@ void SwCrsrShell::EndAction( const bool bIdleEnd )
         return;
     }
 
-    sal_uInt16 nParm = SwCrsrShell::CHKRANGE;
     if ( !bIdleEnd )
-        nParm |= SwCrsrShell::SCROLLWIN;
+        eFlags |= SwCrsrShell::SCROLLWIN;
 
-    UpdateCrsr( nParm, bIdleEnd );      // Show Cursor changes
+    UpdateCrsr( eFlags, bIdleEnd );      // Show Cursor changes
 
     {
         SwCallLink aLk( *this );        // watch Crsr-Moves
