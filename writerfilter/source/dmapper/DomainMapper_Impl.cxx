@@ -1245,6 +1245,9 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, PropertyMapP
                             if (m_bStartIndex || m_bStartBibliography || m_bStartGenericField)
                                 xTOCTextCursor->goLeft(1, false);
                             xTextRange = xTextAppend->insertTextPortion(rString, pValues, xTOCTextCursor);
+                            SAL_WARN_IF(!xTextRange.is(), "writerfilter.dmapper", "insertTextPortion failed");
+                            if (!xTextRange.is())
+                                throw uno::Exception("insertTextPortion failed", NULL);
                             m_bTextInserted = true;
                             xTOCTextCursor->gotoRange(xTextRange->getEnd(), true);
                             mxTOCTextCursor = xTOCTextCursor;
