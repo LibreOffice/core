@@ -42,6 +42,7 @@ $(eval $(call gb_Library_use_libraries,wpftcalc,\
 ))
 
 $(eval $(call gb_Library_use_externals,wpftcalc,\
+	boost_headers \
 	odfgen \
 	revenge \
 	mwaw \
