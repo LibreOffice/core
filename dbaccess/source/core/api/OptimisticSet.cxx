@@ -182,7 +182,7 @@ void SAL_CALL OptimisticSet::updateRow(const ORowSetRow& _rInsertRow ,const ORow
 {
     if ( m_aJoinedKeyColumns.empty() )
         throw SQLException();
-    // list all cloumns that should be set
+    // list all columns that should be set
     static OUString s_sPara(" = ?");
     OUString aQuote  = getIdentifierQuoteString();
 

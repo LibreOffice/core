@@ -282,7 +282,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     fillTableName(xSet);
 
     OUStringBuffer aSql("UPDATE " + m_aComposedTableName + " SET ");
-    // list all cloumns that should be set
+    // list all columns that should be set
 
     OUStringBuffer aCondition;
     ::std::list< sal_Int32> aOrgValues;

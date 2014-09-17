@@ -34,7 +34,7 @@ class SW_DLLPUBLIC SwAnchoredDrawObject : public SwAnchoredObject
         // and that a positioning has to be performed.
         bool mbValidPos;
 
-        // rectangle, keeping the last object rectangle after the postioning
+        // rectangle, keeping the last object rectangle after the positioning
         Rectangle* mpLastObjRect;
 
         // boolean, indicating that anchored drawing object hasn't been attached

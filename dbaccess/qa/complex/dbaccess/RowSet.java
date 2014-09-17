@@ -200,7 +200,7 @@ public class RowSet extends TestCase
         System.out.println("testing testRowSet");
         createTestCase(true);
 
-        // sequential postioning
+        // sequential positioning
         m_resultSet.beforeFirst();
         testSequentialPositining(m_resultSet, m_row);
 

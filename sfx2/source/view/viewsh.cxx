@@ -1052,7 +1052,7 @@ void SfxViewShell::OuterResizePixel
     here. The mainuse is to change the size of the Vis-Area.
 
     If the Border is changed due to the new calculation then this has to be set
-    by <SfxViewShell::SetBorderPixel(const SvBorder&)>. The Postioning of Tools
+    by <SfxViewShell::SetBorderPixel(const SvBorder&)>. The Positioning of Tools
     is only allowed after the calling of 'SetBorderPixel'.
 
     [Example]
@@ -1101,7 +1101,7 @@ void SfxViewShell::InnerResizePixel
 
     If the Border is changed due to the new calculation then is has to be set
     by <SfxViewShell::SetBorderPixel(const SvBorder&)>.
-    The Postioning of Tools is only allowed after the calling of
+    The Positioning of Tools is only allowed after the calling of
     'SetBorderPixel'.
 
 

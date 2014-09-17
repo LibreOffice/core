@@ -562,14 +562,14 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     fillTableName(xSet);
 
     OUStringBuffer aSql = "UPDATE " + m_aComposedTableName + " SET ";
-    // list all cloumns that should be set
+    // list all columns that should be set
     static OUString aPara(" = ?,");
     OUString aQuote  = getIdentifierQuoteString();
     static OUString aAnd(" AND ");
     OUString sIsNull(" IS NULL");
     OUString sParam(" = ?");
 
-    // use keys and indexes for exact postioning
+    // use keys and indexes for exact positioning
     // first the keys
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
 
@@ -972,11 +972,11 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
 
     OUStringBuffer aSql("DELETE FROM " + m_aComposedTableName + " WHERE ");
 
-    // list all cloumns that should be set
+    // list all columns that should be set
     OUString aQuote  = getIdentifierQuoteString();
     static OUString aAnd(" AND ");
 
-    // use keys and indexes for excat postioning
+    // use keys and indexes for exact positioning
     Reference<XNameAccess> xKeyColumns = getKeyColumns();
     // second the indexes
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
@@ -1082,7 +1082,7 @@ void SAL_CALL OKeySet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 
 Reference<XNameAccess> OKeySet::getKeyColumns() const
 {
-    // use keys and indexes for exact postioning
+    // use keys and indexes for exact positioning
     // first the keys
 
     Reference<XIndexAccess> xKeys = m_xTableKeys;
