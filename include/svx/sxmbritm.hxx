@@ -23,10 +23,10 @@
 
 #include <svx/sdynitm.hxx>
 
-// Die Masslinie unterhalb der Bezugskante
-// Zur Bemassung einer Objektunterkante
-// (Redundant zum drehen der Bezugskante um 180deg +
-// TextUpsideDown, jedoch besser bedienbar)
+// dimension line below the reference edge
+// for dimensioning the lower edge of the object
+// (redundant to turn the referece edge through 180deg +
+// TextUpsideDown, but easily operated)
 // laesst sich auch draggen, indem man den Masslinienabstand
 // (SdrMeasureLineDistItem) ueber die Bezugskante hinwegdraggt
 class SdrMeasureBelowRefEdgeItem: public SdrYesNoItem {

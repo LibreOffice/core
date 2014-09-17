@@ -32,18 +32,17 @@ class OutputDevice;
 #define XPOLYPOLY_APPEND     0xFFFF
 #define XPOLY_APPEND         0xFFFF
 
-#define XPOLY_MAXPOINTS      0xFFF0 /* Auch fuer die 32-Bitter etwas Luft lassen */
+#define XPOLY_MAXPOINTS      0xFFF0 /* Let space for the 32-Bit systems too */
 
-// Punktstile im XPolygon:
-// NORMAL : Anfangs- oder Endpunkt einer Kurve oder Linie
-// SMOOTH : Glatter Uebergang zwischen Kurven
-// SYMMTR : glatter und symmetrischer Uebergang zwischen Kurven
-// CONTROL: Kontrollpunkt einer Bezierkurve
+// point-styles in XPolygon:
+// NORMAL : start-/endpoint of a curve or a line
+// SMOOTH : smooth transition between curves
+// SYMMTR : smooth and symmetrical transition between curves
+// CONTROL: control handles of a  Bezier curve
 
 enum XPolyFlags { XPOLY_NORMAL, XPOLY_SMOOTH, XPOLY_CONTROL, XPOLY_SYMMTR };
 
-// Klasse XPolygon; hat neben dem Point-Array noch ein Array mit Flags,
-// die Informationen ueber den jeweiligen Punkt enthalten
+// Class XPolygon;has a point-array and a flag-array, which contains information about a particular point
 
 class ImpXPolygon;
 
@@ -52,10 +51,10 @@ class SVX_DLLPUBLIC XPolygon
 protected:
     ImpXPolygon*    pImpXPolygon;
 
-    // ImpXPolygon-ReferenceCount pruefen und ggf. abkoppeln
+    // check ImpXPolygon-ReferenceCount and decouple if necessary
     void    CheckReference();
 
-    // Hilfsfunktionen fuer Bezierkonvertierung
+    // auxiliary functions for Bezier conversion
     void    SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT);
     void    GenBezArc(const Point& rCenter, long nRx, long nRy,
                       long nXHdl, long nYHdl, sal_uInt16 nStart, sal_uInt16 nEnd,
@@ -95,15 +94,15 @@ public:
     bool        IsControl(sal_uInt16 nPos) const;
     bool        IsSmooth(sal_uInt16 nPos) const;
 
-    // Abstand zwischen zwei Punkten
+    // distance between two points
     double  CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2);
 
-    // Bezierkonvertierungen
+    // Bezier conversion
     void CalcSmoothJoin(sal_uInt16 nCenter, sal_uInt16 nDrag, sal_uInt16 nPnt);
     void CalcTangent(sal_uInt16 nCenter, sal_uInt16 nPrev, sal_uInt16 nNext);
     void PointsToBezier(sal_uInt16 nFirst);
 
-    // Transformationen
+    // transformations
     void Translate(const Point& rTrans);
     void Scale(double fSx, double fSy);
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
@@ -116,8 +115,7 @@ public:
      explicit XPolygon(const basegfx::B2DPolygon& rPolygon);
 };
 
-// Klasse XPolyPolygon; wie PolyPolygon, nur statt aus Polygonen aus
-// XPolygonen bestehend
+// Class XPolyPolygon; like PolyPolygon, composed of XPolygons instead of Polygons
 
 class ImpXPolyPolygon;
 
@@ -126,7 +124,7 @@ class SVX_DLLPUBLIC XPolyPolygon
 protected:
     ImpXPolyPolygon* pImpXPolyPolygon;
 
-    // ImpXPolyPolygon-ReferenceCount pruefen und ggf. abkoppeln
+    // check ImpXPolyPolygon-ReferenceCount and decouple if necessary
     void    CheckReference();
 
 public:
@@ -155,7 +153,7 @@ public:
     bool            operator==( const XPolyPolygon& rXPolyPoly ) const;
     bool            operator!=( const XPolyPolygon& rXPolyPoly ) const;
 
-    // Transformationen
+    // transformations
     void Distort(const Rectangle& rRefRect, const XPolygon& rDistortedRect);
 
     // #116512# convert to basegfx::B2DPolyPolygon and return

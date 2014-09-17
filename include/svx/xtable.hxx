@@ -46,11 +46,11 @@ class Color;
 class Bitmap;
 class VirtualDevice;
 
-// Standard-Vergleichsstring
+// standard reference string
 extern sal_Unicode pszStandard[]; // "standard"
 
-// Funktion zum Konvertieren in echte RGB-Farben, da mit
-// enum COL_NAME nicht verglichen werden kann.
+// function to convert in real RGB_Colours;
+// it can't be compared with enum COL_NAME
 SVX_DLLPUBLIC Color RGB_Color( ColorData nColorName );
 
 
