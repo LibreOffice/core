@@ -90,7 +90,7 @@ RecentlyUsedMasterPages&  RecentlyUsedMasterPages::Instance (void)
 
 RecentlyUsedMasterPages::RecentlyUsedMasterPages (void)
     : maListeners(),
-      mpMasterPages(new MasterPageList()),
+      mvMasterPages(),
       mnMaxListSize(8),
       mpContainer(new MasterPageContainer())
 {
@@ -135,8 +135,8 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
 
         // Read the names and URLs of the master pages.
         Sequence<OUString> aKeys (xSet->getElementNames());
-        mpMasterPages->clear();
-        mpMasterPages->reserve(aKeys.getLength());
+        mvMasterPages.clear();
+        mvMasterPages.reserve(aKeys.getLength());
         for (int i=0; i<aKeys.getLength(); i++)
         {
             Reference<container::XNameAccess> xSetItem (
@@ -168,7 +168,7 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
                     pDescriptor->mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(
                         new PagePreviewProvider());
                 MasterPageContainer::Token aToken (mpContainer->PutMasterPage(pDescriptor));
-                mpMasterPages->push_back(Descriptor(aToken,sURL,sName));
+                mvMasterPages.push_back(Descriptor(aToken,sURL,sName));
             }
         }
 
@@ -209,8 +209,8 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
             return;
         MasterPageList::const_iterator iDescriptor;
         sal_Int32 nIndex(0);
-        for (iDescriptor=mpMasterPages->begin();
-                iDescriptor!=mpMasterPages->end();
+        for (iDescriptor=mvMasterPages.begin();
+                iDescriptor!=mvMasterPages.end();
                 ++iDescriptor,++nIndex)
         {
             // Create new child.
@@ -261,13 +261,13 @@ void RecentlyUsedMasterPages::RemoveEventListener (const Link& rEventListener)
 
 int RecentlyUsedMasterPages::GetMasterPageCount (void) const
 {
-    return mpMasterPages->size();
+    return mvMasterPages.size();
 }
 
 MasterPageContainer::Token RecentlyUsedMasterPages::GetTokenForIndex (sal_uInt32 nIndex) const
 {
-    if(nIndex<mpMasterPages->size())
-        return (*mpMasterPages)[nIndex].maToken;
+    if(nIndex<mvMasterPages.size())
+        return mvMasterPages[nIndex].maToken;
     else
         return MasterPageContainer::NIL_TOKEN;
 }
@@ -336,25 +336,25 @@ void RecentlyUsedMasterPages::AddMasterPage (
     {
 
         MasterPageList::iterator aIterator (
-            ::std::find_if(mpMasterPages->begin(),mpMasterPages->end(),
+            ::std::find_if(mvMasterPages.begin(),mvMasterPages.end(),
                 Descriptor::TokenComparator(aToken)));
-        if (aIterator != mpMasterPages->end())
+        if (aIterator != mvMasterPages.end())
         {
             // When an entry for the given token already exists then remove
             // it now and insert it later at the head of the list.
-            mpMasterPages->erase (aIterator);
+            mvMasterPages.erase (aIterator);
         }
 
-        mpMasterPages->insert(mpMasterPages->begin(),
+        mvMasterPages.insert(mvMasterPages.begin(),
             Descriptor(
                 aToken,
                 mpContainer->GetURLForToken(aToken),
                 mpContainer->GetStyleNameForToken(aToken)));
 
         // Shorten list to maximal size.
-        while (mpMasterPages->size() > mnMaxListSize)
+        while (mvMasterPages.size() > mnMaxListSize)
         {
-            mpMasterPages->pop_back ();
+            mvMasterPages.pop_back ();
         }
 
         if (bMakePersistent)
@@ -368,7 +368,7 @@ void RecentlyUsedMasterPages::ResolveList (void)
     bool bNotify (false);
 
     MasterPageList::iterator iDescriptor;
-    for (iDescriptor=mpMasterPages->begin(); iDescriptor!=mpMasterPages->end(); ++iDescriptor)
+    for (iDescriptor=mvMasterPages.begin(); iDescriptor!=mvMasterPages.end(); ++iDescriptor)
     {
         if (iDescriptor->maToken == MasterPageContainer::NIL_TOKEN)
         {
