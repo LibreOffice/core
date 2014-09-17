@@ -176,7 +176,7 @@ class MyUriHelper:
         self.s_UriMap = \
         { "share" : "vnd.sun.star.expand:$BRAND_BASE_DIR/$BRAND_SHARE_SUBDIR/Scripts/python" , \
           "share:uno_packages" : "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/uno_packages", \
-          "user" : "vnd.sun.star.expand:${$BRAND_BASE_DIR/$BRAND_BIN_SUBDIR/" + toIniName( "bootstrap") + "::UserInstallation}/user/Scripts/python" , \
+          "user" : "vnd.sun.star.expand:${$BRAND_INI_DIR/" + toIniName( "bootstrap") + "::UserInstallation}/user/Scripts/python" , \
           "user:uno_packages" : "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages" } 
         self.m_uriRefFac = ctx.ServiceManager.createInstanceWithContext("com.sun.star.uri.UriReferenceFactory",ctx)
         if location.startswith( "vnd.sun.star.tdoc" ):
