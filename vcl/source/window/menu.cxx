@@ -2481,15 +2481,16 @@ Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
     pMenu->pStartedFrom = 0;
     pMenu->pWindow = pWindow;
     pMenuBarWindow->SetMenu(pMenu);
-    long nHeight = pMenu->ImplCalcSize( pWindow ).Height();
+    long nHeight = pMenu->ImplCalcSize(pWindow).Height();
 
     // depending on the native implementation or the displayable flag
     // the menubar windows is suppressed (ie, height=0)
-    if( !((MenuBar*) pMenu)->IsDisplayable() ||
-        ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
+    if (!pMenu->IsDisplayable() || (pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar()))
+    {
         nHeight = 0;
+    }
 
-    pWindow->setPosSizePixel( 0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT );
+    pMenuBarWindow->SetHeight(nHeight);
     return pWindow;
 }
 

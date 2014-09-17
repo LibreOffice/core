@@ -123,6 +123,7 @@ public:
     virtual sal_uLong GetFocusId() const SAL_OVERRIDE { return nSaveFocusId; }
 
     virtual void    SetMenu(MenuBar* pMenu) SAL_OVERRIDE;
+    virtual void    SetHeight(long nHeight) SAL_OVERRIDE;
     virtual void    KillActivePopup() SAL_OVERRIDE;
     virtual void    PopupClosed(Menu* pMenu) SAL_OVERRIDE;
     virtual sal_uInt16 GetHighlightedItem() const SAL_OVERRIDE { return nHighlightedItem; }

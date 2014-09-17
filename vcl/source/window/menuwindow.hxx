@@ -80,6 +80,7 @@ public:
 
     virtual void SetAutoPopup(bool bAuto) = 0;
     virtual void SetMenu(MenuBar* pMenu) = 0;
+    virtual void SetHeight(long nHeight) = 0;
     virtual void KillActivePopup() = 0;
 
     /// Add an arbitrary button to the menubar that will appear next to the close button.

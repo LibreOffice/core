@@ -194,6 +194,11 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
     }
 }
 
+void MenuBarWindow::SetHeight(long nHeight)
+{
+    setPosSizePixel(0, 0, 0, nHeight, WINDOW_POSSIZE_HEIGHT);
+}
+
 void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
 {
     aCloseBtn.ShowItem(IID_DOCUMENTCLOSE, bClose);
