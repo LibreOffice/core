@@ -8,10 +8,14 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/GraphicType.hpp>
+#include <vcl/GraphicNativeTransform.hxx>
 #include <sfx2/linkmgr.hxx>
 
 #include <docsh.hxx>
 #include <editsh.hxx>
+#include <ndgrf.hxx>
 
 class HtmlImportTest : public SwModelTestBase
 {
@@ -28,6 +32,44 @@ DECLARE_HTMLIMPORT_TEST(testPictureImport, "picture.html")
     // The document contains one embeded picture and one stored as a link.
     const sfx2::LinkManager& rLinkManager = pTxtDoc->GetDocShell()->GetDoc()->GetEditShell()->GetLinkManager();
     CPPUNIT_ASSERT_EQUAL(size_t(1), rLinkManager.GetLinks().size());
+}
+
+DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
+{
+    SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pTxtDoc);
+    // The document contains only one embeded picture inlined in img's src attribute.
+
+    SwDoc* pDoc = pTxtDoc->GetDocShell()->GetDoc();
+    SwEditShell* pEditShell = pDoc->GetEditShell();
+    CPPUNIT_ASSERT(pEditShell);
+
+    // This was 1 before 1ef778072763a539809c74804ef074c556efe501
+    const sfx2::LinkManager& rLinkManager = pEditShell->GetLinkManager();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), rLinkManager.GetLinks().size());
+
+    uno::Reference<drawing::XShape> xShape = getShape(1);
+    uno::Reference<container::XNamed> const xNamed(xShape, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(OUString("Image1"), xNamed->getName());
+
+    uno::Reference<graphic::XGraphic> xGraphic =
+        getProperty< uno::Reference<graphic::XGraphic> >(xShape, "Graphic");
+    CPPUNIT_ASSERT(xGraphic.is());
+    CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
+
+    for (int n = 0; ; n++)
+    {
+        SwNode* pNode = pDoc->GetNodes()[ n ];
+        if (SwGrfNode *pGrfNode = pNode->GetGrfNode())
+        {
+            // FIXME? For some reason without the fix in 72703173066a2db5c977d422ace
+            // I was getting GRAPHIC_NONE from SwEditShell::GetGraphicType() when
+            // running LibreOffice but cannot reproduce that in a unit test here. :-(
+            // So, this does not really test anything.
+            CPPUNIT_ASSERT(pGrfNode->GetGrfObj().GetType() != GRAPHIC_NONE);
+            break;
+        }
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
