@@ -540,8 +540,10 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
                 xCont->insertByName( aName, aElement );
                 break;
             }
-            catch ( Exception& )
+            catch ( Exception& e )
             {
+                SAL_INFO(
+                    "scripting.provider", "ignoring Exception " << e.Message);
             }
 
         }
