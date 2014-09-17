@@ -77,14 +77,7 @@ SwGrfNode::SwGrfNode(
         bFrameInPaint = bScaleImageMap = false;
 
     bGraphicArrived = true;
-
-    // fdo#50763 inline image has already been read into memory
-    if (rGrfName.startsWith("data:")) {
-        maGrfObj.SetGraphic( *pGraphic, rGrfName );
-    }
-    else {
-        ReRead(rGrfName,rFltName, pGraphic, 0, false);
-    }
+    ReRead(rGrfName, rFltName, pGraphic, 0, false);
 }
 
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
