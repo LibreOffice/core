@@ -13,16 +13,18 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "ImportFilterBase.hxx"
+#include "writerperfect/ImportFilter.hxx"
+
+#include "DocumentHandlerForOds.hxx"
 
 /* This component will be instantiated for both import or export. Whether it calls
  * setSourceDocument or setTargetDocument determines which Impl function the filter
  * member calls */
-class MSWorksCalcImportFilter : public writerperfect::calc::ImportFilterBase
+class MSWorksCalcImportFilter : public writerperfect::ImportFilter<OdsGenerator>
 {
 public:
     MSWorksCalcImportFilter(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext)
-        : writerperfect::calc::ImportFilterBase(rxContext) {}
+        : writerperfect::ImportFilter<OdsGenerator>(rxContext) {}
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName()
@@ -34,7 +36,7 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, OUString &rTypeName) SAL_OVERRIDE;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGSpreadsheetInterface &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdsGenerator &rGenerator, utl::MediaDescriptor &) SAL_OVERRIDE;
     virtual void doRegisterHandlers(OdsGenerator &rGenerator) SAL_OVERRIDE;
 };
 

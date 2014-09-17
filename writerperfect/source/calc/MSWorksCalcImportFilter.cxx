@@ -24,7 +24,7 @@ using com::sun::star::uno::Exception;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XComponentContext;
 
-bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, librevenge::RVNGSpreadsheetInterface &rGenerator, utl::MediaDescriptor &)
+bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdsGenerator &rGenerator, utl::MediaDescriptor &)
 {
     return libwps::WPS_OK == libwps::WPSDocument::parse(&rInput, &rGenerator);
 }

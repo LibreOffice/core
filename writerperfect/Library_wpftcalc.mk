@@ -19,6 +19,11 @@
 
 $(eval $(call gb_Library_Library,wpftcalc))
 
+$(eval $(call gb_Library_set_include,wpftcalc,\
+	-I$(SRCDIR)/writerperfect/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_set_componentfile,wpftcalc,writerperfect/source/calc/wpftcalc))
 
 $(eval $(call gb_Library_use_sdk_api,wpftcalc))
@@ -49,7 +54,6 @@ $(eval $(call gb_Library_use_externals,wpftcalc,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,wpftcalc,\
-	writerperfect/source/calc/ImportFilterBase \
 	writerperfect/source/calc/MSWorksCalcImportFilter \
 	writerperfect/source/calc/MWAWCalcImportFilter \
 	writerperfect/source/calc/wpftcalc_genericfilter \

@@ -19,6 +19,11 @@
 
 $(eval $(call gb_Library_Library,wpftdraw))
 
+$(eval $(call gb_Library_set_include,wpftdraw,\
+	-I$(SRCDIR)/writerperfect/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_set_componentfile,wpftdraw,writerperfect/source/draw/wpftdraw))
 
 $(eval $(call gb_Library_use_sdk_api,wpftdraw))
