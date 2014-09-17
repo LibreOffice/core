@@ -204,7 +204,7 @@ void PaletteManager::SetBtnUpdater(svx::ToolboxButtonColorUpdater* pBtnUpdater)
     mpBtnUpdater = pBtnUpdater;
 }
 
-void PaletteManager::PopupColorPicker(const OUString aCommand)
+void PaletteManager::PopupColorPicker(const OUString& aCommand)
 {
     SvColorDialog aColorDlg( 0 );
     aColorDlg.SetColor ( mLastColor );
@@ -218,7 +218,7 @@ void PaletteManager::PopupColorPicker(const OUString aCommand)
     }
 }
 
-void PaletteManager::DispatchColorCommand(const OUString aCommand, const Color aColor)
+void PaletteManager::DispatchColorCommand(const OUString& aCommand, const Color aColor)
 {
     using namespace css::uno;
     using namespace css::frame;
