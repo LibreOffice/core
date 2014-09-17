@@ -28,8 +28,9 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,mariadb,1))
 # non-static inline local_thr_alarm in libmariadb/net.c":
 $(eval $(call gb_UnpackedTarball_add_patches,mariadb,\
     external/libmariadb/mariadb-swap.patch \
-    external/libmariadb/mariadb-msvc.patch.1 \
-	external/libmariadb/mariadb-inline.patch.1 \
+    $(if $(filter MSC,$(COM)),external/libmariadb/mariadb-msvc.patch.1) \
+    external/libmariadb/mariadb-inline.patch.1 \
+    external/libmariadb/mariadb-CONC-104.patch.1 \
 ))
 
 # vim: set noet sw=4 ts=4:
