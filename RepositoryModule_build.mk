@@ -22,6 +22,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_toolset,\
 	i18nlangtag \
 	i18nutil \
 	i18npool \
+	instsetoo_native \
 	idl \
 	io \
 	javaunohelper \
