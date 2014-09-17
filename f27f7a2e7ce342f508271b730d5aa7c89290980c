@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_f09a00c5",
+        "filename": "vcl/source/font/PhysicalFontFamily.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-17T06:19:23Z",
+      "side": 1,
+      "message": "no idea about the legitimate-ness of the original assert, but:\n* remove the code instead of commenting it out\n* use SAL_WARN_IF",
+      "revId": "f27f7a2e7ce342f508271b730d5aa7c89290980c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
