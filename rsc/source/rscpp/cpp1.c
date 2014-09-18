@@ -355,11 +355,7 @@ int MAIN(int argc, char** argv)
         if (!eflag)
             exit(IO_ERROR);
     }
-#ifdef NOMAIN                  /* BP */ /* kein exit im der LIB-Version */
     return( IO_NORMAL );
-#else
-    exit(IO_NORMAL);                /* No errors or -E option set   */
-#endif
 
 }
 
