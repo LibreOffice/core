@@ -214,12 +214,6 @@ protected:
          */
         void    updateRoadmapItemLabel( WizardState _nState );
 
-    protected:
-#ifdef DBG_UTIL
-        const sal_Char* checkInvariants() const;
-        friend const char* CheckInvariants( const void* pVoid );
-#endif
-
     private:
         DECL_DLLPRIVATE_LINK( OnRoadmapItemSelected, void* );
 

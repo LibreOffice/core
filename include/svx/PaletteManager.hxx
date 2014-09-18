@@ -60,7 +60,6 @@ public:
 
     long        GetColorCount();
     long        GetRecentColorCount();
-    OUString    GetPaletteName();
 
     const Color& GetLastColor();
     void        SetLastColor(const Color& rLastColor);

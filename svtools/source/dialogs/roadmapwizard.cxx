@@ -118,41 +118,6 @@ namespace svt
     }
 
     //= RoadmapWizard
-#ifdef DBG_UTIL
-    const sal_Char* RoadmapWizard::checkInvariants() const
-    {
-        // all paths have to start with the same state
-        WizardState nSharedFirstState = WZS_INVALID_STATE;
-        for ( Paths::const_iterator aPath = m_pImpl->aPaths.begin();
-              aPath != m_pImpl->aPaths.end();
-              ++aPath
-            )
-        {
-            if ( aPath->second.empty() )
-                return "RoadmapWizard::checkInvariants: paths should not be empty!";
-
-            if ( nSharedFirstState == WZS_INVALID_STATE )
-                // first path
-                nSharedFirstState = aPath->second[ 0 ];
-            else
-                if ( nSharedFirstState != aPath->second[ 0 ] )
-                    return "RoadmapWizard::checkInvariants: alls paths must start with the same state!";
-        }
-
-        if ( !m_pImpl->aPaths.empty() )
-        {
-            Paths::const_iterator aCurrentPathPos = m_pImpl->aPaths.find( m_pImpl->nActivePath );
-            if ( aCurrentPathPos == m_pImpl->aPaths.end() )
-                return "RoadmapWizard::checkInvariants: invalid active path!";
-
-            if ( -1 == m_pImpl->getStateIndexInPath( getCurrentState(), m_pImpl->nActivePath ) )
-                return "RoadmapWizard::checkInvariants: the current state is not part of the current path!";
-        }
-
-        return NULL;
-    }
-#endif
-
     RoadmapWizard::RoadmapWizard( Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
         :OWizardMachine( _pParent, i_nStyle, _nButtonFlags )
         ,m_pImpl( new RoadmapWizardImpl )

@@ -166,16 +166,6 @@ long PaletteManager::GetRecentColorCount()
     return maRecentColors.size();
 }
 
-OUString PaletteManager::GetPaletteName()
-{
-    if( mnCurrentPalette == 0 )
-        return OUString( STR_DEFAULT_PAL );
-    else if( mnCurrentPalette == mnNumOfPalettes - 1 )
-        return OUString( STR_DOC_COLORS );
-    else
-        return maPalettes[mnCurrentPalette - 1].GetName();
-}
-
 const Color& PaletteManager::GetLastColor()
 {
     return mLastColor;
