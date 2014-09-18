@@ -1334,7 +1334,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     else*/
         nPointHeight = nPangoHeight/PANGO_SCALE;
 
-    Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
+    vcl::Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
         aFont.SetWeight( aInfo.m_eWeight );
     if( aInfo.m_eWidth != WIDTH_DONTKNOW )
