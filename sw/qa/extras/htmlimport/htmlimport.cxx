@@ -44,7 +44,7 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
     SwEditShell* pEditShell = pDoc->GetEditShell();
     CPPUNIT_ASSERT(pEditShell);
 
-    // This was 1 before 1ef778072763a539809c74804ef074c556efe501
+    // This was 1 before 3914a711060341345f15b83656457f90095f32d6
     const sfx2::LinkManager& rLinkManager = pEditShell->GetLinkManager();
     CPPUNIT_ASSERT_EQUAL(size_t(0), rLinkManager.GetLinks().size());
 
