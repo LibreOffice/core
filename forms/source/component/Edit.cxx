@@ -199,7 +199,7 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
     if( !xSet.is() )
         return;
 
-    // Not for  multiline edits
+    // Not for multiline edits
     Any aTmp( xSet->getPropertyValue(PROPERTY_MULTILINE));
     if ((aTmp.getValueType().equals(::getBooleanCppuType())) && getBOOL(aTmp))
         return;

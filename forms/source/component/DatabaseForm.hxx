@@ -159,7 +159,7 @@ class ODatabaseForm :public OFormComponents
 {
     friend class OFormSubmitResetThread;
 
-        // listener administration
+    // listener administration
     ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
     ::cppu::OInterfaceContainerHelper   m_aRowSetApproveListeners;
     ::cppu::OInterfaceContainerHelper   m_aRowSetListeners;
@@ -180,7 +180,7 @@ class ODatabaseForm :public OFormComponents
     PropertyBagHelper           m_aPropertyBagHelper;
     ::dbtools::WarningsContainer    m_aWarnings;
     OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
-    // Verwaltung der ControlGruppen
+    // Management of the Control Groups
     OGroupManager*              m_pGroupManager;
     ::dbtools::ParameterManager m_aParameterManager;
     ::dbtools::FilterManager    m_aFilterManager;
@@ -188,8 +188,8 @@ class ODatabaseForm :public OFormComponents
 
     OFormSubmitResetThread*     m_pThread;
     OUString             m_sCurrentErrorContext;
-                // will be used as additional context information
-                // when an exception is catched and forwarded to the listeners
+    // will be used as additional context information
+    // when an exception is catched and forwarded to the listeners
 
     sal_Int32                       m_nResetsPending;
 //  <overwritten_properties>

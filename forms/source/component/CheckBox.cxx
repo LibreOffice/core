@@ -76,7 +76,7 @@ InterfaceRef SAL_CALL OCheckBoxModel_CreateInstance(const Reference<XMultiServic
 
 OCheckBoxModel::OCheckBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OReferenceValueComponent( _rxFactory, VCL_CONTROLMODEL_CHECKBOX, FRM_SUN_CONTROL_CHECKBOX, true )
-                    // use the old control name for compytibility reasons
+    // use the old control name for compytibility reasons
 {
 
     m_nClassId = FormComponentType::CHECKBOX;

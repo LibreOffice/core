@@ -58,16 +58,16 @@ namespace frm
                                     ,public OPropertyChangeListener
     {
     protected:
-        ::com::sun::star::form::FormButtonType  m_eButtonType;      // Art des Buttons (push,submit,reset)
-        OUString                         m_sTargetURL;       // URL fuer den URL-Button
-        OUString                         m_sTargetFrame;     // TargetFrame zum Oeffnen
+        ::com::sun::star::form::FormButtonType  m_eButtonType; // Type of the button (push, submit, reset)
+        OUString                         m_sTargetURL;         // URL for the URL button
+        OUString                         m_sTargetFrame;       // TargetFrame to open
 
         // ImageProducer stuff
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xProducer;
-        SfxMedium*                              m_pMedium;          // Download-Medium
+        SfxMedium*                              m_pMedium;     // Download medium
         ImageProducer*                          m_pProducer;
         bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
-        bool                                m_bDownloading : 1; // laeuft ein Download?
+        bool                                m_bDownloading : 1;     // Is a download in progress?
         bool                                m_bProdStarted : 1;
 
         // XSubmission stuff
@@ -90,7 +90,7 @@ namespace frm
     public:
         DECLARE_DEFAULT_XTOR( OClickableImageBaseModel );
 
-        // UNO Anbindung
+        // UNO Binding
         DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseModel, OControlModel)
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -205,7 +205,7 @@ namespace frm
         virtual ~OClickableImageBaseControl();
 
     protected:
-        // UNO Anbindung
+        // UNO Binding
         DECLARE_UNO3_AGG_DEFAULTS(OClickableImageBaseControl, OControl)
         virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
@@ -249,12 +249,11 @@ namespace frm
     {
     protected:
 
-        // Die folgende Methode wrrd gerufen um das Event unter Beruecksichtigung
-        // seines Typs zu duplizieren
+        // This method was called to duplicate the Event by taking its type into account
         virtual ::com::sun::star::lang::EventObject* cloneEvent( const ::com::sun::star::lang::EventObject* _pEvt ) const SAL_OVERRIDE;
 
-        // Ein Event bearbeiten. Der Mutex ist dabei nicht gelockt, pCompImpl
-        // bleibt aber in jedem Fall gueltig.
+        // Process an Event.
+        // The mutex is not locked, pCompImpl stays valid in any case
         virtual void processEvent( ::cppu::OComponentHelper *pCompImpl,
                                 const ::com::sun::star::lang::EventObject*,
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>&,

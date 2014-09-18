@@ -598,7 +598,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
     if (!xComponentSet.is())
         return;
 
-    // MIB 25.6.98: Catch nested Forms; or would we need to submit them?
+    // TODO: Catch nested Forms; or would we need to submit them?
     if (!hasProperty(PROPERTY_CLASSID, xComponentSet))
         return;
 
@@ -621,7 +621,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         case FormComponentType::COMMANDBUTTON:
         {
             // We only evaluate the pressed Submit button
-            // MIB: If one is passed at all
+            // If one is passed at all
             if( rxSubmitButton.is() )
             {
                 Reference<XPropertySet>  xSubmitButtonComponent(rxSubmitButton->getModel(), UNO_QUERY);
@@ -639,7 +639,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         case FormComponentType::IMAGEBUTTON:
         {
             // We only evaluate the pressed Submit button
-            // MIB: If one is passed at all
+            // If one is passed at all
             if( rxSubmitButton.is() )
             {
                 Reference<XPropertySet>  xSubmitButtonComponent(rxSubmitButton->getModel(), UNO_QUERY);
@@ -667,7 +667,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             }
         } break;
 
-        // CheckBoxen / RadioButtons
+        // CheckBoxes/RadioButtons
         case FormComponentType::CHECKBOX:
         case FormComponentType::RADIOBUTTON:
         {
@@ -693,13 +693,13 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
             if( !hasProperty(PROPERTY_TEXT, xComponentSet) )
                 break;
 
-            // MIB: Special treatment for multiline edit only if we have a control for it
+            // Special treatment for multiline edit only if we have a control for it
             Any aTmp = xComponentSet->getPropertyValue( PROPERTY_MULTILINE );
             bool bMulti =   rxSubmitButton.is()
                             && (aTmp.getValueType().getTypeClass() == TypeClass_BOOLEAN)
                             && getBOOL(aTmp);
             OUString sText;
-            if ( bMulti )   // For multiline edit, get the text at the control
+            if ( bMulti ) // For multiline edit, get the text at the control
             {
 
                 Reference<XControlContainer>  xControlContainer(rxSubmitButton->getContext(), UNO_QUERY);
@@ -748,7 +748,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         case FormComponentType::CURRENCYFIELD:
         case FormComponentType::NUMERICFIELD:
         {
-            // <name>=<wert> // Value is a double with dot as decimal delimiter
+            // <name>=<value> // Value is a double with dot as decimal delimiter
                              // no value (NULL) means empty value
             if( hasProperty(PROPERTY_VALUE, xComponentSet) )
             {
@@ -767,7 +767,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         }   break;
         case FormComponentType::DATEFIELD:
         {
-            // <name>=<wert> // Value is a Date with the format MM-DD-YYYY
+            // <name>=<value> // Value is a Date with the format MM-DD-YYYY
                              // no value (NULL) means empty value
             if( hasProperty(PROPERTY_DATE, xComponentSet) )
             {
@@ -790,7 +790,7 @@ void ODatabaseForm::AppendComponent(HtmlSuccessfulObjList& rList, const Referenc
         }   break;
         case FormComponentType::TIMEFIELD:
         {
-            // <name>=<wert> // Value is a Time with the format HH:MM:SS
+            // <name>=<value> // Value is a Time with the format HH:MM:SS
                              // no value (NULL) means empty value
             if( hasProperty(PROPERTY_TIME, xComponentSet) )
             {
@@ -927,7 +927,7 @@ void ODatabaseForm::FillSuccessfulList( HtmlSuccessfulObjList& rList,
     // Delete list
     rList.clear();
     // Iterate over Components
-    Reference<XPropertySet>         xComponentSet;
+    Reference<XPropertySet> xComponentSet;
     OUString aPrefix;
 
     // we know already how many objects should be appended,
@@ -1262,7 +1262,7 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
                 {
                     // move on the insert row of set
                     // resetting must be done later, after the load events have been posted
-                    // see :moveToInsertRow and load , reload
+                    // see: moveToInsertRow and load , reload
                     Reference<XResultSetUpdate>  xUpdate;
                     if (query_aggregation( m_xAggregate, xUpdate))
                         xUpdate->moveToInsertRow();
@@ -1310,7 +1310,7 @@ void ODatabaseForm::disposing()
     m_aSubmitListeners.disposeAndClear(aEvt);
     m_aErrorListeners.disposeAndClear(aEvt);
 
-    m_aParameterManager.dispose();   // (to free any references it may have to me)
+    m_aParameterManager.dispose();   // To free any references it may have to be me
     m_aFilterManager.dispose();      // (dito)
 
     OFormComponents::disposing();
@@ -2061,7 +2061,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
         xIter->nextElement() >>= xReset;
         if (xReset.is())
         {
-            // TODO : all reset-methods have to be thread-safe
+            // TODO: all reset-methods have to be thread-safe
             xReset->reset();
         }
     }
@@ -2350,7 +2350,7 @@ void ODatabaseForm::_propertyChanged(const PropertyChangeEvent& evt) throw( Runt
         sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
         fire(&nHandle, &evt.NewValue, &evt.OldValue, 1, false);
     }
-    else    // it was one of the statement relevant props
+    else // it was one of the statement relevant props
     {
         // if the statement has changed we have to delete the parameter info
         invlidateParameters();
@@ -2684,7 +2684,7 @@ bool ODatabaseForm::canShareConnection( const Reference< XPropertySet >& _rxPare
             bCanShareConnection = true;
         else
         {   // the data source name is empty
-            // -> ook for the URL
+            // -> ok for the URL
             OUString sParentURL;
             OUString sMyURL;
             _rxParentProps->getPropertyValue( PROPERTY_URL ) >>= sParentURL;
@@ -3193,7 +3193,7 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event) t
 
 sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event) throw( RuntimeException, std::exception )
 {
-    if (event.Source == InterfaceRef(static_cast<XWeak*>(this)))    // ignore our aggregate as we handle this approve ourself
+    if (event.Source == InterfaceRef(static_cast<XWeak*>(this))) // ignore our aggregate as we handle this approve ourself
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         bool bWasLoaded = isLoaded();
@@ -3887,7 +3887,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
             default : OSL_FAIL("ODatabaseForm::write : wrong CommandType !");
         }
     }
-    _rxOutStream->writeShort((sal_Int16)eTranslated);           // former DataSelectionType
+    _rxOutStream->writeShort((sal_Int16)eTranslated); // former DataSelectionType
 
     // very old versions expect a CursorType here
     _rxOutStream->writeShort(DatabaseCursorType_KEYSET);
@@ -4082,7 +4082,7 @@ void SAL_CALL ODatabaseForm::errorOccured(const SQLErrorEvent& _rEvent) throw( R
 {
     // give it to my own error listener
     onError(_rEvent);
-    // TODO : think about extending the chain with an SQLContext object saying
+    // TODO: think about extending the chain with an SQLContext object saying
     // "this was an error of one of my children"
 }
 

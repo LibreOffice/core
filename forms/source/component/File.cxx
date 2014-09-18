@@ -208,7 +208,7 @@ void OFileControlModel::write(const Reference<css::io::XObjectOutputStream>& _rx
 
     // Version
     _rxOutStream->writeShort(0x0002);
-    // Default-Wert
+    // Default value
     _rxOutStream << m_sDefaultValue;
     writeHelpTextCompatibly(_rxOutStream);
 }
@@ -221,7 +221,7 @@ void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxIn
 
     // Version
     sal_uInt16 nVersion = _rxInStream->readShort();
-    // Default-Wert
+    // Default value
     switch (nVersion)
     {
         case 1:

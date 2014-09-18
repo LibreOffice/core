@@ -118,9 +118,8 @@ OControl::OControl( const Reference< XComponentContext >& _rxContext, const OUSt
             :OComponentHelper(m_aMutex)
             ,m_xContext( _rxContext )
 {
-    // aggregate VCL-Control
-    // bei Aggregation den Refcount um eins erhoehen da im setDelegator
-    // das Aggregat selbst den Refcount erhoeht
+    // Aggregate VCL Control
+    // Increment the RefCount for aggregates, because the aggregate by itself increments the RefCount in the setDelegator
     increment( m_refCount );
     {
         m_xAggregate.set(_rxContext->getServiceManager()->createInstanceWithContext(_rAggregateService, _rxContext), css::uno::UNO_QUERY);
@@ -249,7 +248,7 @@ void SAL_CALL OControl::disposing(const com::sun::star::lang::EventObject& _rEve
     // does the disposing come from the aggregate?
     if (xAggAsIface != Reference< XInterface >(_rEvent.Source, UNO_QUERY))
     {   // no -> forward it
-                Reference<com::sun::star::lang::XEventListener> xListener;
+        Reference<com::sun::star::lang::XEventListener> xListener;
         if (query_aggregation(m_xAggregate, xListener))
             xListener->disposing(_rEvent);
     }
@@ -768,7 +767,7 @@ void SAL_CALL OControlModel::write(const Reference<css::io::XObjectOutputStream>
     ::comphelper::operator<<( _rxOutStream, m_aTag); // 3. version
 
     // IMPORTANT NOTE!
-    // don't write any new members here : this wouldn't be compatible with older versions, as OControlModel
+    // don't write any new members here: this wouldn't be compatible with older versions, as OControlModel
     // is a base class which is called in derived classes "read" method. So if you increment the version
     // and write new stuff, older office versions will read this in the _derived_ classes, which may result
     // in anything from data loss to crash.
@@ -1534,7 +1533,7 @@ void SAL_CALL OBoundControlModel::write( const Reference<css::io::XObjectOutputS
     // Controlsource
     ::comphelper::operator<<( _rxOutStream, m_aControlSource);
     // !!! IMPORTANT NOTE !!!
-    // don't write any new members here : this wouldn't be compatible with older versions, as OBoundControlModel
+    // don't write any new members here: this wouldn't be compatible with older versions, as OBoundControlModel
     // is a base class which is called in derived classes "read" method. So if you increment the version
     // and write new stuff, older office versions will read this in the _derived_ classes, which may result
     // in anything from data loss to crash.
@@ -1728,7 +1727,7 @@ void OBoundControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, co
                 throw com::sun::star::lang::IllegalArgumentException();
             }
 
-            // check if weself and the given model have a common anchestor (up to the forms collection)
+            // Check if we and the given model have a common ancestor (up to the forms collection)
             Reference<XChild> xCont;
             query_interface(static_cast<XWeak*>(this), xCont);
             Reference< XInterface > xMyTopLevel = xCont->getParent();
@@ -1957,7 +1956,7 @@ bool OBoundControlModel::connectToField(const Reference<XRowSet>& rForm)
                     sal_Int32 nNullableFlag = ColumnValue::NO_NULLS;
                     m_xField->getPropertyValue(PROPERTY_ISNULLABLE) >>= nNullableFlag;
                     m_bRequired = (ColumnValue::NO_NULLS == nNullableFlag);
-                        // we're optimistic: in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability...
+                    // we're optimistic: in case of ColumnValue_NULLABLE_UNKNOWN we assume nullability...
                 }
 
                 else
@@ -2488,8 +2487,8 @@ void OBoundControlModel::disconnectExternalValueBinding( )
 void SAL_CALL OBoundControlModel::setValueBinding( const Reference< XValueBinding >& _rxBinding ) throw (IncompatibleTypesException, RuntimeException, std::exception)
 {
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::setValueBinding: How did you reach this method?" );
-        // the interface for this method should not have been exposed if we do not
-        // support binding to external data
+    // the interface for this method should not have been exposed if we do not
+    // support binding to external data
     // allow reset
     if ( _rxBinding.is() && !impl_approveValueBinding_nolock( _rxBinding ) )
     {
@@ -2515,8 +2514,8 @@ Reference< XValueBinding > SAL_CALL OBoundControlModel::getValueBinding(  ) thro
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsExternalBinding, "OBoundControlModel::getValueBinding: How did you reach this method?" );
-        // the interface for this method should not have been exposed if we do not
-        // support binding to external data
+    // the interface for this method should not have been exposed if we do not
+    // support binding to external data
     return m_xExternalBinding;
 }
 
@@ -2733,8 +2732,8 @@ Reference< XValidator > SAL_CALL OBoundControlModel::getValidator(  ) throw (Run
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::getValidator: How did you reach this method?" );
-        // the interface for this method should not have been exposed if we do not
-        // support validation
+    // the interface for this method should not have been exposed if we do not
+    // support validation
 
     return m_xValidator;
 }
@@ -2743,8 +2742,8 @@ void SAL_CALL OBoundControlModel::validityConstraintChanged( const EventObject& 
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     OSL_PRECOND( m_bSupportsValidation, "OBoundControlModel::validityConstraintChanged: How did you reach this method?" );
-        // the interface for this method should not have been exposed if we do not
-        // support validation
+    // the interface for this method should not have been exposed if we do not
+    // support validation
 
     recheckValidity( false );
 }
