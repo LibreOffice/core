@@ -39,6 +39,29 @@
       "revId": "a201bf8a6e9a25a2b72d88787f9be4bcd5b38b4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_9002946e",
+        "filename": "connectivity/source/inc/odbc/OFunctiondefs.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2014-09-18T11:45:56Z",
+      "side": 1,
+      "message": "In the SYSTEM_ODBC_HEADERS case, we do not set SQL_API anymore. Is it set by windows.h, or in other words does this change anything, or do we go to another calling convention now?",
+      "range": {
+        "startLine": 34,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 1
+      },
+      "revId": "a201bf8a6e9a25a2b72d88787f9be4bcd5b38b4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
