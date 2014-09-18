@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_30ad2889",
+        "filename": "solenv/gbuild/platform/com_GCC_defs.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-18T09:44:21Z",
+      "side": 1,
+      "message": "...that comment\u0027s obsolete now and should be removed",
+      "revId": "031699bdc989c5d256679fbae99ed3c8c63efa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
