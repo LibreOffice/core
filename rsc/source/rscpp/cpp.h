@@ -38,12 +38,7 @@ extern FILE *pDefOut;                                   /* ER */
 /* limit for reading commandfiles */
 #define PARALIMIT       100
 
-#ifndef EOS
-/*
- * This is predefined in Decus C
- */
 #define EOS             '\0'            /* End of string                */
-#endif
 #define EOF_CHAR        0               /* Returned by get() on eof     */
 #define NULLST          ((char *) NULL) /* Pointer to nowhere (linted)  */
 #define DEF_NOARGS      (-1)            /* #define foo vs #define foo() */
@@ -202,35 +197,15 @@ typedef struct sizes {
     int         size;                   /* this is the datum size value */
     int         psize;                  /* this is the pointer size     */
 } SIZES;
-/*
- * nomacarg is a built-in #define on Decus C.
- */
 
-#ifdef  nomacarg
-#define cput            output          /* cput concatenates tokens     */
-#else
 #define cput(c)         { if (c != TOK_SEP) PUTCHAR(c); }
-#endif
-
-#ifndef nomacarg
 #define streq(s1, s2)   (strcmp(s1, s2) == 0)
-#endif
 
 /*
  * Error codes.
- * Decus C codes are defined in stdio.h.
- * Others are cooked to order.
  */
-
-/*
- * Note: IO_NORMAL and IO_ERROR are defined in the Decus C stdio.h file
- */
-#ifndef IO_NORMAL
 #define IO_NORMAL       0
-#endif
-#ifndef IO_ERROR
 #define IO_ERROR        1
-#endif
 
 /*
  * Externs

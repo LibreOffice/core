@@ -87,16 +87,7 @@ typedef struct optab {
 } OPTAB;
 static int  evalue;         /* Current value from evallex() */
 
-#ifdef  nomacargs
-FILE_LOCAL int
-isbinary(op)
-int    op;
-{
-    return (op >= FIRST_BINOP && op <= LAST_BINOP);
-}
-#else
 #define isbinary(op)    (op >= FIRST_BINOP && op <= LAST_BINOP)
-#endif
 
 /*
  * The following definitions are used to specify basic variable sizes.

@@ -181,11 +181,7 @@
 
 
 #ifndef FILE_LOCAL
-#ifdef  decus
-#define FILE_LOCAL              static
-#else
 #define FILE_LOCAL                              /* Others are global    */
-#endif
 #endif
 
 #endif // INCLUDED_RSC_SOURCE_RSCPP_CPPDEF_H
