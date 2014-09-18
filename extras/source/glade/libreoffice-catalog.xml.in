@@ -364,10 +364,7 @@
     <glade-widget-class title="Document Info Preview" name="svtlo-ODocumentInfoPreview"
                         generic-name="Document Info Preview" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="SvxCoreColorValueSet" name="svxcorelo-SvxColorValueSet"
-                        generic-name="Set of Value Options" parent="GtkDrawingArea"
-                        icon-name="widget-gtk-drawingarea"/>
-    <glade-widget-class title="SvxColorValueSet" name="svxlo-SvxColorValueSet"
+    <glade-widget-class title="SvxColorValueSet" name="svxcorelo-SvxColorValueSet"
                         generic-name="Set of Value Options" parent="GtkDrawingArea"
                         icon-name="widget-gtk-drawingarea"/>
     <glade-widget-class title="SwColumnValueSet" name="swuilo-ColumnValueSet"
@@ -694,7 +691,7 @@
     <glade-widget-class title="Open Document ListBox" name="dbulo-OpenDocumentListBox"
                         generic-name="Open Document ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
-
+                        
     <glade-widget-class title="Fade Effect ListBox" name="sdlo-FadeEffectLB"
                         generic-name="Fade Effect ListBox" parent="GtkComboBox"
                         icon-name="widget-gtk-combobox"/>
