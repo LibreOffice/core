@@ -771,8 +771,11 @@ void ScTable::SortReorderByColumn(
         sc::CellStoreType& rCells = aCol[nCol].maCells;
         sc::CellStoreType::position_type aPos = rCells.position(nRow1);
         sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
-        aPos = rCells.position(aPos.first, nRow2+1);
-        sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+        if (nRow2 < MAXROW)
+        {
+            aPos = rCells.position(aPos.first, nRow2+1);
+            sc::SharedFormulaUtil::joinFormulaCellAbove(aPos);
+        }
     }
 }
 
