@@ -101,9 +101,6 @@
 
 #if     TARGET == SYS_UNIX
 #define SYSTEM                  "unix"
-#ifdef  pdp11
-#define MACHINE                 "pdp11"
-#endif
 #ifdef  vax
 #define MACHINE                 "vax"
 #endif
