@@ -461,7 +461,7 @@ namespace drawinglayer
             // the height
             if(rFont.GetSize().getWidth() > 0)
             {
-                Font aUnscaledFont(rFont);
+                vcl::Font aUnscaledFont(rFont);
                 aUnscaledFont.SetWidth(0);
                 const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aUnscaledFont));
 
