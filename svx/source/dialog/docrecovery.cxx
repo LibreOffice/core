@@ -410,6 +410,19 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     aNew.DisplayName = lInfo.getUnpackedValueOrDefault(STATEPROP_TITLE      , OUString());
     aNew.Module      = lInfo.getUnpackedValueOrDefault(STATEPROP_MODULE     , OUString());
 
+    if (aNew.OrgURL.isEmpty()) {
+        // If there is no file URL, the window title is used for the display name.
+        // Remove any unwanted elements such as " - LibreOffice Writer".
+        sal_Int32 i = aNew.DisplayName.indexOf(" - ");
+        if (i > 0)
+            aNew.DisplayName = aNew.DisplayName.copy(0, i);
+    } else {
+        // If there is a file URL, parse out the filename part as the display name.
+        INetURLObject aOrgURL(aNew.OrgURL);
+        aNew.DisplayName = aOrgURL.getName(INetURLObject::LAST_SEGMENT, true,
+                                           INetURLObject::DECODE_WITH_CHARSET);
+    }
+
     // search for already existing items and update her nState value ...
     TURLList::iterator pIt;
     for (  pIt  = m_lURLs.begin();
@@ -448,11 +461,6 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
        for now! But if there is a further notification for this item (see lines above!) we must
        map the doc state to an UI state. */
     aNew.RecoveryState = E_NOT_RECOVERED_YET;
-
-    // patch DisplayName! Because the document title contain more than the file name ...
-    sal_Int32 i = aNew.DisplayName.indexOf(" - ");
-    if (i > 0)
-        aNew.DisplayName = aNew.DisplayName.copy(0, i);
 
     m_lURLs.push_back(aNew);
 
