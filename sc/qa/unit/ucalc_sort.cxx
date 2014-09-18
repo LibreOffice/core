@@ -189,6 +189,83 @@ void Test::testSortHorizontal()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testSortHorizontalWholeColumn()
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, "Sort");
+
+    // 0 = empty cell
+    const char* aData[][5] = {
+        { "4", "2", "47", "a", "9" }
+    };
+
+    // Insert row data to C1:G1.
+    ScRange aSortRange = insertRangeData(m_pDoc, ScAddress(2,0,0), aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(5,0,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+
+    // Extend the sort range to whole column.
+    aSortRange.aEnd.SetRow(MAXROW);
+
+    SCCOL nCol1 = aSortRange.aStart.Col();
+    SCCOL nCol2 = aSortRange.aEnd.Col();
+    SCROW nRow1 = aSortRange.aStart.Row();
+    SCROW nRow2 = aSortRange.aEnd.Row();
+
+    // Define C:G as sheet-local anonymous database range.
+    m_pDoc->SetAnonymousDBData(
+        0, new ScDBData(STR_DB_LOCAL_NONAME, 0, nCol1, nRow1, nCol2, nRow2, false, false));
+
+    // Sort C:G horizontally ascending by row 1.
+    ScDBDocFunc aFunc(getDocShell());
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = nCol1;
+    aSortData.nCol2 = nCol2;
+    aSortData.nRow1 = nRow1;
+    aSortData.nRow2 = nRow2;
+    aSortData.bHasHeader = false;
+    aSortData.bByRow = false; // Sort by column (in horizontal direction).
+    aSortData.bIncludePattern = true;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+    aSortData.maKeyState[0].bAscending = true;
+    bool bSorted = aFunc.Sort(0, aSortData, true, true, true);
+    CPPUNIT_ASSERT(bSorted);
+
+    // Check the sort result.
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(5,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(6,0,0)));
+
+    // Undo and check.
+
+    SfxUndoManager* pUndoMgr = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pUndoMgr);
+
+    pUndoMgr->Undo();
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(5,0,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(6,0,0)));
+
+    // Redo and check.
+    pUndoMgr->Redo();
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2,0,0)));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(3,0,0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(4,0,0)));
+    CPPUNIT_ASSERT_EQUAL(47.0, m_pDoc->GetValue(ScAddress(5,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("a"), m_pDoc->GetString(ScAddress(6,0,0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testSortSingleRow()
 {
     // This test case is from fdo#80462.
