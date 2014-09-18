@@ -29,8 +29,14 @@
 #endif
 
 // just to go with calling convention of windows
+#if SYSTEM_ODBC_HEADERS
+#include <windows.h>
+#define SQL_API __stdcall
+#include <sqlext.h>
+#else
 #define SQL_API __stdcall
 #include <odbc/sqlext.h>
+#endif
 #undef SQL_API
 #define SQL_API __stdcall
 

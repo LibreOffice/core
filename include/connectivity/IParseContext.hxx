@@ -43,11 +43,12 @@ namespace connectivity
             ERROR_INVALID_INT_COMPARE,      // "The field can not be compared with a number."
             ERROR_INVALID_DATE_COMPARE,     // "The field can not be compared with a date."
             ERROR_INVALID_REAL_COMPARE,     // "The field can not be compared with a floating point number."
-            ERROR_INVALID_TABLE,            // "The database does not contain a table named \"#\"."
+            ERROR_INVALID_TABLE1,           // "The database does not contain a table named \"#\"."
+                                            // Named like this to avoid conflict with a #define in the Windows system ODBC headers.
             ERROR_INVALID_TABLE_OR_QUERY,   // "The database does contain neither a table nor a query named \"#\"."
             ERROR_INVALID_COLUMN,           // "The column \"#1\" is unknown in the table \"#2\"."
             ERROR_INVALID_TABLE_EXIST,      // "The database already contains a table or view with name \"#\"."
-            ERROR_INVALID_QUERY_EXIST       // "The database already contains a query with name \"#\".";
+            ERROR_INVALID_QUERY_EXIST,       // "The database already contains a query with name \"#\".";
         };
 
         enum    InternationalKeyCode

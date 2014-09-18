@@ -416,13 +416,13 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const OUString& _rComp
                     // m_xQueryContainer would not have been set), so emit a better error message
                     impl_appendError( IParseContext::ERROR_INVALID_TABLE_OR_QUERY, &sName );
                 else
-                    impl_appendError( IParseContext::ERROR_INVALID_TABLE, &sName );
+                    impl_appendError( IParseContext::ERROR_INVALID_TABLE1, &sName );
             }
         }
     }
     catch(Exception&)
     {
-        impl_appendError( IParseContext::ERROR_INVALID_TABLE, &sComposedName );
+        impl_appendError( IParseContext::ERROR_INVALID_TABLE1, &sComposedName );
     }
 
     return aReturn;

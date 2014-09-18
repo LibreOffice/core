@@ -826,17 +826,17 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
                 while(seekRow(IResultSetHelper::NEXT, 1, nCurPos)) ; // run through after last row
             }
             // m_nMaxRowCount can still be zero, but now it means there a genuinely zero rows in the table
-            return seekRow(IResultSetHelper::ABSOLUTE, m_nMaxRowCount, nCurPos);
+            return seekRow(IResultSetHelper::ABSOLUTE1, m_nMaxRowCount, nCurPos);
             break;
-        case IResultSetHelper::RELATIVE:
+        case IResultSetHelper::RELATIVE1:
             {
                 const sal_Int32 nNewRowPos = m_nRowPos + nOffset;
                 if (nNewRowPos < 0)
                     return false;
                 // ABSOLUTE will take care of case nNewRowPos > nMaxRowCount
-                return seekRow(IResultSetHelper::ABSOLUTE, nNewRowPos, nCurPos);
+                return seekRow(IResultSetHelper::ABSOLUTE1, nNewRowPos, nCurPos);
             }
-        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::ABSOLUTE1:
             {
                 if(nOffset < 0)
                 {
@@ -850,7 +850,7 @@ bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
                 }
                 if(nOffset < 0)
                 {
-                    seekRow(IResultSetHelper::ABSOLUTE, 0, nCurPos);
+                    seekRow(IResultSetHelper::ABSOLUTE1, 0, nCurPos);
                     return false;
                 }
                 if(m_nMaxRowCount && nOffset > m_nMaxRowCount)

@@ -4329,7 +4329,7 @@ OUString OParseContext::getErrorMessage(ErrorCode _eCode) const
 		case ERROR_INVALID_INT_COMPARE:		aMsg = "The field can not be compared with a number."; break;
 		case ERROR_INVALID_DATE_COMPARE:	aMsg = "The field can not be compared with a date."; break;
 		case ERROR_INVALID_REAL_COMPARE:	aMsg = "The field can not be compared with a floating point number."; break;
-		case ERROR_INVALID_TABLE:			aMsg = "The database does not contain a table named \"#\"."; break;
+		case ERROR_INVALID_TABLE1:			aMsg = "The database does not contain a table named \"#\"."; break;
 		case ERROR_INVALID_TABLE_OR_QUERY:  aMsg = "The database does contain neither a table nor a query named \"#\"."; break;
 		case ERROR_INVALID_COLUMN:			aMsg = "The column \"#1\" is unknown in the table \"#2\"."; break;
 		case ERROR_INVALID_TABLE_EXIST:		aMsg = "The database already contains a table or view with name \"#\"."; break;

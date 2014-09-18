@@ -34,9 +34,10 @@ namespace connectivity
             PRIOR,
             FIRST,
             LAST,
-            RELATIVE,
-            ABSOLUTE,
-            BOOKMARK
+            // Named like this to avoid conflict with a #define in the Windows system ODBC headers.
+            RELATIVE1,
+            ABSOLUTE1,
+            BOOKMARK,
         };
     public:
         virtual bool move(Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData) = 0;
