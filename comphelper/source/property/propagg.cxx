@@ -624,7 +624,7 @@ void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const  
 
 sal_Int32 OPropertySetAggregationHelper::getOriginalHandle(sal_Int32 nHandle) const
 {
-    OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper();
+    OPropertyArrayAggregationHelper& rPH = static_cast<OPropertyArrayAggregationHelper&>( const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper() );
     sal_Int32 nOriginalHandle = -1;
     (void)rPH.fillAggregatePropertyInfoByHandle(NULL, &nOriginalHandle, nHandle);
     return nOriginalHandle;
@@ -662,7 +662,7 @@ void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHa
 
 void OPropertySetAggregationHelper::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const
 {
-    OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper();
+    OPropertyArrayAggregationHelper& rPH = static_cast<OPropertyArrayAggregationHelper&>( const_cast<OPropertySetAggregationHelper*>(this)->getInfoHelper() );
     OUString aPropName;
     sal_Int32   nOriginalHandle = -1;
 

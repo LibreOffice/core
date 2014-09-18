@@ -142,7 +142,7 @@ namespace comphelper
         else if ( _bCreate )
         {   // not found in the cache, and allowed to create
             // -> new wrapper
-            xValue = new OAccessibleWrapper( m_xContext, _rxKey, (Reference< XAccessible >)m_aOwningAccessible );
+            xValue = new OAccessibleWrapper( m_xContext, _rxKey, m_aOwningAccessible );
 
             // see if we do cache children
             if ( !m_bTransientChildren )
@@ -336,7 +336,7 @@ namespace comphelper
 
     Reference< XAccessibleContext > OAccessibleWrapper::getContextNoCreate( ) const
     {
-        return (Reference< XAccessibleContext >)m_aContext;
+        return m_aContext;
     }
 
 
@@ -349,7 +349,7 @@ namespace comphelper
     Reference< XAccessibleContext > SAL_CALL OAccessibleWrapper::getAccessibleContext(  ) throw (RuntimeException, std::exception)
     {
         // see if the context is still alive (we cache it)
-        Reference< XAccessibleContext > xContext = (Reference< XAccessibleContext >)m_aContext;
+        Reference< XAccessibleContext > xContext = m_aContext;
         if ( !xContext.is() )
         {
             // create a new context

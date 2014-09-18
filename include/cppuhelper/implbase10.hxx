@@ -108,7 +108,7 @@ namespace cppu
         struct cd : public rtl::StaticAggregate< class_data, ImplClassData10< Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, WeakImplHelper10<Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10> > > {};
     public:
         virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-            { return WeakImplHelper_query( rType, cd::get(), this, (OWeakObject *)this ); }
+            { return WeakImplHelper_query( rType, cd::get(), this, static_cast<OWeakObject *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
             { OWeakObject::acquire(); }
         virtual void SAL_CALL release() throw () SAL_OVERRIDE
@@ -142,7 +142,7 @@ namespace cppu
         virtual com::sun::star::uno::Any SAL_CALL queryInterface( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
             { return OWeakAggObject::queryInterface( rType ); }
         virtual com::sun::star::uno::Any SAL_CALL queryAggregation( com::sun::star::uno::Type const & rType ) throw (com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE
-            { return WeakAggImplHelper_queryAgg( rType, cd::get(), this, (OWeakAggObject *)this ); }
+            { return WeakAggImplHelper_queryAgg( rType, cd::get(), this, static_cast<OWeakAggObject *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
             { OWeakAggObject::acquire(); }
         virtual void SAL_CALL release() throw () SAL_OVERRIDE

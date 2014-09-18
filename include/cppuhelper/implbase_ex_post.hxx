@@ -68,7 +68,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper##N \
     static class_data##N s_cd; \
 public: \
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
-        { return WeakImplHelper_query( rType, (class_data *)&s_cd, this, (OWeakObject *)this ); } \
+        { return WeakImplHelper_query( rType, (class_data *)&s_cd, this, static_cast<OWeakObject *>(this) ); } \
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE \
         { OWeakObject::acquire(); } \
     virtual void SAL_CALL release() throw () SAL_OVERRIDE \
@@ -92,7 +92,7 @@ public: \
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
         { return OWeakAggObject::queryInterface( rType ); } \
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( ::com::sun::star::uno::Type const & rType ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE \
-        { return WeakAggImplHelper_queryAgg( rType, (class_data *)&s_cd, this, (OWeakAggObject *)this ); } \
+        { return WeakAggImplHelper_queryAgg( rType, (class_data *)&s_cd, this, static_cast<OWeakAggObject *>(this) ); } \
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE \
         { OWeakAggObject::acquire(); } \
     virtual void SAL_CALL release() throw () SAL_OVERRIDE \

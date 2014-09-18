@@ -195,7 +195,7 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     // Iterate over all listeners and pass events.
     OInterfaceIteratorHelper aIt( mpManager->aScriptListeners );
     while( aIt.hasMoreElements() )
-        ((XScriptListener *)aIt.next())->firing( aScriptEvent );
+        static_cast<XScriptListener *>(aIt.next())->firing( aScriptEvent );
 }
 
 
@@ -263,7 +263,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
     OInterfaceIteratorHelper aIt( mpManager->aScriptListeners );
     while( aIt.hasMoreElements() )
     {
-        aRet = ((XScriptListener *)aIt.next())->approveFiring( aScriptEvent );
+        aRet = static_cast<XScriptListener *>(aIt.next())->approveFiring( aScriptEvent );
         try
         {
             Reference< XIdlClass > xListenerType = mpManager->getReflection()->

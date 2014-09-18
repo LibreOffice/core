@@ -74,7 +74,7 @@ void NumberedCollection::setUntitledPrefix(const OUString& sPrefix)
         if ( ! xComponent.is ())
             throw css::lang::IllegalArgumentException (OUString(ERRMSG_INVALID_COMPONENT_PARAM), m_xOwner.get(), 1);
 
-        sal_IntPtr pComponent = (sal_IntPtr) xComponent.get ();
+        sal_IntPtr pComponent = reinterpret_cast<sal_IntPtr>( xComponent.get() );
         TNumberedItemHash::const_iterator pIt = m_lComponents.find (pComponent);
 
         // a) component already exists - return it's number directly
@@ -150,7 +150,7 @@ void SAL_CALL NumberedCollection::releaseNumberForComponent(const css::uno::Refe
         if ( ! xComponent.is ())
             throw css::lang::IllegalArgumentException (OUString(ERRMSG_INVALID_COMPONENT_PARAM), m_xOwner.get(), 1);
 
-        sal_IntPtr pComponent = (sal_IntPtr) xComponent.get ();
+        sal_IntPtr pComponent = reinterpret_cast<sal_IntPtr>( xComponent.get() );
         TNumberedItemHash::iterator pIt = m_lComponents.find (pComponent);
 
         // a) component exists and will be removed

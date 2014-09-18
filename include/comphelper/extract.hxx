@@ -75,7 +75,7 @@ template< typename E >
 inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny )
     throw( ::com::sun::star::lang::IllegalArgumentException )
 {
-    // check for type save enum
+    // check for typesafe enum
     if (! (rAny >>= eRet))
     {
         // if not enum, maybe integer?
@@ -83,7 +83,7 @@ inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny
         if (! (rAny >>= nValue))
             throw ::com::sun::star::lang::IllegalArgumentException();
 
-        eRet = (E)nValue;
+        eRet = static_cast<E>(nValue);
     }
 }
 

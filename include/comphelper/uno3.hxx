@@ -187,7 +187,7 @@ namespace comphelper
             ::com::sun::star::uno::Any aCheck = _rxAggregate->queryAggregation(
                 cppu::UnoType<iface>::get());
             if (aCheck.hasValue())
-                _rxOut = *(::com::sun::star::uno::Reference<iface>*)aCheck.getValue();
+                _rxOut = *reinterpret_cast<const ::com::sun::star::uno::Reference<iface>*>(aCheck.getValue());
         }
         return _rxOut.is();
     }
@@ -208,7 +208,7 @@ namespace comphelper
                 cppu::UnoType<iface>::get());
             if(aCheck.hasValue())
             {
-                _rxOut = *(::com::sun::star::uno::Reference<iface>*)aCheck.getValue();
+                _rxOut = *reinterpret_cast<const ::com::sun::star::uno::Reference<iface>*>(aCheck.getValue());
                 return _rxOut.is();
             }
         }

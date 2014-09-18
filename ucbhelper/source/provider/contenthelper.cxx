@@ -70,7 +70,7 @@ struct hashPtr
 {
     size_t operator()( const XPropertiesChangeListenerPtr& rp ) const
     {
-        return (size_t)rp;
+        return reinterpret_cast<size_t>(rp);
     }
 };
 

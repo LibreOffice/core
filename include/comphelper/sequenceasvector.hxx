@@ -177,7 +177,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
          */
         void operator>>(::com::sun::star::uno::Sequence< TElementType >& lDestination) const
         {
-            sal_Int32 c = (sal_Int32)this->size();
+            sal_Int32 c = static_cast<sal_Int32>(this->size());
             lDestination.realloc(c);
             TElementType* pDestination = lDestination.getArray();
 
@@ -201,7 +201,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
          */
         void operator>>(::com::sun::star::uno::Any& aDestination) const
         {
-            sal_Int32                                       c            = (sal_Int32)this->size();
+            sal_Int32                                       c            = static_cast<sal_Int32>(this->size());
             ::com::sun::star::uno::Sequence< TElementType > lDestination(c);
             TElementType*                                   pDestination = lDestination.getArray();
 
