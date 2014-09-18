@@ -203,7 +203,7 @@ public:
     }
     INetMIMEMessage *GetSourceMessage (void) const
     {
-        return ((INetMIMEMessage *)INetMessageIStream::GetSourceMessage());
+        return static_cast<INetMIMEMessage *>(INetMessageIStream::GetSourceMessage());
     }
 
     using INetMessageOStream::SetTargetMessage;
@@ -213,7 +213,7 @@ public:
     }
     INetMIMEMessage *GetTargetMessage (void) const
     {
-        return ((INetMIMEMessage *)INetMessageOStream::GetTargetMessage());
+        return static_cast<INetMIMEMessage *>(INetMessageOStream::GetTargetMessage());
     }
 };
 

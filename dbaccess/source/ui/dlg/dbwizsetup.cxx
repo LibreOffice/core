@@ -134,7 +134,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(vcl::Window* _pParent
 {
     // no local resources needed anymore
     // extract the datasource type collection from the item set
-    DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
+    const DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
     if (pCollectionItem)
         m_pCollection = pCollectionItem->getCollection();
 

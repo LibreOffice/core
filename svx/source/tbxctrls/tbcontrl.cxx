@@ -2479,7 +2479,7 @@ SvxSimpleUndoRedoController::~SvxSimpleUndoRedoController()
 
 void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* pState )
 {
-    SfxStringItem* pItem = PTR_CAST( SfxStringItem, pState );
+    const SfxStringItem* pItem = PTR_CAST( SfxStringItem, pState );
     ToolBox& rBox = GetToolBox();
     if ( pItem && eState != SfxItemState::DISABLED )
     {

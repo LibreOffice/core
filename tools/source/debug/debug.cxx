@@ -288,7 +288,7 @@ void* DbgFunc( sal_uInt16 nAction, void* pParam )
                 break;
 
             case DBG_FUNC_SETTESTSOLARMUTEX:
-                pDebugData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)(long)pParam;
+                pDebugData->pDbgTestSolarMutex = reinterpret_cast<DbgTestSolarMutexProc>(reinterpret_cast<long>(pParam));
                 break;
 
             case DBG_FUNC_TESTSOLARMUTEX:

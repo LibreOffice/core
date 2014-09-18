@@ -639,7 +639,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
 
             if( pStyle && pStyle->ISA(XMLShapeStyleContext) )
             {
-                pDocStyle = PTR_CAST( XMLShapeStyleContext, pStyle );
+                pDocStyle = const_cast<XMLShapeStyleContext*>(PTR_CAST( XMLShapeStyleContext, pStyle ));
 
                 if( pDocStyle->GetStyle().is() )
                 {
@@ -735,7 +735,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
                 break;
 
             const SvXMLStyleContext* pTempStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(XML_STYLE_FAMILY_TEXT_PARAGRAPH, maTextStyleName);
-            XMLPropStyleContext* pStyle = PTR_CAST( XMLPropStyleContext, pTempStyle ); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
+            XMLPropStyleContext* pStyle = const_cast<XMLPropStyleContext*>(PTR_CAST( XMLPropStyleContext, pTempStyle )); // use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
             if( pStyle == NULL )
                 break;
 

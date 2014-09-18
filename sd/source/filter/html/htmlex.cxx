@@ -1467,7 +1467,7 @@ OUString HtmlExport::TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState
         SvxFieldItem* pItem = (SvxFieldItem*)pSet->GetItem( EE_FEATURE_FIELD );
         if(pItem)
         {
-            SvxURLField* pURL = PTR_CAST(SvxURLField, pItem->GetField());
+            const SvxURLField* pURL = PTR_CAST(SvxURLField, pItem->GetField());
             if(pURL)
             {
                 aLink = pURL->GetURL();

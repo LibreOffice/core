@@ -109,7 +109,7 @@ SfxObjectItem::SfxObjectItem( sal_uInt16 nWhichId, SfxShell *pSh )
 
 bool SfxObjectItem::operator==( const SfxPoolItem &rItem ) const
 {
-     SfxObjectItem *pOther = PTR_CAST(SfxObjectItem, &rItem);
+     const SfxObjectItem *pOther = PTR_CAST(SfxObjectItem, &rItem);
      return pOther->_pSh == _pSh;
 }
 

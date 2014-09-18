@@ -4429,7 +4429,7 @@ void DocxAttributeOutput::WritePostponedFormControl(const SdrObject* pObject)
 {
     if (pObject && pObject->GetObjInventor() == FmFormInventor)
     {
-        if (SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject))
+        if (SdrUnoObj *pFormObj = const_cast<SdrUnoObj*>(PTR_CAST(SdrUnoObj,pObject)))
         {
             uno::Reference<awt::XControlModel> xControlModel = pFormObj->GetUnoControlModel();
             uno::Reference<lang::XServiceInfo> xInfo(xControlModel, uno::UNO_QUERY);

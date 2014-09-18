@@ -3183,7 +3183,7 @@ const SwStartNode *SwXTextFrame::GetStartNode() const
 {
     const SwStartNode *pSttNd = 0;
 
-    SwFrmFmt* pFmt = GetFrmFmt();
+    const SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
         const SwFmtCntnt& rFlyCntnt = pFmt->GetCntnt();

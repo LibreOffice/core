@@ -162,7 +162,7 @@ sal_Int32 SwAccessibleParagraph::GetCaretPos()
             if(!GetPortionData().IsValidCorePosition( nIndex ) ||
                 ( GetPortionData().IsZeroCorePositionData() && nIndex== 0) )
             {
-                SwTxtFrm *pTxtFrm = PTR_CAST( SwTxtFrm, GetFrm() );
+                const SwTxtFrm *pTxtFrm = PTR_CAST( SwTxtFrm, GetFrm() );
                 bool bFormat = (pTxtFrm && pTxtFrm->HasPara());
                 if(bFormat)
                 {
@@ -946,7 +946,7 @@ lang::Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
 {
     SolarMutexGuard aGuard;
 
-    SwTxtFrm *pTxtFrm = PTR_CAST( SwTxtFrm, GetFrm() );
+    const SwTxtFrm *pTxtFrm = PTR_CAST( SwTxtFrm, GetFrm() );
     if( !pTxtFrm )
     {
         THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (no text frame)" );

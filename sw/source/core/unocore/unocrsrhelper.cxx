@@ -191,7 +191,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         ::sw::UnoTunnelGetImplementation<SwXFrame>(xTunnel));
     if (pFrame)
     {
-        SwFrmFmt *const pFrmFmt(pFrame->GetFrmFmt());
+        const SwFrmFmt *const pFrmFmt(pFrame->GetFrmFmt());
         if (pFrmFmt && pFrmFmt->GetDoc() == &rTargetDoc)
         {
             o_rFrame = std::make_pair(pFrmFmt->GetName(), pFrame->GetFlyCntType());

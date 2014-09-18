@@ -1116,7 +1116,7 @@ DbuTypeCollectionItem::DbuTypeCollectionItem(const DbuTypeCollectionItem& _rSour
 
 bool DbuTypeCollectionItem::operator==(const SfxPoolItem& _rItem) const
 {
-    DbuTypeCollectionItem* pCompare = PTR_CAST(DbuTypeCollectionItem, &_rItem);
+    const DbuTypeCollectionItem* pCompare = PTR_CAST(DbuTypeCollectionItem, &_rItem);
     return pCompare && (pCompare->getCollection() == getCollection());
 }
 

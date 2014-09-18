@@ -222,7 +222,7 @@ void SdXMLDrawingPageStyleContext::Finish( bool bOverwrite )
 
                 sal_Int32 nStyle = 0;
 
-                SdXMLNumberFormatImportContext* pSdNumStyle =
+                const SdXMLNumberFormatImportContext* pSdNumStyle =
                     PTR_CAST( SdXMLNumberFormatImportContext,
                         GetStyles()->FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE, sStyleName, true ) );
 

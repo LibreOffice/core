@@ -536,7 +536,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_BOX:
         {
-            SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
+            const SvxBoxItem* pBox = PTR_CAST(SvxBoxItem, &rItem);
             assert(pBox && "Wrong Which-ID");
             if (pBox)
             {
@@ -874,7 +874,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_KEEP:
         {
-            SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
+            const SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
             assert(pFmtKeep && "Wrong Which-ID");
             if (pFmtKeep)
             {
@@ -888,7 +888,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_BACKGROUND:
         {
-            SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
+            const SvxBrushItem* pBrush = PTR_CAST(SvxBrushItem, &rItem);
             OSL_ENSURE( pBrush != NULL, "Wrong Which-ID" );
 
             // note: the graphic is only exported if nMemberId equals
@@ -1038,7 +1038,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_HORI_ORIENT:
         {
-            SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
+            const SwFmtHoriOrient* pHoriOrient = PTR_CAST(SwFmtHoriOrient, &rItem);
             assert(pHoriOrient && "Wrong Which-ID");
             if (pHoriOrient)
             {
@@ -1051,7 +1051,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_VERT_ORIENT:
         {
-            SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
+            const SwFmtVertOrient* pVertOrient = PTR_CAST(SwFmtVertOrient, &rItem);
             assert(pVertOrient && "Wrong Which-ID");
 
             SvXMLUnitConverter::convertEnum( aOut, pVertOrient->GetVertOrient(),
@@ -1062,7 +1062,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
 
         case RES_FRM_SIZE:
         {
-            SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
+            const SwFmtFrmSize* pFrmSize = PTR_CAST(SwFmtFrmSize, &rItem);
             OSL_ENSURE( pFrmSize != NULL, "Wrong Which-ID" );
 
             bool bOutHeight = false;

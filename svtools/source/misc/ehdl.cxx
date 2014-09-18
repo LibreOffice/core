@@ -176,7 +176,7 @@ bool SfxErrorHandler::CreateString(
     sal_uLong nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
     if( nErrCode>=lEnd || nErrCode<=lStart )
         return false;
-    MessageInfo *pMsgInfo=PTR_CAST(MessageInfo,pErr);
+    const MessageInfo *pMsgInfo = PTR_CAST(MessageInfo,pErr);
     if(pMsgInfo)
     {
         if(GetMessageString(nErrCode, rStr, nFlags))
@@ -187,7 +187,7 @@ bool SfxErrorHandler::CreateString(
     }
     else if(GetErrorString(nErrCode, rStr, nFlags))
     {
-        StringErrorInfo *pStringInfo=PTR_CAST(StringErrorInfo,pErr);
+        const StringErrorInfo *pStringInfo = PTR_CAST(StringErrorInfo,pErr);
         if(pStringInfo)
         {
             rStr = rStr.replaceAll(OUString("$(ARG1)"),
@@ -195,7 +195,7 @@ bool SfxErrorHandler::CreateString(
         }
         else
         {
-            TwoStringErrorInfo * pTwoStringInfo = PTR_CAST(TwoStringErrorInfo,
+            const TwoStringErrorInfo * pTwoStringInfo = PTR_CAST(TwoStringErrorInfo,
                                                            pErr);
             if (pTwoStringInfo)
             {
