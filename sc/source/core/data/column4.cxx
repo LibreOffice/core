@@ -916,11 +916,16 @@ public:
 
 void ScColumn::SplitFormulaGroupByRelativeRef( const ScRange& rBoundRange )
 {
+    if (rBoundRange.aStart.Row() >= MAXROW)
+        // Nothing to split.
+        return;
+
     std::vector<SCROW> aBounds;
 
     // Cut at row boundaries first.
     aBounds.push_back(rBoundRange.aStart.Row());
-    aBounds.push_back(rBoundRange.aEnd.Row()+1);
+    if (rBoundRange.aEnd.Row() < MAXROW)
+        aBounds.push_back(rBoundRange.aEnd.Row()+1);
     sc::SharedFormulaUtil::splitFormulaCellGroups(maCells, aBounds);
 
     RelativeRefBoundChecker aFunc(rBoundRange);
