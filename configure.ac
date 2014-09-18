@@ -4902,16 +4902,17 @@ if test "$GCC" = "yes"; then
         hash_style_ldflags_save=$LDFLAGS
         LDFLAGS="$LDFLAGS -Wl,--hash-style=$hash_style"
 
-        AC_LINK_IFELSE([AC_LANG_PROGRAM(
+        AC_RUN_IFELSE([AC_LANG_PROGRAM(
             [
 #include <stdio.h>
             ],[
 printf ("");
             ])],
-            [ if ./conftest$EXEEXT; then
+            [
                   HAVE_LD_HASH_STYLE=TRUE
                   WITH_LINKER_HASH_STYLE=$hash_style
-              fi],
+            ],
+            [HAVE_LD_HASH_STYLE=FALSE],
             [HAVE_LD_HASH_STYLE=FALSE])
         LDFLAGS=$hash_style_ldflags_save
     done
