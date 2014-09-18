@@ -11,10 +11,11 @@
 
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>
-#include <com/sun/star/xml/sax/FastTokenHandler.hpp>
+#include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastParser.hpp>
 
+#include <cppuhelper/implbase1.hxx>
 #include <test/bootstrapfixture.hxx>
 
 using namespace css;
@@ -22,11 +23,43 @@ using namespace css::xml::sax;
 
 namespace {
 
+class DummyTokenHandler : public cppu::WeakImplHelper1< xml::sax::XFastTokenHandler >
+{
+public:
+             DummyTokenHandler() {}
+    virtual ~DummyTokenHandler() {}
+
+    virtual sal_Int32 SAL_CALL getToken( const OUString& )
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        CPPUNIT_ASSERT_MESSAGE( "getToken: unexpected call", false );
+        return FastToken::DONTKNOW;
+    }
+    virtual OUString SAL_CALL getIdentifier( sal_Int32 )
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        CPPUNIT_ASSERT_MESSAGE( "getIdentifier: unexpected call", false );
+        return OUString();
+    }
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence<sal_Int8>& )
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        return FastToken::DONTKNOW;
+    }
+    virtual uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 )
+        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
+    {
+        CPPUNIT_ASSERT_MESSAGE( "getUTF8Identifier: unexpected call", false );
+        return uno::Sequence<sal_Int8>();
+    }
+};
+
 class ParserTest: public test::BootstrapFixture
 {
     InputSource maInput;
     uno::Reference< XFastParser > mxParser;
     uno::Reference< XFastDocumentHandler > mxDocumentHandler;
+    uno::Reference< DummyTokenHandler > mxTokenHandler;
 
 public:
     virtual void setUp() SAL_OVERRIDE;
@@ -46,8 +79,8 @@ void ParserTest::setUp()
 {
     test::BootstrapFixture::setUp();
     mxParser = css::xml::sax::FastParser::create(m_xContext);
-    mxParser->setTokenHandler(
-        css::xml::sax::FastTokenHandler::create(m_xContext));
+    mxTokenHandler.set( new DummyTokenHandler() );
+    mxParser->setTokenHandler( mxTokenHandler );
 }
 
 void ParserTest::tearDown()

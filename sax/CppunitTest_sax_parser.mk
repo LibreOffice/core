@@ -16,6 +16,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sax_parser, \
 $(eval $(call gb_CppunitTest_use_libraries,sax_parser, \
 	comphelper \
 	cppu \
+	cppuhelper \
 	sal \
 	test \
 	$(gb_UWINAPI) \
@@ -34,7 +35,6 @@ $(eval $(call gb_CppunitTest_use_components,sax_parser,\
 	configmgr/source/configmgr \
 	framework/util/fwk \
 	i18npool/util/i18npool \
-	oox/util/oox \
 	sax/source/expatwrap/expwrap \
 	sfx2/util/sfx \
 	ucb/source/core/ucb1 \
