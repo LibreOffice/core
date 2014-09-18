@@ -351,7 +351,11 @@ class Parser:
 
         for path in lines:
             baseDir = self.first_elem(path)
-            if not baseDir in directory_whitelist:
+
+            # Support searching within sub directories
+            if directory is '.':
+                self.check_file(path.strip())
+            elif not baseDir in directory_whitelist:
                 print ("Missing path %s " % baseDir)
             elif directory_whitelist[baseDir] is 0:
 #                print ("Scan path %s " % baseDir)
