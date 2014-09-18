@@ -1081,11 +1081,11 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     SetHelpId( HID_POPUP_COLOR );
     mpColorSet->SetHelpId( HID_POPUP_COLOR_CTRL );
     SetText( rWndTitle );
-    AddStatusListener( OUString( ".uno:ColorTableState" ));
-    AddStatusListener( maCommand );
 
     mrPaletteManager.ReloadColorSet(*mpColorSet);
     mrPaletteManager.ReloadRecentColorSet(*mpRecentColorSet);
+    AddStatusListener( ".uno:ColorTableState" );
+    AddStatusListener( maCommand );
 }
 
 SvxColorWindow_Impl::~SvxColorWindow_Impl()
