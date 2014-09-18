@@ -732,6 +732,7 @@ $(eval $(call gb_Helper_register_jars,NONE,\
 endif
 
 $(eval $(call gb_Helper_register_packages_for_install,ure,\
+	instsetoo_native_setup_ure \
 	ure_install \
 	$(if $(ENABLE_JAVA),\
 		jvmfwk_javavendors \
