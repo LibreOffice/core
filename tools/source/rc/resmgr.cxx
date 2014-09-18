@@ -1234,9 +1234,9 @@ sal_uInt32 ResMgr::GetRemainSize()
         return pFallbackResMgr->GetRemainSize();
 
     const ImpRCStack& rTop = aStack[nCurStack];
-    return  (sal_uInt32)((sal_IntPtr)(sal_uInt8 *)rTop.pResource +
-                     rTop.pResource->GetLocalOff() -
-                     (sal_IntPtr)(sal_uInt8 *)rTop.pClassRes);
+    return (sal_uInt32)(reinterpret_cast<sal_IntPtr>(rTop.pResource) +
+                        rTop.pResource->GetLocalOff() -
+                        reinterpret_cast<sal_IntPtr>(rTop.pClassRes));
 }
 
 void* ResMgr::Increment( sal_uInt32 nSize )

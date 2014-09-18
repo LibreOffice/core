@@ -123,7 +123,7 @@ typedef void* (*TypeId)();
     p: Pointer to be cast into T
 */
 #define PTR_CAST( T, pObj ) \
-        ( pObj && (pObj)->IsA( TYPE(T) ) ? (T*)(pObj) : 0 )
+        ( pObj && (pObj)->IsA( TYPE(T) ) ? static_cast<T*>(pObj) : 0 )
 
 /** Check whether object pObj has a Base Class T
     (or if pObj is an instance of T) */

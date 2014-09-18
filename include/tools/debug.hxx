@@ -98,7 +98,7 @@ inline sal_uIntPtr DbgIsBoldAppFont()
 
 inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
 {
-    DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, (void*)(long)pProc );
+    DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, reinterpret_cast<void*>(reinterpret_cast<long>(pProc)) );
 }
 
 #define DBG_ASSERTWARNING( sCon, aWarning ) \
