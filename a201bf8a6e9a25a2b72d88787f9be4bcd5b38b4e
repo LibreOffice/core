@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_d0937c4e",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 8617,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-18T09:10:22Z",
+      "side": 1,
+      "message": "Is this really needed? When i don\u0027t pass --with-system-odbc wouldn\u0027t these paths already be included in CPPFLAGS on Windows?",
+      "revId": "a201bf8a6e9a25a2b72d88787f9be4bcd5b38b4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_f08e8026",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 8620,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-18T09:10:22Z",
+      "side": 1,
+      "message": "Nit: untabify",
+      "range": {
+        "startLine": 8620,
+        "startChar": 0,
+        "endLine": 8620,
+        "endChar": 1
+      },
+      "revId": "a201bf8a6e9a25a2b72d88787f9be4bcd5b38b4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
