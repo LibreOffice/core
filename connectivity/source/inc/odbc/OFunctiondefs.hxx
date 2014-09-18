@@ -29,10 +29,15 @@
 #endif
 
 // just to go with calling convention of windows
+#if SYSTEM_ODBC_HEADERS
+#include <windows.h>
+#include <sqlext.h>
+#else
 #define SQL_API __stdcall
 #include <odbc/sqlext.h>
 #undef SQL_API
 #define SQL_API __stdcall
+#endif
 
 #ifdef _MSC_VER
 #pragma warning(pop)
