@@ -264,7 +264,7 @@ public:
 #endif
 
         // FIXME: is 14 point enough ?
-        Font aFont( OUString( "Roboto" ), Size( 0, 14 ) );
+        vcl::Font aFont( OUString( "Roboto" ), Size( 0, 14 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
         aStyleSet.SetAppFont( aFont );
