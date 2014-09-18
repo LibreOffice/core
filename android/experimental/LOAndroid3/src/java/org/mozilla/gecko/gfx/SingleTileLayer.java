@@ -38,17 +38,13 @@
 
 package org.mozilla.gecko.gfx;
 
-import org.mozilla.gecko.gfx.CairoImage;
-import org.mozilla.gecko.gfx.CairoUtils;
-import org.mozilla.gecko.gfx.IntSize;
-import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.gfx.TileLayer;
-import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Region;
+import android.graphics.RegionIterator;
 import android.opengl.GLES20;
-import android.util.Log;
+
 import java.nio.FloatBuffer;
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Encapsulates the logic needed to draw a single textured tile.
@@ -56,10 +52,25 @@ import javax.microedition.khronos.opengles.GL10;
  * TODO: Repeating textures really should be their own type of layer.
  */
 public class SingleTileLayer extends TileLayer {
+    private static final String LOGTAG = "GeckoSingleTileLayer";
+
+    private Rect mMask;
+
     public SingleTileLayer(CairoImage image) { this(false, image); }
 
     public SingleTileLayer(boolean repeat, CairoImage image) {
-        super(repeat, image);
+        super(image, repeat ? PaintMode.REPEAT : PaintMode.NORMAL);
+    }
+
+    public SingleTileLayer(CairoImage image, TileLayer.PaintMode paintMode) {
+        super(image, paintMode);
+    }
+
+    /**
+     * Set an area to mask out when rendering.
+     */
+    public void setMask(Rect aMaskRect) {
+        mMask = aMaskRect;
     }
 
     @Override
@@ -69,59 +80,83 @@ public class SingleTileLayer extends TileLayer {
         if (!initialized())
             return;
 
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTextureID());
-
         RectF bounds;
-        int[] cropRect;
-        IntSize size = getSize();
+        Rect position = getPosition();
         RectF viewport = context.viewport;
 
-        if (repeats()) {
+        if (repeats() || stretches()) {
             bounds = new RectF(0.0f, 0.0f, viewport.width(), viewport.height());
             int width = Math.round(viewport.width());
             int height = Math.round(viewport.height());
-            cropRect = new int[] { 0, 0, width, height };
         } else {
-            bounds = getBounds(context, new FloatSize(size));
-            cropRect = new int[] { 0, 0, size.width, size.height };
+            bounds = getBounds(context);
         }
 
-        float height = bounds.height();
-        float left = bounds.left - viewport.left;
-        float top = viewport.height() - (bounds.top + height - viewport.top);
+        Rect intBounds = new Rect();
+        bounds.roundOut(intBounds);
+        Region maskedBounds = new Region(intBounds);
+        if (mMask != null) {
+            maskedBounds.op(mMask, Region.Op.DIFFERENCE);
+            if (maskedBounds.isEmpty())
+                return;
+        }
 
-        float[] coords = {
+        // XXX Possible optimisation here, form this array so we can draw it in
+        //     a single call.
+        RegionIterator i = new RegionIterator(maskedBounds);
+        for (Rect subRect = new Rect(); i.next(subRect);) {
+            // Compensate for rounding errors at the edge of the tile caused by
+            // the roundOut above
+            RectF subRectF = new RectF(Math.max(bounds.left, (float)subRect.left),
+                                       Math.max(bounds.top, (float)subRect.top),
+                                       Math.min(bounds.right, (float)subRect.right),
+                                       Math.min(bounds.bottom, (float)subRect.bottom));
+
+            int[] cropRect = new int[] { Math.round(subRectF.left - bounds.left),
+                                         Math.round(subRectF.bottom - bounds.top),
+                                         Math.round(subRectF.right - bounds.left),
+                                         Math.round(subRectF.top - bounds.top) };
+
+            cropRect = new int[] { 0, 0, position.width(), position.height() };
+
+            float height = subRectF.height();
+            float left = subRectF.left - viewport.left;
+            float top = viewport.height() - (subRectF.top + height - viewport.top);
+
+            float[] coords = {
                 //x, y, z, texture_x, texture_y
                 left/viewport.width(), top/viewport.height(), 0,
-                cropRect[0]/(float)size.width, cropRect[1]/(float)size.height,
+                cropRect[0]/(float)position.width(), cropRect[1]/(float)position.height(),
 
                 left/viewport.width(), (top+height)/viewport.height(), 0,
-                cropRect[0]/(float)size.width, cropRect[3]/(float)size.height,
+                cropRect[0]/(float)position.width(), cropRect[3]/(float)position.height(),
 
-                (left+bounds.width())/viewport.width(), top/viewport.height(), 0,
-                cropRect[2]/(float)size.width, cropRect[1]/(float)size.height,
+                (left+subRectF.width())/viewport.width(), top/viewport.height(), 0,
+                cropRect[2]/(float)position.width(), cropRect[1]/(float)position.height(),
 
-                (left+bounds.width())/viewport.width(), (top+height)/viewport.height(), 0,
-                cropRect[2]/(float)size.width, cropRect[3]/(float)size.height
-        };
+                (left+subRectF.width())/viewport.width(), (top+height)/viewport.height(), 0,
+                cropRect[2]/(float)position.width(), cropRect[3]/(float)position.height()
+            };
 
-        FloatBuffer coordBuffer = context.coordBuffer;
-        int positionHandle = context.positionHandle;
-        int textureHandle = context.textureHandle;
+            FloatBuffer coordBuffer = context.coordBuffer;
+            int positionHandle = context.positionHandle;
+            int textureHandle = context.textureHandle;
 
-        // Make sure we are at position zero in the buffer in case other draw methods did not clean
-        // up after themselves
-        coordBuffer.position(0);
-        coordBuffer.put(coords);
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, getTextureID());
 
-        // Vertex coordinates are x,y,z starting at position 0 into the buffer.
-        coordBuffer.position(0);
-        GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 20, coordBuffer);
+            // Make sure we are at position zero in the buffer
+            coordBuffer.position(0);
+            coordBuffer.put(coords);
 
-        // Texture coordinates are texture_x, texture_y starting at position 3 into the buffer.
-        coordBuffer.position(3);
-        GLES20.glVertexAttribPointer(textureHandle, 2, GLES20.GL_FLOAT, false, 20, coordBuffer);
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+            // Vertex coordinates are x,y,z starting at position 0 into the buffer.
+            coordBuffer.position(0);
+            GLES20.glVertexAttribPointer(positionHandle, 3, GLES20.GL_FLOAT, false, 20, coordBuffer);
+
+            // Texture coordinates are texture_x, texture_y starting at position 3 into the buffer.
+            coordBuffer.position(3);
+            GLES20.glVertexAttribPointer(textureHandle, 2, GLES20.GL_FLOAT, false, 20, coordBuffer);
+            GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
+        }
     }
 }
 

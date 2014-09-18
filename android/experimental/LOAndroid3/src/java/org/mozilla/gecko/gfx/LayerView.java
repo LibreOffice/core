@@ -39,21 +39,18 @@
 package org.mozilla.gecko.gfx;
 
 //import org.mozilla.gecko.GeckoInputConnection;
-import org.mozilla.gecko.gfx.FloatSize;
-import org.mozilla.gecko.gfx.InputConnectionHandler;
-import org.mozilla.gecko.gfx.LayerController;
-import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
+
 import android.content.Context;
-import android.opengl.GLSurfaceView;
-import android.view.View;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.view.ScaleGestureDetector;
-import android.widget.RelativeLayout;
-import android.util.Log;
+
+import org.mozilla.gecko.ui.SimpleScaleGestureDetector;
+
 import java.nio.IntBuffer;
 import java.util.LinkedList;
 
@@ -62,6 +59,8 @@ import java.util.LinkedList;
  *
  * This view delegates to LayerRenderer to actually do the drawing. Its role is largely that of a
  * mediator between the LayerRenderer and the LayerController.
+ *
+ * Note that LayerView is accessed by Robocop via reflection.
  */
 public class LayerView extends FlexibleGLSurfaceView {
     private Context mContext;
@@ -75,6 +74,14 @@ public class LayerView extends FlexibleGLSurfaceView {
     private static String LOGTAG = "GeckoLayerView";
     /* List of events to be processed if the page does not prevent them. Should only be touched on the main thread */
     private LinkedList<MotionEvent> mEventQueue = new LinkedList<MotionEvent>();
+    /* Must be a PAINT_xxx constant */
+    private int mPaintState = PAINT_NONE;
+
+    /* Flags used to determine when to show the painted surface. The integer
+     * order must correspond to the order in which these states occur. */
+    public static final int PAINT_NONE = 0;
+    public static final int PAINT_BEFORE_FIRST = 1;
+    public static final int PAINT_AFTER_FIRST = 2;
 
 
     public LayerView(Context context, LayerController controller) {
@@ -86,7 +93,7 @@ public class LayerView extends FlexibleGLSurfaceView {
         setRenderer(mRenderer);
         mGestureDetector = new GestureDetector(context, controller.getGestureListener());
         mScaleGestureDetector =
-                new SimpleScaleGestureDetector(controller.getScaleGestureListener());
+            new SimpleScaleGestureDetector(controller.getScaleGestureListener());
         mGestureDetector.setOnDoubleTapListener(controller.getDoubleTapListener());
         mInputConnectionHandler = null;
 
@@ -139,12 +146,6 @@ public class LayerView extends FlexibleGLSurfaceView {
         mController.setViewportSize(new FloatSize(size));
     }
 
-    //public GeckoInputConnection setInputConnectionHandler() {
-    //    GeckoInputConnection geckoInputConnection = GeckoInputConnection.create(this);
-    //    mInputConnectionHandler = geckoInputConnection;
-    //    return geckoInputConnection;
-    //}
-
     @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
         if (mInputConnectionHandler != null)
@@ -187,6 +188,7 @@ public class LayerView extends FlexibleGLSurfaceView {
         return false;
     }
 
+
     @Override
     public void requestRender() {
         super.requestRender();
@@ -197,6 +199,10 @@ public class LayerView extends FlexibleGLSurfaceView {
                 mRenderTime = System.nanoTime();
             }
         }
+    }
+
+    public void changeCheckerboardBitmap(Bitmap bitmap) {
+        mRenderer.setCheckerboardBitmap(bitmap);
     }
 
     public void addLayer(Layer layer) {
@@ -225,6 +231,28 @@ public class LayerView extends FlexibleGLSurfaceView {
     /** Used by robocop for testing purposes. Not for production use! This is called via reflection by robocop. */
     public IntBuffer getPixels() {
         return mRenderer.getPixels();
+    }
+
+    public void setLayerRenderer(LayerRenderer renderer) {
+        mRenderer = renderer;
+        setRenderer(mRenderer);
+    }
+
+    public LayerRenderer getLayerRenderer() {
+        return mRenderer;
+    }
+
+    /* paintState must be a PAINT_xxx constant. The state will only be changed
+     * if paintState represents a state that occurs after the current state. */
+    public void setPaintState(int paintState) {
+        if (paintState > mPaintState) {
+            Log.d(LOGTAG, "LayerView paint state set to " + paintState);
+            mPaintState = paintState;
+        }
+    }
+
+    public int getPaintState() {
+        return mPaintState;
     }
 }
 

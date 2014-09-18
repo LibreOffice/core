@@ -70,12 +70,12 @@ public class MultiTileLayer extends Layer {
         }
 
         for (SubTile layer : mTiles) {
-            IntSize tileSize = layer.getSize();
-            Rect tileRect = new Rect(layer.x, layer.y, layer.x + tileSize.width, layer.y + tileSize.height);
+            Rect rect = layer.getPosition();
+            Rect tileRect = new Rect(layer.x, layer.y, layer.x + rect.width(), layer.y + rect.height());
 
             if (tileRect.intersect(dirtyRect)) {
                 tileRect.offset(-layer.x, -layer.y);
-                layer.invalidate(tileRect);
+                layer.invalidate();
             }
         }
     }
@@ -90,7 +90,6 @@ public class MultiTileLayer extends Layer {
         mSize = size;
     }
 
-    @Override
     public IntSize getSize() {
         return mSize;
     }
@@ -99,11 +98,12 @@ public class MultiTileLayer extends Layer {
         Log.i(LOGTAG, "validateTiles()");
 
         // Set tile origins and resolution
-        refreshTileMetrics(getOrigin(), getResolution(), false);
+        Point origin = new Point();
+        refreshTileMetrics(origin, getResolution(), false);
     }
 
     @Override
-    protected boolean performUpdates(RenderContext context) {
+    protected void performUpdates(RenderContext context) {
         super.performUpdates(context);
 
         validateTiles();
@@ -115,34 +115,20 @@ public class MultiTileLayer extends Layer {
         for (SubTile layer : mTiles) {
             // First do a non-texture update to make sure coordinates are
             // up-to-date.
-            boolean invalid = layer.getSkipTextureUpdate();
-            layer.setSkipTextureUpdate(true);
             layer.performUpdates(context);
 
-            RectF layerBounds = layer.getBounds(context, new FloatSize(layer.getSize()));
-            boolean isDirty = layer.isDirty();
+            RectF layerBounds = layer.getBounds(context);
 
-            if (isDirty) {
-                if (!RectF.intersects(layerBounds, context.viewport)) {
-                    if (firstDirtyTile == null)
-                        firstDirtyTile = layer;
-                    dirtyTiles++;
-                    invalid = true;
-                } else {
-                    // This tile intersects with the screen and is dirty,
-                    // update it immediately.
-                    layer.setSkipTextureUpdate(false);
-                    screenUpdateDone = true;
-                    layer.performUpdates(context);
-                    invalid = false;
-                }
+            if (!RectF.intersects(layerBounds, context.viewport)) {
+                if (firstDirtyTile == null)
+                    firstDirtyTile = layer;
+                dirtyTiles++;
+            } else {
+                // This tile intersects with the screen and is dirty,
+                // update it immediately.
+                screenUpdateDone = true;
+                layer.performUpdates(context);
             }
-
-            // We use the SkipTextureUpdate flag as a marker of a tile's
-            // validity. This is required, as sometimes layers are drawn
-            // without updating first, and we mustn't draw tiles that have
-            // been marked as invalid that we haven't updated.
-            layer.setSkipTextureUpdate(invalid);
         }
 
         // Now if no tiles that intersect with the screen were updated, update
@@ -150,12 +136,10 @@ public class MultiTileLayer extends Layer {
         // of spreading out non-critical texture upload over time, and smoothing
         // upload-related hitches.
         if (!screenUpdateDone && firstDirtyTile != null) {
-            firstDirtyTile.setSkipTextureUpdate(false);
             firstDirtyTile.performUpdates(context);
             dirtyTiles--;
         }
 
-        return (dirtyTiles == 0);
     }
 
     private void refreshTileMetrics(Point origin, float resolution, boolean inTransaction) {
@@ -166,7 +150,7 @@ public class MultiTileLayer extends Layer {
             }
 
             if (origin != null) {
-                layer.setOrigin(new Point(origin.x + layer.x, origin.y + layer.y));
+                layer.getPosition().offsetTo(origin.x + layer.x, origin.y + layer.y);
             }
             if (resolution >= 0.0f) {
                 layer.setResolution(resolution);
@@ -178,9 +162,8 @@ public class MultiTileLayer extends Layer {
         }
     }
 
-    @Override
-    public void setOrigin(Point newOrigin) {
-        super.setOrigin(newOrigin);
+    public void setPosition(Point newOrigin) {
+        super.getPosition().offsetTo(newOrigin.x, newOrigin.y);
         refreshTileMetrics(newOrigin, -1, true);
     }
 
@@ -211,13 +194,8 @@ public class MultiTileLayer extends Layer {
     @Override
     public void draw(RenderContext context) {
         for (SubTile layer : mTiles) {
-            // We use the SkipTextureUpdate flag as a validity flag. If it's false,
-            // the contents of this tile are invalid and we shouldn't draw it.
-            if (layer.getSkipTextureUpdate())
-                continue;
-
             // Avoid work, only draw tiles that intersect with the viewport
-            RectF layerBounds = layer.getBounds(context, new FloatSize(layer.getSize()));
+            RectF layerBounds = layer.getBounds(context);
             if (RectF.intersects(layerBounds, context.viewport))
                 layer.draw(context);
         }
@@ -227,8 +205,6 @@ public class MultiTileLayer extends Layer {
     public Region getValidRegion(RenderContext context) {
         Region validRegion = new Region();
         for (SubTile tile : mTiles) {
-            if (tile.getSkipTextureUpdate())
-                continue;
             validRegion.op(tile.getValidRegion(context), Region.Op.UNION);
         }
 

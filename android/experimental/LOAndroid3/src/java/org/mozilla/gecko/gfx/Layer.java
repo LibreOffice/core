@@ -39,7 +39,7 @@
 
 package org.mozilla.gecko.gfx;
 
-import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Region;
 
@@ -50,16 +50,24 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public abstract class Layer {
     private final ReentrantLock mTransactionLock;
-    protected Point mOrigin;
-    protected float mResolution;
     private boolean mInTransaction;
-    private Point mNewOrigin;
+    private Rect mNewPosition;
     private float mNewResolution;
-    private LayerView mView;
+
+    protected Rect mPosition;
+    protected float mResolution;
 
     public Layer() {
+        this(null);
+    }
+
+    public Layer(IntSize size) {
         mTransactionLock = new ReentrantLock();
-        mOrigin = new Point(0, 0);
+        if (size == null) {
+            mPosition = new Rect();
+        } else {
+            mPosition = new Rect(0, 0, size.width, size.height);
+        }
         mResolution = 1.0f;
     }
 
@@ -69,12 +77,14 @@ public abstract class Layer {
      */
     public final boolean update(RenderContext context) {
         if (mTransactionLock.isHeldByCurrentThread()) {
-            throw new RuntimeException("draw() called while transaction lock held by this thread?!");
+            throw new RuntimeException("draw() called while transaction lock held by this " +
+                                       "thread?!");
         }
 
         if (mTransactionLock.tryLock()) {
             try {
-                return performUpdates(context);
+                performUpdates(context);
+                return true;
             } finally {
                 mTransactionLock.unlock();
             }
@@ -83,24 +93,12 @@ public abstract class Layer {
         return false;
     }
 
-    /**
-     * Subclasses override this function to draw the layer.
-     */
+    /** Subclasses override this function to draw the layer. */
     public abstract void draw(RenderContext context);
 
-    /**
-     * Subclasses override this function to provide access to the size of the layer.
-     */
-    public abstract IntSize getSize();
-
-    /**
-     * Given the intrinsic size of the layer, returns the pixel boundaries of the layer rect.
-     */
-    protected RectF getBounds(RenderContext context, FloatSize size) {
-        float scaleFactor = context.zoomFactor / mResolution;
-        float x = mOrigin.x * scaleFactor, y = mOrigin.y * scaleFactor;
-        float width = size.width * scaleFactor, height = size.height * scaleFactor;
-        return new RectF(x, y, x + width, y + height);
+    /** Given the intrinsic size of the layer, returns the pixel boundaries of the layer rect. */
+    protected RectF getBounds(RenderContext context) {
+        return RectUtils.scale(new RectF(mPosition), context.zoomFactor / mResolution);
     }
 
     /**
@@ -109,68 +107,50 @@ public abstract class Layer {
      * may be overridden.
      */
     public Region getValidRegion(RenderContext context) {
-        return new Region(RectUtils.round(getBounds(context, new FloatSize(getSize()))));
+        return new Region(RectUtils.round(getBounds(context)));
     }
 
     /**
      * Call this before modifying the layer. Note that, for TileLayers, "modifying the layer"
      * includes altering the underlying CairoImage in any way. Thus you must call this function
      * before modifying the byte buffer associated with this layer.
-     * <p/>
+     *
      * This function may block, so you should never call this on the main UI thread.
      */
-    public void beginTransaction(LayerView aView) {
-        //if (mTransactionLock.isHeldByCurrentThread())
-        //    throw new RuntimeException("Nested transactions are not supported");
+    public void beginTransaction() {
+        if (mTransactionLock.isHeldByCurrentThread())
+            throw new RuntimeException("Nested transactions are not supported");
         mTransactionLock.lock();
-        mView = aView;
         mInTransaction = true;
         mNewResolution = mResolution;
     }
 
-    public void beginTransaction() {
-        beginTransaction(null);
-    }
-
-    /**
-     * Call this when you're done modifying the layer.
-     */
+    /** Call this when you're done modifying the layer. */
     public void endTransaction() {
         if (!mInTransaction)
             throw new RuntimeException("endTransaction() called outside a transaction");
         mInTransaction = false;
         mTransactionLock.unlock();
-
-        if (mView != null)
-            mView.requestRender();
     }
 
-    /**
-     * Returns true if the layer is currently in a transaction and false otherwise.
-     */
+    /** Returns true if the layer is currently in a transaction and false otherwise. */
     protected boolean inTransaction() {
         return mInTransaction;
     }
 
-    /**
-     * Returns the current layer origin.
-     */
-    public Point getOrigin() {
-        return mOrigin;
+    /** Returns the current layer position. */
+    public Rect getPosition() {
+        return mPosition;
     }
 
-    /**
-     * Sets the origin. Only valid inside a transaction.
-     */
-    public void setOrigin(Point newOrigin) {
+    /** Sets the position. Only valid inside a transaction. */
+    public void setPosition(Rect newPosition) {
         if (!mInTransaction)
-            throw new RuntimeException("setOrigin() is only valid inside a transaction");
-        mNewOrigin = newOrigin;
+            throw new RuntimeException("setPosition() is only valid inside a transaction");
+        mNewPosition = newPosition;
     }
 
-    /**
-     * Returns the current layer's resolution.
-     */
+    /** Returns the current layer's resolution. */
     public float getResolution() {
         return mResolution;
     }
@@ -179,8 +159,7 @@ public abstract class Layer {
      * Sets the layer resolution. This value is used to determine how many pixels per
      * device pixel this layer was rendered at. This will be reflected by scaling by
      * the reciprocal of the resolution in the layer's transform() function.
-     * Only valid inside a transaction.
-     */
+     * Only valid inside a transaction. */
     public void setResolution(float newResolution) {
         if (!mInTransaction)
             throw new RuntimeException("setResolution() is only valid inside a transaction");
@@ -193,22 +172,15 @@ public abstract class Layer {
      * superclass implementation. Returns false if there is still work to be done after this
      * update is complete.
      */
-    protected boolean performUpdates(RenderContext context) {
-
-        if (mNewOrigin != null) {
-            mOrigin = mNewOrigin;
-            mNewOrigin = null;
+    protected void performUpdates(RenderContext context) {
+        if (mNewPosition != null) {
+            mPosition = mNewPosition;
+            mNewPosition = null;
         }
         if (mNewResolution != 0.0f) {
             mResolution = mNewResolution;
             mNewResolution = 0.0f;
         }
-
-        return true;
-    }
-
-    protected boolean dimensionChangesPending() {
-        return (mNewOrigin != null) || (mNewResolution != 0.0f);
     }
 
     public static class RenderContext {
@@ -234,8 +206,8 @@ public abstract class Layer {
                 return false;
             }
             return RectUtils.fuzzyEquals(viewport, other.viewport)
-                    && pageSize.fuzzyEquals(other.pageSize)
-                    && FloatUtils.fuzzyEquals(zoomFactor, other.zoomFactor);
+                && pageSize.fuzzyEquals(other.pageSize)
+                && FloatUtils.fuzzyEquals(zoomFactor, other.zoomFactor);
         }
     }
 }
