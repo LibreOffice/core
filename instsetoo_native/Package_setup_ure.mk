@@ -7,20 +7,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,instsetoo_native))
+$(eval $(call gb_Package_Package,instsetoo_native_setup_ure,$(call gb_CustomTarget_get_workdir,instsetoo_native/setup)))
 
-ifneq (,$(PKGFORMAT)$(filter TRUE,$(LIBO_TEST_INSTALL)))
-
-$(eval $(call gb_Module_add_targets,instsetoo_native,\
-	CustomTarget_install \
-))
-
-endif
-
-$(eval $(call gb_Module_add_targets,instsetoo_native,\
-	CustomTarget_setup \
-	Package_setup \
-	Package_setup_ure \
+$(eval $(call gb_Package_add_files,instsetoo_native_setup_ure,$(LIBO_URE_ETC_FOLDER), \
+    $(call gb_Helper_get_rcfile,uno) \
 ))
 
 # vim: set noet sw=4 ts=4:
