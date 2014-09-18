@@ -122,9 +122,6 @@ public class LOKitTileProvider implements TileProvider {
 
     @Override
     public Bitmap thumbnail() {
-        ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
-        Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
-
         int widthPixel = getPageWidth();
         int heightPixel = getPageHeight();
 
@@ -138,8 +135,14 @@ public class LOKitTileProvider implements TileProvider {
             widthPixel = (int) (heightPixel * ratio);
         }
 
+        ByteBuffer buffer = ByteBuffer.allocateDirect(widthPixel * heightPixel * 4);
         mDocument.paintTile(buffer, widthPixel, heightPixel, 0, 0, (int) mWidthTwip, (int) mHeightTwip);
 
+        Bitmap bitmap = Bitmap.createBitmap(widthPixel, heightPixel, Bitmap.Config.ARGB_8888);
+        bitmap.copyPixelsFromBuffer(buffer);
+        if (bitmap == null) {
+            Log.w(LOGTAG, "Thumbnail not created!");
+        }
         return bitmap;
     }
 

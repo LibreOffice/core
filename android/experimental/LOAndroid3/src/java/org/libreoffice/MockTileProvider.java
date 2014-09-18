@@ -63,7 +63,7 @@ public class MockTileProvider implements TileProvider {
 
     @Override
     public Bitmap thumbnail() {
-        return null;
+        return layerController.getDrawable("dummy_page");
     }
 
     @Override
