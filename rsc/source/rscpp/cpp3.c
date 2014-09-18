@@ -98,29 +98,6 @@ void setincdirs()
 #endif
 
 
-#if HOST == SYS_RSX
-        extern int      $$rsts;                 /* TRUE on RSTS/E       */
-        extern int      $$pos;                  /* TRUE on PRO-350 P/OS */
-        extern int      $$vms;                  /* TRUE on VMS compat.  */
-
-        if ($$pos) {                            /* P/OS?                */
-            *incend++ = "SY:[ZZDECUSC]";        /* C #includes          */
-            *incend++ = "LB:[1,5]";             /* RSX library          */
-        }
-        else if ($$rsts) {                      /* RSTS/E?              */
-            *incend++ = "SY:@";                 /* User-defined account */
-            *incend++ = "C:";                   /* Decus-C library      */
-            *incend++ = "LB:[1,1]";             /* RSX library          */
-        }
-        else if ($$vms) {                       /* VMS compatibility?   */
-            *incend++ = "C:";
-        }
-        else {                                  /* Plain old RSX/IAS    */
-            *incend++ = "LB:[1,1]";
-        }
-#define MAXINCLUDE      (NINCLUDE - 3 - IS_INCLUDE)
-#endif
-
 #if HOST == SYS_RT11
         extern int      $$rsts;                 /* RSTS/E emulation?    */
 
