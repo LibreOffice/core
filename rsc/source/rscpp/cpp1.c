@@ -314,11 +314,7 @@ int MAIN(int argc, char** argv)
         }                           /* Else, just get stdin         */
     case 0:                         /* No args?                     */
     case 1:                         /* No files, stdin -> stdout    */
-#if (HOST == SYS_UNIX) || (HOST == SYS_UNKNOWN)
         work[0] = EOS;              /* Unix can't find stdin name   */
-#else
-        fgetname(stdin, work);      /* Vax-11C, Decus C know name   */
-#endif
         break;
 
     default:
