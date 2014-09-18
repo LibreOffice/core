@@ -209,11 +209,7 @@ typedef struct sizes {
 #ifdef  nomacarg
 #define cput            output          /* cput concatenates tokens     */
 #else
-#if COMMENT_INVISIBLE
-#define cput(c)         { if (c != TOK_SEP && c != COM_SEP) PUTCHAR(c); }
-#else
 #define cput(c)         { if (c != TOK_SEP) PUTCHAR(c); }
-#endif
 #endif
 
 #ifndef nomacarg
@@ -340,11 +336,7 @@ void checkparm( int c, DEFBUF *dp );
 int expcollect(void);
 void expstuff( DEFBUF *dp );
 
-#if STRING_FORMAL
-void stparmscan( int delim, DEFBUF *dp);
-#else
 void stparmscan( int delim);
-#endif
 #if OSL_DEBUG_LEVEL > 1
 void dumpparm( char *why );
 #endif

@@ -87,11 +87,7 @@
         << error type table is not correct >>
 #endif
 
-#if OK_DOLLAR
 #define DOL     LET
-#else
-#define DOL     000
-#endif
 
 #ifdef EBCDIC
 
@@ -211,11 +207,7 @@ skipws()
 
         do {                            /* Skip whitespace      */
             c = get();
-#if COMMENT_INVISIBLE
-        } while (type[c] == SPA || c == COM_SEP);
-#else
         } while (type[c] == SPA);
-#endif
         return (c);
 }
 
@@ -273,7 +265,6 @@ catenate()
         int            c;
         char           *token1;
 
-#if OK_CONCAT
         if (get() != TOK_SEP) {                 /* Token concatenation  */
             unget();
             return (FALSE);
@@ -301,12 +292,10 @@ catenate()
                 break;
 
             default:                            /* An error, ...        */
-#if ! COMMENT_INVISIBLE
                 if (isprint(c))
                     cierror("Strange character '%c' after #", c);
                 else
                     cierror("Strange character (%d.) after #", c);
-#endif
                 strcpy(work, token1);
                 unget();
                 break;
@@ -321,9 +310,6 @@ catenate()
             ungetstring(work);                  /* Unget the new thing, */
             return (TRUE);
         }
-#else
-        return (FALSE);                         /* Not supported        */
-#endif
 }
 
 int
@@ -927,14 +913,7 @@ newline:
                         if (*file->bptr == '\n'
                          || type[*file->bptr & 0xFF] == SPA)
                             goto newline;
-#if COMMENT_INVISIBLE
-                        /*
-                         * Return magic (old-fashioned) syntactic space.
-                         */
-                        return ((file->bptr[-1] = COM_SEP));
-#else
                         return ((file->bptr[-1] = ' '));
-#endif
 
                     case '\n':                      /* we'll need a #line   */
                         if (!keepcomments)
@@ -1036,11 +1015,7 @@ cget()
 
         do {
             c = get();
-#if COMMENT_INVISIBLE
-        } while (c == TOK_SEP || c == COM_SEP);
-#else
         } while (c == TOK_SEP);
-#endif
         return (c);
 }
 

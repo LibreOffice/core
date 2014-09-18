@@ -280,19 +280,10 @@ nest_err:       cerror("#%s must be in an #if", token);
             break;
         }
         if (hash != L_include) {
-#if OLD_PREPROCESSOR
-            /*
-             * Ignore the rest of the #control line so you can write
-             *          #if     foo
-             *          #endif  foo
-             */
-            goto dump_line;                     /* Take common exit     */
-#else
             if (skipws() != '\n') {
                 cwarn("Unexpected text in #control line ignored", NULLST);
                 skipnl();
             }
-#endif
         }
         return (counter + 1);
 }
@@ -335,10 +326,8 @@ void doif(int hash)
         return;
 
 badif:  cerror("#if, #ifdef, or #ifndef without an argument", NULLST);
-#if !OLD_PREPROCESSOR
         skipnl();                               /* Prevent an extra     */
         unget();                                /* Error message        */
-#endif
         return;
 }
 

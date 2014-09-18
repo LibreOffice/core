@@ -127,18 +127,11 @@ void dodefine()
         workp = work;                           /* Replacement put here */
         inmacro = TRUE;                         /* Keep \<newline> now  */
         while (c != EOF_CHAR && c != '\n') {    /* Compile macro body   */
-#if OK_CONCAT
-#if COMMENT_INVISIBLE
-            if (c == COM_SEP) {                 /* Token concatenation? */
-                save(TOK_SEP);                  /* Stuff a delimiter    */
-                c = get();
-#else
             if (c == '#') {                     /* Token concatenation? */
                 while (workp > work && type[(int)workp[-1]] == SPA)
                     --workp;                    /* Erase leading spaces */
                 save(TOK_SEP);                  /* Stuff a delimiter    */
                 c = skipws();                   /* Eat whitespace       */
-#endif
                 if (type[c] == LET)             /* Another token here?  */
                     ;                           /* Stuff it normally    */
                 else if (type[c] == DIG) {      /* Digit string after?  */
@@ -149,13 +142,10 @@ void dodefine()
                     save(TOK_SEP);              /* Delimit 2nd token    */
                 }
                 else {
-#if ! COMMENT_INVISIBLE
                     ciwarn("Strange character after # (%d.)", c);
-#endif
                 }
                 continue;
             }
-#endif
             switch (type[c]) {
             case LET:
                 checkparm(c, dp);               /* Might be a formal    */
@@ -167,11 +157,7 @@ void dodefine()
                 break;
 
             case QUO:                           /* String in mac. body  */
-#if STRING_FORMAL
-                stparmscan(c, dp);              /* Do string magic      */
-#else
                 stparmscan(c);
-#endif
                 break;
 
             case BSH:                           /* Backslash            */
@@ -258,44 +244,6 @@ void checkparm(int c, DEFBUF* dp)
             save(*cp++);                        /* The token itself     */
 }
 
-#if STRING_FORMAL
-void stparmscan(delim, dp)
-int             delim;
-DEFBUF          *dp;
-/*
- * Scan the string (starting with the given delimiter).
- * The token is replaced if it is the only text in this string or
- * character constant.  The algorithm follows checkparm() above.
- * Note that scanstring() has approved of the string.
- */
-{
-        int            c;
-
-        /*
-         * Warning -- this code hasn't been tested for a while.
-         * It exists only to preserve compatibility with earlier
-         * implementations of cpp.  It is not part of the Draft
-         * ANSI Standard C language.
-         */
-        save(delim);
-        instring = TRUE;
-        while ((c = get()) != delim
-             && c != '\n'
-             && c != EOF_CHAR) {
-            if (type[c] == LET)                 /* Maybe formal parm    */
-                checkparm(c, dp);
-            else {
-                save(c);
-                if (c == '\\')
-                    save(get());
-            }
-        }
-        instring = FALSE;
-        if (c != delim)
-            cerror("Unterminated string in macro body", NULLST);
-        save(c);
-}
-#else
 void stparmscan(int delim)
 /*
  * Normal string parameter scan.
@@ -328,7 +276,6 @@ void stparmscan(int delim)
         }
         workp[-1] = wp[-1];             /* Nope, reset end quote.       */
 }
-#endif
 
 void doundef()
 /*

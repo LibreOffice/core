@@ -74,15 +74,6 @@
  *              to be marked "static" even though they are referenced
  *              by "extern" statements elsewhere.
  *
- * OK_DOLLAR    Should be set TRUE if $ is a valid alphabetic character
- *              in identifiers (default), or zero if $ is invalid.
- *              Default is TRUE.
- *
- * OK_CONCAT    Should be set TRUE if # may be used to concatenate
- *              tokens in macros (per the Ansi Draft Standard) or
- *              FALSE for old-style # processing (needed if cpp is
- *              to process assembler source code).
- *
  * OK_DATE      Predefines the compilation date if set TRUE.
  *              Not permitted by the Nov. 12, 1984 Draft Standard.
  *
@@ -116,24 +107,6 @@
 #endif
 
 /*
- * OLD_PREPROCESSOR forces the definition of OK_DOLLAR, OK_CONCAT,
- * COMMENT_INVISIBLE, and STRING_FORMAL to values appropriate for
- * an old-style preprocessor.
- */
-
-#ifndef OLD_PREPROCESSOR
-#define OLD_PREPROCESSOR        FALSE
-#endif
-
-#if     OLD_PREPROCESSOR
-#define OK_DOLLAR               FALSE
-#define OK_CONCAT               TRUE
-#define COMMENT_INVISIBLE       TRUE
-#define STRING_FORMAL           TRUE
-#define IDMAX                   63      /* actually, seems to be unlimited */
-#endif
-
-/*
  * RECURSION_LIMIT may be set to -1 to disable the macro recursion test.
  */
 #ifndef RECURSION_LIMIT
@@ -146,45 +119,6 @@
  */
 #ifndef BITS_CHAR
 #define BITS_CHAR               8
-#endif
-
-/*
- * COMMENT_INVISIBLE may be defined to allow "old-style" comment
- * processing, whereby the comment becomes a zero-length token
- * delimiter.  This permitted tokens to be concatenated in macro
- * expansions.  This was removed from the Draft Ansi Standard.
- */
-#ifndef COMMENT_INVISIBLE
-#define COMMENT_INVISIBLE       FALSE
-#endif
-
-/*
- * STRING_FORMAL may be defined to allow recognition of macro parameters
- * anywhere in replacement strings.  This was removed from the Draft Ansi
- * Standard and a limited recognition capability added.
- */
-#ifndef STRING_FORMAL
-#define STRING_FORMAL           FALSE
-#endif
-
-/*
- * OK_DOLLAR enables use of $ as a valid "letter" in identifiers.
- * This is a permitted extension to the Ansi Standard and is required
- * for e.g., RSX-11M, etc.   It should be set FALSE if cpp is
- * used to preprocess assembler source on Unix systems.  OLD_PREPROCESSOR
- * sets OK_DOLLAR FALSE for that reason.
- */
-#ifndef OK_DOLLAR
-#define OK_DOLLAR               TRUE
-#endif
-
-/*
- * OK_CONCAT enables (one possible implementation of) token concatenation.
- * If cpp is used to preprocess Unix assembler source, this should be
- * set FALSE as the concatenation character, #, is used by the assembler.
- */
-#ifndef OK_CONCAT
-#define OK_CONCAT               TRUE
 #endif
 
 /*

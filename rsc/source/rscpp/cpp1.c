@@ -338,11 +338,7 @@ int MAIN(int argc, char** argv)
 
     if ((i = (ifptr - &ifstack[0])) != 0)
     {
-#if OLD_PREPROCESSOR
-        ciwarn("Inside #ifdef block at end of input, depth = %d", i);
-#else
         cierror("Inside #ifdef block at end of input, depth = %d", i);
-#endif
     }
 #if OSL_DEBUG_LEVEL > 1
     if( pDefOut != stdout && pDefOut != stderr )
@@ -458,9 +454,6 @@ void cppmain()
             {                            /* Token concat. loop   */
                 for (counter = 0; type[(c = get())] == SPA;)
                 {
-#if COMMENT_INVISIBLE
-                    if (c != COM_SEP)
-#endif
                     counter++;              /* Skip over blanks     */
 
                 }
@@ -538,11 +531,7 @@ void cppmain()
  */
 void output(int c)
 {
-#if COMMENT_INVISIBLE
-    if (c != TOK_SEP && c != COM_SEP)
-#else
     if (c != TOK_SEP)
-#endif
         PUTCHAR(c);
 }
 
@@ -553,11 +542,7 @@ void output(int c)
  */
 int outputEval(int c)
 {
-#if COMMENT_INVISIBLE
-    if (c != TOK_SEP && c != COM_SEP)
-#else
     if (c != TOK_SEP)
-#endif
     {
         PUTCHAR(c);
         if ( bIsInEval && nEvalOff < NEVALBUF )
