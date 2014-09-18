@@ -657,7 +657,11 @@ GtkSalMenu* GtkSalMenu::GetMenuForItemCommand( gchar* aCommand, gboolean bGetSub
         GtkSalMenuItem *pSalItem = maItems[ nPos ];
 
         OUString aItemCommand = mpVCLMenu->GetItemCommand( pSalItem->mnId );
-        gchar* aItemCommandStr = (gchar*) OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 ).getStr();
+        // Do not join the following two lines, or the OString will be destroyed
+        // immediately, and the gchar* pointed to by aItemCommandStr will be
+        // freed before it can be used - fdo#69090
+        OString aItemCommandOStr = OUStringToOString( aItemCommand, RTL_TEXTENCODING_UTF8 );
+        gchar* aItemCommandStr = (gchar*) aItemCommandOStr.getStr();
 
         if ( g_strcmp0( aItemCommandStr, aCommand ) == 0 )
         {
