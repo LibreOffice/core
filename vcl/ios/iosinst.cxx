@@ -149,7 +149,7 @@ public:
     virtual void UpdateSettings( AllSettings &rSettings ) SAL_OVERRIDE
     {
         // Clobber the UI fonts
-        Font aFont( OUString( "Helvetica" ), Size( 0, 14 ) );
+        vcl::Font aFont( OUString( "Helvetica" ), Size( 0, 14 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
         aStyleSet.SetAppFont( aFont );
