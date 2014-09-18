@@ -249,7 +249,7 @@ namespace basegfx
 
         static const B3DVector& getEmptyVector()
         {
-            return (const B3DVector&) ::basegfx::B3DTuple::getEmptyTuple();
+            return static_cast<const B3DVector&>( ::basegfx::B3DTuple::getEmptyTuple() );
         }
     };
 

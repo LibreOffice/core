@@ -100,8 +100,8 @@ namespace basegfx
                 }
 
                 // reset last line, it equals default
-                delete ((ImplHomMatrixTemplate< RowSize >*)this)->mpLine;
-                ((ImplHomMatrixTemplate< RowSize >*)this)->mpLine = 0L;
+                delete const_cast<ImplHomMatrixTemplate< RowSize >*>(this)->mpLine;
+                const_cast<ImplHomMatrixTemplate< RowSize >*>(this)->mpLine = 0L;
 
                 return true;
             }

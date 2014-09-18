@@ -208,7 +208,7 @@ namespace basegfx
 
         static const BColor& getEmptyBColor()
         {
-            return (const BColor&) ::basegfx::B3DTuple::getEmptyTuple();
+            return static_cast<const BColor&>( ::basegfx::B3DTuple::getEmptyTuple() );
         }
 
         com::sun::star::uno::Sequence< double > colorToDoubleSequence(const com::sun::star::uno::Reference< com::sun::star::rendering::XGraphicDevice >& /*xGraphicDevice*/) const

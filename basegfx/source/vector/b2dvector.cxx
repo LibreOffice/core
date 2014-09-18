@@ -80,7 +80,7 @@ namespace basegfx
 
     const B2DVector& B2DVector::getEmptyVector()
     {
-        return (const B2DVector&) B2DTuple::getEmptyTuple();
+        return static_cast<const B2DVector&>( B2DTuple::getEmptyTuple() );
     }
 
     B2DVector& B2DVector::operator*=( const B2DHomMatrix& rMat )

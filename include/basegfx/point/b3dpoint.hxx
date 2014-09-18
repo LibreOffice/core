@@ -124,7 +124,7 @@ namespace basegfx
 
         static const B3DPoint& getEmptyPoint()
         {
-            return (const B3DPoint&) ::basegfx::B3DTuple::getEmptyTuple();
+            return static_cast<const B3DPoint&>( ::basegfx::B3DTuple::getEmptyTuple() );
         }
     };
 

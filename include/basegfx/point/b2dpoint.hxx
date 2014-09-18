@@ -124,7 +124,7 @@ namespace basegfx
 
         static const B2DPoint& getEmptyPoint()
         {
-            return (const B2DPoint&) ::basegfx::B2DTuple::getEmptyTuple();
+            return static_cast<const B2DPoint&>( ::basegfx::B2DTuple::getEmptyTuple() );
         }
     };
 
