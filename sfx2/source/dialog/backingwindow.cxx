@@ -100,6 +100,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), "sfx/ui/startcenter.ui", "StartCenter" );
 
     get(mpOpenButton, "open_all");
+    get(mpRecentButton, "recent_all");
     get(mpTemplateButton, "templates_all");
 
     get(mpCreateLabel, "create_label");
@@ -274,6 +275,7 @@ void BackingWindow::initControls()
     mpLocalView->setOpenTemplateHdl(LINK(this,BackingWindow,OpenTemplateHdl));
 
     setupButton( mpOpenButton );
+    setupButton( mpRecentButton );
     setupButton( mpTemplateButton );
     setupButton( mpWriterAllButton );
     setupButton( mpDrawAllButton );
@@ -544,6 +546,11 @@ IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
         pArg[0].Value <<= OUString("private:user");
 
         dispatchURL( OPEN_URL, OUString(), xFrame, aArgs );
+    }
+    else if( pButton == mpRecentButton )
+    {
+        mpLocalView->Hide();
+        mpAllRecentThumbnails->Show();
     }
     else if( pButton == mpTemplateButton )
     {
