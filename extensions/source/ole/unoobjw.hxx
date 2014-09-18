@@ -80,16 +80,14 @@ typedef boost::unordered_map
 <
     OUString,
     DISPID,
-    hashOUString_Impl,
-    equalOUString_Impl
+    OUStringHash
 > NameToIdMap;
 
 typedef boost::unordered_map
 <
     OUString,
     sal_Bool,
-    hashOUString_Impl,
-    equalOUString_Impl
+    OUStringHash
 > BadNameMap;
 
 typedef boost::unordered_map
