@@ -256,9 +256,6 @@ documentation for that file. The schema has two parts:
   <define name="namespace-element">
     <element name="namespace">
       <attribute name="name"/>
-      <optional>
-        <attribute name="file"/>
-      </optional>
       <zeroOrMore>
         <ref name="start-element"/>
       </zeroOrMore>

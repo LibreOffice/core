@@ -714,8 +714,7 @@ using namespace com::sun::star;
 
     files = {}
     for nsNode in getChildrenByName(modelNode, "namespace"):
-        if nsNode.hasAttribute("file"):
-            files[nsNode.getAttribute("file")] = nsNode
+        files[nsNode.getAttribute("name")] = nsNode
 
     for nsNode in [i for i in getChildrenByName(modelNode, "namespace") if i.getAttribute("name") == nsName]:
         nsLabel = nsToLabel(nsNode)

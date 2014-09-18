@@ -66,8 +66,7 @@
     <start name="themeManager"/>
     <start name="hlinkClick"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-baseStylesheet.rng"/>
+      <include href="dml-baseStylesheet"/>
       <!-- start = theme | themeOverride | themeManager | hlinkClick -->
       <define name="CT_EmptyElement">
       </define>
@@ -215,8 +214,7 @@
   </namespace>
   <namespace name="dml-styleDefaults">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-shapeProperties.rng"/>
+      <include href="dml-shapeProperties"/>
       <define name="CT_DefaultShapeDefinition">
         <element name="spPr">
           <ref name="CT_ShapeProperties"/>
@@ -241,7 +239,7 @@
       </define>
     </grammar>
   </namespace>
-  <namespace name="dml-shape3DLighting" file="dml-shape3DLighting.rng">
+  <namespace name="dml-shape3DLighting">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <define name="ST_LightRigDirection">
         <choice>
@@ -373,11 +371,10 @@
       <value tokenid="ooxml:Value_drawingml_ST_LightRigType_brightRoom">brightRoom</value>
     </resource>
   </namespace>
-  <namespace name="dml-shape3DScene" file="dml-shape3DScene.rng">
+  <namespace name="dml-shape3DScene">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-shape3DCamera.rng"/>
-      <include href="dml-shape3DLighting.rng"/>
+      <include href="dml-shape3DCamera"/>
+      <include href="dml-shape3DLighting"/>
       <define name="CT_Scene3D">
         <element name="camera">
           <ref name="CT_Camera"/>
@@ -391,10 +388,9 @@
       </define>
     </grammar>
   </namespace>
-  <namespace name="dml-shape3DStyles" file="dml-shape3DStyles.rng">
+  <namespace name="dml-shape3DStyles">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-shapeGeometry.rng"/>
+      <include href="dml-shapeGeometry"/>
       <define name="ST_BevelPresetType">
         <choice>
           <!-- Relaxed Inset -->
@@ -545,7 +541,7 @@
       <value tokenid="ooxml:Value_drawingml_ST_PresetMaterialType_softmetal">softmetal</value>
     </resource>
   </namespace>
-  <namespace name="dml-shape3DCamera" file="dml-shape3DCamera.rng">
+  <namespace name="dml-shape3DCamera">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <define name="ST_PresetCameraType">
         <choice>
@@ -757,7 +753,7 @@
       <value tokenid="ooxml:Value_drawingml_ST_PresetCameraType_perspectiveRelaxedModerately">perspectiveRelaxedModerately</value>
     </resource>
   </namespace>
-  <namespace name="dml-baseStylesheet" file="dml-baseStylesheet.rng">
+  <namespace name="dml-baseStylesheet">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
       <define name="ST_ColorSchemeIndex">
@@ -1015,9 +1011,8 @@
   </namespace>
   <namespace name="dml-textCharacter">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-shapeEffects.rng"/>
-      <include href="dml-shapeLineProperties.rng"/>
+      <include href="dml-shapeEffects"/>
+      <include href="dml-shapeLineProperties"/>
       <define name="ST_TextPoint">
         <data type="int"/>
       </define>
@@ -1271,7 +1266,7 @@
       <value tokenid="ooxml:Value_drawingml_ST_TextCapsType_all">all</value>
     </resource>
   </namespace>
-  <namespace name="dml-shapeEffects" file="dml-shapeEffects.rng">
+  <namespace name="dml-shapeEffects">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- start = blip -->
       <define name="CT_AlphaBiLevelEffect">
@@ -2283,10 +2278,9 @@
       <attribute name="name" tokenid="ooxml:CT_EffectContainer_name"/>
     </resource>
   </namespace>
-  <namespace name="dml-shapeLineProperties" file="dml-shapeLineProperties.rng">
+  <namespace name="dml-shapeLineProperties">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-shapeEffects.rng"/>
+      <include href="dml-shapeEffects"/>
       <define name="ST_LineEndType">
         <choice>
           <!-- None -->
@@ -2555,14 +2549,13 @@
       <attribute name="algn" tokenid="ooxml:CT_LineProperties_algn"/>
     </resource>
   </namespace>
-  <namespace name="dml-shapeProperties" file="dml-shapeProperties.rng">
+  <namespace name="dml-shapeProperties">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-shape3DStyles.rng"/>
-      <include href="dml-shape3DScene.rng"/>
-      <include href="dml-shapeGeometry.rng"/>
-      <include href="dml-shapeEffects.rng"/>
-      <include href="dml-shapeLineProperties.rng"/>
+      <include href="dml-shape3DStyles"/>
+      <include href="dml-shape3DScene"/>
+      <include href="dml-shapeGeometry"/>
+      <include href="dml-shapeEffects"/>
+      <include href="dml-shapeLineProperties"/>
       <define name="CT_ShapeProperties">
         <element name="xfrm">
           <ref name="CT_Transform2D"/>
@@ -2614,8 +2607,7 @@
   </namespace>
   <namespace name="dml-baseTypes">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="shared-relationshipReference.rng"/>
+      <include href="shared-relationshipReference"/>
       <define name="CT_OfficeArtExtension">
         <element>
           <ref name="BUILT_IN_ANY_TYPE"/>
@@ -3767,10 +3759,9 @@
     </resource>
     <resource name="ST_DrawingElementId" resource="Integer"/>
   </namespace>
-  <namespace name="dml-documentProperties" file="dml-documentProperties.rng">
+  <namespace name="dml-documentProperties">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-shapeGeometry.rng"/>
+      <include href="dml-shapeGeometry"/>
       <define name="AG_Locking">
         <attribute name="noGrp">
           <data type="boolean"/>
@@ -3984,7 +3975,7 @@
       <element name="extLst" tokenid="ooxml:CT_NonVisualGraphicFrameProperties_extLst"/>
     </resource>
   </namespace>
-  <namespace name="dml-graphicalObject" file="dml-graphicalObject.rng">
+  <namespace name="dml-graphicalObject">
     <start name="graphic"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <!-- ISO RELAX NG Schema -->
@@ -5667,7 +5658,7 @@
       </define>
     </grammar>
   </namespace>
-  <namespace name="dml-shapeGeometry" file="dml-shapeGeometry.rng">
+  <namespace name="dml-shapeGeometry">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main">
       <define name="ST_ShapeType">
         <choice>
@@ -6678,13 +6669,12 @@
       <element name="prstGeom" tokenid="ooxml:EG_Geometry_prstGeom"/>
     </resource>
   </namespace>
-  <namespace name="dml-wordprocessingDrawing" file="dml-wordprocessingDrawing.rng">
+  <namespace name="dml-wordprocessingDrawing">
     <start name="inline"/>
     <start name="anchor"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-graphicalObject.rng"/>
-      <include href="dml-documentProperties.rng"/>
+      <include href="dml-graphicalObject"/>
+      <include href="dml-documentProperties"/>
       <!-- start = inline | anchor -->
       <define name="CT_EffectExtent">
         <attribute name="l">
@@ -7187,12 +7177,11 @@
       </define>
     </grammar>
   </namespace>
-  <namespace name="shared-math" file="shared-math.rng">
+  <namespace name="shared-math">
     <start name="oMathPara"/>
     <start name="oMath"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" attributeFormDefault="qualified">
-      <!-- ISO RELAX NG Schema -->
-      <include href="wml.rng"/>
+      <include href="wml"/>
       <!-- start = mathPr | oMathPara | oMath -->
       <define name="ST_Integer255">
         <data type="integer"/>
@@ -8250,7 +8239,7 @@
       <attribute name="val" tokenid="ooxml:CT_BreakBinSub_val" action="setValue"/>
     </resource>
   </namespace>
-  <namespace name="shared-relationshipReference" file="shared-relationshipReference.rng">
+  <namespace name="shared-relationshipReference">
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
       <!-- ISO RELAX NG Schema -->
       <define name="id">
@@ -8294,9 +8283,8 @@
   <namespace name="dml-chartDrawing">
     <start name="pic"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/picture">
-      <!-- ISO RELAX NG Schema -->
-      <include href="dml-shapeProperties.rng"/>
-      <include href="dml-documentProperties.rng"/>
+      <include href="dml-shapeProperties"/>
+      <include href="dml-documentProperties"/>
       <!-- start = pic -->
       <define name="CT_PictureNonVisual">
         <element name="cNvPr">
@@ -8441,7 +8429,7 @@
     </resource>
 
   </namespace>
-  <namespace name="vml-main" file="vml-main.rng">
+  <namespace name="vml-main">
     <start name="shape"/>
     <start name="shapetype"/>
     <start name="group"/>
@@ -8464,10 +8452,8 @@
     <start name="rect"/>
     <start name="roundrect"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:vml">
-      <!-- ISO RELAX NG Schema -->
-      <include href="vml-officeDrawing.rng"/>
-      <!--  External schema: http://schemas.openxmlformats.org/wordprocessingml/2006/main -->
-      <include href="vml-wordprocessingDrawing.rng"/>
+      <include href="vml-officeDrawing"/>
+      <include href="vml-wordprocessingDrawing"/>
       <!-- start = shape | shapetype | group | background | fill | formulas | handles | imagedata | path | textbox | shadow | stroke | textpath | arc | curve | image | line | oval | polyline | rect | roundrect -->
       <define name="AG_Id">
         <attribute name="id">
@@ -9466,7 +9452,7 @@
       <attribute name="type" tokenid="ooxml:CT_Fill_type"/>
     </resource>
   </namespace>
-  <namespace name="vml-officeDrawing" file="vml-officeDrawing.rng">
+  <namespace name="vml-officeDrawing">
     <start name="shapedefaults"/>
     <start name="shapelayout"/>
     <start name="signatureline"/>
@@ -9486,8 +9472,7 @@
     <start name="clippath"/>
     <start name="fill"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="urn:schemas-microsoft-com:office:office" >
-      <!-- ISO RELAX NG Schema -->
-      <include href="vml-main.rng"/>
+      <include href="vml-main"/>
       <!--  External schema: http://schemas.openxmlformats.org/officeDocument/2006/relationships -->
       <!-- start = shapedefaults | shapelayout | signatureline | ink | diagram | skew | extrusion | callout | lock | OLEObject | complex | left | top | right | bottom | column | clippath | fill -->
       <define name="bwmode">
@@ -10454,7 +10439,7 @@
       <value tokenid="ooxml:Value_vmlOffice_ST_FillType_background">background</value>
     </resource>
   </namespace>
-  <namespace name="vml-wordprocessingDrawing" file="vml-wordprocessingDrawing.rng">
+  <namespace name="vml-wordprocessingDrawing">
     <start name="bordertop"/>
     <start name="borderleft"/>
     <start name="borderright"/>
@@ -10607,7 +10592,7 @@
       <value tokenid="ooxml:Value_vml_wordprocessingDrawing_ST_VerticalAnchor_line">line</value>
     </resource>
   </namespace>
-  <namespace name="wml" file="wml.rng">
+  <namespace name="wml">
     <start name="recipients"/>
     <start name="txbxContent"/>
     <start name="comments"/>
@@ -10623,9 +10608,9 @@
     <start name="document"/>
     <start name="glossaryDocument"/>
     <grammar xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" attributeFormDefault="qualified">
-      <include href="shared-math.rng"/>
-      <include href="dml-wordprocessingDrawing.rng"/>
-      <include href="shared-relationshipReference.rng"/>
+      <include href="shared-math"/>
+      <include href="dml-wordprocessingDrawing"/>
+      <include href="shared-relationshipReference"/>
       <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
       <define name="CT_Empty">
       </define>
