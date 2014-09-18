@@ -45,6 +45,7 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="20330"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertAnnotation" toolbar:helpid="20329"/>
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="10244"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:visible="false"/>
