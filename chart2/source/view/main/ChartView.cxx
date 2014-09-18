@@ -1501,7 +1501,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         VCoordinateSystem* pVCooSys = rVCooSysList[0];
         pVCooSys->createMaximumAxesLabels();
 
-        aConsumedOuterRect = ::basegfx::B2IRectangle( AbstractShapeFactory::getRectangleOfShape(xBoundingShape) );
+        aConsumedOuterRect = AbstractShapeFactory::getRectangleOfShape(xBoundingShape);
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
         if( !bUseFixedInnerSize )
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
