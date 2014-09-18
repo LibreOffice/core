@@ -35,7 +35,6 @@
  */
 #define SYS_UNKNOWN             0
 #define SYS_UNIX                1
-#define SYS_LATTICE             5
 #define SYS_ONYX                6
 #define SYS_68000               7
 
@@ -101,15 +100,6 @@
  *              which is to be searched *before* the operating-system
  *              specific directories.
  */
-
-#if TARGET == SYS_LATTICE
-/*
- * We assume the operating system is pcdos for the IBM-PC.
- * We also assume the small model (just like the PDP-11)
- */
-#define MACHINE                 "i8086"
-#define SYSTEM                  "pcdos"
-#endif
 
 #if TARGET == SYS_ONYX
 #define MACHINE                 "z8000"
