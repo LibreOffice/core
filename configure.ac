@@ -2950,7 +2950,7 @@ if test $_os = iOS; then
     xcode_developer=`xcode-select -print-path`
 
     current_sdk_ver=7.1
-    for sdkver in 8.0 7.1 7.0 6.1 6.0; do
+    for sdkver in 8.0 7.1; do
         t=$xcode_developer/Platforms/$platform.platform/Developer/SDKs/$platform$sdkver.sdk
         if test -d $t; then
             ios_sdk=$sdkver
@@ -2973,24 +2973,16 @@ if test $_os = iOS; then
             versionmin=-mios-simulator-version-min=7.0
         else
             XCODE_ARCHS=i386
-            case $sdkver in
-            7.*)
-                versionmin=-mios-simulator-version-min=6.1
-                ;;
-            *)
-                versionmin=-mmacosx-version-min=10.7
-                ;;
-            esac
+            versionmin=-mios-simulator-version-min=7.0
         fi
     else
         platform=iPhoneOS
         if test "$BITNESS_OVERRIDE" = 64; then
             XCODE_ARCHS=arm64
-            versionmin=-miphoneos-version-min=7.0
         else
             XCODE_ARCHS=armv7
-            versionmin=-miphoneos-version-min=6.1
         fi
+        versionmin=-miphoneos-version-min=7.0
     fi
 
     # LTO is not really recommended for iOS builds,
@@ -3002,18 +2994,7 @@ if test $_os = iOS; then
     # get compiled with it, to avoid ld warnings when linking all that together into one
     # executable.
 
-    # Use libc++ for iOS 7 SDK and libstdc++ for earlier (but we don't really expect anybody to
-    # be be using an earlier SDK)
-
-    XCODE_CLANG_CXX_LIBRARY=libstdc++
-    case $ios_sdk in
-    6.*)
-        ;;
-    *)
-        XCODE_CLANG_CXX_LIBRARY=libc++
-        ;;
-    esac
-
+    XCODE_CLANG_CXX_LIBRARY=libc++
     stdlib="-stdlib=$XCODE_CLANG_CXX_LIBRARY"
 
     CC="`xcrun -find clang` -arch $XCODE_ARCHS -fvisibility=hidden -isysroot $sysroot $lto $versionmin"
