@@ -20,7 +20,6 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkButton" id="auto_color_button">
-            <property name="label" translatable="yes">Automatic</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

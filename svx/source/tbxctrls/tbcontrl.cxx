@@ -1014,11 +1014,12 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
     mnColorSetCols( 10 )
 
 {
-    get(mpPaletteListBox,   "palette_listbox");
-    get(mpButtonAutoColor,  "auto_color_button");
-    get(mpButtonPicker,     "color_picker_button");
-    get(mpColorSet,         "colorset");
-    get(mpRecentColorSet,   "recent_colorset");
+    get(mpPaletteListBox,     "palette_listbox");
+    get(mpButtonAutoColor,    "auto_color_button");
+    get(mpButtonPicker,       "color_picker_button");
+    get(mpColorSet,           "colorset");
+    get(mpRecentColorSet,     "recent_colorset");
+    get(mpAutomaticSeparator, "separator4");
 
     mpColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT) );
     mpRecentColorSet->SetStyle( WinBits(WB_FLATVALUESET | WB_ITEMBORDER | WB_3DLOOK | WB_NO_DIRECTSELECT) );
@@ -1031,7 +1032,7 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
     if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
     {
-        mpColorSet->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
+        mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_TRANSPARENT ) );
         mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
     }
     else if ( SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2 == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId )
@@ -1045,16 +1046,20 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
         SfxItemState eState = aQueryStatus.QueryState( pDummy );
         if( (SfxItemState::DEFAULT > eState) || ( SID_EXTRUSION_3D_COLOR == theSlotId ) )
         {
-            mpColorSet->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
+            mpButtonAutoColor->SetText( SVX_RESSTR( RID_SVXSTR_AUTOMATIC ) );
             mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_TEXTCOLOR ) );
         }
     }
     else if ( SID_FRAME_LINECOLOR == theSlotId )
     {
+        mpButtonAutoColor->Hide();
+        mpAutomaticSeparator->Hide();
         mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
     }
     else
     {
+        mpButtonAutoColor->Hide();
+        mpAutomaticSeparator->Hide();
         mpColorSet->SetAccessibleName( SVX_RESSTR( RID_SVXSTR_LINECOLOR ) );
     }
 
@@ -1099,15 +1104,7 @@ SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 {
-    sal_uInt16 nItemId = mpColorSet->GetSelectItemId();
-    Color aColor;
-    if ( !nItemId && ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId  || SID_BACKGROUND_COLOR == theSlotId ) )
-        aColor = COL_TRANSPARENT;
-    else if ( !nItemId && (SID_ATTR_CHAR_COLOR == theSlotId || SID_ATTR_CHAR_COLOR2  == theSlotId || SID_EXTRUSION_3D_COLOR == theSlotId) )
-        aColor = COL_AUTO;
-    else
-        aColor = mpColorSet->GetItemColor( nItemId );
-
+    Color aColor = mpColorSet->GetItemColor( mpColorSet->GetSelectItemId() );
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
@@ -1126,10 +1123,7 @@ IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 
 IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectRecentHdl)
 {
-    sal_uInt16 nItemId = mpRecentColorSet->GetSelectItemId();
-    Color aColor;
-    aColor = mpRecentColorSet->GetItemColor( nItemId );
-
+    Color aColor = mpRecentColorSet->GetItemColor( mpRecentColorSet->GetSelectItemId() );
     /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() calls.
         This instance may be deleted in the meantime (i.e. when a dialog is opened
         while in Dispatch()), accessing members will crash in this case. */
@@ -1227,8 +1221,6 @@ void SvxColorWindow_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eState, co
                     return;
                 }
             }
-            if ( aColor == COL_AUTO || aColor == COL_TRANSPARENT )
-                mpColorSet->SelectItem(0);
         }
     }
 }

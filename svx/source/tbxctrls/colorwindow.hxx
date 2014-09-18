@@ -41,6 +41,7 @@ private:
     ListBox*            mpPaletteListBox;
     PushButton*         mpButtonAutoColor;
     PushButton*         mpButtonPicker;
+    FixedLine*          mpAutomaticSeparator;
     OUString            maCommand;
     Link                maSelectedLink;
 
