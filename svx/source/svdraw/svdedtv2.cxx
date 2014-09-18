@@ -614,7 +614,7 @@ bool SdrEditView::ImpCanConvertForCombine(const SdrObject* pObj) const
 basegfx::B2DPolyPolygon SdrEditView::ImpGetPolyPolygon1(const SdrObject* pObj, bool bCombine) const
 {
     basegfx::B2DPolyPolygon aRetval;
-    SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
+    const SdrPathObj* pPath = PTR_CAST(SdrPathObj, pObj);
 
     if(bCombine && pPath && !pObj->GetOutlinerParaObject())
     {

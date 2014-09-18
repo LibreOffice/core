@@ -423,7 +423,7 @@ SwCntntFrm::SwCntntFrm( SwCntntNode * const pCntnt, SwFrm* pSib ) :
 
 SwCntntFrm::~SwCntntFrm()
 {
-    SwCntntNode* pCNd;
+    const SwCntntNode* pCNd;
     if( 0 != ( pCNd = PTR_CAST( SwCntntNode, GetRegisteredIn() )) &&
         !pCNd->GetDoc()->IsInDtor() )
     {

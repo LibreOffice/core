@@ -370,7 +370,7 @@ bool WW8Export::MiserableFormFieldExportHack(const SwFrmFmt& rFrmFmt)
     const SdrObject *pObject = rFrmFmt.FindRealSdrObject();
     if (pObject && pObject->GetObjInventor() == FmFormInventor)
     {
-        if (SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject))
+        if (const SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObject))
         {
             uno::Reference< awt::XControlModel > xControlModel =
                 pFormObj->GetUnoControlModel();
@@ -3112,7 +3112,7 @@ bool SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrObject *pOb
     if (!rWW8Wrt.bWrtWW8)
         return false;
 
-    SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObj);
+    const SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObj);
     assert(pFormObj);
     if (!pFormObj)
         return false;

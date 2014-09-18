@@ -84,14 +84,14 @@ void OTableStyleContext::FillPropertySet(
         {
             if ((m_nNumberFormat == -1) && !m_sDataStyleName.isEmpty())
             {
-                SvXMLNumFormatContext* pStyle = PTR_CAST(SvXMLNumFormatContext,pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true));
+                SvXMLNumFormatContext* pStyle = const_cast<SvXMLNumFormatContext*>(PTR_CAST(SvXMLNumFormatContext,pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true)));
                 if ( !pStyle )
                 {
                     OTableStylesContext* pMyStyles = PTR_CAST(OTableStylesContext,GetOwnImport().GetAutoStyles());
                     if ( pMyStyles )
-                        pStyle = PTR_CAST(SvXMLNumFormatContext,pMyStyles->
-                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true));
+                        pStyle = const_cast<SvXMLNumFormatContext*>(PTR_CAST(SvXMLNumFormatContext,pMyStyles->
+                            FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, m_sDataStyleName, true)));
                     else {
                         OSL_FAIL("not possible to get style");
                     }

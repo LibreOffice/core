@@ -419,7 +419,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if ( pObjSh->IsModified() )
                 {
                     pObjSh->ExecuteSlot( aReq );
-                    SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, aReq.GetReturnValue() );
+                    const SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, aReq.GetReturnValue() );
                     if ( !pItem || !pItem->GetValue() )
                         bOK = false;
                 }

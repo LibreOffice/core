@@ -77,7 +77,7 @@ sal_uInt16 ScViewUtil::GetEffLanguage( ScDocument* pDoc, const ScAddress& rPos )
     sal_uInt16 nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? ATTR_CJK_FONT_LANGUAGE :
                     ( ( nScript == SCRIPTTYPE_COMPLEX ) ? ATTR_CTL_FONT_LANGUAGE : ATTR_FONT_LANGUAGE );
     const SfxPoolItem* pItem = pDoc->GetAttr( rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
-    SvxLanguageItem* pLangIt = PTR_CAST( SvxLanguageItem, pItem );
+    const SvxLanguageItem* pLangIt = PTR_CAST( SvxLanguageItem, pItem );
     LanguageType eLnge;
     if (pLangIt)
     {

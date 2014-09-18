@@ -642,7 +642,7 @@ const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
     if( !pObj || FmFormInventor != pObj->GetObjInventor() )
         return 0;
 
-    SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
+    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pObj );
     assert(pFormObj);
     if (!pFormObj)
         return 0;
@@ -676,7 +676,7 @@ static void GetControlSize( const SdrObject& rSdrObj, Size& rSz,
     if( !pVSh )
         return;
 
-    SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObj );
+    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObj );
     assert(pFormObj);
     if (!pFormObj)
         return;
@@ -703,7 +703,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObject );
+    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, &rSdrObject );
     assert(pFormObj);
     if (!pFormObj)
         return rWrt;
@@ -1292,7 +1292,7 @@ static void AddControl( HTMLControls& rControls,
                         const SdrObject *pSdrObj,
                         sal_uInt32 nNodeIdx )
 {
-    SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pSdrObj );
+    const SdrUnoObj *pFormObj = PTR_CAST( SdrUnoObj, pSdrObj );
     assert(pFormObj); //Doch kein FormObj
     if (!pFormObj)
         return;

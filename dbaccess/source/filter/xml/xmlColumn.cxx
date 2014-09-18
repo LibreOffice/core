@@ -130,7 +130,7 @@ void OXMLColumn::EndElement()
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN,m_sStyleName));
+                    OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_COLUMN,m_sStyleName)));
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(xProp);
@@ -142,7 +142,7 @@ void OXMLColumn::EndElement()
                 const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
                 if ( pAutoStyles )
                 {
-                    OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
+                    OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName)));
                     if ( pAutoStyle )
                     {
                         pAutoStyle->FillPropertySet(xProp);
@@ -159,7 +159,7 @@ void OXMLColumn::EndElement()
         const SvXMLStylesContext* pAutoStyles = GetOwnImport().GetAutoStyles();
         if ( pAutoStyles )
         {
-            OTableStyleContext* pAutoStyle = PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName));
+            OTableStyleContext* pAutoStyle = const_cast<OTableStyleContext*>(PTR_CAST(OTableStyleContext,pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_TABLE_CELL,m_sCellStyleName)));
             if ( pAutoStyle )
             {
                 // we also have to do this on the table to import text-properties

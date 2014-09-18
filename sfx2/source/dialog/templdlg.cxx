@@ -1718,7 +1718,7 @@ bool SfxCommonTemplateDialog_Impl::Execute_Impl(
 
     if ( (nId == SID_STYLE_NEW || SID_STYLE_EDIT == nId) && (pTreeBox || aFmtLb.GetSelectionCount() <= 1) )
     {
-        SfxUInt16Item *pFilterItem = PTR_CAST(SfxUInt16Item, pItem);
+        const SfxUInt16Item *pFilterItem = PTR_CAST(SfxUInt16Item, pItem);
         OSL_ENSURE(pFilterItem, "SfxUINT16Item expected");
         sal_uInt16 nFilterFlags = pFilterItem->GetValue() & ~SFXSTYLEBIT_USERDEF;
         if(!nFilterFlags)       // User Template?

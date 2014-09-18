@@ -331,7 +331,7 @@ namespace
 
         // On the other side some special slots return a boolean state,
         // which can be set to FALSE.
-        SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, _pResult );
+        const SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, _pResult );
         if ( pItem )
             bSuccess = pItem->GetValue();
 

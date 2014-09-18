@@ -359,7 +359,7 @@ inline SwSectionFmt* SwSectionFmt::GetParent() const
 {
     SwSectionFmt* pRet = 0;
     if( GetRegisteredIn() )
-        pRet = PTR_CAST( SwSectionFmt, GetRegisteredIn() );
+        pRet = const_cast<SwSectionFmt*>(PTR_CAST( SwSectionFmt, GetRegisteredIn() ));
     return pRet;
 }
 

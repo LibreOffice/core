@@ -310,7 +310,7 @@ inline double ImplGetParameter( const Point& rCenter, const Point& rPt, double f
 
 Polygon::Polygon()
 {
-    mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
+    mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
 }
 
 Polygon::Polygon( sal_uInt16 nSize )
@@ -319,7 +319,7 @@ Polygon::Polygon( sal_uInt16 nSize )
     if ( nSize )
         mpImplPolygon = new ImplPolygon( nSize );
     else
-        mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
+        mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
 }
 
 Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pFlagAry )
@@ -328,7 +328,7 @@ Polygon::Polygon( sal_uInt16 nPoints, const Point* pPtAry, const sal_uInt8* pFla
     if( nPoints )
         mpImplPolygon = new ImplPolygon( nPoints, pPtAry, pFlagAry );
     else
-        mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
+        mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
 }
 
 Polygon::Polygon( const Polygon& rPoly )
@@ -344,7 +344,7 @@ Polygon::Polygon( const Rectangle& rRect )
 {
 
     if ( rRect.IsEmpty() )
-        mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
+        mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
     else
     {
         mpImplPolygon = new ImplPolygon( 5 );
@@ -359,7 +359,7 @@ Polygon::Polygon( const Rectangle& rRect )
 Polygon::Polygon( const Rectangle& rRect, sal_uIntPtr nHorzRound, sal_uIntPtr nVertRound )
 {
     if ( rRect.IsEmpty() )
-        mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
+        mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
     else
     {
         Rectangle aRect( rRect );
@@ -455,7 +455,7 @@ Polygon::Polygon( const Point& rCenter, long nRadX, long nRadY, sal_uInt16 nPoin
         }
     }
     else
-        mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
+        mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
 }
 
 Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEnd,
@@ -530,7 +530,7 @@ Polygon::Polygon( const Rectangle& rBound, const Point& rStart, const Point& rEn
             mpImplPolygon->mpPointAry[ nPoints ] = mpImplPolygon->mpPointAry[ 0 ];
     }
     else
-        mpImplPolygon = (ImplPolygon*) &aStaticImplPolygon;
+        mpImplPolygon = static_cast<ImplPolygon*>( &aStaticImplPolygon );
 }
 
 Polygon::Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
@@ -677,7 +677,7 @@ void Polygon::Clear()
             delete mpImplPolygon;
     }
 
-    mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
+    mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
 }
 
 double Polygon::CalcDistance( sal_uInt16 nP1, sal_uInt16 nP2 )
@@ -1934,7 +1934,7 @@ Polygon::Polygon(const basegfx::B2DPolygon& rPolygon)
     if(!mpImplPolygon)
     {
         // no content yet, create empty polygon
-        mpImplPolygon = (ImplPolygon*)(&aStaticImplPolygon);
+        mpImplPolygon = static_cast<ImplPolygon*>(&aStaticImplPolygon);
     }
 }
 

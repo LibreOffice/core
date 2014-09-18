@@ -134,7 +134,7 @@ void SdTbxControl::StateChanged( sal_uInt16 nSId,
 
     if( eState == SfxItemState::DEFAULT )
     {
-        TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
+        const TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
         // StarDesktop can also receive another item,
         // but it is not allowed to evaluate it
         if( pItem )
