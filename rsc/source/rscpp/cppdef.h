@@ -35,7 +35,6 @@
  */
 #define SYS_UNKNOWN             0
 #define SYS_UNIX                1
-#define SYS_68000               7
 
 #ifndef HOST
 #ifdef  unix
@@ -99,16 +98,6 @@
  *              which is to be searched *before* the operating-system
  *              specific directories.
  */
-
-#if TARGET == SYS_68000 || defined(M68000) || defined(m68000) || defined(m68k)
-/*
- * All three machine designators have been seen in various systems.
- * Warning -- compilers differ as to sizeof (int).  cpp3 assumes that
- * sizeof (int) == 2
- */
-#define MACHINE                 "M68000", "m68000", "m68k"
-#define SYSTEM                  "unix"
-#endif
 
 #if     TARGET == SYS_UNIX
 #define SYSTEM                  "unix"
