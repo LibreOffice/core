@@ -1452,7 +1452,44 @@ OUString OSingleSelectQueryComposer::getStatementPart( TGetParseNode& _aGetFunct
 
 namespace
 {
-    OUString lcl_getCondition(const Sequence< Sequence< PropertyValue > >& filter,const OPredicateInputController& i_aPredicateInputController,const Reference< XNameAccess >& i_xSelectColumns)
+    OUString lcl_getDecomposedColumnName(const OUString& rComposedName, const OUString& rQuoteString)
+    {
+        const sal_Int32 nQuoteLength = rQuoteString.getLength();
+        OUString sName = rComposedName.trim();
+        OUString sColumnName;
+        sal_Int32 nPos, nRPos = 0;
+
+        for (;;)
+        {
+            nPos = sName.indexOf( rQuoteString, nRPos );
+            if ( nPos >= 0 )
+            {
+                nRPos = sName.indexOf( rQuoteString, nPos + nQuoteLength );
+                if ( nRPos > nPos )
+                {
+                    if ( nRPos + nQuoteLength < sName.getLength() )
+                    {
+                        nRPos += nQuoteLength; // -1 + 1 skip dot
+                    }
+                    else
+                    {
+                        sColumnName = sName.copy( nPos + nQuoteLength, nRPos - nPos - nQuoteLength );
+                        break;
+                    }
+                }
+                else
+                    break;
+            }
+            else
+                break;
+        }
+        return sColumnName.isEmpty() ? rComposedName : sColumnName;
+    }
+
+    OUString lcl_getCondition(const Sequence< Sequence< PropertyValue > >& filter,
+        const OPredicateInputController& i_aPredicateInputController,
+        const Reference< XNameAccess >& i_xSelectColumns,
+        const OUString& rQuoteString)
     {
         OUStringBuffer sRet;
         const Sequence< PropertyValue >* pOrIter = filter.getConstArray();
@@ -1469,9 +1506,10 @@ namespace
                     sRet.append(pAndIter->Name);
                     OUString sValue;
                     pAndIter->Value >>= sValue;
-                    if ( i_xSelectColumns.is() && i_xSelectColumns->hasByName(pAndIter->Name) )
+                    const OUString sColumnName = lcl_getDecomposedColumnName( pAndIter->Name, rQuoteString );
+                    if ( i_xSelectColumns.is() && i_xSelectColumns->hasByName(sColumnName) )
                     {
-                        Reference<XPropertySet> xColumn(i_xSelectColumns->getByName(pAndIter->Name),UNO_QUERY);
+                        Reference<XPropertySet> xColumn(i_xSelectColumns->getByName(sColumnName),UNO_QUERY);
                         sValue = i_aPredicateInputController.getPredicateValue(sValue,xColumn,true);
                     }
                     else
@@ -1496,13 +1534,13 @@ namespace
 void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, ::com::sun::star::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection, &m_aParseContext);
-    setFilter(lcl_getCondition(filter,aPredicateInput,getColumns()));
+    setFilter(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));
 }
 
 void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, RuntimeException, std::exception)
 {
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection);
-    setHavingClause(lcl_getCondition(filter,aPredicateInput,getColumns()));
+    setHavingClause(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));
 }
 
 void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropertySet >& column, bool andCriteria ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor,sal_Int32 filterOperator)
