@@ -2586,7 +2586,7 @@ inline Color ImplWinColorToSal( COLORREF nColor )
     return Color( GetRValue( nColor ), GetGValue( nColor ), GetBValue( nColor ) );
 }
 
-static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
+static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, vcl::Font& rFont )
 {
     ImplSalLogFontToFontW( hDC, rLogFont, rFont );
 
@@ -2761,12 +2761,12 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetHighContrastMode( false );
 
     // Query Fonts
-    Font    aMenuFont = aStyleSettings.GetMenuFont();
-    Font    aTitleFont = aStyleSettings.GetTitleFont();
-    Font    aFloatTitleFont = aStyleSettings.GetFloatTitleFont();
-    Font    aHelpFont = aStyleSettings.GetHelpFont();
-    Font    aAppFont = aStyleSettings.GetAppFont();
-    Font    aIconFont = aStyleSettings.GetIconFont();
+    vcl::Font    aMenuFont = aStyleSettings.GetMenuFont();
+    vcl::Font    aTitleFont = aStyleSettings.GetTitleFont();
+    vcl::Font    aFloatTitleFont = aStyleSettings.GetFloatTitleFont();
+    vcl::Font    aHelpFont = aStyleSettings.GetHelpFont();
+    vcl::Font    aAppFont = aStyleSettings.GetAppFont();
+    vcl::Font    aIconFont = aStyleSettings.GetIconFont();
     HDC     hDC = GetDC( 0 );
     NONCLIENTMETRICSW aNonClientMetrics;
     aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
