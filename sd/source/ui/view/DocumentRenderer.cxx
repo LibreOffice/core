@@ -1409,6 +1409,7 @@ private:
         PrintInfo& rInfo)
     {
         SdDrawDocument* pDocument = mrBase.GetMainViewShell()->GetDoc();
+        bool bIsDraw = pDocument->GetDocumentType() == DOCUMENT_TYPE_DRAW;
         rInfo.meOrientation = ORIENTATION_PORTRAIT;
 
         if( ! mpOptions->IsBooklet())
@@ -1420,7 +1421,7 @@ private:
 
         // Draw should abide by specified paper size
         Size aPaperSize;
-        if (mpOptions->IsDraw())
+        if (bIsDraw)
         {
             aPaperSize.setWidth(rInfo.maPageSize.Width());
             aPaperSize.setHeight(rInfo.maPageSize.Height());
@@ -1497,7 +1498,7 @@ private:
                 aInfo.msTimeDate += GetSdrGlobalData().GetLocaleData()->getTime( Time( Time::SYSTEM ), false, false );
 
             // Draw should use specified paper size when printing
-            if (mpOptions->IsDraw())
+            if (mrBase.GetDocShell()->GetDocumentType() == DOCUMENT_TYPE_DRAW)
             {
                 aInfo.maPrintSize = mrBase.GetDocument()->GetSdPage(0, PK_STANDARD)->GetSize();
                 maPrintSize = awt::Size(aInfo.maPrintSize.Width(),
