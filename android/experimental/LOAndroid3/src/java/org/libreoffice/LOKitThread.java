@@ -7,6 +7,7 @@ import android.util.Log;
 
 import org.mozilla.gecko.gfx.FloatSize;
 import org.mozilla.gecko.gfx.GeckoLayerClient;
+import org.mozilla.gecko.gfx.ImmutableViewportMetrics;
 import org.mozilla.gecko.gfx.SubTile;
 import org.mozilla.gecko.gfx.ViewportMetrics;
 
@@ -29,9 +30,9 @@ public class LOKitThread extends Thread {
         mInputFile = inputFile;
     }
 
-    RectF normlizeRect(ViewportMetrics metrics) {
+    RectF normlizeRect(ImmutableViewportMetrics metrics) {
         RectF rect = metrics.getViewport();
-        float zoomFactor = metrics.getZoomFactor();
+        float zoomFactor = metrics.zoomFactor;
         return new RectF(rect.left / zoomFactor, rect.top / zoomFactor, rect.right / zoomFactor, rect.bottom / zoomFactor);
     }
 
@@ -68,7 +69,7 @@ public class LOKitThread extends Thread {
         GeckoLayerClient layerClient = mApplication.getLayerClient();
         layerClient.beginDrawing(mViewportMetrics);
 
-        ViewportMetrics metrics = mApplication.getLayerController().getViewportMetrics();
+        ImmutableViewportMetrics metrics = mApplication.getLayerController().getViewportMetrics();
         RectF viewport = normlizeRect(metrics);
         Rect rect = inflate(roundToTileSize(viewport, TILE_SIZE), TILE_SIZE);
 

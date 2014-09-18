@@ -149,7 +149,7 @@ public class GeckoLayerClient {
         mGeckoViewport = mNewGeckoViewport;
         mGeckoViewport.setSize(viewportSize);
 
-        PointF displayportOrigin = mGeckoViewport.getDisplayportOrigin();
+        PointF displayportOrigin = mGeckoViewport.getOrigin();
         RectF position = mGeckoViewport.getViewport();
         mTileLayer.setPosition(RectUtils.round(position));
         mTileLayer.setResolution(mGeckoViewport.getZoomFactor());
@@ -288,7 +288,7 @@ public class GeckoLayerClient {
 
         viewportMetrics.setViewport(viewportMetrics.getClampedViewport());
 
-        mDisplayPort = calculateDisplayPort(new ImmutableViewportMetrics(mLayerController.getViewportMetrics()));
+        mDisplayPort = calculateDisplayPort(mLayerController.getViewportMetrics());
 
         LOKitShell.sendEvent(LOEvent.viewport(viewportMetrics));
         if (mViewportSizeChanged) {

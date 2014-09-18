@@ -70,7 +70,20 @@ public class LayerController {
     private Layer mRootLayer;                   /* The root layer. */
     private LayerView mView;                    /* The main rendering view. */
     private Context mContext;                   /* The current context. */
-    private ViewportMetrics mViewportMetrics;   /* The current viewport metrics. */
+
+    /* This is volatile so that we can read and write to it from different threads.
+     * We avoid synchronization to make getting the viewport metrics from
+     * the compositor as cheap as possible. The viewport is immutable so
+     * we don't need to worry about anyone mutating it while we're reading from it.
+     * Specifically:
+     * 1) reading mViewportMetrics from any thread is fine without synchronization
+     * 2) writing to mViewportMetrics requires synchronizing on the layer controller object
+     * 3) whenver reading multiple fields from mViewportMetrics without synchronization (i.e. in
+     *    case 1 above) you should always frist grab a local copy of the reference, and then use
+     *    that because mViewportMetrics might get reassigned in between reading the different
+     *    fields. */
+    private volatile ImmutableViewportMetrics mViewportMetrics;   /* The current viewport metrics. */
+
     private boolean mWaitForTouchListeners;
 
     private PanZoomController mPanZoomController;
@@ -84,7 +97,7 @@ public class LayerController {
 
     /* The new color for the checkerboard. */
     private int mCheckerboardColor;
-    private boolean mCheckerboardShouldShowChecks;
+    private boolean mCheckerboardShouldShowChecks = true;
 
     private boolean mForceRedraw;
 
@@ -113,10 +126,9 @@ public class LayerController {
         mContext = context;
 
         mForceRedraw = true;
-        mViewportMetrics = new ViewportMetrics();
+        mViewportMetrics = new ImmutableViewportMetrics(new ViewportMetrics());
         mPanZoomController = new PanZoomController(this);
         mView = new LayerView(context, this);
-        mCheckerboardShouldShowChecks = true;
     }
 
     public void onDestroy() {
@@ -136,7 +148,7 @@ public class LayerController {
     public Layer getRoot()                        { return mRootLayer; }
     public LayerView getView()                    { return mView; }
     public Context getContext()                   { return mContext; }
-    public ViewportMetrics getViewportMetrics()   { return mViewportMetrics; }
+    public ImmutableViewportMetrics getViewportMetrics()   { return mViewportMetrics; }
 
     public RectF getViewport() {
         return mViewportMetrics.getViewport();
@@ -155,7 +167,7 @@ public class LayerController {
     }
 
     public float getZoomFactor() {
-        return mViewportMetrics.getZoomFactor();
+        return mViewportMetrics.zoomFactor;
     }
 
     public Bitmap getBackgroundPattern()    { return getDrawable("background"); }
@@ -185,13 +197,49 @@ public class LayerController {
      * result in an infinite loop.
      */
     public void setViewportSize(FloatSize size) {
+        // Resize the viewport, and modify its zoom factor so that the page retains proportionally
+        // zoomed relative to the screen.
         ViewportMetrics viewportMetrics = new ViewportMetrics(mViewportMetrics);
+        float oldHeight = viewportMetrics.getSize().height;
+        float oldWidth = viewportMetrics.getSize().width;
+        float oldZoomFactor = viewportMetrics.getZoomFactor();
         viewportMetrics.setSize(size);
-        mViewportMetrics = new ViewportMetrics(viewportMetrics);
+
+        // if the viewport got larger (presumably because the vkb went away), and the page
+        // is smaller than the new viewport size, increase the page size so that the panzoomcontroller
+        // doesn't zoom in to make it fit (bug 718270). this page size change is in anticipation of
+        // gecko increasing the page size to match the new viewport size, which will happen the next
+        // time we get a draw update.
+        if (size.width >= oldWidth && size.height >= oldHeight) {
+            FloatSize pageSize = viewportMetrics.getPageSize();
+            if (pageSize.width < size.width || pageSize.height < size.height) {
+                viewportMetrics.setPageSize(new FloatSize(Math.max(pageSize.width, size.width),
+                                                           Math.max(pageSize.height, size.height)));
+            }
+        }
+
+        // For rotations, we want the focus point to be at the top left.
+        boolean rotation = (size.width > oldWidth && size.height < oldHeight) ||
+                           (size.width < oldWidth && size.height > oldHeight);
+        PointF newFocus;
+        if (rotation) {
+            newFocus = new PointF(0, 0);
+        } else {
+            newFocus = new PointF(size.width / 2.0f, size.height / 2.0f);
+        }
+        float newZoomFactor = size.width * oldZoomFactor / oldWidth;
+        viewportMetrics.scaleTo(newZoomFactor, newFocus);
+        mViewportMetrics = new ImmutableViewportMetrics(viewportMetrics);
+
+        setForceRedraw();
 
         if (mLayerClient != null) {
             mLayerClient.viewportSizeChanged();
+            notifyLayerClientOfGeometryChange();
         }
+
+        mPanZoomController.abortAnimation();
+        mView.requestRender();
     }
 
     /** Scrolls the viewport by the given offset. You must hold the monitor while calling this. */
@@ -200,7 +248,7 @@ public class LayerController {
         PointF origin = viewportMetrics.getOrigin();
         origin.offset(point.x, point.y);
         viewportMetrics.setOrigin(origin);
-        mViewportMetrics = new ViewportMetrics(viewportMetrics);
+        mViewportMetrics = new ImmutableViewportMetrics(viewportMetrics);
 
         notifyLayerClientOfGeometryChange();
         mView.requestRender();
@@ -213,7 +261,7 @@ public class LayerController {
 
         ViewportMetrics viewportMetrics = new ViewportMetrics(mViewportMetrics);
         viewportMetrics.setPageSize(size);
-        mViewportMetrics = new ViewportMetrics(viewportMetrics);
+        mViewportMetrics = new ImmutableViewportMetrics(viewportMetrics);
 
         // Page size is owned by the layer client, so no need to notify it of
         // this change.
@@ -233,7 +281,7 @@ public class LayerController {
      * while calling this.
      */
     public void setViewportMetrics(ViewportMetrics viewport) {
-        mViewportMetrics = new ViewportMetrics(viewport);
+        mViewportMetrics = new ImmutableViewportMetrics(viewport);
         Log.d(LOGTAG, "setViewportMetrics: " + mViewportMetrics);
         mView.requestRender();
     }
@@ -245,7 +293,7 @@ public class LayerController {
     public void scaleWithFocus(float zoomFactor, PointF focus) {
         ViewportMetrics viewportMetrics = new ViewportMetrics(mViewportMetrics);
         viewportMetrics.scaleTo(zoomFactor, focus);
-        mViewportMetrics = new ViewportMetrics(viewportMetrics);
+        mViewportMetrics = new ImmutableViewportMetrics(viewportMetrics);
         Log.d(LOGTAG, "scaleWithFocus: " + mViewportMetrics + "; zf=" + zoomFactor);
 
         // We assume the zoom level will only be modified by the
@@ -317,31 +365,26 @@ public class LayerController {
      * Converts a point from layer view coordinates to layer coordinates. In other words, given a
      * point measured in pixels from the top left corner of the layer view, returns the point in
      * pixels measured from the top left corner of the root layer, in the coordinate system of the
-     * layer itself (CSS pixels). This method is used as part of the process of translating touch
-     * events to Gecko's coordinate system.
+     * layer itself. This method is used by the viewport controller as part of the process of
+     * translating touch events to Gecko's coordinate system.
      */
     public PointF convertViewPointToLayerPoint(PointF viewPoint) {
         if (mRootLayer == null)
             return null;
 
-        ViewportMetrics viewportMetrics = mViewportMetrics;
+        ImmutableViewportMetrics viewportMetrics = mViewportMetrics;
+        // Undo the transforms.
         PointF origin = viewportMetrics.getOrigin();
         PointF newPoint = new PointF(origin.x, origin.y);
-        float zoom = viewportMetrics.getZoomFactor();
+        float zoom = viewportMetrics.zoomFactor;
+        viewPoint.x /= zoom;
+        viewPoint.y /= zoom;
+        newPoint.offset(viewPoint.x, viewPoint.y);
 
         Rect rootPosition = mRootLayer.getPosition();
-        float rootScale = mRootLayer.getResolution();
+        newPoint.offset(-rootPosition.left, -rootPosition.top);
 
-        // viewPoint + origin gives the coordinate in device pixels from the top-left corner of the page.
-        // Divided by zoom, this gives us the coordinate in CSS pixels from the top-left corner of the page.
-        // rootPosition / rootScale is where Gecko thinks it is (scrollTo position) in CSS pixels from
-        // the top-left corner of the page. Subtracting the two gives us the offset of the viewPoint from
-        // the current Gecko coordinate in CSS pixels.
-        PointF layerPoint = new PointF(
-                ((viewPoint.x + origin.x) / zoom) - (rootPosition.left / rootScale),
-                ((viewPoint.y + origin.y) / zoom) - (rootPosition.top / rootScale));
-
-        return layerPoint;
+        return newPoint;
     }
 
     /*

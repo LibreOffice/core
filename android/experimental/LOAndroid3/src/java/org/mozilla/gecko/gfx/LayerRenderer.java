@@ -286,7 +286,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
      * Called whenever a new frame is about to be drawn.
      */
     public void onDrawFrame(GL10 gl) {
-        Frame frame = createFrame(new ImmutableViewportMetrics(mView.getController().getViewportMetrics()));
+        Frame frame = createFrame(mView.getController().getViewportMetrics());
         synchronized (mView.getController()) {
             frame.beginDrawing();
             frame.drawBackground();
