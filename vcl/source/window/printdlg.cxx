@@ -1787,6 +1787,14 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )
         sal_Int32 nVal( i_pBox->GetSelectEntryPos() );
         pVal->Value <<= nVal;
 
+        //If we are in impress we start in print slides mode and get a
+        //maFirstPageSize for slides which are usually landscape mode, if we
+        //change to notes which are usually in portrait mode, and then visit
+        //n-up print, we will assume notes are in landscape unless we throw
+        //away maFirstPageSize when we change page content type
+        if (pVal->Name == "PageContentType")
+            maFirstPageSize = Size();
+
         checkOptionalControlDependencies();
 
         // update preview and page settings
