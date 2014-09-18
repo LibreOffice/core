@@ -131,7 +131,7 @@ void OCurrencyModel::implConstruct()
 
 OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, false, true )
-                                    // use the old control name for compytibility reasons
+    // use the old control name for compaytibility reasons
 {
 
     m_nClassId = FormComponentType::CURRENCYFIELD;
@@ -179,8 +179,8 @@ StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw(std::ex
 void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
-        // Value auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
+    // Set Value to transient
+    // ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 
         DECL_PROP3(DEFAULT_VALUE,       double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP1(TABINDEX,        sal_Int16,              BOUND);

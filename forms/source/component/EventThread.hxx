@@ -97,7 +97,7 @@ public:
     // ::com::sun::star::lang::XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
-/* resolve ambiguity : both OWeakObject and OObject have these memory operators */
+    // Resolve ambiguity: both OWeakObject and OObject have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return osl::Thread::operator new(size); }
     void SAL_CALL operator delete( void * p ) throw() { osl::Thread::operator delete(p); }
 

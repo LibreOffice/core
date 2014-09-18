@@ -188,7 +188,7 @@ void OButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw 
         case 0x0003:
         {
             OStreamSection aSection( _rxInStream.get() );
-                // this will skip any unknown bytes in it's dtor
+            // this will skip any unknown bytes in it's dtor
 
             // button type
             m_eButtonType = (FormButtonType)_rxInStream->readShort();
@@ -621,7 +621,7 @@ void OButtonControl::modelFeatureUrlPotentiallyChanged( )
 {
     sal_Int16 nOldUrlFeatureId = m_nTargetUrlFeatureId;
 
-    // doe we have another TargetURL now? If so, we need to update our dispatches
+    // Do we have another TargetURL now? If so, we need to update our dispatches
     m_nTargetUrlFeatureId = getModelUrlFeatureId( );
     if ( nOldUrlFeatureId != m_nTargetUrlFeatureId )
     {

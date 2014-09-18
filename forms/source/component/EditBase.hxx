@@ -56,7 +56,7 @@ class OEditBaseModel :  public OBoundControlModel
 protected:
 // [properties]         for all EditingFields
     ::com::sun::star::uno::Any  m_aDefault;
-    OUString             m_aDefaultText;             // default value
+    OUString                m_aDefaultText;             // default value
     bool                    m_bEmptyIsNull : 1;         // empty string will be interepreted as NULL when committing
     bool                    m_bFilterProposal : 1;      // use a list of possible value in filtermode
 // [properties]
@@ -88,8 +88,8 @@ protected:
     void defaultCommonEditProperties();
 
     virtual sal_uInt16 getPersistenceFlags() const;
-        // derived classes may use this if they want this base class to write additional version flags
-        // (one of the PF_.... constants). After ::read they may ask for that flags with getLastReadVersion
+    // derived classes may use this if they want this base class to write additional version flags
+    // (one of the PF_.... constants). After ::read they may ask for that flags with getLastReadVersion
 };
 
 

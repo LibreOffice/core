@@ -98,7 +98,7 @@ namespace frm
         }
     }
 
-    // UNO Anbindung
+    // UNO Binding
 
     Any SAL_CALL OClickableImageBaseControl::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
     {
@@ -178,7 +178,7 @@ namespace frm
         ::cppu::OInterfaceIteratorHelper aIter( m_aApproveActionListeners );
         while( !bCancelled && aIter.hasMoreElements() )
         {
-            // Jede approveAction-Methode muss thread-safe sein!!!
+            // Every approveAction method must be thread-safe!
             if( !static_cast< XApproveActionListener* >( aIter.next() )->approveAction( aEvent ) )
                 bCancelled = true;
         }
@@ -187,8 +187,7 @@ namespace frm
     }
 
 
-    // Diese Methode wird auch aus einem Thread gerufen und muss deshalb
-    // thread-safe sein.
+    // This method is also called from a thread and thus must be thread-safe.
     void OClickableImageBaseControl::actionPerformed_Impl(bool bNotifyListener, const MouseEvent& rEvt)
     {
         if( bNotifyListener )
@@ -197,15 +196,15 @@ namespace frm
                 return;
         }
 
-        // Ob der Rest des Codes Thread-Safe ist weiss man nicht genau. Deshalb
-        // wird das meiste bei gelocktem Solar-Mutex erledigen.
+        // Whether the rest of the code is thread-safe, one can't tell. Therefore
+        // we do most of the work on a locked solar mutex.
         Reference<XPropertySet>  xSet;
         Reference< XInterface > xModelsParent;
         FormButtonType eButtonType = FormButtonType_PUSH;
         {
             SolarMutexGuard aGuard;
 
-            // Parent holen
+            // Get parent
             Reference<XFormComponent>  xComp(getModel(), UNO_QUERY);
             if (!xComp.is())
                 return;
@@ -214,7 +213,7 @@ namespace frm
             if (!xModelsParent.is())
                 return;
 
-            // which button type?
+            // Which button type?
             xSet.set(xComp, css::uno::UNO_QUERY);
             if ( !xSet.is() )
                 return;
@@ -225,7 +224,7 @@ namespace frm
         {
             case FormButtonType_RESET:
             {
-                // reset-Methoden muessen thread-safe sein!
+                // Reset methods must be thread-safe!
                 Reference<XReset>  xReset(xModelsParent, UNO_QUERY);
                 if (!xReset.is())
                     return;
@@ -258,7 +257,7 @@ namespace frm
                     return;
 
 
-                // Jetzt URL ausfuehren
+                // Execute URL now
                 Reference< XController >  xController = xModel->getCurrentController();
                 if (!xController.is())
                     return;
@@ -272,19 +271,19 @@ namespace frm
                     getString(xSet->getPropertyValue(PROPERTY_TARGET_URL));
 
                 if (!aURL.Complete.isEmpty() && (LOCAL_URL_PREFIX == aURL.Complete[0]))
-                {   // the URL contains a local URL only. Since the URLTransformer does not handle this case correctly
+                {   // FIXME: The URL contains a local URL only. Since the URLTransformer does not handle this case correctly
                     // (it can't: it does not know the document URL), we have to take care for this ourself.
                     // The real solution would be to not allow such relative URLs (there is a rule that at runtime, all
                     // URLs have to be absolute), but for compatibility reasons this is no option.
                     // The more as the user does not want to see a local URL as "file://<path>/<document>#mark" if it
                     // could be "#mark" as well.
                     // If we someday say that this hack (yes, it's kind of a hack) is not sustainable anymore, the complete
-                    // solutiuon would be:
+                    // solution would be:
                     // * recognize URLs consisting of a mark only while _reading_ the document
                     // * for this, allow the INetURLObject (which at the moment is invoked when reading URLs) to
                     //   transform such mark-only URLs into correct absolute URLs
                     // * at the UI, show only the mark
-                    // * !!!! recognize every SAVEAS on the document, so the absolute URL can be adjusted. This seems
+                    // * !!! recognize every SAVEAS on the document, so the absolute URL can be adjusted. This seems
                     // rather impossible !!!
                     aURL.Mark = aURL.Complete;
                     aURL.Complete = xModel->getURL();
@@ -336,7 +335,7 @@ namespace frm
             }   break;
             default:
             {
-                    // notify the action listeners for a push button
+                // notify the action listeners for a push button
                 ActionEvent aEvt(static_cast<XWeak*>(this), m_aActionCommand);
                 m_aActionListeners.notifyEach( &XActionListener::actionPerformed, aEvt );
             }
@@ -520,7 +519,7 @@ namespace frm
             dispose();
         }
         DBG_ASSERT(m_pMedium == NULL, "OClickableImageBaseModel::~OClickableImageBaseModel : leaving a memory leak ...");
-            // spaetestens im dispose sollte das aufgeraeumt worden sein
+        // This should be cleaned up at least in the dispose
 
     }
 
@@ -682,7 +681,7 @@ namespace frm
             if ( ::svt::GraphicAccess::isSupportedURL( sURL )  )
                 pImgProd->SetImage( sURL );
             else
-                // caution: the medium may be NULL if somebody gave us a invalid URL to work with
+                // caution: the medium may be NULL if somebody gave us an invalid URL to work with
                 pImgProd->SetImage(OUString());
             m_bDownloading = false;
             return;
@@ -709,7 +708,7 @@ namespace frm
     {
         if (m_pMedium || rURL.isEmpty())
         {
-            // Den Stream am Producer freigeben, bevor das Medium geloscht wird.
+            // Free the stream at the Producer, before the medium is deleted
             GetImageProducer()->SetImage(OUString());
             delete m_pMedium;
             m_pMedium = NULL;
@@ -728,12 +727,11 @@ namespace frm
 
             m_pMedium = new SfxMedium(rURL, STREAM_STD_READ);
 
-            // Das XModel suchen, um an die Object-Shell oder zumindest den
-            // Referer zu gelangen.
-            // Das Model findet man allerdings nur beim Laden von HTML-Dokumenten
-            // und dann, wenn die URL in einem bereits geladenen Dokument
-            // geaendert wird. Waehrend des Ladens kommt man nicht an das
-            // Model ran.
+            // Find the XModel to get to the Object shell or at least the
+            // Referer.
+            // There's only a Model if we load HTML documents and the URL is
+            // changed in a document that is already loaded. There's no way
+            // we can get to the Model during loading.
             Reference< XModel >  xModel;
             InterfaceRef  xIfc( *this );
             while( !xModel.is() && xIfc.is() )
@@ -743,11 +741,9 @@ namespace frm
                 query_interface(xIfc, xModel);
             }
 
-            // Die Object-Shell suchen, indem wir
-            // ueber alle Object-Shells iterieren und deren XModel mit dem
-            // eigenen vergleichen. Als Optimierung probieren wir aber erstmal
-            // die aktuelle Object-Shell.
-            // wir unser XModel mit dem aller Object
+            // Search for the Object shell by iterating over all Object shells
+            // and comparing their XModel to our´s.
+            // As an optimization, we try the current Object shell first.
             SfxObjectShell *pObjSh = 0;
 
             if( xModel.is() )
@@ -776,8 +772,8 @@ namespace frm
     #ifdef USE_REGISTER_TRANSFER
             if( pObjSh )
             {
-                // Target-Frame uebertragen, damit auch javascript:-URLs
-                // "geladen" werden koennen.
+                // Transfer target frame, so that javascript: URLs
+                // can also be "loaded"
                 const SfxMedium *pShMedium = pObjSh->GetMedium();
                 if( pShMedium )
                     m_pMedium->SetLoadTargetFrame(pShMedium->GetLoadTargetFrame());
@@ -785,20 +781,20 @@ namespace frm
     #else
             if( pObjSh )
             {
-                // Target-Frame uebertragen, damit auch javascript:-URLs
-                // "geladen" werden koennen.
+                // Transfer target frame, so that javascript: URLs
+                // can also be "loaded"
                 const SfxMedium *pShMedium = pObjSh->GetMedium();
                 if( pShMedium )
                     m_pMedium->SetLoadTargetFrame(pShMedium->GetLoadTargetFrame());
             }
     #endif
 
-            // Downloading-Flag auf sal_True setzen. Es werden dann auch
-            // Data-Available-Links, wenn wir in den Pending-Staus gelangen.
+            // Set downloading flag to true. They will be Data Available Links,
+            // if get to the pending staus.
             m_bDownloading = true;
             m_bProdStarted = false;
 
-            // Download anstossen (Achtung: Kann auch synchron sein).
+            // Kick off download (caution: can be synchronous).
             m_pMedium->Download(STATIC_LINK(this, OClickableImageBaseModel, DownloadDoneLink));
         }
         else
@@ -837,8 +833,7 @@ namespace frm
     void OClickableImageBaseModel::_propertyChanged( const PropertyChangeEvent& rEvt )
         throw( RuntimeException )
     {
-        // Wenn eine URL gesetzt worden ist, muss die noch an den ImageProducer
-        // weitergereicht werden.
+        // If a URL was set, it needs to be passed onto the ImageProducer.
         ::osl::MutexGuard aGuard(m_aMutex);
         SetURL( getString(rEvt.NewValue) );
     }

@@ -97,7 +97,7 @@ private:
     ResetHelper m_aResetHelper;
 
     // <properties>
-    ToggleState m_eDefaultState;          // the default check state
+    ToggleState m_eDefaultState; // the default check state
     // </properties>
 protected:
     using OClickableImageBaseModel::disposing;
@@ -177,17 +177,13 @@ protected:
 private:
     DECL_LINK( OnClick, void* );
 
-    /** to be called whenever the feature URL represented by our model has potentially changed
-    */
+    /// to be called whenever the feature URL represented by our model has potentially changed
     void        modelFeatureUrlPotentiallyChanged( );
 
-    /** retrieves the feature id (see OFormNavigationHelper) of the TargetURL of
-        the model.
-    */
+    /// retrieves the feature id (see OFormNavigationHelper) of the TargetURL of the model.
     sal_Int16   getModelUrlFeatureId( ) const;
 
-    /** starts or stops listening for changes in model properties we're interested in
-    */
+    /// starts or stops listening for changes in model properties we're interested in
     void        startOrStopModelPropertyListening( bool _bStart );
 };
 

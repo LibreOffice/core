@@ -48,22 +48,19 @@ class OComboBoxModel
 {
     CachedRowSet                            m_aListRowSet;          // the row set to fill the list
     ::com::sun::star::uno::Any              m_aBoundColumn;         // obsolete
-    OUString                         m_aListSource;
-    OUString                         m_aDefaultText;         // DefaultText
+    OUString                                m_aListSource;
+    OUString                                m_aDefaultText;         // DefaultText
     ::com::sun::star::uno::Any              m_aLastKnownValue;
 
     StringSequence                          m_aDesignModeStringItems;
-        // upon loading, in some cases we reset fill our string item list ourself. We don't want
-        // to lose the user's items then, so we remember them here.
-
-
+    // upon loading, in some cases we reset fill our string item list ourself. We don't want
+    // to lose the user's items then, so we remember them here.
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter> m_xFormatter;
 
     ::com::sun::star::form::ListSourceType  m_eListSourceType;      // ListSource's type
-    bool                                m_bEmptyIsNull;         // Empty string is interpreted as NULL
+    bool                                    m_bEmptyIsNull;         // Empty string is interpreted as NULL
 
-    ::std::auto_ptr< ::dbtools::FormattedColumnValue >
-                                            m_pValueFormatter;
+    ::std::auto_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
 
 
 
@@ -129,7 +126,7 @@ protected:
 
     virtual void            resetNoBroadcast() SAL_OVERRIDE;
 
-    // OEntryListHelper overriables
+    // OEntryListHelper overridables
     virtual void    stringItemListChanged( ControlModelLock& _rInstanceLock ) SAL_OVERRIDE;
     virtual void    connectedExternalListSource( ) SAL_OVERRIDE;
     virtual void    disconnectedExternalListSource( ) SAL_OVERRIDE;

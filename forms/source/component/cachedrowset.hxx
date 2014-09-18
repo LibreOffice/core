@@ -33,8 +33,7 @@ namespace frm
 
     struct CachedRowSet_Data;
 
-    /** caches a result set obtained from a SQL statement
-    */
+    /// caches a result set obtained from a SQL statement
     class CachedRowSet
     {
     public:

@@ -38,8 +38,7 @@ class OEditModel
                                 m_pValueFormatter;
     bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
 
-    bool                    m_bWritingFormattedFake : 1;
-        // are we writing something which should be interpreted as formatted upon reading?
+    bool                    m_bWritingFormattedFake : 1; // are we writing something which should be interpreted as formatted upon reading?
 
 protected:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes() SAL_OVERRIDE;

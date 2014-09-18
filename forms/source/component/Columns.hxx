@@ -50,15 +50,15 @@ class OGridColumn   :public ::comphelper::OBaseMutex
 {
 protected:
 // [properties]
-    ::com::sun::star::uno::Any  m_aWidth;                   // column width
-    ::com::sun::star::uno::Any  m_aAlign;                   // column alignment
-    ::com::sun::star::uno::Any  m_aHidden;                  // column hidden?
+    ::com::sun::star::uno::Any  m_aWidth;  // column width
+    ::com::sun::star::uno::Any  m_aAlign;  // column alignment
+    ::com::sun::star::uno::Any  m_aHidden; // column hidden?
 // [properties]
 
     OUString                 m_aModelName;
 
 // [properties]
-    OUString             m_aLabel;                   // Column name
+    OUString                m_aLabel;      // Column name
 // [properties]
 
 public:

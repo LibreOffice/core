@@ -127,7 +127,7 @@ Any SAL_CALL OComboBoxModel::queryAggregation(const Type& _rType) throw (Runtime
 
 OComboBoxModel::OComboBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_COMBOBOX, FRM_SUN_CONTROL_COMBOBOX, true, true, true )
-                    // use the old control name for compytibility reasons
+     // use the old control name for compatibility reasons
     ,OEntryListHelper( (OControlModel&)*this )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
     ,m_aListRowSet()
@@ -248,7 +248,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
         {
             ControlModelLock aLock( *this );
             setNewStringItemList( _rValue, aLock );
-                // TODO: this is bogus. setNewStringItemList expects a guard which has the *only*
+                // FIXME: this is bogus. setNewStringItemList expects a guard which has the *only*
                 // lock to the mutex, but setFastPropertyValue_NoBroadcast is already called with
                 // a lock - so we effectively has two locks here, of which setNewStringItemList can
                 // only control one.
@@ -336,7 +336,7 @@ void SAL_CALL OComboBoxModel::write(const Reference<css::io::XObjectOutputStream
     // Version 0x0005:  HelpText
     _rxOutStream->writeShort(0x0006);
 
-    // Maskierung fuer any
+    // Mask for Any
     sal_uInt16 nAnyMask = 0;
     if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
         nAnyMask |= BOUNDCOLUMN;
@@ -396,7 +396,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
         return;
     }
 
-    // Masking for any
+    // Mask for Any
     sal_uInt16 nAnyMask;
     _rxInStream >> nAnyMask;
 
@@ -729,8 +729,8 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
     if ( bModified )
     {
         if  (   !aNewValue.hasValue()
-            ||  (   sNewValue.isEmpty()         // an empty string
-                &&  m_bEmptyIsNull              // which should be interpreted as NULL
+            ||  (   sNewValue.isEmpty() // an empty string
+                &&  m_bEmptyIsNull      // which should be interpreted as NULL
                 )
             )
         {
@@ -760,7 +760,7 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
 
     // add the new value to the list
     bool bAddToList = bModified && !_bPostReset;
-        // (only if this is not the "commit" triggered by a "reset")
+    // (only if this is not the "commit" triggered by a "reset")
 
     if ( bAddToList )
     {
