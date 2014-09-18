@@ -85,7 +85,7 @@ static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
 */
-static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& rLocale )
+static vcl::Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& rLocale )
 {
     psp::FastPrintFontInfo aInfo;
     QFontInfo qFontInfo( rQFont );
@@ -145,7 +145,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
         nPointHeight = rQFont.pointSize();
 
     // Create the font
-    Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
+    vcl::Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
         aFont.SetWeight( aInfo.m_eWeight );
     if( aInfo.m_eWidth != WIDTH_DONTKNOW )
@@ -189,7 +189,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "titleFont";
         if ( aGroup.hasKey( pKey ) )
         {
-            Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILanguageTag().getLocale() );
+            vcl::Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILanguageTag().getLocale() );
             style.SetTitleFont( aFont );
             bSetTitleFont = true;
         }
@@ -204,7 +204,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "toolbarFont";
         if ( aGroup.hasKey( pKey ) )
         {
-            Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILanguageTag().getLocale() );
+            vcl::Font aFont = toFont( aGroup.readEntry( pKey, QFont() ), rSettings.GetUILanguageTag().getLocale() );
             style.SetToolFont( aFont );
         }
     }
@@ -260,7 +260,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetHelpTextColor( toColor( QToolTip::palette().color( QPalette::Active, QPalette::ToolTipText )));
 
     // Font
-    Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
+    vcl::Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
 
     style.SetAppFont( aFont );
 
