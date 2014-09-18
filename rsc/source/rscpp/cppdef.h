@@ -101,9 +101,6 @@
 
 #if     TARGET == SYS_UNIX
 #define SYSTEM                  "unix"
-#ifdef  vax
-#define MACHINE                 "vax"
-#endif
 #endif
 
 /*
@@ -253,11 +250,7 @@
 #ifdef  decus
 #define FILE_LOCAL              static
 #else
-#ifdef  vax11c
-#define FILE_LOCAL              static
-#else
 #define FILE_LOCAL                              /* Others are global    */
-#endif
 #endif
 #endif
 
