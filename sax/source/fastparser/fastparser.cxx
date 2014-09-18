@@ -781,6 +781,9 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
     Entity entity( maData );
     entity.maStructSource = maStructSource;
 
+    if( !entity.mxTokenHandler.is() )
+        throw SAXException("No token handler, use setTokenHandler()", Reference< XInterface >(), Any() );
+
     if( !entity.maStructSource.aInputStream.is() )
         throw SAXException("No input source", Reference< XInterface >(), Any() );
 
