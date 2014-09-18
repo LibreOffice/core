@@ -18030,7 +18030,10 @@
     <resource name="CT_SdtContentRun" resource="Stream"/>
     <resource name="CT_SdtContentBlock" resource="Stream"/>
     <resource name="CT_SdtContentRow" resource="Stream"/>
-    <resource name="CT_SdtContentCell" resource="Stream"/>
+    <resource name="CT_SdtContentCell" resource="Stream">
+      <action name="start" action="startSdt"/>
+      <action name="end" action="endSdt"/>
+    </resource>
     <resource name="CT_SdtBlock" resource="Stream">
       <element name="sdtPr" tokenid="ooxml:CT_SdtBlock_sdtPr"/>
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtBlock_sdtEndPr"/>

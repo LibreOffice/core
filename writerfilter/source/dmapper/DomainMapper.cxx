@@ -2949,10 +2949,17 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
         m_pImpl->setSdtEndDeferred(false);
     }
 
+    bool bNewLine = len == 1 && (sText[0] == 0x0d || sText[0] == 0x07);
     if (!m_pImpl->m_pSdtHelper->getDropDownItems().empty())
     {
-        m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
-        return;
+        if (bNewLine)
+            // Dropdown control has single-line texts, so in case of newline, create the control.
+            m_pImpl->m_pSdtHelper->createDropDownControl();
+        else
+        {
+            m_pImpl->m_pSdtHelper->getSdtTexts().append(sText);
+            return;
+        }
     }
     // Form controls are not allowed in headers / footers; see sw::DocumentContentOperationsManager::InsertDrawObj()
     else if (!m_pImpl->m_pSdtHelper->getDateFormat().isEmpty() && !IsInHeaderFooter())
@@ -3005,7 +3012,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         m_pImpl->getTableManager().utext(data_, len);
 
-        if(len == 1 && (sText[0] == 0x0d || sText[0] == 0x07))
+        if (bNewLine)
         {
             if (m_pImpl->m_bIgnoreNextPara)
             {
