@@ -744,12 +744,12 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException, std
 
 sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    return moveImpl(IResultSetHelper::ABSOLUTE,row,true);
+    return moveImpl(IResultSetHelper::ABSOLUTE1,row,true);
 }
 
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
-    return moveImpl(IResultSetHelper::RELATIVE,row,true);
+    return moveImpl(IResultSetHelper::RELATIVE1,row,true);
 }
 
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
@@ -1669,10 +1669,10 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
         case IResultSetHelper::LAST:
             nFetchOrientation = SQL_FETCH_LAST;
             break;
-        case IResultSetHelper::RELATIVE:
+        case IResultSetHelper::RELATIVE1:
             nFetchOrientation = SQL_FETCH_RELATIVE;
             break;
-        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::ABSOLUTE1:
             nFetchOrientation = SQL_FETCH_ABSOLUTE;
             break;
         case IResultSetHelper::BOOKMARK: // special case here because we are only called with position numbers
@@ -1721,10 +1721,10 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
             case IResultSetHelper::LAST:
                 m_bEOF = true;
                 break;
-            case IResultSetHelper::RELATIVE:
+            case IResultSetHelper::RELATIVE1:
                 m_nRowPos += _nOffset;
                 break;
-            case IResultSetHelper::ABSOLUTE:
+            case IResultSetHelper::ABSOLUTE1:
             case IResultSetHelper::BOOKMARK: // special case here because we are only called with position numbers
                 m_nRowPos = _nOffset;
                 break;

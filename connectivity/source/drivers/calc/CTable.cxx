@@ -739,11 +739,11 @@ bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 n
         case IResultSetHelper::LAST:
             m_nFilePos = nNumberOfRecords;
             break;
-        case IResultSetHelper::RELATIVE:
+        case IResultSetHelper::RELATIVE1:
             m_nFilePos = (((sal_Int32)m_nFilePos) + nOffset < 0) ? 0L
                             : (sal_uInt32)(((sal_Int32)m_nFilePos) + nOffset);
             break;
-        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::ABSOLUTE1:
         case IResultSetHelper::BOOKMARK:
             m_nFilePos = (sal_uInt32)nOffset;
             break;
@@ -769,8 +769,8 @@ Error:
             break;
         case IResultSetHelper::LAST:
         case IResultSetHelper::NEXT:
-        case IResultSetHelper::ABSOLUTE:
-        case IResultSetHelper::RELATIVE:
+        case IResultSetHelper::ABSOLUTE1:
+        case IResultSetHelper::RELATIVE1:
             if (nOffset > 0)
                 m_nFilePos = nNumberOfRecords + 1;
             else if (nOffset < 0)

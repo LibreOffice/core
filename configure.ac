@@ -2773,7 +2773,6 @@ if test $_os = Darwin; then
         ;;
     esac
 
-    # If no CC and CXX environment vars, try to guess where the compiler is
     LIBTOOL=libtool
     INSTALL_NAME_TOOL=install_name_tool
     if test -z "$save_CC"; then
@@ -8611,8 +8610,19 @@ if test "$with_system_odbc" = "yes" ; then
     AC_MSG_RESULT([external])
     SYSTEM_ODBC_HEADERS=TRUE
 
-    AC_CHECK_HEADER(sqlext.h, [],
-      [AC_MSG_ERROR(odbc not found. install odbc)], [])
+    if test "$build_os" = "cygwin"; then
+        save_CPPFLAGS=$CPPFLAGS
+        find_winsdk
+        PathFormat "$winsdktest"
+        CPPFLAGS="$CPPFLAGS -I$formatted_path/include/um -I$formatted_path/include -I$formatted_path/include/shared"
+        AC_CHECK_HEADER(sqlext.h, [],
+            [AC_MSG_ERROR(odbc not found. install odbc)],
+	        [#include <windows.h>])
+        CPPFLAGS=$save_CPPFLAGS
+    else
+        AC_CHECK_HEADER(sqlext.h, [],
+            [AC_MSG_ERROR(odbc not found. install odbc)],[])
+    fi
 elif test "$enable_database_connectivity" != yes; then
     AC_MSG_RESULT([none])
 else

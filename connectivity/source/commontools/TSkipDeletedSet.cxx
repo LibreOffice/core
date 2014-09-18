@@ -45,7 +45,7 @@ bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, s
 
     switch (_eCursorPosition)
     {
-        case IResultSetHelper::ABSOLUTE:
+        case IResultSetHelper::ABSOLUTE1:
             return moveAbsolute(_nOffset,_bRetrieveData);
         case IResultSetHelper::FIRST:                   // set the movement when positioning failed
             eDelPosition = IResultSetHelper::NEXT;
@@ -55,7 +55,7 @@ bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, s
             eDelPosition = IResultSetHelper::PRIOR; // last row is invalid so position before
             nDelOffset = 1;
             break;
-        case IResultSetHelper::RELATIVE:
+        case IResultSetHelper::RELATIVE1:
             eDelPosition = (_nOffset >= 0) ? IResultSetHelper::NEXT : IResultSetHelper::PRIOR;
             break;
         default:
@@ -107,7 +107,7 @@ bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, s
         }
         return bDataFound;
     }
-    else if (_eCursorPosition != IResultSetHelper::RELATIVE)
+    else if (_eCursorPosition != IResultSetHelper::RELATIVE1)
     {
         bDataFound = m_pHelper->move(_eCursorPosition, _nOffset, _bRetrieveData);
         bDone = bDataFound && (m_bDeletedVisible || !m_pHelper->isRowDeleted());
@@ -129,7 +129,7 @@ bool OSkipDeletedSet::skipDeleted(IResultSetHelper::Movement _eCursorPosition, s
     while (bDataFound && !bDone)            // Iterate until we are at the valid set
     {
         bDataFound = m_pHelper->move(eDelPosition, 1, _bRetrieveData);
-        if (_eCursorPosition != IResultSetHelper::RELATIVE)
+        if (_eCursorPosition != IResultSetHelper::RELATIVE1)
             bDone = bDataFound && (m_bDeletedVisible || !m_pHelper->isRowDeleted());
         else if (bDataFound && (m_bDeletedVisible || !m_pHelper->isRowDeleted()))
         {

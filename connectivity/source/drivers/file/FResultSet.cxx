@@ -434,14 +434,14 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE,row,true) : sal_False;
+    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::ABSOLUTE1,row,true) : sal_False;
 }
 
 sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE,row,true) : sal_False;
+    return m_pTable ? m_aSkipDeletedSet.skipDeleted(IResultSetHelper::RELATIVE1,row,true) : sal_False;
 }
 
 sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
@@ -867,7 +867,7 @@ again:
             }
             else if (eCursorPosition == IResultSetHelper::FIRST ||
                      eCursorPosition == IResultSetHelper::NEXT ||
-                     eCursorPosition == IResultSetHelper::ABSOLUTE)
+                     eCursorPosition == IResultSetHelper::ABSOLUTE1)
             {
                 eCursorPosition = IResultSetHelper::NEXT;
                 nOffset = 1;
@@ -878,7 +878,7 @@ again:
                 eCursorPosition = IResultSetHelper::PRIOR;
                 nOffset = 1;
             }
-            else if (eCursorPosition == IResultSetHelper::RELATIVE)
+            else if (eCursorPosition == IResultSetHelper::RELATIVE1)
             {
                 eCursorPosition = (nOffset >= 0) ? IResultSetHelper::NEXT : IResultSetHelper::PRIOR;
             }
@@ -974,10 +974,10 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
                 case IResultSetHelper::LAST:
                     m_nRowPos = m_pFileSet->get().size() - 1;
                     break;
-                case IResultSetHelper::RELATIVE:
+                case IResultSetHelper::RELATIVE1:
                     m_nRowPos += nOffset;
                     break;
-                case IResultSetHelper::ABSOLUTE:
+                case IResultSetHelper::ABSOLUTE1:
                 case IResultSetHelper::BOOKMARK:
                     if ( m_nRowPos == (nOffset -1) )
                         return true;
@@ -1014,7 +1014,7 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
                     // set first on the last known row
                     if (m_pFileSet->get().empty())
                     {
-                        m_pTable->seekRow(IResultSetHelper::ABSOLUTE, 0, m_nFilePos);
+                        m_pTable->seekRow(IResultSetHelper::ABSOLUTE1, 0, m_nFilePos);
                     }
                     else
                     {
@@ -1084,10 +1084,10 @@ bool OResultSet::Move(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOff
             case IResultSetHelper::LAST:
                 m_nRowPos = 0;
                 break;
-            case IResultSetHelper::RELATIVE:
+            case IResultSetHelper::RELATIVE1:
                 m_nRowPos += nOffset;
                 break;
-            case IResultSetHelper::ABSOLUTE:
+            case IResultSetHelper::ABSOLUTE1:
             case IResultSetHelper::BOOKMARK:
                 m_nRowPos = nOffset - 1;
                 break;
@@ -1135,8 +1135,8 @@ Error:
                 break;
             case IResultSetHelper::LAST:
             case IResultSetHelper::NEXT:
-            case IResultSetHelper::ABSOLUTE:
-            case IResultSetHelper::RELATIVE:
+            case IResultSetHelper::ABSOLUTE1:
+            case IResultSetHelper::RELATIVE1:
                 if (nOffset > 0)
                     m_nRowPos = m_pFileSet.is() ? (sal_Int32)m_pFileSet->get().size() : -1;
                 else if (nOffset < 0)
