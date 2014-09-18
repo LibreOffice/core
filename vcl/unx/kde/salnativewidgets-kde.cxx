@@ -1755,7 +1755,7 @@ static Color readColor( KConfig *pConfig, const char *pKey )
 
     Mostly grabbed from the Gtk+ vclplug (salnativewidgets-gtk.cxx).
 */
-static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& rLocale )
+static vcl::Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& rLocale )
 {
     psp::FastPrintFontInfo aInfo;
     QFontInfo qFontInfo( rQFont );
@@ -1815,7 +1815,7 @@ static Font toFont( const QFont &rQFont, const ::com::sun::star::lang::Locale& r
         nPointHeight = rQFont.pointSize();
 
     // Create the font
-    Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
+    vcl::Font aFont( aInfo.m_aFamilyName, Size( 0, nPointHeight ) );
     if( aInfo.m_eWeight != WEIGHT_DONTKNOW )
         aFont.SetWeight( aInfo.m_eWeight );
     if( aInfo.m_eWidth != WIDTH_DONTKNOW )
@@ -1871,7 +1871,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         pKey = "titleFont";
         if ( pConfig->hasKey( pKey ) )
         {
-            Font aFont = toFont( pConfig->readFontEntry( pKey ), rSettings.GetUILanguageTag().getLocale() );
+            vcl::Font aFont = toFont( pConfig->readFontEntry( pKey ), rSettings.GetUILanguageTag().getLocale() );
             aStyleSettings.SetTitleFont( aFont );
             bSetTitleFont = true;
         }
@@ -1932,7 +1932,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetHighlightTextColor( toColor( qColorGroup.highlightedText() ) );
 
     // Font
-    Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
+    vcl::Font aFont = toFont( QApplication::font(), rSettings.GetUILanguageTag().getLocale() );
 
     aStyleSettings.SetAppFont( aFont );
     aStyleSettings.SetHelpFont( aFont );
