@@ -28,7 +28,7 @@
 
 #include <string.h>
 
-#if (OSL_DEBUG_LEVEL > 1) && (HOST == SYS_VMS || HOST == SYS_UNIX)
+#if (OSL_DEBUG_LEVEL > 1) && (HOST == SYS_UNIX)
 #include <signal.h>
 #endif
 
@@ -97,14 +97,6 @@ void setincdirs()
 #define MAXINCLUDE      (NINCLUDE - 1 - IS_INCLUDE)
 #endif
 
-#if HOST == SYS_VMS
-        extern char     *getenv();
-
-        if (getenv("C$LIBRARY") != NULL)
-            *incend++ = "C$LIBRARY:";
-        *incend++ = "SYS$LIBRARY:";
-#define MAXINCLUDE      (NINCLUDE - 2 - IS_INCLUDE)
-#endif
 
 #if HOST == SYS_RSX
         extern int      $$rsts;                 /* TRUE on RSTS/E       */
@@ -294,7 +286,7 @@ dooptions(int argc, char** argv)
 #if OSL_DEBUG_LEVEL > 1
                 case 'X':                       /* Debug                */
                     debug = (isdigit(*ap)) ? atoi(ap) : 1;
-#if (HOST == SYS_VMS || HOST == SYS_UNIX)
+#if (HOST == SYS_UNIX)
                     signal(SIGINT, (void (*)(int)) abort); /* Trap "interrupt" */
 #endif
                     fprintf(stderr, "Debug set to %d\n", debug);
@@ -475,92 +467,6 @@ void initdefines()
         }
 }
 
-#if HOST == SYS_VMS
-/*
- * getredirection() is intended to aid in porting C programs
- * to VMS (Vax-11 C) which does not support '>' and '<'
- * I/O redirection.  With suitable modification, it may
- * useful for other portability problems as well.
- */
 
-int
-getredirection(argc, argv)
-int             argc;
-char            **argv;
-/*
- * Process vms redirection arg's.  Exit if any error is seen.
- * If getredirection() processes an argument, it is erased
- * from the vector.  getredirection() returns a new argc value.
- *
- * Warning: do not try to simplify the code for vms.  The code
- * presupposes that getredirection() is called before any data is
- * read from stdin or written to stdout.
- *
- * Normal usage is as follows:
- *
- *      main(argc, argv)
- *      int             argc;
- *      char            *argv[];
- *      {
- *              argc = getredirection(argc, argv);
- *      }
- */
-{
-        char                    *ap;    /* Argument pointer     */
-        int                     i;      /* argv[] index         */
-        int                     j;      /* Output index         */
-        int                     file;   /* File_descriptor      */
-        extern int              errno;  /* Last vms i/o error   */
-
-        for (j = i = 1; i < argc; i++) {   /* Do all arguments  */
-            switch (*(ap = argv[i])) {
-            case '<':                   /* <file                */
-                if (freopen(++ap, "r", stdin) == NULL) {
-                    perror(ap);         /* Can't find file      */
-                    exit(errno);        /* Is a fatal error     */
-                }
-                break;
-
-            case '>':                   /* >file or >>file      */
-                if (*++ap == '>') {     /* >>file               */
-                    /*
-                     * If the file exists, and is writable by us,
-                     * call freopen to append to the file (using the
-                     * file's current attributes).  Otherwise, create
-                     * a new file with "vanilla" attributes as if the
-                     * argument was given as ">filename".
-                     * access(name, 2) returns zero if we can write on
-                     * the specified file.
-                     */
-                    if (access(++ap, 2) == 0) {
-                        if (freopen(ap, "a", stdout) != NULL)
-                            break;      /* Exit case statement  */
-                        perror(ap);     /* Error, can't append  */
-                        exit(errno);    /* After access test    */
-                    }                   /* If file accessible   */
-                }
-                /*
-                 * On vms, we want to create the file using "standard"
-                 * record attributes.  creat(...) creates the file
-                 * using the caller's default protection mask and
-                 * "variable length, implied carriage return"
-                 * attributes. dup2() associates the file with stdout.
-                 */
-                if ((file = creat(ap, 0, "rat=cr", "rfm=var")) == -1
-                 || dup2(file, fileno(stdout)) == -1) {
-                    perror(ap);         /* Can't create file    */
-                    exit(errno);        /* is a fatal error     */
-                }                       /* If '>' creation      */
-                break;                  /* Exit case test       */
-
-            default:
-                argv[j++] = ap;         /* Not a redirector     */
-                break;                  /* Exit case test       */
-            }
-        }                               /* For all arguments    */
-        argv[j] = NULL;                 /* Terminate argv[]     */
-        return (j);                     /* Return new argc      */
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -35,7 +35,6 @@
  */
 #define SYS_UNKNOWN             0
 #define SYS_UNIX                1
-#define SYS_VMS                 2
 #define SYS_RSX                 3
 #define SYS_RT11                4
 #define SYS_LATTICE             5
@@ -46,15 +45,11 @@
 #ifdef  unix
 #define HOST                    SYS_UNIX
 #else
-#ifdef  vms
-#define HOST                    SYS_VMS
-#else
 #ifdef  rsx
 #define HOST                    SYS_RSX
 #else
 #ifdef  rt11
 #define HOST                    SYS_RT11
-#endif
 #endif
 #endif
 #endif
@@ -128,12 +123,6 @@
 #if TARGET == SYS_ONYX
 #define MACHINE                 "z8000"
 #define SYSTEM                  "unix"
-#endif
-
-#if TARGET == SYS_VMS
-#define MACHINE                 "vax"
-#define SYSTEM                  "vms"
-#define COMPILER                "vax11c"
 #endif
 
 #if TARGET == SYS_RSX
@@ -235,7 +224,7 @@
 /*
  * OK_DOLLAR enables use of $ as a valid "letter" in identifiers.
  * This is a permitted extension to the Ansi Standard and is required
- * for e.g., VMS, RSX-11M, etc.   It should be set FALSE if cpp is
+ * for e.g., RSX-11M, etc.   It should be set FALSE if cpp is
  * used to preprocess assembler source on Unix systems.  OLD_PREPROCESSOR
  * sets OK_DOLLAR FALSE for that reason.
  */

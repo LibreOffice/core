@@ -250,9 +250,6 @@ int MAIN(int argc, char** argv)
     InitCpp5();
     InitCpp6();
 
-#if HOST == SYS_VMS
-    argc = getredirection(argc, argv);      /* vms >file and <file  */
-#endif
     initdefines();                          /* O.S. specific def's  */
     if ( argv[argc-1][0] == '@' )
     {
@@ -275,16 +272,8 @@ int MAIN(int argc, char** argv)
              */
             if (!streq(useargv[3], "-"))
             {
-#if HOST == SYS_VMS
-                /*
-                 * On vms, reopen stdout with "vanilla rms" attributes.
-                 */
-                if ((i = creat(useargv[3], 0, "rat=cr", "rfm=var")) == -1
-                    || dup2(i, fileno(stdout)) == -1)
-#else
                 pDefOut = fopen( useargv[3], "w" );
                 if( pDefOut == NULL )
-#endif
                 {
                     perror(useargv[3]);
                     cerror("Can't open output file \"%s\"", useargv[3]);
@@ -299,16 +288,8 @@ int MAIN(int argc, char** argv)
          */
         if (!streq(useargv[2], "-"))
         {
-#if HOST == SYS_VMS
-            /*
-             * On vms, reopen stdout with "vanilla rms" attributes.
-             */
-            if ((i = creat(useargv[2], 0, "rat=cr", "rfm=var")) == -1
-                || dup2(i, fileno(stdout)) == -1)
-#else
             pCppOut = fopen( useargv[2], "w" );
             if( pCppOut == NULL )
-#endif
             {
                 perror(useargv[2]);
                 cerror("Can't open output file \"%s\"", useargv[2]);

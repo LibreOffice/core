@@ -21,17 +21,6 @@
 #include <ctype.h>
 #include "cppdef.h"
 #include "cpp.h"
-#if HOST == SYS_VMS
-/*
- * Include the rms stuff.  (We can't just include rms.h as it uses the
- * VaxC-specific library include syntax that Decus CPP doesn't support.
- * By including things by hand, we can CPP ourself.)
- */
-#include <nam.h>
-#include <fab.h>
-#include <rab.h>
-#include <rmsdef.h>
-#endif
 
 /*
  * Generate (by hand-inspection) a set of unique values for each control
@@ -372,9 +361,6 @@ void doinclude()
 {
         int            c;
         int            delim;
-#if HOST == SYS_VMS
-        char                    def_filename[NAM$C_MAXRSS + 1];
-#endif
 
         delim = macroid(skipws());
         if (delim != '<' && delim != '"')
@@ -400,20 +386,8 @@ void doinclude()
 #endif
         *workp = EOS;                   /* Terminate filename           */
         instring = FALSE;
-#if HOST == SYS_VMS
-        /*
-         * Assume the default .h filetype.
-         */
-        if (!vmsparse(work, ".H", def_filename)) {
-            perror(work);               /* Oops.                        */
-            goto incerr;
-        }
-        else if (openinclude(def_filename, (delim == '"')))
-            return;
-#else
         if (openinclude(work, (delim == '"')))
             return;
-#endif
         /*
          * No sense continuing if #include file isn't there.
          */
@@ -435,11 +409,6 @@ openinclude(char* filename, int searchlocal)
  */
 {
         char           **incptr;
-#if HOST == SYS_VMS
-#if NFWORK < (NAM$C_MAXRSS + 1)
-    << error, NFWORK is not greater than NAM$C_MAXRSS >>
-#endif
-#endif
         char                    tmpname[NFWORK]; /* Filename work area   */
 
         if (searchlocal) {
@@ -518,14 +487,6 @@ hasdirectory(char* source, char* result)
             return (TRUE);
         }
 #else
-#if HOST == SYS_VMS
-        if (vmsparse(source, NULLST, result)
-         && result[0] != EOS)
-            return (TRUE);
-        else {
-            return (FALSE);
-        }
-#else
         /*
          * Random DEC operating system (RSX, RT11, RSTS/E)
          */
@@ -540,78 +501,8 @@ hasdirectory(char* source, char* result)
             return (TRUE);
         }
 #endif
-#endif
 }
 
-#if HOST == SYS_VMS
 
-/*
- * EXP_DEV is set if a device was specified, EXP_DIR if a directory
- * is specified.  (Both set indicate a file-logical, but EXP_DEV
- * would be set by itself if you are reading, say, SYS$INPUT:)
- */
-#define DEVDIR (NAM$M_EXP_DEV | NAM$M_EXP_DIR)
-
-FILE_LOCAL int
-vmsparse(source, defstring, result)
-char            *source;
-char            *defstring;     /* non-NULL -> default string.          */
-char            *result;        /* Size is at least NAM$C_MAXRSS + 1    */
-/*
- * Parse the source string, applying the default (properly, using
- * the system parse routine), storing it in result.
- * TRUE if it parsed, FALSE on error.
- *
- * If defstring is NULL, there are no defaults and result gets
- * (just) the node::[directory] part of the string (possibly "")
- */
-{
-        struct FAB      fab = cc$rms_fab;       /* File access block    */
-        struct NAM      nam = cc$rms_nam;       /* File name block      */
-        char            fullname[NAM$C_MAXRSS + 1];
-        char            *rp;                    /* Result pointer       */
-
-        fab.fab$l_nam = &nam;                   /* fab -> nam           */
-        fab.fab$l_fna = source;                 /* Source filename      */
-        fab.fab$b_fns = strlen(source);         /* Size of source       */
-        fab.fab$l_dna = defstring;              /* Default string       */
-        if (defstring != NULLST)
-            fab.fab$b_dns = strlen(defstring);  /* Size of default      */
-        nam.nam$l_esa = fullname;               /* Expanded filename    */
-        nam.nam$b_ess = NAM$C_MAXRSS;           /* Expanded name size   */
-        if (sys$parse(&fab) == RMS$_NORMAL) {   /* Parse away           */
-            fullname[nam.nam$b_esl] = EOS;      /* Terminate string     */
-            result[0] = EOS;                    /* Just in case         */
-            rp = &result[0];
-            /*
-             * Remove stuff added implicitly, accepting node names and
-             * dev:[directory] strings (but not process-permanent files).
-             */
-            if ((nam.nam$l_fnb & NAM$M_PPF) == 0) {
-                if ((nam.nam$l_fnb & NAM$M_NODE) != 0) {
-                    strncpy(result, nam.nam$l_node, nam.nam$b_node);
-                    rp += nam.nam$b_node;
-                    *rp = EOS;
-                }
-                if ((nam.nam$l_fnb & DEVDIR) == DEVDIR) {
-                    strncpy(rp, nam.nam$l_dev, nam.nam$b_dev + nam.nam$b_dir);
-                    rp += nam.nam$b_dev + nam.nam$b_dir;
-                    *rp = EOS;
-                }
-            }
-            if (defstring != NULLST) {
-                strncpy(rp, nam.nam$l_name, nam.nam$b_name + nam.nam$b_type);
-                rp += nam.nam$b_name + nam.nam$b_type;
-                *rp = EOS;
-                if ((nam.nam$l_fnb & NAM$M_EXP_VER) != 0) {
-                    strncpy(rp, nam.nam$l_ver, nam.nam$b_ver);
-                    rp[nam.nam$b_ver] = EOS;
-                }
-            }
-            return (TRUE);
-        }
-        return (FALSE);
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

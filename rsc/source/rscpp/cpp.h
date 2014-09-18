@@ -221,17 +221,11 @@ typedef struct sizes {
 #endif
 
 /*
- * Error codes.  VMS uses system definitions.
+ * Error codes.
  * Decus C codes are defined in stdio.h.
  * Others are cooked to order.
  */
 
-#if HOST == SYS_VMS
-#include <ssdef.h>
-#include <stsdef.h>
-#define IO_NORMAL       (SS$_NORMAL | STS$M_INHIB_MSG)
-#define IO_ERROR        SS$_ABORT
-#endif
 /*
  * Note: IO_NORMAL and IO_ERROR are defined in the Decus C stdio.h file
  */
