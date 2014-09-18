@@ -74,6 +74,8 @@ public class LOKitThread extends Thread {
 
         Log.i(LOGTAG, "tilerender rect: " + rect);
 
+        long start = System.currentTimeMillis();
+
         ArrayList<SubTile> removeTiles = new ArrayList<SubTile>();
         for (SubTile tile : layerClient.getTiles()) {
             Rect tileRect = new Rect(tile.x, tile.y, tile.x + TILE_SIZE, tile.y + TILE_SIZE);
@@ -82,8 +84,11 @@ public class LOKitThread extends Thread {
                 removeTiles.add(tile);
             }
         }
+        Log.i(LOGTAG, "TileRendering Remove: " + (System.currentTimeMillis() - start));
 
         layerClient.getTiles().removeAll(removeTiles);
+
+        Log.i(LOGTAG, "TileRendering Clear: " + (System.currentTimeMillis() - start));
 
         for (int y = rect.top; y < rect.bottom; y += TILE_SIZE) {
             for (int x = rect.left; x < rect.right; x += TILE_SIZE) {
@@ -105,6 +110,8 @@ public class LOKitThread extends Thread {
                 }
             }
         }
+
+        Log.i(LOGTAG, "TileRendering Add: " + (System.currentTimeMillis() - start));
 
         layerClient.endDrawing();
         Log.i(LOGTAG, "tilerender end draw");
