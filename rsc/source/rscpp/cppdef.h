@@ -35,7 +35,6 @@
  */
 #define SYS_UNKNOWN             0
 #define SYS_UNIX                1
-#define SYS_ONYX                6
 #define SYS_68000               7
 
 #ifndef HOST
@@ -100,11 +99,6 @@
  *              which is to be searched *before* the operating-system
  *              specific directories.
  */
-
-#if TARGET == SYS_ONYX
-#define MACHINE                 "z8000"
-#define SYSTEM                  "unix"
-#endif
 
 #if TARGET == SYS_68000 || defined(M68000) || defined(m68000) || defined(m68k)
 /*
