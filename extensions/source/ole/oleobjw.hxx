@@ -53,9 +53,9 @@ namespace ole_adapter
 
 
 
-typedef boost::unordered_map<OUString, pair<DISPID, unsigned short>, hashOUString_Impl, equalOUString_Impl> DispIdMap;
+typedef boost::unordered_map<OUString, pair<DISPID, unsigned short>, OUStringHash> DispIdMap;
 
-typedef boost::unordered_multimap<OUString, unsigned int, hashOUString_Impl, equalOUString_Impl> TLBFuncIndexMap;
+typedef boost::unordered_multimap<OUString, unsigned int, OUStringHash> TLBFuncIndexMap;
 
 // This class wraps an IDispatch and maps XInvocation calls to IDispatch calls on the wrapped object.
 // If m_TypeDescription is set then this class represents an UNO interface implemented in a COM component.
