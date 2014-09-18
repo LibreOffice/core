@@ -98,16 +98,6 @@ void setincdirs()
 #endif
 
 
-#if HOST == SYS_RT11
-        extern int      $$rsts;                 /* RSTS/E emulation?    */
-
-        if ($$rsts)
-            *incend++ = "SY:@";                 /* User-defined account */
-        *incend++ = "C:";                       /* Decus-C library disk */
-        *incend++ = "SY:";                      /* System (boot) disk   */
-#define MAXINCLUDE      (NINCLUDE - 3 - IS_INCLUDE)
-#endif
-
 #if HOST == SYS_UNKNOWN
 /*
  * Kontext: GenMake

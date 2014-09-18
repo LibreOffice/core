@@ -35,7 +35,6 @@
  */
 #define SYS_UNKNOWN             0
 #define SYS_UNIX                1
-#define SYS_RT11                4
 #define SYS_LATTICE             5
 #define SYS_ONYX                6
 #define SYS_68000               7
@@ -44,9 +43,6 @@
 #ifdef  unix
 #define HOST                    SYS_UNIX
 #else
-#ifdef  rt11
-#define HOST                    SYS_RT11
-#endif
 #endif
 #endif
 
@@ -118,12 +114,6 @@
 #if TARGET == SYS_ONYX
 #define MACHINE                 "z8000"
 #define SYSTEM                  "unix"
-#endif
-
-#if TARGET == SYS_RT11
-#define MACHINE                 "pdp11"
-#define SYSTEM                  "rt11"
-#define COMPILER                "decus"
 #endif
 
 #if TARGET == SYS_68000 || defined(M68000) || defined(m68000) || defined(m68k)

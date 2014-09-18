@@ -488,7 +488,7 @@ hasdirectory(char* source, char* result)
         }
 #else
         /*
-         * Random DEC operating system (RT11, RSTS/E)
+         * Random DEC operating system (RSTS/E)
          */
         char           *tp;
 
