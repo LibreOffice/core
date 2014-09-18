@@ -1,5 +1,6 @@
 package org.libreoffice;
 
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
@@ -22,6 +23,7 @@ public class LOKitThread extends Thread {
     private ViewportMetrics mViewportMetrics;
     private String mInputFile;
     private Rect mOldRect;
+    private boolean mCheckboardImageSet = false;
 
     LOKitThread(String inputFile) {
         mInputFile = inputFile;
@@ -115,6 +117,7 @@ public class LOKitThread extends Thread {
 
         layerClient.endDrawing();
         Log.i(LOGTAG, "tilerender end draw");
+
         return true;
     }
 
@@ -128,7 +131,22 @@ public class LOKitThread extends Thread {
     private boolean initialize() {
         mApplication = LibreOfficeMainActivity.mAppContext;
         mTileProvider = new LOKitTileProvider(mApplication.getLayerController(), mInputFile);
-        return mTileProvider.isReady();
+        boolean isReady = mTileProvider.isReady();
+        if (isReady)
+        {
+            if (!mCheckboardImageSet) {
+                Log.i(LOGTAG, "Generate thumbnail!");
+                Bitmap bitmap = mTileProvider.thumbnail();
+                Log.i(LOGTAG, "Done generate thumbnail!");
+                if (bitmap != null) {
+                    Log.i(LOGTAG, "Setting checkboard image!");
+                    mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap);
+                    Log.i(LOGTAG, "Done setting checkboard image!!");
+                    mCheckboardImageSet = true;
+                }
+            }
+        }
+        return isReady;
     }
 
     public void run() {
