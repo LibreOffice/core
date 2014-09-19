@@ -50,7 +50,8 @@ void VBATest::testMiscVBAFunctions()
         "dateserial.vb",
         "format.vb",
         "replace.vb",
-        "stringplusdouble.vb"
+        "stringplusdouble.vb",
+        "win32compat.vb"
     };
     OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
     // Some test data expects the uk locale

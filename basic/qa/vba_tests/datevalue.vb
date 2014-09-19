@@ -28,12 +28,12 @@ Function verify_testDateValue() as String
     Dim date1, date2 As Date
     testName = "Test DateValue function"
     date2 = 25246
-    
+
     On Error GoTo errorHandler
-    
+
     date1 = DateValue("February 12, 1969") '2/12/1969
     TestLog_ASSERT date1 = date2, "the return date is: " & date1
-    
+
     date2 = 39468
     date1 = DateValue("21/01/2008") '1/21/2008
     TestLog_ASSERT date1 = date2, "the return date is: " & date1
@@ -61,5 +61,5 @@ Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional tes
         result = result & Chr$(10) & " Failed: " & testMsg
         failCount = failCount + 1
     End If
-    
+
 End Sub

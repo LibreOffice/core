@@ -23,7 +23,7 @@ Function verify_testCDec() as String
     Dim ret As Double
     testName = "Test CDec function"
     On Error GoTo errorHandler
-    
+
     ret = CDec("")
     TestLog_ASSERT ret = 0, "Empty string test:" & ret
 
@@ -82,5 +82,5 @@ Sub TestLog_ASSERT(assertion As Boolean, Optional testId As String, Optional tes
         result = result & Chr$(10) & " Failed: " & testMsg
         failCount = failCount + 1
     End If
-    
+
 End Sub
