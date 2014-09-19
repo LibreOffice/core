@@ -1258,16 +1258,20 @@ bool SwWW8AttrIter::IsRedlineAtEnd( sal_Int32 nEnd ) const
     for( sal_uInt16 nPos = nCurRedlinePos;
         nPos < m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl().size(); ++nPos )
     {
-        const SwPosition* pEnd = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[ nPos ]->End();
-        if( pEnd->nNode != rNd )
+        const SwRangeRedline *pRange = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[nPos];
+        const SwPosition* pEnd = pRange->End();
+        if (pEnd->nNode == rNd)
         {
+            // In word the paragraph end marker is a real character, in writer it is not.
+            if (pEnd->nContent.GetIndex() == nEnd)
+            {
+                // This condition detects if the pseudo-char we will export is affected
+                // by redlining
+                return true;
+            }
+        }
+        else
             break;
-        }
-
-        if( pEnd->nContent.GetIndex() == nEnd )
-        {
-            return true;
-        }
     }
     return false;
 }
