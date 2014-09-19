@@ -109,6 +109,10 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
     else if ( pDialogButton == (AboutDialogButton*)WEBSITE_BUTTON )
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
+#if defined MACOSX && HAVE_FEATURE_MACOSX_SANDBOX
+        sURL += "lofc-mac-app-store/";
+#endif
+
         localizeWebserviceURI(sURL);
     }
 
