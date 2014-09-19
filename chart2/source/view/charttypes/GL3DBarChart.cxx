@@ -538,7 +538,7 @@ GL3DBarChart::GL3DBarChart(
     maDataUpdateStartTime.Seconds = maDataUpdateStartTime.Nanosec = 0;
     maDataUpdateEndTime.Seconds = maDataUpdateEndTime.Nanosec = 0;
 
-    static const char *aBenchMark = getenv("BENCHMARK_MODE");
+    static const char *aBenchMark = getenv("UNLOCK_FPS_MODE");
     if (aBenchMark)
     {
         mbBenchMarkMode = atoi(aBenchMark);
