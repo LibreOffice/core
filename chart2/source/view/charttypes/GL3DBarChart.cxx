@@ -567,6 +567,19 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 {
     SharedResourceAccess(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
+    mnPreSelectBarId = mnSelectBarId;
+    mnSelectBarId -= 10;
+    sal_uInt32 nSelectRow = (mnSelectBarId - SHAPE_START_ID) / ID_STEP / (mnBarsInRow + 1);
+    sal_uInt32 nPreSelectRow = (mnPreSelectBarId - SHAPE_START_ID) / ID_STEP / (mnBarsInRow + 1);
+    if(nSelectRow != nPreSelectRow)
+    {
+        mnSelectBarId = mnPreSelectBarId;
+    }
+    else
+    {
+        mpRenderer->EndClick();
+        mpRenderer->StartClick(mnSelectBarId);
+    }
     mpRenderer->ReleaseShapes();
     // Each series of data flows from left to right, and multiple series are
     // stacked vertically along y axis.
