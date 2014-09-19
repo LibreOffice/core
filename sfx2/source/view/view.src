@@ -88,20 +88,20 @@ String STR_NONCHECKEDOUT_DOCUMENT
 };
 String STR_READONLY_DOCUMENT
 {
-    Text [ en-US ] = "This document is opened in read-only mode." ;
+    Text [ en-US ] = "This document is open in read-only mode." ;
 };
 
 PushButton BT_CHECKOUT
 {
     Pos = MAP_APPFONT( 0 , 0 );
     Size = MAP_APPFONT( 30 , 0 );
-    Text[ en-US ] = "Check out";
+    Text[ en-US ] = "Check Out";
 };
 PushButton BT_READONLY_EDIT
 {
     Pos = MAP_APPFONT( 0 , 0 );
     Size = MAP_APPFONT( 70 , 0 );
-    Text[ en-US ] = "Edit document";
+    Text[ en-US ] = "Edit Document";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
