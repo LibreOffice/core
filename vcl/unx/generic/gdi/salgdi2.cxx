@@ -227,7 +227,7 @@ extern "C"
     {
         Bool bRet = False;
         if( (pEvent->type == GraphicsExpose || pEvent->type == NoExpose) &&
-            pEvent->xnoexpose.drawable == (Drawable)pFrameWindow )
+            pEvent->xnoexpose.drawable == reinterpret_cast<Drawable>(pFrameWindow) )
         {
             bRet = True;
         }
@@ -263,7 +263,7 @@ void X11SalGraphics::YieldGraphicsExpose()
 
     do
     {
-        if( ! GetDisplay()->XIfEventWithTimeout( &aEvent, (XPointer)aWindow, GraphicsExposePredicate ) )
+        if( ! GetDisplay()->XIfEventWithTimeout( &aEvent, reinterpret_cast<XPointer>(aWindow), GraphicsExposePredicate ) )
             // this should not happen at all; still sometimes it happens
             break;
 

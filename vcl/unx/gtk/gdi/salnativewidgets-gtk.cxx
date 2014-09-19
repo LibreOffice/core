@@ -2721,7 +2721,7 @@ bool GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
             // Now the tab itself
             if( nState & CTRL_STATE_ROLLOVER )
-                g_object_set_data(G_OBJECT(pixmap),tabPrelitDataName,(gpointer)TRUE);
+                g_object_set_data(G_OBJECT(pixmap),tabPrelitDataName,reinterpret_cast<gpointer>(TRUE));
 
             gtk_paint_extension( gWidgetData[m_nXScreen].gNotebookWidget->style, pixmap, stateType, GTK_SHADOW_OUT, NULL, gWidgetData[m_nXScreen].gNotebookWidget,
                 (char *)"tab", (tabRect.Left() - pixmapRect.Left()), (tabRect.Top() - pixmapRect.Top()),
@@ -4166,7 +4166,7 @@ static void NWSetWidgetState( GtkWidget* widget, ControlState nState, GtkStateTy
     GTK_WIDGET_UNSET_FLAGS( widget, GTK_HAS_DEFAULT );
     GTK_WIDGET_UNSET_FLAGS( widget, GTK_HAS_FOCUS );
     GTK_WIDGET_UNSET_FLAGS( widget, GTK_SENSITIVE );
-    GTK_WIDGET_SET_FLAGS( widget, gWidgetDefaultFlags[(long)widget] );
+    GTK_WIDGET_SET_FLAGS( widget, gWidgetDefaultFlags[reinterpret_cast<long>(widget)] );
 
     if ( nState & CTRL_STATE_DEFAULT )
         GTK_WIDGET_SET_FLAGS( widget, GTK_HAS_DEFAULT );
@@ -4209,7 +4209,7 @@ static void NWAddWidgetToCacheWindow( GtkWidget* widget, SalX11Screen nScreen )
     gtk_widget_ensure_style( widget );
 
     // Store widget's default flags
-    gWidgetDefaultFlags[ (long)widget ] = GTK_WIDGET_FLAGS( widget );
+    gWidgetDefaultFlags[ reinterpret_cast<long>(widget) ] = GTK_WIDGET_FLAGS( widget );
 }
 
 static void NWEnsureGTKButton( SalX11Screen nScreen )
@@ -4385,7 +4385,7 @@ static void NWEnsureGTKMenubar( SalX11Screen nScreen )
         gtk_widget_realize( gWidgetData[nScreen].gMenuItemMenubarWidget );
         gtk_widget_ensure_style( gWidgetData[nScreen].gMenuItemMenubarWidget );
 
-        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemMenubarWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemMenubarWidget );
+        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemMenubarWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemMenubarWidget );
     }
 }
 
@@ -4425,12 +4425,12 @@ static void NWEnsureGTKMenu( SalX11Screen nScreen )
         gtk_widget_realize( gWidgetData[nScreen].gImageMenuItem );
         gtk_widget_ensure_style( gWidgetData[nScreen].gImageMenuItem );
 
-        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuWidget );
-        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemMenuWidget );
-        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemCheckMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
-        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemRadioMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
-        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gMenuItemSeparatorMenuWidget ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
-        gWidgetDefaultFlags[ (long)gWidgetData[nScreen].gImageMenuItem ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gImageMenuItem );
+        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuWidget );
+        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemMenuWidget );
+        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemCheckMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemCheckMenuWidget );
+        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemRadioMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemRadioMenuWidget );
+        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gMenuItemSeparatorMenuWidget) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gMenuItemSeparatorMenuWidget );
+        gWidgetDefaultFlags[ reinterpret_cast<long>(gWidgetData[nScreen].gImageMenuItem) ] = GTK_WIDGET_FLAGS( gWidgetData[nScreen].gImageMenuItem );
     }
 }
 

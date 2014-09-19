@@ -1708,19 +1708,19 @@ void OKButton::Click()
         {
             if ( pParent->IsDialog() )
             {
-                if ( ((Dialog*)pParent)->IsInExecute() )
-                    ((Dialog*)pParent)->EndDialog( RET_OK );
+                if ( static_cast<Dialog*>(pParent)->IsInExecute() )
+                    static_cast<Dialog*>(pParent)->EndDialog( RET_OK );
                 // prevent recursive calls
-                else if ( !((Dialog*)pParent)->IsInClose() )
+                else if ( !static_cast<Dialog*>(pParent)->IsInClose() )
                 {
                     if ( pParent->GetStyle() & WB_CLOSEABLE )
-                        ((Dialog*)pParent)->Close();
+                        static_cast<Dialog*>(pParent)->Close();
                 }
             }
             else
             {
                 if ( pParent->GetStyle() & WB_CLOSEABLE )
-                    ((SystemWindow*)pParent)->Close();
+                    static_cast<SystemWindow*>(pParent)->Close();
             }
         }
     }
@@ -1753,19 +1753,19 @@ void CancelButton::Click()
         {
             if ( pParent->IsDialog() )
             {
-                if ( ((Dialog*)pParent)->IsInExecute() )
-                    ((Dialog*)pParent)->EndDialog( RET_CANCEL );
+                if ( static_cast<Dialog*>(pParent)->IsInExecute() )
+                    static_cast<Dialog*>(pParent)->EndDialog( RET_CANCEL );
                 // prevent recursive calls
-                else if ( !((Dialog*)pParent)->IsInClose() )
+                else if ( !static_cast<Dialog*>(pParent)->IsInClose() )
                 {
                     if ( pParent->GetStyle() & WB_CLOSEABLE )
-                        ((Dialog*)pParent)->Close();
+                        static_cast<Dialog*>(pParent)->Close();
                 }
             }
             else
             {
                 if ( pParent->GetStyle() & WB_CLOSEABLE )
-                    ((SystemWindow*)pParent)->Close();
+                    static_cast<SystemWindow*>(pParent)->Close();
             }
         }
     }

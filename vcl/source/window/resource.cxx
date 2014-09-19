@@ -145,7 +145,7 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_EXTRALONG )
     {
         sal_uIntPtr nRes = ReadLongRes();
-        SetData( (void*)nRes );
+        SetData( reinterpret_cast<void*>(nRes) );
     }
     if ( nObjMask & WINDOW_UNIQUEID )
         SetUniqueId( ReadByteStringRes() );

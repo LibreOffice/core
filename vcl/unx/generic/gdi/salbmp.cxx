@@ -846,7 +846,7 @@ bool X11SalBitmap::GetSystemData( BitmapSystemData& rData )
         // Rename/retype pDummy to your likings (though X11 Pixmap is
         // prolly not a good idea, since it's accessed from
         // non-platform aware code in vcl/bitmap.hxx)
-        rData.aPixmap = (void*)mpDDB->ImplGetPixmap();
+        rData.aPixmap = reinterpret_cast<void*>(mpDDB->ImplGetPixmap());
         rData.mnWidth = mpDDB->ImplGetWidth ();
         rData.mnHeight = mpDDB->ImplGetHeight ();
         return true;

@@ -1059,7 +1059,7 @@ void ImplDockingWindowWrapper::ToggleFloatingMode()
     // note: this must be done *before* notifying the
     //       listeners to have the toolbox in the proper state
     if( GetWindow()->ImplIsDockingWindow() )
-        ((DockingWindow*) GetWindow())->ToggleFloatingMode();
+        static_cast<DockingWindow*>(GetWindow())->ToggleFloatingMode();
 
     // now notify listeners
     GetWindow()->ImplCallEventListeners( VCLEVENT_WINDOW_TOGGLEFLOATING );
@@ -1186,7 +1186,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     GetWindow()->Show( false, SHOW_NOFOCUSCHANGE );
 
     // set parameter for handler before destroying floating window
-    ImplPopupFloatWin *pPopupFloatWin = (ImplPopupFloatWin*) mpFloatWin;
+    ImplPopupFloatWin *pPopupFloatWin = static_cast<ImplPopupFloatWin*>(mpFloatWin);
     EndPopupModeData aData( pPopupFloatWin->GetTearOffPosition(), mpFloatWin->IsPopupModeTearOff() );
 
     // before deleting change parent back, so we can delete the floating window alone
@@ -1195,7 +1195,7 @@ IMPL_LINK_NOARG(ImplDockingWindowWrapper, PopupModeEnd)
     if ( mpOldBorderWin )
     {
         GetWindow()->SetParent( mpOldBorderWin );
-        ((ImplBorderWindow*)mpOldBorderWin)->GetBorder(
+        static_cast<ImplBorderWindow*>(mpOldBorderWin)->GetBorder(
             GetWindow()->mpWindowImpl->mnLeftBorder, GetWindow()->mpWindowImpl->mnTopBorder,
             GetWindow()->mpWindowImpl->mnRightBorder, GetWindow()->mpWindowImpl->mnBottomBorder );
         mpOldBorderWin->Resize();
@@ -1310,7 +1310,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( bool bFloatMode )
                 if ( mpOldBorderWin )
                 {
                     GetWindow()->SetParent( mpOldBorderWin );
-                    ((ImplBorderWindow*)mpOldBorderWin)->GetBorder(
+                    static_cast<ImplBorderWindow*>(mpOldBorderWin)->GetBorder(
                         GetWindow()->mpWindowImpl->mnLeftBorder, GetWindow()->mpWindowImpl->mnTopBorder,
                         GetWindow()->mpWindowImpl->mnRightBorder, GetWindow()->mpWindowImpl->mnBottomBorder );
                     mpOldBorderWin->Resize();

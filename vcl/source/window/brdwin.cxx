@@ -363,7 +363,7 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
                 // call handler already on mouse down
                 if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                 {
-                    SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
+                    SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                     pClientWindow->TitleButtonClick( TITLE_BUTTON_MENU );
                 }
             }
@@ -413,7 +413,7 @@ bool ImplBorderWindowView::ImplMouseButtonDown( ImplBorderFrameData* pData, cons
 
                         if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                         {
-                            SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
+                            SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                             if ( true /*pBorderWindow->mbDockBtn*/ )   // always perform docking on double click, no button required
                                 pClientWindow->TitleButtonClick( TITLE_BUTTON_DOCKING );
                             else if ( pBorderWindow->GetStyle() & WB_ROLLABLE )
@@ -487,7 +487,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 {
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                     {
-                        SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
+                        SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                         if ( pClientWindow->IsRollUp() )
                             pClientWindow->RollDown();
                         else
@@ -509,7 +509,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 {
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                     {
-                        SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
+                        SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                         pClientWindow->TitleButtonClick( TITLE_BUTTON_DOCKING );
                     }
                 }
@@ -537,7 +537,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 {
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                     {
-                        SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
+                        SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                         pClientWindow->TitleButtonClick( TITLE_BUTTON_HIDE );
                     }
                 }
@@ -568,7 +568,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                 {
                     if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                     {
-                        SystemWindow* pClientWindow = (SystemWindow*)(pBorderWindow->ImplGetClientWindow());
+                        SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
                         pClientWindow->SetPin( !pClientWindow->IsPinned() );
                         pClientWindow->Pin();
                     }
@@ -594,8 +594,8 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
             {
                 if ( pBorderWindow->ImplGetClientWindow()->ImplIsFloatingWindow() )
                 {
-                    if ( ((FloatingWindow*)pBorderWindow->ImplGetClientWindow())->IsInPopupMode() )
-                        ((FloatingWindow*)pBorderWindow->ImplGetClientWindow())->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
+                    if ( static_cast<FloatingWindow*>(pBorderWindow->ImplGetClientWindow())->IsInPopupMode() )
+                        static_cast<FloatingWindow*>(pBorderWindow->ImplGetClientWindow())->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
                 }
             }
         }
@@ -827,7 +827,7 @@ bool ImplBorderWindowView::ImplTracking( ImplBorderFrameData* pData, const Track
                     aSize = aNewRect.GetSize();
                     aSize.Width()   -= nBorderWidth;
                     aSize.Height()  -= nBorderHeight;
-                    ((SystemWindow*)pBorderWindow->ImplGetClientWindow())->Resizing( aSize );
+                    static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow())->Resizing( aSize );
                     aSize.Width()   += nBorderWidth;
                     aSize.Height()  += nBorderHeight;
                     if ( aSize.Width() < nMinWidth )
@@ -1013,7 +1013,7 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
 
     vcl::Window *pWin = NULL, *pCtrl = NULL;
     if (mpOutDev->GetOutDevType() == OUTDEV_WINDOW)
-        pWin = (vcl::Window*) mpOutDev;
+        pWin = static_cast<vcl::Window*>(mpOutDev);
 
     if (pWin)
         pCtrl = mpBorderWindow->GetWindow(WINDOW_CLIENT);
@@ -1188,7 +1188,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
     // control this border belongs to
     vcl::Window *pWin = NULL, *pCtrl = NULL;
     if( mpOutDev->GetOutDevType() == OUTDEV_WINDOW )
-        pWin = (vcl::Window*) mpOutDev;
+        pWin = static_cast<vcl::Window*>(mpOutDev);
 
     ControlType aCtrlType = 0;
     ControlPart aCtrlPart = PART_ENTIRE_CONTROL;
@@ -1303,7 +1303,7 @@ void ImplSmallBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice*
         // are passed, this might force a redraw though.... (TODO: improve)
         if ( (aCtrlType == CTRL_SPINBOX) && !pCtrl->IsNativeControlSupported( CTRL_SPINBOX, PART_BUTTON_UP ) )
         {
-            Edit *pEdit = ((Edit*) pCtrl)->GetSubEdit();
+            Edit *pEdit = static_cast<Edit*>(pCtrl)->GetSubEdit();
             if ( pEdit )
                 pCtrl->Paint( Rectangle() );  // make sure the buttons are also drawn as they might overwrite the border
         }

@@ -74,7 +74,7 @@ class VCL_DLLPUBLIC SalGenericData : public SalData
 
 inline SalGenericData * GetGenericData()
 {
-    return (SalGenericData *)ImplGetSVData()->mpSalData;
+    return static_cast<SalGenericData *>(ImplGetSVData()->mpSalData);
 }
 
 #endif

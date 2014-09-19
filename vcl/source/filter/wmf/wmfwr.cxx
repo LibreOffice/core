@@ -1020,7 +1020,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
             {
                 case META_PIXEL_ACTION:
                 {
-                    const MetaPixelAction* pA = (const MetaPixelAction *) pMA;
+                    const MetaPixelAction* pA = static_cast<const MetaPixelAction *>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_SetPixel( pA->GetPoint(), pA->GetColor() );
@@ -1029,7 +1029,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_POINT_ACTION:
                 {
-                    const MetaPointAction*  pA = (const MetaPointAction*) pMA;
+                    const MetaPointAction*  pA = static_cast<const MetaPointAction*>(pMA);
                     const Point&            rPt = pA->GetPoint();
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
@@ -1040,7 +1040,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_LINE_ACTION:
                 {
-                    const MetaLineAction* pA = (const MetaLineAction *) pMA;
+                    const MetaLineAction* pA = static_cast<const MetaLineAction *>(pMA);
                     if(pA->GetLineInfo().IsDefault())
                     {
                         aSrcLineInfo = pA->GetLineInfo();
@@ -1061,7 +1061,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_RECT_ACTION:
                 {
-                    const MetaRectAction* pA = (const MetaRectAction*) pMA;
+                    const MetaRectAction* pA = static_cast<const MetaRectAction*>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Rectangle( pA->GetRect() );
@@ -1070,7 +1070,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_ROUNDRECT_ACTION:
                 {
-                    const MetaRoundRectAction* pA = (const MetaRoundRectAction*) pMA;
+                    const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_RoundRect( pA->GetRect(), pA->GetHorzRound(), pA->GetVertRound() );
@@ -1079,7 +1079,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_ELLIPSE_ACTION:
                 {
-                    const MetaEllipseAction* pA = (const MetaEllipseAction*) pMA;
+                    const MetaEllipseAction* pA = static_cast<const MetaEllipseAction*>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Ellipse( pA->GetRect() );
@@ -1088,7 +1088,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_ARC_ACTION:
                 {
-                    const MetaArcAction* pA = (const MetaArcAction*) pMA;
+                    const MetaArcAction* pA = static_cast<const MetaArcAction*>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Arc( pA->GetRect(),pA->GetStartPoint(),pA->GetEndPoint() );
@@ -1097,7 +1097,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_PIE_ACTION:
                 {
-                    const MetaPieAction* pA = (const MetaPieAction*) pMA;
+                    const MetaPieAction* pA = static_cast<const MetaPieAction*>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Pie( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
@@ -1106,7 +1106,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_CHORD_ACTION:
                 {
-                    const MetaChordAction* pA = (const MetaChordAction*) pMA;
+                    const MetaChordAction* pA = static_cast<const MetaChordAction*>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Chord( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint() );
@@ -1115,7 +1115,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_POLYLINE_ACTION:
                 {
-                    const MetaPolyLineAction* pA = (const MetaPolyLineAction*) pMA;
+                    const MetaPolyLineAction* pA = static_cast<const MetaPolyLineAction*>(pMA);
                     const Polygon&              rPoly = pA->GetPolygon();
 
                     if( rPoly.GetSize() )
@@ -1137,7 +1137,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_POLYGON_ACTION:
                 {
-                    const MetaPolygonAction* pA = (const MetaPolygonAction*) pMA;
+                    const MetaPolygonAction* pA = static_cast<const MetaPolygonAction*>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_Polygon( pA->GetPolygon() );
@@ -1146,7 +1146,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_POLYPOLYGON_ACTION:
                 {
-                    const MetaPolyPolygonAction* pA = (const MetaPolyPolygonAction*) pMA;
+                    const MetaPolyPolygonAction* pA = static_cast<const MetaPolyPolygonAction*>(pMA);
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
                     WMFRecord_PolyPolygon( pA->GetPolyPolygon() );
@@ -1155,7 +1155,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_TEXTRECT_ACTION:
                 {
-                    const MetaTextRectAction * pA = (const MetaTextRectAction*)pMA;
+                    const MetaTextRectAction * pA = static_cast<const MetaTextRectAction*>(pMA);
                     OUString aTemp( pA->GetText() );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
@@ -1168,7 +1168,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_TEXT_ACTION:
                 {
-                    const MetaTextAction * pA = (const MetaTextAction*) pMA;
+                    const MetaTextAction * pA = static_cast<const MetaTextAction*>(pMA);
                     OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
                     aSrcLineInfo = LineInfo();
                     SetAllAttr();
@@ -1179,7 +1179,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_TEXTARRAY_ACTION:
                 {
-                    const MetaTextArrayAction* pA = (const MetaTextArrayAction*) pMA;
+                    const MetaTextArrayAction* pA = static_cast<const MetaTextArrayAction*>(pMA);
 
                     OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
                     aSrcLineInfo = LineInfo();
@@ -1191,7 +1191,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_STRETCHTEXT_ACTION:
                 {
-                    const MetaStretchTextAction* pA = (const MetaStretchTextAction *) pMA;
+                    const MetaStretchTextAction* pA = static_cast<const MetaStretchTextAction *>(pMA);
                     OUString aTemp = pA->GetText().copy( pA->GetIndex(), std::min<sal_Int32>(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                     sal_uInt16 nLen,i;
@@ -1214,21 +1214,21 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_BMP_ACTION:
                 {
-                    const MetaBmpAction* pA = (const MetaBmpAction *) pMA;
+                    const MetaBmpAction* pA = static_cast<const MetaBmpAction *>(pMA);
                     WMFRecord_StretchDIB( pA->GetPoint(), pA->GetBitmap().GetSizePixel(), pA->GetBitmap() );
                 }
                 break;
 
                 case META_BMPSCALE_ACTION:
                 {
-                    const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pMA;
+                    const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pMA);
                     WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), pA->GetBitmap() );
                 }
                 break;
 
                 case META_BMPSCALEPART_ACTION:
                 {
-                    const MetaBmpScalePartAction*   pA = (const MetaBmpScalePartAction*) pMA;
+                    const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pMA);
                     Bitmap                          aTmp( pA->GetBitmap() );
 
                     if( aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
@@ -1238,7 +1238,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_BMPEX_ACTION:
                 {
-                    const MetaBmpExAction*  pA = (const MetaBmpExAction *) pMA;
+                    const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction *>(pMA);
                     Bitmap                  aBmp( pA->GetBitmapEx().GetBitmap() );
                     Bitmap                  aMsk( pA->GetBitmapEx().GetMask() );
 
@@ -1256,7 +1256,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_BMPEXSCALE_ACTION:
                 {
-                    const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pMA;
+                    const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pMA);
                     Bitmap                      aBmp( pA->GetBitmapEx().GetBitmap() );
                     Bitmap                      aMsk( pA->GetBitmapEx().GetMask() );
 
@@ -1274,7 +1274,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_BMPEXSCALEPART_ACTION:
                 {
-                    const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pMA;
+                    const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pMA);
                     BitmapEx                        aBmpEx( pA->GetBitmapEx() );
                     aBmpEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                     Bitmap                          aBmp( aBmpEx.GetBitmap() );
@@ -1294,7 +1294,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_GRADIENT_ACTION:
                 {
-                    const MetaGradientAction*   pA = (const MetaGradientAction*) pMA;
+                    const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pMA);
                     GDIMetaFile                 aTmpMtf;
 
                     pVirDev->AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
@@ -1304,7 +1304,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_HATCH_ACTION:
                 {
-                    const MetaHatchAction*  pA = (const MetaHatchAction*) pMA;
+                    const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pMA);
                     GDIMetaFile             aTmpMtf;
 
                     pVirDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
@@ -1314,7 +1314,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_WALLPAPER_ACTION:
                 {
-                    const MetaWallpaperAction*  pA = (const MetaWallpaperAction*) pMA;
+                    const MetaWallpaperAction*  pA = static_cast<const MetaWallpaperAction*>(pMA);
                     const Color&                rColor = pA->GetWallpaper().GetColor();
                     const Color                 aOldLineColor( aSrcLineColor );
                     const Color                 aOldFillColor( aSrcFillColor );
@@ -1331,14 +1331,14 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_ISECTRECTCLIPREGION_ACTION:
                 {
-                    const MetaISectRectClipRegionAction* pA = (const MetaISectRectClipRegionAction*) pMA;
+                    const MetaISectRectClipRegionAction* pA = static_cast<const MetaISectRectClipRegionAction*>(pMA);
                     WMFRecord_IntersectClipRect( pA->GetRect() );
                 }
                 break;
 
                 case META_LINECOLOR_ACTION:
                 {
-                    const MetaLineColorAction* pA = (const MetaLineColorAction*) pMA;
+                    const MetaLineColorAction* pA = static_cast<const MetaLineColorAction*>(pMA);
 
                     if( pA->IsSetting() )
                         aSrcLineColor = pA->GetColor();
@@ -1349,7 +1349,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_FILLCOLOR_ACTION:
                 {
-                    const MetaFillColorAction* pA = (const MetaFillColorAction*) pMA;
+                    const MetaFillColorAction* pA = static_cast<const MetaFillColorAction*>(pMA);
 
                     if( pA->IsSetting() )
                         aSrcFillColor = pA->GetColor();
@@ -1360,14 +1360,14 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_TEXTCOLOR_ACTION:
                 {
-                    const MetaTextColorAction* pA = (const MetaTextColorAction*) pMA;
+                    const MetaTextColorAction* pA = static_cast<const MetaTextColorAction*>(pMA);
                     aSrcTextColor = pA->GetColor();
                 }
                 break;
 
                 case META_TEXTFILLCOLOR_ACTION:
                 {
-                    const MetaTextFillColorAction* pA = (const MetaTextFillColorAction*) pMA;
+                    const MetaTextFillColorAction* pA = static_cast<const MetaTextFillColorAction*>(pMA);
                     if( pA->IsSetting() )
                         aSrcFont.SetFillColor( pA->GetColor() );
                     else
@@ -1377,14 +1377,14 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_TEXTALIGN_ACTION:
                 {
-                    const MetaTextAlignAction* pA = (const MetaTextAlignAction*) pMA;
+                    const MetaTextAlignAction* pA = static_cast<const MetaTextAlignAction*>(pMA);
                     eSrcTextAlign = pA->GetTextAlign();
                 }
                 break;
 
                 case META_MAPMODE_ACTION:
                 {
-                    const MetaMapModeAction* pA = (const MetaMapModeAction*) pMA;
+                    const MetaMapModeAction* pA = static_cast<const MetaMapModeAction*>(pMA);
 
                     if (aSrcMapMode!=pA->GetMapMode())
                     {
@@ -1438,7 +1438,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_FONT_ACTION:
                 {
-                    const MetaFontAction* pA = (const MetaFontAction*) pMA;
+                    const MetaFontAction* pA = static_cast<const MetaFontAction*>(pMA);
                     aSrcFont = pA->GetFont();
 
                     if ( (aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW)
@@ -1455,7 +1455,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_PUSH_ACTION:
                 {
-                    const MetaPushAction* pA = (const MetaPushAction*)pMA;
+                    const MetaPushAction* pA = static_cast<const MetaPushAction*>(pMA);
 
                     WMFWriterAttrStackMember* pAt = new WMFWriterAttrStackMember;
                     pAt->nFlags = pA->GetFlags();
@@ -1517,7 +1517,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_EPS_ACTION :
                 {
-                    const MetaEPSAction* pA = (const MetaEPSAction*)pMA;
+                    const MetaEPSAction* pA = static_cast<const MetaEPSAction*>(pMA);
                     const GDIMetaFile aGDIMetaFile( pA->GetSubstitute() );
 
                     size_t nCount = aGDIMetaFile.GetActionSize();
@@ -1526,7 +1526,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                         const MetaAction* pMetaAct = aGDIMetaFile.GetAction( i );
                         if ( pMetaAct->GetType() == META_BMPSCALE_ACTION )
                         {
-                            const MetaBmpScaleAction* pBmpScaleAction = (const MetaBmpScaleAction*)pMetaAct;
+                            const MetaBmpScaleAction* pBmpScaleAction = static_cast<const MetaBmpScaleAction*>(pMetaAct);
                             WMFRecord_StretchDIB( pA->GetPoint(), pA->GetSize(), pBmpScaleAction->GetBitmap() );
                             break;
                         }
@@ -1536,7 +1536,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case META_RASTEROP_ACTION:
                 {
-                    const MetaRasterOpAction* pA = (const MetaRasterOpAction*) pMA;
+                    const MetaRasterOpAction* pA = static_cast<const MetaRasterOpAction*>(pMA);
                     eSrcRasterOp=pA->GetRasterOp();
                 }
                 break;
@@ -1545,13 +1545,13 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 {
                     aSrcLineInfo = LineInfo();
                     SetLineAndFillAttr();
-                    WMFRecord_PolyPolygon( ( (MetaTransparentAction*) pMA )->GetPolyPolygon() );
+                    WMFRecord_PolyPolygon( static_cast<const MetaTransparentAction*>(pMA)->GetPolyPolygon() );
                 }
                 break;
 
                 case META_FLOATTRANSPARENT_ACTION:
                 {
-                    const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pMA;
+                    const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pMA);
 
                     GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
                     Point           aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
@@ -1582,7 +1582,7 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
 
                 case( META_LAYOUTMODE_ACTION ):
                 {
-                    ComplexTextLayoutMode nLayoutMode = ( (MetaLayoutModeAction*) pMA )->GetLayoutMode();
+                    ComplexTextLayoutMode nLayoutMode = static_cast<const MetaLayoutModeAction*>(pMA)->GetLayoutMode();
                     eSrcHorTextAlign = 0; // TA_LEFT
                     if ((nLayoutMode & TEXT_LAYOUT_BIDI_RTL) != TEXT_LAYOUT_DEFAULT)
                     {

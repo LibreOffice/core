@@ -33,7 +33,7 @@ class PPDParser;
 struct FPtrHash
 {
     size_t operator()(const FILE* pPtr) const
-    { return (size_t)pPtr; }
+    { return reinterpret_cast<size_t>(pPtr); }
 };
 
 class CUPSManager : public PrinterInfoManager

@@ -563,14 +563,14 @@ void DbgDialogTest( vcl::Window* pWindow )
                     switch( pChild->GetType() )
                     {
                         case WINDOW_RADIOBUTTON:
-                            aWidth = ((RadioButton*)pChild)->CalcMinimumSize(0).Width();
+                            aWidth = static_cast<RadioButton*>(pChild)->CalcMinimumSize(0).Width();
                             break;
                         case WINDOW_CHECKBOX:
                         case WINDOW_TRISTATEBOX:
-                            aWidth = ((CheckBox*)pChild)->CalcMinimumSize(0).Width();
+                            aWidth = static_cast<CheckBox*>(pChild)->CalcMinimumSize(0).Width();
                             break;
                         case WINDOW_PUSHBUTTON:
-                            aWidth = ((PushButton*)pChild)->CalcMinimumSize(0).Width();
+                            aWidth = static_cast<PushButton*>(pChild)->CalcMinimumSize(0).Width();
                             break;
                         default: break;
                     }
@@ -666,61 +666,61 @@ void DbgDialogTest( vcl::Window* pWindow )
                 bool bMaxWarning = false;
                 if ( pChild->GetType() == WINDOW_NUMERICFIELD )
                 {
-                    NumericField* pField = (NumericField*)pChild;
+                    NumericField* pField = static_cast<NumericField*>(pChild);
                     if ( pField->GetMax() == LONG_MAX )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_METRICFIELD )
                 {
-                    MetricField* pField = (MetricField*)pChild;
+                    MetricField* pField = static_cast<MetricField*>(pChild);
                     if ( pField->GetMax() == LONG_MAX )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_CURRENCYFIELD )
                 {
-                    CurrencyField* pField = (CurrencyField*)pChild;
+                    CurrencyField* pField = static_cast<CurrencyField*>(pChild);
                     if ( pField->GetMax() == LONG_MAX )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_TIMEFIELD )
                 {
-                    TimeField* pField = (TimeField*)pChild;
+                    TimeField* pField = static_cast<TimeField*>(pChild);
                     if ( pField->GetMax() == Time( 23, 59, 59, 99 ) )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_DATEFIELD )
                 {
-                    DateField* pField = (DateField*)pChild;
+                    DateField* pField = static_cast<DateField*>(pChild);
                     if ( pField->GetMax() == Date( 31, 12, 9999 ) )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_NUMERICBOX )
                 {
-                    NumericBox* pBox = (NumericBox*)pChild;
+                    NumericBox* pBox = static_cast<NumericBox*>(pChild);
                     if ( pBox->GetMax() == LONG_MAX )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_METRICBOX )
                 {
-                    MetricBox* pBox = (MetricBox*)pChild;
+                    MetricBox* pBox = static_cast<MetricBox*>(pChild);
                     if ( pBox->GetMax() == LONG_MAX )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_CURRENCYBOX )
                 {
-                    CurrencyBox* pBox = (CurrencyBox*)pChild;
+                    CurrencyBox* pBox = static_cast<CurrencyBox*>(pChild);
                     if ( pBox->GetMax() == LONG_MAX )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_TIMEBOX )
                 {
-                    TimeBox* pBox = (TimeBox*)pChild;
+                    TimeBox* pBox = static_cast<TimeBox*>(pChild);
                     if ( pBox->GetMax() == Time( 23, 59, 59, 99 ) )
                         bMaxWarning = true;
                 }
                 else if ( pChild->GetType() == WINDOW_DATEBOX )
                 {
-                    DateBox* pBox = (DateBox*)pChild;
+                    DateBox* pBox = static_cast<DateBox*>(pChild);
                     if ( pBox->GetMax() == Date( 31, 12, 9999 ) )
                         bMaxWarning = true;
                 }

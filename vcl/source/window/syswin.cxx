@@ -121,7 +121,7 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
         {
             vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
             if( pWin && pWin->IsSystemWindow() )
-                pMBar = ((SystemWindow*)pWin)->GetMenuBar();
+                pMBar = static_cast<SystemWindow*>(pWin)->GetMenuBar();
         }
         if ( pMBar && pMBar->ImplHandleKeyEvent( *rNEvt.GetKeyEvent(), false ) )
             return true;
@@ -150,7 +150,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
             {
                 vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
                 if( pWin && pWin->IsSystemWindow() )
-                    pTList = ((SystemWindow*)pWin)->mpImplData->mpTaskPaneList;
+                    pTList = static_cast<SystemWindow*>(pWin)->mpImplData->mpTaskPaneList;
             }
             if( !pTList )
             {
@@ -161,7 +161,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
                 {
                     pWin = pWin->GetParent();
                     if( pWin && pWin->IsSystemWindow() )
-                        pSysWin = (SystemWindow*) pWin;
+                        pSysWin = static_cast<SystemWindow*>(pWin);
                 }
                 pTList = pSysWin->mpImplData->mpTaskPaneList;
             }
@@ -184,7 +184,7 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
         {
             vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
             if ( pWin && pWin->IsSystemWindow() )
-                pMBar = ((SystemWindow*)pWin)->GetMenuBar();
+                pMBar = static_cast<SystemWindow*>(pWin)->GetMenuBar();
         }
         if( pMBar )
             mpImplData->mpTaskPaneList->AddWindow( pMBar->ImplGetWindow() );
@@ -303,7 +303,7 @@ void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
         {
             mbDockBtn = bVisible;
             if ( mpWindowImpl->mpBorderWindow )
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetDockButton( bVisible );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetDockButton( bVisible );
         }
     }
     else if ( nButton == TITLE_BUTTON_HIDE )
@@ -312,13 +312,13 @@ void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
         {
             mbHideBtn = bVisible;
             if ( mpWindowImpl->mpBorderWindow )
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetHideButton( bVisible );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetHideButton( bVisible );
         }
     }
     else if ( nButton == TITLE_BUTTON_MENU )
     {
         if ( mpWindowImpl->mpBorderWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuButton( bVisible );
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetMenuButton( bVisible );
     }
     else
         return;
@@ -338,7 +338,7 @@ void SystemWindow::SetPin( bool bPin )
     {
         mbPinned = bPin;
         if ( mpWindowImpl->mpBorderWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetPin( bPin );
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetPin( bPin );
     }
 }
 
@@ -353,7 +353,7 @@ void SystemWindow::RollUp()
             aSize.Width() = GetOutputSizePixel().Width();
         mbRollUp = true;
         if ( mpWindowImpl->mpBorderWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetRollUp( true, aSize );
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetRollUp( true, aSize );
         else
             SetOutputSizePixel( aSize );
         mbRollFunc = false;
@@ -366,7 +366,7 @@ void SystemWindow::RollDown()
     {
         mbRollUp = false;
         if ( mpWindowImpl->mpBorderWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetRollUp( false, maOrgSize );
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetRollUp( false, maOrgSize );
         else
             SetOutputSizePixel( maOrgSize );
     }
@@ -377,7 +377,7 @@ void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
     maMinOutSize = rSize;
     if ( mpWindowImpl->mpBorderWindow )
     {
-        ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMinOutputSize( rSize.Width(), rSize.Height() );
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetMinOutputSize( rSize.Width(), rSize.Height() );
         if ( mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame )
             mpWindowImpl->mpBorderWindow->mpWindowImpl->mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
     }
@@ -396,7 +396,7 @@ void SystemWindow::SetMaxOutputSizePixel( const Size& rSize )
     mpImplData->maMaxOutSize = aSize;
     if ( mpWindowImpl->mpBorderWindow )
     {
-        ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMaxOutputSize( aSize.Width(), aSize.Height() );
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetMaxOutputSize( aSize.Width(), aSize.Height() );
         if ( mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame )
             mpWindowImpl->mpBorderWindow->mpWindowImpl->mpFrame->SetMaxClientSize( aSize.Width(), aSize.Height() );
     }
@@ -902,11 +902,11 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar, const css::uno::Reference<css::
             if ( pMenuBar )
             {
                 DBG_ASSERT( !pMenuBar->pWindow, "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarWindow(pNewWindow = MenuBar::ImplCreate(mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar, rFrame));
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetMenuBarWindow( pNewWindow = MenuBar::ImplCreate( mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar, rFrame));
                 ImplCallEventListeners( VCLEVENT_WINDOW_MENUBARADDED, (void*) pMenuBar );
             }
             else
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarWindow( NULL );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetMenuBarWindow( NULL );
             ImplToBottomChild();
             if ( pOldMenuBar )
             {
@@ -949,9 +949,9 @@ void SystemWindow::SetMenuBarMode( sal_uInt16 nMode )
         if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
         {
             if ( nMode == MENUBAR_MODE_HIDE )
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( true );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetMenuBarMode( true );
             else
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarMode( false );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetMenuBarMode( false );
         }
     }
 }

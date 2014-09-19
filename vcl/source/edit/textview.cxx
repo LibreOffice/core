@@ -106,7 +106,7 @@ uno::Any TETextDataObject::getTransferData( const datatransfer::DataFlavor& rFla
     sal_uLong nT = SotExchange::GetFormat( rFlavor );
     if ( nT == SOT_FORMAT_STRING )
     {
-        aAny <<= (OUString)GetText();
+        aAny <<= GetText();
     }
     else if ( nT == SOT_FORMATSTR_ID_HTML )
     {

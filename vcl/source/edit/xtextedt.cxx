@@ -241,7 +241,7 @@ bool ExtTextView::MatchGroup()
         return false;
     }
 
-    TextSelection aMatchSel = ((ExtTextEngine*)GetTextEngine())->MatchGroup( aTmpSel.GetStart() );
+    TextSelection aMatchSel = static_cast<ExtTextEngine*>(GetTextEngine())->MatchGroup( aTmpSel.GetStart() );
     if ( aMatchSel.HasRange() )
         SetSelection( aMatchSel );
 
@@ -252,7 +252,7 @@ bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, bool bForwa
 {
     bool bFound = false;
     TextSelection aSel( GetSelection() );
-    if ( ((ExtTextEngine*)GetTextEngine())->Search( aSel, rSearchOptions, bForward ) )
+    if ( static_cast<ExtTextEngine*>(GetTextEngine())->Search( aSel, rSearchOptions, bForward ) )
     {
         bFound = true;
         // First add the beginning of the word to the selection,
@@ -293,7 +293,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, bool
     {
         // the writer replaces all, from beginning to end
 
-        ExtTextEngine* pTextEngine = (ExtTextEngine*)GetTextEngine();
+        ExtTextEngine* pTextEngine = static_cast<ExtTextEngine*>(GetTextEngine());
 
         // HideSelection();
         TextSelection aSel;

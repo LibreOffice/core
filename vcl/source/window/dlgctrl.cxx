@@ -95,7 +95,7 @@ static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, s
                 // for a TabControl, remember the current TabPage for later use
                 if ( pWindow->GetType() == WINDOW_TABCONTROL )
                 {
-                    TabControl* pTabControl = ((TabControl*)pWindow);
+                    TabControl* pTabControl = static_cast<TabControl*>(pWindow);
                     // Check if the TabPage is a Child of the TabControl and still exists (by
                     // walking all child windows); because it could be that the TabPage has been
                     // destroyed already by a Dialog-Dtor, event that the TabControl still exists.
@@ -480,8 +480,8 @@ void Window::ImplControlFocus( sal_uInt16 nFlags )
     {
         if ( GetType() == WINDOW_RADIOBUTTON )
         {
-            if ( !((RadioButton*)this)->IsChecked() )
-                ((RadioButton*)this)->ImplCallClick( true, nFlags );
+            if ( !static_cast<RadioButton*>(this)->IsChecked() )
+                static_cast<RadioButton*>(this)->ImplCallClick( true, nFlags );
             else
                 ImplGrabFocus( nFlags );
         }
@@ -491,12 +491,12 @@ void Window::ImplControlFocus( sal_uInt16 nFlags )
             if ( nFlags & GETFOCUS_UNIQUEMNEMONIC )
             {
                 if ( GetType() == WINDOW_CHECKBOX )
-                    ((CheckBox*)this)->ImplCheck();
+                    static_cast<CheckBox*>(this)->ImplCheck();
                 else if ( mpWindowImpl->mbPushButton )
                 {
-                    ((PushButton*)this)->SetPressed( true );
-                    ((PushButton*)this)->SetPressed( false );
-                    ((PushButton*)this)->Click();
+                    static_cast<PushButton*>(this)->SetPressed( true );
+                    static_cast<PushButton*>(this)->SetPressed( false );
+                    static_cast<PushButton*>(this)->Click();
                 }
             }
         }
@@ -505,8 +505,8 @@ void Window::ImplControlFocus( sal_uInt16 nFlags )
     {
         if ( GetType() == WINDOW_RADIOBUTTON )
         {
-            if ( !((RadioButton*)this)->IsChecked() )
-                ((RadioButton*)this)->ImplCallClick( true, nFlags );
+            if ( !static_cast<RadioButton*>(this)->IsChecked() )
+                static_cast<RadioButton*>(this)->ImplCallClick( true, nFlags );
             else
                 ImplGrabFocus( nFlags );
         }
@@ -718,7 +718,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         {
             if ( mpWindowImpl->mpDlgCtrlDownWindow != pButtonWindow )
             {
-                ((PushButton*)mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
+                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
                 mpWindowImpl->mpDlgCtrlDownWindow = NULL;
                 return true;
             }
@@ -930,18 +930,18 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         {
             if ( mpWindowImpl->mpDlgCtrlDownWindow && (mpWindowImpl->mpDlgCtrlDownWindow != pButtonWindow) )
             {
-                ((PushButton*)mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
+                static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
                 mpWindowImpl->mpDlgCtrlDownWindow = NULL;
             }
 
-            ((PushButton*)pButtonWindow)->SetPressed( true );
+            static_cast<PushButton*>(pButtonWindow)->SetPressed( true );
             mpWindowImpl->mpDlgCtrlDownWindow = pButtonWindow;
         }
         else if ( mpWindowImpl->mpDlgCtrlDownWindow == pButtonWindow )
         {
             mpWindowImpl->mpDlgCtrlDownWindow = NULL;
-            ((PushButton*)pButtonWindow)->SetPressed( false );
-            ((PushButton*)pButtonWindow)->Click();
+            static_cast<PushButton*>(pButtonWindow)->SetPressed( false );
+            static_cast<PushButton*>(pButtonWindow)->Click();
         }
 
         return true;
@@ -1022,7 +1022,7 @@ static void ImplDlgCtrlUpdateDefButton( vcl::Window* pParent, vcl::Window* pFocu
     {
         if ( pSWindow->ImplIsPushButton() )
         {
-            PushButton* pPushButton = (PushButton*)pSWindow;
+            PushButton* pPushButton = static_cast<PushButton*>(pSWindow);
             if ( pPushButton->ImplIsDefButton() )
                 pOldDefButton = pPushButton;
             if ( pPushButton->HasChildPathFocus() )
@@ -1060,7 +1060,7 @@ void Window::ImplDlgCtrlFocusChanged( vcl::Window* pWindow, bool bGetFocus )
 {
     if ( mpWindowImpl->mpDlgCtrlDownWindow && !bGetFocus )
     {
-        ((PushButton*)mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
+        static_cast<PushButton*>(mpWindowImpl->mpDlgCtrlDownWindow)->SetPressed( false );
         mpWindowImpl->mpDlgCtrlDownWindow = NULL;
     }
 

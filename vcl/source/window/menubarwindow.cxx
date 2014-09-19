@@ -223,7 +223,7 @@ IMPL_LINK_NOARG(MenuBarWindow, CloseHdl)
         // #i106052# call close hdl asynchronously to ease handler implementation
         // this avoids still being in the handler while the DecoToolBox already
         // gets destroyed
-        Application::PostUserEvent(((MenuBar*)pMenu)->GetCloseButtonClickHdl(), pMenu);
+        Application::PostUserEvent(static_cast<MenuBar*>(pMenu)->GetCloseButtonClickHdl(), pMenu);
     }
     else
     {
@@ -278,12 +278,12 @@ IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent*, pEvent )
 
 IMPL_LINK_NOARG(MenuBarWindow, FloatHdl)
 {
-    return pMenu ? ((MenuBar*)pMenu)->GetFloatButtonClickHdl().Call( pMenu ) : 0;
+    return pMenu ? static_cast<MenuBar*>(pMenu)->GetFloatButtonClickHdl().Call( pMenu ) : 0;
 }
 
 IMPL_LINK_NOARG(MenuBarWindow, HideHdl)
 {
-    return pMenu ? ((MenuBar*)pMenu)->GetHideButtonClickHdl().Call( pMenu ) : 0;
+    return pMenu ? static_cast<MenuBar*>(pMenu)->GetHideButtonClickHdl().Call( pMenu ) : 0;
 }
 
 void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
@@ -296,9 +296,10 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
         {
             KillActivePopup();
         }
-        if ( pItemData->bEnabled && pItemData->pSubMenu && ( nHighlightedItem != ITEMPOS_INVALID ) && ( pItemData->pSubMenu != pActivePopup ) )
+        if ( pItemData->bEnabled && pItemData->pSubMenu && ( nHighlightedItem != ITEMPOS_INVALID ) &&
+             ( pItemData->pSubMenu != pActivePopup ) )
         {
-            pActivePopup = (PopupMenu*)pItemData->pSubMenu;
+            pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu);
             long nX = 0;
             MenuItemData* pData = 0;
             for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
@@ -341,7 +342,7 @@ void MenuBarWindow::KillActivePopup()
     if ( pActivePopup )
     {
         if( pActivePopup->pWindow != NULL )
-            if( ((FloatingWindow *) pActivePopup->pWindow)->IsInCleanUp() )
+            if( static_cast<FloatingWindow *>(pActivePopup->pWindow)->IsInCleanUp() )
                 return; // kill it later
 
         if ( pActivePopup->bInCallback )
@@ -713,7 +714,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     {
         if( GetParent()->GetWindow( WINDOW_CLIENT )->IsSystemWindow() )
         {
-            SystemWindow *pSysWin = (SystemWindow*)GetParent()->GetWindow( WINDOW_CLIENT );
+            SystemWindow *pSysWin = static_cast<SystemWindow*>(GetParent()->GetWindow( WINDOW_CLIENT ));
             if( pSysWin->GetTaskPaneList() )
                 if( pSysWin->GetTaskPaneList()->HandleKeyEvent( rKEvent ) )
                     return true;
@@ -1000,7 +1001,7 @@ void MenuBarWindow::LayoutChanged()
 
         // depending on the native implementation or the displayable flag
         // the menubar windows is suppressed (ie, height=0)
-        if( !((MenuBar*) pMenu)->IsDisplayable() ||
+        if( !static_cast<MenuBar*>(pMenu)->IsDisplayable() ||
             ( pMenu->ImplGetSalMenu() && pMenu->ImplGetSalMenu()->VisibleMenuBar() ) )
             nHeight = 0;
 

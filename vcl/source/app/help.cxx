@@ -229,7 +229,7 @@ void Help::UpdateTip( sal_uIntPtr nId, vcl::Window* pParent, const Rectangle& rS
 
 void Help::HideTip( sal_uLong nId )
 {
-    HelpTextWindow* pHelpWin = (HelpTextWindow*)nId;
+    HelpTextWindow* pHelpWin = reinterpret_cast<HelpTextWindow*>(nId);
     vcl::Window* pFrameWindow = pHelpWin->ImplGetFrameWindow();
     pHelpWin->Hide();
     // trigger update, so that a Paint is instantly triggered since we do not save the background

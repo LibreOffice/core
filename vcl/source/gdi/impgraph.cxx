@@ -214,7 +214,7 @@ ImpGraphic::~ImpGraphic()
 {
     ImplClear();
 
-    if( (sal_uLong) mpContext > 1UL )
+    if( reinterpret_cast<sal_uLong>(mpContext) > 1UL )
         delete mpContext;
 }
 

@@ -755,7 +755,7 @@ bool Window::AcquireGraphics() const
         OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
         while ( pReleaseOutDev )
         {
-            if ( ((vcl::Window*)pReleaseOutDev)->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
+            if ( static_cast<vcl::Window*>(pReleaseOutDev)->mpWindowImpl->mpFrame == mpWindowImpl->mpFrame )
                 break;
             pReleaseOutDev = pReleaseOutDev->mpPrevGraphics;
         }
@@ -923,9 +923,9 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         // check for undecorated floating window
         if( // 1. floating windows that are not moveable/sizeable (only closeable allowed)
             ( !(nFrameStyle & ~SAL_FRAME_STYLE_CLOSEABLE) &&
-            ( mpWindowImpl->mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) ) ) ||
+            ( mpWindowImpl->mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) ) ) ||
             // 2. borderwindows of floaters with ownerdraw decoration
-            ( ((GetType() == WINDOW_BORDERWINDOW) && ((ImplBorderWindow*)this)->mbFloatWindow && (nStyle & WB_OWNERDRAWDECORATION) ) ) )
+            ( ((GetType() == WINDOW_BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow && (nStyle & WB_OWNERDRAWDECORATION) ) ) )
         {
             nFrameStyle = SAL_FRAME_STYLE_FLOAT;
             if( nStyle & WB_OWNERDRAWDECORATION )
@@ -2083,7 +2083,7 @@ void Window::SetBorderStyle( sal_uInt16 nBorderStyle )
         else
         {
             if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-                 ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetBorderStyle( nBorderStyle );
+                static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetBorderStyle( nBorderStyle );
             else
                 mpWindowImpl->mpBorderWindow->SetBorderStyle( nBorderStyle );
         }
@@ -2096,7 +2096,7 @@ sal_uInt16 Window::GetBorderStyle() const
     if ( mpWindowImpl->mpBorderWindow )
     {
         if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-            return ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->GetBorderStyle();
+            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->GetBorderStyle();
         else
             return mpWindowImpl->mpBorderWindow->GetBorderStyle();
     }
@@ -2110,7 +2110,7 @@ long Window::CalcTitleWidth() const
     if ( mpWindowImpl->mpBorderWindow )
     {
         if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
-            return ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->CalcTitleWidth();
+            return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->CalcTitleWidth();
         else
             return mpWindowImpl->mpBorderWindow->CalcTitleWidth();
     }
@@ -2514,8 +2514,8 @@ void Window::Enable( bool bEnable, bool bChild )
     {
         mpWindowImpl->mpBorderWindow->Enable( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
-             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->Enable( bEnable, true );
+             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->Enable( bEnable, true );
     }
 
     // #i56102# restore app focus win in case the
@@ -2576,8 +2576,8 @@ void Window::EnableInput( bool bEnable, bool bChild )
     {
         mpWindowImpl->mpBorderWindow->EnableInput( bEnable, false );
         if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
-             ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
-            ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->EnableInput( bEnable, true );
+             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow )
+            static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->mpMenuBarWindow->EnableInput( bEnable, true );
     }
 
     if ( (! bEnable && mpWindowImpl->meAlwaysInputMode != AlwaysInputEnabled) ||
@@ -3645,7 +3645,7 @@ bool Window::HasActiveChildFrame()
             // but FloatingWindows carry this information in their TitleType...
             // TODO: avoid duplicate WinBits !!!
             if( pChildFrame && pChildFrame->ImplIsFloatingWindow() )
-                bDecorated = ((FloatingWindow*) pChildFrame)->GetTitleType() != FLOATWIN_TITLE_NONE;
+                bDecorated = static_cast<FloatingWindow*>(pChildFrame)->GetTitleType() != FLOATWIN_TITLE_NONE;
             if( bDecorated || (pFrameWin->mpWindowImpl->mnStyle & (WB_MOVEABLE | WB_SIZEABLE) ) )
                 if( pChildFrame && pChildFrame->IsVisible() && pChildFrame->IsActive() )
                 {

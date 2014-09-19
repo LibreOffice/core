@@ -1892,7 +1892,7 @@ void Edit::GetFocus()
                 maSelection.Max() = maText.getLength();
             }
             if ( mbIsSubEdit )
-                ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                static_cast<Edit*>(GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
             else
                 ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
         }
@@ -2376,7 +2376,7 @@ void Edit::Modify()
 
     if ( mbIsSubEdit )
     {
-        ((Edit*)GetParent())->Modify();
+        static_cast<Edit*>(GetParent())->Modify();
     }
     else
     {
@@ -2532,7 +2532,7 @@ void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
                 if (bSelection)
                 {
                     if ( mbIsSubEdit )
-                        ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
+                        static_cast<Edit*>(GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
                     else
                         ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
                 }
@@ -2540,14 +2540,14 @@ void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
                 if (bCaret)
                 {
                     if ( mbIsSubEdit )
-                        ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
+                        static_cast<Edit*>(GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
                     else
                         ImplCallEventListeners( VCLEVENT_EDIT_CARETCHANGED );
                 }
 
                 // #103511# notify combobox listeners of deselection
                 if( !maSelection && GetParent() && GetParent()->GetType() == WINDOW_COMBOBOX )
-                    ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_COMBOBOX_DESELECT );
+                    static_cast<Edit*>(GetParent())->ImplCallEventListeners( VCLEVENT_COMBOBOX_DESELECT );
             }
         }
     }

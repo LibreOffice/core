@@ -624,7 +624,7 @@ void ScrollBar::ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev )
 
     vcl::Window *pWin = NULL;
     if( pOutDev->GetOutDevType() == OUTDEV_WINDOW )
-        pWin = (vcl::Window*) pOutDev;
+        pWin = static_cast<vcl::Window*>(pOutDev);
 
     // Draw the entire control if the native theme engine needs it
     if ( nDrawFlags && pWin && pWin->IsNativeControlSupported(CTRL_SCROLLBAR, PART_DRAW_BACKGROUND_HORZ) )

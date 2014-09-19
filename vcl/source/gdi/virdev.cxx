@@ -176,7 +176,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
         mbScreenComp = false;
     else if ( pOutDev->GetOutDevType() == OUTDEV_VIRDEV )
-        mbScreenComp = ((VirtualDevice*)pOutDev)->mbScreenComp;
+        mbScreenComp = static_cast<const VirtualDevice*>(pOutDev)->mbScreenComp;
 
     meOutDevType    = OUTDEV_VIRDEV;
     mbDevOutput     = true;

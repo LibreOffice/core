@@ -640,7 +640,7 @@ bool XPMReader::ImplGetString( void )
 
 bool ImportXPM( SvStream& rStm, Graphic& rGraphic )
 {
-    XPMReader*  pXPMReader = (XPMReader*) rGraphic.GetContext();
+    XPMReader*  pXPMReader = static_cast<XPMReader*>(rGraphic.GetContext());
     ReadState   eReadState;
     bool        bRet = true;
 

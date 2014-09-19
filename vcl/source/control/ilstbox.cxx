@@ -121,7 +121,7 @@ void ImplEntryList::SelectEntry( sal_Int32 nPos, bool bSelect )
         {
             iter->mbIsSelected = bSelect;
             if ( mbCallSelectionChangedHdl )
-                maSelectionChangedHdl.Call( (void*)sal_IntPtr(nPos) );
+                maSelectionChangedHdl.Call( reinterpret_cast<void*>(nPos) );
         }
     }
 }

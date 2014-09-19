@@ -338,7 +338,7 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 
 bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
 {
-    XBMReader*  pXBMReader = (XBMReader*) rGraphic.GetContext();
+    XBMReader*  pXBMReader = static_cast<XBMReader*>( rGraphic.GetContext() );
     ReadState   eReadState;
     bool        bRet = true;
 

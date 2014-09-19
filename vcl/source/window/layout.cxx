@@ -2024,7 +2024,7 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
         {
             case WINDOW_PUSHBUTTON:
             {
-                PushButton* pButton = (PushButton*)pChild;
+                PushButton* pButton = static_cast<PushButton*>(pChild);
                 pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
                 break;
             }

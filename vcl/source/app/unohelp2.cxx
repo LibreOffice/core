@@ -76,7 +76,7 @@ namespace vcl { namespace unohelper {
         sal_uLong nT = SotExchange::GetFormat( rFlavor );
         if ( nT == SOT_FORMAT_STRING )
         {
-            aAny <<= (OUString)GetString();
+            aAny <<= GetString();
         }
         else
         {

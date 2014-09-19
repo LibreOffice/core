@@ -846,7 +846,7 @@ static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
     // focus or the last time the focus.
     // the first floating window always has the focus
     vcl::Window* pChild = pSVData->maWinData.mpFirstFloat;
-    if( !pChild || ( pChild->ImplGetWindowImpl()->mbFloatWin && !((FloatingWindow *)pChild)->GrabsFocus() ) )
+    if( !pChild || ( pChild->ImplGetWindowImpl()->mbFloatWin && !static_cast<FloatingWindow *>(pChild)->GrabsFocus() ) )
         pChild = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     else
     {
@@ -1649,7 +1649,7 @@ static void ImplActivateFloatingWindows( vcl::Window* pWindow, bool bActive )
         {
             if ( (pTempWindow->GetType() == WINDOW_BORDERWINDOW) &&
                  (pTempWindow->ImplGetWindow()->GetType() == WINDOW_FLOATINGWINDOW) )
-                ((ImplBorderWindow*)pTempWindow)->SetDisplayActive( bActive );
+                static_cast<ImplBorderWindow*>(pTempWindow)->SetDisplayActive( bActive );
         }
 
         ImplActivateFloatingWindows( pTempWindow, bActive );
@@ -1834,9 +1834,9 @@ static long DelayedCloseEventLink( void* pCEvent, void* )
         pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
         // dispatch to correct window type
         if( pEv->pWindow->IsSystemWindow() )
-            ((SystemWindow*)pEv->pWindow)->Close();
+            static_cast<SystemWindow*>(pEv->pWindow)->Close();
         else if( pEv->pWindow->ImplIsDockingWindow() )
-            ((DockingWindow*)pEv->pWindow)->Close();
+            static_cast<DockingWindow*>(pEv->pWindow)->Close();
     }
     delete pEv;
 
@@ -2008,7 +2008,7 @@ static bool ImplHandleMenuEvent( vcl::Window* pWindow, SalMenuEvent* pEvent, sal
     }
     if( pWin )
     {
-        MenuBar *pMenuBar = ((SystemWindow*) pWin)->GetMenuBar();
+        MenuBar *pMenuBar = static_cast<SystemWindow*>(pWin)->GetMenuBar();
         if( pMenuBar )
         {
             switch( nEvent )

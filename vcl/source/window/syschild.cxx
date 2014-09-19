@@ -173,17 +173,17 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
 
         jclass          jcThrowable = pJavaEnv->FindClass("java/lang/Throwable");
         jmethodID       jmThrowable_getMessage = pJavaEnv->GetMethodID(jcThrowable, "getMessage", "()Ljava/lang/String;");
-        jstring         jsMessage = (jstring) pJavaEnv->CallObjectMethod(jtThrowable, jmThrowable_getMessage);
-            OUString ouMessage;
+        jstring         jsMessage = static_cast<jstring>( pJavaEnv->CallObjectMethod(jtThrowable, jmThrowable_getMessage) );
+        OUString        ouMessage;
 
-            if(jsMessage)
-            {
-                const jchar * jcMessage = pJavaEnv->GetStringChars(jsMessage, NULL);
-                ouMessage = OUString(jcMessage);
-                pJavaEnv->ReleaseStringChars(jsMessage, jcMessage);
-            }
+        if(jsMessage)
+        {
+            const jchar * jcMessage = pJavaEnv->GetStringChars(jsMessage, NULL);
+            ouMessage = OUString(jcMessage);
+            pJavaEnv->ReleaseStringChars(jsMessage, jcMessage);
+        }
 
-            throw uno::RuntimeException(ouMessage);
+        throw uno::RuntimeException(ouMessage);
     }
 #else
     (void)pEnv;

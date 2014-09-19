@@ -189,7 +189,7 @@ void ImplDrawSpinButton( OutputDevice* pOutDev,
 
     if( pOutDev->GetOutDevType() == OUTDEV_WINDOW )
     {
-        vcl::Window *pWin = (vcl::Window*) pOutDev;
+        vcl::Window *pWin = static_cast<vcl::Window*>(pOutDev);
 
         // are we drawing standalone spin buttons or members of a spinfield ?
         ControlType aControl = CTRL_SPINBUTTONS;
@@ -663,7 +663,7 @@ void SpinField::ImplCalcButtonAreas( OutputDevice* pDev, const Size& rOutSz, Rec
             ! (GetStyle() & WB_DROPDOWN) &&
             IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) )
         {
-            vcl::Window *pWin = (vcl::Window*) pDev;
+            vcl::Window *pWin = static_cast<vcl::Window*>(pDev);
             vcl::Window *pBorder = pWin->GetWindow( WINDOW_BORDER );
 
             // get the system's spin button size

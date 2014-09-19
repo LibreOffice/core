@@ -2405,10 +2405,10 @@ void
 X11SalFrame::HandleExtTextEvent (XClientMessageEvent *pEvent)
 {
     #if SAL_TYPES_SIZEOFLONG > 4
-    void* pExtTextEvent = (void*)(  (pEvent->data.l[0] & 0xffffffff)
-                                  | (pEvent->data.l[1] << 32) );
+    void* pExtTextEvent = reinterpret_cast<void*>(  (pEvent->data.l[0] & 0xffffffff)
+                                                  | (pEvent->data.l[1] << 32) );
     #else
-    void* pExtTextEvent = (void*)(pEvent->data.l[0]);
+    void* pExtTextEvent = reinterpret_cast<void*>(pEvent->data.l[0]);
     #endif
     sal_uInt16 nExtTextEventType = sal_uInt16(pEvent->data.l[2]);
 

@@ -455,7 +455,7 @@ void StatusBar::ImplDrawItem( bool bOffScreen, sal_uInt16 nPos, bool bDrawText, 
 
     const OutputDevice *pOutDev = GetOutDev();
     if ( !pOutDev->ImplIsRecordLayout() )
-        ImplCallEventListeners( VCLEVENT_STATUSBAR_DRAWITEM, (void*) sal_IntPtr(pItem->mnId) );
+        ImplCallEventListeners( VCLEVENT_STATUSBAR_DRAWITEM, reinterpret_cast<void*>(pItem->mnId) );
 }
 
 void DrawProgress( vcl::Window* pWindow, const Point& rPos,
@@ -919,7 +919,7 @@ void StatusBar::InsertItem( sal_uInt16 nItemId, sal_uLong nWidth,
     if ( ImplIsItemUpdate() )
         Invalidate();
 
-    ImplCallEventListeners( VCLEVENT_STATUSBAR_ITEMADDED, (void*) sal_IntPtr(nItemId) );
+    ImplCallEventListeners( VCLEVENT_STATUSBAR_ITEMADDED, reinterpret_cast<void*>(nItemId) );
 }
 
 void StatusBar::RemoveItem( sal_uInt16 nItemId )
@@ -934,7 +934,7 @@ void StatusBar::RemoveItem( sal_uInt16 nItemId )
         if ( ImplIsItemUpdate() )
             Invalidate();
 
-        ImplCallEventListeners( VCLEVENT_STATUSBAR_ITEMREMOVED, (void*) sal_IntPtr(nItemId) );
+        ImplCallEventListeners( VCLEVENT_STATUSBAR_ITEMREMOVED, reinterpret_cast<void*>(nItemId) );
     }
 }
 
@@ -953,7 +953,7 @@ void StatusBar::ShowItem( sal_uInt16 nItemId )
             if ( ImplIsItemUpdate() )
                 Invalidate();
 
-            ImplCallEventListeners( VCLEVENT_STATUSBAR_SHOWITEM, (void*) sal_IntPtr(nItemId) );
+            ImplCallEventListeners( VCLEVENT_STATUSBAR_SHOWITEM, reinterpret_cast<void*>(nItemId) );
         }
     }
 }
@@ -973,7 +973,7 @@ void StatusBar::HideItem( sal_uInt16 nItemId )
             if ( ImplIsItemUpdate() )
                 Invalidate();
 
-            ImplCallEventListeners( VCLEVENT_STATUSBAR_HIDEITEM, (void*) sal_IntPtr(nItemId) );
+            ImplCallEventListeners( VCLEVENT_STATUSBAR_HIDEITEM, reinterpret_cast<void*>(nItemId) );
         }
     }
 }
@@ -1471,7 +1471,7 @@ void StatusBar::SetAccessibleName( sal_uInt16 nItemId, const OUString& rName )
         if ( pItem->maAccessibleName != rName )
         {
             pItem->maAccessibleName = rName;
-            ImplCallEventListeners( VCLEVENT_STATUSBAR_NAMECHANGED, (void*) sal_IntPtr(pItem->mnId) );
+            ImplCallEventListeners( VCLEVENT_STATUSBAR_NAMECHANGED, reinterpret_cast<void*>(pItem->mnId) );
         }
     }
 }

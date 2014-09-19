@@ -181,7 +181,7 @@ public:
 
 inline GtkData* GetGtkSalData()
 {
-    return (GtkData*)ImplGetSVData()->mpSalData;
+    return static_cast<GtkData*>(ImplGetSVData()->mpSalData);
 }
 inline GdkDisplay *GtkData::GetGdkDisplay()
 {

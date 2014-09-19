@@ -193,7 +193,7 @@ Splitter* Splitter::ImplFindSibling()
     {
         if( pWin->ImplIsSplitter() )
         {
-            pSplitter = (Splitter*) pWin;
+            pSplitter = static_cast<Splitter*>(pWin);
             if( pSplitter != this && IsHorizontal() != pSplitter->IsHorizontal() )
                 return pSplitter;
         }

@@ -797,8 +797,8 @@ ReadState GIFReader::ReadGIF( Graphic& rGraphic )
 
 bool ImportGIF( SvStream & rStm, Graphic& rGraphic )
 {
-    GIFReader*  pGIFReader = (GIFReader*) rGraphic.GetContext();
-    sal_uInt16      nOldFormat = rStm.GetNumberFormatInt();
+    GIFReader*  pGIFReader = static_cast<GIFReader*>(rGraphic.GetContext());
+    sal_uInt16  nOldFormat = rStm.GetNumberFormatInt();
     ReadState   eReadState;
     bool        bRet = true;
 

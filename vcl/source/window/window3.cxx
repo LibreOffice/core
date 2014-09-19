@@ -39,10 +39,10 @@ void Window::ImplAdjustNWFSizes()
     switch( GetType() )
     {
     case WINDOW_CHECKBOX:
-        ((CheckBox*)this)->ImplSetMinimumNWFSize();
+        static_cast<CheckBox*>(this)->ImplSetMinimumNWFSize();
         break;
     case WINDOW_RADIOBUTTON:
-        ((RadioButton*)this)->ImplSetMinimumNWFSize();
+        static_cast<RadioButton*>(this)->ImplSetMinimumNWFSize();
         break;
     default:
         {

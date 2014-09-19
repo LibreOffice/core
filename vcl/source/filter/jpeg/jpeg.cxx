@@ -30,7 +30,7 @@ bool ImportJPEG( SvStream& rInputStream, Graphic& rGraphic, void* pCallerData, s
     ReadState   eReadState;
     bool        bReturn = true;
 
-    JPEGReader* pJPEGReader = (JPEGReader*) rGraphic.GetContext();
+    JPEGReader* pJPEGReader = static_cast<JPEGReader*>( rGraphic.GetContext() );
 
     if( !pJPEGReader )
     {

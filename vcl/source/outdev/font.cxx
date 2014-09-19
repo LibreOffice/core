@@ -517,7 +517,7 @@ void OutputDevice::ImplClearFontData( const bool bNewFontLists )
     // also update child windows if needed
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        vcl::Window* pChild = ((vcl::Window*)this)->mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = static_cast<vcl::Window*>(this)->mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->ImplClearFontData( true );
@@ -553,7 +553,7 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
     // also update child windows if needed
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        vcl::Window* pChild = ((vcl::Window*)this)->mpWindowImpl->mpFirstChild;
+        vcl::Window* pChild = static_cast<vcl::Window*>(this)->mpWindowImpl->mpFirstChild;
         while ( pChild )
         {
             pChild->ImplRefreshFontData( true );

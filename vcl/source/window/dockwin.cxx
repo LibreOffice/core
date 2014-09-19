@@ -805,7 +805,7 @@ void DockingWindow::SetFloatingMode( bool bFloatMode )
                 if ( mpOldBorderWin )
                 {
                     SetParent( mpOldBorderWin );
-                    ((ImplBorderWindow*)mpOldBorderWin)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+                    static_cast<ImplBorderWindow*>(mpOldBorderWin)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
                     mpOldBorderWin->Resize();
                 }
                 mpWindowImpl->mpBorderWindow = mpOldBorderWin;

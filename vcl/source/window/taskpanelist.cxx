@@ -33,8 +33,8 @@ Point ImplTaskPaneListGetPos( const vcl::Window *w )
     Point pos;
     if( w->ImplIsDockingWindow() )
     {
-        pos = ((DockingWindow*)w)->GetPosPixel();
-        vcl::Window *pF = ((DockingWindow*)w)->GetFloatingWindow();
+        pos = static_cast<const DockingWindow*>(w)->GetPosPixel();
+        vcl::Window *pF = static_cast<const DockingWindow*>(w)->GetFloatingWindow();
         if( pF )
             pos = pF->OutputToAbsoluteScreenPixel( pF->ScreenToOutputPixel( pos ) );
         else

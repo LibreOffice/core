@@ -80,7 +80,7 @@ void MenuFloatingWindow::doShutdown()
             }
             if( i < nCount )
             {
-                MenuFloatingWindow* pPWin = (MenuFloatingWindow*)pMenu->pStartedFrom->ImplGetWindow();
+                MenuFloatingWindow* pPWin = dynamic_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
                 if( pPWin )
                     pPWin->HighlightItem( i, false );
             }
@@ -284,7 +284,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
         }
         if ( pItemData->bEnabled && pItemData->pSubMenu && pItemData->pSubMenu->GetItemCount() && ( pItemData->pSubMenu != pActivePopup ) )
         {
-            pActivePopup = (PopupMenu*)pItemData->pSubMenu;
+            pActivePopup = static_cast<PopupMenu*>(pItemData->pSubMenu);
             long nY = nScrollerHeight+ImplGetStartY();
             MenuItemData* pData = 0;
             for ( sal_uLong n = 0; n < nHighlightedItem; n++ )
@@ -334,7 +334,7 @@ IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose)
 {
     if( pMenu && pMenu->pStartedFrom )
     {
-        MenuFloatingWindow* pWin = (MenuFloatingWindow*) pMenu->pStartedFrom->GetWindow();
+        MenuFloatingWindow* pWin = static_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->GetWindow());
         if( pWin )
             pWin->KillActivePopup();
     }
@@ -365,7 +365,7 @@ void MenuFloatingWindow::Execute()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    pSVData->maAppData.mpActivePopupMenu = (PopupMenu*)pMenu;
+    pSVData->maAppData.mpActivePopupMenu = static_cast<PopupMenu*>(pMenu);
 
     bInExecute = true;
 //  bCallingSelect = false;
@@ -408,7 +408,7 @@ void MenuFloatingWindow::KillActivePopup( PopupMenu* pThisOnly )
     if ( pActivePopup && ( !pThisOnly || ( pThisOnly == pActivePopup ) ) )
     {
         if( pActivePopup->pWindow != NULL )
-            if( ((FloatingWindow *) pActivePopup->pWindow)->IsInCleanUp() )
+            if( static_cast<FloatingWindow *>(pActivePopup->pWindow)->IsInCleanUp() )
                 return; // kill it later
         if ( pActivePopup->bInCallback )
             pActivePopup->bCanceled = true;
@@ -445,7 +445,7 @@ void MenuFloatingWindow::EndExecute()
     while (pWin && !pWin->bInExecute &&
         pWin->pMenu->pStartedFrom && !pWin->pMenu->pStartedFrom->IsMenuBar())
     {
-        pWin = ((PopupMenu*)pWin->pMenu->pStartedFrom)->ImplGetFloatingWindow();
+        pWin = static_cast<PopupMenu*>(pWin->pMenu->pStartedFrom)->ImplGetFloatingWindow();
     }
     if ( pWin )
         pCleanUpFrom = pWin;
@@ -596,7 +596,7 @@ void MenuFloatingWindow::ImplScroll( bool bUp )
 
         long nHeight = GetOutputSizePixel().Height();
         sal_uInt16 nLastVisible;
-        ((PopupMenu*)pMenu)->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
+        static_cast<PopupMenu*>(pMenu)->ImplCalcVisEntries( nHeight, nFirstEntry, &nLastVisible );
         if ( pMenu->ImplGetNextVisible( nLastVisible ) == ITEMPOS_INVALID )
         {
             bScrollDown = false;
@@ -682,7 +682,7 @@ void MenuFloatingWindow::ChangeHighlightItem( sal_uInt16 n, bool bStartPopupTime
             }
             if( i < nCount )
             {
-                MenuFloatingWindow* pPWin = (MenuFloatingWindow*)pMenu->pStartedFrom->ImplGetWindow();
+                MenuFloatingWindow* pPWin = dynamic_cast<MenuFloatingWindow*>(pMenu->pStartedFrom->ImplGetWindow());
                 if( pPWin && pPWin->nHighlightedItem != i )
                 {
                     pPWin->HighlightItem( i, true );
@@ -911,11 +911,11 @@ void MenuFloatingWindow::ImplCursorUpDown( bool bUp, bool bHomeEnd )
 
                 Size aOutSz = GetOutputSizePixel();
                 sal_uInt16 nLastVisible;
-                ((PopupMenu*)pMenu)->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry, &nLastVisible );
+                static_cast<PopupMenu*>(pMenu)->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry, &nLastVisible );
                 while ( n > nLastVisible )
                 {
                     ImplScroll( false );
-                    ((PopupMenu*)pMenu)->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry, &nLastVisible );
+                    static_cast<PopupMenu*>(pMenu)->ImplCalcVisEntries( aOutSz.Height(), nFirstEntry, &nLastVisible );
                 }
             }
             ChangeHighlightItem( n, false );
@@ -965,7 +965,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 else
                 {
                     StopExecute();
-                    PopupMenu* pPopupMenu = (PopupMenu*)pMenu->pStartedFrom;
+                    PopupMenu* pPopupMenu = static_cast<PopupMenu*>(pMenu->pStartedFrom);
                     MenuFloatingWindow* pFloat = pPopupMenu->ImplGetFloatingWindow();
                     pFloat->GrabFocus();
                     pFloat->KillActivePopup();
@@ -985,7 +985,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
                 }
                 else
                 {
-                    MenuFloatingWindow* pFloat = ((PopupMenu*)pMenu->pStartedFrom)->ImplGetFloatingWindow();
+                    MenuFloatingWindow* pFloat = static_cast<PopupMenu*>(pMenu->pStartedFrom)->ImplGetFloatingWindow();
                     pFloat->GrabFocus();
                     pFloat->KillActivePopup();
                     sal_uInt16 highlightItem = pFloat->GetHighlightedItem();

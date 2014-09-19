@@ -440,7 +440,7 @@ IMPL_LINK( ComboBox, ImplSelectionChangedHdl, void*, n )
 {
     if ( !mpImplLB->IsTrackingSelect() )
     {
-        sal_Int32 nChanged = (sal_Int32)(sal_uLong)n;
+        sal_Int32 nChanged = (sal_Int32)reinterpret_cast<sal_uLong>(n);
         if ( !mpSubEdit->IsReadOnly() && mpImplLB->GetEntryList()->IsEntryPosSelected( nChanged ) )
             mpSubEdit->SetText( mpImplLB->GetEntryList()->GetEntryText( nChanged ) );
     }
@@ -861,7 +861,7 @@ sal_Int32 ComboBox::InsertEntry(const OUString& rStr, sal_Int32 const nPos)
 
     nRealPos = mpImplLB->InsertEntry( nRealPos, rStr );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, reinterpret_cast<void*>(nRealPos) );
     return nRealPos;
 }
 
@@ -884,7 +884,7 @@ sal_Int32 ComboBox::InsertEntryWithImage(
 
     nRealPos = mpImplLB->InsertEntry( nRealPos, rStr, rImage );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) sal_IntPtr(nRealPos) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, reinterpret_cast<void*>(nRealPos) );
     return nRealPos;
 }
 
@@ -900,13 +900,13 @@ void ComboBox::RemoveEntryAt(sal_Int32 const nPos)
         return;
 
     mpImplLB->RemoveEntry( nPos + nMRUCount );
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(nPos) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, reinterpret_cast<void*>(nPos) );
 }
 
 void ComboBox::Clear()
 {
     mpImplLB->Clear();
-    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(-1) );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, reinterpret_cast<void*>(-1) );
 }
 
 Image ComboBox::GetEntryImage( sal_Int32 nPos ) const

@@ -836,7 +836,7 @@ SystemWindow* Window::GetSystemWindow() const
     const vcl::Window* pWin = this;
     while ( pWin && !pWin->IsSystemWindow() )
         pWin  = pWin->GetParent();
-    return (SystemWindow*)pWin;
+    return static_cast<SystemWindow*>(const_cast<Window*>(pWin));
 }
 
 static SystemWindow *ImplGetLastSystemWindow( vcl::Window *pWin )
@@ -849,7 +849,7 @@ static SystemWindow *ImplGetLastSystemWindow( vcl::Window *pWin )
     while ( pMyParent )
     {
         if ( pMyParent->IsSystemWindow() )
-            pSysWin = (SystemWindow*)pMyParent;
+            pSysWin = static_cast<SystemWindow*>(pMyParent);
         pMyParent = pMyParent->GetParent();
     }
     return pSysWin;
@@ -991,7 +991,7 @@ void Window::SetParent( vcl::Window* pNewParent )
     {
         if ( (GetType() == WINDOW_BORDERWINDOW) &&
              (ImplGetWindow()->GetType() == WINDOW_FLOATINGWINDOW) )
-            ((ImplBorderWindow*)this)->SetDisplayActive( mpWindowImpl->mpFrameData->mbHasFocus );
+            static_cast<ImplBorderWindow*>(this)->SetDisplayActive( mpWindowImpl->mpFrameData->mbHasFocus );
     }
 
     // when required give focus to new frame if

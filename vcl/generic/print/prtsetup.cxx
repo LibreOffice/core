@@ -324,7 +324,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent )
 
     for( sal_uInt16 i = 0; i < m_pLevelBox->GetEntryCount(); i++ )
     {
-        if( (sal_uLong)m_pLevelBox->GetEntryData( i ) == nLevelEntryData )
+        if( reinterpret_cast<sal_uLong>(m_pLevelBox->GetEntryData( i )) == nLevelEntryData )
         {
             m_pLevelBox->SelectEntryPos( i );
             break;
@@ -391,7 +391,7 @@ sal_uLong RTSDevicePage::getColorDevice()
 
 sal_uLong RTSDevicePage::getLevel()
 {
-    sal_uLong nLevel = (sal_uLong)m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() );
+    sal_uLong nLevel = reinterpret_cast<sal_uLong>(m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() ));
     if (nLevel == 0)
         return 0;   //automatic
     return nLevel < 10 ? nLevel-1 : 0;
@@ -399,7 +399,7 @@ sal_uLong RTSDevicePage::getLevel()
 
 sal_uLong RTSDevicePage::getPDFDevice()
 {
-    sal_uLong nLevel = (sal_uLong)m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() );
+    sal_uLong nLevel = reinterpret_cast<sal_uLong>(m_pLevelBox->GetEntryData( m_pLevelBox->GetSelectEntryPos() ));
     if (nLevel > 9)
         return 2;   //explictly PDF
     else if (nLevel == 0)

@@ -275,7 +275,7 @@ void Window::ImplGrabFocus( sal_uInt16 nFlags )
     {
         // #102158#, ignore grabfocus only if the floating parent grabs keyboard focus by itself (GrabsFocus())
         // otherwise we cannot set the focus in a floating toolbox
-        if( ( (pParent->mpWindowImpl->mbFloatWin && ((FloatingWindow*)pParent)->GrabsFocus()) || ( pParent->GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( pParent->GetStyle() & WB_MOVEABLE ) )
+        if( ( (pParent->mpWindowImpl->mbFloatWin && static_cast<FloatingWindow*>(pParent)->GrabsFocus()) || ( pParent->GetStyle() & WB_SYSTEMFLOATWIN ) ) && !( pParent->GetStyle() & WB_MOVEABLE ) )
         {
             bMustNotGrabFocus = true;
             break;

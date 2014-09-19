@@ -316,7 +316,7 @@ void Graphic::Save( SvStream& rOStm )
 
 void Graphic::Assign( const SvDataCopyStream& rCopyStream )
 {
-    *this = (const Graphic& ) rCopyStream;
+    *this = static_cast<const Graphic&>( rCopyStream );
 }
 
 void Graphic::Clear()

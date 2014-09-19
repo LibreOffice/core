@@ -789,7 +789,7 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
     {
         // 0 means get BitmapEx
         uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
-        boost::scoped_ptr<BitmapEx> pBitmapEx((BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue()));
+        boost::scoped_ptr<BitmapEx> pBitmapEx(reinterpret_cast<BitmapEx*>( *reinterpret_cast<const sal_Int64*>(aAny.getValue())));
         if( pBitmapEx )
         {
             *this = *pBitmapEx;

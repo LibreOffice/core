@@ -3276,7 +3276,7 @@ void VclBuilder::mungeModel(ListBox &rTarget, const ListStore &rStore, sal_uInt1
         if (rRow.size() > 1)
         {
             sal_IntPtr nValue = rRow[1].toInt32();
-            rTarget.SetEntryData(nEntry, (void*)nValue);
+            rTarget.SetEntryData(nEntry, reinterpret_cast<void*>(nValue));
         }
     }
     if (nActiveId < rStore.m_aEntries.size())

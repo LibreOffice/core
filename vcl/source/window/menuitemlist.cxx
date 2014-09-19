@@ -34,7 +34,7 @@ MenuItemData::~MenuItemData()
 {
     if( pAutoSubMenu )
     {
-        ((PopupMenu*)pAutoSubMenu)->pRefAutoSubMenu = NULL;
+        static_cast<PopupMenu*>(pAutoSubMenu)->pRefAutoSubMenu = NULL;
         delete pAutoSubMenu;
         pAutoSubMenu = NULL;
     }

@@ -56,7 +56,7 @@ TextAttrib* TextAttribFontColor::Clone() const
 bool TextAttribFontColor::operator==( const TextAttrib& rAttr ) const
 {
     return ( ( TextAttrib::operator==(rAttr ) ) &&
-                ( maColor == ((const TextAttribFontColor&)rAttr).maColor ) );
+                ( maColor == static_cast<const TextAttribFontColor&>(rAttr).maColor ) );
 }
 
 TextAttribFontWeight::TextAttribFontWeight( FontWeight eWeight )
@@ -86,7 +86,7 @@ TextAttrib* TextAttribFontWeight::Clone() const
 bool TextAttribFontWeight::operator==( const TextAttrib& rAttr ) const
 {
     return ( ( TextAttrib::operator==(rAttr ) ) &&
-                ( meWeight == ((const TextAttribFontWeight&)rAttr).meWeight ) );
+                ( meWeight == static_cast<const TextAttribFontWeight&>(rAttr).meWeight ) );
 }
 
 TextAttribHyperLink::TextAttribHyperLink( const TextAttribHyperLink& rAttr )
@@ -113,9 +113,9 @@ TextAttrib* TextAttribHyperLink::Clone() const
 bool TextAttribHyperLink::operator==( const TextAttrib& rAttr ) const
 {
     return ( ( TextAttrib::operator==(rAttr ) ) &&
-                ( maURL == ((const TextAttribHyperLink&)rAttr).maURL ) &&
-                ( maDescription == ((const TextAttribHyperLink&)rAttr).maDescription ) &&
-                ( maColor == ((const TextAttribHyperLink&)rAttr).maColor ) );
+                ( maURL == static_cast<const TextAttribHyperLink&>(rAttr).maURL ) &&
+                ( maDescription == static_cast<const TextAttribHyperLink&>(rAttr).maDescription ) &&
+                ( maColor == static_cast<const TextAttribHyperLink&>(rAttr).maColor ) );
 }
 
 TextAttribProtect::TextAttribProtect() :

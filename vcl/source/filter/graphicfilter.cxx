@@ -1334,7 +1334,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     sal_uInt16              nStatus;
     GraphicReader*          pContext = rGraphic.GetContext();
     GfxLinkType             eLinkType = GFX_LINK_TYPE_NONE;
-    bool                    bDummyContext = ( pContext == (GraphicReader*) 1 );
+    bool                    bDummyContext = ( pContext == reinterpret_cast<GraphicReader*>(1) );
     const bool              bLinkSet = rGraphic.IsLink();
     FilterConfigItem*       pFilterConfigItem = NULL;
 
@@ -1395,7 +1395,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         // if pending, return GRFILTER_OK in order to request more bytes
         if( rIStream.GetError() == ERRCODE_IO_PENDING )
         {
-            rGraphic.SetContext( (GraphicReader*) 1 );
+            rGraphic.SetContext( reinterpret_cast<GraphicReader*>(1) );
             rIStream.ResetError();
             rIStream.Seek( nStreamBegin );
             return (sal_uInt16) ImplSetError( GRFILTER_OK );
@@ -1425,7 +1425,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
     {
         if( aFilterName.equalsIgnoreAsciiCase( IMP_GIF )  )
         {
-            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+            if( rGraphic.GetContext() == reinterpret_cast<GraphicReader*>(1) )
                 rGraphic.SetContext( NULL );
 
             if( !ImportGIF( rIStream, rGraphic ) )
@@ -1435,7 +1435,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_PNG ) )
         {
-            if ( rGraphic.GetContext() == (GraphicReader*) 1 )
+            if ( rGraphic.GetContext() == reinterpret_cast<GraphicReader*>(1) )
                 rGraphic.SetContext( NULL );
 
             vcl::PNGReader aPNGReader( rIStream );
@@ -1486,7 +1486,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_JPEG ) )
         {
-            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+            if( rGraphic.GetContext() == reinterpret_cast<GraphicReader*>(1) )
                 rGraphic.SetContext( NULL );
 
             // set LOGSIZE flag always, if not explicitly disabled
@@ -1501,7 +1501,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_SVG ) )
         {
-            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+            if( rGraphic.GetContext() == reinterpret_cast<GraphicReader*>(1) )
                 rGraphic.SetContext( NULL );
 
             const sal_uInt32 nStreamPosition(rIStream.Tell());
@@ -1570,7 +1570,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_XBM ) )
         {
-            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+            if( rGraphic.GetContext() == reinterpret_cast<GraphicReader*>(1) )
                 rGraphic.SetContext( NULL );
 
             if( !ImportXBM( rIStream, rGraphic ) )
@@ -1578,7 +1578,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         else if( aFilterName.equalsIgnoreAsciiCase( IMP_XPM ) )
         {
-            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+            if( rGraphic.GetContext() == reinterpret_cast<GraphicReader*>(1) )
                 rGraphic.SetContext( NULL );
 
             if( !ImportXPM( rIStream, rGraphic ) )

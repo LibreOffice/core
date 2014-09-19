@@ -989,7 +989,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
         {
             case( META_PIXEL_ACTION ):
             {
-                const MetaPixelAction* pA = (const MetaPixelAction*) pAction;
+                const MetaPixelAction* pA = static_cast<const MetaPixelAction*>(pAction);
 
                 ImplCheckLineAttr();
                 ImplBeginRecord( WIN_EMR_SETPIXELV );
@@ -1003,7 +1003,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 if( maVDev.IsLineColor() )
                 {
-                    const MetaPointAction* pA = (const MetaPointAction*) pAction;
+                    const MetaPointAction* pA = static_cast<const MetaPointAction*>(pAction);
 
                     ImplCheckLineAttr();
                     ImplBeginRecord( WIN_EMR_SETPIXELV );
@@ -1018,7 +1018,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 if( maVDev.IsLineColor() )
                 {
-                    const MetaLineAction* pA = (const MetaLineAction*) pAction;
+                    const MetaLineAction* pA = static_cast<const MetaLineAction*>(pAction);
 
                     if(pA->GetLineInfo().IsDefault())
                     {
@@ -1053,7 +1053,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 if( maVDev.IsLineColor() || maVDev.IsFillColor() )
                 {
-                    const MetaRectAction* pA = (const MetaRectAction*) pAction;
+                    const MetaRectAction* pA = static_cast<const MetaRectAction*>(pAction);
 
                     ImplCheckFillAttr();
                     ImplCheckLineAttr();
@@ -1069,7 +1069,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 if( maVDev.IsLineColor() || maVDev.IsFillColor() )
                 {
-                    const MetaRoundRectAction* pA = (const MetaRoundRectAction*) pAction;
+                    const MetaRoundRectAction* pA = static_cast<const MetaRoundRectAction*>(pAction);
 
                     ImplCheckFillAttr();
                     ImplCheckLineAttr();
@@ -1086,7 +1086,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 if( maVDev.IsLineColor() || maVDev.IsFillColor() )
                 {
-                    const MetaEllipseAction* pA = (const MetaEllipseAction*) pAction;
+                    const MetaEllipseAction* pA = static_cast<const MetaEllipseAction*>(pAction);
 
                     ImplCheckFillAttr();
                     ImplCheckLineAttr();
@@ -1111,27 +1111,27 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                     {
                         case( META_ARC_ACTION ):
                         {
-                            const MetaArcAction* pA = (const MetaArcAction*) pAction;
+                            const MetaArcAction* pA = static_cast<const MetaArcAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_ARC );
                         }
                         break;
 
                         case( META_PIE_ACTION ):
                         {
-                            const MetaPieAction* pA = (const MetaPieAction*) pAction;
+                            const MetaPieAction* pA = static_cast<const MetaPieAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_PIE );
                         }
                         break;
 
                         case( META_CHORD_ACTION ):
                         {
-                            const MetaChordAction* pA = (const MetaChordAction*) pAction;
+                            const MetaChordAction* pA = static_cast<const MetaChordAction*>(pAction);
                             aPoly = Polygon( pA->GetRect(), pA->GetStartPoint(), pA->GetEndPoint(), POLY_CHORD );
                         }
                         break;
 
                         case( META_POLYGON_ACTION ):
-                            aPoly = ( (const MetaPolygonAction*) pAction )->GetPolygon();
+                            aPoly = static_cast<const MetaPolygonAction*>(pAction)->GetPolygon();
                         break;
                     }
 
@@ -1144,7 +1144,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             {
                 if( maVDev.IsLineColor() )
                 {
-                    const MetaPolyLineAction*   pA = (const MetaPolyLineAction*) pAction;
+                    const MetaPolyLineAction*   pA = static_cast<const MetaPolyLineAction*>(pAction);
                     const Polygon&              rPoly = pA->GetPolygon();
 
                     if( rPoly.GetSize() )
@@ -1166,13 +1166,13 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_POLYPOLYGON_ACTION ):
             {
                 if( maVDev.IsLineColor() || maVDev.IsFillColor() )
-                    ImplWritePolyPolygonRecord( ( (const MetaPolyPolygonAction*) pAction )->GetPolyPolygon() );
+                    ImplWritePolyPolygonRecord( static_cast<const MetaPolyPolygonAction*>(pAction)->GetPolyPolygon() );
             }
             break;
 
             case( META_GRADIENT_ACTION ):
             {
-                const MetaGradientAction*   pA = (const MetaGradientAction*) pAction;
+                const MetaGradientAction*   pA = static_cast<const MetaGradientAction*>(pAction);
                 GDIMetaFile                 aTmpMtf;
 
                 maVDev.AddGradientActions( pA->GetRect(), pA->GetGradient(), aTmpMtf );
@@ -1182,7 +1182,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_HATCH_ACTION:
             {
-                const MetaHatchAction*  pA = (const MetaHatchAction*) pAction;
+                const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
                 GDIMetaFile             aTmpMtf;
 
                 maVDev.AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
@@ -1192,9 +1192,9 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_TRANSPARENT_ACTION:
             {
-                const PolyPolygon& rPolyPoly = ( (MetaTransparentAction*) pAction )->GetPolyPolygon();
+                const PolyPolygon& rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
                 if( rPolyPoly.Count() )
-                    ImplWritePlusFillPolygonRecord( rPolyPoly[0], ( (MetaTransparentAction*)pAction)->GetTransparence() );
+                    ImplWritePlusFillPolygonRecord( rPolyPoly[0], static_cast<const MetaTransparentAction*>(pAction)->GetTransparence() );
                 ImplCheckFillAttr();
                 ImplCheckLineAttr();
                 ImplWritePolyPolygonRecord( rPolyPoly );
@@ -1207,7 +1207,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_FLOATTRANSPARENT_ACTION:
             {
-                const MetaFloatTransparentAction* pA = (const MetaFloatTransparentAction*) pAction;
+                const MetaFloatTransparentAction* pA = static_cast<const MetaFloatTransparentAction*>(pAction);
 
                 GDIMetaFile     aTmpMtf( pA->GetGDIMetaFile() );
                 Point           aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
@@ -1238,7 +1238,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case( META_EPS_ACTION ):
             {
-                const MetaEPSAction*    pA = (const MetaEPSAction*) pAction;
+                const MetaEPSAction*    pA = static_cast<const MetaEPSAction*>(pAction);
                 const GDIMetaFile       aSubstitute( pA->GetSubstitute() );
 
                 for( size_t i = 0, nCount = aSubstitute.GetActionSize(); i < nCount; i++ )
@@ -1270,21 +1270,21 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_BMP_ACTION:
             {
-                const MetaBmpAction* pA = (const MetaBmpAction *) pAction;
+                const MetaBmpAction* pA = static_cast<const MetaBmpAction *>(pAction);
                 ImplWriteBmpRecord( pA->GetBitmap(), pA->GetPoint(), maVDev.PixelToLogic( pA->GetBitmap().GetSizePixel() ), WIN_SRCCOPY );
             }
             break;
 
             case META_BMPSCALE_ACTION:
             {
-                const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+                const MetaBmpScaleAction* pA = static_cast<const MetaBmpScaleAction*>(pAction);
                 ImplWriteBmpRecord( pA->GetBitmap(), pA->GetPoint(), pA->GetSize(), WIN_SRCCOPY );
             }
             break;
 
             case META_BMPSCALEPART_ACTION:
             {
-                const MetaBmpScalePartAction*   pA = (const MetaBmpScalePartAction*) pAction;
+                const MetaBmpScalePartAction*   pA = static_cast<const MetaBmpScalePartAction*>(pAction);
                 Bitmap                          aTmp( pA->GetBitmap() );
 
                 if( aTmp.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) ) )
@@ -1294,7 +1294,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_BMPEX_ACTION:
             {
-                const MetaBmpExAction*  pA = (const MetaBmpExAction *) pAction;
+                const MetaBmpExAction*  pA = static_cast<const MetaBmpExAction *>(pAction);
                 Bitmap                  aBmp( pA->GetBitmapEx().GetBitmap() );
                 Bitmap                  aMsk( pA->GetBitmapEx().GetMask() );
 
@@ -1312,7 +1312,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_BMPEXSCALE_ACTION:
             {
-                const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+                const MetaBmpExScaleAction* pA = static_cast<const MetaBmpExScaleAction*>(pAction);
                 Bitmap                      aBmp( pA->GetBitmapEx().GetBitmap() );
                 Bitmap                      aMsk( pA->GetBitmapEx().GetMask() );
 
@@ -1330,7 +1330,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_BMPEXSCALEPART_ACTION:
             {
-                const MetaBmpExScalePartAction* pA = (const MetaBmpExScalePartAction*) pAction;
+                const MetaBmpExScalePartAction* pA = static_cast<const MetaBmpExScalePartAction*>(pAction);
                 BitmapEx                        aBmpEx( pA->GetBitmapEx() );
                 aBmpEx.Crop( Rectangle( pA->GetSrcPoint(), pA->GetSrcSize() ) );
                 Bitmap                          aBmp( aBmpEx.GetBitmap() );
@@ -1350,7 +1350,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_TEXT_ACTION:
             {
-                const MetaTextAction*   pA = (const MetaTextAction*) pAction;
+                const MetaTextAction*   pA = static_cast<const MetaTextAction*>(pAction);
                 const OUString          aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
@@ -1360,7 +1360,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_TEXTRECT_ACTION:
             {
-                const MetaTextRectAction*   pA = (const MetaTextRectAction*) pAction;
+                const MetaTextRectAction*   pA = static_cast<const MetaTextRectAction*>(pAction);
                 const OUString              aText( pA->GetText() );
 
                 ImplCheckTextAttr();
@@ -1370,7 +1370,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_TEXTARRAY_ACTION:
             {
-                const MetaTextArrayAction*  pA = (const MetaTextArrayAction*) pAction;
+                const MetaTextArrayAction*  pA = static_cast<const MetaTextArrayAction*>(pAction);
                 const OUString              aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
@@ -1380,7 +1380,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
 
             case META_STRETCHTEXT_ACTION:
             {
-                const MetaStretchTextAction*    pA = (const MetaStretchTextAction*) pAction;
+                const MetaStretchTextAction*    pA = static_cast<const MetaStretchTextAction*>(pAction);
                 const OUString                  aText = pA->GetText().copy( pA->GetIndex(), std::min(pA->GetText().getLength() - pA->GetIndex(), pA->GetLen()) );
 
                 ImplCheckTextAttr();
@@ -1418,7 +1418,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                 ( (MetaAction*) pAction )->Execute( &maVDev );
 
                 ImplBeginRecord( WIN_EMR_INTERSECTCLIPRECT );
-                ImplWriteRect( ( (MetaISectRectClipRegionAction*) pAction )->GetRect() );
+                ImplWriteRect( static_cast<const MetaISectRectClipRegionAction*>(pAction)->GetRect() );
                 ImplEndRecord();
             }
             break;
@@ -1461,13 +1461,13 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_RASTEROP_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( &maVDev );
-                ImplWriteRasterOp( ( (MetaRasterOpAction*) pAction )->GetRasterOp() );
+                ImplWriteRasterOp( static_cast<const MetaRasterOpAction*>(pAction)->GetRasterOp() );
             }
             break;
 
             case( META_LAYOUTMODE_ACTION ):
             {
-                ComplexTextLayoutMode nLayoutMode = ( (MetaLayoutModeAction*) pAction )->GetLayoutMode();
+                ComplexTextLayoutMode nLayoutMode = static_cast<const MetaLayoutModeAction*>(pAction)->GetLayoutMode();
                 mnHorTextAlign = 0;
                 if ((nLayoutMode & TEXT_LAYOUT_BIDI_RTL) != TEXT_LAYOUT_DEFAULT)
                 {

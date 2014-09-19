@@ -480,7 +480,7 @@ sal_uIntPtr Window::SaveFocus()
         ImplFocusDelData* pDelData = new ImplFocusDelData;
         pSVData->maWinData.mpFocusWin->ImplAddDel( pDelData );
         pDelData->mpFocusWin = pSVData->maWinData.mpFocusWin;
-        return (sal_uIntPtr)(void*)pDelData;
+        return reinterpret_cast<sal_uIntPtr>(pDelData);
     }
     else
         return 0;
@@ -493,7 +493,7 @@ bool Window::EndSaveFocus( sal_uIntPtr nSaveId, bool bRestore )
     else
     {
         bool                bOK = true;
-        ImplFocusDelData*   pDelData = (ImplFocusDelData*)(void*)nSaveId;
+        ImplFocusDelData*   pDelData = reinterpret_cast<ImplFocusDelData*>(nSaveId);
         if ( !pDelData->IsDead() )
         {
             pDelData->mpFocusWin->ImplRemoveDel( pDelData );

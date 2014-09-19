@@ -65,7 +65,7 @@ static OString ImplGetDialogText( Dialog* pDialog )
     {
         aErrorStr.append(", ");
         aErrorStr.append(OUStringToOString(
-            ((MessBox*)pDialog)->GetMessText(), RTL_TEXTENCODING_UTF8));
+            static_cast<MessBox*>(pDialog)->GetMessText(), RTL_TEXTENCODING_UTF8));
     }
     return aErrorStr.makeStringAndClear();
 }
@@ -265,7 +265,7 @@ static PushButton* ImplGetDefaultButton( Dialog* pDialog )
     {
         if ( pChild->ImplIsPushButton() )
         {
-            PushButton* pPushButton = (PushButton*)pChild;
+            PushButton* pPushButton = static_cast<PushButton*>(pChild);
             if ( pPushButton->ImplIsDefButton() )
                 return pPushButton;
         }
@@ -282,7 +282,7 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
     while ( pChild )
     {
         if ( pChild->GetType() == WINDOW_OKBUTTON )
-            return (PushButton*)pChild;
+            return static_cast<PushButton*>(pChild);
 
         pChild = pChild->GetWindow( WINDOW_NEXT );
     }
@@ -297,7 +297,7 @@ static PushButton* ImplGetCancelButton( Dialog* pDialog )
     while ( pChild )
     {
         if ( pChild->GetType() == WINDOW_CANCELBUTTON )
-            return (PushButton*)pChild;
+            return static_cast<PushButton*>(pChild);
 
         pChild = pChild->GetWindow( WINDOW_NEXT );
     }
@@ -627,7 +627,7 @@ void Dialog::StateChanged( StateChangedType nType )
             if ( ImplGetCancelButton( this ) || ImplGetOKButton( this ) )
             {
                 if ( ImplGetBorderWindow() )
-                    ((ImplBorderWindow*)ImplGetBorderWindow())->SetCloseButton();
+                    static_cast<ImplBorderWindow*>(ImplGetBorderWindow())->SetCloseButton();
             }
         }
 
@@ -1047,7 +1047,7 @@ void Dialog::SetModalInputMode( bool bModal, bool bSubModalDialogs )
         while ( pOverlap )
         {
             if ( pOverlap->IsDialog() )
-                ((Dialog*)pOverlap)->SetModalInputMode( bModal, true );
+                static_cast<Dialog*>(pOverlap)->SetModalInputMode( bModal, true );
             pOverlap = pOverlap->mpWindowImpl->mpNext;
         }
     }

@@ -1399,7 +1399,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
         {
             case( META_PIXEL_ACTION ):
             {
-                MetaPixelAction* pAct = (MetaPixelAction*) pAction;
+                const MetaPixelAction* pAct = static_cast<const MetaPixelAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_PIXEL_ACTION );
                 rOStm.WriteInt32( 18 );
@@ -1411,7 +1411,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_POINT_ACTION ):
             {
-                MetaPointAction* pAct = (MetaPointAction*) pAction;
+                const MetaPointAction* pAct = static_cast<const MetaPointAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_POINT_ACTION );
                 rOStm.WriteInt32( 12 );
@@ -1422,7 +1422,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_LINE_ACTION ):
             {
-                MetaLineAction* pAct = (MetaLineAction*) pAction;
+                const MetaLineAction* pAct = static_cast<const MetaLineAction*>(pAction);
                 const LineInfo& rInfo = pAct->GetLineInfo();
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
@@ -1491,7 +1491,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_RECT_ACTION ):
             {
-                MetaRectAction* pAct = (MetaRectAction*) pAction;
+                const MetaRectAction* pAct = static_cast<const MetaRectAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_RECT_ACTION );
                 rOStm.WriteInt32( 28 );
@@ -1504,7 +1504,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_ROUNDRECT_ACTION ):
             {
-                MetaRoundRectAction* pAct = (MetaRoundRectAction*) pAction;
+                const MetaRoundRectAction* pAct = static_cast<const MetaRoundRectAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_RECT_ACTION );
                 rOStm.WriteInt32( 28 );
@@ -1517,7 +1517,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_ELLIPSE_ACTION ):
             {
-                MetaEllipseAction* pAct = (MetaEllipseAction*) pAction;
+                const MetaEllipseAction* pAct = static_cast<const MetaEllipseAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_ELLIPSE_ACTION );
                 rOStm.WriteInt32( 20 );
@@ -1528,7 +1528,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_ARC_ACTION ):
             {
-                MetaArcAction* pAct = (MetaArcAction*) pAction;
+                const MetaArcAction* pAct = static_cast<const MetaArcAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_ARC_ACTION );
                 rOStm.WriteInt32( 36 );
@@ -1541,7 +1541,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_PIE_ACTION ):
             {
-                MetaPieAction* pAct = (MetaPieAction*) pAction;
+                const MetaPieAction* pAct = static_cast<const MetaPieAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_PIE_ACTION );
                 rOStm.WriteInt32( 36 );
@@ -1554,10 +1554,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_CHORD_ACTION ):
             {
-                MetaChordAction*    pAct = (MetaChordAction*) pAction;
-                Polygon             aChordPoly( pAct->GetRect(), pAct->GetStartPoint(),
+                const MetaChordAction* pAct = static_cast<const MetaChordAction*>(pAction);
+                Polygon                aChordPoly( pAct->GetRect(), pAct->GetStartPoint(),
                                                 pAct->GetEndPoint(), POLY_CHORD );
-                const sal_uInt16        nPoints = aChordPoly.GetSize();
+                const sal_uInt16       nPoints = aChordPoly.GetSize();
 
                 rOStm.WriteInt16(  GDI_POLYGON_ACTION );
                 rOStm.WriteInt32( ( 8 + ( nPoints << 3 ) ) );
@@ -1572,14 +1572,14 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             case( META_POLYLINE_ACTION ):
             {
                 // #i102224#
-                MetaPolyLineAction* pAct = (MetaPolyLineAction*) pAction;
+                const MetaPolyLineAction* pAct = static_cast<const MetaPolyLineAction*>(pAction);
                 // #i102224# Here the possible curved nature of Polygon was
                 // ignored (for all those years). Adapted to at least write
                 // a polygon representing the curve as good as possible
-                 Polygon aSimplePoly;
-                 pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
+                Polygon aSimplePoly;
+                pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
                 const LineInfo& rInfo = pAct->GetLineInfo();
-                 const sal_uInt16 nPoints(aSimplePoly.GetSize());
+                const sal_uInt16 nPoints(aSimplePoly.GetSize());
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
                 const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
@@ -1658,12 +1658,12 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_POLYGON_ACTION ):
             {
-                MetaPolygonAction* pAct = (MetaPolygonAction*)pAction;
+                const MetaPolygonAction* pAct = static_cast<const MetaPolygonAction*>(pAction);
                 // #i102224# Here the possible curved nature of Polygon was
                 // ignored (for all those years). Adapted to at least write
                 // a polygon representing the curve as good as possible
-                 Polygon aSimplePoly;
-                 pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
+                Polygon aSimplePoly;
+                pAct->GetPolygon().AdaptiveSubdivide(aSimplePoly);
                 const sal_uInt16 nPoints(aSimplePoly.GetSize());
 
                 rOStm.WriteInt16(  GDI_POLYGON_ACTION );
@@ -1685,7 +1685,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_POLYPOLYGON_ACTION ):
             {
-                MetaPolyPolygonAction* pAct = (MetaPolyPolygonAction*) pAction;
+                const MetaPolyPolygonAction* pAct = static_cast<const MetaPolyPolygonAction*>(pAction);
                 ImplWritePolyPolyAction( rOStm, pAct->GetPolyPolygon() );
                 nCount++;
 
@@ -1698,10 +1698,9 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TEXT_ACTION ):
             {
-                MetaTextAction* pAct = (MetaTextAction*) pAction;
-                OUString        aUniText( pAct->GetText() );
-                OString aText(OUStringToOString(aUniText,
-                    rActualCharSet));
+                const MetaTextAction* pAct = static_cast<const MetaTextAction*>(pAction);
+                OUString aUniText( pAct->GetText() );
+                OString  aText(OUStringToOString(aUniText, rActualCharSet));
                 const sal_Int32 nStrLen = aText.getLength();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
@@ -1720,7 +1719,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TEXTARRAY_ACTION ):
             {
-                MetaTextArrayAction* pAct = (MetaTextArrayAction*)pAction;
+                const MetaTextArrayAction* pAct = static_cast<const MetaTextArrayAction*>(pAction);
                 OString aText(OUStringToOString(pAct->GetText(), rActualCharSet));
                 OUString aUniText = pAct->GetText().copy(
                         pAct->GetIndex(),
@@ -1764,11 +1763,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_STRETCHTEXT_ACTION ):
             {
-                MetaStretchTextAction*  pAct = (MetaStretchTextAction*) pAction;
-                OUString                aUniText( pAct->GetText() );
-                OString aText(OUStringToOString(aUniText,
-                    rActualCharSet));
-                const sal_Int32         nStrLen = aText.getLength();
+                const MetaStretchTextAction* pAct = static_cast<const MetaStretchTextAction*>(pAction);
+                OUString aUniText( pAct->GetText() );
+                OString  aText(OUStringToOString(aUniText, rActualCharSet));
+                const sal_Int32 nStrLen = aText.getLength();
 
                 if ( ImplWriteUnicodeComment( rOStm, aUniText ) )
                     nCount++;
@@ -1787,7 +1785,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_BMP_ACTION ):
             {
-                MetaBmpAction* pAct = (MetaBmpAction*) pAction;
+                const MetaBmpAction* pAct = static_cast<const MetaBmpAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_BITMAP_ACTION );
                 rOStm.WriteInt32( 12 );
@@ -1799,7 +1797,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_BMPSCALE_ACTION ):
             {
-                MetaBmpScaleAction* pAct = (MetaBmpScaleAction*) pAction;
+                const MetaBmpScaleAction* pAct = static_cast<const MetaBmpScaleAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_BITMAPSCALE_ACTION );
                 rOStm.WriteInt32( 20 );
@@ -1812,7 +1810,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_BMPSCALEPART_ACTION ):
             {
-                MetaBmpScalePartAction* pAct = (MetaBmpScalePartAction*) pAction;
+                const MetaBmpScalePartAction* pAct = static_cast<const MetaBmpScalePartAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_BITMAPSCALEPART_ACTION );
                 rOStm.WriteInt32( 36 );
@@ -1827,8 +1825,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_BMPEX_ACTION ):
             {
-                MetaBmpExAction*    pAct = (MetaBmpExAction*) pAction;
-                const Bitmap        aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
+                const MetaBmpExAction* pAct = static_cast<const MetaBmpExAction*>(pAction);
+                const Bitmap           aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
 
                 rOStm.WriteInt16(  GDI_BITMAP_ACTION );
                 rOStm.WriteInt32( 12 );
@@ -1840,8 +1838,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_BMPEXSCALE_ACTION ):
             {
-                MetaBmpExScaleAction*   pAct = (MetaBmpExScaleAction*) pAction;
-                const Bitmap            aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
+                const MetaBmpExScaleAction* pAct = static_cast<const MetaBmpExScaleAction*>(pAction);
+                const Bitmap                aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
 
                 rOStm.WriteInt16(  GDI_BITMAPSCALE_ACTION );
                 rOStm.WriteInt32( 20 );
@@ -1854,8 +1852,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_BMPEXSCALEPART_ACTION ):
             {
-                MetaBmpExScalePartAction* pAct = (MetaBmpExScalePartAction*) pAction;
-                const Bitmap            aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
+                const MetaBmpExScalePartAction* pAct = static_cast<const MetaBmpExScalePartAction*>(pAction);
+                const Bitmap                    aBmp( Graphic( pAct->GetBitmapEx() ).GetBitmap() );
 
                 rOStm.WriteInt16(  GDI_BITMAPSCALEPART_ACTION );
                 rOStm.WriteInt32( 36 );
@@ -1870,8 +1868,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_GRADIENT_ACTION ):
             {
-                MetaGradientAction* pAct = (MetaGradientAction*) pAction;
-                const Gradient&     rGrad = pAct->GetGradient();
+                const MetaGradientAction* pAct = static_cast<const MetaGradientAction*>(pAction);
+                const Gradient&           rGrad = pAct->GetGradient();
 
                 rOStm.WriteInt16(  GDI_GRADIENT_ACTION );
                 rOStm.WriteInt32( 46 );
@@ -1891,8 +1889,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_GRADIENTEX_ACTION ):
             {
-                const MetaGradientExAction* pA = (MetaGradientExAction*) pAction;
-                sal_uLong                       nOldPos, nNewPos;
+                const MetaGradientExAction* pA = static_cast<const MetaGradientExAction*>(pAction);
+                sal_uLong                   nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm.WriteInt16(  GDI_GRADIENTEX_COMMENT );
@@ -1918,8 +1916,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_WALLPAPER_ACTION ):
             {
-                MetaWallpaperAction*    pAct = (MetaWallpaperAction*) pAction;
-                const Color&            rColor = pAct->GetWallpaper().GetColor();
+                const MetaWallpaperAction* pAct = static_cast<const MetaWallpaperAction*>(pAction);
+                const Color&               rColor = pAct->GetWallpaper().GetColor();
 
                 ImplWritePushAction( rOStm );
                 ImplWriteLineColor( rOStm, rColor, 1 );
@@ -1938,9 +1936,9 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_CLIPREGION_ACTION ):
             {
-                MetaClipRegionAction*   pAct = (MetaClipRegionAction*) pAction;
-                const Region&           rRegion = pAct->GetRegion();
-                Rectangle               aClipRect;
+                const MetaClipRegionAction* pAct = static_cast<const MetaClipRegionAction*>(pAction);
+                const Region&               rRegion = pAct->GetRegion();
+                Rectangle                   aClipRect;
 
                 rOStm.WriteInt16(  GDI_CLIPREGION_ACTION );
                 rOStm.WriteInt32( 24 );
@@ -1965,7 +1963,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_ISECTRECTCLIPREGION_ACTION ):
             {
-                MetaISectRectClipRegionAction* pAct = (MetaISectRectClipRegionAction*) pAction;
+                const MetaISectRectClipRegionAction* pAct = static_cast<const MetaISectRectClipRegionAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_ISECTCLIPREGION_ACTION );
                 rOStm.WriteInt32( 20 );
@@ -1976,7 +1974,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_MOVECLIPREGION_ACTION ):
             {
-                MetaMoveClipRegionAction* pAct = (MetaMoveClipRegionAction*) pAction;
+                const MetaMoveClipRegionAction* pAct = static_cast<const MetaMoveClipRegionAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_MOVECLIPREGION_ACTION );
                 rOStm.WriteInt32( 12 );
@@ -1988,7 +1986,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_LINECOLOR_ACTION ):
             {
-                MetaLineColorAction* pAct = (MetaLineColorAction*) pAction;
+                const MetaLineColorAction* pAct = static_cast<const MetaLineColorAction*>(pAction);
                 ImplWriteLineColor( rOStm, rLineCol = pAct->GetColor(), pAct->IsSetting() ? 1 : 0 );
                 nCount++;
             }
@@ -1996,7 +1994,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_FILLCOLOR_ACTION ):
             {
-                MetaFillColorAction* pAct = (MetaFillColorAction*) pAction;
+                const MetaFillColorAction* pAct = static_cast<const MetaFillColorAction*>(pAction);
                 ImplWriteFillColor( rOStm, pAct->GetColor(), pAct->IsSetting() ? 1 : 0 );
                 nCount++;
             }
@@ -2004,7 +2002,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_FONT_ACTION ):
             {
-                rSaveVDev.SetFont( ( (MetaFontAction*) pAction )->GetFont() );
+                rSaveVDev.SetFont( static_cast<const MetaFontAction*>(pAction)->GetFont() );
                 ImplWriteFont( rOStm, rSaveVDev.GetFont(), rActualCharSet );
                 nCount++;
             }
@@ -2014,7 +2012,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 vcl::Font aSaveFont( rSaveVDev.GetFont() );
 
-                aSaveFont.SetColor( ( (MetaTextColorAction*) pAction )->GetColor() );
+                aSaveFont.SetColor( static_cast<const MetaTextColorAction*>(pAction)->GetColor() );
                 rSaveVDev.SetFont( aSaveFont );
                 ImplWriteFont( rOStm, rSaveVDev.GetFont(), rActualCharSet );
                 nCount++;
@@ -2023,8 +2021,8 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TEXTFILLCOLOR_ACTION ):
             {
-                MetaTextFillColorAction*    pAct = (MetaTextFillColorAction*) pAction;
-                vcl::Font                   aSaveFont( rSaveVDev.GetFont() );
+                const MetaTextFillColorAction* pAct = static_cast<const MetaTextFillColorAction*>(pAction);
+                vcl::Font                      aSaveFont( rSaveVDev.GetFont() );
 
                 if( pAct->IsSetting() )
                     aSaveFont.SetFillColor( pAct->GetColor() );
@@ -2041,7 +2039,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
             {
                 vcl::Font aSaveFont( rSaveVDev.GetFont() );
 
-                aSaveFont.SetAlign( ( (MetaTextAlignAction*) pAction )->GetTextAlign() );
+                aSaveFont.SetAlign( static_cast<const MetaTextAlignAction*>(pAction)->GetTextAlign() );
                 rSaveVDev.SetFont( aSaveFont );
                 ImplWriteFont( rOStm, rSaveVDev.GetFont(), rActualCharSet );
                 nCount++;
@@ -2050,7 +2048,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_MAPMODE_ACTION ):
             {
-                MetaMapModeAction* pAct = (MetaMapModeAction*) pAction;
+                const MetaMapModeAction* pAct = static_cast<const MetaMapModeAction*>(pAction);
 
                 rOStm.WriteInt16(  GDI_MAPMODE_ACTION );
                 rOStm.WriteInt32( 30 );
@@ -2093,7 +2091,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_RASTEROP_ACTION ):
             {
-                MetaRasterOpAction* pAct = (MetaRasterOpAction*) pAction;
+                const MetaRasterOpAction* pAct = static_cast<const MetaRasterOpAction*>(pAction);
 
                 if( ( pAct->GetRasterOp() != ROP_0 ) && ( pAct->GetRasterOp() != ROP_1 ) )
                 {
@@ -2145,10 +2143,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TRANSPARENT_ACTION ):
             {
-                const PolyPolygon&  rPolyPoly = ( (MetaTransparentAction*) pAction )->GetPolyPolygon();
-                const sal_Int16         nTrans = ( (MetaTransparentAction*) pAction )->GetTransparence();
-                const sal_Int16         nBrushStyle = ( nTrans < 38 ) ? 8 : ( nTrans < 63 ) ? 9 : 10;
-                sal_uLong               nOldPos, nNewPos;
+                const PolyPolygon&  rPolyPoly = static_cast<const MetaTransparentAction*>(pAction)->GetPolyPolygon();
+                const sal_Int16     nTrans = static_cast<const MetaTransparentAction*>(pAction)->GetTransparence();
+                const sal_Int16     nBrushStyle = ( nTrans < 38 ) ? 8 : ( nTrans < 63 ) ? 9 : 10;
+                sal_uLong           nOldPos, nNewPos;
 
                 // write transparence comment
                 rOStm.WriteInt16(  GDI_TRANSPARENT_COMMENT );
@@ -2204,7 +2202,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_FLOATTRANSPARENT_ACTION ):
             {
-                const MetaFloatTransparentAction*   pA = (MetaFloatTransparentAction*) pAction;
+                const MetaFloatTransparentAction*   pA = static_cast<const MetaFloatTransparentAction*>(pAction);
                 const GDIMetaFile&                  rTransMtf = pA->GetGDIMetaFile();
                 const Point&                        rPos = pA->GetPoint();
                 const Size&                         rSize = pA->GetSize();
@@ -2266,10 +2264,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_HATCH_ACTION ):
             {
-                const MetaHatchAction*  pA = (MetaHatchAction*) pAction;
+                const MetaHatchAction*  pA = static_cast<const MetaHatchAction*>(pAction);
                 const PolyPolygon&      rPolyPoly = pA->GetPolyPolygon();
                 const Hatch&            rHatch = pA->GetHatch();
-                sal_uLong                   nOldPos, nNewPos, nAddCount;
+                sal_uLong               nOldPos, nNewPos, nAddCount;
 
                 // write hatch comment
                 rOStm.WriteInt16(  GDI_HATCH_COMMENT );
@@ -2309,10 +2307,10 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_REFPOINT_ACTION ):
             {
-                const MetaRefPointAction*   pA = (MetaRefPointAction*) pAction;
+                const MetaRefPointAction*   pA = static_cast<const MetaRefPointAction*>(pAction);
                 const Point&                rRefPoint = pA->GetRefPoint();
                 const bool                  bSet = pA->IsSetting();
-                sal_uLong                       nOldPos, nNewPos;
+                sal_uLong                   nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm.WriteInt16(  GDI_REFPOINT_COMMENT );
@@ -2338,9 +2336,9 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TEXTLINECOLOR_ACTION ):
             {
-                const MetaTextLineColorAction*  pA = (MetaTextLineColorAction*) pAction;
+                const MetaTextLineColorAction*  pA = static_cast<const MetaTextLineColorAction*>(pAction);
                 const Color&                    rColor = pA->GetColor();
-                const bool                  bSet = pA->IsSetting();
+                const bool                      bSet = pA->IsSetting();
                 sal_uLong                       nOldPos, nNewPos;
 
                 // write RefPoint comment
@@ -2367,12 +2365,12 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_TEXTLINE_ACTION ):
             {
-                const MetaTextLineAction*   pA = (MetaTextLineAction*) pAction;
+                const MetaTextLineAction*   pA = static_cast<const MetaTextLineAction*>(pAction);
                 const Point&                rStartPt = pA->GetStartPoint();
                 const sal_Int32             nWidth = (sal_Int32) pA->GetWidth();
                 const FontStrikeout         eStrikeout = pA->GetStrikeout();
                 const FontUnderline         eUnderline = pA->GetUnderline();
-                sal_uLong                       nOldPos, nNewPos;
+                sal_uLong                   nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm.WriteInt16(  GDI_TEXTLINE_COMMENT );
@@ -2401,9 +2399,9 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
 
             case( META_COMMENT_ACTION ):
             {
-                const MetaCommentAction*    pA = (MetaCommentAction*) pAction;
+                const MetaCommentAction*    pA = static_cast<const MetaCommentAction*>(pAction);
                 const sal_uInt32            nDataSize = pA->GetDataSize();
-                sal_uLong                       nOldPos, nNewPos;
+                sal_uLong                   nOldPos, nNewPos;
 
                 // write RefPoint comment
                 rOStm.WriteInt16(  GDI_COMMENT_COMMENT );

@@ -1420,7 +1420,7 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, vcl::Font& rFont,
             else
             {
                 if ( pOutDev )
-                    pOutDev->SetTextColor( ((TextAttribFontColor&)pAttrib->GetAttr()).GetColor() );
+                    pOutDev->SetTextColor( static_cast<const TextAttribFontColor&>(pAttrib->GetAttr()).GetColor() );
             }
         }
     }
@@ -2602,7 +2602,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
 
                         // e.g. <A HREF="http://www.mopo.de/">Morgenpost</A>
                         aText.append( "<A HREF=\"" );
-                        aText.append( ((const TextAttribHyperLink&) pAttr->GetAttr() ).GetURL() );
+                        aText.append( static_cast<const TextAttribHyperLink&>( pAttr->GetAttr() ).GetURL() );
                         aText.append( "\">" );
                         nTmpStart = pAttr->GetStart();
                         aText.append( pNode->GetText().copy( nTmpStart, nTmpEnd-nTmpStart ) );

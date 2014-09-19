@@ -682,8 +682,8 @@ void OutputDevice::SetMapMode()
         mbInitFont  = true;
         if ( GetOutDevType() == OUTDEV_WINDOW )
         {
-            if ( ((vcl::Window*)this)->mpWindowImpl->mpCursor )
-                ((vcl::Window*)this)->mpWindowImpl->mpCursor->ImplNew();
+            if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor )
+                static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor->ImplNew();
         }
 
         // #106426# Adapt logical offset when changing mapmode
@@ -786,8 +786,8 @@ void OutputDevice::SetMapMode( const MapMode& rNewMapMode )
     mbInitFont  = true;
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        if ( ((vcl::Window*)this)->mpWindowImpl->mpCursor )
-            ((vcl::Window*)this)->mpWindowImpl->mpCursor->ImplNew();
+        if ( static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor )
+            static_cast<vcl::Window*>(this)->mpWindowImpl->mpCursor->ImplNew();
     }
 
     // #106426# Adapt logical offset when changing mapmode

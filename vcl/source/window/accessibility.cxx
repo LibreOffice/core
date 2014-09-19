@@ -280,16 +280,18 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
     // report the menubarwindow as a child of THE workwindow
     if( GetType() == WINDOW_BORDERWINDOW )
     {
-        if( ((ImplBorderWindow *) this)->mpMenuBarWindow &&
-            ((ImplBorderWindow *) this)->mpMenuBarWindow->IsVisible()
+        ImplBorderWindow *pBorderWindow = static_cast<ImplBorderWindow*>(this);
+        if( pBorderWindow->mpMenuBarWindow &&
+            pBorderWindow->mpMenuBarWindow->IsVisible()
             )
             --nChildren;
     }
     else if( GetType() == WINDOW_WORKWINDOW )
     {
-        if( ((WorkWindow *) this)->GetMenuBar() &&
-            ((WorkWindow *) this)->GetMenuBar()->GetWindow() &&
-            ((WorkWindow *) this)->GetMenuBar()->GetWindow()->IsVisible()
+        WorkWindow *pWorkWindow = static_cast<WorkWindow*>(this);
+        if( pWorkWindow->GetMenuBar() &&
+            pWorkWindow->GetMenuBar()->GetWindow() &&
+            pWorkWindow->GetMenuBar()->GetWindow()->IsVisible()
             )
             ++nChildren;
     }
@@ -300,11 +302,11 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
 vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
 {
     // report the menubarwindow as a the first child of THE workwindow
-    if( GetType() == WINDOW_WORKWINDOW && ((WorkWindow *) this)->GetMenuBar() )
+    if( GetType() == WINDOW_WORKWINDOW && static_cast<WorkWindow *>(this)->GetMenuBar() )
     {
         if( n == 0 )
         {
-            MenuBar *pMenuBar = ((WorkWindow *) this)->GetMenuBar();
+            MenuBar *pMenuBar = static_cast<WorkWindow *>(this)->GetMenuBar();
             if( pMenuBar->GetWindow() && pMenuBar->GetWindow()->IsVisible() )
                 return pMenuBar->GetWindow();
         }

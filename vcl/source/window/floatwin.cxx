@@ -578,8 +578,8 @@ void FloatingWindow::SetTitleType( sal_uInt16 nTitle )
             nTitleStyle = BORDERWINDOW_TITLE_POPUP;
         else // nTitle == FLOATWIN_TITLE_NONE
             nTitleStyle = BORDERWINDOW_TITLE_NONE;
-        ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetTitleType( nTitleStyle, aOutSize );
-        ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->SetTitleType( nTitleStyle, aOutSize );
+        static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
     }
 }
 

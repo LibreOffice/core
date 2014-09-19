@@ -280,7 +280,7 @@ bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
     if ( !pNextAction->ISA( TextUndoInsertChars ) )
         return false;
 
-    TextUndoInsertChars* pNext = (TextUndoInsertChars*)pNextAction;
+    TextUndoInsertChars* pNext = static_cast<TextUndoInsertChars*>(pNextAction);
 
     if ( maTextPaM.GetPara() != pNext->maTextPaM.GetPara() )
         return false;
