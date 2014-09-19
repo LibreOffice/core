@@ -54,8 +54,6 @@
 
 #ifdef UNX
 
-// Currently, we directly use the ODBC shared library from Q+E (via the supplied lib)
-
 #ifndef ODBC_UNX
 #define ODBC_UNX
 #endif
@@ -66,14 +64,8 @@
 #else
 #include <odbc/sqlext.h>
 #endif
-#undef sal_Bool // Is defined in qeodbc.h, but gets redefined by solar.h
 
 #define SDB_ODBC_CHAR UCHAR
-#define SQL_WCHAR           (-8)
-#define SQL_WVARCHAR        (-9)
-#define SQL_WLONGVARCHAR    (-10)
-#define SQL_C_WCHAR         SQL_WCHAR
-
 
 #endif // UNX
 
@@ -92,10 +84,12 @@
 #define SQL_C_WCHAR         SQL_WCHAR
 #endif
 
+#ifndef SQL_C_TCHAR
 #ifdef UNICODE
 #define SQL_C_TCHAR     SQL_C_WCHAR
 #else
 #define SQL_C_TCHAR     SQL_C_CHAR
+#endif
 #endif
 
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONDEFS_HXX
