@@ -122,12 +122,6 @@ $(if $(filter Executable,$(1)),\
 	$$(call gb_Library_get_layer,$(2)))
 endef
 
-# We sign executables right after linking below. But not dylibs,
-# because many of them are built by ad-hoc or 3rd-party mechanisms. So
-# as we would need to sign those separately anyway, we do it for the
-# gbuild-built ones, too, after an app bundle has been constructed, in
-# the solenv/bin/macosx-codesign-app-bundle script.
-
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
 	$(if $(CXXOBJECTS)$(OBJCXXOBJECTS)$(GENCXXOBJECTS)$(EXTRAOBJECTLISTS),$(gb_CXX),$(gb_CC)) \
@@ -154,9 +148,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl app $(LAYER) $(1) &&) \
 	$(if $(filter Library Bundle CppunitTest,$(TARGETTYPE)),\
 		$(PERL) $(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl $(LAYER) $(1) &&) \
-	$(if $(MACOSX_CODESIGNING_IDENTITY), \
-		$(if $(filter Executable,$(TARGETTYPE)), \
-			(codesign --identifier=$(MACOSX_BUNDLE_IDENTIFIER).$(notdir $(1)) --sign $(MACOSX_CODESIGNING_IDENTITY) --force $(1) || true) &&)) \
 	$(if $(filter Library,$(TARGETTYPE)),\
 		otool -l $(1) | grep -A 5 LC_ID_DYLIB \
 			> $(WORKDIR)/LinkTarget/$(2).exports.tmp && \
