@@ -141,6 +141,8 @@ struct CreateShapeParam2D
     boost::shared_ptr<VTitle> mpVTitleSecondX;
     boost::shared_ptr<VTitle> mpVTitleSecondY;
 
+    css::uno::Reference<css::drawing::XShape> mxMarkHandles;
+
     bool mbAutoPosTitleX;
     bool mbAutoPosTitleY;
     bool mbAutoPosTitleZ;
@@ -1430,9 +1432,7 @@ sal_Int16 lcl_getDefaultWritingModeFromPool( const boost::shared_ptr<DrawModelWr
 awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
             , const uno::Reference< drawing::XShapes>& xDiagramPlusAxes_Shapes
             , const CreateShapeParam2D& rParam
-            , const awt::Size& rPageSize
-            , const uno::Reference< drawing::XShape>& xDiagram_MarkHandles /*needs to be resized to fit the result*/
-            )
+            , const awt::Size& rPageSize )
 {
     //return the used rectangle
     awt::Rectangle aUsedOuterRect(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y, 0, 0);
@@ -1690,7 +1690,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         }
     }
 
-    if( xDiagram_MarkHandles.is() )
+    if (rParam.mxMarkHandles.is())
     {
         awt::Point aPos(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y);
         awt::Size  aSize(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height);
@@ -1704,8 +1704,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             aPos = awt::Point( m_aResultingDiagramRectangleExcludingAxes.X, m_aResultingDiagramRectangleExcludingAxes.Y );
             aSize = awt::Size( m_aResultingDiagramRectangleExcludingAxes.Width, m_aResultingDiagramRectangleExcludingAxes.Height );
         }
-        xDiagram_MarkHandles->setPosition( aPos );
-        xDiagram_MarkHandles->setSize( aSize );
+        rParam.mxMarkHandles->setPosition(aPos);
+        rParam.mxMarkHandles->setSize(aSize);
     }
 
     return aUsedOuterRect;
@@ -3026,9 +3026,9 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
             pShapeFactory->createGroup2D(mxRootShape,aDiagramCID) );
 
-    uno::Reference< drawing::XShape > xDiagram_MarkHandles( pShapeFactory->createInvisibleRectangle(
-                xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-    AbstractShapeFactory::setShapeName( xDiagram_MarkHandles, "MarkHandles" );
+    aParam.mxMarkHandles = pShapeFactory->createInvisibleRectangle(
+        xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0));
+    AbstractShapeFactory::setShapeName(aParam.mxMarkHandles, "MarkHandles");
 
     uno::Reference< drawing::XShape > xDiagram_OuterRect( pShapeFactory->createInvisibleRectangle(
                 xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
@@ -3091,7 +3091,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         awt::Size aAvailableSizeForDiagram(aParam.maRemainingSpace.Width, aParam.maRemainingSpace.Height);
 
         awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(
-            aSeriesPlotterContainer, xDiagramPlusAxes_Shapes, aParam, rPageSize, xDiagram_MarkHandles);
+            aSeriesPlotterContainer, xDiagramPlusAxes_Shapes, aParam, rPageSize);
 
         if( xDiagram_OuterRect.is() )
         {

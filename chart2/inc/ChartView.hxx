@@ -225,8 +225,7 @@ private: //methods
     ::com::sun::star::awt::Rectangle impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes>& xDiagramPlusAxes_Shapes
         , const CreateShapeParam2D& rParam
-        , const ::com::sun::star::awt::Size& rPageSize
-        , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& xDiagram_MarkHandles );
+        , const ::com::sun::star::awt::Size& rPageSize );
 
     DECL_LINK( UpdateTimeBased, void* );
 
