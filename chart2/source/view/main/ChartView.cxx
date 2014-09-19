@@ -3090,9 +3090,6 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
     if (getAvailablePosAndSizeForDiagram(aParam, rPageSize, mrChartModel.getFirstDiagram()))
     {
-        awt::Point aAvailablePosDia(aParam.maRemainingSpace.X, aParam.maRemainingSpace.Y);
-        awt::Size aAvailableSizeForDiagram(aParam.maRemainingSpace.Width, aParam.maRemainingSpace.Height);
-
         awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(aSeriesPlotterContainer, aParam, rPageSize);
 
         if (aParam.mxPlotAreaWithAxes.is())
