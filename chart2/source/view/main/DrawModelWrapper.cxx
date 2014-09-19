@@ -204,24 +204,27 @@ uno::Reference< lang::XMultiServiceFactory > DrawModelWrapper::getShapeFactory()
 
 uno::Reference< drawing::XDrawPage > DrawModelWrapper::getMainDrawPage()
 {
-    //create draw page:
-    if( !m_xMainDrawPage.is() )
+    if (m_xMainDrawPage.is())
+        return m_xMainDrawPage;
+
+    // Create draw page.
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSuplier(getUnoModel(), uno::UNO_QUERY);
+    if (!xDrawPagesSuplier.is())
+        return m_xMainDrawPage;
+
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSuplier->getDrawPages();
+    if (xDrawPages->getCount() > 1)
     {
-        uno::Reference< drawing::XDrawPagesSupplier > xDrawPagesSuplier( this->getUnoModel(), uno::UNO_QUERY );
-        if( xDrawPagesSuplier.is() )
-        {
-            uno::Reference< drawing::XDrawPages > xDrawPages( xDrawPagesSuplier->getDrawPages () );
-            if( xDrawPages->getCount()>1 )
-            {
-                uno::Any aPage = xDrawPages->getByIndex( 0 ) ;
-                aPage >>= m_xMainDrawPage;
-            }
-            if(!m_xMainDrawPage.is())
-            {
-                m_xMainDrawPage = xDrawPages->insertNewByIndex( 0 );
-            }
-        }
+        // Take the first page in case of multiple pages.
+        uno::Any aPage = xDrawPages->getByIndex(0);
+        aPage >>= m_xMainDrawPage;
     }
+
+    if (!m_xMainDrawPage.is())
+    {
+        m_xMainDrawPage = xDrawPages->insertNewByIndex(0);
+    }
+
     //ensure that additional shapes are in front of the chart objects so create the chart root before
     // let us disable this call for now
     // TODO:moggi
