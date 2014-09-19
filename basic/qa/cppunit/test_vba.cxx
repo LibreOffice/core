@@ -51,7 +51,8 @@ void VBATest::testMiscVBAFunctions()
         "format.vb",
         "replace.vb",
         "stringplusdouble.vb",
-        "win32compat.vb"
+        "win32compat.vb", // windows compatibility hooks.
+        "win32compatb.vb" // same methods, different signatures.
     };
     OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
     // Some test data expects the uk locale
