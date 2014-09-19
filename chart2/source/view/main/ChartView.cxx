@@ -2232,82 +2232,86 @@ boost::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     }
 
     uno::Reference< XTitle > xTitle( TitleHelper::getTitle( eType, rModel ) );
-    OUString aCompleteString( TitleHelper::getCompleteString( xTitle ) );
-    if( !aCompleteString.isEmpty() )
+    OUString aCompleteString = TitleHelper::getCompleteString(xTitle);
+    if (aCompleteString.isEmpty())
+        return apVTitle;
+
+    //create title
+    apVTitle.reset(new VTitle(xTitle));
+    OUString aCID = ObjectIdentifier::createClassifiedIdentifierForObject(xTitle, rModel);
+    apVTitle->init(xPageShapes, xShapeFactory, aCID);
+    apVTitle->createShapes(awt::Point(0,0), rPageSize);
+    awt::Size aTitleUnrotatedSize = apVTitle->getUnrotatedSize();
+    awt::Size aTitleSize = apVTitle->getFinalSize();
+
+    //position
+    rbAutoPosition = true;
+    awt::Point aNewPosition(0,0);
+    chart2::RelativePosition aRelativePosition;
+    uno::Reference<beans::XPropertySet> xProp(xTitle, uno::UNO_QUERY);
+    if (xProp.is() && (xProp->getPropertyValue("RelativePosition") >>= aRelativePosition))
     {
-        //create title
-        apVTitle.reset(new VTitle(xTitle));
-        OUString aCID( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, rModel ) );
-        apVTitle->init(xPageShapes,xShapeFactory,aCID);
-        apVTitle->createShapes( awt::Point(0,0), rPageSize );
-        awt::Size aTitleUnrotatedSize = apVTitle->getUnrotatedSize();
-        awt::Size aTitleSize = apVTitle->getFinalSize();
+        rbAutoPosition = false;
 
-        //position
-        rbAutoPosition=true;
-        awt::Point aNewPosition(0,0);
-        chart2::RelativePosition aRelativePosition;
-        uno::Reference< beans::XPropertySet > xProp(xTitle, uno::UNO_QUERY);
-        if( xProp.is() && (xProp->getPropertyValue( "RelativePosition" )>>=aRelativePosition) )
-        {
-            rbAutoPosition = false;
+        //@todo decide whether x is primary or secondary
+        double fX = aRelativePosition.Primary*rPageSize.Width;
+        double fY = aRelativePosition.Secondary*rPageSize.Height;
 
-            //@todo decide whether x is primary or secondary
-            double fX = aRelativePosition.Primary*rPageSize.Width;
-            double fY = aRelativePosition.Secondary*rPageSize.Height;
-
-            double fAnglePi = apVTitle->getRotationAnglePi();
-            aNewPosition = RelativePositionHelper::getCenterOfAnchoredObject(
-                    awt::Point(static_cast<sal_Int32>(fX),static_cast<sal_Int32>(fY))
-                    , aTitleUnrotatedSize, aRelativePosition.Anchor, fAnglePi );
-        }
-        else //auto position
-        {
-            switch( eAlignment )
-            {
-            case ALIGN_TOP:
-                aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width/2
-                                         , rRemainingSpace.Y + aTitleSize.Height/2 + nYDistance );
-                break;
-            case ALIGN_BOTTOM:
-                aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width/2
-                                         , rRemainingSpace.Y + rRemainingSpace.Height - aTitleSize.Height/2 - nYDistance );
-                break;
-            case ALIGN_LEFT:
-                aNewPosition = awt::Point( rRemainingSpace.X + aTitleSize.Width/2 + nXDistance
-                                         , rRemainingSpace.Y + rRemainingSpace.Height/2 );
-                break;
-            case ALIGN_RIGHT:
-                aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width - aTitleSize.Width/2 - nXDistance
-                                         , rRemainingSpace.Y + rRemainingSpace.Height/2 );
-                break;
-            default:
-                break;
-
-            }
-        }
-        apVTitle->changePosition( aNewPosition );
-
-        //remaining space
+        double fAnglePi = apVTitle->getRotationAnglePi();
+        aNewPosition = RelativePositionHelper::getCenterOfAnchoredObject(
+                awt::Point(static_cast<sal_Int32>(fX),static_cast<sal_Int32>(fY))
+                , aTitleUnrotatedSize, aRelativePosition.Anchor, fAnglePi );
+    }
+    else //auto position
+    {
         switch( eAlignment )
         {
-            case ALIGN_TOP:
-                rRemainingSpace.Y += ( aTitleSize.Height + nYDistance );
-                rRemainingSpace.Height -= ( aTitleSize.Height + nYDistance );
-                break;
-            case ALIGN_BOTTOM:
-                rRemainingSpace.Height -= ( aTitleSize.Height + nYDistance );
-                break;
-            case ALIGN_LEFT:
-                rRemainingSpace.X += ( aTitleSize.Width + nXDistance );
-                rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
-                break;
-            case ALIGN_RIGHT:
-                rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
-                break;
-            default:
-                break;
+        case ALIGN_TOP:
+            aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width/2
+                                     , rRemainingSpace.Y + aTitleSize.Height/2 + nYDistance );
+            break;
+        case ALIGN_BOTTOM:
+            aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width/2
+                                     , rRemainingSpace.Y + rRemainingSpace.Height - aTitleSize.Height/2 - nYDistance );
+            break;
+        case ALIGN_LEFT:
+            aNewPosition = awt::Point( rRemainingSpace.X + aTitleSize.Width/2 + nXDistance
+                                     , rRemainingSpace.Y + rRemainingSpace.Height/2 );
+            break;
+        case ALIGN_RIGHT:
+            aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width - aTitleSize.Width/2 - nXDistance
+                                     , rRemainingSpace.Y + rRemainingSpace.Height/2 );
+            break;
+        default:
+            break;
+
         }
+    }
+    apVTitle->changePosition( aNewPosition );
+
+    //remaining space
+    switch( eAlignment )
+    {
+        case ALIGN_TOP:
+            // Push the remaining space down from top.
+            rRemainingSpace.Y += ( aTitleSize.Height + nYDistance );
+            rRemainingSpace.Height -= ( aTitleSize.Height + nYDistance );
+            break;
+        case ALIGN_BOTTOM:
+            // Push the remaining space up from bottom.
+            rRemainingSpace.Height -= ( aTitleSize.Height + nYDistance );
+            break;
+        case ALIGN_LEFT:
+            // Push the remaining space to the right from left edge.
+            rRemainingSpace.X += ( aTitleSize.Width + nXDistance );
+            rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
+            break;
+        case ALIGN_RIGHT:
+            // Push the remaining space to the left from right edge.
+            rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
+            break;
+        default:
+            break;
     }
 
     return apVTitle;
