@@ -687,7 +687,7 @@ inline glm::vec3 randNormVectorInXYPlane()
 template<typename T>
 T clamp(const T& rIn)
 {
-    return glm::clamp(rIn, -1.0, 1.0);
+    return glm::clamp(rIn, T(-1.0), T(1.0));
 }
 
 boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles )
