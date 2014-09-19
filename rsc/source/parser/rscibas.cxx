@@ -408,7 +408,7 @@ RscTupel * RscTypCont::InitGeometry()
     nId = aNmTb.Put( "HEIGHT", VARNAME );
     pTupel->SetVariable( nId, &aShort );
 
-    return (RscTupel *)pTupel;
+    return static_cast<RscTupel *>(pTupel);
 }
 
 RscArray * RscTypCont::InitLangGeometry( RscTupel * pGeo )
@@ -444,7 +444,7 @@ RscTupel * RscTypCont::InitStringTupel()
     nId = aNmTb.Put( "MASK", VARNAME );
     pTupel->SetVariable( nId, &aString );
 
-    return (RscTupel *)pTupel;
+    return static_cast<RscTupel *>(pTupel);
 }
 
 RscTupel * RscTypCont::InitStringLongTupel()
@@ -459,7 +459,7 @@ RscTupel * RscTypCont::InitStringLongTupel()
     nId = aNmTb.Put( "ItemId", VARNAME );
     pTupel->SetVariable( nId, &aEnumLong );
 
-    return (RscTupel *)pTupel;
+    return static_cast<RscTupel *>(pTupel);
 }
 
 RscCont * RscTypCont::InitStringTupelList( RscTupel * pTupelString )

@@ -42,8 +42,8 @@ public:
                         // verkettete Liste um
                         BiNode* ChangeBTreeDLList();
 
-            BiNode *    Left() const { return pLeft  ; };
-            BiNode *    Right() const{ return pRight ; };
+            BiNode *    Left() const { return pLeft  ; }
+            BiNode *    Right() const{ return pRight ; }
             void        EnumNodes( Link aLink ) const;
 };
 
@@ -56,8 +56,8 @@ protected:
             NameNode*   Search( const void * pCmp ) const;
 
 public:
-            NameNode*   Left() const { return (NameNode *)pLeft  ; };
-            NameNode*   Right() const{ return (NameNode *)pRight ; };
+            NameNode*   Left() const { return static_cast<NameNode *>(pLeft); }
+            NameNode*   Right() const{ return static_cast<NameNode *>(pRight); }
             NameNode*   Search( const NameNode * pName ) const;
                         // insert a new node in the b-tree
             bool        Insert( NameNode * pTN, sal_uInt32 * nDepth );

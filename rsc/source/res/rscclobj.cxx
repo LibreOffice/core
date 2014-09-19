@@ -69,9 +69,9 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey )
     ObjNode * pRetNode = this;
 
     if( Right() )
-        pRight = ((ObjNode *)Right())->DelObjNode( pClass, nFileKey );
+        pRight = static_cast<ObjNode *>(Right())->DelObjNode( pClass, nFileKey );
     if( Left() )
-        pLeft = ((ObjNode *)Left())->DelObjNode( pClass, nFileKey );
+        pLeft = static_cast<ObjNode *>(Left())->DelObjNode( pClass, nFileKey );
 
     if( GetFileKey() == nFileKey )
     {
@@ -80,14 +80,14 @@ ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey )
             pClass->Destroy( RSCINST( pClass, GetRscObj() ) );
             rtl_freeMemory( GetRscObj() );
         }
-        pRetNode = (ObjNode *)Right();
+        pRetNode = static_cast<ObjNode *>(Right());
         if( pRetNode )
         {
             if( Left() )
-                pRetNode->Insert( (ObjNode *)Left() );
+                pRetNode->Insert( static_cast<ObjNode *>(Left()) );
         }
         else
-            pRetNode = (ObjNode *)Left();
+            pRetNode = static_cast<ObjNode *>(Left());
 
         delete this;
     }
@@ -111,22 +111,22 @@ bool ObjNode::IsConsistent()
     {
         if( Left() )
         {
-            if( !((ObjNode *)Left())->IsConsistent() )
+            if( !static_cast<ObjNode *>(Left())->IsConsistent() )
             {
                 bRet = false;
             }
-            if( ((ObjNode *)Left())->aRscId >= aRscId )
+            if( static_cast<ObjNode *>(Left())->aRscId >= aRscId )
             {
                 bRet = false;
             }
         }
         if( Right() )
         {
-            if( ((ObjNode *)Right())->aRscId <= aRscId )
+            if( static_cast<ObjNode *>(Right())->aRscId <= aRscId )
             {
                 bRet = false;
             }
-            if( !((ObjNode *)Right())->IsConsistent() )
+            if( !static_cast<ObjNode *>(Right())->IsConsistent() )
             {
                 bRet = false;
             }

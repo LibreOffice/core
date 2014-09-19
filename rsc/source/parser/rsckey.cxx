@@ -105,7 +105,7 @@ Atom RscNameTable::Put( const char * pName, sal_uInt32 nTyp )
 
 Atom RscNameTable::Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass )
 {
-    return Put( nName, nTyp, (long)pClass );
+    return Put( nName, nTyp, reinterpret_cast<long>(pClass) );
 };
 
 bool RscNameTable::Get( Atom nName, KEY_STRUCT * pEle )

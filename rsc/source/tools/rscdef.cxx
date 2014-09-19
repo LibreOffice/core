@@ -173,7 +173,7 @@ bool RscDefine::Evaluate()
 
 RscDefine * RscDefine::Search( const char * pStr )
 {
-    return (RscDefine *)StringNode::Search( pStr );
+    return static_cast<RscDefine *>(StringNode::Search( pStr ));
 }
 
 OString RscDefine::GetMacro()
@@ -446,7 +446,7 @@ void RscDefTree::Remove()
     while( pDefRoot )
     {
         pDef = pDefRoot;
-        pDefRoot = (RscDefine *)pDefRoot->Remove( pDefRoot );
+        pDefRoot = static_cast<RscDefine *>(pDefRoot->Remove( pDefRoot ));
         pDef->DecRef();
     }
 }
@@ -472,7 +472,7 @@ void RscDefTree::Remove( RscDefine * pDef )
     if( pDefRoot )
     {
         //falls pDef == pDefRoot
-        pDefRoot = (RscDefine *)pDefRoot->Remove( pDef );
+        pDefRoot = static_cast<RscDefine *>(pDefRoot->Remove( pDef ));
     }
     pDef->DecRef();
 }
@@ -481,9 +481,9 @@ bool RscDefTree::Evaluate( RscDefine * pDef )
 {
     if( pDef )
     {
-        if( !Evaluate( (RscDefine *)pDef->Left() ) )
+        if( !Evaluate( static_cast<RscDefine *>(pDef->Left()) ) )
             return false;
-        if( !Evaluate( (RscDefine *)pDef->Right() ) )
+        if( !Evaluate( static_cast<RscDefine *>(pDef->Right()) ) )
             return false;
     }
     return true;

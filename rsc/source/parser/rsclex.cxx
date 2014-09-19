@@ -240,7 +240,7 @@ int MakeToken( YYSTYPE * pTokenVal )
                 switch( aKey.nTyp )
                 {
                 case CLASSNAME:
-                    pTokenVal->pClass = (RscTop *)aKey.yylval;
+                    pTokenVal->pClass = reinterpret_cast<RscTop *>(aKey.yylval);
                     break;
                 case VARNAME:
                     pTokenVal->varid = aKey.nName;

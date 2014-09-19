@@ -155,9 +155,9 @@ NameNode * NameNode::Remove( NameNode * pRemove )
 
 COMPARE NameNode::Compare( const NameNode * pCompare ) const
 {
-    if( (long)this < (long)pCompare )
+    if( reinterpret_cast<long>(this) < reinterpret_cast<long>(pCompare) )
         return LESS;
-    else if( (long)this > (long)pCompare )
+    else if( reinterpret_cast<long>(this) > reinterpret_cast<long>(pCompare) )
         return GREATER;
     else
         return EQUAL;
@@ -165,9 +165,9 @@ COMPARE NameNode::Compare( const NameNode * pCompare ) const
 
 COMPARE NameNode::Compare( const void * pCompare ) const
 {
-    if( (long)this < (long)pCompare )
+    if( reinterpret_cast<long>(this) < reinterpret_cast<long>(pCompare) )
         return LESS;
-    else if( (long)this > (long)pCompare )
+    else if( reinterpret_cast<long>(this) > reinterpret_cast<long>(pCompare) )
         return GREATER;
     else
         return EQUAL;
@@ -302,8 +302,8 @@ bool NameNode::Insert( NameNode * pTN )
 
 void NameNode::OrderTree()
 {
-    NameNode * pTmpLeft = (NameNode *)Left();
-    NameNode * pTmpRight = (NameNode *)Right();
+    NameNode * pTmpLeft = static_cast<NameNode *>(Left());
+    NameNode * pTmpRight = static_cast<NameNode *>(Right());
 
     pLeft = NULL;
     pRight = NULL;
@@ -315,8 +315,8 @@ void NameNode::SubOrderTree( NameNode * pOrderNode )
 {
     if( pOrderNode )
     {
-        NameNode * pTmpLeft = (NameNode *)pOrderNode->Left();
-        NameNode * pTmpRight = (NameNode *)pOrderNode->Right();
+        NameNode * pTmpLeft = static_cast<NameNode *>(pOrderNode->Left());
+        NameNode * pTmpRight = static_cast<NameNode *>(pOrderNode->Right());
         pOrderNode->pLeft = NULL;
         pOrderNode->pRight = NULL;
         Insert( pOrderNode );
@@ -327,14 +327,14 @@ void NameNode::SubOrderTree( NameNode * pOrderNode )
 
 IdNode * IdNode::Search( sal_uInt32 nTypeName ) const
 {
-    return (IdNode *)NameNode::Search( (const void *)&nTypeName );
+    return static_cast<IdNode *>(NameNode::Search( (const void *)&nTypeName ));
 }
 
 COMPARE IdNode::Compare( const NameNode * pSearch ) const
 {
-    if( GetId() < (sal_uInt32)(((const IdNode *)pSearch)->GetId()) )
+    if( GetId() < (sal_uInt32)(static_cast<const IdNode *>(pSearch)->GetId()) )
         return LESS;
-    else if( GetId() > (sal_uInt32)(((const IdNode *)pSearch)->GetId()) )
+    else if( GetId() > (sal_uInt32)(static_cast<const IdNode *>(pSearch)->GetId()) )
         return GREATER;
     else
         return EQUAL;
@@ -358,13 +358,13 @@ sal_uInt32 IdNode::GetId() const
 
 StringNode * StringNode::Search( const char * pSearch ) const
 {
-    return (StringNode *)NameNode::Search( (const void *)pSearch );
+    return static_cast<StringNode *>(NameNode::Search( (const void *)pSearch ));
 }
 
 COMPARE StringNode::Compare( const NameNode * pSearch ) const
 {
     int nCmp = strcmp( m_aName.getStr(),
-                       ((const StringNode *)pSearch)->m_aName.getStr() );
+                       static_cast<const StringNode *>(pSearch)->m_aName.getStr() );
     if( nCmp < 0 )
         return LESS;
     else if( nCmp > 0 )

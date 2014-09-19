@@ -36,11 +36,11 @@ public:
     RscInstNode( sal_uInt32 nId );
     virtual ~RscInstNode();
     virtual sal_uInt32  GetId() const SAL_OVERRIDE;
-    RscInstNode *   Left() const { return (RscInstNode *)pLeft  ; };
-    RscInstNode *   Right() const{ return (RscInstNode *)pRight ; };
+    RscInstNode *   Left() const { return static_cast<RscInstNode *>(pLeft); };
+    RscInstNode *   Right() const{ return static_cast<RscInstNode *>(pRight); };
     RscInstNode *   Search( sal_uInt32 nId ) const
                         {
-                            return (RscInstNode *)IdNode::Search( nId );
+                            return static_cast<RscInstNode *>(IdNode::Search( nId ));
                         }
 };
 

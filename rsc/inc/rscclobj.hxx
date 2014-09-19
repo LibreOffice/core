@@ -42,7 +42,7 @@ public:
     sal_uLong   GetFileKey(){ return lFileKey; };
     ObjNode*    Search( const RscId &rName ) const //< search the index in the b-tree
                     {
-                        return( (ObjNode *)IdNode::Search( rName ) );
+                        return( static_cast<ObjNode *>(IdNode::Search( rName )) );
                     }
     bool        Insert( ObjNode* pTN ) //< insert a new node in the b-tree
 
@@ -72,7 +72,7 @@ public:
     sal_uInt32  GetId() const SAL_OVERRIDE;
     RefNode*    Search( Atom typ ) const //< search the index in the b-tree
                     {
-                        return( (RefNode *)IdNode::Search( typ ) );
+                        return( static_cast<RefNode *>(IdNode::Search( typ )) );
                     }
     bool        Insert( RefNode* pTN ) //< insert a new node in the b-tree
                     {

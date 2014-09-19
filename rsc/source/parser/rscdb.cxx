@@ -128,8 +128,8 @@ void DestroyNode( RscTop * pRscTop, ObjNode * pObjNode )
 {
     if( pObjNode )
     {
-        DestroyNode( pRscTop, (ObjNode*)pObjNode->Left() );
-        DestroyNode( pRscTop, (ObjNode*)pObjNode->Right() );
+        DestroyNode( pRscTop, static_cast<ObjNode*>(pObjNode->Left()) );
+        DestroyNode( pRscTop, static_cast<ObjNode*>(pObjNode->Right()) );
 
         if( pObjNode->GetRscObj() )
         {
@@ -144,9 +144,9 @@ void DestroySubTrees( RscTop * pRscTop )
 {
     if( pRscTop )
     {
-        DestroySubTrees( (RscTop*)pRscTop->Left() );
+        DestroySubTrees( static_cast<RscTop*>(pRscTop->Left()) );
         DestroyNode( pRscTop, pRscTop->GetObjNode() );
-        DestroySubTrees( (RscTop*)pRscTop->Right() );
+        DestroySubTrees( static_cast<RscTop*>(pRscTop->Right()) );
     }
 }
 
@@ -154,8 +154,8 @@ void DestroyTree( RscTop * pRscTop )
 {
     if( pRscTop )
     {
-        DestroyTree( (RscTop*)pRscTop->Left() );
-        DestroyTree( (RscTop*)pRscTop->Right() );
+        DestroyTree( static_cast<RscTop*>(pRscTop->Left()) );
+        DestroyTree( static_cast<RscTop*>(pRscTop->Right()) );
 
         delete pRscTop;
     }
@@ -165,8 +165,8 @@ void Pre_dtorTree( RscTop * pRscTop )
 {
     if( pRscTop )
     {
-        Pre_dtorTree( (RscTop*)pRscTop->Left() );
-        Pre_dtorTree( (RscTop*)pRscTop->Right() );
+        Pre_dtorTree( static_cast<RscTop*>(pRscTop->Left()) );
+        Pre_dtorTree( static_cast<RscTop*>(pRscTop->Right()) );
 
         pRscTop->Pre_dtor();
     }
@@ -615,7 +615,7 @@ bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
     {
         RSCINST aTmpI;
 
-        if( ! IsInstConsistent( (ObjNode*)pObjNode->Left(), pRscTop ) )
+        if( ! IsInstConsistent( static_cast<ObjNode*>(pObjNode->Left()), pRscTop ) )
             bRet = false;
 
         aTmpI.pClass = pRscTop;
@@ -623,7 +623,7 @@ bool IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
         if( ! aTmpI.pClass->IsConsistent( aTmpI ) )
             bRet = false;
 
-        if( ! IsInstConsistent( (ObjNode*)pObjNode->Right(), pRscTop ) )
+        if( ! IsInstConsistent( static_cast<ObjNode*>(pObjNode->Right()), pRscTop ) )
             bRet = false;
     }
 
@@ -636,7 +636,7 @@ bool MakeConsistent( RscTop * pRscTop )
 
     if( pRscTop )
     {
-        if( ! ::MakeConsistent( (RscTop*)pRscTop->Left() ) )
+        if( ! ::MakeConsistent( static_cast<RscTop*>(pRscTop->Left()) ) )
             bRet = false;
 
         if( pRscTop->GetObjNode() )
@@ -651,7 +651,7 @@ bool MakeConsistent( RscTop * pRscTop )
                 bRet = false;
         }
 
-        if( ! ::MakeConsistent( (RscTop*)pRscTop->Right() ) )
+        if( ! ::MakeConsistent( static_cast<RscTop*>(pRscTop->Right()) ) )
             bRet = false;
     }
 
