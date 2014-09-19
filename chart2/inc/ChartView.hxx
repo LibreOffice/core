@@ -56,6 +56,7 @@ class SeriesPlotterContainer;
 class VDataSeries;
 class GL3DPlotterBase;
 class GL2DRenderer;
+struct CreateShapeParam2D;
 
 enum TimeBasedMode
 {
@@ -204,6 +205,7 @@ private: //methods
 
     void createShapes();
     void createShapes2D( const css::awt::Size& rPageSize );
+    bool createAxisTitleShapes2D( const css::awt::Size& rPageSize, CreateShapeParam2D& rParam );
     void createShapes3D();
     bool isReal3DChart();
     void getMetaFile( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream
