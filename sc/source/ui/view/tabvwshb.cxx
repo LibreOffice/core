@@ -85,10 +85,10 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
 
         Size aOleSize = pObj->GetOrigObjSize();
 
-        Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
-        Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
-        aScaleHeight.ReduceInaccurate(10);
+        boost::rational<long> aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
+        boost::rational<long> aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
+        rational_ReduceInaccurate(aScaleWidth, 10);       // kompatibel zum SdrOle2Obj
+        rational_ReduceInaccurate(aScaleHeight, 10);
         pClient->SetSizeScale(aScaleWidth,aScaleHeight);
 
         // sichtbarer Ausschnitt wird nur inplace veraendert!
@@ -145,17 +145,17 @@ bool ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                     awt::Size aSz( aOleSize.Width(), aOleSize.Height() );
                     xObj->setVisualAreaSize( pClient->GetAspect(), aSz );
                 }
-                Fraction aOne( 1, 1 );
+                boost::rational<long> aOne( 1, 1 );
                 pClient->SetSizeScale( aOne, aOne );
             }
             else
             {
                 //  calculate scale from client and VisArea size
 
-                Fraction aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
-                Fraction aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
-                aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
-                aScaleHeight.ReduceInaccurate(10);
+                boost::rational<long> aScaleWidth (aDrawSize.Width(),  aOleSize.Width() );
+                boost::rational<long> aScaleHeight(aDrawSize.Height(), aOleSize.Height() );
+                rational_ReduceInaccurate(aScaleWidth, 10);       // kompatibel zum SdrOle2Obj
+                rational_ReduceInaccurate(aScaleHeight, 10);
                 pClient->SetSizeScale(aScaleWidth,aScaleHeight);
             }
 

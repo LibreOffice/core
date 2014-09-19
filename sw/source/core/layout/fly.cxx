@@ -867,8 +867,8 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                 if ( rOld.GetWidth() && rOld.GetHeight() )
                 {
 
-                    Fraction aScaleX( rOld.GetWidth(), rNew.GetWidth() );
-                    Fraction aScaleY( rOld.GetHeight(), rOld.GetHeight() );
+                    boost::rational<long> aScaleX( rOld.GetWidth(), rNew.GetWidth() );
+                    boost::rational<long> aScaleY( rOld.GetHeight(), rOld.GetHeight() );
                     aURL.GetMap()->Scale( aScaleX, aScaleY );
                     SwFrmFmt *pFmt = GetFmt();
                     pFmt->LockModify();
@@ -994,8 +994,8 @@ void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                      rSz.GetWidth()  != Frm().Width() )
                 {
                     SwFmtURL aURL( GetFmt()->GetURL() );
-                    Fraction aScaleX( Frm().Width(),  rSz.GetWidth() );
-                    Fraction aScaleY( Frm().Height(), rSz.GetHeight() );
+                    boost::rational<long> aScaleX( Frm().Width(),  rSz.GetWidth() );
+                    boost::rational<long> aScaleY( Frm().Height(), rSz.GetHeight() );
                     aURL.GetMap()->Scale( aScaleX, aScaleY );
                     SwFrmFmt *pFmt = GetFmt();
                     pFmt->LockModify();

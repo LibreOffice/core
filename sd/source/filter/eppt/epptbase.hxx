@@ -347,7 +347,7 @@ protected:
     sal_uInt32          mnPages;            ///< number of Slides ( w/o master pages & notes & handout )
     sal_uInt32          mnMasterPages;
 
-    Fraction                        maFraction;
+    boost::rational<long>           maFraction;
     MapMode                         maMapModeSrc;
     MapMode                         maMapModeDest;
     ::com::sun::star::awt::Size     maDestPageSize;

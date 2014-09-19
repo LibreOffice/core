@@ -109,10 +109,10 @@ class ScViewDataTable                           // per-sheet data
 friend class ScViewData;
 private:
     SvxZoomType     eZoomType;                  // selected zoom type (normal view)
-    Fraction        aZoomX;                     // selected zoom X
-    Fraction        aZoomY;                     // selected zoom Y (displayed)
-    Fraction        aPageZoomX;                 // zoom in page break preview mode
-    Fraction        aPageZoomY;
+    boost::rational<long>        aZoomX;                     // selected zoom X
+    boost::rational<long>        aZoomY;                     // selected zoom Y (displayed)
+    boost::rational<long>        aPageZoomX;                 // zoom in page break preview mode
+    boost::rational<long>        aPageZoomY;
 
     long            nTPosX[2];                  // MapMode - Offset (Twips)
     long            nTPosY[2];
@@ -174,10 +174,10 @@ private:
     MapMode             aLogicMode;                 // skalierter 1/100mm-MapMode
 
     SvxZoomType         eDefZoomType;               // default zoom and type for missing TabData
-    Fraction            aDefZoomX;
-    Fraction            aDefZoomY;
-    Fraction            aDefPageZoomX;              // zoom in page break preview mode
-    Fraction            aDefPageZoomY;
+    boost::rational<long>            aDefZoomX;
+    boost::rational<long>            aDefZoomY;
+    boost::rational<long>            aDefPageZoomX;              // zoom in page break preview mode
+    boost::rational<long>            aDefPageZoomY;
 
     ScRefType           eRefType;
 
@@ -305,15 +305,15 @@ public:
 
     void            SetZoomType( SvxZoomType eNew, bool bAll );
     void            SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs );
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAll );
+    void            SetZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY, std::vector< SCTAB >& tabs );
+    void            SetZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY, bool bAll );
     void            RefreshZoom();
 
     void            SetSelCtrlMouseClick( bool bTmp ) { bSelCtrlMouseClick = bTmp; }
 
     SvxZoomType     GetZoomType() const     { return pThisTab->eZoomType; }
-    const Fraction& GetZoomX() const        { return bPagebreak ? pThisTab->aPageZoomX : pThisTab->aZoomX; }
-    const Fraction& GetZoomY() const        { return bPagebreak ? pThisTab->aPageZoomY : pThisTab->aZoomY; }
+    const boost::rational<long>& GetZoomX() const        { return bPagebreak ? pThisTab->aPageZoomX : pThisTab->aZoomX; }
+    const boost::rational<long>& GetZoomY() const        { return bPagebreak ? pThisTab->aPageZoomY : pThisTab->aZoomY; }
 
     void            SetShowGrid( bool bShow );
     bool            GetShowGrid() const { return pThisTab->bShowGrid; }
@@ -446,7 +446,7 @@ public:
     void            SetScreen( const Rectangle& rVisArea );
     void            SetScreenPos( const Point& rVisAreaStart );
 
-    void            UpdateScreenZoom( const Fraction& rNewX, const Fraction& rNewY );
+    void            UpdateScreenZoom( const boost::rational<long>& rNewX, const boost::rational<long>& rNewY );
 
     Size            GetScrSize() const              { return aScrSize; }
 

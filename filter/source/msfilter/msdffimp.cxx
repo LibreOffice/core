@@ -170,9 +170,9 @@ void Impl_OlePres::Write( SvStream & rStm )
     {
         // Always to 1/100 mm, until Mtf-Solution found
         // Assumption (no scaling, no origin translation)
-        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == Fraction( 1, 1 ),
+        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleX() == boost::rational<long>( 1, 1 ),
                     "X-Skalierung im Mtf" );
-        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == Fraction( 1, 1 ),
+        DBG_ASSERT( pMtf->GetPrefMapMode().GetScaleY() == boost::rational<long>( 1, 1 ),
                     "Y-Skalierung im Mtf" );
         DBG_ASSERT( pMtf->GetPrefMapMode().GetOrigin() == Point(),
                     "Origin-Verschiebung im Mtf" );
@@ -183,8 +183,8 @@ void Impl_OlePres::Write( SvStream & rStm )
             Size aS( aPrefS );
             aS = OutputDevice::LogicToLogic( aS, nMU, MAP_100TH_MM );
 
-            pMtf->Scale( Fraction( aS.Width(), aPrefS.Width() ),
-                         Fraction( aS.Height(), aPrefS.Height() ) );
+            pMtf->Scale( boost::rational<long>( aS.Width(), aPrefS.Width() ),
+                         boost::rational<long>( aS.Height(), aPrefS.Height() ) );
             pMtf->SetPrefMapMode( MAP_100TH_MM );
             pMtf->SetPrefSize( aS );
         }
@@ -3088,11 +3088,11 @@ void SvxMSDffManager::ScaleEmu( sal_Int32& rVal ) const
 sal_uInt32 SvxMSDffManager::ScalePt( sal_uInt32 nVal ) const
 {
     MapUnit eMap = pSdrModel->GetScaleUnit();
-    Fraction aFact( GetMapFactor( MAP_POINT, eMap ).X() );
-    long aMul = aFact.GetNumerator();
-    long aDiv = aFact.GetDenominator() * 65536;
-    aFact = Fraction( aMul, aDiv ); // try again to shorten it
-    return BigMulDiv( nVal, aFact.GetNumerator(), aFact.GetDenominator() );
+    boost::rational<long> aFact( GetMapFactor( MAP_POINT, eMap ).X() );
+    long aMul = aFact.numerator();
+    long aDiv = aFact.denominator() * 65536;
+    aFact = boost::rational<long>( aMul, aDiv ); // try again to shorten it
+    return BigMulDiv( nVal, aFact.numerator(), aFact.denominator() );
 }
 
 sal_Int32 SvxMSDffManager::ScalePoint( sal_Int32 nVal ) const
@@ -3108,31 +3108,31 @@ void SvxMSDffManager::SetModel(SdrModel* pModel, long nApplicationScale)
         // PPT works in units of 576DPI
         // WW on the other side uses twips, i.e. 1440DPI.
         MapUnit eMap = pSdrModel->GetScaleUnit();
-        Fraction aFact( GetMapFactor(MAP_INCH, eMap).X() );
-        long nMul=aFact.GetNumerator();
-        long nDiv=aFact.GetDenominator()*nApplicationScale;
-        aFact=Fraction(nMul,nDiv); // try again to shorten it
+        boost::rational<long> aFact = GetMapFactor(MAP_INCH, eMap).X();
+        long nMul=aFact.numerator();
+        long nDiv=aFact.denominator()*nApplicationScale;
+        aFact=boost::rational<long>(nMul,nDiv); // try again to shorten it
         // For 100TH_MM -> 2540/576=635/144
         // For Twip     -> 1440/576=5/2
-        nMapMul  = aFact.GetNumerator();
-        nMapDiv  = aFact.GetDenominator();
+        nMapMul  = aFact.numerator();
+        nMapDiv  = aFact.denominator();
         bNeedMap = nMapMul!=nMapDiv;
 
         // MS-DFF-Properties are mostly given in EMU (English Metric Units)
         // 1mm=36000emu, 1twip=635emu
         aFact=GetMapFactor(MAP_100TH_MM,eMap).X();
-        nMul=aFact.GetNumerator();
-        nDiv=aFact.GetDenominator()*360;
-        aFact=Fraction(nMul,nDiv); // try again to shorten it
+        nMul=aFact.numerator();
+        nDiv=aFact.denominator()*360;
+        aFact=boost::rational<long>(nMul,nDiv); // try again to shorten it
         // For 100TH_MM ->                            1/360
         // For Twip     -> 14,40/(25,4*360)=144/91440=1/635
-        nEmuMul=aFact.GetNumerator();
-        nEmuDiv=aFact.GetDenominator();
+        nEmuMul=aFact.numerator();
+        nEmuDiv=aFact.denominator();
 
         // And something for typographic Points
         aFact=GetMapFactor(MAP_POINT,eMap).X();
-        nPntMul=aFact.GetNumerator();
-        nPntDiv=aFact.GetDenominator();
+        nPntMul=aFact.numerator();
+        nPntDiv=aFact.denominator();
     }
     else
     {

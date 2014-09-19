@@ -1608,8 +1608,8 @@ private:
     {
         MapMode aMap (rInfo.maMap);
         Point aPageOfs (rInfo.mpPrinter->GetPageOffset() );
-        aMap.SetScaleX(Fraction(1,2));
-        aMap.SetScaleY(Fraction(1,2));
+        aMap.SetScaleX(boost::rational<long>(1,2));
+        aMap.SetScaleY(boost::rational<long>(1,2));
         mpPrinter->SetMapMode(aMap);
 
         Rectangle aOutRect(aPageOfs, rInfo.mpPrinter->GetOutputSize());
@@ -1803,11 +1803,11 @@ private:
             const double fHorz = (double) aPrintSize.Width()    / aPageSize.Width();
             const double fVert = (double) aPrintSize.Height() / aPageSize.Height();
 
-            Fraction    aFract;
+            boost::rational<long>    aFract;
             if ( fHorz < fVert )
-                aFract = Fraction(aPrintSize.Width(), aPageSize.Width());
+                aFract = boost::rational<long>(aPrintSize.Width(), aPageSize.Width());
             else
-                aFract = Fraction(aPrintSize.Height(), aPageSize.Height());
+                aFract = boost::rational<long>(aPrintSize.Height(), aPageSize.Height());
 
             aMap.SetScaleX(aFract);
             aMap.SetScaleY(aFract);
@@ -1931,11 +1931,11 @@ private:
                 const double fHorz ((double) rInfo.maPrintSize.Width()  / aPageSize.Width());
                 const double fVert ((double) rInfo.maPrintSize.Height() / aPageSize.Height());
 
-                Fraction aFract;
+                boost::rational<long> aFract;
                 if (fHorz < fVert)
-                    aFract = Fraction(rInfo.maPrintSize.Width(), aPageSize.Width());
+                    aFract = boost::rational<long>(rInfo.maPrintSize.Width(), aPageSize.Width());
                 else
-                    aFract = Fraction(rInfo.maPrintSize.Height(), aPageSize.Height());
+                    aFract = boost::rational<long>(rInfo.maPrintSize.Height(), aPageSize.Height());
 
                 aMap.SetScaleX(aFract);
                 aMap.SetScaleY(aFract);
@@ -2013,8 +2013,8 @@ private:
         }
 
         MapMode aMap (rInfo.maMap);
-        aMap.SetScaleX( Fraction( aPageSize_2.Width(), rInfo.maPageSize.Width() ) );
-        aMap.SetScaleY( Fraction( aPageSize_2.Height(), rInfo.maPageSize.Height() ) );
+        aMap.SetScaleX( boost::rational<long>( aPageSize_2.Width(), rInfo.maPageSize.Width() ) );
+        aMap.SetScaleY( boost::rational<long>( aPageSize_2.Height(), rInfo.maPageSize.Height() ) );
 
         // calculate adjusted print size
         const Size aAdjustedPrintSize (OutputDevice::LogicToLogic(

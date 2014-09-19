@@ -494,14 +494,14 @@ bool ImpEditEngine::ImpCheckRefMapMode()
     if ( aStatus.DoFormat100() )
     {
         MapMode aMapMode( GetRefDevice()->GetMapMode() );
-        if ( aMapMode.GetScaleX().GetNumerator() != aMapMode.GetScaleX().GetDenominator() )
+        if ( aMapMode.GetScaleX().numerator() != aMapMode.GetScaleX().denominator() )
             bChange = true;
-        else if ( aMapMode.GetScaleY().GetNumerator() != aMapMode.GetScaleY().GetDenominator() )
+        else if ( aMapMode.GetScaleY().numerator() != aMapMode.GetScaleY().denominator() )
             bChange = true;
 
         if ( bChange )
         {
-            Fraction Scale1( 1, 1 );
+            boost::rational<long> Scale1( 1, 1 );
             aMapMode.SetScaleX( Scale1 );
             aMapMode.SetScaleY( Scale1 );
             GetRefDevice()->Push();

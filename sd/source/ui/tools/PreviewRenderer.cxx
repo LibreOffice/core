@@ -383,9 +383,9 @@ void PreviewRenderer::SetupOutputSize (
     {
         const sal_Int32 nFrameWidth (mbHasFrame ? snFrameWidth : 0);
         aMapMode.SetScaleX(
-            Fraction(rFramePixelSize.Width()-2*nFrameWidth-1, aPageModelSize.Width()));
+            boost::rational<long>(rFramePixelSize.Width()-2*nFrameWidth-1, aPageModelSize.Width()));
         aMapMode.SetScaleY(
-            Fraction(rFramePixelSize.Height()-2*nFrameWidth-1, aPageModelSize.Height()));
+            boost::rational<long>(rFramePixelSize.Height()-2*nFrameWidth-1, aPageModelSize.Height()));
         aMapMode.SetOrigin(mpPreviewDevice->PixelToLogic(Point(nFrameWidth,nFrameWidth),aMapMode));
     }
     else

@@ -258,8 +258,8 @@ bool ScBlockUndo::AdjustHeight()
     ScDocument& rDoc = pDocShell->GetDocument();
 
     VirtualDevice aVirtDev;
-    Fraction aZoomX( 1, 1 );
-    Fraction aZoomY = aZoomX;
+    boost::rational<long> aZoomX( 1, 1 );
+    boost::rational<long> aZoomY = aZoomX;
     double nPPTX, nPPTY;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -356,8 +356,8 @@ void ScMultiBlockUndo::AdjustHeight()
     ScDocument& rDoc = pDocShell->GetDocument();
 
     VirtualDevice aVirtDev;
-    Fraction aZoomX( 1, 1 );
-    Fraction aZoomY = aZoomX;
+    boost::rational<long> aZoomX( 1, 1 );
+    boost::rational<long> aZoomY = aZoomX;
     double nPPTX, nPPTY;
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)

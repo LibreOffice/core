@@ -1705,7 +1705,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
                                PDFWriter& i_rOuterFace)
         :
         m_pReferenceDevice( NULL ),
-        m_aMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1) ), Fraction( 1L, pointToPixel(1) ) ),
+        m_aMapMode( MAP_POINT, Point(), boost::rational<long>( 1L, pointToPixel(1) ), boost::rational<long>( 1L, pointToPixel(1) ) ),
         m_nCurrentStructElement( 0 ),
         m_bEmitStructure( true ),
         m_bNewMCID( false ),
@@ -7465,7 +7465,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     // if the mapmode is distorted we need to adjust for that also
     if( m_aCurrentPDFState.m_aMapMode.GetScaleX() != m_aCurrentPDFState.m_aMapMode.GetScaleY() )
     {
-        fXScale *= double(m_aCurrentPDFState.m_aMapMode.GetScaleX()) / double(m_aCurrentPDFState.m_aMapMode.GetScaleY());
+        fXScale *= boost::rational_cast<double>(m_aCurrentPDFState.m_aMapMode.GetScaleX()) / boost::rational_cast<double>(m_aCurrentPDFState.m_aMapMode.GetScaleY());
     }
 
     int nAngle = m_aCurrentPDFState.m_aFont.GetOrientation();

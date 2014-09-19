@@ -78,10 +78,10 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     OScrollWindowHelper* pScrollWindow = pReportWindow->getScrollWindow();
 
     Size aOut = pReportWindow->GetOutputSizePixel();
-    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
+    boost::rational<long> aStartWidth(long(REPORT_STARTMARKER_WIDTH));
     aStartWidth *= m_pParent->GetMapMode().GetScaleX();
 
-    aOut.Width() -= (long)aStartWidth;
+    aOut.Width() -= boost::rational_cast<long>(aStartWidth);
     aOut.Height() = m_pParent->GetOutputSizePixel().Height();
 
     Point aPos = pScrollWindow->getThumbPos();
@@ -90,7 +90,7 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     Rectangle aOutRect( aPos, aOut );
     aOutRect = m_pParent->PixelToLogic( aOutRect );
     Rectangle aWorkArea(Point(), pScrollWindow->getTotalSize());
-    aWorkArea.Right() -= (long)aStartWidth;
+    aWorkArea.Right() -= boost::rational_cast<long>(aStartWidth);
     aWorkArea = pScrollWindow->PixelToLogic( aWorkArea );
     if( !aOutRect.IsInside( rPos ) && aWorkArea.IsInside( rPos ) )
     {

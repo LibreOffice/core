@@ -286,7 +286,7 @@ void ScDrawView::DoCut()
     EndUndo();
 }
 
-void ScDrawView::GetScale( Fraction& rFractX, Fraction& rFractY ) const
+void ScDrawView::GetScale( boost::rational<long>& rFractX, boost::rational<long>& rFractY ) const
 {
     rFractX = aScaleX;
     rFractY = aScaleY;
@@ -296,8 +296,8 @@ void ScDrawView::RecalcScale()
 {
     double nPPTX;
     double nPPTY;
-    Fraction aZoomX(1,1);
-    Fraction aZoomY(1,1);
+    boost::rational<long> aZoomX(1,1);
+    boost::rational<long> aZoomY(1,1);
 
     if (pViewData)
     {
@@ -614,8 +614,8 @@ void ScDrawView::UpdateUserViewOptions()
         SetSnapEnabled( rGrid.GetUseGridSnap() );
         SetGridSnap( rGrid.GetUseGridSnap() );
 
-        Fraction aFractX( rGrid.GetFldDrawX(), rGrid.GetFldDivisionX() + 1 );
-        Fraction aFractY( rGrid.GetFldDrawY(), rGrid.GetFldDivisionY() + 1 );
+        boost::rational<long> aFractX( rGrid.GetFldDrawX(), rGrid.GetFldDivisionX() + 1 );
+        boost::rational<long> aFractY( rGrid.GetFldDrawY(), rGrid.GetFldDivisionY() + 1 );
         SetSnapGridWidth( aFractX, aFractY );
 
         SetGridCoarse( Size( rGrid.GetFldDrawX(), rGrid.GetFldDrawY() ) );
