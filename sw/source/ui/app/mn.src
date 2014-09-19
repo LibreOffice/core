@@ -295,10 +295,37 @@
             Text[ en-US ] = "Down One Level";                              \
         };
 
+#define MN_NEW_PASTE_SPECIAL \
+    MenuItem\
+    {\
+        Identifier = SID_PASTE_SPECIAL ; \
+        HelpId =  CMD_SID_PASTE_SPECIAL ; \
+        Text [ en-US ] = "Paste ~Special" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MenuItem\
+                {\
+                    Identifier = SID_PASTE_UNFORMATTED ; \
+                    HelpId =  CMD_SID_PASTE_SPECIAL ; \
+                    Text [ en-US ] = "~Text Only" ; \
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_PASTE_SPECIAL ; \
+                    HelpId =  CMD_SID_PASTE_SPECIAL ; \
+                    Text [ en-US ] = "~More" ; \
+                };\
+            };\
+        };\
+    };
+
 #define BASE_TEXT_POPUPMENU_BEGIN \
 {                                                                           \
     ItemList =                                                              \
     {                                                                       \
+        MN_NEW_PASTE_SPECIAL                                                \
         MN_RESET                                                            \
         _NUMBERING_RELATED_MENU                                             \
         SEPARATOR ;                                                         \
