@@ -142,6 +142,7 @@ struct CreateShapeParam2D
     boost::shared_ptr<VTitle> mpVTitleSecondY;
 
     css::uno::Reference<css::drawing::XShape> mxMarkHandles;
+    css::uno::Reference<css::drawing::XShape> mxPlotAreaWithAxes;
 
     bool mbAutoPosTitleX;
     bool mbAutoPosTitleY;
@@ -3030,9 +3031,9 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0));
     AbstractShapeFactory::setShapeName(aParam.mxMarkHandles, "MarkHandles");
 
-    uno::Reference< drawing::XShape > xDiagram_OuterRect( pShapeFactory->createInvisibleRectangle(
-                xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-    AbstractShapeFactory::setShapeName( xDiagram_OuterRect, "PlotAreaIncludingAxes" );
+    aParam.mxPlotAreaWithAxes = pShapeFactory->createInvisibleRectangle(
+        xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0, 0));
+    AbstractShapeFactory::setShapeName(aParam.mxPlotAreaWithAxes, "PlotAreaIncludingAxes");
 
     uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( pShapeFactory->createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
 
@@ -3093,10 +3094,10 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(
             aSeriesPlotterContainer, xDiagramPlusAxes_Shapes, aParam, rPageSize);
 
-        if( xDiagram_OuterRect.is() )
+        if (aParam.mxPlotAreaWithAxes.is())
         {
-            xDiagram_OuterRect->setPosition( awt::Point( aUsedOuterRect.X, aUsedOuterRect.Y ) );
-            xDiagram_OuterRect->setSize( awt::Size( aUsedOuterRect.Width, aUsedOuterRect.Height ) );
+            aParam.mxPlotAreaWithAxes->setPosition(awt::Point(aUsedOuterRect.X, aUsedOuterRect.Y));
+            aParam.mxPlotAreaWithAxes->setSize(awt::Size(aUsedOuterRect.Width, aUsedOuterRect.Height));
         }
 
         //correct axis title position
