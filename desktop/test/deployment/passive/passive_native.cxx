@@ -78,25 +78,25 @@ private:
     virtual ~Provider() {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException) SAL_OVERRIDE
     { return static_getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException)
+    getSupportedServiceNames() throw (css::uno::RuntimeException) SAL_OVERRIDE
     { return static_getSupportedServiceNames(); }
 
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
         css::util::URL const &, OUString const &, sal_Int32)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
     SAL_CALL queryDispatches(
         css::uno::Sequence< css::frame::DispatchDescriptor > const & Requests)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
@@ -170,32 +170,32 @@ private:
     virtual ~Dispatch() {}
 
     virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException) SAL_OVERRIDE
     { return static_getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException)
+    getSupportedServiceNames() throw (css::uno::RuntimeException) SAL_OVERRIDE
     { return static_getSupportedServiceNames(); }
 
     virtual void SAL_CALL dispatch(
         css::util::URL const &,
         css::uno::Sequence< css::beans::PropertyValue > const &)
-        throw (css::uno::RuntimeException);
+        throw (css::uno::RuntimeException) SAL_OVERRIDE;
 
     virtual void SAL_CALL addStatusListener(
         css::uno::Reference< css::frame::XStatusListener > const &,
         css::util::URL const &)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException) SAL_OVERRIDE
     {}
 
     virtual void SAL_CALL removeStatusListener(
         css::uno::Reference< css::frame::XStatusListener > const &,
         css::util::URL const &)
-        throw (css::uno::RuntimeException)
+        throw (css::uno::RuntimeException) SAL_OVERRIDE
     {}
 
     css::uno::Reference< css::uno::XComponentContext > context_;
