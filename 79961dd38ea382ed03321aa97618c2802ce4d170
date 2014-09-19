@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_334bf25b",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-19T12:40:04Z",
+      "side": 1,
+      "message": "no need to qualify name",
+      "revId": "79961dd38ea382ed03321aa97618c2802ce4d170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_1348ee5a",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-19T12:40:04Z",
+      "side": 1,
+      "message": "why are you creating a new object?",
+      "revId": "79961dd38ea382ed03321aa97618c2802ce4d170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_f3732ab3",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-19T12:40:04Z",
+      "side": 1,
+      "message": "for collections, we prefer to specify interfaces, not concrete classes in our API",
+      "revId": "79961dd38ea382ed03321aa97618c2802ce4d170",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
