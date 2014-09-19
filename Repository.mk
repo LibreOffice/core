@@ -190,8 +190,10 @@ endif
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
-	regmerge \
-	regview \
+	$(if $(ENABLE_MACOSX_SANDBOX),, \
+		regmerge \
+		regview \
+	) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
