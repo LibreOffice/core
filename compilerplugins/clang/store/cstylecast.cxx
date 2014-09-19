@@ -58,6 +58,10 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
     if( expr->getCastKind() == CK_BitCast ) {
         return true;
     }
+    // ignore stuff from inside templates for now
+    if( expr->getCastKind() == CK_Dependent ) {
+        return true;
+    }
     SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(
                               expr->getLocStart());
     StringRef filename = compiler.getSourceManager().getFilename(spellingLocation);
@@ -66,16 +70,18 @@ bool CStyleCast::VisitCStyleCastExpr(const CStyleCastExpr * expr) {
         return true;
     }
     if ( compat::isInMainFile(compiler.getSourceManager(), spellingLocation)
-        ? (filename.startswith(SRCDIR "/sal")) // sal has tons of weird stuff going on that I don't understand enough to fix
+        ? (filename.startswith(SRCDIR "/sal") // sal has tons of weird stuff going on that I don't understand enough to fix
+           || filename.startswith(SRCDIR "/bridges")) // I'm not messing with this code - far too dangerous
         : (filename.startswith(SRCDIR "/include/tools/solar.h")) ) {
         return true;
     }
     report(
         DiagnosticsEngine::Warning,
-        "c-style cast, type=%0, from=%1, recommendedFix=%2",
+        "c-style cast, type=%0, from=%1, to=%2, recommendedFix=%3",
         expr->getSourceRange().getBegin())
       << expr->getCastKind()
       << expr->getSubExprAsWritten()->getType()
+      << expr->getType()
       << recommendedFix(expr->getCastKind())
       << expr->getSourceRange();
     return true;
