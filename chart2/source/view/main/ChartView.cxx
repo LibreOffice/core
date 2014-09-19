@@ -1384,15 +1384,15 @@ void lcl_setDefaultWritingMode( ::boost::shared_ptr< DrawModelWrapper > pDrawMod
     }
 }
 
-sal_Int16 lcl_getDefaultWritingModeFromPool( ::boost::shared_ptr< DrawModelWrapper > pDrawModelWrapper )
+sal_Int16 lcl_getDefaultWritingModeFromPool( const boost::shared_ptr<DrawModelWrapper>& pDrawModelWrapper )
 {
     sal_Int16 nWritingMode = text::WritingMode2::LR_TB;
-    if( pDrawModelWrapper.get() )
-    {
-        const SfxPoolItem* pItem = &(pDrawModelWrapper->GetItemPool().GetDefaultItem( EE_PARA_WRITINGDIR ));
-        if( pItem )
-            nWritingMode = static_cast< sal_Int16 >((static_cast< const SvxFrameDirectionItem * >( pItem ))->GetValue());
-    }
+    if(!pDrawModelWrapper)
+        return nWritingMode;
+
+    const SfxPoolItem* pItem = &(pDrawModelWrapper->GetItemPool().GetDefaultItem( EE_PARA_WRITINGDIR ));
+    if( pItem )
+        nWritingMode = static_cast< sal_Int16 >((static_cast< const SvxFrameDirectionItem * >( pItem ))->GetValue());
     return nWritingMode;
 }
 
@@ -2327,17 +2327,16 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
                    , const std::vector< LegendEntryProvider* >& rLegendEntryProviderList
                    , sal_Int16 nDefaultWritingMode )
 {
-    if( VLegend::isVisible( xLegend ))
-    {
-        VLegend aVLegend( xLegend, xContext, rLegendEntryProviderList,
-                xPageShapes, xShapeFactory, rModel);
-        aVLegend.setDefaultWritingMode( nDefaultWritingMode );
-        aVLegend.createShapes( awt::Size( rRemainingSpace.Width, rRemainingSpace.Height ),
-                               rPageSize );
-        aVLegend.changePosition( rRemainingSpace, rPageSize );
-        return true;
-    }
-    return false;
+    if (!VLegend::isVisible(xLegend))
+        return false;
+
+    VLegend aVLegend( xLegend, xContext, rLegendEntryProviderList,
+            xPageShapes, xShapeFactory, rModel);
+    aVLegend.setDefaultWritingMode( nDefaultWritingMode );
+    aVLegend.createShapes( awt::Size( rRemainingSpace.Width, rRemainingSpace.Height ),
+                           rPageSize );
+    aVLegend.changePosition( rRemainingSpace, rPageSize );
+    return true;
 }
 
 void formatPage(
