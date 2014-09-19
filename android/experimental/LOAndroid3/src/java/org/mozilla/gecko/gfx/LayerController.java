@@ -213,8 +213,9 @@ public class LayerController {
         if (size.width >= oldWidth && size.height >= oldHeight) {
             FloatSize pageSize = viewportMetrics.getPageSize();
             if (pageSize.width < size.width || pageSize.height < size.height) {
-                viewportMetrics.setPageSize(new FloatSize(Math.max(pageSize.width, size.width),
-                                                           Math.max(pageSize.height, size.height)));
+                FloatSize actualPageSize = new FloatSize(Math.max(pageSize.width, size.width),
+                                               Math.max(pageSize.height, size.height));
+                viewportMetrics.setPageSize(actualPageSize, actualPageSize);
             }
         }
 
@@ -260,7 +261,7 @@ public class LayerController {
             return;
 
         ViewportMetrics viewportMetrics = new ViewportMetrics(mViewportMetrics);
-        viewportMetrics.setPageSize(size);
+        viewportMetrics.setPageSize(size, size);
         mViewportMetrics = new ImmutableViewportMetrics(viewportMetrics);
 
         // Page size is owned by the layer client, so no need to notify it of

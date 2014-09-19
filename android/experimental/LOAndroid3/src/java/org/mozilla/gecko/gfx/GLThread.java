@@ -38,10 +38,10 @@
 package org.mozilla.gecko.gfx;
 
 import android.opengl.GLSurfaceView;
-import android.view.SurfaceHolder;
-import javax.microedition.khronos.opengles.GL10;
-import java.util.concurrent.Future;
+
 import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.microedition.khronos.opengles.GL10;
 
 // A GL thread managed by Java. It is not necessary to use this class to use the
 // FlexibleGLSurfaceView, but it can be helpful, especially if the GL rendering is to be done

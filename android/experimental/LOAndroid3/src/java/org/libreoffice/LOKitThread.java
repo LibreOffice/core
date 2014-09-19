@@ -64,7 +64,8 @@ public class LOKitThread extends Thread {
         int pageHeight = mTileProvider.getPageHeight();
 
         mViewportMetrics = new ViewportMetrics();
-        mViewportMetrics.setPageSize(new FloatSize(pageWidth, pageHeight));
+        FloatSize size = new FloatSize(pageWidth, pageHeight);
+        mViewportMetrics.setPageSize(size, size);
 
         GeckoLayerClient layerClient = mApplication.getLayerClient();
         layerClient.beginDrawing(mViewportMetrics);

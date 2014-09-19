@@ -59,7 +59,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -92,7 +92,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private RenderContext mLastPageContext;
     private int mMaxTextureSize;
 
-    private ArrayList<Layer> mExtraLayers = new ArrayList<Layer>();
+    private CopyOnWriteArrayList<Layer> mExtraLayers = new CopyOnWriteArrayList<Layer>();
 
     // Dropped frames display
     private int[] mFrameTimings;
@@ -113,6 +113,9 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     private int mTextureHandle;
     private int mSampleHandle;
     private int mTMatrixHandle;
+
+    private int mSurfaceWidth;
+    private int mSurfaceHeight;
 
     // column-major matrix applied to each vertex to shift the viewport from
     // one ranging from (-1, -1),(1,1) to (0,0),(1,1) and to scale all sizes by
@@ -263,9 +266,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     }
 
     public void addLayer(Layer layer) {
-        LayerController controller = mView.getController();
-
-        synchronized (controller) {
+        synchronized (mExtraLayers) {
             if (mExtraLayers.contains(layer)) {
                 mExtraLayers.remove(layer);
             }
@@ -275,9 +276,7 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     }
 
     public void removeLayer(Layer layer) {
-        LayerController controller = mView.getController();
-
-        synchronized (controller) {
+        synchronized (mExtraLayers) {
             mExtraLayers.remove(layer);
         }
     }
@@ -331,11 +330,14 @@ public class LayerRenderer implements GLSurfaceView.Renderer {
     }
 
     private RenderContext createContext(RectF viewport, FloatSize pageSize, float zoomFactor) {
-        return new RenderContext(viewport, pageSize, zoomFactor, mPositionHandle, mTextureHandle,
+        return new RenderContext(viewport, pageSize, new IntSize(mSurfaceWidth, mSurfaceHeight), zoomFactor, mPositionHandle, mTextureHandle,
                                  mCoordBuffer);
     }
 
     public void onSurfaceChanged(GL10 gl, final int width, final int height) {
+        mSurfaceWidth = width;
+        mSurfaceHeight = height;
+
         GLES20.glViewport(0, 0, width, height);
 
         if (mFrameRateLayer != null) {
