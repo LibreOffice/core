@@ -38,7 +38,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Random;
 
 /** Bootstrap offers functionality to obtain a context or simply
@@ -94,7 +96,7 @@ public class Bootstrap {
     static public XComponentContext createInitialComponentContext( Hashtable<String, Object> context_entries )
             throws Exception
     {
-        return createInitialComponentContext((java.util.Map<String,Object>)context_entries);
+        return createInitialComponentContext((Map<String, Object>) context_entries);
     }
     /** Bootstraps an initial component context with service manager and basic
         jurt components inserted.
@@ -102,7 +104,7 @@ public class Bootstrap {
         context entries (type class ComponentContextEntry).
         @return a new context.
     */
-    static public XComponentContext createInitialComponentContext( java.util.Map<String, Object> context_entries )
+    static public XComponentContext createInitialComponentContext( Map<String, Object> context_entries )
         throws Exception
     {
         ServiceManager xSMgr = new ServiceManager();
@@ -116,7 +118,7 @@ public class Bootstrap {
 
         // initial component context
         if (context_entries == null)
-            context_entries = new Hashtable<String,Object>( 1 );
+            context_entries = new HashMap<String,Object>( 1 );
         // add smgr
         context_entries.put(
             "/singletons/com.sun.star.lang.theServiceManager",
@@ -143,7 +145,7 @@ public class Bootstrap {
     static public XMultiServiceFactory createSimpleServiceManager() throws Exception
     {
         return UnoRuntime.queryInterface(
-            XMultiServiceFactory.class, createInitialComponentContext( null ).getServiceManager() );
+            XMultiServiceFactory.class, createInitialComponentContext( (Map<String, Object>) null ).getServiceManager() );
     }
 
 
@@ -155,7 +157,7 @@ public class Bootstrap {
     static public final XComponentContext defaultBootstrap_InitialComponentContext()
         throws Exception
     {
-        return defaultBootstrap_InitialComponentContext( null, null );
+        return defaultBootstrap_InitialComponentContext( (String) null, (Map<String,String>) null );
     }
     /**
      * Backwards compatibility stub.
@@ -164,7 +166,7 @@ public class Bootstrap {
             String ini_file, Hashtable<String,String> bootstrap_parameters )
             throws Exception
     {
-        return defaultBootstrap_InitialComponentContext(ini_file, (java.util.Map<String,String>)bootstrap_parameters);
+        return defaultBootstrap_InitialComponentContext(ini_file, (Map<String,String>) bootstrap_parameters);
 
     }
     /** Bootstraps the initial component context from a native UNO installation.
@@ -178,7 +180,7 @@ public class Bootstrap {
                bootstrap parameters (maybe null)
     */
     static public final XComponentContext defaultBootstrap_InitialComponentContext(
-        String ini_file, java.util.Map<String,String> bootstrap_parameters )
+        String ini_file, Map<String,String> bootstrap_parameters )
         throws Exception
     {
         // jni convenience: easier to iterate over array than calling Hashtable
@@ -187,7 +189,7 @@ public class Bootstrap {
         {
             pairs = new String [ 2 * bootstrap_parameters.size() ];
             int n = 0;
-            for (java.util.Map.Entry<String, String> bootstrap_parameter : bootstrap_parameters.entrySet()) {
+            for (Map.Entry<String, String> bootstrap_parameter : bootstrap_parameters.entrySet()) {
                 pairs[ n++ ] = bootstrap_parameter.getKey();
                 pairs[ n++ ] = bootstrap_parameter.getValue();
             }
@@ -250,7 +252,7 @@ public class Bootstrap {
         try {
             // create default local component context
             XComponentContext xLocalContext =
-                createInitialComponentContext( null );
+                createInitialComponentContext( (Map<String, Object>) null );
             if ( xLocalContext == null )
                 throw new BootstrapException( "no local component context!" );
 
