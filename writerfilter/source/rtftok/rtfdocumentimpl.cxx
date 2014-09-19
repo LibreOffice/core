@@ -2741,13 +2741,13 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     switch (nKeyword)
     {
     case RTF_TRQL:
-        nParam = 0;
+        nParam = NS_ooxml::LN_Value_ST_Jc_left;
         break;
     case RTF_TRQC:
-        nParam = 1;
+        nParam = NS_ooxml::LN_Value_ST_Jc_center;
         break;
     case RTF_TRQR:
-        nParam = 2;
+        nParam = NS_ooxml::LN_Value_ST_Jc_right;
         break;
     default:
         break;

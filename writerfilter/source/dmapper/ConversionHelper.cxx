@@ -252,9 +252,15 @@ sal_Int16 convertTableJustification( sal_Int32 nIntValue )
     sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
     switch( nIntValue )
     {
-        case 1 : nOrient = text::HoriOrientation::CENTER; break;
-        case 2 : nOrient = text::HoriOrientation::RIGHT; break;
-        case 0 :
+        case NS_ooxml::LN_Value_ST_Jc_center:
+            nOrient = text::HoriOrientation::CENTER;
+            break;
+        case NS_ooxml::LN_Value_ST_Jc_right:
+        case NS_ooxml::LN_Value_ST_Jc_end:
+            nOrient = text::HoriOrientation::RIGHT;
+            break;
+        case NS_ooxml::LN_Value_ST_Jc_left:
+        case NS_ooxml::LN_Value_ST_Jc_start:
         //no break
         default:;
 

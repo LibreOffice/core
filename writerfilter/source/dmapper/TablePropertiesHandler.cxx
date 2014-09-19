@@ -72,7 +72,6 @@ namespace dmapper {
             case NS_ooxml::LN_CT_TblPrBase_jc:
             case 0x5400: // sprmTJc
             {
-                //table justification 0: left, 1: center, 2: right
                 sal_Int16 nOrient = ConversionHelper::convertTableJustification( nIntValue );
                 TablePropertyMapPtr pTableMap( new TablePropertyMap );
                 pTableMap->setValue( TablePropertyMap::HORI_ORIENT, nOrient );
