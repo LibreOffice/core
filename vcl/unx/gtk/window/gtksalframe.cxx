@@ -509,6 +509,9 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, sal_uLong nStyle )
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (nStyle & SAL_FRAME_STYLE_SIZEABLE) && ! pParent );
     m_bWindowIsGtkPlug  = false;
+#if defined(ENABLE_DBUS) && defined(ENABLE_GIO)
+    m_pLastSyncedDbusMenu = NULL;
+#endif
     Init( pParent, nStyle );
 }
 
