@@ -26,9 +26,10 @@ void appendSQLWCHARs(OUStringBuffer & s, const sal_Unicode* d, sal_Int32 n)
 BOOST_STATIC_ASSERT(sizeof (wchar_t) == 4);
 void appendSQLWCHARs(OUStringBuffer & s, const wchar_t* d, sal_Int32 n)
 {
-    for (sal_Int32 i = 0; i < n; ++i)
+    const wchar_t * const end = d + n;
+    for (; d < end; ++d)
     {
-        s.appendUtf32(d[i]);
+        s.appendUtf32(*d);
     }
 }
 #endif
