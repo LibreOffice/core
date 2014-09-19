@@ -37,12 +37,14 @@ $(eval $(call gb_Module_add_check_targets,svx,\
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifeq (,$(ENABLE_MACOSX_SANDBOX))
 $(eval $(call gb_Module_add_targets,svx,\
     Executable_gengal \
     $(if $(filter-out WNT,$(OS)), \
 		Package_gengal \
         Executable_pixelctl) \
 ))
+endif
 endif
 
 ifneq ($(OOO_JUNIT_JAR),)
