@@ -234,7 +234,7 @@ int MAIN(int argc, char** argv)
 {
     int    i;
     char** useargv = 0;
-    char** pfargv;
+    char** pfargv = NULL;
 
     if( nRunde == 0 )
     {
