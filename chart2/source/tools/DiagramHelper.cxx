@@ -136,66 +136,67 @@ void DiagramHelper::setVertical(
     try
     {
         Reference< XCoordinateSystemContainer > xCnt( xDiagram, uno::UNO_QUERY );
-        if( xCnt.is())
+        if (!xCnt.is())
+            return;
+
+        Sequence< Reference<XCoordinateSystem> > aCooSys = xCnt->getCoordinateSystems();
+        uno::Any aValue;
+        aValue <<= bVertical;
+        for( sal_Int32 i=0; i<aCooSys.getLength(); ++i )
         {
-            Sequence< Reference< XCoordinateSystem > > aCooSys(
-                xCnt->getCoordinateSystems());
-            uno::Any aValue;
-            aValue <<= bVertical;
-            for( sal_Int32 i=0; i<aCooSys.getLength(); ++i )
+            uno::Reference< XCoordinateSystem > xCooSys( aCooSys[i] );
+            Reference< beans::XPropertySet > xProp( xCooSys, uno::UNO_QUERY );
+            bool bChanged = false;
+            if (xProp.is())
             {
-                uno::Reference< XCoordinateSystem > xCooSys( aCooSys[i] );
-                Reference< beans::XPropertySet > xProp( xCooSys, uno::UNO_QUERY );
-                bool bChanged = false;
-                if( xProp.is() )
+                bool bOldSwap = false;
+                if( !(xProp->getPropertyValue("SwapXAndYAxis") >>= bOldSwap)
+                    || bVertical != bOldSwap )
+                    bChanged = true;
+
+                if( bChanged )
+                    xProp->setPropertyValue("SwapXAndYAxis", aValue);
+            }
+
+            if (!xCooSys.is())
+                continue;
+
+            const sal_Int32 nDimensionCount = xCooSys->getDimension();
+            sal_Int32 nDimIndex = 0;
+            for (nDimIndex=0; nDimIndex < nDimensionCount; ++nDimIndex)
+            {
+                const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
+                for (sal_Int32 nI = 0; nI <= nMaximumScaleIndex; ++nI)
                 {
-                    bool bOldSwap = false;
-                    if( !(xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bOldSwap)
-                        || bVertical != bOldSwap )
-                        bChanged = true;
+                    Reference<chart2::XAxis> xAxis = xCooSys->getAxisByDimension(nDimIndex,nI);
+                    if (!xAxis.is())
+                        continue;
 
-                    if( bChanged )
-                        xProp->setPropertyValue( "SwapXAndYAxis", aValue );
-                }
-                if( xCooSys.is() )
-                {
-                    const sal_Int32 nDimensionCount( xCooSys->getDimension() );
-                    sal_Int32 nDimIndex = 0;
-                    for(nDimIndex=0; nDimIndex<nDimensionCount; ++nDimIndex)
-                    {
-                        const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
-                        for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
-                        {
-                            Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( nDimIndex,nI ));
-                            if( xAxis.is() )
-                            {
-                                //adapt title rotation only when axis swapping has changed
-                                if( bChanged )
-                                {
-                                    Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
-                                    if( xTitled.is())
-                                    {
-                                        Reference< beans::XPropertySet > xTitleProps( xTitled->getTitleObject(), uno::UNO_QUERY );
-                                        if( !xTitleProps.is() )
-                                            continue;
-                                        double fAngleDegree = 0.0;
-                                        xTitleProps->getPropertyValue( "TextRotation" ) >>= fAngleDegree;
-                                        if( !::rtl::math::approxEqual( fAngleDegree, 0.0 )
-                                            && !::rtl::math::approxEqual( fAngleDegree, 90.0 ) )
-                                            continue;
+                    //adapt title rotation only when axis swapping has changed
+                    if (!bChanged)
+                        continue;
 
-                                        double fNewAngleDegree = 0.0;
-                                        if( !bVertical && nDimIndex == 1 )
-                                            fNewAngleDegree = 90.0;
-                                        else if( bVertical && nDimIndex == 0 )
-                                            fNewAngleDegree = 90.0;
+                    Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
+                    if (!xTitled.is())
+                        continue;
 
-                                        xTitleProps->setPropertyValue( "TextRotation", uno::makeAny( fNewAngleDegree ));
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    Reference< beans::XPropertySet > xTitleProps( xTitled->getTitleObject(), uno::UNO_QUERY );
+                    if (!xTitleProps.is())
+                        continue;
+
+                    double fAngleDegree = 0.0;
+                    xTitleProps->getPropertyValue("TextRotation") >>= fAngleDegree;
+                    if (!rtl::math::approxEqual(fAngleDegree, 0.0) &&
+                        !rtl::math::approxEqual(fAngleDegree, 90.0))
+                        continue;
+
+                    double fNewAngleDegree = 0.0;
+                    if( !bVertical && nDimIndex == 1 )
+                        fNewAngleDegree = 90.0;
+                    else if( bVertical && nDimIndex == 0 )
+                        fNewAngleDegree = 90.0;
+
+                    xTitleProps->setPropertyValue("TextRotation", uno::makeAny(fNewAngleDegree));
                 }
             }
         }
@@ -214,29 +215,29 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
     rbAmbiguous = false;
 
     Reference< XCoordinateSystemContainer > xCnt( xDiagram, uno::UNO_QUERY );
-    if( xCnt.is())
+    if (!xCnt.is())
+        return false;
+
+    Sequence< Reference<XCoordinateSystem> > aCooSys = xCnt->getCoordinateSystems();
+
+    for (sal_Int32 i = 0; i < aCooSys.getLength(); ++i)
     {
-        Sequence< Reference< XCoordinateSystem > > aCooSys(
-            xCnt->getCoordinateSystems());
-        for( sal_Int32 i=0; i<aCooSys.getLength(); ++i )
+        Reference<beans::XPropertySet> xProp(aCooSys[i], uno::UNO_QUERY);
+        if (!xProp.is())
+            continue;
+
+        bool bCurrent = false;
+        if (xProp->getPropertyValue("SwapXAndYAxis") >>= bCurrent)
         {
-            Reference< beans::XPropertySet > xProp( aCooSys[i], uno::UNO_QUERY );
-            if( xProp.is())
+            if (!rbFound)
             {
-                bool bCurrent = false;
-                if( xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bCurrent )
-                {
-                    if( !rbFound )
-                    {
-                        bValue = bCurrent;
-                        rbFound = true;
-                    }
-                    else if( bCurrent != bValue )
-                    {
-                        // ambiguous -> choose always first found
-                        rbAmbiguous = true;
-                    }
-                }
+                bValue = bCurrent;
+                rbFound = true;
+            }
+            else if (bCurrent != bValue)
+            {
+                // ambiguous -> choose always first found
+                rbAmbiguous = true;
             }
         }
     }
