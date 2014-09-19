@@ -297,9 +297,15 @@ ifeq ($(OS_FOR_BUILD),WNT)
 else
 	@ooinstall $(TESTINSTALLDIR)
 ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
-# The InfoPlist_*.zip files in "bin" are totally pointless and should
-# not be there. I am too lazy at the moment to figure out how to
-# prevent them from ending up there.
+# Unzip bin/InfoPlist_*.zip files into corresponding Resources/*.lproj directories.
+	set -x; for F in $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/bin/InfoPlist_*.zip; do \
+		bn=`basename $$F .zip`; \
+		lang=$${bn#InfoPlist_}; \
+		lproj=$(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/Resources/$$lang.lproj; \
+		mkdir $$lproj; \
+		(cd $$lproj; unzip $$F); \
+	done
+# And remove the "bin" folder which should not be there
 	rm -rf $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/bin
 	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app
 endif
