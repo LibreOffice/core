@@ -28,7 +28,7 @@ import com.sun.star.io.XInputStream;
 import com.sun.star.io.XSeekable;
 import  com.sun.star.lib.uno.helper.ComponentBase;
 
-public class ByteArrayToXInputStreamAdapter
+public final class ByteArrayToXInputStreamAdapter
     extends ComponentBase
     implements XInputStream, XSeekable
 {
