@@ -23,7 +23,7 @@ $(eval $(call gb_Library_set_include,odbc,\
 
 $(eval $(call gb_Library_add_defs,odbc,\
 	-DOOO_DLLIMPLEMENTATION_ODBCBASE \
-	$(if $(and $(filter MACOSX,$(OS)), $(filter TRUE,$(SYSTEM_ODBC_HEADERS))), \
+	$(if $(and $(filter MACOSX,$(OS)), $(if $(SYSTEM_ODBC_HEADERS),,TRUE)), \
 		-DSQL_WCHART_CONVERT) \
 ))
 
