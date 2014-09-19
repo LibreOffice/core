@@ -2338,7 +2338,7 @@ bool lcl_createLegend( const uno::Reference< XLegend > & xLegend
 
 void formatPage(
       ChartModel& rChartModel
-    , const awt::Size rPageSize
+    , const awt::Size& rPageSize
     , const uno::Reference< drawing::XShapes >& xTarget
     , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
     )
