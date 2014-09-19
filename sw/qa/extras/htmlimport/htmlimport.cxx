@@ -57,6 +57,10 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImage, "inlined_image.html")
     CPPUNIT_ASSERT(xGraphic.is());
     CPPUNIT_ASSERT(xGraphic->getType() != graphic::GraphicType::EMPTY);
 
+    OUString sGraphicURL = getProperty< OUString >(xShape, "GraphicURL");
+    // Before it was "data:image/png;base64,<data>"
+    CPPUNIT_ASSERT(sGraphicURL.startsWith("vnd.sun.star.GraphicObject:"));
+
     for (int n = 0; ; n++)
     {
         SwNode* pNode = pDoc->GetNodes()[ n ];
