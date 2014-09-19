@@ -2140,6 +2140,16 @@ void OpenGL3DRenderer::CreateSceneBoxView()
                m_CameraInfo.cameraUp);
 }
 
+void OpenGL3DRenderer::AddMatrixDiff(glm::mat4& aMat)
+{
+    m_matDiff = m_matDiff + aMat;
+}
+
+void OpenGL3DRenderer::ResetMatrixDiff()
+{
+    m_matDiff = glm::mat4(0.0);
+}
+
 void OpenGL3DRenderer::ClearBuffer()
 {
     CHECK_GL_ERROR();
@@ -2451,6 +2461,12 @@ glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras(glm::vec3& rBeginPos, glm::vec3&
     return aEnd - aBegin;
 }
 
+glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras( glm::vec3& rEndPos,  glm::vec3& rEndDirection)
+{
+    glm::mat4 aEnd = glm::lookAt(glm::vec3(m_GlobalScaleMatrix * glm::vec4(rEndPos, 1.0)),
+                     glm::vec3(m_GlobalScaleMatrix * glm::vec4(rEndDirection, 1.0)),glm::vec3(0, 0, 1));
+    return aEnd - m_3DView;
+}
 
 glm::mat4 OpenGL3DRenderer::GetProjectionMatrix()
 {
