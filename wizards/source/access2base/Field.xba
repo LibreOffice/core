@@ -525,7 +525,7 @@ Dim oParent As Object
 					If Column.IsNullable = com.sun.star.sdbc.ColumnValue.NULLABLE Then Column.updateNull() Else Goto Trace_Null
 				Else
 					Select Case Column.Type
-						Case .BIT, .Boolean
+						Case .BIT, .BOOLEAN
 							If Not Utils._CheckArgument(pvValue, iArgNr, vbBoolean, , False) Then Goto Trace_Error_Value
 							Column.updateBoolean(pvValue)
 						Case .TINYINT
@@ -536,7 +536,7 @@ Dim oParent As Object
 							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 							If pvValue &lt; -32768 Or pvValue &gt; 32767 Then Goto trace_Error_Value
 							Column.updateInt(CLng(pvValue))
-						Case .Integer
+						Case .INTEGER
 							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 							If pvValue &lt; -2147483648 Or pvValue &gt; 2147483647 Then Goto trace_Error_Value
 							Column.updateInt(CLng(pvValue))
@@ -546,7 +546,7 @@ Dim oParent As Object
 						Case .FLOAT
 							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 							If Abs(pvValue) &lt; 3.402823E38 And Abs(pvValue) &gt; 1.401298E-45 Then Column.updateFloat(CSng(pvValue)) Else Goto trace_Error_Value
-						Case .REAL, .Double
+						Case .REAL, .DOUBLE
 							If Not Utils._CheckArgument(pvValue, iArgNr, Utils._AddNumeric(), , False) Then Goto Trace_Error_Value
 							&apos;If Abs(pvValue) &lt; 1.79769313486232E308 And Abs(pvValue) &gt; 4.94065645841247E-307 Then Column.updateDouble(CDbl(pvValue)) Else Goto trace_Error_Value
 							Column.updateDouble(CDbl(pvValue))
@@ -565,7 +565,7 @@ Dim oParent As Object
 						Case .CHAR, .VARCHAR, .LONGVARCHAR
 							If Not Utils._CheckArgument(pvValue, iArgNr, vbString, , False) Then Goto Trace_Error_Value
 							Column.updateString(pvValue)						&apos;	vbString
-						Case .Date
+						Case .DATE
 							If Not Utils._CheckArgument(pvValue, iArgNr, vbDate, , False) Then Goto Trace_Error_Value
 							vTemp = New com.sun.star.util.Date
 							With vTemp
