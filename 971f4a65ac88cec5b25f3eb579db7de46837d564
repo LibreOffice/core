@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_f381ea4e",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-19T13:44:53Z",
+      "side": 1,
+      "message": "should just be Map\u003cString,Object\u003e",
+      "revId": "971f4a65ac88cec5b25f3eb579db7de46837d564",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
