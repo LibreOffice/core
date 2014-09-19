@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_f39a0ac5",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-19T13:35:20Z",
+      "side": 1,
+      "message": "Map\u003cString,Object\u003e is fine",
+      "revId": "060a82e1c1060b8e58ac5a362fc871e3710fde46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_d39f06b3",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-19T13:35:20Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "060a82e1c1060b8e58ac5a362fc871e3710fde46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_93a97ee2",
+        "filename": "javaunohelper/com/sun/star/comp/helper/Bootstrap.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-19T13:35:20Z",
+      "side": 1,
+      "message": "Map\u003cString,Object\u003e is fine",
+      "revId": "060a82e1c1060b8e58ac5a362fc871e3710fde46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
