@@ -1385,9 +1385,9 @@ void addPlainStructBaseArguments(
             "unexpected entity \"" + base
             + "\" in call to addPlainStructBaseArguments");
     }
+    assert(ent.is());
     rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
-        dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
-    assert(ent2.is());
+        static_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
     if (!ent2->getDirectBase().isEmpty()) {
         addPlainStructBaseArguments(
             manager, dependencies, methodDescriptor, code,
@@ -1601,9 +1601,9 @@ void addExceptionBaseArguments(
             "unexpected entity \"" + base
             + "\" in call to addExceptionBaseArguments");
     }
+    assert(ent.is());
     rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
-        dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
-    assert(ent2.is());
+        static_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
     bool baseException = base == "com.sun.star.uno.Exception";
     if (!baseException) {
         addExceptionBaseArguments(

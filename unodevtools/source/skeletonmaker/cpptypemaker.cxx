@@ -146,9 +146,9 @@ bool printConstructorParameters(
     switch (sort) {
     case codemaker::UnoType::SORT_PLAIN_STRUCT_TYPE:
         {
+            assert(entity.is());
             rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
-                dynamic_cast< unoidl::PlainStructTypeEntity * >(entity.get()));
-            assert(ent2.is());
+                static_cast< unoidl::PlainStructTypeEntity * >(entity.get()));
             if (!ent2->getDirectBase().isEmpty()) {
                 rtl::Reference< unoidl::Entity > baseEnt;
                 codemaker::UnoType::Sort baseSort = manager->getSort(
@@ -665,9 +665,9 @@ void printConstructors(
             "unexpected entity \"" + name
             + "\" in call to skeletonmaker::java::printConstructors");
     }
+    assert(ent.is());
     rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
-        dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(ent.get()));
-    assert(ent2.is());
+        static_cast< unoidl::SingleInterfaceBasedServiceEntity * >(ent.get()));
     for (std::vector< unoidl::SingleInterfaceBasedServiceEntity::Constructor >::
              const_iterator i(ent2->getConstructors().begin());
          i != ent2->getConstructors().end(); ++i)

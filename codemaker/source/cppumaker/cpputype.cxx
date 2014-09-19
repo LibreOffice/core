@@ -2083,9 +2083,9 @@ bool PlainStructType::dumpBaseMembers(
                 "plain struct type base " + base
                 + " is not a plain struct type");
         }
+        assert(ent.is());
         rtl::Reference< unoidl::PlainStructTypeEntity > ent2(
-            dynamic_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
-        assert(ent2.is());
+            static_cast< unoidl::PlainStructTypeEntity * >(ent.get()));
         hasMember = dumpBaseMembers(out, ent2->getDirectBase(), withType);
         for (std::vector< unoidl::PlainStructTypeEntity::Member >::
                  const_iterator i(ent2->getDirectMembers().begin());
@@ -3083,9 +3083,9 @@ sal_uInt32 ExceptionType::getTotalMemberCount(OUString const & base) const {
         throw CannotDumpException(
             "exception type base " + base + " is not an exception type");
     }
+    assert(ent.is());
     rtl::Reference< unoidl::ExceptionTypeEntity > ent2(
-        dynamic_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
-    assert(ent2.is());
+        static_cast< unoidl::ExceptionTypeEntity * >(ent.get()));
     return getTotalMemberCount(ent2->getDirectBase())
         + ent2->getDirectMembers().size(); //TODO: overflow
 }

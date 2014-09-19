@@ -210,10 +210,10 @@ void checkType(rtl::Reference< TypeManager > const & manager,
     case codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE:
         if (serviceTypes.find(name) == serviceTypes.end()) {
             serviceTypes.insert(name);
+            assert(ent.is());
             rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity > ent2(
-                dynamic_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
+                static_cast< unoidl::SingleInterfaceBasedServiceEntity * >(
                     ent.get()));
-            assert(ent2.is());
             if (interfaceTypes.find(ent2->getBase()) == interfaceTypes.end()) {
                 interfaceTypes.insert(ent2->getBase());
                 // check if constructors are specified, if yes automatically
@@ -342,12 +342,12 @@ OUString checkPropertyHelper(
                 && (sort
                     == codemaker::UnoType::SORT_SINGLE_INTERFACE_BASED_SERVICE))
             {
+                assert(ent.is());
                 rtl::Reference< unoidl::SingleInterfaceBasedServiceEntity >
                     ent2(
-                        dynamic_cast<
+                        static_cast<
                         unoidl::SingleInterfaceBasedServiceEntity * >(
                             ent.get()));
-                assert(ent2.is());
                 checkAttributes(
                     manager, ent2->getBase(), attributes, propinterfaces);
                 if (!(attributes.empty() || propinterfaces.empty())) {
