@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_107ea4ae",
+        "filename": "forms/source/component/CheckBox.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-19T06:35:32Z",
+      "side": 1,
+      "message": "compytibility -\u003e compatibility",
+      "revId": "0613f1e510d7c1db99658118917294a9d9335db7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
