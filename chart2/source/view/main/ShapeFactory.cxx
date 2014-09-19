@@ -63,19 +63,21 @@ namespace chart
 uno::Reference< drawing::XShapes > ShapeFactory::getOrCreateChartRootShape(
     const uno::Reference< drawing::XDrawPage>& xDrawPage )
 {
-    uno::Reference< drawing::XShapes > xRet( ShapeFactory::getChartRootShape( xDrawPage ) );
-    if( !xRet.is()  )
-    {
-        uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance(
-                    "com.sun.star.drawing.GroupShape" ), uno::UNO_QUERY );
-        uno::Reference< drawing::XShapes2 > xShapes2(xDrawPage, uno::UNO_QUERY_THROW);
-        xShapes2->addBottom(xShape);
+    uno::Reference<drawing::XShapes> xRet = ShapeFactory::getChartRootShape(xDrawPage);
+    if (xRet.is())
+        return xRet;
 
-        setShapeName( xShape, "com.sun.star.chart2.shapes" );
-        xShape->setSize(awt::Size(0,0));
+    // Create a new root shape and set it to the bottom of the page.  The root
+    // shape is identified by having the name com.sun.star.chart2.shapes.
+    uno::Reference<drawing::XShape> xShape(
+        m_xShapeFactory->createInstance("com.sun.star.drawing.GroupShape"), uno::UNO_QUERY);
+    uno::Reference<drawing::XShapes2> xShapes2(xDrawPage, uno::UNO_QUERY_THROW);
+    xShapes2->addBottom(xShape);
 
-        xRet = uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
-    }
+    setShapeName(xShape, "com.sun.star.chart2.shapes");
+    xShape->setSize(awt::Size(0,0));
+
+    xRet = uno::Reference<drawing::XShapes>(xShape, uno::UNO_QUERY);
     return xRet;
 }
 
