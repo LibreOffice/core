@@ -110,7 +110,16 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
     else if ( pDialogButton == (AboutDialogButton*)WEBSITE_BUTTON )
     {
         sURL = officecfg::Office::Common::Help::StartCenter::InfoURL::get();
+#if defined MACOSX && HAVE_FEATURE_MACOSX_SANDBOX
+        sURL += "lofc-mac-app-store/";
+#endif
+
+#if 0   // In this branch the URL is on
+        // libreoffice-from-collabora.com, which does not offer
+        // localized pages, or automatic redirection to an English
+        // page if a localized one does not exist. I think.
         localizeWebserviceURI(sURL);
+#endif
     }
 
     // If the URL is empty, don't do anything
