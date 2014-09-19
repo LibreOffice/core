@@ -25,10 +25,11 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 
+import java.util.Map;
 
 public class Bootstrap_Test {
 
-    static public boolean test( String ini_file, java.util.Map<String,String> bootstrap_parameters )
+    static public boolean test( String ini_file, Map<String,String> bootstrap_parameters )
         throws java.lang.Exception
     {
         boolean passed = false;
