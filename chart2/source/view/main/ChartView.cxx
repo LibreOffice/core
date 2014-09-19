@@ -144,6 +144,8 @@ struct CreateShapeParam2D
     css::uno::Reference<css::drawing::XShape> mxMarkHandles;
     css::uno::Reference<css::drawing::XShape> mxPlotAreaWithAxes;
 
+    css::uno::Reference<css::drawing::XShapes> mxDiagramWithAxesShapes;
+
     bool mbAutoPosTitleX;
     bool mbAutoPosTitleY;
     bool mbAutoPosTitleZ;
@@ -1430,10 +1432,9 @@ sal_Int16 lcl_getDefaultWritingModeFromPool( const boost::shared_ptr<DrawModelWr
 
 } //end anonymous namespace
 
-awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
-            , const uno::Reference< drawing::XShapes>& xDiagramPlusAxes_Shapes
-            , const CreateShapeParam2D& rParam
-            , const awt::Size& rPageSize )
+awt::Rectangle ChartView::impl_createDiagramAndContent(
+    SeriesPlotterContainer& rSeriesPlotterContainer,
+    const CreateShapeParam2D& rParam, const awt::Size& rPageSize )
 {
     //return the used rectangle
     awt::Rectangle aUsedOuterRect(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y, 0, 0);
@@ -1490,7 +1491,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     VDiagram aVDiagram(xDiagram, aPreferredAspectRatio, nDimensionCount);
     bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
     {//create diagram
-        aVDiagram.init(xDiagramPlusAxes_Shapes, m_xShapeFactory);
+        aVDiagram.init(rParam.mxDiagramWithAxesShapes, m_xShapeFactory);
         aVDiagram.createShapes(
             awt::Point(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y),
             awt::Size(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height));
@@ -1501,7 +1502,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             aVDiagram.reduceToMimimumSize();
     }
 
-    uno::Reference< drawing::XShapes > xTextTargetShapes( AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->createGroup2D(xDiagramPlusAxes_Shapes) );
+    uno::Reference< drawing::XShapes > xTextTargetShapes =
+        AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->createGroup2D(rParam.mxDiagramWithAxesShapes);
 
     // - create axis and grids for all coordinate systems
 
@@ -1519,7 +1521,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
     //calculate resulting size respecting axis label layout and fontscaling
 
-    uno::Reference< drawing::XShape > xBoundingShape( xDiagramPlusAxes_Shapes, uno::UNO_QUERY );
+    uno::Reference< drawing::XShape > xBoundingShape(rParam.mxDiagramWithAxesShapes, uno::UNO_QUERY);
     ::basegfx::B2IRectangle aConsumedOuterRect;
 
     //use first coosys only so far; todo: calculate for more than one coosys if we have more in future
@@ -3035,7 +3037,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0, 0));
     AbstractShapeFactory::setShapeName(aParam.mxPlotAreaWithAxes, "PlotAreaIncludingAxes");
 
-    uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( pShapeFactory->createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
+    aParam.mxDiagramWithAxesShapes = pShapeFactory->createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes);
 
     bool bAutoPositionDummy = true;
 
@@ -3091,8 +3093,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         awt::Point aAvailablePosDia(aParam.maRemainingSpace.X, aParam.maRemainingSpace.Y);
         awt::Size aAvailableSizeForDiagram(aParam.maRemainingSpace.Width, aParam.maRemainingSpace.Height);
 
-        awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(
-            aSeriesPlotterContainer, xDiagramPlusAxes_Shapes, aParam, rPageSize);
+        awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(aSeriesPlotterContainer, aParam, rPageSize);
 
         if (aParam.mxPlotAreaWithAxes.is())
         {
