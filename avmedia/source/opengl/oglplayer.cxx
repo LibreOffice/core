@@ -121,7 +121,7 @@ bool OGLPlayer::create( const OUString& rURL )
     }
 
     // Set timer
-    m_aTimer.SetTimeout(10);
+    m_aTimer.SetTimeout(1);
     m_aTimer.SetTimeoutHdl(LINK(this,OGLPlayer,TimerHandler));
     return true;
 }
