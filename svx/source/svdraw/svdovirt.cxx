@@ -355,7 +355,7 @@ void SdrVirtObj::NbcMove(const Size& rSiz)
     SetRectsDirty();
 }
 
-void SdrVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrVirtObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     rRefObj.NbcResize(rRef-aAnchor,xFact,yFact);
     SetRectsDirty();
@@ -392,9 +392,9 @@ void SdrVirtObj::Move(const Size& rSiz)
     }
 }
 
-void SdrVirtObj::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
+void SdrVirtObj::Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative)
 {
-    if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
+    if (xFact.numerator()!=xFact.denominator() || yFact.numerator()!=yFact.denominator()) {
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         rRefObj.Resize(rRef-aAnchor,xFact,yFact, bUnsetRelative);
         SetRectsDirty();

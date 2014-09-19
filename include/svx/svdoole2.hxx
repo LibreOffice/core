@@ -136,7 +136,7 @@ public:
     SdrOle2Obj& operator=(const SdrOle2Obj& rObj);
 
     virtual void NbcMove(const Size& rSize) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
     virtual void NbcSetSnapRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void NbcSetLogicRect(const Rectangle& rRect) SAL_OVERRIDE;
     virtual void SetGeoData(const SdrObjGeoData& rGeo) SAL_OVERRIDE;
@@ -167,7 +167,7 @@ public:
                           const OUString& aMediaType );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetParentXModel()  const;
-    bool CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize );
+    bool CalculateNewScaling( boost::rational<long>& aScaleWidth, boost::rational<long>& aScaleHeight, Size& aObjAreaSize );
     bool AddOwnLightClient();
 
     // handy to get the empty replacement graphic without accessing all the old stuff

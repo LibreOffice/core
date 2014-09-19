@@ -61,7 +61,7 @@ class SdDisplay : public Control
 {
 private:
     BitmapEx    aBitmapEx;
-    Fraction    aScale;
+    boost::rational<long>    aScale;
 
 public:
     SdDisplay( vcl::Window* pWin, SdResId Id );
@@ -70,7 +70,7 @@ public:
     virtual void Paint( const Rectangle& rRect ) SAL_OVERRIDE;
 
     void    SetBitmapEx( BitmapEx* pBmpEx );
-    void    SetScale( const Fraction& rFrac );
+    void    SetScale( const boost::rational<long>& rFrac );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt ) SAL_OVERRIDE;
 };
@@ -155,7 +155,7 @@ private:
     void            ResetAttrs();
     void            WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
                                         SfxProgress* pStbMgr ) const;
-    Fraction        GetScale();
+    boost::rational<long>        GetScale();
 };
 
 /**

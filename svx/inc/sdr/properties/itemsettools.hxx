@@ -28,7 +28,7 @@
 class SdrObject;
 class SfxItemSet;
 class Rectangle;
-class Fraction;
+namespace boost { template<class T> class rational; }
 
 
 // class to remember broadcast start positions
@@ -57,7 +57,7 @@ namespace sdr
 {
     namespace properties
     {
-        void ScaleItemSet(SfxItemSet& rSet, const Fraction& rScale);
+        void ScaleItemSet(SfxItemSet& rSet, const boost::rational<long>& rScale);
     } // end of namespace properties
 } // end of namespace sdr
 

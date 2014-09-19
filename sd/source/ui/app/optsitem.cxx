@@ -1126,8 +1126,8 @@ SdOptionsGridItem::SdOptionsGridItem( sal_uInt16 _nWhich, SdOptions* pOpts, ::sd
         SetFldDrawY( pView->GetGridCoarse().Height() );
         SetFldDivisionX( pView->GetGridFine().Width() ? ( GetFldDrawX() / pView->GetGridFine().Width() - 1 ) : 0 );
         SetFldDivisionY( pView->GetGridFine().Height() ? ( GetFldDrawY() / pView->GetGridFine().Height() - 1 ) : 0 );
-        SetFldSnapX( long(pView->GetSnapGridWidthX()) );
-        SetFldSnapY( long(pView->GetSnapGridWidthY()) );
+        SetFldSnapX( boost::rational_cast<long>(pView->GetSnapGridWidthX()) );
+        SetFldSnapY( boost::rational_cast<long>(pView->GetSnapGridWidthY()) );
         SetUseGridSnap( pView->IsGridSnap() );
         SetGridVisible( pView->IsGridVisible() );
     }

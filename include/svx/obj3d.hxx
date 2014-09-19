@@ -153,7 +153,7 @@ public:
     virtual void        SetPage(SdrPage* pNewPage) SAL_OVERRIDE;
     virtual void        SetModel(SdrModel* pNewModel) SAL_OVERRIDE;
     virtual void        NbcMove(const Size& rSize) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
     virtual SdrObjList* GetSubList() const SAL_OVERRIDE;
 
     // Insert 3D object into the group; transfer to other owner!

@@ -19,7 +19,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_TEXT_PORLAY_HXX
 #define INCLUDED_SW_SOURCE_CORE_TEXT_PORLAY_HXX
 
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 #include <scriptinfo.hxx>
 
 #include "swrect.hxx"

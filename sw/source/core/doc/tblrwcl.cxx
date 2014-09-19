@@ -25,7 +25,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
@@ -3986,10 +3986,10 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
     else
     {
         // Calculate as exactly as possible
-        Fraction aTmp( nMyOldH );
-        aTmp *= Fraction( nNewHeight, nOldHeight );
-        aTmp += Fraction( 1, 2 );       // round up if needed
-        nMyNewH = aTmp;
+        boost::rational<long> aTmp( nMyOldH );
+        aTmp *= boost::rational<long>( nNewHeight, nOldHeight );
+        aTmp += boost::rational<long>( 1, 2 );       // round up if needed
+        nMyNewH = boost::rational_cast<long>(aTmp);
     }
 
     SwFrmSize eSize = ATT_MIN_SIZE;

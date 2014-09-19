@@ -202,7 +202,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         maVisibleLayers.SetAll();
         maPrintableLayers.SetAll();
         SetGridCoarse( Size( 1000, 1000 ) );
-        SetSnapGridWidth(Fraction(1000, 1), Fraction(1000, 1));
+        SetSnapGridWidth(boost::rational<long>(1000, 1), boost::rational<long>(1000, 1));
         SetActiveLayer( SD_RESSTR(STR_LAYER_LAYOUT) );
         mbNoColors = true;
         mbNoAttribs = false;
@@ -302,8 +302,8 @@ void FrameView::Update(SdOptions* pOptions)
 
         SetGridCoarse( Size( pOptions->GetFldDrawX(), pOptions->GetFldDrawY() ) );
         SetGridFine( Size( pOptions->GetFldDivisionX(), pOptions->GetFldDivisionY() ) );
-        Fraction aFractX(pOptions->GetFldDrawX(), pOptions->GetFldDrawX() / ( pOptions->GetFldDivisionX() ? pOptions->GetFldDivisionX() : 1 ));
-        Fraction aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
+        boost::rational<long> aFractX(pOptions->GetFldDrawX(), pOptions->GetFldDrawX() / ( pOptions->GetFldDivisionX() ? pOptions->GetFldDivisionX() : 1 ));
+        boost::rational<long> aFractY(pOptions->GetFldDrawY(), pOptions->GetFldDrawY() / ( pOptions->GetFldDivisionY() ? pOptions->GetFldDivisionY() : 1 ));
         SetSnapGridWidth(aFractX, aFractY);
         SetQuickEdit(pOptions->IsQuickEdit());
 
@@ -464,10 +464,10 @@ void FrameView::WriteUserDataSequence ( ::com::sun::star::uno::Sequence < ::com:
     aUserData.addValue( sUNO_View_GridCoarseHeight, makeAny( (sal_Int32)GetGridCoarse().Height() ) );
     aUserData.addValue( sUNO_View_GridFineWidth, makeAny( (sal_Int32)GetGridFine().Width() ) );
     aUserData.addValue( sUNO_View_GridFineHeight, makeAny( (sal_Int32)GetGridFine().Height() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( (sal_Int32)GetSnapGridWidthX().GetNumerator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( (sal_Int32)GetSnapGridWidthX().GetDenominator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( (sal_Int32)GetSnapGridWidthY().GetNumerator() ) );
-    aUserData.addValue( sUNO_View_GridSnapWidthYDenominator, makeAny( (sal_Int32)GetSnapGridWidthY().GetDenominator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthXNumerator, makeAny( (sal_Int32)GetSnapGridWidthX().numerator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthXDenominator, makeAny( (sal_Int32)GetSnapGridWidthX().denominator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthYNumerator, makeAny( (sal_Int32)GetSnapGridWidthY().numerator() ) );
+    aUserData.addValue( sUNO_View_GridSnapWidthYDenominator, makeAny( (sal_Int32)GetSnapGridWidthY().denominator() ) );
     aUserData.addValue( sUNO_View_IsAngleSnapEnabled, makeAny( IsAngleSnapEnabled() ) );
     aUserData.addValue( sUNO_View_SnapAngle, makeAny( (sal_Int32)GetSnapAngle() ) );
 
@@ -561,11 +561,11 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
         sal_Int16 nInt16 = 0;
         OUString aString;
 
-        sal_Int32 aSnapGridWidthXNum = GetSnapGridWidthX().GetNumerator();
-        sal_Int32 aSnapGridWidthXDom = GetSnapGridWidthX().GetDenominator();
+        sal_Int32 aSnapGridWidthXNum = GetSnapGridWidthX().numerator();
+        sal_Int32 aSnapGridWidthXDom = GetSnapGridWidthX().denominator();
 
-        sal_Int32 aSnapGridWidthYNum = GetSnapGridWidthY().GetNumerator();
-        sal_Int32 aSnapGridWidthYDom = GetSnapGridWidthY().GetDenominator();
+        sal_Int32 aSnapGridWidthYNum = GetSnapGridWidthY().numerator();
+        sal_Int32 aSnapGridWidthYDom = GetSnapGridWidthY().denominator();
 
         const com::sun::star::beans::PropertyValue *pValue = rSequence.getConstArray();
         for (sal_Int16 i = 0 ; i < nLength; i++, pValue++ )
@@ -916,8 +916,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             default: SetViewShEditModeOnLoad(EM_PAGE); break;
         }
 
-        const Fraction aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
-        const Fraction aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );
+        const boost::rational<long> aSnapGridWidthX( aSnapGridWidthXNum, aSnapGridWidthXDom );
+        const boost::rational<long> aSnapGridWidthY( aSnapGridWidthYNum, aSnapGridWidthYDom );
 
         SetSnapGridWidth( aSnapGridWidthX, aSnapGridWidthY );
     }

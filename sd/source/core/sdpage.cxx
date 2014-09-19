@@ -1843,8 +1843,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     long nOldWidth  = GetWdt() - GetLftBorder() - GetRgtBorder();
     long nOldHeight = GetHgt() - GetUppBorder() - GetLwrBorder();
 
-    Fraction aFractX = Fraction(aNewPageSize.Width(), nOldWidth);
-    Fraction aFractY = Fraction(aNewPageSize.Height(), nOldHeight);
+    boost::rational<long> aFractX( aNewPageSize.Width(), nOldWidth );
+    boost::rational<long> aFractY( aNewPageSize.Height(), nOldHeight );
 
     const size_t nObjCnt = (mbScaleObjects ? GetObjCount() : 0);
 
@@ -1902,14 +1902,14 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                                 SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT);
                                 sal_uLong nFontHeight = rOldHgt.GetHeight();
-                                nFontHeight = long(nFontHeight * (double) aFractY);
+                                nFontHeight = long(nFontHeight * boost::rational_cast<double>(aFractY));
                                 rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
                                 if( SfxItemState::DEFAULT == rSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                 {
                                     rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CJK);
                                     nFontHeight = rOldHgt.GetHeight();
-                                    nFontHeight = long(nFontHeight * (double) aFractY);
+                                    nFontHeight = long(nFontHeight * boost::rational_cast<double>(aFractY));
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                 }
 
@@ -1917,7 +1917,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                 {
                                     rOldHgt = (SvxFontHeightItem&) rSet.Get(EE_CHAR_FONTHEIGHT_CTL);
                                     nFontHeight = rOldHgt.GetHeight();
-                                    nFontHeight = long(nFontHeight * (double) aFractY);
+                                    nFontHeight = long(nFontHeight * boost::rational_cast<double>(aFractY));
                                     rSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                 }
 
@@ -1941,14 +1941,14 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                                     SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT);
                                     sal_uLong nFontHeight = rOldHgt.GetHeight();
-                                    nFontHeight = long(nFontHeight * (double) aFractY);
+                                    nFontHeight = long(nFontHeight * boost::rational_cast<double>(aFractY));
                                     aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT));
 
                                     if( SfxItemState::DEFAULT == aTempSet.GetItemState( EE_CHAR_FONTHEIGHT_CJK ) )
                                     {
                                         rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CJK);
                                         nFontHeight = rOldHgt.GetHeight();
-                                        nFontHeight = long(nFontHeight * (double) aFractY);
+                                        nFontHeight = long(nFontHeight * boost::rational_cast<double>(aFractY));
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CJK));
                                     }
 
@@ -1956,7 +1956,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                     {
                                         rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT_CTL);
                                         nFontHeight = rOldHgt.GetHeight();
-                                        nFontHeight = long(nFontHeight * (double) aFractY);
+                                        nFontHeight = long(nFontHeight * boost::rational_cast<double>(aFractY));
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                     }
 
@@ -2018,7 +2018,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                         // use more modern method to scale the text height
                         sal_uInt32 nFontHeight = ((SvxFontHeightItem&)pObj->GetMergedItem(nWhich)).GetHeight();
-                        sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * (double)aFractY);
+                        sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * boost::rational_cast<double>(aFractY));
 
                         pObj->SetMergedItem(SvxFontHeightItem(nNewFontHeight, 100, nWhich));
                     }
@@ -2034,8 +2034,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                 // corrected scaling; only distances may be scaled
                 // use aTopLeft as original TopLeft
-                aNewPos.X() = long((aTopLeft.X() - GetLftBorder()) * (double)aFractX) + nLeft;
-                aNewPos.Y() = long((aTopLeft.Y() - GetUppBorder()) * (double)aFractY) + nUpper;
+                aNewPos.X() = long((aTopLeft.X() - GetLftBorder()) * boost::rational_cast<double>(aFractX)) + nLeft;
+                aNewPos.Y() = long((aTopLeft.Y() - GetUppBorder()) * boost::rational_cast<double>(aFractY)) + nUpper;
 
                 Size aVec(aNewPos.X() - aTopLeft.X(), aNewPos.Y() - aTopLeft.Y());
 

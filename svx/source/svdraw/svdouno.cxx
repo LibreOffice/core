@@ -320,7 +320,7 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
     return *this;
 }
 
-void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrUnoObj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     SdrRectObj::NbcResize(rRef,xFact,yFact);
 

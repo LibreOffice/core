@@ -34,7 +34,7 @@ class SfxInPlaceClient_Impl;
 class SfxViewShell;
 class SfxObjectShell;
 namespace vcl { class Window; }
-class Fraction;
+namespace boost { template<typename T> class rational; }
 
 
 
@@ -74,10 +74,10 @@ public:
     bool                SetObjArea( const Rectangle & );
     Rectangle           GetObjArea() const;
     Rectangle           GetScaledObjArea() const;
-    void                SetSizeScale( const Fraction & rScaleWidth, const Fraction & rScaleHeight );
-    bool                SetObjAreaAndScale( const Rectangle&, const Fraction&, const Fraction& );
-    const Fraction&     GetScaleWidth() const;
-    const Fraction&     GetScaleHeight() const;
+    void                SetSizeScale( const boost::rational<long> & rScaleWidth, const boost::rational<long> & rScaleHeight );
+    bool                SetObjAreaAndScale( const Rectangle&, const boost::rational<long>&, const boost::rational<long>& );
+    const boost::rational<long>&     GetScaleWidth() const;
+    const boost::rational<long>&     GetScaleHeight() const;
     void                Invalidate();
     static SfxInPlaceClient* GetClient( SfxObjectShell* pDoc, const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObject );
     sal_Int64           GetAspect() const;

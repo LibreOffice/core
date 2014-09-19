@@ -234,7 +234,7 @@ DlgEditor::DlgEditor (
     pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 
     pDlgEdView->SetGridCoarse( aGridSize );
-    pDlgEdView->SetSnapGridWidth(Fraction(aGridSize.Width(), 1), Fraction(aGridSize.Height(), 1));
+    pDlgEdView->SetSnapGridWidth(boost::rational<long>(aGridSize.Width(),1), boost::rational<long>(aGridSize.Height(),1));
     pDlgEdView->SetGridSnap( bGridSnap );
     pDlgEdView->SetGridVisible( bGridVisible );
     pDlgEdView->SetDragStripes(false);
@@ -508,7 +508,7 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
                 Size   aSize = rWindow.PixelToLogic( Size( 400, 300 ) );
 
                 // align with grid
-                Size aGridSize_(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
+                Size aGridSize_(boost::rational_cast<long>(pDlgEdView->GetSnapGridWidthX()), boost::rational_cast<long>(pDlgEdView->GetSnapGridWidthY()));
                 aSize.Width()  -= aSize.Width()  % aGridSize_.Width();
                 aSize.Height() -= aSize.Height() % aGridSize_.Height();
 

@@ -1457,9 +1457,9 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
     CalcOutputFactor();
     if ( bRet && (bSetColWidths || bSetRowHeights) )
     {   // Adjust column width/row height; base 100% zoom
-        Fraction aZoom( 1, 1 );
-        double nPPTX = ScGlobal::nScreenPPTX * (double) aZoom / GetOutputFactor(); // Factor is printer display ratio
-        double nPPTY = ScGlobal::nScreenPPTY * (double) aZoom;
+        boost::rational<long> aZoom( 1, 1 );
+        double nPPTX = ScGlobal::nScreenPPTX * boost::rational_cast<double>(aZoom) / GetOutputFactor(); // Factor is printer display ratio
+        double nPPTY = ScGlobal::nScreenPPTY * boost::rational_cast<double>(aZoom);
         VirtualDevice aVirtDev;
         //  all sheets (for Excel import)
         SCTAB nTabCount = aDocument.GetTableCount();
