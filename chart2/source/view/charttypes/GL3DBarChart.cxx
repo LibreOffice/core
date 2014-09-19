@@ -41,7 +41,7 @@ using namespace com::sun::star;
 namespace chart {
 
 const size_t STEPS = 200;
-
+const size_t STEPS_UPDATE = 100;
 namespace {
 
 const float TEXT_HEIGHT = 10.0f;
@@ -210,6 +210,7 @@ private:
     void MoveCamera();
     void MoveCameraToBar();
     void MoveToBar();
+    void MoveToSelectedBar();
     void MoveToDefault();
     void MoveToCorner();
     void ProcessScroll();
@@ -335,6 +336,36 @@ void RenderBenchMarkThread::MoveToBar()
     MoveCameraToBar();
 }
 
+void RenderBenchMarkThread::MoveToSelectedBar()
+{
+    mpChart->mnSelectBarId = mpChart->mnUpdateBarId;
+    std::map<sal_uInt32, const GL3DBarChart::BarInformation>::const_iterator itr = mpChart->maBarMap.find(mpChart->mnSelectBarId);
+    if(itr == mpChart->maBarMap.end())
+    {
+        mpChart->mnSelectBarId = mpChart->mnPreSelectBarId;
+        mpChart->maRenderEvent = mpChart->maPreRenderEvent;
+        mpChart->maClickCond.set();
+        return;
+    }
+    mpChart->mpRenderer->EndClick();
+    const GL3DBarChart::BarInformation& rBarInfo = itr->second;
+    mnStep = 0;
+    mnStepsTotal = STEPS_UPDATE;
+    maTargetPosition = rBarInfo.maPos;
+    maTargetPosition.z += 240;
+    maTargetPosition.x += BAR_SIZE_X / 2.0f;
+    maTargetDirection = rBarInfo.maPos;
+    maTargetDirection.x += BAR_SIZE_X / 2.0f;
+    maTargetDirection.y += BAR_SIZE_Y / 2.0f;
+    maTargetPosition.y = maTargetDirection.y - 240;
+    maMatrixStep = mpChart->mpRenderer->GetDiffOfTwoCameras( maTargetPosition,  maTargetDirection)/((float)mnStepsTotal);
+    mpChart->maClickCond.set();
+    mbExecuting = true;
+    mbNeedFlyBack = false;
+    mpChart->mpRenderer->StartClick(mpChart->mnSelectBarId);
+    mpChart->maRenderEvent = EVENT_CLICK;
+}
+
 void RenderBenchMarkThread::AutoMoveToBar()
 {
     if (!mbAutoFlyExecuting)
@@ -402,7 +433,11 @@ void RenderBenchMarkThread::ProcessClickFlyBack()
 void RenderBenchMarkThread::ProcessMouseEvent()
 {
     ProcessClickFlyBack();
-    if (mpChart->maRenderEvent == EVENT_CLICK)
+    if (mpChart->maRenderEvent == EVENT_SELECTBAR_UPDEDATE)
+    {
+        MoveToSelectedBar();
+    }
+    else if (mpChart->maRenderEvent == EVENT_CLICK)
     {
         MoveToBar();
     }
@@ -494,7 +529,8 @@ GL3DBarChart::GL3DBarChart(
     mbBenchMarkMode(false),
     mnHistoryCounter(0),
     mnBarsInRow(0),
-    mbAutoFly(false)
+    mbAutoFly(false),
+    mnUpdateBarId(0)
 {
     maFPSRenderStartTime.Seconds = maFPSRenderStartTime.Nanosec = 0;
     maFPSRenderEndTime.Seconds = maFPSRenderEndTime.Nanosec = 0;
@@ -572,18 +608,22 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
 {
     SharedResourceAccess(maCond1, maCond2);
     osl::MutexGuard aGuard(maMutex);
-    mnPreSelectBarId = mnSelectBarId;
-    mnSelectBarId -= 10;
-    sal_uInt32 nSelectRow = (mnSelectBarId - SHAPE_START_ID) / ID_STEP / (mnBarsInRow + 1);
-    sal_uInt32 nPreSelectRow = (mnPreSelectBarId - SHAPE_START_ID) / ID_STEP / (mnBarsInRow + 1);
-    if(nSelectRow != nPreSelectRow)
+    if(mnSelectBarId)
     {
-        mnSelectBarId = mnPreSelectBarId;
-    }
-    else
-    {
-        mpRenderer->EndClick();
-        mpRenderer->StartClick(mnSelectBarId);
+        int nSelectBarId = mnSelectBarId;
+        int nPreSelectBarId = nSelectBarId;
+        nSelectBarId -= 10;
+        sal_uInt32 nSelectRow = (nSelectBarId - SHAPE_START_ID) / ID_STEP / (mnBarsInRow + 1);
+        sal_uInt32 nPreSelectRow = (nPreSelectBarId - SHAPE_START_ID) / ID_STEP / (mnBarsInRow + 1);
+        if(nSelectRow == nPreSelectRow)
+        {
+            std::map<sal_uInt32, const GL3DBarChart::BarInformation>::const_iterator itr = maBarMap.find(nSelectBarId);
+            if((maRenderEvent == EVENT_CLICK || maRenderEvent == EVENT_SHOW_SELECT || maRenderEvent == EVENT_AUTO_FLY)&&(itr != maBarMap.end()))
+            {
+                mnUpdateBarId = nSelectBarId;
+                maRenderEvent = EVENT_SELECTBAR_UPDEDATE;
+            }
+        }
     }
     mpRenderer->ReleaseShapes();
     // Each series of data flows from left to right, and multiple series are
