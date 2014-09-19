@@ -2504,191 +2504,7 @@ void ChartView::createShapes()
     }
 #endif
 
-    {
-        SolarMutexGuard aSolarGuard;
-
-        // todo: it would be nicer to just pass the page m_xDrawPage and format it,
-        // but the draw page does not support XPropertySet
-        formatPage( mrChartModel, aPageSize, mxRootShape, m_xShapeFactory );
-
-        //sal_Int32 nYDistance = static_cast<sal_Int32>(aPageSize.Height*lcl_getPageLayoutDistancePercentage());
-        awt::Rectangle aRemainingSpace( 0, 0, aPageSize.Width, aPageSize.Height );
-
-        //create the group shape for diagram and axes first to have title and legends on top of it
-        uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
-        OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
-        uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
-                pShapeFactory->createGroup2D(mxRootShape,aDiagramCID) );
-
-        uno::Reference< drawing::XShape > xDiagram_MarkHandles( pShapeFactory->createInvisibleRectangle(
-                    xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-        AbstractShapeFactory::setShapeName( xDiagram_MarkHandles, "MarkHandles" );
-
-        uno::Reference< drawing::XShape > xDiagram_OuterRect( pShapeFactory->createInvisibleRectangle(
-                    xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
-        AbstractShapeFactory::setShapeName( xDiagram_OuterRect, "PlotAreaIncludingAxes" );
-
-        uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( pShapeFactory->createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
-
-        bool bAutoPositionDummy = true;
-
-        lcl_createTitle( TitleHelper::MAIN_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
-                    , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
-        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
-            return;
-
-        lcl_createTitle( TitleHelper::SUB_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
-                    , aRemainingSpace, aPageSize, ALIGN_TOP, bAutoPositionDummy );
-        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
-            return;
-
-        SeriesPlotterContainer aSeriesPlotterContainer( m_aVCooSysList );
-        aSeriesPlotterContainer.initializeCooSysAndSeriesPlotter( mrChartModel );
-        if(maTimeBased.bTimeBased && maTimeBased.nFrame != 0)
-        {
-            std::vector<VSeriesPlotter*>& rSeriesPlotter =
-                aSeriesPlotterContainer.getSeriesPlotterList();
-            size_t n = rSeriesPlotter.size();
-            for(size_t i = 0; i < n; ++i)
-            {
-                std::vector< VDataSeries* > aAllNewDataSeries =
-                    rSeriesPlotter[i]->getAllSeries();
-                std::vector< VDataSeries* >& rAllOldDataSeries =
-                    maTimeBased.m_aDataSeriesList[i];
-                size_t m = std::min(aAllNewDataSeries.size(), rAllOldDataSeries.size());
-                for(size_t j = 0; j < m; ++j)
-                {
-                    aAllNewDataSeries[j]->setOldTimeBased(
-                            rAllOldDataSeries[j], (maTimeBased.nFrame % 60)/60.0);
-                }
-            }
-        }
-
-        lcl_createLegend( LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC
-                    , aRemainingSpace, aPageSize, mrChartModel, aSeriesPlotterContainer.getLegendEntryProviderList()
-                    , lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
-        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
-            return;
-
-        Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
-        sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
-
-        bool bAutoPosition_XTitle = true;
-        boost::shared_ptr<VTitle> apVTitle_X;
-        if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
-            apVTitle_X = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
-                    , aRemainingSpace, aPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle );
-        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
-            return;
-
-        bool bAutoPosition_YTitle = true;
-        boost::shared_ptr<VTitle> apVTitle_Y;
-        if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
-            apVTitle_Y = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
-                    , aRemainingSpace, aPageSize, ALIGN_LEFT, bAutoPosition_YTitle );
-        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
-            return;
-
-        bool bAutoPosition_ZTitle = true;
-        boost::shared_ptr<VTitle> apVTitle_Z;
-        if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
-            apVTitle_Z = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
-                    , aRemainingSpace, aPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle );
-        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
-            return;
-
-        bool bDummy = false;
-        bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
-
-        bool bAutoPosition_SecondXTitle = true;
-        boost::shared_ptr<VTitle> apVTitle_SecondX;
-        if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
-            apVTitle_SecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
-                    , aRemainingSpace, aPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, bAutoPosition_SecondXTitle );
-        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
-            return;
-
-        bool bAutoPosition_SecondYTitle = true;
-        boost::shared_ptr<VTitle> apVTitle_SecondY;
-        if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
-            apVTitle_SecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
-                    , aRemainingSpace, aPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, bAutoPosition_SecondYTitle );
-        if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
-            return;
-
-        awt::Point aAvailablePosDia;
-        awt::Size  aAvailableSizeForDiagram;
-        bool bUseFixedInnerSize = false;
-        if( getAvailablePosAndSizeForDiagram( aAvailablePosDia, aAvailableSizeForDiagram, aRemainingSpace, aPageSize
-            , mrChartModel.getFirstDiagram(), bUseFixedInnerSize ) )
-        {
-            awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent( aSeriesPlotterContainer
-                        , xDiagramPlusAxes_Shapes
-                        , aAvailablePosDia ,aAvailableSizeForDiagram, aPageSize, bUseFixedInnerSize, xDiagram_MarkHandles );
-
-            if( xDiagram_OuterRect.is() )
-            {
-                xDiagram_OuterRect->setPosition( awt::Point( aUsedOuterRect.X, aUsedOuterRect.Y ) );
-                xDiagram_OuterRect->setSize( awt::Size( aUsedOuterRect.Width, aUsedOuterRect.Height ) );
-            }
-
-            //correct axis title position
-            awt::Rectangle aDiagramPlusAxesRect( aUsedOuterRect );
-            if(bAutoPosition_XTitle)
-                changePositionOfAxisTitle( apVTitle_X.get(), ALIGN_BOTTOM, aDiagramPlusAxesRect, aPageSize );
-            if(bAutoPosition_YTitle)
-                changePositionOfAxisTitle( apVTitle_Y.get(), ALIGN_LEFT, aDiagramPlusAxesRect, aPageSize );
-            if(bAutoPosition_ZTitle)
-                changePositionOfAxisTitle( apVTitle_Z.get(), ALIGN_Z, aDiagramPlusAxesRect, aPageSize );
-            if(bAutoPosition_SecondXTitle)
-                changePositionOfAxisTitle( apVTitle_SecondX.get(), bIsVertical? ALIGN_RIGHT : ALIGN_TOP, aDiagramPlusAxesRect, aPageSize );
-            if(bAutoPosition_SecondYTitle)
-                changePositionOfAxisTitle( apVTitle_SecondY.get(), bIsVertical? ALIGN_TOP : ALIGN_RIGHT, aDiagramPlusAxesRect, aPageSize );
-        }
-
-        //cleanup: remove all empty group shapes to avoid grey border lines:
-        lcl_removeEmptyGroupShapes( mxRootShape );
-
-        render();
-
-        if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
-        {
-            // create copy of the data for next frame
-            std::vector<VSeriesPlotter*>& rSeriesPlotter =
-                aSeriesPlotterContainer.getSeriesPlotterList();
-            size_t n = rSeriesPlotter.size();
-            maTimeBased.m_aDataSeriesList.clear();
-            maTimeBased.m_aDataSeriesList.resize(n);
-            for(size_t i = 0; i < n; ++i)
-            {
-                std::vector< VDataSeries* > aAllNewDataSeries =
-                    rSeriesPlotter[i]->getAllSeries();
-                std::vector< VDataSeries* >& rAllOldDataSeries =
-                    maTimeBased.m_aDataSeriesList[i];
-                size_t m = aAllNewDataSeries.size();
-                for(size_t j = 0; j < m; ++j)
-                {
-                    rAllOldDataSeries.push_back( aAllNewDataSeries[j]->
-                            createCopyForTimeBased() );
-                }
-            }
-
-            if(maTimeBased.eMode != MANUAL)
-            {
-                mrChartModel.setTimeBased(true);
-                mrChartModel.getNextTimePoint();
-            }
-            else
-                maTimeBased.maTimer.Stop();
-        }
-
-        if(maTimeBased.bTimeBased && maTimeBased.eMode != MANUAL && !maTimeBased.maTimer.IsActive())
-        {
-            maTimeBased.maTimer.SetTimeout(15);
-            maTimeBased.maTimer.SetTimeoutHdl(LINK(this, ChartView, UpdateTimeBased));
-            maTimeBased.maTimer.Start();
-        }
-    }
+    createShapes2D(aPageSize);
 
     // #i12587# support for shapes in chart
     if ( m_pDrawModelWrapper )
@@ -3161,6 +2977,195 @@ IMPL_LINK_NOARG(ChartView, UpdateTimeBased)
     update();
 
     return 0;
+}
+
+void ChartView::createShapes2D( const awt::Size& rPageSize )
+{
+    AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory);
+
+    SolarMutexGuard aSolarGuard;
+
+    // todo: it would be nicer to just pass the page m_xDrawPage and format it,
+    // but the draw page does not support XPropertySet
+    formatPage( mrChartModel, rPageSize, mxRootShape, m_xShapeFactory );
+
+    //sal_Int32 nYDistance = static_cast<sal_Int32>(aPageSize.Height*lcl_getPageLayoutDistancePercentage());
+    awt::Rectangle aRemainingSpace( 0, 0, rPageSize.Width, rPageSize.Height );
+
+    //create the group shape for diagram and axes first to have title and legends on top of it
+    uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
+    OUString aDiagramCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM, OUString::number( 0 ) ) );//todo: other index if more than one diagram is possible
+    uno::Reference< drawing::XShapes > xDiagramPlusAxesPlusMarkHandlesGroup_Shapes(
+            pShapeFactory->createGroup2D(mxRootShape,aDiagramCID) );
+
+    uno::Reference< drawing::XShape > xDiagram_MarkHandles( pShapeFactory->createInvisibleRectangle(
+                xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
+    AbstractShapeFactory::setShapeName( xDiagram_MarkHandles, "MarkHandles" );
+
+    uno::Reference< drawing::XShape > xDiagram_OuterRect( pShapeFactory->createInvisibleRectangle(
+                xDiagramPlusAxesPlusMarkHandlesGroup_Shapes, awt::Size(0,0) ) );
+    AbstractShapeFactory::setShapeName( xDiagram_OuterRect, "PlotAreaIncludingAxes" );
+
+    uno::Reference< drawing::XShapes > xDiagramPlusAxes_Shapes( pShapeFactory->createGroup2D(xDiagramPlusAxesPlusMarkHandlesGroup_Shapes ) );
+
+    bool bAutoPositionDummy = true;
+
+    lcl_createTitle( TitleHelper::MAIN_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
+                , aRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return;
+
+    lcl_createTitle( TitleHelper::SUB_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
+                , aRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return;
+
+    SeriesPlotterContainer aSeriesPlotterContainer( m_aVCooSysList );
+    aSeriesPlotterContainer.initializeCooSysAndSeriesPlotter( mrChartModel );
+    if(maTimeBased.bTimeBased && maTimeBased.nFrame != 0)
+    {
+        std::vector<VSeriesPlotter*>& rSeriesPlotter =
+            aSeriesPlotterContainer.getSeriesPlotterList();
+        size_t n = rSeriesPlotter.size();
+        for(size_t i = 0; i < n; ++i)
+        {
+            std::vector< VDataSeries* > aAllNewDataSeries =
+                rSeriesPlotter[i]->getAllSeries();
+            std::vector< VDataSeries* >& rAllOldDataSeries =
+                maTimeBased.m_aDataSeriesList[i];
+            size_t m = std::min(aAllNewDataSeries.size(), rAllOldDataSeries.size());
+            for(size_t j = 0; j < m; ++j)
+            {
+                aAllNewDataSeries[j]->setOldTimeBased(
+                        rAllOldDataSeries[j], (maTimeBased.nFrame % 60)/60.0);
+            }
+        }
+    }
+
+    lcl_createLegend( LegendHelper::getLegend( mrChartModel ), mxRootShape, m_xShapeFactory, m_xCC
+                , aRemainingSpace, rPageSize, mrChartModel, aSeriesPlotterContainer.getLegendEntryProviderList()
+                , lcl_getDefaultWritingModeFromPool( m_pDrawModelWrapper ) );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return;
+
+    Reference< chart2::XChartType > xChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
+    sal_Int32 nDimension = DiagramHelper::getDimension( xDiagram );
+
+    bool bAutoPosition_XTitle = true;
+    boost::shared_ptr<VTitle> apVTitle_X;
+    if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
+        apVTitle_X = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
+                , aRemainingSpace, rPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return;
+
+    bool bAutoPosition_YTitle = true;
+    boost::shared_ptr<VTitle> apVTitle_Y;
+    if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
+        apVTitle_Y = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, mxRootShape, m_xShapeFactory, mrChartModel
+                , aRemainingSpace, rPageSize, ALIGN_LEFT, bAutoPosition_YTitle );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return;
+
+    bool bAutoPosition_ZTitle = true;
+    boost::shared_ptr<VTitle> apVTitle_Z;
+    if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
+        apVTitle_Z = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
+                , aRemainingSpace, rPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return;
+
+    bool bDummy = false;
+    bool bIsVertical = DiagramHelper::getVertical( xDiagram, bDummy, bDummy );
+
+    bool bAutoPosition_SecondXTitle = true;
+    boost::shared_ptr<VTitle> apVTitle_SecondX;
+    if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 0 ) )
+        apVTitle_SecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
+                , aRemainingSpace, rPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, bAutoPosition_SecondXTitle );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return;
+
+    bool bAutoPosition_SecondYTitle = true;
+    boost::shared_ptr<VTitle> apVTitle_SecondY;
+    if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension, 1 ) )
+        apVTitle_SecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, m_xShapeFactory, mrChartModel
+                , aRemainingSpace, rPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, bAutoPosition_SecondYTitle );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return;
+
+    awt::Point aAvailablePosDia;
+    awt::Size  aAvailableSizeForDiagram;
+    bool bUseFixedInnerSize = false;
+    if( getAvailablePosAndSizeForDiagram( aAvailablePosDia, aAvailableSizeForDiagram, aRemainingSpace, rPageSize
+        , mrChartModel.getFirstDiagram(), bUseFixedInnerSize ) )
+    {
+        awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent( aSeriesPlotterContainer
+                    , xDiagramPlusAxes_Shapes
+                    , aAvailablePosDia ,aAvailableSizeForDiagram, rPageSize, bUseFixedInnerSize, xDiagram_MarkHandles );
+
+        if( xDiagram_OuterRect.is() )
+        {
+            xDiagram_OuterRect->setPosition( awt::Point( aUsedOuterRect.X, aUsedOuterRect.Y ) );
+            xDiagram_OuterRect->setSize( awt::Size( aUsedOuterRect.Width, aUsedOuterRect.Height ) );
+        }
+
+        //correct axis title position
+        awt::Rectangle aDiagramPlusAxesRect( aUsedOuterRect );
+        if(bAutoPosition_XTitle)
+            changePositionOfAxisTitle( apVTitle_X.get(), ALIGN_BOTTOM, aDiagramPlusAxesRect, rPageSize );
+        if(bAutoPosition_YTitle)
+            changePositionOfAxisTitle( apVTitle_Y.get(), ALIGN_LEFT, aDiagramPlusAxesRect, rPageSize );
+        if(bAutoPosition_ZTitle)
+            changePositionOfAxisTitle( apVTitle_Z.get(), ALIGN_Z, aDiagramPlusAxesRect, rPageSize );
+        if(bAutoPosition_SecondXTitle)
+            changePositionOfAxisTitle( apVTitle_SecondX.get(), bIsVertical? ALIGN_RIGHT : ALIGN_TOP, aDiagramPlusAxesRect, rPageSize );
+        if(bAutoPosition_SecondYTitle)
+            changePositionOfAxisTitle( apVTitle_SecondY.get(), bIsVertical? ALIGN_TOP : ALIGN_RIGHT, aDiagramPlusAxesRect, rPageSize );
+    }
+
+    //cleanup: remove all empty group shapes to avoid grey border lines:
+    lcl_removeEmptyGroupShapes( mxRootShape );
+
+    render();
+
+    if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
+    {
+        // create copy of the data for next frame
+        std::vector<VSeriesPlotter*>& rSeriesPlotter =
+            aSeriesPlotterContainer.getSeriesPlotterList();
+        size_t n = rSeriesPlotter.size();
+        maTimeBased.m_aDataSeriesList.clear();
+        maTimeBased.m_aDataSeriesList.resize(n);
+        for(size_t i = 0; i < n; ++i)
+        {
+            std::vector< VDataSeries* > aAllNewDataSeries =
+                rSeriesPlotter[i]->getAllSeries();
+            std::vector< VDataSeries* >& rAllOldDataSeries =
+                maTimeBased.m_aDataSeriesList[i];
+            size_t m = aAllNewDataSeries.size();
+            for(size_t j = 0; j < m; ++j)
+            {
+                rAllOldDataSeries.push_back( aAllNewDataSeries[j]->
+                        createCopyForTimeBased() );
+            }
+        }
+
+        if(maTimeBased.eMode != MANUAL)
+        {
+            mrChartModel.setTimeBased(true);
+            mrChartModel.getNextTimePoint();
+        }
+        else
+            maTimeBased.maTimer.Stop();
+    }
+
+    if(maTimeBased.bTimeBased && maTimeBased.eMode != MANUAL && !maTimeBased.maTimer.IsActive())
+    {
+        maTimeBased.maTimer.SetTimeout(15);
+        maTimeBased.maTimer.SetTimeoutHdl(LINK(this, ChartView, UpdateTimeBased));
+        maTimeBased.maTimer.Start();
+    }
 }
 
 void ChartView::createShapes3D()
