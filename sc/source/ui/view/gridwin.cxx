@@ -4625,8 +4625,8 @@ void ScGridWindow::UpdateFormulas()
     ScTableInfo aTabInfo;
     rDoc.FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab, nPPTX, nPPTY, false, false );
 
-    Fraction aZoomX = pViewData->GetZoomX();
-    Fraction aZoomY = pViewData->GetZoomY();
+    boost::rational<long> aZoomX = pViewData->GetZoomX();
+    boost::rational<long> aZoomY = pViewData->GetZoomY();
     ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, &rDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );

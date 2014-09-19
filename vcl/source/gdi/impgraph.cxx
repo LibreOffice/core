@@ -1041,8 +1041,8 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
 
         aSize = Size( nWidth, nHeight );
         aMapMode = MapMode( (MapUnit) nMapMode, Point( nOffsX, nOffsY ),
-                            Fraction( nScaleNumX, nScaleDenomX ),
-                            Fraction( nScaleNumY, nScaleDenomY ) );
+                            boost::rational<long>( nScaleNumX, nScaleDenomX ),
+                            boost::rational<long>( nScaleNumY, nScaleDenomY ) );
     }
 
     nHeaderLen = rIStm.Tell() - nStartPos;
@@ -1250,10 +1250,10 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Width()) );
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Height()) );
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetMapUnit()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().GetNumerator()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().GetDenominator()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().GetNumerator()) );
-            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().GetDenominator()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().numerator()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleX().denominator()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().numerator()) );
+            rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetScaleY().denominator()) );
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().X()) );
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().Y()) );
         }

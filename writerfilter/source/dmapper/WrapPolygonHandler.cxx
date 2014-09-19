@@ -83,7 +83,7 @@ WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
     return pResult;
 }
 
-WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fraction & rFractionY)
+WrapPolygon::Pointer_t WrapPolygon::scale(const boost::rational<long>& rFractionX, const boost::rational<long>& rFractionY)
 {
     WrapPolygon::Pointer_t pResult(new WrapPolygon);
 
@@ -92,7 +92,7 @@ WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fra
 
     while (aIt != aItEnd)
     {
-        awt::Point aPoint((Fraction(long(aIt->X)) * rFractionX).operator long(), (Fraction(long(aIt->Y)) * rFractionY).operator long());
+        awt::Point aPoint( boost::rational_cast<long>(long(aIt->X) * rFractionX), boost::rational_cast<long>(long(aIt->Y) * rFractionY) );
         pResult->addPoint(aPoint);
         ++aIt;
     }
@@ -106,17 +106,17 @@ WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSr
 
     const long nWrap100Percent = 21600;
 
-    Fraction aMove(nWrap100Percent, rSrcSize.Width);
-    aMove = aMove * Fraction(15, 1);
-    awt::Point aMovePoint(aMove.operator long(), 0);
+    boost::rational<long> aMove(nWrap100Percent, rSrcSize.Width);
+    aMove = aMove * boost::rational<long>(15, 1);
+    awt::Point aMovePoint(boost::rational_cast<long>(aMove), 0);
     pResult = move(aMovePoint);
 
-    Fraction aScaleX(nWrap100Percent, Fraction(nWrap100Percent) + aMove);
-    Fraction aScaleY(nWrap100Percent, Fraction(nWrap100Percent) - aMove);
+    boost::rational<long> aScaleX(nWrap100Percent, boost::rational_cast<long>(nWrap100Percent + aMove));
+    boost::rational<long> aScaleY(nWrap100Percent, boost::rational_cast<long>(nWrap100Percent - aMove));
     pResult = pResult->scale(aScaleX, aScaleY);
 
-    Fraction aScaleSrcX(rSrcSize.Width, nWrap100Percent);
-    Fraction aScaleSrcY(rSrcSize.Height, nWrap100Percent);
+    boost::rational<long> aScaleSrcX(rSrcSize.Width, nWrap100Percent);
+    boost::rational<long> aScaleSrcY(rSrcSize.Height, nWrap100Percent);
     pResult = pResult->scale(aScaleSrcX, aScaleSrcY);
 
     return pResult;

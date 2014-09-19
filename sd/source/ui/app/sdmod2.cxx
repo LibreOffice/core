@@ -502,9 +502,9 @@ SfxItemSet*  SdModule::CreateItemSet( sal_uInt16 nSlot )
 
     if(pFrameView)
     {
-        const Fraction& rFraction =  pDoc->GetUIScale();
-        nX=rFraction.GetNumerator();
-        nY=rFraction.GetDenominator();
+        const boost::rational<long>& rFraction =  pDoc->GetUIScale();
+        nX=rFraction.numerator();
+        nY=rFraction.denominator();
     }
     else
     {
@@ -595,7 +595,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             // Apply to document only if doc type match
             if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
             {
-                pDoc->SetUIScale( Fraction( nX, nY ) );
+                pDoc->SetUIScale( boost::rational<long>( nX, nY ) );
                 if( pViewShell )
                     pViewShell->SetRuler( pViewShell->HasRuler() );
             }

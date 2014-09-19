@@ -1962,48 +1962,48 @@ void PictWriter::WriteOpcodes( const GDIMetaFile & rMTF )
                     if( pA->GetMapMode().GetMapUnit() == MAP_RELATIVE )
                     {
                         MapMode aMM = pA->GetMapMode();
-                        Fraction aScaleX = aMM.GetScaleX();
-                        Fraction aScaleY = aMM.GetScaleY();
+                        boost::rational<long> aScaleX = aMM.GetScaleX();
+                        boost::rational<long> aScaleY = aMM.GetScaleY();
 
                         Point aOrigin = aSrcMapMode.GetOrigin();
                         BigInt aX( aOrigin.X() );
-                        aX *= BigInt( aScaleX.GetDenominator() );
+                        aX *= BigInt( aScaleX.denominator() );
                         if( aOrigin.X() >= 0 )
                         {
-                            if( aScaleX.GetNumerator() >= 0 )
-                                aX += BigInt( aScaleX.GetNumerator()/2 );
+                            if( aScaleX.numerator() >= 0 )
+                                aX += BigInt( aScaleX.numerator()/2 );
                             else
-                                aX -= BigInt( (aScaleX.GetNumerator()+1)/2 );
+                                aX -= BigInt( (aScaleX.numerator()+1)/2 );
                         }
                         else
                         {
-                            if( aScaleX.GetNumerator() >= 0 )
-                                aX -= BigInt( (aScaleX.GetNumerator()-1)/2 );
+                            if( aScaleX.numerator() >= 0 )
+                                aX -= BigInt( (aScaleX.numerator()-1)/2 );
                             else
-                                aX += BigInt( aScaleX.GetNumerator()/2 );
+                                aX += BigInt( aScaleX.numerator()/2 );
                         }
 
-                        aX /= BigInt( aScaleX.GetNumerator() );
+                        aX /= BigInt( aScaleX.numerator() );
                         aOrigin.X() = (long)aX + aMM.GetOrigin().X();
                         BigInt aY( aOrigin.Y() );
-                        aY *= BigInt( aScaleY.GetDenominator() );
+                        aY *= BigInt( aScaleY.denominator() );
 
                         if( aOrigin.Y() >= 0 )
                         {
-                            if( aScaleY.GetNumerator() >= 0 )
-                                aY += BigInt( aScaleY.GetNumerator()/2 );
+                            if( aScaleY.numerator() >= 0 )
+                                aY += BigInt( aScaleY.numerator()/2 );
                             else
-                                aY -= BigInt( (aScaleY.GetNumerator()+1)/2 );
+                                aY -= BigInt( (aScaleY.numerator()+1)/2 );
                         }
                         else
                         {
-                            if( aScaleY.GetNumerator() >= 0 )
-                                aY -= BigInt( (aScaleY.GetNumerator()-1)/2 );
+                            if( aScaleY.numerator() >= 0 )
+                                aY -= BigInt( (aScaleY.numerator()-1)/2 );
                             else
-                                aY += BigInt( aScaleY.GetNumerator()/2 );
+                                aY += BigInt( aScaleY.numerator()/2 );
                         }
 
-                        aY /= BigInt( aScaleY.GetNumerator() );
+                        aY /= BigInt( aScaleY.numerator() );
                         aOrigin.Y() = (long)aY + aMM.GetOrigin().Y();
                         aSrcMapMode.SetOrigin( aOrigin );
 
@@ -2183,7 +2183,7 @@ bool PictWriter::WritePict(const GDIMetaFile & rMTF, SvStream & rTargetStream, F
 {
     PictWriterAttrStackMember*  pAt;
     MapMode                     aMap72( MAP_INCH );
-    Fraction                    aDPIFrac( 1, 72 );
+    boost::rational<long>       aDPIFrac( 1, 72 );
 
     bStatus=true;
     nLastPercent=0;

@@ -1009,8 +1009,8 @@ public:
     void                                SetCursor( vcl::Cursor* pCursor );
     vcl::Cursor*                        GetCursor() const;
 
-    void                                SetZoom( const Fraction& rZoom );
-    const Fraction&                     GetZoom() const;
+    void                                SetZoom( const boost::rational<long>& rZoom );
+    const boost::rational<long>&        GetZoom() const;
     bool                                IsZoom() const;
     long                                CalcZoom( long n ) const;
 

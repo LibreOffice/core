@@ -22,7 +22,7 @@
 
 #include "address.hxx"
 
-class Fraction;
+namespace boost { template<typename T> class rational; }
 class OutputDevice;
 class ScDocument;
 
@@ -31,9 +31,9 @@ class ScDrawUtil
 public:
     static void CalcScale( ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                        OutputDevice* pDev, const Fraction& rZoomX, const Fraction& rZoomY,
+                        OutputDevice* pDev, const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
                         double nPPTX, double nPPTY,
-                        Fraction& rScaleX, Fraction& rScaleY );
+                        boost::rational<long>& rScaleX, boost::rational<long>& rScaleY );
 };
 
 #endif

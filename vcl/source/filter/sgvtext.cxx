@@ -688,7 +688,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     sal_uInt16       i,j,k,h;
     sal_uInt16       re,li;
 
-    vOut.SetMapMode(MapMode(MAP_10TH_MM,Point(),Fraction(1,4),Fraction(1,4)));
+    vOut.SetMapMode(MapMode(MAP_10TH_MM,Point(),boost::rational<long>(1,4),boost::rational<long>(1,4)));
 
     nChars=0;
     SetTextContext(vOut,AktAtr,false,0,1,1,1,1);

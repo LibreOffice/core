@@ -70,8 +70,8 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
             ( rSz.Width() ? rSz.Width() /std::max(short(1),pNewOpt->GetDivisionX()):0,
               rSz.Height()? rSz.Height()/std::max(short(1),pNewOpt->GetDivisionY()):0);
      pDrawView->SetGridFine( aFSize );
-    Fraction aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
-    Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
+    boost::rational<long> aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
+    boost::rational<long> aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
     pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
     if ( pRoot->Frm().HasArea() )
@@ -432,7 +432,7 @@ void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
 
 // OD 15.01.2003 #103492# - method signature change due to new page preview functionality
 void SwViewImp::UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
-                                         const Fraction&  _rScale,
+                                         const boost::rational<long>&  _rScale,
                                          const SwPageFrm* _pSelectedPageFrm,
                                          const Size&      _rPreviewWinSize )
 {

@@ -241,18 +241,18 @@ size_t ImpSdrGDIMetaFileImport::DoImport(
 
     mbMov = maOfs.X()!=0 || maOfs.Y()!=0;
     mbSize = false;
-    maScaleX = Fraction( 1, 1 );
-    maScaleY = Fraction( 1, 1 );
+    maScaleX = boost::rational<long>( 1, 1 );
+    maScaleY = boost::rational<long>( 1, 1 );
 
     if(aMtfSize.Width() != (maScaleRect.GetWidth() - 1))
     {
-        maScaleX = Fraction(maScaleRect.GetWidth() - 1, aMtfSize.Width());
+        maScaleX = boost::rational<long>(maScaleRect.GetWidth() - 1, aMtfSize.Width());
         mbSize = true;
     }
 
     if(aMtfSize.Height() != (maScaleRect.GetHeight() - 1))
     {
-        maScaleY = Fraction(maScaleRect.GetHeight() - 1, aMtfSize.Height());
+        maScaleY = boost::rational<long>(maScaleRect.GetHeight() - 1, aMtfSize.Height());
         mbSize = true;
     }
 

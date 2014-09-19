@@ -644,9 +644,9 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     {
         Point aPos = GetActiveWindow()->PixelToLogic(maMousePos);
         pPageView->LogicToPagePos(aPos);
-        Fraction aUIScale(GetDoc()->GetUIScale());
-        aPos.X() = Fraction(aPos.X()) / aUIScale;
-        aPos.Y() = Fraction(aPos.Y()) / aUIScale;
+        boost::rational<long> aUIScale(GetDoc()->GetUIScale());
+        aPos.X() = boost::rational_cast<long>(aPos.X() / aUIScale);
+        aPos.Y() = boost::rational_cast<long>(aPos.Y() / aUIScale);
 
         // position- and size items
         if ( mpDrawView->IsAction() )
@@ -660,12 +660,12 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             {
                 pPageView->LogicToPagePos(aRect);
                 aPos = aRect.TopLeft();
-                aPos.X() = Fraction(aPos.X()) / aUIScale;
-                aPos.Y() = Fraction(aPos.Y()) / aUIScale;
+                aPos.X() = boost::rational_cast<long>(aPos.X() / aUIScale);
+                aPos.Y() = boost::rational_cast<long>(aPos.Y() / aUIScale);
                 rSet.Put( SfxPointItem( SID_ATTR_POSITION, aPos) );
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.Height() = Fraction(aSize.Height()) / aUIScale;
-                aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
+                aSize.Height() = boost::rational_cast<long>(aSize.Height() / aUIScale);
+                aSize.Width()  = boost::rational_cast<long>(aSize.Width() / aUIScale);
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
         }
@@ -678,13 +678,13 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
                 // Show the position of the selected shape(s)
                 Point aShapePosition (aRect.TopLeft());
-                aShapePosition.X() = Fraction(aShapePosition.X()) / aUIScale;
-                aShapePosition.Y() = Fraction(aShapePosition.Y()) / aUIScale;
+                aShapePosition.X() = boost::rational_cast<long>(aShapePosition.X() / aUIScale);
+                aShapePosition.Y() = boost::rational_cast<long>(aShapePosition.Y() / aUIScale);
                 rSet.Put (SfxPointItem(SID_ATTR_POSITION, aShapePosition));
 
                 Size aSize( aRect.Right() - aRect.Left(), aRect.Bottom() - aRect.Top() );
-                aSize.Height() = Fraction(aSize.Height()) / aUIScale;
-                aSize.Width()  = Fraction(aSize.Width())  / aUIScale;
+                aSize.Height() = boost::rational_cast<long>(aSize.Height() / aUIScale);
+                aSize.Width()  = boost::rational_cast<long>(aSize.Width() / aUIScale);
                 rSet.Put( SvxSizeItem( SID_ATTR_SIZE, aSize) );
             }
             else

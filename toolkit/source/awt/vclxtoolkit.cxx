@@ -744,9 +744,9 @@ void SAL_CALL VCLXToolkit::disposing()
     if ( addressOfMemoryBufferForSharedArrayWrapper != 0 ) {
 #if defined(ANDROID)
         ByteBufferWrapper *bbw = (ByteBufferWrapper *) (intptr_t) addressOfMemoryBufferForSharedArrayWrapper;
-        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
+        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), boost::rational<long>(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( bbw->pointer(), *bbw ));
 #else
-        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), Fraction(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( (sal_uInt8*) (sal_uIntPtr) addressOfMemoryBufferForSharedArrayWrapper ));
+        pV->SetOutputSizePixelScaleOffsetAndBuffer( Size( Width, Height ), boost::rational<long>(ScaleNumerator, ScaleDenominator), Point( XOffset, YOffset), basebmp::RawMemorySharedArray( (sal_uInt8*) (sal_uIntPtr) addressOfMemoryBufferForSharedArrayWrapper ));
 #endif
     } else {
         pV->SetOutputSizePixel( Size( Width, Height ) );

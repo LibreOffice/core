@@ -213,11 +213,11 @@ void ScClient::ViewChanged()
     if (pDrawObj)
     {
         Rectangle aLogicRect = pDrawObj->GetLogicRect();
-        Fraction aFractX = GetScaleWidth();
-        Fraction aFractY = GetScaleHeight();
+        boost::rational<long> aFractX = GetScaleWidth();
+        boost::rational<long> aFractY = GetScaleHeight();
         aFractX *= aVisSize.Width();
         aFractY *= aVisSize.Height();
-        aVisSize = Size( (long) aFractX, (long) aFractY ); // Scaled for Draw model
+        aVisSize = Size( boost::rational_cast<long>(aFractX), boost::rational_cast<long>(aFractY) ); // Scaled for Draw model
 
         //  pClientData->SetObjArea before pDrawObj->SetLogicRect, so that we don't
         //  calculate wrong scalings:

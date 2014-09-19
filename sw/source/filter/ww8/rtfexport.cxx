@@ -396,7 +396,7 @@ void RtfExport::WriteFootnoteSettings()
 {
     const SwPageFtnInfo& rFtnInfo = pDoc->GetPageDesc(0).GetFtnInfo();
     // Request a separator only in case the width is larger than zero.
-    bool bSeparator = double(rFtnInfo.GetWidth()) > 0;
+    bool bSeparator = boost::rational_cast<double>(rFtnInfo.GetWidth()) > 0;
 
     Strm().WriteChar('{').WriteCharPtr(OOO_STRING_SVTOOLS_RTF_IGNORE).WriteCharPtr(OOO_STRING_SVTOOLS_RTF_FTNSEP);
     if (bSeparator)

@@ -80,7 +80,7 @@ ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
     ImplMapMode* pImplMapMode = ((ImplMapMode*)aStaticImplMapModeAry)+eUnit;
     if ( !pImplMapMode->mbSimple )
     {
-        Fraction aDefFraction( 1, 1 );
+        boost::rational<long> aDefFraction( 1, 1 );
         pImplMapMode->maScaleX  = aDefFraction;
         pImplMapMode->maScaleY  = aDefFraction;
         pImplMapMode->meUnit    = eUnit;
@@ -125,7 +125,7 @@ MapMode::MapMode( MapUnit eUnit )
 }
 
 MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
-                  const Fraction& rScaleX, const Fraction& rScaleY )
+                  const boost::rational<long>& rScaleX, const boost::rational<long>& rScaleY )
 {
 
     mpImplMapMode           = new ImplMapMode;
@@ -163,14 +163,14 @@ void MapMode::SetOrigin( const Point& rLogicOrg )
     mpImplMapMode->maOrigin = rLogicOrg;
 }
 
-void MapMode::SetScaleX( const Fraction& rScaleX )
+void MapMode::SetScaleX( const boost::rational<long>& rScaleX )
 {
 
     ImplMakeUnique();
     mpImplMapMode->maScaleX = rScaleX;
 }
 
-void MapMode::SetScaleY( const Fraction& rScaleY )
+void MapMode::SetScaleY( const boost::rational<long>& rScaleY )
 {
 
     ImplMakeUnique();

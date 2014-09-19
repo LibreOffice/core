@@ -22,7 +22,7 @@
 
 
 #include <tools/gen.hxx>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 #include <svx/svxdllapi.h>
 
 // Status information for specialized object dragging. In order for the model
@@ -146,8 +146,8 @@ public:
     bool CheckMinMoved(const Point& rPnt);
     long  GetDX() const                     { return GetNow().X()-GetPrev().X(); }
     long  GetDY() const                     { return GetNow().Y()-GetPrev().Y(); }
-    Fraction GetXFact() const;
-    Fraction GetYFact() const;
+    boost::rational<long> GetXFact() const;
+    boost::rational<long> GetYFact() const;
 
     SdrDragMethod* GetDragMethod() const               { return pDragMethod; }
     void           SetDragMethod(SdrDragMethod* pMth)  { pDragMethod=pMth; }

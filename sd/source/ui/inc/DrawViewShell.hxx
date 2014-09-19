@@ -408,7 +408,7 @@ protected:
     virtual SvxRuler* CreateVRuler(::sd::Window* pWin) SAL_OVERRIDE;
     virtual void    UpdateHRuler() SAL_OVERRIDE;
     virtual void    UpdateVRuler() SAL_OVERRIDE;
-    virtual void    SetZoomFactor(const Fraction& rZoomX, const Fraction& rZoomY) SAL_OVERRIDE;
+    virtual void    SetZoomFactor(const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY) SAL_OVERRIDE;
 
     void            SetupPage( Size &rSize, long nLeft, long nRight, long nUpper, long nLower,
                                bool bSize, bool bMargin, bool bScaleAll );

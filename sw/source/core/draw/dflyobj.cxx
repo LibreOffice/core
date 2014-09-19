@@ -731,7 +731,7 @@ void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 }
 
 void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
-            const Fraction& xFact, const Fraction& yFact)
+            const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     ResizeRect( aOutRect, rRef, xFact, yFact );
 
@@ -843,7 +843,7 @@ void SwVirtFlyDrawObj::Move(const Size& rSiz)
 }
 
 void SwVirtFlyDrawObj::Resize(const Point& rRef,
-                    const Fraction& xFact, const Fraction& yFact, bool /*bUnsetRelative*/)
+                    const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool /*bUnsetRelative*/)
 {
     NbcResize( rRef, xFact, yFact );
     SetChanged();

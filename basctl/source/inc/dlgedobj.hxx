@@ -63,7 +63,7 @@ protected:
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
     virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
     using SfxListener::StartListening;
@@ -153,7 +153,7 @@ private:
 
 protected:
     virtual void NbcMove( const Size& rSize ) SAL_OVERRIDE;
-    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact) SAL_OVERRIDE;
+    virtual void NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact) SAL_OVERRIDE;
     virtual bool EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd) SAL_OVERRIDE;
 
 public:

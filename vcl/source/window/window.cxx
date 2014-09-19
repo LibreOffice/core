@@ -572,7 +572,7 @@ Window::~Window()
 
 WindowImpl::WindowImpl( WindowType nType )
 {
-    maZoom                              = Fraction( 1, 1 );
+    maZoom                              = boost::rational<long>( 1, 1 );
     maWinRegion                         = Region(true);
     maWinClipRegion                     = Region(true);
     mpWinData                           = NULL;                      // Extra Window Data, that we dont need for all windows

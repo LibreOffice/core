@@ -322,7 +322,7 @@ void E3dObject::SetModel(SdrModel* pNewModel)
 
 // resize object, used from old 2d interfaces, e.g. in Move/Scale dialog (F4)
 
-void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void E3dObject::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     // Movement in X, Y in the eye coordinate system
     E3dScene* pScene = GetScene();
@@ -345,8 +345,8 @@ void E3dObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
         aScaleCenter3D = aInverseViewToEye * aScaleCenter3D;
 
         // Get scale factors
-        double fScaleX(xFact);
-        double fScaleY(yFact);
+        double fScaleX(boost::rational_cast<double>(xFact));
+        double fScaleY(boost::rational_cast<double>(yFact));
 
         // build transform
         basegfx::B3DHomMatrix aInverseOrientation(aViewInfo3D.getOrientation());

@@ -22,7 +22,7 @@
 
 #include <prex.h>
 #include <postx.h>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 
 #include "vcl/salgtype.hxx"
 #include "vcl/vclenum.hxx"

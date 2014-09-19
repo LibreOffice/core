@@ -569,7 +569,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
     }
 
     sal_uInt16 nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
-    Fraction aZoomFract(nZoom, 100);
+    boost::rational<long> aZoomFract(nZoom, 100);
 
     // Start at specified cell position (nCol, nRow, nTab).
     ScColumn* pCol  = &pTab->aCol[aScope.Col()];
@@ -655,7 +655,7 @@ bool ScDocument::IdleCalcTextWidth()            // true = demnaechst wieder vers
                         if (getScaleValue(*pStyle, ATTR_PAGE_SCALETOPAGES) == 0)
                         {
                             nZoom = getScaleValue(*pStyle, ATTR_PAGE_SCALE);
-                            aZoomFract = Fraction(nZoom, 100);
+                            aZoomFract = boost::rational<long>(nZoom, 100);
                         }
                         else
                             nZoom = 0;

@@ -703,8 +703,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             Rectangle   aObjRect( pNewObj->GetCurrentBoundRect() );
                             Size        aObjSize( aObjRect.GetSize() );
 
-                            Fraction aScaleWidth( aPickObjSize.Width(), aObjSize.Width() );
-                            Fraction aScaleHeight( aPickObjSize.Height(), aObjSize.Height() );
+                            boost::rational<long> aScaleWidth( aPickObjSize.Width(), aObjSize.Width() );
+                            boost::rational<long> aScaleHeight( aPickObjSize.Height(), aObjSize.Height() );
                             pNewObj->NbcResize( aObjRect.TopLeft(), aScaleWidth, aScaleHeight );
 
                             aVec -= aObjRect.TopLeft();

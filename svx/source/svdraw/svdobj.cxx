@@ -1338,12 +1338,12 @@ Rectangle SdrObject::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nYMul=std::abs(nYMul);
         nXDiv=std::abs(nXDiv);
         nYDiv=std::abs(nYDiv);
-        Fraction aXFact(nXMul,nXDiv); // fractions for canceling
-        Fraction aYFact(nYMul,nYDiv); // and for comparing
-        nXMul=aXFact.GetNumerator();
-        nYMul=aYFact.GetNumerator();
-        nXDiv=aXFact.GetDenominator();
-        nYDiv=aYFact.GetDenominator();
+        boost::rational<long> aXFact(nXMul,nXDiv); // fractions for canceling
+        boost::rational<long> aYFact(nYMul,nYDiv); // and for comparing
+        nXMul=aXFact.numerator();
+        nYMul=aYFact.numerator();
+        nXDiv=aXFact.denominator();
+        nYDiv=aYFact.denominator();
         if (bEcke) { // corner point handles
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
@@ -1495,10 +1495,10 @@ void SdrObject::NbcMove(const Size& rSiz)
     SetRectsDirty();
 }
 
-void SdrObject::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrObject::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
-    bool bXMirr=(xFact.GetNumerator()<0) != (xFact.GetDenominator()<0);
-    bool bYMirr=(yFact.GetNumerator()<0) != (yFact.GetDenominator()<0);
+    bool bXMirr = xFact.numerator() < 0;
+    bool bYMirr = yFact.numerator() < 0;
     if (bXMirr || bYMirr) {
         Point aRef1(GetSnapRect().Center());
         if (bXMirr) {
@@ -1593,9 +1593,9 @@ void SdrObject::Move(const Size& rSiz)
     }
 }
 
-void SdrObject::Resize(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bUnsetRelative)
+void SdrObject::Resize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bUnsetRelative)
 {
-    if (xFact.GetNumerator()!=xFact.GetDenominator() || yFact.GetNumerator()!=yFact.GetDenominator()) {
+    if (xFact.numerator()!=xFact.denominator() || yFact.numerator()!=yFact.denominator()) {
         if (bUnsetRelative)
         {
             mnRelativeWidth.reset( );
@@ -2262,15 +2262,15 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     if (aNewLogic!=rLogic) {
         NbcSetLogicRect(aNewLogic);
     }
-    Fraction aResizeX(1,1);
-    Fraction aResizeY(1,1);
+    boost::rational<long> aResizeX(1,1);
+    boost::rational<long> aResizeY(1,1);
     if (rAttr.GetItemState(SDRATTR_RESIZEXONE,true,&pPoolItem)==SfxItemState::SET) {
         aResizeX*=((const SdrResizeXOneItem*)pPoolItem)->GetValue();
     }
     if (rAttr.GetItemState(SDRATTR_RESIZEYONE,true,&pPoolItem)==SfxItemState::SET) {
         aResizeY*=((const SdrResizeYOneItem*)pPoolItem)->GetValue();
     }
-    if (aResizeX!=Fraction(1,1) || aResizeY!=Fraction(1,1)) {
+    if (aResizeX!=boost::rational<long>(1,1) || aResizeY!=boost::rational<long>(1,1)) {
         NbcResize(aRef1,aResizeX,aResizeY);
     }
 }

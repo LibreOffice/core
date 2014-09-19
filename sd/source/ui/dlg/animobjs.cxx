@@ -89,8 +89,8 @@ void SdDisplay::Paint( const Rectangle& )
     Point aPt;
     Size aSize = GetOutputSize();
     Size aBmpSize = aBitmapEx.GetBitmap().GetSizePixel();
-    aBmpSize.Width() = (long) ( (double) aBmpSize.Width() * (double) aScale );
-    aBmpSize.Height() = (long) ( (double) aBmpSize.Height() * (double) aScale );
+    aBmpSize.Width() = (long) ( (double) aBmpSize.Width() * boost::rational_cast<double>(this->aScale) );
+    aBmpSize.Height() = (long) ( (double) aBmpSize.Height() * boost::rational_cast<double>(this->aScale) );
 
     if( aBmpSize.Width() < aSize.Width() )
         aPt.X() = ( aSize.Width() - aBmpSize.Width() ) / 2;
@@ -100,7 +100,7 @@ void SdDisplay::Paint( const Rectangle& )
     aBitmapEx.Draw( this, aPt, aBmpSize );
 }
 
-void SdDisplay::SetScale( const Fraction& rFrac )
+void SdDisplay::SetScale( const boost::rational<long>& rFrac )
 {
     aScale = rFrac;
 }
@@ -468,7 +468,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
     }
 
     // calculate and set zoom for DisplayWin
-    Fraction aFrac( GetScale() );
+    boost::rational<long> aFrac( GetScale() );
     aCtlDisplay.SetScale( aFrac );
 
     UpdateControl();
@@ -643,9 +643,9 @@ void AnimationWindow::WaitInEffect( sal_uLong nMilliSeconds, sal_uLong nTime,
     }
 }
 
-Fraction AnimationWindow::GetScale()
+boost::rational<long> AnimationWindow::GetScale()
 {
-    Fraction aFrac;
+    boost::rational<long> aFrac;
     size_t const nCount = m_FrameList.size();
     if (nCount > 0)
     {
@@ -662,7 +662,7 @@ Fraction AnimationWindow::GetScale()
         aBmpSize.Width() += 10;
         aBmpSize.Height() += 10;
 
-        aFrac = Fraction( std::min( (double)aDisplaySize.Width() / (double)aBmpSize.Width(),
+        aFrac = rational_FromDouble( std::min( (double)aDisplaySize.Width() / (double)aBmpSize.Width(),
                              (double)aDisplaySize.Height() / (double)aBmpSize.Height() ) );
     }
     return( aFrac );
@@ -733,7 +733,7 @@ void AnimationWindow::Resize()
         aGrpAnimation.SetPosPixel( aGrpAnimation.GetPosPixel() + aPt );
 
         // calculate and set zoom for DisplayWin
-        Fraction aFrac( GetScale() );
+        boost::rational<long> aFrac( GetScale() );
         aCtlDisplay.SetScale( aFrac );
 
         aBtnFirst.Show();
@@ -963,7 +963,7 @@ void AnimationWindow::AddObj (::sd::View& rView )
         }
 
         // calculate and set zoom for DisplayWin
-        Fraction aFrac( GetScale() );
+        boost::rational<long> aFrac( GetScale() );
         aCtlDisplay.SetScale( aFrac );
 
         UpdateControl();

@@ -24,7 +24,7 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsTheme.hxx"
 #include <sal/types.h>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 #include <vcl/mapmod.hxx>
 #include <vector>
 #include <utility>
@@ -114,7 +114,7 @@ public:
     /** Return the scale factor that can be set at the map mode of the
         output window.
     */
-    Fraction GetScaleFactor (void) const;
+    boost::rational<long> GetScaleFactor (void) const;
 
     Size GetPageObjectSize (void) const;
 

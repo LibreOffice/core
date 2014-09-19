@@ -258,8 +258,8 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
         if( ( ( 1 == nUnit ) || ( 2 == nUnit ) ) && pParam->X_density && pParam->Y_density )
         {
             Point       aEmptyPoint;
-            Fraction    aFractX( 1, pParam->X_density );
-            Fraction    aFractY( 1, pParam->Y_density );
+            boost::rational<long>    aFractX( 1, pParam->X_density );
+            boost::rational<long>    aFractY( 1, pParam->Y_density );
             MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
             Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
 

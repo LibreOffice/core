@@ -724,14 +724,14 @@ void SmXMLContext_Helper::ApplyAttrs()
                     .GetMM100UnitConverter().GetXMLMeasureUnit())
             {
                 if (nFontSize < 100.00)
-                    pFontNode->SetSizeParameter(Fraction(100.00/nFontSize),
+                    pFontNode->SetSizeParameter(rational_FromDouble(100.00/nFontSize),
                         FNTSIZ_DIVIDE);
                 else
-                    pFontNode->SetSizeParameter(Fraction(nFontSize/100.00),
+                    pFontNode->SetSizeParameter(rational_FromDouble(nFontSize/100.00),
                         FNTSIZ_MULTIPLY);
             }
             else
-                pFontNode->SetSizeParameter(Fraction(nFontSize),FNTSIZ_ABSOLUT);
+                pFontNode->SetSizeParameter(rational_FromDouble(nFontSize),FNTSIZ_ABSOLUT);
 
             pFontNode->SetSubNodes(0,lcl_popOrZero(rNodeStack));
             rNodeStack.push(pFontNode);

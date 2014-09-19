@@ -113,9 +113,9 @@ void SvxXConnectionPreview::AdaptSize()
             aNewSize.Height()= (long) ( (double) nWidth / fRectWH );
         }
 
-        Fraction aFrac1( aWinSize.Width(), aRect.GetWidth() );
-        Fraction aFrac2( aWinSize.Height(), aRect.GetHeight() );
-        Fraction aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
+        boost::rational<long> aFrac1( aWinSize.Width(), aRect.GetWidth() );
+        boost::rational<long> aFrac2( aWinSize.Height(), aRect.GetHeight() );
+        boost::rational<long> aMinFrac( aFrac1 <= aFrac2 ? aFrac1 : aFrac2 );
 
         // Implement MapMode
         aDisplayMap.SetScaleX( aMinFrac );
@@ -261,29 +261,29 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
     if( bZoomIn || bZoomOut )
     {
         MapMode aMapMode = GetMapMode();
-        Fraction aXFrac = aMapMode.GetScaleX();
-        Fraction aYFrac = aMapMode.GetScaleY();
-        boost::scoped_ptr<Fraction> pMultFrac;
+        boost::rational<long> aXFrac = aMapMode.GetScaleX();
+        boost::rational<long> aYFrac = aMapMode.GetScaleY();
+        boost::scoped_ptr<boost::rational<long>> pMultFrac;
 
         if( bZoomIn )
         {
             if( bCtrl )
-                pMultFrac.reset(new Fraction( 3, 2 ));
+                pMultFrac.reset(new boost::rational<long>( 3, 2 ));
             else
-                pMultFrac.reset(new Fraction( 11, 10 ));
+                pMultFrac.reset(new boost::rational<long>( 11, 10 ));
         }
         else
         {
             if( bCtrl )
-                pMultFrac.reset(new Fraction( 2, 3 ));
+                pMultFrac.reset(new boost::rational<long>( 2, 3 ));
             else
-                pMultFrac.reset(new Fraction( 10, 11 ));
+                pMultFrac.reset(new boost::rational<long>( 10, 11 ));
         }
 
         aXFrac *= *pMultFrac;
         aYFrac *= *pMultFrac;
-        if( (double)aXFrac > 0.001 && (double)aXFrac < 1000.0 &&
-            (double)aYFrac > 0.001 && (double)aYFrac < 1000.0 )
+        if( boost::rational_cast<double>(aXFrac) > 0.001 && boost::rational_cast<double>(aXFrac) < 1000.0 &&
+            boost::rational_cast<double>(aYFrac) > 0.001 && boost::rational_cast<double>(aYFrac) < 1000.0 )
         {
             aMapMode.SetScaleX( aXFrac );
             aMapMode.SetScaleY( aYFrac );
@@ -292,8 +292,8 @@ void SvxXConnectionPreview::MouseButtonDown( const MouseEvent& rMEvt )
             Size aOutSize( GetOutputSize() );
 
             Point aPt( aMapMode.GetOrigin() );
-            long nX = (long)( ( (double)aOutSize.Width() - ( (double)aOutSize.Width() * (double)*pMultFrac  ) ) / 2.0 + 0.5 );
-            long nY = (long)( ( (double)aOutSize.Height() - ( (double)aOutSize.Height() * (double)*pMultFrac  ) ) / 2.0 + 0.5 );
+            long nX = (long)( ( (double)aOutSize.Width() - ( (double)aOutSize.Width() * boost::rational_cast<double>(* pMultFrac)  ) ) / 2.0 + 0.5 );
+            long nY = (long)( ( (double)aOutSize.Height() - ( (double)aOutSize.Height() * boost::rational_cast<double>(* pMultFrac)  ) ) / 2.0 + 0.5 );
             aPt.X() +=  nX;
             aPt.Y() +=  nY;
 

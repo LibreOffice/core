@@ -47,7 +47,7 @@ namespace dbaui
         TTableConnectionData m_vTableConnectionData;
         TTableWindowData     m_vTableData;
 
-        Fraction                                m_aZoom;
+        boost::rational<long>                   m_aZoom;
         ::dbtools::SQLExceptionInfo             m_aExceptionInfo;
 
         OAddTableDlg*                               m_pAddTableDialog;
