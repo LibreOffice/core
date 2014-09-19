@@ -143,7 +143,9 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,writer_brand, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
-	gengal \
+	$(if $(ENABLE_MACOSX_SANDBOX),, \
+		gengal \
+	)\
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
 	$(if $(filter unx-TRUE,$(GUIBASE)-$(ENABLE_TDE)),tdefilepicker) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
@@ -183,8 +185,10 @@ endif
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
-	regmerge \
-	regview \
+	$(if $(ENABLE_MACOSX_SANDBOX),, \
+		regmerge \
+		regview \
+	) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
