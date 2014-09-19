@@ -385,7 +385,7 @@ void SfxViewFrame::INetState_Impl( SfxItemSet &rItemSet )
         rItemSet.DisableItem( SID_CREATELINK );
 }
 
-void SfxViewFrame::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
+void SfxViewFrame::SetZoomFactor( const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY )
 {
     GetViewShell()->SetZoomFactor( rZoomX, rZoomY );
 }

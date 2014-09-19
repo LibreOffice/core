@@ -2423,10 +2423,10 @@ long BrowseBox::CalcReverseZoom(long nVal)
 {
     if (IsZoom())
     {
-        const Fraction& rZoom = GetZoom();
+        const boost::rational<long>& rZoom = GetZoom();
         double n = (double)nVal;
-        n *= (double)rZoom.GetDenominator();
-        n /= (double)rZoom.GetNumerator();
+        n *= (double)rZoom.denominator();
+        n /= (double)rZoom.numerator();
         nVal = n>0 ? (long)(n + 0.5) : -(long)(-n + 0.5);
     }
 

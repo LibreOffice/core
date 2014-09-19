@@ -32,46 +32,20 @@ void MoveXPoly(XPolygon& rPoly, const Size& S)
     rPoly.Move(S.Width(),S.Height());
 }
 
-void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, const Fraction& ryFact, bool bNoJustify)
+void ResizeRect(Rectangle& rRect, const Point& rRef, const boost::rational<long>& rxFact, const boost::rational<long>& ryFact, bool bNoJustify)
 {
-    Fraction xFact(rxFact);
-    Fraction yFact(ryFact);
+    boost::rational<long> xFact(rxFact);
+    boost::rational<long> yFact(ryFact);
 
-    {
-        if (xFact.GetDenominator()==0) {
-            long nWdt=rRect.Right()-rRect.Left();
-            if (xFact.GetNumerator()>=0) { // catch divisions by zero
-                xFact=Fraction(xFact.GetNumerator(),1);
-                if (nWdt==0) rRect.Right()++;
-            } else {
-                xFact=Fraction(xFact.GetNumerator(),-1);
-                if (nWdt==0) rRect.Left()--;
-            }
-        }
-        rRect.Left()  =rRef.X()+Round(((double)(rRect.Left()  -rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
-        rRect.Right() =rRef.X()+Round(((double)(rRect.Right() -rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
-    }
-    {
-        if (yFact.GetDenominator()==0) {
-            long nHgt=rRect.Bottom()-rRect.Top();
-            if (yFact.GetNumerator()>=0) { // catch divisions by zero
-                yFact=Fraction(yFact.GetNumerator(),1);
-                if (nHgt==0) rRect.Bottom()++;
-            } else {
-                yFact=Fraction(yFact.GetNumerator(),-1);
-                if (nHgt==0) rRect.Top()--;
-            }
-
-            yFact=Fraction(yFact.GetNumerator(),1); // catch divisions by zero
-        }
-        rRect.Top()   =rRef.Y()+Round(((double)(rRect.Top()   -rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
-        rRect.Bottom()=rRef.Y()+Round(((double)(rRect.Bottom()-rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
-    }
+    rRect.Left()  =rRef.X()+Round(((double)(rRect.Left()  -rRef.X())*xFact.numerator())/xFact.denominator());
+    rRect.Right() =rRef.X()+Round(((double)(rRect.Right() -rRef.X())*xFact.numerator())/xFact.denominator());
+    rRect.Top()   =rRef.Y()+Round(((double)(rRect.Top()   -rRef.Y())*yFact.numerator())/yFact.denominator());
+    rRect.Bottom()=rRef.Y()+Round(((double)(rRect.Bottom()-rRef.Y())*yFact.numerator())/yFact.denominator());
     if (!bNoJustify) rRect.Justify();
 }
 
 
-void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void ResizePoly(Polygon& rPoly, const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     sal_uInt16 nAnz=rPoly.GetSize();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -79,7 +53,7 @@ void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const 
     }
 }
 
-void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     sal_uInt16 nAnz=rPoly.GetPointCount();
     for (sal_uInt16 i=0; i<nAnz; i++) {
@@ -596,10 +570,10 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
     return 0x7fffffff;
 }
 
-void Kuerzen(Fraction& rF, unsigned nDigits)
+void Kuerzen(boost::rational<long>& rF, unsigned nDigits)
 {
-    sal_Int32 nMul=rF.GetNumerator();
-    sal_Int32 nDiv=rF.GetDenominator();
+    sal_Int32 nMul=rF.numerator();
+    sal_Int32 nDiv=rF.denominator();
     bool bNeg = false;
     if (nMul<0) { nMul=-nMul; bNeg=!bNeg; }
     if (nDiv<0) { nDiv=-nDiv; bNeg=!bNeg; }
@@ -625,7 +599,7 @@ void Kuerzen(Fraction& rF, unsigned nDigits)
         return;
     }
     if (bNeg) nMul=-nMul;
-    rF=Fraction(nMul,nDiv);
+    rF=boost::rational<long>(nMul,nDiv);
 }
 
 
@@ -661,7 +635,7 @@ FrPair GetInchOrMM(MapUnit eU)
         }
         default: break;
     }
-    return Fraction(1,1);
+    return boost::rational<long>(1,1);
 }
 
 FrPair GetInchOrMM(FieldUnit eU)
@@ -680,7 +654,7 @@ FrPair GetInchOrMM(FieldUnit eU)
         case FUNIT_MILE       : return FrPair(   1,63360);
         default: break;
     }
-    return Fraction(1,1);
+    return boost::rational<long>(1,1);
 }
 
 // Calculate the factor that we need to convert units from eS to eD.
@@ -694,8 +668,8 @@ FrPair GetMapFactor(MapUnit eS, MapUnit eD)
     bool bSInch=IsInch(eS);
     bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
-    if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
-    if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
+    if (bSInch && !bDInch) { aRet.X()*=boost::rational<long>(127,5); aRet.Y()*=boost::rational<long>(127,5); }
+    if (!bSInch && bDInch) { aRet.X()*=boost::rational<long>(5,127); aRet.Y()*=boost::rational<long>(5,127); }
     return aRet;
 };
 
@@ -707,8 +681,8 @@ FrPair GetMapFactor(FieldUnit eS, FieldUnit eD)
     bool bSInch=IsInch(eS);
     bool bDInch=IsInch(eD);
     FrPair aRet(aD.X()/aS.X(),aD.Y()/aS.Y());
-    if (bSInch && !bDInch) { aRet.X()*=Fraction(127,5); aRet.Y()*=Fraction(127,5); }
-    if (!bSInch && bDInch) { aRet.X()*=Fraction(5,127); aRet.Y()*=Fraction(5,127); }
+    if (bSInch && !bDInch) { aRet.X()*=boost::rational<long>(127,5); aRet.Y()*=boost::rational<long>(127,5); }
+    if (!bSInch && bDInch) { aRet.X()*=boost::rational<long>(5,127); aRet.Y()*=boost::rational<long>(5,127); }
     return aRet;
 };
 
@@ -789,7 +763,7 @@ void GetMeterOrInch(FieldUnit eFU, short& rnKomma, long& rnMul, long& rnDiv, boo
 
 void SdrFormatter::Undirty()
 {
-    if (aScale.GetNumerator()==0 || aScale.GetDenominator()==0) aScale=Fraction(1,1);
+    if (aScale.numerator()==0) aScale=boost::rational<long>(1,1);
     bool bSrcMetr,bSrcInch,bDstMetr,bDstInch;
     long nMul1,nDiv1,nMul2,nDiv2;
     short nKomma1,nKomma2;
@@ -818,9 +792,9 @@ void SdrFormatter::Undirty()
     }
 
     // temporary fraction for canceling
-    Fraction aTempFract(nMul1,nDiv1);
-    nMul1=aTempFract.GetNumerator();
-    nDiv1=aTempFract.GetDenominator();
+    boost::rational<long> aTempFract(nMul1,nDiv1);
+    nMul1=aTempFract.numerator();
+    nDiv1=aTempFract.denominator();
 
     nMul_=nMul1;
     nDiv_=nDiv1;

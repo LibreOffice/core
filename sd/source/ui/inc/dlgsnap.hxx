@@ -25,7 +25,7 @@
 #include <vcl/field.hxx>
 #include <vcl/group.hxx>
 #include <vcl/layout.hxx>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 #include <vcl/dialog.hxx>
 #include "sdenumdef.hxx"
 /************************************************************************/
@@ -53,7 +53,7 @@ private:
     long                nXValue;
     long                nYValue;
     FieldUnit           eUIUnit;
-    Fraction            aUIScale;
+    boost::rational<long>            aUIScale;
 
     DECL_LINK( ClickHdl, Button * );
 

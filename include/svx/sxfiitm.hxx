@@ -20,26 +20,26 @@
 #define INCLUDED_SVX_SXFIITM_HXX
 
 #include <svl/poolitem.hxx>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 
 /*************************************************************************/
 /* FractionItem                                                          */
 /*************************************************************************/
 
 class SdrFractionItem: public SfxPoolItem {
-    Fraction nValue;
+    boost::rational<long> nValue;
 public:
     TYPEINFO_VISIBILITY( SVX_DLLPUBLIC );
     SdrFractionItem(sal_uInt16 nId=0): SfxPoolItem(nId) {}
-    SdrFractionItem(sal_uInt16 nId, const Fraction& rVal): SfxPoolItem(nId), nValue(rVal) {}
+    SdrFractionItem(sal_uInt16 nId, const boost::rational<long>& rVal): SfxPoolItem(nId), nValue(rVal) {}
     SdrFractionItem(sal_uInt16 nId, SvStream& rIn);
     virtual bool             operator==(const SfxPoolItem&) const SAL_OVERRIDE;
     virtual bool GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, OUString &rText, const IntlWrapper * = 0) const SAL_OVERRIDE;
     virtual SfxPoolItem*     Create(SvStream&, sal_uInt16 nVer) const SAL_OVERRIDE;
     virtual SvStream&        Store(SvStream&, sal_uInt16 nItemVers) const SAL_OVERRIDE;
     virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const SAL_OVERRIDE;
-            const Fraction&  GetValue() const { return nValue; }
-            void             SetValue(const Fraction& rVal) { nValue = rVal; }
+            const boost::rational<long>&  GetValue() const { return nValue; }
+            void             SetValue(const boost::rational<long>& rVal) { nValue = rVal; }
 };
 
 

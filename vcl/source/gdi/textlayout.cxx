@@ -103,7 +103,7 @@ namespace vcl
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
         Font            m_aUnzoomedPointFont;
-        const Fraction  m_aZoom;
+        const boost::rational<long>  m_aZoom;
         const bool      m_bRTLEnabled;
 
         Rectangle       m_aCompleteTextRect;

@@ -876,7 +876,7 @@
 #include <tools/datetime.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 #include <tools/gen.hxx>
 #include <tools/globname.hxx>
 #include <tools/mempool.hxx>

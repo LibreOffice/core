@@ -393,7 +393,7 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
     }
     if(bGridSnap)
     {
-        double fSnapWidth = aSnapWdtX;
+        double fSnapWidth = boost::rational_cast<double>(aSnapWdtX);
         if(dx == NOT_SNAPPED && fSnapWidth != 0.0)
         {
             double fx = (double)x;
@@ -408,7 +408,7 @@ sal_uInt16 SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
             x = (long)((double)x * fSnapWidth + (double)pPV->GetPageOrigin().X());
             dx = 0;
         }
-        fSnapWidth = aSnapWdtY;
+        fSnapWidth = boost::rational_cast<double>(aSnapWdtY);
         if(dy == NOT_SNAPPED && fSnapWidth)
         {
             double fy = (double)y;

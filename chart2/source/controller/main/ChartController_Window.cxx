@@ -244,8 +244,8 @@ void SAL_CALL ChartController::setPosSize(
         MapMode aNewMapMode(
                     MAP_100TH_MM,
                     Point(0,0),
-                    Fraction(nScaleXNumerator, nScaleXDenominator),
-                    Fraction(nScaleYNumerator, nScaleYDenominator) );
+                    boost::rational<long>(nScaleXNumerator, nScaleXDenominator),
+                    boost::rational<long>(nScaleYNumerator, nScaleYDenominator) );
         m_pChartWindow->SetMapMode(aNewMapMode);
         m_pChartWindow->setPosSizePixel( X, Y, Width, Height, Flags );
 

@@ -202,7 +202,7 @@ namespace rptui
 
         /** zoom the ruler and view windows
         */
-        void zoom(const Fraction& _aZoom);
+        void zoom(const boost::rational<long>& _aZoom);
 
         /** fills the vector with all selected control models
             /param  _rSelection The vector will be filled and will not be cleared before.

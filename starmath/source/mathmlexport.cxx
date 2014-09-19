@@ -1344,24 +1344,24 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
         case TSIZE:
             {
                 const SmFontNode *pFontNode = static_cast<const SmFontNode *>(pNode);
-                const Fraction &aFrac = pFontNode->GetSizeParameter();
+                const boost::rational<long>& aFrac = pFontNode->GetSizeParameter();
 
                 OUStringBuffer sStrBuf;
                 switch(pFontNode->GetSizeType())
                 {
                     case FNTSIZ_MULTIPLY:
                         ::sax::Converter::convertDouble(sStrBuf,
-                            static_cast<double>(aFrac*Fraction(100.00)));
+                            boost::rational_cast<double>(aFrac * rational_FromDouble(100.0)));
                         sStrBuf.append('%');
                         break;
                     case FNTSIZ_DIVIDE:
                         ::sax::Converter::convertDouble(sStrBuf,
-                            static_cast<double>(Fraction(100.00)/aFrac));
+                            boost::rational_cast<double>(rational_FromDouble(100.0) / aFrac));
                         sStrBuf.append('%');
                         break;
                     case FNTSIZ_ABSOLUT:
                         ::sax::Converter::convertDouble(sStrBuf,
-                            static_cast<double>(aFrac));
+                            boost::rational_cast<double>(aFrac));
                         sStrBuf.append(
                             GetXMLToken(XML_UNIT_PT));
                         break;
@@ -1373,7 +1373,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                             //value specified in points.
 
                             //Must fix StarMath to retain the original pt values
-                            Fraction aTemp = Sm100th_mmToPts(pFontNode->GetFont().
+                            boost::rational<long> aTemp = Sm100th_mmToPts(pFontNode->GetFont().
                                 GetSize().Height());
 
                             if (pFontNode->GetSizeType() == FNTSIZ_MINUS)
@@ -1381,7 +1381,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                             else
                                 aTemp+=aFrac;
 
-                            double mytest = static_cast<double>(aTemp);
+                            double mytest = static_cast<double>(boost::rational_cast<double>(aTemp));
 
                             mytest = ::rtl::math::round(mytest,1);
                             ::sax::Converter::convertDouble(sStrBuf,mytest);
