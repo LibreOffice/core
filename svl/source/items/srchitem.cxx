@@ -244,7 +244,7 @@ static bool operator == ( const SearchOptions& rItem1, const SearchOptions& rIte
 bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal which or type" );
-    const SvxSearchItem &rSItem = (SvxSearchItem &) rItem;
+    const SvxSearchItem &rSItem = static_cast<const SvxSearchItem &>(rItem);
     return ( nCommand       == rSItem.nCommand )        &&
            ( bBackward      == rSItem.bBackward )       &&
            ( bPattern       == rSItem.bPattern )        &&

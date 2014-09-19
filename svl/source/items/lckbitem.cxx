@@ -62,7 +62,7 @@ SfxLockBytesItem::~SfxLockBytesItem()
 
 bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
 {
-    return ((SfxLockBytesItem&)rItem)._xVal == _xVal;
+    return static_cast<const SfxLockBytesItem&>(rItem)._xVal == _xVal;
 }
 
 

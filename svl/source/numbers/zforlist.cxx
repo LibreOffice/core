@@ -319,7 +319,7 @@ Color* SvNumberFormatter::GetUserDefColor(sal_uInt16 nIndex)
 {
     if( aColorLink.IsSet() )
     {
-        return (Color*) ( aColorLink.Call( (void*) &nIndex ));
+        return reinterpret_cast<Color*>( aColorLink.Call( (void*) &nIndex )) ;
     }
     else
     {

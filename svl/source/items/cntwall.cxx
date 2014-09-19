@@ -94,7 +94,7 @@ bool CntWallpaperItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
 
-    const CntWallpaperItem& rWallItem = (const CntWallpaperItem&)rItem;
+    const CntWallpaperItem& rWallItem = static_cast<const CntWallpaperItem&>(rItem);
 
     return ( rWallItem._nStyle == _nStyle ) &&
         ( rWallItem._nColor == _nColor ) &&

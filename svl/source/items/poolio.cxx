@@ -1438,7 +1438,7 @@ const SfxPoolItem* SfxItemPool::LoadItem( SvStream &rStream, bool bDirect,
     sal_uInt16 nWhich(0), nSlot(0); // nSurrogate;
     rStream.ReadUInt16( nWhich ).ReadUInt16( nSlot );
 
-    bool bDontPut = (SfxItemPool*)-1 == pRefPool;
+    bool bDontPut = reinterpret_cast<SfxItemPool*>(-1) == pRefPool;
     if ( bDontPut || !pRefPool )
         pRefPool = this;
 

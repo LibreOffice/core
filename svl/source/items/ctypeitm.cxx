@@ -96,7 +96,7 @@ SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
 // virtual
 bool CntContentTypeItem::operator==( const SfxPoolItem& rOrig ) const
 {
-    const CntContentTypeItem& rOther = (const CntContentTypeItem&)rOrig;
+    const CntContentTypeItem& rOther = static_cast<const CntContentTypeItem&>(rOrig);
 
     if ( ( _eType != CONTENT_TYPE_NOT_INIT ) &&
          ( rOther._eType != CONTENT_TYPE_NOT_INIT ) )

@@ -61,7 +61,8 @@ SfxPoolItem* SfxImageItem::Clone( SfxItemPool* ) const
 
 bool SfxImageItem::operator==( const SfxPoolItem& rItem ) const
 {
-    return( ((SfxImageItem&) rItem).GetValue() == GetValue() && (*pImp == *(((SfxImageItem&)rItem).pImp) ) );
+    return (static_cast<const SfxImageItem&>(rItem).GetValue() == GetValue()) &&
+           (*pImp == *static_cast<const SfxImageItem&>(rItem).pImp);
 }
 
 bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const

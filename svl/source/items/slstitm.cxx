@@ -130,9 +130,9 @@ bool SfxStringListItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
 
-    SfxStringListItem* pItem = (SfxStringListItem*)&rItem;
+    const SfxStringListItem& rSSLItem = static_cast<const SfxStringListItem&>(rItem);
 
-    return pImp == pItem->pImp;
+    return pImp == rSSLItem.pImp;
 }
 
 

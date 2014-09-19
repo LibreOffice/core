@@ -83,7 +83,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
     }
 
     // Insert the new attributes in a new Set
-    SfxSetItem *pNewItem = (SfxSetItem *)rOrigItem.Clone();
+    SfxSetItem *pNewItem = static_cast<SfxSetItem *>(rOrigItem.Clone());
     if ( pItemToPut )
     {
         pNewItem->GetItemSet().PutDirect( *pItemToPut );
@@ -92,7 +92,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
     }
     else
         pNewItem->GetItemSet().Put( *pSetToPut );
-    const SfxSetItem* pNewPoolItem = (const SfxSetItem*) &pPool->Put( *pNewItem );
+    const SfxSetItem* pNewPoolItem = static_cast<const SfxSetItem*>(&pPool->Put( *pNewItem ));
     DBG_ASSERT( pNewPoolItem != pNewItem, "Pool: same in and out?" );
     delete pNewItem;
 

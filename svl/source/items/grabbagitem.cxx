@@ -43,7 +43,7 @@ SfxGrabBagItem::~SfxGrabBagItem()
 
 bool SfxGrabBagItem::operator==(const SfxPoolItem& rItem) const
 {
-    SfxGrabBagItem* pItem = (SfxGrabBagItem*)&rItem;
+    const SfxGrabBagItem* pItem = static_cast<const SfxGrabBagItem*>(&rItem);
 
     return m_aMap == pItem->m_aMap;
 }

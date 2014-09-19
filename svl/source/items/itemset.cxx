@@ -428,10 +428,10 @@ void SfxItemSet::InvalidateDefaultItems()
     while( *pPtr )
     {
         for ( sal_uInt16 nWhich = *pPtr; nWhich <= *(pPtr+1); ++nWhich, ++ppFnd )
-            if ( *ppFnd && *ppFnd != (SfxPoolItem *)-1 && **ppFnd == _pPool->GetDefaultItem( nWhich ) )
+            if ( *ppFnd && *ppFnd != reinterpret_cast<SfxPoolItem *>(-1) && **ppFnd == _pPool->GetDefaultItem( nWhich ) )
             {
                 _pPool->Remove( **ppFnd );
-                *ppFnd = (SfxPoolItem*)-1;
+                *ppFnd = reinterpret_cast<SfxPoolItem*>(-1);
             }
         pPtr += 2;
     }
@@ -473,7 +473,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                         break; // Keep searching in the parents!
                     }
 
-                    if ( (SfxPoolItem*) -1 == *ppFnd )
+                    if ( reinterpret_cast<SfxPoolItem*>(-1) == *ppFnd )
                         // Different ones are present
                         return SfxItemState::DONTCARE;
 
@@ -760,7 +760,7 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
                 else if ( SfxItemState::DONTCARE == eState )
                 {
                     ++nNewCount;
-                    aNewItems[n] = (SfxPoolItem*)-1;
+                    aNewItems[n] = reinterpret_cast<SfxPoolItem*>(-1);
                 }
                 else
                 {
@@ -918,7 +918,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
                     ppFnd += nWhich - *pPtr;
                     if( *ppFnd )
                     {
-                        if( (SfxPoolItem*)-1 == *ppFnd ) {
+                        if( reinterpret_cast<SfxPoolItem*>(-1) == *ppFnd ) {
                             //FIXME: The following code is duplicated further down
                             SFX_ASSERT(_pPool, nWhich, "no Pool, but status is ambiguous");
                             //!((SfxAllItemSet *)this)->aDefault.SetWhich(nWhich);
@@ -1212,12 +1212,12 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
     {
         if ( IsInvalidItem(pFnd2) )
             // Decision table: default, dontcare, doesn't matter, doesn't matter
-            *ppFnd1 = (SfxPoolItem*) -1;
+            *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
 
         else if ( pFnd2 && !bIgnoreDefaults &&
                   _pPool->GetDefaultItem(pFnd2->Which()) != *pFnd2 )
             // Decision table: default, set, !=, sal_False
-            *ppFnd1 = (SfxPoolItem*) -1;
+            *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
 
         else if ( pFnd2 && bIgnoreDefaults )
             // Decision table: default, set, doesn't matter, sal_True
@@ -1238,7 +1238,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
             {
                 // Decision table: set, default, !=, sal_False
                 _pPool->Remove( **ppFnd1 );
-                *ppFnd1 = (SfxPoolItem*) -1;
+                *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
             }
         }
         else if ( IsInvalidItem(pFnd2) )
@@ -1250,7 +1250,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
                 // Decision table: set, dontcare, doesn't matter, sal_False
                 // or:             set, dontcare, !=, sal_True
                 _pPool->Remove( **ppFnd1 );
-                *ppFnd1 = (SfxPoolItem*) -1;
+                *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
             }
         }
         else
@@ -1260,7 +1260,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
             {
                 // Decision table: set, set, !=, doesn't matter
                 _pPool->Remove( **ppFnd1 );
-                *ppFnd1 = (SfxPoolItem*) -1;
+                *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
             }
         }
     }
@@ -1357,15 +1357,15 @@ void SfxItemSet::InvalidateItem( sal_uInt16 nWhich )
 
             if( *ppFnd ) // Set for me
             {
-                if( (SfxPoolItem*)-1 != *ppFnd ) // Not yet dontcare!
+                if( reinterpret_cast<SfxPoolItem*>(-1) != *ppFnd ) // Not yet dontcare!
                 {
                     _pPool->Remove( **ppFnd );
-                    *ppFnd = (SfxPoolItem*)-1;
+                    *ppFnd = reinterpret_cast<SfxPoolItem*>(-1);
                 }
             }
             else
             {
-                *ppFnd = (SfxPoolItem*)-1;
+                *ppFnd = reinterpret_cast<SfxPoolItem*>(-1);
                 ++_nCount;
             }
             break;

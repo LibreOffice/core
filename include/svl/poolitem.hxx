@@ -256,7 +256,7 @@ inline bool IsPooledItem( const SfxPoolItem *pItem )
 
 inline bool IsInvalidItem(const SfxPoolItem *pItem)
 {
-    return pItem == (SfxPoolItem *)-1;
+    return pItem == reinterpret_cast<SfxPoolItem *>(-1);
 }
 
 

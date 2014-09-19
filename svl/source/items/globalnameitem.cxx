@@ -55,7 +55,7 @@ SfxGlobalNameItem::~SfxGlobalNameItem()
 
 bool SfxGlobalNameItem::operator==( const SfxPoolItem& rItem ) const
 {
-    return ((SfxGlobalNameItem&)rItem).m_aName == m_aName;
+    return static_cast<const SfxGlobalNameItem&>(rItem).m_aName == m_aName;
 }
 
 

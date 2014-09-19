@@ -76,10 +76,8 @@ bool SfxRangeItem::GetPresentation
 bool SfxRangeItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
-    SfxRangeItem* pT = (SfxRangeItem*)&rItem;
-    if( nFrom==pT->nFrom && nTo==pT->nTo )
-        return true;
-    return false;
+    const SfxRangeItem& rT = static_cast<const SfxRangeItem&>(rItem);
+    return nFrom==rT.nFrom && nTo==rT.nTo;
 }
 
 
@@ -144,7 +142,7 @@ SfxUShortRangesItem::~SfxUShortRangesItem()
 
 bool SfxUShortRangesItem::operator==( const SfxPoolItem &rItem ) const
 {
-    const SfxUShortRangesItem &rOther = (const SfxUShortRangesItem&) rItem;
+    const SfxUShortRangesItem &rOther = static_cast<const SfxUShortRangesItem&>(rItem);
     if ( !_pRanges && !rOther._pRanges )
         return true;
     if ( _pRanges || rOther._pRanges )

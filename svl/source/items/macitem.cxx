@@ -192,7 +192,7 @@ bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
     const SvxMacroTableDtor& rOwn = aMacroTable;
-    const SvxMacroTableDtor& rOther = ( (SvxMacroItem&) rAttr ).aMacroTable;
+    const SvxMacroTableDtor& rOther = static_cast<const SvxMacroItem&>(rAttr).aMacroTable;
 
     return rOwn == rOther;
 }
