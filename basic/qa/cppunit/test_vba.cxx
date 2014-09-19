@@ -51,7 +51,9 @@ void VBATest::testMiscVBAFunctions()
         "format.vb",
         "replace.vb",
         "stringplusdouble.vb",
+#ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
+#endif
         "win32compatb.vb" // same methods, different signatures.
     };
     OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");

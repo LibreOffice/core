@@ -18,8 +18,8 @@ Dim passCount As Integer
 Dim failCount As Integer
 Dim result As String
 
-Private Declare Function QueryPerformanceCounter Lib "kernel32" (lpPerformanceCount As Currency) As Long
-Private Declare Function QueryPerformanceFrequency Lib "kernel32" (lpFrequency As Currency) As Long
+Private Declare Function QueryPerformanceCounter Lib "kernel32" (ByRef lpPerformanceCount As Currency) As Long
+Private Declare Function QueryPerformanceFrequency Lib "kernel32" (ByRef lpFrequency As Currency) As Long
 
 ' FIXME: all this cut/paste should be factored out !
 
@@ -61,7 +61,7 @@ Function verify_win32compat() as String
     Exit Function
 
 errorHandler:
-    TestLog_ASSERT (False), "hit error handler"
+    TestLog_ASSERT (False), "hit error handler - " & Err & ": " & Error$ & " (line : " & Erl & ")"
     verify_win32compat = result
 
 End Function
