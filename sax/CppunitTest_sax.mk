@@ -10,22 +10,22 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sax))
 
 $(eval $(call gb_CppunitTest_use_api,sax,\
-    offapi \
-    udkapi \
+	offapi \
+	udkapi \
 ))
 
 $(eval $(call gb_CppunitTest_use_external,sax,boost_headers))
 
 $(eval $(call gb_CppunitTest_use_libraries,sax, \
-    sax \
-    sal \
-    comphelper \
-    cppu \
+	sax \
+	sal \
+	comphelper \
+	cppu \
 	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sax, \
-    sax/qa/cppunit/test_converter \
+	sax/qa/cppunit/test_converter \
 ))
 
 

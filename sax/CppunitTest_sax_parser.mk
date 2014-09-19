@@ -10,7 +10,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,sax_parser))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sax_parser, \
-    sax/qa/cppunit/parser \
+	sax/qa/cppunit/parser \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sax_parser, \

@@ -12,28 +12,28 @@ $(eval $(call gb_Library_Library,expwrap))
 $(eval $(call gb_Library_set_componentfile,expwrap,sax/source/expatwrap/expwrap))
 
 $(eval $(call gb_Library_set_include,expwrap,\
-    -I$(SRCDIR)/sax/inc \
-    $$(INCLUDE) \
+	-I$(SRCDIR)/sax/inc \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_add_defs,expwrap,\
-    -DFASTSAX_DLLIMPLEMENTATION \
+	-DFASTSAX_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_use_sdk_api,expwrap))
 
 $(eval $(call gb_Library_use_externals,expwrap,\
-    boost_headers \
-    expat \
-    zlib \
+	boost_headers \
+	expat \
+	zlib \
 ))
 
 $(eval $(call gb_Library_use_libraries,expwrap,\
-    cppu \
-    cppuhelper \
-    sal \
-    salhelper \
-    sax \
+	cppu \
+	cppuhelper \
+	sal \
+	salhelper \
+	sax \
 	$(gb_UWINAPI) \
 ))
 

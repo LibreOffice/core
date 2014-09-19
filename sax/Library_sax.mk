@@ -10,8 +10,8 @@
 $(eval $(call gb_Library_Library,sax))
 
 $(eval $(call gb_Library_set_include,sax,\
-    -I$(SRCDIR)/sax/inc \
-    $$(INCLUDE) \
+	-I$(SRCDIR)/sax/inc \
+	$$(INCLUDE) \
 ))
 
 $(eval $(call gb_Library_use_external,sax,boost_headers))
@@ -19,22 +19,22 @@ $(eval $(call gb_Library_use_external,sax,boost_headers))
 $(eval $(call gb_Library_use_sdk_api,sax))
 
 $(eval $(call gb_Library_use_libraries,sax,\
-    comphelper \
-    cppu \
-    cppuhelper \
-    sal \
+	comphelper \
+	cppu \
+	cppuhelper \
+	sal \
 	$(gb_UWINAPI) \
 ))
 
 $(eval $(call gb_Library_add_defs,sax,\
-    -DSAX_DLLIMPLEMENTATION \
+	-DSAX_DLLIMPLEMENTATION \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sax,\
-    sax/source/tools/converter \
-    sax/source/tools/fastattribs \
+	sax/source/tools/converter \
+	sax/source/tools/fastattribs \
 	sax/source/tools/fastserializer \
-    sax/source/tools/fshelper \
+	sax/source/tools/fshelper \
 ))
 
 # vim: set noet sw=4 ts=4:
