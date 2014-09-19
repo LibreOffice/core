@@ -192,6 +192,7 @@ private:
     bool mbBenchMarkMode;
     sal_uInt32 mnHistoryCounter;
     sal_uInt32 mnBarsInRow;
+    bool mbAutoFly;
 
 
     // these form a pair:
