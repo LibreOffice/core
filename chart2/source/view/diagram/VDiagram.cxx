@@ -700,24 +700,24 @@ void VDiagram::reduceToMimimumSize()
 
 ::basegfx::B2IRectangle VDiagram::adjustInnerSize( const ::basegfx::B2IRectangle& rConsumedOuterRect )
 {
-    awt::Point aNewPos( m_aCurrentPosWithoutAxes );
-    awt::Size aNewSize( m_aCurrentSizeWithoutAxes );
+    awt::Point aNewPos = m_aCurrentPosWithoutAxes;
+    awt::Size aNewSize = m_aCurrentSizeWithoutAxes;
 
-    ::basegfx::B2IRectangle rAvailableOuterRect(
-        BaseGFXHelper::makeRectangle(m_aAvailablePosIncludingAxes,m_aAvailableSizeIncludingAxes) );
+    basegfx::B2IRectangle aAvailableOuterRect =
+        BaseGFXHelper::makeRectangle(m_aAvailablePosIncludingAxes, m_aAvailableSizeIncludingAxes);
 
-    sal_Int32 nDeltaWidth = static_cast<sal_Int32>(rAvailableOuterRect.getWidth() - rConsumedOuterRect.getWidth());
-    sal_Int32 nDeltaHeight = static_cast<sal_Int32>(rAvailableOuterRect.getHeight() - rConsumedOuterRect.getHeight());
-    if( (aNewSize.Width + nDeltaWidth) < rAvailableOuterRect.getWidth()/3 )
-        nDeltaWidth = static_cast<sal_Int32>(rAvailableOuterRect.getWidth()/3 - aNewSize.Width);
+    sal_Int32 nDeltaWidth = aAvailableOuterRect.getWidth() - rConsumedOuterRect.getWidth();
+    sal_Int32 nDeltaHeight = aAvailableOuterRect.getHeight() - rConsumedOuterRect.getHeight();
+    if( (aNewSize.Width + nDeltaWidth) < aAvailableOuterRect.getWidth()/3 )
+        nDeltaWidth = aAvailableOuterRect.getWidth()/3 - aNewSize.Width;
     aNewSize.Width += nDeltaWidth;
 
-    if( (aNewSize.Height + nDeltaHeight) < rAvailableOuterRect.getHeight()/3 )
-        nDeltaHeight = static_cast<sal_Int32>(rAvailableOuterRect.getHeight()/3 - aNewSize.Height);
+    if( (aNewSize.Height + nDeltaHeight) < aAvailableOuterRect.getHeight()/3 )
+        nDeltaHeight = aAvailableOuterRect.getHeight()/3 - aNewSize.Height;
     aNewSize.Height += nDeltaHeight;
 
-    sal_Int32 nDiffLeft = rConsumedOuterRect.getMinX() - rAvailableOuterRect.getMinX();
-    sal_Int32 nDiffRight = rAvailableOuterRect.getMaxX() - rConsumedOuterRect.getMaxX();
+    sal_Int32 nDiffLeft = rConsumedOuterRect.getMinX() - aAvailableOuterRect.getMinX();
+    sal_Int32 nDiffRight = aAvailableOuterRect.getMaxX() - rConsumedOuterRect.getMaxX();
     if( nDiffLeft >= 0 )
         aNewPos.X -= nDiffLeft;
     else if( nDiffRight >= 0 )
@@ -730,8 +730,8 @@ void VDiagram::reduceToMimimumSize()
             aNewPos.X += abs(nDeltaWidth);
     }
 
-    sal_Int32 nDiffUp = rConsumedOuterRect.getMinY() - rAvailableOuterRect.getMinY();
-    sal_Int32 nDiffDown = rAvailableOuterRect.getMaxY() - rConsumedOuterRect.getMaxY();
+    sal_Int32 nDiffUp = rConsumedOuterRect.getMinY() - aAvailableOuterRect.getMinY();
+    sal_Int32 nDiffDown = aAvailableOuterRect.getMaxY() - rConsumedOuterRect.getMaxY();
     if( nDiffUp >= 0 )
         aNewPos.Y -= nDiffUp;
     else if( nDiffDown >= 0 )
