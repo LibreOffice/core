@@ -27,7 +27,7 @@
 class Point;
 class Rectangle;
 class Size;
-class Fraction;
+namespace boost { template<typename T> class rational; }
 class IMapObject;
 
 typedef ::std::vector< IMapObject* > IMapObjectList_impl;
@@ -117,7 +117,7 @@ public:
     void                SetName( const OUString& rName ) { aName = rName; }
 
     // skaliert alle Objekte der ImageMap entpr. dem uebergebenen Faktor
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( const boost::rational<long>& rFractX, const boost::rational<long>& rFracY );
 
     // Im-/Export
     void                Write ( SvStream& rOStm, const OUString& rBaseURL ) const;

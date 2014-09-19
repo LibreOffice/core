@@ -23,87 +23,80 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <rtl/math.hxx>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 
 namespace tools
 {
 
-class FractionTest : public CppUnit::TestFixture
+class RationalTest : public CppUnit::TestFixture
 {
 public:
-    void setUp()
-    {
-    }
 
-    void tearDown()
+    void testReduceInaccurate()
     {
-    }
-
-    void testFraction()
-    {
-        const Fraction aFract(1082130431,1073741824);
+        const boost::rational<long> aFract(1082130431,1073741824);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #1 not approximately equal to 1.007812499068677",
-                                rtl::math::approxEqual((double)aFract,1.007812499068677) );
+                                rtl::math::approxEqual(boost::rational_cast<double>(aFract),1.007812499068677) );
 
-        Fraction aFract2( aFract );
-        aFract2.ReduceInaccurate(8);
+        boost::rational<long> aFract2( aFract );
+        rational_ReduceInaccurate(aFract2, 8);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #2 not 1",
-                                aFract2.GetNumerator() == 1 &&
-                                aFract2.GetDenominator() == 1 );
+                                aFract2.numerator() == 1 &&
+                                aFract2.denominator() == 1 );
 
-        Fraction aFract3( 0x7AAAAAAA, 0x35555555 );
+        boost::rational<long> aFract3( 0x7AAAAAAA, 0x35555555 );
         CPPUNIT_ASSERT_MESSAGE( "Fraction #3 cancellation wrong",
-                                aFract3.GetNumerator() == 0x7AAAAAAA &&
-                                aFract3.GetDenominator() == 0x35555555 );
-        aFract3.ReduceInaccurate(30);
+                                aFract3.numerator() == 0x7AAAAAAA &&
+                                aFract3.denominator() == 0x35555555 );
+        rational_ReduceInaccurate(aFract3, 30);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #3 ReduceInaccurate errorneously cut precision",
-                                aFract3.GetNumerator() == 0x7AAAAAAA &&
-                                aFract3.GetDenominator() == 0x35555555 );
+                                aFract3.numerator() == 0x7AAAAAAA &&
+                                aFract3.denominator() == 0x35555555 );
 
-        aFract3.ReduceInaccurate(29);
+        rational_ReduceInaccurate(aFract3, 29);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #3 reduce to 29 bits failed",
-                                aFract3.GetNumerator() == 0x3D555555 &&
-                                aFract3.GetDenominator() == 0x1AAAAAAA );
+                                aFract3.numerator() == 0x3D555555 &&
+                                aFract3.denominator() == 0x1AAAAAAA );
 
-        aFract3.ReduceInaccurate(9);
+        rational_ReduceInaccurate(aFract3, 9);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #3 reduce to 9 bits failed",
-                                aFract3.GetNumerator() == 0x0147 &&
-                                aFract3.GetDenominator() == 0x008E );
+                                aFract3.numerator() == 0x0147 &&
+                                aFract3.denominator() == 0x008E );
 
-        aFract3.ReduceInaccurate(1);
+        rational_ReduceInaccurate(aFract3, 1);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #3 reduce to 1 bit failed",
-                                aFract3.GetNumerator() == 2 &&
-                                aFract3.GetDenominator() == 1 );
+                                aFract3.numerator() == 2 &&
+                                aFract3.denominator() == 1 );
 
-        aFract3.ReduceInaccurate(0);
+        rational_ReduceInaccurate(aFract3, 0);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #3 reduce to 0 bits failed",
-                                aFract3.GetNumerator() == 2 &&
-                                aFract3.GetDenominator() == 1 );
+                                aFract3.numerator() == 2 &&
+                                aFract3.denominator() == 1 );
 
 #if SAL_TYPES_SIZEOFLONG == 8
-        Fraction aFract4(0x7AAAAAAAAAAAAAAA, 0x3555555555555555);
+        boost::rational<long> aFract4(0x7AAAAAAAAAAAAAAA, 0x3555555555555555);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #4 cancellation wrong",
-                                aFract4.GetNumerator() == 0x7AAAAAAAAAAAAAAA &&
-                                aFract4.GetDenominator() == 0x3555555555555555 );
-        aFract4.ReduceInaccurate(62);
+                                aFract4.numerator() == 0x7AAAAAAAAAAAAAAA &&
+                                aFract4.denominator() == 0x3555555555555555 );
+        rational_ReduceInaccurate(aFract4, 62);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #4 ReduceInaccurate errorneously cut precision",
-                                aFract4.GetNumerator() == 0x7AAAAAAAAAAAAAAA &&
-                                aFract4.GetDenominator() == 0x3555555555555555 );
+                                aFract4.numerator() == 0x7AAAAAAAAAAAAAAA &&
+                                aFract4.denominator() == 0x3555555555555555 );
 
-        aFract4.ReduceInaccurate(61);
+        rational_ReduceInaccurate(aFract4, 61);
         CPPUNIT_ASSERT_MESSAGE( "Fraction #4 ReduceInaccurate reduce to 61 bit failed",
-                                aFract4.GetNumerator() == 0x3D55555555555555 &&
-                                aFract4.GetDenominator() == 0x1AAAAAAAAAAAAAAA );
+                                aFract4.numerator() == 0x3D55555555555555 &&
+                                aFract4.denominator() == 0x1AAAAAAAAAAAAAAA );
 #endif
     }
 
-    CPPUNIT_TEST_SUITE(FractionTest);
-    CPPUNIT_TEST(testFraction);
+    CPPUNIT_TEST_SUITE(RationalTest);
+    CPPUNIT_TEST(testReduceInaccurate);
     CPPUNIT_TEST_SUITE_END();
 };
 
 
-CPPUNIT_TEST_SUITE_REGISTRATION(FractionTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(RationalTest);
 } // namespace tools
 
 CPPUNIT_PLUGIN_IMPLEMENT();

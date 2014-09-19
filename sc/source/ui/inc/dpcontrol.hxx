@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 
 class OutputDevice;
 class Point;
@@ -37,7 +37,7 @@ class ScDocument;
 class ScDPFieldButton
 {
 public:
-    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const Fraction* pZoomX = NULL, const Fraction* pZoomY = NULL,
+    ScDPFieldButton(OutputDevice* pOutDev, const StyleSettings* pStyle, const boost::rational<long>* pZoomX = NULL, const boost::rational<long>* pZoomY = NULL,
                     ScDocument* pDoc = NULL);
     ~ScDPFieldButton();
 
@@ -58,9 +58,9 @@ private:
 private:
     Point                   maPos;
     Size                    maSize;
-    OUString         maText;
-    Fraction                maZoomX;
-    Fraction                maZoomY;
+    OUString                maText;
+    boost::rational<long>   maZoomX;
+    boost::rational<long>   maZoomY;
     ScDocument*             mpDoc;
     OutputDevice*           mpOutDev;
     const StyleSettings*    mpStyle;

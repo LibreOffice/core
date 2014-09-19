@@ -550,8 +550,8 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
         if( !aTmpPrefSize.Height() )
             aTmpPrefSize.Height() = aDestSize.Height();
 
-        Fraction aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
-        Fraction aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
+        boost::rational<long> aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
+        boost::rational<long> aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
 
         aScaleX *= aDrawMap.GetScaleX(); aDrawMap.SetScaleX( aScaleX );
         aScaleY *= aDrawMap.GetScaleY(); aDrawMap.SetScaleY( aScaleY );
@@ -784,8 +784,8 @@ void GDIMetaFile::Move( long nX, long nY, long nDPIX, long nDPIY )
             {
                 aOffset = aMapVDev.LogicToPixel( aBaseOffset, GetPrefMapMode() );
                 MapMode aMap( aMapVDev.GetMapMode() );
-                aOffset.Width() = static_cast<long>(aOffset.Width() * (double)aMap.GetScaleX());
-                aOffset.Height() = static_cast<long>(aOffset.Height() * (double)aMap.GetScaleY());
+                aOffset.Width() = static_cast<long>(aOffset.Width() * boost::rational_cast<double>(aMap.GetScaleX()));
+                aOffset.Height() = static_cast<long>(aOffset.Height() * boost::rational_cast<double>(aMap.GetScaleY()));
             }
             else
                 aOffset = OutputDevice::LogicToLogic( aBaseOffset, GetPrefMapMode(), aMapVDev.GetMapMode() );
@@ -816,9 +816,9 @@ void GDIMetaFile::Scale( double fScaleX, double fScaleY )
     aPrefSize.Height() = FRound( aPrefSize.Height() * fScaleY );
 }
 
-void GDIMetaFile::Scale( const Fraction& rScaleX, const Fraction& rScaleY )
+void GDIMetaFile::Scale( const boost::rational<long>& rScaleX, const boost::rational<long>& rScaleY )
 {
-    Scale( (double) rScaleX, (double) rScaleY );
+    Scale( boost::rational_cast<double>(rScaleX), boost::rational_cast<double>(rScaleY) );
 }
 
 void GDIMetaFile::Clip( const Rectangle& i_rClipRect )

@@ -30,7 +30,7 @@
 #include <boost/spirit/include/classic_core.hpp>
 #include "RowFunctionParser.hxx"
 #include <rtl/ustring.hxx>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 
 
 

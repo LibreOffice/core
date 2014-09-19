@@ -27,9 +27,9 @@
 void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
                             SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                             OutputDevice* pDev,
-                            const Fraction& rZoomX, const Fraction& rZoomY,
+                            const boost::rational<long>& rZoomX, const boost::rational<long>& rZoomY,
                             double nPPTX, double nPPTY,
-                            Fraction& rScaleX, Fraction& rScaleY )
+                            boost::rational<long>& rScaleX, boost::rational<long>& rScaleY )
 {
     long nPixelX = 0;
     long nTwipsX = 0;
@@ -63,27 +63,27 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     //  because ReduceInaccurate is called later anyway.
 
     if ( aPixelLog.X() && nTwipsX )
-        rScaleX = Fraction( ((double)aPixelLog.X()) *
-                            ((double)rZoomX.GetNumerator()) /
+        rScaleX = rational_FromDouble( ((double)aPixelLog.X()) *
+                            ((double)rZoomX.numerator()) /
                             ((double)nTwipsX) /
                             ((double)HMM_PER_TWIPS) /
-                            ((double)rZoomX.GetDenominator()) );
+                            ((double)rZoomX.denominator()) );
     else
-        rScaleX = Fraction( 1, 1 );
+        rScaleX = boost::rational<long>( 1, 1 );
 
     if ( aPixelLog.Y() && nTwipsY )
-        rScaleY = Fraction( ((double)aPixelLog.Y()) *
-                            ((double)rZoomY.GetNumerator()) /
+        rScaleY = rational_FromDouble( ((double)aPixelLog.Y()) *
+                            ((double)rZoomY.numerator()) /
                             ((double)nTwipsY) /
                             ((double)HMM_PER_TWIPS) /
-                            ((double)rZoomY.GetDenominator()) );
+                            ((double)rZoomY.denominator()) );
     else
-        rScaleY = Fraction( 1, 1 );
+        rScaleY = boost::rational<long>( 1, 1 );
 
     //  25 bits of accuracy are needed to always hit the right part of
     //  cells in the last rows (was 17 before 1M rows).
-    rScaleX.ReduceInaccurate( 25 );
-    rScaleY.ReduceInaccurate( 25 );
+    rational_ReduceInaccurate(rScaleX, 25);
+    rational_ReduceInaccurate(rScaleY, 25);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

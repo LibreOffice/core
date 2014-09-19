@@ -114,22 +114,22 @@ class SdrLightEmbeddedClient_Impl : public ::cppu::WeakImplHelper5
     uno::Reference< awt::XWindow > m_xWindow;
     SdrOle2Obj* mpObj;
 
-    Fraction m_aScaleWidth;
-    Fraction m_aScaleHeight;
+    boost::rational<long> m_aScaleWidth;
+    boost::rational<long> m_aScaleHeight;
 
 
 public:
     SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj );
     void Release();
 
-    void SetSizeScale( const Fraction& aScaleWidth, const Fraction& aScaleHeight )
+    void SetSizeScale( const boost::rational<long>& aScaleWidth, const boost::rational<long>& aScaleHeight )
     {
         m_aScaleWidth = aScaleWidth;
         m_aScaleHeight = aScaleHeight;
     }
 
-    Fraction GetScaleWidth() const { return m_aScaleWidth; }
-    Fraction GetScaleHeight() const { return m_aScaleHeight; }
+    boost::rational<long> GetScaleWidth() const { return m_aScaleWidth; }
+    boost::rational<long> GetScaleHeight() const { return m_aScaleHeight; }
 
     void setWindow(const uno::Reference< awt::XWindow >& _xWindow);
 
@@ -177,8 +177,8 @@ Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
 {
     Rectangle aLogicRect( mpObj->GetLogicRect() );
     // apply scaling to object area and convert to pixels
-    aLogicRect.SetSize( Size( Fraction( aLogicRect.GetWidth() ) * m_aScaleWidth,
-                                Fraction( aLogicRect.GetHeight() ) * m_aScaleHeight ) );
+    aLogicRect.SetSize( Size( boost::rational_cast<long>(aLogicRect.GetWidth() * m_aScaleWidth),
+                                boost::rational_cast<long>(aLogicRect.GetHeight() * m_aScaleHeight) ) );
     return aLogicRect;
 }
 
@@ -262,8 +262,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
 
             aVisArea.SetSize( Size( aSz.Width, aSz.Height ) );
             aVisArea = OutputDevice::LogicToLogic( aVisArea, aObjMapUnit, aContainerMapUnit );
-            Size aScaledSize( static_cast< long >( m_aScaleWidth * Fraction( aVisArea.GetWidth() ) ),
-                                static_cast< long >( m_aScaleHeight * Fraction( aVisArea.GetHeight() ) ) );
+            Size aScaledSize( boost::rational_cast<long>( m_aScaleWidth * aVisArea.GetWidth() ),
+                                boost::rational_cast<long>( m_aScaleHeight * aVisArea.GetHeight() ) );
             Rectangle aLogicRect( mpObj->GetLogicRect() );
 
             // react to the change if the difference is bigger than one pixel
@@ -548,8 +548,8 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
         //SfxBooleanFlagGuard aGuard( m_bResizeNoScale, true );
 
         // new size of the object area without scaling
-        Size aNewObjSize( Fraction( aNewLogicRect.GetWidth() ) / m_aScaleWidth,
-                          Fraction( aNewLogicRect.GetHeight() ) / m_aScaleHeight );
+        Size aNewObjSize( boost::rational_cast<long>(aNewLogicRect.GetWidth() / m_aScaleWidth),
+                          boost::rational_cast<long>(aNewLogicRect.GetHeight() / m_aScaleHeight) );
 
         // now remove scaling from new placement and keep this a the new object area
         aNewLogicRect.SetSize( aNewObjSize );
@@ -1762,8 +1762,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                     || mpImpl->mxObjRef->getCurrentState() == embed::EmbedStates::INPLACE_ACTIVE
                     )
             {
-                Fraction aScaleWidth;
-                Fraction aScaleHeight;
+                boost::rational<long> aScaleWidth;
+                boost::rational<long> aScaleHeight;
                 if ( pClient )
                 {
                     aScaleWidth = pClient->GetScaleWidth();
@@ -1781,8 +1781,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 // objects' visual area. The scaling will not change, but it might exist already and must
                 // be used in calculations
                 MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( mpImpl->mxObjRef->getMapUnit( GetAspect() ) );
-                Size aVisSize( (long)( Fraction( aRect.GetWidth() ) / aScaleWidth ),
-                                (long)( Fraction( aRect.GetHeight() ) / aScaleHeight ) );
+                Size aVisSize( boost::rational_cast<long>(aRect.GetWidth() / aScaleWidth),
+                                boost::rational_cast<long>(aRect.GetHeight() / aScaleHeight) );
 
                 aVisSize = OutputDevice::LogicToLogic( aVisSize, pModel->GetScaleUnit(), aMapUnit);
                 awt::Size aSz;
@@ -1798,8 +1798,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                 {}
 
                 Rectangle aAcceptedVisArea;
-                aAcceptedVisArea.SetSize( Size( (long)( Fraction( long( aSz.Width ) ) * aScaleWidth ),
-                                                (long)( Fraction( long( aSz.Height ) ) * aScaleHeight ) ) );
+                aAcceptedVisArea.SetSize( Size( boost::rational_cast<long>(long(aSz.Width) * aScaleWidth),
+                                                boost::rational_cast<long>(long(aSz.Height) * aScaleHeight) ) );
                 if (aVisSize != aAcceptedVisArea.GetSize())
                 {
                     // server changed VisArea to its liking and the VisArea is different than the suggested one
@@ -1826,8 +1826,8 @@ void SdrOle2Obj::ImpSetVisAreaSize()
             {
                 // The object isn't active and does not want to resize itself so the changed object area size
                 // will be reflected in a changed object scaling
-                Fraction aScaleWidth;
-                Fraction aScaleHeight;
+                boost::rational<long> aScaleWidth;
+                boost::rational<long> aScaleHeight;
                 Size aObjAreaSize;
                 if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
                 {
@@ -1865,7 +1865,7 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
 
 
-void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
+void SdrOle2Obj::NbcResize(const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact)
 {
     if( pModel && !pModel->isLocked() )
     {
@@ -2211,7 +2211,7 @@ uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
 }
 
 
-bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHeight, Size& aObjAreaSize )
+bool SdrOle2Obj::CalculateNewScaling( boost::rational<long>& aScaleWidth, boost::rational<long>& aScaleHeight, Size& aObjAreaSize )
 {
     // TODO/LEAN: to avoid rounding errors scaling always uses the VisArea.
     // If we don't cache it for own objects also we must load the object here
@@ -2222,8 +2222,8 @@ bool SdrOle2Obj::CalculateNewScaling( Fraction& aScaleWidth, Fraction& aScaleHei
     aObjAreaSize = mpImpl->mxObjRef.GetSize( &aMapMode );
 
     Size aSize = aRect.GetSize();
-    aScaleWidth = Fraction(aSize.Width(),  aObjAreaSize.Width() );
-    aScaleHeight = Fraction(aSize.Height(), aObjAreaSize.Height() );
+    aScaleWidth = boost::rational<long>(aSize.Width(),  aObjAreaSize.Width() );
+    aScaleHeight = boost::rational<long>(aSize.Height(), aObjAreaSize.Height() );
 
     // reduce to 10 binary digits
     Kuerzen(aScaleHeight, 10);
@@ -2243,8 +2243,8 @@ bool SdrOle2Obj::AddOwnLightClient()
 
         if ( mpImpl->mxObjRef.is() && mpImpl->pLightClient )
         {
-            Fraction aScaleWidth;
-            Fraction aScaleHeight;
+            boost::rational<long> aScaleWidth;
+            boost::rational<long> aScaleHeight;
             Size aObjAreaSize;
             if ( CalculateNewScaling( aScaleWidth, aScaleHeight, aObjAreaSize ) )
             {

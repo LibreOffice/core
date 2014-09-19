@@ -99,7 +99,7 @@ DrawModelWrapper::DrawModelWrapper( const uno::Reference<uno::XComponentContext>
     m_pChartItemPool = ChartItemPool::CreateChartItemPool();
 
     SetScaleUnit(MAP_100TH_MM);
-    SetScaleFraction(Fraction(1, 1));
+    SetScaleFraction(boost::rational<long>(1, 1));
     SetDefaultFontHeight(423);     // 12pt
 
     SfxItemPool* pMasterPool = &GetItemPool();

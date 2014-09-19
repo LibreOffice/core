@@ -515,7 +515,7 @@ namespace frm
 
     void RichTextControlImpl::notifyZoomChanged()
     {
-        const Fraction& rZoom = m_pAntiImpl->GetZoom();
+        const boost::rational<long>& rZoom = m_pAntiImpl->GetZoom();
 
         MapMode aMapMode( m_pAntiImpl->GetMapMode() );
         aMapMode.SetScaleX( rZoom );

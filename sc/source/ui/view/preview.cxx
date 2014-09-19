@@ -344,8 +344,8 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         UpdateDrawView();       // Spreedsheet eventually changes
     }
 
-    Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    boost::rational<long> aPreviewZoom( nZoom, 100 );
+    boost::rational<long> aHorPrevZoom( long( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
 
     bool bDoPrint = ( pFillLocation == NULL );
@@ -732,8 +732,8 @@ void ScPreview::SetZoom(sal_uInt16 nNewZoom)
 
         //  apply new MapMode and call UpdateScrollBars to update aOffset
 
-        Fraction aPreviewZoom( nZoom, 100 );
-        Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+        boost::rational<long> aPreviewZoom( nZoom, 100 );
+        boost::rational<long> aHorPrevZoom( long( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
         MapMode aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
         SetMapMode( aMMMode );
 
@@ -961,8 +961,8 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Fraction  aPreviewZoom( nZoom, 100 );
-    Fraction  aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    boost::rational<long>  aPreviewZoom( nZoom, 100 );
+    boost::rational<long>  aHorPrevZoom( long( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode   aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
 
     aButtonDownChangePoint = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
@@ -1044,8 +1044,8 @@ void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 
 void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 {
-        Fraction  aPreviewZoom( nZoom, 100 );
-        Fraction  aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+        boost::rational<long>  aPreviewZoom( nZoom, 100 );
+        boost::rational<long>  aHorPrevZoom( long( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
         MapMode   aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
 
         aButtonUpPt = PixelToLogic( rMEvt.GetPosPixel(),aMMMode );
@@ -1294,8 +1294,8 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
 void ScPreview::MouseMove( const MouseEvent& rMEvt )
 {
-    Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    boost::rational<long> aPreviewZoom( nZoom, 100 );
+    boost::rational<long> aHorPrevZoom( long( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode  aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
     Point    aMouseMovePoint = PixelToLogic( rMEvt.GetPosPixel(), aMMMode );
 
@@ -1540,8 +1540,8 @@ void ScPreview::SwitchView()
 
 void ScPreview::DragMove( long nDragMovePos, sal_uInt16 nFlags )
 {
-    Fraction aPreviewZoom( nZoom, 100 );
-    Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
+    boost::rational<long> aPreviewZoom( nZoom, 100 );
+    boost::rational<long> aHorPrevZoom( long( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
     MapMode  aMMMode( MAP_100TH_MM, Point(), aHorPrevZoom, aPreviewZoom );
     SetMapMode( aMMMode );
     long  nPos = nDragMovePos;

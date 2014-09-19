@@ -231,7 +231,7 @@ void ScDrawStringsVars::SetShrinkScale( long nScale, sal_uInt8 nScript )
 
     // call GetFont with a modified fraction, use only the height
 
-    Fraction aFraction( nScale, 100 );
+    boost::rational<long> aFraction( nScale, 100 );
     if ( !bPixelToLogic )
         aFraction *= pOutput->aZoomY;
     vcl::Font aTmpFont;
@@ -810,12 +810,12 @@ double ScOutputData::GetStretch()
     if ( mpRefDevice == pFmtDevice )
     {
         MapMode aOld = mpRefDevice->GetMapMode();
-        return ((double)aOld.GetScaleY()) / ((double)aOld.GetScaleX()) * ((double)aZoomY) / ((double)aZoomX);
+        return boost::rational_cast<double>(aOld.GetScaleY()) / boost::rational_cast<double>(aOld.GetScaleX()) * boost::rational_cast<double>(this->aZoomY) / boost::rational_cast<double>(this->aZoomX);
     }
     else
     {
         // when formatting for printer, device map mode has already been taken care of
-        return ((double)aZoomY) / ((double)aZoomX);
+        return boost::rational_cast<double>(this->aZoomY) / boost::rational_cast<double>(this->aZoomX);
     }
 }
 
@@ -2787,7 +2787,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            Fraction aFract(1,1);
+            boost::rational<long> aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
@@ -3809,7 +3809,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            Fraction aFract(1,1);
+            boost::rational<long> aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();
@@ -4165,7 +4165,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             // #i85342# screen display and formatting for printer,
             // use same GetEditArea call as in ScViewData::SetEditEngine
 
-            Fraction aFract(1,1);
+            boost::rational<long> aFract(1,1);
             Rectangle aUtilRect = ScEditUtil( mpDoc, rParam.mnCellX, rParam.mnCellY, nTab, Point(0,0), pFmtDevice,
                 HMM_PER_TWIPS, HMM_PER_TWIPS, aFract, aFract ).GetEditArea( rParam.mpPattern, false );
             aLogicSize.Width() = aUtilRect.GetWidth();

@@ -114,15 +114,15 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
 
     double nPPTX = GetViewData().GetPPTX();
     double nPPTY = GetViewData().GetPPTY();
-    Fraction aZoomX = GetViewData().GetZoomX();
-    Fraction aZoomY = GetViewData().GetZoomY();
+    boost::rational<long> aZoomX = GetViewData().GetZoomX();
+    boost::rational<long> aZoomY = GetViewData().GetZoomY();
 
     ScSizeDeviceProvider aProv(pDocSh);
     if (aProv.IsPrinter())
     {
         nPPTX = aProv.GetPPTX();
         nPPTY = aProv.GetPPTY();
-        aZoomX = aZoomY = Fraction( 1, 1 );
+        aZoomX = aZoomY = boost::rational<long>( 1, 1 );
     }
 
     sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
@@ -163,8 +163,8 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint )
     SCTAB nTab = GetViewData().GetTabNo();
     double nPPTX = GetViewData().GetPPTX();
     double nPPTY = GetViewData().GetPPTY();
-    Fraction aZoomX = GetViewData().GetZoomX();
-    Fraction aZoomY = GetViewData().GetZoomY();
+    boost::rational<long> aZoomX = GetViewData().GetZoomX();
+    boost::rational<long> aZoomY = GetViewData().GetZoomY();
     sal_uInt16 nOldPixel = 0;
     if (nStartRow == nEndRow)
         nOldPixel = (sal_uInt16) (rDoc.GetRowHeight(nStartRow,nTab) * nPPTY);
@@ -174,7 +174,7 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, bool bPaint )
     {
         nPPTX = aProv.GetPPTX();
         nPPTY = aProv.GetPPTY();
-        aZoomX = aZoomY = Fraction( 1, 1 );
+        aZoomX = aZoomY = boost::rational<long>( 1, 1 );
     }
     sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
     bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);

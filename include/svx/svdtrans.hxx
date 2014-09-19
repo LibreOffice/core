@@ -22,7 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <svx/svxdllapi.h>
-#include <tools/fract.hxx>
+#include <tools/rational.hxx>
 #include <tools/gen.hxx>
 #include <tools/poly.hxx>
 #include <vcl/field.hxx>
@@ -55,10 +55,10 @@ inline void MovePoly(Polygon& rPoly, const Size& S)      { rPoly.Move(S.Width(),
 inline void MovePoly(tools::PolyPolygon& rPoly, const Size& S)  { rPoly.Move(S.Width(),S.Height()); }
 void MoveXPoly(XPolygon& rPoly, const Size& S);
 
-SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bNoJustify = false);
-inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact);
-void ResizePoly(Polygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
-void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+SVX_DLLPUBLIC void ResizeRect(Rectangle& rRect, const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact, bool bNoJustify = false);
+inline void ResizePoint(Point& rPnt, const Point& rRef, boost::rational<long> xFact, boost::rational<long> yFact);
+void ResizePoly(Polygon& rPoly, const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact);
+void ResizeXPoly(XPolygon& rPoly, const Point& rRef, const boost::rational<long>& xFact, const boost::rational<long>& yFact);
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs);
 SVX_DLLPUBLIC void RotatePoly(Polygon& rPoly, const Point& rRef, double sn, double cs);
@@ -102,12 +102,10 @@ void CrookStretchPoly(XPolyPolygon& rPoly, const Point& rCenter, const Point& rR
 /*  Inline                                                                                        */
 /**************************************************************************************************/
 
-inline void ResizePoint(Point& rPnt, const Point& rRef, Fraction xFact, Fraction yFact)
+inline void ResizePoint(Point& rPnt, const Point& rRef, boost::rational<long> xFact, boost::rational<long> yFact)
 {
-    if (xFact.GetDenominator()==0) xFact=Fraction(xFact.GetNumerator(),1); // DivZero abfangen
-    if (yFact.GetDenominator()==0) yFact=Fraction(yFact.GetNumerator(),1); // DivZero abfangen
-    rPnt.X()=rRef.X()+ Round(((double)(rPnt.X()-rRef.X())*xFact.GetNumerator())/xFact.GetDenominator());
-    rPnt.Y()=rRef.Y()+ Round(((double)(rPnt.Y()-rRef.Y())*yFact.GetNumerator())/yFact.GetDenominator());
+    rPnt.X()=rRef.X()+ Round(((double)(rPnt.X()-rRef.X())*xFact.numerator())/xFact.denominator());
+    rPnt.Y()=rRef.Y()+ Round(((double)(rPnt.Y()-rRef.Y())*yFact.numerator())/yFact.denominator());
 }
 
 inline void RotatePoint(Point& rPnt, const Point& rRef, double sn, double cs)
@@ -221,25 +219,25 @@ SVX_DLLPUBLIC void OrthoDistance4(const Point& rPt0, Point& rPt, bool bBigOrtho)
 // Rechnung und Zwischenergebnis sind BigInt.
 SVX_DLLPUBLIC long BigMulDiv(long nVal, long nMul, long nDiv);
 
-// Fehlerbehaftetes Kuerzen einer Fraction.
+// Fehlerbehaftetes Kuerzen einer boost::rational<long>.
 // nDigits gibt an, wieviele signifikante Stellen in
 // Zaehler/Nenner mindestens erhalten bleiben sollen.
-void Kuerzen(Fraction& rF, unsigned nDigits);
+void Kuerzen(boost::rational<long>& rF, unsigned nDigits);
 
 
 class FrPair {
-    Fraction aX;
-    Fraction aY;
+    boost::rational<long> aX;
+    boost::rational<long> aY;
 public:
     FrPair()                                          : aX(0,1),aY(0,1)             {}
-    FrPair(const Fraction& rBoth)                     : aX(rBoth),aY(rBoth)         {}
-    FrPair(const Fraction& rX, const Fraction& rY)    : aX(rX),aY(rY)               {}
+    FrPair(const boost::rational<long>& rBoth)        : aX(rBoth),aY(rBoth)         {}
+    FrPair(const boost::rational<long>& rX, const boost::rational<long>& rY)    : aX(rX),aY(rY)               {}
     FrPair(long nMul, long nDiv)                      : aX(nMul,nDiv),aY(nMul,nDiv) {}
     FrPair(long xMul, long xDiv, long yMul, long yDiv): aX(xMul,xDiv),aY(yMul,yDiv) {}
-    const Fraction& X() const { return aX; }
-    const Fraction& Y() const { return aY; }
-    Fraction& X()             { return aX; }
-    Fraction& Y()             { return aY; }
+    const boost::rational<long>&  X() const { return aX; }
+    const boost::rational<long>&  Y() const { return aY; }
+    boost::rational<long>&  X()             { return aX; }
+    boost::rational<long>&  Y()             { return aY; }
 };
 
 // Fuer die Umrechnung von Masseinheiten
@@ -265,7 +263,7 @@ inline bool IsInch(FieldUnit eU) {
 }
 
 class SVX_DLLPUBLIC SdrFormatter {
-    Fraction  aScale;
+    boost::rational<long>  aScale;
     long      nMul_;
     long      nDiv_;
     short     nKomma_;

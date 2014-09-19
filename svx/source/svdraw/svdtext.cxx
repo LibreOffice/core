@@ -153,12 +153,12 @@ void SdrText::SetModel( SdrModel* pNewModel )
         mpOutlinerParaObject=0;
         if (bScaleUnitChanged)
         {
-            Fraction aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
+            boost::rational<long> aMetricFactor=GetMapFactor(aOldUnit,aNewUnit).X();
 
             if (bSetHgtItem)
             {
                 // Now correct the frame attribute
-                nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.GetNumerator(),aMetricFactor.GetDenominator());
+                nOldFontHgt=BigMulDiv(nOldFontHgt,aMetricFactor.numerator(),aMetricFactor.denominator());
                 SetObjectItem(SvxFontHeightItem(nOldFontHgt, 100, EE_CHAR_FONTHEIGHT));
             }
         }
