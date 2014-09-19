@@ -494,7 +494,8 @@ GL3DBarChart::GL3DBarChart(
     mnColorRate(0),
     mbBenchMarkMode(false),
     mnHistoryCounter(0),
-    mnBarsInRow(0)
+    mnBarsInRow(0),
+    mbAutoFly(false)
 {
     maFPSRenderStartTime.Seconds = maFPSRenderStartTime.Nanosec = 0;
     maFPSRenderEndTime.Seconds = maFPSRenderEndTime.Nanosec = 0;
@@ -517,6 +518,11 @@ GL3DBarChart::GL3DBarChart(
                 mbScrollFlg = true;
                 mpRenderer->SetScroll();
             }
+        }
+        char *aAutoFly = getenv("AUTO_FLY");
+        if (aAutoFly)
+        {
+            mbAutoFly = atoi(aAutoFly);
         }
         maTimer.SetTimeout(DATA_UPDATE_TIME);
         maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, updateTimer));
@@ -676,7 +682,8 @@ void GL3DBarChart::create3DShapes(const boost::ptr_vector<VDataSeries>& rDataSer
                 }
                 else
                 {
-                    processAutoFly(nId, nColor);
+                    if(mbAutoFly)
+                        processAutoFly(nId, nColor);
                 }
             }
             maShapes.push_back(new opengl3D::Bar(mpRenderer.get(), aBarPosition, nColor, nId));
