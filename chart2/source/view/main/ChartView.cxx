@@ -148,12 +148,15 @@ struct CreateShapeParam2D
     bool mbAutoPosSecondTitleX;
     bool mbAutoPosSecondTitleY;
 
+    bool mbUseFixedInnerSize;
+
     CreateShapeParam2D() :
         mbAutoPosTitleX(true),
         mbAutoPosTitleY(true),
         mbAutoPosTitleZ(true),
         mbAutoPosSecondTitleX(true),
-        mbAutoPosSecondTitleY(true) {}
+        mbAutoPosSecondTitleY(true),
+        mbUseFixedInnerSize(false) {}
 };
 
 class GL2DRenderer : public IRenderer
@@ -2105,25 +2108,19 @@ double lcl_getPageLayoutDistancePercentage()
 }
 
 bool getAvailablePosAndSizeForDiagram(
-    awt::Point& rOutPos, awt::Size& rOutAvailableDiagramSize
-    , const awt::Rectangle& rSpaceLeft
-    , const awt::Size & rPageSize
-    , const uno::Reference< XDiagram > & xDiagram
-    , bool& bUseFixedInnerSize )
+    CreateShapeParam2D& rParam, const awt::Size & rPageSize, const uno::Reference<XDiagram>& xDiagram )
 {
-    bUseFixedInnerSize = false;
+    rParam.mbUseFixedInnerSize = false;
 
     //@todo: we need a size dependent on the axis labels
-    awt::Rectangle aRemainingSpace(rSpaceLeft);
-    {
-        sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
-        sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
-        aRemainingSpace.X+=nXDistance;
-        aRemainingSpace.Width-=2*nXDistance;
-        aRemainingSpace.Y+=nYDistance;
-        aRemainingSpace.Height-=2*nYDistance;
-    }
-    if(aRemainingSpace.Width <= 0 || aRemainingSpace.Height <= 0 )
+    sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
+    sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
+    rParam.maRemainingSpace.X += nXDistance;
+    rParam.maRemainingSpace.Width -= 2*nXDistance;
+    rParam.maRemainingSpace.Y += nYDistance;
+    rParam.maRemainingSpace.Height -= 2*nYDistance;
+
+    if (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0)
         return false;
 
     uno::Reference< beans::XPropertySet > xProp(xDiagram, uno::UNO_QUERY);
@@ -2136,12 +2133,10 @@ bool getAvailablePosAndSizeForDiagram(
     ::com::sun::star::chart2::RelativeSize aRelativeSize;
     if( xProp.is() && (xProp->getPropertyValue( "RelativeSize" )>>=aRelativeSize) )
     {
-        rOutAvailableDiagramSize.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);
-        rOutAvailableDiagramSize.Width = static_cast<sal_Int32>(aRelativeSize.Primary*rPageSize.Width);
-        bUseFixedInnerSize = bPosSizeExcludeAxes;
+        rParam.maRemainingSpace.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);
+        rParam.maRemainingSpace.Width = static_cast<sal_Int32>(aRelativeSize.Primary*rPageSize.Width);
+        rParam.mbUseFixedInnerSize = bPosSizeExcludeAxes;
     }
-    else
-        rOutAvailableDiagramSize = awt::Size(aRemainingSpace.Width,aRemainingSpace.Height);
 
     //position:
     chart2::RelativePosition aRelativePosition;
@@ -2153,21 +2148,23 @@ bool getAvailablePosAndSizeForDiagram(
         double fX = aRelativePosition.Primary*rPageSize.Width;
         double fY = aRelativePosition.Secondary*rPageSize.Height;
 
-        rOutPos = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
-                    awt::Point(static_cast<sal_Int32>(fX),static_cast<sal_Int32>(fY))
-                    , rOutAvailableDiagramSize, aRelativePosition.Anchor );
-        bUseFixedInnerSize = bPosSizeExcludeAxes;
+        awt::Point aPos = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
+            awt::Point(static_cast<sal_Int32>(fX),static_cast<sal_Int32>(fY)),
+            awt::Size(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height),
+            aRelativePosition.Anchor);
+
+        rParam.maRemainingSpace.X = aPos.X;
+        rParam.maRemainingSpace.Y = aPos.Y;
+
+        rParam.mbUseFixedInnerSize = bPosSizeExcludeAxes;
     }
-    else
-        rOutPos = awt::Point(aRemainingSpace.X,aRemainingSpace.Y);
 
     //ensure that the diagram does not lap out right side or out of bottom
-    {
-        if( rOutPos.Y + rOutAvailableDiagramSize.Height > rPageSize.Height )
-            rOutAvailableDiagramSize.Height = rPageSize.Height - rOutPos.Y;
-        if( rOutPos.X + rOutAvailableDiagramSize.Width > rPageSize.Width )
-            rOutAvailableDiagramSize.Width = rPageSize.Width - rOutPos.X;
-    }
+    if (rParam.maRemainingSpace.Y + rParam.maRemainingSpace.Height > rPageSize.Height)
+        rParam.maRemainingSpace.Height = rPageSize.Height - rParam.maRemainingSpace.Y;
+
+    if (rParam.maRemainingSpace.X + rParam.maRemainingSpace.Width > rPageSize.Width)
+        rParam.maRemainingSpace.Width = rPageSize.Width - rParam.maRemainingSpace.X;
 
     return true;
 }
@@ -3086,18 +3083,17 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     if (!createAxisTitleShapes2D(rPageSize, aParam))
         return;
 
-    awt::Point aAvailablePosDia;
-    awt::Size  aAvailableSizeForDiagram;
-    bool bUseFixedInnerSize = false;
     bool bDummy = false;
     bool bIsVertical = DiagramHelper::getVertical(xDiagram, bDummy, bDummy);
 
-    if (getAvailablePosAndSizeForDiagram(
-        aAvailablePosDia, aAvailableSizeForDiagram, aParam.maRemainingSpace, rPageSize, mrChartModel.getFirstDiagram(), bUseFixedInnerSize))
+    if (getAvailablePosAndSizeForDiagram(aParam, rPageSize, mrChartModel.getFirstDiagram()))
     {
+        awt::Point aAvailablePosDia(aParam.maRemainingSpace.X, aParam.maRemainingSpace.Y);
+        awt::Size aAvailableSizeForDiagram(aParam.maRemainingSpace.Width, aParam.maRemainingSpace.Height);
+
         awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent( aSeriesPlotterContainer
                     , xDiagramPlusAxes_Shapes
-                    , aAvailablePosDia ,aAvailableSizeForDiagram, rPageSize, bUseFixedInnerSize, xDiagram_MarkHandles );
+                    , aAvailablePosDia ,aAvailableSizeForDiagram, rPageSize, aParam.mbUseFixedInnerSize, xDiagram_MarkHandles );
 
         if( xDiagram_OuterRect.is() )
         {
