@@ -61,3 +61,14 @@ no /usr/include.
  CPMAC=CpMac
  
  APPTEMPLATE=$(srcdir)/Resources/app
+--- python3/Mac/Resources/framework/Info.plist.in
++++ python3/Mac/Resources/framework/Info.plist.in
+@@ -5,7 +5,7 @@
+ 	<key>CFBundleDevelopmentRegion</key>
+ 	<string>English</string>
+ 	<key>CFBundleExecutable</key>
+-	<string>Python</string>
++	<string>@PYTHONFRAMEWORK@</string>
+ 	<key>CFBundleGetInfoString</key>
+ 	<string>Python Runtime and Library</string>
+ 	<key>CFBundleIdentifier</key>
