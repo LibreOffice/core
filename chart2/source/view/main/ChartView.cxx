@@ -2364,11 +2364,8 @@ void formatPage(
         PropertyMapper::getMultiPropertyListsFromValueMap( aNames, aValues, aNameValueMap );
 
         AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
-        uno::Reference< drawing::XShape > xShape =
-            pShapeFactory->createRectangle( xTarget,
-                    rPageSize,
-                    awt::Point( 0, 0 ),
-                    aNames, aValues );
+        pShapeFactory->createRectangle(
+            xTarget, rPageSize, awt::Point(0, 0), aNames, aValues);
     }
     catch( const uno::Exception & ex )
     {
