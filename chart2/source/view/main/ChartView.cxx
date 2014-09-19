@@ -1429,17 +1429,14 @@ sal_Int16 lcl_getDefaultWritingModeFromPool( const boost::shared_ptr<DrawModelWr
 
 awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
             , const uno::Reference< drawing::XShapes>& xDiagramPlusAxes_Shapes
-            , const awt::Point& rAvailablePos
-            , const awt::Size& rAvailableSize
+            , const CreateShapeParam2D& rParam
             , const awt::Size& rPageSize
-            , bool bUseFixedInnerSize
             , const uno::Reference< drawing::XShape>& xDiagram_MarkHandles /*needs to be resized to fit the result*/
             )
 {
     //return the used rectangle
-    awt::Rectangle aUsedOuterRect( rAvailablePos.X, rAvailablePos.Y, 0, 0 );
+    awt::Rectangle aUsedOuterRect(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y, 0, 0);
 
-//     sal_Int32 nDiagramIndex = 0;//todo if more than one diagam is supported
     uno::Reference< XDiagram > xDiagram( mrChartModel.getFirstDiagram() );
     if( !xDiagram.is())
         return aUsedOuterRect;
@@ -1451,7 +1448,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         nDimensionCount = 2;
     }
 
-    ::basegfx::B2IRectangle aAvailableOuterRect( BaseGFXHelper::makeRectangle(rAvailablePos,rAvailableSize) );
+    basegfx::B2IRectangle aAvailableOuterRect = BaseGFXHelper::makeRectangle(rParam.maRemainingSpace);
 
     const std::vector< VCoordinateSystem* >& rVCooSysList( rSeriesPlotterContainer.getCooSysList() );
     const std::vector< VSeriesPlotter* >& rSeriesPlotterList( rSeriesPlotterContainer.getSeriesPlotterList() );
@@ -1495,10 +1492,13 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     bool bIsPieOrDonut = lcl_IsPieOrDonut(xDiagram);
     {//create diagram
         aVDiagram.init(xDiagramPlusAxes_Shapes, m_xShapeFactory);
-        aVDiagram.createShapes(rAvailablePos,rAvailableSize);
+        aVDiagram.createShapes(
+            awt::Point(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y),
+            awt::Size(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height));
+
         xSeriesTargetInFrontOfAxis = aVDiagram.getCoordinateRegion();
         // It is preferrable to use full size than minimum for pie charts
-        if( !bIsPieOrDonut && !bUseFixedInnerSize )
+        if (!bIsPieOrDonut && !rParam.mbUseFixedInnerSize)
             aVDiagram.reduceToMimimumSize();
     }
 
@@ -1532,7 +1532,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
         aConsumedOuterRect = AbstractShapeFactory::getRectangleOfShape(xBoundingShape);
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
-        if( !bUseFixedInnerSize )
+        if (!rParam.mbUseFixedInnerSize)
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
 
         pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
@@ -1555,7 +1555,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
                 bLessSpaceConsumedThanExpected = true;
         }
 
-        if( bLessSpaceConsumedThanExpected && !bUseFixedInnerSize )
+        if (bLessSpaceConsumedThanExpected && !rParam.mbUseFixedInnerSize)
         {
             aVDiagram.adjustInnerSize( aConsumedOuterRect );
             pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
@@ -1616,7 +1616,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
         aConsumedOuterRect = ::basegfx::B2IRectangle( AbstractShapeFactory::getRectangleOfShape(xBoundingShape) );
         ::basegfx::B2IRectangle aNewInnerRect( aVDiagram.getCurrentRectangle() );
-        if( !bUseFixedInnerSize )
+        if (!rParam.mbUseFixedInnerSize)
             aNewInnerRect = aVDiagram.adjustInnerSize( aConsumedOuterRect );
 
         for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
@@ -1656,12 +1656,12 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
         }
     }
 
-    if( bUseFixedInnerSize )
+    if (rParam.mbUseFixedInnerSize)
     {
         aUsedOuterRect = awt::Rectangle( aConsumedOuterRect.getMinX(), aConsumedOuterRect.getMinY(), aConsumedOuterRect.getWidth(), aConsumedOuterRect.getHeight() );
     }
     else
-        aUsedOuterRect = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
+        aUsedOuterRect = rParam.maRemainingSpace;
 
     bool bSnapRectToUsedArea = false;
     for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; ++aPlotterIter )
@@ -1673,7 +1673,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     }
     if(bSnapRectToUsedArea)
     {
-        if( bUseFixedInnerSize )
+        if (rParam.mbUseFixedInnerSize)
             m_aResultingDiagramRectangleExcludingAxes = getRectangleOfObject( "PlotAreaExcludingAxes" );
         else
         {
@@ -1683,8 +1683,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
     }
     else
     {
-        if( bUseFixedInnerSize )
-            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( rAvailablePos.X, rAvailablePos.Y, rAvailableSize.Width, rAvailableSize.Height );
+        if (rParam.mbUseFixedInnerSize)
+            m_aResultingDiagramRectangleExcludingAxes = rParam.maRemainingSpace;
         else
         {
             ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
@@ -1694,13 +1694,14 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
 
     if( xDiagram_MarkHandles.is() )
     {
-        awt::Point aPos(rAvailablePos);
-        awt::Size  aSize(rAvailableSize);
+        awt::Point aPos(rParam.maRemainingSpace.X, rParam.maRemainingSpace.Y);
+        awt::Size  aSize(rParam.maRemainingSpace.Width, rParam.maRemainingSpace.Height);
+
         bool bPosSizeExcludeAxesProperty = true;
         uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY_THROW );
         if( xDiaProps.is() )
             xDiaProps->getPropertyValue("PosSizeExcludeAxes") >>= bPosSizeExcludeAxesProperty;
-        if( bUseFixedInnerSize || bPosSizeExcludeAxesProperty )
+        if (rParam.mbUseFixedInnerSize || bPosSizeExcludeAxesProperty)
         {
             aPos = awt::Point( m_aResultingDiagramRectangleExcludingAxes.X, m_aResultingDiagramRectangleExcludingAxes.Y );
             aSize = awt::Size( m_aResultingDiagramRectangleExcludingAxes.Width, m_aResultingDiagramRectangleExcludingAxes.Height );
@@ -3080,7 +3081,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     if (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0)
         return;
 
-    if (!createAxisTitleShapes2D(rPageSize, aParam))
+    if (!createAxisTitleShapes2D(aParam, rPageSize))
         return;
 
     bool bDummy = false;
@@ -3091,9 +3092,8 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         awt::Point aAvailablePosDia(aParam.maRemainingSpace.X, aParam.maRemainingSpace.Y);
         awt::Size aAvailableSizeForDiagram(aParam.maRemainingSpace.Width, aParam.maRemainingSpace.Height);
 
-        awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent( aSeriesPlotterContainer
-                    , xDiagramPlusAxes_Shapes
-                    , aAvailablePosDia ,aAvailableSizeForDiagram, rPageSize, aParam.mbUseFixedInnerSize, xDiagram_MarkHandles );
+        awt::Rectangle aUsedOuterRect = impl_createDiagramAndContent(
+            aSeriesPlotterContainer, xDiagramPlusAxes_Shapes, aParam, rPageSize, xDiagram_MarkHandles);
 
         if( xDiagram_OuterRect.is() )
         {
@@ -3159,7 +3159,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     }
 }
 
-bool ChartView::createAxisTitleShapes2D( const css::awt::Size& rPageSize, CreateShapeParam2D& rParam )
+bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize )
 {
     uno::Reference<XDiagram> xDiagram = mrChartModel.getFirstDiagram();
 

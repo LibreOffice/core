@@ -47,6 +47,8 @@ OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B2IRectangle makeRectangle(
             const com::sun::star::awt::Point& rPosition,
             const com::sun::star::awt::Size& rSize );
 
+OOO_DLLPUBLIC_CHARTTOOLS ::basegfx::B2IRectangle makeRectangle( const css::awt::Rectangle& rRect );
+
 OOO_DLLPUBLIC_CHARTTOOLS com::sun::star::awt::Point B2IRectangleToAWTPoint(
             const ::basegfx::B2IRectangle& rB2IRectangle );
 

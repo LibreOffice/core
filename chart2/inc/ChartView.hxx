@@ -205,7 +205,7 @@ private: //methods
 
     void createShapes();
     void createShapes2D( const css::awt::Size& rPageSize );
-    bool createAxisTitleShapes2D( const css::awt::Size& rPageSize, CreateShapeParam2D& rParam );
+    bool createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::awt::Size& rPageSize );
     void createShapes3D();
     bool isReal3DChart();
     void getMetaFile( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutStream
@@ -224,10 +224,8 @@ private: //methods
 
     ::com::sun::star::awt::Rectangle impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlotterContainer
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes>& xDiagramPlusAxes_Shapes
-        , const ::com::sun::star::awt::Point& rAvailablePos
-        , const ::com::sun::star::awt::Size& rAvailableSize
+        , const CreateShapeParam2D& rParam
         , const ::com::sun::star::awt::Size& rPageSize
-        , bool bUseFixedInnerSize
         , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>& xDiagram_MarkHandles );
 
     DECL_LINK( UpdateTimeBased, void* );

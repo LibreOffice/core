@@ -66,6 +66,11 @@ B2IRectangle makeRectangle( const awt::Point& rPos, const awt::Size& rSize )
     return B2IRectangle(rPos.X,rPos.Y,rPos.X+rSize.Width,rPos.Y+rSize.Height);
 }
 
+B2IRectangle makeRectangle( const awt::Rectangle& rRect )
+{
+    return B2IRectangle(rRect.X, rRect.Y, rRect.X+rRect.Width, rRect.Y+rRect.Height);
+}
+
 awt::Point B2IRectangleToAWTPoint( const ::basegfx::B2IRectangle& rB2IRectangle )
 {
     return awt::Point( rB2IRectangle.getMinX(), rB2IRectangle.getMinY() );
