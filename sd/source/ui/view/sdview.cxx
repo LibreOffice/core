@@ -876,8 +876,8 @@ void View::SetMarkedOriginalSize()
                         Rectangle   aDrawRect( pObj->GetLogicRect() );
 
                         pUndoGroup->AddAction( mrDoc.GetSdrUndoFactory().CreateUndoGeoObject( *pObj ) );
-                        pObj->Resize( aDrawRect.TopLeft(), Fraction( aOleSize.Width(), aDrawRect.GetWidth() ),
-                                                           Fraction( aOleSize.Height(), aDrawRect.GetHeight() ) );
+                        pObj->Resize( aDrawRect.TopLeft(), boost::rational<long>( aOleSize.Width(), aDrawRect.GetWidth() ),
+                                                           boost::rational<long>( aOleSize.Height(), aDrawRect.GetHeight() ) );
                     }
                 }
             }
@@ -938,10 +938,10 @@ void View::DoConnect(SdrOle2Obj* pObj)
                     MapMode aMapMode( mrDoc.GetScaleUnit() );
                     Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
 
-                    Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
-                    Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-                    aScaleWidth.ReduceInaccurate(10);       // compatible to SdrOle2Obj
-                    aScaleHeight.ReduceInaccurate(10);
+                    boost::rational<long> aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
+                    boost::rational<long> aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
+                    rational_ReduceInaccurate(aScaleWidth, 10);       // compatible to SdrOle2Obj
+                    rational_ReduceInaccurate(aScaleHeight, 10);
                     pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
                     // visible area is only changed in-place!

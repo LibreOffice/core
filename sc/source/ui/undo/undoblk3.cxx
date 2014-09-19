@@ -847,8 +847,8 @@ void ScUndoAutoFormat::Redo()
     if (bSize)
     {
         VirtualDevice aVirtDev;
-        Fraction aZoomX(1,1);
-        Fraction aZoomY = aZoomX;
+        boost::rational<long> aZoomX(1,1);
+        boost::rational<long> aZoomY = aZoomX;
         double nPPTX,nPPTY;
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         if (pViewShell)

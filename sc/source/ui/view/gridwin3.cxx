@@ -247,8 +247,8 @@ MapMode ScGridWindow::GetDrawMapMode( bool bForce )
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if ( pDrView || bForce )
     {
-        Fraction aScaleX;
-        Fraction aScaleY;
+        boost::rational<long> aScaleX;
+        boost::rational<long> aScaleY;
         if (pDrView)
             pDrView->GetScale( aScaleX, aScaleY );
         else

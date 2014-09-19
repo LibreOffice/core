@@ -2244,8 +2244,8 @@ void SdrEdgeObj::NbcSetSnapRect(const Rectangle& rRect)
             long nDivY = aOld.Bottom()  - aOld.Top();
             if ( nDivX == 0 ) { nMulX = 1; nDivX = 1; }
             if ( nDivY == 0 ) { nMulY = 1; nDivY = 1; }
-            Fraction aX(nMulX, nDivX);
-            Fraction aY(nMulY, nDivY);
+            boost::rational<long> aX(nMulX, nDivX);
+            boost::rational<long> aY(nMulY, nDivY);
             NbcResize(aOld.TopLeft(), aX, aY);
             NbcMove(Size(rRect.Left() - aOld.Left(), rRect.Top() - aOld.Top()));
         }
@@ -2258,7 +2258,7 @@ void SdrEdgeObj::NbcMove(const Size& rSiz)
     MoveXPoly(*pEdgeTrack,rSiz);
 }
 
-void SdrEdgeObj::NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact)
+void SdrEdgeObj::NbcResize(const Point& rRefPnt, const boost::rational<long>& aXFact, const boost::rational<long>& aYFact)
 {
     SdrTextObj::NbcResize(rRefPnt,aXFact,aXFact);
     ResizeXPoly(*pEdgeTrack,rRefPnt,aXFact,aYFact);

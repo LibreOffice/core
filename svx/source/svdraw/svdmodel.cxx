@@ -113,7 +113,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     aObjUnit=SdrEngineDefaults::GetMapFraction();
     eObjUnit=SdrEngineDefaults::GetMapUnit();
     eUIUnit=FUNIT_MM;
-    aUIScale=Fraction(1,1);
+    aUIScale=boost::rational<long>(1,1);
     nUIUnitKomma=0;
     bUIOnlyKomma=false;
     pLayerAdmin=NULL;
@@ -927,9 +927,9 @@ void SdrModel::SetDefaultTabulator(sal_uInt16 nVal)
 
 void SdrModel::ImpSetUIUnit()
 {
-    if(0 == aUIScale.GetNumerator() || 0 == aUIScale.GetDenominator())
+    if(0 == aUIScale.numerator())
     {
-        aUIScale = Fraction(1,1);
+        aUIScale = boost::rational<long>(1,1);
     }
 
     // set start values
@@ -1015,17 +1015,17 @@ void SdrModel::ImpSetUIUnit()
     // may need to be changed in the future, too
     if(1 != nMul || 1 != nDiv)
     {
-        const Fraction aTemp(static_cast< long >(nMul), static_cast< long >(nDiv));
-        nMul = aTemp.GetNumerator();
-        nDiv = aTemp.GetDenominator();
+        const boost::rational<long> aTemp(static_cast< long >(nMul), static_cast< long >(nDiv));
+        nMul = aTemp.numerator();
+        nDiv = aTemp.denominator();
     }
 
     // #i89872# take Unit of Measurement into account
-    if(1 != aUIScale.GetDenominator() || 1 != aUIScale.GetNumerator())
+    if(1 != aUIScale.denominator() || 1 != aUIScale.numerator())
     {
         // divide by UIScale
-        nMul *= aUIScale.GetDenominator();
-        nDiv *= aUIScale.GetNumerator();
+        nMul *= aUIScale.denominator();
+        nDiv *= aUIScale.numerator();
     }
 
     // shorten trailing zeros for dividend
@@ -1043,12 +1043,12 @@ void SdrModel::ImpSetUIUnit()
     }
 
     // end preparations, set member values
-    aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
+    aUIUnitFact = boost::rational<long>(sal_Int32(nMul), sal_Int32(nDiv));
     bUIOnlyKomma = (nMul == nDiv);
     TakeUnitStr(eUIUnit, aUIUnitStr);
 }
 
-void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
+void SdrModel::SetScaleUnit(MapUnit eMap, const boost::rational<long>& rFrac)
 {
     if (eObjUnit!=eMap || aObjUnit!=rFrac) {
         eObjUnit=eMap;
@@ -1073,7 +1073,7 @@ void SdrModel::SetScaleUnit(MapUnit eMap)
     }
 }
 
-void SdrModel::SetScaleFraction(const Fraction& rFrac)
+void SdrModel::SetScaleFraction(const boost::rational<long>& rFrac)
 {
     if (aObjUnit!=rFrac) {
         aObjUnit=rFrac;
@@ -1093,7 +1093,7 @@ void SdrModel::SetUIUnit(FieldUnit eUnit)
     }
 }
 
-void SdrModel::SetUIScale(const Fraction& rScale)
+void SdrModel::SetUIScale(const boost::rational<long>& rScale)
 {
     if (aUIScale!=rScale) {
         aUIScale=rScale;
@@ -1102,7 +1102,7 @@ void SdrModel::SetUIScale(const Fraction& rScale)
     }
 }
 
-void SdrModel::SetUIUnit(FieldUnit eUnit, const Fraction& rScale)
+void SdrModel::SetUIUnit(FieldUnit eUnit, const boost::rational<long>& rScale)
 {
     if (eUIUnit!=eUnit || aUIScale!=rScale) {
         eUIUnit=eUnit;
@@ -1193,7 +1193,7 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     const bool bNegative(nVal < 0L);
     SvtSysLocale aSysLoc;
     const LocaleDataWrapper& rLoc(aSysLoc.GetLocaleData());
-    double fLocalValue(double(nVal) * double(aUIUnitFact));
+    double fLocalValue(double(nVal) * boost::rational_cast<double>(aUIUnitFact));
 
     if(bNegative)
     {
@@ -1333,10 +1333,10 @@ void SdrModel::TakeWinkStr(long nWink, OUString& rStr, bool bNoDegChar) const
     rStr = aBuf.makeStringAndClear();
 }
 
-void SdrModel::TakePercentStr(const Fraction& rVal, OUString& rStr, bool bNoPercentChar) const
+void SdrModel::TakePercentStr(const boost::rational<long>& rVal, OUString& rStr, bool bNoPercentChar) const
 {
-    sal_Int32 nMul(rVal.GetNumerator());
-    sal_Int32 nDiv(rVal.GetDenominator());
+    sal_Int32 nMul(rVal.numerator());
+    sal_Int32 nDiv(rVal.denominator());
     bool bNeg(nMul < 0);
 
     if(nDiv < 0)
