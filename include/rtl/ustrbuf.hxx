@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/stringutils.hxx>
 #include <sal/types.h>
+#include <boost/static_assert.hpp>
 
 #ifdef RTL_FAST_STRING
 #include <rtl/stringconcat.hxx>
@@ -442,6 +443,38 @@ public:
         }
         return *this;
     }
+
+    /**
+        Appends the string representation of the <code>char</code> array
+        argument to this string buffer.
+
+        Characters of the character array <code>str</code> are appended,
+        in order, to the contents of this string buffer. The length of this
+        string buffer increases by the value of <code>len</code>.
+
+        @param str the characters to be appended; must be non-null, and must
+        point to at least len characters
+        @param len the number of characters to append; must be non-negative
+        @return  this string buffer.
+
+        @since LibreOffice 4.4
+     */
+#if defined(SAL_UNICODE_NOTEQUAL_WCHAR_T)
+    OUStringBuffer & append(const wchar_t * str, sal_Int32 len)
+    {
+#if defined(SAL_W32)
+        BOOST_STATIC_ASSERT(sizeof (wchar_t) == 2);
+        rtl_uStringbuffer_insert( &pData, &nCapacity, getLength(), str, len );
+#else
+        BOOST_STATIC_ASSERT(sizeof (wchar_t) == 4);
+        for (sal_Int32 i = 0; i < len; ++i)
+        {
+            appendUtf32(str[i]);
+        }
+#endif
+        return *this;
+    }
+#endif
 
     /**
         Appends the string representation of the <code>char</code> array

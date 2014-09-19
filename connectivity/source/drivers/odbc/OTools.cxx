@@ -399,26 +399,6 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
     return aData;
 }
 
-namespace
-{
-// Approximation of "#if sizeof (SQLWCHAR) == 4 && sizeof (wchar_t) == 4":
-#if defined SQL_WCHART_CONVERT && defined SAL_UNICODE_NOTEQUAL_WCHAR_T
-    BOOST_STATIC_ASSERT(sizeof (wchar_t) == 4);
-    void append(OUStringBuffer & s, wchar_t* d, sal_Int32 n)
-    {
-        for (sal_Int32 i = 0; i < n; ++i)
-        {
-            s.appendUtf32(d[i]);
-        }
-    }
-#else
-    void append(OUStringBuffer & s, sal_Unicode* d, sal_Int32 n)
-    {
-        s.append(d, n);
-    }
-#endif
-}
-
 OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLHANDLE _aStatementHandle,
                                        sal_Int32 columnIndex,
@@ -477,7 +457,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                 nReadChars = pcbValue/sizeof(SQLWCHAR);
             }
 
-            append(aData, waCharArray, nReadChars);
+            aData.append(waCharArray, nReadChars);
         }
         break;
     }
