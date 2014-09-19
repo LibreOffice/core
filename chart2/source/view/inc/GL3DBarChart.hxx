@@ -49,7 +49,8 @@ enum RenderEventType
     EVENT_SHOW_SCROLL,
     EVENT_SHOW_SELECT,
     EVENT_AUTO_FLY,
-    EVENT_DIE
+    EVENT_DIE,
+    EVENT_SELECTBAR_UPDEDATE
 };
 
 class RenderThread;
@@ -193,7 +194,7 @@ private:
     sal_uInt32 mnHistoryCounter;
     sal_uInt32 mnBarsInRow;
     bool mbAutoFly;
-
+    sal_Int32 mnUpdateBarId;
 
     // these form a pair:
     // main thread sets condition 1 and waits until it can take the mutex
