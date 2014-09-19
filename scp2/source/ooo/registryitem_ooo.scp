@@ -197,7 +197,7 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Sta
     ModuleID = gid_Module_Root;
     Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
     Name = "HelpLink";
-    Value = "http://www.libreoffice.org";
+    Value = "http://libreoffice-from-collabora.com";
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Modifypath
@@ -213,7 +213,7 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Sta
     ModuleID = gid_Module_Root;
     Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
     Name = "Publisher";
-    Value = "The Document Foundation for the LibreOffice Community";
+    Value = "Collabora Productivity Ltd.";
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Uninstallstring
@@ -229,7 +229,7 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Sta
     ModuleID = gid_Module_Root;
     Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
     Name = "URLInfoAbout";
-    Value = "http://www.libreoffice.org/";
+    Value = "http://libreoffice-from-collabora.com";
 End
 
 RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Staroffice_Urlupdateinfo
@@ -237,7 +237,7 @@ RegistryItem gid_Regitem_Software_Microsoft_Windows_Currentversion_Uninstall_Sta
     ModuleID = gid_Module_Root;
     Subkey = "Software\Microsoft\Windows\CurrentVersion\Uninstall\%PRODUCTNAME %PRODUCTVERSION";
     Name = "URLUpdateInfo";
-    Value = "http://download.libreoffice.org";
+    Value = "http://libreoffice-from-collabora.com";
 End
 
 RegistryItem gid_Regitem_Software_Openoffice_Productname_Productversion_Path
