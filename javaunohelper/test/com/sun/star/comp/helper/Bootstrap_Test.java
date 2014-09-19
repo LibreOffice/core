@@ -28,7 +28,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 
 public class Bootstrap_Test {
 
-    static public boolean test( String ini_file, java.util.Map<String,String> bootstrap_parameters )
+    static public boolean test( String ini_file, java.util.HashMap<String,String> bootstrap_parameters )
         throws java.lang.Exception
     {
         boolean passed = false;
