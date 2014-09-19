@@ -38,20 +38,6 @@ module com {  module sun {  module star {  module xml {  module sax {
 interface XFastTokenHandler: com::sun::star::uno::XInterface
 {
 
-    /** returns a integer token for the given string identifier.
-
-        @returns
-            a unique integer token for the given String or FastToken::DONTKNOW
-            if the identifier is not known to this instance.
-    */
-    long getToken( [in] string Identifier );
-
-
-    /** returns a string identifier for the given integer token.
-    */
-    string getIdentifier( [in] long Token );
-
-
     /** returns a integer token for the given string
 
         @param Identifier

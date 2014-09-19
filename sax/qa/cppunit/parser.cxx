@@ -29,18 +29,6 @@ public:
              DummyTokenHandler() {}
     virtual ~DummyTokenHandler() {}
 
-    virtual sal_Int32 SAL_CALL getToken( const OUString& )
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
-    {
-        CPPUNIT_ASSERT_MESSAGE( "getToken: unexpected call", false );
-        return FastToken::DONTKNOW;
-    }
-    virtual OUString SAL_CALL getIdentifier( sal_Int32 )
-        throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
-    {
-        CPPUNIT_ASSERT_MESSAGE( "getIdentifier: unexpected call", false );
-        return OUString();
-    }
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence<sal_Int8>& )
         throw (uno::RuntimeException, std::exception) SAL_OVERRIDE
     {

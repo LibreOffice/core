@@ -73,17 +73,6 @@ Sequence< OUString > SAL_CALL FastTokenHandler::getSupportedServiceNames() throw
     return FastTokenHandler_getSupportedServiceNames();
 }
 
-// XFastTokenHandler
-sal_Int32 FastTokenHandler::getToken( const OUString& rIdentifier ) throw( RuntimeException, std::exception )
-{
-    return mrTokenMap.getTokenFromUnicode( rIdentifier );
-}
-
-OUString FastTokenHandler::getIdentifier( sal_Int32 nToken ) throw( RuntimeException, std::exception )
-{
-    return mrTokenMap.getUnicodeTokenName( nToken );
-}
-
 Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken ) throw( RuntimeException, std::exception )
 {
     return mrTokenMap.getUtf8TokenName( nToken );

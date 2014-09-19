@@ -47,19 +47,9 @@ vector<sal_uInt8> convertToVector(Sequence<sal_Int8>& input)
 class AgileTokenHandler : public cppu::WeakImplHelper1< XFastTokenHandler >
 {
 public:
-    virtual sal_Int32 SAL_CALL getToken( const OUString& /*nIdentifier*/ ) throw (RuntimeException, std::exception) SAL_OVERRIDE
-    {
-        return FastToken::DONTKNOW;
-    }
-
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const Sequence< sal_Int8 >& /*nIdentifier*/ ) throw (RuntimeException, std::exception) SAL_OVERRIDE
     {
         return FastToken::DONTKNOW;
-    }
-
-    virtual OUString SAL_CALL getIdentifier( sal_Int32 /*nToken*/ ) throw (RuntimeException, std::exception) SAL_OVERRIDE
-    {
-        return OUString();
     }
 
     virtual Sequence<sal_Int8> SAL_CALL getUTF8Identifier(sal_Int32 /*nToken*/) throw (RuntimeException, std::exception) SAL_OVERRIDE
