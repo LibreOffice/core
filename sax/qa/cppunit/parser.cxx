@@ -10,12 +10,12 @@
 #include <sal/config.h>
 
 #include <com/sun/star/io/Pipe.hpp>
-#include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
 
 #include <cppuhelper/implbase1.hxx>
+#include <sax/fastparser.hxx>
 #include <test/bootstrapfixture.hxx>
 
 using namespace css;
@@ -57,7 +57,7 @@ public:
 class ParserTest: public test::BootstrapFixture
 {
     InputSource maInput;
-    uno::Reference< XFastParser > mxParser;
+    sax_fastparser::FastSaxParser maParser;
     uno::Reference< XFastDocumentHandler > mxDocumentHandler;
     uno::Reference< DummyTokenHandler > mxTokenHandler;
 
@@ -78,9 +78,8 @@ private:
 void ParserTest::setUp()
 {
     test::BootstrapFixture::setUp();
-    mxParser = css::xml::sax::FastParser::create(m_xContext);
     mxTokenHandler.set( new DummyTokenHandler() );
-    mxParser->setTokenHandler( mxTokenHandler );
+    maParser.setTokenHandler( mxTokenHandler );
 }
 
 void ParserTest::tearDown()
@@ -102,13 +101,13 @@ uno::Reference< io::XInputStream > ParserTest::createStream(const OString& sInpu
 void ParserTest::parse()
 {
     maInput.aInputStream = createStream("<a>...<b />..</a>");
-    mxParser->parseStream( maInput );
+    maParser.parseStream( maInput );
 
     maInput.aInputStream = createStream("<b></a>");
     bool bException = false;
     try
     {
-        mxParser->parseStream( maInput );
+        maParser.parseStream( maInput );
     }
     catch (const SAXParseException &)
     {
