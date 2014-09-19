@@ -82,7 +82,9 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
-	gengal \
+	$(if $(ENABLE_MACOSX_SANDBOX),, \
+		gengal \
+	)\
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \
@@ -128,8 +130,10 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 
 $(eval $(call gb_Helper_register_executables_for_install,UREBIN,ure,\
 	$(if $(and $(ENABLE_JAVA),$(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),javaldx) \
-	regmerge \
-	regview \
+	$(if $(ENABLE_MACOSX_SANDBOX),, \
+		regmerge \
+		regview \
+	) \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),uno) \
 ))
 
