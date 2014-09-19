@@ -165,7 +165,7 @@ public class Factory
     }
 
 
-    private final Object instantiate( XComponentContext xContext )
+    private Object instantiate( XComponentContext xContext )
         throws com.sun.star.uno.Exception
     {
         try
