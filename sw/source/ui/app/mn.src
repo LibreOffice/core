@@ -295,11 +295,10 @@
             Text[ en-US ] = "Down One Level";                              \
         };
 
-#define MN_NEW_PASTE_SPECIAL \
+#define MENU_PASTE_SPECIAL \
     MenuItem\
     {\
-        Identifier = SID_PASTE_SPECIAL ; \
-        HelpId =  CMD_SID_PASTE_SPECIAL ; \
+        Identifier = SID_MENU_PASTE_SPECIAL ; \
         Text [ en-US ] = "Paste ~Special" ; \
         SubMenu = Menu\
         {\
@@ -308,7 +307,7 @@
                 MenuItem\
                 {\
                     Identifier = SID_PASTE_UNFORMATTED ; \
-                    HelpId =  CMD_SID_PASTE_SPECIAL ; \
+                    HelpId =  CMD_SID_PASTE_UNFORMATTED ; \
                     Text [ en-US ] = "~Text Only" ; \
                 };\
                 MenuItem\
@@ -325,7 +324,7 @@
 {                                                                           \
     ItemList =                                                              \
     {                                                                       \
-        MN_NEW_PASTE_SPECIAL                                                \
+        MENU_PASTE_SPECIAL                                                  \
         MN_RESET                                                            \
         _NUMBERING_RELATED_MENU                                             \
         SEPARATOR ;                                                         \

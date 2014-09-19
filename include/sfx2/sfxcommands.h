@@ -39,6 +39,7 @@
 #define CMD_SID_GALLERY_BG_BRUSH                    ".uno:BackgroundImage"
 #define CMD_SID_PASTE                               ".uno:Paste"
 #define CMD_SID_PASTE_SPECIAL                       ".uno:PasteSpecial"
+#define CMD_SID_PASTE_UNFORMATTED                   ".uno:PasteUnformatted"
 #define CMD_SID_PASTE_ONLY                          ".uno:PasteOnly"
 #define CMD_SID_PASTE_ONLY_VALUE                    ".uno:PasteOnlyValue"
 #define CMD_SID_PASTE_ONLY_TEXT                     ".uno:PasteOnlyText"
