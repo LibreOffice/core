@@ -93,15 +93,10 @@ namespace sdr
 {
     namespace properties
     {
-        void ScaleItemSet(SfxItemSet& rSet, const Fraction& rScale)
+        void ScaleItemSet(SfxItemSet& rSet, const boost::rational<long>& rScale)
         {
-            sal_Int32 nMul(rScale.GetNumerator());
-            sal_Int32 nDiv(rScale.GetDenominator());
-
-            if(!rScale.IsValid() || !nDiv)
-            {
-                return;
-            }
+            sal_Int32 nMul(rScale.numerator());
+            sal_Int32 nDiv(rScale.denominator());
 
             SfxWhichIter aIter(rSet);
             sal_uInt16 nWhich(aIter.FirstWhich());

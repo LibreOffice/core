@@ -128,12 +128,12 @@ void CopyDlg::Reset()
         long nMoveX = 500L;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
             nMoveX = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
-        SetMetricValue( *m_pMtrFldMoveX, Fraction(nMoveX) / maUIScale, SFX_MAPUNIT_100TH_MM);
+        SetMetricValue( *m_pMtrFldMoveX, boost::rational_cast<long>(nMoveX / maUIScale), SFX_MAPUNIT_100TH_MM);
 
         long nMoveY = 500L;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
             nMoveY = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
-        SetMetricValue( *m_pMtrFldMoveY, Fraction(nMoveY) / maUIScale, SFX_MAPUNIT_100TH_MM);
+        SetMetricValue( *m_pMtrFldMoveY, boost::rational_cast<long>(nMoveY / maUIScale), SFX_MAPUNIT_100TH_MM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
             m_pMtrFldAngle->SetValue( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
@@ -143,12 +143,12 @@ void CopyDlg::Reset()
         long nWidth = 0L;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
             nWidth = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
-        SetMetricValue( *m_pMtrFldWidth, Fraction(nWidth) / maUIScale, SFX_MAPUNIT_100TH_MM);
+        SetMetricValue( *m_pMtrFldWidth, boost::rational_cast<long>(nWidth / maUIScale), SFX_MAPUNIT_100TH_MM);
 
         long nHeight = 0L;
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
             nHeight = ( ( ( const SfxInt32Item* ) pPoolItem )->GetValue() );
-        SetMetricValue( *m_pMtrFldHeight, Fraction(nHeight) / maUIScale, SFX_MAPUNIT_100TH_MM);
+        SetMetricValue( *m_pMtrFldHeight, boost::rational_cast<long>(nHeight / maUIScale), SFX_MAPUNIT_100TH_MM);
 
         if( SfxItemState::SET == mrOutAttrs.GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
@@ -199,10 +199,10 @@ void CopyDlg::Reset()
  */
 void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 {
-    long nMoveX = Fraction( GetCoreValue( *m_pMtrFldMoveX, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
-    long nMoveY = Fraction( GetCoreValue( *m_pMtrFldMoveY, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
-    long nHeight = Fraction( GetCoreValue( *m_pMtrFldHeight, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
-    long nWidth  = Fraction( GetCoreValue( *m_pMtrFldWidth, SFX_MAPUNIT_100TH_MM) ) * maUIScale;
+    long nMoveX = boost::rational_cast<long>(GetCoreValue(*m_pMtrFldMoveX, SFX_MAPUNIT_100TH_MM) * maUIScale);
+    long nMoveY = boost::rational_cast<long>(GetCoreValue(*m_pMtrFldMoveY, SFX_MAPUNIT_100TH_MM) * maUIScale);
+    long nHeight = boost::rational_cast<long>(GetCoreValue(*m_pMtrFldHeight, SFX_MAPUNIT_100TH_MM) * maUIScale);
+    long nWidth  = boost::rational_cast<long>(GetCoreValue(*m_pMtrFldWidth, SFX_MAPUNIT_100TH_MM) * maUIScale);
 
     rOutAttrs.Put( SfxUInt16Item( ATTR_COPY_NUMBER, (sal_uInt16) m_pNumFldCopies->GetValue() ) );
     rOutAttrs.Put( SfxInt32Item( ATTR_COPY_MOVE_X, nMoveX ) );
@@ -249,10 +249,8 @@ IMPL_LINK_NOARG(CopyDlg, SetViewData)
 {
     Rectangle aRect = mpView->GetAllMarkedRect();
 
-    SetMetricValue( *m_pMtrFldMoveX, Fraction( aRect.GetWidth() ) /
-                                    maUIScale, SFX_MAPUNIT_100TH_MM);
-    SetMetricValue( *m_pMtrFldMoveY, Fraction( aRect.GetHeight() ) /
-                                    maUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( *m_pMtrFldMoveX, boost::rational_cast<long>(aRect.GetWidth() / maUIScale), SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( *m_pMtrFldMoveY, boost::rational_cast<long>(aRect.GetHeight() / maUIScale), SFX_MAPUNIT_100TH_MM);
 
     // sets color attribute
     const SfxPoolItem*  pPoolItem = NULL;
@@ -273,13 +271,13 @@ IMPL_LINK_NOARG(CopyDlg, SetDefault)
     m_pNumFldCopies->SetValue( 1L );
 
     long nValue = 500L;
-    SetMetricValue( *m_pMtrFldMoveX, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
-    SetMetricValue( *m_pMtrFldMoveY, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( *m_pMtrFldMoveX, boost::rational_cast<long>(nValue / maUIScale), SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( *m_pMtrFldMoveY, boost::rational_cast<long>(nValue / maUIScale), SFX_MAPUNIT_100TH_MM);
 
     nValue = 0L;
     m_pMtrFldAngle->SetValue( nValue );
-    SetMetricValue( *m_pMtrFldWidth, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
-    SetMetricValue( *m_pMtrFldHeight, Fraction(nValue) / maUIScale, SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( *m_pMtrFldWidth, boost::rational_cast<long>(nValue / maUIScale), SFX_MAPUNIT_100TH_MM);
+    SetMetricValue( *m_pMtrFldHeight, boost::rational_cast<long>(nValue / maUIScale), SFX_MAPUNIT_100TH_MM);
 
     // set color attribute
     const SfxPoolItem*  pPoolItem = NULL;

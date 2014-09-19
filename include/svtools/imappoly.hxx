@@ -24,7 +24,7 @@
 #include <svtools/imapobj.hxx>
 #include <tools/poly.hxx>
 
-class Fraction;
+namespace boost { template<typename T> class rational; }
 
 class SVT_DLLPUBLIC IMapPolygonObject : public IMapObject
 {
@@ -66,7 +66,7 @@ public:
     const Rectangle&    GetExtraEllipse() const { return aEllipse; }
     void                SetExtraEllipse( const Rectangle& rEllipse );
 
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( const boost::rational<long>& rFractX, const boost::rational<long>& rFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapPolygonObject& rEqObj );

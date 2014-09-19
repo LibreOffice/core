@@ -508,7 +508,7 @@ void SwSidebarWin::Rescale()
     {
         vcl::Font aFont( mpMetadataAuthor->GetSettings().GetStyleSettings().GetFieldFont() );
         sal_Int32 nHeight = aFont.GetHeight();
-        nHeight = nHeight * aMode.GetScaleY().GetNumerator() / aMode.GetScaleY().GetDenominator();
+        nHeight = nHeight * aMode.GetScaleY().numerator() / aMode.GetScaleY().denominator();
         aFont.SetHeight( nHeight );
         mpMetadataAuthor->SetControlFont( aFont );
     }
@@ -516,7 +516,7 @@ void SwSidebarWin::Rescale()
     {
         vcl::Font aFont( mpMetadataDate->GetSettings().GetStyleSettings().GetFieldFont() );
         sal_Int32 nHeight = aFont.GetHeight();
-        nHeight = nHeight * aMode.GetScaleY().GetNumerator() / aMode.GetScaleY().GetDenominator();
+        nHeight = nHeight * aMode.GetScaleY().numerator() / aMode.GetScaleY().denominator();
         aFont.SetHeight( nHeight );
         mpMetadataDate->SetControlFont( aFont );
     }
@@ -780,26 +780,26 @@ void SwSidebarWin::DoResize()
     mpVScrollbar->SetRange( Range(0, mpOutliner->GetTextHeight()));
 
     //calculate rects for meta- button
-    const Fraction& fx( GetMapMode().GetScaleX() );
-    const Fraction& fy( GetMapMode().GetScaleY() );
+    const boost::rational<long>& fx( GetMapMode().GetScaleX() );
+    const boost::rational<long>& fy( GetMapMode().GetScaleY() );
 
     const Point aPos( mpMetadataAuthor->GetPosPixel());
     Rectangle aRectMetaButton;
     if (IsPreview())
     {
         aRectMetaButton = PixelToLogic(
-            Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH*4+10)*fx.GetNumerator()/fx.GetDenominator(),
-                              aPos.Y()+5*fy.GetNumerator()/fy.GetDenominator() ),
-                       Size( METABUTTON_WIDTH*4*fx.GetNumerator()/fx.GetDenominator(),
-                             METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() ) ) );
+            Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH*4+10)*fx.numerator()/fx.denominator(),
+                              aPos.Y()+5*fy.numerator()/fy.denominator() ),
+                       Size( METABUTTON_WIDTH*4*fx.numerator()/fx.denominator(),
+                             METABUTTON_HEIGHT*fy.numerator()/fy.denominator() ) ) );
     }
     else
     {
         aRectMetaButton = PixelToLogic(
-            Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx.GetNumerator()/fx.GetDenominator(),
-                              aPos.Y()+5*fy.GetNumerator()/fy.GetDenominator() ),
-                       Size( METABUTTON_WIDTH*fx.GetNumerator()/fx.GetDenominator(),
-                             METABUTTON_HEIGHT*fy.GetNumerator()/fy.GetDenominator() ) ) );
+            Rectangle( Point( aPos.X()+GetSizePixel().Width()-(METABUTTON_WIDTH+10)*fx.numerator()/fx.denominator(),
+                              aPos.Y()+5*fy.numerator()/fy.denominator() ),
+                       Size( METABUTTON_WIDTH*fx.numerator()/fx.denominator(),
+                             METABUTTON_HEIGHT*fy.numerator()/fy.denominator() ) ) );
     }
 
     {
@@ -1208,17 +1208,17 @@ sal_Int32 SwSidebarWin::GetScrollbarWidth()
 
 sal_Int32 SwSidebarWin::GetMetaButtonAreaWidth()
 {
-    const Fraction& f( GetMapMode().GetScaleX() );
+    const boost::rational<long>& f( GetMapMode().GetScaleX() );
     if (IsPreview())
-        return 3 * METABUTTON_AREA_WIDTH * f.GetNumerator() / f.GetDenominator();
+        return 3 * METABUTTON_AREA_WIDTH * f.numerator() / f.denominator();
     else
-        return METABUTTON_AREA_WIDTH * f.GetNumerator() / f.GetDenominator();
+        return METABUTTON_AREA_WIDTH * f.numerator() / f.denominator();
 }
 
 sal_Int32 SwSidebarWin::GetMetaHeight()
 {
-    const Fraction& f( GetMapMode().GetScaleY() );
-    return POSTIT_META_HEIGHT * f.GetNumerator() / f.GetDenominator();
+    const boost::rational<long>& f( GetMapMode().GetScaleY() );
+    return POSTIT_META_HEIGHT * f.numerator() / f.denominator();
 }
 
 sal_Int32 SwSidebarWin::GetMinimumSizeWithMeta()
@@ -1228,8 +1228,8 @@ sal_Int32 SwSidebarWin::GetMinimumSizeWithMeta()
 
 sal_Int32 SwSidebarWin::GetMinimumSizeWithoutMeta()
 {
-    const Fraction& f( GetMapMode().GetScaleY() );
-    return POSTIT_MINIMUMSIZE_WITHOUT_META * f.GetNumerator() / f.GetDenominator();
+    const boost::rational<long>& f( GetMapMode().GetScaleY() );
+    return POSTIT_MINIMUMSIZE_WITHOUT_META * f.numerator() / f.denominator();
 }
 
 void SwSidebarWin::SetSpellChecking()

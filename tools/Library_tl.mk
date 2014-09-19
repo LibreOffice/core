@@ -55,7 +55,7 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/generic/bigint \
     tools/source/generic/color \
     tools/source/generic/config \
-    tools/source/generic/fract \
+    tools/source/generic/rational \
     tools/source/generic/gen \
     tools/source/generic/line \
     tools/source/generic/link \

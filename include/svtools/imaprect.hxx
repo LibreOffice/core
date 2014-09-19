@@ -23,7 +23,7 @@
 #include <svtools/imapobj.hxx>
 #include <tools/gen.hxx>
 
-class Fraction;
+namespace boost { template<typename T> class rational; }
 
 class SVT_DLLPUBLIC IMapRectangleObject : public IMapObject
 {
@@ -58,7 +58,7 @@ public:
     // liefert das BoundRect des Rechteck-Objektes in 1/100mm
     virtual Rectangle   GetBoundRect() const SAL_OVERRIDE { return aRect; }
 
-    void                Scale( const Fraction& rFractX, const Fraction& rFracY );
+    void                Scale( const boost::rational<long>& rFractX, const boost::rational<long>& rFracY );
 
     using IMapObject::IsEqual;
     bool                IsEqual( const IMapRectangleObject& rEqObj );

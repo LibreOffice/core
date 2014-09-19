@@ -134,8 +134,8 @@ public:
                   SmFace & GetFont()       { return aFace; };
 
             void SetFont(const SmFace &rFace);
-            void SetFontSize(const Fraction &rRelSize, sal_uInt16 nType);
-            void SetSize(const Fraction &rScale);
+            void SetFontSize(const boost::rational<long> &rRelSize, sal_uInt16 nType);
+            void SetSize(const boost::rational<long> &rScale);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void PrepareAttributes();
@@ -1240,18 +1240,18 @@ public:
 class SmFontNode : public SmStructureNode
 {
     sal_uInt16      nSizeType;
-    Fraction    aFontSize;
+    boost::rational<long>    aFontSize;
 
 public:
     SmFontNode(const SmToken &rNodeToken)
     :   SmStructureNode(NFONT, rNodeToken)
     {
         nSizeType = FNTSIZ_MULTIPLY;
-        aFontSize = Fraction(1L);
+        aFontSize = boost::rational<long>(1L);
     }
 
-    void SetSizeParameter(const Fraction &rValue, sal_uInt16 nType);
-    const Fraction & GetSizeParameter() const {return aFontSize;}
+    void SetSizeParameter(const boost::rational<long> &rValue, sal_uInt16 nType);
+    const boost::rational<long> & GetSizeParameter() const {return aFontSize;}
     const sal_uInt16& GetSizeType() const {return nSizeType;}
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell) SAL_OVERRIDE;

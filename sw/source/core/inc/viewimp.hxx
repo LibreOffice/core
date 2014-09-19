@@ -40,7 +40,7 @@ class SwPageFrm;
 class SwRegionRects;
 class SwAccessibleMap;
 class SdrObject;
-class Fraction;
+namespace boost { template<typename T> class rational; }
 class SwPrintData;
 class SwPagePreviewLayout;
 struct PreviewPage;
@@ -262,7 +262,7 @@ public:
     /// update data for accessible preview
     /// change method signature due to new page preview functionality
     void UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
-                                  const Fraction&  _rScale,
+                                  const boost::rational<long>&  _rScale,
                                   const SwPageFrm* _pSelectedPageFrm,
                                   const Size&      _rPreviewWinSize );
 

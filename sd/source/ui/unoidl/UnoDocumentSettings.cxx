@@ -677,7 +677,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                     sal_Int32 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        Fraction aFract( nValue, pDoc->GetUIScale().GetDenominator() );
+                        boost::rational<long> aFract( nValue, pDoc->GetUIScale().denominator() );
                         pDoc->SetUIScale( aFract );
                         bOk = true;
                         bChanged = true;
@@ -689,7 +689,7 @@ throw (UnknownPropertyException, PropertyVetoException,
                     sal_Int32 nValue = 0;
                     if( *pValues >>= nValue )
                     {
-                        Fraction aFract( pDoc->GetUIScale().GetNumerator(), nValue );
+                        boost::rational<long> aFract( pDoc->GetUIScale().numerator(), nValue );
                         pDoc->SetUIScale( aFract );
                         bOk = true;
                         bChanged = true;
@@ -1091,10 +1091,10 @@ throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
                 }
                 break;
             case HANDLE_SCALE_NUM:
-                *pValue <<= (sal_Int32)pDoc->GetUIScale().GetNumerator();
+                *pValue <<= (sal_Int32)pDoc->GetUIScale().numerator();
                 break;
             case HANDLE_SCALE_DOM:
-                *pValue <<= (sal_Int32)pDoc->GetUIScale().GetDenominator();
+                *pValue <<= (sal_Int32)pDoc->GetUIScale().denominator();
                 break;
             case HANDLE_TABSTOP:
                 *pValue <<= (sal_Int32)pDoc->GetDefaultTabulator();

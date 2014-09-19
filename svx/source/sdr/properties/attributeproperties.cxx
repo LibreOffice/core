@@ -318,7 +318,7 @@ namespace sdr
                     MapUnit aOldUnit(pOldModel->GetScaleUnit());
                     MapUnit aNewUnit(pNewModel->GetScaleUnit());
                     bool bScaleUnitChanged(aNewUnit != aOldUnit);
-                    Fraction aMetricFactor;
+                    boost::rational<long> aMetricFactor;
 
                     if(bScaleUnitChanged)
                     {
