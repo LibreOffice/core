@@ -1467,10 +1467,8 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& 
             CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( xSceneProperties ) );
             pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
-        pVCooSys->createVAxisList( xNumberFormatsSupplier
-                                        , rPageSize //font reference size
-                                        , BaseGFXHelper::B2IRectangleToAWTRectangle( aAvailableOuterRect ) //maximum space for labels
-                                        );
+
+        pVCooSys->createVAxisList(xNumberFormatsSupplier, rPageSize, rParam.maRemainingSpace);
     }
 
     // - prepare list of all axis and how they are used
