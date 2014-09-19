@@ -1056,6 +1056,18 @@ namespace sw { namespace mark
         return lcl_FindMarkByName( rName, m_vAnnotationMarks.begin(), m_vAnnotationMarks.end() );
     }
 
+    IMark* MarkManager::getAnnotationMarkFor(const SwPosition& rPos) const
+    {
+        const_iterator_t pAnnotationMark = find_if(
+            m_vAnnotationMarks.begin(),
+            m_vAnnotationMarks.end( ),
+            boost::bind(&IMark::IsCoveringPosition, _1, rPos));
+        if (pAnnotationMark == m_vAnnotationMarks.end())
+            return NULL;
+        return pAnnotationMark->get();
+    }
+
+
     OUString MarkManager::getUniqueMarkName(const OUString& rName) const
     {
         OSL_ENSURE(rName.getLength(),

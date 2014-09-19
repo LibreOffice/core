@@ -1389,6 +1389,18 @@ bool SwCursor::SelectWordWT( SwViewShell* pViewShell, sal_Int16 nWordType, const
                 {
                     SetMark();
                     GetMark()->nContent = aBndry.startPos;
+                    if (sw::mark::IMark* pAnnotationMark = pMarksAccess->getAnnotationMarkFor(*GetPoint()))
+                    {
+                        // An annotation mark covers the selected word. Check
+                        // if it covers only the word: in that case we select
+                        // the comment anchor as well.
+                        bool bStartMatch = GetMark()->nNode == pAnnotationMark->GetMarkStart().nNode &&
+                            GetMark()->nContent == pAnnotationMark->GetMarkStart().nContent;
+                        bool bEndMatch = GetPoint()->nNode == pAnnotationMark->GetMarkEnd().nNode &&
+                            GetPoint()->nContent.GetIndex() + 1 == pAnnotationMark->GetMarkEnd().nContent.GetIndex();
+                        if (bStartMatch && bEndMatch)
+                            GetPoint()->nContent++;
+                    }
                     if( !IsSelOvr() )
                         bRet = true;
                 }

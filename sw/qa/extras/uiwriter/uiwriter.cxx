@@ -51,6 +51,7 @@ public:
     void testShapeTextboxVertadjust();
     void testShapeTextboxAutosize();
     void testFdo82191();
+    void testCommentedWord();
     void testChineseConversionBlank();
     void testChineseConversionNonChineseText();
     void testChineseConversionTraditionalToSimplified();
@@ -72,6 +73,7 @@ public:
     CPPUNIT_TEST(testShapeTextboxVertadjust);
     CPPUNIT_TEST(testShapeTextboxAutosize);
     CPPUNIT_TEST(testFdo82191);
+    CPPUNIT_TEST(testCommentedWord);
     CPPUNIT_TEST(testChineseConversionBlank);
     CPPUNIT_TEST(testChineseConversionNonChineseText);
     CPPUNIT_TEST(testChineseConversionTraditionalToSimplified);
@@ -424,6 +426,23 @@ void SwUiWriterTest::testFdo82191()
     aTextBoxes = SwTextBoxHelper::findTextBoxes(pDoc);
     // This was one: the textbox of the shape wasn't copied.
     CPPUNIT_ASSERT_EQUAL(size_t(2), aTextBoxes.size());
+}
+
+void SwUiWriterTest::testCommentedWord()
+{
+    // This word is commented. <- string in document
+    // 123456789 <- character positions
+    SwDoc* pDoc = createDoc("commented-word.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    // Move the cursor into the second word.
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, 5, /*bBasicCall=*/false);
+    // Select the word.
+    pWrtShell->SelWrd();
+
+    // Make sure that not only the word, but its comment anchor is also selected.
+    SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
+    // This was 9, only "word", not "word<anchor character>" was selected.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10), pShellCrsr->End()->nContent.GetIndex());
 }
 
 

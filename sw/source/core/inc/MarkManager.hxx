@@ -92,6 +92,7 @@ namespace sw {
             virtual const_iterator_t getAnnotationMarksEnd() const SAL_OVERRIDE;
             virtual sal_Int32 getAnnotationMarksCount() const SAL_OVERRIDE;
             virtual const_iterator_t findAnnotationMark( const ::rtl::OUString& rName ) const SAL_OVERRIDE;
+            virtual sw::mark::IMark* getAnnotationMarkFor(const SwPosition& rPos) const SAL_OVERRIDE;
 
             virtual void assureSortedMarkContainers() const SAL_OVERRIDE;
 
