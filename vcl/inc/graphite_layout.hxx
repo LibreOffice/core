@@ -87,13 +87,7 @@ private:
 class VCL_PLUGIN_PUBLIC GraphiteLayout : public SalLayout
 {
 public:
-
-    class Glyphs : public std::vector<GlyphItem>
-    {
-    public:
-        typedef std::pair<Glyphs::const_iterator, Glyphs::const_iterator> iterator_pair_t;
-
-    };
+    typedef std::vector<GlyphItem> Glyphs;
 
     mutable Glyphs          mvGlyphs;
     void clear();
