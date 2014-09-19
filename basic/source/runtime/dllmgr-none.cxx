@@ -42,7 +42,7 @@ namespace {
 SbError returnInt64InOutArg(SbxArray *pArgs, SbxVariable &rRetVal,
                             sal_Int64 nValue)
 {
-    if (!rRetVal.PutLong(true) && !rRetVal.PutInteger(true))
+    if (!rRetVal.PutLong(1) && !rRetVal.PutInteger(1))
         return ERRCODE_BASIC_BAD_ARGUMENT;
     if (!pArgs || pArgs->Count() != 2)
         return ERRCODE_BASIC_BAD_ARGUMENT;
