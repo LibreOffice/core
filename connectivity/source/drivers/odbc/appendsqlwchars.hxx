@@ -17,10 +17,10 @@
 
 namespace connectivity { namespace odbc {
 
-void appendSQLWCHARs(OUStringBuffer & s, sal_Unicode* d, sal_Int32 n);
+void appendSQLWCHARs(OUStringBuffer & s, const sal_Unicode* d, sal_Int32 n);
 
 #if defined SAL_UNICODE_NOTEQUAL_WCHAR_T
-void appendSQLWCHARs(OUStringBuffer & s, wchar_t* d, sal_Int32 n);
+void appendSQLWCHARs(OUStringBuffer & s, const wchar_t* d, sal_Int32 n);
 #endif
 
 } }
