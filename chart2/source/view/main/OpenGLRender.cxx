@@ -108,7 +108,7 @@ int OpenGLRender::InitOpenGL()
 
     //Init the Projection matrix
     m_Projection = glm::ortho(0.f, float(m_iWidth), -float(m_iHeight), 0.f, -1.f, 1.f);
-    m_Projection = m_Projection * glm::scale(1.0f, -1.0f, 1.0f);
+    m_Projection = m_Projection * glm::scale(glm::vec3(1.0f, -1.0f, 1.0f));
     m_View       = glm::lookAt(glm::vec3(0,0,1), // Camera is at (4,3,-3), in World Space
                                glm::vec3(0,0,0), // and looks at the origin
                                glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
@@ -358,7 +358,7 @@ void OpenGLRender::SetSize(int width, int height)
     m_iWidth = width;
     m_iHeight = height;
     m_Projection = glm::ortho(0.f, float(m_iWidth), -float(m_iHeight), 0.f, -4.f, 3.f);
-    m_Projection = m_Projection * glm::scale(1.0f, -1.0f, 1.0f);
+    m_Projection = m_Projection * glm::scale(glm::vec3(1.0f, -1.0f, 1.0f));
 }
 
 void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uInt8 nAlpha)
