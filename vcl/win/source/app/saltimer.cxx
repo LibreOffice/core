@@ -29,25 +29,37 @@
 // maximum period
 #define MAX_SYSPERIOD     65533
 
+void CALLBACK SalTimerProc(PVOID pParameter, BOOLEAN bTimerOrWaitFired);
+
+// See http://msdn.microsoft.com/en-us/library/windows/desktop/ms687003%28v=vs.85%29.aspx
+// (and related pages) for details about the Timer Queues.
+
+void ImplSalStopTimer(SalData* pSalData)
+{
+    HANDLE hTimer = pSalData->mnTimerId;
+    pSalData->mnTimerId = 0;
+    DeleteTimerQueueTimer(NULL, hTimer, 0);
+}
+
 void ImplSalStartTimer( sal_uLong nMS, bool bMutex )
 {
     SalData* pSalData = GetSalData();
 
     // Remember the time of the timer
     pSalData->mnTimerMS = nMS;
-    if ( !bMutex )
+    if (!bMutex)
         pSalData->mnTimerOrgMS = nMS;
 
     // duration has to fit into Window's sal_uInt16
-    if ( nMS > MAX_SYSPERIOD )
+    if (nMS > MAX_SYSPERIOD)
         nMS = MAX_SYSPERIOD;
 
-    // kill timer if it exists
-    if ( pSalData->mnTimerId )
-        KillTimer( 0, pSalData->mnTimerId );
+    // change if it exists, create if not
+    if (pSalData->mnTimerId)
+        ChangeTimerQueueTimer(NULL, pSalData->mnTimerId, nMS, nMS);
+    else
+        CreateTimerQueueTimer(&pSalData->mnTimerId, NULL, SalTimerProc, NULL, nMS, nMS, WT_EXECUTEDEFAULT);
 
-    // Make a new timer with new period
-    pSalData->mnTimerId = SetTimer( 0, 0, (UINT)nMS, SalTimerProc );
     pSalData->mnNextTimerTime = pSalData->mnLastEventTime + nMS;
 }
 
@@ -77,13 +89,17 @@ void WinSalTimer::Stop()
     // If we have a timer, than
     if ( pSalData->mnTimerId )
     {
-        KillTimer( 0, pSalData->mnTimerId );
-        pSalData->mnTimerId = 0;
+        ImplSalStopTimer(pSalData);
         pSalData->mnNextTimerTime = 0;
     }
 }
 
-void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
+/** This gets invoked from a Timer Queue thread.
+
+Don't acquire the SolarMutex to avoid deadlocks, just wake up the main thread
+at better resolution than 10ms.
+*/
+void CALLBACK SalTimerProc(PVOID, BOOLEAN)
 {
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
     jmp_buf jmpbuf;
@@ -98,42 +114,58 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
         SalData* pSalData = GetSalData();
         ImplSVData* pSVData = ImplGetSVData();
 
-        // Test for MouseLeave
-        SalTestMouseLeave();
-
-        bool bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
-        if ( pSVData->mpSalTimer && ! bRecursive )
+        // don't allow recursive calls (mbInTimerProc is set when the callback
+        // is being processed)
+        if (pSVData->mpSalTimer && !pSalData->mbInTimerProc)
         {
-            // Try to acquire the mutex. If we don't get the mutex then we
-            // try this a short time later again.
-            if ( ImplSalYieldMutexTryToAcquire() )
-            {
-                bRecursive = pSalData->mbInTimerProc && (nId != SALTIMERPROC_RECURSIVE);
-                if ( pSVData->mpSalTimer && ! bRecursive )
-                {
-                    pSalData->mbInTimerProc = TRUE;
-                    pSVData->mpSalTimer->CallCallback();
-                    pSalData->mbInTimerProc = FALSE;
-                    ImplSalYieldMutexRelease();
-
-                    // Run the timer in the correct time, if we start this
-                    // with a small timeout, because we don't get the mutex
-                    if ( pSalData->mnTimerId &&
-                        (pSalData->mnTimerMS != pSalData->mnTimerOrgMS) )
-                        ImplSalStartTimer( pSalData->mnTimerOrgMS, FALSE );
-                }
-            }
-            else
-                ImplSalStartTimer( 10, TRUE );
+            ImplPostMessage(pSalData->mpFirstInstance->mhComWnd, SAL_MSG_TIMER_CALLBACK, 0, 0);
         }
-    }
 #if defined ( __MINGW32__ ) && !defined ( _WIN64 )
+    }
     han.Reset();
 #else
+    }
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
 #endif
+}
+
+/** Called in the main thread.
+
+We assured that by posting the message from the SalTimeProc only, the real
+call then happens when the main thread gets SAL_MSG_TIMER_CALLBACK.
+
+@param bAllowRecursive allows to skip the check that assures that two timeouts
+do not overlap.
+*/
+void EmitTimerCallback(bool bAllowRecursive)
+{
+    SalData* pSalData = GetSalData();
+    ImplSVData* pSVData = ImplGetSVData();
+
+    // Test for MouseLeave
+    SalTestMouseLeave();
+
+    // Try to acquire the mutex. If we don't get the mutex then we
+    // try this a short time later again.
+    if (ImplSalYieldMutexTryToAcquire())
+    {
+        if (pSVData->mpSalTimer && (!pSalData->mbInTimerProc || bAllowRecursive))
+        {
+            pSalData->mbInTimerProc = true;
+            pSVData->mpSalTimer->CallCallback();
+            pSalData->mbInTimerProc = false;
+            ImplSalYieldMutexRelease();
+
+            // Run the timer in the correct time, if we start this
+            // with a small timeout, because we don't get the mutex
+            if (pSalData->mnTimerId && (pSalData->mnTimerMS != pSalData->mnTimerOrgMS))
+                ImplSalStartTimer(pSalData->mnTimerOrgMS, false);
+        }
+    }
+    else
+        ImplSalStartTimer(10, true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -736,7 +736,10 @@ LRESULT CALLBACK SalComWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPar
             rDef = FALSE;
             break;
         case SAL_MSG_POSTTIMER:
-            SalTimerProc( 0, 0, SALTIMERPROC_RECURSIVE, lParam );
+            EmitTimerCallback(/*bAllowRecursive = */ true);
+            break;
+        case SAL_MSG_TIMER_CALLBACK:
+            EmitTimerCallback(/*bAllowRecursive = */ false);
             break;
     }
 

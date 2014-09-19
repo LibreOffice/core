@@ -83,11 +83,11 @@ public:
     long*                   mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
-    sal_uLong                   mnTimerMS;              // Current Time (in MS) of the Timer
-    sal_uLong                   mnTimerOrgMS;           // Current Original Time (in MS)
+    sal_uLong               mnTimerMS;              // Current Time (in MS) of the Timer
+    sal_uLong               mnTimerOrgMS;           // Current Original Time (in MS)
     DWORD                   mnNextTimerTime;
     DWORD                   mnLastEventTime;
-    UINT                    mnTimerId;              // windows timer id
+    HANDLE                  mnTimerId;              ///< Windows timer id
     bool                    mbInTimerProc;          // timer event is currently being dispatched
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
@@ -181,8 +181,7 @@ void ImplSalAcquireYieldMutex( sal_uLong nCount );
 
 LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
-#define SALTIMERPROC_RECURSIVE 0xffffffff
-void    CALLBACK SalTimerProc( HWND hWnd, UINT nMsg, UINT_PTR nId, DWORD nTime );
+void EmitTimerCallback(bool bAllowRecursive);
 
 void SalTestMouseLeave();
 bool ImplWriteLastError( DWORD lastError, const char *szApiCall );
@@ -285,6 +284,9 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 #define SALOBJ_MSG_TOTOP            (WM_USER+160)
 // POSTFOCUS-Message; wParam == bFocus; lParam == 0
 #define SALOBJ_MSG_POSTFOCUS        (WM_USER+161)
+
+// Call the Timer's callback from the main thread
+#define SAL_MSG_TIMER_CALLBACK      (WM_USER+162)
 
 // A/W-Wrapper
 BOOL    ImplPostMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );

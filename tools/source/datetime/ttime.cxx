@@ -400,7 +400,19 @@ Time Time::GetUTCOffset()
 sal_uIntPtr Time::GetSystemTicks()
 {
 #if defined WNT
-    return (sal_uIntPtr)GetTickCount();
+    static LARGE_INTEGER nTicksPerMS;
+    static bool bTicksPerMSInitialized = false;
+    if (!bTicksPerMSInitialized)
+    {
+        QueryPerformanceFrequency(&nTicksPerMS);
+        nTicksPerMS.QuadPart /= 1000;
+        bTicksPerMSInitialized = true;
+    }
+
+    LARGE_INTEGER nPerformanceCount;
+    QueryPerformanceCounter(&nPerformanceCount);
+
+    return (sal_uIntPtr)(nPerformanceCount.QuadPart/nTicksPerMS.QuadPart);
 #else
     timeval tv;
     gettimeofday (&tv, 0);
