@@ -344,6 +344,19 @@ DECLARE_WW8EXPORT_TEST(testBorderColoursExport, "bordercolours.odt")
 #endif
 }
 
+DECLARE_WW8EXPORT_TEST(testRedlineExport1, "redline-export-1.odt")
+{
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParagraph, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    //there must be no redline information on the first line before or after reloading
+    while (xRunEnum->hasMoreElements())
+    {
+        uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(false, hasProperty(xRun, "RedlineType"));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

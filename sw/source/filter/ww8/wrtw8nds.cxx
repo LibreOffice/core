@@ -1252,7 +1252,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
     return nRet;
 }
 
-bool SwWW8AttrIter::IsRedlineAtEnd( sal_Int32 nEnd ) const
+bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) const
 {
     // search next Redline
     for( sal_uInt16 nPos = nCurRedlinePos;
@@ -1260,16 +1260,32 @@ bool SwWW8AttrIter::IsRedlineAtEnd( sal_Int32 nEnd ) const
     {
         const SwRangeRedline *pRange = m_rExport.pDoc->getIDocumentRedlineAccess().GetRedlineTbl()[nPos];
         const SwPosition* pEnd = pRange->End();
+        const SwPosition* pStart = pRange->Start();
+        // In word the paragraph end marker is a real character, in writer it is not.
+        // Here we find out if the para end marker we will emit is affected by
+        // redlining, in which case it must be included by the range of character
+        // attributes that contains the redlining information.
         if (pEnd->nNode == rNd)
         {
-            // In word the paragraph end marker is a real character, in writer it is not.
             if (pEnd->nContent.GetIndex() == nEnd)
             {
-                // This condition detects if the pseudo-char we will export is affected
-                // by redlining
+                // This condition detects if the pseudo-char we will export
+                // should be explicitly included by the redlining char
+                // properties on this node
                 return true;
             }
         }
+        else if (pStart->nNode.GetIndex()-1 == rNd.GetIndex())
+        {
+            if (pStart->nContent.GetIndex() == 0)
+            {
+                // This condition detects if the pseudo-char we will export
+                // should be implictly excluded by the redlining char
+                // properties starting on the next node.
+                return true;
+            }
+        }
+
         else
             break;
     }
@@ -2050,7 +2066,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
     sal_Int32 nAktPos = 0;
     sal_Int32 const nEnd = aStr.getLength();
-    bool bRedlineAtEnd = false;
+    bool bIncludeEndOfParaCRInRedlineProperties = false;
     sal_Int32 nOpenAttrWithRange = 0;
     OUString aStringForImage("\001");
 
@@ -2236,8 +2252,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             OSL_ENSURE( nOpenAttrWithRange >= 0, "odd to see this happening, expected >= 0" );
             if ( !bTxtAtr && nOpenAttrWithRange <= 0 )
             {
-                if ( aAttrIter.IsRedlineAtEnd( nEnd ) )
-                    bRedlineAtEnd = true;
+                if ( aAttrIter.IncludeEndOfParaCRInRedlineProperties( nEnd ) )
+                    bIncludeEndOfParaCRInRedlineProperties = true;
                 else
                 {
                     // insert final graphic anchors if any before CR
@@ -2287,7 +2303,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
             AttrOutput().OutputFKP();
 
-            if ( bTxtAtr || bAttrWithRange || bRedlineAtEnd )
+            if (bTxtAtr || bAttrWithRange || bIncludeEndOfParaCRInRedlineProperties)
             {
                 // insert final graphic anchors if any before CR
                 nStateOfFlyFrame = aAttrIter.OutFlys( nEnd );
@@ -2308,10 +2324,14 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     AttrOutput().EndTOX( *pTOXSect );
                 }
 
-                if ( bRedlineAtEnd )
+                if (bIncludeEndOfParaCRInRedlineProperties)
                 {
                     AttrOutput().Redline( aAttrIter.GetRunLevelRedline( nEnd ) );
-                    AttrOutput().OutputFKP();
+                    //If if there was no redline property emitted, force adding
+                    //another entry for the CR so that in the case that this
+                    //has no redline, but the next para does, then this one is
+                    //not merged with the next
+                    AttrOutput().OutputFKP(true);
                 }
             }
         }

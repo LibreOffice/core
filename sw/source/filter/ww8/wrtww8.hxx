@@ -1536,7 +1536,7 @@ public:
     SwWW8AttrIter( MSWordExportBase& rWr, const SwTxtNode& rNd );
 
     bool IsTxtAttr( sal_Int32 nSwPos );
-    bool IsRedlineAtEnd( sal_Int32 nPos ) const;
+    bool IncludeEndOfParaCRInRedlineProperties(sal_Int32 nPos) const;
     bool IsDropCap( int nSwPos );
     bool RequiresImplicitBookmark();
 

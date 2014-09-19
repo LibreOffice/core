@@ -1063,9 +1063,9 @@ void WW8AttributeOutput::RawText( const OUString& rText, bool bForceUnicode, rtl
     m_rWW8Export.OutSwString( rText, 0, rText.getLength(), bForceUnicode, eCharSet );
 }
 
-void WW8AttributeOutput::OutputFKP()
+void WW8AttributeOutput::OutputFKP(bool bForce)
 {
-    if ( !m_rWW8Export.pO->empty() )
+    if (!m_rWW8Export.pO->empty() || bForce)
     {
         m_rWW8Export.pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(),
                 m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );

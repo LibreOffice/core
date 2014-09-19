@@ -92,7 +92,7 @@ public:
     /// Output FKP (Formatted disK Page) - necessary for binary formats only.
     /// FIXME having it in AttributeOutputBase is probably a hack, it
     /// should be in WW8AttributeOutput only...
-    virtual void OutputFKP() SAL_OVERRIDE;
+    virtual void OutputFKP(bool bForce = false) SAL_OVERRIDE;
 
     /// Output style.
     virtual void ParagraphStyle( sal_uInt16 nStyle ) SAL_OVERRIDE;
