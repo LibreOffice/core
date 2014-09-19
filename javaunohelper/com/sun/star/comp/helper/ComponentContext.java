@@ -28,8 +28,10 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
 
-import java.util.Hashtable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
 
 
 
@@ -57,7 +59,7 @@ public class ComponentContext implements XComponentContext, XComponent
     private static final String SMGR_NAME = "/singletons/com.sun.star.lang.theServiceManager";
     private static final String TDMGR_NAME = "/singletons/com.sun.star.reflection.theTypeDescriptionManager";
 
-    private java.util.Map<String,Object> m_table;
+    private Map<String,Object> m_table;
     private XComponentContext m_xDelegate;
 
     private XMultiComponentFactory m_xSMgr;
@@ -67,7 +69,7 @@ public class ComponentContext implements XComponentContext, XComponent
 
     public ComponentContext( Hashtable<String,Object> table, XComponentContext xDelegate )
     {
-        this((java.util.Map<String,Object>)table, xDelegate);
+        this((Map<String,Object>) table, xDelegate);
     }
 
     /** Ctor to create a component context passing a hashtable for values and a delegator
@@ -79,7 +81,7 @@ public class ComponentContext implements XComponentContext, XComponent
         @param xDelegate
                if values are not found, request is delegated to this object
     */
-    public ComponentContext( java.util.Map<String,Object> table, XComponentContext xDelegate )
+    public ComponentContext( Map<String,Object> table, XComponentContext xDelegate )
     {
         m_eventListener = new ArrayList<XEventListener>();
         m_table = table;
@@ -237,7 +239,7 @@ public class ComponentContext implements XComponentContext, XComponent
 
         XComponent tdmgr = null;
         // dispose values, then service manager, then typdescription manager
-        for (java.util.Map.Entry<String, Object> entry : m_table.entrySet())
+        for (Map.Entry<String, Object> entry : m_table.entrySet())
         {
             String name = entry.getKey();
             if (! name.equals( SMGR_NAME ))
