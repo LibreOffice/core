@@ -577,8 +577,8 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
                 if( nRowSpan == 0 )
                 {
                     // we are not in a span yet. Let's find out if the current cell is in a span.
-                    sal_Int32 nColSpan;
-                    sal_Int32 nSpanInfoCol;
+                    sal_Int32 nColSpan = sal_Int32();
+                    sal_Int32 nSpanInfoCol = sal_Int32();
 
                     if( xSourceCell->getRowSpan() > 1 )
                     {
@@ -681,8 +681,8 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
                 if( nColSpan == 0 )
                 {
                     // we are not in a span yet. Let's find out if the current cell is in a span.
-                    sal_Int32 nRowSpan;
-                    sal_Int32 nSpanInfoRow;
+                    sal_Int32 nRowSpan = sal_Int32();
+                    sal_Int32 nSpanInfoRow = sal_Int32();
 
                     if( xSourceCell->getColumnSpan() > 1 )
                     {
