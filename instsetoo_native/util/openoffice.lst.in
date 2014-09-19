@@ -67,7 +67,7 @@ LibreOffice
             CHANGETARGETDIR 1
             PATCHCODEFILE ooo_patchcodes.txt
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_INFO_URL http://libreoffice-from-collabora.com/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
@@ -120,7 +120,7 @@ LibreOffice_Dev
             CODEFILENAME codes_ooodev.txt
             LOCALUSERDIR $ORIGIN/..
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_INFO_URL http://libreoffice-from-collabora.com/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
@@ -162,7 +162,7 @@ LibreOffice_SDK
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_INFO_URL http://libreoffice-from-collabora.com/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
@@ -208,7 +208,7 @@ LibreOffice_Dev_SDK
             CHANGETARGETDIR 1
             DONTUSESTARTMENUFOLDER 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
-            STARTCENTER_INFO_URL http://www.libreoffice.org/
+            STARTCENTER_INFO_URL http://libreoffice-from-collabora.com/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
             STARTCENTER_HIDE_EXTERNAL_LINKS 0
