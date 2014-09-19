@@ -462,6 +462,7 @@ sal_Bool ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
             return false;
 
         aLocalParam.MoveToDest();
+        nTab = aLocalParam.nDestTab;
     }
 
     ScEditableTester aTester( pDoc, nTab, aLocalParam.nCol1,aLocalParam.nRow1,
