@@ -1320,6 +1320,7 @@ void Test::testSortRefUpdate5()
 void Test::testSortOutOfPlaceResult()
 {
     m_pDoc->InsertTab(0, "Sort");
+    m_pDoc->InsertTab(1, "Result");
 
     const char* pData[] = {
         "Header",
@@ -1356,7 +1357,7 @@ void Test::testSortOutOfPlaceResult()
     aSortData.nRow2 = 5;
     aSortData.bHasHeader = true;
     aSortData.bInplace = false;
-    aSortData.nDestTab = 0;
+    aSortData.nDestTab = 1;
     aSortData.nDestCol = 2;
     aSortData.nDestRow = 1;
     aSortData.maKeyState[0].bDoSort = true;
@@ -1373,14 +1374,15 @@ void Test::testSortOutOfPlaceResult()
     CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(0,4,0)));
     CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
-    // Sort result in C2:C7.
-    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(2,1,0)));
-    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(2,2,0)));
-    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(2,3,0)));
-    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(2,4,0)));
-    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(2,5,0)));
-    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(2,6,0)));
+    // Sort result in C2:C7 on sheet "Result".
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), m_pDoc->GetString(ScAddress(2,1,1)));
+    CPPUNIT_ASSERT_EQUAL(-2.0, m_pDoc->GetValue(ScAddress(2,2,1)));
+    CPPUNIT_ASSERT_EQUAL( 1.0, m_pDoc->GetValue(ScAddress(2,3,1)));
+    CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue(ScAddress(2,4,1)));
+    CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue(ScAddress(2,5,1)));
+    CPPUNIT_ASSERT_EQUAL(23.0, m_pDoc->GetValue(ScAddress(2,6,1)));
 
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
