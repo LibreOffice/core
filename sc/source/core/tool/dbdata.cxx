@@ -685,13 +685,10 @@ ScDBData* ScDBCollection::NamedDBs::findByUpperName(const OUString& rName)
 
 bool ScDBCollection::NamedDBs::insert(ScDBData* p)
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<ScDBData> pData(p);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-    if (!pData->GetIndex())
-        pData->SetIndex(mrParent.nEntryIndex++);
+    if (!p->GetIndex())
+        p->SetIndex(mrParent.nEntryIndex++);
 
-    pair<DBsType::iterator, bool> r = maDBs.insert(pData);
+    pair<DBsType::iterator, bool> r = maDBs.insert(p);
 
     if (r.second && p->HasImportParam() && !p->HasImportSelection())
     {
@@ -763,27 +760,21 @@ const ScDBData* ScDBCollection::AnonDBs::findByRange(const ScRange& rRange) cons
 ScDBData* ScDBCollection::AnonDBs::getByRange(const ScRange& rRange)
 {
     const ScDBData* pData = findByRange(rRange);
-    if (!pData)
-    {
-        // Insert a new db data.  They all have identical names.
-        OUString aName(STR_DB_GLOBAL_NONAME);
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<ScDBData> pNew(new ScDBData(
-            aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
-            rRange.aEnd.Col(), rRange.aEnd.Row(), true, false));
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-        pData = pNew.get();
-        maDBs.push_back(pNew);
-    }
-    return const_cast<ScDBData*>(pData);
+    if (pData)
+        return const_cast<ScDBData*>(pData);
+
+    // Insert a new db data.  They all have identical names.
+    OUString aName(STR_DB_GLOBAL_NONAME);
+    ScDBData* pData2 = new ScDBData(
+        aName, rRange.aStart.Tab(), rRange.aStart.Col(), rRange.aStart.Row(),
+        rRange.aEnd.Col(), rRange.aEnd.Row(), true, false);
+    maDBs.push_back(pData2);
+    return pData2;
 }
 
 void ScDBCollection::AnonDBs::insert(ScDBData* p)
 {
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<ScDBData> pNew(p);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-    maDBs.push_back(pNew);
+    maDBs.push_back(p);
 }
 
 bool ScDBCollection::AnonDBs::empty() const
