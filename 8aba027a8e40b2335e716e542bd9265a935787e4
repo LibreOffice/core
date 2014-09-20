@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9af37de9_6f13d15d",
+        "filename": "include/oox/token/tokenmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-20T18:23:05Z",
+      "side": 0,
+      "message": "What is with caller of the old methods? This doesn\u0027t compile, obviously.",
+      "range": {
+        "startLine": 39,
+        "startChar": 17,
+        "endLine": 39,
+        "endChar": 36
+      },
+      "revId": "8aba027a8e40b2335e716e542bd9265a935787e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9af37de9_4f100d4f",
+        "filename": "include/oox/token/tokenmap.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2014-09-20T18:23:05Z",
+      "side": 0,
+      "message": "Have you tried to compile this change? This variable is used:\n\n  $ git grep maUniName oox | wc -l\n  3",
+      "revId": "8aba027a8e40b2335e716e542bd9265a935787e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
