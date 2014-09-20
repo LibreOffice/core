@@ -70,12 +70,7 @@ public:
 private:
     sal_Int32 getTokenPerfectHash( const char *pToken, sal_Int32 nLength ) const;
 
-    struct TokenName
-    {
-        OUString maUniName;
-        ::com::sun::star::uno::Sequence< sal_Int8 > maUtf8Name;
-    };
-    typedef ::std::vector< TokenName > TokenNameVector;
+    typedef ::std::vector< ::com::sun::star::uno::Sequence< sal_Int8 > > TokenNameVector;
 
     TokenNameVector     maTokenNames;
     sal_Int32           mnAlphaTokens[26];
