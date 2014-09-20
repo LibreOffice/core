@@ -150,12 +150,12 @@ the source code generation happens in these steps:
   * import cshape-all.pptx into impress and redirect output to
     custom-shapes.log
 
-  * generate cxx files by running generatePresetsCXX.pl - it uses
-    debug output from the custom-shapes.log file and prepares the C++
-    source code
+  * generate oox-drawingml-cs-presets data file by running
+    generatePresetsData.pl - it uses debug output from the custom-shapes.log
+    file
 
-  * check generated source code files customshapepresets[123456].cxx
-    and move them to oox/source/drawingml/
+  * check generated data file oox-drawingml-cs-presets and move them to
+    oox/source/drawingml/
 
   * build oox with new source files and test
 
