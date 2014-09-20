@@ -1171,32 +1171,32 @@ void SwHTMLWriter::OutImplicitMark( const OUString& rMark,
     }
 }
 
-void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
+OUString SwHTMLWriter::convertHyperlinkHRefValue(const OUString& rURL)
 {
-    OUString sURL( rURL );
-    sal_Int32 nPos = sURL.lastIndexOf( cMarkSeparator );
-    if( nPos != -1 )
+    OUString sURL(rURL);
+    sal_Int32 nPos = sURL.lastIndexOf(cMarkSeparator);
+    if (nPos != -1)
     {
-        OUString sCmp(comphelper::string::remove(sURL.copy(nPos+1), ' '));
-        if( !sCmp.isEmpty() )
+        OUString sCompare(comphelper::string::remove(sURL.copy(nPos + 1), ' '));
+        if (!sCompare.isEmpty())
         {
-            sCmp = sCmp.toAsciiLowerCase();
-            if( sCmp == "region" ||
-                sCmp == "frame" ||
-                sCmp == "graphic" ||
-                sCmp == "ole" ||
-                sCmp == "table" ||
-                sCmp == "outline" ||
-                sCmp == "text" )
+            sCompare = sCompare.toAsciiLowerCase();
+            if( sCompare == "region"  || sCompare == "frame"   ||
+                sCompare == "graphic" || sCompare == "ole"     ||
+                sCompare == "table"   || sCompare == "outline" ||
+                sCompare == "text" )
             {
                 sURL = sURL.replace( '?', '_' );   // '?' causes problems in IE/Netscape 5
             }
         }
     }
+    return URIHelper::simpleNormalizedMakeRelative(GetBaseURL(), sURL);
+}
 
-    sURL = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), sURL);
-    HTMLOutFuncs::Out_String( Strm(), sURL, eDestEnc,
-                              &aNonConvertableCharacters );
+void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
+{
+    OUString sURL = convertHyperlinkHRefValue(rURL);
+    HTMLOutFuncs::Out_String( Strm(), sURL, eDestEnc, &aNonConvertableCharacters );
 }
 
 void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic )
@@ -1297,25 +1297,31 @@ sal_uInt16 SwHTMLWriter::GetHTMLDirection( sal_uInt16 nDir ) const
 
 void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
 {
-    const sal_Char *pValue = 0;
-    switch( nDir )
-    {
-    case FRMDIR_HORI_LEFT_TOP:
-    case FRMDIR_VERT_TOP_LEFT:
-        pValue = "ltr";
-        break;
-    case FRMDIR_HORI_RIGHT_TOP:
-    case FRMDIR_VERT_TOP_RIGHT:
-        pValue = "rtl";
-        break;
-    }
-    if( pValue != 0 )
+    OString sConverted = convertDirection(nDir);
+    if (!sConverted.isEmpty())
     {
         OStringBuffer sOut;
         sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_dir)
-            .append("=\"").append(pValue).append('\"');
+            .append("=\"").append(sConverted).append('\"');
         Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
+}
+
+OString SwHTMLWriter::convertDirection(sal_uInt16 nDirection)
+{
+    OString sConverted;
+    switch (nDirection)
+    {
+    case FRMDIR_HORI_LEFT_TOP:
+    case FRMDIR_VERT_TOP_LEFT:
+        sConverted = "ltr";
+        break;
+    case FRMDIR_HORI_RIGHT_TOP:
+    case FRMDIR_VERT_TOP_RIGHT:
+        sConverted = "rtl";
+        break;
+    }
+    return sConverted;
 }
 
 OString SwHTMLWriter::GetIndentString(sal_uInt16 nIncLvl)

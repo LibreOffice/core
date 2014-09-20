@@ -803,115 +803,360 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
     return sRetEndTags;
 }
 
-Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
-                       Graphic& rGraphic, const OUString& rAlternateTxt,
-                       const Size &rRealSize, sal_uInt32 nFrmOpts,
-                       const sal_Char *pMarkType,
-                       const ImageMap *pAltImgMap )
+void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rFrmFmt, const OUString& rAlternateText, sal_uInt32 nFrameOptions)
 {
-    SwHTMLWriter &rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
-
-    if (rHTMLWrt.mbSkipImages)
-        return rHTMLWrt;
-
-    // ggf. ein noch offenes Attribut voruebergehend beenden
-    if( !rHTMLWrt.aINetFmts.empty() )
-    {
-        SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
-        OutHTML_INetFmt( rWrt, *pINetFmt, false );
-    }
+    OStringBuffer sOut;
 
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
 
-    const SwFmtURL *pURLItem = 0;
+    // Name
+    if( (nFrameOptions & (HTML_FRMOPT_ID|HTML_FRMOPT_NAME)) &&
+        !rFrmFmt.GetName().isEmpty() )
+    {
+        const sal_Char* pAttributeName = (nFrameOptions & HTML_FRMOPT_ID) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
+        aHtml.attribute(pAttributeName, rFrmFmt.GetName());
+    }
+
+    // Name
+    if (nFrameOptions & HTML_FRMOPT_DIR)
+    {
+        sal_uInt16 nCurrentDirection = GetHTMLDirection(rItemSet);
+        OString sDirection = convertDirection(nCurrentDirection);
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_dir, sDirection);
+    }
+
+    // alt
+    if( (nFrameOptions & HTML_FRMOPT_ALT) && !rAlternateText.isEmpty() )
+    {
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_alt, rAlternateText);
+    }
+
+    // align
+    const sal_Char* pAlignString = 0;
+    RndStdIds eAnchorId = rFrmFmt.GetAnchor().GetAnchorId();
+    if( (nFrameOptions & HTML_FRMOPT_ALIGN) &&
+        ((FLY_AT_PARA == eAnchorId) || (FLY_AT_CHAR == eAnchorId)) )
+    {
+        const SwFmtHoriOrient& rHoriOri = rFrmFmt.GetHoriOrient();
+        if( !(nFrameOptions & HTML_FRMOPT_S_ALIGN) ||
+            text::RelOrientation::FRAME == rHoriOri.GetRelationOrient() ||
+            text::RelOrientation::PRINT_AREA == rHoriOri.GetRelationOrient() )
+        {
+            pAlignString = text::HoriOrientation::RIGHT == rHoriOri.GetHoriOrient()
+                        ? OOO_STRING_SVTOOLS_HTML_AL_right
+                        : OOO_STRING_SVTOOLS_HTML_AL_left;
+        }
+    }
+    if( (nFrameOptions & HTML_FRMOPT_ALIGN) && !pAlignString &&
+        ( (nFrameOptions & HTML_FRMOPT_S_ALIGN) == 0 ||
+          (FLY_AS_CHAR == eAnchorId) ) &&
+        SfxItemState::SET == rItemSet.GetItemState( RES_VERT_ORIENT, true, &pItem ))
+    {
+        switch( ((SwFmtVertOrient*)pItem)->GetVertOrient() )
+        {
+        case text::VertOrientation::LINE_TOP:     pAlignString = OOO_STRING_SVTOOLS_HTML_VA_top;        break;
+        case text::VertOrientation::CHAR_TOP:
+        case text::VertOrientation::BOTTOM:       pAlignString = OOO_STRING_SVTOOLS_HTML_VA_texttop;    break;
+        case text::VertOrientation::LINE_CENTER:
+        case text::VertOrientation::CHAR_CENTER:  pAlignString = OOO_STRING_SVTOOLS_HTML_VA_absmiddle;  break;
+        case text::VertOrientation::CENTER:       pAlignString = OOO_STRING_SVTOOLS_HTML_VA_middle;     break;
+        case text::VertOrientation::LINE_BOTTOM:
+        case text::VertOrientation::CHAR_BOTTOM:  pAlignString = OOO_STRING_SVTOOLS_HTML_VA_absbottom;  break;
+        case text::VertOrientation::TOP:          pAlignString = OOO_STRING_SVTOOLS_HTML_VA_bottom;     break;
+        case text::VertOrientation::NONE:     break;
+        }
+    }
+    if (pAlignString)
+    {
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_align, pAlignString);
+    }
+
+    // hspace und vspace
+    Size aTwipSpc( 0, 0 );
+    if( (nFrameOptions & (HTML_FRMOPT_SPACE | HTML_FRMOPT_MARGINSIZE)) &&
+        SfxItemState::SET == rItemSet.GetItemState( RES_LR_SPACE, true, &pItem ))
+    {
+        aTwipSpc.Width() =
+            ( ((SvxLRSpaceItem*)pItem)->GetLeft() +
+                ((SvxLRSpaceItem*)pItem)->GetRight() ) / 2;
+        nDfltLeftMargin = nDfltRightMargin = aTwipSpc.Width();
+    }
+    if( (nFrameOptions & (HTML_FRMOPT_SPACE|HTML_FRMOPT_MARGINSIZE)) &&
+        SfxItemState::SET == rItemSet.GetItemState( RES_UL_SPACE, true, &pItem ))
+    {
+        aTwipSpc.Height()  =
+            ( ((SvxULSpaceItem*)pItem)->GetUpper() +
+                ((SvxULSpaceItem*)pItem)->GetLower() ) / 2;
+        nDfltTopMargin = nDfltBottomMargin = (sal_uInt16)aTwipSpc.Height();
+    }
+
+    if( (nFrameOptions & HTML_FRMOPT_SPACE) &&
+        (aTwipSpc.Width() || aTwipSpc.Height()) &&
+        Application::GetDefaultDevice() )
+    {
+        Size aPixelSpc =
+            Application::GetDefaultDevice()->LogicToPixel( aTwipSpc,
+                                                MapMode(MAP_TWIP) );
+        if( !aPixelSpc.Width() && aTwipSpc.Width() )
+            aPixelSpc.Width() = 1;
+        if( !aPixelSpc.Height() && aTwipSpc.Height() )
+            aPixelSpc.Height() = 1;
+
+        if (aPixelSpc.Width())
+        {
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_hspace, static_cast<sal_Int32>(aPixelSpc.Width()));
+        }
+
+        if (aPixelSpc.Height())
+        {
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_vspace, static_cast<sal_Int32>(aPixelSpc.Height()));
+        }
+    }
+
+    // Der Abstand muss bei der Groesse beruecksichtigt, wenn das entsprechende
+    // Flag gesetzt ist.
+    if( (nFrameOptions & HTML_FRMOPT_MARGINSIZE) )
+    {
+        aTwipSpc.Width() *= -2;
+        aTwipSpc.Height() *= -2;
+    }
+    else
+    {
+        aTwipSpc.Width() = 0;
+        aTwipSpc.Height() = 0;
+    }
+
+    if( !(nFrameOptions & HTML_FRMOPT_ABSSIZE) &&
+        SfxItemState::SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
+    {
+        const SvxBoxItem* pBoxItem = (const SvxBoxItem*)pItem;
+
+        aTwipSpc.Width() += pBoxItem->CalcLineSpace( BOX_LINE_LEFT );
+        aTwipSpc.Width() += pBoxItem->CalcLineSpace( BOX_LINE_RIGHT );
+        aTwipSpc.Height() += pBoxItem->CalcLineSpace( BOX_LINE_TOP );
+        aTwipSpc.Height() += pBoxItem->CalcLineSpace( BOX_LINE_BOTTOM );
+    }
+
+    // "width" and/or "height"
+    // ATT_VAR_SIZE/ATT_MIN_SIZE nur ausgeben, wenn ANYSIZE gesezut ist
+    if( (nFrameOptions & HTML_FRMOPT_SIZE) &&
+        SfxItemState::SET == rItemSet.GetItemState( RES_FRM_SIZE, true, &pItem ) &&
+        ( (nFrameOptions & HTML_FRMOPT_ANYSIZE) ||
+          ATT_FIX_SIZE == ((const SwFmtFrmSize *)pItem)->GetHeightSizeType()) )
+    {
+        const SwFmtFrmSize *pFSItem = (const SwFmtFrmSize *)pItem;
+        sal_uInt8 nPrcWidth = pFSItem->GetWidthPercent();
+        sal_uInt8 nPrcHeight = pFSItem->GetHeightPercent();
+
+        // Groesse des Objekts Twips ohne Raender
+        Size aTwipSz( (nPrcWidth ? 0
+                                 : pFSItem->GetWidth()-aTwipSpc.Width()),
+                      (nPrcHeight ? 0
+                                  : pFSItem->GetHeight()-aTwipSpc.Height()) );
+
+        OSL_ENSURE( aTwipSz.Width() >= 0 && aTwipSz.Height() >= 0,
+                "Rahmengroesse minus Abstand < 0!!!???" );
+        if( aTwipSz.Width() < 0 )
+            aTwipSz.Width() = 0;
+        if( aTwipSz.Height() < 0 )
+            aTwipSz.Height() = 0;
+
+        Size aPixelSz( 0, 0 );
+        if( (aTwipSz.Width() || aTwipSz.Height()) &&
+            Application::GetDefaultDevice() )
+        {
+            aPixelSz =
+                Application::GetDefaultDevice()->LogicToPixel( aTwipSz,
+                                                    MapMode(MAP_TWIP) );
+            if( !aPixelSz.Width() && aTwipSz.Width() )
+                aPixelSz.Width() = 1;
+            if( !aPixelSz.Height() && aTwipSz.Height() )
+                aPixelSz.Height() = 1;
+        }
+
+        if( (nFrameOptions & HTML_FRMOPT_WIDTH) &&
+            ((nPrcWidth && nPrcWidth!=255) || aPixelSz.Width()) )
+        {
+            OString sWidth;
+            if (nPrcWidth)
+                sWidth = OString::number(static_cast<sal_Int32>(nPrcWidth)) + "%";
+            else
+                sWidth = OString::number(static_cast<sal_Int32>(aPixelSz.Width()));
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_width, sWidth);
+        }
+
+        if( (nFrameOptions & HTML_FRMOPT_HEIGHT) &&
+            ((nPrcHeight && nPrcHeight!=255) || aPixelSz.Height()) )
+        {
+            OString sHeight;
+            if (nPrcWidth)
+                sHeight = OString::number(static_cast<sal_Int32>(nPrcHeight)) + "%";
+            else
+                sHeight = OString::number(static_cast<sal_Int32>(aPixelSz.Height()));
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_height, sHeight);
+        }
+    }
+
+    // Umlauf fuer absatzgeb. Grafiken als <BR CLEAR=...> in den String
+    // schreiben
+
+    const sal_Char* pSurroundString = 0;
+    if( (nFrameOptions & HTML_FRMOPT_BRCLEAR) &&
+        ((FLY_AT_PARA == rFrmFmt.GetAnchor().GetAnchorId()) ||
+         (FLY_AT_CHAR == rFrmFmt.GetAnchor().GetAnchorId())) &&
+        SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem ))
+    {
+        const SwFmtSurround* pSurround = (const SwFmtSurround*)pItem;
+        sal_Int16 eHoriOri = rFrmFmt.GetHoriOrient().GetHoriOrient();
+        SwSurround eSurround = pSurround->GetSurround();
+        bool bAnchorOnly = pSurround->IsAnchorOnly();
+        switch( eHoriOri )
+        {
+            case text::HoriOrientation::RIGHT:
+            {
+                switch( eSurround )
+                {
+                case SURROUND_NONE:
+                case SURROUND_RIGHT:
+                    pSurroundString = OOO_STRING_SVTOOLS_HTML_AL_right;
+                    break;
+                case SURROUND_LEFT:
+                case SURROUND_PARALLEL:
+                    if( bAnchorOnly )
+                        bClearRight = true;
+                    break;
+                default:
+                    ;
+                }
+            }
+            break;
+
+            default:
+            // If a frame is centered, it gets left aligned. This
+            // should be taken into account here, too.
+            {
+                switch( eSurround )
+                {
+                case SURROUND_NONE:
+                case SURROUND_LEFT:
+                    pSurroundString = OOO_STRING_SVTOOLS_HTML_AL_left;
+                    break;
+                case SURROUND_RIGHT:
+                case SURROUND_PARALLEL:
+                    if( bAnchorOnly )
+                        bClearLeft = true;
+                    break;
+                default:
+                    break;
+                }
+            }
+            break;
+        }
+
+        if (pSurroundString)
+        {
+            aHtml.start(OOO_STRING_SVTOOLS_HTML_linebreak);
+            aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, pSurroundString);
+            aHtml.end();
+        }
+    }
+}
+
+namespace
+{
+
+OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, const SwFrmFmt& rFrmFmt,
+                         const Size& rRealSize, const ImageMap* pAltImgMap, SwFmtURL*& pURLItem)
+{
+    OUString aIMapName;
+
+    const SfxPoolItem* pItem;
 
     // das URL-Attribut nur beruecksichtigen, wenn keine Image-Map
     // uebergeben wurde
-    if( !pAltImgMap &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_URL, true, &pItem ))
+    if (!pAltImgMap && SfxItemState::SET == rItemSet.GetItemState( RES_URL, true, &pItem))
     {
-        pURLItem = (const SwFmtURL *)pItem;
+        pURLItem = (SwFmtURL*) pItem;
     }
 
     // Image-Map rausschreiben
-    const ImageMap *pIMap = pAltImgMap;
+    const ImageMap* pIMap = pAltImgMap;
     if( !pIMap && pURLItem )
     {
         pIMap = pURLItem->GetMap();
     }
 
-    OUString aIMapName;
-    if( pIMap )
+    if (pIMap)
     {
         // den Namen eindeutig machen
         aIMapName = pIMap->GetName();
         OUString aNameBase;
-        if( !aIMapName.isEmpty() )
+        if (!aIMapName.isEmpty())
             aNameBase = aIMapName;
         else
             aNameBase = OOO_STRING_SVTOOLS_HTML_map;
-        if( aIMapName.isEmpty() )
-            aIMapName = aNameBase + OUString::number( rHTMLWrt.nImgMapCnt );
+
+        if (aIMapName.isEmpty())
+            aIMapName = aNameBase + OUString::number(rHTMLWrt.nImgMapCnt);
 
         bool bFound;
         do
         {
             bFound = false;
-            for(size_t i = 0; i < rHTMLWrt.aImgMapNames.size(); ++i)
+            for (size_t i = 0; i < rHTMLWrt.aImgMapNames.size(); ++i)
             {
                 // TODO: Unicode: Comparison is case insensitive for ASCII
                 // characters only now!
-                if( aIMapName.equalsIgnoreAsciiCase( rHTMLWrt.aImgMapNames[i] ) )
+                if (aIMapName.equalsIgnoreAsciiCase(rHTMLWrt.aImgMapNames[i]))
                 {
                     bFound = true;
                     break;
                 }
             }
-            if( bFound )
+            if (bFound)
             {
                 rHTMLWrt.nImgMapCnt++;
                 aIMapName = aNameBase + OUString::number( rHTMLWrt.nImgMapCnt );
             }
-
-        } while( bFound );
+        } while (bFound);
 
         bool bScale = false;
-        Fraction aScaleX( 1, 1 );
-        Fraction aScaleY( 1, 1 );
+        Fraction aScaleX(1, 1);
+        Fraction aScaleY(1, 1);
 
         const SwFmtFrmSize& rFrmSize = rFrmFmt.GetFrmSize();
         const SvxBoxItem& rBox = rFrmFmt.GetBox();
 
-        if( !rFrmSize.GetWidthPercent() && rRealSize.Width() )
+        if (!rFrmSize.GetWidthPercent() && rRealSize.Width())
         {
             SwTwips nWidth = rFrmSize.GetWidth();
-            nWidth -= ( rBox.CalcLineSpace(BOX_LINE_LEFT) +
-                        rBox.CalcLineSpace(BOX_LINE_RIGHT) );
+            nWidth -= rBox.CalcLineSpace(BOX_LINE_LEFT) + rBox.CalcLineSpace(BOX_LINE_RIGHT);
 
-            OSL_ENSURE( nWidth>0, "Gibt es 0 twip breite Grafiken!?" );
-            if( nWidth<=0 ) // sollte nicht passieren
+            OSL_ENSURE( nWidth > 0, "Gibt es 0 twip breite Grafiken!?" );
+            if (nWidth <= 0) // sollte nicht passieren
                 nWidth = 1;
 
-            if( rRealSize.Width() != nWidth )
+            if (rRealSize.Width() != nWidth)
             {
-                aScaleX = Fraction( nWidth, rRealSize.Width() );
+                aScaleX = Fraction(nWidth, rRealSize.Width());
                 bScale = true;
             }
         }
-        if( !rFrmSize.GetHeightPercent() && rRealSize.Height() )
+
+        if (!rFrmSize.GetHeightPercent() && rRealSize.Height())
         {
             SwTwips nHeight = rFrmSize.GetHeight();
-            nHeight -= ( rBox.CalcLineSpace(BOX_LINE_TOP) +
-                         rBox.CalcLineSpace(BOX_LINE_BOTTOM) );
 
-            OSL_ENSURE( nHeight>0, "Gibt es 0 twip hohe Grafiken!?" );
-            if( nHeight<=0 )
+            nHeight -= rBox.CalcLineSpace(BOX_LINE_TOP) + rBox.CalcLineSpace(BOX_LINE_BOTTOM);
+
+            OSL_ENSURE( nHeight > 0, "Gibt es 0 twip hohe Grafiken!?" );
+            if (nHeight <= 0)
                 nHeight = 1;
 
-            if( rRealSize.Height() != nHeight )
+            if (rRealSize.Height() != nHeight)
             {
-                aScaleY = Fraction( nHeight, rRealSize.Height() );
+                aScaleY = Fraction(nHeight, rRealSize.Height());
                 bScale = true;
             }
         }
@@ -921,7 +1166,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         OString aIndMap, aIndArea;
         const sal_Char *pIndArea = 0, *pIndMap = 0;
 
-        if( rHTMLWrt.bLFPossible )
+        if (rHTMLWrt.bLFPossible)
         {
             rHTMLWrt.OutNewLine( true );
             aIndMap = rHTMLWrt.GetIndentString();
@@ -930,11 +1175,11 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
             pIndMap = aIndMap.getStr();
         }
 
-        if( bScale )
+        if (bScale)
         {
-            ImageMap aScaledIMap( *pIMap );
-            aScaledIMap.Scale( aScaleX, aScaleY );
-            HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), aScaledIMap, aIMapName,
+            ImageMap aScaledIMap(*pIMap);
+            aScaledIMap.Scale(aScaleX, aScaleY);
+            HTMLOutFuncs::Out_ImageMap( rHTMLWrt.Strm(), rHTMLWrt.GetBaseURL(), aScaledIMap, aIMapName,
                                         aIMapEventTable,
                                         rHTMLWrt.bCfgStarBasic,
                                         SAL_NEWLINE_STRING, pIndArea, pIndMap,
@@ -943,7 +1188,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
         }
         else
         {
-            HTMLOutFuncs::Out_ImageMap( rWrt.Strm(), rWrt.GetBaseURL(), *pIMap, aIMapName,
+            HTMLOutFuncs::Out_ImageMap( rHTMLWrt.Strm(), rHTMLWrt.GetBaseURL(), *pIMap, aIMapName,
                                         aIMapEventTable,
                                         rHTMLWrt.bCfgStarBasic,
                                         SAL_NEWLINE_STRING, pIndArea, pIndMap,
@@ -951,94 +1196,101 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
                                         &rHTMLWrt.aNonConvertableCharacters );
         }
     }
+    return aIMapName;
+}
 
-    // wenn meoglich vor der Grafik einen Zeilen-Umbruch ausgeben
+}
+
+Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
+                       Graphic& rGraphic, const OUString& rAlternateTxt,
+                       const Size &rRealSize, sal_uInt32 nFrmOpts,
+                       const sal_Char *pMarkType,
+                       const ImageMap *pAltImgMap )
+{
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+
+    if (rHTMLWrt.mbSkipImages)
+        return rHTMLWrt;
+
+    // ggf. ein noch offenes Attribut voruebergehend beenden
+    if( !rHTMLWrt.aINetFmts.empty() )
+    {
+        SwFmtINetFmt* pINetFmt = rHTMLWrt.aINetFmts.back();
+        OutHTML_INetFmt( rWrt, *pINetFmt, false );
+    }
+
+    const SfxPoolItem* pItem;
+    const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
+
+    SwFmtURL* pURLItem = 0;
+    OUString aIMapName = lclWriteOutImap(rHTMLWrt, rItemSet, rFrmFmt, rRealSize, pAltImgMap, pURLItem);
+
+    // put img into new line
     if( rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine( true );
 
-    // Attribute die ausserhelb der Grafik geschreiben werden muessen sammeln
-    OStringBuffer sOut;
-    OString aEndTags;
+    HtmlWriter aHtml(rWrt.Strm());
 
-    // implizite Sprungmarke -> <A NAME=...></A>...<IMG ...>
+    // <a name=...></a>...<img ...>
     if( pMarkType && !rFrmFmt.GetName().isEmpty() )
+    {
         rHTMLWrt.OutImplicitMark( rFrmFmt.GetName(), pMarkType );
+    }
 
-    // URL -> <A>...<IMG ... >...</A>
+    // URL -> <a>...<img ... >...</a>
     const SvxMacroItem *pMacItem = 0;
-    if( SfxItemState::SET == rItemSet.GetItemState( RES_FRMMACRO, true, &pItem ))
+    if (SfxItemState::SET == rItemSet.GetItemState(RES_FRMMACRO, true, &pItem))
+    {
         pMacItem = (const SvxMacroItem *)pItem;
+    }
 
-    if( pURLItem || pMacItem )
+    if (pURLItem || pMacItem)
     {
         OUString aMapURL;
         OUString aName;
         OUString aTarget;
-        if( pURLItem )
+
+        if(pURLItem)
         {
             aMapURL = pURLItem->GetURL();
             aName = pURLItem->GetName();
             aTarget = pURLItem->GetTargetFrameName();
         }
+
         bool bEvents = pMacItem && !pMacItem->GetMacroTable().empty();
 
         if( !aMapURL.isEmpty() || !aName.isEmpty() || !aTarget.isEmpty() || bEvents )
         {
-            sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_anchor);
+            aHtml.start(OOO_STRING_SVTOOLS_HTML_anchor);
 
-            // Ein HREF nur Ausgaben, wenn es einen Link oder Makros gibt
+            // Output "href" element if a link or macro exists
             if( !aMapURL.isEmpty() || bEvents )
             {
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_href).
-                    append("=\"");
-                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-                rHTMLWrt.OutHyperlinkHRefValue( aMapURL );
-                sOut.append('\"');
+                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_href, OUStringToOString(rHTMLWrt.convertHyperlinkHRefValue(aMapURL), RTL_TEXTENCODING_UTF8));
             }
 
             if( !aName.isEmpty() )
             {
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_name).
-                    append("=\"");
-                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), aName,
-                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-                sOut.append('\"');
+                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_name, OUStringToOString(aName, RTL_TEXTENCODING_UTF8));
             }
 
             if( !aTarget.isEmpty() )
             {
-                sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_target).
-                    append("=\"");
-                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-                HTMLOutFuncs::Out_String( rWrt.Strm(), aTarget,
-                                          rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-                sOut.append('\"');
+                aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_target, OUStringToOString(aTarget, RTL_TEXTENCODING_UTF8));
             }
-
-            if (!sOut.isEmpty())
-                rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
             if( pMacItem )
             {
                 const SvxMacroTableDtor& rMacTable = pMacItem->GetMacroTable();
-                if( !rMacTable.empty() )
-                    HTMLOutFuncs::Out_Events( rWrt.Strm(), rMacTable,
-                                              aAnchorEventTable,
-                                              rHTMLWrt.bCfgStarBasic,
-                                                 rHTMLWrt.eDestEnc,
-                                        &rHTMLWrt.aNonConvertableCharacters );
+                if (!rMacTable.empty())
+                {
+                    HtmlWriterHelper::applyEvents(aHtml, rMacTable, aAnchorEventTable, rHTMLWrt.bCfgStarBasic);
+                }
             }
-
-            rWrt.Strm().WriteCharPtr( ">" );
-            aEndTags = OStringBuffer().append("</").
-                append(OOO_STRING_SVTOOLS_HTML_anchor).
-                append(">").append(aEndTags).
-                makeStringAndClear();
         }
     }
 
-    // Umrandung -> <FONT COLOR = ...>...<IMG ... >...</FONT>
+    // <font color = ...>...<img ... >...</font>
     sal_uInt16 nBorderWidth = 0;
     if( (nFrmOpts & HTML_FRMOPT_BORDER) &&
         SfxItemState::SET == rItemSet.GetItemState( RES_BOX, true, &pItem ))
@@ -1098,74 +1350,57 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrmFmt &rFrmFmt,
 
         if( pColBorderLine )
         {
-            sOut.append('<');
-            sOut.append(OOO_STRING_SVTOOLS_HTML_font).append(' ').
-                append(OOO_STRING_SVTOOLS_HTML_O_color).append("=");
-            rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-            HTMLOutFuncs::Out_Color( rWrt.Strm(),
-                                     pColBorderLine->GetColor(), rHTMLWrt.eDestEnc ).WriteChar( '>' );
-
-            aEndTags = OStringBuffer().
-                append("</").
-                append(OOO_STRING_SVTOOLS_HTML_font).
-                append('>').append(aEndTags).makeStringAndClear();
+            aHtml.start(OOO_STRING_SVTOOLS_HTML_font);
+            HtmlWriterHelper::applyColor(aHtml, OOO_STRING_SVTOOLS_HTML_O_color, pColBorderLine->GetColor());
         }
     }
 
-    sOut.append('<');
-    sOut.append(OOO_STRING_SVTOOLS_HTML_image).append(' ').
-        append(OOO_STRING_SVTOOLS_HTML_O_src).
-        append("=\"").append(OOO_STRING_SVTOOLS_HTML_O_data).append(":");
-    rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+    aHtml.start(OOO_STRING_SVTOOLS_HTML_image);
 
     OUString aGraphicInBase64;
     sal_uLong nErr = XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64);
-    if( nErr )
+    if (nErr)
     {
         rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
     }
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
+
+    OStringBuffer sBuffer;
+    sBuffer.append(OOO_STRING_SVTOOLS_HTML_O_data);
+    sBuffer.append(":");
+    sBuffer.append(OUStringToOString(aGraphicInBase64, RTL_TEXTENCODING_UTF8));
+    aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_src, sBuffer.makeStringAndClear().getStr());
 
     // Events
-    if( SfxItemState::SET == rItemSet.GetItemState( RES_FRMMACRO, true, &pItem ))
+    if (SfxItemState::SET == rItemSet.GetItemState(RES_FRMMACRO, true, &pItem))
     {
-        const SvxMacroTableDtor& rMacTable =
-            ((const SvxMacroItem *)pItem)->GetMacroTable();
-        if( !rMacTable.empty() )
-            HTMLOutFuncs::Out_Events( rWrt.Strm(), rMacTable, aImageEventTable,
-                                      rHTMLWrt.bCfgStarBasic, rHTMLWrt.eDestEnc,
-                                        &rHTMLWrt.aNonConvertableCharacters );
+        const SvxMacroTableDtor& rMacTable = ((const SvxMacroItem *)pItem)->GetMacroTable();
+        if (!rMacTable.empty())
+        {
+            HtmlWriterHelper::applyEvents(aHtml, rMacTable, aImageEventTable, rHTMLWrt.bCfgStarBasic);
+        }
     }
 
-    // ALT, ALIGN, WIDTH, HEIGHT, HSPACE, VSPACE
-    aEndTags = rHTMLWrt.OutFrmFmtOptions( rFrmFmt, rAlternateTxt, nFrmOpts, aEndTags );
+    // alt, align, width, height, hspace, vspace
+    rHTMLWrt.writeFrameFormatOptions(aHtml, rFrmFmt, rAlternateTxt, nFrmOpts);
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_FLY ) )
         rHTMLWrt.OutCSS1_FrmFmtOptions( rFrmFmt, nFrmOpts );
 
     if( nFrmOpts & HTML_FRMOPT_BORDER )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_border).
-            append("=\"").append(static_cast<sal_Int32>(nBorderWidth)).append("\"");
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_border, nBorderWidth);
     }
 
     if( pURLItem && pURLItem->IsServerMap() )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_ismap);
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_ismap);
     }
+
     if( !aIMapName.isEmpty() )
     {
-        sOut.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_usemap).
-            append("=\"#");
-        rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aIMapName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters ).WriteChar( '\"' );
+        aHtml.attribute(OOO_STRING_SVTOOLS_HTML_O_usemap, "#" + aIMapName);
     }
 
-    rHTMLWrt.Strm().WriteChar( '>' );
-
-    if( !aEndTags.isEmpty() )
-        rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
+    aHtml.flushStack();
 
     if( !rHTMLWrt.aINetFmts.empty() )
     {

@@ -414,6 +414,9 @@ public:
     void OutBookmarks();
     void OutPointFieldmarks( const SwPosition& rPos );
     void OutImplicitMark( const OUString& rMark, const sal_Char *pMarkType );
+
+    OUString convertHyperlinkHRefValue(const OUString& rURL);
+
     void OutHyperlinkHRefValue( const OUString& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
@@ -465,12 +468,16 @@ public:
     sal_uInt16 GetHTMLDirection( sal_uInt16 nDir ) const;
     sal_uInt16 GetHTMLDirection( const SfxItemSet& rItemSet ) const;
     void OutDirection( sal_uInt16 nDir );
+    OString convertDirection(sal_uInt16 nDirection);
 
     // ALT/ALIGN/WIDTH/HEIGHT/HSPACE/VSPACE-Optionen des aktuellen
     // Frame-Formats ausgeben und ggf. ein <BR CLEAR=...> vorne an
     // rEndTags anhaengen
     OString OutFrmFmtOptions( const SwFrmFmt& rFrmFmt, const OUString& rAltTxt,
         sal_uInt32 nFrmOpts, const OString& rEndTags = OString() );
+
+    void writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rFrmFmt, const OUString& rAltTxt, sal_uInt32 nFrmOpts);
+
     void OutCSS1_TableFrmFmtOptions( const SwFrmFmt& rFrmFmt );
     void OutCSS1_TableCellBorderHack(const SwFrmFmt& rFrmFmt);
     void OutCSS1_SectionFmtOptions( const SwFrmFmt& rFrmFmt, const SwFmtCol *pCol );
