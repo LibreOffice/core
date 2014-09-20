@@ -62,20 +62,6 @@ TokenMap::TokenMap() :
         aIt->maUtf8Name = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUtf8Token.getStr() ), aUtf8Token.getLength() );
     }
 
-#if OSL_DEBUG_LEVEL > 0
-    // check that the perfect_hash is in sync with the token name list
-    bool bOk = true;
-    for( sal_Int32 nToken = 0; bOk && (nToken < XML_TOKEN_COUNT); ++nToken )
-    {
-        // check that the getIdentifier <-> getToken roundtrip works
-        OString aUtf8Name = OUStringToOString( maTokenNames[ nToken ].maUniName, RTL_TEXTENCODING_UTF8 );
-        const struct xmltoken* pToken = Perfect_Hash::in_word_set( aUtf8Name.getStr(), aUtf8Name.getLength() );
-        bOk = pToken && (pToken->nToken == nToken);
-        OSL_ENSURE( bOk, OStringBuffer( "TokenMap::TokenMap - token list broken, #" ).
-            append( nToken ).append( ", '" ).append( aUtf8Name ).append( '\'' ).getStr() );
-    }
-#endif
-
     for (unsigned char c = 'a'; c <= 'z'; c++)
     {
         const struct xmltoken* pToken = Perfect_Hash::in_word_set(
