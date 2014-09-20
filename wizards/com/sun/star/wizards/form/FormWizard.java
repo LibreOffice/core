@@ -78,10 +78,8 @@ public class FormWizard extends DatabaseObjectWizard
                     210, Boolean.TRUE, "DialogForm", 102, 41, 1, Short.valueOf((short) 0), m_oResource.getResText(UIConsts.RID_FORM), 310
                 });
         drawNaviBar();
-        if (getFormResources())
-        {
-            setRightPaneHeaders(m_oResource, UIConsts.RID_FORM + 90, 8);
-        }
+        getFormResources();
+        setRightPaneHeaders(m_oResource, UIConsts.RID_FORM + 90, 8);
     }
 
     public static void main(String i_args[])
@@ -374,15 +372,13 @@ public class FormWizard extends DatabaseObjectWizard
         }
     }
 
-    private boolean getFormResources()
+    private void getFormResources()
     {
         sShowBinaryFields = m_oResource.getResText(UIConsts.RID_FORM + 2);
         slblTables = m_oResource.getResText(UIConsts.RID_FORM + 6);
         slblFields = m_oResource.getResText(UIConsts.RID_FORM + 12);
         slblSelFields = m_oResource.getResText(UIConsts.RID_FORM + 1);
         serrFormNameexists = m_oResource.getResText(UIConsts.RID_FORM + 98);
-
-        return true;
     }
 
     private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
