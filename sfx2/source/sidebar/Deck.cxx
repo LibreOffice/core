@@ -291,17 +291,17 @@ void Deck::ShowPanel (const Panel& rPanel)
 
 
 
-const char* GetWindowClassification (const Window* pWindow)
+const OUString& GetWindowClassification (const Window* pWindow)
 {
     const OUString& rsName (pWindow->GetText());
     if (!rsName.isEmpty())
     {
-        return ::rtl::OUStringToOString(rsName, RTL_TEXTENCODING_ASCII_US).getStr();
+        return rsName;
     }
     else
     {
-        static const char msWindow[] = "window";
-        return msWindow;
+        static const OUString aWindow ("window");
+        return aWindow;
     }
 }
 
@@ -311,12 +311,12 @@ void Deck::PrintWindowSubTree (Window* pRoot, int nIndentation)
     static const char* sIndentation = "                                                                  ";
     const Point aLocation (pRoot->GetPosPixel());
     const Size aSize (pRoot->GetSizePixel());
-    const char* sClassification = GetWindowClassification(pRoot);
+    OUString sClassification = GetWindowClassification(pRoot);
     const char* sVisible = pRoot->IsVisible() ? "visible" : "hidden";
     OSL_TRACE("%s%x %s %s +%d+%d x%dx%d",
         sIndentation+strlen(sIndentation)-nIndentation*4,
         pRoot,
-        sClassification,
+        OUStringToOString(sClassification, RTL_TEXTENCODING_ASCII_US).getStr(),
         sVisible,
         aLocation.X(),aLocation.Y(),
         aSize.Width(),aSize.Height());
