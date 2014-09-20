@@ -58,8 +58,7 @@ TokenMap::TokenMap() :
     for( TokenNameVector::iterator aIt = maTokenNames.begin(), aEnd = maTokenNames.end(); aIt != aEnd; ++aIt, ++ppcTokenName )
     {
         OString aUtf8Token( *ppcTokenName );
-        aIt->maUniName = OStringToOUString( aUtf8Token, RTL_TEXTENCODING_UTF8 );
-        aIt->maUtf8Name = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUtf8Token.getStr() ), aUtf8Token.getLength() );
+        *aIt = Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( aUtf8Token.getStr() ), aUtf8Token.getLength() );
     }
 
     for (unsigned char c = 'a'; c <= 'z'; c++)
@@ -76,9 +75,14 @@ TokenMap::~TokenMap()
 
 OUString TokenMap::getUnicodeTokenName( sal_Int32 nToken ) const
 {
-    if( (0 <= nToken) && (static_cast< size_t >( nToken ) < maTokenNames.size()) )
-        return maTokenNames[ static_cast< size_t >( nToken ) ].maUniName;
-    return OUString();
+    Sequence< sal_Int8 > rUtf8Name = getUtf8TokenName(nToken);
+    if (rUtf8Name.getLength() == 0)
+        return OUString();
+
+    return OUString(reinterpret_cast< const char * >(
+                    rUtf8Name.getConstArray() ),
+                    rUtf8Name.getLength(),
+                    RTL_TEXTENCODING_UTF8);
 }
 
 sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
@@ -91,7 +95,7 @@ sal_Int32 TokenMap::getTokenFromUnicode( const OUString& rUnicodeName ) const
 Sequence< sal_Int8 > TokenMap::getUtf8TokenName( sal_Int32 nToken ) const
 {
     if( (0 <= nToken) && (static_cast< size_t >( nToken ) < maTokenNames.size()) )
-        return maTokenNames[ static_cast< size_t >( nToken ) ].maUtf8Name;
+        return maTokenNames[ static_cast< size_t >( nToken ) ];
     return Sequence< sal_Int8 >();
 }
 
