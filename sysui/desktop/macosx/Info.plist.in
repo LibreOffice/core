@@ -1303,6 +1303,8 @@
 				<string>pcd</string>
 				<string>oth</string>
 				<string>mml</string>
+                                <string>dpt</string>
+                                <string>wpt</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
