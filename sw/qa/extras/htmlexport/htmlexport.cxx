@@ -162,6 +162,36 @@ DECLARE_HTMLEXPORT_TEST(testSkipImageEmbeddedDocument, "skipimage-embedded-docum
     assertXPathContent(pDoc, "/html/body/p/span/p/span", "Inner.");
 }
 
+DECLARE_HTMLEXPORT_TEST(testExportImageProperties, "HTMLImage.odt")
+{
+    htmlDocPtr pDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pDoc);
+
+    assertXPath(pDoc, "/html/body", 1);
+
+    assertXPath(pDoc, "/html/body/p/map/area", "shape", "poly");
+    assertXPath(pDoc, "/html/body/p/map/area", "href", "http://www.microsoft.com/");
+    assertXPath(pDoc, "/html/body/p/map/area", "target", "_self");
+    assertXPath(pDoc, "/html/body/p/map/area", "alt", "microsoft");
+
+    assertXPath(pDoc, "/html/body/p/a", 1);
+    assertXPath(pDoc, "/html/body/p/a", "href", "http://www.google.com/");
+
+    assertXPath(pDoc, "/html/body/p/a/font", 1);
+    assertXPath(pDoc, "/html/body/p/a/font", "color", "#ff0000");
+
+    assertXPath(pDoc, "/html/body/p/a/font/img", 1);
+    assertXPath(pDoc, "/html/body/p/a/font/img", "name", "Text");
+    assertXPath(pDoc, "/html/body/p/a/font/img", "alt", "Four colors");
+    assertXPath(pDoc, "/html/body/p/a/font/img", "align", "middle");
+    assertXPath(pDoc, "/html/body/p/a/font/img", "hspace", "38");
+    assertXPath(pDoc, "/html/body/p/a/font/img", "vspace", "19");
+    assertXPath(pDoc, "/html/body/p/a/font/img", "width", "222");
+    assertXPath(pDoc, "/html/body/p/a/font/img", "height", "222");
+    assertXPath(pDoc, "/html/body/p/a/font/img", "border", "3");
+    assertXPath(pDoc, "/html/body/p/a/font/img", "usemap", "#map1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
