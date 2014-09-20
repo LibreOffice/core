@@ -238,7 +238,8 @@ namespace svt
     {
         Control* pControl = NULL;
         ControlDescription tmpDesc;
-        tmpDesc.pControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8).getStr();
+        OString aControlName = OUStringToOString( _rControlName, RTL_TEXTENCODING_UTF8 );
+        tmpDesc.pControlName = aControlName.getStr();
 
         // translate the name into an id
         ControlDescRange aFoundRange = ::std::equal_range( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
@@ -319,7 +320,8 @@ namespace svt
     bool OControlAccess::isControlSupported( const OUString& _rControlName )
     {
         ControlDescription tmpDesc;
-        tmpDesc.pControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8).getStr();
+        OString aControlName = OUStringToOString(_rControlName, RTL_TEXTENCODING_UTF8);
+        tmpDesc.pControlName = aControlName.getStr();
         return ::std::binary_search( s_pControls, s_pControlsEnd, tmpDesc, ControlDescriptionLookup() );
     }
 

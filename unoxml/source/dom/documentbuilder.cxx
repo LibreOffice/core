@@ -317,12 +317,6 @@ namespace DOM
 
         ::osl::MutexGuard const g(m_Mutex);
 
-        // encoding...
-        /*
-        xmlChar *encstr = (xmlChar*) OUStringToOString(src.sEncoding, RTL_TEXTENCODING_UTF8).getStr();
-        xmlCharEncoding enc = xmlParseCharEncoding(encstr);
-        */
-
         ::boost::shared_ptr<xmlParserCtxt> const pContext(
                 xmlNewParserCtxt(), xmlFreeParserCtxt);
 
