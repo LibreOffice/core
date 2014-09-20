@@ -40,6 +40,7 @@ static const CHAR* g_Extensions[] =
     ".docm",    // Office Word 2007 XML macro-enabled document
     ".dotx",    // Office Word 2007 XML template
     ".dotm",    // Office Word 2007 XML macro-enabled template
+    ".dpt",     //Kingsoft Presentation
     ".xlw",     // Microsoft Excel
     ".xls",     // Microsoft Excel
     ".xlt",     // Microsoft Excel Template
@@ -58,6 +59,7 @@ static const CHAR* g_Extensions[] =
     ".ppsx",    // Office PowerPoint 2007 XML show
     ".vsd",     // Visio 2000/XP/2003 document
     ".vst",     // Visio 2000/XP/2003 template
+    ".wpt",     //Kingsoft Writer
     0
 };
 
