@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baee8101_53c1d67f",
+        "filename": "basic/source/comp/sbcomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-20T06:58:08Z",
+      "side": 1,
+      "message": "declaring a local variable is probably going to be safer than an allocate/free pair",
+      "revId": "e85dfc513e1e5663f2358020526d08f6cf956df5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_33be5200",
+        "filename": "sfx2/source/control/shell.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 588,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-20T06:58:08Z",
+      "side": 1,
+      "message": "is this not going to leak? Maybe we should convert pName to an OUString to be safe?",
+      "revId": "e85dfc513e1e5663f2358020526d08f6cf956df5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_93ce1eb3",
+        "filename": "sfx2/source/sidebar/Deck.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 294,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-20T06:58:08Z",
+      "side": 1,
+      "message": "this method should probably be returning an OUString, otherwise it will leak.\nWhich will then eliminate the need for the OString conversion",
+      "revId": "e85dfc513e1e5663f2358020526d08f6cf956df5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baee8101_73c4da91",
+        "filename": "sw/source/ui/vba/vbasystem.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2014-09-20T06:58:08Z",
+      "side": 1,
+      "message": "this will leak. Rather just declare a local variable so that the lifetime works out OK.",
+      "revId": "e85dfc513e1e5663f2358020526d08f6cf956df5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
