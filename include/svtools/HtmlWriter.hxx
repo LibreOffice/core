@@ -12,6 +12,7 @@
 #define INCLUDED_SVTOOLS_HTMLWRITER_HXX
 
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <vector>
 #include <svtools/svtdllapi.h>
@@ -20,11 +21,13 @@ class SVT_DLLPUBLIC HtmlWriter
 {
 private:
     std::vector<OString> maElementStack;
-    SvStream&            mrStream;
 
-    bool                 mbElementOpen;
-    bool                 mbContentWritten;
-    bool                 mbPrettyPrint;
+    SvStream& mrStream;
+
+    bool mbElementOpen;
+    bool mbContentWritten;
+    bool mbPrettyPrint;
+    rtl_TextEncoding maEncoding;
 
 public:
     HtmlWriter(SvStream& rStream);
@@ -32,11 +35,23 @@ public:
 
     void prettyPrint(bool bChoice);
 
-    void start(const OString &aElement);
+    void start(const OString& aElement);
+
     void end();
-    void write(const OString &aContent);
-    void attribute(const OString &aAttribute, const OString &aValue);
-    void single(const OString &aContent);
+
+    void flushStack();
+    void flushStack(const OString& aElement);
+
+    void write(const OString& aContent);
+
+    void attribute(const OString& aAttribute, const char* aValue);
+    void attribute(const OString& aAttribute, sal_Int32 aValue);
+    void attribute(const OString& aAttribute, const OString& aValue);
+    void attribute(const OString& aAttribute, const OUString& aValue);
+    // boolean attribute e.g. <img ismap>
+    void attribute(const OString& aAttribute);
+
+    void single(const OString& aContent);
     void endAttribute();
 };
 

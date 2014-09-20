@@ -40,6 +40,8 @@ public:
     void testSingleElementWithContent();
     void testSingleElementWithContentAndAttributes();
     void testNested();
+    void testAttributeValues();
+    void testFlushStack();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSingleElement);
@@ -47,6 +49,8 @@ public:
     CPPUNIT_TEST(testSingleElementWithContent);
     CPPUNIT_TEST(testSingleElementWithContentAndAttributes);
     CPPUNIT_TEST(testNested);
+    CPPUNIT_TEST(testAttributeValues);
+    CPPUNIT_TEST(testFlushStack);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -162,6 +166,126 @@ void Test::testNested()
     CPPUNIT_ASSERT_EQUAL(OString("<abc><xyz>xxx</xyz></abc>"), aString);
 }
 
+void Test::testAttributeValues()
+{
+    SvMemoryStream aStream;
+
+    HtmlWriter aHtml(aStream);
+    aHtml.prettyPrint(false);
+    aHtml.start("abc");
+    aHtml.attribute("one", OString("one"));
+    aHtml.attribute("two", OUString("two"));
+    aHtml.attribute("three", sal_Int32(12));
+    aHtml.end();
+
+    OString aString = extractFromStream(aStream);
+
+    CPPUNIT_ASSERT_EQUAL(OString("<abc one=\"one\" two=\"two\" three=\"12\"/>"), aString);
+}
+
+void Test::testFlushStack()
+{
+    {
+        SvMemoryStream aStream;
+
+        HtmlWriter aHtml(aStream);
+        aHtml.prettyPrint(false);
+        aHtml.start("a");
+        aHtml.flushStack("a"); // simple ,end element "a" = like end()
+
+        OString aString = extractFromStream(aStream);
+
+        CPPUNIT_ASSERT_EQUAL(OString("<a/>"), aString);
+    }
+
+    {
+        SvMemoryStream aStream;
+
+        HtmlWriter aHtml(aStream);
+        aHtml.prettyPrint(false);
+        aHtml.start("a");
+        aHtml.start("b");
+        aHtml.flushStack("b"); // end at first element "b", don't output "a" yet
+
+        OString aString = extractFromStream(aStream);
+
+        CPPUNIT_ASSERT_EQUAL(OString("<a><b/>"), aString);
+    }
+
+    {
+        SvMemoryStream aStream;
+
+        HtmlWriter aHtml(aStream);
+        aHtml.prettyPrint(false);
+        aHtml.start("a");
+        aHtml.start("b");
+        aHtml.flushStack("a"); // end at first element "a"
+
+        OString aString = extractFromStream(aStream);
+
+        CPPUNIT_ASSERT_EQUAL(OString("<a><b/></a>"), aString);
+    }
+
+    {
+        SvMemoryStream aStream;
+
+        HtmlWriter aHtml(aStream);
+        aHtml.prettyPrint(false);
+        aHtml.start("a");
+        aHtml.start("b");
+        aHtml.start("c");
+        aHtml.flushStack("a"); // end at first element "a"
+
+        OString aString = extractFromStream(aStream);
+
+        CPPUNIT_ASSERT_EQUAL(OString("<a><b><c/></b></a>"), aString);
+    }
+
+    {
+        SvMemoryStream aStream;
+
+        HtmlWriter aHtml(aStream);
+        aHtml.prettyPrint(false);
+        aHtml.start("a");
+        aHtml.start("b");
+        aHtml.start("c");
+        aHtml.flushStack("b"); // end at first element "b"
+
+        OString aString = extractFromStream(aStream);
+
+        CPPUNIT_ASSERT_EQUAL(OString("<a><b><c/></b>"), aString);
+    }
+
+    {
+        SvMemoryStream aStream;
+
+        HtmlWriter aHtml(aStream);
+        aHtml.prettyPrint(false);
+        aHtml.start("a");
+        aHtml.start("b");
+        aHtml.start("c");
+        aHtml.flushStack("x"); // no known element - ends when stack is empty
+
+        OString aString = extractFromStream(aStream);
+
+        CPPUNIT_ASSERT_EQUAL(OString("<a><b><c/></b></a>"), aString);
+    }
+
+    {
+        SvMemoryStream aStream;
+
+        HtmlWriter aHtml(aStream);
+        aHtml.prettyPrint(false);
+        aHtml.start("a");
+        aHtml.start("b");
+        aHtml.start("c");
+        aHtml.flushStack(); // flush the whole stack
+
+        OString aString = extractFromStream(aStream);
+
+        CPPUNIT_ASSERT_EQUAL(OString("<a><b><c/></b></a>"), aString);
+    }
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 CPPUNIT_PLUGIN_IMPLEMENT();
