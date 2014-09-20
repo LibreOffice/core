@@ -152,10 +152,10 @@ void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
             lResult = RegCreateKeyEx( hBaseKey, lpSubKey, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL );
             if( ERROR_SUCCESS == lResult )
             {
-                LPCTSTR szValue = TEXT( OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 ).getStr() );
-                DWORD cbData = sizeof(TCHAR) * (_tcslen(szValue) + 1);
+                OString aUTF8Value = OUStringToOString( aValue, RTL_TEXTENCODING_UTF8 );
+                DWORD cbData = sizeof(TCHAR) * (_tcslen(aUTF8Value.getStr()) + 1);
                 LPCTSTR lpValueName = TEXT(maKey.getStr());
-                lResult = RegSetValueEx( hKey, lpValueName, 0 /* Reserved */, REG_SZ, (LPBYTE)szValue, cbData );
+                lResult = RegSetValueEx( hKey, lpValueName, 0 /* Reserved */, REG_SZ, (LPBYTE)aUTF8Value.getStr(), cbData );
                 RegCloseKey( hKey );
             }
         }
