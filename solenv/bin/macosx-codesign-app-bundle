@@ -102,6 +102,6 @@ done
 
 id=`echo ${MACOSX_APP_NAME} | tr ' ' '-'`
 
-codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}.$id" $resource_rules --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE"
+codesign --force --verbose --identifier="${MACOSX_BUNDLE_IDENTIFIER}" $resource_rules --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$APP_BUNDLE"
 
 exit 0
