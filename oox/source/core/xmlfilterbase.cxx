@@ -161,7 +161,7 @@ void registerNamespaces( FastParser& rParser )
     const Sequence< beans::Pair<OUString, sal_Int32> > ids = NamespaceIds::get();
 
     // Filter out duplicates: a namespace can have multiple URL's, think of
-    // strict vs trasitional.
+    // strict vs traditional.
     std::set<sal_Int32> aSet;
     for (sal_Int32 i = 0; i < ids.getLength(); ++i)
         aSet.insert(ids[i].Second);

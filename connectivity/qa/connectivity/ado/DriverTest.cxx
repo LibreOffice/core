@@ -117,7 +117,7 @@ void AdoDriverTest::test_select_default_all()
     Reference< XResultSet > xResultSet = xStatement->executeQuery();
     if (!xResultSet.is())
     {
-        CPPUNIT_ASSERT_MESSAGE("cannot execure sql statement!", xResultSet.is());
+        CPPUNIT_ASSERT_MESSAGE("cannot execute sql statement!", xResultSet.is());
     }
 
     Reference< XRow > xDelegatorRow(xResultSet, UNO_QUERY);
