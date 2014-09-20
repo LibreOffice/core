@@ -55,19 +55,25 @@ done
 
 # Sign executables
 
-find "$APP_BUNDLE/Contents/MacOS" \
-     "$APP_BUNDLE/Contents/Frameworks/LibreOfficePython.framework/Versions/"[1-9]*/Resources/Python.app/Contents/MacOS \
-     -type f |
+find "$APP_BUNDLE/Contents/MacOS" -type f |
 while read file; do
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
     codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file"
 done
 
-# Sign included bundles. First frameworks.
+# Sign included bundles. First .app ones (i.e. the Python.app inside
+# the LibreOfficePython.framework. Be generic for kicks...)
 
-# Yeah, we don't bundle any other framework than our Python one, and
-# it has just one version, so this generic search is mostly for
-# completeness.
+find "$APP_BUNDLE" -name '*.app' -type d |
+while read app; do
+    fn=`basename "$app"`
+    fn=${fn%.*}
+    # Assume the app has a XML (and not binary) Info.plist
+    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $app/Contents/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
+    codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$app"
+done
+
+# Then .framework ones. Again, be generic just for kicks.
 
 find "$APP_BUNDLE" -name '*.framework' -type d |
 while read framework; do
@@ -75,8 +81,9 @@ while read framework; do
     fn=${fn%.*}
     for version in "$framework"/Versions/*; do
         if test ! -L "$version" -a -d "$version"; then
-            codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$version/$fn"
-            codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$version"
+	    # Assume the framework has a XML (and not binary) Info.plist
+	    id=`grep -A 1 '<key>CFBundleIdentifier</key>' $version/Resources/Info.plist | tail -1 | sed -e 's,.*<string>,,' -e 's,</string>.*,,'`
+            codesign --verbose --identifier=$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$version"
         fi
     done
 done
