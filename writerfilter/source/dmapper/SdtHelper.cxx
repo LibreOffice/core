@@ -130,9 +130,9 @@ void SdtHelper::createDateControl(OUString& rContentText, beans::PropertyValue a
     aGrabBag["Locale"] <<= m_sLocale.makeStringAndClear();
     aGrabBag["CharFormat"] <<= aCharFormat.Value;
     // merge in properties like ooxml:CT_SdtPr_alias and friends.
-    aGrabBag.update(comphelper::SequenceAsHashMap(m_aGrabBag));
+    aGrabBag.update(comphelper::SequenceAsHashMap(m_aGrabBag.getAsConstList()));
     // and empty the property list, so they won't end up on the next sdt as well
-    m_aGrabBag.realloc(0);
+    m_aGrabBag.clear();
 
     std::vector<OUString> aItems;
     createControlShape(lcl_getOptimalWidth(m_rDM_Impl.GetStyleSheetTable(), rContentText, aItems), xControlModel, aGrabBag.getAsConstPropertyValueList());
@@ -168,31 +168,29 @@ void SdtHelper::createControlShape(awt::Size aSize, uno::Reference<awt::XControl
 
 void SdtHelper::appendToInteropGrabBag(com::sun::star::beans::PropertyValue rValue)
 {
-    sal_Int32 nLength = m_aGrabBag.getLength();
-    m_aGrabBag.realloc(nLength + 1);
-    m_aGrabBag[nLength] = rValue;
+    m_aGrabBag.push_back(rValue);
 }
 
 com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> SdtHelper::getInteropGrabBagAndClear()
 {
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aRet = m_aGrabBag;
-    m_aGrabBag.realloc(0);
+    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> aRet = m_aGrabBag.getAsConstList();
+    m_aGrabBag.clear();
     return aRet;
 }
 
 bool SdtHelper::isInteropGrabBagEmpty()
 {
-    return m_aGrabBag.getLength() == 0;
+    return m_aGrabBag.empty();
 }
 
 sal_Int32 SdtHelper::getInteropGrabBagSize()
 {
-    return m_aGrabBag.getLength();
+    return m_aGrabBag.size();
 }
 
 bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
 {
-    for (sal_Int32 i=0; i < m_aGrabBag.getLength(); ++i)
+    for (size_t i=0; i < m_aGrabBag.size(); ++i)
         if (m_aGrabBag[i].Name == rValueName)
             return true;
 

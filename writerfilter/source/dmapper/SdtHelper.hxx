@@ -57,7 +57,7 @@ class SdtHelper
     /// Locale string as it comes from the ooxml document.
     OUStringBuffer m_sLocale;
     /// Grab bag to store unsupported SDTs, aiming to save them back on export.
-    com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue> m_aGrabBag;
+    comphelper::SequenceAsVector<css::beans::PropertyValue> m_aGrabBag;
 
     bool m_bHasElements;
     /// The last stored SDT element is outside paragraphs.
