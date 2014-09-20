@@ -296,7 +296,7 @@ const char* GetWindowClassification (const Window* pWindow)
     const OUString& rsName (pWindow->GetText());
     if (!rsName.isEmpty())
     {
-        return ::rtl::OUStringToOString(rsName, RTL_TEXTENCODING_ASCII_US).getStr();
+        return strdup(::rtl::OUStringToOString(rsName, RTL_TEXTENCODING_ASCII_US).getStr());
     }
     else
     {

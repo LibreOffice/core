@@ -414,7 +414,7 @@ void lcl_printTimeOutput( void )
             if( pFunctionItem != NULL )
             {
                 OUString aCompleteFunctionName = pFunctionItem->m_aCompleteFunctionName;
-                const char* pName = OUStringToOString( aCompleteFunctionName, RTL_TEXTENCODING_ASCII_US ).getStr();
+                const char* pName = strdup( OUStringToOString( aCompleteFunctionName, RTL_TEXTENCODING_ASCII_US ).getStr() );
                 int nNameLen = aCompleteFunctionName.getLength();
 
                 double dFctTotalTime = pFunctionItem->m_dTotalTime;
@@ -430,6 +430,7 @@ void lcl_printTimeOutput( void )
                          pName, lcl_getSpaces( nSpaceCount ), pFunctionItem->m_nCallCount,
                          dFctTotalTime*1000.0, dFctTotalTimePercent, dFctNetTime*1000.0, dFctNetTimePercent );
                 lcl_lineOut( TimeBuffer );
+                free( pName );
             }
         }
     }
@@ -566,10 +567,11 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     ModuleTraceMap::iterator it = rModuleTraceMap.find( aModuleName );
     if( it == rModuleTraceMap.end() )
     {
-        const char* pModuleNameStr = OUStringToOString( OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr();
+        const char* pModuleNameStr = strdup( OUStringToOString( OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr() );
         char Buffer[200];
         sprintf( Buffer, "TRACE ERROR: Unknown module \"%s\"", pModuleNameStr );
         lcl_lineOut( Buffer );
+        free( pModuleNameStr );
         return;
     }
 
@@ -583,10 +585,11 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     PCToTextDataMap::iterator itInner = pInnerMap->find( nPC );
     if( itInner == pInnerMap->end() )
     {
-        const char* pModuleNameStr = OUStringToOString( OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr();
+        const char* pModuleNameStr = strdup( OUStringToOString( OUString( aModuleName ), RTL_TEXTENCODING_ASCII_US ).getStr() );
         char Buffer[200];
         sprintf( Buffer, "TRACE ERROR: No info for PC = %d in module \"%s\"", (int)nPC, pModuleNameStr );
         lcl_lineOut( Buffer );
+        free( pModuleNameStr );
         return;
     }
 
@@ -925,9 +928,8 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         }
 
         char Buffer[500];
-        const char* pValStr = OUStringToOString( OUString( aValStr ), RTL_TEXTENCODING_ASCII_US ).getStr();
 
-        sprintf( Buffer, "### TRACE_PRINT: %s ###", pValStr );
+        sprintf( Buffer, "### TRACE_PRINT: %s ###", OUStringToOString( OUString( aValStr ), RTL_TEXTENCODING_ASCII_US ).getStr() );
         int nIndent = GnLastCallLvl * GnIndentPerCallLevel;
         lcl_lineOut( Buffer, lcl_getSpaces( nIndent ) );
 
