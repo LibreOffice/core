@@ -218,12 +218,36 @@
 			</dict>
 		</dict>
 
+		<!-- Chart documents -->
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>org.oasis-open.opendocument.chart</string>
+			<key>UTTypeDescription</key>
+			<string>OpenDocument Chart</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.content</string>
+			</array>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>odc</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/vnd.oasis.opendocument.chart</string>
+				</array>
+			</dict>
+		</dict>
+
 		<!-- Text master documents -->
 		<dict>
 			<key>UTTypeIdentifier</key>
 			<string>org.openoffice.text-master</string>
 			<key>UTTypeDescription</key>
-			<string>OpenOffice.org 1.0 Master</string>
+			<string>OpenOffice.org 1.0 Master Document</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.data</string>
@@ -1244,85 +1268,144 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
-				<string>doc</string>
-				<string>dot</string>
-				<string>rtf</string>
-				<string>html</string>
-				<string>htm</string>
-				<string>pdb</string>
-				<string>xml</string>
-				<string>psw</string>
 				<string>wpd</string>
-				<string>jtd</string>
-				<string>jtt</string>
-				<string>hwp</string>
-				<string>wps</string>
-				<string>dif</string>
-				<string>dbf</string>
-				<string>xls</string>
-				<string>xlw</string>
-				<string>xlt</string>
-				<string>slk</string>
-				<string>csv</string>
-				<string>wk1</string>
-				<string>wk2</string>
-				<string>123</string>
-				<string>pxl</string>
-				<string>ppt</string>
-				<string>pps</string>
-				<string>pot</string>
-				<string>cgm</string>
-				<string>dxf</string>
-				<string>emf</string>
-				<string>eps</string>
-				<string>met</string>
-				<string>pct</string>
-				<string>sgf</string>
-				<string>sgv</string>
-				<string>svm</string>
-				<string>wmf</string>
-				<string>bmp</string>
-				<string>gif</string>
-				<string>jpg</string>
-				<string>jpeg</string>
-				<string>jfif</string>
-				<string>jif</string>
-				<string>jpe</string>
-				<string>pbm</string>
-				<string>pcx</string>
-				<string>pgm</string>
-				<string>png</string>
-				<string>ppm</string>
-				<string>psd</string>
-				<string>ras</string>
-				<string>tga</string>
-				<string>tif</string>
-				<string>tiff</string>
-				<string>xbm</string>
-				<string>xpm</string>
-				<string>pcd</string>
-				<string>oth</string>
-				<string>mml</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-		</dict>
+			<key>CFBundleTypeName</key>
+			<string>WordPerfect Document</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>pdb</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>PalmDoc eBook</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>hwp</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Hangul WP 97 Document</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wps</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Works for Mac Document (v1 - v4)</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>dif</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Data Interchange Format Document</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>slk</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>SYLK Document</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>csv</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Comma-Separated Value Spreadsheet</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>dbf</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>dBASE Document</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wk1</string>
+				<string>wk2</string>
+				<string>123</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Lotus 1-2-3 Document</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>cgm</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Computer Graphics Metafile</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>dxf</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>AutoCAD Interchange Format</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>emf</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Windows Enhanced Metafile</string>
+	        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>wmf</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Windows Metafile</string>
+	        </dict>
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>txt</string>
 				<string>TXT</string>
 				<string>text</string>
-				<string>*</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>TEXT</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>TEXT</string>
-				<string>sEXT</string>
-				<string>ttro</string>
-			</array>
+			<string>Text file</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
@@ -1330,52 +1413,300 @@
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>org.openoffice.text</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Text</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.text</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Text</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.spreadsheet</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Spreadsheet</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.spreadsheet</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Spreadsheet</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.presentation</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Presentation</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.presentation</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Presentation</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.graphics</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Drawing</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.graphics</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Drawing</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.text-master</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Master Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.text-master</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Master Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.formula</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Formula</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.formula</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Formula</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.text-template</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Text Template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.text-template</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Text Template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.spreadsheet-template</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Spreadsheet Template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.spreadsheet-template</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Spreadsheet Template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.presentation-template</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Presentation Template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.presentation-template</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Presentation Template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openoffice.graphics-template</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenOffice.org 1.0 Drawing Template</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.graphics-template</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument DrawingTemplate</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.database</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Database</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.oasis-open.opendocument.chart</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>OpenDocument Chart</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>public.rtf</string>
-				<string>public.html</string>
-				<string>public.jpeg</string>
-				<string>public.tiff</string>
-				<string>public.png</string>
-				<string>public.xbitmap-image</string>
-				<string>com.adobe.encapsulated-postscript</string>
-				<string>com.microsoft.bmp</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Rich Text Format</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>com.microsoft.word.doc</string>
-				<string>com.microsoft.excel.xls</string>
-				<string>com.microsoft.powerpoint.ppt</string>
+				<string>com.microsoft.word.dot</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Word Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openxmlformats.wordprocessingml.document</string>
 				<string>org.openxmlformats.wordprocessingml.document.macroenabled</string>
 				<string>org.openxmlformats.wordprocessingml.template</string>
 				<string>org.openxmlformats.wordprocessingml.template.macroenabled</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML Word Processing Document</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.excel.xls</string>
+				<string>com.microsoft.excel.sheet.binary.macroenabled</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft Excel Spreadsheet</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openxmlformats.spreadsheetml.sheet</string>
 				<string>org.openxmlformats.spreadsheetml.sheet.macroenabled</string>
-				<string>com.microsoft.excel.sheet.binary.macroenabled</string>
 				<string>org.openxmlformats.spreadsheetml.template</string>
 				<string>org.openxmlformats.spreadsheetml.template.macroenabled</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML Spreadsheet</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>com.microsoft.powerpoint.ppt</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Microsoft PowerPoint Presentation</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
+		<dict>
+			<key>LSItemContentTypes</key>
+			<array>
 				<string>org.openxmlformats.presentationml.presentation</string>
 				<string>org.openxmlformats.presentationml.presentation.macroenabled</string>
 				<string>org.openxmlformats.presentationml.template</string>
 				<string>org.openxmlformats.presentationml.template.macroenabled</string>
 			</array>
+			<key>CFBundleTypeName</key>
+			<string>Office Open XML Presentation</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 		</dict>
