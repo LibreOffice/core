@@ -24,9 +24,13 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 
 public class ComponentContext_Test {
-    public static void main(String args[]) {
+
+    @Test public void test() {
         try {
             HashMap<String,Object> table = new HashMap<String,Object>();
             table.put( "bla1", new ComponentContextEntry( null, Integer.valueOf( 1 ) ) );
@@ -38,40 +42,24 @@ public class ComponentContext_Test {
             XComponentContext xContext = new ComponentContext( table, xInitialContext );
 
             XMultiComponentFactory xSMgr = xContext.getServiceManager();
-            Object o = xSMgr.createInstanceWithContext( "com.sun.star.loader.Java", xContext );
-            if (o == null)
-                System.err.println( "### failed raising service: 1!" );
-            o = xSMgr.createInstanceWithContext( "com.sun.star.bridge.BridgeFactory", xContext );
-            if (o == null)
-                System.err.println( "### failed raising service: 2!" );
-            o = xSMgr.createInstanceWithContext( "com.sun.star.bridge.UnoUrlResolver", xContext );
-            if (o == null)
-                System.err.println( "### failed raising service: 3!" );
-            o = xSMgr.createInstanceWithContext( "com.sun.star.connection.Connector", xContext );
-            if (o == null)
-                System.err.println( "### failed raising service: 4!" );
-            o = xSMgr.createInstanceWithContext( "com.sun.star.connection.Acceptor", xContext );
-            if (o == null)
-                System.err.println( "### failed raising service: 5!" );
-            o = xSMgr.createInstanceWithContext( "com.sun.star.lang.ServiceManager", xContext );
-            if (o == null)
-                System.err.println( "### failed raising service: 6!" );
 
-            if (xContext.getValueByName( "bla1" ) == null ||
-                xContext.getValueByName( "bla2" ) == null ||
-                xContext.getValueByName( "bla3" ) == null ||
-                xInitialContext.getValueByName( "bla2" ) != null ||
-                xInitialContext.getValueByName( "bla3" ) != null)
-            {
-                System.err.println( "### bootstrap context test failed: 1!" );
-            }
-            if (((Integer)xContext.getValueByName( "bla1" )).intValue() != 1 ||
-                ((Integer)xContext.getValueByName( "bla2" )).intValue() != 2 ||
-                ((Integer)xContext.getValueByName( "bla3" )).intValue() != 3 ||
-                ((Integer)xInitialContext.getValueByName( "bla1" )).intValue() != 1)
-            {
-                System.err.println( "### bootstrap context test failed: 2!" );
-            }
+            assertNotNull(xSMgr.createInstanceWithContext( "com.sun.star.loader.Java", xContext ));
+            assertNotNull(xSMgr.createInstanceWithContext( "com.sun.star.bridge.BridgeFactory", xContext ));
+            assertNotNull(xSMgr.createInstanceWithContext( "com.sun.star.bridge.UnoUrlResolver", xContext ));
+            assertNotNull(xSMgr.createInstanceWithContext( "com.sun.star.connection.Connector", xContext ));
+            assertNotNull(xSMgr.createInstanceWithContext( "com.sun.star.connection.Acceptor", xContext ));
+            assertNotNull(xSMgr.createInstanceWithContext( "com.sun.star.lang.ServiceManager", xContext ));
+
+            assertNotNull(xContext.getValueByName( "bla1" ));
+            assertNotNull(xContext.getValueByName( "bla2" ));
+            assertNotNull(xContext.getValueByName( "bla3" ));
+            assertNotNull(xInitialContext.getValueByName( "bla2" ));
+            assertNotNull(xInitialContext.getValueByName( "bla3" ));
+
+            assertEquals(((Integer)xContext.getValueByName( "bla1" )).intValue(), 1);
+            assertEquals(((Integer)xContext.getValueByName( "bla2" )).intValue(), 2);
+            assertEquals(((Integer)xContext.getValueByName( "bla3" )).intValue(), 3);
+            assertEquals(((Integer)xInitialContext.getValueByName( "bla1" )).intValue(), 1);
 
             XComponent xComp = UnoRuntime.queryInterface(
                 XComponent.class, xInitialContext );

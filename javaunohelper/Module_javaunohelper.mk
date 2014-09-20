@@ -16,6 +16,10 @@ $(eval $(call gb_Module_add_targets,javaunohelper,\
     Jar_juh \
 ))
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,javaunohelper,\
+    JunitTest_juh_ComponentContext \
+))
+
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_Module_add_targets,javaunohelper,\
     Library_juhx \
