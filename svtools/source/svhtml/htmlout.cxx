@@ -1001,4 +1001,29 @@ void HtmlWriterHelper::applyColor(HtmlWriter& rHtmlWriter, const OString &aAttri
     rHtmlWriter.attribute(aAttributeName, sBuffer.makeStringAndClear());
 }
 
+
+void HtmlWriterHelper::applyEvents(HtmlWriter& rHtmlWriter, const SvxMacroTableDtor& rMacroTable, const HTMLOutEvent* pEventTable, bool bOutStarBasic)
+{
+    sal_uInt16 i = 0;
+    while (pEventTable[i].pBasicName || pEventTable[i].pJavaName)
+    {
+        const SvxMacro* pMacro = rMacroTable.Get(pEventTable[i].nEvent);
+
+        if (pMacro && pMacro->HasMacro() && (JAVASCRIPT == pMacro->GetScriptType() || bOutStarBasic))
+        {
+            const sal_Char* pAttributeName = NULL;
+            if (STARBASIC == pMacro->GetScriptType())
+                pAttributeName = pEventTable[i].pBasicName;
+            else
+                pAttributeName = pEventTable[i].pJavaName;
+
+            if (pAttributeName)
+            {
+                rHtmlWriter.attribute(pAttributeName, OUStringToOString(pMacro->GetMacName(), RTL_TEXTENCODING_UTF8));
+            }
+        }
+        i++;
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
