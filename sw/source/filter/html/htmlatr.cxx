@@ -2524,7 +2524,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     if( 0x0a == c )
                     {
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
-                        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_linebreak );
+                        HtmlWriter aHtml(rWrt.Strm());
+                        aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
                     }
                     // #i120442#: if c is outside the unicode base plane output it as "&#******;"
                     else if( c > 0xffff)
