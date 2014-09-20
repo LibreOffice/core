@@ -102,8 +102,7 @@ void printColumns( Reference<XResultSet> &xRes )
         OSL_TRACE( "ColumnCount = %d", xMeta->getColumnCount());
         for(sal_Int32 i=1;i<=xMeta->getColumnCount();++i)
         {
-            const char *str = OUtoCStr(xMeta->getColumnName(i));
-            OSL_TRACE( aPat, str );
+            OSL_TRACE( aPat, OUtoCStr(xMeta->getColumnName(i) );
             }
         OSL_TRACE("\n");
         OSL_TRACE("------------------------------------------------------------------------------------------");
@@ -125,8 +124,7 @@ void printXResultSet( Reference<XResultSet> &xRes )
         {
             try
             {
-                const char *str = OUtoCStr(xRow->getString(j));
-                OSL_TRACE( aPat_Short, str );
+                OSL_TRACE( aPat_Short, OUtoCStr(xRow->getString(j) );
             } catch (...) {
             OSL_TRACE(" Ex ");
             }
@@ -235,8 +233,7 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                 while( xRes.is() && xRes->next())
                 {
                     Reference<XRow> xRow(xRes,UNO_QUERY);
-                    const char *strTableName = OUtoCStr(xRow->getString(3));
-                    OSL_TRACE("Testing Table:%s",strTableName);
+                    OSL_TRACE("Testing Table:%s",OUtoCStr(xRow->getString(3));
 
                     Reference<XResultSet> tmpRes =
                         xStmt->executeQuery(sqlPrefix + qut + xRow->getString(3) + qut);

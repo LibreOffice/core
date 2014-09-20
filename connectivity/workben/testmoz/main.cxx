@@ -82,8 +82,7 @@ void printColumns( Reference<XResultSet> &xRes )
         printf( "ColumnCount = %d\n", xMeta->getColumnCount());
         for(sal_Int32 i=1;i<=xMeta->getColumnCount();++i)
         {
-            const char *str = OUtoCStr(xMeta->getColumnName(i));
-            printf( aPat, str );
+            printf( aPat, OUtoCStr(xMeta->getColumnName(i) );
         }
         printf("\n");
         printf("------------------------------------------------------------------------------------------\n");
@@ -100,8 +99,7 @@ void printXResultSet( Reference<XResultSet> &xRes )
         for(sal_Int32 j=1;j<=xMeta->getColumnCount();++j)
         {
             try {
-                const char *str = OUtoCStr(xRow->getString(j));
-                printf( aPat_Short, str );
+                printf( aPat_Short, OUtoCStr(xRow->getString(j)) );
             } catch (...) {
                   printf(" Ex ");
             }
