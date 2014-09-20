@@ -1180,14 +1180,14 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const OUSt
                                   const Any& catalog2, const OUString* schema2,
                                   const OUString* table2) throw(SQLException, RuntimeException)
 {
-    OString aPKQ, aPKN, aFKQ, aFKO, aFKN;
+    OString aPKQ, aPKO, aPKN, aFKQ, aFKO, aFKN;
     if ( catalog.hasValue() )
         aPKQ = OUStringToOString(comphelper::getString(catalog),m_nTextEncoding);
     if ( catalog2.hasValue() )
         aFKQ = OUStringToOString(comphelper::getString(catalog2),m_nTextEncoding);
 
     const char  *pPKQ = catalog.hasValue() && !aPKQ.isEmpty() ? aPKQ.getStr()  : NULL,
-                *pPKO = schema && !schema->isEmpty() ? OUStringToOString(*schema,m_nTextEncoding).getStr() : NULL,
+                *pPKO = schema && !schema->isEmpty() ? (aPKO = OUStringToOString(*schema,m_nTextEncoding)).getStr() : NULL,
                 *pPKN = table   ? (aPKN = OUStringToOString(*table,m_nTextEncoding)).getStr(): NULL,
                 *pFKQ = catalog2.hasValue() && !aFKQ.isEmpty() ? aFKQ.getStr() : NULL,
                 *pFKO = schema2 && !schema2->isEmpty() ? (aFKO = OUStringToOString(*schema2,m_nTextEncoding)).getStr() : NULL,
