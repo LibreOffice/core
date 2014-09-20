@@ -22,5 +22,7 @@ Hidden=false
 Icon=
 Type=MimeType
 Patterns=*.doc
+Patterns=*.wpt
+Patterns=*.dpt
 MimeType=application/msword
 Comment=Microsoft Word Document
