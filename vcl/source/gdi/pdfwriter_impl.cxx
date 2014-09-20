@@ -6039,7 +6039,7 @@ bool PDFWriterImpl::finalizeSignature()
     HASH_End(hc.get(), digest.data, &digest.len, SHA1_LENGTH);
     hc.clear();
 
-    const char *pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 ).getStr();
+    OString pass = OUStringToOString( m_aContext.SignPassword, RTL_TEXTENCODING_UTF8 );
 
     NSSCMSMessage *cms_msg = NSS_CMSMessage_Create(NULL);
     if (!cms_msg)
@@ -6116,7 +6116,7 @@ bool PDFWriterImpl::finalizeSignature()
     NSSCMSEncoderContext *cms_ecx;
 
     //FIXME: Check if password is passed correctly to SEC_PKCS7CreateSignedData function
-    cms_ecx = NSS_CMSEncoder_Start(cms_msg, NULL, NULL, &cms_output, arena, (PK11PasswordFunc)::PDFSigningPKCS7PasswordCallback, (void *)pass, NULL, NULL, NULL, NULL);
+    cms_ecx = NSS_CMSEncoder_Start(cms_msg, NULL, NULL, &cms_output, arena, (PK11PasswordFunc)::PDFSigningPKCS7PasswordCallback, (void *)pass.getStr(), NULL, NULL, NULL, NULL);
 
     if (!cms_ecx)
     {
