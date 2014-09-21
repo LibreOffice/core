@@ -39,6 +39,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/graphicfilter.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/helpers.hxx>
@@ -52,7 +53,7 @@
 #include "graphhelp.hxx"
 #include "doc.hrc"
 
-using namespace ::com::sun::star;
+using namespace css;
 
 SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDIMeta, sal_uInt32 nFormat )
 {
@@ -192,30 +193,33 @@ bool GraphicHelper::supportsMetaFileHandle_Impl()
 
 
 // static
-bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
-                                                        const uno::Reference< io::XStream >& xStream )
+bool GraphicHelper::getThumbnailFormatFromGDI_Impl(GDIMetaFile* pMetaFile, const uno::Reference<io::XStream>& xStream)
 {
     bool bResult = false;
-    SvStream* pStream = NULL;
 
-    if ( xStream.is() )
-        pStream = ::utl::UcbStreamHelper::CreateStream( xStream );
+    if (!pMetaFile || !xStream.is())
+        return false;
 
-    if ( pMetaFile && pStream && !pStream->GetError() )
-    {
-        BitmapEx aResultBitmap;
+    boost::scoped_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xStream));
 
-        bResult = pMetaFile->CreateThumbnail(aResultBitmap);
+    if (pStream->GetError())
+        return false;
 
-        if ( bResult )
-            bResult = ( !aResultBitmap.IsEmpty()
-                        && GraphicConverter::Export( *pStream, aResultBitmap, CVT_PNG ) == 0
-                        && ( pStream->Flush(), !pStream->GetError() ) );
+    BitmapEx aResultBitmap;
 
-        delete pStream;
-    }
+    bResult = pMetaFile->CreateThumbnail(aResultBitmap, 256, BMP_CONVERSION_8BIT_COLORS, BMP_SCALE_DEFAULT);
 
-    return bResult;
+    if (!bResult || aResultBitmap.IsEmpty())
+        return false;
+
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    if (rFilter.compressAsPNG(aResultBitmap, *pStream.get(), 9) != GRFILTER_OK)
+        return false;
+
+    pStream->Flush();
+
+    return !pStream->GetError();
 }
 
 // static
