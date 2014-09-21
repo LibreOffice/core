@@ -37,6 +37,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
+#include <vcl/metric.hxx>
 
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -45,6 +46,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 #ifdef check
 #  //some problem with MacOSX and a check define
 #  undef check
@@ -96,6 +98,8 @@ class ImplFontAttributes;
 class VirtualDevice;
 namespace vcl { class Window; }
 struct SalTwoRect;
+
+typedef boost::intrusive_ptr< FontCharMap > PtrFontCharMap;
 
 // Layout options
 #define SAL_LAYOUT_BIDI_RTL                 (1<<0)
@@ -313,7 +317,7 @@ private:
     Region                          maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
     Color                           maFillColor;
-    vcl::Font                       maFont;
+    vcl::Font                            maFont;
     Color                           maTextColor;
     Color                           maTextLineColor;
     Color                           maOverlineColor;
@@ -590,7 +594,7 @@ public:
     bool                        IsBackground() const { return mbBackground; }
 
     void                        SetFont( const vcl::Font& rNewFont );
-    const vcl::Font&            GetFont() const { return maFont; }
+    const vcl::Font&                 GetFont() const { return maFont; }
 
 protected:
 
@@ -961,7 +965,7 @@ public:
 
         <code>
         VirtualDevice aDevice;
-        vcl::Font aFont = aDevice.GetFont();
+        Font aFont = aDevice.GetFont();
         aFont.SetSize(Size(0, 96));
         aFont.SetColor(COL_BLACK);
         aDevice.SetFont(aFont);
@@ -1145,7 +1149,7 @@ public:
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const vcl::Font& rFont ) const;
 
-    bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
+    bool                        GetFontCharMap( PtrFontCharMap& rFontCharMap );
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     /** Retrieve detailed font information in platform independent structure
@@ -1165,7 +1169,7 @@ public:
                                                     int nLen, int nBase, MetricVector& rVector );
 
     sal_Int32                   HasGlyphs( const vcl::Font& rFont, const OUString& rStr,
-                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
+                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1 );
 
     long                        GetMinKashida() const;
 
@@ -1186,7 +1190,7 @@ public:
     static void                 RemoveFontSubstitute( sal_uInt16 n );
     static sal_uInt16           GetFontSubstituteCount();
 
-    static vcl::Font            GetDefaultFont( sal_uInt16 nType,
+    static vcl::Font                 GetDefaultFont( sal_uInt16 nType,
                                                 LanguageType eLang,
                                                 sal_uLong nFlags,
                                                 const OutputDevice* pOutDev = NULL );
