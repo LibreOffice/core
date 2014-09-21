@@ -24,8 +24,8 @@
 
 #include <tools/helpers.hxx>
 
-#include "salgdi.hxx"
 #include "impfont.hxx"
+#include "salgdi.hxx"
 #include "outdata.hxx"
 
 #include <config_graphite.h>
