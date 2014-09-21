@@ -1307,10 +1307,10 @@ void SwHTMLWriter::OutDirection( sal_uInt16 nDir )
     }
 }
 
-OString SwHTMLWriter::convertDirection(sal_uInt16 nDirection)
+OString SwHTMLWriter::convertDirection(sal_uInt16 nDir)
 {
     OString sConverted;
-    switch (nDirection)
+    switch (nDir)
     {
     case FRMDIR_HORI_LEFT_TOP:
     case FRMDIR_VERT_TOP_LEFT:
