@@ -2880,7 +2880,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
     return rOStm;
 }
 
-bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) const
+bool GDIMetaFile::CreateThumbnail(BitmapEx& rBitmapEx, sal_uInt32 nMaximumExtent, BmpConversion eColorConversion, long nScaleFlag) const
 {
     // initialization seems to be complicated but is used to avoid rounding errors
     VirtualDevice   aVDev;
@@ -2890,8 +2890,8 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) c
     Size            aDrawSize( aVDev.LogicToPixel( GetPrefSize(), GetPrefMapMode() ) );
     Size            aSizePix( labs( aBRPix.X() - aTLPix.X() ) + 1, labs( aBRPix.Y() - aTLPix.Y() ) + 1 );
 
-    if ( !rBmpEx.IsEmpty() )
-        rBmpEx.SetEmpty();
+    if (!rBitmapEx.IsEmpty())
+        rBitmapEx.SetEmpty();
 
     // determine size that has the same aspect ratio as image size and
     // fits into the rectangle determined by nMaximumExtent
@@ -2933,19 +2933,18 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) c
         const_cast<GDIMetaFile *>(this)->Play(&aVDev, aBackPosPix, aAntialias);
 
         // get paint bitmap
-        Bitmap aBmp( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
+        Bitmap aBitmap( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
 
-        // assure that we have a true color image
-        if ( aBmp.GetBitCount() != 24 )
-            aBmp.Convert( BMP_CONVERSION_24BIT );
+        // scale down the image to the desired size - use the input scaler for the scaling operation
+        aBitmap.Scale(aDrawSize, nScaleFlag);
 
-        // downsize, to get the antialiased picture
-        aBmp.Scale(aDrawSize, BMP_SCALE_BESTQUALITY);
+        // convert to desired bitmap color format
+        aBitmap.Convert(eColorConversion);
 
-        rBmpEx = BitmapEx(aBmp);
+        rBitmapEx = BitmapEx(aBitmap);
     }
 
-    return !rBmpEx.IsEmpty();
+    return !rBitmapEx.IsEmpty();
 }
 
 void GDIMetaFile::UseCanvas( bool _bUseCanvas )

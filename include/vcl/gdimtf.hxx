@@ -24,6 +24,7 @@
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/bitmap.hxx>
 #include <vector>
 
 class OutputDevice;
@@ -214,7 +215,10 @@ public:
     friend VCL_DLLPUBLIC SvStream& WriteGDIMetaFile( SvStream& rOStm, const GDIMetaFile& rGDIMetaFile );
 
     /// Creates an antialiased thumbnail, with maximum width or height of nMaximumExtent.
-    bool        CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumSize = 256) const;
+    bool        CreateThumbnail(BitmapEx& rBitmapEx,
+                                sal_uInt32 nMaximumExtent = 256,
+                                BmpConversion nColorConversion = BMP_CONVERSION_24BIT,
+                                long nScaleFlag = BMP_SCALE_BESTQUALITY) const;
 
     void            UseCanvas( bool _bUseCanvas );
     bool        GetUseCanvas() const { return bUseCanvas; }
