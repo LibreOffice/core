@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
 #include <config_folders.h>
 
 #include <pyuno/pyuno.hxx>
@@ -218,6 +219,11 @@ Reference< XInterface > CreateInstance( const Reference< XComponentContext > & c
 #else
         PyImport_AppendInittab( (char*)"pyuno", initpyuno );
 #endif
+
+#if HAVE_FEATURE_READONLY_INSTALLSET
+        Py_DontWriteBytecodeFlag = 1;
+#endif
+
         // initialize python
         Py_Initialize();
         PyEval_InitThreads();
