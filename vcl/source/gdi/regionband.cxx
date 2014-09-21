@@ -103,6 +103,7 @@ void RegionBand::implReset()
     }
 
     mpLastCheckedBand = 0;
+    mpFirstBand = 0;
 
     DBG_CHKTHIS(RegionBand, ImplDbgTestRegionBand);
 }
