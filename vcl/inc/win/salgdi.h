@@ -94,7 +94,7 @@ public:
     const gr_face*          GraphiteFace() const;
 #endif
 
-    const ImplFontCharMap*  GetImplFontCharMap() const;
+    const FontCharMapPtr    GetImplFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
