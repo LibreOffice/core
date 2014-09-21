@@ -37,6 +37,7 @@
 
 #include "vcl/sysdata.hxx"
 #include "vcl/svapp.hxx"
+#include "vcl/metric.hxx"
 
 #include "quartz/salgdi.h"
 #include "quartz/utils.h"
@@ -95,39 +96,36 @@ sal_IntPtr CoreTextFontData::GetFontId() const
 
 static unsigned GetUShort( const unsigned char* p ){return((p[0]<<8)+p[1]);}
 
-const ImplFontCharMap* CoreTextFontData::GetImplFontCharMap() const
+const PtrFontCharMap CoreTextFontData::GetFontCharMap() const
 {
     // return the cached charmap
     if( mpCharMap )
         return mpCharMap;
 
     // set the default charmap
-    mpCharMap = ImplFontCharMap::GetDefaultMap();
-    mpCharMap->AddReference();
+    mpCharMap.reset( FontCharMap::GetDefaultMap() );
 
     // get the CMAP byte size
     // allocate a buffer for the CMAP raw data
     const int nBufSize = GetFontTable( "cmap", NULL );
-    DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::GetImplFontCharMap : GetFontTable1 failed!\n");
+    DBG_ASSERT( (nBufSize > 0), "CoreTextFontData::GetFontCharMap : GetFontTable1 failed!\n");
     if( nBufSize <= 0 )
         return mpCharMap;
 
     // get the CMAP raw data
     ByteVector aBuffer( nBufSize );
     const int nRawLength = GetFontTable( "cmap", &aBuffer[0] );
-    DBG_ASSERT( (nRawLength > 0), "CoreTextFontData::GetImplFontCharMap : GetFontTable2 failed!\n");
+    DBG_ASSERT( (nRawLength > 0), "CoreTextFontData::GetFontCharMap : GetFontTable2 failed!\n");
     if( nRawLength <= 0 )
         return mpCharMap;
-    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::GetImplFontCharMap : ByteCount mismatch!\n");
+    DBG_ASSERT( (nBufSize==nRawLength), "CoreTextFontData::GetFontCharMap : ByteCount mismatch!\n");
 
     // parse the CMAP
     CmapResult aCmapResult;
     if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
     {
         // create the matching charmap
-        mpCharMap->DeReference();
-        mpCharMap = new ImplFontCharMap( aCmapResult );
-        mpCharMap->AddReference();
+        mpCharMap.reset( new FontCharMap( aCmapResult ) );
     }
 
     return mpCharMap;
@@ -489,12 +487,12 @@ SalLayout* AquaSalGraphics::GetTextLayout( ImplLayoutArgs& /*rArgs*/, int /*nFal
     return pSalLayout;
 }
 
-const ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
+const PtrFontCharMap AquaSalGraphics::GetFontCharMap() const
 {
     if( !mpFontData )
-        return ImplFontCharMap::GetDefaultMap();
+        return FontCharMap::GetDefaultMap();
 
-    return mpFontData->GetImplFontCharMap();
+    return mpFontData->GetFontCharMap();
 }
 
 bool AquaSalGraphics::GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const
@@ -726,9 +724,8 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
                 free( (void*)pGlyphMetrics );
             }
 
-            const ImplFontCharMap* pMap = mpFontData->GetImplFontCharMap();
+            const PtrFontCharMap pMap = mpFontData->GetFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no charmap" );
-            pMap->AddReference(); // TODO: add and use RAII object instead
 
             // get unicode<->glyph encoding
             // TODO? avoid sft mapping by using the pMap itself
@@ -744,7 +741,7 @@ void AquaSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFontData, bool bV
                     rUnicodeEnc[ nUcsChar ] = nGlyph;
             }
 
-            pMap->DeReference(); // TODO: add and use RAII object instead
+            pMap.reset();
         }
 
         ::CloseTTFont( pSftFont );
