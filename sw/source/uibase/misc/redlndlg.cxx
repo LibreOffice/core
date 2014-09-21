@@ -337,6 +337,7 @@ OUString SwRedlineAcceptDlg::GetActionText(const SwRangeRedline& rRedln, sal_uIn
         case nsRedlineType_t::REDLINE_INSERT:   return sInserted;
         case nsRedlineType_t::REDLINE_DELETE:   return sDeleted;
         case nsRedlineType_t::REDLINE_FORMAT:   return sFormated;
+        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:   return sFormated;
         case nsRedlineType_t::REDLINE_TABLE:    return sTableChgd;
         case nsRedlineType_t::REDLINE_FMTCOLL:  return sFmtCollSet;
         default:;//prevent warning
@@ -1089,6 +1090,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
                             nResId = STR_REDLINE_DELETED;
                             break;
                         case nsRedlineType_t::REDLINE_FORMAT:
+                        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
                             nResId = STR_REDLINE_FORMATED;
                             break;
                         case nsRedlineType_t::REDLINE_TABLE:
