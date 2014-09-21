@@ -2650,12 +2650,6 @@ void SAL_CALL LayoutManager::windowResized( const awt::WindowEvent& aEvent )
 throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
-
-    if ( !m_xDockingAreaAcceptor.is() )
-        return;
-
-    // Request to set docking area space again.
-    Reference< XDockingAreaAcceptor > xDockingAreaAcceptor( m_xDockingAreaAcceptor );
     Reference< awt::XWindow >         xContainerWindow( m_xContainerWindow );
 
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
