@@ -452,7 +452,7 @@ sal_uInt16 SvMetaClass::WriteSlots( const OString& rShellName,
         SvSlotElement * pEle = rSlotList[ i ];
         SvMetaSlot * pAttr = pEle->xSlot;
         nSCount = nSCount + pAttr->WriteSlotMap( rShellName, nCount + nSCount,
-                                        rSlotList, i, pEle->aPrefix, rBase,
+                                        rSlotList, i, rBase,
                                         rOutStm );
     }
 

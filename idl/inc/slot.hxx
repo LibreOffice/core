@@ -72,8 +72,7 @@ class SvMetaSlot : public SvMetaAttribute
                             sal_uInt16 nCount, const OString& rSlotId,
                             SvSlotElementList &rList,
                             size_t nStart,
-                            const OString& rPrefix,
-                               SvIdlDataBase & rBase, SvStream & rOutStm );
+                            SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void    Write( SvIdlDataBase & rBase,
                             SvStream & rOutStm, sal_uInt16 nTab,
                              WriteType, WriteAttribute = 0 ) SAL_OVERRIDE;
@@ -244,7 +243,6 @@ public:
                                     sal_uInt16 nCount,
                                     SvSlotElementList&,
                                     size_t nStart,
-                                    const OString&,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
     sal_uInt16          WriteSlotParamArray( SvIdlDataBase & rBase,

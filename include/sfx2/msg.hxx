@@ -174,7 +174,7 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
                  ExecMethodPtr, \
                  StateMethodPtr, \
                  (const SfxType*) &a##ItemClass##_Impl, \
-                 Name, Name, 0, 0, \
+                 0, 0, \
                  &a##aShellClass##Args_Impl[nArg0], nArgs, 0, Name \
                }
 
@@ -184,16 +184,15 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
                  ExecMethodPtr, \
                  StateMethodPtr, \
                  (const SfxType*) &a##ItemClass##_Impl, \
-                 0, 0, 0, 0, 0, 0, 0 \
+                 0, 0, 0, 0, 0 \
                }
 
-#define SFX_NEW_SLOT_ARG( aShellClass, id, hid, GroupId, pLinked, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Name, Prop, UnoName ) \
+#define SFX_NEW_SLOT_ARG( aShellClass, id, hid, GroupId, pLinked, pNext, ExecMethodPtr, StateMethodPtr, Flags, DisableFlags, ItemClass, nArg0, nArgs, Prop, UnoName ) \
                { id, GroupId, hid, Flags | Prop, \
                  USHRT_MAX, 0, \
                  ExecMethodPtr, \
                  StateMethodPtr, \
                  (const SfxType*) &a##ItemClass##_Impl, \
-                 Name, Name, \
                  pLinked, pNext, \
                  &a##aShellClass##Args_Impl[nArg0], nArgs, DisableFlags, UnoName \
                }
@@ -204,7 +203,6 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
                  0, \
                  0, \
                  (const SfxType*) &aSfxBoolItem_Impl, \
-                 0, 0, \
                  pMaster, \
                  pNext, \
                  0, 0, DisableFlags, UnoName \
@@ -240,9 +238,7 @@ public:
     SfxExecFunc   fnExec;   // Function to be excecuted
     SfxStateFunc  fnState;  // Function for Status
 
-    const SfxType*  pType;        // SfxPoolItem-Type (Status)
-    const char*     pName;        // Name of the Slots
-    const char*     pMethodName;  // Name of the Method if different
+    const SfxType*  pType;       // SfxPoolItem-Type (Status)
 
     const SfxSlot*  pLinkedSlot; // Master-Slot for Enum value
     const SfxSlot*  pNextSlot;   // with the same Status-Method
