@@ -63,35 +63,34 @@ typedef std::vector<unsigned char> ByteVector;
 class CoreTextFontData : public PhysicalFontFace
 {
 public:
-    CoreTextFontData( const ImplDevFontAttributes&, sal_IntPtr nFontID );
+                                    CoreTextFontData( const ImplDevFontAttributes&, sal_IntPtr nFontID );
+    virtual                         ~CoreTextFontData();
 
-    virtual ~CoreTextFontData();
+    PhysicalFontFace*               Clone() const SAL_OVERRIDE;
+    ImplFontEntry*                  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
+    sal_IntPtr                      GetFontId() const SAL_OVERRIDE;
 
-    PhysicalFontFace*   Clone() const SAL_OVERRIDE;
-    ImplFontEntry*  CreateFontInstance( FontSelectPattern& ) const SAL_OVERRIDE;
-    sal_IntPtr      GetFontId() const SAL_OVERRIDE;
+    CoreTextStyle*                  CreateTextStyle( const FontSelectPattern& ) const;
+    int                             GetFontTable( const char pTagName[5], unsigned char* ) const;
 
-    CoreTextStyle*  CreateTextStyle( const FontSelectPattern& ) const;
-    int             GetFontTable( const char pTagName[5], unsigned char* ) const;
+    const PtrFontCharMap            GetFontCharMap() const;
+    bool                            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
+    bool                            HasChar( sal_uInt32 cChar ) const;
 
-    const ImplFontCharMap*  GetImplFontCharMap() const;
-    bool                    GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
-    bool                    HasChar( sal_uInt32 cChar ) const;
-
-    void                    ReadOs2Table() const;
-    void                    ReadMacCmapEncoding() const;
+    void                            ReadOs2Table() const;
+    void                            ReadMacCmapEncoding() const;
 
 protected:
-    CoreTextFontData( const CoreTextFontData&);
+                                    CoreTextFontData( const CoreTextFontData& );
 
 private:
-    const sal_IntPtr            mnFontId;
-    mutable const ImplFontCharMap*  mpCharMap;
-    mutable vcl::FontCapabilities maFontCapabilities;
-    mutable bool                mbOs2Read;       // true if OS2-table related info is valid
-    mutable bool                mbHasOs2Table;
-    mutable bool                mbCmapEncodingRead; // true if cmap encoding of Mac font is read
-    mutable bool                mbFontCapabilitiesRead;
+    const sal_IntPtr                mnFontId;
+    mutable const PtrFontCharMap    mpCharMap;
+    mutable vcl::FontCapabilities   maFontCapabilities;
+    mutable bool                    mbOs2Read;       // true if OS2-table related info is valid
+    mutable bool                    mbHasOs2Table;
+    mutable bool                    mbCmapEncodingRead; // true if cmap encoding of Mac font is read
+    mutable bool                    mbFontCapabilitiesRead;
 };
 
 class CoreTextStyle
@@ -192,117 +191,117 @@ protected:
     bool                                    mbWindow;
 
 public:
-    AquaSalGraphics();
-    virtual ~AquaSalGraphics();
+                            AquaSalGraphics();
+    virtual                 ~AquaSalGraphics();
 
-    bool                IsPenVisible() const    { return maLineColor.IsVisible(); }
-    bool                IsBrushVisible() const  { return maFillColor.IsVisible(); }
+    bool                    IsPenVisible() const    { return maLineColor.IsVisible(); }
+    bool                    IsBrushVisible() const  { return maFillColor.IsVisible(); }
 
-    void                SetWindowGraphics( AquaSalFrame* pFrame );
-    void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY );
-    void                SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
+    void                    SetWindowGraphics( AquaSalFrame* pFrame );
+    void                    SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY );
+    void                    SetVirDevGraphics( CGLayerRef, CGContextRef, int nBitDepth = 0 );
 
-    void                initResolution( NSWindow* );
-    void                copyResolution( AquaSalGraphics& );
-    void                updateResolution();
+    void                    initResolution( NSWindow* );
+    void                    copyResolution( AquaSalGraphics& );
+    void                    updateResolution();
 
-    bool                IsWindowGraphics()      const   { return mbWindow; }
-    AquaSalFrame*       getGraphicsFrame() const { return mpFrame; }
-    void                setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
+    bool                    IsWindowGraphics()      const   { return mbWindow; }
+    AquaSalFrame*           getGraphicsFrame() const { return mpFrame; }
+    void                    setGraphicsFrame( AquaSalFrame* pFrame ) { mpFrame = pFrame; }
 
-    void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
+    void                    ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
 
-    bool                CheckContext();
-    CGContextRef        GetContext();
-    void                UpdateWindow( NSRect& ); // delivered in NSView coordinates
+    bool                    CheckContext();
+    CGContextRef            GetContext();
+    void                    UpdateWindow( NSRect& ); // delivered in NSView coordinates
 #if !defined(__LP64__) && !defined(NS_BUILD_32_LIKE_64)
-    void                RefreshRect( const CGRect& );
+    void                    RefreshRect( const CGRect& );
 #endif
-    void                RefreshRect( const NSRect& );
-    void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
+    void                    RefreshRect( const NSRect& );
+    void                    RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
-    void                SetState();
-    void                UnsetState();
+    void                    SetState();
+    void                    UnsetState();
     // InvalidateContext does an UnsetState and sets mrContext to 0
-    void                InvalidateContext();
+    void                    InvalidateContext();
 
-    virtual bool        setClipRegion( const Region& ) SAL_OVERRIDE;
+    virtual bool            setClipRegion( const Region& ) SAL_OVERRIDE;
 
     // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void        drawPixel( long nX, long nY ) SAL_OVERRIDE;
-    virtual void        drawPixel( long nX, long nY, SalColor nSalColor ) SAL_OVERRIDE;
-    virtual void        drawLine( long nX1, long nY1, long nX2, long nY2 ) SAL_OVERRIDE;
-    virtual void        drawRect( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    virtual void        drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) SAL_OVERRIDE;
-    virtual void        drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) SAL_OVERRIDE;
-    virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) SAL_OVERRIDE;
-    virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) SAL_OVERRIDE;
-    virtual bool    drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) SAL_OVERRIDE;
-    virtual bool    drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) SAL_OVERRIDE;
-    virtual bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) SAL_OVERRIDE;
-    virtual bool        drawPolyLine(
-        const ::basegfx::B2DPolygon&,
-        double fTransparency,
-        const ::basegfx::B2DVector& rLineWidths,
-        basegfx::B2DLineJoin,
-        com::sun::star::drawing::LineCap eLineCap) SAL_OVERRIDE;
+    virtual void            drawPixel( long nX, long nY ) SAL_OVERRIDE;
+    virtual void            drawPixel( long nX, long nY, SalColor nSalColor ) SAL_OVERRIDE;
+    virtual void            drawLine( long nX1, long nY1, long nX2, long nY2 ) SAL_OVERRIDE;
+    virtual void            drawRect( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual void            drawPolyLine( sal_uInt32 nPoints, const SalPoint* pPtAry ) SAL_OVERRIDE;
+    virtual void            drawPolygon( sal_uInt32 nPoints, const SalPoint* pPtAry ) SAL_OVERRIDE;
+    virtual void            drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) SAL_OVERRIDE;
+    virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) SAL_OVERRIDE;
+    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) SAL_OVERRIDE;
+    virtual bool            drawPolygonBezier( sal_uInt32 nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry ) SAL_OVERRIDE;
+    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry ) SAL_OVERRIDE;
+    virtual bool            drawPolyLine(
+                                const ::basegfx::B2DPolygon&,
+                                double fTransparency,
+                                const ::basegfx::B2DVector& rLineWidths,
+                                basegfx::B2DLineJoin,
+                                com::sun::star::drawing::LineCap eLineCap) SAL_OVERRIDE;
 
     // CopyArea --> No RasterOp, but ClipRegion
-    virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
-                                  long nSrcHeight, sal_uInt16 nFlags ) SAL_OVERRIDE;
+    virtual void            copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
+                                      long nSrcHeight, sal_uInt16 nFlags ) SAL_OVERRIDE;
 
     // CopyBits and DrawBitmap --> RasterOp and ClipRegion
     // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void        copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
-    virtual void        drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) SAL_OVERRIDE;
-    virtual void        drawBitmap( const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    SalColor nTransparentColor ) SAL_OVERRIDE;
-    virtual void        drawBitmap( const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rTransparentBitmap ) SAL_OVERRIDE;
-    virtual void        drawMask( const SalTwoRect& rPosAry,
-                                  const SalBitmap& rSalBitmap,
-                                  SalColor nMaskColor ) SAL_OVERRIDE;
+    virtual void            copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) SAL_OVERRIDE;
+    virtual void            drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) SAL_OVERRIDE;
+    virtual void            drawBitmap( const SalTwoRect& rPosAry,
+                                        const SalBitmap& rSalBitmap,
+                                        SalColor nTransparentColor ) SAL_OVERRIDE;
+    virtual void            drawBitmap( const SalTwoRect& rPosAry,
+                                        const SalBitmap& rSalBitmap,
+                                        const SalBitmap& rTransparentBitmap ) SAL_OVERRIDE;
+    virtual void            drawMask( const SalTwoRect& rPosAry,
+                                      const SalBitmap& rSalBitmap,
+                                      SalColor nMaskColor ) SAL_OVERRIDE;
 
-    virtual SalBitmap*  getBitmap( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
-    virtual SalColor    getPixel( long nX, long nY ) SAL_OVERRIDE;
+    virtual SalBitmap*      getBitmap( long nX, long nY, long nWidth, long nHeight ) SAL_OVERRIDE;
+    virtual SalColor        getPixel( long nX, long nY ) SAL_OVERRIDE;
 
     // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void        invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) SAL_OVERRIDE;
-    virtual void        invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) SAL_OVERRIDE;
+    virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags) SAL_OVERRIDE;
+    virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) SAL_OVERRIDE;
 
-    virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) SAL_OVERRIDE;
+    virtual bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) SAL_OVERRIDE;
 
     virtual bool            drawAlphaBitmap( const SalTwoRect&,
                                              const SalBitmap& rSourceBitmap,
                                              const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
 
-    bool drawTransformedBitmap(
-        const basegfx::B2DPoint& rNull,
-        const basegfx::B2DPoint& rX,
-        const basegfx::B2DPoint& rY,
-        const SalBitmap& rSourceBitmap,
-        const SalBitmap* pAlphaBitmap) SAL_OVERRIDE;
+    bool                    drawTransformedBitmap(
+                                            const basegfx::B2DPoint& rNull,
+                                            const basegfx::B2DPoint& rX,
+                                            const basegfx::B2DPoint& rY,
+                                            const SalBitmap& rSourceBitmap,
+                                            const SalBitmap* pAlphaBitmap) SAL_OVERRIDE;
 
     virtual bool            drawAlphaRect( long nX, long nY, long nWidth,
                                            long nHeight, sal_uInt8 nTransparency ) SAL_OVERRIDE;
 
     CGPoint*                makeCGptArray(sal_uInt32 nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
-    virtual bool        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                              const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
-    virtual bool        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue,
-                                           const OUString& aCaption ) SAL_OVERRIDE;
-    virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, const OUString& aCaption,
-                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
+    virtual bool            hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+                                                  const Point& aPos, bool& rIsInside ) SAL_OVERRIDE;
+    virtual bool            drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
+                                               ControlState nState, const ImplControlValue& aValue,
+                                               const OUString& aCaption ) SAL_OVERRIDE;
+    virtual bool            getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
+                                                    const ImplControlValue& aValue, const OUString& aCaption,
+                                                    Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion ) SAL_OVERRIDE;
 
     // get device resolution
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) SAL_OVERRIDE;
     // get the depth of the device
-    virtual sal_uInt16          GetBitCount() const SAL_OVERRIDE;
+    virtual sal_uInt16      GetBitCount() const SAL_OVERRIDE;
     // get the width of the device
     virtual long            GetGraphicsWidth() const SAL_OVERRIDE;
 
@@ -327,16 +326,17 @@ public:
     // set the text color to a specific color
     virtual void            SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
     // set the font
-    virtual sal_uInt16         SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
     // get the repertoire of the current font
-    virtual const ImplFontCharMap* GetImplFontCharMap() const SAL_OVERRIDE;
-    virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
+    virtual const PtrFontCharMap
+                            GetFontCharMap() const SAL_OVERRIDE;
+    virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
     // graphics must drop any cached font info
-    virtual void ClearDevFontCache() SAL_OVERRIDE;
+    virtual void            ClearDevFontCache() SAL_OVERRIDE;
     virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) SAL_OVERRIDE;
     // CreateFontSubset: a method to get a subset of glyhps of a font
     // inside a new valid font file
@@ -350,14 +350,14 @@ public:
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly
     // as "undefined character"
-    virtual bool        CreateFontSubset( const OUString& rToFile,
-                                              const PhysicalFontFace* pFont,
-                                              sal_GlyphId* pGlyphIds,
-                                              sal_uInt8* pEncoding,
-                                              sal_Int32* pWidths,
-                                              int nGlyphs,
-                                              FontSubsetInfo& rInfo // out parameter
-                                              ) SAL_OVERRIDE;
+    virtual bool            CreateFontSubset( const OUString& rToFile,
+                                                  const PhysicalFontFace* pFont,
+                                                  sal_GlyphId* pGlyphIds,
+                                                  sal_uInt8* pEncoding,
+                                                  sal_Int32* pWidths,
+                                                  int nGlyphs,
+                                                  FontSubsetInfo& rInfo // out parameter
+                                                  ) SAL_OVERRIDE;
 
     // GetFontEncodingVector: a method to get the encoding map Unicode
     // to font encoded character; this is only used for type1 fonts and
@@ -375,11 +375,11 @@ public:
     //                      pWidths MUST support at least 256 members;
     //             rInfo: additional outgoing information
     //             pDataLen: out parameter, contains the byte length of the returned buffer
-    virtual const void* GetEmbedFontData( const PhysicalFontFace*,
-                                          const sal_Ucs* pUnicodes,
-                                          sal_Int32* pWidths,
-                                          FontSubsetInfo& rInfo,
-                                          long* pDataLen ) SAL_OVERRIDE;
+    virtual const void*     GetEmbedFontData( const PhysicalFontFace*,
+                                              const sal_Ucs* pUnicodes,
+                                              sal_Int32* pWidths,
+                                              FontSubsetInfo& rInfo,
+                                              long* pDataLen ) SAL_OVERRIDE;
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) SAL_OVERRIDE;
 
@@ -388,31 +388,32 @@ public:
                                             Int32Vector& rWidths,
                                             Ucs2UIntMap& rUnicodeEnc ) SAL_OVERRIDE;
 
-    virtual bool                    GetGlyphBoundRect( sal_GlyphId, Rectangle& ) SAL_OVERRIDE;
-    virtual bool                    GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) SAL_OVERRIDE;
+    virtual bool            GetGlyphBoundRect( sal_GlyphId, Rectangle& ) SAL_OVERRIDE;
+    virtual bool            GetGlyphOutline( sal_GlyphId, basegfx::B2DPolyPolygon& ) SAL_OVERRIDE;
 
-    virtual SalLayout*              GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) SAL_OVERRIDE;
-    virtual void                     DrawServerFontLayout( const ServerFontLayout& ) SAL_OVERRIDE;
-    virtual bool                    supportsOperation( OutDevSupportType ) const SAL_OVERRIDE;
+    virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual void            DrawServerFontLayout( const ServerFontLayout& ) SAL_OVERRIDE;
+    virtual bool            supportsOperation( OutDevSupportType ) const SAL_OVERRIDE;
 
     // Query the platform layer for control support
-    virtual bool IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
+    virtual bool            IsNativeControlSupported( ControlType nType, ControlPart nPart ) SAL_OVERRIDE;
 
-    virtual SystemGraphicsData    GetGraphicsData() const SAL_OVERRIDE;
-    virtual SystemFontData        GetSysFontData( int /* nFallbacklevel */ ) const SAL_OVERRIDE;
+    virtual SystemGraphicsData
+                            GetGraphicsData() const SAL_OVERRIDE;
+    virtual SystemFontData  GetSysFontData( int /* nFallbacklevel */ ) const SAL_OVERRIDE;
 
 private:
     // differences between VCL, Quartz and kHiThemeOrientation coordinate systems
     // make some graphics seem to be vertically-mirrored from a VCL perspective
-    bool IsFlipped() const { return mbWindow; }
+    bool                    IsFlipped() const { return mbWindow; }
 
-    void ApplyXorContext();
-    void Pattern50Fill();
-    UInt32 getState( ControlState nState );
-    UInt32 getTrackState( ControlState nState );
-    bool GetRawFontData( const PhysicalFontFace* pFontData,
-                         std::vector<unsigned char>& rBuffer,
-                         bool* pJustCFF );
+    void                    ApplyXorContext();
+    void                    Pattern50Fill();
+    UInt32                  getState( ControlState nState );
+    UInt32                  getTrackState( ControlState nState );
+    bool                    GetRawFontData( const PhysicalFontFace* pFontData,
+                                std::vector<unsigned char>& rBuffer,
+                                bool* pJustCFF );
 };
 
 // --- some trivial inlines

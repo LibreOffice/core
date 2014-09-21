@@ -164,7 +164,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
 
     if (!bOpenSymbol)
     {
-        FontCharMap aFontCharMap;
+        PtrFontCharMap aFontCharMap;
         bool bHasCharMap = rDevice.GetFontCharMap(aFontCharMap);
         if( bHasCharMap )
         {
@@ -175,7 +175,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
             sal_uInt32 cNewChar = 0xFF00;
 
             const int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
-            int nSkip = aFontCharMap.GetCharCount() / nMaxCount;
+            int nSkip = aFontCharMap->GetCharCount() / nMaxCount;
             if( nSkip > 10 )
                 nSkip = 10;
             else if( nSkip <= 0 )
@@ -184,7 +184,7 @@ OUString makeShortRepresentativeSymbolTextForSelectedFont(OutputDevice &rDevice)
             {
                 sal_uInt32 cOldChar = cNewChar;
                 for( int j = nSkip; --j >= 0; )
-                    cNewChar = aFontCharMap.GetPrevChar( cNewChar );
+                    cNewChar = aFontCharMap->GetPrevChar( cNewChar );
                 if( cOldChar == cNewChar )
                     break;
                 aText[ i ] = static_cast<sal_Unicode>(cNewChar); // TODO: support UCS4 samples
