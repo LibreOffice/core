@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "7ad8896b_ee733fb3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2014-09-21T12:39:50Z",
+      "side": 1,
+      "message": "It\u0027s traditional to add a one line summary after fdo#82335. Sorry for nitpicking, but the one-liner is often important for those scanning commits.",
+      "revId": "e544dd88adc3f2d2b298b838868ad00592e6e7ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7ad8896b_8e0ddb39",
         "filename": "filter/source/config/fragments/types/writer_MS_Word_97.xcu",
         "patchSetId": 3
