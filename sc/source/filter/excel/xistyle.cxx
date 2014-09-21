@@ -446,38 +446,38 @@ void XclImpFont::GuessScriptType()
     if( OutputDevice* pPrinter = GetPrinter() )
     {
         Font aFont( maData.maName, Size( 0, 10 ) );
-        FontCharMap aCharMap;
+        PtrFontCharMap aCharMap;
 
         pPrinter->SetFont( aFont );
         if( pPrinter->GetFontCharMap( aCharMap ) )
         {
             // CJK fonts
             mbHasAsian =
-                aCharMap.HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
-                aCharMap.HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
-                aCharMap.HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
-                aCharMap.HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
-                aCharMap.HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
-                aCharMap.HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
-                aCharMap.HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
-                aCharMap.HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
-                aCharMap.HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
-                aCharMap.HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
-                aCharMap.HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
-                aCharMap.HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
-                aCharMap.HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
+                aCharMap->HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
+                aCharMap->HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
+                aCharMap->HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
+                aCharMap->HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
+                aCharMap->HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
+                aCharMap->HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
+                aCharMap->HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
+                aCharMap->HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
+                aCharMap->HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
+                aCharMap->HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
+                aCharMap->HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
+                aCharMap->HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
+                aCharMap->HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
             // CTL fonts
             mbHasCmplx =
-                aCharMap.HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
-                aCharMap.HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
-                aCharMap.HasChar( 0x0721 ) ||   // 0700-074F: Syriac
-                aCharMap.HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
-                aCharMap.HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
-                aCharMap.HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
-                aCharMap.HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
-                aCharMap.HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
+                aCharMap->HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
+                aCharMap->HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
+                aCharMap->HasChar( 0x0721 ) ||   // 0700-074F: Syriac
+                aCharMap->HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
+                aCharMap->HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
+                aCharMap->HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
+                aCharMap->HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
+                aCharMap->HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
             // Western fonts
-            mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || aCharMap.HasChar( 'A' );
+            mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || aCharMap->HasChar( 'A' );
         }
     }
 }

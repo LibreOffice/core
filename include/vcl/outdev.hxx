@@ -37,6 +37,7 @@
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/outdevstate.hxx>
 #include <vcl/outdevmap.hxx>
+#include <vcl/metric.hxx>
 
 #include <basegfx/vector/b2enums.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -45,6 +46,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <boost/shared_ptr.hpp>
 #ifdef check
 #  //some problem with MacOSX and a check define
 #  undef check
@@ -96,6 +98,8 @@ class ImplFontAttributes;
 class VirtualDevice;
 class Window;
 struct SalTwoRect;
+
+typedef boost::shared_ptr< FontCharMap > PtrFontCharMap;
 
 // Layout options
 #define SAL_LAYOUT_BIDI_RTL                 (1<<0)
@@ -1145,7 +1149,7 @@ public:
     FontMetric                  GetFontMetric() const;
     FontMetric                  GetFontMetric( const Font& rFont ) const;
 
-    bool                        GetFontCharMap( FontCharMap& rFontCharMap ) const;
+    bool                        GetFontCharMap( PtrFontCharMap& rFontCharMap );
     bool                        GetFontCapabilities( vcl::FontCapabilities& rFontCapabilities ) const;
 
     /** Retrieve detailed font information in platform independent structure
@@ -1165,7 +1169,7 @@ public:
                                                     int nLen, int nBase, MetricVector& rVector );
 
     sal_Int32                   HasGlyphs( const Font& rFont, const OUString& rStr,
-                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1 ) const;
+                                           sal_Int32 nIndex = 0, sal_Int32 nLen = -1 );
 
     long                        GetMinKashida() const;
 

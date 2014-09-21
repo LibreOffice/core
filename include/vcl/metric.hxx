@@ -24,9 +24,12 @@
 #include <vcl/font.hxx>
 #include <vcl/outdev.hxx>
 
-class ImplFontMetric;
-class ImplFontCharMap;
+#include <boost/shared_ptr.hpp>
 
+class ImplFontMetric;
+class FontCharMap;
+
+typedef boost::shared_ptr< FontCharMap > PtrFontCharMap;
 typedef sal_uInt32 sal_UCS4;
 
 namespace vcl {
@@ -91,36 +94,64 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream;
 }
 
+typedef sal_uInt32 FontRefCount;
+
+// CmapResult is a normalized version of the many CMAP formats
+class VCL_PLUGIN_PUBLIC CmapResult
+{
+public:
+    explicit    CmapResult( bool bSymbolic = false,
+                    const sal_uInt32* pRangeCodes = NULL, int nRangeCount = 0,
+                    const int* pStartGlyphs = 0, const sal_uInt16* pGlyphIds = NULL );
+
+    const sal_uInt32* mpRangeCodes;
+    const int*        mpStartGlyphs;
+    const sal_uInt16* mpGlyphIds;
+    int               mnRangeCount;
+    bool              mbSymbolic;
+    bool              mbRecoded;
+};
+
 class VCL_DLLPUBLIC FontCharMap
 {
-private:
-    const ImplFontCharMap* mpImpl;
-
 public:
-                        FontCharMap();
-                        ~FontCharMap();
+                            FontCharMap();
+                            FontCharMap(const CmapResult&);
+                            ~FontCharMap();
 
-    bool                IsDefaultMap( void ) const;
-    bool                HasChar( sal_UCS4 ) const;
-    int                 CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const;
-    int                 GetCharCount( void ) const;
+    static PtrFontCharMap   GetDefaultMap( bool bSymbols=false );
 
-    sal_UCS4            GetFirstChar() const;
+    bool                    IsDefaultMap( void ) const;
+    bool                    HasChar( sal_UCS4 ) const;
+    int                     CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const;
+    int                     GetCharCount( void ) const { return mnCharCount; }
 
-    sal_UCS4            GetNextChar( sal_UCS4 ) const;
-    sal_UCS4            GetPrevChar( sal_UCS4 ) const;
+    sal_UCS4                GetFirstChar() const { return mpRangeCodes[0]; }
+    sal_UCS4                GetLastChar() const;
 
-    int                 GetIndexFromChar( sal_UCS4 ) const;
-    sal_UCS4            GetCharFromIndex( int ) const;
+    sal_UCS4                GetNextChar( sal_UCS4 ) const;
+    sal_UCS4                GetPrevChar( sal_UCS4 ) const;
 
+    int                     GetIndexFromChar( sal_UCS4 ) const;
+    sal_UCS4                GetCharFromIndex( int ) const;
+
+    int                     GetGlyphIndex( sal_uInt32 ) const;
 
 private:
     friend class OutputDevice;
-    void                Reset( const ImplFontCharMap* pNewMap = NULL );
+
+    int                     findRangeIndex( sal_uInt32 ) const;
+    void                    destroy();
 
     // prevent assignment and copy construction
-                        FontCharMap( const FontCharMap& );
-    void                operator=( const FontCharMap& );
+                            FontCharMap( const FontCharMap& );
+    void                    operator=( const FontCharMap& );
+
+    const sal_uInt32*       mpRangeCodes;     // pairs of StartCode/(EndCode+1)
+    const int*              mpStartGlyphs;    // range-specific mapper to glyphs
+    const sal_uInt16*       mpGlyphIds;       // individual glyphid mappings
+    int                     mnRangeCount;
+    int                     mnCharCount;      // covered codepoints
 };
 
 class VCL_DLLPUBLIC TextRectInfo

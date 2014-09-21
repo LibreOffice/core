@@ -111,7 +111,7 @@ private:
 
     sal_Int32       nSelectedIndex;
 
-    FontCharMap     maFontCharMap;
+    PtrFontCharMap     maFontCharMap;
     ScrollBar       aVscrollSB;
 
 private:

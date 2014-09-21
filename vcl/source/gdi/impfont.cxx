@@ -33,13 +33,12 @@ CmapResult::CmapResult( bool bSymbolic,
 ,   mbRecoded( false)
 {}
 
-ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
+FontCharMap::FontCharMap( const CmapResult& rCR )
 :   mpRangeCodes( rCR.mpRangeCodes )
 ,   mpStartGlyphs( rCR.mpStartGlyphs )
 ,   mpGlyphIds( rCR.mpGlyphIds )
 ,   mnRangeCount( rCR.mnRangeCount )
 ,   mnCharCount( 0 )
-,   mnRefCount( 1 )
 {
     const sal_UCS4* pRangePtr = mpRangeCodes;
     for( int i = mnRangeCount; --i >= 0; pRangePtr += 2 )
@@ -50,17 +49,30 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
     }
 }
 
-static ImplFontCharMap* pDefaultImplFontCharMap = NULL;
+FontCharMap::FontCharMap()
+:   mpRangeCodes( FontCharMap::GetDefaultMap()->mpRangeCodes )
+,   mpStartGlyphs( FontCharMap::GetDefaultMap()->mpStartGlyphs )
+,   mpGlyphIds( FontCharMap::GetDefaultMap()->mpGlyphIds )
+,   mnRangeCount( FontCharMap::GetDefaultMap()->mnRangeCount )
+,   mnCharCount( 0 )
+{}
+
+static PtrFontCharMap pDefaultFontCharMap = NULL;
 static const sal_UCS4 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
 static const sal_UCS4 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
-bool ImplFontCharMap::IsDefaultMap() const
+bool FontCharMap::IsDefaultMap() const
 {
     const bool bIsDefault = (mpRangeCodes == aDefaultUnicodeRanges) || (mpRangeCodes == aDefaultSymbolRanges);
     return bIsDefault;
 }
 
-ImplFontCharMap::~ImplFontCharMap()
+FontCharMap::~FontCharMap()
+{
+    destroy();
+}
+
+void FontCharMap::destroy()
 {
     if( IsDefaultMap() )
         return;
@@ -69,11 +81,10 @@ ImplFontCharMap::~ImplFontCharMap()
     delete[] mpGlyphIds;
 }
 
-ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
+
+PtrFontCharMap FontCharMap::GetDefaultMap( bool bSymbols )
 {
-    if( pDefaultImplFontCharMap )
-        pDefaultImplFontCharMap->AddReference();
-    else
+    if( !pDefaultFontCharMap )
     {
         const sal_UCS4* pRangeCodes = aDefaultUnicodeRanges;
         int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
@@ -84,48 +95,18 @@ ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
         }
 
         CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
-        pDefaultImplFontCharMap = new ImplFontCharMap( aDefaultCR );
+        pDefaultFontCharMap.reset(new FontCharMap( aDefaultCR ));
     }
 
-    return pDefaultImplFontCharMap;
+    return pDefaultFontCharMap;
 }
 
-void ImplFontCharMap::AddReference( void) const
-{
-    ++mnRefCount;
-}
-
-void ImplFontCharMap::DeReference( void) const
-{
-    if( --mnRefCount <= 0 )
-        if( this != pDefaultImplFontCharMap )
-            delete this;
-}
-
-
-int ImplFontCharMap::ImplFindRangeIndex( sal_UCS4 cChar ) const
-{
-    int nLower = 0;
-    int nMid   = mnRangeCount;
-    int nUpper = 2 * mnRangeCount - 1;
-    while( nLower < nUpper )
-    {
-        if( cChar >= mpRangeCodes[ nMid ] )
-            nLower = nMid;
-        else
-            nUpper = nMid - 1;
-        nMid = (nLower + nUpper + 1) / 2;
-    }
-
-    return nMid;
-}
-
-bool ImplFontCharMap::HasChar( sal_UCS4 cChar ) const
+bool FontCharMap::HasChar( sal_UCS4 cChar ) const
 {
     bool bHasChar = false;
 
     if( mpStartGlyphs  == NULL ) { // only the char-ranges are known
-        const int nRange = ImplFindRangeIndex( cChar );
+        const int nRange = findRangeIndex( cChar );
         if( nRange==0 && cChar<mpRangeCodes[0] )
             return false;
         bHasChar = ((nRange & 1) == 0); // inside a range
@@ -137,14 +118,14 @@ bool ImplFontCharMap::HasChar( sal_UCS4 cChar ) const
     return bHasChar;
 }
 
-int ImplFontCharMap::GetGlyphIndex( sal_UCS4 cChar ) const
+int FontCharMap::GetGlyphIndex( sal_UCS4 cChar ) const
 {
     // return -1 if the object doesn't know the glyph ids
     if( !mpStartGlyphs )
         return -1;
 
     // return 0 if the unicode doesn't have a matching glyph
-    int nRange = ImplFindRangeIndex( cChar );
+    int nRange = findRangeIndex( cChar );
     // check that we are inside any range
     if( (nRange == 0) && (cChar < mpRangeCodes[0]) ) {
         // symbol aliasing gives symbol fonts a second chance
@@ -153,7 +134,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_UCS4 cChar ) const
             return 0;
         // check for symbol aliasing (U+F0xx -> U+00xx)
         cChar |= 0xF000;
-        nRange = ImplFindRangeIndex( cChar );
+        nRange = findRangeIndex( cChar );
         if( (nRange == 0) && (cChar < mpRangeCodes[0]) ) {
             return 0;
         }
@@ -178,19 +159,19 @@ int ImplFontCharMap::GetGlyphIndex( sal_UCS4 cChar ) const
 
 // returns the number of chars supported by the font, which
 // are inside the unicode range from cMin to cMax (inclusive)
-int ImplFontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
+int FontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
 {
     int nCount = 0;
 
     // find and adjust range and char count for cMin
-    int nRangeMin = ImplFindRangeIndex( cMin );
+    int nRangeMin = findRangeIndex( cMin );
     if( nRangeMin & 1 )
         ++nRangeMin;
     else if( cMin > mpRangeCodes[ nRangeMin ] )
         nCount -= cMin - mpRangeCodes[ nRangeMin ];
 
     // find and adjust range and char count for cMax
-    int nRangeMax = ImplFindRangeIndex( cMax );
+    int nRangeMax = findRangeIndex( cMax );
     if( nRangeMax & 1 )
         --nRangeMax;
     else
@@ -204,38 +185,38 @@ int ImplFontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
 }
 
 
-sal_UCS4 ImplFontCharMap::GetLastChar() const
+sal_UCS4 FontCharMap::GetLastChar() const
 {
     return (mpRangeCodes[ 2*mnRangeCount-1 ] - 1);
 }
 
-sal_UCS4 ImplFontCharMap::GetNextChar( sal_UCS4 cChar ) const
+sal_UCS4 FontCharMap::GetNextChar( sal_UCS4 cChar ) const
 {
     if( cChar < GetFirstChar() )
         return GetFirstChar();
     if( cChar >= GetLastChar() )
         return GetLastChar();
 
-    int nRange = ImplFindRangeIndex( cChar + 1 );
+    int nRange = findRangeIndex( cChar + 1 );
     if( nRange & 1 )                       // outside of range?
         return mpRangeCodes[ nRange + 1 ]; // => first in next range
     return (cChar + 1);
 }
 
-sal_UCS4 ImplFontCharMap::GetPrevChar( sal_UCS4 cChar ) const
+sal_UCS4 FontCharMap::GetPrevChar( sal_UCS4 cChar ) const
 {
     if( cChar <= GetFirstChar() )
         return GetFirstChar();
     if( cChar > GetLastChar() )
         return GetLastChar();
 
-    int nRange = ImplFindRangeIndex( cChar - 1 );
+    int nRange = findRangeIndex( cChar - 1 );
     if( nRange & 1 )                            // outside a range?
         return (mpRangeCodes[ nRange ] - 1);    // => last in prev range
     return (cChar - 1);
 }
 
-int ImplFontCharMap::GetIndexFromChar( sal_UCS4 cChar ) const
+int FontCharMap::GetIndexFromChar( sal_UCS4 cChar ) const
 {
     // TODO: improve linear walk?
     int nCharIndex = 0;
@@ -255,7 +236,7 @@ int ImplFontCharMap::GetIndexFromChar( sal_UCS4 cChar ) const
     return -1;
 }
 
-sal_UCS4 ImplFontCharMap::GetCharFromIndex( int nCharIndex ) const
+sal_UCS4 FontCharMap::GetCharFromIndex( int nCharIndex ) const
 {
     // TODO: improve linear walk?
     const sal_UCS4* pRange = &mpRangeCodes[0];
@@ -272,11 +253,28 @@ sal_UCS4 ImplFontCharMap::GetCharFromIndex( int nCharIndex ) const
     return mpRangeCodes[0];
 }
 
+int FontCharMap::findRangeIndex( sal_UCS4 cChar ) const
+{
+    int nLower = 0;
+    int nMid   = mnRangeCount;
+    int nUpper = 2 * mnRangeCount - 1;
+    while( nLower < nUpper )
+    {
+        if( cChar >= mpRangeCodes[ nMid ] )
+            nLower = nMid;
+        else
+            nUpper = nMid - 1;
+        nMid = (nLower + nUpper + 1) / 2;
+    }
+
+    return nMid;
+}
+
 static unsigned GetUInt( const unsigned char* p ) { return((p[0]<<24)+(p[1]<<16)+(p[2]<<8)+p[3]);}
 static unsigned Getsal_uInt16( const unsigned char* p ){ return((p[0]<<8) | p[1]);}
 static int GetSShort( const unsigned char* p ){ return static_cast<sal_Int16>((p[0]<<8)|p[1]);}
 
-// TODO: move CMAP parsing directly into the ImplFontCharMap class
+// TODO: move CMAP parsing directly into the FontCharMap class
 bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 {
     rResult.mpRangeCodes = NULL;
@@ -558,76 +556,6 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     rResult.mnRangeCount = nRangeCount;
     rResult.mpGlyphIds = pGlyphIds;
     return true;
-}
-
-FontCharMap::FontCharMap()
-:   mpImpl( ImplFontCharMap::GetDefaultMap() )
-{}
-
-FontCharMap::~FontCharMap()
-{
-    mpImpl->DeReference();
-    mpImpl = NULL;
-}
-
-int FontCharMap::GetCharCount() const
-{
-    return mpImpl->GetCharCount();
-}
-
-int FontCharMap::CountCharsInRange( sal_UCS4 cMin, sal_UCS4 cMax ) const
-{
-    return mpImpl->CountCharsInRange( cMin, cMax );
-}
-
-void FontCharMap::Reset( const ImplFontCharMap* pNewMap )
-{
-    if( pNewMap == NULL )
-    {
-        mpImpl->DeReference();
-        mpImpl = ImplFontCharMap::GetDefaultMap();
-    }
-    else if( pNewMap != mpImpl )
-    {
-        mpImpl->DeReference();
-        mpImpl = pNewMap;
-        mpImpl->AddReference();
-    }
-}
-
-bool FontCharMap::IsDefaultMap() const
-{
-    return mpImpl->IsDefaultMap();
-}
-
-bool FontCharMap::HasChar( sal_UCS4 cChar ) const
-{
-    return mpImpl->HasChar( cChar );
-}
-
-sal_UCS4 FontCharMap::GetFirstChar() const
-{
-    return mpImpl->GetFirstChar();
-}
-
-sal_UCS4 FontCharMap::GetNextChar( sal_UCS4 cChar ) const
-{
-    return mpImpl->GetNextChar( cChar );
-}
-
-sal_UCS4 FontCharMap::GetPrevChar( sal_UCS4 cChar ) const
-{
-    return mpImpl->GetPrevChar( cChar );
-}
-
-int FontCharMap::GetIndexFromChar( sal_UCS4 cChar ) const
-{
-    return mpImpl->GetIndexFromChar( cChar );
-}
-
-sal_UCS4 FontCharMap::GetCharFromIndex( int nIndex ) const
-{
-    return mpImpl->GetCharFromIndex( nIndex );
 }
 
 // on some systems we have to get the font attributes from the name table

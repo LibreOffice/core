@@ -48,37 +48,38 @@ class ServerFont;
 class SvpSalGraphics : public SalGraphics
 {
 #ifndef IOS
-    basebmp::BitmapDeviceSharedPtr       m_aDevice;
-    basebmp::BitmapDeviceSharedPtr       m_aOrigDevice;
+    basebmp::BitmapDeviceSharedPtr m_aDevice;
+    basebmp::BitmapDeviceSharedPtr m_aOrigDevice;
 
-    basebmp::BitmapDeviceSharedPtr       m_aClipMap;
+    basebmp::BitmapDeviceSharedPtr m_aClipMap;
 
-    bool                                 m_bUseLineColor;
-    basebmp::Color                       m_aLineColor;
-    bool                                 m_bUseFillColor;
-    basebmp::Color                       m_aFillColor;
+    bool                    m_bUseLineColor;
+    basebmp::Color          m_aLineColor;
+    bool                    m_bUseFillColor;
+    basebmp::Color          m_aFillColor;
 
-    basebmp::DrawMode                    m_aDrawMode;
+    basebmp::DrawMode       m_aDrawMode;
 
     // These fields are used only when we use FreeType to draw into a
     // headless backend, i.e. not on iOS.
-    basebmp::Color                       m_aTextColor;
-    ServerFont*                          m_pServerFont[ MAX_FALLBACK ];
-    basebmp::Format                      m_eTextFmt;
+    basebmp::Color          m_aTextColor;
+    ServerFont*             m_pServerFont[ MAX_FALLBACK ];
+    basebmp::Format         m_eTextFmt;
 
 protected:
-    basegfx::B2IVector                   GetSize() { return m_aOrigDevice->getSize(); }
+    basegfx::B2IVector      GetSize() { return m_aOrigDevice->getSize(); }
 
 private:
-    bool                                 m_bClipSetup;
+    bool                    m_bClipSetup;
     struct ClipUndoHandle {
-        SvpSalGraphics                &m_rGfx;
+            ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
+            ~ClipUndoHandle();
+
+        SvpSalGraphics &m_rGfx;
         basebmp::BitmapDeviceSharedPtr m_aDevice;
-        ClipUndoHandle( SvpSalGraphics *pGfx ) : m_rGfx( *pGfx ) {}
-        ~ClipUndoHandle();
     };
-    bool isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
-    void ensureClip();
+    bool                    isClippedSetup( const basegfx::B2IBox &aRange, ClipUndoHandle &rUndo );
+    void                    ensureClip();
 
 public:
     void setDevice( basebmp::BitmapDeviceSharedPtr& rDevice );
@@ -86,55 +87,55 @@ public:
 #else
     friend class CTLayout;
 
-    CGLayerRef                              mxLayer;
+    CGLayerRef              mxLayer;
     // mirror AquaSalVirtualDevice::mbForeignContext for SvpSalGraphics objects related to such
-    bool mbForeignContext;
-    CGContextRef                            mrContext;
-    int                                     mnContextStackDepth;
-    class XorEmulation*                     mpXorEmulation;
-    int                                     mnXorMode; // 0: off 1: on 2: invert only
-    int                                     mnWidth;
-    int                                     mnHeight;
-    int                                  mnBitmapDepth;  // zero unless bitmap
+    bool                    mbForeignContext;
+    CGContextRef            mrContext;
+    int                     mnContextStackDepth;
+    class XorEmulation*     mpXorEmulation;
+    int                     mnXorMode; // 0: off 1: on 2: invert only
+    int                     mnWidth;
+    int                     mnHeight;
+    int                     mnBitmapDepth;  // zero unless bitmap
 
     /// path representing current clip region
-    CGMutablePathRef                        mxClipPath;
+    CGMutablePathRef        mxClipPath;
 
     /// Drawing colors
     /// pen color RGBA
-    RGBAColor                               maLineColor;
+    RGBAColor               maLineColor;
     /// brush color RGBA
-    RGBAColor                               maFillColor;
+    RGBAColor               maFillColor;
 
     // Device Font settings
-    const CoreTextFontData*                 mpFontData;
-    CoreTextStyle*                          mpTextStyle;
-    RGBAColor                               maTextColor;
+    const CoreTextFontData* mpFontData;
+    CoreTextStyle*          mpTextStyle;
+    RGBAColor               maTextColor;
     /// allows text to be rendered without antialiasing
-    bool                                    mbNonAntialiasedText;
+    bool                    mbNonAntialiasedText;
 
     /// is this a printer graphics
-    bool                                    mbPrinter;
+    bool                    mbPrinter;
     /// is this a virtual device graphics
-    bool                                    mbVirDev;
+    bool                    mbVirDev;
 #endif
 
 protected:
-    Region                               m_aClipRegion;
+    Region                  m_aClipRegion;
 
 protected:
-    virtual bool drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
-    virtual bool drawTransformedBitmap(
-        const basegfx::B2DPoint& rNull,
-        const basegfx::B2DPoint& rX,
-        const basegfx::B2DPoint& rY,
-        const SalBitmap& rSourceBitmap,
-        const SalBitmap* pAlphaBitmap) SAL_OVERRIDE;
-    virtual bool drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency ) SAL_OVERRIDE;
+    virtual bool            drawAlphaBitmap( const SalTwoRect&, const SalBitmap& rSourceBitmap, const SalBitmap& rAlphaBitmap ) SAL_OVERRIDE;
+    virtual bool            drawTransformedBitmap(
+                                    const basegfx::B2DPoint& rNull,
+                                    const basegfx::B2DPoint& rX,
+                                    const basegfx::B2DPoint& rY,
+                                    const SalBitmap& rSourceBitmap,
+                                    const SalBitmap* pAlphaBitmap) SAL_OVERRIDE;
+    virtual bool            drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency ) SAL_OVERRIDE;
 
 public:
-    SvpSalGraphics();
-    virtual ~SvpSalGraphics();
+                            SvpSalGraphics();
+    virtual                 ~SvpSalGraphics();
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) SAL_OVERRIDE;
     virtual sal_uInt16      GetBitCount() const SAL_OVERRIDE;
@@ -156,12 +157,12 @@ public:
     virtual void            SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
     virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
-    virtual const ImplFontCharMap* GetImplFontCharMap() const SAL_OVERRIDE;
-    virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
+    virtual const PtrFontCharMap GetFontCharMap() SAL_OVERRIDE;
+    virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
-    virtual void ClearDevFontCache() SAL_OVERRIDE;
+    virtual void            ClearDevFontCache() SAL_OVERRIDE;
     virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) SAL_OVERRIDE;
-    virtual bool        CreateFontSubset( const OUString& rToFile,
+    virtual bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
                                               sal_GlyphId* pGlyphIds,
                                               sal_uInt8* pEncoding,
@@ -200,13 +201,13 @@ public:
     virtual void            drawPolyPolygon( sal_uInt32 nPoly,
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry ) SAL_OVERRIDE;
-    virtual bool        drawPolyLineBezier( sal_uInt32 nPoints,
+    virtual bool            drawPolyLineBezier( sal_uInt32 nPoints,
                                                 const SalPoint* pPtAry,
                                                 const sal_uInt8* pFlgAry ) SAL_OVERRIDE;
-    virtual bool        drawPolygonBezier( sal_uInt32 nPoints,
+    virtual bool            drawPolygonBezier( sal_uInt32 nPoints,
                                                const SalPoint* pPtAry,
                                                const sal_uInt8* pFlgAry ) SAL_OVERRIDE;
-    virtual bool        drawPolyPolygonBezier( sal_uInt32 nPoly,
+    virtual bool            drawPolyPolygonBezier( sal_uInt32 nPoly,
                                                    const sal_uInt32* pPoints,
                                                    const SalPoint* const* pPtAry,
                                                    const sal_uInt8* const* pFlgAry ) SAL_OVERRIDE;
@@ -236,31 +237,31 @@ public:
     virtual void            invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags ) SAL_OVERRIDE;
     virtual void            invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nFlags ) SAL_OVERRIDE;
 
-    virtual bool        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) SAL_OVERRIDE;
+    virtual bool            drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, sal_uLong nSize ) SAL_OVERRIDE;
 
     virtual SystemGraphicsData GetGraphicsData() const SAL_OVERRIDE;
     virtual SystemFontData  GetSysFontData( int nFallbacklevel ) const SAL_OVERRIDE;
 
 #ifdef IOS
-    void                SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 );
+    void                    SetVirDevGraphics( CGLayerRef xLayer, CGContextRef xContext, int = 0 );
 
-    bool CheckContext();
-    CGContextRef GetContext();
-    bool GetRawFontData( const PhysicalFontFace* pFontData,
-                         std::vector<unsigned char>& rBuffer,
-                         bool* pJustCFF );
-    void                RefreshRect( const CGRect& ) { };
-    void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
-    void                SetState();
-    void                UnsetState();
-    void                InvalidateContext();
-    bool                IsPenVisible() const    { return maLineColor.IsVisible(); }
-    bool                IsBrushVisible() const  { return maFillColor.IsVisible(); }
-    void                ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
-    CGPoint*            makeCGptArray(sal_uInt32 nPoints, const SalPoint*  pPtAry);
-    bool IsFlipped() const { return false; }
-    void ApplyXorContext();
-    void Pattern50Fill();
+    bool                    CheckContext();
+    CGContextRef            GetContext();
+    bool                    GetRawFontData( const PhysicalFontFace* pFontData,
+                                            std::vector<unsigned char>& rBuffer,
+                                            bool* pJustCFF );
+    void                    RefreshRect( const CGRect& ) { };
+    void                    RefreshRect(float lX, float lY, float lWidth, float lHeight);
+    void                    SetState();
+    void                    UnsetState();
+    void                    InvalidateContext();
+    bool                    IsPenVisible() const    { return maLineColor.IsVisible(); }
+    bool                    IsBrushVisible() const  { return maFillColor.IsVisible(); }
+    void                    ImplDrawPixel( long nX, long nY, const RGBAColor& ); // helper to draw single pixels
+    CGPoint*                makeCGptArray(sal_uInt32 nPoints, const SalPoint*  pPtAry);
+    bool                    IsFlipped() const { return false; }
+    void                    ApplyXorContext();
+    void                    Pattern50Fill();
 #endif
 };
 
