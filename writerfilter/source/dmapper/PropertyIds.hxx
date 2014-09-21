@@ -366,6 +366,7 @@ enum PropertyIds
         ,PROP_APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING
         ,PROP_CELL_DIRECTION
         ,PROP_CELL_HIDE_MARK
+        ,PROP_FOLLOW_TEXT_FLOW
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
