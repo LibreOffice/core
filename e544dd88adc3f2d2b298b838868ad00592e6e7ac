@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_8e0ddb39",
+        "filename": "filter/source/config/fragments/types/writer_MS_Word_97.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2014-09-21T08:31:39Z",
+      "side": 1,
+      "message": "wpt is a *template* type, so you must add it to writer_MS_Word_97_Vorlage.xcu instead.\n\ndpt is a presentation (template) type, and should go to impress_MS_PowerPoint_97_Vorlage.xcu",
+      "revId": "e544dd88adc3f2d2b298b838868ad00592e6e7ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_6e13cf5d",
+        "filename": "setup_native/source/win32/customactions/reg4allmsdoc/reg4allmsi.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2014-09-21T08:31:39Z",
+      "side": 1,
+      "message": "For any modification of this array, you must keep related types together (i.e. text documents with text documents, presentations with presentations and so on), and you must also adapt *_START vars below the array.",
+      "revId": "e544dd88adc3f2d2b298b838868ad00592e6e7ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
