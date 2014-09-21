@@ -1723,6 +1723,15 @@ DECLARE_OOXMLIMPORT_TEST(testTableBtlrCenter, "table-btlr-center.docx")
     CPPUNIT_ASSERT_EQUAL(text::VertOrientation::CENTER, getProperty<sal_Int16>(xTable->getCellByName("A2"), "VertOrient"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testBnc891663, "bnc891663.docx")
+{
+    // The image should be inside a cell, so the text in the following cell should be below it.
+    int imageTop = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds", "top").toInt32();
+    int imageHeight = parseDump("/root/page/body/tab/row[1]/cell[2]/txt[1]/anchored/fly/infos/bounds", "height").toInt32();
+    int textNextRowTop = parseDump("/root/page/body/tab/row[2]/cell[1]/txt[1]/infos/bounds", "top").toInt32();
+    CPPUNIT_ASSERT( textNextRowTop >= imageTop + imageHeight );
+}
+
 #endif
 
 CPPUNIT_PLUGIN_IMPLEMENT();
