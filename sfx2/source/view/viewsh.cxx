@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
@@ -784,6 +786,16 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
     {
         switch ( nSID )
         {
+#if HAVE_FEATURE_MACOSX_SANDBOX
+            case SID_BLUETOOTH_SENDDOC:
+            case SID_MAIL_SENDDOC:
+            case SID_MAIL_SENDDOCASFORMAT:
+            case SID_MAIL_SENDDOCASMS:
+            case SID_MAIL_SENDDOCASOOO:
+            case SID_MAIL_SENDDOCASPDF:
+                rSet.DisableItem(nSID);
+                break;
+#endif
             // Printer functions
             case SID_PRINTDOC:
             case SID_PRINTDOCDIRECT:
