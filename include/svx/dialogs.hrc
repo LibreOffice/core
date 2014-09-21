@@ -184,6 +184,9 @@
 
 // for Toolbox-Control style
 #define RID_SVXTBX_STYLE                    (RID_SVX_START + 120)
+#define RID_SVX_STYLE_MENU                  (RID_SVX_START + 121)
+#define RID_SVX_APPLY_STYLE                 (RID_SVX_START + 122)
+#define RID_SVX_MODIFY_STYLE                (RID_SVX_START + 123)
 
 #define RID_SVXDLG_COMPRESSGRAPHICS         (RID_SVX_START + 142)
 
