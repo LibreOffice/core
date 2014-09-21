@@ -1760,6 +1760,8 @@ private:
     (void) actualRange;
 #endif
 
+    YIELD_GUARD;
+
     SalExtTextInputPosEvent aPosEvent;
     mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void *)&aPosEvent );
 
