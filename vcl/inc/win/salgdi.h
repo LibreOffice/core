@@ -94,7 +94,7 @@ public:
     const gr_face*          GraphiteFace() const;
 #endif
 
-    const ImplFontCharMap*  GetImplFontCharMap() const;
+    const FontCharMapPtr    GetFontCharMap();
     bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
@@ -116,7 +116,7 @@ private:
 #endif
     mutable bool                    mbHasArabicSupport;
     mutable bool                    mbFontCapabilitiesRead;
-    mutable ImplFontCharMap*        mpUnicodeMap;
+    mutable FontCharMapPtr          mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
     mutable vcl::FontCapabilities   maFontCapabilities;
 
@@ -310,7 +310,7 @@ public:
     // get the current font's metrics
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get the repertoire of the current font
-    virtual const ImplFontCharMap* GetImplFontCharMap() const;
+    virtual const FontCharMapPtr GetFontCharMap();
     // get the layout capabilities of the current font
     virtual bool GetFontCapabilities(vcl::FontCapabilities &rGetFontCapabilities) const;
     // graphics must fill supplied font list
