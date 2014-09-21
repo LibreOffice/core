@@ -28,6 +28,8 @@
 #include <graphite_features.hxx>
 #include <graphite_serverfont.hxx>
 
+#include <vcl/metric.hxx>
+
 float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 {
     ServerFont * pServerFont =
