@@ -2555,7 +2555,7 @@ void ChartView::render()
         OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
         if(pWindow)
             pWindow->setRenderer(mp2DRenderer.get());
-        bool bRender = pShapeFactory->preRender(pWindow);
+        bool bRender = pShapeFactory->preRender(mxRootShape, pWindow);
         if(bRender)
         {
             pShapeFactory->render(mxRootShape, pWindow != mp2DRenderer->getOpenGLWindow());

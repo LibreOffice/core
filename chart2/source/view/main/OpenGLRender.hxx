@@ -72,6 +72,7 @@ public:
     int InitOpenGL();
     int MoveModelf(PosVecf3 trans, PosVecf3 angle, PosVecf3 scale);
     void SetSize(int width, int height);
+    void SetSizePixel(int width, int height);
     void Release();
     int RenderLine2FBO(int wholeFlag);
     int SetLine2DShapePoint(float x, float y, int listLength);

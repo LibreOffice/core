@@ -398,6 +398,8 @@ public:
     void invalidateInit() { mbNotInit = true; }
     TextCache& getTextCache() { return maTextCache;}
 
+    OpenGLRender& getRenderer() { return m_GLRender; }
+
 private:
 
     TextCache maTextCache;

@@ -456,7 +456,7 @@ void OpenglShapeFactory::render(uno::Reference< drawing::XShapes > xRootShape, b
     rChart.render();
 }
 
-bool OpenglShapeFactory::preRender(OpenGLWindow* pWindow)
+bool OpenglShapeFactory::preRender(uno::Reference< drawing::XShapes > xRootShape, OpenGLWindow* pWindow)
 {
     if(!pWindow)
         return false;
@@ -465,6 +465,8 @@ bool OpenglShapeFactory::preRender(OpenGLWindow* pWindow)
     pWindow->getContext().makeCurrent();
     Size aSize = pWindow->GetSizePixel();
     pWindow->getContext().setWinSize(aSize);
+    dummy::DummyChart& rChart = dynamic_cast<dummy::DummyChart&>(*xRootShape.get());
+    rChart.getRenderer().SetSizePixel(aSize.Width(), aSize.Height());
     return true;
 }
 
