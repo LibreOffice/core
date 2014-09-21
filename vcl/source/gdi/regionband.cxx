@@ -89,7 +89,7 @@ void RegionBand::implReset()
     }
 
     mpLastCheckedBand = 0;
-
+    mpFirstBand = 0;
 }
 
 RegionBand::~RegionBand()
