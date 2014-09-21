@@ -58,55 +58,55 @@ private:
 class FtFontInfo
 {
 public:
-                           FtFontInfo( const ImplDevFontAttributes&,
-                               const OString& rNativeFileName,
-                               int nFaceNum, sal_IntPtr nFontId, int nSynthetic);
-                          ~FtFontInfo();
+                                FtFontInfo( const ImplDevFontAttributes&,
+                                    const OString& rNativeFileName,
+                                    int nFaceNum, sal_IntPtr nFontId, int nSynthetic);
+                                ~FtFontInfo();
 
-    const unsigned char*  GetTable( const char*, sal_uLong* pLength=0 ) const;
+    const unsigned char*        GetTable( const char*, sal_uLong* pLength=0 ) const;
 
-    FT_FaceRec_*          GetFaceFT();
+    FT_FaceRec_*                GetFaceFT();
 #if ENABLE_GRAPHITE
-    GraphiteFaceWrapper*  GetGraphiteFace();
+    GraphiteFaceWrapper*        GetGraphiteFace();
 #endif
-    void                  ReleaseFaceFT();
+    void                        ReleaseFaceFT();
 
-    const OString&        GetFontFileName() const   { return mpFontFile->GetFileName(); }
-    int                   GetFaceNum() const        { return mnFaceNum; }
-    int                   GetSynthetic() const      { return mnSynthetic; }
-    sal_IntPtr            GetFontId() const         { return mnFontId; }
-    bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
-    const ImplFontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
+    const OString&              GetFontFileName() const   { return mpFontFile->GetFileName(); }
+    int                         GetFaceNum() const        { return mnFaceNum; }
+    int                         GetSynthetic() const      { return mnSynthetic; }
+    sal_IntPtr                  GetFontId() const         { return mnFontId; }
+    bool                        IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
+    const ImplFontAttributes&   GetFontAttributes() const { return maDevFontAttributes; }
 
-    void                  AnnounceFont( PhysicalFontCollection* );
+    void                        AnnounceFont( PhysicalFontCollection* );
 
-    int                   GetGlyphIndex( sal_UCS4 cChar ) const;
-    void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
+    int                         GetGlyphIndex( sal_UCS4 cChar ) const;
+    void                        CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
 
-    bool                  GetFontCodeRanges( CmapResult& ) const;
-    const ImplFontCharMap* GetImplFontCharMap( void );
+    bool                        GetFontCodeRanges( CmapResult& ) const;
+    const                       PtrFontCharMap GetFontCharMap();
 
 private:
-    FT_FaceRec_*    maFaceFT;
-    FtFontFile*     mpFontFile;
-    const int       mnFaceNum;
-    int             mnRefCount;
-    const int       mnSynthetic;
+    FT_FaceRec_*                maFaceFT;
+    FtFontFile*                 mpFontFile;
+    const int                   mnFaceNum;
+    int                         mnRefCount;
+    const int                   mnSynthetic;
 #if ENABLE_GRAPHITE
-    bool            mbCheckedGraphite;
-    GraphiteFaceWrapper * mpGraphiteFace;
+    bool                        mbCheckedGraphite;
+    GraphiteFaceWrapper *       mpGraphiteFace;
 #endif
-    sal_IntPtr      mnFontId;
-    ImplDevFontAttributes maDevFontAttributes;
+    sal_IntPtr                  mnFontId;
+    ImplDevFontAttributes       maDevFontAttributes;
 
-    const ImplFontCharMap* mpFontCharMap;
+    PtrFontCharMap              mpFontCharMap;
 
     // cache unicode->glyphid mapping because looking it up is expensive
     // TODO: change to boost::unordered_multimap when a use case requires a m:n mapping
     typedef ::boost::unordered_map<int,int> Int2IntMap;
-    mutable Int2IntMap* mpChar2Glyph;
-    mutable Int2IntMap* mpGlyph2Char;
-    void InitHashes() const;
+    mutable Int2IntMap*         mpChar2Glyph;
+    mutable Int2IntMap*         mpGlyph2Char;
+    void                        InitHashes() const;
 };
 
 // these two inlines are very important for performance

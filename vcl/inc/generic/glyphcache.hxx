@@ -38,6 +38,8 @@
 #include <impfont.hxx>
 #include <sallayout.hxx>
 
+#include <vcl/metric.hxx>
+
 class FtFontInfo;
 class GlyphCachePeer;
 class GlyphData;
@@ -182,7 +184,7 @@ public:
     const unsigned char* GetTable( const char* pName, sal_uLong* pLength );
     int                 GetEmUnits() const { return maFaceFT->units_per_EM;}
     const FT_Size_Metrics& GetMetricsFT() const { return maSizeFT->metrics; }
-    const ImplFontCharMap* GetImplFontCharMap() const;
+    const PtrFontCharMap GetFontCharMap() const;
     bool                GetFontCapabilities(vcl::FontCapabilities &) const;
 
     GlyphData&                  GetGlyphData( sal_GlyphId );

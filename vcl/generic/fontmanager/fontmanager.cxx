@@ -2088,11 +2088,11 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                 CmapResult aCmapResult;
                 if( ParseCMAP( pCmapData, nCmapSize, aCmapResult ) )
                 {
-                    const ImplFontCharMap aCharMap( aCmapResult );
+                    const PtrFontCharMap aCharMap( new FontCharMap(aCmapResult) );
                     for( sal_uInt32 cOld = 0;;)
                     {
                         // get next unicode covered by font
-                        const sal_uInt32 c = aCharMap.GetNextChar( cOld );
+                        const sal_uInt32 c = aCharMap->GetNextChar( cOld );
                         if( c == cOld )
                             break;
                         cOld = c;
@@ -2101,7 +2101,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                             break;
 #endif
                         // get the matching glyph index
-                        const sal_GlyphId aGlyphId = aCharMap.GetGlyphIndex( c );
+                        const sal_GlyphId aGlyphId = aCharMap->GetGlyphIndex( c );
                         // update the requested map
                         rUnicodeEnc[ (sal_Unicode)c ] = aGlyphId;
                     }
