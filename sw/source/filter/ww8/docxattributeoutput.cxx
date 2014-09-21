@@ -1888,9 +1888,9 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
         m_pSerializer->singleElementNS( XML_w, XML_lang, xAttrList );
     }
 
-    if (m_aTextEffectsGrabBag.getLength() > 0)
+    if (!m_aTextEffectsGrabBag.empty())
     {
-        for (sal_Int32 i=0; i < m_aTextEffectsGrabBag.getLength(); ++i)
+        for (size_t i = 0; i < m_aTextEffectsGrabBag.size(); ++i)
         {
             boost::optional<sal_Int32> aElementId = lclGetElementIdForName(m_aTextEffectsGrabBag[i].Name);
             if(aElementId)
@@ -1900,7 +1900,7 @@ void DocxAttributeOutput::WriteCollectedRunProperties()
                 lclProcessRecursiveGrabBag(*aElementId, aGrabBagSeq, m_pSerializer);
             }
         }
-        m_aTextEffectsGrabBag.realloc(0);
+        m_aTextEffectsGrabBag.clear();
     }
 }
 
@@ -8138,9 +8138,7 @@ void DocxAttributeOutput::CharGrabBag( const SfxGrabBagItem& rItem )
         {
             beans::PropertyValue aPropertyValue;
             i->second >>= aPropertyValue;
-            sal_Int32 aLength = m_aTextEffectsGrabBag.getLength();
-            m_aTextEffectsGrabBag.realloc(m_aTextEffectsGrabBag.getLength() + 1);
-            m_aTextEffectsGrabBag[aLength] = aPropertyValue;
+            m_aTextEffectsGrabBag.push_back(aPropertyValue);
         }
         else if (i->first == "SdtEndBefore")
         {
