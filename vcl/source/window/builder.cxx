@@ -945,7 +945,7 @@ namespace
         if (sType == "utility")
             nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_MOVEABLE;
         else if (sType == "popup-menu")
-            nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_POPUP;
+            nBits |= WB_SYSTEMWINDOW | WB_DIALOGCONTROL | WB_POPUP | WB_OWNERDRAWDECORATION;
         else
             nBits |= WB_MOVEABLE;
         return nBits;
