@@ -88,6 +88,23 @@ ComboBox RID_SVXTBX_STYLE
     Hide = TRUE ;
 };
 
+Menu RID_SVX_STYLE_MENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = RID_SVX_APPLY_STYLE ;
+            Text [ en-US ] = "Apply style" ;
+        };
+        MenuItem
+        {
+            Identifier = RID_SVX_MODIFY_STYLE ;
+            Text [ en-US ] = "Modify style" ;
+        };
+    };
+};
+
 String RID_SVXSTR_EXTRAS_CHARBACKGROUND
 {
     Text [ en-US ] = "Highlighting" ;

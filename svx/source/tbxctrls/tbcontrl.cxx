@@ -25,6 +25,7 @@
 #include <svl/itemset.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/bmpacc.hxx>
+#include <vcl/menubtn.hxx>
 #include <svtools/valueset.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <svl/style.hxx>
@@ -166,8 +167,12 @@ private:
     OUString                        aMoreKey;
     OUString                        sDefaultStyle;
     bool                            bInSpecialMode;
+    MenuButton*                     m_pButtons[MAX_STYLES_ENTRIES];
+    PopupMenu                       m_aMenu;
 
     void            ReleaseFocus();
+
+    DECL_LINK( MenuSelectHdl, Menu * );
 };
 
 
@@ -348,7 +353,11 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(Window* pParent,
     , aClearFormatKey( rClearFormatKey )
     , aMoreKey( rMoreKey )
     , bInSpecialMode( bInSpec )
+    , m_aMenu ( SVX_RES( RID_SVX_STYLE_MENU ) )
 {
+    m_aMenu.SetSelectHdl( LINK( this, SvxStyleBox_Impl, MenuSelectHdl ) );
+    for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
+        m_pButtons[i] = NULL;
     aLogicalSize = PixelToLogic( GetSizePixel(), MAP_APPFONT );
     EnableAutocomplete( true );
     EnableUserDraw( true );
@@ -357,6 +366,8 @@ SvxStyleBox_Impl::SvxStyleBox_Impl(Window* pParent,
 
 SvxStyleBox_Impl::~SvxStyleBox_Impl()
 {
+    for(int i = 0; i < MAX_STYLES_ENTRIES; i++)
+        delete m_pButtons[i];
 }
 
 
@@ -372,7 +383,33 @@ void SvxStyleBox_Impl::ReleaseFocus()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-
+IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu)
+{
+    sal_uInt16 nMenuId = pMenu->GetCurItemId();
+    switch(nMenuId) {
+        case RID_SVX_APPLY_STYLE:
+        {
+            nCurSel = GetSelectEntryPos();
+            SetText(GetEntry(nCurSel));
+            Select();
+            break;
+        }
+        case RID_SVX_MODIFY_STYLE:
+        {
+            OUString sEntry = OUString( (GetEntry(GetSelectEntryPos())) );
+            ReleaseFocus();
+            Sequence< PropertyValue > aArgs( 2 );
+            aArgs[0].Name   = "Param";
+            aArgs[0].Value  = makeAny( sEntry );
+            aArgs[1].Name   = "Family";
+            aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
+            SfxToolBoxControl::Dispatch( m_xDispatchProvider,
+                OUString( ".uno:EditStyle" ), aArgs );
+            break;
+        }
+    }
+    return 0;
+}
 
 void SvxStyleBox_Impl::Select()
 {
@@ -499,6 +536,21 @@ bool SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
         switch ( nCode )
         {
             case KEY_RETURN:
+            {
+                if(IsInDropDown())
+                {
+                    sal_uInt16 nItem = GetSelectEntryPos() - 1;
+                    if(nItem < MAX_STYLES_ENTRIES)
+                        m_pButtons[nItem]->KeyInput(*rNEvt.GetKeyEvent());
+                    nHandled = true;
+                }
+                else
+                {
+                    nHandled = true;
+                    Select();
+                }
+                break;
+            }
             case KEY_TAB:
             {
                 if ( KEY_TAB == nCode )
@@ -556,6 +608,10 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
 
     if ( nItem == 0 || nItem == GetEntryCount() - 1 )
     {
+        Rectangle aRect(rUDEvt.GetRect());
+        unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+        if(m_pButtons[nId])
+            m_pButtons[nId]->Hide();
         // draw the non-style entries, ie. "Clear Formatting" or "More..."
         DrawEntry( rUDEvt, true, true );
     }
@@ -666,6 +722,27 @@ void SvxStyleBox_Impl::UserDraw( const UserDrawEvent& rUDEvt )
                     {
                         pDevice->SetFillColor( aColor );
                         pDevice->DrawRect( rUDEvt.GetRect() );
+                    }
+
+                    Rectangle aRect(rUDEvt.GetRect());
+                    unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+                    if(nId < MAX_STYLES_ENTRIES && m_pButtons[nId])
+                        m_pButtons[nId]->Hide();
+                }
+                else
+                {
+                    Rectangle aRect(rUDEvt.GetRect());
+                    unsigned int nId = (aRect.getY() / aRect.GetSize().Height());
+                    if(nId < MAX_STYLES_ENTRIES)
+                    {
+                        if(m_pButtons[nId] == NULL)
+                        {
+                            m_pButtons[nId] = new MenuButton((Window*)pDevice);
+                            m_pButtons[nId]->SetSizePixel(Size(20, aRect.GetSize().Height()));
+                            m_pButtons[nId]->SetPopupMenu(&m_aMenu);
+                        }
+                        m_pButtons[nId]->SetPosPixel(Point(aRect.GetWidth() - 20, aRect.getY()));
+                        m_pButtons[nId]->Show();
                     }
                 }
 
