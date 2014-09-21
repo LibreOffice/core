@@ -320,6 +320,8 @@ public:
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = NULL,
                      sal_uInt16* pDeterminedFormat = NULL );
+
+    sal_uInt16 compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream, sal_uInt32 nCompression = 5);
 };
 
 #endif // INCLUDED_VCL_GRAPHICFILTER_HXX

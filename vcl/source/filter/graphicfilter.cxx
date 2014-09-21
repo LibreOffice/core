@@ -2307,4 +2307,16 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     return nRes;
 }
 
+sal_uInt16 GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream, sal_uInt32 nCompression)
+{
+    nCompression = MinMax(nCompression, 0, 100);
+
+    uno::Sequence<beans::PropertyValue> aFilterData(1);
+    aFilterData[0].Name = "Compression";
+    aFilterData[0].Value <<= nCompression;
+
+    sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName("PNG");
+    return ExportGraphic(rGraphic, OUString(), rOutputStream, nFilterFormat, &aFilterData);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
