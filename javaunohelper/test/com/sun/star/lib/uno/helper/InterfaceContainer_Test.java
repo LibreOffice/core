@@ -18,16 +18,20 @@
 
 package com.sun.star.lib.uno.helper;
 
-import java.util.Iterator;
-import java.util.ListIterator;
 import com.sun.star.uno.XWeak;
 import com.sun.star.lang.XTypeProvider;
-import java.util.ArrayList;
 import com.sun.star.lib.uno.environments.java.java_environment;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class InterfaceContainer_Test
 {
+    private static final Logger logger = Logger.getLogger(InterfaceContainer_Test.class.getName());
     java_environment env= new java_environment(null);
     /** Creates a new instance of InterfaceContainerTest */
     AWeakBase obj1,obj2,obj3,obj4;
@@ -74,7 +78,7 @@ public class InterfaceContainer_Test
      */
     public boolean add()
     {
-        System.out.println("Testing List.add(Object), List.size(), List.clear(), List.isEmpty()");
+        logger.log(Level.INFO, "Testing List.add(Object), List.size(), List.clear(), List.isEmpty()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -94,10 +98,7 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -105,7 +106,7 @@ public class InterfaceContainer_Test
      */
     public boolean listConstructors()
     {
-        System.out.println("Testing Constructors of InterfaceContainer");
+        logger.log(Level.INFO, "Testing Constructors of InterfaceContainer");
         boolean r[]= new boolean[50];
         int i= 0;
         InterfaceContainer cont= new InterfaceContainer(100);
@@ -114,15 +115,12 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
     public boolean trimToSize()
     {
-        System.out.println("Testing InterfaceContainer.trimToSize");
+        logger.log(Level.INFO, "Testing InterfaceContainer.trimToSize");
         InterfaceContainer cont= new InterfaceContainer(100);
         boolean r[]= new boolean[50];
         int i= 0;
@@ -135,15 +133,12 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
     public boolean ensureCapacity()
     {
-        System.out.println("Testing InterfaceContainer.ensureCapacity");
+        logger.log(Level.INFO, "Testing InterfaceContainer.ensureCapacity");
         InterfaceContainer cont= new InterfaceContainer(10);
         boolean r[]= new boolean[50];
         int i= 0;
@@ -155,16 +150,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean addAll()
     {
-        System.out.println("Testing List.addAll(Collection c), List.addAll(int index, Collection c)");
+        logger.log(Level.INFO, "Testing List.addAll(Collection c), List.addAll(int index, Collection c)");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -194,10 +186,7 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -205,7 +194,7 @@ public class InterfaceContainer_Test
      */
     public boolean get()
     {
-        System.out.println("Testing List.add(int index, Object element), List.get(int index)");
+        logger.log(Level.INFO, "Testing List.add(int index, Object element), List.get(int index)");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -229,17 +218,14 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
     /** Tests List.contains
      */
     public boolean contains()
     {
-        System.out.println("Testing List.contains()");
+        logger.log(Level.INFO, "Testing List.contains()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -259,17 +245,14 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
     /** Tests List.containsAll
      */
     public boolean containsAll()
     {
-        System.out.println("Testing List.containsAll");
+        logger.log(Level.INFO, "Testing List.containsAll");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -293,17 +276,14 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
     /** Tests List.indexOf, List.lastIndexOf
      */
     public boolean indexOf()
     {
-        System.out.println("Testing List.indexOf(Object element), List.lastIndexOf(Object element)");
+        logger.log(Level.INFO, "Testing List.indexOf(Object element), List.lastIndexOf(Object element)");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -320,10 +300,7 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -331,7 +308,7 @@ public class InterfaceContainer_Test
      */
     public boolean remove()
     {
-        System.out.println("Testing List.remove(int index), List.remove(Object element), List.removeAll(Collection c)");
+        logger.log(Level.INFO, "Testing List.remove(int index), List.remove(Object element), List.removeAll(Collection c)");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -361,10 +338,7 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -372,7 +346,7 @@ public class InterfaceContainer_Test
      */
     public boolean retainAll()
     {
-        System.out.println("Testing List.retainAll(Collection c)");
+        logger.log(Level.INFO, "Testing List.retainAll(Collection c)");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -393,10 +367,7 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -404,7 +375,7 @@ public class InterfaceContainer_Test
      **/
     public boolean set()
     {
-        System.out.println("Testing List.set(int index, Object element)");
+        logger.log(Level.INFO, "Testing List.set(int index, Object element)");
         boolean r[]= new boolean[50];
         int i= 0;
         InterfaceContainer cont= new InterfaceContainer();
@@ -419,10 +390,7 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -430,7 +398,7 @@ public class InterfaceContainer_Test
      */
     public boolean toArray()
     {
-        System.out.println("Testing List.toArray(), List.toArray(Object[] a)");
+        logger.log(Level.INFO, "Testing List.toArray(), List.toArray(Object[] a)");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -457,16 +425,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean Iterator_next()
     {
-        System.out.println("Testing InterfaceContainer.iterator, Iterator.next()");
+        logger.log(Level.INFO, "Testing InterfaceContainer.iterator, Iterator.next()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -490,16 +455,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean Iterator_hasNext()
     {
-        System.out.println("Testing, Iterator.next()");
+        logger.log(Level.INFO, "Testing, Iterator.next()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -519,16 +481,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean Iterator_remove()
     {
-        System.out.println("Testing, Iterator.remove()");
+        logger.log(Level.INFO, "Testing, Iterator.remove()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -599,15 +558,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
+
     public boolean ListIterator_next()
     {
-        System.out.println("Testing InterfaceContainer.listIerator, ListIterator.next()");
+        logger.log(Level.INFO, "Testing InterfaceContainer.listIerator, ListIterator.next()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -631,16 +588,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean ListIterator_hasNext()
     {
-        System.out.println("Testing ListIterator.hasNext()");
+        logger.log(Level.INFO, "Testing ListIterator.hasNext()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -660,16 +614,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean ListIterator_remove()
     {
-        System.out.println("Testing ListIterator.remove()");
+        logger.log(Level.INFO, "Testing ListIterator.remove()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -740,16 +691,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean ListIterator_hasPrevious()
     {
-        System.out.println("Testing ListIterator.hasPrevious()");
+        logger.log(Level.INFO, "Testing ListIterator.hasPrevious()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -767,16 +715,13 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean ListIterator_previous()
     {
-        System.out.println("Testing ListIterator.previous()");
+        logger.log(Level.INFO, "Testing ListIterator.previous()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -807,16 +752,13 @@ public class InterfaceContainer_Test
 
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean ListIterator_nextIndex()
     {
-        System.out.println("Testing ListIterator.nextIndex()");
+        logger.log(Level.INFO, "Testing ListIterator.nextIndex()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -833,15 +775,12 @@ public class InterfaceContainer_Test
 
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
     public boolean ListIterator_previousIndex()
     {
-        System.out.println("Testing ListIterator.previousIndex()");
+        logger.log(Level.INFO, "Testing ListIterator.previousIndex()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -862,15 +801,12 @@ public class InterfaceContainer_Test
 
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
     public boolean ListIterator_add()
     {
-        System.out.println("Testing ListIterator.add()");
+        logger.log(Level.INFO, "Testing ListIterator.add()");
         InterfaceContainer cont= new InterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -888,16 +824,13 @@ public class InterfaceContainer_Test
 
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean disposeAndClear()
     {
-        System.out.println("Testing InterfaceContainer.disposeAndClear");
+        logger.log(Level.INFO, "Testing InterfaceContainer.disposeAndClear");
         InterfaceContainer cont= new InterfaceContainer(10);
         boolean r[]= new boolean[50];
         int i= 0;
@@ -907,7 +840,7 @@ public class InterfaceContainer_Test
         cont.add(obj3);
         cont.add(proxyObj1Weak1);
         cont.add(proxyObj3TypeProv);
-        System.out.println("Two proxies are called. Check the output:");
+        logger.log(Level.FINE, "Two proxies are called. Check the output:");
         cont.disposeAndClear(new com.sun.star.lang.EventObject());
         r[i++]= obj1.nDisposingCalled == 1;
         r[i++]= obj2.nDisposingCalled == 1;
@@ -915,10 +848,7 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -956,11 +886,7 @@ public class InterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Test finished.\nErrors occurred!!!");
-        else
-            System.out.println("Test finished. \nNo errors.");
-
+        logger.log(Level.INFO, "Test finished.");
+        logger.log(Level.INFO, bOk ? "No errors." : "Errors occurred!!!");
     }
-
 }

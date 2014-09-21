@@ -25,18 +25,19 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.Map;
 
 public class Bootstrap_Test {
+
+    private static final Logger logger = Logger.getLogger(Bootstrap_Test.class.getName());
 
     static public boolean test( String ini_file, Map<String,String> bootstrap_parameters )
         throws java.lang.Exception
     {
         boolean passed = false;
-        System.err.println();
-        System.out.println("*******************************************************************");
-        System.err.println("Bootstrap - doing tests...");
-        System.err.println();
+        logger.log(Level.INFO, "Bootstrap - doing tests...");
 
         try {
             XComponentContext xContext =
@@ -54,14 +55,13 @@ public class Bootstrap_Test {
             XMultiServiceFactory msf = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, xContext.getServiceManager() );
             String services[] = msf.getAvailableServiceNames();
-            System.out.println("Available services are:");
-            System.err.println();
+            logger.log(Level.FINE, "Available services are:");
             if (services.length == 0)
-                System.out.println("No services avialable!");
+                logger.log(Level.FINE, "No services avialable!");
 
             else
                 for ( int i=0; i<services.length; i++ )
-                    System.out.println(services[i]);
+                    logger.log(Level.FINE, services[i]);
 
             XComponent xComp = UnoRuntime.queryInterface(
                 XComponent.class, xContext );
@@ -72,10 +72,7 @@ public class Bootstrap_Test {
         catch (Exception e) {
             e.printStackTrace();
         }
-        System.err.println();
-        System.err.println("Bootstrap test passed? " + passed);
-        System.out.println("*******************************************************************");
-        System.err.println();
+        logger.log(Level.INFO, "Bootstrap test passed? " + passed);
         return passed;
     }
 

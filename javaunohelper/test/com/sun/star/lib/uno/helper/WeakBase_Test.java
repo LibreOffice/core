@@ -17,6 +17,7 @@
  */
 
 package com.sun.star.lib.uno.helper;
+
 import com.sun.star.uno.Type;
 import com.sun.star.bridge.XBridgeSupplier2;
 import com.sun.star.uno.XReference;
@@ -24,12 +25,17 @@ import com.sun.star.uno.XWeak;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.XAdapter;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class WeakBase_Test
 {
 
+    private static final Logger logger = Logger.getLogger(WeakBase_Test.class.getName());
+
     public boolean getTypes()
     {
-        System.out.println("Testing WeakBase.getTypes");
+        logger.log(Level.INFO, "Testing WeakBase.getTypes");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -60,16 +66,13 @@ public class WeakBase_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean getImplementationId()
     {
-        System.out.println("Testing WeakBase.getImplementationId");
+        logger.log(Level.INFO, "Testing WeakBase.getImplementationId");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -94,16 +97,13 @@ public class WeakBase_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean queryAdapter()
     {
-        System.out.println("Testing WeakBase.queryAdapter, XAdapter tests");
+        logger.log(Level.INFO, "Testing WeakBase.queryAdapter, XAdapter tests");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -116,7 +116,7 @@ public class WeakBase_Test
 
         r[i++]= adapter.queryAdapted() == comp;
         comp= null;
-        System.out.println("Wait 5 sec");
+        logger.log(Level.FINE, "Wait 5 sec");
         for(int c= 0; c < 50; c++)
         {
             try
@@ -144,7 +144,7 @@ public class WeakBase_Test
         adapter.addReference(aRef2);
 
         adapter.removeReference(aRef1);
-        System.out.println("Wait 5 sec");
+        logger.log(Level.FINE, "Wait 5 sec");
         comp= null;
         for(int c= 0; c < 50; c++)
         {
@@ -163,10 +163,7 @@ public class WeakBase_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -182,11 +179,7 @@ public class WeakBase_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Errors occurred!");
-        else
-            System.out.println("No errors.");
-
+        logger.log(Level.INFO, bOk ? "No errors." : "Errors occurred!");
     }
 
 }

@@ -17,13 +17,18 @@
  */
 
 package com.sun.star.lib.uno.helper;
+
 import com.sun.star.uno.XWeak;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XEventListener;
+import java.util.logging.Level;
+
+import java.util.logging.Logger;
 
 public class ComponentBase_Test
 {
+    private static final Logger logger = Logger.getLogger(ComponentBase_Test.class.getName());
     AWeakBase obj1, obj2, obj3;
     Object proxyObj1Weak1;
     Object proxyObj3Weak1;
@@ -46,12 +51,12 @@ public class ComponentBase_Test
 
     public boolean dispose()
     {
-        System.out.println("Testing ComponentBase");
+        logger.log(Level.INFO, "Testing ComponentBase");
         ComponentBase comp= new ComponentBase();
         boolean r[]= new boolean[50];
         int i= 0;
-        // addEventListener
 
+        logger.log(Level.FINE, "addEventListener");
         comp.addEventListener(obj1);
         comp.addEventListener(obj2);
         comp.addEventListener(obj3);
@@ -66,11 +71,13 @@ public class ComponentBase_Test
         r[i++]= obj1.nDisposingCalled == 1;
         r[i++]= obj2.nDisposingCalled == 1;
         r[i++]= obj3.nDisposingCalled == 1;
-        // adding a listener after dispose, causes a immediate call to the listerner
+
+        logger.log(Level.FINE, "Adding a listener after dispose, causes a immediate call to the listerner.");
         obj1.nDisposingCalled= 0;
         comp.addEventListener(obj1);
         r[i++]= obj1.nDisposingCalled == 1;
-        //calling dispose again must not notify the listeners again
+
+        logger.log(Level.FINE, "Calling dispose again must not notify the listeners again.");
         obj1.nDisposingCalled= 0;
         obj2.nDisposingCalled= 0;
         obj3.nDisposingCalled= 0;
@@ -80,16 +87,13 @@ public class ComponentBase_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean test_finalize()
     {
-        System.out.println("Testing ComponentBase");
+        logger.log(Level.INFO, "Testing ComponentBase");
         ComponentBase comp= new ComponentBase();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -97,7 +101,7 @@ public class ComponentBase_Test
         comp.addEventListener(obj1);
 
         comp= null;
-        System.out.println("Waiting 10s");
+        logger.log(Level.FINE, "Waiting 10s");
         for(int c= 0; c < 100; c++)
         {
             try
@@ -114,10 +118,7 @@ public class ComponentBase_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -133,12 +134,7 @@ public class ComponentBase_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Errors occurred!");
-        else
-            System.out.println("No errors.");
-
+        logger.log(Level.INFO, bOk ? "No errors." : "Errors occurred!");
+        System.exit( bOk ? 0: -1 );
     }
-
 }
-
