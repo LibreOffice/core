@@ -25,6 +25,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/metric.hxx>
 
 #include "sallayout.hxx"
 #include "svdata.hxx"
@@ -216,9 +217,10 @@ FontMetric OutputDevice::GetFontMetric( const vcl::Font& rFont ) const
     return aMetric;
 }
 
-bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
+bool OutputDevice::GetFontCharMap( PtrFontCharMap& rFontCharMap )
 {
-    rFontCharMap.Reset();
+    rFontCharMap.reset();
+    rFontCharMap = FontCharMap::GetDefaultMap();
 
     // we need a graphics
     if( !mpGraphics && !AcquireGraphics() )
@@ -231,10 +233,10 @@ bool OutputDevice::GetFontCharMap( FontCharMap& rFontCharMap ) const
     if( !mpFontEntry )
         return false;
 
-    const ImplFontCharMap* pNewMap = mpGraphics->GetImplFontCharMap();
-    rFontCharMap.Reset( pNewMap );
+    rFontCharMap.reset();
+    rFontCharMap = mpGraphics->GetFontCharMap();
 
-    if( rFontCharMap.IsDefaultMap() )
+    if( rFontCharMap->IsDefaultMap() )
         return false;
     return true;
 }
@@ -422,7 +424,7 @@ void OutputDevice::ImplGetEmphasisMark( PolyPolygon& rPolyPoly, bool& rPolyLine,
         rYOff += nDotSize;
 }
 
-FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const vcl::Font& rFont )
+FontEmphasisMark OutputDevice::ImplGetEmphasisMarkStyle( const Font& rFont )
 {
     FontEmphasisMark nEmphasisMark = rFont.GetEmphasisMark();
 
@@ -2144,7 +2146,7 @@ bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const OUString& rSt
 }
 
 sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& rStr,
-    sal_Int32 nIndex, sal_Int32 nLen ) const
+    sal_Int32 nIndex, sal_Int32 nLen )
 {
     if( nIndex >= rStr.getLength() )
         return nIndex;
@@ -2160,7 +2162,7 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
     // to get the map temporarily set font
     const vcl::Font aOrigFont = GetFont();
     const_cast<OutputDevice&>(*this).SetFont( rTempFont );
-    FontCharMap aFontCharMap;
+    PtrFontCharMap aFontCharMap;
     bool bRet = GetFontCharMap( aFontCharMap );
     const_cast<OutputDevice&>(*this).SetFont( aOrigFont );
 
@@ -2169,7 +2171,7 @@ sal_Int32 OutputDevice::HasGlyphs( const vcl::Font& rTempFont, const OUString& r
         return nIndex;
 
     for( sal_Int32 i = nIndex; nIndex < nEnd; ++i, ++nIndex )
-        if( ! aFontCharMap.HasChar( rStr[i] ) )
+        if( ! aFontCharMap->HasChar( rStr[i] ) )
             return nIndex;
 
     return -1;

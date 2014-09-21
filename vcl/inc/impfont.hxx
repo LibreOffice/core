@@ -157,68 +157,7 @@ public:
         { return NULL; }
 };
 
-// - ImplFontCharMap -
-
 class CmapResult;
-
-class VCL_PLUGIN_PUBLIC ImplFontCharMap
-{
-public:
-    explicit             ImplFontCharMap( const CmapResult& );
-    virtual              ~ImplFontCharMap();
-
-    static ImplFontCharMap* GetDefaultMap( bool bSymbols=false);
-
-    bool                IsDefaultMap() const;
-    bool                HasChar( sal_uInt32 ) const;
-    int                 CountCharsInRange( sal_uInt32 cMin, sal_uInt32 cMax ) const;
-    int                 GetCharCount() const { return mnCharCount;}
-
-    sal_uInt32          GetFirstChar() const { return mpRangeCodes[0];}
-    sal_uInt32          GetLastChar() const;
-
-    sal_uInt32          GetNextChar( sal_uInt32 ) const;
-    sal_uInt32          GetPrevChar( sal_uInt32 ) const;
-
-    int                 GetIndexFromChar( sal_uInt32 ) const;
-    sal_uInt32          GetCharFromIndex( int ) const;
-
-    void                AddReference() const;
-    void                DeReference() const;
-
-    int                 GetGlyphIndex( sal_uInt32 ) const;
-
-private:
-    int                 ImplFindRangeIndex( sal_uInt32 ) const;
-
-    // prevent assignment and copy construction
-    explicit            ImplFontCharMap( const ImplFontCharMap& );
-    void                operator=( const ImplFontCharMap& );
-
-private:
-    const sal_uInt32*   mpRangeCodes;     // pairs of StartCode/(EndCode+1)
-    const int*          mpStartGlyphs;    // range-specific mapper to glyphs
-    const sal_uInt16*       mpGlyphIds;       // individual glyphid mappings
-    int                 mnRangeCount;
-    int                 mnCharCount;      // covered codepoints
-    mutable FontRefCount    mnRefCount;
-};
-
-// CmapResult is a normalized version of the many CMAP formats
-class VCL_PLUGIN_PUBLIC CmapResult
-{
-public:
-    explicit    CmapResult( bool bSymbolic = false,
-                    const sal_uInt32* pRangeCodes = NULL, int nRangeCount = 0,
-                    const int* pStartGlyphs = 0, const sal_uInt16* pGlyphIds = NULL );
-
-    const sal_uInt32* mpRangeCodes;
-    const int*        mpStartGlyphs;
-    const sal_uInt16*     mpGlyphIds;
-    int               mnRangeCount;
-    bool              mbSymbolic;
-    bool              mbRecoded;
-};
 
 bool ParseCMAP( const unsigned char* pRawData, int nRawLength, CmapResult& );
 
