@@ -17,6 +17,7 @@
  */
 
 package com.sun.star.lib.uno.helper;
+
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.DisposedException;
 import com.sun.star.uno.Type;
@@ -34,12 +35,17 @@ import com.sun.star.beans.XVetoableChangeListener;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.beans.XPropertiesChangeListener;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class PropertySet_Test
 {
 
+    private static final Logger logger = Logger.getLogger(PropertySet_Test.class.getName());
+
     public boolean convertPropertyValue()
     {
-        System.out.println("PropertySet.convertPropertyValue");
+        logger.log(Level.INFO, "PropertySet.convertPropertyValue");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -52,16 +58,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean setPropertyValueNoBroadcast()
     {
-        System.out.println("PropertySet.setValueNoBroadcast");
+        logger.log(Level.INFO, "PropertySet.setValueNoBroadcast");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -74,16 +77,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean setPropertyValue()
     {
-        System.out.println("PropertySet.setPropertyValue");
+        logger.log(Level.INFO, "PropertySet.setPropertyValue");
         boolean[] r= new boolean[150];
         int i= 0;
 
@@ -576,20 +576,17 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean addPropertyChangeListener()
     {
-        System.out.println("PropertySet.addPropertyChangeListener,\n" +
-                            "PropertySet.removePropertChangeListener," +
-                            "PropertySet.addVetoableChangeListener, \n" +
-                            "PropertySet.removeVetoableChangeListener" +
-                            "Notification of listeners");
+        logger.log(Level.INFO, "PropertySet.addPropertyChangeListener,\n" +
+                               "PropertySet.removePropertChangeListener," +
+                               "PropertySet.addVetoableChangeListener, \n" +
+                               "PropertySet.removeVetoableChangeListener" +
+                               "Notification of listeners");
         boolean[] r= new boolean[50];
         int i= 0;
         try {
@@ -771,16 +768,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean getPropertySetInfo()
     {
-        System.out.println("PropertySet.getPropertySetInfo");
+        logger.log(Level.INFO, "PropertySet.getPropertySetInfo");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -823,16 +817,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean setFastPropertyValue()
     {
-        System.out.println("PropertySet.setFastPropertyValue");
+        logger.log(Level.INFO, "PropertySet.setFastPropertyValue");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -854,16 +845,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean getFastPropertyValue()
     {
-        System.out.println("PropertySet.setFastPropertyValue");
+        logger.log(Level.INFO, "PropertySet.setFastPropertyValue");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -880,16 +868,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean setPropertyValues()
     {
-        System.out.println("PropertySet.setPropertyValues");
+        logger.log(Level.INFO, "PropertySet.setPropertyValues");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -915,16 +900,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean getPropertyValues()
     {
-        System.out.println("PropertySet.getPropertyValues");
+        logger.log(Level.INFO, "PropertySet.getPropertyValues");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -944,10 +926,7 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -955,9 +934,9 @@ public class PropertySet_Test
     // The property names in the first argument are ignored.
     public boolean addPropertiesChangeListener()
     {
-        System.out.println("PropertySet.addPropertiesChangeListener\n" +
-                            "PropertySet.removePropertiesChangeListener\n" +
-                            "notification of such listeners");
+        logger.log(Level.INFO, "PropertySet.addPropertiesChangeListener\n" +
+                               "PropertySet.removePropertiesChangeListener\n" +
+                               "notification of such listeners");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -986,16 +965,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean firePropertiesChangeEvent()
     {
-        System.out.println("PropertySet.firePropertiesChangeEvent");
+        logger.log(Level.INFO, "PropertySet.firePropertiesChangeEvent");
         boolean[] r= new boolean[50];
         int i= 0;
 
@@ -1020,10 +996,7 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -1060,15 +1033,13 @@ public class PropertySet_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Errors occurred!");
-        else
-            System.out.println("No errors.");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
+
     public static void main(String[] args)
     {
-        test();
+        System.exit( test() ? 0: -1 );
     }
 }
 
@@ -1469,7 +1440,6 @@ class TestClass2 extends PropertySet
 
     boolean test_registerProperty1()
     {
-        System.out.println("registerProperty Test 1");
         boolean r[]= new boolean[50];
         int i= 0;
 
