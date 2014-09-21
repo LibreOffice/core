@@ -17,16 +17,22 @@
  */
 
 package com.sun.star.lib.uno.helper;
-import java.util.List;
-import com.sun.star.uno.XWeak;
+
+import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lang.XTypeProvider;
-import java.util.ArrayList;
+
+import com.sun.star.uno.XWeak;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XInterface;
-import com.sun.star.lang.XSingleComponentFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MultiTypeInterfaceContainer_Test
 {
+    private static final Logger logger = Logger.getLogger(MultiTypeInterfaceContainer_Test.class.getName());
     /** Creates a new instance of InterfaceContainerTest */
     AWeakBase obj1,obj2,obj3,obj4;
     Object proxyObj1Weak1;
@@ -72,7 +78,7 @@ public class MultiTypeInterfaceContainer_Test
 
     public boolean addInterface()
     {
-        System.out.println("Testing MultiTypeInterfaceContainer.addInterface");
+        logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.addInterface");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
         boolean r[]= new boolean[200];
         int i= 0;
@@ -107,16 +113,13 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean getContainedTypes()
     {
-        System.out.println("Testing MultiTypeInterfaceContainer.getContainedTypes");
+        logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.getContainedTypes");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -153,16 +156,13 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean getContainer()
     {
-        System.out.println("Testing MultiTypeInterfaceContainer.getContainedTypes");
+        logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.getContainedTypes");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -186,16 +186,13 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean removeInterface()
     {
-        System.out.println("Testing MultiTypeInterfaceContainer.removeInterface");
+        logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.removeInterface");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -221,16 +218,13 @@ public class MultiTypeInterfaceContainer_Test
           boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean clear()
     {
-        System.out.println("Testing MultiTypeInterfaceContainer.clear");
+        logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.clear");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -254,16 +248,13 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
     public boolean disposeAndClear()
     {
-        System.out.println("Testing MultiTypeInterfaceContainer.disposeAndClear");
+        logger.log(Level.INFO, "Testing MultiTypeInterfaceContainer.disposeAndClear");
         MultiTypeInterfaceContainer cont= new MultiTypeInterfaceContainer();
         boolean r[]= new boolean[50];
         int i= 0;
@@ -288,10 +279,7 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if (!bOk)
-            System.out.println("Failed");
-        else
-            System.out.println("Ok");
+        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
         return bOk;
     }
 
@@ -310,13 +298,8 @@ public class MultiTypeInterfaceContainer_Test
         boolean bOk= true;
         for (int c= 0; c < i; c++)
             bOk= bOk && r[c];
-        if ( ! bOk )
-            System.out.println("Test finished.\nErrors occurred!!!");
-        else
-            System.out.println("Test finished. \nNo errors.");
-
+        logger.log(Level.INFO, "Test finished.");
+        logger.log(Level.INFO, bOk ? "No errors." : "Errors occurred!!!");
+        System.exit( bOk ? 0: -1 );
     }
 }
-
-
-
