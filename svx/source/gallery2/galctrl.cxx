@@ -36,7 +36,6 @@
 #include <vcl/settings.hxx>
 
 #define GALLERY_BRWBOX_TITLE    1
-#define GALLERY_BRWBOX_PATH     2
 
 GalleryPreview::GalleryPreview(Window* pParent, WinBits nStyle, GalleryTheme* pTheme)
     : Window(pParent, nStyle)
@@ -527,10 +526,9 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 
     InitSettings();
 
-    SetMode( BROWSER_AUTO_VSCROLL | BROWSER_AUTOSIZE_LASTCOL );
+    SetMode( BROWSER_AUTO_VSCROLL | BROWSER_AUTOSIZE_LASTCOL | BROWSER_AUTO_HSCROLL );
     SetDataRowHeight( 28 );
     InsertDataColumn( GALLERY_BRWBOX_TITLE, GAL_RESSTR(RID_SVXSTR_GALLERY_TITLE), 256  );
-    InsertDataColumn( GALLERY_BRWBOX_PATH, GAL_RESSTR(RID_SVXSTR_GALLERY_PATH), 256 );
 }
 
 GalleryListView::~GalleryListView()
@@ -558,7 +556,7 @@ bool GalleryListView::SeekRow( long nRow )
     return true;
 }
 
-OUString GalleryListView::GetCellText(long _nRow, sal_uInt16 nColumnId) const
+OUString GalleryListView::GetCellText(long _nRow, sal_uInt16 /*nColumnId*/) const
 {
     OUString sRet;
     if( mpTheme && ( _nRow < static_cast< long >( mpTheme->GetObjectCount() ) ) )
@@ -567,9 +565,7 @@ OUString GalleryListView::GetCellText(long _nRow, sal_uInt16 nColumnId) const
 
         if( pObj )
         {
-            sRet = GalleryBrowser2::GetItemText( *mpTheme, *pObj,
-                ( GALLERY_BRWBOX_TITLE == nColumnId ) ? GALLERY_ITEM_TITLE : GALLERY_ITEM_PATH );
-
+            sRet = GalleryBrowser2::GetItemText( *mpTheme, *pObj, GALLERY_ITEM_TITLE );
             mpTheme->ReleaseObject( pObj );
         }
     }
@@ -607,7 +603,7 @@ sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColu
     return nRet;
 }
 
-void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
+void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 /*nColumnId*/ ) const
 {
     rDev.Push( PUSH_CLIPREGION );
     rDev.IntersectClipRegion( rRect );
@@ -624,20 +620,8 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
 
         bool bNeedToCreate(aBitmapEx.IsEmpty());
 
-        if(!bNeedToCreate && GALLERY_BRWBOX_TITLE == nColumnId && aItemTextTitle.isEmpty())
-        {
+        if(!bNeedToCreate && (aItemTextTitle.isEmpty() || aPreparedSize != aSize))
             bNeedToCreate = true;
-        }
-
-        if(!bNeedToCreate && GALLERY_BRWBOX_PATH == nColumnId && aItemTextPath.isEmpty())
-        {
-            bNeedToCreate = true;
-        }
-
-        if(!bNeedToCreate && aPreparedSize != aSize)
-        {
-            bNeedToCreate = true;
-        }
 
         if(bNeedToCreate)
         {
@@ -656,30 +640,23 @@ void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sa
 
         const long nTextPosY(rRect.Top() + ((rRect.GetHeight() - rDev.GetTextHeight()) >> 1));
 
-        if(GALLERY_BRWBOX_TITLE == nColumnId)
+        if(!aBitmapEx.IsEmpty())
         {
-            if(!aBitmapEx.IsEmpty())
+            const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
+            const Point aPos(
+                ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1) + rRect.Left(),
+                ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
+
+            if(aBitmapEx.IsTransparent())
             {
-                const Size aBitmapExSizePixel(aBitmapEx.GetSizePixel());
-                const Point aPos(
-                    ((aSize.Width() - aBitmapExSizePixel.Width()) >> 1) + rRect.Left(),
-                    ((aSize.Height() - aBitmapExSizePixel.Height()) >> 1) + rRect.Top());
-
-                if(aBitmapEx.IsTransparent())
-                {
-                    // draw checkered background
-                    drawTransparenceBackground(rDev, aPos, aBitmapExSizePixel);
-                }
-
-                rDev.DrawBitmapEx(aPos, aBitmapEx);
+                // draw checkered background
+                drawTransparenceBackground(rDev, aPos, aBitmapExSizePixel);
             }
 
-            rDev.DrawText(Point(rRect.Left() + rRect.GetHeight() + 6, nTextPosY), aItemTextTitle);
+            rDev.DrawBitmapEx(aPos, aBitmapEx);
         }
-        else if(GALLERY_BRWBOX_PATH == nColumnId)
-        {
-            rDev.DrawText(Point(rRect.Left(), nTextPosY), aItemTextPath);
-        }
+
+        rDev.DrawText(Point(rRect.Left() + rRect.GetHeight() + 6, nTextPosY), aItemTextTitle);
 
 
         //SgaObject* pObj = mpTheme->AcquireObject( mnCurRow );

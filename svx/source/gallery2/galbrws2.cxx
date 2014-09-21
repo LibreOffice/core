@@ -956,33 +956,8 @@ void GalleryBrowser2::ImplUpdateViews( sal_uInt16 nSelectionId )
 
 void GalleryBrowser2::ImplUpdateInfoBar()
 {
-    OUString aInfoText;
-
     if( mpCurTheme )
-    {
-        Point       aSelPos;
-        const sal_uIntPtr nItemId = ImplGetSelectedItemId( NULL, aSelPos );
-
-        if( nItemId )
-        {
-            const sal_uIntPtr nPos = nItemId - 1;
-
-            aInfoText = mpCurTheme->GetName();
-
-            if( nPos < mpCurTheme->GetObjectCount() )
-            {
-                SgaObject* pObj = mpCurTheme->AcquireObject( nPos );
-
-                if( pObj )
-                {
-                    aInfoText = GetItemText( *mpCurTheme, *pObj, GALLERY_ITEM_THEMENAME | GALLERY_ITEM_TITLE | GALLERY_ITEM_PATH );
-                    mpCurTheme->ReleaseObject( pObj );
-                }
-            }
-        }
-    }
-
-    maInfoBar.SetText( aInfoText );
+         maInfoBar.SetText( mpCurTheme->GetName() );
 }
 
 sal_uIntPtr GalleryBrowser2::ImplGetSelectedItemId( const Point* pSelPos, Point& rSelPos )
