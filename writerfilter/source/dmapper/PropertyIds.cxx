@@ -400,6 +400,7 @@ OUString PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CELL_CNF_STYLE: sName = "CellCnfStyle"; break;
             case PROP_ROW_CNF_STYLE: sName = "RowCnfStyle"; break;
             case PROP_CELL_HIDE_MARK: sName = "CellHideMark"; break;
+            case PROP_FOLLOW_TEXT_FLOW: sName = "IsFollowingTextFlow"; break;
         }
         ::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->aNameMap.insert( PropertyNameMap_t::value_type( eId, sName ));

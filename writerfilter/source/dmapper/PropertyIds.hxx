@@ -372,6 +372,7 @@ enum PropertyIds
         ,PROP_CELL_CNF_STYLE
         ,PROP_ROW_CNF_STYLE
         ,PROP_CELL_HIDE_MARK
+        ,PROP_FOLLOW_TEXT_FLOW
     };
 struct PropertyNameSupplier_Impl;
 class PropertyNameSupplier
