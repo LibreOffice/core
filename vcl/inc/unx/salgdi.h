@@ -185,7 +185,7 @@ protected:
     void freeResources();
 public:
                             X11SalGraphics();
-    virtual             ~X11SalGraphics();
+    virtual                 ~X11SalGraphics();
 
             void            Init( SalFrame *pFrame, Drawable aDrawable, SalX11Screen nXScreen );
             void            Init( X11SalVirtualDevice *pVirtualDevice, SalColormap* pColormap = NULL, bool bDeleteColormap = false );
@@ -208,7 +208,7 @@ public:
 
     // overload all pure virtual methods
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) SAL_OVERRIDE;
-    virtual sal_uInt16          GetBitCount() const SAL_OVERRIDE;
+    virtual sal_uInt16      GetBitCount() const SAL_OVERRIDE;
     virtual long            GetGraphicsWidth() const SAL_OVERRIDE;
     virtual long            GetGraphicsHeight() const;
 
@@ -227,12 +227,12 @@ public:
     virtual void            SetROPFillColor( SalROPColor nROPColor ) SAL_OVERRIDE;
 
     virtual void            SetTextColor( SalColor nSalColor ) SAL_OVERRIDE;
-    virtual sal_uInt16          SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
+    virtual sal_uInt16      SetFont( FontSelectPattern*, int nFallbackLevel ) SAL_OVERRIDE;
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel ) SAL_OVERRIDE;
-    virtual const ImplFontCharMap* GetImplFontCharMap() const SAL_OVERRIDE;
-    virtual bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
+    virtual const           PtrFontCharMap GetFontCharMap() SAL_OVERRIDE;
+    virtual bool            GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const SAL_OVERRIDE;
     virtual void            GetDevFontList( PhysicalFontCollection* ) SAL_OVERRIDE;
-    virtual void ClearDevFontCache() SAL_OVERRIDE;
+    virtual void            ClearDevFontCache() SAL_OVERRIDE;
     virtual bool            AddTempDevFont( PhysicalFontCollection*, const OUString& rFileURL, const OUString& rFontName ) SAL_OVERRIDE;
     virtual bool            CreateFontSubset( const OUString& rToFile,
                                               const PhysicalFontFace*,
@@ -243,11 +243,11 @@ public:
                                               FontSubsetInfo& rInfo
                                               ) SAL_OVERRIDE;
     virtual const Ucs2SIntMap* GetFontEncodingVector( const PhysicalFontFace*, const Ucs2OStrMap** ppNonEncoded ) SAL_OVERRIDE;
-    virtual const void* GetEmbedFontData( const PhysicalFontFace*,
-                                          const sal_Ucs* pUnicodes,
-                                          sal_Int32* pWidths,
-                                          FontSubsetInfo& rInfo,
-                                          long* pDataLen ) SAL_OVERRIDE;
+    virtual const void*     GetEmbedFontData( const PhysicalFontFace*,
+                                              const sal_Ucs* pUnicodes,
+                                              sal_Int32* pWidths,
+                                              FontSubsetInfo& rInfo,
+                                              long* pDataLen ) SAL_OVERRIDE;
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen ) SAL_OVERRIDE;
     virtual void            GetGlyphWidths( const PhysicalFontFace*,
                                             bool bVertical,
