@@ -62,6 +62,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -1188,6 +1189,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
     const char* italic = NULL;
     const char* underline = NULL;
     const char* strikeout = NULL;
+    const char* cap = NULL;
     sal_Int32 nSize = 1800;
     sal_Int32 nCharEscapement = 0;
 
@@ -1313,6 +1315,19 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
         nSize = (nSize / 0.58);
     }
 
+    if( GETA( CharCaseMap ) )
+    {
+        switch ( *((sal_Int16*) mAny.getValue()) )
+        {
+            case CaseMap::UPPERCASE :
+                cap = "all";
+                break;
+            case CaseMap::SMALLCAPS :
+                cap = "small";
+                break;
+        }
+    }
+
     mpFS->startElementNS( XML_a, XML_rPr,
                           XML_b, bold,
                           XML_i, italic,
@@ -1321,6 +1336,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, bool bIsFiel
                           XML_strike, strikeout,
                           XML_u, underline,
                           XML_baseline, nCharEscapement == 0 ? NULL : IS( nCharEscapement*1000 ),
+                          XML_cap, cap,
                           FSEND );
 
     // mso doesn't like text color to be placed after typeface
