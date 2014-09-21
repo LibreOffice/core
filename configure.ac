@@ -1231,6 +1231,12 @@ AC_ARG_ENABLE(macosx-sandbox,
          adherence to App Store rules.]),
 ,)
 
+AC_ARG_WITH(macosx-teamid,
+    AS_HELP_STRING([--with-macosx-teamid=<teamid>],
+        [The "team id" to be used for com.apple.application-identifier
+         in the entitlements when building a sandboxed LibreOffice.]),
+,)
+
 AC_ARG_ENABLE(canonical-installation-tree-structure,
     AS_HELP_STRING([--enable-canonical-installation-tree-structure],
         [Make the installation tree structure be more canonical for
@@ -2921,8 +2927,14 @@ if test $_os = Darwin; then
 
     AC_MSG_CHECKING([whether to sandbox the application])
 
+    if test -n "$with_macosx_teamid" -a "$with_macosx_teamid != yes -a "$with_macosx_teamid != no; then
+        MACOSX_TEAMID="$with_macosx_teamid"
+    fi
+
     if test -z "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
         AC_MSG_ERROR([OS X sandboxing requires code signing])
+    elif test -z "$MACOSX_TEAMID" -a "$enable_macosx_sandbox" = yes; then
+        AC_MSG_ERROR([OS X sandboxing requires a team id])
     elif test -n "$ENABLE_JAVA" -a "$enable_macosx_sandbox" = yes; then
         AC_MSG_ERROR([OS X sandboxing (actually App Store rules) disallows use of Java])
     elif test -n "$MACOSX_CODESIGNING_IDENTITY" -a "$enable_macosx_sandbox" = yes; then
@@ -2952,6 +2964,7 @@ AC_SUBST(MACOSX_CODESIGNING_IDENTITY)
 AC_SUBST(MACOSX_PACKAGE_SIGNING_IDENTITY)
 AC_SUBST(ENABLE_MACOSX_SANDBOX)
 AC_SUBST(MACOSX_BUNDLE_IDENTIFIER)
+AC_SUBST(MACOSX_TEAMID)
 AC_SUBST(MACOSX_APP_NAME)
 
 dnl ===================================================================
