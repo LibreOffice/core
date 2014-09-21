@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 // tragen wir etwas ein, was hier (hoffentlich) nie vorkommt).
 SFX_SLOTMAP(ExtrusionBar)
 {
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 SFX_IMPL_INTERFACE(ExtrusionBar, SfxShell, SVX_RES(RID_SVX_EXTRUSION_BAR))

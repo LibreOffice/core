@@ -33,7 +33,7 @@ namespace sd {
 
 SFX_SLOTMAP(LeftImpressPaneShell)
 {
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 SFX_IMPL_INTERFACE(LeftImpressPaneShell, SfxShell, SdResId(STR_LEFT_IMPRESS_PANE_SHELL))
@@ -59,7 +59,7 @@ LeftImpressPaneShell::~LeftImpressPaneShell (void)
 
 SFX_SLOTMAP(LeftDrawPaneShell)
 {
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 SFX_IMPL_INTERFACE(LeftDrawPaneShell, SfxShell, SdResId(STR_LEFT_DRAW_PANE_SHELL))

@@ -291,7 +291,7 @@ void Deck::ShowPanel (const Panel& rPanel)
 
 
 
-const OUString& GetWindowClassification (const Window* pWindow)
+const OUString GetWindowClassification (const Window* pWindow)
 {
     const OUString& rsName (pWindow->GetText());
     if (!rsName.isEmpty())
@@ -300,8 +300,7 @@ const OUString& GetWindowClassification (const Window* pWindow)
     }
     else
     {
-        static const OUString aWindow ("window");
-        return aWindow;
+        return OUString("window");
     }
 }
 

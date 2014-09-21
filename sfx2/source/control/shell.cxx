@@ -585,7 +585,6 @@ void SfxShell::SetVerbs(const com::sun::star::uno::Sequence < com::sun::star::em
         pNewSlot->fnExec = SFX_STUB_PTR(SfxShell,VerbExec);
         pNewSlot->fnState = SFX_STUB_PTR(SfxShell,VerbState);
         pNewSlot->pType = 0; // HACK(SFX_TYPE(SfxVoidItem)) ???
-        pNewSlot->pName = strdup (OUStringToOString( aVerbs[n].VerbName, RTL_TEXTENCODING_UTF8 ).getStr());
         pNewSlot->pLinkedSlot = 0;
         pNewSlot->nArgDefCount = 0;
         pNewSlot->pFirstArgDef = 0;

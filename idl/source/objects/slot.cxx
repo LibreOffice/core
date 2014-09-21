@@ -1145,7 +1145,6 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
                             const OString& rSlotId,
                             SvSlotElementList& rSlotList,
                             size_t nStart,
-                            const OString& rPrefix,
                             SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     if ( !GetExport() && !GetHidden() )
@@ -1379,25 +1378,12 @@ void SvMetaSlot::WriteSlot( const OString& rShellName, sal_uInt16 nCount,
             sal_uLong nSCount = pType->GetAttrCount();
             rOutStm
                .WriteCharPtr( OString::number(nSCount).getStr() )
-               .WriteCharPtr( "/*Count*/" );
+               .WriteCharPtr( "/*Count*/," );
         }
         else
-            rOutStm.WriteChar( '0' );
+            rOutStm.WriteCharPtr( "0," );
 
-        // name for recording
-        if ( GetExport() )
-        {
-            rOutStm.WriteCharPtr( ",\"" );
-            if (!rPrefix.isEmpty())
-                rOutStm.WriteCharPtr( rPrefix.getStr() );
-            rOutStm.WriteChar( '.' );
-            if ( !IsVariable() || !GetType() ||
-                 GetType()->GetBaseType()->GetType() != TYPE_STRUCT )
-                rOutStm.WriteCharPtr( GetMangleName( false ).getStr() );
-            rOutStm.WriteCharPtr( "\"," );
-        }
-        else
-            rOutStm.WriteCharPtr( ", 0, " );
+        rOutStm.WriteCharPtr( " " );
 
         // Method/Property flags
         if( IsMethod() )
@@ -1463,7 +1449,6 @@ sal_uInt16 SvMetaSlot::WriteSlotParamArray( SvIdlDataBase & rBase, SvStream & rO
 sal_uInt16 SvMetaSlot::WriteSlotMap( const OString& rShellName, sal_uInt16 nCount,
                                 SvSlotElementList& rSlotList,
                                 size_t nStart,
-                                const OString& rPrefix,
                                 SvIdlDataBase & rBase,
                                 SvStream & rOutStm )
 {
@@ -1483,7 +1468,7 @@ sal_uInt16 SvMetaSlot::WriteSlotMap( const OString& rShellName, sal_uInt16 nCoun
         nSCount = (sal_uInt16)pType->GetAttrCount();
     }
 
-    WriteSlot( rShellName, nCount, slotId, rSlotList, nStart, rPrefix, rBase, rOutStm );
+    WriteSlot( rShellName, nCount, slotId, rSlotList, nStart, rBase, rOutStm );
     return nSCount;
 }
 
