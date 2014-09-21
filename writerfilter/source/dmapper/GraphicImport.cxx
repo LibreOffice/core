@@ -210,6 +210,7 @@ public:
     sal_Int16 nVertOrient;
     sal_Int16 nVertRelation;
     sal_Int32 nWrap;
+    bool      bLayoutInCell;
     bool      bOpaque;
     bool      bContour;
     bool      bContourOutside;
@@ -282,6 +283,7 @@ public:
         ,nVertOrient(  text::VertOrientation::NONE )
         ,nVertRelation( text::RelOrientation::FRAME )
         ,nWrap(0)
+        ,bLayoutInCell(false)
         ,bOpaque( true )
         ,bContour(false)
         ,bContourOutside(true)
@@ -855,7 +857,10 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                     m_pImpl->bOpaque = false;
         break;
         case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
+        break;
         case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
+            m_pImpl->bLayoutInCell = nIntValue != 0;
+        break;
         case NS_ooxml::LN_CT_Anchor_hidden: // 90992; - ignored
         break;
         case NS_ooxml::LN_CT_Anchor_allowOverlap: // 90993;
@@ -1508,6 +1513,9 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 }
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND ),
                         uno::makeAny(m_pImpl->nWrap));
+                if( m_pImpl->bLayoutInCell && m_pImpl->nWrap != text::WrapTextMode_THROUGHT )
+                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_FOLLOW_TEXT_FLOW ),
+                            uno::makeAny(true));
 
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
