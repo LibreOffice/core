@@ -2953,7 +2953,7 @@ bool ImplWinFontEntry::InitKashidaHandling( HDC hDC )
 PhysicalFontFace* ImplWinFontData::Clone() const
 {
     if( mpUnicodeMap )
-        mpUnicodeMap->AddReference();
+        mpUnicodeMap->reset();
 #if ENABLE_GRAPHITE
     if ( mpGraphiteData )
         mpGraphiteData->AddReference();
