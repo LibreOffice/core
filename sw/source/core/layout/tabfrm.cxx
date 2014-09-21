@@ -3577,7 +3577,7 @@ void SwRowFrm::MakeAll()
     SwLayoutFrm::MakeAll();
 }
 
-long CalcHeightWidthFlys( const SwFrm *pFrm )
+long CalcHeightWithFlys( const SwFrm *pFrm )
 {
     SWRECTFN( pFrm )
     long nHeight = 0;
@@ -3739,7 +3739,7 @@ static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
                 if ( _bConsiderObjs )
                 {
                     nFlyAdd = std::max( 0L, nFlyAdd - nLowHeight );
-                    nFlyAdd = std::max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
+                    nFlyAdd = std::max( nFlyAdd, ::CalcHeightWithFlys( pLow ) );
                 }
             }
 

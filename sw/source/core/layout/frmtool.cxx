@@ -3137,7 +3137,7 @@ static SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
             else if( pLow->IsSctFrm() && ((SwSectionFrm*)pLow)->IsUndersized() )
                 nLow += ((SwSectionFrm*)pLow)->Undersize();
             nFlyAdd = std::max( 0L, nFlyAdd - nLow );
-            nFlyAdd = std::max( nFlyAdd, ::CalcHeightWidthFlys( pLow ) );
+            nFlyAdd = std::max( nFlyAdd, ::CalcHeightWithFlys( pLow ) );
             nHeight += nLow;
             pLow = pLow->GetNext();
         } while ( pLow );

@@ -120,7 +120,7 @@ extern bool bSetCompletePaintOnInvalidate;
 
 // for table settings via keyboard
 long CalcRowRstHeight( SwLayoutFrm *pRow );
-long CalcHeightWidthFlys( const SwFrm *pFrm );
+long CalcHeightWithFlys( const SwFrm *pFrm );
 
 SwPageFrm *InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
                           bool bOdd, bool bFirst, bool bInsertEmpty, bool bFtn,
