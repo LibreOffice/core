@@ -177,10 +177,8 @@ int OpenGLRender::SetLine2DShapePoint(float x, float y, int listLength)
     {
         m_Line2DPointList.reserve(listLength*3);
     }
-    float actualX = (x / OPENGL_SCALE_VALUE);
-    float actualY = (y / OPENGL_SCALE_VALUE);
-    m_Line2DPointList.push_back(actualX);
-    m_Line2DPointList.push_back(actualY);
+    m_Line2DPointList.push_back(x);
+    m_Line2DPointList.push_back(y);
     m_Line2DPointList.push_back(m_fZStep);
 
     if (m_Line2DPointList.size() == size_t(listLength * 3))
@@ -368,7 +366,7 @@ void OpenGLRender::SetLine2DColor(sal_uInt8 r, sal_uInt8 g, sal_uInt8 b, sal_uIn
 
 void OpenGLRender::SetLine2DWidth(int width)
 {
-    m_fLineWidth = std::max((float)width / OPENGL_SCALE_VALUE, 0.001f);
+    m_fLineWidth = std::max((float)width, 0.001f);
 }
 
 void OpenGLRender::SetColor(sal_uInt32 color, sal_uInt8 nAlpha)
@@ -406,13 +404,11 @@ int OpenGLRender::Bubble2DShapePoint(float x, float y, float directionX, float d
         Create2DCircle(100);
     }
 
-    float actualX = (x / OPENGL_SCALE_VALUE);
-    float actualY = (y / OPENGL_SCALE_VALUE);
     Bubble2DPointList aBubble2DPointList;
-    aBubble2DPointList.xScale = directionX / OPENGL_SCALE_VALUE;
-    aBubble2DPointList.yScale = directionY / OPENGL_SCALE_VALUE;
-    aBubble2DPointList.x = actualX + aBubble2DPointList.xScale / 2;
-    aBubble2DPointList.y = actualY + aBubble2DPointList.yScale / 2;
+    aBubble2DPointList.xScale = directionX;
+    aBubble2DPointList.yScale = directionY;
+    aBubble2DPointList.x = x + aBubble2DPointList.xScale / 2;
+    aBubble2DPointList.y = y + aBubble2DPointList.yScale / 2;
 
     m_Bubble2DShapePointList.push_back(aBubble2DPointList);
     return 0;
@@ -499,24 +495,19 @@ int OpenGLRender::RenderBubble2FBO(int)
 
 int OpenGLRender::RectangleShapePoint(float x, float y, float directionX, float directionY)
 {
-    //check whether to create the circle data
-    float actualX = x / OPENGL_SCALE_VALUE;
-    float actualY = y / OPENGL_SCALE_VALUE;
-    float actualSizeX = directionX / OPENGL_SCALE_VALUE;
-    float actualSizeY = directionY / OPENGL_SCALE_VALUE;
     RectanglePointList aRectangle;
 
-    aRectangle.points[0] = actualX;
-    aRectangle.points[1] = actualY;
+    aRectangle.points[0] = x;
+    aRectangle.points[1] = y;
     aRectangle.points[2] = m_fZStep;
-    aRectangle.points[3] = actualX + actualSizeX;
-    aRectangle.points[4] = actualY;
+    aRectangle.points[3] = x + directionX;
+    aRectangle.points[4] = y;
     aRectangle.points[5] = m_fZStep;
-    aRectangle.points[6] = actualX + actualSizeX;
-    aRectangle.points[7] = actualY + actualSizeY;
+    aRectangle.points[6] = x + directionX;
+    aRectangle.points[7] = y + directionY;
     aRectangle.points[8] = m_fZStep;
-    aRectangle.points[9] = actualX;
-    aRectangle.points[10] = actualY + actualSizeY;
+    aRectangle.points[9] = x;
+    aRectangle.points[10] = y + directionY;
     aRectangle.points[11] = m_fZStep;
 
     m_RectangleShapePointList.push_back(aRectangle);
@@ -696,23 +687,23 @@ int OpenGLRender::CreateTextTexture(const boost::shared_array<sal_uInt8> &rPixel
 
     TextInfo aTextInfo;
     aTextInfo.rotation = -(double)rotation / 360.0 * 2* GL_PI;
-    aTextInfo.vertex[0] = -aSize.Width / 2 / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[1] = -aSize.Height / 2 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[0] = -aSize.Width / 2;
+    aTextInfo.vertex[1] = -aSize.Height / 2;
     aTextInfo.vertex[2] = m_fZStep;
 
-    aTextInfo.vertex[3] = aSize.Width / 2 / OPENGL_SCALE_VALUE ;
-    aTextInfo.vertex[4] = -aSize.Height / 2 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[3] = aSize.Width / 2;
+    aTextInfo.vertex[4] = -aSize.Height / 2;
     aTextInfo.vertex[5] = m_fZStep;
 
-    aTextInfo.vertex[6] = aSize.Width / 2 / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[7] = aSize.Height / 2 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[6] = aSize.Width / 2;
+    aTextInfo.vertex[7] = aSize.Height / 2;
     aTextInfo.vertex[8] = m_fZStep;
 
-    aTextInfo.vertex[9] = -aSize.Width / 2 / OPENGL_SCALE_VALUE;
-    aTextInfo.vertex[10] = aSize.Height / 2 / OPENGL_SCALE_VALUE;
+    aTextInfo.vertex[9] = -aSize.Width / 2;
+    aTextInfo.vertex[10] = aSize.Height / 2;
     aTextInfo.vertex[11] = m_fZStep;
-    aTextInfo.nDx = (rTrans.Line1.Column3 + aSize.Width / 2 ) / OPENGL_SCALE_VALUE - bmpWidth/2;
-    aTextInfo.nDy = (rTrans.Line2.Column3 + aSize.Height / 2 ) / OPENGL_SCALE_VALUE - bmpHeight/2;
+    aTextInfo.nDx = (rTrans.Line1.Column3 + aSize.Width / 2 ) - bmpWidth/2;
+    aTextInfo.nDy = (rTrans.Line2.Column3 + aSize.Height / 2 ) - bmpHeight/2;
 
     CHECK_GL_ERROR();
     glGenTextures(1, &aTextInfo.texture);
@@ -808,10 +799,8 @@ int OpenGLRender::SetArea2DShapePoint(float x, float y, int listLength)
     {
         m_Area2DPointList.reserve(listLength);
     }
-    float actualX = (x / OPENGL_SCALE_VALUE);
-    float actualY = (y / OPENGL_SCALE_VALUE);
-    m_Area2DPointList.push_back(actualX);
-    m_Area2DPointList.push_back(actualY);
+    m_Area2DPointList.push_back(x);
+    m_Area2DPointList.push_back(y);
     m_Area2DPointList.push_back(m_fZStep);
 
     if (m_Area2DPointList.size() == size_t(listLength * 3))
@@ -985,9 +974,9 @@ void OpenGLRender::GeneratePieSegment2D(double fInnerRadius, double fOutterRadiu
 int OpenGLRender::RenderPieSegment2DShape(float fSize, float fPosX, float fPosY)
 {
     int listNum = m_PieSegment2DShapePointList.size();
-    PosVecf3 trans = {fPosX/OPENGL_SCALE_VALUE, fPosY/OPENGL_SCALE_VALUE, 0.0f};
+    PosVecf3 trans = {fPosX, fPosY, 0.0f};
     PosVecf3 angle = {0.0f, 0.0f, 0.0f};
-    PosVecf3 scale = {fSize/OPENGL_SCALE_VALUE, fSize/OPENGL_SCALE_VALUE, 1.0f};
+    PosVecf3 scale = {fSize, fSize, 1.0f};
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
 
@@ -1040,7 +1029,7 @@ int OpenGLRender::RenderSymbol2DShape(float x, float y, float , float , sal_Int3
     MoveModelf(trans, angle, scale);
     m_MVP = m_Projection * m_View * m_Model;
 
-    float aPos[3] = { x/OPENGL_SCALE_VALUE, y/OPENGL_SCALE_VALUE, m_fZStep };
+    float aPos[3] = { x, y, m_fZStep };
     //fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
     CHECK_GL_ERROR();

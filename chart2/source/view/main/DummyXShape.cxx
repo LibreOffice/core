@@ -1158,8 +1158,8 @@ void SAL_CALL DummyChart::setSize( const awt::Size& aSize )
     throw( beans::PropertyVetoException, uno::RuntimeException, std::exception )
 {
     SAL_INFO("chart2.opengl", "DummyChart::setSize()---aSize.Width = " << aSize.Width << ", aSize.Height = " << aSize.Height);
-    int width = aSize.Width / OPENGL_SCALE_VALUE;
-    int height = aSize.Height / OPENGL_SCALE_VALUE;
+    int width = aSize.Width;
+    int height = aSize.Height;
     DummyXShape::setSize(awt::Size(0,0));
     m_GLRender.SetSize(width, height);
     SAL_INFO("chart2.opengl", "DummyChart::GLRender.Width = " << width << ", GLRender.Height = " << height);

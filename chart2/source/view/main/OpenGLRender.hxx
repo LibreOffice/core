@@ -25,7 +25,6 @@
 #include "glm/gtx/euler_angles.hpp"
 #include "glm/gtx/quaternion.hpp"
 
-#define OPENGL_SCALE_VALUE 20
 #define DEBUG_POSITIONING 0
 #define RENDER_TO_FILE 0
 
