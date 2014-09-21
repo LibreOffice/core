@@ -94,7 +94,7 @@ public:
     const gr_face*          GraphiteFace() const;
 #endif
 
-    const ImplFontCharMap*  GetImplFontCharMap() const;
+    const FontCharMapPtr    GetFontCharMap() const;
     bool GetFontCapabilities(vcl::FontCapabilities &rFontCapabilities) const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
@@ -116,7 +116,7 @@ private:
 #endif
     mutable bool                    mbHasArabicSupport;
     mutable bool                    mbFontCapabilitiesRead;
-    mutable ImplFontCharMap*        mpUnicodeMap;
+    mutable FontCharMapPtr          mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
     mutable vcl::FontCapabilities   maFontCapabilities;
 
