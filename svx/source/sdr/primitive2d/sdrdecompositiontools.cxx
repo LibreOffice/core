@@ -295,6 +295,10 @@ namespace drawinglayer
                 aAnchorTransform = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
                     * aAnchorTransform;
 
+                // FIXME(matteocam)
+                SdrTextObj *pReferredTextObj = &rText.getSdrText().GetObject();
+                fprintf(stderr, "[MkTextPrimitive] Referring to text object: %p\n", pReferredTextObj);
+
                 if(rText.isFitToSize())
                 {
                     // stretched text in range

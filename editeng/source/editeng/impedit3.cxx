@@ -601,6 +601,8 @@ void ImpEditEngine::CheckPageOverflow()
     // setting overflow status
 
     sal_uInt32 nBoxHeight = GetMaxAutoPaperSize().Height();
+    fprintf(stderr, "[OVERFLOW-CHECK] Current MaxAutoPaperSize is %d\n", nBoxHeight);
+    fprintf(stderr, "[CONTROL_STATUS] AutoPageSize is %s",  ( aStatus.GetControlWord() & EE_CNTRL_AUTOPAGESIZE ) ? "ON\n" : "OFF\n" );
 
     if (CalcTextHeight(NULL) > nBoxHeight)
     {
