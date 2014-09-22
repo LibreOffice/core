@@ -18,10 +18,10 @@
  */
 
 #include <hintids.hxx>
-
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/scripttypeitem.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <txatbase.hxx>
 #include <txtftn.hxx>
@@ -42,10 +42,12 @@
 #include <txtfrm.hxx>
 #include <scriptinfo.hxx>
 #include <svl/ctloptions.hxx>
+#include <svl/itemiter.hxx>
 #include <charfmt.hxx>
 #include <numrule.hxx>
 
 #include <algorithm>
+#include <charatr.hxx>
 
 /*
  * hard Formatting (Attributes)
@@ -279,6 +281,178 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 
     // if none of the selected node contain a named paragraph format
     return NULL;
+}
+
+std::vector<const SfxPoolItem*> SwEditShell::GetCurItem( sal_uInt16 nWhich )
+{
+    std::vector<const SfxPoolItem*> vItem;
+    SwPaM* pPaM = GetCrsr();
+    SwPaM* pStartPaM = pPaM;
+    do { // for all the point and mark (selections)
+
+        // get the start and the end node of the current selection
+        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
+              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
+        sal_Int32 nSttCnt = pPaM->GetMark()->nContent.GetIndex();
+        sal_Int32 nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
+
+        // reverse start and end if there number aren't sorted correctly
+        if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
+        {
+            std::swap(nSttNd, nEndNd);
+            std::swap(nSttCnt, nEndCnt);
+        }
+
+        // for all the nodes in the current selection
+        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        {
+            SwNode* pNd = GetDoc()->GetNodes()[ n ];
+            switch( pNd->GetNodeType() )
+            {
+            case ND_TEXTNODE:
+                {
+                    SwTxtNode* pTxtNd = (SwTxtNode*) pNd;
+                    const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
+                    const sal_Int32 nEnd = (n == nEndNd)
+                        ? nEndCnt : pTxtNd->GetTxt().getLength();
+
+                    // item from attribute set or default item
+                    if ( pTxtNd->HasSwAttrSet() )
+                    {
+                        const SwAttrSet aSet = pTxtNd->GetSwAttrSet();
+                        vItem.push_back( &(aSet.GetSize()) );
+                    }
+                    // items with limited range
+                    if ( pTxtNd->HasHints() )
+                    {
+                        const size_t nSize = pTxtNd->GetpSwpHints()->Count();
+                        for (size_t m = 0; m < nSize; m++)
+                        {
+                            const SwTxtAttr* pHt = (*pTxtNd->GetpSwpHints())[m];
+                            if ( pHt->Which() == RES_TXTATR_AUTOFMT )
+                            {
+                                const sal_Int32 nAttrStart = pHt->GetStart();
+                                const sal_Int32* pAttrEnd = pHt->End();
+
+                                // Ignore items not in selection
+                                if ( nAttrStart > nEnd )
+                                    break;
+                                if ( !pAttrEnd || *pAttrEnd <= nStt )
+                                    continue;
+
+                                boost::scoped_ptr< SfxItemIter > pItemIter;
+                                const SfxPoolItem* pItem = 0;
+                                const SfxItemSet* pAutoSet =
+                                    CharFmt::GetItemSet ( pHt->GetAttr() );
+                                if ( pAutoSet )
+                                {
+                                    pItemIter.reset( new SfxItemIter( *pAutoSet ));
+                                    pItem = pItemIter->GetCurItem();
+                                    while ( pItem )
+                                    {
+                                        if ( pItem->Which() == nWhich )
+                                        {
+                                            vItem.push_back( pItem );
+                                            break;
+                                        }
+                                        pItem = pItemIter->NextItem();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case ND_GRFNODE:
+            case ND_OLENODE:
+                break;
+
+            default:
+                pNd = 0;
+            }
+        }
+    } while ( ( pPaM = (SwPaM*)pPaM->GetNext() ) != pStartPaM );
+    return vItem;
+}
+
+std::vector<SwPaM*> SwEditShell::GetSplitPaM( sal_uInt16 nWhich)
+{
+    std::vector<SwPaM*> vPaMs;
+    SwPaM* pPaM = GetCrsr();
+    SwPaM* pStartPaM = pPaM;
+    do { // for all the point and mark (selections)
+
+        // get the start and the end node of the current selection
+        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
+              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
+        sal_Int32 nSttCnt = pPaM->GetMark()->nContent.GetIndex();
+        sal_Int32 nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
+
+        // reverse start and end if there number aren't sorted correctly
+        if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
+        {
+            std::swap(nSttNd, nEndNd);
+            std::swap(nSttCnt, nEndCnt);
+        }
+
+        // for all the nodes in the current selection
+        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        {
+            SwNode* pNd = GetDoc()->GetNodes()[ n ];
+            switch( pNd->GetNodeType() )
+            {
+            case ND_TEXTNODE:
+                {
+                    SwTxtNode* pTxtNd = (SwTxtNode*) pNd;
+                    const sal_Int32 nStt = (n == nSttNd) ? nSttCnt : 0;
+                    const sal_Int32 nEnd = (n == nEndNd)
+                        ? nEndCnt : pTxtNd->GetTxt().getLength();
+                    if ( pTxtNd->HasSwAttrSet() )
+                    {
+                        SwPaM* pNewPaM = new SwPaM(*pNd, nStt, *pNd, nEnd);
+                        vPaMs.push_back( pNewPaM );
+                    }
+                    if ( pTxtNd->HasHints() )
+                    {
+                        const size_t nSize = pTxtNd->GetpSwpHints()->Count();
+                        for (size_t m = 0; m < nSize; m++)
+                        {
+                            const SwTxtAttr* pHt = (*pTxtNd->GetpSwpHints())[m];
+                            const SfxItemSet* pAutoSet =
+                                      CharFmt::GetItemSet ( pHt->GetAttr() );
+                            if ( isTXTATR_NOEND( pHt->Which() ) || !pAutoSet->HasItem( nWhich ) )
+                                continue;
+                            const sal_Int32 nAttrStart = pHt->GetStart();
+                            const sal_Int32* pAttrEnd = pHt->End();
+                            if ( nAttrStart > nEnd )
+                                break;
+                            if ( !pAttrEnd || *pAttrEnd <= nStt )
+                                continue;
+                            sal_Int32 nStart = 0, nStop = 0;
+                            if ( nAttrStart < nStt ) //Attribut starts before selection
+                                nStart = nStt;
+                            else
+                                nStart = nAttrStart;
+                            if ( *pAttrEnd > nEnd ) //Attribut ends after selection
+                                nStop = nEnd;
+                            else
+                                nStop = *pAttrEnd;
+                            SwPaM* pNewPaM = new SwPaM(*pNd, nStart, *pNd, nStop);
+                            vPaMs.push_back( pNewPaM );
+                        }
+                    }
+                }
+                break;
+            case ND_GRFNODE:
+            case ND_OLENODE:
+                break;
+
+            default:
+                pNd = 0;
+            }
+        }
+    } while ( ( pPaM = (SwPaM*)pPaM->GetNext() ) != pStartPaM );
+    return vPaMs;
 }
 
 bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
