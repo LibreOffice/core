@@ -220,6 +220,10 @@ public:
     glm::mat4 GetProjectionMatrix();
     glm::mat4 GetViewMatrix();
     glm::mat4 GetGlobalScaleMatrix();
+    glm::mat4 GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection);
+    glm::mat4 GetDiffOfTwoCameras(const glm::vec3& rEndPos, const glm::vec3& rEndDirection);
+    void AddMatrixDiff(const glm::mat4& aMat);
+    void ResetMatrixDiff();
 private:
     void MoveModelf( const PosVecf3& trans, const PosVecf3& angle, const PosVecf3& scale);
 
@@ -282,9 +286,6 @@ private:
     void SetHighLightBar(BatchBarInfo &barInfo);
     void DisableHighLightBar(BatchBarInfo &barInfo);
     void CalcScrollMoveMatrix(bool bNewScene);
-    glm::mat4 GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection);
-    void AddMatrixDiff(const glm::mat4& aMat);
-    void ResetMatrixDiff();
 private:
 
     struct ShaderResources
