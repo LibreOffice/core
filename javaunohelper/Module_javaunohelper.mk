@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_targets,javaunohelper,\
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,javaunohelper,\
+    JunitTest_juh_ComponentBase \
     JunitTest_juh_ComponentContext \
 ))
 
