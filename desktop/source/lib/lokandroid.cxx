@@ -41,6 +41,17 @@ void setHandle(JNIEnv* pEnv, jobject aObject, T* aType)
     pEnv->SetLongField(aObject, getHandleField(pEnv, aObject), aHandle);
 }
 
+const char* copyJavaString(JNIEnv* pEnv, jstring aJavaString)
+{
+    const char* pClone = NULL;
+
+    const char* pTemp = pEnv->GetStringUTFChars(aJavaString, NULL);
+    pClone = strdup(pTemp);
+    pEnv->ReleaseStringUTFChars(aJavaString, pTemp);
+
+    return pClone;
+}
+
 extern "C" SAL_JNI_EXPORT jstring JNICALL Java_org_libreoffice_kit_Office_getError(JNIEnv* pEnv, jobject aObject)
 {
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
@@ -53,21 +64,29 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_initializ
     pEnv->SetLongField(aObject, getHandleField(pEnv, aObject), aLokHandle);
 }
 
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Office_destroy(JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
+    pLibreOfficeKit->pClass->destroy(pLibreOfficeKit);
+}
+
 extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Office_documentLoadNative(JNIEnv* pEnv, jobject aObject, jstring documentPath)
 {
-    const char* aCloneDocumentPath;
-
-    const char* aCharDocumentPath = pEnv->GetStringUTFChars(documentPath, NULL);
-    aCloneDocumentPath = strdup(aCharDocumentPath);
-    pEnv->ReleaseStringUTFChars(documentPath, aCharDocumentPath);
-
+    const char* aCloneDocumentPath = copyJavaString(pEnv, documentPath);
     LibreOfficeKit* pLibreOfficeKit = getHandle<LibreOfficeKit>(pEnv, aObject);
 
     LibreOfficeKitDocument* pDocument = pLibreOfficeKit->pClass->documentLoad(pLibreOfficeKit, aCloneDocumentPath);
-    return (jlong) (intptr_t) pDocument;
+    return (jlong) pDocument;
 }
 
 /* Document */
+extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_destroy
+    (JNIEnv* pEnv, jobject aObject)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+    pDocument->pClass->destroy(pDocument);
+}
+
 extern "C" SAL_JNI_EXPORT void JNICALL Java_org_libreoffice_kit_Document_setPart
     (JNIEnv* pEnv, jobject aObject, jint aPart)
 {
@@ -143,6 +162,23 @@ extern "C" SAL_JNI_EXPORT jlong JNICALL Java_org_libreoffice_kit_Document_getDoc
     long nHeight;
     pDocument->pClass->getDocumentSize(pDocument, &nWidth, &nHeight);
     return nWidth;
+}
+
+extern "C" SAL_JNI_EXPORT jint JNICALL Java_org_libreoffice_kit_Office_saveAs(JNIEnv* pEnv, jobject aObject, jstring sUrl, jstring sFormat, jstring sOptions)
+{
+    LibreOfficeKitDocument* pDocument = getHandle<LibreOfficeKitDocument>(pEnv, aObject);
+
+    const char* pUrl = pEnv->GetStringUTFChars(sUrl, NULL);
+    const char* pFormat = pEnv->GetStringUTFChars(sFormat, NULL);
+    const char* pOptions = pEnv->GetStringUTFChars(sOptions, NULL);
+
+    int result = pDocument->pClass->saveAs(pDocument, pUrl, pFormat, pOptions);
+
+    pEnv->ReleaseStringUTFChars(sUrl, pUrl);
+    pEnv->ReleaseStringUTFChars(sFormat, pFormat);
+    pEnv->ReleaseStringUTFChars(sOptions, pOptions);
+
+    return result;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

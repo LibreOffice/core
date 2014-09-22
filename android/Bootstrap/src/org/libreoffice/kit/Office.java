@@ -9,8 +9,6 @@
 
 package org.libreoffice.kit;
 
-import android.util.Log;
-
 public class Office {
 
     private long handle;
@@ -31,4 +29,6 @@ public class Office {
         }
         return document;
     }
+
+    public native void destroy();
 }

@@ -24,6 +24,8 @@ public class Document {
         this.handle = handle;
     }
 
+    public native void destroy();
+
     public native int getPart();
 
     public native void setPart(int partIndex);
@@ -39,6 +41,8 @@ public class Document {
     public native long getDocumentWidth();
 
     private native int getDocumentTypeNative();
+
+    private native void saveAs(String url, String format, String options);
 
     private native void paintTileNative(ByteBuffer buffer, int canvasWidth, int canvasHeight, int tilePositionX, int tilePositionY, int tileWidth, int tileHeight);
 
