@@ -8,7 +8,7 @@
 #
 #*************************************************************************
 
-gb_COMPILERDEFAULTOPTFLAGS := -O2
+gb_COMPILERDEFAULTOPTFLAGS := -O3
 
 include $(GBUILDDIR)/platform/macosx.mk
 
