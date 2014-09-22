@@ -808,9 +808,14 @@ int RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XSh
     if (xShape.is())
     {
         uno::Reference<lang::XServiceInfo> xSI(xShape, uno::UNO_QUERY_THROW);
-        assert(xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"));
+        if (!xSI->supportsService("com.sun.star.drawing.GraphicObjectShape"))
+        {
+            //fdo37691-1.rtf
+            SAL_WARN("writerfilter.rtf", "cannot set graphic on existing shape, creating a new GraphicObjectShape");
+            xShape.set(NULL);
+        }
     }
-    else
+    if (!xShape.is())
     {
         if (m_xModelFactory.is())
             xShape.set(m_xModelFactory->createInstance("com.sun.star.drawing.GraphicObjectShape"), uno::UNO_QUERY);
