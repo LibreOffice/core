@@ -144,9 +144,7 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,writer_brand, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
-	$(if $(ENABLE_MACOSX_SANDBOX),, \
-		gengal \
-	)\
+	gengal \
 	$(if $(filter TRUE-TRUE,$(USING_X11)-$(ENABLE_NPAPI_FROM_BROWSER)),pluginapp.bin) \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
 	$(if $(ENABLE_MACOSX_SANDBOX),, \
