@@ -2440,6 +2440,17 @@ void OpenGL3DRenderer::CalcScrollMoveMatrix(bool bNewScene)
     m_bUndrawFlag = m_fCurDistance >= m_fScrollDistance ? true : false;
 }
 
+glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection)
+{
+    glm::mat4 aBegin = glm::lookAt(glm::vec3(m_GlobalScaleMatrix * glm::vec4(rBeginPos, 1.0)),
+              glm::vec3(m_GlobalScaleMatrix * glm::vec4(rBeginDirection, 1.0)),
+              glm::vec3(0, 0, 1));
+    glm::mat4 aEnd = glm::lookAt(glm::vec3(m_GlobalScaleMatrix * glm::vec4(rEndPos, 1.0)),
+              glm::vec3(m_GlobalScaleMatrix * glm::vec4(rEndDirection, 1.0)),
+              glm::vec3(0, 0, 1));
+    return aEnd - aBegin;
+}
+
 glm::mat4 OpenGL3DRenderer::GetProjectionMatrix()
 {
     return m_3DProjection;
