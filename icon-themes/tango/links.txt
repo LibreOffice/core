@@ -149,7 +149,8 @@ cmd/lc_commentchangetracking.png cmd/lc_editdoc.png
 cmd/sc_commentchangetracking.png cmd/sc_editdoc.png
 cmd/lc_accepttrackedchanges.png cmd/lc_insertobjectfloatingframe.png
 cmd/sc_accepttrackedchanges.png cmd/sc_insertobjectfloatingframe.png
-
+cmd/lc_closepreview.png cmd/lc_closedoc.png
+cmd/sc_closepreview.png cmd/sc_closedoc.png
 
 # Duplicates
 cmd/lc_thesaurusdialog.png cmd/lc_thesaurus.png
