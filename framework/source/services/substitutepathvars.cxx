@@ -821,8 +821,7 @@ OUString SubstitutePathVariables::GetWorkPath() const
 {
     OUString aWorkPath;
     css::uno::Reference< css::container::XHierarchicalNameAccess > xPaths(officecfg::Office::Paths::Paths::get(m_xContext), css::uno::UNO_QUERY_THROW);
-    OUString xWork;
-    if (!(xPaths->getByHierarchicalName("['Work']/WritePath") >>= xWork))
+    if (!(xPaths->getByHierarchicalName("['Work']/WritePath") >>= aWorkPath))
         // fallback in case config layer does not return an useable work dir value.
         aWorkPath = GetWorkVariableValue();
 
