@@ -1377,18 +1377,21 @@ sal_Int8 ScChildrenShapes::Compare(const ScAccessibleShapeData* pData1,
     return nResult;
 }
 
-struct ScVisAreaChanged
+namespace
 {
-    ScAccessibleDocument* mpAccDoc;
-    ScVisAreaChanged(ScAccessibleDocument* pAccDoc) : mpAccDoc(pAccDoc) {}
-    void operator() (const ScAccessibleShapeData* pAccShapeData) const
+    struct ScVisAreaChanged
     {
-        if (pAccShapeData && pAccShapeData->pAccShape)
+        ScAccessibleDocument* mpAccDoc;
+        ScVisAreaChanged(ScAccessibleDocument* pAccDoc) : mpAccDoc(pAccDoc) {}
+        void operator() (const ScAccessibleShapeData* pAccShapeData) const
         {
-            pAccShapeData->pAccShape->ViewForwarderChanged(::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpAccDoc);
+            if (pAccShapeData && pAccShapeData->pAccShape)
+            {
+                pAccShapeData->pAccShape->ViewForwarderChanged(::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpAccDoc);
+            }
         }
-    }
-};
+    };
+}
 
 void ScChildrenShapes::VisAreaChanged() const
 {

@@ -846,18 +846,21 @@ void ScShapeChildren::DataChanged()
     }
 }
 
-struct ScVisAreaChanged
+namespace
 {
-    const ScIAccessibleViewForwarder* mpViewForwarder;
-    ScVisAreaChanged(const ScIAccessibleViewForwarder* pViewForwarder) : mpViewForwarder(pViewForwarder) {}
-    void operator() (const ScShapeChild& rAccShapeData) const
+    struct ScVisAreaChanged
     {
-        if (rAccShapeData.mpAccShape)
+        const ScIAccessibleViewForwarder* mpViewForwarder;
+        ScVisAreaChanged(const ScIAccessibleViewForwarder* pViewForwarder) : mpViewForwarder(pViewForwarder) {}
+        void operator() (const ScShapeChild& rAccShapeData) const
         {
-            rAccShapeData.mpAccShape->ViewForwarderChanged(::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpViewForwarder);
+            if (rAccShapeData.mpAccShape)
+            {
+                rAccShapeData.mpAccShape->ViewForwarderChanged(::accessibility::IAccessibleViewForwarderListener::VISIBLE_AREA, mpViewForwarder);
+            }
         }
-    }
-};
+    };
+}
 
 void ScShapeChildren::VisAreaChanged() const
 {
