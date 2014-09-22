@@ -106,6 +106,7 @@ using namespace ::com::sun::star::ui;
 
 SFX_IMPL_TOOLBOX_CONTROL_ARG(SfxToolBoxControl, SfxStringItem, true);
 SFX_IMPL_TOOLBOX_CONTROL(SfxRecentFilesToolBoxControl, SfxStringItem);
+SFX_IMPL_TOOLBOX_CONTROL(SfxCurrencyToolBoxControl, SfxStringItem);
 
 static vcl::Window* GetTopMostParentSystemWindow( vcl::Window* pWindow )
 {
@@ -1407,6 +1408,55 @@ SfxPopupWindow* SfxRecentFilesToolBoxControl::CreatePopupWindow()
 
     aPropValue.Name = "CommandURL";
     aPropValue.Value <<= OUString( ".uno:RecentFileList" );
+    aArgs[0] <<= aPropValue;
+
+    aPropValue.Name = "Frame";
+    aPropValue.Value <<= m_xFrame;
+    aArgs[1] <<= aPropValue;
+
+    uno::Reference< frame::XPopupMenuController > xPopupController( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.comp.framework.RecentFilesMenuController", aArgs, m_xContext ), UNO_QUERY );
+
+    uno::Reference< awt::XPopupMenu > xPopupMenu( m_xContext->getServiceManager()->createInstanceWithContext(
+                "com.sun.star.awt.PopupMenu", m_xContext ), uno::UNO_QUERY );
+
+    if ( xPopupController.is() && xPopupMenu.is() )
+    {
+        xPopupController->setPopupMenu( xPopupMenu );
+
+        rBox.SetItemDown( nItemId, true );
+        Reference< awt::XWindowPeer > xPeer( getParent(), uno::UNO_QUERY );
+
+        if ( xPeer.is() )
+            xPopupMenu->execute( xPeer, VCLUnoHelper::ConvertToAWTRect( aRect ), 0 );
+
+        rBox.SetItemDown( nItemId, false );
+    }
+
+    return 0;
+}
+
+SfxCurrencyToolBoxControl::SfxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox )
+    : SfxToolBoxControl( nSlotId, nId, rBox )
+{
+    rBox.SetItemBits( nId, rBox.GetItemBits( nId ) | TIB_DROPDOWN);
+}
+
+SfxCurrencyToolBoxControl::~SfxCurrencyToolBoxControl()
+{
+}
+
+SfxPopupWindow* SfxCurrencyToolBoxControl::CreatePopupWindow()
+{
+    ToolBox& rBox = GetToolBox();
+    sal_uInt16 nItemId = GetId();
+    ::Rectangle aRect( rBox.GetItemRect( nItemId ) );
+
+    Sequence< Any > aArgs( 2 );
+    PropertyValue aPropValue;
+
+    aPropValue.Name = "CommandURL";
+    aPropValue.Value <<= OUString( ".uno:NumberFormatCurrency" );
     aArgs[0] <<= aPropValue;
 
     aPropValue.Name = "Frame";

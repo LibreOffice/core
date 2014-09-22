@@ -332,6 +332,27 @@ protected:
     virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
 };
 
+/** Toolbox that implements dropdown menu for the currency toolbar button.
+
+To use that, the appropriate Sfx*Item (like Open, OpenFromCalc, or
+OpenFromWriter) has to have SlotType = SfxStringItem, and the appropriate
+module initialization has to call RegisterControl().
+*/
+class SfxCurrencyToolBoxControl : public SfxToolBoxControl
+{
+public:
+    // We don't use SFX_DECL_TOOLBOX_CONTROL() here as we need to have this
+    // RegisterControl() marked as SFX2_DLLPUBLIC
+    static SfxToolBoxControl* CreateImpl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx );
+    static void SFX2_DLLPUBLIC RegisterControl(sal_uInt16 nSlotId = 0, SfxModule *pMod=NULL);
+
+    SfxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rBox );
+    virtual ~SfxCurrencyToolBoxControl();
+
+protected:
+    virtual SfxPopupWindow* CreatePopupWindow() SAL_OVERRIDE;
+};
+
 class SfxReloadToolBoxControl_Impl : public SfxToolBoxControl
 {
     protected:
