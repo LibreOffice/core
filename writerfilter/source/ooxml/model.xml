@@ -16701,13 +16701,13 @@
       <attribute name="themeShade" tokenid="ooxml:CT_Underline_themeShade"/>
     </resource>
     <resource name="ST_TextEffect" resource="List">
-      <value tokenid="0">none</value>
-      <value tokenid="1">lights</value>
-      <value tokenid="2">blinkBackground</value>
-      <value tokenid="3">sparkle</value>
-      <value tokenid="4">antsBlack</value>
-      <value tokenid="5">antsRed</value>
-      <value tokenid="6">shimmer</value>
+      <value tokenid="ooxml:Value_ST_TextEffect_none">none</value>
+      <value tokenid="ooxml:Value_ST_TextEffect_lights">lights</value>
+      <value tokenid="ooxml:Value_ST_TextEffect_blinkBackground">blinkBackground</value>
+      <value tokenid="ooxml:Value_ST_TextEffect_sparkle">sparkle</value>
+      <value tokenid="ooxml:Value_ST_TextEffect_antsBlack">antsBlack</value>
+      <value tokenid="ooxml:Value_ST_TextEffect_antsRed">antsRed</value>
+      <value tokenid="ooxml:Value_ST_TextEffect_shimmer">shimmer</value>
     </resource>
     <resource name="CT_TextEffect" resource="Value">
       <attribute name="val" tokenid="ooxml:CT_TextEffect_val" action="setValue"/>
