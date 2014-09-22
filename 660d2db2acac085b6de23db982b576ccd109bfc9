@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_cee1a3d2",
+        "filename": "sw/uiconfig/swriter/toolbar/changes.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000233
+      },
+      "writtenOn": "2014-09-22T09:39:56Z",
+      "side": 1,
+      "message": "This can obviously not work. There is no \u0027.uno:AcceptTrackedChanges\u0027. There is (as original) a \u0027.uno:AcceptTracedChange\u0027 ( see http://opengrok.libreoffice.org/search?q\u003dAcceptTracedChange\u0026project\u003dcore\u0026defs\u003d\u0026refs\u003d\u0026path\u003d\u0026hist\u003d )",
+      "revId": "660d2db2acac085b6de23db982b576ccd109bfc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
