@@ -103,6 +103,10 @@ public class UCB
 
     /**
      * @deprecated
+     * @param sourceDir
+     * @param filename
+     * @param targetDir
+     * @throws Exception
      */
     public void copy(String sourceDir, String filename, String targetDir) throws Exception
     {
@@ -111,6 +115,11 @@ public class UCB
 
     /**
      * target name can be PropertyNames.EMPTY_STRING, in which case the name stays lige the source name
+     * @param sourceDir
+     * @param sourceFilename
+     * @param targetDir
+     * @param targetFilename
+     * @return
      */
     public GlobalTransferCommandArgument copyArg(String sourceDir, String sourceFilename, String targetDir, String targetFilename)
     {
@@ -219,11 +228,11 @@ public class UCB
         }
         else if (type.equals(Integer.class))
         {
-            return Integer.valueOf(xrow.getInt(1));
+            return new Integer(xrow.getInt(1));
         }
         else if (type.equals(Short.class))
         {
-            return Short.valueOf(xrow.getShort(1));
+            return new Short(xrow.getShort(1));
         }
         else
         {
@@ -240,9 +249,9 @@ public class UCB
           XContentProvider.class,ucb).queryContent(id);
     }
 
-    private interface Verifier
+    public static interface Verifier
     {
 
-        boolean verify(Object object);
+        public boolean verify(Object object);
     }
 }

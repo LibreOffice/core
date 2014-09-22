@@ -29,6 +29,11 @@ public class TaskEvent extends EventObject
     public static final int TASK_FAILED = 5;
     private int type;
 
+    /**
+     * general constructor-
+     * @param source
+     * @param type_
+     */
     public TaskEvent(Task source, int type_)
     {
         super(source);

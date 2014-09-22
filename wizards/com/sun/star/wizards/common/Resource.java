@@ -18,6 +18,7 @@
 
 package com.sun.star.wizards.common;
 
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -27,12 +28,15 @@ import com.sun.star.uno.UnoRuntime;
 public class Resource
 {
 
-    private XMultiServiceFactory xMSF;
-    private String Module;
-    private XIndexAccess xStringIndexAccess;
-    private XIndexAccess xStringListIndexAccess;
+    XMultiServiceFactory xMSF;
+    String Module;
+    XIndexAccess xStringIndexAccess;
+    XIndexAccess xStringListIndexAccess;
 
     /** Creates a new instance of Resource
+     * @param _xMSF
+     * @param _Unit
+     * @param _Module
      */
     public Resource(XMultiServiceFactory _xMSF, String _Unit /* unused */, String _Module)
     {
@@ -83,7 +87,18 @@ public class Resource
         }
     }
 
-
+    public PropertyValue[] getStringList(int nID)
+    {
+        try
+        {
+            return (PropertyValue[])this.xStringListIndexAccess.getByIndex(nID);
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace();
+            throw new java.lang.IllegalArgumentException("Resource with ID not " + String.valueOf(nID) + "not found");
+        }
+    }
 
     public String[] getResArray(int nID, int iCount)
     {

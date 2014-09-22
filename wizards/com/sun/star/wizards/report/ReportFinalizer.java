@@ -30,17 +30,18 @@ import com.sun.star.wizards.db.RecordParser;
 public class ReportFinalizer
 {
 
-    private WizardDialog CurUnoDialog;
-    private XTextComponent xTitleTextBox;
-
-
-    private String CHANGEREPORTTITLE_FUNCNAME = "changeReportTitle";
-    private String TOGGLESUBTEMPLATECONTROLS_FUNCNAME = "toggleSubTemplateControls";
-    private String StoreName;
-
-    private String DefaultName;
-    private String OldDefaultName;
-    private IReportDocument CurReportDocument;
+    WizardDialog CurUnoDialog;
+    XTextComponent xTitleTextBox;
+    XTextComponent[] xSaveTextBox = new XTextComponent[2];
+    Object chkTemplate;
+    String CHANGEREPORTTITLE_FUNCNAME = "changeReportTitle";
+    String TOGGLESUBTEMPLATECONTROLS_FUNCNAME = "toggleSubTemplateControls";
+    String TemplatePath;
+    String StoreName;
+    boolean bfinalaskbeforeOverwrite;
+    String DefaultName;
+    String OldDefaultName;
+    IReportDocument CurReportDocument;
     public static final int SOCREATEDOCUMENT = 1;
     public static final int SOCREATETEMPLATE = 2;
     public static final int SOUSETEMPLATE = 3;
@@ -69,7 +70,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    8, sReportTitle, 95, 27, Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 68
+                    8, sReportTitle, 95, 27, new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 68
                 });
 
         xTitleTextBox = CurUnoDialog.insertTextField("txtTitle", CHANGEREPORTTITLE_FUNCNAME, this,
@@ -79,7 +80,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    12, "HID:WIZARDS_HID_DLGREPORT_4_TITLE", 95, 37, Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 209
+                    12, "HID:WIZARDS_HID_DLGREPORT_4_TITLE", 95, 37, new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 209
                 });
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblChooseReportKind",
@@ -89,7 +90,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    8, slblChooseReportKind, 95, 57, Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 209
+                    8, slblChooseReportKind, 95, 57, new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 209
                 });
 
         CurUnoDialog.insertRadioButton("optCreateDocument", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
@@ -99,7 +100,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTSTATDOCUMENT", sSaveAsDocument, 95, 69, Short.valueOf((short) 0), Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 138
+                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTSTATDOCUMENT", sSaveAsDocument, 95, 69, new Short((short) 0), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 138
                 });
 
         CurUnoDialog.insertRadioButton("optCreateReportTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
@@ -109,7 +110,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    8, "HID:WIZARDS_HID_DLGREPORT_5_OPTDYNTEMPLATE", sSaveAsTemplate, 95, 81, Short.valueOf((short) 1), Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 209
+                    8, "HID:WIZARDS_HID_DLGREPORT_5_OPTDYNTEMPLATE", sSaveAsTemplate, 95, 81, new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 209
                 });
 
 
@@ -120,7 +121,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    8, slblHowProceed, 105, 93, Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 209
+                    8, slblHowProceed, 105, 93, new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 209
                 });
 
 
@@ -131,7 +132,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTEDITTEMPLATE", sEditTemplate, 111, 105, 6, Short.valueOf(curtabindex++), 138
+                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTEDITTEMPLATE", sEditTemplate, 111, 105, 6, new Short(curtabindex++), 138
                 });
 
         CurUnoDialog.insertRadioButton("optUseTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
@@ -141,12 +142,27 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTUSETEMPLATE", sUseTemplate, 111, 115, Short.valueOf((short) 1), Integer.valueOf(ReportWizard.SOSTOREPAGE), Short.valueOf(curtabindex++), 138
+                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTUSETEMPLATE", sUseTemplate, 111, 115, new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 138
                 });
     }
 
 
+    /*
+     * This function is called if one of the radio buttons is pressed
+     */
+    public void toggleSubTemplateControls()
+    {
+        // String sStorePath = PropertyNames.EMPTY_STRING;
+        Short iState = (Short) CurUnoDialog.getControlProperty("optCreateReportTemplate", PropertyNames.PROPERTY_STATE);
+        boolean bDoTemplateEnable = iState.shortValue() == 1;
+        CurUnoDialog.setControlProperty("optEditTemplate", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
+        CurUnoDialog.setControlProperty("optUseTemplate", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
+        CurUnoDialog.setControlProperty("lblHowProceed", PropertyNames.PROPERTY_ENABLED, bDoTemplateEnable);
 
+        String sTitle = xTitleTextBox.getText();
+        boolean bDoEnable = sTitle.equals(PropertyNames.EMPTY_STRING);
+        CurUnoDialog.enableFinishButton(!bDoEnable);
+    }
     public void initialize(RecordParser _CurDBMetaData)
     {
         String FirstCommandName = (_CurDBMetaData.getIncludedCommandNames())[0];
@@ -189,7 +205,12 @@ public class ReportFinalizer
         }
     }
 
-
+    public void changeReportTitle()
+    {
+        final String TitleName = xTitleTextBox.getText();
+        CurReportDocument.liveupdate_updateReportTitle(TitleName);
+        CurUnoDialog.enableFinishButton(!PropertyNames.EMPTY_STRING.equals(TitleName));
+    }
 
     public int getReportOpenMode()
     {

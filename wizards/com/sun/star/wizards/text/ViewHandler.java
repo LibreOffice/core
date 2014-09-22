@@ -23,6 +23,7 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XPageCursor;
 import com.sun.star.text.XTextContent;
@@ -43,7 +44,7 @@ public class ViewHandler
     private XViewSettingsSupplier xViewSettingsSupplier;
 
     /** Creates a new instance of View */
-    public ViewHandler(XTextDocument xTextDocument)
+    public ViewHandler(XMultiServiceFactory xMSF, XTextDocument xTextDocument)
     {
         xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
         xViewSettingsSupplier = UnoRuntime.queryInterface(XViewSettingsSupplier.class, xTextDocument.getCurrentController());

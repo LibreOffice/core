@@ -17,34 +17,54 @@
  */
 package com.sun.star.wizards.text;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.document.XDocumentProperties;
 import com.sun.star.document.XDocumentPropertiesSupplier;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFramesSupplier;
 import com.sun.star.frame.XLoadable;
+import com.sun.star.frame.XModel;
 import com.sun.star.frame.XModule;
 import com.sun.star.frame.XTerminateListener;
 import com.sun.star.frame.XStorable;
+import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.awt.Size;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.lang.Locale;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.task.XStatusIndicatorFactory;
+import com.sun.star.text.XPageCursor;
 import com.sun.star.text.XSimpleText;
 import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextViewCursor;
+import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.DateTime;
 import com.sun.star.util.XModifiable;
 import com.sun.star.util.XNumberFormatsSupplier;
+import com.sun.star.util.XRefreshable;
+import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Helper.DateUtils;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.document.OfficeDocument;
 
@@ -53,21 +73,21 @@ public class TextDocument
 
     public XComponent xComponent;
     public com.sun.star.text.XTextDocument xTextDocument;
-
-    private com.sun.star.document.XDocumentProperties m_xDocProps;
+    public com.sun.star.util.XNumberFormats NumberFormats;
+    public com.sun.star.document.XDocumentProperties m_xDocProps;
     public com.sun.star.task.XStatusIndicator xProgressBar;
     public com.sun.star.frame.XFrame xFrame;
     public XText xText;
     public XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
-
+    public com.sun.star.util.XNumberFormatsSupplier xNumberFormatsSupplier;
     public com.sun.star.awt.XWindowPeer xWindowPeer;
-
-
-
-
-
-
+    public int PageWidth;
+    public int ScaleWidth;
+    public Size DocSize;
+    public com.sun.star.awt.Rectangle PosSize;
+    public com.sun.star.lang.Locale CharLocale;
+    public XStorable xStorable;
 
     // creates an instance of TextDocument and creates a named frame. No document is actually loaded into this frame.
     public TextDocument(XMultiServiceFactory xMSF, XTerminateListener listener, String FrameName)
@@ -93,7 +113,7 @@ public class TextDocument
     }
 
     // creates an instance of TextDocument from the desktop's current frame
-    public TextDocument(XMultiServiceFactory xMSF, boolean bShowStatusIndicator)
+    public TextDocument(XMultiServiceFactory xMSF, boolean bShowStatusIndicator, XTerminateListener listener)
     {
         this.xMSF = xMSF;
 
@@ -115,7 +135,7 @@ public class TextDocument
 
         private String m_identifier;
 
-        private final String getIdentifier()
+        protected final String getIdentifier()
         {
             return m_identifier;
         }
@@ -177,6 +197,7 @@ public class TextDocument
         xFrame = _textDocument.getCurrentController().getFrame();
         xComponent = UnoRuntime.queryInterface(XComponent.class, _textDocument);
         xTextDocument = UnoRuntime.queryInterface(XTextDocument.class, xComponent);
+        //PosSize = xFrame.getComponentWindow().getPosSize();
         if (bshowStatusIndicator)
         {
             XStatusIndicatorFactory xStatusIndicatorFactory = UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
@@ -186,10 +207,11 @@ public class TextDocument
         }
         xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
 
         XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
+        CharLocale = (Locale) Helper.getUnoStructValue(xComponent, "CharLocale");
         xText = xTextDocument.getText();
     }
 
@@ -197,10 +219,11 @@ public class TextDocument
     {
         xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
         XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
-        UnoRuntime.queryInterface(XStorable.class, xTextDocument);
+        CharLocale = (Locale) Helper.getUnoStructValue(xComponent, "CharLocale");
+        xStorable = UnoRuntime.queryInterface(XStorable.class, xTextDocument);
         xText = xTextDocument.getText();
     }
 
@@ -212,7 +235,7 @@ public class TextDocument
         xProgressBar.setValue(5);
     }
 
-    private XTextDocument loadAsPreview(String sDefaultTemplate, boolean asTemplate)
+    public XTextDocument loadAsPreview(String sDefaultTemplate, boolean asTemplate)
     {
         PropertyValue loadValues[] = new PropertyValue[3];
         //      open document in the Preview mode
@@ -241,12 +264,13 @@ public class TextDocument
         }
         Object oDoc = OfficeDocument.load(xFrame, sDefaultTemplate, "_self", loadValues);
         xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
+        DocSize = getPageSize();
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
 
-        ViewHandler myViewHandler = new ViewHandler(xTextDocument);
+        ViewHandler myViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
         try
         {
-            myViewHandler.setViewSetting("ZoomType", Short.valueOf(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
+            myViewHandler.setViewSetting("ZoomType", new Short(com.sun.star.view.DocumentZoomType.ENTIRE_PAGE));
         }
         catch (Exception e)
         {
@@ -294,10 +318,11 @@ public class TextDocument
 
         xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xWindow);
         xMSFDoc = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        xNumberFormatsSupplier = UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
 
         XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
         m_xDocProps = xDocPropsSuppl.getDocumentProperties();
+        CharLocale = (Locale) Helper.getUnoStructValue(xComponent, "CharLocale");
     }
 
     public static XTextCursor createTextCursor(Object oCursorContainer)
@@ -312,7 +337,29 @@ public class TextDocument
     // to make it really safe you must acquire the Tablenames before the insertion and after the insertion of the new Table. By comparing the
     // two sequences of tablenames you can find out the tablename of the last inserted Table
 
-
+    // Todo: This method is  unsecure because the last index is not necessarily the last section
+    public int getCharWidth(String ScaleString)
+    {
+        int iScale = 200;
+        xTextDocument.lockControllers();
+        int iScaleLen = ScaleString.length();
+        com.sun.star.text.XTextCursor xTextCursor = createTextCursor(xTextDocument.getText());
+        xTextCursor.gotoStart(false);
+        com.sun.star.wizards.common.Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
+        xTextCursor.setString(ScaleString);
+        XTextViewCursorSupplier xViewCursor = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xTextDocument.getCurrentController());
+        XTextViewCursor xTextViewCursor = xViewCursor.getViewCursor();
+        xTextViewCursor.gotoStart(false);
+        int iFirstPos = xTextViewCursor.getPosition().X;
+        xTextViewCursor.gotoEnd(false);
+        int iLastPos = xTextViewCursor.getPosition().X;
+        iScale = (iLastPos - iFirstPos) / iScaleLen;
+        xTextCursor.gotoStart(false);
+        xTextCursor.gotoEnd(true);
+        xTextCursor.setString(PropertyNames.EMPTY_STRING);
+        unlockallControllers();
+        return iScale;
+    }
 
     public void unlockallControllers()
     {
@@ -322,13 +369,104 @@ public class TextDocument
         }
     }
 
+    public void refresh()
+    {
+        XRefreshable xRefreshable = UnoRuntime.queryInterface(XRefreshable.class, xTextDocument);
+        xRefreshable.refresh();
+    }
 
+    /**
+     * This method sets the Author of a Wizard-generated template correctly
+     * and adds a explanatory sentence to the template description.
+     * @param WizardName The name of the Wizard.
+     * @param TemplateDescription The old Description which is being appended with another sentence.
+     */
+    public void setWizardTemplateDocInfo(String WizardName, String TemplateDescription)
+    {
+        try
+        {
+            Object uD = Configuration.getConfigurationRoot(xMSF, "/org.openoffice.UserProfile/Data", false);
+            XNameAccess xNA = UnoRuntime.queryInterface(XNameAccess.class, uD);
+            Object gn = xNA.getByName("givenname");
+            Object sn = xNA.getByName("sn");
+            String fullname = gn + PropertyNames.SPACE + sn;
 
+            Calendar cal = new GregorianCalendar();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            DateTime currentDate = new DateTime();
+            currentDate.Day = (short) day;
+            currentDate.Month = (short) month;
+            currentDate.Year = (short) year;
+            DateUtils du = new DateUtils(xMSF, this.xTextDocument);
+            int ff = du.getFormat(NumberFormatIndex.DATE_SYS_DDMMYY);
+            String myDate = du.format(ff, currentDate);
 
+            XDocumentPropertiesSupplier xDocPropsSuppl = UnoRuntime.queryInterface(XDocumentPropertiesSupplier.class, xTextDocument);
+            XDocumentProperties xDocProps2 = xDocPropsSuppl.getDocumentProperties();
+            xDocProps2.setAuthor(fullname);
+            xDocProps2.setModifiedBy(fullname);
+            String description = xDocProps2.getDescription();
+            description = description + PropertyNames.SPACE + TemplateDescription;
+            description = JavaTools.replaceSubString(description, WizardName, "<wizard_name>");
+            description = JavaTools.replaceSubString(description, myDate, "<current_date>");
+            xDocProps2.setDescription(description);
+        }
+        catch (NoSuchElementException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (WrappedTargetException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
+    /**
+     * removes an arbitrary Object which supports the  'XTextContent' interface
+     * @param oTextContent
+     * @return
+     */
+    public boolean removeTextContent(Object oTextContent)
+    {
+        try
+        {
+            XTextContent xTextContent = UnoRuntime.queryInterface(XTextContent.class, oTextContent);
+            xText.removeTextContent(xTextContent);
+            return true;
+        }
+        catch (NoSuchElementException e)
+        {
+            e.printStackTrace(System.err);
+            return false;
+        }
+    }
 
-
-
+    /**
+     * Apparently there is no other way to get the
+     * page count of a text document other than using a cursor and
+     * making it jump to the last page...
+     * @param model the document model.
+     * @return the page count of the document.
+     */
+    public static int getPageCount(Object model)
+    {
+        XModel xModel = UnoRuntime.queryInterface(XModel.class, model);
+        XController xController = xModel.getCurrentController();
+        XTextViewCursorSupplier xTextVCS = UnoRuntime.queryInterface(XTextViewCursorSupplier.class, xController);
+        XTextViewCursor xTextVC = xTextVCS.getViewCursor();
+        XPageCursor xPC = UnoRuntime.queryInterface(XPageCursor.class, xTextVC);
+        xPC.jumpToLastPage();
+        return xPC.getPage();
+    }
 
     /* Possible Values for "OptionString" are: "LoadCellStyles", "LoadTextStyles", "LoadFrameStyles",
     "LoadPageStyles", "LoadNumberingStyles", "OverwriteStyles" */

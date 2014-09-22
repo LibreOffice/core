@@ -44,8 +44,8 @@ import com.sun.star.wizards.ui.XFieldSelectionListener;
  */
 public class ScenarioSelector extends FieldSelection implements XItemListener, XFieldSelectionListener
 {
-    private final static int PRIVATE = 0;
-    private final static int BUSINESS = 1;
+    final static int PRIVATE = 0;
+    final static int BUSINESS = 1;
 
     private XFixedText lblExplanation;
     private XFixedText lblCategories;
@@ -80,7 +80,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         String sPrivate = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 17);
         String sTableNames = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 18);
         smytable = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 44);
-        Integer IMAINSTEP = Integer.valueOf(TableWizard.SOMAINPAGE);
+        Integer IMAINSTEP = new Integer(TableWizard.SOMAINPAGE);
         oCGCategory = new CGCategory(CurUnoDialog.xMSF);
         oCGTable = new CGTable(CurUnoDialog.xMSF);
         lblExplanation = CurUnoDialog.insertLabel("lblScenarioExplanation",
@@ -90,7 +90,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    32, sExplanation, Boolean.TRUE, 91, 27, IMAINSTEP, Short.valueOf(pretabindex++), 233
+                    32, sExplanation, Boolean.TRUE, 91, 27, IMAINSTEP, new Short(pretabindex++), 233
                 });
 
         lblCategories = CurUnoDialog.insertLabel("lblCategories",
@@ -100,7 +100,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    8, sCategories, 91, 60, IMAINSTEP, Short.valueOf(pretabindex++), 100
+                    8, sCategories, 91, 60, IMAINSTEP, new Short(pretabindex++), 100
                 });
 
         optBusiness = CurTableWizardUnoDialog.insertRadioButton("optBusiness", SELECTCATEGORY, this,
@@ -110,7 +110,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, 98, 70, Short.valueOf((short) 1), IMAINSTEP, Short.valueOf(pretabindex++), 78
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, 98, 70, new Short((short) 1), IMAINSTEP, new Short(pretabindex++), 78
                 });
 
         optPrivate = CurTableWizardUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
@@ -120,7 +120,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTPRIVATE", sPrivate, 182, 70, IMAINSTEP, Short.valueOf(pretabindex++), 90
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTPRIVATE", sPrivate, 182, 70, IMAINSTEP, new Short(pretabindex++), 90
                 });
 
         CurUnoDialog.insertLabel("lblTableNames",
@@ -130,7 +130,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    8, sTableNames, 91, 82, IMAINSTEP, Short.valueOf(pretabindex++), 80
+                    8, sTableNames, 91, 82, IMAINSTEP, new Short(pretabindex++), 80
                 });
 
         try
@@ -142,7 +142,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LBTABLES", Short.valueOf(UnoDialog.getListBoxLineCount()), 91, 92, IMAINSTEP, Short.valueOf(pretabindex++), getListboxWidth()
+                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LBTABLES", new Short(UnoDialog.getListBoxLineCount()), 91, 92, IMAINSTEP, new Short(pretabindex++), getListboxWidth()
                     });
         }
         catch (Exception e)
@@ -152,7 +152,19 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         initializeCategory(BUSINESS);
     }
 
-    private void initializeCategory(int _iCategory)
+    public void selectCategory()
+    {
+        if (optBusiness.getState())
+        {
+            initializeCategory(BUSINESS);
+        }
+        else
+        {
+            initializeCategory(PRIVATE);
+        }
+    }
+
+    public void initializeCategory(int _iCategory)
     {
         try
         {
@@ -168,7 +180,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         }
     }
 
-    private void initializeTable(int _iTable)
+    public void initializeTable(int _iTable)
     {
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), PropertyNames.SELECTED_ITEMS, new short[]
                 {
@@ -178,7 +190,6 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         super.initialize(oCGTable.getFieldNames(bcolumnnameislimited, imaxcolumnchars), true);
     }
 
-    @Override
     public String[] getSelectedFieldNames()
     {
         String[] displayfieldnames = super.getSelectedFieldNames();
@@ -256,6 +267,16 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
         return smytable;
     }
 
+    public void fillupTables()
+    {
+    }
+
+    public void fillupFieldsListbox()
+    {
+        super.emptyFieldsListBoxes();
+    }
+
+
     /* (non-Javadoc)
      * @see com.sun.star.awt.XItemListener#itemStateChanged(com.sun.star.awt.ItemEvent)
      */
@@ -270,7 +291,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
     public void disposing(EventObject arg0)
     {
     }
-    private int ID;
+    protected int ID;
 
     public int getID()
     {

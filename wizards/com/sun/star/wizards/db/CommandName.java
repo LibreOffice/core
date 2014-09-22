@@ -25,17 +25,17 @@ import com.sun.star.wizards.common.PropertyNames;
 public class CommandName
 {
 
-    private CommandMetaData oCommandMetaData;
-    private String CatalogName = PropertyNames.EMPTY_STRING;
-    private String SchemaName = PropertyNames.EMPTY_STRING;
-    private String TableName = PropertyNames.EMPTY_STRING;
-    private String DisplayName = PropertyNames.EMPTY_STRING;
-    private String ComposedName = PropertyNames.EMPTY_STRING;
-    private String AliasName = PropertyNames.EMPTY_STRING;
-    private boolean bCatalogAtStart;
-    private String sCatalogSep;
-
-    private boolean baddQuotation = true;
+    protected CommandMetaData oCommandMetaData;
+    protected String CatalogName = PropertyNames.EMPTY_STRING;
+    protected String SchemaName = PropertyNames.EMPTY_STRING;
+    protected String TableName = PropertyNames.EMPTY_STRING;
+    protected String DisplayName = PropertyNames.EMPTY_STRING;
+    protected String ComposedName = PropertyNames.EMPTY_STRING;
+    protected String AliasName = PropertyNames.EMPTY_STRING;
+    protected boolean bCatalogAtStart;
+    protected String sCatalogSep;
+    protected String sIdentifierQuote;
+    protected boolean baddQuotation = true;
 
     public CommandName(CommandMetaData _CommandMetaData, String _DisplayName)
     {
@@ -131,7 +131,7 @@ public class CommandName
         }
     }
 
-    private void setComposedCommandName()
+    public void setComposedCommandName()
     {
         if (this.setMetaDataAttributes())
         {
@@ -176,6 +176,7 @@ public class CommandName
         {
             bCatalogAtStart = oCommandMetaData.xDBMetaData.isCatalogAtStart();
             sCatalogSep = oCommandMetaData.xDBMetaData.getCatalogSeparator();
+            sIdentifierQuote = oCommandMetaData.xDBMetaData.getIdentifierQuoteString();
             return true;
         }
         catch (SQLException e)
@@ -185,7 +186,7 @@ public class CommandName
         }
     }
 
-    private String quoteName(String _sName)
+    public String quoteName(String _sName)
     {
         if (baddQuotation)
         {

@@ -47,14 +47,19 @@ public class TypeInspector
         DataType.INTEGER, DataType.FLOAT, DataType.REAL, DataType.DOUBLE, DataType.NUMERIC, DataType.DECIMAL
     };
     final int INVALID = 999999;
-    private XResultSet xResultSet;
+    XResultSet xResultSet;
 
     public class TypeInfo
     {
+
+        public int nDataType;
+        public String sDataTypeName;
         public boolean bisAutoIncrementable;
 
-        private TypeInfo(int _nDataType, String _sDataTypeName, boolean _bisAutoIncrementable)
+        public TypeInfo(int _nDataType, String _sDataTypeName, boolean _bisAutoIncrementable)
         {
+            nDataType = _nDataType;
+            sDataTypeName = _sDataTypeName;
             bisAutoIncrementable = _bisAutoIncrementable;
         }
     }
@@ -76,13 +81,13 @@ public class TypeInspector
             while (xResultSet.next())
             {
                 aTypeNameVector.add(xRow.getString(1));
-                aTypeVector.add(Integer.valueOf(xRow.getShort(2)));
-                aPrecisionVector.add(Integer.valueOf(xRow.getInt(3)));
-                aNullableVector.add(Integer.valueOf(xRow.getShort(7)));
-                aSearchableVector.add(Integer.valueOf(xRow.getShort(9)));
+                aTypeVector.add(new Integer(xRow.getShort(2)));
+                aPrecisionVector.add(new Integer(xRow.getInt(3)));
+                aNullableVector.add(new Integer(xRow.getShort(7)));
+                aSearchableVector.add(new Integer(xRow.getShort(9)));
                 aAutoIncrementVector.add(Boolean.valueOf(xRow.getBoolean(12)));
-                aMinScaleVector.add(Integer.valueOf(xRow.getShort(14)));
-                aMaxScaleVector.add(Integer.valueOf(xRow.getShort(15)));
+                aMinScaleVector.add(new Integer(xRow.getShort(14)));
+                aMaxScaleVector.add(new Integer(xRow.getShort(15)));
 
             }
             sDataTypeNames = new String[aTypeNameVector.size()];
@@ -145,7 +150,28 @@ public class TypeInspector
         return _nNullable;
     }
 
-
+    public int getNullability(XPropertySet _xColPropertySet)
+    {
+        try
+        {
+            int i = getDataTypeIndex(_xColPropertySet, false);
+            if (i == -1)
+            {
+                return ColumnValue.NO_NULLS;
+            }
+            int nNullable = AnyConverter.toInt(_xColPropertySet.getPropertyValue("IsNullable"));
+            if (nNullable == ColumnValue.NULLABLE)
+            {
+                return nNullableInfos[i];
+            }
+            return nNullable;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.err);
+        }
+        return ColumnValue.NO_NULLS;
+    }
 
     public boolean isColumnOrderable(XPropertySet _xColPropertySet)
     {
@@ -216,7 +242,7 @@ public class TypeInspector
         return -1;
     }
 
-    private boolean supportsDataType(int _curDataType)
+    public boolean supportsDataType(int _curDataType)
     {
         return (JavaTools.FieldInIntTable(nDataTypeInfos, _curDataType) > -1);
     }
@@ -236,6 +262,8 @@ public class TypeInspector
     /**
      * an empty string is returned when no appropriate Typename can be found
      * finds the first TypeName of the passed datatype.
+     * @param _curDataType
+     * @return
      */
     public String getDefaultTypeName(int _curDataType, Integer precision)
     {

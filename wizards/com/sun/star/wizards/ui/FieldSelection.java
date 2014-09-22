@@ -35,10 +35,10 @@ public class FieldSelection
     protected boolean AppendMode = false;
     protected Integer IStep;
 
-
-    private int CompPosY;
-    private int CompHeight;
-
+    protected int CompPosX;
+    protected int CompPosY;
+    protected int CompHeight;
+    protected int CompWidth;
 
     private XFieldSelectionListener xFieldSelection;
     private int maxfieldcount = 10000000;
@@ -59,7 +59,7 @@ public class FieldSelection
     private final static int SOSELFLDSLST = 8;
 
 
-    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
@@ -87,7 +87,7 @@ public class FieldSelection
         }
     }
 
-    private class ActionListenerImpl implements com.sun.star.awt.XActionListener
+    class ActionListenerImpl implements com.sun.star.awt.XActionListener
     {
 
         public void disposing(com.sun.star.lang.EventObject eventObject)
@@ -174,8 +174,10 @@ public class FieldSelection
             int ShiftButtonCount = 2;
             int a = 0;
             this.CurUnoDialog = CurUnoDialog;
+            this.CompPosX = CompPosX;
             this.CompPosY = CompPosY;
             this.CompHeight = CompHeight;
+            this.CompWidth = CompWidth;
             Object btnmoveall = null;
             Object btnremoveall = null;
 
@@ -184,22 +186,22 @@ public class FieldSelection
             final int lblHeight = 8;
             final int lblVertiDist = 2;
 
-            ListBoxWidth = Integer.valueOf(((CompWidth - 3 * cmdButtonHoriDist - 2 * cmdButtonWidth) / 2));
-            Integer cmdShiftButtonPosX = Integer.valueOf((CompPosX + ListBoxWidth.intValue() + cmdButtonHoriDist));
-            Integer ListBoxPosY = Integer.valueOf(CompPosY + lblVertiDist + lblHeight);
-            Integer ListBoxHeight = Integer.valueOf(CompHeight - 8 - 2);
-            SelListBoxPosX = Integer.valueOf(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
+            ListBoxWidth = new Integer(((CompWidth - 3 * cmdButtonHoriDist - 2 * cmdButtonWidth) / 2));
+            Integer cmdShiftButtonPosX = new Integer((CompPosX + ListBoxWidth.intValue() + cmdButtonHoriDist));
+            Integer ListBoxPosY = new Integer(CompPosY + lblVertiDist + lblHeight);
+            Integer ListBoxHeight = new Integer(CompHeight - 8 - 2);
+            SelListBoxPosX = new Integer(cmdShiftButtonPosX.intValue() + cmdButtonWidth + cmdButtonHoriDist);
 
-            IStep = Integer.valueOf(_iStep);
+            IStep = new Integer(_iStep);
             if (bshowFourButtons)
             {
                 ShiftButtonCount = 4;
             }
             Integer[] ShiftButtonPosY = getYButtonPositions(ShiftButtonCount);
             Integer[] MoveButtonPosY = getYButtonPositions(2);
-            Integer cmdMoveButtonPosX = Integer.valueOf(SelListBoxPosX.intValue() + ListBoxWidth.intValue() + cmdButtonHoriDist);
+            Integer cmdMoveButtonPosX = new Integer(SelListBoxPosX.intValue() + ListBoxWidth.intValue() + cmdButtonHoriDist);
 
-            Integer CmdButtonWidth = Integer.valueOf(cmdButtonWidth);
+            Integer CmdButtonWidth = new Integer(cmdButtonWidth);
 
             sIncSuffix = "_" + com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.getDlgNameAccess(), "lblFields_");
 
@@ -211,7 +213,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        8, slblFields, Integer.valueOf(CompPosX), Integer.valueOf(CompPosY), IStep, Short.valueOf(curtabindex), 109
+                        8, slblFields, new Integer(CompPosX), new Integer(CompPosY), IStep, new Short(curtabindex), 109
                     });
 
             // Listbox 'Available fields'
@@ -222,7 +224,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        ListBoxHeight, HelpIds.getHelpIdString(_FirstHelpIndex), Boolean.TRUE, Integer.valueOf(CompPosX), ListBoxPosY, IStep, Short.valueOf((curtabindex++)), ListBoxWidth
+                        ListBoxHeight, HelpIds.getHelpIdString(_FirstHelpIndex), Boolean.TRUE, new Integer(CompPosX), ListBoxPosY, IStep, new Short((curtabindex++)), ListBoxWidth
                     });
 
             Object btnmoveselected = CurUnoDialog.insertButton("cmdMoveSelected" + sIncSuffix, SOCMDMOVESEL, new ActionListenerImpl(),
@@ -232,7 +234,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 1), ">", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, Short.valueOf(curtabindex++), CmdButtonWidth
+                        Boolean.FALSE, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 1), ">", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
             if (bshowFourButtons)
@@ -244,7 +246,7 @@ public class FieldSelection
                         },
                         new Object[]
                         {
-                            14, HelpIds.getHelpIdString(_FirstHelpIndex + 2), ">>", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, Short.valueOf(curtabindex++), CmdButtonWidth
+                            14, HelpIds.getHelpIdString(_FirstHelpIndex + 2), ">>", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                         });
             }
             Object btnremoveselected = CurUnoDialog.insertButton("cmdRemoveSelected" + sIncSuffix, SOCMDREMOVESEL, new ActionListenerImpl(),
@@ -254,7 +256,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 3), "<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, Short.valueOf(curtabindex++), CmdButtonWidth
+                        Boolean.FALSE, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 3), "<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
             if (bshowFourButtons)
@@ -266,7 +268,7 @@ public class FieldSelection
                         },
                         new Object[]
                         {
-                            14, HelpIds.getHelpIdString(_FirstHelpIndex + 4), "<<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, Short.valueOf(curtabindex++), CmdButtonWidth
+                            14, HelpIds.getHelpIdString(_FirstHelpIndex + 4), "<<", cmdShiftButtonPosX, ShiftButtonPosY[a++], IStep, new Short(curtabindex++), CmdButtonWidth
                         });
             }
 
@@ -281,7 +283,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        8, slblSelFields, SelListBoxPosX, Integer.valueOf(CompPosY), IStep, Short.valueOf(curtabindex++), ListBoxWidth
+                        8, slblSelFields, SelListBoxPosX, new Integer(CompPosY), IStep, new Short(curtabindex++), ListBoxWidth
                     });
 
             // ListBox 'Fields in the form'
@@ -292,7 +294,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        ListBoxHeight, HelpIds.getHelpIdString(_FirstHelpIndex + 5), Boolean.TRUE, SelListBoxPosX, ListBoxPosY, IStep, Short.valueOf(curtabindex++), ListBoxWidth
+                        ListBoxHeight, HelpIds.getHelpIdString(_FirstHelpIndex + 5), Boolean.TRUE, SelListBoxPosX, ListBoxPosY, IStep, new Short(curtabindex++), ListBoxWidth
                     });
 
             Object btnmoveup = CurUnoDialog.insertButton("cmdMoveUp" + sIncSuffix, SOCMDMOVEUP, new ActionListenerImpl(),
@@ -302,7 +304,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, oFontDesc, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 6), String.valueOf((char) 8743), cmdMoveButtonPosX, MoveButtonPosY[0], IStep, Short.valueOf(curtabindex++), CmdButtonWidth
+                        Boolean.FALSE, oFontDesc, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 6), String.valueOf((char) 8743), cmdMoveButtonPosX, MoveButtonPosY[0], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
             Object btnmovedown = CurUnoDialog.insertButton("cmdMoveDown" + sIncSuffix, SOCMDMOVEDOWN, new ActionListenerImpl(),
@@ -312,7 +314,7 @@ public class FieldSelection
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, oFontDesc, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 7), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, Short.valueOf(curtabindex++), CmdButtonWidth
+                        Boolean.FALSE, oFontDesc, 14, HelpIds.getHelpIdString(_FirstHelpIndex + 7), String.valueOf((char) 8744), cmdMoveButtonPosX, MoveButtonPosY[1], IStep, new Short(curtabindex++), CmdButtonWidth
                     });
 
             CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveselected, AccessTextMoveSelected);
@@ -353,12 +355,12 @@ public class FieldSelection
             final int cmdButtonHeight = 14;
             final int cmdButtonVertiDist = 2;
 
-            YPosArray[0] = Integer.valueOf( (CompPosY + 10 + (((CompHeight - 10) - (ButtonCount * cmdButtonHeight) - ((ButtonCount - 1) * cmdButtonVertiDist)) / 2)));
+            YPosArray[0] = new Integer( (CompPosY + 10 + (((CompHeight - 10) - (ButtonCount * cmdButtonHeight) - ((ButtonCount - 1) * cmdButtonVertiDist)) / 2)));
             if (ButtonCount > 1)
             {
                 for (int i = 1; i < ButtonCount; i++)
                 {
-                    YPosArray[i] = Integer.valueOf(YPosArray[i - 1].intValue() + cmdButtonHeight + cmdButtonVertiDist);
+                    YPosArray[i] = new Integer(YPosArray[i - 1].intValue() + cmdButtonHeight + cmdButtonVertiDist);
                 }
             }
             return YPosArray;
@@ -491,7 +493,11 @@ public class FieldSelection
         }
     }
 
-
+    public void mergeList(String[] AllFieldNames, String[] SecondList)
+    {
+        xFieldsListBox.addItems(AllFieldNames, (short) 0);
+        toggleListboxButtons((short) - 1, (short) - 1);
+    }
 
     public void intializeSelectedFields(String[] _SelectedFieldNames)
     {
@@ -517,7 +523,15 @@ public class FieldSelection
         toggleListboxControls(Boolean.TRUE);
     }
 
-
+    public void initialize(String[][] _AllFieldNamesTable, boolean _AppendMode, int _maxfieldcount)
+    {
+        String[] AllFieldNames_ = new String[_AllFieldNamesTable.length];
+        for (int i = 0; i < _AllFieldNamesTable.length; i++)
+        {
+            AllFieldNames_[i] = _AllFieldNamesTable[i][0];
+        }
+        initialize(AllFieldNames_, _AppendMode, _maxfieldcount);
+    }
 
     public void initialize(String[] _AllFieldNames, boolean _AppendMode, int _maxfieldcount)
     {
@@ -571,7 +585,7 @@ public class FieldSelection
         }
     }
 
-    private void deselectFields(boolean bMoveAll)
+    public void deselectFields(boolean bMoveAll)
     {
         String SearchString;
         short iOldFieldSelected = xFieldsListBox.getSelectedItemPos();

@@ -28,6 +28,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ContainerEvent;
 import com.sun.star.container.XContainer;
 import com.sun.star.container.XContainerListener;
+import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.EventObject;
@@ -51,20 +52,20 @@ import com.sun.star.wizards.common.PropertyNames;
 public class TableDescriptor extends CommandMetaData implements XContainerListener
 {
 
-    private XDataDescriptorFactory xTableDataDescriptorFactory;
-    private XPropertySet xPropTableDataDescriptor;
+    XDataDescriptorFactory xTableDataDescriptorFactory;
+    XPropertySet xPropTableDataDescriptor;
     private XNameAccess xNameAccessColumns;
     private XIndexAccess xIndexAccessKeys;
-    private XDataDescriptorFactory xColumnDataDescriptorFactory;
-    private XContainer xTableContainer;
-    private XAppend xTableAppend;
-    private XDrop xTableDrop;
+    public XDataDescriptorFactory xColumnDataDescriptorFactory;
+    XContainer xTableContainer;
+    XAppend xTableAppend;
+    XDrop xTableDrop;
     private XAppend xKeyAppend;
     private XDrop xKeyDrop;
     private String[] sTableFilters = null;
     private ArrayList<ColumnDescriptor> columncontainer;
     private ArrayList<XPropertySet> keycolumncontainer;
-
+    public XHierarchicalNameAccess xTableHierarchicalNameAccess;
     private CommandName ComposedTableName;
     private XAppend xKeyColAppend;
     private XColumnsSupplier xKeyColumnSupplier;
@@ -74,6 +75,9 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private String sColumnAlreadyExistsMessage = PropertyNames.EMPTY_STRING;
     private XWindow xWindow;
 
+    /**
+     * @param xMSF
+     */
     public TableDescriptor(XMultiServiceFactory xMSF, XWindow _xWindow, String _sColumnAlreadyExistsMessage)
     {
         super(xMSF);
@@ -96,7 +100,6 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    @Override
     public boolean getConnection(PropertyValue[] _curPropertyValue)
     {
         if (super.getConnection(_curPropertyValue))
@@ -136,7 +139,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    private boolean createPrimaryKeys(String[] _fieldnames, boolean _bAutoincrementation)
+    public boolean createPrimaryKeys(String[] _fieldnames, boolean _bAutoincrementation)
     {
         try
         {
@@ -146,7 +149,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
             xKeyDrop = UnoRuntime.queryInterface(XDrop.class, xIndexAccessKeys);
             xKeyAppend = UnoRuntime.queryInterface(XAppend.class, xKeyFac);
             xKey = xKeyFac.createDataDescriptor();
-            xKey.setPropertyValue("Type", Integer.valueOf(KeyType.PRIMARY));
+            xKey.setPropertyValue("Type", new Integer(KeyType.PRIMARY));
             xKeyColumnSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, xKey);
             XDataDescriptorFactory xKeyColFac = UnoRuntime.queryInterface(XDataDescriptorFactory.class, xKeyColumnSupplier.getColumns());
             xKeyColAppend = UnoRuntime.queryInterface(XAppend.class, xKeyColFac);
@@ -165,7 +168,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 {
                     xColPropertySet = addPrimaryKeyColumn(_fieldnames[i]);
                 }
-                xColPropertySet.setPropertyValue("IsNullable", Integer.valueOf(com.sun.star.sdbc.ColumnValue.NO_NULLS));
+                xColPropertySet.setPropertyValue("IsNullable", new Integer(com.sun.star.sdbc.ColumnValue.NO_NULLS));
                 if (_bAutoincrementation)
                 {
                     int nDataType = oTypeInspector.getAutoIncrementIndex(xColPropertySet);
@@ -173,7 +176,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                     {
                         if (xColPropertySet.getPropertySetInfo().hasPropertyByName("IsAutoIncrement"))
                         {
-                            xColPropertySet.setPropertyValue("Type", Integer.valueOf(nDataType));
+                            xColPropertySet.setPropertyValue("Type", new Integer(nDataType));
                             xColPropertySet.setPropertyValue("IsAutoIncrement", Boolean.valueOf(_bAutoincrementation));
                         }
                     }
@@ -202,7 +205,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         return false;
     }
 
-    private boolean isColunnNameDuplicate(XNameAccess _xColumns, XPropertySet _xToBeAppendedPropertySet)
+    public boolean isColunnNameDuplicate(XNameAccess _xColumns, XPropertySet _xToBeAppendedPropertySet)
     {
         try
         {
@@ -224,7 +227,10 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
 
     /**
      * creates the table under the passed name
+     * @param _catalogname
+     * @param _schemaname
      * @param _tablename is made unique if necessary
+     * @param _fieldnames
      * @return true or false to indicate successful creation or not
      */
     public boolean createTable(String _catalogname, String _schemaname, String _tablename, String[] _fieldnames)
@@ -383,7 +389,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
-    private boolean modifyColumn(String _sname, String _spropname, Object _oValue)
+    public boolean modifyColumn(String _sname, String _spropname, Object _oValue)
     {
         try
         {
@@ -639,9 +645,34 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         }
     }
 
+    public boolean addColumn(String _columnname, XPropertySet _xNewColPropertySet)
+    {
+        try
+        {
+            if (!hasByName(_columnname))
+            {
+                if (_columnname.equals(PropertyNames.EMPTY_STRING))
+                {
+                    return false;
+                }
+                else
+                {
+                    ColumnPropertySet oPropertySet = new ColumnPropertySet(oTypeInspector, xColumnDataDescriptorFactory.createDataDescriptor());
+                    oPropertySet.assignNewPropertySet(_columnname, _xNewColPropertySet);
+                    ColumnDescriptor oColumnDescriptor = new ColumnDescriptor(oPropertySet.xPropertySet, _columnname);
+                    columncontainer.add(oColumnDescriptor);
+                    return true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.err);
+        }
+        return false;
+    }
 
-
-    private XPropertySet addPrimaryKeyColumn(String _columnname)
+    public XPropertySet addPrimaryKeyColumn(String _columnname)
     {
         try
         {
@@ -654,7 +685,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                     xColPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, IDFieldName);
 
                     int nDataType = oTypeInspector.convertDataType(com.sun.star.sdbc.DataType.INTEGER);
-                    xColPropertySet.setPropertyValue("Type", Integer.valueOf(nDataType));
+                    xColPropertySet.setPropertyValue("Type", new Integer(nDataType));
                     xColPropertySet.setPropertyValue("TypeName", oTypeInspector.getDefaultTypeName(nDataType, null));
                     ColumnDescriptor oColumnDescriptor = new ColumnDescriptor(xColPropertySet, IDFieldName);
                     this.columncontainer.add(0, oColumnDescriptor);
@@ -767,7 +798,11 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
     }
 
-    private boolean appendTableNameToFilter(String _scomposedtablename)
+    /**
+     * @param _scomposedtablename
+     * @return
+     */
+    public boolean appendTableNameToFilter(String _scomposedtablename)
     {
         boolean bhastoinsert = true;
         for (int i = 0; i < sTableFilters.length; i++)

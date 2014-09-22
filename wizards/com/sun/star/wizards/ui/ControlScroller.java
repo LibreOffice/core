@@ -28,35 +28,35 @@ public abstract class ControlScroller
 {
 
     protected WizardDialog CurUnoDialog;
-
+    protected XMultiServiceFactory xMSF;
     protected int ncurfieldcount;
-    private int nblockincrement;
+    protected int nblockincrement;
     private int nlineincrement;
-    private int nscrollvalue = 0;
-    private int ntotfieldcount;
-    private XScrollBar xScrollBar;
-    private ArrayList<PropertyValue[]> scrollfields;
-
+    protected int nscrollvalue = 0;
+    protected int ntotfieldcount;
+    XScrollBar xScrollBar;
+    protected ArrayList<PropertyValue[]> scrollfields;
+    protected Integer ICompPosX;
     protected int iCompPosX;
-
+    protected Integer ICompPosY;
     protected int iCompPosY;
-
+    protected Integer ICompWidth;
     protected int iCompWidth;
-
+    protected Integer ICompHeight;
     protected int iCompHeight;
-    private int iStartPosY;
+    protected int iStartPosY;
     protected short curtabindex;
-    private int iStep;
+    int iStep;
     protected Integer IStep;
-    private int linedistance;
+    protected int linedistance;
     int iScrollBarWidth = 10;
-    private int SORELFIRSTPOSY = 3;
+    int SORELFIRSTPOSY = 3;
     protected int curHelpIndex;
-    private String sIncSuffix;
+    String sIncSuffix;
     protected ArrayList<Object> ControlGroupVector = new ArrayList<Object>();
+    protected PeerConfig oTitlePeerConfig;
 
-
-    private class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
+    class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener
     {
 
         public void disposing(com.sun.star.lang.EventObject eventObject)
@@ -82,16 +82,20 @@ public abstract class ControlScroller
     // TODO add parameters for tabindices and helpindex
     protected ControlScroller(WizardDialog _CurUnoDialog, XMultiServiceFactory _xMSF, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _nblockincrement, int _nlinedistance, int _firsthelpindex)
     {
+        this.xMSF = _xMSF;
         this.nblockincrement = _nblockincrement;
         this.CurUnoDialog = _CurUnoDialog;
         this.iStep = _iStep;
         this.curHelpIndex = _firsthelpindex;
         curtabindex = UnoDialog.setInitialTabindex(iStep);
         this.linedistance = _nlinedistance;
-        IStep = Integer.valueOf(iStep);
+        IStep = new Integer(iStep);
         this.iCompPosX = _iCompPosX;
         this.iCompPosY = _iCompPosY;
+        this.ICompPosX = new Integer(iCompPosX);
+        this.ICompPosY = new Integer(iCompPosY);
         this.iCompWidth = _iCompWidth;
+        this.ICompWidth = new Integer(iCompWidth);
         this.iCompHeight = 2 * SORELFIRSTPOSY + nblockincrement * linedistance;
         iStartPosY = iCompPosY + SORELFIRSTPOSY;
         int ScrollHeight = iCompHeight - 2;
@@ -105,7 +109,7 @@ public abstract class ControlScroller
                 },
                 new Object[]
                 {
-                    Short.valueOf((short) 0), Boolean.TRUE, Integer.valueOf(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), Integer.valueOf(ScrollBarOrientation.VERTICAL), Integer.valueOf(iCompPosX + iCompWidth - iScrollBarWidth - 1), Integer.valueOf(iCompPosY + 1), IStep, Integer.valueOf(iScrollBarWidth)
+                    new Short((short) 0), Boolean.TRUE, new Integer(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
                 });
         scrollfields = new ArrayList<PropertyValue[]>();
         int ypos = iStartPosY + SORELFIRSTPOSY;
@@ -116,7 +120,10 @@ public abstract class ControlScroller
         }
     }
 
-
+    protected void setScrollBarOrientationHorizontal()
+    {
+        Helper.setUnoPropertyValue(xScrollBar, PropertyNames.ORIENTATION, new Integer(ScrollBarOrientation.HORIZONTAL));
+    }
 
     /**
      * @param _ntotfieldcount The number of fields that are to be administered by the ControlScroller
@@ -128,7 +135,7 @@ public abstract class ControlScroller
             ntotfieldcount = _ntotfieldcount;
             setCurFieldCount();
             nscrollvalue = 0;
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "ScrollValue", Integer.valueOf(nscrollvalue));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "ScrollValue", new Integer(nscrollvalue));
             if (ntotfieldcount > nblockincrement)
             {
                 Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
@@ -136,7 +143,7 @@ public abstract class ControlScroller
                             PropertyNames.PROPERTY_ENABLED, "BlockIncrement", "LineIncrement", "ScrollValue", "ScrollValueMax"
                         }, new Object[]
                         {
-                            Boolean.TRUE, Integer.valueOf(nblockincrement), Integer.valueOf(nlineincrement), Integer.valueOf(nscrollvalue), Integer.valueOf(ntotfieldcount - nblockincrement)
+                            Boolean.TRUE, new Integer(nblockincrement), new Integer(nlineincrement), new Integer(nscrollvalue), new Integer(ntotfieldcount - nblockincrement)
                         });
             }
             else
@@ -146,7 +153,7 @@ public abstract class ControlScroller
                             PropertyNames.PROPERTY_ENABLED, "ScrollValue"
                         }, new Object[]
                         {
-                            Boolean.FALSE, Integer.valueOf(nscrollvalue)
+                            Boolean.FALSE, new Integer(nscrollvalue)
                         });
             }
             fillupControls(true);
@@ -157,7 +164,7 @@ public abstract class ControlScroller
         }
     }
 
-    private void fillupControls(boolean binitialize)
+    protected void fillupControls(boolean binitialize)
     {
         for (int a = 0; a < this.nblockincrement; a++)
         {
@@ -176,7 +183,7 @@ public abstract class ControlScroller
         }
     }
 
-    private void fillupControls(int guiRow)
+    protected void fillupControls(int guiRow)
     {
         PropertyValue[] nameProps = scrollfields.get(guiRow);
         PropertyValue[] valueProps = scrollfields.get(guiRow + nscrollvalue);
@@ -193,11 +200,11 @@ public abstract class ControlScroller
         }
     }
 
-    private void setScrollValue(int _nscrollvalue)
+    protected void setScrollValue(int _nscrollvalue)
     {
         if (_nscrollvalue >= 0)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "ScrollValue", Integer.valueOf(_nscrollvalue));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "ScrollValue", new Integer(_nscrollvalue));
             scrollControls();
         }
     }
@@ -241,7 +248,7 @@ public abstract class ControlScroller
                         PropertyNames.PROPERTY_ENABLED, "ScrollValueMax"
                     }, new Object[]
                     {
-                        Boolean.TRUE, Integer.valueOf(ntotfieldcount - nblockincrement)
+                        Boolean.TRUE, new Integer(ntotfieldcount - nblockincrement)
                     });
         }
         else
@@ -275,11 +282,29 @@ public abstract class ControlScroller
         return nscrollvalue;
     }
 
+    protected void setLineIncrementation(int _nlineincrement)
+    {
+        this.nlineincrement = _nlineincrement;
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "LineIncrement", new Integer(nlineincrement));
 
+    }
 
+    protected int getLineIncrementation()
+    {
+        return nlineincrement;
+    }
 
-
-
+    protected void setBlockIncrementation(int _nblockincrement)
+    {
+        this.nblockincrement = _nblockincrement;
+        Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
+                {
+                    PropertyNames.PROPERTY_ENABLED, "BlockIncrement", "ScrollValueMax"
+                }, new Object[]
+                {
+                        Boolean.valueOf(ntotfieldcount > nblockincrement), new Integer(nblockincrement), new Integer(ntotfieldcount - nblockincrement)
+                });
+    }
 
     protected int getBlockIncrementation()
     {
@@ -304,7 +329,7 @@ public abstract class ControlScroller
         }
     }
 
-    private void scrollRowsInfo()
+    protected void scrollRowsInfo()
     {
         int cols =
                 scrollfields.size() > 0
@@ -327,7 +352,7 @@ public abstract class ControlScroller
      * @return the propertyValue object corresponding to
      * this control.
      */
-    private PropertyValue fieldInfo(int guiRow, int column)
+    protected PropertyValue fieldInfo(int guiRow, int column)
     {
         if (guiRow + nscrollvalue < scrollfields.size())
         {
@@ -341,7 +366,7 @@ public abstract class ControlScroller
         }
     }
 
-    private PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp)
+    protected PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp)
     {
         if (CurUnoDialog.getDlgNameAccess().hasByName(nameProp.Name))
         {
@@ -375,9 +400,12 @@ public abstract class ControlScroller
         }
     }
 
+    protected PropertyValue[] getControlGroupInfo(int _i)
+    {
+        return scrollfields.get(_i);
+    }
 
-
-    private void setControlData(String controlname, Object newvalue)
+    protected void setControlData(String controlname, Object newvalue)
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);
@@ -387,7 +415,7 @@ public abstract class ControlScroller
         }
     }
 
-    private Object getControlData(String controlname)
+    protected Object getControlData(String controlname)
     {
         Object oControlModel = UnoDialog.getModel(CurUnoDialog.xDlgContainer.getControl(controlname));
         String propertyname = UnoDialog.getDisplayProperty(oControlModel);

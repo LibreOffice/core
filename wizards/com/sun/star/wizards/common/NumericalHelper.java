@@ -33,20 +33,20 @@ import com.sun.star.uno.TypeClass;
 public class NumericalHelper
 {
 
-    private static final int UNKNOWN_TYPE = -32768;
-    private static final int BYTE_TYPE = 0;
-    private static final int SHORT_TYPE = 1;
-    private static final int INT_TYPE = 2;
-    private static final int LONG_TYPE = 3;
-    private static final int FLOAT_TYPE = 4;
-    private static final int DOUBLE_TYPE = 5;
-    private static final int CHAR_TYPE = 6;
-    private static final int STRING_TYPE = -1;
-    private static final int BOOLEAN_TYPE = -2;
-    private static final int SEQUENCE_TYPE = -3;
-
-
-
+    public static final int UNKNOWN_TYPE = -32768;
+    public static final int BYTE_TYPE = 0;
+    public static final int SHORT_TYPE = 1;
+    public static final int INT_TYPE = 2;
+    public static final int LONG_TYPE = 3;
+    public static final int FLOAT_TYPE = 4;
+    public static final int DOUBLE_TYPE = 5;
+    public static final int CHAR_TYPE = 6;
+    public static final int STRING_TYPE = -1;
+    public static final int BOOLEAN_TYPE = -2;
+    public static final int SEQUENCE_TYPE = -3;
+    public static final int ASCII_VALUE_0 = 48;
+    public static final int ASCII_VALUE_A = 65;
+    public static final int COUNT_CHARS_IN_ALPHABET = 26;
     private static final int HEX_BASE = 16;
     private static final int DEC_BASE = 10;
     private static final int ASCII_LETTER_A_OFFSET = 55;
@@ -59,10 +59,341 @@ public class NumericalHelper
         // private c'tor, so no one can instantiate
     }
 
+    /**
+     * get the type of an object: returns all types that can possibly converted
+     * with this class.
+     * @param obj an object that is checked for conversion
+     * @return the type of the object
+     */
+    public static int getType(Object obj)
+    {
+        try
+        {
+            TypeObject aTypeObject = getTypeObject(obj);
+            return aTypeObject.iType;
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore this one; just return unknown type
+        }
+        return UNKNOWN_TYPE;
+    }
 
+    /**
+     * get a byte value from the object
+     * @param aValue
+     * @return a byte
+     * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
+     */
+    public static byte toByte(Object aValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+
+        byte retValue = 0;
+        TypeObject aTypeObject = getTypeObject(aValue);
+        switch (aTypeObject.iType)
+        {
+            case BYTE_TYPE:
+                retValue = getByte(aTypeObject);
+                break;
+            case CHAR_TYPE:
+                retValue = (byte) getChar(aTypeObject);
+                break;
+            case SHORT_TYPE:
+                retValue = (byte) getShort(aTypeObject);
+                break;
+            case INT_TYPE:
+                retValue = (byte) getInt(aTypeObject);
+                break;
+            case LONG_TYPE:
+                retValue = (byte) getLong(aTypeObject);
+                break;
+            case FLOAT_TYPE:
+                retValue = (byte) getFloat(aTypeObject);
+                break;
+            case DOUBLE_TYPE:
+                retValue = (byte) getDouble(aTypeObject);
+                break;
+            case STRING_TYPE:
+                try
+                {
+                    retValue = Byte.parseByte((String) aTypeObject.aValue);
+                }
+                catch (java.lang.NumberFormatException e)
+                {
+                    throw new com.sun.star.lang.IllegalArgumentException(
+                            "Cannot convert to byte: " + aTypeObject.aValue);
+                }
+                break;
+            case BOOLEAN_TYPE:
+                retValue = getBool(aTypeObject) ? (byte) -1 : (byte) 0;
+                break;
+            default:
+                throw new com.sun.star.lang.IllegalArgumentException(
+                        "Cannot convert this type: " + aValue.getClass().getName());
+        }
+        return retValue;
+    }
+
+    /**
+     * get a char value from the object
+     * @param aValue
+     * @return a char
+     * @throws com.sun.star.lang.IllegalArgumentException  if the object cannot be converted
+     */
+    public static char toChar(Object aValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+
+        char retValue = 0;
+        TypeObject aTypeObject = getTypeObject(aValue);
+        switch (aTypeObject.iType)
+        {
+            case CHAR_TYPE:
+                retValue = getChar(aTypeObject);
+                break;
+            case BYTE_TYPE:
+                retValue = (char) getByte(aTypeObject);
+                break;
+            case SHORT_TYPE:
+                retValue = (char) getShort(aTypeObject);
+                break;
+            case INT_TYPE:
+                retValue = (char) getInt(aTypeObject);
+                break;
+            case LONG_TYPE:
+                retValue = (char) getLong(aTypeObject);
+                break;
+            case FLOAT_TYPE:
+                retValue = (char) getFloat(aTypeObject);
+                break;
+            case DOUBLE_TYPE:
+                retValue = (char) getDouble(aTypeObject);
+                break;
+            case STRING_TYPE:
+                try
+                {
+                    String s = (String) aTypeObject.aValue;
+                    if (s.length() > 0)
+                    {
+                        retValue = s.charAt(0);
+                    }
+                    else
+                    {
+                        retValue = (char) 0;
+                    }
+                }
+                catch (java.lang.NumberFormatException e)
+                {
+                    throw new com.sun.star.lang.IllegalArgumentException(
+                            "Cannot convert to char: " + aTypeObject.aValue);
+                }
+                break;
+            case BOOLEAN_TYPE:
+                retValue = getBool(aTypeObject) ? (char) -1 : (char) 0;
+                break;
+            default:
+                throw new com.sun.star.lang.IllegalArgumentException(
+                        "Cannot convert this type: " + aValue.getClass().getName());
+        }
+        return retValue;
+    }
+
+    /**
+     * get a short value from the object
+     * @param aValue
+     * @return a short
+     * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
+     */
+    public static short toShort(Object aValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        short retValue = 0;
+        TypeObject aTypeObject = getTypeObject(aValue);
+        switch (aTypeObject.iType)
+        {
+            case BYTE_TYPE:
+                retValue = getByte(aTypeObject);
+                break;
+            case CHAR_TYPE:
+                retValue = (byte) getChar(aTypeObject);
+                break;
+            case SHORT_TYPE:
+                retValue = getShort(aTypeObject);
+                break;
+            case INT_TYPE:
+                retValue = (short) getInt(aTypeObject);
+                break;
+            case LONG_TYPE:
+                retValue = (short) getLong(aTypeObject);
+                break;
+            case FLOAT_TYPE:
+                retValue = (short) getFloat(aTypeObject);
+                break;
+            case DOUBLE_TYPE:
+                retValue = (short) getDouble(aTypeObject);
+                break;
+            case STRING_TYPE:
+                try
+                {
+                    retValue = Short.parseShort((String) aTypeObject.aValue);
+                }
+                catch (java.lang.NumberFormatException e)
+                {
+                    throw new com.sun.star.lang.IllegalArgumentException(
+                            "Cannot convert to short: " + aTypeObject.aValue);
+                }
+                break;
+            case BOOLEAN_TYPE:
+                retValue = getBool(aTypeObject) ? (short) -1 : (short) 0;
+                break;
+            default:
+                throw new com.sun.star.lang.IllegalArgumentException(
+                        "Cannot convert this type: " + aValue.getClass().getName());
+        }
+        return retValue;
+    }
+
+    public static boolean isValidAndNumerical(Object aValue) throws com.sun.star.lang.IllegalArgumentException
+    {
+        if (aValue != null)
+        {
+            if (!AnyConverter.isVoid(aValue))
+            {
+                return (NumericalHelper.isNumerical(aValue));
+            }
+        }
+        return false;
+    }
+
+    public static boolean isValidAndBoolean(Object aValue) throws com.sun.star.lang.IllegalArgumentException
+    {
+        if (aValue != null)
+        {
+            if (!AnyConverter.isVoid(aValue))
+            {
+                int nType = AnyConverter.getType(aValue).getTypeClass().getValue();
+                return (nType == TypeClass.BOOLEAN_value);
+            }
+        }
+        return false;
+    }
+
+    public static boolean isValid(Object aValue)
+    {
+        if (aValue != null)
+        {
+            if (!AnyConverter.isVoid(aValue))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+    @param aValue a object this can contain anything
+    @return true, if the parameter aValue is type of real numbers
+    @deprecate, use isRealNumber() instead.
+     */
+    public static boolean isNumerical(Object aValue)
+    {
+        try
+        {
+            TypeObject aTypeObject = getTypeObject(aValue);
+            switch (aTypeObject.iType)
+            {
+                case BYTE_TYPE:
+                case CHAR_TYPE:
+                case SHORT_TYPE:
+                case INT_TYPE:
+                case LONG_TYPE:
+                case DOUBLE_TYPE:
+                case FLOAT_TYPE:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            return false;
+        }
+    }
+
+    /**
+    @param _aValue a object this can contain anything
+    @return true, if the parameter aValue is type of real numbers
+
+    see also http://en.wikipedia.org/wiki/Mathematics
+     */
+    public static boolean isRealNumber(Object _aValue)
+    {
+        return isNumerical(_aValue);
+    }
+
+    /**
+    @param aValue a object this can contain anything
+     * @return true, if the value is type of any integer values. double / float are not(!) integer values
+     * @throws com.sun.star.lang.IllegalArgumentException
+     */
+    public static boolean isInteger(Object aValue) throws com.sun.star.lang.IllegalArgumentException
+    {
+        TypeObject aTypeObject = getTypeObject(aValue);
+        switch (aTypeObject.iType)
+        {
+            case BYTE_TYPE:
+            case CHAR_TYPE:
+            case SHORT_TYPE:
+            case INT_TYPE:
+            case LONG_TYPE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Can a given object be converted to a String array?
+     * @param aValue the object to test
+     * @return true, if the object can be converted to a String array.
+     */
+    public static boolean isStringArray(Object aValue)
+    {
+        try
+        {
+            toStringArray(aValue);
+            return true;
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore
+        }
+        return false;
+    }
+
+    /**
+     * Can a given object be converted to an int array?
+     * @param aValue the object to test
+     * @return true, if the object can be converted to an Integer array.
+     */
+    public static boolean isIntegerArray(Object aValue)
+    {
+        try
+        {
+            toIntArray(aValue);
+            return true;
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore
+        }
+        return false;
+    }
 
     /**
      * get an int value from the object
+     * @param aValue
      * @return an int
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -116,7 +447,118 @@ public class NumericalHelper
     }
 
     /**
+     * get a long value from the object
+     * @param aValue
+     * @return a long
+     * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
+     */
+    public static long toLong(Object aValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        long retValue = 0;
+        TypeObject aTypeObject = getTypeObject(aValue);
+        switch (aTypeObject.iType)
+        {
+            case BYTE_TYPE:
+                retValue = getByte(aTypeObject);
+                break;
+            case CHAR_TYPE:
+                retValue = getChar(aTypeObject);
+                break;
+            case SHORT_TYPE:
+                retValue = getShort(aTypeObject);
+                break;
+            case INT_TYPE:
+                retValue = getInt(aTypeObject);
+                break;
+            case LONG_TYPE:
+                retValue = getLong(aTypeObject);
+                break;
+            case FLOAT_TYPE:
+                retValue = (long) getFloat(aTypeObject);
+                break;
+            case DOUBLE_TYPE:
+                retValue = (long) getDouble(aTypeObject);
+                break;
+            case STRING_TYPE:
+                try
+                {
+                    retValue = Long.parseLong((String) aTypeObject.aValue);
+                }
+                catch (java.lang.NumberFormatException e)
+                {
+                    throw new com.sun.star.lang.IllegalArgumentException(
+                            "Cannot convert to short: " + aTypeObject.aValue);
+                }
+                break;
+            case BOOLEAN_TYPE:
+                retValue = getBool(aTypeObject) ? -1 : 0;
+                break;
+            default:
+                throw new com.sun.star.lang.IllegalArgumentException(
+                        "Cannot convert this type: " + aValue.getClass().getName());
+        }
+        return retValue;
+    }
+
+    /**
+     * get a float value from the object
+     * @param aValue
+     * @return a float
+     * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
+     */
+    public static float toFloat(Object aValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        float retValue = (float) 0.0;
+        TypeObject aTypeObject = getTypeObject(aValue);
+        switch (aTypeObject.iType)
+        {
+            case BYTE_TYPE:
+                retValue = getByte(aTypeObject);
+                break;
+            case CHAR_TYPE:
+                retValue = getChar(aTypeObject);
+                break;
+            case SHORT_TYPE:
+                retValue = getShort(aTypeObject);
+                break;
+            case INT_TYPE:
+                retValue = getInt(aTypeObject);
+                break;
+            case LONG_TYPE:
+                retValue = getLong(aTypeObject);
+                break;
+            case FLOAT_TYPE:
+                retValue = getFloat(aTypeObject);
+                break;
+            case DOUBLE_TYPE:
+                retValue = (float) getDouble(aTypeObject);
+                break;
+            case STRING_TYPE:
+                try
+                {
+                    retValue = Float.parseFloat((String) aTypeObject.aValue);
+                }
+                catch (java.lang.NumberFormatException e)
+                {
+                    throw new com.sun.star.lang.IllegalArgumentException(
+                            "Cannot convert to short: " + aTypeObject.aValue);
+                }
+                break;
+            case BOOLEAN_TYPE:
+                retValue = getBool(aTypeObject) ? (float) -1 : (float) 0;
+                break;
+            default:
+                throw new com.sun.star.lang.IllegalArgumentException(
+                        "Cannot convert this type: " + aValue.getClass().getName());
+        }
+        return retValue;
+    }
+
+    /**
      * get a double value from the object
+     * @param aValue
      * @return a double
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -170,7 +612,58 @@ public class NumericalHelper
     }
 
     /**
+     * get a String value from the object
+     * @param aValue
+     * @return a String
+     * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
+     */
+    public static String toString(Object aValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        String retValue = null;
+        TypeObject aTypeObject = getTypeObject(aValue);
+        switch (aTypeObject.iType)
+        {
+            case BYTE_TYPE:
+                retValue = aTypeObject.aValue.toString();
+                break;
+            case CHAR_TYPE:
+                retValue = aTypeObject.aValue.toString();
+                break;
+            case SHORT_TYPE:
+                retValue = aTypeObject.aValue.toString();
+                break;
+            case INT_TYPE:
+                retValue = aTypeObject.aValue.toString();
+                break;
+            case LONG_TYPE:
+                retValue = aTypeObject.aValue.toString();
+                break;
+            case FLOAT_TYPE:
+                retValue = aTypeObject.aValue.toString();
+                break;
+            case DOUBLE_TYPE:
+                retValue = aTypeObject.aValue.toString();
+                break;
+            case STRING_TYPE:
+                retValue = (String) aTypeObject.aValue;
+                break;
+            case BOOLEAN_TYPE:
+                retValue = aTypeObject.aValue.toString();
+                break;
+            case SEQUENCE_TYPE:
+                retValue = new String(toByteArray((aValue)));
+                break;
+            default:
+                throw new com.sun.star.lang.IllegalArgumentException(
+                        "Cannot convert this type: " + aValue.getClass().getName());
+        }
+        return retValue;
+    }
+
+    /**
      * get a boolean value from the object
+     * @param aValue
      * @return a boolean
      * @throws com.sun.star.lang.IllegalArgumentException if the object cannot be converted
      */
@@ -224,6 +717,320 @@ public class NumericalHelper
     }
 
     /**
+     * get an int array from an object
+     * @param anArrayValue a value that is constructed into an array
+     * @return an integer array
+     * @throws com.sun.star.lang.IllegalArgumentException
+     */
+    public static int[] toIntArray(Object anArrayValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        int[] retValue = null;
+        TypeObject aTypeObject = getTypeObject(anArrayValue);
+        if (aTypeObject.iType == SEQUENCE_TYPE)
+        {
+            Object[] obj = convertSequenceToObjectArray(aTypeObject);
+            retValue = new int[obj.length];
+            for (int i = 0; i < obj.length; i++)
+            {
+                retValue[i] = toInt(obj[i]);
+            }
+        }
+        else
+        { // object is not really an array
+            retValue = new int[]
+                    {
+                        toInt(anArrayValue)
+                    };
+        }
+        return retValue;
+    }
+
+    /**
+     * get an byte array from an object
+     * @param anArrayValue a value that is constructed into an array
+     * @return a byte array
+     * @throws com.sun.star.lang.IllegalArgumentException
+     */
+    public static byte[] toByteArray(Object anArrayValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        byte[] retValue = null;
+        TypeObject aTypeObject = getTypeObject(anArrayValue);
+        if (aTypeObject.iType == SEQUENCE_TYPE)
+        {
+            Object[] obj = convertSequenceToObjectArray(aTypeObject);
+            retValue = new byte[obj.length];
+            for (int i = 0; i < obj.length; i++)
+            {
+                retValue[i] = toByte(obj[i]);
+            }
+        }
+        else
+        { // object is not really an array
+            retValue = new byte[]
+                    {
+                        toByte(anArrayValue)
+                    };
+        }
+        return retValue;
+    }
+
+    /**
+     * get a short array from an object
+     * @param anArrayValue a value that is constructed into an array
+     * @return a short array
+     * @throws com.sun.star.lang.IllegalArgumentException
+     */
+    public static short[] toShortArray(Object anArrayValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        short[] retValue = null;
+        TypeObject aTypeObject = getTypeObject(anArrayValue);
+        if (aTypeObject.iType == SEQUENCE_TYPE)
+        {
+            Object[] obj = convertSequenceToObjectArray(aTypeObject);
+            retValue = new short[obj.length];
+            for (int i = 0; i < obj.length; i++)
+            {
+                retValue[i] = toShort(obj[i]);
+            }
+        }
+        else
+        { // object is not really an array
+            retValue = new short[]
+                    {
+                        toShort(anArrayValue)
+                    };
+        }
+        return retValue;
+    }
+
+    /**
+     * get a string array from an object
+     * @param anArrayValue a value that is constructed into an array
+     * @return a short array
+     * @throws com.sun.star.lang.IllegalArgumentException
+     */
+    public static String[] toStringArray(Object anArrayValue)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        String[] retValue = null;
+        TypeObject aTypeObject = getTypeObject(anArrayValue);
+        if (aTypeObject.iType == SEQUENCE_TYPE)
+        {
+            Object[] obj = convertSequenceToObjectArray(aTypeObject);
+            retValue = new String[obj.length];
+            for (int i = 0; i < obj.length; i++)
+            {
+                retValue[i] = toString(obj[i]);
+            }
+        }
+        else
+        { // object is not really an array
+            retValue = new String[]
+                    {
+                        toString(anArrayValue)
+                    };
+        }
+        return retValue;
+    }
+
+    /**
+     * get an int from an object
+     * @param _aValue a value that is constructed into an int
+     * @param _ndefaultValue the value that is returned, if conversion fails, or if 'aValue' is null
+     * @return an int value
+     * @throws java.lang.Exception
+     */
+    public static int toInt(Object _aValue, int _ndefaultValue) throws Exception
+    {
+        int nreturn = _ndefaultValue;
+        try
+        {
+            if ((_aValue != null) && (!(AnyConverter.isVoid(_aValue))))
+            {
+                if (isInteger(_aValue))
+                {
+                    nreturn = toInt(_aValue);
+                }
+                else
+                {
+                    DebugHelper.exception(1/* BasicErrorCode.SbERR_CONVERSION*/, PropertyNames.EMPTY_STRING);
+                }
+            }
+        }
+        catch (com.sun.star.uno.Exception e)
+        {
+            DebugHelper.exception(1 /*BasicErrorCode.SbERR_METHOD_FAILED*/, PropertyNames.EMPTY_STRING);
+        }
+        return nreturn;
+    }
+
+    /**
+     * get a long from an object
+     * @param aValue a value that is constructed into a long
+     * @param defaultValue the value that is returned, if conversion fails
+     * @return a long value
+     */
+    public static long toLong(Object aValue, long defaultValue)
+    {
+        try
+        {
+            return toLong(aValue);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore exception
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get a float from an object
+     * @param aValue a value that is constructed into a float
+     * @param defaultValue the value that is returned, if conversion fails
+     * @return a long value
+     */
+    public static float toFloat(Object aValue, float defaultValue)
+    {
+        try
+        {
+            return toFloat(aValue);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore exception
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get a double from an object
+     * @param aValue a value that is constructed into a double
+     * @param defaultValue the value that is returned, if conversion fails
+     * @return a double value
+     */
+    public static double toDouble(Object aValue, double defaultValue)
+    {
+        try
+        {
+            return toDouble(aValue);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore exception
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get a string from an object
+     * @param aValue a value that is constructed into a string
+     * @param defaultValue the value that is returned, if conversion fails
+     * @return a string value
+     */
+    public static String toString(Object aValue, String defaultValue)
+    {
+        try
+        {
+            return toString(aValue);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore exception
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get a boolean from an object
+     * @param aValue a value that is constructed into a boolean
+     * @param defaultValue the value that is returned, if conversion fails
+     * @return a boolean value
+     */
+    public static boolean toBoolean(Object aValue, boolean defaultValue)
+    {
+        try
+        {
+            return toBoolean(aValue);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore exception
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get a int array from an object
+     * @param anArrayValue  a value that is constructed into an int array
+     * @param defaultValue the value that is returned, if conversion fails
+     * @return an int array
+     */
+    public static int[] toIntArray(Object anArrayValue, int[] defaultValue)
+    {
+        try
+        {
+            return toIntArray(anArrayValue);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore exception
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get a short array from an object
+     * @param anArrayValue a value that is constructed into a short array
+     * @param defaultValue the value that is returned, if conversion fails
+     * @return a short array
+     */
+    public static short[] toShortArray(Object anArrayValue, short[] defaultValue)
+    {
+        try
+        {
+            return toShortArray(anArrayValue);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore exception
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get a string array from an object
+     * @param anArrayValue a value that is constructed into a string array
+     * @param defaultValue the value that is returned, if conversion fails
+     * @return a string array
+     */
+    public static String[] toStringArray(Object anArrayValue, String[] defaultValue)
+    {
+        try
+        {
+            return toStringArray(anArrayValue);
+        }
+        catch (com.sun.star.lang.IllegalArgumentException e)
+        {
+            // ignore exception
+        }
+        return defaultValue;
+    }
+
+    /**
+     * get a hexadecimal representation from a number
+     * @param number the number to transform
+     * @return a String with the hex code of the number
+     */
+    public static String getHexStringFromNumber(long number)
+    {
+        TransformNumToHex num = new TransformNumToHex(number);
+        return num.getResult();
+    }
+
+    /**
      * get the type object from the given object
      * @param aValue an object representing a (numerical) value; can also be an 'any'
      * @return a type object: the object together with the its type information
@@ -246,19 +1053,19 @@ public class NumericalHelper
                 break;
             case TypeClass.BYTE_value:
                 aTypeObject.iType = BYTE_TYPE;
-                aTypeObject.aValue = Byte.valueOf(AnyConverter.toByte(aValue));
+                aTypeObject.aValue = new Byte(AnyConverter.toByte(aValue));
                 break;
             case TypeClass.SHORT_value:
                 aTypeObject.iType = SHORT_TYPE;
-                aTypeObject.aValue = Short.valueOf(AnyConverter.toShort(aValue));
+                aTypeObject.aValue = new Short(AnyConverter.toShort(aValue));
                 break;
             case TypeClass.LONG_value:
                 aTypeObject.iType = INT_TYPE;
-                aTypeObject.aValue = Integer.valueOf(AnyConverter.toInt(aValue));
+                aTypeObject.aValue = new Integer(AnyConverter.toInt(aValue));
                 break;
             case TypeClass.HYPER_value:
                 aTypeObject.iType = LONG_TYPE;
-                aTypeObject.aValue = Long.valueOf(AnyConverter.toLong(aValue));
+                aTypeObject.aValue = new Long(AnyConverter.toLong(aValue));
                 break;
             case TypeClass.FLOAT_value:
                 aTypeObject.iType = FLOAT_TYPE;
@@ -335,7 +1142,7 @@ public class NumericalHelper
      * @return
      * @throws com.sun.star.lang.IllegalArgumentException
      */
-    private static int getInt(TypeObject typeObject)
+    static int getInt(TypeObject typeObject)
             throws com.sun.star.lang.IllegalArgumentException
     {
         if (typeObject.iType != INT_TYPE)
@@ -350,7 +1157,7 @@ public class NumericalHelper
      * get the simple float type
      * @throws com.sun.star.lang.IllegalArgumentException
      */
-    private static float getFloat(TypeObject typeObject)
+    static float getFloat(TypeObject typeObject)
             throws com.sun.star.lang.IllegalArgumentException
     {
         if (typeObject.iType != FLOAT_TYPE)
@@ -444,5 +1251,114 @@ public class NumericalHelper
                 transform(number);
             }
         }
+
+        public String getResult()
+        {
+            return val.toString();
+        }
+    }
+
+    private static Object[] convertSequenceToObjectArray(
+            TypeObject sourceObject)
+            throws com.sun.star.lang.IllegalArgumentException
+    {
+        Object array = sourceObject.aValue;
+        Class<?> c = array.getClass();
+        Object[] aShortVal = null;
+        if (c.equals(byte[].class))
+        {
+            byte[] vals = (byte[]) array;
+            aShortVal = new Object[vals.length];
+            for (int i = 0; i < vals.length; i++)
+            {
+                aShortVal[i] = new Byte(vals[i]);
+            }
+        }
+        else if (c.equals(short[].class))
+        {
+            short[] vals = (short[]) array;
+            aShortVal = new Object[vals.length];
+            for (int i = 0; i < vals.length; i++)
+            {
+                aShortVal[i] = new Short(vals[i]);
+            }
+        }
+        else if (c.equals(int[].class))
+        {
+            int[] vals = (int[]) array;
+            aShortVal = new Object[vals.length];
+            for (int i = 0; i < vals.length; i++)
+            {
+                aShortVal[i] = new Integer(vals[i]);
+            }
+        }
+        else if (c.equals(long[].class))
+        {
+            long[] vals = (long[]) array;
+            aShortVal = new Object[vals.length];
+            for (int i = 0; i < vals.length; i++)
+            {
+                aShortVal[i] = new Long(vals[i]);
+            }
+        }
+        else if (c.equals(float[].class))
+        {
+            float[] vals = (float[]) array;
+            aShortVal = new Object[vals.length];
+            for (int i = 0; i < vals.length; i++)
+            {
+                aShortVal[i] = new Float(vals[i]);
+            }
+        }
+        else if (c.equals(double[].class))
+        {
+            double[] vals = (double[]) array;
+            aShortVal = new Object[vals.length];
+            for (int i = 0; i < vals.length; i++)
+            {
+                aShortVal[i] = new Double(vals[i]);
+            }
+        }
+        else if (c.equals(boolean[].class))
+        {
+            boolean[] vals = (boolean[]) array;
+            aShortVal = new Object[vals.length];
+            for (int i = 0; i < vals.length; i++)
+            {
+                aShortVal[i] = Boolean.valueOf(vals[i]);
+            }
+        }
+        // if nothing did match, try this
+        if (aShortVal == null)
+        {
+            try
+            {
+                aShortVal = (Object[]) array;
+            }
+            catch (java.lang.ClassCastException e)
+            {
+                // unknown type cannot be converted
+                throw new com.sun.star.lang.IllegalArgumentException(
+                        "Cannot convert unknown type: '" + e.getMessage() + "'");
+            }
+        }
+        return aShortVal;
+    }
+
+    public static boolean representsIntegerNumber(double _dblvalue)
+    {
+        double dblsecvalue = ((int) _dblvalue);
+        return Double.compare(_dblvalue, dblsecvalue) == 0;
+    }
+
+    public static double roundDouble(Double _Dblvalue, int _ndecimals)
+    {
+        return roundDouble(_Dblvalue.doubleValue(), _ndecimals);
+    }
+
+    public static double roundDouble(double _dblvalue, int _ndecimals)
+    {
+        double dblfactor = java.lang.Math.pow(10.0, _ndecimals);
+        return ((int) (_dblvalue * dblfactor)) / dblfactor;
     }
 }

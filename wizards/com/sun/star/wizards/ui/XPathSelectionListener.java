@@ -21,5 +21,5 @@ package com.sun.star.wizards.ui;
 public interface XPathSelectionListener
 {
 
-    void validatePath();
+    public void validatePath();
 }

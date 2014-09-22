@@ -61,7 +61,7 @@ public class FormHandler
     private static final String TEXTFIELD = "TextField";
     private static final String TIMEFIELD = "TimeField";
 
-    private XFormsSupplier xFormsSupplier;
+    public XFormsSupplier xFormsSupplier;
     public XMultiServiceFactory xMSFDoc;
     public XMultiServiceFactory xMSF;
     public XDrawPage xDrawPage;
@@ -78,28 +78,28 @@ public class FormHandler
     public final static int SOGRIDCONTROL = 6;
     public final static int SOIMAGECONTROL = 7;
     public final static int SODATETIMECONTROL = 8;
-    private int iImageControlHeight = 2000;
+    int iImageControlHeight = 2000;
     public static String SOSIZETEXT = "The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.";
-    private int iXPixelFactor = -1;
-    private int iYPixelFactor = -1;
-    private int iXNirwanaPos = 50000;
-    private int iYNirwanaPos = 50000;
-    private int nLabelHeight = -1;
-    private int nDBRefHeight = -1;
-    private int BasicLabelDiffHeight = -1;
-    private XNameAccess xNamedForms;
+    int iXPixelFactor = -1;
+    int iYPixelFactor = -1;
+    int iXNirwanaPos = 50000;
+    int iYNirwanaPos = 50000;
+    public int nLabelHeight = -1;
+    public int nDBRefHeight = -1;
+    public int BasicLabelDiffHeight = -1;
+    XNameAccess xNamedForms;
     XControlAccess xControlAccess;
     XShapeGrouper xShapeGrouper;
-    private XNameContainer xNamedFormContainer;
+    XNameContainer xNamedFormContainer;
 
-    class ControlData
+    public class ControlData
     {
 
         int DataType;
-        private int ControlType;
-
+        int ControlType;
+        String ControlService;
         String GridColumnName;
-
+        boolean bIsText;
     }
 
     /** Creates a new instance of FormHandler */
@@ -159,11 +159,25 @@ public class FormHandler
         return -1;
     }
 
+    public void setglobalMultiServiceFactory(XMultiServiceFactory _xMSF)
+    {
+        xMSF = _xMSF;
+    }
 
+    public String getModelServiceName(int _fieldtype)
+    {
+        int icontroltype = getControlType(_fieldtype);
+        if (icontroltype > -1)
+        {
+            return sModelServices[icontroltype];
+        }
+        else
+        {
+            return null;
+        }
+    }
 
-
-
-    private void initializeBasicControlValues()
+    public void initializeBasicControlValues()
     {
         Control oLabelControl = new Control(this, SOLABEL, new Point(), new Size());
         XDevice xDevice = UnoRuntime.queryInterface(XDevice.class, oLabelControl.xWindowPeer);
@@ -178,12 +192,14 @@ public class FormHandler
         xDrawPage.remove(oTextControl.xShape);
     }
 
-    private ControlData createControlData(int _datatype, int _controltype, String _scontrolservicename, String _gridcolumnname, boolean _bIsTextControl)
+    public ControlData createControlData(int _datatype, int _controltype, String _scontrolservicename, String _gridcolumnname, boolean _bIsTextControl)
     {
         ControlData curControlData = new ControlData();
         curControlData.DataType = _datatype;
         curControlData.ControlType = _controltype;
+        curControlData.ControlService = _scontrolservicename;
         curControlData.GridColumnName = _gridcolumnname;
+        curControlData.bIsText = _bIsTextControl;
         return curControlData;
     }
 
@@ -231,14 +247,28 @@ public class FormHandler
         }
     }
 
-    private boolean hasFormByName(String _FormName)
+    public boolean hasFormByName(String _FormName)
     {
         xNamedFormContainer = getDocumentForms();
         xNamedForms = UnoRuntime.queryInterface(XNameAccess.class, xNamedFormContainer);
         return xNamedForms.hasByName(_FormName);
     }
 
-
+    public void removeFormByName(String _FormName)
+    {
+        try
+        {
+            if (hasFormByName(_FormName))
+            {
+                removeControlsofForm(_FormName);
+                xNamedFormContainer.removeByName(_FormName);
+            }
+        }
+        catch (com.sun.star.uno.Exception ex)
+        {
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public void removeControlsofForm(String _FormName)
     {
@@ -275,7 +305,7 @@ public class FormHandler
         }
     }
 
-    private boolean belongsToForm(Object _oDrawPageElement, String _FormName)
+    public boolean belongsToForm(Object _oDrawPageElement, String _FormName)
     {
         XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, _oDrawPageElement);
         if (xServiceInfo.supportsService("com.sun.star.drawing.ControlShape"))
@@ -319,14 +349,17 @@ public class FormHandler
         }
     }
 
-
+    public XNameContainer insertSubFormbyName(String _FormName, XNameContainer _xNamedFormContainer)
+    {
+        return insertFormbyName(_FormName, _xNamedFormContainer);
+    }
 
     public XNameContainer insertFormbyName(String _FormName)
     {
         return insertFormbyName(_FormName, getDocumentForms());
     }
 
-    private XNameContainer getFormByName(String _sname)
+    public XNameContainer getFormByName(String _sname)
     {
         XNameContainer xNamedForm = null;
         try
@@ -344,6 +377,9 @@ public class FormHandler
         return xNamedForm;
     }
 
+    /**
+     * @return
+     */
     public int getXPixelFactor()
     {
         if (iXPixelFactor == -1)
@@ -353,6 +389,9 @@ public class FormHandler
         return iXPixelFactor;
     }
 
+    /**
+     * @return
+     */
     public int getYPixelFactor()
     {
         if (iYPixelFactor == -1)
@@ -362,20 +401,33 @@ public class FormHandler
         return iYPixelFactor;
     }
 
+    /**
+     * @param i
+     */
     public void setXPixelFactor(int i)
     {
         iXPixelFactor = i;
     }
+
+    /**
+     * @param i
+     */
     public void setYPixelFactor(int i)
     {
         iYPixelFactor = i;
     }
 
+    /**
+     * @return
+     */
     public int getImageControlHeight()
     {
         return iImageControlHeight;
     }
 
+    /**
+     * @param i
+     */
     public void setImageControlHeight(int i)
     {
         iImageControlHeight = i;
@@ -396,9 +448,30 @@ public class FormHandler
         }
     }
 
+    public void moveShapesToNirwana()
+    {
+        try
+        {
+            for (int i = 0; i < this.xDrawPage.getCount(); i++)
+            {
+                XShape xShape = UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
+                xShape.setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
+            }
+        }
+        catch (Exception e)
+        {
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
 
-
-
+    public void removeAllShapes() throws Exception
+    {
+        for (int i = this.xDrawPage.getCount(); i > -1; i--)
+        {
+            XShape xShape = UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
+            removeShape(xShape);
+        }
+    }
 
     /**
      * By removing the shape the whole control is disposed too
@@ -410,7 +483,18 @@ public class FormHandler
         XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, _xShape);
         xComponent.dispose();
     }
-
+    // Destroy all Shapes in Nirwana
+    public void removeNirwanaShapes() throws Exception
+    {
+        for (int i = this.xDrawPage.getCount(); i > -1; i--)
+        {
+            XShape xShape = UnoRuntime.queryInterface(XShape.class, xDrawPage.getByIndex(i));
+            if (xShape.getPosition().Y < this.iYNirwanaPos)
+            {
+                xDrawPage.remove(xShape);
+            }
+        }
+    }
 
     public XShape groupShapesTogether(XMultiServiceFactory _xMSF, XShape _xLabelShape, XShape _xControlShape)
     {
@@ -429,6 +513,9 @@ public class FormHandler
         }
     }
 
+    /**
+     * @return
+     */
     public int getBasicLabelDiffHeight()
     {
         if (this.BasicLabelDiffHeight == -1)
@@ -438,6 +525,9 @@ public class FormHandler
         return BasicLabelDiffHeight;
     }
 
+    /**
+     * @return
+     */
     public int getControlReferenceHeight()
     {
         if (this.nDBRefHeight == -1)
@@ -447,6 +537,9 @@ public class FormHandler
         return nDBRefHeight;
     }
 
+    /**
+     * @return
+     */
     public int getLabelHeight()
     {
         if (this.nLabelHeight == -1)

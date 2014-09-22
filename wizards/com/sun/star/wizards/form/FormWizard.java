@@ -47,7 +47,7 @@ public class FormWizard extends DatabaseObjectWizard
     private static String slblSelFields;
     private String sShowBinaryFields = PropertyNames.EMPTY_STRING;
     private String serrFormNameexists = PropertyNames.EMPTY_STRING;
-    private static final int SOMAIN_PAGE = 1;
+    public static final int SOMAIN_PAGE = 1;
     public static final int SOSUBFORM_PAGE = 2;
     public static final int SOSUBFORMFIELDS_PAGE = 3;
     public static final int SOFIELDLINKER_PAGE = 4;
@@ -75,7 +75,7 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    210, Boolean.TRUE, "DialogForm", 102, 41, 1, Short.valueOf((short) 0), m_oResource.getResText(UIConsts.RID_FORM), 310
+                    210, Boolean.TRUE, "DialogForm", 102, 41, 1, new Short((short) 0), m_oResource.getResText(UIConsts.RID_FORM), 310
                 });
         drawNaviBar();
         if (getFormResources())
@@ -90,7 +90,6 @@ public class FormWizard extends DatabaseObjectWizard
     }
 
     // @Override
-    @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         try
@@ -121,7 +120,7 @@ public class FormWizard extends DatabaseObjectWizard
                     {
                         final String sTableName = curSubFormFieldSelection.getSelectedCommandName();
                         String[] aFieldNames = curSubFormFieldSelection.getSelectedFieldNames();
-                        curFormDocument.oSubFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
+                        curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
                     }
                     else
                     {
@@ -165,7 +164,6 @@ public class FormWizard extends DatabaseObjectWizard
     }
 
     // @Override
-    @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
         switch (nOldStep)
@@ -174,7 +172,7 @@ public class FormWizard extends DatabaseObjectWizard
             {
                 final String sTableName = curDBCommandFieldSelection.getSelectedCommandName();
                 final String[] aFieldNames = curDBCommandFieldSelection.getSelectedFieldNames();
-                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
+                curFormDocument.oMainFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
 
                 final String[] aMainFieldNames = curFormDocument.oMainFormDBMetaData.getFieldNames();
                 try
@@ -192,7 +190,7 @@ public class FormWizard extends DatabaseObjectWizard
             {
                 final String sTableName = curSubFormFieldSelection.getSelectedCommandName();
                 final String[] aFieldNames = curSubFormFieldSelection.getSelectedFieldNames();
-                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(sTableName, aFieldNames);
+                curFormDocument.oSubFormDBMetaData.initializeFieldColumns(true, sTableName, aFieldNames);
 
                 final String[] aSubFieldNames = curFormDocument.oSubFormDBMetaData.getFieldNames();
                 try
@@ -220,7 +218,7 @@ public class FormWizard extends DatabaseObjectWizard
         }
     }
 
-    private void buildSteps()
+    public void buildSteps()
     {
         curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields, slblTables, true, 34411);
         curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
@@ -236,7 +234,7 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, Integer.valueOf(SOMAIN_PAGE), 210
+                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, new Integer(SOMAIN_PAGE), 210
                 });
 
         curFormConfiguration = new FormConfiguration(this);
@@ -254,7 +252,7 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, Integer.valueOf(SOSUBFORMFIELDS_PAGE), 210
+                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, new Integer(SOSUBFORMFIELDS_PAGE), 210
                 });
 
         curFormDocument.xProgressBar.setValue(40);
@@ -281,7 +279,6 @@ public class FormWizard extends DatabaseObjectWizard
     }
 
     // @Override
-    @Override
     public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
@@ -314,14 +311,13 @@ public class FormWizard extends DatabaseObjectWizard
     }
 
     // @Override
-    @Override
     public void cancelWizard()
     {
         m_success = false;
         xDialog.endExecute();
     }
 
-    private void insertFormRelatedSteps()
+    public void insertFormRelatedSteps()
     {
         addRoadmap();
         int i = 0;
@@ -385,10 +381,10 @@ public class FormWizard extends DatabaseObjectWizard
         return true;
     }
 
-    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
-        private int ID;
+        protected int ID;
 
         // @Override
         public int getID()

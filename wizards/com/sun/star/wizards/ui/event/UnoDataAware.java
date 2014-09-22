@@ -35,13 +35,13 @@ import com.sun.star.wizards.common.PropertyNames;
 public class UnoDataAware extends DataAware
 {
 
-    private Object unoControl;
-    private Object unoModel;
-    private String unoPropName;
-    private Object[] disableObjects = new Object[0];
-    private boolean inverse = false;
+    protected Object unoControl;
+    protected Object unoModel;
+    protected String unoPropName;
+    protected Object[] disableObjects = new Object[0];
+    protected boolean inverse = false;
 
-    private UnoDataAware(Object dataObject, Value value, Object unoObject_, String unoPropName_)
+    protected UnoDataAware(Object dataObject, Value value, Object unoObject_, String unoPropName_)
     {
         super(dataObject, value);
         unoControl = unoObject_;
@@ -54,7 +54,6 @@ public class UnoDataAware extends DataAware
         inverse = i;
     }
 
-    @Override
     protected void enableControls(Object value)
     {
         Boolean b = getBoolean(value);
@@ -68,7 +67,6 @@ public class UnoDataAware extends DataAware
         }
     }
 
-    @Override
     protected void setToUI(Object value)
     {
         Helper.setUnoPropertyValue(unoModel, unoPropName, value);
@@ -84,7 +82,7 @@ public class UnoDataAware extends DataAware
      * @param value
      * @return
      */
-    private Boolean getBoolean(Object value)
+    protected Boolean getBoolean(Object value)
     {
         if (value == null)
         {
@@ -112,12 +110,73 @@ public class UnoDataAware extends DataAware
         }
     }
 
+    public void disableControls(Object[] controls)
+    {
+        disableObjects = controls;
+    }
 
-
-    @Override
     protected Object getFromUI()
     {
         return Helper.getUnoPropertyValue(unoModel, unoPropName);
+    }
+
+    private static UnoDataAware attachTextControl(Object data, String prop, Object unoText, final Listener listener, String unoProperty, boolean field, Object value)
+    {
+        XTextComponent text = UnoRuntime.queryInterface(XTextComponent.class, unoText);
+        final UnoDataAware uda = new UnoDataAware(data,
+                field
+                ? DataAwareFields.getFieldValueFor(data, prop, value)
+                : new DataAware.PropertyValue(prop, data),
+                text, unoProperty);
+        text.addTextListener(new XTextListener()
+        {
+
+            public void textChanged(TextEvent te)
+            {
+                uda.updateData();
+                if (listener != null)
+                {
+                    listener.eventPerformed(te);
+                }
+            }
+
+            public void disposing(EventObject eo)
+            {
+            }
+        });
+        return uda;
+    }
+
+    public static UnoDataAware attachEditControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
+    {
+        return attachTextControl(data, prop, unoControl, listener, "Text", field, PropertyNames.EMPTY_STRING);
+    }
+
+    public static UnoDataAware attachDateControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
+    {
+        return attachTextControl(data, prop, unoControl, listener, "Date", field, 0);
+    }
+
+    public static UnoDataAware attachTimeControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
+    {
+        return attachTextControl(data, prop, unoControl, listener, "Time", field, 0);
+    }
+
+    public static UnoDataAware attachNumericControl(Object data, String prop, Object unoControl, Listener listener, boolean field)
+    {
+        return attachTextControl(data, prop, unoControl, listener, "Value", field, new Double(0));
+    }
+
+    public static UnoDataAware attachCheckBox(Object data, String prop, Object checkBox, final Listener listener, boolean field)
+    {
+        XCheckBox xcheckBox = UnoRuntime.queryInterface(XCheckBox.class, checkBox);
+        final UnoDataAware uda = new UnoDataAware(data,
+                field
+                ? DataAwareFields.getFieldValueFor(data, prop, new Short((short) 0))
+                : new DataAware.PropertyValue(prop, data),
+                checkBox, PropertyNames.PROPERTY_STATE);
+        xcheckBox.addItemListener(itemListener(uda, listener));
+        return uda;
     }
 
     static XItemListener itemListener(final DataAware da, final Listener listener)
@@ -140,18 +199,37 @@ public class UnoDataAware extends DataAware
         };
     }
 
+    public static UnoDataAware attachLabel(Object data, String prop, Object label, final Listener listener, boolean field)
+    {
+        return new UnoDataAware(data,
+                field ? DataAwareFields.getFieldValueFor(data, prop, PropertyNames.EMPTY_STRING)
+                : new DataAware.PropertyValue(prop, data),
+                label, PropertyNames.PROPERTY_LABEL);
+    }
 
-
-
+    public static UnoDataAware attachListBox(Object data, String prop, Object listBox, final Listener listener, boolean field)
+    {
+        XListBox xListBox = UnoRuntime.queryInterface(XListBox.class, listBox);
+        final UnoDataAware uda = new UnoDataAware(data,
+                field
+                ? DataAwareFields.getFieldValueFor(data, prop, new short[0])
+                : new DataAware.PropertyValue(prop, data),
+                listBox, PropertyNames.SELECTED_ITEMS);
+        xListBox.addItemListener(itemListener(uda, listener));
+        return uda;
+    }
 
     public static Object getModel(Object control)
     {
         return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
 
+    public static void setEnabled(Object control, boolean enabled)
+    {
+        setEnabled(control, enabled ? Boolean.TRUE : Boolean.FALSE);
+    }
 
-
-    private static void setEnabled(Object control, Boolean enabled)
+    public static void setEnabled(Object control, Boolean enabled)
     {
         Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enabled);
     }

@@ -30,13 +30,13 @@ import com.sun.star.wizards.common.Configuration;
 public class CGCategory
 {
 
-
-
+    public String Name;
+    public int Index;
     private final String CGROOTPATH = "/org.openoffice.Office.TableWizard/TableWizard/";
-    private XMultiServiceFactory xMSF;
+    XMultiServiceFactory xMSF;
     XNameAccess xNameAccessTablesNode;
-    private XNameAccess xNameAccessCurBusinessNode;
-    private Object oconfigView;
+    XNameAccess xNameAccessCurBusinessNode;
+    Object oconfigView;
 
     public CGCategory(XMultiServiceFactory _xMSF)
     {

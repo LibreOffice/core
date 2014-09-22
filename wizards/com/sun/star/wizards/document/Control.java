@@ -27,6 +27,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.container.XNamed;
 import com.sun.star.wizards.common.*;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -40,18 +41,18 @@ public class Control extends Shape
 {
 
     XControlModel xControlModel;
-    private XControl xControl;
+    XControl xControl;
     public XPropertySet xPropertySet;
-
+    XPropertySet xControlPropertySet;
     XWindowPeer xWindowPeer;
-
-
-    private String sServiceName;
-
-    private final int SOMAXTEXTSIZE = 50;
+    Object oDefaultValue;
+    GridControl oGridControl;
+    String sServiceName;
+    XNamed xNamed;
+    final int SOMAXTEXTSIZE = 50;
     private int icontroltype;
-    private XNameContainer xFormName;
-    private final int IIMGFIELDWIDTH = 3000;
+    protected XNameContainer xFormName;
+    protected final int IIMGFIELDWIDTH = 3000;
 
     public Control()
     {
@@ -66,23 +67,23 @@ public class Control extends Shape
     {
         super(_oFormHandler, _aPoint, _aSize);
         xFormName = _xFormName;
-        createControl(_icontroltype, null, _FieldName);
+        createControl(_icontroltype, _aPoint, _aSize, null, _FieldName);
     }
 
     public Control(FormHandler _oFormHandler, XShapes _xGroupShapes, XNameContainer _xFormName, int _icontroltype, Point _aPoint, Size _aSize)
     {
         super(_oFormHandler, _aPoint, _aSize);
         xFormName = _xFormName;
-        createControl(_icontroltype, _xGroupShapes, null);
+        createControl(_icontroltype, _aPoint, _aSize, _xGroupShapes, null);
     }
 
     public Control(FormHandler _oFormHandler, int _icontroltype, Point _aPoint, Size _aSize)
     {
         super(_oFormHandler, _aPoint, _aSize);
-        createControl(_icontroltype, null, null);
+        createControl(_icontroltype, _aPoint, _aSize, null, null);
     }
 
-    private void createControl(int _icontroltype, XShapes _xGroupShapes, String _FieldName)
+    public void createControl(int _icontroltype, Point _aPoint, Size _aSize, XShapes _xGroupShapes, String _FieldName)
     {
         try
         {
@@ -94,7 +95,7 @@ public class Control extends Shape
 
             XPropertySetInfo xPSI = xPropertySet.getPropertySetInfo();
             if ( xPSI.hasPropertyByName( "MouseWheelBehavior" ) )
-                xPropertySet.setPropertyValue( "MouseWheelBehavior", Short.valueOf( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
+                xPropertySet.setPropertyValue( "MouseWheelBehavior", new Short( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
 
             insertControlInContainer(_FieldName);
             xControlShape.setControl(xControlModel);
@@ -107,7 +108,7 @@ public class Control extends Shape
                 _xGroupShapes.add(xShape);
             }
             xControl = oFormHandler.xControlAccess.getControl(xControlModel);
-            UnoRuntime.queryInterface( XPropertySet.class, xControl );
+            xControlPropertySet = UnoRuntime.queryInterface( XPropertySet.class, xControl );
             xWindowPeer = xControl.getPeer();
         }
         catch (Exception e)
@@ -116,7 +117,7 @@ public class Control extends Shape
         }
     }
 
-    private void insertControlInContainer(String _fieldname)
+    public void insertControlInContainer(String _fieldname)
     {
         try
         {
@@ -134,7 +135,7 @@ public class Control extends Shape
         }
     }
 
-    private String getControlName(String _fieldname)
+    public String getControlName(String _fieldname)
     {
         String controlname = PropertyNames.EMPTY_STRING;
         switch (getControlType())
@@ -226,7 +227,7 @@ public class Control extends Shape
         }
     }
 
-    private Size getPreferredSize(String sText)
+    public Size getPreferredSize(String sText)
     {
         try
         {
@@ -261,6 +262,8 @@ public class Control extends Shape
 
     /** the peer should be retrieved every time before it is used because it
      * might be disposed otherwise
+     *
+     * @return
      */
     public XLayoutConstrains getPeer()
     {
@@ -342,6 +345,9 @@ public class Control extends Shape
         }
     }
 
+    /**
+     * @return
+     */
     public int getControlType()
     {
         return icontroltype;

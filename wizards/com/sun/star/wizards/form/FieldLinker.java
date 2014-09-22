@@ -48,7 +48,6 @@ public class FieldLinker extends DBLimitedFieldSelection
         super(_CurUnoDialog, iStep, iCompPosX, iCompPosY, iCompWidth, _firsthelpid);
     }
 
-    @Override
     protected void insertControlGroup(int i)
     {
         try
@@ -80,7 +79,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                     },
                     new Object[]
                     {
-                            Boolean.valueOf(bDoEnable), 8, sSlaveListHeader[i], 97, Integer.valueOf(iCurPosY), IStep, Short.valueOf(curtabindex++), 97
+                            Boolean.valueOf(bDoEnable), 8, sSlaveListHeader[i], 97, new Integer(iCurPosY), IStep, new Short(curtabindex++), 97
                     });
             lstSlaveFields[i] = CurUnoDialog.insertListBox("lstSlaveFieldLink" + (i + 1), SOLINKLST[i], null, new ItemListenerImpl(),
                     new String[]
@@ -104,9 +103,9 @@ public class FieldLinker extends DBLimitedFieldSelection
                             sSlaveHidString,
                         Short.valueOf(UnoDialog.getListBoxLineCount()),
                         97,
-                        Integer.valueOf(iCurPosY + 10),
+                        new Integer(iCurPosY + 10),
                         IStep,
-                        Short.valueOf(curtabindex++),
+                        new Short(curtabindex++),
                         97
                     });
 
@@ -117,7 +116,7 @@ public class FieldLinker extends DBLimitedFieldSelection
                     },
                     new Object[]
                     {
-                            Boolean.valueOf(bDoEnable), 8, sMasterListHeader[i], 206, Integer.valueOf(iCurPosY), IStep, Short.valueOf(curtabindex++), 97
+                            Boolean.valueOf(bDoEnable), 8, sMasterListHeader[i], 206, new Integer(iCurPosY), IStep, new Short(curtabindex++), 97
                     });
 
             lstMasterFields[i] = CurUnoDialog.insertListBox("lstMasterFieldLink" + Integer.toString(i + 1), SOLINKLST[i], null, new ItemListenerImpl(),
@@ -142,9 +141,9 @@ public class FieldLinker extends DBLimitedFieldSelection
                             sMasterHidString,
                         Short.valueOf(UnoDialog.getListBoxLineCount()),
                         206,
-                        Integer.valueOf(iCurPosY + 10),
+                        new Integer(iCurPosY + 10),
                         IStep,
-                        Short.valueOf(curtabindex++),
+                        new Short(curtabindex++),
                         97
                     });
             iCurPosY = iCurPosY + 38;
@@ -155,7 +154,6 @@ public class FieldLinker extends DBLimitedFieldSelection
         }
     }
 
-    @Override
     protected void enableNextControlRow(int curindex)
     {
         boolean bSlaveField = lstSlaveFields[curindex].getSelectedItemPos() > 0;
@@ -171,7 +169,6 @@ public class FieldLinker extends DBLimitedFieldSelection
         }
     }
 
-    @Override
     protected int getMaxSelIndex()
     {
         int MaxSelIndex = -1;
@@ -185,7 +182,6 @@ public class FieldLinker extends DBLimitedFieldSelection
         return MaxSelIndex;
     }
 
-    @Override
     protected void toggleControlRow(int i, boolean bDoEnable)
     {
         if (i < rowcount)
@@ -202,7 +198,6 @@ public class FieldLinker extends DBLimitedFieldSelection
         }
     }
 
-    @Override
     protected void updateFromNextControlRow(int curindex)
     {
         short iNextMasterItemPos = lstMasterFields[curindex + 1].getSelectedItemPos();
@@ -282,7 +277,7 @@ public class FieldLinker extends DBLimitedFieldSelection
         CurUnoDialog.setStepEnabled(IStep.intValue(), _bdoenable);
     }
 
-    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(ItemEvent EventObject)

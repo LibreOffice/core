@@ -28,7 +28,7 @@ public class QueryMetaData extends CommandMetaData
 {
 
     private SQLQueryComposer oSQLQueryComposer = null;
-
+    FieldColumn CurFieldColumn;
     public String Command;
     // Vector CommandNamesV;
     private PropertyValue[][] m_aFilterConditions; /* = new PropertyValue[][] {}; */
@@ -36,15 +36,16 @@ public class QueryMetaData extends CommandMetaData
     public PropertyValue[][] GroupByFilterConditions = new PropertyValue[][]
     {
     };
-    private String[] UniqueAggregateFieldNames = new String[]
+    public String[] UniqueAggregateFieldNames = new String[]
     {
     };
     public int Type = QueryType.SODETAILQUERY;
 
-    public interface QueryType
+    public static interface QueryType
     {
-        int SOSUMMARYQUERY = 0;
-        int SODETAILQUERY = 1;
+
+        final static int SOSUMMARYQUERY = 0;
+        final static int SODETAILQUERY = 1;
     }
 
     public QueryMetaData(XMultiServiceFactory xMSF, Locale CharLocale, NumberFormatter oNumberFormatter)
@@ -133,7 +134,24 @@ public class QueryMetaData extends CommandMetaData
         oRemainingFieldColumns.toArray(FieldColumns);
     }
 
-
+    public void removeFieldColumn(String _sFieldName, String _sCommandName)
+    {
+        FieldColumn oFieldColumn = getFieldColumn(_sFieldName, _sCommandName);
+        int a = 0;
+        if (oFieldColumn != null)
+        {
+            FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length - 1];
+            for (int i = 0; i < FieldColumns.length; i++)
+            {
+                if (!FieldColumns[i].getFieldName().equals(_sFieldName) && !FieldColumns[i].getCommandName().equals(_sCommandName))
+                {
+                    LocFieldColumns[a] = FieldColumns[i];
+                    a++;
+                }
+            }
+            FieldColumns = LocFieldColumns;
+        }
+    }
 
     public String[] getIncludedCommandNames()
     {
@@ -176,9 +194,13 @@ public class QueryMetaData extends CommandMetaData
         return sIncludedCommandNames;
     }
 
+    public String[] getFieldNamesOfCommand(String _sCommandName)
+    {
+        CommandObject oTable = getTableByName(_sCommandName);
+        return oTable.getColumns().getElementNames();
+    }
 
-
-    public void initializeFieldTitleSet()
+    public void initializeFieldTitleSet(boolean _bAppendMode)
     {
         try
         {

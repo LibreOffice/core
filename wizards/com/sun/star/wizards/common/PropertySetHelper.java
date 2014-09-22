@@ -17,15 +17,19 @@
  */
 package com.sun.star.wizards.common;
 
+import com.sun.star.beans.Property;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.lang.XServiceInfo;
+
 import java.util.HashMap;
 
 public class PropertySetHelper
 {
 
-    private XPropertySet m_xPropertySet;
+    protected XPropertySet m_xPropertySet;
     private HashMap<String, Object> m_aHashMap;
 
     public PropertySetHelper(Object _aObj)
@@ -67,8 +71,9 @@ public class PropertySetHelper
     set a property,
     @param _sName name of the property to set
     @param _aValue property value as object
+     * @throws java.lang.Exception
      */
-    private void setPropertyValue(String _sName, Object _aValue) throws java.lang.Exception
+    public void setPropertyValue(String _sName, Object _aValue) throws java.lang.Exception
     {
         if (m_xPropertySet != null)
         {
@@ -139,7 +144,45 @@ public class PropertySetHelper
         return nValue;
     }
 
+    /**
+    get a property and convert it to a short value
+    @param _sName the string name of the property
+    @param _nDefault if an error occur, return this value
+    @return the int value of the property
+     */
+    public short getPropertyValueAsShort(String _sName, short _nDefault)
+    {
+        Object aObject = null;
+        short nValue = _nDefault;
 
+        if (m_xPropertySet != null)
+        {
+            try
+            {
+                aObject = m_xPropertySet.getPropertyValue(_sName);
+            }
+            catch (com.sun.star.beans.UnknownPropertyException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
+        }
+        if (aObject != null)
+        {
+            try
+            {
+                nValue = NumericalHelper.toShort(aObject);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                DebugHelper.writeInfo("can't convert a object to short.");
+            }
+        }
+        return nValue;
+    }
 
     /**
     get a property and convert it to a double value
@@ -188,7 +231,46 @@ public class PropertySetHelper
         return nValue;
     }
 
+    /**
+    get a property and convert it to a boolean value
+    @param _sName the string name of the property
+    @param _bDefault if an error occur, return this value
+    @return the boolean value of the property
+     */
+    public boolean getPropertyValueAsBoolean(String _sName, boolean _bDefault)
+    {
+        Object aObject = null;
+        boolean bValue = _bDefault;
 
+        if (m_xPropertySet != null)
+        {
+            try
+            {
+                aObject = m_xPropertySet.getPropertyValue(_sName);
+            }
+            catch (com.sun.star.beans.UnknownPropertyException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+                DebugHelper.writeInfo("UnknownPropertyException caught: Name:=" + _sName);
+            }
+            catch (com.sun.star.lang.WrappedTargetException e)
+            {
+                DebugHelper.writeInfo(e.getMessage());
+            }
+        }
+        if (aObject != null)
+        {
+            try
+            {
+                bValue = NumericalHelper.toBoolean(aObject);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                DebugHelper.writeInfo("can't convert a object to boolean.");
+            }
+        }
+        return bValue;
+    }
 
     /**
     get a property and convert it to a string value
@@ -255,5 +337,43 @@ public class PropertySetHelper
             }
         }
         return aObject;
+    }
+
+    /**
+     * Debug helper, to show all properties which are available in the given object.
+     * @param _xObj the object of which the properties should shown
+     */
+    public static void showProperties(Object _xObj)
+    {
+        PropertySetHelper aHelper = new PropertySetHelper(_xObj);
+        aHelper.showProperties();
+    }
+
+    /**
+    Debug helper, to show all properties which are available in the current object.
+     */
+    public void showProperties()
+    {
+        String sName = PropertyNames.EMPTY_STRING;
+
+        if (m_xPropertySet != null)
+        {
+            XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, m_xPropertySet);
+            if (xServiceInfo != null)
+            {
+                sName = xServiceInfo.getImplementationName();
+            }
+            XPropertySetInfo xInfo = m_xPropertySet.getPropertySetInfo();
+            Property[] aAllProperties = xInfo.getProperties();
+            DebugHelper.writeInfo("Show all properties of Implementation of :'" + sName + "'");
+            for (int i = 0; i < aAllProperties.length; i++)
+            {
+                DebugHelper.writeInfo(" - " + aAllProperties[i].Name);
+            }
+        }
+        else
+        {
+            DebugHelper.writeInfo("The given object don't support XPropertySet interface.");
+        }
     }
 }

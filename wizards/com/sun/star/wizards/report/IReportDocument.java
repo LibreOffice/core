@@ -33,7 +33,7 @@ public interface IReportDocument
 
     // initialisation
 
-    void initialize(
+    public void initialize(
             final XDatabaseDocumentUI i_documentUI,
             final Resource i_resource
         );
@@ -43,57 +43,65 @@ public interface IReportDocument
 
     /**
      * Gives access to the DB Values
+     * @return
      */
-    com.sun.star.wizards.db.RecordParser getRecordParser();
+    public com.sun.star.wizards.db.RecordParser getRecordParser();
 
     /**
      * Give access to the parent document
      * It is a document in the old Wizard
      * It is a Report Builder in the new Wizard
+     * @return
      */
-    com.sun.star.awt.XWindowPeer getWizardParent();
+    public com.sun.star.awt.XWindowPeer getWizardParent();
 
     /**
      *
      * @return the Frame of the document Window or Report Builder Window
      */
-    com.sun.star.frame.XFrame getFrame();
+    public com.sun.star.frame.XFrame getFrame();
 
-    XComponent getComponent();
+    public XComponent getComponent();
 
 
     // First step: After entering the table name, select fields
 
     /**
      * Is called after first step, set Tablename and the fields, which should occur in the Report.
+     * @param _aType
+     * @param TableName
+     * @param FieldNames
      */
-    void initializeFieldColumns(final int _aType, final String TableName, final String[] FieldNames);
+    public void initializeFieldColumns(final int _aType, final String TableName, final String[] FieldNames);
 
     /**
      * Empties the report document
      */
-    void clearDocument();
+    public void clearDocument();
 
     /**
      * Empties the report document, if we called back, don't remove Grouping/Sorting
      */
-    void removeTextTableAndTextSection();
+    public void removeTextTableAndTextSection();
 
 
     // Second step: Label field titles
 
     /**
      * Set new names for the titles
+     * @param sFieldTitles
      */
-    void setFieldTitles(final String[] sFieldTitles);
+    public void setFieldTitles(final String[] sFieldTitles);
 
     /**
      * Change a the name of the 'title' of one field.
      * It is possible to give all element names new names which are used as
      * element title of a given element name.
      * This is only used as a preview
+     * @param FieldName
+     * @param TitleName
      */
-    void liveupdate_changeUserFieldContent(final String FieldName, final String TitleName);
+    public void liveupdate_changeUserFieldContent(final String FieldName, final String TitleName);
 
     // Third step: Grouping
 
@@ -101,53 +109,66 @@ public interface IReportDocument
     // Document should not hold the grouping information!
     /**
      * Called by press ('greater then') add a group to the group list
+     * @param GroupNames
+     * @param CurGroupTitle
+     * @param GroupFieldVector
+     * @param ReportPath
+     * @param iSelCount
+     * @return
      */
-    boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount);
+    public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount);
 
-    void refreshGroupFields(String[] _sNewNames);
+    public void refreshGroupFields(String[] _sNewNames);
     /**
      * Called by press ('less then') Removes an already set Groupname out of the list
+     * @param NewSelGroupNames
+     * @param CurGroupTitle
+     * @param GroupFieldVector
      */
-    void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, java.util.ArrayList<String> GroupFieldVector);
+    public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, java.util.ArrayList<String> GroupFieldVector);
 
     /**
      * set the list how to group
+     * @param aGroupList
      */
-    void setGrouping(String[] aGroupList);
+    public void setGrouping(String[] aGroupList);
 
     // Fourth step: Sorting
 
     /**
      * Set the list how to sort
+     * @param aSort
      */
-    void setSorting(String[][] aSort);
+    public void setSorting(String[][] aSort);
 
     // Fivth step: Templates / Layout
 
     /* Template Page */
-    void setPageOrientation(int nOrientation) throws com.sun.star.lang.IllegalArgumentException;
+    public void setPageOrientation(int nOrientation) throws com.sun.star.lang.IllegalArgumentException;
 
-    int getDefaultPageOrientation();
+    public int getDefaultPageOrientation();
 
-    ArrayList<String> getReportPath();
+    public ArrayList<String> getReportPath();
 
-    String getLayoutPath();
+    public String getLayoutPath();
 
-    String getContentPath();
+    public String getContentPath();
 
     /**
      * Called if a new Layout is selected
+     * @param LayoutTemplatePath
      */
-    void liveupdate_changeLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/);
+    public void liveupdate_changeLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/);
 
     /**
      * Called if a new Template is selected
+     * @param ContentTemplatePath
      */
-    void liveupdate_changeContentTemplate(String ContentTemplatePath);
+    public void liveupdate_changeContentTemplate(String ContentTemplatePath);
 
-    void layout_selectFirstPage();
+    public void layout_selectFirstPage();
 
-    void layout_setupRecordSection(String TemplateName);
+    public void layout_setupRecordSection(String TemplateName);
 
     // finishing
 
@@ -156,64 +177,73 @@ public interface IReportDocument
     /**
      * Set the Title into the document from the 'Create Report Page'
      * BUG: The Title is empty after create Report.
+     * @param _sTitleName
      */
-    void liveupdate_updateReportTitle(String _sTitleName);
+    public void liveupdate_updateReportTitle(String _sTitleName);
 
     /**
      * Store the document by the given name
+     * @param Name
+     * @param OpenMode
      */
-    void store(String Name, int OpenMode) throws com.sun.star.uno.Exception;
+    public void store(String Name, int OpenMode) throws com.sun.star.uno.Exception;
 
     /**
      * The current report is added to the DB View under the given name
      *
      * TODO: add Name to this functionality
      */
-    void addReportToDBView();
+    public void addReportToDBView();
 
-    void importReportData(ReportWizard aWizard);
+    public void importReportData(ReportWizard aWizard);
 
     /**
      * Create the final Report document
+     * @param Name
+     * @param _bAsTemplate
+     * @param _bOpenInDesign
      */
-    void createAndOpenReportDocument(
+    public void createAndOpenReportDocument(
         final String Name,
         final boolean _bAsTemplate,
         final boolean _bOpenInDesign
     );
 
-    void dispose();
+    public void dispose();
 
     // Garbage dump
 
     /* DataImport */
     // ???
     // ???
-    boolean reconnectToDatabase(XMultiServiceFactory xMSF, PropertyValue[] Properties);
+    public boolean reconnectToDatabase(XMultiServiceFactory xMSF, PropertyValue[] Properties);
     // ???
-    void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF);
+    public void insertDatabaseDatatoReportDocument(XMultiServiceFactory xMSF);
     // ???
     /**
      * set a internal variable to stop a maybe longer DB access.
      */
-    void StopProcess(); // cancel
+    public void StopProcess(); // cancel
 
     /**
      * Returns a string list of layouts.
+     * @return
      */
-    String[][] getDataLayout();
+    public String[][] getDataLayout();
 
     /**
      * Returns a string list of header layouts
+     * @return
      */
-    String[][] getHeaderLayout();
+    public String[][] getHeaderLayout();
 
-    void setCommandType(int CommandType);
+    public void setCommandType(int CommandType);
 
-    void setCommand(String Command);
+    public void setCommand(String Command);
 
     /**
      * check internal invariants
+     * @throws java.lang.Exception
      */
-    void checkInvariants() throws java.lang.Exception;
+    public void checkInvariants() throws java.lang.Exception;
 }

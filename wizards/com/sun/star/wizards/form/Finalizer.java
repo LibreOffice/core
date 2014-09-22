@@ -31,12 +31,12 @@ import com.sun.star.wizards.ui.*;
 public class Finalizer
 {
 
-    private WizardDialog CurUnoDialog;
-    private short curtabindex;
-    private XRadioButton optModifyForm;
-
-    private XTextComponent txtFormName;
-    private FormDocument oFormDocument;
+    WizardDialog CurUnoDialog;
+    short curtabindex;
+    XRadioButton optModifyForm;
+    XRadioButton optWorkWithForm;
+    XTextComponent txtFormName;
+    FormDocument oFormDocument;
 
     public Finalizer(WizardDialog _CurUnoDialog)
     {
@@ -54,7 +54,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], slblFormName, 97, 25, UIConsts.INTEGERS[8], Short.valueOf(curtabindex++), 111
+                    UIConsts.INTEGERS[8], slblFormName, 97, 25, UIConsts.INTEGERS[8], new Short(curtabindex++), 111
                 });
         txtFormName = CurUnoDialog.insertTextField("txtFormName", "toggleFinishButton", this,
                 new String[]
@@ -63,7 +63,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGFORM_TXTPATH", 97, 35, UIConsts.INTEGERS[8], Short.valueOf((short) 82), PropertyNames.EMPTY_STRING, 185
+                    UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGFORM_TXTPATH", 97, 35, UIConsts.INTEGERS[8], new Short((short) 82), PropertyNames.EMPTY_STRING, 185
                 });
         CurUnoDialog.insertLabel("lblProceed",
                 new String[]
@@ -72,7 +72,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], slblProceed, 97, 62, UIConsts.INTEGERS[8], Short.valueOf(curtabindex++), 185
+                    UIConsts.INTEGERS[8], slblProceed, 97, 62, UIConsts.INTEGERS[8], new Short(curtabindex++), 185
                 });
         CurUnoDialog.insertRadioButton("optWorkWithForm", null,
                 new String[]
@@ -81,7 +81,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTWORKWITHFORM", sWorkWithForm, 101, 77, Short.valueOf((short) 1), UIConsts.INTEGERS[8], Short.valueOf(curtabindex++), 107
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTWORKWITHFORM", sWorkWithForm, 101, 77, new Short((short) 1), UIConsts.INTEGERS[8], new Short(curtabindex++), 107
                 });
         optModifyForm = CurUnoDialog.insertRadioButton("optModifyForm", null,
                 new String[]
@@ -90,7 +90,7 @@ public class Finalizer
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTMODIFYFORM", sModifyForm, 101, 89, UIConsts.INTEGERS[8], Short.valueOf(curtabindex++), 107
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTMODIFYFORM", sModifyForm, 101, 89, UIConsts.INTEGERS[8], new Short(curtabindex++), 107
                 });
     }
 
@@ -106,7 +106,10 @@ public class Finalizer
         }
     }
 
-
+    public void toggleFinishButton()
+    {
+        CurUnoDialog.enableFinishButton(txtFormName.getText().length() > 0);
+    }
 
     public String getName()
     {

@@ -33,9 +33,9 @@ public class PeerConfig implements XWindowListener
 {
 
     private ArrayList<PeerTask> m_aPeerTasks = new ArrayList<PeerTask>();
-    private ArrayList<ControlTask> aControlTasks = new ArrayList<ControlTask>();
-    private ArrayList<ImageUrlTask> aImageUrlTasks = new ArrayList<ImageUrlTask>();
-    private UnoDialog oUnoDialog = null;
+    ArrayList<ControlTask> aControlTasks = new ArrayList<ControlTask>();
+    ArrayList<ImageUrlTask> aImageUrlTasks = new ArrayList<ImageUrlTask>();
+    UnoDialog oUnoDialog = null;
 
     public PeerConfig(UnoDialog _oUnoDialog)
     {
@@ -43,14 +43,14 @@ public class PeerConfig implements XWindowListener
         oUnoDialog.xWindow.addWindowListener(this);
     }
 
-    private class PeerTask
+    class PeerTask
     {
 
-        private XControl xControl;
-        private String[] propnames;
-        private Object[] propvalues;
+        XControl xControl;
+        String[] propnames;
+        Object[] propvalues;
 
-        private PeerTask(XControl _xControl, String[] propNames_, Object[] propValues_)
+        public PeerTask(XControl _xControl, String[] propNames_, Object[] propValues_)
         {
             propnames = propNames_;
             propvalues = propValues_;
@@ -58,14 +58,14 @@ public class PeerConfig implements XWindowListener
         }
     }
 
-    private class ControlTask
+    class ControlTask
     {
 
-        private Object oModel;
-        private String propname;
-        private Object propvalue;
+        Object oModel;
+        String propname;
+        Object propvalue;
 
-        private ControlTask(Object _oModel, String _propName, Object _propValue)
+        public ControlTask(Object _oModel, String _propName, Object _propValue)
         {
             propname = _propName;
             propvalue = _propValue;
@@ -73,14 +73,14 @@ public class PeerConfig implements XWindowListener
         }
     }
 
-    private class ImageUrlTask
+    class ImageUrlTask
     {
 
-        private Object oModel;
-        private Object oResource;
-        private Object oHCResource;
+        Object oModel;
+        Object oResource;
+        Object oHCResource;
 
-        private ImageUrlTask(Object _oModel, Object _oResource, Object _oHCResource)
+        public ImageUrlTask(Object _oModel, Object _oResource, Object _oHCResource)
         {
             oResource = _oResource;
             oHCResource = _oHCResource;
@@ -150,6 +150,7 @@ public class PeerConfig implements XWindowListener
 
     /**
      * @param oAPIControl an API control that the interface XControl can be derived from
+     * @param _saccessname
      */
     public void setAccessibleName(Object oAPIControl, String _saccessname)
     {
@@ -163,9 +164,27 @@ public class PeerConfig implements XWindowListener
                 });
     }
 
+    public void setAccessibleName(XControl _xControl, String _saccessname)
+    {
+        setPeerProperties(_xControl, new String[]
+                {
+                    "AccessibleName"
+                }, new String[]
+                {
+                    _saccessname
+                });
+    }
 
-
-
+    /**
+     * @param oAPIControl an API control that the interface XControl can be derived from
+     * @param _propnames
+     * @param _propvalues
+     */
+    public void setPeerProperties(Object oAPIControl, String[] _propnames, Object[] _propvalues)
+    {
+        XControl xControl = UnoRuntime.queryInterface(XControl.class, oAPIControl);
+        setPeerProperties(xControl, _propnames, _propvalues);
+    }
 
     public void setPeerProperties(XControl _xControl, String[] propnames, Object[] propvalues)
     {
@@ -173,22 +192,39 @@ public class PeerConfig implements XWindowListener
         this.m_aPeerTasks.add(oPeerTask);
     }
 
-
+    /**
+     * assigns an arbitrary property to a control as soon as the peer is created
+     * Note: The property 'ImageUrl' should better be assigned with 'setImageurl(...)', to consider the High Contrast Mode
+     * @param _ocontrolmodel
+     * @param _spropname
+     * @param _propvalue
+     */
+    public void setControlProperty(Object _ocontrolmodel, String _spropname, Object _propvalue)
+    {
+        ControlTask oControlTask = new ControlTask(_ocontrolmodel, _spropname, _propvalue);
+        this.aControlTasks.add(oControlTask);
+    }
 
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
      * within the wizards project
      * wizards project
+     * @param _ocontrolmodel
+     * @param _nResId
+     * @param _nhcResId
      */
     public void setImageUrl(Object _ocontrolmodel, int _nResId, int _nhcResId)
     {
-        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, Integer.valueOf(_nResId), Integer.valueOf(_nhcResId));
+        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, new Integer(_nResId), new Integer(_nhcResId));
         this.aImageUrlTasks.add(oImageUrlTask);
     }
 
     /**
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image ids that the Resource urls point to
      * may be assigned in a Resource file outside the wizards project
+     * @param _ocontrolmodel
+     * @param _sResourceUrl
+     * @param _sHCResourceUrl
      */
     public void setImageUrl(Object _ocontrolmodel, String _sResourceUrl, String _sHCResourceUrl)
     {
@@ -200,6 +236,9 @@ public class PeerConfig implements XWindowListener
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image id must be assigned in a resource file
      * within the wizards project
      * wizards project
+     * @param _ocontrolmodel
+     * @param _oResource
+     * @param _oHCResource
      */
     public void setImageUrl(Object _ocontrolmodel, Object _oResource, Object _oHCResource)
     {

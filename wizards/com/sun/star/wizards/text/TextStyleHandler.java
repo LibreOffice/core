@@ -34,7 +34,7 @@ public class TextStyleHandler
     public XStyleFamiliesSupplier xStyleFamiliesSupplier;
 
     /** Creates a new instance of TextStyleHandler */
-    public TextStyleHandler(XTextDocument xTextDocument)
+    public TextStyleHandler(com.sun.star.lang.XMultiServiceFactory xMSF, XTextDocument xTextDocument)
     {
         xStyleFamiliesSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class, xTextDocument);
     }

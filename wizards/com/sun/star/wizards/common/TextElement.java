@@ -39,7 +39,6 @@ public class TextElement extends ParaStyled
         text = text_;
     }
 
-    @Override
     public void write(Object textRange)
     {
         UnoRuntime.queryInterface(XTextRange.class, textRange).setString(text);

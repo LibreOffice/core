@@ -37,6 +37,11 @@ public class DataAwareFields
     /**
      * returns a Value Object which sets and gets values
      * and converting them to other types, according to the "value" argument.
+     *
+     * @param owner
+     * @param fieldname
+     * @param value
+     * @return
      */
     public static DataAware.Value getFieldValueFor(Object owner, String fieldname, Object value)
     {
@@ -306,7 +311,7 @@ public class DataAwareFields
                     }
                     else
                     {
-                        return Integer.valueOf(s);
+                        return new Integer(s);
                     }
                 }
                 else if (convertTo.equals(Double.class))
@@ -368,7 +373,7 @@ public class DataAwareFields
                     }
                     if (field.getType().equals(Short.class))
                     {
-                        return Short.valueOf((short) 0);
+                        return new Short((short) 0);
                     }
                     if (field.getType().equals(Integer.class))
                     {
@@ -473,11 +478,11 @@ public class DataAwareFields
     {
         if (c.equals(Integer.class))
         {
-            return Integer.valueOf((int) i);
+            return new Integer((int) i);
         }
         else if (c.equals(Short.class))
         {
-            return Short.valueOf((short) i);
+            return new Short((short) i);
         }
         else if (c.equals(Double.class))
         {

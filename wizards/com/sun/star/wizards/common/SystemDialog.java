@@ -34,23 +34,25 @@ import com.sun.star.beans.PropertyValue;
 public class SystemDialog
 {
 
-    private Object systemDialog;
-    private XFilePicker xFilePicker;
-    private XFolderPicker2 xFolderPicker;
-    private XFilterManager xFilterManager;
-    private XInitialization xInitialize;
-    private XExecutableDialog xExecutable;
-
-    private XFilePickerControlAccess xFilePickerControlAccess;
-    private XMultiServiceFactory xMSF;
-    private XStringSubstitution xStringSubstitution;
+    Object systemDialog;
+    XFilePicker xFilePicker;
+    XFolderPicker2 xFolderPicker;
+    XFilterManager xFilterManager;
+    XInitialization xInitialize;
+    XExecutableDialog xExecutable;
+    XComponent xComponent;
+    XFilePickerControlAccess xFilePickerControlAccess;
+    XMultiServiceFactory xMSF;
+    public XStringSubstitution xStringSubstitution;
     public String sStorePath;
 
     /**
      *
+     * @param xMSF
+     * @param ServiceName
      * @param type  according to com.sun.star.ui.dialogs.TemplateDescription
      */
-    private SystemDialog(XMultiServiceFactory xMSF, String ServiceName, short type)
+    public SystemDialog(XMultiServiceFactory xMSF, String ServiceName, short type)
     {
         try
         {
@@ -61,12 +63,12 @@ public class SystemDialog
             xFilterManager = UnoRuntime.queryInterface(XFilterManager.class, systemDialog);
             xInitialize = UnoRuntime.queryInterface(XInitialization.class, systemDialog);
             xExecutable = UnoRuntime.queryInterface(XExecutableDialog.class, systemDialog);
-            UnoRuntime.queryInterface(XComponent.class, systemDialog);
+            xComponent = UnoRuntime.queryInterface(XComponent.class, systemDialog);
             xFilePickerControlAccess = UnoRuntime.queryInterface(XFilePickerControlAccess.class, systemDialog);
             xStringSubstitution = createStringSubstitution(xMSF);
             Short[] listAny = new Short[]
             {
-                Short.valueOf(type)
+                new Short(type)
             };
             if (xInitialize != null)
             {
@@ -84,11 +86,20 @@ public class SystemDialog
         return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", TemplateDescription.FILESAVE_AUTOEXTENSION);
     }
 
+    public static SystemDialog createOpenDialog(XMultiServiceFactory xmsf)
+    {
+        return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FilePicker", TemplateDescription.FILEOPEN_SIMPLE);
+    }
 
+    public static SystemDialog createFolderDialog(XMultiServiceFactory xmsf)
+    {
+        return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.FolderPicker", (short) 0);
+    }
 
-
-
-
+    public static SystemDialog createOfficeFolderDialog(XMultiServiceFactory xmsf)
+    {
+        return new SystemDialog(xmsf, "com.sun.star.ui.dialogs.OfficeFolderPicker", (short) 0);
+    }
 
     private String subst(String path)
     {
@@ -107,6 +118,11 @@ public class SystemDialog
      * ATTENTION a BUG : The extension calculated
      * here gives the last 3 chars of the filename - what
      * if the extension is of 4 or more chars?
+     *
+     * @param DisplayDirectory
+     * @param DefaultName
+     * @param sDocuType
+     * @return
      */
     public String callStoreDialog(String DisplayDirectory, String DefaultName, String sDocuType)
     {
@@ -117,9 +133,12 @@ public class SystemDialog
 
     /**
      *
+     * @param displayDir
+     * @param defaultName
      * given url to a local path.
+     * @return
      */
-    private String callStoreDialog(String displayDir, String defaultName)
+    public String callStoreDialog(String displayDir, String defaultName)
     {
         sStorePath = null;
         try
@@ -140,17 +159,55 @@ public class SystemDialog
         return sStorePath;
     }
 
-
+    public String callFolderDialog(String title, String description, String displayDir)
+    {
+        try
+        {
+            xFolderPicker.setDisplayDirectory(subst(displayDir));
+        }
+        catch (com.sun.star.lang.IllegalArgumentException iae)
+        {
+            iae.printStackTrace();
+            throw new IllegalArgumentException(iae.getMessage());
+        }
+        xFolderPicker.setTitle(title);
+        xFolderPicker.setDescription(description);
+        if (execute(xFolderPicker))
+        {
+            return xFolderPicker.getDirectory();
+        }
+        else
+        {
+            return null;
+        }
+    }
 
     private boolean execute(XExecutableDialog execDialog)
     {
         return execDialog.execute() == 1;
     }
 
+    public String[] callOpenDialog(boolean multiSelect, String displayDirectory)
+    {
 
+        try
+        {
+            xFilePicker.setMultiSelectionMode(multiSelect);
+            xFilePicker.setDisplayDirectory(subst(displayDirectory));
+            if (execute(xExecutable))
+            {
+                return xFilePicker.getFiles();
+            }
+        }
+        catch (com.sun.star.lang.IllegalArgumentException exception)
+        {
+            exception.printStackTrace();
+        }
+        return null;
+    }
 
     //("writer_StarOffice_XML_Writer_Template")    'StarOffice XML (Writer)
-    private void addFilterToDialog(String sExtension, String filterName, boolean setToDefault)
+    public void addFilterToDialog(String sExtension, String filterName, boolean setToDefault)
     {
         try
         {
@@ -167,7 +224,7 @@ public class SystemDialog
         }
     }
 
-    private void addFilter(String uiName, String pattern, boolean setToDefault)
+    public void addFilter(String uiName, String pattern, boolean setToDefault)
     {
         try
         {
@@ -293,6 +350,12 @@ public class SystemDialog
     /**
      * just like the other showMessageBox(...) method, but receives a
      * peer argument to use to create the message box.
+     * @param xMSF
+     * @param peer
+     * @param windowServiceName
+     * @param windowAttribute
+     * @param MessageText
+     * @return
      */
     public static int showMessageBox(XMultiServiceFactory xMSF, XWindowPeer peer, String windowServiceName, int windowAttribute, String MessageText)
     {
@@ -326,7 +389,7 @@ public class SystemDialog
         return iMessage;
     }
 
-    private static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
+    public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)
     {
         Object xPathSubst = null;
         try

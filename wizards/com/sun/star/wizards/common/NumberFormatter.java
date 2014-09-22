@@ -36,17 +36,17 @@ import com.sun.star.util.XNumberFormatter;
 public class NumberFormatter
 {
 
-    private int iDateFormatKey = -1;
-    private int iDateTimeFormatKey = -1;
-    private int iNumberFormatKey = -1;
-    private int iTextFormatKey = -1;
-    private int iTimeFormatKey = -1;
-    private int iLogicalFormatKey = -1;
-    private long lDateCorrection;
-    private XNumberFormatter xNumberFormatter;
-    private XNumberFormats xNumberFormats;
-    private XNumberFormatTypes xNumberFormatTypes;
-    private XPropertySet xNumberFormatSettings;
+    public int iDateFormatKey = -1;
+    public int iDateTimeFormatKey = -1;
+    public int iNumberFormatKey = -1;
+    public int iTextFormatKey = -1;
+    public int iTimeFormatKey = -1;
+    public int iLogicalFormatKey = -1;
+    public long lDateCorrection;
+    public XNumberFormatter xNumberFormatter;
+    public XNumberFormats xNumberFormats;
+    public XNumberFormatTypes xNumberFormatTypes;
+    public XPropertySet xNumberFormatSettings;
     private boolean bNullDateCorrectionIsDefined = false;
     private Locale aLocale;
 
@@ -72,6 +72,14 @@ public class NumberFormatter
     }
 
 
+    /**
+     * @param _xMSF
+     * @param _xNumberFormatsSupplier
+     * @return
+     * @throws Exception
+     * @deprecated
+     *
+     */
     public static XNumberFormatter createNumberFormatter(XMultiServiceFactory _xMSF, XNumberFormatsSupplier _xNumberFormatsSupplier) throws Exception
     {
         Object oNumberFormatter = _xMSF.createInstance("com.sun.star.util.NumberFormatter");
@@ -90,6 +98,7 @@ public class NumberFormatter
      * XNumberFormatter nf = Desktop.createNumberFormatter(xmsf, nsf);
      * nf.convertNumberToString( key, 1972 );
      * </pre>
+     * @param numberFormatsSupplier
      * @param type - a constant out of i18n.NumberFormatIndex enumeration.
      * @return a key to use with a util.NumberFormat instance.
      *
@@ -108,7 +117,10 @@ public class NumberFormatter
     }
 
 
-
+    public static String convertNumberToString(XNumberFormatter _xNumberFormatter, int _nkey, double _dblValue)
+    {
+        return _xNumberFormatter.convertNumberToString(_nkey, _dblValue);
+    }
 
 
     public double convertStringToNumber(int _nkey, String _sString)throws Exception
@@ -146,9 +158,12 @@ public class NumberFormatter
 
 
     /**
-     * @return a numberformat for a FormatString.
+     * returns a numberformat for a FormatString.
+     * @param _FormatString
+     * @param _aLocale
+     * @return
      */
-    private int defineNumberFormat(String _FormatString, Locale _aLocale)
+    public int defineNumberFormat(String _FormatString, Locale _aLocale)
     {
         try
         {
@@ -183,11 +198,11 @@ public class NumberFormatter
             }
             if (xPSet.getPropertySetInfo().hasPropertyByName("NumberFormat"))
             {
-                xPSet.setPropertyValue("NumberFormat", Integer.valueOf(NewFormatKey));
+                xPSet.setPropertyValue("NumberFormat", new Integer(NewFormatKey));
             }
             else if (xPSet.getPropertySetInfo().hasPropertyByName("FormatKey"))
             {
-                xPSet.setPropertyValue("FormatKey", Integer.valueOf(NewFormatKey));
+                xPSet.setPropertyValue("FormatKey", new Integer(NewFormatKey));
             }
             else
             {

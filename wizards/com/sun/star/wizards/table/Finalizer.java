@@ -30,17 +30,17 @@ import com.sun.star.wizards.ui.*;
 public class Finalizer
 {
 
-    private TableWizard CurUnoDialog;
-    private short curtabindex;
-    private XRadioButton optModifyTable;
-    private XRadioButton optWorkWithTable;
-
-    private XTextComponent txtTableName;
-    private XListBox xCatalogListBox;
-    private XListBox xSchemaListBox;
-    private TableDescriptor curtabledescriptor;
-    private String SETCOMPLETIONFLAG = "setCompletionFlag";
-    private static int WORKWITHTABLEMODE = 0;
+    TableWizard CurUnoDialog;
+    short curtabindex;
+    XRadioButton optModifyTable;
+    XRadioButton optWorkWithTable;
+    XRadioButton optStartFormWizard;
+    XTextComponent txtTableName;
+    XListBox xCatalogListBox;
+    XListBox xSchemaListBox;
+    TableDescriptor curtabledescriptor;
+    public String SETCOMPLETIONFLAG = "setCompletionFlag";
+    public static int WORKWITHTABLEMODE = 0;
     public static int MODIFYTABLEMODE = 1;
     public static int STARTFORMWIZARDMODE = 2;
 
@@ -51,7 +51,7 @@ public class Finalizer
             this.CurUnoDialog = _CurUnoDialog;
             this.curtabledescriptor = _curtabledescriptor;
             curtabindex = (short) (TableWizard.SOFINALPAGE * 100);
-            Integer IFINALSTEP = Integer.valueOf(TableWizard.SOFINALPAGE);
+            Integer IFINALSTEP = new Integer(TableWizard.SOFINALPAGE);
             String slblTableName = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 34);
             String slblProceed = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 36);
             String sWorkWithTable = CurUnoDialog.m_oResource.getResText(UIConsts.RID_TABLE + 38);
@@ -83,7 +83,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", 97, 35, IFINALSTEP, Short.valueOf(curtabindex++), PropertyNames.EMPTY_STRING, 223
+                        UIConsts.INTEGER_12, "HID:WIZARDS_HID_DLGTABLE_TXT_NAME", 97, 35, IFINALSTEP, new Short(curtabindex++), PropertyNames.EMPTY_STRING, 223
                     });
             txtTableName.addTextListener(CurUnoDialog);
             txtTableName.setMaxTextLen((short) this.curtabledescriptor.getMaxTableNameLength());
@@ -110,7 +110,7 @@ public class Finalizer
                                 },
                                 new Object[]
                                 {
-                                    8, slblCatalog, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, Short.valueOf(curtabindex++), 120
+                                    8, slblCatalog, new Integer(nListBoxPosX), 52, IFINALSTEP, new Short(curtabindex++), 120
                                 });
 
                         try
@@ -122,7 +122,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", Short.valueOf(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sCatalogNames, Short.valueOf(curtabindex++), 80
+                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_CATALOG", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), 62, IFINALSTEP, sCatalogNames, new Short(curtabindex++), 80
                                     });
                             int isel = JavaTools.FieldInList(sCatalogNames, sCatalog);
                             if (isel < 0)
@@ -165,7 +165,7 @@ public class Finalizer
                                 },
                                 new Object[]
                                 {
-                                    8, slblSchema, Integer.valueOf(nListBoxPosX), 52, IFINALSTEP, Short.valueOf(curtabindex++), 80
+                                    8, slblSchema, new Integer(nListBoxPosX), 52, IFINALSTEP, new Short(curtabindex++), 80
                                 });
 
                         try
@@ -177,7 +177,7 @@ public class Finalizer
                                     },
                                     new Object[]
                                     {
-                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", Short.valueOf(UnoDialog.getListBoxLineCount()), Integer.valueOf(nListBoxPosX), 62, IFINALSTEP, sSchemaNames, Short.valueOf(curtabindex++), 80
+                                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LST_SCHEMA", new Short(UnoDialog.getListBoxLineCount()), new Integer(nListBoxPosX), 62, IFINALSTEP, sSchemaNames, new Short(curtabindex++), 80
                                     });
                             int isel = JavaTools.FieldInList(sSchemaNames, sSchema);
                             if (isel < 0)
@@ -205,7 +205,7 @@ public class Finalizer
                         },
                         new Object[]
                         {
-                            16, sCongratulations, Boolean.TRUE, 97, 62, IFINALSTEP, Short.valueOf(curtabindex++), 226
+                            16, sCongratulations, Boolean.TRUE, 97, 62, IFINALSTEP, new Short(curtabindex++), 226
                         });
             }
             else
@@ -219,7 +219,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], slblProceed, 97, Integer.valueOf(82 + ndiffPosY), IFINALSTEP, Short.valueOf(curtabindex++), 227
+                        UIConsts.INTEGERS[8], slblProceed, 97, new Integer(82 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 227
                     });
             optWorkWithTable = CurUnoDialog.insertRadioButton("optWorkWithTable", null,
                     new String[]
@@ -228,7 +228,7 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE", sWorkWithTable, 101, Integer.valueOf(97 + ndiffPosY), Short.valueOf((short) 1), IFINALSTEP, Short.valueOf(curtabindex++), 177
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_WORKWITHTABLE", sWorkWithTable, 101, new Integer(97 + ndiffPosY), new Short((short) 1), IFINALSTEP, new Short(curtabindex++), 177
                     });
             optModifyTable = CurUnoDialog.insertRadioButton("optModifyTable", null,
                     new String[]
@@ -237,16 +237,16 @@ public class Finalizer
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, 101, Integer.valueOf(109 + ndiffPosY), IFINALSTEP, Short.valueOf(curtabindex++), 177
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_MODIFYTABLE", sModifyTable, 101, new Integer(109 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 177
                     });
-            CurUnoDialog.insertRadioButton("optStartFormWizard", null,
+            optStartFormWizard = CurUnoDialog.insertRadioButton("optStartFormWizard", null,
                     new String[]
                     {
                         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD", sStartFormWizard, 101, Integer.valueOf(121 + ndiffPosY), IFINALSTEP, Short.valueOf(curtabindex++), 177
+                        UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPT_STARTFORMWIZARD", sStartFormWizard, 101, new Integer(121 + ndiffPosY), IFINALSTEP, new Short(curtabindex++), 177
                     });
         }
         catch (SQLException e)
@@ -344,7 +344,7 @@ public class Finalizer
         return (txtTableName.getText().length() > 0);
     }
 
-    private void setCompletionFlag()
+    public void setCompletionFlag()
     {
         CurUnoDialog.setcompleted(TableWizard.SOFINALPAGE, iscompleted());
     }

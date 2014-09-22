@@ -38,7 +38,7 @@ import com.sun.star.wizards.document.TimeStampControl;
 public class FormControlArranger
 {
 
-    private static final String LABELCONTROL = "LabelControl";
+    public static final String LABELCONTROL = "LabelControl";
     protected DatabaseControl[] DBControlList = null;
     private XNameContainer xFormName;
     private XMultiServiceFactory xMSF;
@@ -75,7 +75,7 @@ public class FormControlArranger
     private int a;
     private int StartA;
     private int m_controlMaxPosY = 0;     //the maximum YPosition of a DBControl in the form
-    private Short NBorderType = Short.valueOf((short) 1); //3-D Border
+    private Short NBorderType = new Short((short) 1); //3-D Border
 
     public FormControlArranger(FormHandler _oFormHandler, XNameContainer _xFormName, CommandMetaData oDBMetaData, XStatusIndicator _xProgressBar, Point _StartPoint, Size _FormSize)
     {
@@ -105,7 +105,7 @@ public class FormControlArranger
 
     public void setBorderType(short _nBorderType)
     {
-        NBorderType = Short.valueOf(_nBorderType);
+        NBorderType = new Short(_nBorderType);
     }
 
     public Control[] getLabelControlList()
@@ -329,7 +329,7 @@ public class FormControlArranger
         }
     }
 
-    public void positionControls(int _icurArrangement, Point _aStartPoint, short _iAlign, Short _NBorderType)
+    public void positionControls(int _icurArrangement, Point _aStartPoint, Size _aFormSize, short _iAlign, Short _NBorderType)
     {
         try
         {
@@ -564,11 +564,11 @@ public class FormControlArranger
             {
                 m_currentControlPosX = m_currentLabelPosX;
                 m_currentControlPosY = m_currentLabelPosY + m_LabelHeight;
-                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) com.sun.star.awt.TextAlign.LEFT));
+                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short((short) com.sun.star.awt.TextAlign.LEFT));
             }
             else
             {
-                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) _iAlign));
+                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short((short) _iAlign));
             }
             if (!bControlsareCreated)
             {
@@ -661,7 +661,18 @@ public class FormControlArranger
         cYOffset = _aPoint.Y;
     }
 
-
+    public void adjustYPositions(int _diffY)
+    {
+        for (int i = 0; i < DBControlList.length; i++)
+        {
+            Point aPoint = DBControlList[i].getPosition();
+            DBControlList[i].setPosition(new Point(aPoint.X, aPoint.Y - _diffY));
+            aPoint = LabelControlList[i].getPosition();
+            LabelControlList[i].setPosition(new Point(aPoint.X, aPoint.Y - _diffY));
+        }
+        m_controlMaxPosY = -_diffY;
+        cYOffset = -_diffY;
+    }
 
     public void setFormSize(Size _FormSize)
     {

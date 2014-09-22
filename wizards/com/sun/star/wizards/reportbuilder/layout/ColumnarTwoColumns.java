@@ -41,7 +41,6 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
         return getResource().getResText(UIConsts.RID_REPORT + 82);
     }
 
-    @Override
     protected void insertDetailFields()
     {
         insertDetailFields(2);
@@ -115,7 +114,6 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
         doNotBreakInTable(xSection);
     }
 
-    @Override
     protected void insertDetailFieldTitles(int lastGroupPostion)
     {
         // we won't extra field titles

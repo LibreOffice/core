@@ -32,7 +32,6 @@ public class SectionEmptyObject extends SectionObject
         return new SectionEmptyObject();
     }
 
-    @Override
     public FontDescriptor getFontDescriptor()
     {
         return null;

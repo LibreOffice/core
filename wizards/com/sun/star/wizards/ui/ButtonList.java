@@ -33,6 +33,7 @@ import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.common.PropertySetHelper;
 import com.sun.star.wizards.common.PropertyNames;
 import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
 import com.sun.star.wizards.common.HelpIds;
 
 public class ButtonList implements XItemEventBroadcaster, XActionListener
@@ -57,14 +58,14 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private int imageTextLines = 1;
     private boolean rowSelect = false;
     public int tabIndex;
-
+    public Boolean scaleImages = Boolean.TRUE;
     private String m_aControlName = "il";
     private int m_nCurrentSelection = -1;
     private int pageStart = 0;
     public int helpURL = 0;
     private IImageRenderer renderer;
     private ListModel listModel;
-    private IRenderer counterRenderer = new SimpleCounterRenderer();
+    public IRenderer counterRenderer = new SimpleCounterRenderer();
     private final static int LINE_HEIGHT = 8;
 
     /** Getter for property m_aButtonSize.
@@ -165,7 +166,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                         Integer.valueOf(pos.Width + (m_aButtonSize.Width + gap.Width) * cols + gap.Width - btnSize.intValue() + 1),
                         Integer.valueOf(pos.Height + (m_aButtonSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + 1),
                         step,
-                        Short.valueOf((short) (tabIndex + 2)),
+                        new Short((short) (tabIndex + 2)),
                         Boolean.TRUE,
                         btnSize
                     });
@@ -182,14 +183,14 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                         Integer.valueOf(cols * (m_aButtonSize.Width + gap.Width) + gap.Width - 2 * btnSize.intValue() - 1)
                     });
 
-            Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_ALIGN, Short.valueOf((short) 1));
+            Helper.setUnoPropertyValue(getModel(lblCounter), PropertyNames.PROPERTY_ALIGN, new Short((short) 1));
             Helper.setUnoPropertyValue(getModel(btnBack), PropertyNames.PROPERTY_LABEL, "<");
             Helper.setUnoPropertyValue(getModel(btnNext), PropertyNames.PROPERTY_LABEL, ">");
 
 
         }
 
-        m_tabIndex = Short.valueOf((short) tabIndex);
+        m_tabIndex = new Short((short) tabIndex);
 
         m_aButtons = new XControl[rows * cols];
 
@@ -356,7 +357,28 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         return pageStart + i;
     }
 
+    public void contentsChanged(ListDataEvent event)
+    {
+    }
 
+    public void intervalAdded(ListDataEvent event)
+    {
+        if (event.getIndex0() <= m_nCurrentSelection)
+        {
+            if (event.getIndex1() <= m_nCurrentSelection)
+            {
+                m_nCurrentSelection += event.getIndex1() - event.getIndex0() + 1;
+            }
+        }
+        if (event.getIndex0() < pageStart || event.getIndex1() < (pageStart + getRows() + getCols()))
+        {
+            refreshImages();
+        }
+    }
+
+    public void intervalRemoved(ListDataEvent event)
+    {
+    }
 
     /** Registers ItemListener to receive events.
      * @param listener The listener to register.
@@ -461,21 +483,33 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         cols = i;
     }
 
+    /**
+     * @param size
+     */
     public void setGap(Size size)
     {
         gap = size;
     }
 
+    /**
+     * @param model
+     */
     public void setListModel(ListModel model)
     {
         listModel = model;
     }
 
+    /**
+     * @param short1
+     */
     public void setStep(Short short1)
     {
         step = short1;
     }
 
+    /**
+     * @param i
+     */
     public void setPageStart(int i)
     {
         if (i == pageStart)
@@ -487,21 +521,33 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         refreshImages();
     }
 
+    /**
+     * @param _size
+     */
     public void setPos(Size _size)
     {
         pos = _size;
     }
 
+    /**
+     * @param _renderer
+     */
     public void setRenderer(IImageRenderer _renderer)
     {
         this.renderer = _renderer;
     }
 
+    /**
+     * @param i
+     */
     public void setRows(int i)
     {
         rows = i;
     }
 
+    /**
+     * @param i
+     */
     public void setSelected(int i)
     {
         if (rowSelect && (i >= 0))
@@ -529,19 +575,43 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, sText);
     }
 
+    /**
+     * @param size
+     */
     public void setSelectionGap(Size size)
     {
         selectionGap = size;
     }
 
+    /**
+     * @param b
+     */
     public void setShowButtons(boolean b)
     {
         showButtons = b;
     }
 
+    public void nextPage()
+    {
+        if (pageStart < getListModel().getSize() - rows * cols)
+        {
+            setPageStart(pageStart + rows * cols);
+        }
+    }
 
-
-
+    public void prevPage()
+    {
+        if (pageStart == 0)
+        {
+            return;
+        }
+        int i = pageStart - rows * cols;
+        if (i < 0)
+        {
+            i = 0;
+        }
+        setPageStart(i);
+    }
 
     private void enableButtons()
     {
@@ -568,14 +638,15 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
 
-    public interface IImageRenderer extends IRenderer
+    public static interface IImageRenderer extends IRenderer
     {
 
         /**
+         * @param listItem
          * @return two resource ids for an image referenced in the imaglist resourcefile of the
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
          */
-        Object[] getImageUrls(Object listItem);
+        public Object[] getImageUrls(Object listItem);
     }
 
     private static class SimpleCounterRenderer implements IRenderer
@@ -587,12 +658,12 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
     }
 
-    private static class Counter
+    public static class Counter
     {
 
-        private int start,  end,  max;
+        public int start,  end,  max;
 
-        private Counter(int start_, int end_, int max_)
+        public Counter(int start_, int end_, int max_)
         {
             start = start_;
             end = end_;
@@ -617,13 +688,26 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
 
-
+    /**
+     * jump to the given item (display the screen
+     * that contains the given item).
+     * @param i
+     */
+    public void display(int i)
+    {
+        int is = (getCols() * getRows());
+        int ps = (listModel.getSize() / is) * is;
+        setPageStart(ps);
+    }
 
     public boolean isenabled()
     {
         return benabled;
     }
 
+    /**
+     * @param b
+     */
     public void setenabled(boolean b)
     {
 
@@ -670,6 +754,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 /**
  * implementation of XActionListener
  * will call if a button from the m_aButtonList is pressed.
+ * @param actionEvent
  */
     public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent)
     {

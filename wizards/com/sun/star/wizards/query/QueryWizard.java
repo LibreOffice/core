@@ -43,7 +43,7 @@ import com.sun.star.wizards.ui.TitlesComponent;
 public class QueryWizard extends DatabaseObjectWizard
 {
 
-
+    public static final String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
     private static final int SOFIELDSELECTION_PAGE = 1;
     private static final int SOSORTING_PAGE = 2;
     private static final int SOFILTER_PAGE = 3;
@@ -107,7 +107,7 @@ public class QueryWizard extends DatabaseObjectWizard
                         },
                         new Object[]
                         {
-                            210, Boolean.TRUE, "DialogQuery", 102, 41, 1, Short.valueOf((short) 0), resQueryWizard, 310
+                            210, Boolean.TRUE, "DialogQuery", 102, 41, 1, new Short((short) 0), resQueryWizard, 310
                         });
                 drawNaviBar();
                 setRightPaneHeaders(m_oResource, UIConsts.RID_QUERY + 70, 8);
@@ -139,7 +139,7 @@ public class QueryWizard extends DatabaseObjectWizard
         return m_createdQuery;
     }
 
-    private void enableRoadmapItems(boolean _bEnabled)
+    public void enableRoadmapItems(String[] _FieldNames, boolean _bEnabled)
     {
         try
         {
@@ -190,7 +190,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
-    private void insertQueryRelatedSteps()
+    public void insertQueryRelatedSteps()
     {
         try
         {
@@ -221,7 +221,7 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
-    private void buildSteps()
+    public void buildSteps()
     {
         try
         {
@@ -254,7 +254,6 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
-    @Override
     public boolean finishWizard()
     {
         int ncurStep = getCurrentStep();
@@ -272,7 +271,6 @@ public class QueryWizard extends DatabaseObjectWizard
         return false;
     }
 
-    @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         try
@@ -320,14 +318,13 @@ public class QueryWizard extends DatabaseObjectWizard
         }
     }
 
-    @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
         switch (nOldStep)
         {
             case SOFIELDSELECTION_PAGE:
                 m_DBMetaData.reorderFieldColumns(m_DBCommandFieldSelectio.getSelectedFieldNames());
-                m_DBMetaData.initializeFieldTitleSet();
+                m_DBMetaData.initializeFieldTitleSet(true);
                 m_DBMetaData.setNumericFields();
                 searchForOutdatedFields();
                 break;
@@ -390,13 +387,13 @@ public class QueryWizard extends DatabaseObjectWizard
         boolean bEnabled = NewItems.length > 0;
         setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, bEnabled);
         setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, bEnabled);
-        enableRoadmapItems(bEnabled); // Note: Performancewise this could be improved
+        enableRoadmapItems(NewItems, bEnabled); // Note: Performancewise this could be improved
     }
 
-    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
-        private int ID;
+        protected int ID;
 
         public int getID()
         {

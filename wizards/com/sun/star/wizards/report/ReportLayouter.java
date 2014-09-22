@@ -36,20 +36,20 @@ import java.util.ArrayList;
 public class ReportLayouter
 {
 
-    private UnoDialog CurUnoDialog;
-
-    private final int SOCONTENTLST = 29;
+    UnoDialog CurUnoDialog;
+    final int SOTXTTITLE = 28;
+    final int SOCONTENTLST = 29;
     final static public int SOOPTLANDSCAPE = 30;
     final static public int SOOPTPORTRAIT = 31;
-    private final int SOLAYOUTLST = 32;
-    private XListBox xContentListBox;
-    private XListBox xLayoutListBox;
-    private int iOldContentPos;
-    private int iOldLayoutPos;
-    private IReportDocument CurReportDocument;
-    private String[][] LayoutFiles;
-    private String[][] ContentFiles;
-    private Object aOrientationImage;
+    final int SOLAYOUTLST = 32;
+    XListBox xContentListBox;
+    XListBox xLayoutListBox;
+    int iOldContentPos;
+    int iOldLayoutPos;
+    IReportDocument CurReportDocument;
+    public String[][] LayoutFiles;
+    public String[][] ContentFiles;
+    Object aOrientationImage;
     private XMultiServiceFactory m_xMSF;
     private XTextRange          trTitleconst, trAuthorconst, trDateconst, trPageconst;
     private TextElement         teTitleconst, teAuthorconst, teDateconst, tePageconst;
@@ -80,7 +80,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        8, slblDataStructure, 95, 27, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 99
+                        8, slblDataStructure, 95, 27, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 99
                     });
 
             short iSelPos = 0;
@@ -101,7 +101,7 @@ public class ReportLayouter
                         108, "HID:WIZARDS_HID_DLGREPORT_4_DATALAYOUT", 95, 37, new short[]
                         {
                             iSelPos
-                        }, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], Short.valueOf(curtabindex++), 99
+                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), 99
                     });
 
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblLayout",
@@ -111,7 +111,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        8, slblPageLayout, 205, 27, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 99
+                        8, slblPageLayout, 205, 27, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 99
                     });
 
             short iSelLayoutPos = 0;
@@ -135,7 +135,7 @@ public class ReportLayouter
                         108, "HID:WIZARDS_HID_DLGREPORT_4_PAGELAYOUT", 205, 37, new short[]
                         {
                             iSelLayoutPos
-                        }, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], Short.valueOf(curtabindex++), 99
+                        }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), 99
                     });
             iOldLayoutPos = iSelPos;
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblOrientation",
@@ -145,10 +145,10 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        8, sOrientationHeader, 95, 148, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 74
+                        8, sOrientationHeader, 95, 148, new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 74
                     });
 
-            short nLandscapeState = CurReportDocument.getDefaultPageOrientation() == SOOPTLANDSCAPE ? (short) 1 : 0;
+            short m_nLandscapeState = CurReportDocument.getDefaultPageOrientation() == SOOPTLANDSCAPE ? (short) 1 : 0;
             CurUnoDialog.insertRadioButton("optLandscape", SOOPTLANDSCAPE, new ItemListenerImpl(),
                     new String[]
                     {
@@ -156,10 +156,10 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        10, "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, 101, 158, Short.valueOf(nLandscapeState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 60
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, 101, 158, new Short(m_nLandscapeState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 60
                     });
 
-            short nPortraitState = CurReportDocument.getDefaultPageOrientation() == SOOPTPORTRAIT ? (short) 1 : (short) 0;
+            short m_nPortraitState = CurReportDocument.getDefaultPageOrientation() == SOOPTPORTRAIT ? (short) 1 : (short) 0;
             CurUnoDialog.insertRadioButton("optPortrait", SOOPTPORTRAIT, new ItemListenerImpl(),
                     new String[]
                     {
@@ -167,7 +167,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        10, "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, 101, 171, Short.valueOf(nPortraitState), Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), Short.valueOf(curtabindex++), 60
+                        10, "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, 101, 171, new Short(m_nPortraitState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), 60
                     });
 
             aOrientationImage = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgOrientation",
@@ -177,7 +177,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        Short.valueOf("0"), 23, 164, 158, Boolean.FALSE, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), 30
+                        new Short("0"), 23, 164, 158, Boolean.FALSE, new Integer(ReportWizard.SOTEMPLATEPAGE), 30
                     });
 
             String sNote = ReportWizard.getBlindTextNote(CurReportDocument, CurUnoDialog.m_oResource);
@@ -188,9 +188,9 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        34, sNote, Boolean.TRUE, 205, 148, Integer.valueOf(ReportWizard.SOTEMPLATEPAGE), 99
+                        34, sNote, Boolean.TRUE, 205, 148, new Integer(ReportWizard.SOTEMPLATEPAGE), 99
                     });
-            if (nLandscapeState == 1)
+            if (m_nLandscapeState == 1)
             {
                 CurUnoDialog.getPeerConfiguration().setImageUrl(aOrientationImage, 1002, 1003);
             }
@@ -217,7 +217,7 @@ public class ReportLayouter
         CurUnoDialog.setFocus("lblContent");
     }
 
-    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
@@ -260,6 +260,7 @@ public class ReportLayouter
                         break;
 
                     case SOOPTLANDSCAPE:
+                        // CurReportDocument.getDoc().changePageOrientation(true);
                         try
                         {
                             CurReportDocument.setPageOrientation(SOOPTLANDSCAPE);
@@ -301,7 +302,7 @@ public class ReportLayouter
         }
     }
 
-    private class ActionListenerImpl implements com.sun.star.awt.XActionListener
+    class ActionListenerImpl implements com.sun.star.awt.XActionListener
     {
 
         public void disposing(EventObject eventObject)
@@ -365,7 +366,7 @@ public class ReportLayouter
             }
     }
 
-    private void clearConstants()
+    public void clearConstants()
     {
         constRangeList.clear();
         trTitleconst = null;
@@ -384,7 +385,7 @@ public class ReportLayouter
         te.write(tr);
     }
 
-    private List<XTextRange> searchFillInItems(int type)
+    public List<XTextRange> searchFillInItems(int type)
     {
       try
       {

@@ -35,13 +35,13 @@ import com.sun.star.lang.XMultiServiceFactory;
 public class GridControl extends Shape
 {
 
-    private FieldColumn[] fieldcolumns;
+    FieldColumn[] fieldcolumns;
     public XNameContainer xNameContainer;
     public XGridColumnFactory xGridColumnFactory;
     public XPropertySet xPropertySet;
     XNameAccess xNameAccess;
-
-    private XControlModel xControlModel;
+    final String SODEFAULTNAME = "Grid1";
+    XControlModel xControlModel;
     public XComponent xComponent;
 
     public GridControl(XMultiServiceFactory _xMSF, String _sname, FormHandler _oFormHandler, XNameContainer _xFormName, FieldColumn[] _fieldcolumns, Point _aPoint, Size _aSize)
@@ -61,6 +61,7 @@ public class GridControl extends Shape
             xGridColumnFactory = UnoRuntime.queryInterface( XGridColumnFactory.class, oGridModel );
             xComponent = UnoRuntime.queryInterface( XComponent.class, oGridModel );
 
+//      Helper.setUnoPropertyValue(oGridModel, PropertyNames.PROPERTY_NAME, _sname);
             for (int i = 0; i < fieldcolumns.length; i++)
             {
                 FieldColumn curfieldcolumn = fieldcolumns[i];

@@ -20,6 +20,8 @@ package com.sun.star.wizards.ui.event;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import com.sun.star.wizards.common.PropertyNames;
 
 /**
@@ -41,15 +43,17 @@ public abstract class DataAware {
     /**
      * this is the data object.
      */
-    private Object dataObject;
+    protected Object dataObject;
     /**
      * A Value Object knows how to get/set a value
      * from/to the data object.
      */
-    private Value value;
+    protected Value value;
 
     /**
      * creates a DataAware object for the given data object and Value object.
+     * @param dataObject_
+     * @param value_
      */
     protected DataAware(Object dataObject_, Value value_) {
         dataObject = dataObject_;
@@ -58,9 +62,28 @@ public abstract class DataAware {
 
     /**
      * returns the data object.
+     * @return
      */
     public Object getDataObject() {
         return dataObject;
+    }
+
+    /**
+     * sets a new data object. Optionally
+     * update the UI.
+     * @param obj the new data object.
+     * @param updateUI if true updateUI() will be called.
+     */
+    public void setDataObject(Object obj, boolean updateUI) {
+
+        if (obj != null && !value.isAssignable(obj.getClass()))
+            throw new ClassCastException("can not cast new DataObject to original Class");
+
+        dataObject = obj;
+
+        if (updateUI)
+            updateUI();
+
     }
 
     /**
@@ -70,7 +93,7 @@ public abstract class DataAware {
      * another kind of Data is needed.
      * @param newValue the new value to set to the DataObject.
      */
-    private void setToData(Object newValue) {
+    protected void setToData(Object newValue) {
         value.set(newValue,getDataObject());
     }
 
@@ -80,7 +103,7 @@ public abstract class DataAware {
      * the value object.
      * @return the current value of the data object.
      */
-    private Object getFromData() {
+    protected Object getFromData() {
         return value.get(getDataObject());
     }
 
@@ -95,6 +118,23 @@ public abstract class DataAware {
      * @return the current value from the UI control.
      */
     protected abstract Object getFromUI();
+
+    /**
+     * updates the UI control according to the
+     * current state of the data object.
+     */
+    public void updateUI() {
+        Object data = getFromData();
+        Object ui = getFromUI();
+        if (!equals(data, ui))
+            try {
+                setToUI(data);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                //TODO tell user...
+            }
+        enableControls(data);
+    }
 
     /**
      * enables
@@ -116,7 +156,7 @@ public abstract class DataAware {
     }
 
     public interface Listener {
-        void eventPerformed(Object event);
+        public void eventPerformed(Object event);
     }
 
     /**
@@ -127,7 +167,7 @@ public abstract class DataAware {
      * @param b second object to compare.
      * @return true if both are null or both are equal.
      */
-    private boolean equals(Object a, Object b) {
+    protected boolean equals(Object a, Object b) {
         if (a == null && b == null)
             return true;
         if (a == null || b == null)
@@ -141,11 +181,33 @@ public abstract class DataAware {
         return a.equals(b);
     }
 
+    /**
+     * given a collection containing DataAware objects,
+     * calls updateUI() on each memebr of the collection.
+     * @param dataAwares a collection containing DataAware objects.
+     */
+    public static void updateUI(Collection<DataAware> dataAwares) {
+        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
+             i.next().updateUI();
+    }
 
+    public static void updateData(Collection<DataAware> dataAwares) {
+        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
+             i.next().updateData();
+    }
 
-
-
-
+    /**
+     * /**
+     * Given a collection containing DataAware objects,
+     * sets the given DataObject to each DataAware object
+     * in the given collection
+     * @param dataAwares a collection of DataAware objects.
+     * @param dataObject new data object to set to the DataAware objects in the given collection.
+     * @param updateUI if true, calls updateUI() on each DataAware object.
+     */public static void setDataObject(Collection<DataAware> dataAwares, Object dataObject, boolean updateUI) {
+        for (Iterator<DataAware> i = dataAwares.iterator(); i.hasNext();)
+             i.next().setDataObject(dataObject, updateUI);
+    }
 
     /**
      * Value objects read and write a value from and
@@ -163,13 +225,13 @@ public abstract class DataAware {
          * @param target the object to get the value from.
          * @return the value from the given object.
          */
-        Object get(Object target);
+        public Object get(Object target);
         /**
          * sets a value to the given object.
          * @param value the value to set to the object.
          * @param target the object to set the value to.
          */
-        void set(Object value, Object target);
+        public void set(Object value, Object target);
         /**
          * checks if this Value object can handle
          * the given object type as a target.
@@ -177,7 +239,7 @@ public abstract class DataAware {
          * @return true if the given class is acceptable for
          * the Value object. False if not.
          */
-        boolean isAssignable(Class<?> type);
+        public boolean isAssignable(Class<?> type);
     }
 
     /**
@@ -214,7 +276,7 @@ public abstract class DataAware {
          * @param obj the object which contains the property.
          * @return the get method reflection object.
          */
-        private Method createGetMethod(String propName, Object obj)
+        protected Method createGetMethod(String propName, Object obj)
         {
             Method m = null;
             try
@@ -243,7 +305,7 @@ public abstract class DataAware {
                 if (getMethod.getReturnType().equals(String.class))
                     return PropertyNames.EMPTY_STRING;
                 if (getMethod.getReturnType().equals(Short.class))
-                    return Short.valueOf((short) 0);
+                    return new Short((short) 0);
                 if (getMethod.getReturnType().equals(Integer.class))
                     return 0;
                 if (getMethod.getReturnType().equals(short[].class))
@@ -252,7 +314,7 @@ public abstract class DataAware {
             return null;
         }
 
-        private Method createSetMethod(String propName, Object obj, Class<?> paramClass) {
+        protected Method createSetMethod(String propName, Object obj, Class<?> paramClass) {
             Method m = null;
             try {
                 m = obj.getClass().getMethod("set" + propName, paramClass);

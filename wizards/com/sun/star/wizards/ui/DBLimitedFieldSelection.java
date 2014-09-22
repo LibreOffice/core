@@ -18,6 +18,7 @@
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.XListBox;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;
@@ -29,28 +30,32 @@ import com.sun.star.wizards.common.PropertyNames;
 public abstract class DBLimitedFieldSelection
 {
 
-
+    protected XMultiServiceFactory xMSF;
     protected WizardDialog CurUnoDialog;
-    private String sNoField;
+    protected String sNoField;
     protected Integer IStep;
-
-
-
+    protected Integer ICompPosX;
+    protected Integer ICompPosY;
+    protected Integer ICompWidth;
     protected final int rowcount = 4;
-    private final int MAXSELINDEX = rowcount - 1;
+    protected final int MAXSELINDEX = rowcount - 1;
     protected short curtabindex;
     protected int iCurPosY;
     protected int FirstHelpIndex;
-    private int iCompPosX;
+    protected int iCompPosX;
 
     public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int iCompWidth, int _FirstHelpIndex)
     {
         this.CurUnoDialog = _CurUnoDialog;
+        xMSF = CurUnoDialog.xMSF;
         FirstHelpIndex = _FirstHelpIndex;
         curtabindex = (short) (iStep * 100);
         sNoField = CurUnoDialog.m_oResource.getResText(UIConsts.RID_REPORT + 8);
-        IStep = Integer.valueOf(iStep);
+        IStep = new Integer(iStep);
         iCompPosX = _iCompPosX;
+        ICompPosX = new Integer(iCompPosX);
+        ICompPosY = new Integer(iCompPosY);
+        ICompWidth = new Integer(iCompWidth);
         iCurPosY = iCompPosY;
         for (int i = 0; i < rowcount; i++)
         {
@@ -123,6 +128,14 @@ public abstract class DBLimitedFieldSelection
 
     }
 
+    protected void initializeListBox(XListBox xListBox, String[] _AllFieldNames, String _SelFieldName)
+    {
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.STRING_ITEM_LIST, _AllFieldNames);
+        short[] SelList = null;
+        int index = JavaTools.FieldInList(_AllFieldNames, _SelFieldName);
+        SelList = new short[] { (short) (index) };
+        Helper.setUnoPropertyValue(UnoDialog.getModel(xListBox), PropertyNames.SELECTED_ITEMS, SelList);
+    }
 }
 
 

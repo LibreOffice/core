@@ -59,55 +59,60 @@ public class FilterComponent
     private String slblFieldNames;
     private String slblOperators;
     private String slblValue;
-    private WizardDialog CurUnoDialog;
+    WizardDialog CurUnoDialog;
     private int BaseID = 2300;
     private String sIncSuffix;
     private ControlRow[] oControlRows;
     private String sDuplicateCondition;
-    private final int SOOPTORMODE = 100;
-    private final int SOOPTANDMODE = 101;
-    private QueryMetaData oQueryMetaData;
-    private int iDateTimeFormat;
-    private int iDateFormat;
-    private int iTimeFormat;
+    final int SOOPTORMODE = 100;
+    final int SOOPTANDMODE = 101;
+    QueryMetaData oQueryMetaData;
+    int iDateTimeFormat;
+    int iDateFormat;
+    int iTimeFormat;
     private PropertyValue[][] filterconditions;
     private short curtabindex;
-
-    private final int SO_FIRSTFIELDNAME = 1;
-    private final int SO_SECONDFIELDNAME = 2;
-    private final int SO_THIRDFIELDNAME = 3;
-    private final int SO_FOURTHFIELDNAME = 4;
-    private int[] SO_FIELDNAMELIST = new int[]
+    XMultiServiceFactory xMSF;
+    final int SO_FIRSTFIELDNAME = 1;
+    final int SO_SECONDFIELDNAME = 2;
+    final int SO_THIRDFIELDNAME = 3;
+    final int SO_FOURTHFIELDNAME = 4;
+    int[] SO_FIELDNAMELIST = new int[]
     {
         SO_FIRSTFIELDNAME, SO_SECONDFIELDNAME, SO_THIRDFIELDNAME, SO_FOURTHFIELDNAME
     };
-    private final int SO_FIRSTCONDITION = 5;
-    private final int SO_SECONDCONDITION = 6;
-    private final int SO_THIRDCONDITION = 7;
-    private final int SO_FOURTHCONDITION = 8;
-    private int[] SO_CONDITIONLIST = new int[]
+    final int SO_FIRSTCONDITION = 5;
+    final int SO_SECONDCONDITION = 6;
+    final int SO_THIRDCONDITION = 7;
+    final int SO_FOURTHCONDITION = 8;
+    int[] SO_CONDITIONLIST = new int[]
     {
         SO_FIRSTCONDITION, SO_SECONDCONDITION, SO_THIRDCONDITION, SO_FOURTHCONDITION
     };
-    private final int SO_FIRSTTEXTFIELD = 1;
-    private final int SO_SECONDTEXTFIELD = 2;
-    private final int SO_THIRDTEXTFIELD = 3;
-    private final int SO_FOURTHTEXTFIELD = 4;
-    private int[] SO_TEXTFIELDLIST = new int[]
+    final int SO_FIRSTTEXTFIELD = 1;
+    final int SO_SECONDTEXTFIELD = 2;
+    final int SO_THIRDTEXTFIELD = 3;
+    final int SO_FOURTHTEXTFIELD = 4;
+    int[] SO_TEXTFIELDLIST = new int[]
     {
         SO_FIRSTTEXTFIELD, SO_SECONDTEXTFIELD, SO_THIRDTEXTFIELD, SO_FOURTHTEXTFIELD
     };
-    private final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
-    private final int SO_SECONDBOOLFIELDNAME = 256 + 2;
-    private final int SO_THIRDBOOLFIELDNAME = 256 + 3;
-    private final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
+    final int SO_FIRSTBOOLFIELDNAME = 256 + 1;
+    final int SO_SECONDBOOLFIELDNAME = 256 + 2;
+    final int SO_THIRDBOOLFIELDNAME = 256 + 3;
+    final int SO_FOURTHBOOLFIELDNAME = 256 + 4;
+    int SO_BOOLEANLIST[] =
 
 
-    private int SOI_MATCHALL = 0;
-    private int SOI_MATCHANY = 1;
-    private int curHelpID;
+    {
+        SO_FIRSTBOOLFIELDNAME, SO_SECONDBOOLFIELDNAME, SO_THIRDBOOLFIELDNAME, SO_FOURTHBOOLFIELDNAME
+    };
+    final int SO_OPTQUERYMODE = 5;
+    int SOI_MATCHALL = 0;
+    int SOI_MATCHANY = 1;
+    int curHelpID;
 
-    private class ItemListenerImpl implements com.sun.star.awt.XItemListener
+    class ItemListenerImpl implements com.sun.star.awt.XItemListener
     {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
@@ -162,7 +167,7 @@ public class FilterComponent
         }
     }
 
-    private class TextListenerImpl implements com.sun.star.awt.XTextListener
+    class TextListenerImpl implements com.sun.star.awt.XTextListener
     {
 
         public void textChanged(TextEvent EventObject)
@@ -174,9 +179,14 @@ public class FilterComponent
         public void disposing(EventObject eventObject)
         {
         }
+
+        public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent)
+        {
+            getfilterstate();
+        }
     }
 
-    private static String getIndexNumber(String _sStr)
+    public static String getIndexNumber(String _sStr)
     {
         return _sStr.substring(_sStr.length() - 1, _sStr.length());
     }
@@ -364,10 +374,20 @@ public class FilterComponent
     }
 
     /** Creates a new instance of FilterComponent
+     * @param CurUnoDialog
+     * @param _xMSF
+     * @param iStep
+     * @param iPosX
+     * @param iPosY
+     * @param iWidth
+     * @param FilterCount
+     * @param _oQueryMetaData
+     * @param _firstHelpID
      */
     public FilterComponent(WizardDialog CurUnoDialog, XMultiServiceFactory _xMSF, int iStep, int iPosX, int iPosY, int iWidth, int FilterCount, QueryMetaData _oQueryMetaData, int _firstHelpID)
     {
         this.curHelpID = _firstHelpID;
+        this.xMSF = _xMSF;
         this.IStep = Integer.valueOf(iStep);
 
         curtabindex = UnoDialog.setInitialTabindex(iStep);
@@ -454,9 +474,11 @@ public class FilterComponent
         for (i = 0; i < RowCount; i++)
         {
             oControlRows[i].setFieldNames(_fieldnames);
+            // oControlRows[i].setFieldNames(aFieldNamesWithAdditionalEmpty);
         }
         this.filterconditions = _filterconditions;
         PropertyValue[] curfilterconditions;
+        // int a;
         if (_filterconditions.length == 1)
         {
             curfilterconditions = filterconditions[0];
@@ -500,17 +522,17 @@ public class FilterComponent
 
 
 
-    private final class ControlRow
+    final class ControlRow
     {
 
         private final static int SOLSTFIELDNAME = 3;
         private final static int SOLSTOPERATOR = 4;
         private final static int SOTXTVALUE = 5;
-        private XInterface[] ControlElements = new XInterface[6];
+        protected XInterface[] ControlElements = new XInterface[6];
         private boolean m_bEnabled;
-        private String[] FieldNames;
+        String[] FieldNames;
 
-        private ControlRow(int iCompPosX, int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
+        protected ControlRow(int iCompPosX, int iCompPosY, int Index, boolean _bEnabled, int _firstRowHelpID)
         {
             int nFieldWidth = 71;
             int nOperatorWidth = 70;
@@ -694,7 +716,7 @@ public class FilterComponent
          * @return true if the current condition is complete, all needed fields are filled with values.
          * So we can enable the next.
          */
-        private boolean isConditionComplete()
+        boolean isConditionComplete()
         {
             try
             {
@@ -738,7 +760,7 @@ public class FilterComponent
             }
         }
 
-        private void setCondition(PropertyValue _filtercondition)
+        protected void setCondition(PropertyValue _filtercondition)
         {
             try
             {
@@ -757,6 +779,7 @@ public class FilterComponent
                         sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "' }");
                         try
                         {
+                            //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", );
                             oQueryMetaData.getNumberFormatter().convertStringToNumber(iDateFormat, sValue);
                         }
                         catch (java.lang.Exception ex)
@@ -771,6 +794,7 @@ public class FilterComponent
                         sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "' }");
                         try
                         {
+                            //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", );
                             oQueryMetaData.getNumberFormatter().convertStringToNumber(iTimeFormat, sValue);
                         }
                         catch (java.lang.Exception ex)
@@ -782,6 +806,7 @@ public class FilterComponent
                     //TODO: other datetime formats?
                     else
                     {
+                        //Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue", sValue);
                     }
                 }
                 else if (AnyConverter.isBoolean(_filtercondition.Value))
@@ -805,13 +830,13 @@ public class FilterComponent
             }
         }
 
-        private void setFieldNames(String[] _FieldNames)
+        protected void setFieldNames(String[] _FieldNames)
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), PropertyNames.STRING_ITEM_LIST, _FieldNames);
             FieldNames = _FieldNames;
         }
 
-        private boolean isEnabled()
+        protected boolean isEnabled()
         {
             return m_bEnabled;
         }
@@ -858,7 +883,7 @@ public class FilterComponent
             }
         }
 
-        private String getSelectedFieldName()
+        protected String getSelectedFieldName()
         {
             try
             {
@@ -874,7 +899,7 @@ public class FilterComponent
 
         // TODO: check if it is really useful to match the indices of the listbox the API constants
         // =, <>, <, >, <=, >=, like, !like, is null, !is null
-        private short getSelectedOperator()
+        protected short getSelectedOperator()
         {
             try
             {
@@ -913,13 +938,21 @@ public class FilterComponent
         }
 
         // TODO make a difference between Text and Numbers
-        private Object getValue()
+        protected Object getValue()
         {
             return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue"));
         }
 
+        protected Object getText()
+        {
+            return (Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "Text"));
+        }
 
-
-
+        protected String getDateTimeString(boolean bgetDate)
+        {
+            double dblValue = ((Double) getValue()).doubleValue();
+            NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
+            return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
+        }
     }
 }

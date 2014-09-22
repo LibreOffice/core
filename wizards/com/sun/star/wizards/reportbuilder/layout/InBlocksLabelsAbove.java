@@ -31,19 +31,16 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
         super(_xDefinitionAccess, _aResource);
     }
 
-    @Override
     public String getName()
     {
         return "InBlocksLabelsAboveLayoutOfData";
     }
 
-    @Override
     public String getLocalizedName()
     {
         return getResource().getResText(UIConsts.RID_REPORT + 85);
     }
 
-    @Override
     protected void insertDetailFields()
     {
         copyDetailProperties();
@@ -140,7 +137,6 @@ public class InBlocksLabelsAbove extends ColumnarTwoColumns
         doNotBreakInTable(xSection);
     }
 
-    @Override
     protected void insertDetailFieldTitles(int lastGroupPostion)
     {
         // we won't extra field titles

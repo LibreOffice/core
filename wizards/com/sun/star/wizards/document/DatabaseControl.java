@@ -53,7 +53,7 @@ public class DatabaseControl extends Control
         createGridColumn(_oGridControl, _curfieldcolumn, _fieldtype, _columntitle);
     }
 
-    private int getFieldType()
+    protected int getFieldType()
     {
         return m_nFieldType;
     }
@@ -81,7 +81,7 @@ public class DatabaseControl extends Control
 
             XPropertySetInfo xPSI = xPropColumn.getPropertySetInfo();
             if ( xPSI.hasPropertyByName( "MouseWheelBehavior" ) )
-                xPropColumn.setPropertyValue( "MouseWheelBehavior", Short.valueOf( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
+                xPropColumn.setPropertyValue( "MouseWheelBehavior", new Short( com.sun.star.awt.MouseWheelBehavior.SCROLL_DISABLED ) );
 
             setNumericLimits();
             _oGridControl.xNameContainer.insertByName(sFieldName, xPropColumn);
@@ -176,8 +176,14 @@ public class DatabaseControl extends Control
     }
 
     private static long m_nLongMax = 0;
-
-    private void setNumericLimits()
+    public static long getLongMax()
+    {
+        if (m_nLongMax == 0)
+        {
+        }
+        return m_nLongMax;
+    }
+    public void setNumericLimits()
     {
         try
         {

@@ -40,13 +40,13 @@ import java.util.ArrayList;
 public class SQLQueryComposer
 {
 
-
-    private QueryMetaData CurDBMetaData;
+    public XColumnsSupplier xColSuppl;
+    QueryMetaData CurDBMetaData;
     public XSingleSelectQueryAnalyzer m_xQueryAnalyzer;
-    private ArrayList<CommandName> composedCommandNames = new ArrayList<CommandName>(1);
+    ArrayList<CommandName> composedCommandNames = new ArrayList<CommandName>(1);
     private XSingleSelectQueryComposer m_queryComposer;
-    private XMultiServiceFactory xMSF;
-    private boolean bincludeGrouping = true;
+    XMultiServiceFactory xMSF;
+    boolean bincludeGrouping = true;
 
     public SQLQueryComposer(QueryMetaData _CurDBMetaData)
     {
@@ -109,7 +109,7 @@ public class SQLQueryComposer
         return sSelectClause;
     }
 
-    private String getAliasFieldNameClause(String _FieldName)
+    public String getAliasFieldNameClause(String _FieldName)
     {
         String FieldTitle = CurDBMetaData.getFieldTitle(_FieldName);
         if (!FieldTitle.equals(_FieldName))
@@ -122,14 +122,27 @@ public class SQLQueryComposer
         }
     }
 
-
+    public void appendFilterConditions()
+    {
+        try
+        {
+            for (int i = 0; i < CurDBMetaData.getFilterConditions().length; i++)
+            {
+                m_queryComposer.setStructuredFilter(CurDBMetaData.getFilterConditions());
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.err);
+        }
+    }
 
     public void prependSortingCriteria() throws SQLException
     {
         prependSortingCriteria(false);
     }
 
-    private void prependSortingCriteria(boolean _baddAliasFieldNames) throws SQLException
+    public void prependSortingCriteria(boolean _baddAliasFieldNames) throws SQLException
     {
         XIndexAccess xColumnIndexAccess = m_xQueryAnalyzer.getOrderColumns();
         m_queryComposer.setOrder("");
@@ -170,7 +183,7 @@ public class SQLQueryComposer
         m_queryComposer.appendOrderByColumn(xColumn, bascend);
     }
 
-    private void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException
+    public void appendSortingcriteria(boolean _baddAliasFieldNames) throws SQLException
     {
         String sOrder = "";
         m_queryComposer.setOrder("");
@@ -199,7 +212,7 @@ public class SQLQueryComposer
         sOrder = m_queryComposer.getOrder();
     }
 
-    private void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException
+    public void appendGroupByColumns(boolean _baddAliasFieldNames) throws SQLException
     {
         for (int i = 0; i < CurDBMetaData.GroupFieldNames.length; i++)
         {
@@ -267,12 +280,12 @@ public class SQLQueryComposer
         return setQueryCommand(_xParentWindow, _bincludeGrouping, _baddAliasFieldNames, true);
     }
 
-    private boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery)
+    public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery)
     {
         return setQueryCommand(_xParentWindow, _bincludeGrouping, _baddAliasFieldNames, addQuery, false);
     }
 
-    private boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery, boolean prependSortingCriteria)
+    public boolean setQueryCommand(XWindow _xParentWindow, boolean _bincludeGrouping, boolean _baddAliasFieldNames, boolean addQuery, boolean prependSortingCriteria)
     {
         try
         {
@@ -349,7 +362,7 @@ public class SQLQueryComposer
         return null;
     }
 
-    private CommandName getComposedCommandByDisplayName(String _DisplayName)
+    public CommandName getComposedCommandByDisplayName(String _DisplayName)
     {
         if (composedCommandNames != null)
         {
@@ -364,7 +377,7 @@ public class SQLQueryComposer
         return null;
     }
 
-    private String getuniqueAliasName(String _TableName)
+    public String getuniqueAliasName(String _TableName)
     {
         int a = 0;
         String AliasName = "";
@@ -391,7 +404,7 @@ public class SQLQueryComposer
         return CommandName.quoteName(_sname, CurDBMetaData.getIdentifierQuote());
     }
 
-    private void displaySQLErrorDialog(Exception _exception, XWindow _xParentWindow)
+    public void displaySQLErrorDialog(Exception _exception, XWindow _xParentWindow)
     {
         try
         {

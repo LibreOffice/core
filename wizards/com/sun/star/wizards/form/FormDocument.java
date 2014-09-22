@@ -68,12 +68,12 @@ public class FormDocument extends TextDocument
         {
             oFormHandler = new FormHandler(xMSF, xTextDocument);
             oFormHandler.setDrawObjectsCaptureMode(false);
-            oTextStyleHandler = new TextStyleHandler(xTextDocument);
-            oViewHandler = new ViewHandler(xTextDocument);
+            oTextStyleHandler = new TextStyleHandler(xMSFDoc, xTextDocument);
+            oViewHandler = new ViewHandler(xMSFDoc, xTextDocument);
             oMainFormDBMetaData = new CommandMetaData(xMSF);// , CharLocale);
             oSubFormDBMetaData = new CommandMetaData(xMSF);// , CharLocale);
-            ViewHandler oViewHandler = new ViewHandler(xTextDocument);
-            TextStyleHandler oTextStyleSupplier = new TextStyleHandler(xTextDocument);
+            ViewHandler oViewHandler = new ViewHandler(xMSF, xTextDocument);
+            TextStyleHandler oTextStyleSupplier = new TextStyleHandler(xMSFDoc, xTextDocument);
             Helper.setUnoPropertyValue(xTextDocument, "ApplyFormDesignMode", Boolean.FALSE);
             oViewHandler.setViewSetting("ShowTableBoundaries", Boolean.FALSE);
             oViewHandler.setViewSetting("ShowOnlineLayout", Boolean.TRUE);
@@ -121,10 +121,10 @@ public class FormDocument extends TextDocument
             {
                 nMargin = 1000;
             }
-            xPropPageStyle.setPropertyValue("RightMargin", Integer.valueOf(nMargin));
-            xPropPageStyle.setPropertyValue("LeftMargin", Integer.valueOf(nMargin));
-            xPropPageStyle.setPropertyValue("TopMargin", Integer.valueOf(nMargin));
-            xPropPageStyle.setPropertyValue("BottomMargin", Integer.valueOf(nMargin));
+            xPropPageStyle.setPropertyValue("RightMargin", new Integer(nMargin));
+            xPropPageStyle.setPropertyValue("LeftMargin", new Integer(nMargin));
+            xPropPageStyle.setPropertyValue("TopMargin", new Integer(nMargin));
+            xPropPageStyle.setPropertyValue("BottomMargin", new Integer(nMargin));
             aMainFormPoint = new Point(nMargin, nMargin);
             nFormWidth = (int) (0.8 * nPageWidth) - 2 * nMargin;
             nFormHeight = (int) (0.65 * nPageHeight) - 2 * nMargin;
@@ -160,6 +160,7 @@ public class FormDocument extends TextDocument
                 adjustMainFormSize(_NBorderType);
                 final ControlForm aSubControlForm = new ControlForm(this, SOSUBFORM, getSubFormPoint(), getSubFormSize());
                 oControlForms.add(aSubControlForm);
+                /* ((ControlForm) oControlForms.get(1))*/
                 aSubControlForm.initialize(curUIControlArranger.getSelectedArrangement(1), _NBorderType);
             }
             else if (_bModifySubForm)
@@ -239,8 +240,8 @@ public class FormDocument extends TextDocument
         {
             oMainControlForm.oFormController.positionControls(oMainControlForm.curArrangement,
                     oMainControlForm.aStartPoint,
-                    curUIControlArranger.getAlignValue(),
-                    _NBorderType);
+                    oMainControlForm.getFormSize(),
+                    curUIControlArranger.getAlignValue(), _NBorderType);
         }
     }
 
@@ -259,12 +260,13 @@ public class FormDocument extends TextDocument
         }
         else
         {
+//          oSubControlForm.oFormController.adjustYPositions(_idiffheight);
             oSubControlForm.setStartPoint(new Point(oSubControlForm.aStartPoint.X, oMainControlForm.getActualFormHeight() + oMainControlForm.aStartPoint.Y + SOFORMGAP));
-            oSubControlForm.oFormController.positionControls(oSubControlForm.curArrangement, oSubControlForm.aStartPoint, curUIControlArranger.getAlignValue(), _NBorderType);
+            oSubControlForm.oFormController.positionControls(oSubControlForm.curArrangement, oSubControlForm.aStartPoint, oSubControlForm.getAvailableFormSize(), curUIControlArranger.getAlignValue(), _NBorderType);
         }
     }
 
-    private ControlForm getControlFormByName(String _sname)
+    public ControlForm getControlFormByName(String _sname)
     {
         for (int i = 0; i < oControlForms.size(); i++)
         {
@@ -334,18 +336,18 @@ public class FormDocument extends TextDocument
     public class ControlForm
     {
 
-        private XNameContainer xFormContainer;
+        XNameContainer xFormContainer;
         GridControl oGridControl;
-        private FormControlArranger oFormController;
-        private int curArrangement;
-        private FormDocument oFormDocument;
-        private String Name;
-        private Point aStartPoint;
+        FormControlArranger oFormController;
+        int curArrangement;
+        FormDocument oFormDocument;
+        String Name;
+        Point aStartPoint;
         private Size aFormSize;
-        private CommandMetaData oDBMetaData;
-        private XPropertySet xPropertySet;
+        CommandMetaData oDBMetaData;
+        XPropertySet xPropertySet;
 
-        private ControlForm(FormDocument _oFormDocument, String _sname, Point _astartPoint, Size _aFormSize)
+        public ControlForm(FormDocument _oFormDocument, String _sname, Point _astartPoint, Size _aFormSize)
         {
             aStartPoint = _astartPoint;
             aFormSize = _aFormSize;
@@ -402,11 +404,11 @@ public class FormDocument extends TextDocument
             else
             {
                 adaptControlStyles = !oFormController.areControlsexisting();
-                oFormController.positionControls(_curArrangement, aStartPoint, curUIControlArranger.getAlignValue(), _NBorderType);
+                oFormController.positionControls(_curArrangement, aStartPoint, getAvailableFormSize(), curUIControlArranger.getAlignValue(), _NBorderType);
             }
             if (adaptControlStyles)
             {
-                curStyleApplier.applyStyle(true);
+                curStyleApplier.applyStyle(false, true);
             }
             if ((Name.equals(SOMAINFORM)) && (oControlForms.size() > 1))
             {
@@ -434,6 +436,19 @@ public class FormDocument extends TextDocument
 
         public Size getFormSize()
         {
+            return aFormSize;
+        }
+
+        private Size getAvailableFormSize()
+        {
+            if (this.Name.equals(SOMAINFORM))
+            {
+                setFormSize(getMainFormSize(curArrangement));
+            }
+            else
+            {
+                setFormSize(getSubFormSize());
+            }
             return aFormSize;
         }
 
@@ -482,7 +497,7 @@ public class FormDocument extends TextDocument
             {
                 xPropertySet.setPropertyValue("DataSourceName", getDataSourceName());
                 xPropertySet.setPropertyValue(PropertyNames.COMMAND, _oDBMetaData.getCommandName());
-                xPropertySet.setPropertyValue(PropertyNames.COMMAND_TYPE, Integer.valueOf(_oDBMetaData.getCommandType()));
+                xPropertySet.setPropertyValue(PropertyNames.COMMAND_TYPE, new Integer(_oDBMetaData.getCommandType()));
                 for (int i = 0; i < _aPropertySetList.length; i++)
                 {
                     xPropertySet.setPropertyValue(_aPropertySetList[i].Name, _aPropertySetList[i].Value);
@@ -537,7 +552,7 @@ public class FormDocument extends TextDocument
             }
         }
 
-        private void finalizeControls()
+        public void finalizeControls()
         {
             Control[] oLabelControls = getLabelControls();
             Control[] oDBControls = getDatabaseControls();

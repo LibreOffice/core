@@ -36,27 +36,27 @@ import com.sun.star.wizards.db.RelationController;
 public class FormConfiguration
 {
 
-    private WizardDialog CurUnoDialog;
-    private short curtabindex;
-    private XRadioButton optOnExistingRelation;
-    private XCheckBox chkcreateSubForm;
-    private XRadioButton optSelectManually;
-
-    private XFixedText lblRelations;
-    private XListBox lstRelations;
-    private String[] sreferencedTables;
-    private CommandFieldSelection CurSubFormFieldSelection;
-    private String SSUBFORMMODE = "toggleSubFormMode";
-    private String STOGGLESTEPS = "toggleSteps";
-    private String SONEXISTINGRELATIONSELECTION = "onexistingRelationSelection";
-    private boolean bsupportsRelations;
-    private RelationController oRelationController = null;
+    WizardDialog CurUnoDialog;
+    short curtabindex;
+    XRadioButton optOnExistingRelation;
+    XCheckBox chkcreateSubForm;
+    XRadioButton optSelectManually;
+    XFixedText lblSubFormDescription;
+    XFixedText lblRelations;
+    XListBox lstRelations;
+    String[] sreferencedTables;
+    CommandFieldSelection CurSubFormFieldSelection;
+    String SSUBFORMMODE = "toggleSubFormMode";
+    String STOGGLESTEPS = "toggleSteps";
+    String SONEXISTINGRELATIONSELECTION = "onexistingRelationSelection";
+    boolean bsupportsRelations;
+    RelationController oRelationController = null;
 
     public FormConfiguration(WizardDialog _CurUnoDialog)
     {
         this.CurUnoDialog = _CurUnoDialog;
         curtabindex = (short) (FormWizard.SOSUBFORM_PAGE * 100);
-        Integer ISubFormStep = Integer.valueOf(FormWizard.SOSUBFORM_PAGE);
+        Integer ISubFormStep = new Integer(FormWizard.SOSUBFORM_PAGE);
         String sOnExistingRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 5);
         String sOnManualRelation = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 7);
         String sSelectManually = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 4);
@@ -71,7 +71,7 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKCREATESUBFORM", sSelectManually, 97, 26, ISubFormStep, Short.valueOf(curtabindex++), 160
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_CHKCREATESUBFORM", sSelectManually, 97, 26, ISubFormStep, new Short(curtabindex++), 160
                 });
         optOnExistingRelation = CurUnoDialog.insertRadioButton("optOnExistingRelation", STOGGLESTEPS, this,
                 new String[]
@@ -80,7 +80,7 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTONEXISTINGRELATION", sOnExistingRelation, 107, 43, ISubFormStep, Short.valueOf(curtabindex++), 160
+                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTONEXISTINGRELATION", sOnExistingRelation, 107, 43, ISubFormStep, new Short(curtabindex++), 160
                 });
         optSelectManually = CurUnoDialog.insertRadioButton("optSelectManually", STOGGLESTEPS, this,
                 new String[]
@@ -89,7 +89,7 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTSELECTMANUALLY", sOnManualRelation, 107, 99, Short.valueOf((short) 1), ISubFormStep, Short.valueOf(curtabindex++), 160
+                    Boolean.FALSE, UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGFORM_OPTSELECTMANUALLY", sOnManualRelation, 107, 99, new Short((short) 1), ISubFormStep, new Short(curtabindex++), 160
                 });
         lblRelations = CurUnoDialog.insertLabel("lblSelectRelation",
                 new String[]
@@ -98,7 +98,7 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, 19, sSelectRelation, Boolean.TRUE, 119, 56, ISubFormStep, Short.valueOf(curtabindex++), 80
+                    Boolean.FALSE, 19, sSelectRelation, Boolean.TRUE, 119, 56, ISubFormStep, new Short(curtabindex++), 80
                 });
         lstRelations = CurUnoDialog.insertListBox("lstrelations", SONEXISTINGRELATIONSELECTION, SONEXISTINGRELATIONSELECTION, this,
                 new String[]
@@ -107,16 +107,16 @@ public class FormConfiguration
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, 37, "HID:WIZARDS_HID_DLGFORM_lstRELATIONS", 201, 55, ISubFormStep, Short.valueOf(curtabindex++), 103
+                    Boolean.FALSE, 37, "HID:WIZARDS_HID_DLGFORM_lstRELATIONS", 201, 55, ISubFormStep, new Short(curtabindex++), 103
                 });
-        CurUnoDialog.insertLabel("lblSubFormDescription",
+        lblSubFormDescription = CurUnoDialog.insertLabel("lblSubFormDescription",
                 new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    59, sSubFormDescription, Boolean.TRUE, 110, 120, ISubFormStep, Short.valueOf(curtabindex++), 190
+                    59, sSubFormDescription, Boolean.TRUE, 110, 120, ISubFormStep, new Short(curtabindex++), 190
                 });
         CurUnoDialog.insertInfoImage(97, 120, ISubFormStep.intValue());
     }
@@ -132,7 +132,13 @@ public class FormConfiguration
         return ((chkcreateSubForm.getState() == 1) && (optOnExistingRelation.getState()));
     }
 
-
+    public void toggleSubFormMode()
+    {
+        boolean bdoEnable = (this.chkcreateSubForm.getState() == 1);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable && bsupportsRelations));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(optSelectManually), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bdoEnable));
+        toggleSteps();
+    }
 
     public void initialize(CommandFieldSelection _CurSubFormFieldSelection, RelationController _oRelationController)
     {
@@ -143,6 +149,29 @@ public class FormConfiguration
         this.CurSubFormFieldSelection = _CurSubFormFieldSelection;
         toggleRelationsListbox();
         Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bsupportsRelations && (chkcreateSubForm.getState() == 1)));
+    }
+
+    public void toggleSteps()
+    {
+        if (chkcreateSubForm.getState() == 1)
+        {
+            if (optOnExistingRelation.getState())
+            {
+                onexistingRelationSelection();
+            }
+            else if (optSelectManually.getState())
+            {
+                CurUnoDialog.enablefromStep(FormWizard.SOFIELDLINKER_PAGE, (CurSubFormFieldSelection.getSelectedFieldNames().length > 0));
+                CurUnoDialog.setStepEnabled(FormWizard.SOSUBFORMFIELDS_PAGE, true);
+            }
+        }
+        else
+        {
+            CurUnoDialog.setStepEnabled(FormWizard.SOSUBFORMFIELDS_PAGE, false);
+            CurUnoDialog.setStepEnabled(FormWizard.SOFIELDLINKER_PAGE, false);
+            CurUnoDialog.enablefromStep(FormWizard.SOCONTROL_PAGE, true);
+        }
+        toggleRelationsListbox();
     }
 
     public String getreferencedTableName()
@@ -159,6 +188,27 @@ public class FormConfiguration
             }
         }
         return PropertyNames.EMPTY_STRING;
+    }
+
+    public void onexistingRelationSelection()
+    {
+        String scurreferencedTableName = getreferencedTableName();
+        if (scurreferencedTableName.length() > 0)
+        {
+            if (CurSubFormFieldSelection.getSelectedCommandName().equals(scurreferencedTableName))
+            {
+                CurUnoDialog.enablefromStep(FormWizard.SOSUBFORMFIELDS_PAGE, true);
+                CurUnoDialog.setStepEnabled(FormWizard.SOFIELDLINKER_PAGE, false);
+                return;
+            }
+            else
+            {
+                CurUnoDialog.setStepEnabled(FormWizard.SOSUBFORMFIELDS_PAGE, true);
+                CurUnoDialog.enablefromStep(FormWizard.SOFIELDLINKER_PAGE, false);
+                return;
+            }
+        }
+        CurUnoDialog.enablefromStep(FormWizard.SOSUBFORMFIELDS_PAGE, false);
     }
 
     private void toggleRelationsListbox()

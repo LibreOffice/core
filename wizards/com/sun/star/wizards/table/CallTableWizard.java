@@ -23,7 +23,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
-/** This class encapsulates the class, that implements the minimal component, a
+/** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
  */
 public class CallTableWizard
@@ -52,14 +52,17 @@ public class CallTableWizard
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    private static class TableWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
+    public static class TableWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
     {
 
         private PropertyValue[] m_wizardContext;
-
-
+        // <properties>
+        public String           Command;
+        public final Integer    CommandType = com.sun.star.sdb.CommandType.TABLE;
+        // </properties>
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
+         * @param i_serviceFactory
          */
         public TableWizardImplementation(com.sun.star.lang.XMultiServiceFactory i_serviceFactory)
         {
@@ -76,7 +79,7 @@ public class CallTableWizard
                 if ( sEvent.equals(PropertyNames.START) )
                 {
                     TableWizard CurTableWizard = new TableWizard( m_serviceFactory, m_wizardContext );
-                    CurTableWizard.startTableWizard();
+                    Command = CurTableWizard.startTableWizard();
                 }
             }
             catch (Exception exception)
@@ -107,7 +110,7 @@ public class CallTableWizard
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
-        public String[] getSupportedServiceNames()
+        public java.lang.String[] getSupportedServiceNames()
         {
             String[] stringSupportedServiceNames = new String[1];
 
@@ -132,7 +135,6 @@ public class CallTableWizard
             return (booleanSupportsService);
         }
 
-        @Override
         public byte[] getImplementationId()
         {
             return new byte[0];
@@ -141,7 +143,7 @@ public class CallTableWizard
         /** Return the class name of the component.
          * @return Class name of the component.
          */
-        public String getImplementationName()
+        public java.lang.String getImplementationName()
         {
             return (TableWizardImplementation.class.getName());
         }
@@ -151,7 +153,6 @@ public class CallTableWizard
          * @return Sequence of all types (usually interface types) provided by the
          * service.
          */
-        @Override
         public Type[] getTypes()
         {
             Type[] typeReturn =

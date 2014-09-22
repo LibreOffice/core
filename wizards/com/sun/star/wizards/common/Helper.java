@@ -22,6 +22,7 @@ import com.sun.star.util.XMacroExpander;
 import java.util.Calendar;
 
 import com.sun.star.beans.Property;
+import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -34,6 +35,11 @@ import com.sun.star.util.XNumberFormatter;
 
 public class Helper
 {
+
+    /** Creates a new instance of Helper */
+    public Helper()
+    {
+    }
 
     public static long convertUnoDatetoInteger(com.sun.star.util.Date DateValue)
     {
@@ -86,7 +92,21 @@ public class Helper
         }
     }
 
-
+    public static Object getPropertyValue(PropertyValue[] CurPropertyValue, String PropertyName)
+    {
+        int MaxCount = CurPropertyValue.length;
+        for (int i = 0; i < MaxCount; i++)
+        {
+            if (CurPropertyValue[i] != null)
+            {
+                if (CurPropertyValue[i].Name.equals(PropertyName))
+                {
+                    return CurPropertyValue[i].Value;
+                }
+            }
+        }
+        throw new RuntimeException();
+    }
 
     public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName, java.lang.Class<?> xClass)
     {
@@ -114,9 +134,53 @@ public class Helper
         }
     }
 
+    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName)
+    {
+        if (CurPropertyValue != null)
+        {
+            int MaxCount = CurPropertyValue.length;
+            for (int i = 0; i < MaxCount; i++)
+            {
+                if (CurPropertyValue[i] != null)
+                {
+                    PropertyValue aValue = (PropertyValue) CurPropertyValue[i];
+                    if (aValue != null && aValue.Name.equals(PropertyName))
+                    {
+                        return aValue.Value;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
-
-
+    public static Object getPropertyValuefromAny(Object[] CurPropertyValue, String PropertyName, java.lang.Class<?> xClass)
+    {
+        try
+        {
+            if (CurPropertyValue != null)
+            {
+                int MaxCount = CurPropertyValue.length;
+                for (int i = 0; i < MaxCount; i++)
+                {
+                    if (CurPropertyValue[i] != null)
+                    {
+                        PropertyValue aValue = (PropertyValue) CurPropertyValue[i];
+                        if (aValue != null && aValue.Name.equals(PropertyName))
+                        {
+                            return com.sun.star.uno.AnyConverter.toObject(new com.sun.star.uno.Type(xClass), aValue.Value);
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.err);
+            return null;
+        }
+    }
 
     public static Object getUnoPropertyValue(Object oUnoObject, String PropertyName)
     {
@@ -206,7 +270,7 @@ public class Helper
      * @param oValue the parameter that has to represent an object
      * @return a null reference if the array is empty
      */
-    private static Object getArrayValue(Object oValue)
+    public static Object getArrayValue(Object oValue)
     {
         try
         {
@@ -262,6 +326,7 @@ public class Helper
 
         /**
          * @param format a constant of the enumeration NumberFormatIndex
+         * @return
          */
         public int getFormat(short format)
         {
@@ -283,7 +348,7 @@ public class Helper
          * @param date a VCL date in form of 20041231
          * @return a document relative date
          */
-        private synchronized double getDocumentDateAsDouble(int date)
+        public synchronized double getDocumentDateAsDouble(int date)
         {
             calendar.clear();
             calendar.set(date / 10000,
@@ -298,9 +363,29 @@ public class Helper
             return (date1 - docNullTime) / DAY_IN_MILLIS + 1;
         }
 
-        private double getDocumentDateAsDouble(DateTime date)
+        public double getDocumentDateAsDouble(DateTime date)
         {
             return getDocumentDateAsDouble(date.Year * 10000 + date.Month * 100 + date.Day);
+        }
+
+        public synchronized double getDocumentDateAsDouble(long javaTimeInMillis)
+        {
+            calendar.clear();
+            JavaTools.setTimeInMillis(calendar, javaTimeInMillis);
+
+            long date1 = getTimeInMillis();
+
+            /*
+             * docNullTime and date1 are in millis, but
+             * I need a day...
+             */
+            return (date1 - docNullTime) / DAY_IN_MILLIS + 1;
+
+        }
+
+        public String format(int formatIndex, int date)
+        {
+            return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date));
         }
 
         public String format(int formatIndex, DateTime date)
@@ -308,7 +393,10 @@ public class Helper
             return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(date));
         }
 
-
+        public String format(int formatIndex, long javaTimeInMillis)
+        {
+            return formatter.convertNumberToString(formatIndex, getDocumentDateAsDouble(javaTimeInMillis));
+        }
     }
 
     public static XComponentContext getComponentContext(XMultiServiceFactory _xMSF)

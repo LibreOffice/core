@@ -22,7 +22,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
-/** This class encapsulates the class, that implements the minimal component, a
+/** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
  */
 public class CallFormWizard
@@ -103,7 +103,7 @@ public class CallFormWizard
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
-        public String[] getSupportedServiceNames()
+        public java.lang.String[] getSupportedServiceNames()
         {
             String[] stringSupportedServiceNames = new String[1];
 
@@ -128,7 +128,6 @@ public class CallFormWizard
             return (booleanSupportsService);
         }
 
-        @Override
         public byte[] getImplementationId()
         {
             return new byte[0];
@@ -137,7 +136,7 @@ public class CallFormWizard
         /** Return the class name of the component.
          * @return Class name of the component.
          */
-        public String getImplementationName()
+        public java.lang.String getImplementationName()
         {
             return (FormWizardImplementation.class.getName());
         }
@@ -147,21 +146,25 @@ public class CallFormWizard
          * @return Sequence of all types (usually interface types) provided by the
          * service.
          */
-        @Override
         public Type[] getTypes()
         {
-            Type[] typeReturn = new Type[]
-                        {
-                            new Type(com.sun.star.task.XJobExecutor.class),
-                            new Type(com.sun.star.lang.XTypeProvider.class),
-                            new Type(com.sun.star.lang.XServiceInfo.class),
-                            new Type(com.sun.star.beans.XPropertySet.class),
-                            new Type(com.sun.star.beans.XFastPropertySet.class),
-                            new Type(com.sun.star.beans.XMultiPropertySet.class),
-                            new Type(com.sun.star.lang.XInitialization.class)
-                        };
+            Type[] typeReturn =
+            {
+            };
 
-            return typeReturn;
+            try
+            {
+                typeReturn = new Type[]
+                        {
+                            new Type(com.sun.star.task.XJobExecutor.class), new Type(com.sun.star.lang.XTypeProvider.class), new Type(com.sun.star.lang.XServiceInfo.class), new Type(com.sun.star.beans.XPropertySet.class), new Type(com.sun.star.beans.XFastPropertySet.class), new Type(com.sun.star.beans.XMultiPropertySet.class), new Type(com.sun.star.lang.XInitialization.class)
+                        };
+            }
+            catch (Exception exception)
+            {
+                System.err.println(exception);
+            }
+
+            return (typeReturn);
         }
     }
 }

@@ -40,15 +40,15 @@ import com.sun.star.wizards.common.PropertyNames;
 public class RecordParser extends QueryMetaData
 {
 
-    private XNameAccess xColumns;
-
-    private com.sun.star.sdbc.XRow xResultSetRow;
+    XNameAccess xColumns;
+    com.sun.star.sdbc.XRow xRow;
+    com.sun.star.sdbc.XRow xResultSetRow;
     public XResultSet ResultSet;
-    private XInterface xRowSet;
-    private XCompletedExecution xExecute;
-
-    private XComponent xRowSetComponent;
-    private XInteractionHandler xInteraction;
+    XInterface xRowSet;
+    XCompletedExecution xExecute;
+    XColumnsSupplier xRowSetColumnsSupplier;
+    XComponent xRowSetComponent;
+    XInteractionHandler xInteraction;
     public FieldColumn[] GroupFieldColumns;
     public FieldColumn[] RecordFieldColumns;
 
@@ -70,7 +70,7 @@ public class RecordParser extends QueryMetaData
         try
         {
             xRowSet = (XInterface) xMSF.createInstance("com.sun.star.sdb.RowSet");
-            UnoRuntime.queryInterface(XColumnsSupplier.class, xRowSet);
+            xRowSetColumnsSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, xRowSet);
             xRowSetComponent = UnoRuntime.queryInterface(XComponent.class, xRowSet);
             xExecute = UnoRuntime.queryInterface(XCompletedExecution.class, xRowSet);
             XInterface oInteraction = (XInterface) xMSF.createInstance("com.sun.star.task.InteractionHandler");
@@ -125,7 +125,7 @@ public class RecordParser extends QueryMetaData
         return Any.VOID;
     }
 
-    private Object getColumnValue(int ColIndex, int iType)
+    public Object getColumnValue(int ColIndex, int iType)
     {
         Object oAny = Any.VOID;
         switch (iType)
@@ -209,7 +209,7 @@ public class RecordParser extends QueryMetaData
             Helper.setUnoPropertyValue(xRowSet, "DataSourceName", DataSourceName);
             Helper.setUnoPropertyValue(xRowSet, PropertyNames.ACTIVE_CONNECTION, DBConnection);
             Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND, Command);
-            Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND_TYPE, Integer.valueOf(_nCommandType)); // CommandType
+            Helper.setUnoPropertyValue(xRowSet, PropertyNames.COMMAND_TYPE, new Integer(_nCommandType)); // CommandType
             xExecute.executeWithCompletion(xInteraction);
             com.sun.star.sdb.XResultSetAccess xResultAccess = UnoRuntime.queryInterface(com.sun.star.sdb.XResultSetAccess.class, xRowSet);
             ResultSet = xResultAccess.createResultSet();
@@ -285,7 +285,6 @@ public class RecordParser extends QueryMetaData
         return true;
     }
 
-    @Override
     public void dispose()
     {
         if (xRowSetComponent != null)

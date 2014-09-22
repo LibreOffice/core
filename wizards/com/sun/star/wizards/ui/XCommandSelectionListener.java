@@ -16,17 +16,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/*
- * XMLSupplier.java
- *
- * Created on 19. September 2003, 11:52
- */
-package com.sun.star.wizards.common;
+package com.sun.star.wizards.ui;
 
-import org.w3c.dom.Node;
-
-public interface XMLProvider
+public interface XCommandSelectionListener
 {
-
-    public Node createDOM(Node parent);
+    public void CommandSelected(String CommandName);
 }

@@ -34,13 +34,13 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
     // ReportTextDocument CurReportDocument;
     IReportDocument CurReportDocument;
 
-
-    private static String sProgressDBConnection;
-    private static String sProgressDataImport;
-
-
-    private static String sProgressTitle;
-    private static String sStop;
+    static boolean bStopProcess;
+    static String sProgressDBConnection;
+    static String sProgressDataImport;
+    static String sProgressBaseCurRecord;
+    static String sProgressCurRecord;
+    static String sProgressTitle;
+    static String sStop;
 
     public Dataimport(XMultiServiceFactory _xMSF)
     {
@@ -49,6 +49,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         sProgressDBConnection = m_oResource.getResText(UIConsts.RID_DB_COMMON + 34);
         sProgressDataImport = m_oResource.getResText(UIConsts.RID_REPORT + 67);
         sProgressTitle = m_oResource.getResText(UIConsts.RID_REPORT + 62);
+        sProgressBaseCurRecord = m_oResource.getResText(UIConsts.RID_REPORT + 63);
         sStop = m_oResource.getResText(UIConsts.RID_DB_COMMON + 21);
 
     }
@@ -63,7 +64,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         CurReportDocument.StopProcess();
     }
 
-    private void showProgressDisplay(boolean bgetConnection)
+    public void showProgressDisplay(XMultiServiceFactory xMSF, boolean bgetConnection)
     {
         try
         {
@@ -129,7 +130,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     },
                     new Object[]
                     {
-                        14, HelpIds.getHelpIdString(34321), 74, 58, 0, Short.valueOf((short) 1), 40, sStop
+                        14, HelpIds.getHelpIdString(34321), 74, 58, 0, new Short((short) 1), 40, sStop
                     });
             createWindowPeer(CurReportDocument.getWizardParent());
             calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());
@@ -148,7 +149,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         }
     }
 
-    private void importReportData(final XMultiServiceFactory _xMSF, PropertyValue[] _properties)
+    public void importReportData(final XMultiServiceFactory _xMSF, final Dataimport _CurDataimport, IReportDocument _CurReportDocument, PropertyValue[] _properties)
     {
         if (CurReportDocument.reconnectToDatabase(_xMSF, _properties))
         {
@@ -165,7 +166,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
         PropertyValue[] properties)
     {
         CurReportDocument = ReportTextImplementation.create( xMSF, i_documentUI, _textDocument, m_oResource );
-        showProgressDisplay(true);
-        importReportData(xMSF, properties);
+        showProgressDisplay(xMSF, true);
+        importReportData(xMSF, this, CurReportDocument, properties);
     }
 }

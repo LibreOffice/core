@@ -19,6 +19,9 @@ package com.sun.star.wizards.db;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdbc.SQLException;
+import com.sun.star.sdbcx.KeyType;
+import com.sun.star.sdbcx.XColumnsSupplier;
+import com.sun.star.sdbcx.XKeysSupplier;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.uno.UnoRuntime;
@@ -63,10 +66,10 @@ public class CommandMetaData extends DBMetaData
     public String[] NonAggregateFieldNames;
     private int CommandType;
     private String Command;
-    private boolean bCatalogAtStart = true;
-    private String sCatalogSep = PropertyNames.EMPTY_STRING;
-    private String sIdentifierQuote = PropertyNames.EMPTY_STRING;
-    private boolean bCommandComposerAttributesalreadyRetrieved = false;
+    boolean bCatalogAtStart = true;
+    String sCatalogSep = PropertyNames.EMPTY_STRING;
+    String sIdentifierQuote = PropertyNames.EMPTY_STRING;
+    boolean bCommandComposerAttributesalreadyRetrieved = false;
     private XIndexAccess xIndexKeys;
 
     public CommandMetaData(XMultiServiceFactory xMSF, Locale _aLocale, NumberFormatter oNumberFormatter)
@@ -79,7 +82,7 @@ public class CommandMetaData extends DBMetaData
         super(xMSF);
     }
 
-    public void initializeFieldColumns(String _CommandName, String[] _FieldNames)
+    public void initializeFieldColumns(boolean _bgetDefaultValue, String _CommandName, String[] _FieldNames)
     {
         this.setCommandName(_CommandName);
         FieldColumns = new FieldColumn[_FieldNames.length];
@@ -268,7 +271,7 @@ public class CommandMetaData extends DBMetaData
         throw new com.sun.star.uno.RuntimeException();
     }
 
-    public boolean getFieldNamesOfCommand(String _commandname, int _commandtype)
+    public boolean getFieldNamesOfCommand(String _commandname, int _commandtype, boolean _bAppendMode)
     {
         try
         {
@@ -309,7 +312,20 @@ public class CommandMetaData extends DBMetaData
         return false;
     }
 
-
+    public String[] getOrderableColumns(String[] _fieldnames)
+    {
+        ArrayList<String> aOrderableColumns = new ArrayList<String>();
+        for (int i = 0; i < _fieldnames.length; i++)
+        {
+            FieldColumn ofieldcolumn = getFieldColumnByFieldName(_fieldnames[i]);
+            if (getDBDataTypeInspector().isColumnOrderable(ofieldcolumn.getXColumnPropertySet()))
+            {
+                aOrderableColumns.add(_fieldnames[i]);
+            }
+        }
+        String[] sretfieldnames = new String[aOrderableColumns.size()];
+        return aOrderableColumns.toArray(sretfieldnames);
+    }
 
     /**
      * @return Returns the command.
@@ -343,7 +359,7 @@ public class CommandMetaData extends DBMetaData
         CommandType = _commandType;
     }
 
-    private boolean isnumeric(FieldColumn _oFieldColumn)
+    public boolean isnumeric(FieldColumn _oFieldColumn)
     {
         try
         {
@@ -452,7 +468,25 @@ public class CommandMetaData extends DBMetaData
         }
     }
 
-
+    /**
+     * the fieldnames passed over are not necessarily the ones that are defined in the class
+     * @param _DisplayFieldNames
+     * @return
+     */
+    public boolean hasNumericalFields(String[] _DisplayFieldNames)
+    {
+        if (_DisplayFieldNames != null && _DisplayFieldNames.length > 0)
+        {
+            for (int i = 0; i < _DisplayFieldNames.length; i++)
+            {
+                if (isnumeric(getFieldColumnByDisplayName(_DisplayFieldNames[i])))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public String getFieldTitle(String FieldName)
     {
@@ -536,11 +570,101 @@ public class CommandMetaData extends DBMetaData
         return RecordFieldNames[i];
     }
 
+    /**@deprecated use 'RelationController' class instead
+     *
+     * @param _stablename
+     * @param _ncommandtype
+     * @return
+     */
+    public String[] getReferencedTables(String _stablename, int _ncommandtype)
+    {
+        String[] sTotReferencedTables = new String[]
+        {
+        };
+        try
+        {
+            if (_ncommandtype == com.sun.star.sdb.CommandType.TABLE && xDBMetaData.supportsIntegrityEnhancementFacility())
+            {
+                java.util.ArrayList<String> TableVector = new java.util.ArrayList<String>();
+                Object oTable = getTableNamesAsNameAccess().getByName(_stablename);
+                XKeysSupplier xKeysSupplier = UnoRuntime.queryInterface(XKeysSupplier.class, oTable);
+                xIndexKeys = xKeysSupplier.getKeys();
+                for (int i = 0; i < xIndexKeys.getCount(); i++)
+                {
+                    XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xIndexKeys.getByIndex(i));
+                    int curtype = AnyConverter.toInt(xPropertySet.getPropertyValue("Type"));
+                    if (curtype == KeyType.FOREIGN)
+                    {
+                        String sreftablename = AnyConverter.toString(xPropertySet.getPropertyValue("ReferencedTable"));
+                        if (getTableNamesAsNameAccess().hasByName(sreftablename))
+                        {
+                            TableVector.add(sreftablename);
+                        }
+                    }
+                }
+                if (TableVector.size() > 0)
+                {
+                    sTotReferencedTables = new String[TableVector.size()];
+                    TableVector.toArray(sTotReferencedTables);
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.err);
+        }
+        return sTotReferencedTables;
+    }
 
+    /**@deprecated use 'RelationController' class instead
+     *
+     * @param _sreferencedtablename
+     * @return
+     */
+    public String[][] getKeyColumns(String _sreferencedtablename)
+    {
+        String[][] skeycolumnnames = null;
+        try
+        {
+            for (int i = 0; i < xIndexKeys.getCount(); i++)
+            {
+                XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xIndexKeys.getByIndex(i));
+                int curtype = AnyConverter.toInt(xPropertySet.getPropertyValue("Type"));
+                if (curtype == KeyType.FOREIGN)
+                {
+                    String scurreftablename = AnyConverter.toString(xPropertySet.getPropertyValue("ReferencedTable"));
+                    if (getTableNamesAsNameAccess().hasByName(scurreftablename))
+                    {
+                        if (scurreftablename.equals(_sreferencedtablename))
+                        {
+                            XColumnsSupplier xColumnsSupplier = UnoRuntime.queryInterface(XColumnsSupplier.class, xPropertySet);
+                            String[] smastercolnames = xColumnsSupplier.getColumns().getElementNames();
+                            skeycolumnnames = new String[2][smastercolnames.length];
+                            skeycolumnnames[0] = smastercolnames;
+                            skeycolumnnames[1] = new String[smastercolnames.length];
+                            for (int n = 0; n < smastercolnames.length; n++)
+                            {
+                                XPropertySet xcolPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xColumnsSupplier.getColumns().getByName(smastercolnames[n]));
+                                skeycolumnnames[1][n] = AnyConverter.toString(xcolPropertySet.getPropertyValue("RelatedColumn"));
+                            }
+                            return skeycolumnnames;
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return skeycolumnnames;
+    }
 
+    public void openFormDocument(boolean _bReadOnly)
+    {
+    }
 
-
-    private void setCommandComposingAttributes()
+    public void setCommandComposingAttributes()
     {
         try
         {

@@ -56,7 +56,7 @@ public class GroupFieldHandler extends FieldSelection
                     },
                     new Object[]
                     {
-                            Boolean.FALSE, 18, sNote, Boolean.TRUE, 95, 158, Integer.valueOf(ReportWizard.SOGROUPPAGE), 209
+                            Boolean.FALSE, 18, sNote, Boolean.TRUE, 95, 158, new Integer(ReportWizard.SOGROUPPAGE), 209
                     });
         }
         catch (Exception exception)
@@ -65,7 +65,7 @@ public class GroupFieldHandler extends FieldSelection
         }
     }
 
-    private boolean isGroupField(String _FieldName)
+    public boolean isGroupField(String _FieldName)
     {
         return (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, _FieldName) != -1);
     }
@@ -115,7 +115,6 @@ public class GroupFieldHandler extends FieldSelection
         CurDBMetaData.GroupFieldNames = GroupFieldNames;
     }
     // @Override
-    @Override
     protected void toggleListboxButtons(short iFieldsSelIndex, short iSelFieldsSelIndex)
     {
         super.toggleListboxButtons(iFieldsSelIndex, iSelFieldsSelIndex);
@@ -126,7 +125,6 @@ public class GroupFieldHandler extends FieldSelection
         }
     }
 
-    @Override
     public void selectFields(boolean bMoveAll)
     {
         int iSelCount = xSelectedFieldsListBox.getItemCount();
@@ -137,7 +135,7 @@ public class GroupFieldHandler extends FieldSelection
 
     }
 
-    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    /* protected */ class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
         public void moveItemDown(String Selitem)
@@ -174,6 +172,7 @@ public class GroupFieldHandler extends FieldSelection
                 String[] NewSelGroupNames = xSelectedFieldsListBox.getItems();
                 CurUnoDialog.setControlProperty("lblBlindTextNote_1", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(NewSelGroupNames.length == 0));
 
+            // CurReportDocument.refreshGroupFields(xSelectedFieldsListBox.getItems());
             }
         }
 

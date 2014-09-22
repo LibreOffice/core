@@ -24,7 +24,7 @@ import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
-/** This class encapsulates the class, that implements the minimal component, a
+/** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
  */
 public class CallQueryWizard
@@ -56,8 +56,8 @@ public class CallQueryWizard
     public static class QueryWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
     {
         private PropertyValue[] m_wizardContext;
-
-
+        public String           Command;
+        public final Integer    CommandType = com.sun.star.sdb.CommandType.QUERY;
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param i_serviceFactory A special service factory could be introduced while initializing.
@@ -77,7 +77,7 @@ public class CallQueryWizard
                 if (sEvent.equals(PropertyNames.START))
                 {
                     QueryWizard CurQueryWizard = new QueryWizard( m_serviceFactory, m_wizardContext );
-                    CurQueryWizard.start();
+                    Command = CurQueryWizard.start();
                 }
             }
             catch (Exception exception)
@@ -108,7 +108,7 @@ public class CallQueryWizard
         /** This method returns an array of all supported service names.
          * @return Array of supported service names.
          */
-        public String[] getSupportedServiceNames()
+        public java.lang.String[] getSupportedServiceNames()
         {
             String[] stringSupportedServiceNames = new String[1];
 
@@ -142,7 +142,7 @@ public class CallQueryWizard
         /** Return the class name of the component.
          * @return Class name of the component.
          */
-        public String getImplementationName()
+        public java.lang.String getImplementationName()
         {
             return (QueryWizardImplementation.class.getName());
         }

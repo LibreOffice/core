@@ -70,7 +70,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
      * We have to remove this!!!
      * @return
      */
-    private ReportTextDocument getDoc()
+    ReportTextDocument getDoc()
     {
         if (m_aDoc == null)
         {
@@ -125,22 +125,24 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     {
         return getDoc().xWindowPeer;
     }
-    private static String sMsgQueryCreationImpossible;
-    private static String sReportFormNotExisting;
-
-    private static String sMsgEndAutopilot;
-
-
-
+    static String sMsgQueryCreationImpossible;
+    static String sReportFormNotExisting;
+    static String sMsgHiddenControlMissing;
+    static String sMsgEndAutopilot;
+    static String sMsgConnectionImpossible;
+    static String sMsgNoConnection;
+    static String[] ReportMessages = new String[4];
 
     private void initialResources()
     {
         sReportFormNotExisting = m_resource.getResText(UIConsts.RID_REPORT + 64);
         sMsgQueryCreationImpossible = m_resource.getResText(UIConsts.RID_REPORT + 65);
+        sMsgHiddenControlMissing = m_resource.getResText(UIConsts.RID_REPORT + 66);
         sMsgEndAutopilot = m_resource.getResText(UIConsts.RID_DB_COMMON + 33);
+        sMsgNoConnection = m_resource.getResText(UIConsts.RID_DB_COMMON + 14);
     }
 
-    private void addTextSectionCopies()
+    public void addTextSectionCopies()
     {
         m_aDoc.setLayoutSectionsVisible(false);
         XTextCursor xTextCursor = ReportTextDocument.createTextCursor(m_aDoc.xTextDocument.getText());
@@ -475,7 +477,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 
     public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount)
     {
-        return getDoc().addGroupNametoDocument(CurGroupTitle, GroupFieldVector, ReportPath, iSelCount);
+        return getDoc().addGroupNametoDocument(GroupNames, CurGroupTitle, GroupFieldVector, ReportPath, iSelCount);
     }
 
     public void refreshGroupFields(String[] _sNewNames)
@@ -491,6 +493,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     public void setPageOrientation(int nOrientation) throws com.sun.star.lang.IllegalArgumentException
     {
         // LLA: should we lock controllers here?
+        // CurReportDocument.getDoc().xTextDocument.lockControllers();
         if (nOrientation == ReportLayouter.SOOPTLANDSCAPE)
         {
             getDoc().changePageOrientation(true);
@@ -597,7 +600,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             // Check general availability of office paths
             try
             {
-                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template");
+                m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
                 FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
             }
             catch (Exception e)

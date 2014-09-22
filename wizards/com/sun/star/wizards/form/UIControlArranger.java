@@ -26,6 +26,7 @@ import com.sun.star.awt.XRadioButton;
 import com.sun.star.lang.EventObject;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
+import com.sun.star.wizards.document.Control;
 import com.sun.star.wizards.ui.ButtonList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -54,7 +55,7 @@ public class UIControlArranger
         this.CurUnoDialog = _CurUnoDialog;
         this.curFormDocument = _curFormDocument;
         curtabindex = (short) (FormWizard.SOCONTROL_PAGE * 100);
-        IControlStep = Integer.valueOf(FormWizard.SOCONTROL_PAGE);
+        IControlStep = new Integer(FormWizard.SOCONTROL_PAGE);
         String sLabelPlacment = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 32);
         String sAlignLeft = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 33);
         String sAlignRight = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 34);
@@ -67,7 +68,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sLabelPlacment, 97, 25, IControlStep, Short.valueOf(curtabindex++), 207
+                    UIConsts.INTEGERS[8], sLabelPlacment, 97, 25, IControlStep, new Short(curtabindex++), 207
                 });
         // Radio Button "Align Left"
         optAlignLeft = CurUnoDialog.insertRadioButton("optAlignLeft", SOALIGNMETHOD, this,
@@ -77,7 +78,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, 107, 38, Short.valueOf((short) 1), IControlStep, Short.valueOf(curtabindex++), 171
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, 107, 38, new Short((short) 1), IControlStep, new Short(curtabindex++), 171
                 });
         // Radio Button "Align Right"
         optAlignRight = CurUnoDialog.insertRadioButton("optAlignRight", SOALIGNMETHOD, this,
@@ -87,7 +88,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT", sAlignRight, Boolean.TRUE, 107, 50, IControlStep, Short.valueOf(curtabindex++), 171
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT", sAlignRight, Boolean.TRUE, 107, 50, IControlStep, new Short(curtabindex++), 171
                 });
 
 
@@ -99,7 +100,7 @@ public class UIControlArranger
         DefaultListModel imageModel = new DefaultListModel();
         for (int i = 0; i < HelpTexts.length; i++)
         {
-            imageModel.addElement(Integer.valueOf(i));
+            imageModel.addElement(new Integer(i));
         }
          String sMainArrangementHeader = CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 41); // "Arrangement of the main form"
          m_aArrangeList[0] = new ArrangeButtonList(0, imageModel, sMainArrangementHeader);
@@ -122,7 +123,7 @@ public class UIControlArranger
             int ResId = UIConsts.RID_IMG_FORM + (2 * ((Integer) listitem).intValue());
             return new Integer[]
                     {
-                        Integer.valueOf(ResId), Integer.valueOf(ResId + 1)
+                        new Integer(ResId), new Integer(ResId + 1)
                     };
         }
 
@@ -148,7 +149,29 @@ public class UIControlArranger
         return optAlignLeft.getState() ? (short)0 : (short)2;
     }
 
-
+    public void alignLabelControls()
+    {
+        try
+        {
+            short iAlignValue = getAlignValue();
+            for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
+            {
+                FormDocument.ControlForm curControlForm = curFormDocument.oControlForms.get(m);
+                if (curControlForm.getArrangemode() == FormWizard.COLUMNAR_LEFT)
+                {
+                    Control[] LabelControls = curControlForm.getLabelControls();
+                    for (int n = 0; n < LabelControls.length; n++)
+                    {
+                        LabelControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short(iAlignValue));
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace(System.err);
+        }
+    }
 
     private void enableAlignControlGroup(boolean _bEnableAlignControlGroup)
     {
@@ -166,7 +189,7 @@ public class UIControlArranger
         public ArrangeButtonList(int _formindex, ListModel model, String _sArrangementHeader)
         {
             formindex = _formindex;
-            Integer YPos = Integer.valueOf(SOBASEIMAGEYPOSITION + _formindex * SOIMAGELISTHEIGHT);
+            Integer YPos = new Integer(SOBASEIMAGEYPOSITION + _formindex * SOIMAGELISTHEIGHT);
             // Label ArrangementHeader ----------------------
             CurUnoDialog.insertFixedLine("lnLabelPlacment_" + (_formindex + 1),
                     new String[]
@@ -186,7 +209,7 @@ public class UIControlArranger
                         97,
                         YPos,
                         IControlStep,
-                        Short.valueOf(curtabindex++),
+                        new Short(curtabindex++),
                         207
                     });
 

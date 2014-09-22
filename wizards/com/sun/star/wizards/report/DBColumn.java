@@ -34,6 +34,7 @@ import com.sun.star.text.XTextTable;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XNumberFormats;
 import com.sun.star.wizards.db.*;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.text.TextDocument;
@@ -43,29 +44,29 @@ import com.sun.star.wizards.text.TextFieldHandler;
 public class DBColumn
 {
 
-    private XCell xValCell;
-    private XTextRange xValTextCell;
-    private XTextCursor xValCellCursor;
-
+    public XCell xValCell;
+    public XTextRange xValTextCell;
+    public XTextCursor xValCellCursor;
+    public XNumberFormats xValCellNumberFormats;
     public XCell xNameCell;
-    private XTextRange xNameTextCell;
-    private boolean bAlignLeft;
-
-    private String CharFontName;
-
-    private PropertyState PropertyState;
+    public XTextRange xNameTextCell;
+    public boolean bAlignLeft;
+    public Object DefaultValue;
+    public String CharFontName;
+    public int FormatKey;
+    public PropertyState PropertyState;
     public int ValColumn = 1;
-    private int ValRow = 0;
+    public int ValRow = 0;
     public FieldColumn CurDBField;
     private XTextTable xTextTable;
     private XTableColumns xTableColumns;
     private XCellRange xCellRange;
     public XNamed xTableName;
     private boolean bIsGroupColumn;
-
-    private RecordParser CurDBMetaData;
-    private RecordTable CurRecordTable;
-    private TextTableHandler oTextTableHandler;
+    TextDocument oTextDocument;
+    RecordParser CurDBMetaData;
+    RecordTable CurRecordTable;
+    TextTableHandler oTextTableHandler;
 
     public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, int i)
     {
@@ -136,7 +137,7 @@ public class DBColumn
         return false;
     }
 
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, String TableName, DBColumn OldDBColumn) {
+    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName, DBColumn OldDBColumn) {
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
         CurDBField = CurDBMetaData.getFieldColumnByDisplayName(_FieldName);
@@ -152,7 +153,7 @@ public class DBColumn
         initializeNumberFormat();
     }
 
-    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, String TableName) throws Exception
+    public DBColumn(TextTableHandler _oTextTableHandler, RecordParser _CurDBMetaData, String _FieldName, int GroupIndex, String TableName) throws Exception
     {
         this.oTextTableHandler = _oTextTableHandler;
         this.CurDBMetaData = _CurDBMetaData;
@@ -167,7 +168,7 @@ public class DBColumn
         {
             xRows = xTextTable.getRows();
         }
-        catch (NullPointerException e)
+        catch (java.lang.NullPointerException e)
         {
             e.printStackTrace();
 // TODO: handle the nullpointer right
@@ -240,7 +241,7 @@ public class DBColumn
         replaceValueCellofTable(_bIsLandscape);
     }
 
-    private void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler)
+    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler)
     {
         XTextCursor xTextCursor = TextDocument.createTextCursor(xNameCell);
         xTextCursor.gotoStart(false);
@@ -249,7 +250,14 @@ public class DBColumn
         oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
     }
 
-
+    public void insertUserFieldToTableCell(TextFieldHandler oTextFieldHandler, XCell xCell)
+    {
+        XTextCursor xTextCursor = TextDocument.createTextCursor(xCell);
+        xTextCursor.gotoStart(false);
+        xTextCursor.gotoEnd(true);
+        xTextCursor.setString(PropertyNames.EMPTY_STRING);
+        oTextFieldHandler.insertUserField(xTextCursor, CurDBField.getFieldName(), CurDBField.getFieldTitle());
+    }
 
     public void formatValueCell()
     {
@@ -276,7 +284,7 @@ public class DBColumn
             if (bAlignLeft)
             {
                 xValCellCursor = TextDocument.createTextCursor(xValCell);
-                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", Integer.valueOf(com.sun.star.style.ParagraphAdjust.LEFT_value));
+                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(com.sun.star.style.ParagraphAdjust.LEFT_value));
             }
         }
         catch (Exception exception)
@@ -285,7 +293,7 @@ public class DBColumn
         }
     }
 
-    private void modifyCellContent(Object CurGroupValue)
+    public void modifyCellContent(Object CurGroupValue)
     {
         double dblValue = 0;
         try
@@ -337,7 +345,7 @@ public class DBColumn
         }
     }
     // If the parameter CurGroupValue is null the placeholders are inserted
-    private void replaceValueCellofTable(boolean _bIsLandscape)
+    public void replaceValueCellofTable(boolean _bIsLandscape)
     {
         try
         {
@@ -353,7 +361,7 @@ public class DBColumn
             modifyCellContent(CurGroupValue);
             if (bAlignLeft)
             {
-                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", Integer.valueOf(ParagraphAdjust.LEFT_value));
+                Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.LEFT_value));
             }
 
             int nFieldType = CurDBField.getFieldType();
@@ -364,7 +372,7 @@ public class DBColumn
                 Helper.setUnoPropertyValue(xValCellCursor, "CharFontName", CharFontName);
                 if (!bIsGroupColumn)
                 {
-                    Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", Integer.valueOf(ParagraphAdjust.CENTER_value));
+                    Helper.setUnoPropertyValue(xValCellCursor, "ParaAdjust", new Integer(ParagraphAdjust.CENTER_value));
                 }
             }
             else

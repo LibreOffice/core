@@ -55,7 +55,7 @@ import java.util.Map;
 public class ReportWizard extends DatabaseObjectWizard implements XTextListener
 {
 
-    private FieldSelection CurGroupFieldSelection;
+    protected FieldSelection CurGroupFieldSelection;
     private SortingComponent CurSortingComponent;
     private TitlesComponent CurTitlesComponent;
     private CommandFieldSelection CurDBCommandFieldSelection;
@@ -110,7 +110,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                         102,
                         41,
                         1,
-                        Short.valueOf((short) 0),
+                        new Short((short) 0),
                         sMsgWizardName,
                         310
                     });
@@ -119,7 +119,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
-    @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         if ((nOldStep >= SOTEMPLATEPAGE) && (nNewStep < SOTEMPLATEPAGE))
@@ -163,7 +162,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
-    @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
 
@@ -188,6 +186,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             case SOTITLEPAGE:
                 String[] sFieldTitles = CurTitlesComponent.getFieldTitles();
                 // set new field name titles
+                // CurReportDocument.getRecordParser().setFieldTitles(sFieldTitles);
                 m_reportDocument.setFieldTitles(sFieldTitles);
                 break;
 
@@ -195,11 +194,13 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
                 // TODO: DESIGN!!! a getter should return a value!!!
                 CurGroupFieldHandler.getGroupFieldNames(m_reportDocument.getRecordParser());
                 String[] aGroupFieldNames = m_reportDocument.getRecordParser().GroupFieldNames;
+                // CurReportDocument.getRecordParser().prependSortFieldNames(aGroupFieldNames);
                 m_reportDocument.setGrouping(aGroupFieldNames);
                 break;
 
             case SOSORTPAGE:
                 String[][] aSortFieldNames = CurSortingComponent.getSortFieldNames();
+                // CurReportDocument.getRecordParser().SortFieldNames = aSortFieldNames;
                 m_reportDocument.setSorting(aSortFieldNames);
                 // TODO: why do we make a switch here
                 super.enablefromStep(SOTEMPLATEPAGE, true);
@@ -303,8 +304,9 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         return bQueryCreated;
     }
 
-    private void buildSteps()
+    public void buildSteps()
     {
+        // CurReportDocument.getDoc().xProgressBar.setValue(30);
         CurDBCommandFieldSelection = new CommandFieldSelection(this, m_reportDocument.getRecordParser(), 100, slblFields, slblSelFields, slblTables, true, 34330);
         CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
         if (!isReportBuilderInstalled())
@@ -329,7 +331,6 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         enableNavigationButtons(false, false, false);
     }
 
-    @Override
     public boolean finishWizard()
     {
         final int ncurStep = getCurrentStep();
@@ -349,13 +350,12 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         return false;
     }
 
-    @Override
     public void cancelWizard()
     {
         xDialog.endExecute();
     }
 
-    private void insertQueryRelatedSteps()
+    public void insertQueryRelatedSteps()
     {
         setRMItemLabels(m_oResource, UIConsts.RID_QUERY + 80);
         addRoadmap();
@@ -505,6 +505,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             }
             if (bexecute)
             {
+                // CurDataimport.insertDatabaseDatatoReportDocument(xMSF);
                 m_reportDocument.insertDatabaseDatatoReportDocument(xMSF);
             }
 
@@ -524,7 +525,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         m_reportDocument.getRecordParser().dispose();
     }
 
-    private boolean getReportResources(boolean bgetProgressResourcesOnly)
+    public boolean getReportResources(boolean bgetProgressResourcesOnly)
     {
         sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_REPORT);
         if (!bgetProgressResourcesOnly)
@@ -556,7 +557,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         return sBlindTextNote;
     }
 
-    private void enableRoadmapItems(boolean _bEnabled)
+    public void enableRoadmapItems(boolean _bEnabled)
     {
         try
         {
@@ -591,7 +592,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         boolean bEnabled = NewItems.length > 0;
         setControlProperty("btnWizardNext", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
         setControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED, Boolean.valueOf(bEnabled));
-        enableRoadmapItems(bEnabled);   // Note: Performance-wise this could be improved
+        enableRoadmapItems(bEnabled);   // Note: Performancewise this could be improved
     }
 
     public void textChanged(TextEvent xTextEvent)
@@ -601,6 +602,7 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
             Object oModel = UnoDialog.getModel(xTextEvent.Source);
             String sContent = (String) Helper.getUnoPropertyValue(oModel, "Text");
             String fieldname = this.CurTitlesComponent.getFieldNameByTitleControl(oModel);
+            // CurReportDocument.getDoc().oTextFieldHandler.changeUserFieldContent(fieldname, sfieldtitle);
             m_reportDocument.liveupdate_changeUserFieldContent(fieldname, sContent);
         }
         catch (Exception exception)
@@ -609,12 +611,10 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
-    @Override
     public void disposing(EventObject EventObject)
     {
     }
 
-    @Override
     public void setmodified(int _ndialogpage, Object ooldValue, Object onewValue)
     {
         switch (_ndialogpage)
@@ -639,10 +639,10 @@ public class ReportWizard extends DatabaseObjectWizard implements XTextListener
         super.setStepEnabled(SOSORTPAGE, bdoenable);
     }
 
-    private class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
+    public class FieldSelectionListener implements com.sun.star.wizards.ui.XFieldSelectionListener
     {
 
-        private int m_nID;
+        protected int m_nID;
 
         public int getID()
         {

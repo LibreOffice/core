@@ -68,7 +68,9 @@ public class ConfigGroup implements ConfigNode
      * convert the primitive type value of the
      * given Field object to the corresponding
      * Java Object value.
+     * @param field
      * @return the value of the field as a Object.
+     * @throws IllegalAccessException
      */
     public Object convertValue(Field field) throws IllegalAccessException
     {
@@ -78,11 +80,11 @@ public class ConfigGroup implements ConfigNode
         }
         if (field.getType().equals(Integer.TYPE))
         {
-            return Integer.valueOf(field.getInt(this));
+            return new Integer(field.getInt(this));
         }
         if (field.getType().equals(Short.TYPE))
         {
-            return Short.valueOf(field.getShort(this));
+            return new Short(field.getShort(this));
         }
         if (field.getType().equals(Float.TYPE))
         {

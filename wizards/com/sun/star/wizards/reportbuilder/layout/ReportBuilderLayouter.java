@@ -163,7 +163,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     /**
      * Remove all Groups
      */
-    private void clearGroups()
+    protected void clearGroups()
     {
         final XGroups xGroups = getReportDefinition().getGroups();
         while (xGroups.hasElements())
@@ -232,7 +232,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return nIndent;
     }
 
-    private int m_nLeftIndent = -1;
+    int m_nLeftIndent = -1;
 
     /**
      * Get left page indent.
@@ -249,7 +249,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return m_nLeftIndent;
     }
 
-    private int m_nRightIndent = -1;
+    int m_nRightIndent = -1;
 
     /**
      * Get right page indent.
@@ -297,7 +297,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return aUsedStyle;
     }
 
-    private int getFromPageStyles(String _sStyleName, int _nDefault)
+    protected int getFromPageStyles(String _sStyleName, int _nDefault)
     {
         int nValue = _nDefault;
         final XStyle xStyle = getUsedStyle("PageStyles");
@@ -310,7 +310,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return nValue;
     }
 
-    private void setToPageStyles(String _sStyleName, Object _aObj)
+    protected void setToPageStyles(String _sStyleName, Object _aObj)
     {
         final XStyle xStyle = getUsedStyle("PageStyles");
         if (xStyle != null)
@@ -320,7 +320,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 
-    private int m_nPageWidth = -1;
+    int m_nPageWidth = -1;
 
     /**
      * Get page width. The default is 21000 1/100mm what is 21cm of DIN A4.
@@ -338,6 +338,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Stores the Group names. To insert/create a report with such group names, call layout()
+     * @param _aGroupNames
      */
     public void insertGroupNames(String[] _aGroupNames)
     {
@@ -381,7 +382,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
 
-    private int insertGroups()
+    protected int insertGroups()
     {
         final XGroups xGroups = getReportDefinition().getGroups();
         int lastGroupPosition = -1;
@@ -466,6 +467,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Give a list off all field title names to insert the field title names, call layout()
+     * @param _aFieldTitleNames
      */
     public void insertFieldTitles(String[] _aFieldTitleNames)
     {
@@ -473,7 +475,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
 
-    private String getTitleFromFieldName(String _sField)
+    protected String getTitleFromFieldName(String _sField)
     {
         for (int i = 0; i < m_aFieldNames.length; i++)
         {
@@ -485,7 +487,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return PropertyNames.EMPTY_STRING;
     }
 
-    private int getTypeFromFieldName(String _sField)
+    protected int getTypeFromFieldName(String _sField)
     {
         for (int i = 0; i < m_aFieldNames.length; i++)
         {
@@ -497,7 +499,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return 0;
     }
 
-    private boolean listContains(String[] _aList, String _aValue)
+    protected boolean listContains(String[] _aList, String _aValue)
     {
         for (int i = 0; i < _aList.length; i++)
         {
@@ -516,7 +518,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
      * @param _aGetResultFrom
      * @return
      */
-    private String[] getNamesWithoutGroupNames(String[] _aList, String[] _aGetResultFrom)
+    protected String[] getNamesWithoutGroupNames(String[] _aList, String[] _aGetResultFrom)
     {
         if (_aList == null)
         {
@@ -580,6 +582,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * Give a list off all field names to insert the field names, call layout()
+     * @param _aFieldNames
      */
     public void insertFieldNames(String[] _aFieldNames)
     {
@@ -694,7 +697,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     }
 
-    private String convertFromFieldName(String _sName)
+    protected String convertFromFieldName(String _sName)
     {
         if (_sName.startsWith("field:["))
         {
@@ -722,7 +725,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return insertFormattedField(_xSection, _sFormattedfield, _aRect, _nWidth, _aSO, (short) com.sun.star.awt.TextAlign.LEFT);
     }
 
-    private Rectangle insertFormattedField(XSection _xSection, String _sFormattedfield, Rectangle _aRect, int _nWidth, SectionObject _aSO, short _nAlignment)
+    protected Rectangle insertFormattedField(XSection _xSection, String _sFormattedfield, Rectangle _aRect, int _nWidth, SectionObject _aSO, short _nAlignment)
     {
         if (_xSection != null)
         {
@@ -831,9 +834,9 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         getReportDefinition().setCommandType(_aType);
         getReportDefinition().setCommand(_sTableName);
     }
-    private XMultiServiceFactory m_xMSF;
+    protected XMultiServiceFactory m_xMSF;
 
-    private XMultiServiceFactory getMSFofReportDefinition()
+    protected XMultiServiceFactory getMSFofReportDefinition()
     {
         if (m_xMSF == null)
         {
@@ -843,14 +846,17 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
 
+    protected Rectangle insertVerticalLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight)
+    {
+        return insertLine(_xSection, _aRect, _nWidth, _nHeight, 1);
+    }
 
-
-    private Rectangle insertHorizontalLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight)
+    protected Rectangle insertHorizontalLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight)
     {
         return insertLine(_xSection, _aRect, _nWidth, _nHeight, 0);
     }
 
-    private Rectangle insertLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight, int _nOrientation)
+    protected Rectangle insertLine(XSection _xSection, Rectangle _aRect, int _nWidth, int _nHeight, int _nOrientation)
     {
         if (_xSection != null)
         {
@@ -880,7 +886,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
 
-    private void clearReportHeader()
+    protected void clearReportHeader()
     {
         XSection xSection;
         try
@@ -897,7 +903,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 
-    private void insertReportHeader()
+    protected void insertReportHeader()
     {
         if (getDesignTemplate() != null)
         {
@@ -930,7 +936,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 
-    private void clearReportFooter()
+    protected void clearReportFooter()
     {
         XSection xSection;
         try
@@ -947,7 +953,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 
-    private void insertReportFooter()
+    protected void insertReportFooter()
     {
         if (getDesignTemplate() != null)
         {
@@ -981,7 +987,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     }
 
 
-    private void clearPageHeader()
+    protected void clearPageHeader()
     {
         XSection xSection;
         try
@@ -998,7 +1004,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 
-    private void clearPageFooter()
+    protected void clearPageFooter()
     {
         XSection xSection;
         try
@@ -1025,8 +1031,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             setToPageStyles("IsLandscape", Boolean.TRUE);
             if (nWidth < nHeight)
             {
-                setToPageStyles(PropertyNames.PROPERTY_WIDTH, Integer.valueOf(nHeight));
-                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, Integer.valueOf(nWidth));
+                setToPageStyles(PropertyNames.PROPERTY_WIDTH, new Integer(nHeight));
+                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, new Integer(nWidth));
             }
         }
         else
@@ -1034,8 +1040,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
             setToPageStyles("IsLandscape", Boolean.FALSE);
             if (nHeight < nWidth)
             {
-                setToPageStyles(PropertyNames.PROPERTY_WIDTH, Integer.valueOf(nHeight));
-                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, Integer.valueOf(nWidth));
+                setToPageStyles(PropertyNames.PROPERTY_WIDTH, new Integer(nHeight));
+                setToPageStyles(PropertyNames.PROPERTY_HEIGHT, new Integer(nWidth));
             }
         }
         // dirty the PageWidth
@@ -1050,7 +1056,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
      * @param _aFont
      * @return width of given text in 1/100mm
      */
-    private Size getPreferredSize(String _sText, FontDescriptor _aFont)
+    Size getPreferredSize(String _sText, FontDescriptor _aFont)
     {
         Size aSizeMM_100TH = new Size(0, 0);
         try
@@ -1097,7 +1103,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return aSizeMM_100TH;
     }
 
-    private String getTableName()
+    protected String getTableName()
     {
         if (m_sTableName != null)
         {
@@ -1106,7 +1112,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return PropertyNames.EMPTY_STRING;
     }
 
-    private String getUserNameFromConfiguration()
+    protected String getUserNameFromConfiguration()
     {
         String sFirstName = PropertyNames.EMPTY_STRING;
         String sLastName = PropertyNames.EMPTY_STRING;
@@ -1186,6 +1192,8 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                         // but there seems some problems, we have to control.
                         copyProperties(aComponent, aClone);
 
+                        // aShape.setPosition(aComponent.getPosition());
+                        // aShape.setSize(aComponent.getSize());
                         _xToSection.add(aShape);
                     }
                 }
@@ -1197,7 +1205,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 
-    private void insertPageHeader()
+    protected void insertPageHeader()
     {
         if (getDesignTemplate() != null)
         {
@@ -1298,7 +1306,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         }
     }
 
-    private void insertPageFooter()
+    protected void insertPageFooter()
     {
         if (getDesignTemplate() != null)
         {
@@ -1392,13 +1400,13 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
     {
         return m_aResource;
     }
-    private int m_aCommandType; // Table or Query
-    private String m_sTableName;
-    private String[] m_aGroupNames;
-    private String[] m_aFieldNames;
-    private String[] m_aFieldTitleNames;
-    private int[] m_aFieldWidths;
-    private int[] m_aFieldTypes;
+    protected int m_aCommandType; // Table or Query
+    protected String m_sTableName;
+    protected String[] m_aGroupNames;
+    protected String[] m_aFieldNames;
+    protected String[] m_aFieldTitleNames;
+    protected int[] m_aFieldWidths;
+    protected int[] m_aFieldTypes;
     private DesignTemplate m_xDesignTemplate = null;
 
     public void initializeData(IReportBuilderLayouter _aOther)
@@ -1457,14 +1465,14 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
      * @param _sLabel
      * @return the width in 1/100mm
      */
-    private int getLabelWidth(String _sLabel)
+    protected int getLabelWidth(String _sLabel)
     {
         return getLabelWidth(_sLabel, 0.0f, 0.0f);
     }
-    private XFixedText m_aFixedTextHelper = null;
-    private HashMap<String, Integer> m_aLabelWidthMap;
+    XFixedText m_aFixedTextHelper = null;
+    HashMap<String, Integer> m_aLabelWidthMap;
 
-    private int getLabelWidth(String _sLabel, FontDescriptor _aFD)
+    protected int getLabelWidth(String _sLabel, FontDescriptor _aFD)
     {
         float fCharWeight = 0.0f;
         float fCharHeight = 0.0f;
@@ -1476,7 +1484,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
         return getLabelWidth(_sLabel, fCharWeight, fCharHeight);
     }
 
-    private int getLabelWidth(String _sLabel, float _nCharWeight, float _nCharHeight)
+    protected int getLabelWidth(String _sLabel, float _nCharWeight, float _nCharHeight)
     {
         int nWidth = 0;
 
@@ -1517,7 +1525,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
                 final Size aSize = getPreferredSize(_sLabel, xFont);
                 nWidth = aSize.Width;
                 // cache the found width
-                m_aLabelWidthMap.put(sKey, Integer.valueOf(nWidth));
+                m_aLabelWidthMap.put(sKey, new Integer(nWidth));
             }
             catch (com.sun.star.uno.Exception e)
             {
@@ -1560,6 +1568,7 @@ abstract public class ReportBuilderLayouter implements IReportBuilderLayouter
 
     /**
      * load the given string as a template and use it's content to paint the other
+     * @param LayoutTemplatePath
      */
     public void loadAndSetBackgroundTemplate(String LayoutTemplatePath)
     {

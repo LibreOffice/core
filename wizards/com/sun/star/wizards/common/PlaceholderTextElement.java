@@ -23,15 +23,16 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.*;
+import com.sun.star.wizards.text.*;
 import com.sun.star.wizards.common.PlaceholderTextElement;
 
 public class PlaceholderTextElement extends TextElement
 {
 
-    private String hint;
-    private String placeHolderText;
-    private XMultiServiceFactory xmsf;
-
+    String hint;
+    String placeHolderText;
+    XMultiServiceFactory xmsf;
+    TextDocument templateDocument;
 
     public PlaceholderTextElement(XTextRange textRange, String placeHolderText_, String hint_, XMultiServiceFactory xmsf_)
     {
@@ -49,7 +50,6 @@ public class PlaceholderTextElement extends TextElement
         xmsf = xmsf_;
     }
 
-    @Override
     public void write(Object textRange)
     {
         super.write(textRange);
@@ -68,7 +68,7 @@ public class PlaceholderTextElement extends TextElement
         }
     }
 
-    private static XTextContent createPlaceHolder(XMultiServiceFactory xmsf, String ph, String hint)
+    public static XTextContent createPlaceHolder(XMultiServiceFactory xmsf, String ph, String hint)
     {
         Object placeHolder;
         try
@@ -82,7 +82,7 @@ public class PlaceholderTextElement extends TextElement
         }
         Helper.setUnoPropertyValue(placeHolder, "PlaceHolder", ph);
         Helper.setUnoPropertyValue(placeHolder, "Hint", hint);
-        Helper.setUnoPropertyValue(placeHolder, "PlaceHolderType", Short.valueOf(PlaceholderType.TEXT));
+        Helper.setUnoPropertyValue(placeHolder, "PlaceHolderType", new Short(PlaceholderType.TEXT));
         return UnoRuntime.queryInterface(XTextContent.class, placeHolder);
 
     }

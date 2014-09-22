@@ -68,7 +68,11 @@ public class TextSectionHandler
         }
     }
 
-
+    public boolean hasTextSectionByName(String SectionName)
+    {
+        com.sun.star.container.XNameAccess xAllTextSections = xTextSectionsSupplier.getTextSections();
+        return xAllTextSections.hasByName(SectionName);
+    }
 
     public void removeLastTextSection()
     {
@@ -84,7 +88,7 @@ public class TextSectionHandler
         }
     }
 
-    private void removeTextSection(Object _oTextSection)
+    public void removeTextSection(Object _oTextSection)
     {
         try
         {
@@ -166,7 +170,18 @@ public class TextSectionHandler
         }
     }
 
-
+    public void breakLinkOfTextSection(Object oTextSection)
+    {
+        SectionFileLink oSectionLink = new SectionFileLink();
+        oSectionLink.FileURL = PropertyNames.EMPTY_STRING;
+        Helper.setUnoPropertyValues(oTextSection, new String[]
+                {
+                    "FileLink", "LinkRegion"
+                }, new Object[]
+                {
+                    oSectionLink, PropertyNames.EMPTY_STRING
+                });
+    }
 
     public void linkSectiontoTemplate(String TemplateName, String SectionName)
     {
@@ -181,7 +196,7 @@ public class TextSectionHandler
         }
     }
 
-    private void linkSectiontoTemplate(Object oTextSection, String TemplateName, String SectionName)
+    public void linkSectiontoTemplate(Object oTextSection, String TemplateName, String SectionName)
     {
         SectionFileLink oSectionLink = new SectionFileLink();
         oSectionLink.FileURL = TemplateName;
@@ -208,6 +223,7 @@ public class TextSectionHandler
             {
                 XTextCursor xTextCursor = xText.createTextCursor();
                 xText.insertControlCharacter(xTextCursor, ControlCharacter.PARAGRAPH_BREAK, false);
+                // Helper.setUnoPropertyValue(xTextCursor, "PageDescName", "First Page");
                 xTextCursor.collapseToEnd();
             }
             XTextCursor xSecondTextCursor = xText.createTextCursor();
@@ -220,7 +236,7 @@ public class TextSectionHandler
         }
     }
 
-    private void insertTextSection(String sectionName, String templateName, XTextCursor position)
+    public void insertTextSection(String sectionName, String templateName, XTextCursor position)
     {
         try
         {

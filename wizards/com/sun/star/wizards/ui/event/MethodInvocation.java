@@ -33,11 +33,11 @@ import java.lang.reflect.Method;
 public class MethodInvocation
 {
     //the method to invoke.
-    private Method mMethod;
+    Method mMethod;
     //the object to invoke the method on.
-    private Object mObject;
+    Object mObject;
     //with one Parameter / without
-    private boolean mWithParam;
+    boolean mWithParam;
 
     /** Creates a new instance of MethodInvokation */
     public MethodInvocation(String methodName, Object obj) throws NoSuchMethodException
@@ -55,7 +55,7 @@ public class MethodInvocation
         this(paramClass == null ? obj.getClass().getMethod(methodName) : obj.getClass().getMethod(methodName, paramClass), obj, paramClass);
     }
 
-    private MethodInvocation(Method method, Object obj, Class<?> paramClass)
+    public MethodInvocation(Method method, Object obj, Class<?> paramClass)
     {
         mMethod = method;
         mObject = obj;
@@ -77,5 +77,12 @@ public class MethodInvocation
         }
     }
 
-
+    /**
+     * This method is a convenience method.
+     * It is the same as calling invoke(null);
+     */
+    public Object invoke() throws IllegalAccessException, InvocationTargetException
+    {
+        return invoke(null);
+    }
 }

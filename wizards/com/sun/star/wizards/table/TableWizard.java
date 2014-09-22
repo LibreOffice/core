@@ -38,26 +38,27 @@ import com.sun.star.wizards.ui.*;
 public class TableWizard extends DatabaseObjectWizard implements XTextListener
 {
 
-    private static String slblFields;
-    private static String slblSelFields;
-    private Finalizer curFinalizer;
-    private ScenarioSelector curScenarioSelector;
-    private FieldFormatter curFieldFormatter;
-    private PrimaryKeyHandler curPrimaryKeyHandler;
-
+    static String slblFields;
+    static String slblSelFields;
+    Finalizer curFinalizer;
+    ScenarioSelector curScenarioSelector;
+    FieldFormatter curFieldFormatter;
+    PrimaryKeyHandler curPrimaryKeyHandler;
+    String sMsgWizardName = PropertyNames.EMPTY_STRING;
     public HashMap<String, FieldDescription> fielditems;
-    private int wizardmode;
-    private String tablename;
-    private String serrToManyFields;
-    private String serrTableNameexists;
-    private String scomposedtablename;
-    private TableDescriptor curTableDescriptor;
-
+    int wizardmode;
+    String tablename;
+    String serrToManyFields;
+    String serrTableNameexists;
+    String scomposedtablename;
+    TableDescriptor curTableDescriptor;
+    public static final int SONULLPAGE = 0;
     public static final int SOMAINPAGE = 1;
     public static final int SOFIELDSFORMATPAGE = 2;
     public static final int SOPRIMARYKEYPAGE = 3;
     public static final int SOFINALPAGE = 4;
     private String sMsgColumnAlreadyExists = PropertyNames.EMPTY_STRING;
+    String WizardHeaderText[] = new String[8];
 
     private String m_tableName;
 
@@ -73,7 +74,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
                 },
                 new Object[]
                 {
-                    218, Boolean.TRUE, "DialogTable", 102, 41, 1, Short.valueOf((short) 0), sTitle, 330
+                    218, Boolean.TRUE, "DialogTable", 102, 41, 1, new Short((short) 0), sTitle, 330
                 });
         drawNaviBar();
         fielditems = new HashMap<String, FieldDescription>();
@@ -84,7 +85,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
-    @Override
     protected void leaveStep(int nOldStep, int nNewStep)
     {
         switch (nOldStep)
@@ -107,7 +107,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
-    @Override
     protected void enterStep(int nOldStep, int nNewStep)
     {
         switch (nNewStep)
@@ -132,7 +131,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#iscompleted(int)
      */
-    @Override
     public boolean iscompleted(int _ndialogpage)
     {
         switch (_ndialogpage)
@@ -157,7 +155,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
     /* (non-Javadoc)
      * @see com.sun.star.wizards.ui.XCompletion#setcompleted(int, boolean)
      */
-    @Override
     public void setcompleted(int _ndialogpage, boolean _biscompleted)
     {
         boolean bScenarioiscompleted = _biscompleted;
@@ -213,10 +210,34 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
-    private void buildSteps()
+/*
+    public static void main(String args[])
+    {
+        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+        PropertyValue[] curproperties = null;
+        try
+        {
+            XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
+            TableWizard CurTableWizard = new TableWizard(xLocMSF);
+            if (xLocMSF != null)
+            {
+                System.out.println("Connected to " + ConnectStr);
+                curproperties = new PropertyValue[1];
+                curproperties[0] = Properties.createProperty("DataSourceName", "Bibliography");
+                //curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///path/to/database.odb");
+                CurTableWizard.startTableWizard(xLocMSF, curproperties);
+            }
+        }
+        catch (Exception exception)
+        {
+            exception.printStackTrace(System.err);
+        }
+    }
+*/
+    public void buildSteps()
     {
         curScenarioSelector = new ScenarioSelector(this, this.curTableDescriptor, slblFields, slblSelFields);
-        curFieldFormatter = new FieldFormatter(this);
+        curFieldFormatter = new FieldFormatter(this, curTableDescriptor);
         if ( this.curTableDescriptor.supportsPrimaryKeys() )
         {
             curPrimaryKeyHandler = new PrimaryKeyHandler(this, curTableDescriptor);
@@ -225,7 +246,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         enableNavigationButtons(false, false, false);
     }
 
-    private boolean createTable()
+    public boolean createTable()
     {
         boolean bIsSuccessfull = true;
         boolean bTableCreated = false;
@@ -233,7 +254,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         String catalogname = curFinalizer.getCatalogName();
         if (curTableDescriptor.supportsPrimaryKeys())
         {
-            String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields();
+            String[] keyfieldnames = curPrimaryKeyHandler.getPrimaryKeyFields(curTableDescriptor);
             if (keyfieldnames != null)
             {
                 if (keyfieldnames.length > 0)
@@ -255,7 +276,6 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         return bIsSuccessfull;
     }
 
-    @Override
     public boolean finishWizard()
     {
         super.switchToStep(super.getCurrentStep(), SOFINALPAGE);
@@ -312,13 +332,12 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
         }
     }
 
-    @Override
     public void cancelWizard()
     {
         xDialog.endExecute();
     }
 
-    private void insertFormRelatedSteps()
+    public void insertFormRelatedSteps()
     {
         addRoadmap();
         int i = 0;
@@ -364,6 +383,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener
 
     public boolean getTableResources()
     {
+        sMsgWizardName = super.m_oResource.getResText(UIConsts.RID_TABLE + 1);
         slblFields = m_oResource.getResText(UIConsts.RID_TABLE + 19);
         slblSelFields = m_oResource.getResText(UIConsts.RID_TABLE + 25);
         serrToManyFields = m_oResource.getResText(UIConsts.RID_TABLE + 47);

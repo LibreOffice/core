@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 public class CallReportWizard
 {
 
-    private static boolean bWizardstartedalready;
+    static boolean bWizardstartedalready;
 
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -63,7 +63,7 @@ public class CallReportWizard
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    private static class ReportWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
+    public static class ReportWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.task.XJobExecutor
     {
 
         private PropertyValue[] m_wizardContext;
@@ -160,7 +160,6 @@ public class CallReportWizard
             return (booleanSupportsService);
         }
 
-        @Override
         public byte[] getImplementationId()
         {
             return new byte[0];
@@ -179,7 +178,6 @@ public class CallReportWizard
          * @return Sequence of all types (usually interface types) provided by the
          * service.
          */
-        @Override
         public Type[] getTypes()
         {
             Type[] typeReturn =

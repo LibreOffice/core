@@ -33,8 +33,8 @@ public class DesignTemplate
 {
 
     private XReportDefinition m_xReportDefinition;
-
-
+    XMultiServiceFactory m_xGlobalMSF;
+    String m_sFilename;
 
     private DesignTemplate()
     {
@@ -264,6 +264,10 @@ public class DesignTemplate
     /**
      * create a new DesignTemplate by try to load a otr file from the given path.
      * Internally we store the loaded ReportDefinition.
+     *
+     * @param _xMSF
+     * @param _sPath
+     * @return
      */
     public static DesignTemplate create(XMultiServiceFactory _xMSF, String _sPath)
     {
@@ -291,6 +295,8 @@ public class DesignTemplate
 
     private void load(XMultiServiceFactory _xMSF, String _sPath) throws com.sun.star.uno.Exception
     {
+        m_xGlobalMSF = _xMSF;
+        m_sFilename = _sPath;
         final Object aObj = _xMSF.createInstance("com.sun.star.report.ReportDefinition");
         m_xReportDefinition = UnoRuntime.queryInterface(XReportDefinition.class, aObj);
 

@@ -23,6 +23,7 @@ import com.sun.star.container.XNamed;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.table.XCellRange;
 import com.sun.star.table.XTableColumns;
+import com.sun.star.table.XTableRows;
 import com.sun.star.text.XTextTable;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -32,14 +33,14 @@ import com.sun.star.wizards.text.ViewHandler;
 public class RecordTable
 {
 
-
-
+    String CurFieldName;
+    String LabelDescription;
     public XNamed xTableName;
     public XCellRange xCellRange;
     public XTextTable xTextTable;
     private TextTableHandler oTextTableHandler;
     public XTableColumns xTableColumns;
-
+    public XTableRows xTableRows;
 
     public RecordTable(TextTableHandler _oTextTableHandler)
     {
@@ -71,7 +72,7 @@ public class RecordTable
                 xTableName = UnoRuntime.queryInterface(XNamed.class, xTextTable);
                 xTableName.setName(ReportTextDocument.TBLRECORDSECTION);
             }
-            xTextTable.getRows();
+            xTableRows = xTextTable.getRows();
             xTableColumns = xTextTable.getColumns();
             xCellRange = UnoRuntime.queryInterface(XCellRange.class, xTextTable);
         }

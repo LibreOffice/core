@@ -32,17 +32,18 @@ public interface IReportDefinitionReadAccess
      * Gives access to a ReportDefinition, if initialized.
      * @return a ReportDefinition or null.
      */
-    XReportDefinition getReportDefinition(); /* should throw NullPointerException but does not. */
+    public XReportDefinition getReportDefinition(); /* should throw NullPointerException but does not. */
 
 
     /**
      * This ServiceFactory is the 'global' Service Factory, which knows all and every thing in the program.
      * @return the global service factory of the program
      */
-    XMultiServiceFactory getGlobalMSF();
+    public XMultiServiceFactory getGlobalMSF();
 
     /**
      * Returns the file path to the default report definition, we need this name for early initialisation
+     * @return
      */
-    String getDefaultHeaderLayout();
+    public String getDefaultHeaderLayout();
 }

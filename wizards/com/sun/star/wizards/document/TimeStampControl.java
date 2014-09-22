@@ -30,23 +30,24 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapes;
 
 public class TimeStampControl extends DatabaseControl
 {
 
-    private DatabaseControl oDateControl;
-    private DatabaseControl oTimeControl;
+    DatabaseControl oDateControl;
+    DatabaseControl oTimeControl;
 //  XShape xGroupShape;
-    private Resource oResource;
+    Resource oResource;
     private String sDateAppendix; // = GetResText(RID_FORM + 4)
     private String sTimeAppendix; // = GetResText(RID_FORM + 5)
-
-    private double nreldatewidth;
-    private double nreltimewidth;
-    private int nTimeWidth;
-    private int nDBWidth;
-    private int nDateWidth;
-    private XShape xShapeGroup;
+    XShapes xGroupShapes = null;
+    double nreldatewidth;
+    double nreltimewidth;
+    int nTimeWidth;
+    int nDBWidth;
+    int nDateWidth;
+    XShape xShapeGroup;
 
     public TimeStampControl(Resource _oResource, FormHandler _oFormHandler, XNameContainer _xFormName, String _curFieldName, Point _aPoint)
     {
@@ -98,20 +99,17 @@ public class TimeStampControl extends DatabaseControl
         oTimeControl = new DatabaseControl(_oGridControl, _curfieldcolumn, DataType.TIME, _curfieldcolumn.getFieldTitle() + PropertyNames.SPACE + sTimeAppendix);
     }
 
-    @Override
     public void setPropertyValue(String _sPropertyName, Object _aPropertyValue) throws Exception
     {
         oDateControl.setPropertyValue(_sPropertyName, _aPropertyValue);
         oTimeControl.setPropertyValue(_sPropertyName, _aPropertyValue);
     }
 
-    @Override
     public int getPreferredWidth()
     {
         return nDBWidth;
     }
 
-    @Override
     public void setSize(Size _aSize)
     {
         try
@@ -127,20 +125,17 @@ public class TimeStampControl extends DatabaseControl
         }
     }
 
-    @Override
     public Size getSize()
     {
         int ncontrolwidth = oDateControl.xShape.getSize().Width + oTimeControl.xShape.getSize().Width;
         return new Size(ncontrolwidth, oDateControl.xShape.getSize().Height);
     }
 
-    @Override
     public Point getPosition()
     {
         return xShapeGroup.getPosition();
     }
 
-    @Override
     public void setPosition(Point _aPoint)
     {
         // --> TESTING
@@ -150,7 +145,6 @@ public class TimeStampControl extends DatabaseControl
         Point aAfterPt = xShapeGroup.getPosition();
     }
 
-    @Override
     public int getControlType()
     {
         return FormHandler.SODATETIMECONTROL;

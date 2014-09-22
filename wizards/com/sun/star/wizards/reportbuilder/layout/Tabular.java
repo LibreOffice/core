@@ -44,7 +44,6 @@ public class Tabular extends ReportBuilderLayouter
         return getResource().getResText(UIConsts.RID_REPORT + 80);
     }
 
-    @Override
     protected void insertDetailFields()
     {
         copyDetailProperties();
@@ -77,7 +76,6 @@ public class Tabular extends ReportBuilderLayouter
         xSection.setHeight(nHeight);
     }
 
-    @Override
     protected void insertDetailFieldTitles(int lastGroupPostion)
     {
         final String[] aFieldTitleNames = getFieldTitleNames();
@@ -107,6 +105,7 @@ public class Tabular extends ReportBuilderLayouter
                 xGroup = UnoRuntime.queryInterface(XGroup.class, xGroups.getByIndex(lastGroupPostion));
 
                 // We don't need to copy the GroupProperties, because this is done in the insertGroup() member function
+                // copyGroupProperties(0);
                 aSO = getDesignTemplate().getGroupLabel(lastGroupPostion);
             }
 

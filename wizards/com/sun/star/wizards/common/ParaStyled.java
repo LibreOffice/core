@@ -25,14 +25,14 @@ import com.sun.star.text.*;
 class ParaStyled implements TemplateElement
 {
 
-    private String paraStyle;
+    String paraStyle;
 
     ParaStyled(String paraStyle_)
     {
         paraStyle = paraStyle_;
     }
 
-    private void format(Object textRange)
+    void format(Object textRange)
     {
         XText o;
         o = UnoRuntime.queryInterface(XText.class, textRange);

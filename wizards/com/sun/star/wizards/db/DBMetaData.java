@@ -85,16 +85,16 @@ public class DBMetaData
     private XPropertySet m_dataSourceSettings;
     private XOfficeDatabaseDocument xModel;
     private XPropertySet xDataSourcePropertySet;
-
-
-    private java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
-    private Locale aLocale;
-    private int[] CommandTypes;
+    public String[] DataSourceNames;
+    public String[] CommandNames;
+    public java.util.ArrayList<CommandObject> CommandObjects = new ArrayList<CommandObject>(1);
+    public Locale aLocale;
+    public int[] CommandTypes;
     public String DataSourceName;
     public com.sun.star.sdbc.XConnection DBConnection;
     private com.sun.star.sdb.tools.XConnectionTools m_connectionTools;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
-    private XComponent xConnectionComponent;
+    public XComponent xConnectionComponent;
 
     private XNameAccess xNameAccess;
     private XInterface xDatabaseContext;
@@ -201,6 +201,7 @@ public class DBMetaData
             this.xMSF = xMSF;
             xDatabaseContext = (XInterface) xMSF.createInstance("com.sun.star.sdb.DatabaseContext");
             xNameAccess = UnoRuntime.queryInterface( XNameAccess.class, xDatabaseContext );
+            DataSourceNames = xNameAccess.getElementNames();
         }
         catch (Exception e)
         {
@@ -208,7 +209,31 @@ public class DBMetaData
         }
     }
 
-
+    public void setCommandTypes()
+    {
+        int TableCount;
+        int QueryCount;
+        int CommandCount;
+        int i;
+        int a;
+        TableCount = JavaTools.getArraylength(TableNames);
+        QueryCount = JavaTools.getArraylength(QueryNames);
+        CommandCount = TableCount + QueryCount;
+        CommandTypes = new int[CommandCount];
+        if (TableCount > 0)
+        {
+            for (i = 0; i < TableCount; i++)
+            {
+                CommandTypes[i] = com.sun.star.sdb.CommandType.TABLE;
+            }
+            a = i;
+            for (i = 0; i < QueryCount; i++)
+            {
+                CommandTypes[a] = com.sun.star.sdb.CommandType.QUERY;
+                a += 1;
+            }
+        }
+    }
 
     public boolean hasTableByName(String _stablename)
     {
@@ -264,7 +289,7 @@ public class DBMetaData
         private String Name;
         private int CommandType;
 
-        private CommandObject(String _CommandName, int _CommandType)
+        public CommandObject(String _CommandName, int _CommandType)
         {
             try
             {
@@ -492,7 +517,18 @@ public class DBMetaData
         return isSQL92CheckEnabled;
     }
 
-
+    public String verifyName(String _sname, int _maxlen)
+    {
+        if (_sname.length() > _maxlen)
+        {
+            return _sname.substring(0, _maxlen);
+        }
+        if (this.isSQL92CheckEnabled())
+        {
+            return Desktop.removeSpecialCharacters(xMSF, Configuration.getLocale(xMSF), _sname);
+        }
+        return _sname;
+    }
 
     public XDataSource getDataSource()
     {
@@ -531,7 +567,7 @@ public class DBMetaData
         }
     }
 
-    private void getDataSourceInterfaces() throws Exception
+    public void getDataSourceInterfaces() throws Exception
     {
         xDataSourcePropertySet = UnoRuntime.queryInterface( XPropertySet.class, getDataSource() );
         bPasswordIsRequired = ((Boolean) xDataSourcePropertySet.getPropertyValue("IsPasswordRequired")).booleanValue();
@@ -749,7 +785,7 @@ public class DBMetaData
         return supportsPrimaryKeys;
     }
 
-    private boolean supportsCoreSQLGrammar()
+    public boolean supportsCoreSQLGrammar()
     {
         try
         {
@@ -760,6 +796,11 @@ public class DBMetaData
             Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return false;
         }
+    }
+
+    public boolean supportsAutoIncrementation()
+    {
+        return false;
     }
 
     public boolean supportsQueriesInFrom() throws SQLException
@@ -774,6 +815,8 @@ public class DBMetaData
 
     /**
      * inserts a Query to a datasource; There is no validation if the queryname is already existing in the datasource
+     * @param _oSQLQueryComposer
+     * @param _QueryName
      */
     public boolean createQuery(SQLQueryComposer _oSQLQueryComposer, String _QueryName)
     {
@@ -866,9 +909,11 @@ public class DBMetaData
     /**
      * adds the passed document as a report or a form to the database. Afterwards the document is deleted.
      * the document may not be open
+     * @param _xComponent
+     * @param _xDocNameAccess
      * @param i_createTemplate  describes the type of the document: "form" or "report"
      */
-    private void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
+    public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean i_createTemplate)
     {
         try
         {

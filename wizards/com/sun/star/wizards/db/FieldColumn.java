@@ -214,7 +214,17 @@ public class FieldColumn
         FieldTitle = _sTitle;
     }
 
-
+    public static String getCommandName(String _DisplayName)
+    {
+        String locCommandName = null;
+        String[] sFieldMetaData = JavaTools.ArrayoutofString(_DisplayName, ".");
+        if (sFieldMetaData.length >= 2)
+        {
+            String locfieldname = sFieldMetaData[sFieldMetaData.length - 1];
+            locCommandName = _DisplayName.substring(0, _DisplayName.length() - locfieldname.length() - 1);
+        }
+        return locCommandName;
+    }
 
     public boolean isBoolean()
     {
@@ -376,7 +386,7 @@ public class FieldColumn
         }
     }
 
-    private void initDefaultValue()
+    public void initDefaultValue()
     {
         switch (getFieldType())
         {
@@ -406,11 +416,11 @@ public class FieldColumn
                 break;
 
             case DataType.VARCHAR: // ==  12;
-                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth);
+                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
                 break;
 
             case DataType.LONGVARCHAR: // ==  -1;
-                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth);
+                DefaultValue = BlindtextCreator.getBlindTextString(FieldTitle, FieldWidth, FieldWidth);
                 break;
 
             case DataType.NUMERIC: // ==   2;
