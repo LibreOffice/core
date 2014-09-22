@@ -473,14 +473,9 @@ void GraphicImport::putPropertyToFrameGrabBag( const OUString& sPropertyName, co
 
     if (xSetInfo->hasPropertyByName(aGrabBagPropName))
     {
-        uno::Sequence< beans::PropertyValue > aGrabBag;
-        xSet->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
-
-        sal_Int32 nLength = aGrabBag.getLength();
-        aGrabBag.realloc(nLength + 1);
-        aGrabBag[nLength] = pProperty;
-
-        xSet->setPropertyValue(aGrabBagPropName, uno::makeAny(aGrabBag));
+        comphelper::SequenceAsVector<beans::PropertyValue> aGrabBag(xSet->getPropertyValue(aGrabBagPropName));
+        aGrabBag.push_back(pProperty);
+        xSet->setPropertyValue(aGrabBagPropName, uno::makeAny(aGrabBag.getAsConstList()));
     }
 }
 
