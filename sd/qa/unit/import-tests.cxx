@@ -49,6 +49,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 #include <stlpool.hxx>
 
@@ -689,6 +690,7 @@ void SdFiltersTest::testBnc480256()
     uno::Reference< table::XCellRange > xTable;
     uno::Reference< beans::XPropertySet > xCell;
     sal_Int32 nColor;
+    table::BorderLine2 aBorderLine;
 
     pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
     CPPUNIT_ASSERT( pTableObj );
@@ -697,10 +699,14 @@ void SdFiltersTest::testBnc480256()
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10208238), nColor);
+    xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
+    CPPUNIT_ASSERT_EQUAL(util::Color(5609427), aBorderLine.Color);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(13032959), nColor);
+    xCell->getPropertyValue("TopBorder") >>= aBorderLine;
+    CPPUNIT_ASSERT_EQUAL(util::Color(5609427), aBorderLine.Color);
 
     pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(1));
     CPPUNIT_ASSERT( pTableObj );
@@ -709,10 +715,16 @@ void SdFiltersTest::testBnc480256()
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(7056614), nColor);
+    xCell->getPropertyValue("LeftBorder") >>= aBorderLine;
+    CPPUNIT_ASSERT_EQUAL(util::Color(12505062), aBorderLine.Color);
 
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4626400), nColor);
+
+    xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
+    CPPUNIT_ASSERT_EQUAL(util::Color(0), aBorderLine.Color);
 
     xDocShRef->DoClose();
 }
