@@ -12,15 +12,22 @@ public class LOEvent {
     public static final int VIEWPORT = 3;
     public static final int DRAW = 4;
     public static final int CHANGE_PART = 5;
+    public static final int LOAD = 6;
+
     public int mType;
-    ViewportMetrics viewportMetrics;
     private ViewportMetrics mViewportMetrics;
     private String mTypeString;
     private int mPartIndex;
+    private String mFilename;
 
     public LOEvent(int type, int widthPixels, int heightPixels, int tileWidth, int tileHeight) {
         mType = type;
         mTypeString = "Size Changed: " + widthPixels + " " + heightPixels;
+    }
+
+    public LOEvent(int type, String filename) {
+        mType = type;
+        mFilename = filename;
     }
 
     public LOEvent(int type, IntSize tileSize) {
@@ -65,6 +72,10 @@ public class LOEvent {
         return new LOEvent(CHANGE_PART, part);
     }
 
+    public static LOEvent load(String inputFile) {
+        return new LOEvent(LOAD, inputFile);
+    }
+
     public String getTypeString() {
         return mTypeString;
     }
@@ -76,4 +87,9 @@ public class LOEvent {
     public int getPartIndex() {
         return mPartIndex;
     }
+
+    public String getFilename() {
+        return mFilename;
+    }
+
 }

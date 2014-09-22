@@ -116,21 +116,18 @@ public class LibreOfficeMainActivity extends Activity {
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
 
-        if (mLayerController == null) {
-            mLayerController = new LayerController(this);
-
-            Log.e(LOGTAG, "### Creating GeckoSoftwareLayerClient");
-            mLayerClient = new GeckoLayerClient(this);
-            Log.e(LOGTAG, "### Done creating GeckoSoftwareLayerClient");
-
-            mLayerController.setLayerClient(mLayerClient);
-            mGeckoLayout.addView(mLayerController.getView(), 0);
-        }
+        mLayerController = new LayerController(this);
+        mLayerClient = new GeckoLayerClient(this);
+        mLayerController.setLayerClient(mLayerClient);
+        mGeckoLayout.addView(mLayerController.getView(), 0);
 
         if (sLOKitThread == null) {
-            sLOKitThread = new LOKitThread(inputFile);
+            sLOKitThread = new LOKitThread();
             sLOKitThread.start();
         }
+
+        sLOKitThread.mEventQueue.clear();
+        LOKitShell.sendEvent(LOEvent.load(inputFile));
 
         Log.w(LOGTAG, "UI almost up");
     }

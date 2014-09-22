@@ -21,6 +21,7 @@ public class LOKitTileProvider implements TileProvider {
     private final LayerController mLayerController;
     private final double mTileWidth;
     private final double mTileHeight;
+    private final String mInputFile;
 
     private double mDPI;
     private double mWidthTwip;
@@ -37,6 +38,7 @@ public class LOKitTileProvider implements TileProvider {
 
         mOffice = new Office(LibreOfficeKit.getLibreOfficeKitHandle());
 
+        mInputFile = input;
         mDocument = mOffice.documentLoad(input);
 
         if (checkDocument()) {
@@ -110,7 +112,11 @@ public class LOKitTileProvider implements TileProvider {
         ByteBuffer buffer = ByteBuffer.allocateDirect(TILE_SIZE * TILE_SIZE * 4);
         Bitmap bitmap = Bitmap.createBitmap(TILE_SIZE, TILE_SIZE, Bitmap.Config.ARGB_8888);
 
-        mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) pixelToTwip(x, mDPI), (int) pixelToTwip(y, mDPI), (int) mTileWidth, (int) mTileHeight);
+        if (mDocument != null) {
+            mDocument.paintTile(buffer, TILE_SIZE, TILE_SIZE, (int) pixelToTwip(x, mDPI), (int) pixelToTwip(y, mDPI), (int) mTileWidth, (int) mTileHeight);
+        } else {
+            Log.e(LOGTAG, "Document is null!!");
+        }
 
         bitmap.copyPixelsFromBuffer(buffer);
 
@@ -144,6 +150,12 @@ public class LOKitTileProvider implements TileProvider {
             Log.w(LOGTAG, "Thumbnail not created!");
         }
         return bitmap;
+    }
+
+    @Override
+    public void close() {
+        Log.i(LOGTAG, "Document destroyed: " + mInputFile);
+        mDocument.destroy();
     }
 
     @Override

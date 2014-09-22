@@ -22,21 +22,19 @@ public class LOKitThread extends Thread {
     private LibreOfficeMainActivity mApplication;
     private TileProvider mTileProvider;
     private ViewportMetrics mViewportMetrics;
-    private String mInputFile;
     private Rect mOldRect;
     private boolean mCheckboardImageSet = false;
 
-    LOKitThread(String inputFile) {
-        mInputFile = inputFile;
+    public LOKitThread() {
     }
 
-    RectF normlizeRect(ImmutableViewportMetrics metrics) {
+    private RectF normlizeRect(ImmutableViewportMetrics metrics) {
         RectF rect = metrics.getViewport();
         float zoomFactor = metrics.zoomFactor;
         return new RectF(rect.left / zoomFactor, rect.top / zoomFactor, rect.right / zoomFactor, rect.bottom / zoomFactor);
     }
 
-    Rect roundToTileSize(RectF input, int tileSize) {
+    private Rect roundToTileSize(RectF input, int tileSize) {
         int minX = (Math.round(input.left)    / tileSize) * tileSize;
         int minY = (Math.round(input.top)     / tileSize) * tileSize;
         int maxX = ((Math.round(input.right)  / tileSize) + 1) * tileSize;
@@ -44,7 +42,7 @@ public class LOKitThread extends Thread {
         return new Rect(minX, minY, maxX, maxY);
     }
 
-    Rect inflate(Rect rect, int inflateSize) {
+    private Rect inflate(Rect rect, int inflateSize) {
         Rect newRect = new Rect(rect);
         newRect.left -= inflateSize;
         newRect.left = newRect.left < 0 ? 0 : newRect.left;
@@ -130,41 +128,49 @@ public class LOKitThread extends Thread {
         LOKitShell.sendEvent(LOEvent.draw(new Rect()));
     }
 
-    private boolean initialize() {
-        mApplication = LibreOfficeMainActivity.mAppContext;
-        mTileProvider = new LOKitTileProvider(mApplication.getLayerController(), mInputFile);
+    private boolean load(String filename) {
+        if (mApplication == null) {
+            mApplication = LibreOfficeMainActivity.mAppContext;
+        }
+        if (mTileProvider != null) {
+            mTileProvider.close();
+        }
+        mTileProvider = new LOKitTileProvider(mApplication.getLayerController(), filename);
         boolean isReady = mTileProvider.isReady();
-        if (isReady)
-        {
-            if (!mCheckboardImageSet) {
-                Log.i(LOGTAG, "Generate thumbnail!");
-                Bitmap bitmap = mTileProvider.thumbnail();
-                Log.i(LOGTAG, "Done generate thumbnail!");
-                if (bitmap != null) {
-                    Log.i(LOGTAG, "Setting checkboard image!");
-                    mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap);
-                    Log.i(LOGTAG, "Done setting checkboard image!!");
-                    mCheckboardImageSet = true;
-                }
-            }
+        if (isReady) {
+            updateCheckbardImage();
         }
         return isReady;
     }
 
-    public void run() {
-        if (initialize()) {
-            try {
-                boolean drawn = false;
-                while (true) {
-                    processEvent(mEventQueue.take());
-                }
-            } catch (InterruptedException ex) {
+    private void updateCheckbardImage() {
+        if (!mCheckboardImageSet) {
+            Log.i(LOGTAG, "Generate thumbnail!");
+            Bitmap bitmap = mTileProvider.thumbnail();
+            Log.i(LOGTAG, "Done generate thumbnail!");
+            if (bitmap != null) {
+                Log.i(LOGTAG, "Setting checkboard image!");
+                mApplication.getLayerController().getView().changeCheckerboardBitmap(bitmap);
+                Log.i(LOGTAG, "Done setting checkboard image!!");
+                mCheckboardImageSet = true;
             }
+        }
+    }
+
+    public void run() {
+        try {
+            while (true) {
+                processEvent(mEventQueue.take());
+            }
+        } catch (InterruptedException ex) {
         }
     }
 
     private void processEvent(LOEvent event) throws InterruptedException {
         switch (event.mType) {
+            case LOEvent.LOAD:
+                load(event.getFilename());
+                break;
             case LOEvent.VIEWPORT:
                 mViewportMetrics = event.getViewport();
                 draw();

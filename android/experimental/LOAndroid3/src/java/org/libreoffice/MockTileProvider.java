@@ -67,6 +67,10 @@ public class MockTileProvider implements TileProvider {
     }
 
     @Override
+    public void close() {
+    }
+
+    @Override
     public void changePart(int partIndex) {
 
     }

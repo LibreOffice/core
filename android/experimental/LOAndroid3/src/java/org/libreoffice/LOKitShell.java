@@ -38,4 +38,5 @@ public class LOKitShell {
     public static Handler getMainHandler() {
         return LibreOfficeMainActivity.mAppContext.mMainHandler;
     }
+
 }
