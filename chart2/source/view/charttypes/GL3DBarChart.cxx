@@ -29,7 +29,8 @@
 #define DATA_UPDATE_TIME 15
 #define FPS_TIME 500
 #define DATAUPDATE_FPS_TIME 1000
-#define HISTORY_NUM 5
+#define HISTORY_NUM 51
+#define COLUMNSIZE 25
 #define SHOW_VALUE_COUNT 15
 #define SHOW_SCROLL_TEXT_DISTANCE 1000
 #define FLY_THRESHOLD 20
@@ -1067,7 +1068,7 @@ void GL3DBarChart::updateRenderFPS()
         osl_getSystemTime(&maFPSRenderStartTime);
     }
     osl_getSystemTime(&maFPSRenderEndTime);
-    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.06f, true,
+    addScreenTextShape(maFPS, glm::vec2(-0.99f, 0.99f), 0.07f, true,
                        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 }
 
@@ -1113,8 +1114,7 @@ void GL3DBarChart::updateDataUpdateFPS()
         osl_getSystemTime(&maDataUpdateStartTime);
     }
     osl_getSystemTime(&maDataUpdateEndTime);
-    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.99f, 0.93f), 0.06f, true,
-                        glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(0.0f, 1.0f, 1.0f, 1.0f));
+    addScreenTextShape(maDataUpdateFPS, glm::vec2(-0.99f, 0.92f), 0.07f);
 }
 
 void GL3DBarChart::recordBarHistory(sal_uInt32 &nBarID, float &nVal)
@@ -1130,20 +1130,29 @@ void GL3DBarChart::updateClickEvent()
     if (maRenderEvent == EVENT_CLICK || maRenderEvent == EVENT_AUTO_FLY || maRenderEvent == EVENT_SHOW_SELECT)
     {
         std::list<float>& aList = maBarHistory[mnSelectBarId];
-        sal_uInt32 aIdex = 0;
+        sal_uInt32 nIdex = 0;
         OUString aTitle;
         OUString aBarValue;
+        float nXCoordStart;
+        float nYCoordStart;
         //write title
         if (aList.size() > 1)
         {
             aTitle = OUString("Time      ");
-            addScreenTextShape(aTitle, glm::vec2(0.8f, 0.99f), 0.1f, false);
+            addScreenTextShape(aTitle, glm::vec2(0.875f, 0.99f), 0.07f, false);
             aTitle = OUString("   Value");
-            addScreenTextShape(aTitle, glm::vec2(0.8f, 0.99f), 0.1f);
+            addScreenTextShape(aTitle, glm::vec2(0.875f, 0.99f), 0.07f);
+        }
+        if (aList.size() > COLUMNSIZE)
+        {
+            aTitle = OUString("Time      ");
+            addScreenTextShape(aTitle, glm::vec2(0.55f, 0.99f), 0.07f, false);
+            aTitle = OUString("   Value");
+            addScreenTextShape(aTitle, glm::vec2(0.55f, 0.99f), 0.07f);
         }
         for (std::list<float>::iterator it = aList.begin();it != aList.end();++it)
         {
-            if (aIdex + 1 == aList.size())
+            if (nIdex + 1 == aList.size())
             {
                 aBarValue = OUString("Value: ") + OUString::number(*it);
                 maScreenTextShapes.push_back(new opengl3D::ScreenText(mpRenderer.get(), *mpTextCache, aBarValue, glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), CALC_POS_EVENT_ID));
@@ -1159,20 +1168,26 @@ void GL3DBarChart::updateClickEvent()
             }
             else
             {
-                aTitle = OUString("[Time:") + OUString::number((maHistoryCounter - aList.size() + aIdex)) + "]: ";
-                if (aIdex == 0)
+                aTitle = OUString("[Time:") + OUString::number((maHistoryCounter - aList.size() + nIdex)) + "]: ";
+                if (nIdex == 0)
                 {
                     aTitle = OUString("Most Recent") + aTitle;
                 }
-                else if ((aIdex + 2) == aList.size())
+                if (aList.size() < COLUMNSIZE)
                 {
-                    aTitle = OUString("Least Recent") + aTitle;
+                    nXCoordStart = 0.875f;
+                    nYCoordStart = (nIdex + 1) * 0.07f;
                 }
-                addScreenTextShape(aTitle, glm::vec2(0.8f, 0.99f - ((aIdex + 1) * 0.1f)), 0.1f, false);
+                else
+                {
+                    nXCoordStart = nIdex < COLUMNSIZE ? 0.55f : 0.875f;
+                    nYCoordStart = nIdex < COLUMNSIZE ? (nIdex + 1) * 0.07f : (nIdex - 24) * 0.07f;
+                }
+                addScreenTextShape(aTitle, glm::vec2(nXCoordStart, 0.99f - nYCoordStart), 0.07f, false);
                 aBarValue = OUString::number(*it);
-                addScreenTextShape(aBarValue, glm::vec2(0.8f, 0.99f - ((aIdex + 1) * 0.1f)), 0.1f);
+                addScreenTextShape(aBarValue, glm::vec2(nXCoordStart, 0.99f - nYCoordStart), 0.07f);
             }
-            aIdex++;
+            nIdex++;
         }
     }
 }
