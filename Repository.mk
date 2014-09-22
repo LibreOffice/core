@@ -76,9 +76,7 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
 ))
 
 $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
-	$(if $(ENABLE_MACOSX_SANDBOX),, \
-		gengal \
-	)\
+	gengal \
 ))
 
 $(eval $(call gb_Helper_register_executables,OOO, \

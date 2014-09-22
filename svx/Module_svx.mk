@@ -34,12 +34,10 @@ $(eval $(call gb_Module_add_l10n_targets,svx,\
 ))
 
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
-ifeq (,$(ENABLE_MACOSX_SANDBOX))
 $(eval $(call gb_Module_add_targets,svx,\
     Executable_gengal.bin \
     Package_gengal \
 ))
-endif
 endif
 
 ifneq ($(OOO_JUNIT_JAR),)
