@@ -13,11 +13,11 @@ in vec2 vTexCoord;
 uniform sampler2D TextTex;
 uniform vec4 textColor;
 out vec4 actualColor;
-
 void main()
 {
-    vec3 color = texture(TextTex, vTexCoord).rgb;
-    actualColor = vec4(textColor.rgb, 1.0 - color.r);
+    vec3 color = texture2D(TextTex, vTexCoord).rgb;
+    actualColor = ((1.0 - color.r) == 0.0) ? vec4(0.0, 0.0, 0.0, textColor.a) :
+                    vec4(textColor.rgb, 1.0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
