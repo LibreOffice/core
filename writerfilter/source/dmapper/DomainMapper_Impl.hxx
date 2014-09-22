@@ -827,6 +827,8 @@ public:
     /// Check if "SdtEndBefore" property is set
     bool IsSdtEndBefore();
 
+    bool IsDiscardHeaderFooter();
+
 private:
     void PushPageHeaderFooter(bool bHeader, SectionPropertyMap::PageType eType);
     std::vector<css::uno::Reference< css::drawing::XShape > > m_vTextFramesForChaining ;

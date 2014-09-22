@@ -2034,6 +2034,11 @@ bool DomainMapper_Impl::IsSdtEndBefore()
     return bIsSdtEndBefore;
 }
 
+bool DomainMapper_Impl::IsDiscardHeaderFooter()
+{
+    return m_bDiscardHeaderFooter;
+}
+
 sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;

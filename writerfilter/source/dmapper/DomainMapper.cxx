@@ -2976,6 +2976,12 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         // there are unsupported SDT properties in the document
         // save them in the paragraph interop grab bag
+        if (m_pImpl->IsDiscardHeaderFooter())
+        {
+            // Unless we're supposed to ignore this header/footer.
+            m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+            return;
+        }
         if((m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_checkbox") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_text") ||
                 m_pImpl->m_pSdtHelper->containedInInteropGrabBag("ooxml:CT_SdtPr_dataBinding") ||

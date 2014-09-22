@@ -242,6 +242,15 @@ DECLARE_OOXMLEXPORT_TEST(testTableAlignment, "table-alignment.docx")
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::RIGHT, getProperty<sal_Int16>(xTable, "HoriOrient"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testSdtIgnoredFooter, "sdt-ignored-footer.docx")
+{
+    if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))
+    {
+        // This was 1, make sure no w:sdt sneaks into the main document from the footer.
+        assertXPath(pXmlDoc, "//w:sdt", 0);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
