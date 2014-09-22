@@ -96,6 +96,7 @@ OpenGL3DRenderer::OpenGL3DRenderer():
     , m_fCurDistance(0.0f)
     , m_ScrollMoveMatrix(glm::mat4(1.0))
     , m_bUndrawFlag(false)
+    , m_matDiff(glm::mat4(0.0))
 {
     m_Polygon3DInfo.lineOnly = false;
     m_Polygon3DInfo.twoSidesLighting = false;
@@ -2138,6 +2139,17 @@ void OpenGL3DRenderer::CreateSceneBoxView()
     m_3DView = glm::lookAt(m_CameraInfo.cameraPos,
                m_CameraInfo.cameraOrg,
                m_CameraInfo.cameraUp);
+    m_3DView = m_3DView + m_matDiff;
+}
+
+void OpenGL3DRenderer::AddMatrixDiff(const glm::mat4& aMat)
+{
+    m_matDiff = m_matDiff + aMat;
+}
+
+void OpenGL3DRenderer::ResetMatrixDiff()
+{
+    m_matDiff = glm::mat4(0.0);
 }
 
 void OpenGL3DRenderer::ClearBuffer()
@@ -2438,6 +2450,17 @@ void OpenGL3DRenderer::CalcScrollMoveMatrix(bool bNewScene)
     m_fCurDistance += m_fCurDistance >= m_fScrollDistance ? 0.0f : m_fScrollSpeed;
     m_ScrollMoveMatrix = glm::translate(glm::vec3(-m_fCurDistance * 0.01, 0.0f, 0.0f));
     m_bUndrawFlag = m_fCurDistance >= m_fScrollDistance ? true : false;
+}
+
+glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection)
+{
+    glm::mat4 aBegin = glm::lookAt(glm::vec3(m_GlobalScaleMatrix * glm::vec4(rBeginPos, 1.0)),
+              glm::vec3(m_GlobalScaleMatrix * glm::vec4(rBeginDirection, 1.0)),
+              glm::vec3(0, 0, 1));
+    glm::mat4 aEnd = glm::lookAt(glm::vec3(m_GlobalScaleMatrix * glm::vec4(rEndPos, 1.0)),
+              glm::vec3(m_GlobalScaleMatrix * glm::vec4(rEndDirection, 1.0)),
+              glm::vec3(0, 0, 1));
+    return aEnd - aBegin;
 }
 
 glm::mat4 OpenGL3DRenderer::GetProjectionMatrix()

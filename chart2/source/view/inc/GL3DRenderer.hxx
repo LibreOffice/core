@@ -282,6 +282,9 @@ private:
     void SetHighLightBar(BatchBarInfo &barInfo);
     void DisableHighLightBar(BatchBarInfo &barInfo);
     void CalcScrollMoveMatrix(bool bNewScene);
+    glm::mat4 GetDiffOfTwoCameras(const glm::vec3& rBeginPos, const glm::vec3& rEndPos, const glm::vec3& rBeginDirection, const glm::vec3& rEndDirection);
+    void AddMatrixDiff(const glm::mat4& aMat);
+    void ResetMatrixDiff();
 private:
 
     struct ShaderResources
@@ -478,6 +481,7 @@ private:
     float m_fCurDistance;
     glm::mat4 m_ScrollMoveMatrix;
     bool m_bUndrawFlag;
+    glm::mat4 m_matDiff;
 };
 
 }
