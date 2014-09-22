@@ -104,7 +104,7 @@ private:
     int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
     void addScreenTextShape(OUString &nStr, glm::vec2 rLeftOrRightTop, float nTextHeight, bool bLeftTopFlag = true,
                                   const glm::vec3& rPos = glm::vec3(0.0f, 0.0f, 0.0f),
-                                  const glm::vec4& rColor = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                                  const glm::vec4& rColor = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f),
                                   sal_uInt32 nEvent = 0);
     void recordBarHistory(sal_uInt32 &nBarID, float &nVal);
     void updateClickEvent();
