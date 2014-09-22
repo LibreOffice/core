@@ -1276,23 +1276,18 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     }
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
+                    OUString sQuickHelp( aString );
+                    // Use custom tooltip if available
                     if ( !aTooltip.isEmpty() )
+                        sQuickHelp = aTooltip;
+                    OUString sShortCut;
+                    if( RetrieveShortcut( aCommandURL, sShortCut ) )
                     {
-                        m_pToolBar->SetQuickHelpText( nId, aTooltip );
+                        sQuickHelp += " (";
+                        sQuickHelp += sShortCut;
+                        sQuickHelp += ")";
                     }
-                    else
-                    {
-                         OUString sQuickHelp( aString );
-                         OUString sShortCut;
-                         if( RetrieveShortcut( aCommandURL, sShortCut ) )
-                         {
-                             sQuickHelp += " (";
-                             sQuickHelp += sShortCut;
-                             sQuickHelp += ")";
-                         }
-
-                        m_pToolBar->SetQuickHelpText( nId, sQuickHelp );
-                    }
+                    m_pToolBar->SetQuickHelpText( nId, sQuickHelp );
 
                     if ( !aLabel.isEmpty() )
                     {

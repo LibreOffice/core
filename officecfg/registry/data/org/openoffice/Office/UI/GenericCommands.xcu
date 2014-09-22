@@ -2019,7 +2019,7 @@
       </node>
       <node oor:name=".uno:PrintDefault" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Print File Directly</value>
+          <value xml:lang="en-US">Print Document Directly</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2246,7 +2246,7 @@
       </node>
       <node oor:name=".uno:InsertDoc" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~File...</value>
+          <value xml:lang="en-US">~Document...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3382,7 +3382,7 @@
       </node>
       <node oor:name=".uno:FormatPaintbrush" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Format Paintbrush (double click for multi-selection)</value>
+          <value xml:lang="en-US">Clone Formatting (double click for multi-selection)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
