@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
   <object class="GtkBox" id="SlideTransitionsPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -96,8 +97,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
                               <item translatable="yes">Slow</item>
                               <item translatable="yes">Medium</item>
@@ -139,12 +138,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="hexpand">True</property>
-                            <property name="entry_text_column">0</property>
-                            <property name="id_column">1</property>
                             <items>
-                              <item translatable="yes">No Sound</item>
-                              <item translatable="yes">Stop Previous Sound</item>
-                              <item translatable="yes">Other Sound...</item>
+                              <item translatable="yes">No sound</item>
+                              <item translatable="yes">Stop previous sound</item>
+                              <item translatable="yes">Other sound...</item>
                             </items>
                           </object>
                           <packing>
@@ -229,12 +226,11 @@
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
                         <property name="width">2</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="rb_auto_after">
-                        <property name="label" translatable="yes">Automatically after</property>
+                        <property name="label" translatable="yes">Automatically after:</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
@@ -245,8 +241,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -254,15 +248,11 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="invisible_char">●</property>
-                        <property name="invisible_char_set">True</property>
                         <property name="digits">2</property>
-                        <property name="spin_size">25</property>
                       </object>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkGrid" id="InteractionPage">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -36,29 +37,23 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Action at mouse click</property>
+                    <property name="label" translatable="yes">Action at mouse click:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">listbox</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkComboBoxText" id="listbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="entry_text_column">0</property>
-                    <property name="id_column">1</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -67,15 +62,13 @@
                     <property name="can_focus">False</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
-                    <property name="label" translatable="yes">Target</property>
+                    <property name="label" translatable="yes">Target:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">box3</property>
                   </object>
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -137,8 +130,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -159,8 +150,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">0</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
     <child>
@@ -221,8 +210,6 @@
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -255,7 +242,6 @@
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -269,7 +255,6 @@
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -283,7 +268,6 @@
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -297,7 +281,6 @@
                         <property name="no_show_all">True</property>
                         <property name="hexpand">True</property>
                         <property name="invisible_char">•</property>
-                        <property name="invisible_char_set">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -309,8 +292,6 @@
                   <packing>
                     <property name="left_attach">0</property>
                     <property name="top_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
@@ -330,8 +311,6 @@
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
-        <property name="width">1</property>
-        <property name="height">1</property>
       </packing>
     </child>
   </object>

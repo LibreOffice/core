@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires LibreOffice 1.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkBox" id="HeaderFooterTab">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -59,9 +60,6 @@
                         <property name="can_focus">False</property>
                         <property name="margin_left">12</property>
                         <property name="spacing">12</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="header_cb"/>
-                        </accessibility>
                         <child>
                           <object class="GtkLabel" id="header_label">
                             <property name="visible">True</property>
@@ -88,6 +86,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="header_cb"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -121,9 +122,6 @@
                         <property name="margin_left">12</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
-                        <accessibility>
-                          <relation type="labelled-by" target="datetime_cb"/>
-                        </accessibility>
                         <child>
                           <object class="GtkBox" id="box6">
                             <property name="visible">True</property>
@@ -155,7 +153,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                                 <accessibility>
                                   <relation type="labelled-by" target="rb_fixed"/>
                                 </accessibility>
@@ -195,8 +192,6 @@
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">0</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
@@ -204,9 +199,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="left_padding">12</property>
-                                <accessibility>
-                                  <relation type="labelled-by" target="rb_auto"/>
-                                </accessibility>
                                 <child>
                                   <object class="GtkGrid" id="grid2">
                                     <property name="visible">True</property>
@@ -221,8 +213,6 @@
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="top_attach">1</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -230,15 +220,13 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">_Language</property>
+                                        <property name="label" translatable="yes">_Language:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">language_list</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">1</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -249,8 +237,6 @@
                                       <packing>
                                         <property name="left_attach">1</property>
                                         <property name="top_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                     <child>
@@ -258,25 +244,24 @@
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="halign">start</property>
-                                        <property name="label" translatable="yes">_Format</property>
+                                        <property name="label" translatable="yes">_Format:</property>
                                         <property name="use_underline">True</property>
                                         <property name="mnemonic_widget">datetime_format_list</property>
                                       </object>
                                       <packing>
                                         <property name="left_attach">0</property>
                                         <property name="top_attach">0</property>
-                                        <property name="width">1</property>
-                                        <property name="height">1</property>
                                       </packing>
                                     </child>
                                   </object>
                                 </child>
+                                <accessibility>
+                                  <relation type="labelled-by" target="rb_auto"/>
+                                </accessibility>
                               </object>
                               <packing>
                                 <property name="left_attach">0</property>
                                 <property name="top_attach">1</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
                               </packing>
                             </child>
                           </object>
@@ -286,6 +271,9 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="datetime_cb"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -324,9 +312,6 @@
                             <property name="can_focus">False</property>
                             <property name="margin_left">12</property>
                             <property name="spacing">12</property>
-                            <accessibility>
-                              <relation type="labelled-by" target="footer_cb"/>
-                            </accessibility>
                             <child>
                               <object class="GtkLabel" id="footer_label">
                                 <property name="visible">True</property>
@@ -346,7 +331,6 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="invisible_char">●</property>
-                                <property name="invisible_char_set">True</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -354,6 +338,9 @@
                                 <property name="position">1</property>
                               </packing>
                             </child>
+                            <accessibility>
+                              <relation type="labelled-by" target="footer_cb"/>
+                            </accessibility>
                           </object>
                           <packing>
                             <property name="expand">False</property>
