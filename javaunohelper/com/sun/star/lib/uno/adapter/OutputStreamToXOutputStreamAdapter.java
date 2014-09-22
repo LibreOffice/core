@@ -27,7 +27,7 @@ import java.io.OutputStream;
    object in a Java.  This allows users to access an <code>OutputStream</code>
    as if it were an <code>XOutputStream</code>.
  */
-public class OutputStreamToXOutputStreamAdapter implements XOutputStream {
+public final class OutputStreamToXOutputStreamAdapter implements XOutputStream {
 
     /**
      *  Internal handle to the OutputStream

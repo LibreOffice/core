@@ -29,7 +29,7 @@ import java.io.OutputStream;
  * an <code>XOutputStream</code> as if it were an
  * <code>OutputStream</code>.
  */
-public class XOutputStreamToOutputStreamAdapter extends OutputStream {
+public final class XOutputStreamToOutputStreamAdapter extends OutputStream {
 
     /**
      *  Internal handle to the XInputStream

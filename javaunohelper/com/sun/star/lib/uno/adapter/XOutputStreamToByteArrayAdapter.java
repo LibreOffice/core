@@ -27,7 +27,7 @@ package com.sun.star.lib.uno.adapter;
 import com.sun.star.io.*;
 import  com.sun.star.lib.uno.helper.ComponentBase;
 
-public class XOutputStreamToByteArrayAdapter
+public final class XOutputStreamToByteArrayAdapter
     extends ComponentBase
     implements XOutputStream
 {
