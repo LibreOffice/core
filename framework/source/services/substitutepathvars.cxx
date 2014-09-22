@@ -262,7 +262,7 @@ public:
 protected:
     DECL_LINK(implts_ConfigurationNotify, void *);
 
-    void            SetPredefinedPathVariables( PredefinedPathVariables& );
+    void            SetPredefinedPathVariables();
     OUString   ConvertOSLtoUCBURL( const OUString& aOSLCompliantURL ) const;
 
     // Special case (transient) values can change during runtime!
@@ -723,7 +723,7 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
 {
     int i;
 
-    SetPredefinedPathVariables( m_aPreDefVars );
+    SetPredefinedPathVariables();
     m_aImpl.GetSharePointsRules( m_aSubstVarMap );
 
     // Init the predefined/fixed variable to index hash map
@@ -1235,12 +1235,12 @@ throw ( NoSuchElementException, RuntimeException )
     }
 }
 
-void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariables& aPreDefPathVariables )
+void SubstitutePathVariables::SetPredefinedPathVariables()
 {
 
-    aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] = "$BRAND_BASE_DIR";
+    m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL] = "$BRAND_BASE_DIR";
     rtl::Bootstrap::expandMacros(
-        aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
+        m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 
     // Get inspath and userpath from bootstrap mechanism in every case as file URL
     ::utl::Bootstrap::PathStatus aState;
@@ -1252,66 +1252,66 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     // of the setup. Then no user installation was required.)
     //Therefore we do not assert here.
     if( aState == ::utl::Bootstrap::PATH_EXISTS ) {
-        aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );
+        m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ] = ConvertOSLtoUCBURL( sVal );
     }
 
     // Set $(inst), $(instpath), $(insturl)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ] = aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL];
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INST ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTPATH ] = m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL];
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTURL ]    = m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTPATH ];
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_INST ]       = m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTPATH ];
     // New variable of hierachy service (#i32656#)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_BASEINSTURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_INSTPATH ];
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_BASEINSTURL ]= m_aPreDefVars.m_FixedVar[ PREDEFVAR_INSTPATH ];
 
     // Set $(user), $(userpath), $(userurl)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERURL ]    = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USER ]       = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERURL ]    = m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ];
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_USER ]       = m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ];
     // New variable of hierachy service (#i32656#)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERDATAURL ]= aPreDefPathVariables.m_FixedVar[ PREDEFVAR_USERPATH ];
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERDATAURL ]= m_aPreDefVars.m_FixedVar[ PREDEFVAR_USERPATH ];
 
     // Detect the program directory
     // Set $(prog), $(progpath), $(progurl)
     INetURLObject aProgObj(
-        aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL] );
+        m_aPreDefVars.m_FixedVar[PREDEFVAR_BRANDBASEURL] );
     if ( !aProgObj.HasError() && aProgObj.insertName( OUString(LIBO_BIN_FOLDER) ) )
     {
-        aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::NO_DECODE);
-        aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGURL ]  = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ];
-        aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROG ]     = aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PROGPATH ];
+        m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ] = aProgObj.GetMainURL(INetURLObject::NO_DECODE);
+        m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGURL ]  = m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ];
+        m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROG ]     = m_aPreDefVars.m_FixedVar[ PREDEFVAR_PROGPATH ];
     }
 
     // Detect the language type of the current office
-    aPreDefPathVariables.m_eLanguageType = LANGUAGE_ENGLISH_US;
+    m_aPreDefVars.m_eLanguageType = LANGUAGE_ENGLISH_US;
     OUString aLocaleStr( utl::ConfigManager::getLocale() );
-    aPreDefPathVariables.m_eLanguageType = LanguageTag::convertToLanguageTypeWithFallback( aLocaleStr );
+    m_aPreDefVars.m_eLanguageType = LanguageTag::convertToLanguageTypeWithFallback( aLocaleStr );
     // We used to have an else branch here with a SAL_WARN, but that
     // always fired in some unit tests when this code was built with
     // debug=t, so it seems fairly pointless, especially as
-    // aPreDefPathVariables.m_eLanguageType has been initialized to a
+    // m_aPreDefVars.m_eLanguageType has been initialized to a
     // default value above anyway.
 
     // Set $(vlang)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_VLANG ] = aLocaleStr;
 
     // Set $(langid)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::number( aPreDefPathVariables.m_eLanguageType );
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_LANGID ] = OUString::number( m_aPreDefVars.m_eLanguageType );
 
     // Set the other pre defined path variables
     // Set $(work)
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_WORK ] = GetWorkVariableValue();
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_HOME ] = GetHomeVariableValue();
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_WORK ] = GetWorkVariableValue();
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_HOME ] = GetHomeVariableValue();
 
     // Set $(workdirurl) this is the value of the path PATH_WORK which doesn't make sense
     // anymore because the path settings service has this value! It can deliver this value more
     // quickly than the substitution service!
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_WORKDIRURL ] = GetWorkPath();
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_WORKDIRURL ] = GetWorkPath();
 
     // Set $(path) variable
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PATH ] = GetPathVariableValue();
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_PATH ] = GetPathVariableValue();
 
     // Set $(temp)
     OUString aTmp;
     osl::FileBase::getTempDirURL( aTmp );
-    aPreDefPathVariables.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );
+    m_aPreDefVars.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );
 }
 
 struct Instance {
