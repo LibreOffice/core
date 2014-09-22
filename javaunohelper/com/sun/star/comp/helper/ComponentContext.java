@@ -29,7 +29,6 @@ import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.EventObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 

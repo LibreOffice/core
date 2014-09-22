@@ -28,7 +28,7 @@ import java.io.InputStream;
  * an <code>XInputStream</code> as if it were an
  * <code>InputStream</code>.
  */
-public class XInputStreamToInputStreamAdapter extends InputStream {
+public final class XInputStreamToInputStreamAdapter extends InputStream {
 
     /**
      *  Internal handle to the XInputStream
