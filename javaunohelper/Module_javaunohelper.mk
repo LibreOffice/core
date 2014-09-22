@@ -17,7 +17,7 @@ $(eval $(call gb_Module_add_targets,javaunohelper,\
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,javaunohelper,\
-    JunitTest_juh_ComponentContext \
+    JunitTest_juh \
 ))
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
