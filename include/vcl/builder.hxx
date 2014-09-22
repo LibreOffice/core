@@ -29,6 +29,7 @@
 #include <boost/ptr_container/ptr_map.hpp>
 
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 class ListBox;
 class NumericFormatter;
@@ -258,7 +259,7 @@ private:
 public:
     VclBuilder(::Window *pParent, const OUString& sUIRootDir, const OUString& sUIFile,
             const OString& sID = OString(),
-            const com::sun::star::uno::Reference<com::sun::star::frame::XFrame> &rFrame = com::sun::star::uno::Reference<com::sun::star::frame::XFrame>());
+            const css::uno::Reference<css::frame::XFrame> &rFrame = css::uno::Reference<css::frame::XFrame>());
     ~VclBuilder();
     ::Window *get_widget_root();
     //sID must exist and be of type T
@@ -323,6 +324,14 @@ public:
     //Helpers to retrofit all the existing code to the builder
     static void reorderWithinParent(std::vector< ::Window*>& rChilds, bool bIsButtonBox);
     static void reorderWithinParent(::Window &rWindow, sal_uInt16 nNewPosition);
+
+    /// Get label of the command (like of .uno:Save) from the description service
+    static OUString getCommandLabel(const OUString& rCommand, const css::uno::Reference<css::uno::XComponentContext>& rContext, const OUString& rModuleId);
+
+    /// Get image of the command (like of .uno:Save) from the description service
+    static Image getCommandImage(const OUString& rCommand, bool bLarge,
+            const css::uno::Reference<css::uno::XComponentContext>& rContext, const css::uno::Reference<css::frame::XFrame>& rFrame,
+            const OUString& rModuleId);
 
     css::uno::Reference<css::frame::XFrame> getFrame() { return m_xFrame; }
 private:

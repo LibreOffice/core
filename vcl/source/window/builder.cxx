@@ -7,7 +7,16 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
+#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/ui/ImageType.hpp>
+#include <com/sun/star/ui/XImageManager.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <osl/module.hxx>
@@ -144,7 +153,7 @@ void VclBuilder::loadTranslations(const LanguageTag &rLanguageTag, const OUStrin
             handleTranslations(reader);
             break;
         }
-        catch (const ::com::sun::star::uno::Exception &)
+        catch (const uno::Exception &)
         {
         }
     }
@@ -197,7 +206,7 @@ VclBuilder::VclBuilder(Window *pParent, const OUString& sUIDir, const OUString& 
 
         handleChild(pParent, reader);
     }
-    catch (const ::com::sun::star::uno::Exception &rExcept)
+    catch (const uno::Exception &rExcept)
     {
         SAL_WARN("vcl.layout", "Unable to read .ui file: " << rExcept.Message);
         throw;
@@ -805,6 +814,27 @@ namespace
         return sTooltipText;
     }
 
+    void setupFromActionName(Button *pButton, VclBuilder::stringmap &rMap, const uno::Reference<frame::XFrame>& rFrame)
+    {
+        if (!rFrame.is())
+            return;
+
+        OUString aCommand(OStringToOUString(extractActionName(rMap), RTL_TEXTENCODING_UTF8));
+        if (aCommand.isEmpty())
+            return;
+
+        uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
+        uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
+        OUString aModuleId(xModuleManager->identify(rFrame));
+
+        OUString aLabel(VclBuilder::getCommandLabel(aCommand, xContext, aModuleId));
+        if (!aLabel.isEmpty())
+            pButton->SetText(aLabel);
+
+        Image aImage(VclBuilder::getCommandImage(aCommand, /* bLarge = */ false, xContext, rFrame, aModuleId));
+        pButton->SetModeImage(aImage);
+    }
+
     Button* extractStockAndBuildPushButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CLIPCHILDREN|WB_CENTER|WB_VCENTER;
@@ -1275,6 +1305,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
         }
         pButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        setupFromActionName(pButton, rMap, m_xFrame);
         pWindow = pButton;
     }
     else if (name == "GtkRadioButton")
@@ -2048,6 +2079,98 @@ void VclBuilder::reorderWithinParent(std::vector<Window*>& rChilds, bool bIsButt
             nBits |= WB_GROUP;
         rChilds[i]->SetStyle(nBits);
     }
+}
+
+OUString VclBuilder::getCommandLabel(const OUString& rCommand, const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
+{
+    if (rCommand.isEmpty())
+        return OUString();
+
+    try
+    {
+        uno::Reference<container::XNameAccess> xUICommandLabels;
+        uno::Reference<container::XNameAccess> xUICommandDescription(frame::theUICommandDescription::get(rContext));
+
+        if ((xUICommandDescription->getByName(rModuleId) >>= xUICommandLabels) && xUICommandLabels.is())
+        {
+            uno::Sequence<beans::PropertyValue> aProperties;
+            if (xUICommandLabels->getByName(rCommand) >>= aProperties)
+            {
+                for ( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
+                {
+                    if (aProperties[i].Name == "Label")
+                    {
+                        OUString aLabel;
+                        if (aProperties[i].Value >>= aLabel)
+                            return aLabel;
+                    }
+                }
+            }
+        }
+    }
+    catch (uno::Exception&)
+    {
+    }
+
+    return OUString();
+}
+
+Image VclBuilder::getCommandImage(const OUString& rCommand, bool bLarge,
+        const uno::Reference<uno::XComponentContext>& rContext, const uno::Reference<frame::XFrame>& rFrame,
+        const OUString& rModuleId)
+{
+    if (rCommand.isEmpty())
+        return Image();
+
+    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
+    if (bLarge)
+        nImageType |= ui::ImageType::SIZE_LARGE;
+
+    try
+    {
+        uno::Reference<frame::XController> xController(rFrame->getController());
+        uno::Reference<frame::XModel> xModel(xController->getModel());
+
+        uno::Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xModel, uno::UNO_QUERY);
+        uno::Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), uno::UNO_QUERY);
+        uno::Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), uno::UNO_QUERY);
+
+        uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
+        uno::Sequence<OUString> aImageCmdSeq(1);
+        aImageCmdSeq[0] = rCommand;
+
+        aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
+        uno::Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
+        Image aImage(xGraphic);
+
+        if (!!aImage)
+            return aImage;
+    }
+    catch (uno::Exception&)
+    {
+    }
+
+    try {
+        uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(rContext));
+        uno::Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(rModuleId));
+
+        uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
+        uno::Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), uno::UNO_QUERY);
+
+        uno::Sequence<OUString> aImageCmdSeq(1);
+        aImageCmdSeq[0] = rCommand;
+
+        aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
+
+        uno::Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
+
+        return Image(xGraphic);
+    }
+    catch (uno::Exception&)
+    {
+    }
+
+    return Image();
 }
 
 void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap)

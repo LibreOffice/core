@@ -41,17 +41,10 @@
 #include <unotools/confignode.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModuleManager2.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/ui/ImageType.hpp>
-#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
 using namespace vcl;
 using namespace com::sun::star;
@@ -621,108 +614,14 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText,
     ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMADDED, reinterpret_cast< void* >( nNewPos ) );
 }
 
-// Get label of the command (like of .uno:Save) from the description service
-static OUString getCommandLabel(const OUString& rCommand, const uno::Reference<uno::XComponentContext>& rContext, const OUString& rModuleId)
-{
-    if (rCommand.isEmpty())
-        return OUString();
-
-    try
-    {
-        uno::Reference<container::XNameAccess> xUICommandLabels;
-        uno::Reference<container::XNameAccess> xUICommandDescription(frame::theUICommandDescription::get(rContext));
-
-        if ((xUICommandDescription->getByName(rModuleId) >>= xUICommandLabels) && xUICommandLabels.is())
-        {
-            uno::Sequence<beans::PropertyValue> aProperties;
-            if (xUICommandLabels->getByName(rCommand) >>= aProperties)
-            {
-                for ( sal_Int32 i = 0; i < aProperties.getLength(); i++ )
-                {
-                    if (aProperties[i].Name == "Label")
-                    {
-                        OUString aLabel;
-                        if (aProperties[i].Value >>= aLabel)
-                            return aLabel;
-                    }
-                }
-            }
-        }
-    }
-    catch (uno::Exception&)
-    {
-    }
-
-    return OUString();
-}
-
-// Get label of the command (like of .uno:Save) from the description service
-static Image getCommandImage(const OUString& rCommand, bool bLarge,
-        const uno::Reference<uno::XComponentContext>& rContext, const uno::Reference<frame::XFrame>& rFrame,
-        const OUString& rModuleId)
-{
-    if (rCommand.isEmpty())
-        return Image();
-
-    sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
-    if (bLarge)
-        nImageType |= ui::ImageType::SIZE_LARGE;
-
-    try
-    {
-        uno::Reference<frame::XController> xController(rFrame->getController());
-        uno::Reference<frame::XModel> xModel(xController->getModel());
-
-        uno::Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xModel, uno::UNO_QUERY);
-        uno::Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), uno::UNO_QUERY);
-        uno::Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), uno::UNO_QUERY);
-
-        uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
-        uno::Sequence<OUString> aImageCmdSeq(1);
-        aImageCmdSeq[0] = rCommand;
-
-        aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
-        uno::Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
-        Image aImage(xGraphic);
-
-        if (!!aImage)
-            return aImage;
-    }
-    catch (uno::Exception&)
-    {
-    }
-
-    try {
-        uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(rContext));
-        uno::Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(rModuleId));
-
-        uno::Sequence< uno::Reference<graphic::XGraphic> > aGraphicSeq;
-        uno::Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), uno::UNO_QUERY);
-
-        uno::Sequence<OUString> aImageCmdSeq(1);
-        aImageCmdSeq[0] = rCommand;
-
-        aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
-
-        uno::Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
-
-        return Image(xGraphic);
-    }
-    catch (uno::Exception&)
-    {
-    }
-
-    return Image();
-}
-
 void ToolBox::InsertItem(const OUString& rCommand, const uno::Reference<frame::XFrame>& rFrame, ToolBoxItemBits nBits, const Size& rRequestedSize, sal_uInt16 nPos)
 {
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     uno::Reference<frame::XModuleManager2> xModuleManager(frame::ModuleManager::create(xContext));
     OUString aModuleId(xModuleManager->identify(rFrame));
 
-    OUString aLabel(getCommandLabel(rCommand, xContext, aModuleId));
-    Image aImage(getCommandImage(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), xContext, rFrame, aModuleId));
+    OUString aLabel(VclBuilder::getCommandLabel(rCommand, xContext, aModuleId));
+    Image aImage(VclBuilder::getCommandImage(rCommand, (GetToolboxButtonSize() == TOOLBOX_BUTTONSIZE_LARGE), xContext, rFrame, aModuleId));
 
     // let's invent an ItemId
     const sal_uInt16 COMMAND_ITEMID_START = 30000;

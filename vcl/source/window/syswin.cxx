@@ -879,7 +879,7 @@ OString SystemWindow::GetWindowState( sal_uLong nMask ) const
     return ImplWindowStateToStr(aData);
 }
 
-void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
+void SystemWindow::SetMenuBar(MenuBar* pMenuBar, const css::uno::Reference<css::frame::XFrame>& rFrame)
 {
     if ( mpMenuBar != pMenuBar )
     {
@@ -902,7 +902,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
             if ( pMenuBar )
             {
                 DBG_ASSERT( !pMenuBar->pWindow, "SystemWindow::SetMenuBar() - MenuBars can only set in one SystemWindow at time" );
-                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarWindow( pNewWindow = MenuBar::ImplCreate( mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar ) );
+                ((ImplBorderWindow*)mpWindowImpl->mpBorderWindow)->SetMenuBarWindow(pNewWindow = MenuBar::ImplCreate(mpWindowImpl->mpBorderWindow, pOldWindow, pMenuBar, rFrame));
                 ImplCallEventListeners( VCLEVENT_WINDOW_MENUBARADDED, (void*) pMenuBar );
             }
             else

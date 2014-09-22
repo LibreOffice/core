@@ -29,6 +29,7 @@
 #include <vcl/bitmapex.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/vclevent.hxx>
+#include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 struct ImplSVEvent;
@@ -407,7 +408,7 @@ class VCL_DLLPUBLIC MenuBar : public Menu
     friend class MenuFloatingWindow;
     friend class SystemWindow;
 
-    SAL_DLLPRIVATE static Window*   ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu );
+    SAL_DLLPRIVATE static Window* ImplCreate(Window* pParent, Window* pWindow, MenuBar* pMenu, const css::uno::Reference<css::frame::XFrame> &rFrame);
     SAL_DLLPRIVATE static void      ImplDestroy( MenuBar* pMenu, bool bDelete );
     SAL_DLLPRIVATE bool         ImplHandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu = true );
 

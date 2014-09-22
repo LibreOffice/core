@@ -2470,7 +2470,7 @@ void MenuBar::SetDisplayable( bool bDisplayable )
     }
 }
 
-Window* MenuBar::ImplCreate( Window* pParent, Window* pWindow, MenuBar* pMenu )
+Window* MenuBar::ImplCreate(Window* pParent, Window* pWindow, MenuBar* pMenu, const css::uno::Reference<css::frame::XFrame> &/*rFrame*/)
 {
     MenuBarWindow *pMenuBarWindow = dynamic_cast<MenuBarWindow*>(pWindow);
     if (!pMenuBarWindow)
