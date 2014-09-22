@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires LibreOffice 1.0 -->
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <requires lib="LibreOffice" version="1.0"/>
   <object class="GtkDialog" id="TableDesignDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
@@ -80,7 +81,7 @@
             <property name="column_homogeneous">True</property>
             <child>
               <object class="GtkCheckButton" id="UseFirstRowStyle">
-                <property name="label" translatable="yes">_Header Row</property>
+                <property name="label" translatable="yes">_Header row</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -91,13 +92,11 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="UseLastRowStyle">
-                <property name="label" translatable="yes">Tot_al Row</property>
+                <property name="label" translatable="yes">Tot_al row</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -108,13 +107,11 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="UseBandingRowStyle">
-                <property name="label" translatable="yes">_Banded Rows</property>
+                <property name="label" translatable="yes">_Banded rows</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -125,13 +122,11 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="UseFirstColumnStyle">
-                <property name="label" translatable="yes">Fi_rst Column</property>
+                <property name="label" translatable="yes">Fi_rst column</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -142,13 +137,11 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">3</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="UseLastColumnStyle">
-                <property name="label" translatable="yes">_Last Column</property>
+                <property name="label" translatable="yes">_Last column</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -159,13 +152,11 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">4</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="UseBandingColumnStyle">
-                <property name="label" translatable="yes">Ba_nded Columns</property>
+                <property name="label" translatable="yes">Ba_nded columns</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -176,8 +167,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">5</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -190,7 +179,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
                 <property name="height">6</property>
               </packing>
             </child>
