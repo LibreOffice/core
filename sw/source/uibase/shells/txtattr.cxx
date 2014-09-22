@@ -223,31 +223,53 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             SfxItemSet aAttrSet( rPool, aSetItem.GetItemSet().GetRanges() );
 
             sal_uInt16 nScriptTypes = rWrtSh.GetScriptType();
-
             const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>(
                                         aSetItem.GetItemOfScript( nScriptTypes ) ) );
-
-            if (pSize)
+            std::vector<SwPaM*> vPaM;
+            std::vector<const SfxPoolItem*> vItem;
+            if ( pSize ) // selected text has one size
             {
-                SvxFontHeightItem aSize(*pSize);
-
-                sal_uInt32 nSize = aSize.GetHeight();
-
-                if ( nSlot == FN_GROW_FONT_SIZE && ( nSize += nFontInc ) > nFontMaxSz )
-                    nSize = nFontMaxSz;
-                else if ( nSlot == FN_SHRINK_FONT_SIZE && ( nSize -= nFontInc ) < nFontInc )
-                    nSize = nFontInc;
-
-                aSize.SetHeight( nSize );
-                aSetItem.PutItemForScriptType( nScriptTypes, aSize );
-                aAttrSet.Put( aSetItem.GetItemSet() );
-
-                if( pColl )
-                    pColl->SetFmtAttr( aAttrSet );
-                else
-                    rWrtSh.SetAttrSet( aAttrSet );
+                vItem.push_back( pSize );
+                // must create new one, otherwise document is without pam
+                SwPaM* pPaM = rWrtSh.GetCrsr();
+                vPaM.push_back( new SwPaM( *(pPaM->GetMark()), *(pPaM->GetPoint()) ) );
             }
+            else
+            {
+                vPaM = rWrtSh.GetSplitPaM( RES_CHRATR_FONTSIZE );
+                vItem = rWrtSh.GetCurItem ( RES_CHRATR_FONTSIZE );
+            }
+            std::vector<SwPaM*>::iterator iPaM = vPaM.begin();
+            std::vector<const SfxPoolItem*>::const_iterator iItem = vItem.begin();
+            rWrtSh.StartUndo( UNDO_INSATTR, NULL);
+            for ( ; iPaM != vPaM.end() && iItem != vItem.end(); ++iPaM, ++iItem )
+            {
+                rWrtSh.GetPaMAttr( *iPaM, aSetItem.GetItemSet() );
+                aAttrSet.SetRanges( aSetItem.GetItemSet().GetRanges() );
 
+                pSize = static_cast<const SvxFontHeightItem*>( *iItem );
+                if (pSize)
+                {
+                    SvxFontHeightItem aSize(*pSize);
+
+                    sal_uInt32 nSize = aSize.GetHeight();
+
+                    if ( nSlot == FN_GROW_FONT_SIZE && ( nSize += nFontInc ) > nFontMaxSz )
+                        nSize = nFontMaxSz;
+                    else if ( nSlot == FN_SHRINK_FONT_SIZE && ( nSize -= nFontInc ) < nFontInc )
+                        nSize = nFontInc;
+
+                    aSize.SetHeight( nSize );
+                    aSetItem.PutItemForScriptType( nScriptTypes, aSize );
+                    aAttrSet.Put( aSetItem.GetItemSet() );
+                    if( pColl )
+                        pColl->SetFmtAttr( aAttrSet );
+                    else
+                        rWrtSh.SetAttrSet( aAttrSet, 0, *iPaM );
+                }
+                delete *iPaM;
+            }
+            rWrtSh.EndUndo( UNDO_INSATTR, NULL);
             rReq.Done();
         }
         break;
@@ -605,10 +627,15 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>(
                                             aSetItem.GetItemOfScript( rSh.GetScriptType() ) ) );
 
-                if( !pSize )
-                    rSet.DisableItem( nSlot );
+                std::vector<const SfxPoolItem*> vFontHeight;
+                if( pSize ) // selection is of one size
+                    vFontHeight.push_back( pSize );
                 else
+                    vFontHeight = rSh.GetCurItem( RES_CHRATR_FONTSIZE );
+
+                for ( const SfxPoolItem* pIt : vFontHeight )
                 {
+                    pSize = static_cast<const SvxFontHeightItem*>(pIt);
                     sal_uInt32 nSize = pSize->GetHeight();
                     if( nSize == nFontMaxSz )
                         rSet.DisableItem( FN_GROW_FONT_SIZE );
