@@ -6,3 +6,5 @@ cmd/lc_showsinglepage.png cmd/lc_adddirect.png
 cmd/sc_showsinglepage.png cmd/sc_adddirect.png
 cmd/lc_zoommode.png cmd/lc_zoomoptimal.png
 cmd/sc_zoommode.png cmd/sc_zoomoptimal.png
+cmd/lc_closepreview.png cmd/lc_basicstop.png
+cmd/sc_closepreview.png cmd/sc_basicstop.png
