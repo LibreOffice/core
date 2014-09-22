@@ -26,6 +26,11 @@ import com.sun.star.lang.XEventListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Before;
+import org.junit.Test;
+
 public class ComponentBase_Test
 {
     private static final Logger logger = Logger.getLogger(ComponentBase_Test.class.getName());
@@ -37,24 +42,29 @@ public class ComponentBase_Test
     Object proxyObj2TypeProv;
 
     /** Creates a new instance of ComponentBase_Test */
-    public ComponentBase_Test()
+    @Before public void setUp() throws Exception
     {
         obj1= new AWeakBase();
         obj2= new AWeakBase();
         obj3= new AWeakBase();
+
         proxyObj1Weak1= ProxyProvider.createProxy(obj1, XWeak.class);
         proxyObj3Weak1= ProxyProvider.createProxy(obj3, XWeak.class);
         proxyObj3Weak2= ProxyProvider.createProxy(obj3, XWeak.class);
+        assertNotNull(proxyObj1Weak1);
+        assertNotNull(proxyObj3Weak1);
+        assertNotNull(proxyObj3Weak2);
+
         proxyObj2TypeProv= ProxyProvider.createProxy(obj2, XTypeProvider.class);
         proxyObj3TypeProv= ProxyProvider.createProxy(obj3, XTypeProvider.class);
+        assertNotNull(proxyObj2TypeProv);
+        assertNotNull(proxyObj3TypeProv);
     }
 
-    public boolean dispose()
+    @Test public void test_dispose() throws Exception
     {
-        logger.log(Level.INFO, "Testing ComponentBase");
+        logger.log(Level.INFO, "Testing ComponentBase: test_dispose()");
         ComponentBase comp= new ComponentBase();
-        boolean r[]= new boolean[50];
-        int i= 0;
 
         logger.log(Level.FINE, "addEventListener");
         comp.addEventListener(obj1);
@@ -68,73 +78,35 @@ public class ComponentBase_Test
         obj3.nDisposingCalled = 0;
 
         comp.dispose();
-        r[i++]= obj1.nDisposingCalled == 1;
-        r[i++]= obj2.nDisposingCalled == 1;
-        r[i++]= obj3.nDisposingCalled == 1;
+        assertEquals(obj1.nDisposingCalled, 1);
+        assertEquals(obj2.nDisposingCalled, 1);
+        assertEquals(obj3.nDisposingCalled, 1);
 
         logger.log(Level.FINE, "Adding a listener after dispose, causes a immediate call to the listerner.");
         obj1.nDisposingCalled= 0;
         comp.addEventListener(obj1);
-        r[i++]= obj1.nDisposingCalled == 1;
+        assertEquals(obj1.nDisposingCalled, 1);
 
         logger.log(Level.FINE, "Calling dispose again must not notify the listeners again.");
         obj1.nDisposingCalled= 0;
         obj2.nDisposingCalled= 0;
         obj3.nDisposingCalled= 0;
         comp.dispose(); // already disposed;
-        r[i++]= obj1.nDisposingCalled == 0;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
+        assertEquals(obj1.nDisposingCalled, 0);
     }
 
-    public boolean test_finalize()
+    @Test public void test_finalize() throws Exception
     {
-        logger.log(Level.INFO, "Testing ComponentBase");
+        logger.log(Level.INFO, "Testing ComponentBase: test_finalize()");
         ComponentBase comp= new ComponentBase();
-        boolean r[]= new boolean[50];
-        int i= 0;
         obj1.nDisposingCalled = 0;
         comp.addEventListener(obj1);
 
         comp= null;
-        logger.log(Level.FINE, "Waiting 10s");
-        for(int c= 0; c < 100; c++)
-        {
-            try
-            {
-                Thread.sleep(100);
-                System.gc();
-                System.runFinalization();
-            }catch (InterruptedException ie)
-            {
-            }
-        }
-        r[i++]= obj1.nDisposingCalled == 1;
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "Ok" : "Failed");
-        return bOk;
-    }
-
-    public static void main(String[] args)
-    {
-        ComponentBase_Test test= new ComponentBase_Test();
-
-        boolean r[]= new boolean[50];
-        int i= 0;
-        r[i++]= test.dispose();
-        r[i++]= test.test_finalize();
-
-        boolean bOk= true;
-        for (int c= 0; c < i; c++)
-            bOk= bOk && r[c];
-        logger.log(Level.INFO, bOk ? "No errors." : "Errors occurred!");
-        System.exit( bOk ? 0: -1 );
+        System.gc();
+        System.runFinalization();
+        logger.log(Level.FINE, "Waiting 51ms (-XX:MaxGCPauseMillis=50)");
+        Thread.sleep(51);
+        assertEquals(obj1.nDisposingCalled, 1);
     }
 }
