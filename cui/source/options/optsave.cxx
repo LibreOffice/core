@@ -110,13 +110,13 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
     aODFVersionLB->SetEntryData(2, (void*)8         ); // 1.2 Extended (compat mode)
     aODFVersionLB->SetEntryData(3, (void*)0x7fffffff); // 1.2 Extended (recommended)
 
-    aDocTypeLB->SetEntryData(0, (void*)APP_WRITER       );
-    aDocTypeLB->SetEntryData(1, (void*)APP_WRITER_WEB   );
-    aDocTypeLB->SetEntryData(2, (void*)APP_WRITER_GLOBAL);
-    aDocTypeLB->SetEntryData(3, (void*)APP_CALC         );
-    aDocTypeLB->SetEntryData(4, (void*)APP_IMPRESS      );
-    aDocTypeLB->SetEntryData(5, (void*)APP_DRAW         );
-    aDocTypeLB->SetEntryData(6, (void*)APP_MATH         );
+    aDocTypeLB->SetEntryData(0, reinterpret_cast<void*>(APP_WRITER)       );
+    aDocTypeLB->SetEntryData(1, reinterpret_cast<void*>(APP_WRITER_WEB)   );
+    aDocTypeLB->SetEntryData(2, reinterpret_cast<void*>(APP_WRITER_GLOBAL));
+    aDocTypeLB->SetEntryData(3, reinterpret_cast<void*>(APP_CALC)         );
+    aDocTypeLB->SetEntryData(4, reinterpret_cast<void*>(APP_IMPRESS)      );
+    aDocTypeLB->SetEntryData(5, reinterpret_cast<void*>(APP_DRAW)         );
+    aDocTypeLB->SetEntryData(6, reinterpret_cast<void*>(APP_MATH)         );
 
     Link aLink = LINK( this, SfxSaveTabPage, AutoClickHdl_Impl );
     aAutoSaveCB->SetClickHdl( aLink );
@@ -169,12 +169,12 @@ SfxSaveTabPage::SfxSaveTabPage( vcl::Window* pParent, const SfxItemSet& rCoreSet
 
     if ( !aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
     {
-        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( (void*) APP_WRITER ));
-        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( (void*) APP_WRITER_WEB ));
-        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( (void*) APP_WRITER_GLOBAL ));
-        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( (void*) APP_WRITER ));
-        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( (void*) APP_WRITER_WEB ));
-        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( (void*) APP_WRITER_GLOBAL ));
+        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_WRITER) ));
+        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_WRITER_WEB) ));
+        aSaveAsLB->RemoveEntry(aSaveAsLB->GetEntryPos( reinterpret_cast<void*>(APP_WRITER_GLOBAL) ));
+        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_WRITER) ));
+        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_WRITER_WEB) ));
+        aDocTypeLB->RemoveEntry(aDocTypeLB->GetEntryPos( reinterpret_cast<void*>(APP_WRITER_GLOBAL) ));
     }
     else
     {
