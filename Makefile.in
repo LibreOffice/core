@@ -307,6 +307,20 @@ ifneq ($(MACOSX_CODESIGNING_IDENTITY),)
 	done
 # And remove the "bin" folder which should not be there
 	rm -rf $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/bin
+#
+# Remove unnecessary executables in the LibreOfficePython framework
+	rm -rf $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/Frameworks/LibreOfficePython.framework/Versions/[1-9]*/bin
+#
+# Remove the python.o object file which is weird and interferes with app store uploading
+# And with it removed, presumably the other stuff in the Python lib/python3.3/config-3.3m probably does not make sense either.
+	rm -rf $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/Frameworks/LibreOfficePython.framework/Versions/[1-9]*/lib/python[1-9]*/config-[1-9]*
+#
+ifneq ($ENABLE_MACOSX_SANDBOX),)
+# Remove the gengal.bin binary that we don't want
+	rm $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app/Contents/MacOS/gengal.bin
+endif
+#
+# Then use the macosx-codesign-app-bundle script
 	@macosx-codesign-app-bundle $(TESTINSTALLDIR)/LibreOffice$(if $(ENABLE_RELEASE_BUILD),,Dev).app
 endif
 endif
