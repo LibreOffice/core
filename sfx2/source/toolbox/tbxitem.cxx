@@ -1464,7 +1464,7 @@ SfxPopupWindow* SfxCurrencyToolBoxControl::CreatePopupWindow()
     aArgs[1] <<= aPropValue;
 
     uno::Reference< frame::XPopupMenuController > xPopupController( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-                "com.sun.star.comp.framework.RecentFilesMenuController", aArgs, m_xContext ), UNO_QUERY );
+                "com.sun.star.comp.framework.CurrencyMenuController", aArgs, m_xContext ), UNO_QUERY );
 
     uno::Reference< awt::XPopupMenu > xPopupMenu( m_xContext->getServiceManager()->createInstanceWithContext(
                 "com.sun.star.awt.PopupMenu", m_xContext ), uno::UNO_QUERY );
