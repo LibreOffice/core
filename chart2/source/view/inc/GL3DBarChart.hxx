@@ -116,6 +116,8 @@ private:
     void getNearestBars(std::vector<sal_uInt32> &vectorNearest);
     void updateScroll();
     void processAutoFly(sal_uInt32 nId, sal_uInt32 nColor);
+    void getNeighborBarID(sal_uInt32 nSelectBarId, sal_uInt32 *pNeighborBarId);
+    void addMovementScreenText(sal_uInt32 nBarId);
     css::uno::Reference<css::chart2::XChartType> mxChartType;
     boost::ptr_vector<opengl3D::Renderable3DObject> maShapes;
 
@@ -188,7 +190,8 @@ private:
     std::map<sal_uInt32, sal_uInt32> maBarColorMap;
     int mnColorRate;
     bool mbBenchMarkMode;
-    sal_uInt32 maHistoryCounter;
+    sal_uInt32 mnHistoryCounter;
+    sal_uInt32 mnBarsInRow;
 
 
     // these form a pair:
