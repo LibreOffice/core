@@ -429,46 +429,47 @@ static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
 {
     const long nWish = pTabFmt->GetFrmSize().GetWidth();
     OSL_ENSURE(nWish, "weird <= 0 width frmfrm");
-    const long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
 
     // The value for the left edge of the box is calculated from the
     // widths of the previous boxes.
     sal_uInt16 nPos = 0;
-    sal_uInt16 nSum = 0;
     sal_uInt16 nLeftMin = 0;
     sal_uInt16 nRightMax = 0;
-    const SwTableBox  *pCur  = pBox;
-    const SwTableLine *pLine = pBox->GetUpper();
-    while ( pLine )
+    if (nWish != 0) //fdo#33012 0 width frmfmt
     {
-        const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
-        for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
+        sal_uInt16 nSum = 0;
+        const SwTableBox  *pCur  = pBox;
+        const SwTableLine *pLine = pBox->GetUpper();
+        const long nAct  = rToFill.GetRight() - rToFill.GetLeft();  // +1 why?
+
+        while ( pLine )
         {
-            SwTwips nWidth = rBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
-            nSum = (sal_uInt16)(nSum + nWidth);
-            sal_uInt64 nTmp = nSum;
-            nTmp *= nAct;
-
-            if (nWish == 0) //fdo#33012 0 width frmfmt
-                continue;
-
-            nTmp /= nWish;
-            if (rBoxes[i] != pCur)
+            const SwTableBoxes &rBoxes = pLine->GetTabBoxes();
+            for ( sal_uInt16 i = 0; i < rBoxes.size(); ++i )
             {
-                if ( pLine == pBox->GetUpper() || 0 == nLeftMin )
-                    nLeftMin = (sal_uInt16)(nTmp - nPos);
-                nPos = (sal_uInt16)nTmp;
+                SwTwips nWidth = rBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
+                nSum = (sal_uInt16)(nSum + nWidth);
+                sal_uInt64 nTmp = nSum;
+                nTmp *= nAct;
+                nTmp /= nWish;
+
+                if (rBoxes[i] != pCur)
+                {
+                    if ( pLine == pBox->GetUpper() || 0 == nLeftMin )
+                        nLeftMin = (sal_uInt16)(nTmp - nPos);
+                    nPos = (sal_uInt16)nTmp;
+                }
+                else
+                {
+                    nSum = (sal_uInt16)(nSum - nWidth);
+                    if ( 0 == nRightMax )
+                        nRightMax = (sal_uInt16)(nTmp - nPos);
+                    break;
+                }
             }
-            else
-            {
-                nSum = (sal_uInt16)(nSum - nWidth);
-                if ( 0 == nRightMax )
-                    nRightMax = (sal_uInt16)(nTmp - nPos);
-                break;
-            }
+            pCur  = pLine->GetUpper();
+            pLine = pCur ? pCur->GetUpper() : 0;
         }
-        pCur  = pLine->GetUpper();
-        pLine = pCur ? pCur->GetUpper() : 0;
     }
 
     bool bInsert = !bRefreshHidden;
