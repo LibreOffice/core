@@ -2463,6 +2463,13 @@ glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras(const glm::vec3& rBeginPos, cons
     return aEnd - aBegin;
 }
 
+glm::mat4 OpenGL3DRenderer::GetDiffOfTwoCameras(const glm::vec3& rEndPos, const glm::vec3& rEndDirection)
+{
+    glm::mat4 aEnd = glm::lookAt(glm::vec3(m_GlobalScaleMatrix * glm::vec4(rEndPos, 1.0)),
+                     glm::vec3(m_GlobalScaleMatrix * glm::vec4(rEndDirection, 1.0)),glm::vec3(0, 0, 1));
+    return aEnd - m_3DView;
+}
+
 glm::mat4 OpenGL3DRenderer::GetProjectionMatrix()
 {
     return m_3DProjection;
