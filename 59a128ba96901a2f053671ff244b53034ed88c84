@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_8e9ddb5b",
+        "filename": "sd/uiconfig/simpress/ui/assistentdialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 1189,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2014-09-22T09:00:35Z",
+      "side": 1,
+      "message": "Is the space intentional at the beginning?",
+      "range": {
+        "startLine": 1189,
+        "startChar": 62,
+        "endLine": 1189,
+        "endChar": 63
+      },
+      "revId": "59a128ba96901a2f053671ff244b53034ed88c84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
