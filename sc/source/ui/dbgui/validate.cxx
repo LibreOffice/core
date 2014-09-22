@@ -48,6 +48,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
+#include <document.hxx>
 
 // ============================================================================
 
@@ -88,7 +89,7 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pD
 
     if ( m_pRefEdit )
     {
-        OUString aStr(rRange.Format(SCR_ABS_3D, pDoc));
+        OUString aStr(rRange.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         m_pRefEdit->SetRefString( aStr );
     }
 }
