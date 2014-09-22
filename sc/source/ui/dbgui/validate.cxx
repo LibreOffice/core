@@ -47,6 +47,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
+#include <document.hxx>
 
 /*  Position indexes for "Allow" list box.
     They do not map directly to ScValidationMode and can safely be modified to
@@ -105,7 +106,7 @@ void ScTPValidationValue::SetReferenceHdl( const ScRange&rRange , ScDocument* pD
 
     if ( m_pRefEdit )
     {
-        OUString aStr(rRange.Format(SCR_ABS_3D, pDoc));
+        OUString aStr(rRange.Format(SCR_ABS_3D, pDoc, pDoc->GetAddressConvention()));
         m_pRefEdit->SetRefString( aStr );
     }
 }
