@@ -805,8 +805,6 @@ OString SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
 
 void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrmFmt& rFrmFmt, const OUString& rAlternateText, sal_uInt32 nFrameOptions)
 {
-    OStringBuffer sOut;
-
     const SfxPoolItem* pItem;
     const SfxItemSet& rItemSet = rFrmFmt.GetAttrSet();
 
