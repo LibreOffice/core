@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_2e9f0761",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1814,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-22T08:20:04Z",
+      "side": 1,
+      "message": "since this prop is already in group \"DataStream\" a name like \"UpdateTimeout\" might make more sense?",
+      "revId": "8c6082f4278d08172e95efca06b9dcd81d6d9124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_4e925359",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Calc.xcs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-22T08:20:04Z",
+      "side": 1,
+      "message": "...in what unit, milliseconds?",
+      "revId": "8c6082f4278d08172e95efca06b9dcd81d6d9124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8896b_0e9c4b68",
+        "filename": "sc/source/ui/docshell/datastream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-22T08:20:04Z",
+      "side": 1,
+      "message": "it\u0027s often cleaner to explicitly write\n\n  css::uno::Reference\u003ccss::uno::XComponentContext\u003e\n\nat the place of use (esp. if there\u0027s only few of them in a source file) than add using directives\n\nalso, the io/table/sheet using directives are not even used?",
+      "revId": "8c6082f4278d08172e95efca06b9dcd81d6d9124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
