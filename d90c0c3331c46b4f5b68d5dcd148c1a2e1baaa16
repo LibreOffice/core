@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_71c4d291",
+        "filename": "include/tools/rtti.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2014-09-23T15:02:48Z",
+      "side": 1,
+      "message": "typeof is a GCC extension, but you should anyway be able to leave out \",typeof(*pObj)\" and let the compiler deduce that template type parameter",
+      "revId": "d90c0c3331c46b4f5b68d5dcd148c1a2e1baaa16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
