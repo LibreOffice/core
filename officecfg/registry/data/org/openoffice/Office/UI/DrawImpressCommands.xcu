@@ -1482,7 +1482,7 @@
       </node>
       <node oor:name=".uno:ZoomMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Zoom Tool</value>
+          <value xml:lang="en-US">Zoom &amp; Pan Tool (CTRL to Zoom Out and SHIFT to Pan)</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
