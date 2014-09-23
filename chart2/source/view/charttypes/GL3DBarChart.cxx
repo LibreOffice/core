@@ -561,7 +561,7 @@ GL3DBarChart::GL3DBarChart(
             mbAutoFly = atoi(aAutoFly);
         }
         maTimer.SetTimeout(DATA_UPDATE_TIME);
-        maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, updateTimer));
+        maTimer.SetTimeoutHdl(LINK(this, GL3DBarChart, UpdateTimerHdl));
         maTimer.Start();
         osl_getSystemTime(&maFPSRenderStartTime);
         osl_getSystemTime(&maFPSRenderEndTime);
@@ -1474,11 +1474,9 @@ void GL3DBarChart::processAutoFly(sal_uInt32 nId, sal_uInt32 nColor)
     }
 }
 
-IMPL_LINK_NOARG(GL3DBarChart, updateTimer)
+IMPL_LINK_NOARG(GL3DBarChart, UpdateTimerHdl)
 {
-    maTimer.Stop();
     updateScreenText();
-    maTimer.SetTimeout(DATA_UPDATE_TIME);
     maTimer.Start();
     return 0;
 }
