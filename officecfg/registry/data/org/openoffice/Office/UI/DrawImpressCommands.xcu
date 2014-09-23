@@ -485,6 +485,11 @@
           <value xml:lang="en-US">~Page Number</value>
         </prop>
       </node>
+      <node oor:name=".uno:InsertPageTitleField" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Page Tit~le</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertPagesField" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Page ~Count</value>
