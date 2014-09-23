@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="text" translatable="yes">Version: %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX</property>
+  </object>
   <object class="GtkDialog" id="AboutDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
+    <property name="title" translatable="yes">About %PRODUCTNAME</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
@@ -126,8 +131,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -144,8 +147,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -190,8 +191,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -206,8 +205,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -222,8 +219,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                     <child>
@@ -238,8 +233,6 @@
                       <packing>
                         <property name="left_attach">0</property>
                         <property name="top_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
                       </packing>
                     </child>
                   </object>
@@ -282,9 +275,6 @@
       <action-widget response="0">website</action-widget>
       <action-widget response="0">close</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkTextBuffer" id="textbuffer1">
-    <property name="text" translatable="yes">Version: %ABOUTBOXPRODUCTVERSION%ABOUTBOXPRODUCTVERSIONSUFFIX</property>
   </object>
   <object class="GtkSizeGroup" id="sizegroup1">
     <widgets>
