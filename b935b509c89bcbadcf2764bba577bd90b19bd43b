@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ad8896b_f12b2232",
+        "filename": "sw/source/uibase/dbui/dbmgr.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 944,
+      "author": {
+        "id": 1000002
+      },
+      "writtenOn": "2014-09-23T17:42:34Z",
+      "side": 1,
+      "message": "There is no more CreateMonitor, please update\nhttp://opengrok.libreoffice.org/search?q\u003dCreateMonitor\u0026project\u003dcore\u0026defs\u003d\u0026refs\u003d\u0026path\u003d\u0026hist\u003d",
+      "revId": "b935b509c89bcbadcf2764bba577bd90b19bd43b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
