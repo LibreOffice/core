@@ -58,7 +58,6 @@
 #include <com/sun/star/office/XAnnotationAccess.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#include <com/sun/star/text/XSimpleText.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 
 #include <oox/export/utils.hxx>
@@ -84,13 +83,7 @@ using namespace ::com::sun::star::util;
 using namespace ::ppt;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::beans::XPropertySetInfo;
-using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::task::XStatusIndicator;
-using ::com::sun::star::text::XSimpleText;
-using ::sax_fastparser::FastSerializerHelper;
 using ::sax_fastparser::FSHelperPtr;
 
 DBG(void dump_pset(Reference< XPropertySet > rXPropSet);)
