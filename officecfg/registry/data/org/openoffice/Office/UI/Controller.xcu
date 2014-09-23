@@ -220,6 +220,17 @@
           <value>com.sun.star.svx.FontHeightToolBoxController</value>
         </prop>
       </node>
+      <node oor:name="c15" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:CurrencyList</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.CurrencyMenuController</value>
+        </prop>
+      </node>
       <node oor:name="AssignLayout" oor:op="replace">
         <prop oor:name="Command">
           <value>.uno:AssignLayout</value>
