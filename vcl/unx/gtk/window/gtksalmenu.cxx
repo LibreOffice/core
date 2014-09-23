@@ -215,7 +215,11 @@ gint CompareStr( gpointer str1, gpointer str2 )
 void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList, GList* pNewCommandList )
 {
     if ( pActionGroup == NULL || pOldCommandList == NULL )
+    {
+        g_list_free_full( pOldCommandList, g_free );
+        g_list_free_full( pNewCommandList, g_free );
         return;
+    }
 
     while ( pNewCommandList != NULL )
     {
@@ -570,8 +574,17 @@ void GtkSalMenu::NativeCheckItem( unsigned nSection, unsigned nItemPos, MenuItem
                 pCheckValue = g_variant_new_boolean( bCheck );
         }
 
-        if ( pCheckValue != NULL && ( pCurrentState == NULL || g_variant_equal( pCurrentState, pCheckValue ) == FALSE ) )
-            g_action_group_change_action_state( mpActionGroup, aCommand, pCheckValue );
+        if ( pCheckValue != NULL )
+        {
+            if ( pCurrentState == NULL || g_variant_equal( pCurrentState, pCheckValue ) == FALSE )
+            {
+                g_action_group_change_action_state( mpActionGroup, aCommand, pCheckValue );
+            }
+            else
+            {
+                g_variant_unref (pCheckValue);
+            }
+        }
 
         if ( pCurrentState != NULL )
             g_variant_unref( pCurrentState );
@@ -629,6 +642,7 @@ void GtkSalMenu::NativeSetAccelerator( unsigned nSection, unsigned nItemPos, con
         g_lo_menu_set_accelerator_to_item_in_section ( G_LO_MENU( mpMenuModel ), nSection, nItemPos, aAccelerator );
 
     g_free( aAccelerator );
+    g_free( aCurrentAccel );
 }
 
 void GtkSalMenu::NativeSetItemCommand( unsigned nSection,
