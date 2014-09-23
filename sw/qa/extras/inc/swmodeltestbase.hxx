@@ -209,12 +209,14 @@ protected:
         // If the testcase is stored in some other format, it's pointless to test.
         if (mustTestImportOf(filename))
         {
+            maTempFile.EnableKillingFile(false);
             header();
             preTest(filename);
             load(mpTestDocumentPath, filename);
             postTest(filename);
             verify();
             finish();
+            maTempFile.EnableKillingFile();
         }
     }
 
@@ -225,6 +227,7 @@ protected:
      */
     void executeImportExportImportTest(const char* filename)
     {
+        maTempFile.EnableKillingFile(false);
         header();
         preTest(filename);
         load(mpTestDocumentPath, filename);
@@ -232,6 +235,7 @@ protected:
         postTest(filename);
         verify();
         finish();
+        maTempFile.EnableKillingFile();
     }
 
     /**
@@ -242,13 +246,16 @@ protected:
      */
     void executeImportExport(const char* filename)
     {
+        maTempFile.EnableKillingFile(false);
         header();
         preTest(filename);
         load(mpTestDocumentPath, filename);
         save(OUString::createFromAscii(mpFilter), maTempFile);
+        maTempFile.EnableKillingFile(false);
         postTest(filename);
         verify();
         finish();
+        maTempFile.EnableKillingFile();
     }
 
     /**
