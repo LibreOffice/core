@@ -158,11 +158,6 @@ inline bool Any::has() const
         (uno_ReleaseFunc) cpp_release );
 }
 
-// not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
-template <>
-bool Any::has<sal_uInt16>() const;
-
-
 inline bool Any::operator == ( const Any & rAny ) const
 {
     return ::uno_type_equalData(
@@ -599,9 +594,6 @@ T Any::get() const
     }
     return value;
 }
-// not impl: forbid use with ambiguous type (sal_Unicode, sal_uInt16)
-template <>
-sal_uInt16 Any::get<sal_uInt16>() const;
 
 /**
    Support for Any in std::ostream (and thus in CPPUNIT_ASSERT or SAL_INFO
