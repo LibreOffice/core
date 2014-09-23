@@ -2236,7 +2236,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         if ( aAttrIter.IsDropCap( nNextAttr ) )
             AttrOutput().FormatDrop( rNode, aAttrIter.GetSwFmtDrop(), nStyle, pTextNodeInfo, pTextNodeInfoInner );
 
-        if (0 != nEnd)
+        // Only output character attributes if this is not a postponed text run.
+        if (0 != nEnd && !(bPostponeWritingText && FLY_PROCESSED == nStateOfFlyFrame))
         {
             // Output the character attributes
             // #i51277# do this before writing flys at end of paragraph
