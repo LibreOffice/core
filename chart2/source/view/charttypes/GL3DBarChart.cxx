@@ -1176,7 +1176,6 @@ int GL3DBarChart::calcTimeInterval(TimeValue &startTime, TimeValue &endTime)
 void GL3DBarChart::updateScreenText()
 {
     SharedResourceAccess(maCond1, maCond2);
-    osl::MutexGuard aGuard(maMutex);
     maScreenTextShapes.clear();
     mpRenderer->ReleaseScreenTextShapes();
     updateRenderFPS();
